@@ -1,0 +1,19 @@
+<Dictionary>
+  <Words>
+    <Unrecognized>
+      <Word>cb</Word>
+    </Unrecognized>
+	
+    <Recognized>
+	  <Word>Appender</Word>
+      <Word>Catel</Word>
+	  <Word>Desaturation</Word>
+	  <Word>MultiValue</Word>
+	  <Word>Shader</Word>
+    </Recognized>
+	
+    <Deprecated>
+      <Term PreferredAlternate="EnterpriseServices">ComPlus</Term>
+    </Deprecated>
+  </Words>
+</Dictionary>

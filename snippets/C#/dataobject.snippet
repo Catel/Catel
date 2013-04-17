@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>Define a new instance of the ModelBase class</Title>
+            <Shortcut>dataobject</Shortcut>
+            <Description>Code snippet for a property for the ModelBase class</Description>
+            <Author>CatenaLogic</Author>
+            <SnippetTypes>
+                <SnippetType>Expansion</SnippetType>
+            </SnippetTypes>
+        </Header>
+        <Snippet>
+            <Declarations>
+                <Literal>
+                    <ID>name</ID>
+                    <ToolTip>Name of the class</ToolTip>
+                    <Default>name</Default>
+                </Literal>
+            </Declarations>
+            <Code Language="csharp">
+                <![CDATA[/// <summary>
+/// $name$ model which fully supports serialization, property changed notifications,
+/// backwards compatibility and error checking.
+/// </summary>
+#if !SILVERLIGHT
+[Serializable]
+#endif
+public class $name$ : ModelBase
+{
+    #region Fields
+    #endregion
+
+    #region Constructors
+    /// <summary>
+    /// Initializes a new object from scratch.
+    /// </summary>
+    public $name$() { }
+
+#if !SILVERLIGHT	
+    /// <summary>
+    /// Initializes a new object based on <see cref="SerializationInfo"/>.
+    /// </summary>
+    /// <param name="info"><see cref="SerializationInfo"/> that contains the information.</param>
+    /// <param name="context"><see cref="StreamingContext"/>.</param>
+    protected $name$(SerializationInfo info, StreamingContext context)
+        : base(info, context) { }
+#endif
+    #endregion
+
+    #region Properties
+	// TODO: Define your custom properties here using the modelprop code snippet
+    #endregion
+
+    #region Methods
+    /// <summary>
+    /// Validates the field values of this object. Override this method to enable
+    /// validation of field values.
+    /// </summary>
+    /// <param name="validationResults">The validation results, add additional results to this list.</param>
+    protected override void ValidateFields(List<FieldValidationResult> validationResults)
+    {
+    }
+
+    /// <summary>
+    /// Validates the field values of this object. Override this method to enable
+    /// validation of field values.
+    /// </summary>
+    /// <param name="validationResults">The validation results, add additional results to this list.</param>
+    protected override void ValidateBusinessRules(List<BusinessRuleValidationResult> validationResults)
+    {
+    }
+    #endregion
+}]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

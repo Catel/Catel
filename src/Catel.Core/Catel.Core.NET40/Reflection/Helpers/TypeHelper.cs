@@ -1,0 +1,673 @@
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="TypeHelper.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace Catel.Reflection
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using Logging;
+
+    /// <summary>
+    /// 	<see cref="Type"/> helper class.
+    /// </summary>
+    public static class TypeHelper
+    {
+        #region Fields
+        /// <summary>
+        ///   The <see cref = "ILog">log</see> object.
+        /// </summary>
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// A list of microsoft public key tokens.
+        /// </summary>
+        private static readonly List<string> _microsoftPublicKeyTokens;
+        #endregion
+
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:System.Object"/> class.
+        /// </summary>
+        static TypeHelper()
+        {
+            _microsoftPublicKeyTokens = new List<string>();
+            _microsoftPublicKeyTokens.Add("b77a5c561934e089");
+            _microsoftPublicKeyTokens.Add("b03f5f7f11d50a3a");
+            _microsoftPublicKeyTokens.Add("31bf3856ad364e35");
+        }
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets the Microsoft public key tokens.
+        /// </summary>
+        /// <value>The Microsoft public key tokens.</value>
+        public static IEnumerable<string> MicrosoftPublicKeyTokens
+        {
+            get { return _microsoftPublicKeyTokens; }
+        }
+        #endregion
+
+        #region Obsolete members
+        /// <summary>
+        /// Obsolete.
+        /// </summary>
+        /// <param name="typeName"></param>
+        /// <param name="assemblyName"></param>
+        /// <param name="ignoreCase"></param>
+        /// <returns></returns>
+        [ObsoleteEx(TreatAsErrorFromVersion = "3.4", RemoveInVersion = "4.0", Replacement = "TypeCache.[MethodName]")]
+        public static Type GetTypeWithAssembly(string typeName, string assemblyName, bool ignoreCase = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Obsolete.
+        /// </summary>
+        /// <param name="typeNameWithoutAssembly"></param>
+        /// <param name="ignoreCase"></param>
+        /// <returns></returns>
+        [ObsoleteEx(TreatAsErrorFromVersion = "3.4", RemoveInVersion = "4.0", Replacement = "TypeCache.[MethodName]")]
+        public static Type GetTypeWithoutAssembly(string typeNameWithoutAssembly, bool ignoreCase = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Obsolete.
+        /// </summary>
+        /// <param name="typeNameWithAssembly"></param>
+        /// <param name="ignoreCase"></param>
+        /// <returns></returns>
+        [ObsoleteEx(TreatAsErrorFromVersion = "3.4", RemoveInVersion = "4.0", Replacement = "TypeCache.[MethodName]")]
+        public static Type GetType(string typeNameWithAssembly, bool ignoreCase = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Obsolete.
+        /// </summary>
+        /// <param name="assembly"></param>
+        /// <returns></returns>
+        [ObsoleteEx(TreatAsErrorFromVersion = "3.4", RemoveInVersion = "4.0", Replacement = "TypeCache.[MethodName]")]
+        public static Type[] GetTypesOfAssembly(System.Reflection.Assembly assembly)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Obsolete.
+        /// </summary>
+        /// <returns></returns>
+        [ObsoleteEx(TreatAsErrorFromVersion = "3.4", RemoveInVersion = "4.0", Replacement = "TypeCache.[MethodName]")]
+        public static Type[] GetTypes()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Obsolete.
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        [ObsoleteEx(TreatAsErrorFromVersion = "3.4", RemoveInVersion = "4.0", Replacement = "TypeCache.[MethodName]")]
+        public static Type[] GetTypes(Func<Type, bool> predicate)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Obsolete.
+        /// </summary>
+        /// <param name="forceFullInitialization"></param>
+        /// <param name="assemblyName"></param>
+        [ObsoleteEx(TreatAsErrorFromVersion = "3.4", RemoveInVersion = "4.0", Replacement = "TypeCache.[MethodName]")]
+        public static void InitializeTypes(bool forceFullInitialization, string assemblyName)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Obsolete.
+        /// </summary>
+        /// <param name="forceFullInitialization"></param>
+        /// <param name="assembly"></param>
+        [ObsoleteEx(TreatAsErrorFromVersion = "3.4", RemoveInVersion = "4.0", Replacement = "TypeCache.[MethodName]")]
+        public static void InitializeTypes(bool forceFullInitialization, System.Reflection.Assembly assembly = null)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// Gets the typed instance based on the specified instance.
+        /// </summary>
+        /// <param name="instance">The instance to retrieve in the typed form.</param>
+        /// <returns>The typed instance.</returns>
+        /// <exception cref="NotSupportedException">The <paramref name="instance"/> cannot be casted to <typeparamref name="TTargetType"/>.</exception>
+        public static TTargetType GetTypedInstance<TTargetType>(object instance)
+            where TTargetType : class
+        {
+            var typedInstance = instance as TTargetType;
+            if ((typedInstance == null) && (instance != null))
+            {
+                string error = string.Format("Expected an instance of '{0}', but retrieved an instance of '{1}', cannot return the typed instance", typeof(TTargetType).Name, instance.GetType().Name);
+
+                Log.Error(error);
+                throw new NotSupportedException(error);
+            }
+
+            return typedInstance;
+        }
+
+        /// <summary>
+        ///   Determines whether the subclass is of a raw generic type.
+        /// </summary>
+        /// <param name = "generic">The generic.</param>
+        /// <param name = "toCheck">The type to check.</param>
+        /// <returns>
+        ///   <c>true</c> if the subclass is of a raw generic type; otherwise, <c>false</c>.
+        /// </returns>
+        /// <remarks>
+        ///   This implementation is based on this forum thread:
+        ///   http://stackoverflow.com/questions/457676/c-reflection-check-if-a-class-is-derived-from-a-generic-class
+        /// </remarks>
+        /// <exception cref = "ArgumentNullException">The <paramref name = "generic" /> is <c>null</c>.</exception>
+        /// <exception cref = "ArgumentNullException">The <paramref name = "toCheck" /> is <c>null</c>.</exception>
+        public static bool IsSubclassOfRawGeneric(Type generic, Type toCheck)
+        {
+            Argument.IsNotNull("generic", generic);
+            Argument.IsNotNull("toCheck", toCheck);
+
+            while ((toCheck != null) && (toCheck != typeof(object)))
+            {
+                var cur = toCheck.IsGenericTypeEx() ? toCheck.GetGenericTypeDefinition() : toCheck;
+                if (generic == cur)
+                {
+                    return true;
+                }
+
+                toCheck = toCheck.GetBaseTypeEx();
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Gets the assembly name without overhead (version, public keytoken, etc)
+        /// </summary>
+        /// <param name="fullyQualifiedAssemblyName">Name of the fully qualified assembly.</param>
+        /// <returns>The assembly without the overhead.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="fullyQualifiedAssemblyName"/> is <c>null</c> or whitespace.</exception>
+        public static string GetAssemblyNameWithoutOverhead(string fullyQualifiedAssemblyName)
+        {
+            Argument.IsNotNullOrWhitespace("fullyQualifiedAssemblyName", fullyQualifiedAssemblyName);
+
+            int indexOfFirstComma = fullyQualifiedAssemblyName.IndexOf(',');
+            if (indexOfFirstComma != -1)
+            {
+                return fullyQualifiedAssemblyName.Substring(0, indexOfFirstComma);
+            }
+
+            return fullyQualifiedAssemblyName;
+        }
+
+        /// <summary>
+        /// Gets the name of the assembly.
+        /// </summary>
+        /// <param name="fullTypeName">Full name of the type, for example <c>Catel.TypeHelper, Catel.Core</c>.</param>
+        /// <returns>The assembly name retrieved from the type, for example <c>Catel.Core</c> or <c>null</c> if the assembly is not contained by the type.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="fullTypeName"/> is <c>null</c> or whitespace.</exception>
+        public static string GetAssemblyName(string fullTypeName)
+        {
+            Argument.IsNotNullOrWhitespace("fullTypeName", fullTypeName);
+
+            int splitterPos = fullTypeName.IndexOf(", ", StringComparison.Ordinal);
+
+            var assemblyName = (splitterPos != -1) ? fullTypeName.Substring(splitterPos + 1).Trim() : null;
+            return assemblyName;
+        }
+
+        /// <summary>
+        /// Gets the type name with assembly, but without the fully qualified assembly name. For example, this method provides
+        /// the string:
+        /// <para />
+        /// <c>Catel.TypeHelper, Catel.Core, Version=1.0.0.0, PublicKeyToken=123456789</c>
+        /// <para />
+        /// and will return:
+        /// <para />
+        /// <c>Catel.TypeHelper, Catel.Core</c>
+        /// </summary>
+        /// <param name="fullTypeName">Full name of the type.</param>
+        /// <returns>The type name including the assembly.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="fullTypeName"/> is <c>null</c> or whitespace.</exception>
+        public static string GetTypeNameWithAssembly(string fullTypeName)
+        {
+            Argument.IsNotNullOrWhitespace("fullTypeName", fullTypeName);
+
+            var assemblyNameWithoutOverhead = GetAssemblyName(fullTypeName);
+            var assemblyName = GetAssemblyNameWithoutOverhead(assemblyNameWithoutOverhead);
+            string typeName = GetTypeName(fullTypeName);
+
+            return FormatType(assemblyName, typeName);
+        }
+
+        /// <summary>
+        /// Gets the name of the type without the assembly but including the namespace.
+        /// </summary>
+        /// <param name="fullTypeName">Full name of the type, for example <c>Catel.TypeHelper, Catel.Core</c>.</param>
+        /// <returns>The type name retrieved from the type, for example <c>Catel.TypeHelper</c>.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="fullTypeName"/> is <c>null</c> or whitespace.</exception>
+        public static string GetTypeName(string fullTypeName)
+        {
+            Argument.IsNotNullOrWhitespace("fullTypeName", fullTypeName);
+
+            int splitterPos = fullTypeName.IndexOf(", ", StringComparison.Ordinal);
+
+            var typeName = (splitterPos != -1) ? fullTypeName.Substring(0, splitterPos).Trim() : fullTypeName;
+            return typeName;
+        }
+
+        /// <summary>
+        /// Gets the type name without the assembly namespace.
+        /// </summary>
+        /// <param name="fullTypeName">Full name of the type, for example <c>Catel.TypeHelper, Catel.Core</c>.</param>
+        /// <returns>The type name retrieved from the type, for example <c>TypeHelper</c>.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="fullTypeName"/> is <c>null</c> or whitespace.</exception>
+        public static string GetTypeNameWithoutNamespace(string fullTypeName)
+        {
+            Argument.IsNotNullOrWhitespace("fullTypeName", fullTypeName);
+
+            fullTypeName = GetTypeName(fullTypeName);
+
+            int splitterPos = fullTypeName.LastIndexOf(".", StringComparison.Ordinal);
+
+            var typeName = (splitterPos != -1) ? fullTypeName.Substring(splitterPos + 1).Trim() : fullTypeName;
+            return typeName;
+        }
+
+        /// <summary>
+        /// Gets the type namespace.
+        /// </summary>
+        /// <param name="fullTypeName">Full name of the type, for example <c>Catel.TypeHelper, Catel.Core</c>.</param>
+        /// <returns>The type namespace retrieved from the type, for example <c>Catel</c>.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="fullTypeName"/> is <c>null</c> or whitespace.</exception>
+        public static string GetTypeNamespace(string fullTypeName)
+        {
+            Argument.IsNotNullOrWhitespace("fullTypeName", fullTypeName);
+
+            fullTypeName = GetTypeName(fullTypeName);
+
+            int splitterPos = fullTypeName.LastIndexOf(".", StringComparison.Ordinal);
+
+            var typeName = (splitterPos != -1) ? fullTypeName.Substring(0, splitterPos).Trim() : fullTypeName;
+            return typeName;
+        }
+
+        /// <summary>
+        ///   Formats a type in the official type description like [typename], [assemblyname].
+        /// </summary>
+        /// <param name = "assembly">Assembly name to format.</param>
+        /// <param name = "type">Type name to format.</param>
+        /// <returns>Type name like [typename], [assemblyname].</returns>
+        /// <exception cref="ArgumentException">The <paramref name="assembly"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="type"/> is <c>null</c> or whitespace.</exception>
+        public static string FormatType(string assembly, string type)
+        {
+            Argument.IsNotNullOrWhitespace("assembly", assembly);
+            Argument.IsNotNullOrWhitespace("type", type);
+
+            return string.Format(CultureInfo.InvariantCulture, "{0}, {1}", type, assembly);
+        }
+
+        /// <summary>
+        ///   Formats multiple inner types into one string.
+        /// </summary>
+        /// <param name = "innerTypes">The inner types.</param>
+        /// <returns>
+        ///   string representing a combination of all inner types.
+        /// </returns>
+        public static string FormatInnerTypes(string[] innerTypes)
+        {
+            string result = string.Empty;
+
+            for (int i = 0; i < innerTypes.Length; i++)
+            {
+                result += string.Format(CultureInfo.InvariantCulture, "[{0}]", innerTypes[i]);
+
+                // Postfix a comma if this is not the last
+                if (i < innerTypes.Length - 1)
+                {
+                    result += ",";
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Converts a string representation of a type to a version independent type by removing the assembly version information.
+        /// </summary>
+        /// <param name="type">Type to convert.</param>
+        /// <returns>String representing the type without version information.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="type"/> is <c>null</c> or whitespace.</exception>
+        public static string ConvertTypeToVersionIndependentType(string type)
+        {
+            Argument.IsNotNullOrWhitespace("type", type);
+
+            const string innerTypesEnd = ",";
+
+            string newType = type;
+            string[] innerTypes = GetInnerTypes(newType);
+
+            if (innerTypes.Length > 0)
+            {
+                // Remove inner types
+                newType = newType.Replace(string.Format(CultureInfo.InvariantCulture, "[{0}]", FormatInnerTypes(innerTypes)), string.Empty);
+                for (int i = 0; i < innerTypes.Length; i++)
+                {
+                    innerTypes[i] = ConvertTypeToVersionIndependentType(innerTypes[i]);
+                }
+            }
+
+            string typeName = GetTypeName(newType);
+            string assemblyName = GetAssemblyName(newType);
+
+            // Remove version info from assembly (if not signed by Microsoft)
+            bool isMicrosoftAssembly = MicrosoftPublicKeyTokens.Any(t => assemblyName.Contains(t));
+            if (!isMicrosoftAssembly)
+            {
+                assemblyName = GetAssemblyNameWithoutOverhead(assemblyName);
+            }
+
+            newType = FormatType(assemblyName, typeName);
+
+            if (innerTypes.Length > 0)
+            {
+                int innerTypesIndex = newType.IndexOf(innerTypesEnd);
+                if (innerTypesIndex >= 0)
+                {
+                    newType = newType.Insert(innerTypesIndex, string.Format(CultureInfo.InvariantCulture, "[{0}]", FormatInnerTypes(innerTypes)));
+                }
+            }
+
+            return newType;
+        }
+
+        /// <summary>
+        /// Returns the inner type of a type, for example, a generic array type.
+        /// </summary>
+        /// <param name="type">Full type which might contain an inner type.</param>
+        /// <returns>Array of inner types.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="type"/> is <c>null</c> or whitespace.</exception>
+        public static string[] GetInnerTypes(string type)
+        {
+            Argument.IsNotNullOrWhitespace("type", type);
+
+            const char InnerTypeCountStart = '`';
+            char[] InnerTypeCountEnd = new[] { '[', '+' };
+            const char InternalTypeStart = '+';
+            const char InternalTypeEnd = '[';
+            const string AllTypesStart = "[[";
+            const char SingleTypeStart = '[';
+            const char SingleTypeEnd = ']';
+
+            var innerTypes = new List<string>();
+
+            try
+            {
+                int countIndex = type.IndexOf(InnerTypeCountStart);
+                if (countIndex == -1)
+                {
+                    return innerTypes.ToArray();
+                }
+
+                // This is a generic, but does the type definition also contain the inner types?
+                if (!type.Contains(AllTypesStart))
+                {
+                    return innerTypes.ToArray();
+                }
+
+                // Get the number of inner types
+                int innerTypeCountEnd = -1;
+                foreach (char t in InnerTypeCountEnd)
+                {
+                    int index = type.IndexOf(t);
+                    if ((index != -1) && ((innerTypeCountEnd == -1) || (index < innerTypeCountEnd)))
+                    {
+                        // This value is more likely to be the one
+                        innerTypeCountEnd = index;
+                    }
+                }
+
+                int innerTypeCount = int.Parse(type.Substring(countIndex + 1, innerTypeCountEnd - countIndex - 1));
+
+                // Remove all info until the first inner type
+                if (!type.Contains(InternalTypeStart.ToString()))
+                {
+                    // Just remove the info
+                    type = type.Substring(innerTypeCountEnd + 1);
+                }
+                else
+                {
+                    // Remove the index, but not the numbers
+                    int internalTypeEnd = type.IndexOf(InternalTypeEnd);
+                    type = type.Substring(internalTypeEnd + 1);
+                }
+
+                // Get all the inner types
+                for (int i = 0; i < innerTypeCount; i++)
+                {
+                    // Get the start & end of this inner type
+                    int innerTypeStart = type.IndexOf(SingleTypeStart);
+                    int innerTypeEnd = innerTypeStart + 1;
+                    int openings = 1;
+
+                    // Loop until we find the end
+                    while (openings > 0)
+                    {
+                        if (type[innerTypeEnd] == SingleTypeStart)
+                        {
+                            openings++;
+                        }
+                        else if (type[innerTypeEnd] == SingleTypeEnd)
+                        {
+                            openings--;
+                        }
+
+                        // Increase current pos if we still have openings left
+                        if (openings > 0)
+                        {
+                            innerTypeEnd++;
+                        }
+                    }
+
+                    innerTypes.Add(type.Substring(innerTypeStart + 1, innerTypeEnd - innerTypeStart - 1));
+                    type = type.Substring(innerTypeEnd + 1);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, "Failed to retrieve inner types");
+            }
+
+            return innerTypes.ToArray();
+        }
+
+        /// <summary>
+        ///   Returns whether a type is nullable or not.
+        /// </summary>
+        /// <param name = "type">Type to check.</param>
+        /// <returns>
+        ///   True if the type is nullable, otherwise false.
+        /// </returns>
+        public static bool IsTypeNullable(Type type)
+        {
+            if (type == null)
+            {
+                return false;
+            }
+
+            if (!type.IsValueTypeEx())
+            {
+                return true;
+            }
+
+            if (Nullable.GetUnderlyingType(type) != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        ///   Checks whether the 2 specified objects are equal. This method is better, simple because it also checks boxing so
+        ///   2 integers with the same values that are boxed are equal.
+        /// </summary>
+        /// <param name = "object1">The first object.</param>
+        /// <param name = "object2">The second object.</param>
+        /// <returns><c>true</c> if the objects are equal; otherwise <c>false</c>.</returns>
+        [ObsoleteEx(Replacement = "ObjectHelper.AreEqual", RemoveInVersion = "4.0", TreatAsErrorFromVersion = "3.2")]
+        public static bool AreObjectsEqual(object object1, object object2)
+        {
+            if ((object1 == null) && (object2 == null))
+            {
+                return true;
+            }
+
+            if ((object1 == null) || (object2 == null))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(object1, object2))
+            {
+                return true;
+            }
+
+            return object1.Equals(object2);
+        }
+        #endregion
+
+        #region Powercast
+        /// <summary>
+        ///   Tries to Generic cast of a value.
+        /// </summary>
+        /// <typeparam name = "TOutput">Requested return type.</typeparam>
+        /// <typeparam name = "TInput">The input type.</typeparam>
+        /// <param name = "value">The value to cast.</param>
+        /// <param name = "output">The casted value.</param>
+        /// <returns>When a cast is succeded true else false.</returns>
+        public static bool TryCast<TOutput, TInput>(TInput value, out TOutput output)
+        {
+            bool success = true;
+            Type outputType = typeof(TOutput);
+            Type innerType = Nullable.GetUnderlyingType(outputType);
+
+            // Database support...
+            if (value == null)
+            {
+                output = default(TOutput);
+
+                if (outputType.IsValueTypeEx() && innerType == null)
+                {
+                    success = false;
+                }
+                else
+                {
+                    // Non-valuetype can contain nill.
+                    // (Nullable<T> also)
+                    success = true;
+                }
+            }
+            else
+            {
+                Type inputType = value.GetType();
+                if (inputType.IsAssignableFromEx(outputType))
+                {
+                    // Direct assignable
+                    success = true;
+                    output = (TOutput)(object)value;
+                }
+                else
+                {
+                    output = (TOutput)Convert.ChangeType(value, innerType ?? outputType, CultureInfo.InvariantCulture);
+                    success = true;
+                }
+            }
+
+            return success;
+        }
+
+        /// <summary>
+        ///   Generic cast of a value.
+        /// </summary>
+        /// <typeparam name = "TOutput">Requested return type.</typeparam>
+        /// <typeparam name = "TInput">The input type.</typeparam>
+        /// <param name = "value">The value to cast.</param>
+        /// <returns>The casted value.</returns>
+        public static TOutput Cast<TOutput, TInput>(TInput value)
+        {
+            return Cast<TOutput>(value);
+        }
+
+        /// <summary>
+        ///   Generic cast of a value.
+        /// </summary>
+        /// <typeparam name = "TOutput">Requested return type.</typeparam>
+        /// <param name = "value">The value to cast.</param>
+        /// <returns>The casted value.</returns>
+        public static TOutput Cast<TOutput>(object value)
+        {
+            TOutput output = default(TOutput);
+
+            if (!TryCast(value, out output))
+            {
+                var tI = ObjectToStringHelper.ToTypeString(value.GetType());
+                string tO = typeof(TOutput).FullName;
+                string vl = string.Concat(value);
+                string msg = "Failed to cast from '{0}' to '{1}'";
+
+                if (!tI.Equals(vl))
+                {
+                    msg = string.Concat(msg, " for value '{2}'");
+                }
+
+                msg = string.Format(msg, tI, tO, vl);
+                throw new InvalidCastException(msg);
+            }
+
+            return output;
+        }
+
+        /// <summary>
+        ///   Generic cast of a value.
+        /// </summary>
+        /// <typeparam name = "TOutput">Requested return type.</typeparam>
+        /// <typeparam name = "TInput">The input type.</typeparam>
+        /// <param name = "value">The value to cast.</param>
+        /// <param name = "whenNullValue">When unable to cast the incoming value, this value is returned instead.</param>
+        /// <returns>The casted value or when uncastable the <paramref name = "whenNullValue" /> is returned.</returns>
+        public static TOutput Cast<TOutput, TInput>(TInput value, TOutput whenNullValue)
+        {
+            TOutput output;
+
+            if (!TryCast(value, out output) || output == null)
+            {
+                output = whenNullValue;
+            }
+
+            return output;
+        }
+        #endregion
+    }
+}

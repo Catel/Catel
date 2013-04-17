@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9D908408-CA30-447A-BC47-85048E5A2999}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Catel.Data</RootNamespace>
+    <AssemblyName>Catel.Extensions.Data</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+	<FodyPath>..\..\..\lib\Fody.1.13.6.0</FodyPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\output\debug\NET45\Catel.Extensions.Data\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET; NET45</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>..\..\..\output\debug\NET45\Catel.Extensions.Data\Catel.Extensions.Data.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\output\release\NET45\Catel.Extensions.Data\</OutputPath>
+    <DefineConstants>TRACE;NET; NET45</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>..\..\..\output\release\NET45\Catel.Extensions.Data\Catel.Extensions.Data.XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="Fody.targets" />
+    <None Include="packages.config" />
+    <Reference Include="Obsolete, Version=1.5.1.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Obsolete.Fody.1.5.1.0\lib\NET40\Obsolete.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <None Include="FodyWeavers.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Catel.Core\Catel.Core.NET45\Catel.Core.NET45.csproj">
+      <Project>{d748be60-bad6-4d1b-be5a-c24943a56594}</Project>
+      <Name>Catel.Core.NET45</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\SolutionAssemblyInfo.cs">
+      <Link>Properties\SolutionAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Data.NET40\Expressions\Extensions\ExpressionExtensions.cs">
+      <Link>Expressions\Extensions\ExpressionExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Data.NET40\Expressions\ParameterRebinder.cs">
+      <Link>Expressions\ParameterRebinder.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Data.NET40\ModuleInitializer.cs">
+      <Link>ModuleInitializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Data.NET40\Properties\AssemblyInfo.cs">
+      <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Data.NET40\Repositories\CachedRepositoryBase.cs">
+      <Link>Repositories\CachedRepositoryBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Data.NET40\Repositories\Interfaces\ICachedRepository.cs">
+      <Link>Repositories\Interfaces\ICachedRepository.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Data.NET40\Repositories\Interfaces\IRepository.cs">
+      <Link>Repositories\Interfaces\IRepository.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Data.NET40\Repositories\RepositoryBase.cs">
+      <Link>Repositories\RepositoryBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Data.NET40\Specifications\AndSpecification.cs">
+      <Link>Specifications\AndSpecification.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Data.NET40\Specifications\CompositeSpecification.cs">
+      <Link>Specifications\CompositeSpecification.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Data.NET40\Specifications\Interfaces\ISpecification.cs">
+      <Link>Specifications\Interfaces\ISpecification.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Data.NET40\Specifications\OrSpecification.cs">
+      <Link>Specifications\OrSpecification.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Data.NET40\Specifications\Specification.cs">
+      <Link>Specifications\Specification.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <Import Project="$(ProjectPath)\..\..\..\..\Tools\Pepita\PepitaGet.targets" />
+  <Import Project="Fody.targets" />
+</Project>

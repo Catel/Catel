@@ -1,0 +1,12 @@
+Catel easy deployment
+=====================
+
+Want easier deployment for Catel? That's possible using NuGet.
+
+More information about NuGet
+----------------------------
+http://www.nuget.org/
+
+Guidance on using Catel and NuGet 
+---------------------------------
+http://catel.catenalogic.com

@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>Define a new instance of the ModelBase class</Title>
+            <Shortcut>model</Shortcut>
+            <Description>Code snippet for a property for the ModelBase class</Description>
+            <Author>CatenaLogic</Author>
+            <SnippetTypes>
+                <SnippetType>Expansion</SnippetType>
+            </SnippetTypes>
+        </Header>
+        <Snippet>
+            <Declarations>
+                <Literal>
+                    <ID>name</ID>
+                    <ToolTip>Name of the class</ToolTip>
+                    <Default>name</Default>
+                </Literal>
+            </Declarations>
+            <Code Language="VB">
+                <![CDATA[''' <summary>
+''' $name$ model which fully supports serialization, property changed notifications,
+''' backwards compatibility and error checking.
+''' </summary>
+#If SILVERLIGHT <> 1 Then
+<Serializable>
+#End If
+Public Class $name$
+	Inherits ModelBase
+	#Region "Variables"
+	#End Region
+
+	#Region "Constructor & destructor"
+	''' <summary>
+	''' Initializes a new object from scratch.
+	''' </summary>
+	Public Sub New()
+	End Sub
+
+	#If SILVERLIGHT <> 1 Then
+	''' <summary>
+	''' Initializes a new object based on <see cref="SerializationInfo"/>.
+	''' </summary>
+	''' <param name="info"><see cref="SerializationInfo"/> that contains the information.</param>
+	''' <param name="context"><see cref="StreamingContext"/>.</param>
+	Protected Sub New(info As SerializationInfo, context As StreamingContext)
+		MyBase.New(info, context)
+	End Sub
+	#End If
+	#End Region
+
+	#Region "Properties"
+	' TODO: Define your custom properties here using the modelprop code snippet
+	#End Region
+
+	#Region "Methods"
+	''' <summary>
+	''' Validates the fields.
+	''' </summary>
+	Protected Overrides Sub ValidateFields()
+		' TODO: Implement any field validation of this object. Simply set any error by using the SetFieldError method
+	End Sub
+
+	''' <summary>
+	''' Validates the business rules.
+	''' </summary>
+	Protected Overrides Sub ValidateBusinessRules()
+		' TODO: Implement any business rules of this object. Simply set any error by using the SetBusinessRuleError method
+	End Sub
+	#End Region
+End Class]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

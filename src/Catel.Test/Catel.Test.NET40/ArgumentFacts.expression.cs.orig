@@ -1,0 +1,223 @@
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ArgumentTest.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace Catel.Test
+{
+    using System;
+    using System.Linq.Expressions;
+
+#if NETFX_CORE
+    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+#else
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+#endif
+
+    public partial class ArgumentFacts
+    {
+        public partial class TheIsNotNullMethod
+        {
+            [TestMethod]
+            public void ThrowsArgumentExceptionForNullExpression()
+            {
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotNull<object>(null));
+            }
+
+            [TestMethod]
+            public void ThrowsArgumentExceptionForNonMemberExpression()
+            {
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsNotNull(() => 1));
+            }
+
+            [TestMethod]
+            public void ThrowsArgumentNullExceptionForNullParameterInvokation()
+            {
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => this.IsNotNullInvokation(null));
+            }            
+            
+            [TestMethod]
+            public void SucceedsForNotNullParameterInvokation()
+            {
+                this.IsNotNullInvokation(new object());
+            }
+
+            private void IsNotNullInvokation(object param01)
+            {
+                Argument.IsNotNull(() => param01);
+            }
+        }
+
+        public partial class TheIsNotNullOrEmptyMethod
+        {
+            [TestMethod]
+            public void ThrowsArgumentExceptionForNullExpression()
+            {
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotNullOrEmpty((Expression<Func<string>>)null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotNullOrEmpty((Expression<Func<Guid>>)null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotNullOrEmpty((Expression<Func<Guid?>>)null));
+            }
+
+            [TestMethod]
+            public void ThrowsArgumentExceptionForNonMemberExpression()
+            {
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsNotNullOrEmpty(() => "string"));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsNotNullOrEmpty(() => new Guid()));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsNotNullOrEmpty(() => new Guid()));
+            }
+
+            [TestMethod]
+            public void ThrowsArgumentNullExceptionForNullOrEmptyParameterInvokation()
+            {
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => this.IsNotNullInvokation(string.Empty));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => this.IsNotNullInvokation(Guid.Empty));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => this.IsNotNullInvokation((string)null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => this.IsNotNullInvokation(null as Guid?));
+                Guid? param01 = Guid.Empty;
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => this.IsNotNullInvokation(param01));
+            }
+
+            [TestMethod]
+            public void SucceedsForNotNullOrEmptyParameterInvokation()
+            {
+                this.IsNotNullInvokation("string");
+                this.IsNotNullInvokation(Guid.NewGuid());
+                this.IsNotNullInvokation((Guid?)Guid.NewGuid());
+            }
+
+
+            private void IsNotNullInvokation(string param01)
+            {
+                Argument.IsNotNullOrEmpty(() => param01);
+            }
+            
+            private void IsNotNullInvokation(Guid param01)
+            {
+                Argument.IsNotNullOrEmpty(() => param01);
+            }
+
+            private void IsNotNullInvokation(Guid? param01)
+            {
+                Argument.IsNotNullOrEmpty(() => param01);
+            }
+        }
+
+        public partial class TheIsNotNullOrWhitespaceMethod
+        {
+            [TestMethod]
+            public void ThrowsArgumentExceptionForNullExpression()
+            {
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotNullOrWhitespace(null));
+                
+            }
+
+            [TestMethod]
+            public void ThrowsArgumentExceptionForNonMemberExpression()
+            {
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsNotNullOrWhitespace(() => "string"));
+            }
+
+            [TestMethod]
+            public void ThrowsArgumentNullExceptionForNullOrWhitespaceInvokation()
+            {
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => this.IsNotNullOrWhitespaceInvokation(string.Empty));
+            }
+
+            [TestMethod]
+            public void SucceedsForNotNullOrWhitespaceInvokation()
+            {
+                this.IsNotNullOrWhitespaceInvokation("string");
+            }
+
+
+            private void IsNotNullOrWhitespaceInvokation(string param01)
+            {
+                Argument.IsNotNullOrWhitespace(() => param01);
+            }
+        }
+
+        public partial class TheIsNotNullOrEmptyArrayMethod
+        {
+            [TestMethod]
+            public void ThrowsArgumentExceptionForNullExpression()
+            {
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotNullOrEmptyArray(null));
+            }
+
+            [TestMethod]
+            public void ThrowsArgumentExceptionForNonMemberExpression()
+            {
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsNotNullOrEmptyArray(() => new object[] { }));
+            }
+
+            [TestMethod]
+            public void ThrowsArgumentNullExceptionForNullOrEmptyArrayParameterInvokation()
+            {
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => this.IsNotNullOrEmptyArrayInvokation(new object[] { }));
+            }
+
+            [TestMethod]
+            public void SucceedsForNotNullOrEmptyArrayInvokation()
+            {
+                this.IsNotNullOrEmptyArrayInvokation(new[] { 1, 2, 3 });
+            }
+
+            private void IsNotNullOrEmptyArrayInvokation(Array param01)
+            {
+                Argument.IsNotNullOrEmptyArray(() => param01);
+            }
+        }
+
+        public partial class TheIsNotOutOfRangeMethod
+        {
+            [TestMethod]
+            public void ThrowsArgumentExceptionForNullExpression()
+            {
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotOutOfRange<double>(null, 0, 0, null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotOutOfRange<int>(null, 0, 0));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotOutOfRange<double>(null, 0, 0));
+            }
+
+            [TestMethod]
+            public void ThrowsArgumentExceptionForNonMemberExpression()
+            {
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsNotOutOfRange(() => 1, 1, 2, null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsNotOutOfRange(() => 1.0d, 1.0d, 2.0d));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsNotOutOfRange(() => 1, 1, 2));
+            }
+
+            [TestMethod]
+            public void ThrowsArgumentNullExceptionForOutOfRangeInvokation()
+            {
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => this.IsNotOutOfRangeInvokation(3, 1, 2));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => this.IsNotOutOfRangeInvokation(3.0d, 1.0d, 2.0d));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => this.IsNotOutOfRangeInvokation(3.0d, 1.0d, 2.0d, null));
+            }
+
+            [TestMethod]
+            public void SucceedsForNotOutOfRangeInvokation()
+            {
+                this.IsNotOutOfRangeInvokation(1, 0, 2);
+                this.IsNotOutOfRangeInvokation(1.0d, 0.0d, 2.0d);
+                this.IsNotOutOfRangeInvokation(1.0d, 0.0d, 2.0d, (d, d1, d2) => d > d1 && d < d2);
+            }
+
+
+            private void IsNotOutOfRangeInvokation(int param01, int min, int max)
+            {
+                Argument.IsNotOutOfRange(() => param01, min, max);
+            }
+
+            private void IsNotOutOfRangeInvokation<T>(T param01, T min, T max)
+            {
+                Argument.IsNotOutOfRange(() => param01, min, max);
+            }
+
+            private void IsNotOutOfRangeInvokation<T>(T param01, T min, T max, Func<T, T, T, bool> validation)
+            {
+                Argument.IsNotOutOfRange(() => param01, min, max, validation);
+            }
+        }
+    }
+}

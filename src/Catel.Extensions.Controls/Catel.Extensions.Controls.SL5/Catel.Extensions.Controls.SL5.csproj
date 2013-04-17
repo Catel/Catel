@@ -1,0 +1,298 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2F07E89E-EB4C-4987-8021-8125ABB274DC}</ProjectGuid>
+    <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Catel</RootNamespace>
+    <AssemblyName>Catel.Extensions.Controls</AssemblyName>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <SilverlightApplication>false</SilverlightApplication>
+    <ValidateXaml>true</ValidateXaml>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <FodyPath>..\..\..\lib\Fody.1.13.6.0</FodyPath>
+  </PropertyGroup>
+  <!-- This property group is only here to support building this project using the 
+       MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
+       to set the TargetFrameworkVersion to v3.5 -->
+  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\output\debug\SL5\Catel.Extensions.Controls\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT; SL5</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\..\output\debug\SL5\Catel.Extensions.Controls\Catel.Extensions.Controls.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\output\release\SL5\Catel.Extensions.Controls\</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT; SL5</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\..\output\release\SL5\Catel.Extensions.Controls\Catel.Extensions.Controls.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="Obsolete, Version=1.5.1.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Obsolete.Fody.1.5.1.0\lib\SL\Obsolete.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Controls, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Navigation, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Toolkit, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\lib\SL5\Toolkit\System.Windows.Controls.Toolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\SolutionAssemblyInfo.cs">
+      <Link>Properties\SolutionAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\ModuleInitializer.cs">
+      <Link>ModuleInitializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\AssemblyInfo.cs">
+      <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Exceptions.SL5.Designer.cs">
+      <Link>Properties\Exceptions.SL5.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Exceptions.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.de.SL5.Designer.cs">
+      <Link>Properties\Resources.de.SL5.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.de.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.SL5.Designer.cs">
+      <Link>Properties\Resources.SL5.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.es.SL5.Designer.cs">
+      <Link>Properties\Resources.es.SL5.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.es.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.fr.SL5.Designer.cs">
+      <Link>Properties\Resources.fr.SL5.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.fr.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.it.SL5.Designer.cs">
+      <Link>Properties\Resources.it.SL5.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.it.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.nl.SL5.Designer.cs">
+      <Link>Properties\Resources.nl.SL5.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.nl.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.tr.SL5.Designer.cs">
+      <Link>Properties\Resources.tr.SL5.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.tr.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.zh-CHS.SL5.Designer.cs">
+      <Link>Properties\Resources.zh-CHS.SL5.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.zh-CHS.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\StackGrid\EmptyColumn.cs">
+      <Link>Windows\Controls\StackGrid\EmptyColumn.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\StackGrid\EmptyRow.cs">
+      <Link>Windows\Controls\StackGrid\EmptyRow.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\StackGrid\StackGrid.cs">
+      <Link>Windows\Controls\StackGrid\StackGrid.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Helpers\StyleHelper.cs">
+      <Link>Windows\Helpers\StyleHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\EmptyEffect\EmptyEffect.cs">
+      <Link>Windows\Media\Effects\EmptyEffect\EmptyEffect.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.cs">
+      <Link>Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\ShaderEffectBase.cs">
+      <Link>Windows\Media\Effects\ShaderEffectBase.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Fody.targets" />
+    <None Include="FodyWeavers.xml" />
+    <None Include="packages.config" />
+    <Resource Include="..\Catel.Extensions.Controls.NET40\Resources\Images\ClearOutput.png">
+      <Link>Resources\Images\ClearOutput.png</Link>
+    </Resource>
+    <Resource Include="..\Catel.Extensions.Controls.NET40\Resources\Images\Error.png">
+      <Link>Resources\Images\Error.png</Link>
+    </Resource>
+    <Resource Include="..\Catel.Extensions.Controls.NET40\Resources\Images\Warning.png">
+      <Link>Resources\Images\Warning.png</Link>
+    </Resource>
+    <Content Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\EmptyEffect.fx">
+      <Link>Windows\Media\Effects\EmptyEffect.fx</Link>
+    </Content>
+    <Content Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\EmptyEffect\EmptyEffect.fx">
+      <Link>Windows\Media\Effects\EmptyEffect\EmptyEffect.fx</Link>
+    </Content>
+    <Content Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.fx">
+      <Link>Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.fx</Link>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\EmptyEffect\EmptyEffect.ps">
+      <Link>Windows\Media\Effects\EmptyEffect\EmptyEffect.ps</Link>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.ps">
+      <Link>Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.ps</Link>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Windows\Media\Extensions\" />
+    <Folder Include="Windows\Media\Imaging\Extensions\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="..\Catel.Extensions.Controls.SL4\Themes\Generic.xaml">
+      <Link>Themes\Generic.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\Catel.Extensions.Controls.SL4\Themes\Generic\catel.generic.xaml">
+      <Link>Themes\Generic\catel.generic.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\Catel.Extensions.Controls.SL4\Themes\Generic\catel.sizes.normal.xaml">
+      <Link>Themes\Generic\catel.sizes.normal.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\Catel.Extensions.Controls.SL4\Themes\Generic\generic.xaml">
+      <Link>Themes\Generic\generic.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Catel.Core\Catel.Core.SL5\Catel.Core.SL5.csproj">
+      <Project>{2B6DB2B2-C289-4779-97C1-507BC779BA25}</Project>
+      <Name>Catel.Core.SL5</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Catel.MVVM\Catel.MVVM.SL5\Catel.MVVM.SL5.csproj">
+      <Project>{5E382C94-510F-4943-8F9E-E6EC3F139E8E}</Project>
+      <Name>Catel.MVVM.SL5</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Exceptions.resx">
+      <Link>Properties\Exceptions.resx</Link>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Exceptions.SL5.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.de.resx">
+      <Link>Properties\Resources.de.resx</Link>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.de.SL5.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.es.resx">
+      <Link>Properties\Resources.es.resx</Link>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.es.SL5.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.fr.resx">
+      <Link>Properties\Resources.fr.resx</Link>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.fr.SL5.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.it.resx">
+      <Link>Properties\Resources.it.resx</Link>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.it.SL5.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.nl.resx">
+      <Link>Properties\Resources.nl.resx</Link>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.nl.SL5.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.resx">
+      <Link>Properties\Resources.resx</Link>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.SL5.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.tr.resx">
+      <Link>Properties\Resources.tr.resx</Link>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.tr.SL5.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.zh-CHS.resx">
+      <Link>Properties\Resources.zh-CHS.resx</Link>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.zh-CHS.SL5.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
+        <SilverlightProjectProperties />
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets. -->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  <Import Project="$(ProjectPath)\..\..\..\..\Tools\Pepita\PepitaGet.targets" />
+  <Import Project="Fody.targets" />
+</Project>

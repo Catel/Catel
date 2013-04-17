@@ -1,0 +1,4 @@
+Catel FAQ
+=========
+
+The FAQ can be found at http://catel.catenalogic.com

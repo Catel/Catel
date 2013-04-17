@@ -1,0 +1,69 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+	<!-- Sizes -->
+	<sys:Double x:Key="Size.MinHeight">23</sys:Double>
+
+	<sys:Double x:Key="Size.Image.VerySmall">16</sys:Double>
+	<sys:Double x:Key="Size.Image.Small">23</sys:Double>
+	<sys:Double x:Key="Size.Image.Medium">33</sys:Double>
+	<sys:Double x:Key="Size.Image.Large">72</sys:Double>
+	<sys:Double x:Key="Size.Image.VeryLarge">96</sys:Double>
+
+	<!-- Margin sizes -->
+	<sys:Double x:Key="MarginSize.Default">6</sys:Double>
+
+	<sys:Double x:Key="MarginSize.Button.X">6</sys:Double>
+	<sys:Double x:Key="MarginSize.Button.Y">6</sys:Double>
+	<sys:Double x:Key="MarginSize.CheckBox.X">6</sys:Double>
+	<sys:Double x:Key="MarginSize.CheckBox.Y">2</sys:Double>
+	<sys:Double x:Key="MarginSize.GroupBox.X">6</sys:Double>
+	<sys:Double x:Key="MarginSize.GroupBox.Y">0</sys:Double>
+	<sys:Double x:Key="MarginSize.Label.X">3</sys:Double>
+	<sys:Double x:Key="MarginSize.Label.Y">6</sys:Double>
+	<sys:Double x:Key="MarginSize.RadioButton.X">6</sys:Double>
+	<sys:Double x:Key="MarginSize.RadioButton.Y">2</sys:Double>
+	<sys:Double x:Key="MarginSize.TextBlock.X">2</sys:Double>
+	<sys:Double x:Key="MarginSize.TextBlock.Y">2</sys:Double>
+
+	<!-- Padding sizes -->
+	<sys:Double x:Key="PaddingSize.Default">NaN</sys:Double>
+
+	<sys:Double x:Key="PaddingSize.Label.X">0</sys:Double>
+	<sys:Double x:Key="PaddingSize.Label.Y">2</sys:Double>
+	<sys:Double x:Key="PaddingSize.TextBox.X">2</sys:Double>
+	<sys:Double x:Key="PaddingSize.TextBox.Y">2</sys:Double>
+	
+	<!-- 
+	
+		ALL STYLES BELOW ARE DETERMINED DYNAMICALLY
+	
+		All definitions below are equal for all size definition files. However, the
+		definitions should be included inside each size definition file because 
+	    "regular" (non-dependency) properties do not support dynamic resources.
+	
+	    Therefore, the thickness objects need to be declared via static resources, and
+	    will be linked to using dynamic resources.
+	
+	-->
+
+	<!-- Margins -->
+	<!--<Thickness x:Key="Margin.Default" Left="{StaticResource MarginSize.Default}" Top="{StaticResource MarginSize.Default}" Right="{StaticResource MarginSize.Default}" Bottom="{StaticResource MarginSize.Default}" />
+
+	<Thickness x:Key="Margin.Button" Left="{StaticResource MarginSize.Button.X}" Top="{StaticResource MarginSize.Button.Y}" Right="{StaticResource MarginSize.Button.X}" Bottom="{StaticResource MarginSize.Button.Y}" />
+	<Thickness x:Key="Margin.Button.LeftAligned" Left="0" Top="{StaticResource MarginSize.Button.Y}" Right="{StaticResource MarginSize.Button.X}" Bottom="0" />
+	<Thickness x:Key="Margin.Button.RightAligned" Left="{StaticResource MarginSize.Button.X}" Top="{StaticResource MarginSize.Button.Y}" Right="0" Bottom="0" />
+	<Thickness x:Key="Margin.CheckBox" Left="{StaticResource MarginSize.CheckBox.X}" Top="{StaticResource MarginSize.CheckBox.Y}" Right="{StaticResource MarginSize.CheckBox.X}" Bottom="{StaticResource MarginSize.CheckBox.Y}" />
+	<Thickness x:Key="Margin.GroupBox" Left="{StaticResource MarginSize.GroupBox.X}" Top="{StaticResource MarginSize.GroupBox.Y}" Right="{StaticResource MarginSize.GroupBox.X}" Bottom="{StaticResource MarginSize.GroupBox.Y}" />
+	<Thickness x:Key="Margin.Label" Left="{StaticResource MarginSize.Label.X}" Top="{StaticResource MarginSize.Label.Y}" Right="{StaticResource MarginSize.Label.X}" Bottom="{StaticResource MarginSize.Label.Y}" />
+	<Thickness x:Key="Margin.RadioButton" Left="{StaticResource MarginSize.RadioButton.X}" Top="{StaticResource MarginSize.RadioButton.Y}" Right="{StaticResource MarginSize.RadioButton.X}" Bottom="{StaticResource MarginSize.RadioButton.Y}" />
+	<Thickness x:Key="Margin.TextBlock" Left="{StaticResource MarginSize.TextBlock.X}" Top="{StaticResource MarginSize.TextBlock.Y}" Right="{StaticResource MarginSize.TextBlock.X}" Bottom="{StaticResource MarginSize.TextBlock.Y}" />-->
+
+	<!-- Paddings -->
+	<!--<Thickness x:Key="Padding.Default" Left="{StaticResource PaddingSize.Default}" Top="{StaticResource PaddingSize.Default}" Right="{StaticResource PaddingSize.Default}" Bottom="{StaticResource PaddingSize.Default}" />
+	
+	<Thickness x:Key="Padding.Label" Left="{StaticResource PaddingSize.Label.X}" Top="{StaticResource PaddingSize.Label.Y}" Right="{StaticResource PaddingSize.Label.X}" Bottom="{StaticResource PaddingSize.Label.Y}" />
+	<Thickness x:Key="Padding.TextBox" Left="{StaticResource PaddingSize.TextBox.X}" Top="{StaticResource PaddingSize.TextBox.Y}" Right="{StaticResource PaddingSize.TextBox.X}" Bottom="{StaticResource PaddingSize.TextBox.Y}" />-->
+
+</ResourceDictionary>

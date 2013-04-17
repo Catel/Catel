@@ -1,0 +1,64 @@
+Defines
+=======
+
+All debug versions have DEBUG
+
+NET35		NET, NET35
+NET40		NET, NET40
+NET45		NET, NET45
+SL4			SILVERLIGHT, SL4
+SL5			SILVERLIGHT, SL5
+WP7			SILVERLIGHT, WINDOWS_PHONE
+WINRT		WINRT
+
+Note that defines must be set for Debug and Release configurations
+
+
+Output directories
+==================
+
+..\..\output\[DEBUG|RELEASE]\[FRAMEWORK]\[PROJECT]
+
+Note that the xml documentation must also be generated
+
+
+Assembly name and default namespace
+===================================
+
+The assembly name is always equal to the project name without the framework
+extension. Thus a project named "Catel.Extensions.FluentValidation.NET35" will
+have the assembly name "Catel.Extensions.FluentValidation".
+
+The default namespace is always "Catel".
+
+
+Assembly info
+=============
+
+There is one assembly info that should be included by all projects, which
+is SolutionAssemblyInfo which is located in Catel.Core.NET35.
+
+Every project (thus Catel.Core, Catel.MVVM, etc) all have a separate AssemblyInfo
+that must be located in the NET35 project and referenced by all other projects.
+
+
+Caitlyn
+=======
+
+See http://caitlyn.codeplex.com
+
+I have created a tool that makes it easier to create the linked files. So, from now
+on you only have to add files to the NET35 project. Then, simply run Caitlyn
+via the Visual Studio extension.
+
+It will automatically loop all the files in "Catel.Core.NET35"
+and create them in the following projects (if they exist):
+
+* Catel.Core.NET40
+* Catel.Core.NET45
+* Catel.Core.SL4
+* Catel.Core.SL5
+* Catel.Core.WP7
+* Catel.Core.WinRT
+
+This makes the development a lot easier!

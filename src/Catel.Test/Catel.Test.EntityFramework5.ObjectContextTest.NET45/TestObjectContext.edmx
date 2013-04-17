@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TestObjectContext.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="TestObjectContextStoreContainer">
+          <EntitySet Name="ObjectContextCustomer" EntityType="TestObjectContext.Store.ObjectContextCustomer" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ObjectContextOrder" EntityType="TestObjectContext.Store.ObjectContextOrder" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ObjectContextProduct" EntityType="TestObjectContext.Store.ObjectContextProduct" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_OrderCustomer" Association="TestObjectContext.Store.FK_OrderCustomer">
+            <End Role="ObjectContextCustomer" EntitySet="ObjectContextCustomer" />
+            <End Role="ObjectContextOrder" EntitySet="ObjectContextOrder" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductOrder" Association="TestObjectContext.Store.FK_ProductOrder">
+            <End Role="ObjectContextProduct" EntitySet="ObjectContextProduct" />
+            <End Role="ObjectContextOrder" EntitySet="ObjectContextOrder" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="ObjectContextCustomer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Street" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Country" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ObjectContextOrder">
+          <Key>
+            <PropertyRef Name="ProductId" />
+            <PropertyRef Name="CustomerId" />
+          </Key>
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="CustomerId" Type="int" Nullable="false" />
+          <Property Name="OrderCreated" Type="datetime" Nullable="false" />
+          <Property Name="Amount" Type="int" Nullable="false" />
+          <Property Name="Product_Id" Type="int" Nullable="false" />
+          <Property Name="Customer_Id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ObjectContextProduct">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_OrderCustomer">
+          <End Role="ObjectContextCustomer" Type="TestObjectContext.Store.ObjectContextCustomer" Multiplicity="1" />
+          <End Role="ObjectContextOrder" Type="TestObjectContext.Store.ObjectContextOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ObjectContextCustomer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ObjectContextOrder">
+              <PropertyRef Name="Customer_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductOrder">
+          <End Role="ObjectContextProduct" Type="TestObjectContext.Store.ObjectContextProduct" Multiplicity="1" />
+          <End Role="ObjectContextOrder" Type="TestObjectContext.Store.ObjectContextOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ObjectContextProduct">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ObjectContextOrder">
+              <PropertyRef Name="Product_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TestObjectContext" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="TestObjectContextContainer" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+          <EntitySet Name="ObjectContextCustomers" EntityType="TestObjectContext.ObjectContextCustomer" />
+          <EntitySet Name="ObjectContextOrders" EntityType="TestObjectContext.ObjectContextOrder" />
+          <EntitySet Name="ObjectContextProducts" EntityType="TestObjectContext.ObjectContextProduct" />
+          <AssociationSet Name="FK_OrderCustomer" Association="TestObjectContext.FK_OrderCustomer">
+            <End Role="ObjectContextCustomer" EntitySet="ObjectContextCustomers" />
+            <End Role="ObjectContextOrder" EntitySet="ObjectContextOrders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductOrder" Association="TestObjectContext.FK_ProductOrder">
+            <End Role="ObjectContextProduct" EntitySet="ObjectContextProducts" />
+            <End Role="ObjectContextOrder" EntitySet="ObjectContextOrders" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="ObjectContextCustomer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Street" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Country" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ObjectContextOrders" Relationship="TestObjectContext.FK_OrderCustomer" FromRole="ObjectContextCustomer" ToRole="ObjectContextOrder" />
+        </EntityType>
+        <EntityType Name="ObjectContextOrder">
+          <Key>
+            <PropertyRef Name="ProductId" />
+            <PropertyRef Name="CustomerId" />
+          </Key>
+          <Property Type="Int32" Name="ProductId" Nullable="false" />
+          <Property Type="Int32" Name="CustomerId" Nullable="false" />
+          <Property Type="DateTime" Name="OrderCreated" Nullable="false" Precision="3" />
+          <Property Type="Int32" Name="Amount" Nullable="false" />
+          <Property Type="Int32" Name="Product_Id" Nullable="false" />
+          <Property Type="Int32" Name="Customer_Id" Nullable="false" />
+          <NavigationProperty Name="ObjectContextCustomer" Relationship="TestObjectContext.FK_OrderCustomer" FromRole="ObjectContextOrder" ToRole="ObjectContextCustomer" />
+          <NavigationProperty Name="ObjectContextProduct" Relationship="TestObjectContext.FK_ProductOrder" FromRole="ObjectContextOrder" ToRole="ObjectContextProduct" />
+        </EntityType>
+        <EntityType Name="ObjectContextProduct">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ObjectContextOrders" Relationship="TestObjectContext.FK_ProductOrder" FromRole="ObjectContextProduct" ToRole="ObjectContextOrder" />
+        </EntityType>
+        <Association Name="FK_OrderCustomer">
+          <End Type="TestObjectContext.ObjectContextCustomer" Role="ObjectContextCustomer" Multiplicity="1" />
+          <End Type="TestObjectContext.ObjectContextOrder" Role="ObjectContextOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ObjectContextCustomer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ObjectContextOrder">
+              <PropertyRef Name="Customer_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductOrder">
+          <End Type="TestObjectContext.ObjectContextProduct" Role="ObjectContextProduct" Multiplicity="1" />
+          <End Type="TestObjectContext.ObjectContextOrder" Role="ObjectContextOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ObjectContextProduct">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ObjectContextOrder">
+              <PropertyRef Name="Product_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <Alias Key="Model" Value="TestObjectContext" />
+        <Alias Key="Target" Value="TestObjectContext.Store" />
+        <EntityContainerMapping CdmEntityContainer="TestObjectContextContainer" StorageEntityContainer="TestObjectContextStoreContainer">
+          <EntitySetMapping Name="ObjectContextCustomers">
+            <EntityTypeMapping TypeName="TestObjectContext.ObjectContextCustomer">
+              <MappingFragment StoreEntitySet="ObjectContextCustomer">
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Street" ColumnName="Street" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ObjectContextOrders">
+            <EntityTypeMapping TypeName="TestObjectContext.ObjectContextOrder">
+              <MappingFragment StoreEntitySet="ObjectContextOrder">
+                <ScalarProperty Name="Customer_Id" ColumnName="Customer_Id" />
+                <ScalarProperty Name="Product_Id" ColumnName="Product_Id" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="OrderCreated" ColumnName="OrderCreated" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ObjectContextProducts">
+            <EntityTypeMapping TypeName="TestObjectContext.ObjectContextProduct">
+              <MappingFragment StoreEntitySet="ObjectContextProduct">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer>
+    <edmx:Connection>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <edmx:DesignerProperty Name="EnablePluralization" Value="True" />
+        <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="Default" />
+        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

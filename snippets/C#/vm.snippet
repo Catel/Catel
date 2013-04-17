@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>Define a new view model class</Title>
+            <Shortcut>vm</Shortcut>
+            <Description>Code snippet for a new view model class</Description>
+            <Author>CatenaLogic</Author>
+            <SnippetTypes>
+                <SnippetType>Expansion</SnippetType>
+            </SnippetTypes>
+        </Header>
+        <Snippet>
+            <Declarations>
+                <Literal>
+                    <ID>name</ID>
+                    <ToolTip>Name of the view model</ToolTip>
+                    <Default>name</Default>
+                </Literal>
+            </Declarations>
+            <Code Language="csharp">
+                <![CDATA[/// <summary>
+/// $name$ view model.
+/// </summary>
+public class $name$ViewModel : ViewModelBase
+{
+	#region Fields
+	#endregion
+
+	#region Constructors
+	/// <summary>
+	/// Initializes a new instance of the <see cref="$name$ViewModel"/> class.
+	/// </summary>
+	public $name$ViewModel ()
+	{
+	}
+	#endregion
+
+    #region Properties
+	/// <summary>
+	/// Gets the title of the view model.
+	/// </summary>
+	/// <value>The title.</value>
+	public override string Title { get { return "View model title"; } }
+	
+	// TODO: Register models with the vmpropmodel codesnippet
+	// TODO: Register view model properties with the vmprop or vmpropviewmodeltomodel codesnippets
+    #endregion
+
+	#region Commands
+	// TODO: Register commands with the vmcommand or vmcommandwithcanexecute codesnippets
+	#endregion
+	
+    #region Methods
+    #endregion
+}]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

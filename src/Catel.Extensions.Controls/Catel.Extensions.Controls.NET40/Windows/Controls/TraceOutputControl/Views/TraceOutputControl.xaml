@@ -1,0 +1,120 @@
+﻿<catel:UserControl x:Class="Catel.Windows.Controls.TraceOutputControl"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+	               xmlns:sysdiagnostics="clr-namespace:System.Diagnostics;assembly=System"
+                   xmlns:catel="http://catel.codeplex.com"
+                   xmlns:Converters="clr-namespace:Catel.Windows.Data.Converters"
+                   SnapsToDevicePixels="True">
+
+    <!-- Resources -->
+    <UserControl.Resources>
+        <!-- Converters -->
+        <Converters:OutputTypeConverter x:Key="OutputTypeConverter" />
+
+        <!-- object data providers -->
+        <!--<ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="AvailableTraceLevelCollection">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="sysdiagnostics:TraceLevel" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>-->
+
+        <!-- Context menu -->
+        <ContextMenu x:Key="LogEntryContextMenu">
+            <MenuItem Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListView}}, Path=DataContext.CopyToClipboard}" Header="Copy to clipboard" />
+        </ContextMenu>
+    </UserControl.Resources>
+
+    <!-- Content -->
+    <DockPanel LastChildFill="True">
+
+        <!-- Toolbar -->
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+            <!-- Combobox with modes -->
+            <Label Content="Details: " />
+            <ComboBox ItemsSource="{Binding AvailableTraceLevels}" SelectedValue="{Binding SelectedTraceLevel}" />
+
+            <!-- Clear button -->
+            <Button Command="{Binding ClearOutput}" Style="{DynamicResource SmallImageButtonStyle}" ToolTip="Clear output">
+                <Image Source="/Catel.Extensions.Controls;component/Resources/Images/ClearOutput.png" />
+            </Button>
+        </StackPanel>
+
+        <!-- Listview with output -->
+        <ListView x:Name="logListView" ItemsSource="{Binding TraceEntryCollection}">
+            <i:Interaction.Behaviors>
+                <catel:KeyPressToCommand Command="{Binding CopyToClipboard}" Key="C" Modifiers="Ctrl" />
+            </i:Interaction.Behaviors>
+
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Style.Triggers>
+                        <!-- Error -->
+                        <DataTrigger Binding="{Binding TraceLevel}">
+                            <DataTrigger.Value>
+                                <sysdiagnostics:TraceLevel>Error</sysdiagnostics:TraceLevel>
+                            </DataTrigger.Value>
+                            <Setter Property="Foreground" Value="Red" />
+                        </DataTrigger>
+
+                        <!-- Warning-->
+                        <DataTrigger Binding="{Binding TraceLevel}">
+                            <DataTrigger.Value>
+                                <sysdiagnostics:TraceLevel>Warning</sysdiagnostics:TraceLevel>
+                            </DataTrigger.Value>
+                            <Setter Property="Foreground" Value="DarkOrange" />
+                        </DataTrigger>
+
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Background" Value="LightGray" />
+                        </Trigger>
+                    </Style.Triggers>
+
+                    <Setter Property="VerticalAlignment" Value="Top" />
+                    <Setter Property="ContextMenu" Value="{StaticResource LogEntryContextMenu}" />
+                </Style>
+            </ListView.ItemContainerStyle>
+
+            <ListView.View>
+                <GridView>
+                    <!-- Icon -->
+                    <GridViewColumn Header="" Width="27">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <ContentControl Content="{Binding TraceLevel, Converter={StaticResource OutputTypeConverter}}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <!-- Time (Default Width = 120) -->
+                    <GridViewColumn Header="Time">
+
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Time}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <!-- Level -->
+                    <GridViewColumn Header="Level" Width="75">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding TraceLevel}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <!-- Message -->
+                    <GridViewColumn Header="Message" Width="1000">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Message}" FontFamily="Courier New" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </DockPanel>
+</catel:UserControl>

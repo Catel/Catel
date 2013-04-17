@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>Define a property as a model for a view model class</Title>
+            <Shortcut>vmpropmodel</Shortcut>
+            <Description>Code snippet for a property as a model for a view model class</Description>
+            <Author>CatenaLogic</Author>
+            <SnippetTypes>
+                <SnippetType>Expansion</SnippetType>
+            </SnippetTypes>
+        </Header>
+        <Snippet>
+            <Declarations>
+                <Literal>
+                    <ID>description</ID>
+                    <ToolTip>Description of the property</ToolTip>
+                    <Default>Gets or sets the property value</Default>
+                </Literal>
+                <Literal>
+                    <ID>name</ID>
+                    <ToolTip>Name of the property</ToolTip>
+                    <Default>name</Default>
+                </Literal>
+                <Literal>
+                    <ID>type</ID>
+                    <ToolTip>Type of the property</ToolTip>
+                    <Default>type</Default>
+                </Literal>
+            </Declarations>
+            <Code Language="csharp">
+                <![CDATA[/// <summary>
+/// $description$.
+/// </summary>
+[Model]
+public $type$ $name$
+{
+	get { return GetValue<$type$>($name$Property); }
+	private set { SetValue($name$Property, value); }
+}
+
+/// <summary>
+/// Register the $name$ property so it is known in the class.
+/// </summary>
+public static readonly PropertyData $name$Property = RegisterProperty("$name$", typeof($type$));]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

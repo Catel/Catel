@@ -1,0 +1,12 @@
+What steps to perform when releasing:
+
+1) Release via NuGet
+2) Release via Codeplex
+3) Update docs on confluence (create copy of LATEST space)
+4) Write blog post
+5) Share via Twitter
+6) Share via LinkedIn
+7) Update the following version numbers:
+   * Version numbers in final builder
+   * History.txt
+   * SolutionAssemblyInfo.cs

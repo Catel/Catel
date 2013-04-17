@@ -1,0 +1,922 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BEDEB2CB-51AB-4AF6-85F9-6A596B4603BB}</ProjectGuid>
+    <OutputType>library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Catel</RootNamespace>
+    <AssemblyName>Catel.MVVM</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <FodyPath>..\..\..\lib\Fody.1.13.6.0</FodyPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\output\debug\NET45\Catel.MVVM\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET; NET45</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>..\..\..\output\debug\NET45\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\output\release\NET45\Catel.MVVM\</OutputPath>
+    <DefineConstants>TRACE;NET; NET45</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>..\..\..\output\release\NET45\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Obsolete, Version=1.5.1.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Obsolete.Fody.1.5.1.0\lib\NET40\Obsolete.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Interactivity">
+      <HintPath>..\..\..\lib\NET45\Interactivity\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Catel.Core\Catel.Core.NET45\Catel.Core.NET45.csproj">
+      <Project>{d748be60-bad6-4d1b-be5a-c24943a56594}</Project>
+      <Name>Catel.Core.NET45</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Catel.MVVM.NET40\ClassDiagrams\ViewModelBase.cd">
+      <Link>ClassDiagrams\ViewModelBase.cd</Link>
+    </None>
+    <None Include="Fody.targets" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\SolutionAssemblyInfo.cs">
+      <Link>Properties\SolutionAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Collections\FastObservableCollection.cs">
+      <Link>Collections\FastObservableCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Data\DispatcherObservableObject.cs">
+      <Link>Data\DispatcherObservableObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Environment.cs">
+      <Link>Environment.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Extensions\NavigationEventArgsExtensions.cs">
+      <Link>Extensions\NavigationEventArgsExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\ModuleInitializer.cs">
+      <Link>ModuleInitializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Auditing\AuditingManager.cs">
+      <Link>MVVM\Auditing\AuditingManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Auditing\AuditorBase.cs">
+      <Link>MVVM\Auditing\AuditorBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Auditing\Helpers\AuditingHelper.cs">
+      <Link>MVVM\Auditing\Helpers\AuditingHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Auditing\Interfaces\IAuditor.cs">
+      <Link>MVVM\Auditing\Interfaces\IAuditor.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\AsynchronousCommand.cs">
+      <Link>MVVM\Commands\AsynchronousCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Command.cs">
+      <Link>MVVM\Commands\Command.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\EventArgs\CommandCanceledEventArgs.cs">
+      <Link>MVVM\Commands\EventArgs\CommandCanceledEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\EventArgs\CommandEventArgs.cs">
+      <Link>MVVM\Commands\EventArgs\CommandEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\EventArgs\CommandExecutedEventArgs.cs">
+      <Link>MVVM\Commands\EventArgs\CommandExecutedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Helpers\CommandHelper.cs">
+      <Link>MVVM\Commands\Helpers\CommandHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\IAuthenticationProvider.cs">
+      <Link>MVVM\Commands\Interfaces\IAuthenticationProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ICatelCommand.cs">
+      <Link>MVVM\Commands\Interfaces\ICatelCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\IViewModelCommandManager.cs">
+      <Link>MVVM\Commands\Interfaces\IViewModelCommandManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\ViewModelCommandManager.cs">
+      <Link>MVVM\Commands\ViewModelCommandManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Exceptions\InvalidViewModelException.cs">
+      <Link>MVVM\Exceptions\InvalidViewModelException.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Exceptions\ModelNotRegisteredException.cs">
+      <Link>MVVM\Exceptions\ModelNotRegisteredException.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Exceptions\PropertyNotFoundInModelException.cs">
+      <Link>MVVM\Exceptions\PropertyNotFoundInModelException.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Exceptions\ViewModelNotRegisteredException.cs">
+      <Link>MVVM\Exceptions\ViewModelNotRegisteredException.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Exceptions\WrongViewModelTypeException.cs">
+      <Link>MVVM\Exceptions\WrongViewModelTypeException.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Helpers\ViewHelper.cs">
+      <Link>MVVM\Helpers\ViewHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Helpers\ViewModelServiceHelper.cs">
+      <Link>MVVM\Helpers\ViewModelServiceHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Locators\Interfaces\ILocator.cs">
+      <Link>MVVM\Locators\Interfaces\ILocator.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Locators\Interfaces\IUrlLocator.cs">
+      <Link>MVVM\Locators\Interfaces\IUrlLocator.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Locators\Interfaces\IViewLocator.cs">
+      <Link>MVVM\Locators\Interfaces\IViewLocator.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Locators\Interfaces\IViewModelLocator.cs">
+      <Link>MVVM\Locators\Interfaces\IViewModelLocator.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Locators\LocatorBase.cs">
+      <Link>MVVM\Locators\LocatorBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Locators\UrlLocator.cs">
+      <Link>MVVM\Locators\UrlLocator.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Locators\ViewLocator.cs">
+      <Link>MVVM\Locators\ViewLocator.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Locators\ViewModelLocator.cs">
+      <Link>MVVM\Locators\ViewModelLocator.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\DispatcherService.cs">
+      <Link>MVVM\Services\DispatcherService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\EventArgs\AccelerometerValueChangedEventArgs.cs">
+      <Link>MVVM\Services\EventArgs\AccelerometerValueChangedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\EventArgs\ApplicationClosingEventArgs.cs">
+      <Link>MVVM\Services\EventArgs\ApplicationClosingEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\EventArgs\CameraOperationCompletedEventArgs.cs">
+      <Link>MVVM\Services\EventArgs\CameraOperationCompletedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\EventArgs\ContentReadyEventArgs.cs">
+      <Link>MVVM\Services\EventArgs\ContentReadyEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\EventArgs\LocationChangedEventArgs.cs">
+      <Link>MVVM\Services\EventArgs\LocationChangedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\EventArgs\UICompletedEventArgs.cs">
+      <Link>MVVM\Services\EventArgs\UICompletedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Exceptions\PageNotRegisteredException.cs">
+      <Link>MVVM\Services\Exceptions\PageNotRegisteredException.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Exceptions\WindowNotRegisteredException.cs">
+      <Link>MVVM\Services\Exceptions\WindowNotRegisteredException.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IAccelerometerService.cs">
+      <Link>MVVM\Services\Interfaces\IAccelerometerService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IAccelerometerValue.cs">
+      <Link>MVVM\Services\Interfaces\IAccelerometerValue.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ICameraService.cs">
+      <Link>MVVM\Services\Interfaces\ICameraService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IDispatcherService.cs">
+      <Link>MVVM\Services\Interfaces\IDispatcherService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IFileSupport.cs">
+      <Link>MVVM\Services\Interfaces\IFileSupport.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ILocation.cs">
+      <Link>MVVM\Services\Interfaces\ILocation.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ILocationService.cs">
+      <Link>MVVM\Services\Interfaces\ILocationService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IMessageService.cs">
+      <Link>MVVM\Services\Interfaces\IMessageService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\INavigationService.cs">
+      <Link>MVVM\Services\Interfaces\INavigationService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IOpenFileService.cs">
+      <Link>MVVM\Services\Interfaces\IOpenFileService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IPleaseWaitService.cs">
+      <Link>MVVM\Services\Interfaces\IPleaseWaitService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IProcessService.cs">
+      <Link>MVVM\Services\Interfaces\IProcessService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ISaveFileService.cs">
+      <Link>MVVM\Services\Interfaces\ISaveFileService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ISensorService.cs">
+      <Link>MVVM\Services\Interfaces\ISensorService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ISplashScreenService.cs">
+      <Link>MVVM\Services\Interfaces\ISplashScreenService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IUIVisualizerService.cs">
+      <Link>MVVM\Services\Interfaces\IUIVisualizerService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IVibrateService.cs">
+      <Link>MVVM\Services\Interfaces\IVibrateService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IViewModelService.cs">
+      <Link>MVVM\Services\Interfaces\IViewModelService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\MessageService.cs">
+      <Link>MVVM\Services\MessageService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\NamingConvention.cs">
+      <Link>MVVM\Services\NamingConvention.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\NavigationService.cs">
+      <Link>MVVM\Services\NavigationService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\OpenFileService.cs">
+      <Link>MVVM\Services\OpenFileService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\PleaseWaitService.cs">
+      <Link>MVVM\Services\PleaseWaitService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\ProcessService.cs">
+      <Link>MVVM\Services\ProcessService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\SaveFileService.cs">
+      <Link>MVVM\Services\SaveFileService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\SplashScreenService.cs">
+      <Link>MVVM\Services\SplashScreenService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Test\MessageService.cs">
+      <Link>MVVM\Services\Test\MessageService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Test\OpenFileService.cs">
+      <Link>MVVM\Services\Test\OpenFileService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Test\PleaseWaitService.cs">
+      <Link>MVVM\Services\Test\PleaseWaitService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Test\ProcessService.cs">
+      <Link>MVVM\Services\Test\ProcessService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Test\SaveFileService.cs">
+      <Link>MVVM\Services\Test\SaveFileService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Test\UIVisualizerService.cs">
+      <Link>MVVM\Services\Test\UIVisualizerService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\UIVisualizerService.cs">
+      <Link>MVVM\Services\UIVisualizerService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\ViewModelServiceBase.cs">
+      <Link>MVVM\Services\ViewModelServiceBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Tasks\ActionTask.cs">
+      <Link>MVVM\Tasks\ActionTask.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Tasks\Interfaces\ITask.cs">
+      <Link>MVVM\Tasks\Interfaces\ITask.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Tasks\Interfaces\ITaskProgressTracker.cs">
+      <Link>MVVM\Tasks\Interfaces\ITaskProgressTracker.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Tasks\TaskBase.cs">
+      <Link>MVVM\Tasks\TaskBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Attributes\ExposeAttribute.cs">
+      <Link>MVVM\ViewModels\Attributes\ExposeAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Attributes\InterestedInAttribute.cs">
+      <Link>MVVM\ViewModels\Attributes\InterestedInAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Attributes\ModelAttribute.cs">
+      <Link>MVVM\ViewModels\Attributes\ModelAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Attributes\ValidationToViewModelAttribute.cs">
+      <Link>MVVM\ViewModels\Attributes\ValidationToViewModelAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Attributes\ViewModelToModelAttribute.cs">
+      <Link>MVVM\ViewModels\Attributes\ViewModelToModelAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\EventArgs\CancelingEventArgs.cs">
+      <Link>MVVM\ViewModels\EventArgs\CancelingEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\EventArgs\CancellableEventArgs.cs">
+      <Link>MVVM\ViewModels\EventArgs\CancellableEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\EventArgs\SavingEventArgs.cs">
+      <Link>MVVM\ViewModels\EventArgs\SavingEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\EventArgs\ViewModelClosedEventArgs.cs">
+      <Link>MVVM\ViewModels\EventArgs\ViewModelClosedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Extensions\ViewModelExtensions.cs">
+      <Link>MVVM\ViewModels\Extensions\ViewModelExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Interfaces\INotifyableViewModel.cs">
+      <Link>MVVM\ViewModels\Interfaces\INotifyableViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Interfaces\IProgressNotifyableViewModel.cs">
+      <Link>MVVM\ViewModels\Interfaces\IProgressNotifyableViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Interfaces\IRelationalViewModel.cs">
+      <Link>MVVM\ViewModels\Interfaces\IRelationalViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Interfaces\IViewModel.cs">
+      <Link>MVVM\ViewModels\Interfaces\IViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Interfaces\IViewModelContainer.cs">
+      <Link>MVVM\ViewModels\Interfaces\IViewModelContainer.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Interfaces\IViewModelFactory.cs">
+      <Link>MVVM\ViewModels\Interfaces\IViewModelFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Interfaces\IViewModelManager.cs">
+      <Link>MVVM\ViewModels\Interfaces\IViewModelManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ManagedViewModel.cs">
+      <Link>MVVM\ViewModels\ManagedViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ModelErrorInfo.cs">
+      <Link>MVVM\ViewModels\ModelErrorInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ModelInfo.cs">
+      <Link>MVVM\ViewModels\ModelInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\NavigationViewModelBase.cs">
+      <Link>MVVM\ViewModels\NavigationViewModelBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ProgressNotifyableViewModel.cs">
+      <Link>MVVM\ViewModels\ProgressNotifyableViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ViewModelBase.cs">
+      <Link>MVVM\ViewModels\ViewModelBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ViewModelBase.customtypedescriptor.cs">
+      <Link>MVVM\ViewModels\ViewModelBase.customtypedescriptor.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ViewModelBase.navigation.cs">
+      <Link>MVVM\ViewModels\ViewModelBase.navigation.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ViewModelFactory.cs">
+      <Link>MVVM\ViewModels\ViewModelFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ViewModelManager.cs">
+      <Link>MVVM\ViewModels\ViewModelManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ViewModelMetadata.cs">
+      <Link>MVVM\ViewModels\ViewModelMetadata.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ViewModelPropertyDescriptor.cs">
+      <Link>MVVM\ViewModels\ViewModelPropertyDescriptor.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ViewModelPropertyDescriptorFactory.cs">
+      <Link>MVVM\ViewModels\ViewModelPropertyDescriptorFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ViewModelToModelMapping.cs">
+      <Link>MVVM\ViewModels\ViewModelToModelMapping.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Attributes\ViewToViewModelAttribute.cs">
+      <Link>MVVM\Views\Attributes\ViewToViewModelAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Helpers\ViewToViewModelMappingHelper.cs">
+      <Link>MVVM\Views\Helpers\ViewToViewModelMappingHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Interfaces\IViewManager.cs">
+      <Link>MVVM\Views\Interfaces\IViewManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\ViewManager.cs">
+      <Link>MVVM\Views\ViewManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\ViewToViewModelMapping.cs">
+      <Link>MVVM\Views\ViewToViewModelMapping.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\ViewToViewModelMappingContainer.cs">
+      <Link>MVVM\Views\ViewToViewModelMappingContainer.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Properties\AssemblyInfo.cs">
+      <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Properties\Exceptions.NET45.Designer.cs">
+      <Link>Properties\Exceptions.NET45.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Exceptions.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.de.NET45.Designer.cs">
+      <Link>Properties\Resources.de.NET45.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.de.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.es.NET45.Designer.cs">
+      <Link>Properties\Resources.es.NET45.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.es.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.fr.NET45.Designer.cs">
+      <Link>Properties\Resources.fr.NET45.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.fr.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.it.NET45.Designer.cs">
+      <Link>Properties\Resources.it.NET45.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.it.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.NET45.Designer.cs">
+      <Link>Properties\Resources.NET45.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.nl.NET45.Designer.cs">
+      <Link>Properties\Resources.nl.NET45.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.nl.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.tr.NET45.Designer.cs">
+      <Link>Properties\Resources.tr.NET45.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.tr.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.zh-CHS2.Designer.cs">
+      <Link>Properties\Resources.zh-CHS2.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.zh-CHS.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\InfoBarMessageControl\InfoBarMessageControl.cs">
+      <Link>Windows\Controls\InfoBarMessageControl\InfoBarMessageControl.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\InfoBarMessageControl\InfoBarMessageControlVisibilityConverter.cs">
+      <Link>Windows\Controls\InfoBarMessageControl\InfoBarMessageControlVisibilityConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\Interfaces\IPage.cs">
+      <Link>Windows\Controls\Interfaces\IPage.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\Interfaces\IUIElement.cs">
+      <Link>Windows\Controls\Interfaces\IUIElement.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\Interfaces\IUserControl.cs">
+      <Link>Windows\Controls\Interfaces\IUserControl.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\Interfaces\IView.cs">
+      <Link>Windows\Controls\Interfaces\IView.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\MVVMProviders\Logic\EventArgs\DetermineViewModelInstanceEventArgs.cs">
+      <Link>Windows\Controls\MVVMProviders\Logic\EventArgs\DetermineViewModelInstanceEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\MVVMProviders\Logic\EventArgs\DetermineViewModelTypeEventArgs.cs">
+      <Link>Windows\Controls\MVVMProviders\Logic\EventArgs\DetermineViewModelTypeEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\MVVMProviders\Logic\Extensions\LogicExtensions.cs">
+      <Link>Windows\Controls\MVVMProviders\Logic\Extensions\LogicExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\MVVMProviders\Logic\LogicBase.cs">
+      <Link>Windows\Controls\MVVMProviders\Logic\LogicBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\MVVMProviders\Logic\NavigationLogicBase.cs">
+      <Link>Windows\Controls\MVVMProviders\Logic\NavigationLogicBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\MVVMProviders\Logic\NavigationPageLogic.cs">
+      <Link>Windows\Controls\MVVMProviders\Logic\NavigationPageLogic.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\MVVMProviders\Logic\UserControlLogic.cs">
+      <Link>Windows\Controls\MVVMProviders\Logic\UserControlLogic.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\MVVMProviders\Logic\WindowLogic.cs">
+      <Link>Windows\Controls\MVVMProviders\Logic\WindowLogic.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\MVVMProviders\MVVMBehaviorBase.cs">
+      <Link>Windows\Controls\MVVMProviders\MVVMBehaviorBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\MVVMProviders\NavigationPageBehavior.cs">
+      <Link>Windows\Controls\MVVMProviders\NavigationPageBehavior.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\MVVMProviders\UserControlBehavior.cs">
+      <Link>Windows\Controls\MVVMProviders\UserControlBehavior.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\MVVMProviders\WindowBehavior.cs">
+      <Link>Windows\Controls\MVVMProviders\WindowBehavior.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\Page.cs">
+      <Link>Windows\Controls\Page.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\Page.generic.cs">
+      <Link>Windows\Controls\Page.generic.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\UserControl.cs">
+      <Link>Windows\Controls\UserControl.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\UserControl.generic.cs">
+      <Link>Windows\Controls\UserControl.generic.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\VisualWrapper.cs">
+      <Link>Windows\Controls\VisualWrapper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\WarningAndErrorValidator.cs">
+      <Link>Windows\Controls\WarningAndErrorValidator.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\BindingEvaluator.cs">
+      <Link>Windows\Data\BindingEvaluator.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\BindingWithValidation.cs">
+      <Link>Windows\Data\BindingWithValidation.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\AreEqualMultiValueConverter.cs">
+      <Link>Windows\Data\Converters\AreEqualMultiValueConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\BooleanToGrayscaleConverter.cs">
+      <Link>Windows\Data\Converters\BooleanToGrayscaleConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\BooleanToOppositeBooleanConverter.cs">
+      <Link>Windows\Data\Converters\BooleanToOppositeBooleanConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\BooleanToTextConverter.cs">
+      <Link>Windows\Data\Converters\BooleanToTextConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\BooleanToVisibilityConverter.cs">
+      <Link>Windows\Data\Converters\BooleanToVisibilityConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\ColorToBrushConverter.cs">
+      <Link>Windows\Data\Converters\ColorToBrushConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\ContainsItemsConverter.cs">
+      <Link>Windows\Data\Converters\ContainsItemsConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\CountVisibilityConverter.cs">
+      <Link>Windows\Data\Converters\CountVisibilityConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\DebugConverter.cs">
+      <Link>Windows\Data\Converters\DebugConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\EmptyStringToVisibilityConverter.cs">
+      <Link>Windows\Data\Converters\EmptyStringToVisibilityConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\FormattingConverter.cs">
+      <Link>Windows\Data\Converters\FormattingConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\GetFirstValidationErrorConverter.cs">
+      <Link>Windows\Data\Converters\GetFirstValidationErrorConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\Helpers\ConverterHelper.cs">
+      <Link>Windows\Data\Converters\Helpers\ConverterHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\IntToStringConverter.cs">
+      <Link>Windows\Data\Converters\IntToStringConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\IsSelectedConverter.cs">
+      <Link>Windows\Data\Converters\IsSelectedConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\IsSelectedValueConverter.cs">
+      <Link>Windows\Data\Converters\IsSelectedValueConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\MethodToValueConverter.cs">
+      <Link>Windows\Data\Converters\MethodToValueConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\MultiplyConverter.cs">
+      <Link>Windows\Data\Converters\MultiplyConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\NullableValueConverter.cs">
+      <Link>Windows\Data\Converters\NullableValueConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\ReferenceToBooleanConverter.cs">
+      <Link>Windows\Data\Converters\ReferenceToBooleanConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\ReferenceToVisibilityConverter.cs">
+      <Link>Windows\Data\Converters\ReferenceToVisibilityConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\ShortDateFormattingConverter.cs">
+      <Link>Windows\Data\Converters\ShortDateFormattingConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\StringToIntConverter.cs">
+      <Link>Windows\Data\Converters\StringToIntConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\ValueConverterBase.cs">
+      <Link>Windows\Data\Converters\ValueConverterBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\ValueConverterGroup.cs">
+      <Link>Windows\Data\Converters\ValueConverterGroup.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\ViewModelToViewConverter.cs">
+      <Link>Windows\Data\Converters\ViewModelToViewConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\VisibilityConverterBase.cs">
+      <Link>Windows\Data\Converters\VisibilityConverterBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\DataResource.cs">
+      <Link>Windows\Data\DataResource.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\EventArgs\DependencyPropertyValueChangedEventArgs.cs">
+      <Link>Windows\Data\EventArgs\DependencyPropertyValueChangedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Helpers\BindingHelper.cs">
+      <Link>Windows\Data\Helpers\BindingHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Helpers\DependencyPropertyChangedHelper.cs">
+      <Link>Windows\Data\Helpers\DependencyPropertyChangedHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Helpers\DependencyPropertyHelper.cs">
+      <Link>Windows\Data\Helpers\DependencyPropertyHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Extensions\ApplicationExtensions.cs">
+      <Link>Windows\Extensions\ApplicationExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Extensions\DependencyObjectExtensions.cs">
+      <Link>Windows\Extensions\DependencyObjectExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Extensions\FrameworkElementExtensions.cs">
+      <Link>Windows\Extensions\FrameworkElementExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Extensions\UIElementExtensions.cs">
+      <Link>Windows\Extensions\UIElementExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Extensions\VisualExtensions.cs">
+      <Link>Windows\Extensions\VisualExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Extensions\WindowExtensions.cs">
+      <Link>Windows\Extensions\WindowExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Helpers\AutoDisposeHelper.cs">
+      <Link>Windows\Helpers\AutoDisposeHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Helpers\EffectsHelper.cs">
+      <Link>Windows\Helpers\EffectsHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Helpers\PopupHelper.cs">
+      <Link>Windows\Helpers\PopupHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Helpers\ResourceHelper.cs">
+      <Link>Windows\Helpers\ResourceHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Helpers\VisualTargetPresentationSource.cs">
+      <Link>Windows\Helpers\VisualTargetPresentationSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Helpers\WrapControlHelper.cs">
+      <Link>Windows\Helpers\WrapControlHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\Authentication.cs">
+      <Link>Windows\Interactivity\Authentication.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\BehaviorBase.cs">
+      <Link>Windows\Interactivity\BehaviorBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\CommandBehaviorBase.cs">
+      <Link>Windows\Interactivity\CommandBehaviorBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\CommandEventTriggerBase.cs">
+      <Link>Windows\Interactivity\CommandEventTriggerBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\CommandTriggerActionBase.cs">
+      <Link>Windows\Interactivity\CommandTriggerActionBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\CommandTriggerBase.cs">
+      <Link>Windows\Interactivity\CommandTriggerBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\DelayBindingUpdate.cs">
+      <Link>Windows\Interactivity\DelayBindingUpdate.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\DoubleClickToCommand.cs">
+      <Link>Windows\Interactivity\DoubleClickToCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\DragDrop.cs">
+      <Link>Windows\Interactivity\DragDrop.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\DragDropHelpers\DragAdorner.cs">
+      <Link>Windows\Interactivity\DragDropHelpers\DragAdorner.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\DragDropHelpers\DropAdorner.cs">
+      <Link>Windows\Interactivity\DragDropHelpers\DropAdorner.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\DragDropHelpers\EnumerableExtensions.cs">
+      <Link>Windows\Interactivity\DragDropHelpers\EnumerableExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\DragDropHelpers\UIHelpers.cs">
+      <Link>Windows\Interactivity\DragDropHelpers\UIHelpers.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\EventToCommand.cs">
+      <Link>Windows\Interactivity\EventToCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\EventTriggerBase.cs">
+      <Link>Windows\Interactivity\EventTriggerBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\Focus.cs">
+      <Link>Windows\Interactivity\Focus.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\FocusFirstControl.cs">
+      <Link>Windows\Interactivity\FocusFirstControl.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\KeyPressToCommand.cs">
+      <Link>Windows\Interactivity\KeyPressToCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\MouseInfo.cs">
+      <Link>Windows\Interactivity\MouseInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\Navigate.cs">
+      <Link>Windows\Interactivity\Navigate.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\NumericTextBox.cs">
+      <Link>Windows\Interactivity\NumericTextBox.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\RoutedEventTrigger.cs">
+      <Link>Windows\Interactivity\RoutedEventTrigger.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\SelectTextOnFocus.cs">
+      <Link>Windows\Interactivity\SelectTextOnFocus.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\TriggerActionBase.cs">
+      <Link>Windows\Interactivity\TriggerActionBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\TriggerBase.cs">
+      <Link>Windows\Interactivity\TriggerBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\UpdateBindingBehaviorBase.cs">
+      <Link>Windows\Interactivity\UpdateBindingBehaviorBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\UpdateBindingOnPasswordChanged.cs">
+      <Link>Windows\Interactivity\UpdateBindingOnPasswordChanged.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\UpdateBindingOnTextChanged.cs">
+      <Link>Windows\Interactivity\UpdateBindingOnTextChanged.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\WindowEventToCommand.cs">
+      <Link>Windows\Interactivity\WindowEventToCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Markup\ServiceDependencyExtension.cs">
+      <Link>Windows\Markup\ServiceDependencyExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Threading\Helpers\Dispatcherhelper.cs">
+      <Link>Windows\Threading\Helpers\Dispatcherhelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Windows\DataWindow\DataWindow.cs">
+      <Link>Windows\Windows\DataWindow\DataWindow.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Windows\DataWindow\DataWindow.generic.cs">
+      <Link>Windows\Windows\DataWindow\DataWindow.generic.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Windows\DataWindow\DataWindowButton.cs">
+      <Link>Windows\Windows\DataWindow\DataWindowButton.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Windows\Interfaces\IDataWindow.cs">
+      <Link>Windows\Windows\Interfaces\IDataWindow.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Windows\PleaseWaitHelper.cs">
+      <Link>Windows\Windows\PleaseWaitHelper.cs</Link>
+    </Compile>
+    <Compile Include="Windows\Windows\LoaderAnimation.xaml.cs">
+      <DependentUpon>LoaderAnimation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Windows\PleaseWaitWindow.xaml.cs">
+      <DependentUpon>PleaseWaitWindow.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Themes\DataWindow.generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\InfoBarMessageControl.generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Windows\LoaderAnimation.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Windows\PleaseWaitWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FodyWeavers.xml">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Exceptions.resx">
+      <Link>Properties\Exceptions.resx</Link>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Exceptions.NET45.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.de.resx">
+      <Link>Properties\Resources.de.resx</Link>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.de.NET45.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.es.resx">
+      <Link>Properties\Resources.es.resx</Link>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.es.NET45.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.fr.resx">
+      <Link>Properties\Resources.fr.resx</Link>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.fr.NET45.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.it.resx">
+      <Link>Properties\Resources.it.resx</Link>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.it.NET45.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.nl.resx">
+      <Link>Properties\Resources.nl.resx</Link>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.nl.NET45.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.resx">
+      <Link>Properties\Resources.resx</Link>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.NET45.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.tr.resx">
+      <Link>Properties\Resources.tr.resx</Link>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.tr.NET45.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.zh-CHS.resx">
+      <Link>Properties\Resources.zh-CHS.resx</Link>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.zh-CHS2.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="..\Catel.MVVM.NET40\Resources\Images\Error.png">
+      <Link>Resources\Images\Error.png</Link>
+    </Resource>
+    <Resource Include="..\Catel.MVVM.NET40\Resources\Images\Warning.png">
+      <Link>Resources\Images\Warning.png</Link>
+    </Resource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <Import Project="$(ProjectPath)\..\..\..\..\Tools\Pepita\PepitaGet.targets" />
+  <Import Project="Fody.targets" />
+</Project>

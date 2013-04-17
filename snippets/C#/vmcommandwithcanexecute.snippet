@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>Define a command with a can execute method for a view model class</Title>
+            <Shortcut>vmcommandwithcanexecute</Shortcut>
+            <Description>Code snippet for a command with a can execute method for a view model class</Description>
+            <Author>CatenaLogic</Author>
+            <SnippetTypes>
+                <SnippetType>Expansion</SnippetType>
+            </SnippetTypes>
+        </Header>
+        <Snippet>
+            <Declarations>
+                <Literal>
+                    <ID>name</ID>
+                    <ToolTip>Name of the command</ToolTip>
+                    <Default>name</Default>
+                </Literal>					
+                <Literal>
+                    <ID>type</ID>
+                    <ToolTip>Type of the property</ToolTip>
+                    <Default>type</Default>
+                </Literal>
+            </Declarations>
+            <Code Language="csharp">
+                <![CDATA[/// <summary>
+/// Gets the $name$ command.
+/// </summary>
+public Command $name$ { get; private set; }
+
+// TODO: Move code below to constructor
+$name$ = new Command(On$name$Execute, On$name$CanExecute);
+// TODO: Move code above to constructor
+
+/// <summary>
+/// Method to check whether the $name$ command can be executed.
+/// </summary>
+/// <returns><c>true</c> if the command can be executed; otherwise <c>false</c></returns>
+private bool On$name$CanExecute()
+{
+    return true;
+}
+
+/// <summary>
+/// Method to invoke when the $name$ command is executed.
+/// </summary>
+private void On$name$Execute()
+{
+    // TODO: Handle command logic here
+}]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

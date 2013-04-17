@@ -1,0 +1,153 @@
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DbContextExtensions.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace Catel.Data
+{
+    using System;
+    using System.Data;
+    using System.Data.Entity;
+    using System.Data.Entity.Infrastructure;
+    using System.Data.Metadata.Edm;
+    using System.Data.Objects;
+    using System.Linq;
+    using Caching;
+    using Reflection;
+
+    /// <summary>
+    /// Extensions to the <see cref="DbContext"/> class.
+    /// </summary>
+    public static class DbContextExtensions
+    {
+        private static readonly ICacheStorage<Tuple<Type, Type>, string> _entityKeyPropertyNameCache = new CacheStorage<Tuple<Type, Type>, string>();
+        private static readonly ICacheStorage<Tuple<Type, Type>, string> _entitySetNameCache = new CacheStorage<Tuple<Type, Type>, string>();
+
+        /// <summary>
+        /// Gets the object context from the specified <see cref="DbContext"/>.
+        /// </summary>
+        /// <param name="dbContext">The db context.</param>
+        /// <returns>The ObjectContext.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="dbContext"/> is <c>null</c>.</exception>
+        public static ObjectContext GetObjectContext(this DbContext dbContext)
+        {
+            Argument.IsNotNull("dbContext", dbContext);
+
+            return ((IObjectContextAdapter)dbContext).ObjectContext;
+        }
+
+        /// <summary>
+        /// Gets the entity key of the specified entity type in the <see cref="DbContext"/>.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the T entity.</typeparam>
+        /// <param name="dbContext">The db context.</param>
+        /// <param name="keyValue">The key value.</param>
+        /// <returns>The entity key.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="dbContext"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="keyValue"/> is <c>null</c>.</exception>
+        public static EntityKey GetEntityKey<TEntity>(this DbContext dbContext, object keyValue)
+        {
+            return GetEntityKey(dbContext, typeof(TEntity), keyValue);
+        }
+
+        /// <summary>
+        /// Gets the entity key of the specified entity type in the <see cref="DbContext" />.
+        /// </summary>
+        /// <param name="dbContext">The db context.</param>
+        /// <param name="entityType">Type of the entity.</param>
+        /// <param name="keyValue">The key value.</param>
+        /// <returns>The entity key.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="dbContext"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="entityType"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="keyValue"/> is <c>null</c>.</exception>
+        public static EntityKey GetEntityKey(this DbContext dbContext, Type entityType, object keyValue) 
+        {
+            Argument.IsNotNull("dbContext", dbContext);
+            Argument.IsNotNull("entityType", entityType);
+            Argument.IsNotNull("keyValue", keyValue);
+
+            var objectContext = dbContext.GetObjectContext();
+
+            var keyPropertyName = _entityKeyPropertyNameCache.GetFromCacheOrFetch(new Tuple<Type, Type>(dbContext.GetType(), entityType), () =>
+            {
+                var createObjectSetMethod = objectContext.GetType().GetMethodEx("CreateObjectSet", new Type[] { });
+                var genericCreateObjectSetMethod = createObjectSetMethod.MakeGenericMethod(entityType);
+
+                var objectSet = genericCreateObjectSetMethod.Invoke(objectContext, new object[] { });
+                var entitySet = (EntitySet)PropertyHelper.GetPropertyValue(objectSet, "EntitySet");
+                return entitySet.ElementType.KeyMembers[0].ToString();
+            });
+
+            var entitySetName = GetFullEntitySetName(dbContext, entityType);
+
+            var entityKey = new EntityKey(entitySetName, new[] { new EntityKeyMember(keyPropertyName, keyValue) });
+            return entityKey;
+        }
+
+        /// <summary>
+        /// Gets the name of the entity set in the <see cref="DbContext"/> for the specified entity type.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the entity.</typeparam>
+        /// <param name="dbContext">The db context.</param>
+        /// <returns>The name of the entity set.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="dbContext"/> is <c>null</c>.</exception>
+        public static string GetEntitySetName<TEntity>(this DbContext dbContext)
+        {
+            return GetEntitySetName(dbContext, typeof(TEntity));
+        }
+
+        /// <summary>
+        /// Gets the name of the entity set in the <see cref="DbContext" /> for the specified entity type.
+        /// </summary>
+        /// <param name="dbContext">The db context.</param>
+        /// <param name="entityType">Type of the entity.</param>
+        /// <returns>The name of the entity set.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="dbContext" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="entityType" /> is <c>null</c>.</exception>
+        public static string GetEntitySetName(this DbContext dbContext, Type entityType)
+        {
+            Argument.IsNotNull("dbContext", dbContext);
+            Argument.IsNotNull("entityType", entityType);
+
+            var entitySetName = _entitySetNameCache.GetFromCacheOrFetch(new Tuple<Type, Type>(dbContext.GetType(), entityType), () =>
+            {
+                var objectContext = dbContext.GetObjectContext();
+                return objectContext.MetadataWorkspace.GetEntityContainer(objectContext.DefaultContainerName, DataSpace.CSpace).BaseEntitySets.First(bes => bes.ElementType.Name == entityType.Name).Name;
+            });
+
+            return entitySetName;
+        }
+
+        /// <summary>
+        /// Gets the full name of the entity in the <see cref="DbContext" /> for the specified entity type.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the T entity.</typeparam>
+        /// <param name="dbContext">The db context.</param>
+        /// <returns>The name of the entity.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="dbContext" /> is <c>null</c>.</exception>
+        public static string GetFullEntitySetName<TEntity>(this DbContext dbContext)
+        {
+            return GetFullEntitySetName(dbContext, typeof(TEntity));
+        }
+
+        /// <summary>
+        /// Gets the full name of the entity in the <see cref="DbContext" /> for the specified entity type.
+        /// </summary>
+        /// <param name="dbContext">The db context.</param>
+        /// <param name="entityType">Type of the entity.</param>
+        /// <returns>The name of the entity.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="dbContext" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="entityType" /> is <c>null</c>.</exception>
+        public static string GetFullEntitySetName(this DbContext dbContext, Type entityType) 
+        {
+            Argument.IsNotNull("dbContext", dbContext);
+            Argument.IsNotNull("entityType", entityType);
+
+            var entitySetName = GetEntitySetName(dbContext, entityType);
+            var objectContext = dbContext.GetObjectContext();
+
+            return string.Format("{0}.{1}", objectContext.DefaultContainerName, entitySetName);
+        }
+    }
+}

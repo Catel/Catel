@@ -1,0 +1,1425 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Configuration xmlns:ctl="http://catel.codeplex.com">
+  <RootProjects xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn.Models" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+    <d1p1:RootProject>
+      <Name>Catel.Core.NET40</Name>
+      <Rules xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <d1p1:Rule>
+          <Name>ComponentModel\INotifyDataErrorInfo.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>NET45</d1p1:ProjectType>
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>ComponentModel\EventArgs\DataErrorsChangedEventArgs.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>NET45</d1p1:ProjectType>
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Runtime\Serialization\RedirectDeserializationBinder.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>IoC\Helpers\MefHelper.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>IoC\Helpers\NinjectHelper.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>IoC\Helpers\UnityHelper.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>IoC\Helpers\WindsorHelper.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>DynamicEventListener.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Properties\Exceptions.resx</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Properties\Resources.de.resx</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Properties\Resources.es.resx</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Properties\Resources.fr.resx</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Properties\Resources.it.resx</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Properties\Resources.nl.resx</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Properties\Resources.resx</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Properties\Resources.tr.resx</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Properties\Resources.zh-CHS.resx</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Runtime\Serialization\Helpers\XmlSchemaHelper.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Runtime\Serialization\XmlSchemaManager.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Configuration</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>IoC\Configuration</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Reflection\Helpers\StackTraceHelper.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Data\ChangeNotificationWrapper.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+      </Rules>
+    </d1p1:RootProject>
+    <d1p1:RootProject>
+      <Name>Catel.MVVM.NET40</Name>
+      <Rules xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <d1p1:Rule>
+          <Name>Windows\Windows</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Data\Converters\ViewModelToViewConverter.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Windows\LoaderAnimation.xaml</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Windows\PleaseWaitWindow.xaml</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Helpers\VisualTargetPresentationSource.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Extensions\VisualExtensions.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Data\Converters\ValueConverterGroup.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Data\Converters\AreEqualMultiValueConverter.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Controls\VisualWrapper.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Controls\Page.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Data\DataResource.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Extensions\UIElementExtensions.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Extensions\WindowExtensions.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Helpers\PopupHelper.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>MVVM\Services\ProcessService.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>MVVM\Services\PleaseWaitService.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Extensions\ApplicationExtensions.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Controls\InfoBarMessageControl</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Helpers\WrapControlHelper.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>MVVM\Services\SaveFileService.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>MVVM\Services\OpenFileService.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>MVVM\Services\UIVisualizerService.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Controls\MVVMProviders\Logic\WindowLogic.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Controls\MVVMProviders\WindowBehavior.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Helpers\EffectsHelper.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Themes</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>MVVM\ViewModels\ViewModelBase.customtypedescriptor.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Controls\Page.generic.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Windows\PleaseWaitHelper.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Interactivity\DragDropHelpers</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Interactivity\DragDrop.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>MVVM\ViewModels\ViewModelPropertyDescriptor.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>MVVM\ViewModels\ViewModelPropertyDescriptorFactory.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Interactivity\RoutedEventTrigger.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Interactivity\FocusFirstControl.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Markup\ServiceDependencyExtension.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Properties\Exceptions.resx</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Properties\Resources.de.resx</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Properties\Resources.es.resx</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Properties\Resources.fr.resx</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Properties\Resources.it.resx</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Properties\Resources.nl.resx</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Properties\Resources.resx</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Properties\Resources.tr.resx</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Properties\Resources.zh-CHS.resx</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Interactivity</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Controls\MVVMProviders\MVVMBehaviorBase.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Controls\MVVMProviders\NavigationPageBehavior.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Controls\MVVMProviders\UserControlBehavior.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Data\Converters\GetFirstValidationErrorConverter.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Resources</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>MVVM\Services\SplashScreenService.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Controls\WarningAndErrorValidator.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Interactivity\Navigate.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Interactivity\WindowEventToCommand.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Data\BindingWithValidation.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+      </Rules>
+    </d1p1:RootProject>
+    <d1p1:RootProject>
+      <Name>Catel.Extensions.FluentValidation.NET40</Name>
+      <Rules xmlns:i="http://www.w3.org/2001/XMLSchema-instance" />
+    </d1p1:RootProject>
+    <d1p1:RootProject>
+      <Name>Catel.Extensions.Prism.NET40</Name>
+      <Rules xmlns:i="http://www.w3.org/2001/XMLSchema-instance" />
+    </d1p1:RootProject>
+    <d1p1:RootProject>
+      <Name>Catel.Extensions.Controls.NET40</Name>
+      <Rules xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <d1p1:Rule>
+          <Name>Windows\Controls\RichToolTip.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Controls\ScrollViewerProperties.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Markup</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Themes</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Media\Imaging\Extensions\BitmapExtensions.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Media\Extensions\VisualExtensions.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Media\Effects</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Media\Extensions\ImageSourceExtensions.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Controls\LinkLabel</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Controls\AnimatedGif.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Controls\BrowseForFile.xaml</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Controls\DropDownButton.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Controls\MultiLineInput.xaml</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Controls\RadioButtonEx.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Controls\ToggleRadioButton.xaml</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Windows</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Themes\LinkLabel.generic.xaml</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Controls\TabControl.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Themes\WatermarkTextBox.generic.xaml</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Controls\WatermarkTextBox.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Themes\TabControl.generic.xaml</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Themes\FilterTextBox.generic.xaml</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Resources\Images\Search.png</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Controls\FilterTextBox</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Properties\Exceptions.resx</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Properties\Resources.de.resx</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Properties\Resources.es.resx</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Properties\Resources.fr.resx</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Properties\Resources.it.resx</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Properties\Resources.nl.resx</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Properties\Resources.resx</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Properties\Resources.tr.resx</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Properties\Resources.zh-CHS.resx</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Helpers\StyleHelper.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Controls\TraceOutputControl</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Helpers\EffectsHelper.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+      </Rules>
+    </d1p1:RootProject>
+    <d1p1:RootProject>
+      <Name>Catel.MVVM.SL4</Name>
+      <Rules xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <d1p1:Rule>
+          <Name>MVVM\Services\PleaseWaitService.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Themes</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>NET40</d1p1:ProjectType>
+            <d1p1:ProjectType>NET45</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+      </Rules>
+    </d1p1:RootProject>
+    <d1p1:RootProject>
+      <Name>Catel.Test.NET40</Name>
+      <Rules xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <d1p1:Rule>
+          <Name>Windows\Data\Converters\AreEqualMultiValueConverterTest.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Data\Helpers\EditableObjectHelperFacts.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Data\CompositeValidatorFacts.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Data\CompositeValidatorProviderFacts.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Data\SavableDataObjectBaseTest.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Extensions\FluentValidation</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Extensions\Prism</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Helpers\FilesHelper.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Helpers\WindowHelper.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>IoC\Helpers\MefHelperTest.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>IoC\Helpers\NinjectHelperTest.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>IoC\Helpers\UnityHelperTest.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>IoC\Helpers\WindsorHelperTest.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Reflection\AssemblyExtensionsTest.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Data\Converters\GetFirstValidationErrorConverterTest.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>MVVM\Services\SplashScreenServiceTest.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Data\SavableModelBaseTest.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Configuration\IoC\IoCConfigurationSectionTests.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>App.config</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>NET45</d1p1:ProjectType>
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Configuration\IoC</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>IoC\Configuration</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Extensions\EntityFramework5</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Extensions\EntityFramework5\TestClasses\TestDbContext</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>NET45</d1p1:ProjectType>
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Extensions\EntityFramework5\TestClasses\TestObjectContext</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>NET45</d1p1:ProjectType>
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+      </Rules>
+    </d1p1:RootProject>
+    <d1p1:RootProject>
+      <Name>Catel.Extensions.Controls.SL4</Name>
+      <Rules xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <d1p1:Rule>
+          <Name>Themes</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Themes\TabControl.generic.xaml</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+      </Rules>
+    </d1p1:RootProject>
+    <d1p1:RootProject>
+      <Name>Catel.Core.SL4</Name>
+      <Rules xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <d1p1:Rule>
+          <Name>ComponentModel\EventArgs\PropertyChangingEventArgs.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>ComponentModel\INotifyPropertyChanging.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+      </Rules>
+    </d1p1:RootProject>
+    <d1p1:RootProject>
+      <Name>Catel.Extensions.Prism.NET40</Name>
+      <Rules xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <d1p1:Rule>
+          <Name>Modules\ModuleManager</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+      </Rules>
+    </d1p1:RootProject>
+    <d1p1:RootProject>
+      <Name>Catel.Core.WP7</Name>
+      <Rules xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <d1p1:Rule>
+          <Name>Collections\HashSet.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+      </Rules>
+    </d1p1:RootProject>
+    <d1p1:RootProject>
+      <Name>Catel.Extensions.Data.NET40</Name>
+      <Rules xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <d1p1:Rule>
+          <Name>Expressions</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Specifications</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+      </Rules>
+    </d1p1:RootProject>
+  </RootProjects>
+  <ProjectMappings xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn.Models" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" />
+  <EnableAutoLink>true</EnableAutoLink>
+</Configuration>

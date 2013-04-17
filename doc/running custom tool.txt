@@ -1,0 +1,62 @@
+When translating or generating files via custom tool (such as the resx file generator, or t4 templates), it
+is required to run the custom tool.
+
+Since it can be quite some work to loop through all the files with a custom tool, this macro can be used:
+
+(originally found at http://stackoverflow.com/questions/1913719/run-custom-tool-for-entire-solution)
+
+Imports System
+Imports EnvDTE
+Imports EnvDTE80
+Imports EnvDTE90
+Imports EnvDTE90a
+Imports EnvDTE100
+Imports System.Diagnostics
+Imports VSLangProj
+
+Public Module RunCustomTool
+    Sub IterateFiles()
+        Dim solution As Solution = DTE.Solution
+        For Each prj As Project In solution.Projects
+            IterateProjectFiles(prj.ProjectItems)
+        Next
+    End Sub
+
+    Private Sub IterateProjectFiles(ByVal prjItms As ProjectItems)
+        For Each file As ProjectItem In prjItms
+            If file.Object IsNot Nothing AndAlso TypeOf file.Object Is VSProjectItem Then
+                AddHeaderToItem(file.Object)
+            End If
+            If file.SubProject IsNot Nothing AndAlso file.SubProject.ProjectItems IsNot Nothing AndAlso file.SubProject.ProjectItems.Count > 0 Then
+                IterateProjectFiles(file.SubProject.ProjectItems)
+            End If
+            If file.ProjectItems IsNot Nothing AndAlso file.ProjectItems.Count > 0 Then
+                IterateProjectFiles(file.ProjectItems)
+            End If
+        Next
+    End Sub
+
+    Private Sub AddHeaderToItem(ByVal file As VSProjectItem)
+        If file.ProjectItem.Name.EndsWith(".resx") Then
+            file.RunCustomTool()
+            Log(file.ProjectItem.Name)
+        End If
+    End Sub
+    Private Sub Write(ByVal name As String, ByVal message As String)
+        Dim output As Window = DTE.Windows.Item(EnvDTE.Constants.vsWindowKindOutput)
+        Dim window As OutputWindow = output.Object
+        Dim pane As OutputWindowPane = window.OutputWindowPanes.Item(name)
+        pane.Activate()
+        pane.OutputString(message)
+        pane.OutputString(Environment.NewLine)
+    End Sub
+    Private Sub Log(ByVal message As String, ByVal ParamArray args() As Object)
+        Write("Debug", String.Format(message, args))
+    End Sub
+
+    Private Sub Log(ByVal message As String)
+        Write("Debug", message)
+    End Sub
+
+End Module
+

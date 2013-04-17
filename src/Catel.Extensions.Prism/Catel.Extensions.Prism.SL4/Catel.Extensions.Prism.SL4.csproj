@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C9D002E4-8ABE-4939-8668-6EA2A6146301}</ProjectGuid>
+    <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Catel</RootNamespace>
+    <AssemblyName>Catel.Extensions.Prism</AssemblyName>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <SilverlightApplication>false</SilverlightApplication>
+    <ValidateXaml>true</ValidateXaml>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <FodyPath>..\..\..\lib\Fody.1.13.6.0</FodyPath>
+  </PropertyGroup>
+  <!-- This property group is only here to support building this project using the 
+       MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
+       to set the TargetFrameworkVersion to v3.5 -->
+  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\output\debug\SL4\Catel.Extensions.Prism\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT; SL4</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\..\output\debug\SL4\Catel.Extensions.Prism\Catel.Extensions.Prism.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\output\release\SL4\Catel.Extensions.Prism\</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT; SL4</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\..\output\release\SL4\Catel.Extensions.Prism\Catel.Extensions.Prism.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\lib\Prism.4.1.0.0\lib\SL4\Microsoft.Expression.Interactions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism">
+      <HintPath>..\..\..\lib\Prism.4.1.0.0\lib\SL4\Microsoft.Practices.Prism.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.Interactivity">
+      <HintPath>..\..\..\lib\Prism.4.1.0.0\lib\SL4\Microsoft.Practices.Prism.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\..\..\lib\CommonServiceLocator.1.0\lib\SL30\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib" />
+    <Reference Include="Obsolete, Version=1.5.1.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Obsolete.Fody.1.5.1.0\lib\SL\Obsolete.dll</HintPath>
+    </Reference>
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\lib\Prism.4.1.0.0\lib\SL4\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Catel.Core\Catel.Core.SL4\Catel.Core.SL4.csproj">
+      <Project>{5F6A19BA-47BC-4DDC-8C4C-06CCEA6BE0BA}</Project>
+      <Name>Catel.Core.SL4</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Catel.MVVM\Catel.MVVM.SL4\Catel.MVVM.SL4.csproj">
+      <Project>{26CD35F7-A75E-439F-9473-D5F6A74B70FD}</Project>
+      <Name>Catel.MVVM.SL4</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\SolutionAssemblyInfo.cs">
+      <Link>Properties\SolutionAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\BootstrapperBase.cs">
+      <Link>BootstrapperBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\BootstrapperBase.generic.cs">
+      <Link>BootstrapperBase.generic.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Extensions\DependencyObjectExtensions.cs">
+      <Link>Extensions\DependencyObjectExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Extensions\ILogExtensions.cs">
+      <Link>Extensions\ILogExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Extensions\IUIVisualizerServiceExtensions.cs">
+      <Link>Extensions\IUIVisualizerServiceExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Extensions\IViewModelExtensions.cs">
+      <Link>Extensions\IViewModelExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Interfaces\IModuleTracker.cs">
+      <Link>Interfaces\IModuleTracker.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Interfaces\IRegionInfo.cs">
+      <Link>Interfaces\IRegionInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Interfaces\IViewInfo.cs">
+      <Link>Interfaces\IViewInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\ModuleInitializer.cs">
+      <Link>ModuleInitializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\CompositeModuleCatalog.cs">
+      <Link>Modules\CompositeModuleCatalog.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\ModuleCatalog.cs">
+      <Link>Modules\ModuleCatalog.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\ModuleBase.cs">
+      <Link>Modules\ModuleBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\ModuleBase.generic.cs">
+      <Link>Modules\ModuleBase.generic.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Properties\AssemblyInfo.cs">
+      <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\ServiceLocatorAdapter.cs">
+      <Link>ServiceLocatorAdapter.cs</Link>
+    </Compile>
+    <Compile Include="Helpers\HostHelper.cs" />
+    <Compile Include="Modules\DownloadingModuleCatalog.cs" />
+    <Compile Include="Modules\EventArgs\ModuleEventArgs.cs" />
+    <Compile Include="Modules\Interfaces\IDownloadingModuleCatalog.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Fody.targets" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FodyWeavers.xml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
+        <SilverlightProjectProperties />
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets. -->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  <Import Project="$(ProjectPath)\..\..\..\..\Tools\Pepita\PepitaGet.targets" />
+  <Import Project="Fody.targets" />
+</Project>

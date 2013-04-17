@@ -1,0 +1,716 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{BE079DB6-FD92-4167-8DF4-CACB2E1422FC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{58F62039-8645-499C-B264-66048F4F0F75}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{E0737FB3-1C66-4582-A076-F6DCD6504C48}"
+	ProjectSection(SolutionItems) = preProject
+		..\doc\catel rules.txt = ..\doc\catel rules.txt
+		..\doc\easy deployment.txt = ..\doc\easy deployment.txt
+		..\doc\faq.txt = ..\doc\faq.txt
+		..\doc\history.txt = ..\doc\history.txt
+		..\doc\projects explanation.txt = ..\doc\projects explanation.txt
+		..\doc\readme.txt = ..\doc\readme.txt
+		..\doc\release steps.txt = ..\doc\release steps.txt
+		..\doc\running custom tool.txt = ..\doc\running custom tool.txt
+		..\doc\translating resources.txt = ..\doc\translating resources.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{EF395E12-0C90-4CE1-921A-A276AF0DC28A}"
+	ProjectSection(SolutionItems) = preProject
+		Caitlyn.xml = Caitlyn.xml
+		Catel.FxCop = Catel.FxCop
+		Catel.snk = Catel.snk
+		Catel.vsmdi = Catel.vsmdi
+		CustomDictionary.xml = CustomDictionary.xml
+		Local.testsettings = Local.testsettings
+		nuget.config = nuget.config
+		Settings.StyleCop = Settings.StyleCop
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "snippets", "snippets", "{0530FD4D-FB57-412E-877C-014B42413D0A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{13F2B8D4-81FB-4645-AA6A-36FEB438642D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SL4", "SL4", "{94384324-A9A0-4888-9E43-24C3E1FFF5FD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SL5", "SL5", "{B0EED982-2D1D-4830-B616-1B8E46BB4C7A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NET40", "NET40", "{80394EA6-3B1A-457A-A21E-EAE2CCEF6BA5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interactivity", "Interactivity", "{1E51A52B-C52A-4883-95A2-0B15D81E83EF}"
+	ProjectSection(SolutionItems) = preProject
+		..\lib\NET40\Interactivity\System.Windows.Interactivity.dll = ..\lib\NET40\Interactivity\System.Windows.Interactivity.dll
+		..\lib\NET40\Interactivity\System.Windows.Interactivity.xml = ..\lib\NET40\Interactivity\System.Windows.Interactivity.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interactivity", "Interactivity", "{5689AF1C-D688-4A23-8AE8-37885CD0D1C3}"
+	ProjectSection(SolutionItems) = preProject
+		..\lib\SL4\Interactivity\System.Windows.Interactivity.dll = ..\lib\SL4\Interactivity\System.Windows.Interactivity.dll
+		..\lib\SL4\Interactivity\System.Windows.Interactivity.xml = ..\lib\SL4\Interactivity\System.Windows.Interactivity.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interactivity", "Interactivity", "{340E7DDE-6DB6-4B51-9F4B-9251C088944F}"
+	ProjectSection(SolutionItems) = preProject
+		..\lib\SL5\Interactivity\System.Windows.Interactivity.dll = ..\lib\SL5\Interactivity\System.Windows.Interactivity.dll
+		..\lib\SL5\Interactivity\System.Windows.Interactivity.xml = ..\lib\SL5\Interactivity\System.Windows.Interactivity.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WP7.Mango", "WP7.Mango", "{4406732C-A144-4461-B03F-6A50465E28C2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interactivity", "Interactivity", "{76059390-7158-435B-A4FA-D02EED95EF90}"
+	ProjectSection(SolutionItems) = preProject
+		..\lib\WP7.Mango\Interactivity\System.Windows.Interactivity.dll = ..\lib\WP7.Mango\Interactivity\System.Windows.Interactivity.dll
+		..\lib\WP7.Mango\Interactivity\System.Windows.Interactivity.xml = ..\lib\WP7.Mango\Interactivity\System.Windows.Interactivity.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Phone7.Fx.Mango", "Phone7.Fx.Mango", "{F740F0AA-A1D4-4A77-8BBE-E7448F2FBE89}"
+	ProjectSection(SolutionItems) = preProject
+		..\lib\WP7.Mango\Phone7.Fx.Mango\Phone7.Fx.Mango.dll = ..\lib\WP7.Mango\Phone7.Fx.Mango\Phone7.Fx.Mango.dll
+		..\lib\WP7.Mango\Phone7.Fx.Mango\readme.txt = ..\lib\WP7.Mango\Phone7.Fx.Mango\readme.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NET45", "NET45", "{65417F3B-DCC0-490F-A13D-9EF48F6F5352}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interactivity", "Interactivity", "{A53512E9-0AA1-4623-9E28-E44693631341}"
+	ProjectSection(SolutionItems) = preProject
+		..\lib\NET45\Interactivity\System.Windows.Interactivity.dll = ..\lib\NET45\Interactivity\System.Windows.Interactivity.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Silverlight testing", "Silverlight testing", "{B0E01468-73E8-4B46-9EB0-20A0E54C9076}"
+	ProjectSection(SolutionItems) = preProject
+		..\lib\WP7.Mango\Silverlight testing\Microsoft.Silverlight.Testing.dll = ..\lib\WP7.Mango\Silverlight testing\Microsoft.Silverlight.Testing.dll
+		..\lib\WP7.Mango\Silverlight testing\Microsoft.Silverlight.Testing.xml = ..\lib\WP7.Mango\Silverlight testing\Microsoft.Silverlight.Testing.xml
+		..\lib\WP7.Mango\Silverlight testing\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll = ..\lib\WP7.Mango\Silverlight testing\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll
+		..\lib\WP7.Mango\Silverlight testing\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.xml = ..\lib\WP7.Mango\Silverlight testing\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{DF031B6B-BD75-4D24-9411-2A691B7241D7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "pepita", "pepita", "{34EAB10D-56DF-4683-BAFA-369B581F4360}"
+	ProjectSection(SolutionItems) = preProject
+		..\tools\pepita\PepitaGet.dll = ..\tools\pepita\PepitaGet.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "design", "design", "{4B5D5785-1151-4517-8157-3C094D8A3E1B}"
+	ProjectSection(SolutionItems) = preProject
+		..\design\Catel logo (silverlight).png = ..\design\Catel logo (silverlight).png
+		..\design\Catel logo (transparent).png = ..\design\Catel logo (transparent).png
+		..\design\Catel logo (windows phone 7).png = ..\design\Catel logo (windows phone 7).png
+		..\design\Catel logo (wpf).png = ..\design\Catel logo (wpf).png
+		..\design\Catel logo.ico = ..\design\Catel logo.ico
+		..\design\Catel logo.png = ..\design\Catel logo.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Core", "Catel.Core", "{3F661942-9946-4292-9FE7-6B576782D5F9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.MVVM", "Catel.MVVM", "{162DE45B-B7A2-4D4A-B90D-F1762133C31C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Extensions.FluentValidation", "Catel.Extensions.FluentValidation", "{DA48A112-2316-4576-84F7-2665282C75BE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Extensions.Prism", "Catel.Extensions.Prism", "{6270F84B-38B3-4602-803C-EAE9E8C924C6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Extensions.Controls", "Catel.Extensions.Controls", "{1F4484D6-CE9B-428E-B640-FB777F260F97}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{8C3710FE-B6C7-4261-81B6-897F4B286B2B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Test.NET40", "Catel.Test\Catel.Test.NET40\Catel.Test.NET40.csproj", "{E7D45C75-2BC2-417F-B797-F1B0B56C0B7B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Core.NET40", "Catel.Core\Catel.Core.NET40\Catel.Core.NET40.csproj", "{43147A1A-C8A0-4645-824D-0E7CAF0293FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Core.SL4", "Catel.Core\Catel.Core.SL4\Catel.Core.SL4.csproj", "{5F6A19BA-47BC-4DDC-8C4C-06CCEA6BE0BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Core.SL5", "Catel.Core\Catel.Core.SL5\Catel.Core.SL5.csproj", "{2B6DB2B2-C289-4779-97C1-507BC779BA25}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Core.WP7", "Catel.Core\Catel.Core.WP7\Catel.Core.WP7.csproj", "{141D3A2E-1C13-461C-A741-81F36E66AD1A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.MVVM.NET40", "Catel.MVVM\Catel.MVVM.NET40\Catel.MVVM.NET40.csproj", "{D9112D3C-62D2-401E-8EA1-86AC28A71C22}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.MVVM.SL4", "Catel.MVVM\Catel.MVVM.SL4\Catel.MVVM.SL4.csproj", "{26CD35F7-A75E-439F-9473-D5F6A74B70FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.MVVM.SL5", "Catel.MVVM\Catel.MVVM.SL5\Catel.MVVM.SL5.csproj", "{5E382C94-510F-4943-8F9E-E6EC3F139E8E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.MVVM.WP7", "Catel.MVVM\Catel.MVVM.WP7\Catel.MVVM.WP7.csproj", "{9F57C67B-F7EA-421D-8CB6-2CF17FEE5783}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Controls.NET40", "Catel.Extensions.Controls\Catel.Extensions.Controls.NET40\Catel.Extensions.Controls.NET40.csproj", "{27EA5DBF-C871-4F2A-A5A0-5DB0F148E6D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Controls.SL4", "Catel.Extensions.Controls\Catel.Extensions.Controls.SL4\Catel.Extensions.Controls.SL4.csproj", "{60902D0D-848C-4750-B479-5FD4AD9F1A13}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Controls.SL5", "Catel.Extensions.Controls\Catel.Extensions.Controls.SL5\Catel.Extensions.Controls.SL5.csproj", "{2F07E89E-EB4C-4987-8021-8125ABB274DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Controls.WP7", "Catel.Extensions.Controls\Catel.Extensions.Controls.WP7\Catel.Extensions.Controls.WP7.csproj", "{35BA4EE2-9321-494A-9B20-73E139097626}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Test.SL4", "Catel.Test\Catel.Test.SL4\Catel.Test.SL4.csproj", "{2C00539B-DBE9-4F0A-AE44-A5998888DAEA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Test.SL4.Web", "Catel.Test\Catel.Test.SL4.Web\Catel.Test.SL4.Web.csproj", "{47D96EC8-20F2-4FFA-8415-AD28276D3625}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Test.SL5", "Catel.Test\Catel.Test.SL5\Catel.Test.SL5.csproj", "{8A06B835-2476-497F-895C-929C94D5B99D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Test.SL5.Web", "Catel.Test\Catel.Test.SL5.Web\Catel.Test.SL5.Web.csproj", "{BEF2C500-F2AF-40C5-A802-73C43F38C234}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.FluentValidation.NET40", "Catel.Extensions.FluentValidation\Catel.Extensions.FluentValidation.NET40\Catel.Extensions.FluentValidation.NET40.csproj", "{135E7F2B-1FE8-44E1-B1AD-0C80B972459E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.FluentValidation.SL4", "Catel.Extensions.FluentValidation\Catel.Extensions.FluentValidation.SL4\Catel.Extensions.FluentValidation.SL4.csproj", "{D897399D-4BD0-4907-B34E-57C6DB0440DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.FluentValidation.SL5", "Catel.Extensions.FluentValidation\Catel.Extensions.FluentValidation.SL5\Catel.Extensions.FluentValidation.SL5.csproj", "{8FB35D65-3E80-483D-B38A-F4DE1AB08D71}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Prism.NET40", "Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Catel.Extensions.Prism.NET40.csproj", "{C9EAD437-56BA-45BB-A982-845AD72FE1C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Prism.SL4", "Catel.Extensions.Prism\Catel.Extensions.Prism.SL4\Catel.Extensions.Prism.SL4.csproj", "{C9D002E4-8ABE-4939-8668-6EA2A6146301}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Prism.SL5", "Catel.Extensions.Prism\Catel.Extensions.Prism.SL5\Catel.Extensions.Prism.SL5.csproj", "{8127EBEE-C5BB-4201-B899-9CA788688E83}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSharp", "CSharp", "{0FF8A998-8E34-424B-9C36-41A111341EB0}"
+	ProjectSection(SolutionItems) = preProject
+		..\snippets\C#\dataobject.snippet = ..\snippets\C#\dataobject.snippet
+		..\snippets\C#\dataprop.snippet = ..\snippets\C#\dataprop.snippet
+		..\snippets\C#\datapropchanged.snippet = ..\snippets\C#\datapropchanged.snippet
+		..\snippets\C#\model.snippet = ..\snippets\C#\model.snippet
+		..\snippets\C#\modelprop.snippet = ..\snippets\C#\modelprop.snippet
+		..\snippets\C#\modelpropchanged.snippet = ..\snippets\C#\modelpropchanged.snippet
+		..\snippets\C#\vm.snippet = ..\snippets\C#\vm.snippet
+		..\snippets\C#\vmcommand.snippet = ..\snippets\C#\vmcommand.snippet
+		..\snippets\C#\vmcommandwithcanexecute.snippet = ..\snippets\C#\vmcommandwithcanexecute.snippet
+		..\snippets\C#\vmcommandwithvalidationsummary.snippet = ..\snippets\C#\vmcommandwithvalidationsummary.snippet
+		..\snippets\C#\vmprop.snippet = ..\snippets\C#\vmprop.snippet
+		..\snippets\C#\vmpropchanged.snippet = ..\snippets\C#\vmpropchanged.snippet
+		..\snippets\C#\vmpropmodel.snippet = ..\snippets\C#\vmpropmodel.snippet
+		..\snippets\C#\vmpropviewmodeltomodel.snippet = ..\snippets\C#\vmpropviewmodeltomodel.snippet
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VB.NET", "VB.NET", "{4B60DC07-ACC6-4EFA-BED6-22AA8F34DC24}"
+	ProjectSection(SolutionItems) = preProject
+		..\snippets\VB.NET\dataobject.snippet = ..\snippets\VB.NET\dataobject.snippet
+		..\snippets\VB.NET\dataprop.snippet = ..\snippets\VB.NET\dataprop.snippet
+		..\snippets\VB.NET\datapropchanged.snippet = ..\snippets\VB.NET\datapropchanged.snippet
+		..\snippets\VB.NET\model.snippet = ..\snippets\VB.NET\model.snippet
+		..\snippets\VB.NET\modelprop.snippet = ..\snippets\VB.NET\modelprop.snippet
+		..\snippets\VB.NET\modelpropchanged.snippet = ..\snippets\VB.NET\modelpropchanged.snippet
+		..\snippets\VB.NET\vm.snippet = ..\snippets\VB.NET\vm.snippet
+		..\snippets\VB.NET\vmcommand.snippet = ..\snippets\VB.NET\vmcommand.snippet
+		..\snippets\VB.NET\vmcommandwithcanexecute.snippet = ..\snippets\VB.NET\vmcommandwithcanexecute.snippet
+		..\snippets\VB.NET\vmcommandwithvalidationsummary.snippet = ..\snippets\VB.NET\vmcommandwithvalidationsummary.snippet
+		..\snippets\VB.NET\vmprop.snippet = ..\snippets\VB.NET\vmprop.snippet
+		..\snippets\VB.NET\vmpropchanged.snippet = ..\snippets\VB.NET\vmpropchanged.snippet
+		..\snippets\VB.NET\vmpropmodel.snippet = ..\snippets\VB.NET\vmpropmodel.snippet
+		..\snippets\VB.NET\vmpropviewmodeltomodel.snippet = ..\snippets\VB.NET\vmpropviewmodeltomodel.snippet
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSharp", "CSharp", "{39402137-1859-4B82-93BD-30ADFB183F06}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VB.NET", "VB.NET", "{2B9538EF-853C-4160-A546-5848444157B0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ItemTemplates", "ItemTemplates", "{C436E4A5-3B2D-4E09-AE37-265F04D3FCCC}"
+	ProjectSection(SolutionItems) = preProject
+		..\templates\C#\ItemTemplates\Catel.Silverlight.DataWindow.zip = ..\templates\C#\ItemTemplates\Catel.Silverlight.DataWindow.zip
+		..\templates\C#\ItemTemplates\Catel.Silverlight.Page.zip = ..\templates\C#\ItemTemplates\Catel.Silverlight.Page.zip
+		..\templates\C#\ItemTemplates\Catel.Silverlight.UserControl.zip = ..\templates\C#\ItemTemplates\Catel.Silverlight.UserControl.zip
+		..\templates\C#\ItemTemplates\Catel.ViewModel.zip = ..\templates\C#\ItemTemplates\Catel.ViewModel.zip
+		..\templates\C#\ItemTemplates\Catel.WP.LandscapePage.zip = ..\templates\C#\ItemTemplates\Catel.WP.LandscapePage.zip
+		..\templates\C#\ItemTemplates\Catel.WP.PanoramaPage.zip = ..\templates\C#\ItemTemplates\Catel.WP.PanoramaPage.zip
+		..\templates\C#\ItemTemplates\Catel.WP.PivotPage.zip = ..\templates\C#\ItemTemplates\Catel.WP.PivotPage.zip
+		..\templates\C#\ItemTemplates\Catel.WP.PortraitPage.zip = ..\templates\C#\ItemTemplates\Catel.WP.PortraitPage.zip
+		..\templates\C#\ItemTemplates\Catel.WP.UserControl.zip = ..\templates\C#\ItemTemplates\Catel.WP.UserControl.zip
+		..\templates\C#\ItemTemplates\Catel.WPF.DataWindow.zip = ..\templates\C#\ItemTemplates\Catel.WPF.DataWindow.zip
+		..\templates\C#\ItemTemplates\Catel.WPF.Page.zip = ..\templates\C#\ItemTemplates\Catel.WPF.Page.zip
+		..\templates\C#\ItemTemplates\Catel.WPF.UserControl.zip = ..\templates\C#\ItemTemplates\Catel.WPF.UserControl.zip
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProjectTemplates", "ProjectTemplates", "{A4B19E44-FA3F-4718-A5D9-C096A57C65D5}"
+	ProjectSection(SolutionItems) = preProject
+		..\templates\C#\ProjectTemplates\Catel.Silverlight.Application.zip = ..\templates\C#\ProjectTemplates\Catel.Silverlight.Application.zip
+		..\templates\C#\ProjectTemplates\Catel.Silverlight.NavigationApplication.zip = ..\templates\C#\ProjectTemplates\Catel.Silverlight.NavigationApplication.zip
+		..\templates\C#\ProjectTemplates\Catel.WP7.Application.zip = ..\templates\C#\ProjectTemplates\Catel.WP7.Application.zip
+		..\templates\C#\ProjectTemplates\Catel.WP7.PanoramaApplication.zip = ..\templates\C#\ProjectTemplates\Catel.WP7.PanoramaApplication.zip
+		..\templates\C#\ProjectTemplates\Catel.WP7.PivotApplication.zip = ..\templates\C#\ProjectTemplates\Catel.WP7.PivotApplication.zip
+		..\templates\C#\ProjectTemplates\Catel.WP8.Application.zip = ..\templates\C#\ProjectTemplates\Catel.WP8.Application.zip
+		..\templates\C#\ProjectTemplates\Catel.WPF.Application.zip = ..\templates\C#\ProjectTemplates\Catel.WPF.Application.zip
+		..\templates\C#\ProjectTemplates\Catel.WPF.BrowserApplication.zip = ..\templates\C#\ProjectTemplates\Catel.WPF.BrowserApplication.zip
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ItemTemplates", "ItemTemplates", "{0F7F5211-C275-4A4A-9575-6EFB533F7F1D}"
+	ProjectSection(SolutionItems) = preProject
+		..\templates\VB.NET\ItemTemplates\Catel.Silverlight.DataWindow.zip = ..\templates\VB.NET\ItemTemplates\Catel.Silverlight.DataWindow.zip
+		..\templates\VB.NET\ItemTemplates\Catel.Silverlight.Page.zip = ..\templates\VB.NET\ItemTemplates\Catel.Silverlight.Page.zip
+		..\templates\VB.NET\ItemTemplates\Catel.Silverlight.UserControl.zip = ..\templates\VB.NET\ItemTemplates\Catel.Silverlight.UserControl.zip
+		..\templates\VB.NET\ItemTemplates\Catel.ViewModel.zip = ..\templates\VB.NET\ItemTemplates\Catel.ViewModel.zip
+		..\templates\VB.NET\ItemTemplates\Catel.WP.LandscapePage.zip = ..\templates\VB.NET\ItemTemplates\Catel.WP.LandscapePage.zip
+		..\templates\VB.NET\ItemTemplates\Catel.WP.PanoramaPage.zip = ..\templates\VB.NET\ItemTemplates\Catel.WP.PanoramaPage.zip
+		..\templates\VB.NET\ItemTemplates\Catel.WP.PivotPage.zip = ..\templates\VB.NET\ItemTemplates\Catel.WP.PivotPage.zip
+		..\templates\VB.NET\ItemTemplates\Catel.WP.PortraitPage.zip = ..\templates\VB.NET\ItemTemplates\Catel.WP.PortraitPage.zip
+		..\templates\VB.NET\ItemTemplates\Catel.WP.UserControl.zip = ..\templates\VB.NET\ItemTemplates\Catel.WP.UserControl.zip
+		..\templates\VB.NET\ItemTemplates\Catel.WPF.DataWindow.zip = ..\templates\VB.NET\ItemTemplates\Catel.WPF.DataWindow.zip
+		..\templates\VB.NET\ItemTemplates\Catel.WPF.Page.zip = ..\templates\VB.NET\ItemTemplates\Catel.WPF.Page.zip
+		..\templates\VB.NET\ItemTemplates\Catel.WPF.UserControl.zip = ..\templates\VB.NET\ItemTemplates\Catel.WPF.UserControl.zip
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProjectTemplates", "ProjectTemplates", "{6F5C52B2-96F2-478C-A662-3D8B7602C8EA}"
+	ProjectSection(SolutionItems) = preProject
+		..\templates\VB.NET\ProjectTemplates\Catel.Silverlight.Application.zip = ..\templates\VB.NET\ProjectTemplates\Catel.Silverlight.Application.zip
+		..\templates\VB.NET\ProjectTemplates\Catel.Silverlight.NavigationApplication.zip = ..\templates\VB.NET\ProjectTemplates\Catel.Silverlight.NavigationApplication.zip
+		..\templates\VB.NET\ProjectTemplates\Catel.WP7.Application.zip = ..\templates\VB.NET\ProjectTemplates\Catel.WP7.Application.zip
+		..\templates\VB.NET\ProjectTemplates\Catel.WP7.PanoramaApplication.zip = ..\templates\VB.NET\ProjectTemplates\Catel.WP7.PanoramaApplication.zip
+		..\templates\VB.NET\ProjectTemplates\Catel.WP7.PivotApplication.zip = ..\templates\VB.NET\ProjectTemplates\Catel.WP7.PivotApplication.zip
+		..\templates\VB.NET\ProjectTemplates\Catel.WP8.Application.zip = ..\templates\VB.NET\ProjectTemplates\Catel.WP8.Application.zip
+		..\templates\VB.NET\ProjectTemplates\Catel.WPF.Application.zip = ..\templates\VB.NET\ProjectTemplates\Catel.WPF.Application.zip
+		..\templates\VB.NET\ProjectTemplates\Catel.WPF.BrowserApplication.zip = ..\templates\VB.NET\ProjectTemplates\Catel.WPF.BrowserApplication.zip
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.MVVM.WP7.Services", "Catel.MVVM.WP7.Services", "{52DE429D-650F-4265-9E45-140D32EBB8FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.MVVM.WP7.Services.Compass", "Catel.MVVM\Catel.MVVM.WP7.Services.Compass\Catel.MVVM.WP7.Services.Compass.csproj", "{2E50EB46-E3AD-4A18-A929-5F676ECEEEDC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.MVVM.WP7.Services.Gyroscope", "Catel.MVVM\Catel.MVVM.WP7.Services.Gyroscope\Catel.MVVM.WP7.Services.Gyroscope.csproj", "{CF369721-E54E-47C1-9B31-DAE84C35E449}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Toolkit", "Toolkit", "{7D3D71F1-1B3D-4B27-8216-86FC25C8CC91}"
+	ProjectSection(SolutionItems) = preProject
+		..\lib\SL5\Toolkit\System.Windows.Controls.Toolkit.dll = ..\lib\SL5\Toolkit\System.Windows.Controls.Toolkit.dll
+		..\lib\SL5\Toolkit\System.Windows.Controls.Toolkit.xml = ..\lib\SL5\Toolkit\System.Windows.Controls.Toolkit.xml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Core.WinRT", "Catel.Core\Catel.Core.WinRT\Catel.Core.WinRT.csproj", "{B9AE0468-56BB-4AFC-8533-8A493FDDF8DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.MVVM.WinRT", "Catel.MVVM\Catel.MVVM.WinRT\Catel.MVVM.WinRT.csproj", "{A27D360D-A4E3-4B4B-90A2-6428CEE073C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Test.WinRT", "Catel.Test\Catel.Test.WinRT\Catel.Test.WinRT.csproj", "{B91E0F04-71C6-485B-8FC5-890994AAED7C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Controls.WinRT", "Catel.Extensions.Controls\Catel.Extensions.Controls.WinRT\Catel.Extensions.Controls.WinRT.csproj", "{42085288-1C51-4F2A-A70E-DEBD80E62870}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Core.NET45", "Catel.Core\Catel.Core.NET45\Catel.Core.NET45.csproj", "{D748BE60-BAD6-4D1B-BE5A-C24943A56594}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Test.NET45", "Catel.Test\Catel.Test.NET45\Catel.Test.NET45.csproj", "{6AEA0DEC-BAF6-4FDE-98F1-B17121E0D45C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Controls.NET45", "Catel.Extensions.Controls\Catel.Extensions.Controls.NET45\Catel.Extensions.Controls.NET45.csproj", "{C179D5AA-66A3-4574-8839-CD9E53890937}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.MVVM.NET45", "Catel.MVVM\Catel.MVVM.NET45\Catel.MVVM.NET45.csproj", "{BEDEB2CB-51AB-4AF6-85F9-6A596B4603BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.FluentValidation.NET45", "Catel.Extensions.FluentValidation\Catel.Extensions.FluentValidation.NET45\Catel.Extensions.FluentValidation.NET45.csproj", "{C30B4F98-084A-4FC4-910E-2DEAE3505AD9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Prism.NET45", "Catel.Extensions.Prism\Catel.Extensions.Prism.NET45\Catel.Extensions.Prism.NET45.csproj", "{1DAC9A4B-2572-446A-99B8-9E86C1D9254B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{1B3CA2AB-8528-4E7C-B487-71BAA66457B5}"
+	ProjectSection(SolutionItems) = preProject
+		nuget.config = nuget.config
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Extensions.CSLA", "Catel.Extensions.CSLA", "{A56117CB-EF5A-4EE5-ABD0-284F084637A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.CSLA.NET40", "Catel.Extensions.CSLA\Catel.Extensions.CSLA.NET40\Catel.Extensions.CSLA.NET40.csproj", "{1D2E4D59-5480-40CF-92EF-4944F8F17610}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.CSLA.NET45", "Catel.Extensions.CSLA\Catel.Extensions.CSLA.NET45\Catel.Extensions.CSLA.NET45.csproj", "{58E5120B-BF91-4D36-804F-FC294DAF183E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.CSLA.SL4", "Catel.Extensions.CSLA\Catel.Extensions.CSLA.SL4\Catel.Extensions.CSLA.SL4.csproj", "{08A705E8-CD96-497C-976B-366EABDD439A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.CSLA.SL5", "Catel.Extensions.CSLA\Catel.Extensions.CSLA.SL5\Catel.Extensions.CSLA.SL5.csproj", "{3DC0543B-B1DD-4F5E-9384-652A339FE7CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Core.WP8", "Catel.Core\Catel.Core.WP8\Catel.Core.WP8.csproj", "{222A55F1-A032-4FAF-92C1-C51A2F7D2725}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.MVVM.WP8", "Catel.MVVM\Catel.MVVM.WP8\Catel.MVVM.WP8.csproj", "{5168ABF4-2DCB-496B-8F76-DB9B716ACC4A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WP8", "WP8", "{F63BBBF1-FC19-4F0A-81D7-2C4C27A1768A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interactivity", "Interactivity", "{B5C5A548-D22B-4BF2-8E10-19F67DF5D0AD}"
+	ProjectSection(SolutionItems) = preProject
+		..\lib\WP8\Interactivity\System.Windows.Interactivity.dll = ..\lib\WP8\Interactivity\System.Windows.Interactivity.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Silverlight testing", "Silverlight testing", "{F80CC0BE-3DA4-4889-A905-A0BE751C31E7}"
+	ProjectSection(SolutionItems) = preProject
+		..\lib\WP8\Silverlight testing\Microsoft.Silverlight.Testing.dll = ..\lib\WP8\Silverlight testing\Microsoft.Silverlight.Testing.dll
+		..\lib\WP8\Silverlight testing\Microsoft.Silverlight.Testing.xml = ..\lib\WP8\Silverlight testing\Microsoft.Silverlight.Testing.xml
+		..\lib\WP8\Silverlight testing\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll = ..\lib\WP8\Silverlight testing\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll
+		..\lib\WP8\Silverlight testing\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.xml = ..\lib\WP8\Silverlight testing\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.xml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Controls.WP8", "Catel.Extensions.Controls\Catel.Extensions.Controls.WP8\Catel.Extensions.Controls.WP8.csproj", "{C6ABBF91-35B6-44AA-B769-A6A16228484D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Extensions.Data", "Catel.Extensions.Data", "{41BA68F9-3422-4FB0-B6DE-7097A22565E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Data.NET40", "Catel.Extensions.Data\Catel.Extensions.Data.NET40\Catel.Extensions.Data.NET40.csproj", "{DB390685-297C-41D9-B4AC-201E58A8364C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Data.NET45", "Catel.Extensions.Data\Catel.Extensions.Data.NET45\Catel.Extensions.Data.NET45.csproj", "{9D908408-CA30-447A-BC47-85048E5A2999}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Data.SL4", "Catel.Extensions.Data\Catel.Extensions.Data.SL4\Catel.Extensions.Data.SL4.csproj", "{AC8F4CAF-A03F-4FF1-9079-0F309235FAB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Data.SL5", "Catel.Extensions.Data\Catel.Extensions.Data.SL5\Catel.Extensions.Data.SL5.csproj", "{081ABDCF-EFA2-4F08-92AE-939F850E5949}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Data.WinRT", "Catel.Extensions.Data\Catel.Extensions.Data.WinRT\Catel.Extensions.Data.WinRT.csproj", "{87DB1DEF-5033-4EDF-947D-CC890E5B84B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Data.WP7", "Catel.Extensions.Data\Catel.Extensions.Data.WP7\Catel.Extensions.Data.WP7.csproj", "{76B5BD1E-6E16-4E2D-9678-0E2B4E14DB3A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Data.WP8", "Catel.Extensions.Data\Catel.Extensions.Data.WP8\Catel.Extensions.Data.WP8.csproj", "{7C9B8FC8-7C8C-4448-95E6-50B0EE23B261}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{4C1D672F-892E-4AC7-84EA-FE5BE2046000}"
+	ProjectSection(SolutionItems) = preProject
+		..\tools\nuget\NuGet.exe = ..\tools\nuget\NuGet.exe
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Extensions.EntityFramework5", "Catel.Extensions.EntityFramework5", "{B08AF9A4-DD22-4ACF-9387-9C3600D487DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.EntityFramework5.NET40", "Catel.Extensions.EntityFramework5\Catel.Extensions.EntityFramework5.NET40\Catel.Extensions.EntityFramework5.NET40.csproj", "{2A4AF4D2-E74C-4A8A-947B-1B7CE5BDB67A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.EntityFramework5.NET45", "Catel.Extensions.EntityFramework5\Catel.Extensions.EntityFramework5.NET45\Catel.Extensions.EntityFramework5.NET45.csproj", "{2156065F-74F7-420C-A7C9-F40B4751E36A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Mvc", "Catel.Mvc", "{4C91969A-ED94-4647-9816-D80254360B75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Mvc.NET40", "Catel.Mvc\Catel.Mvc.NET40\Catel.Mvc.NET40.csproj", "{5C9BE8AF-D2F1-4853-B683-C5D87AA0DBFC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Mvc.NET45", "Catel.Mvc\Catel.Mvc.NET45\Catel.Mvc.NET45.csproj", "{4B51A018-816B-4336-81F4-9182B16D3A42}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Test.EntityFramework5.ObjectContextTest.NET40", "Catel.Test\Catel.Test.EntityFramework5.ObjectContextTest.NET40\Catel.Test.EntityFramework5.ObjectContextTest.NET40.csproj", "{BB30D863-65B0-42BA-8D2C-29DE27C3A5FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Test.EntityFramework5.DbContextTest.NET40", "Catel.Test\Catel.Test.EntityFramework5.DbContextTest.NET40\Catel.Test.EntityFramework5.DbContextTest.NET40.csproj", "{EA3BA85B-4C5F-4140-8FF9-40C98AF2DFED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Test.EntityFramework5.DbContextTest.NET45", "Catel.Test\Catel.Test.EntityFramework5.DbContextTest.NET45\Catel.Test.EntityFramework5.DbContextTest.NET45.csproj", "{B0238565-3C5A-4D9D-9938-A2B82770E525}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Test.EntityFramework5.ObjectContextTest.NET45", "Catel.Test\Catel.Test.EntityFramework5.ObjectContextTest.NET45\Catel.Test.EntityFramework5.ObjectContextTest.NET45.csproj", "{F8982176-FC35-453D-AFAB-60CC3ED474C4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EF", "EF", "{A6B36C41-DB02-43BB-88CA-A5042D6B365B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E7D45C75-2BC2-417F-B797-F1B0B56C0B7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7D45C75-2BC2-417F-B797-F1B0B56C0B7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7D45C75-2BC2-417F-B797-F1B0B56C0B7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7D45C75-2BC2-417F-B797-F1B0B56C0B7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43147A1A-C8A0-4645-824D-0E7CAF0293FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43147A1A-C8A0-4645-824D-0E7CAF0293FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43147A1A-C8A0-4645-824D-0E7CAF0293FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43147A1A-C8A0-4645-824D-0E7CAF0293FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F6A19BA-47BC-4DDC-8C4C-06CCEA6BE0BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F6A19BA-47BC-4DDC-8C4C-06CCEA6BE0BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F6A19BA-47BC-4DDC-8C4C-06CCEA6BE0BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F6A19BA-47BC-4DDC-8C4C-06CCEA6BE0BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B6DB2B2-C289-4779-97C1-507BC779BA25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B6DB2B2-C289-4779-97C1-507BC779BA25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B6DB2B2-C289-4779-97C1-507BC779BA25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B6DB2B2-C289-4779-97C1-507BC779BA25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{141D3A2E-1C13-461C-A741-81F36E66AD1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{141D3A2E-1C13-461C-A741-81F36E66AD1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{141D3A2E-1C13-461C-A741-81F36E66AD1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{141D3A2E-1C13-461C-A741-81F36E66AD1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9112D3C-62D2-401E-8EA1-86AC28A71C22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9112D3C-62D2-401E-8EA1-86AC28A71C22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9112D3C-62D2-401E-8EA1-86AC28A71C22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9112D3C-62D2-401E-8EA1-86AC28A71C22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26CD35F7-A75E-439F-9473-D5F6A74B70FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26CD35F7-A75E-439F-9473-D5F6A74B70FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26CD35F7-A75E-439F-9473-D5F6A74B70FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26CD35F7-A75E-439F-9473-D5F6A74B70FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E382C94-510F-4943-8F9E-E6EC3F139E8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E382C94-510F-4943-8F9E-E6EC3F139E8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E382C94-510F-4943-8F9E-E6EC3F139E8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E382C94-510F-4943-8F9E-E6EC3F139E8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F57C67B-F7EA-421D-8CB6-2CF17FEE5783}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F57C67B-F7EA-421D-8CB6-2CF17FEE5783}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F57C67B-F7EA-421D-8CB6-2CF17FEE5783}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F57C67B-F7EA-421D-8CB6-2CF17FEE5783}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27EA5DBF-C871-4F2A-A5A0-5DB0F148E6D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27EA5DBF-C871-4F2A-A5A0-5DB0F148E6D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27EA5DBF-C871-4F2A-A5A0-5DB0F148E6D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27EA5DBF-C871-4F2A-A5A0-5DB0F148E6D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60902D0D-848C-4750-B479-5FD4AD9F1A13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60902D0D-848C-4750-B479-5FD4AD9F1A13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60902D0D-848C-4750-B479-5FD4AD9F1A13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60902D0D-848C-4750-B479-5FD4AD9F1A13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F07E89E-EB4C-4987-8021-8125ABB274DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F07E89E-EB4C-4987-8021-8125ABB274DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F07E89E-EB4C-4987-8021-8125ABB274DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F07E89E-EB4C-4987-8021-8125ABB274DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35BA4EE2-9321-494A-9B20-73E139097626}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35BA4EE2-9321-494A-9B20-73E139097626}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35BA4EE2-9321-494A-9B20-73E139097626}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35BA4EE2-9321-494A-9B20-73E139097626}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C00539B-DBE9-4F0A-AE44-A5998888DAEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C00539B-DBE9-4F0A-AE44-A5998888DAEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C00539B-DBE9-4F0A-AE44-A5998888DAEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C00539B-DBE9-4F0A-AE44-A5998888DAEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47D96EC8-20F2-4FFA-8415-AD28276D3625}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47D96EC8-20F2-4FFA-8415-AD28276D3625}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47D96EC8-20F2-4FFA-8415-AD28276D3625}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47D96EC8-20F2-4FFA-8415-AD28276D3625}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A06B835-2476-497F-895C-929C94D5B99D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A06B835-2476-497F-895C-929C94D5B99D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A06B835-2476-497F-895C-929C94D5B99D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A06B835-2476-497F-895C-929C94D5B99D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEF2C500-F2AF-40C5-A802-73C43F38C234}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEF2C500-F2AF-40C5-A802-73C43F38C234}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEF2C500-F2AF-40C5-A802-73C43F38C234}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEF2C500-F2AF-40C5-A802-73C43F38C234}.Release|Any CPU.Build.0 = Release|Any CPU
+		{135E7F2B-1FE8-44E1-B1AD-0C80B972459E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{135E7F2B-1FE8-44E1-B1AD-0C80B972459E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{135E7F2B-1FE8-44E1-B1AD-0C80B972459E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{135E7F2B-1FE8-44E1-B1AD-0C80B972459E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D897399D-4BD0-4907-B34E-57C6DB0440DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D897399D-4BD0-4907-B34E-57C6DB0440DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D897399D-4BD0-4907-B34E-57C6DB0440DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D897399D-4BD0-4907-B34E-57C6DB0440DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FB35D65-3E80-483D-B38A-F4DE1AB08D71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FB35D65-3E80-483D-B38A-F4DE1AB08D71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FB35D65-3E80-483D-B38A-F4DE1AB08D71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FB35D65-3E80-483D-B38A-F4DE1AB08D71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9EAD437-56BA-45BB-A982-845AD72FE1C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9EAD437-56BA-45BB-A982-845AD72FE1C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9EAD437-56BA-45BB-A982-845AD72FE1C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9EAD437-56BA-45BB-A982-845AD72FE1C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9D002E4-8ABE-4939-8668-6EA2A6146301}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9D002E4-8ABE-4939-8668-6EA2A6146301}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9D002E4-8ABE-4939-8668-6EA2A6146301}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9D002E4-8ABE-4939-8668-6EA2A6146301}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8127EBEE-C5BB-4201-B899-9CA788688E83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8127EBEE-C5BB-4201-B899-9CA788688E83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8127EBEE-C5BB-4201-B899-9CA788688E83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8127EBEE-C5BB-4201-B899-9CA788688E83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E50EB46-E3AD-4A18-A929-5F676ECEEEDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E50EB46-E3AD-4A18-A929-5F676ECEEEDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E50EB46-E3AD-4A18-A929-5F676ECEEEDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E50EB46-E3AD-4A18-A929-5F676ECEEEDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF369721-E54E-47C1-9B31-DAE84C35E449}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF369721-E54E-47C1-9B31-DAE84C35E449}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF369721-E54E-47C1-9B31-DAE84C35E449}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF369721-E54E-47C1-9B31-DAE84C35E449}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9AE0468-56BB-4AFC-8533-8A493FDDF8DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9AE0468-56BB-4AFC-8533-8A493FDDF8DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9AE0468-56BB-4AFC-8533-8A493FDDF8DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9AE0468-56BB-4AFC-8533-8A493FDDF8DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A27D360D-A4E3-4B4B-90A2-6428CEE073C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A27D360D-A4E3-4B4B-90A2-6428CEE073C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A27D360D-A4E3-4B4B-90A2-6428CEE073C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A27D360D-A4E3-4B4B-90A2-6428CEE073C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B91E0F04-71C6-485B-8FC5-890994AAED7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B91E0F04-71C6-485B-8FC5-890994AAED7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B91E0F04-71C6-485B-8FC5-890994AAED7C}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{B91E0F04-71C6-485B-8FC5-890994AAED7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B91E0F04-71C6-485B-8FC5-890994AAED7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B91E0F04-71C6-485B-8FC5-890994AAED7C}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{42085288-1C51-4F2A-A70E-DEBD80E62870}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42085288-1C51-4F2A-A70E-DEBD80E62870}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42085288-1C51-4F2A-A70E-DEBD80E62870}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42085288-1C51-4F2A-A70E-DEBD80E62870}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D748BE60-BAD6-4D1B-BE5A-C24943A56594}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D748BE60-BAD6-4D1B-BE5A-C24943A56594}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D748BE60-BAD6-4D1B-BE5A-C24943A56594}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D748BE60-BAD6-4D1B-BE5A-C24943A56594}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AEA0DEC-BAF6-4FDE-98F1-B17121E0D45C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AEA0DEC-BAF6-4FDE-98F1-B17121E0D45C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AEA0DEC-BAF6-4FDE-98F1-B17121E0D45C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AEA0DEC-BAF6-4FDE-98F1-B17121E0D45C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C179D5AA-66A3-4574-8839-CD9E53890937}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C179D5AA-66A3-4574-8839-CD9E53890937}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C179D5AA-66A3-4574-8839-CD9E53890937}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C179D5AA-66A3-4574-8839-CD9E53890937}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEDEB2CB-51AB-4AF6-85F9-6A596B4603BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEDEB2CB-51AB-4AF6-85F9-6A596B4603BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEDEB2CB-51AB-4AF6-85F9-6A596B4603BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEDEB2CB-51AB-4AF6-85F9-6A596B4603BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C30B4F98-084A-4FC4-910E-2DEAE3505AD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C30B4F98-084A-4FC4-910E-2DEAE3505AD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C30B4F98-084A-4FC4-910E-2DEAE3505AD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C30B4F98-084A-4FC4-910E-2DEAE3505AD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DAC9A4B-2572-446A-99B8-9E86C1D9254B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DAC9A4B-2572-446A-99B8-9E86C1D9254B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DAC9A4B-2572-446A-99B8-9E86C1D9254B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DAC9A4B-2572-446A-99B8-9E86C1D9254B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D2E4D59-5480-40CF-92EF-4944F8F17610}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D2E4D59-5480-40CF-92EF-4944F8F17610}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D2E4D59-5480-40CF-92EF-4944F8F17610}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D2E4D59-5480-40CF-92EF-4944F8F17610}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58E5120B-BF91-4D36-804F-FC294DAF183E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58E5120B-BF91-4D36-804F-FC294DAF183E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58E5120B-BF91-4D36-804F-FC294DAF183E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58E5120B-BF91-4D36-804F-FC294DAF183E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08A705E8-CD96-497C-976B-366EABDD439A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08A705E8-CD96-497C-976B-366EABDD439A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08A705E8-CD96-497C-976B-366EABDD439A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08A705E8-CD96-497C-976B-366EABDD439A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DC0543B-B1DD-4F5E-9384-652A339FE7CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DC0543B-B1DD-4F5E-9384-652A339FE7CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DC0543B-B1DD-4F5E-9384-652A339FE7CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DC0543B-B1DD-4F5E-9384-652A339FE7CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{222A55F1-A032-4FAF-92C1-C51A2F7D2725}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{222A55F1-A032-4FAF-92C1-C51A2F7D2725}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{222A55F1-A032-4FAF-92C1-C51A2F7D2725}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{222A55F1-A032-4FAF-92C1-C51A2F7D2725}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5168ABF4-2DCB-496B-8F76-DB9B716ACC4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5168ABF4-2DCB-496B-8F76-DB9B716ACC4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5168ABF4-2DCB-496B-8F76-DB9B716ACC4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5168ABF4-2DCB-496B-8F76-DB9B716ACC4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6ABBF91-35B6-44AA-B769-A6A16228484D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6ABBF91-35B6-44AA-B769-A6A16228484D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6ABBF91-35B6-44AA-B769-A6A16228484D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6ABBF91-35B6-44AA-B769-A6A16228484D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB390685-297C-41D9-B4AC-201E58A8364C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB390685-297C-41D9-B4AC-201E58A8364C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB390685-297C-41D9-B4AC-201E58A8364C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB390685-297C-41D9-B4AC-201E58A8364C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D908408-CA30-447A-BC47-85048E5A2999}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D908408-CA30-447A-BC47-85048E5A2999}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D908408-CA30-447A-BC47-85048E5A2999}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D908408-CA30-447A-BC47-85048E5A2999}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC8F4CAF-A03F-4FF1-9079-0F309235FAB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC8F4CAF-A03F-4FF1-9079-0F309235FAB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC8F4CAF-A03F-4FF1-9079-0F309235FAB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC8F4CAF-A03F-4FF1-9079-0F309235FAB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{081ABDCF-EFA2-4F08-92AE-939F850E5949}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{081ABDCF-EFA2-4F08-92AE-939F850E5949}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{081ABDCF-EFA2-4F08-92AE-939F850E5949}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{081ABDCF-EFA2-4F08-92AE-939F850E5949}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87DB1DEF-5033-4EDF-947D-CC890E5B84B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87DB1DEF-5033-4EDF-947D-CC890E5B84B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87DB1DEF-5033-4EDF-947D-CC890E5B84B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87DB1DEF-5033-4EDF-947D-CC890E5B84B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76B5BD1E-6E16-4E2D-9678-0E2B4E14DB3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76B5BD1E-6E16-4E2D-9678-0E2B4E14DB3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76B5BD1E-6E16-4E2D-9678-0E2B4E14DB3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76B5BD1E-6E16-4E2D-9678-0E2B4E14DB3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C9B8FC8-7C8C-4448-95E6-50B0EE23B261}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C9B8FC8-7C8C-4448-95E6-50B0EE23B261}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C9B8FC8-7C8C-4448-95E6-50B0EE23B261}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C9B8FC8-7C8C-4448-95E6-50B0EE23B261}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A4AF4D2-E74C-4A8A-947B-1B7CE5BDB67A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A4AF4D2-E74C-4A8A-947B-1B7CE5BDB67A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A4AF4D2-E74C-4A8A-947B-1B7CE5BDB67A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A4AF4D2-E74C-4A8A-947B-1B7CE5BDB67A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2156065F-74F7-420C-A7C9-F40B4751E36A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2156065F-74F7-420C-A7C9-F40B4751E36A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2156065F-74F7-420C-A7C9-F40B4751E36A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2156065F-74F7-420C-A7C9-F40B4751E36A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C9BE8AF-D2F1-4853-B683-C5D87AA0DBFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C9BE8AF-D2F1-4853-B683-C5D87AA0DBFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C9BE8AF-D2F1-4853-B683-C5D87AA0DBFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C9BE8AF-D2F1-4853-B683-C5D87AA0DBFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B51A018-816B-4336-81F4-9182B16D3A42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B51A018-816B-4336-81F4-9182B16D3A42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B51A018-816B-4336-81F4-9182B16D3A42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B51A018-816B-4336-81F4-9182B16D3A42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB30D863-65B0-42BA-8D2C-29DE27C3A5FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB30D863-65B0-42BA-8D2C-29DE27C3A5FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB30D863-65B0-42BA-8D2C-29DE27C3A5FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB30D863-65B0-42BA-8D2C-29DE27C3A5FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA3BA85B-4C5F-4140-8FF9-40C98AF2DFED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA3BA85B-4C5F-4140-8FF9-40C98AF2DFED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA3BA85B-4C5F-4140-8FF9-40C98AF2DFED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA3BA85B-4C5F-4140-8FF9-40C98AF2DFED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0238565-3C5A-4D9D-9938-A2B82770E525}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0238565-3C5A-4D9D-9938-A2B82770E525}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0238565-3C5A-4D9D-9938-A2B82770E525}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0238565-3C5A-4D9D-9938-A2B82770E525}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8982176-FC35-453D-AFAB-60CC3ED474C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8982176-FC35-453D-AFAB-60CC3ED474C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8982176-FC35-453D-AFAB-60CC3ED474C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8982176-FC35-453D-AFAB-60CC3ED474C4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{94384324-A9A0-4888-9E43-24C3E1FFF5FD} = {BE079DB6-FD92-4167-8DF4-CACB2E1422FC}
+		{B0EED982-2D1D-4830-B616-1B8E46BB4C7A} = {BE079DB6-FD92-4167-8DF4-CACB2E1422FC}
+		{80394EA6-3B1A-457A-A21E-EAE2CCEF6BA5} = {BE079DB6-FD92-4167-8DF4-CACB2E1422FC}
+		{4406732C-A144-4461-B03F-6A50465E28C2} = {BE079DB6-FD92-4167-8DF4-CACB2E1422FC}
+		{65417F3B-DCC0-490F-A13D-9EF48F6F5352} = {BE079DB6-FD92-4167-8DF4-CACB2E1422FC}
+		{F63BBBF1-FC19-4F0A-81D7-2C4C27A1768A} = {BE079DB6-FD92-4167-8DF4-CACB2E1422FC}
+		{3F661942-9946-4292-9FE7-6B576782D5F9} = {58F62039-8645-499C-B264-66048F4F0F75}
+		{162DE45B-B7A2-4D4A-B90D-F1762133C31C} = {58F62039-8645-499C-B264-66048F4F0F75}
+		{DA48A112-2316-4576-84F7-2665282C75BE} = {58F62039-8645-499C-B264-66048F4F0F75}
+		{6270F84B-38B3-4602-803C-EAE9E8C924C6} = {58F62039-8645-499C-B264-66048F4F0F75}
+		{1F4484D6-CE9B-428E-B640-FB777F260F97} = {58F62039-8645-499C-B264-66048F4F0F75}
+		{8C3710FE-B6C7-4261-81B6-897F4B286B2B} = {58F62039-8645-499C-B264-66048F4F0F75}
+		{A56117CB-EF5A-4EE5-ABD0-284F084637A0} = {58F62039-8645-499C-B264-66048F4F0F75}
+		{41BA68F9-3422-4FB0-B6DE-7097A22565E5} = {58F62039-8645-499C-B264-66048F4F0F75}
+		{B08AF9A4-DD22-4ACF-9387-9C3600D487DE} = {58F62039-8645-499C-B264-66048F4F0F75}
+		{4C91969A-ED94-4647-9816-D80254360B75} = {58F62039-8645-499C-B264-66048F4F0F75}
+		{0FF8A998-8E34-424B-9C36-41A111341EB0} = {0530FD4D-FB57-412E-877C-014B42413D0A}
+		{4B60DC07-ACC6-4EFA-BED6-22AA8F34DC24} = {0530FD4D-FB57-412E-877C-014B42413D0A}
+		{39402137-1859-4B82-93BD-30ADFB183F06} = {13F2B8D4-81FB-4645-AA6A-36FEB438642D}
+		{2B9538EF-853C-4160-A546-5848444157B0} = {13F2B8D4-81FB-4645-AA6A-36FEB438642D}
+		{5689AF1C-D688-4A23-8AE8-37885CD0D1C3} = {94384324-A9A0-4888-9E43-24C3E1FFF5FD}
+		{340E7DDE-6DB6-4B51-9F4B-9251C088944F} = {B0EED982-2D1D-4830-B616-1B8E46BB4C7A}
+		{7D3D71F1-1B3D-4B27-8216-86FC25C8CC91} = {B0EED982-2D1D-4830-B616-1B8E46BB4C7A}
+		{1E51A52B-C52A-4883-95A2-0B15D81E83EF} = {80394EA6-3B1A-457A-A21E-EAE2CCEF6BA5}
+		{76059390-7158-435B-A4FA-D02EED95EF90} = {4406732C-A144-4461-B03F-6A50465E28C2}
+		{F740F0AA-A1D4-4A77-8BBE-E7448F2FBE89} = {4406732C-A144-4461-B03F-6A50465E28C2}
+		{B0E01468-73E8-4B46-9EB0-20A0E54C9076} = {4406732C-A144-4461-B03F-6A50465E28C2}
+		{A53512E9-0AA1-4623-9E28-E44693631341} = {65417F3B-DCC0-490F-A13D-9EF48F6F5352}
+		{34EAB10D-56DF-4683-BAFA-369B581F4360} = {DF031B6B-BD75-4D24-9411-2A691B7241D7}
+		{4C1D672F-892E-4AC7-84EA-FE5BE2046000} = {DF031B6B-BD75-4D24-9411-2A691B7241D7}
+		{43147A1A-C8A0-4645-824D-0E7CAF0293FC} = {3F661942-9946-4292-9FE7-6B576782D5F9}
+		{5F6A19BA-47BC-4DDC-8C4C-06CCEA6BE0BA} = {3F661942-9946-4292-9FE7-6B576782D5F9}
+		{2B6DB2B2-C289-4779-97C1-507BC779BA25} = {3F661942-9946-4292-9FE7-6B576782D5F9}
+		{141D3A2E-1C13-461C-A741-81F36E66AD1A} = {3F661942-9946-4292-9FE7-6B576782D5F9}
+		{B9AE0468-56BB-4AFC-8533-8A493FDDF8DA} = {3F661942-9946-4292-9FE7-6B576782D5F9}
+		{D748BE60-BAD6-4D1B-BE5A-C24943A56594} = {3F661942-9946-4292-9FE7-6B576782D5F9}
+		{222A55F1-A032-4FAF-92C1-C51A2F7D2725} = {3F661942-9946-4292-9FE7-6B576782D5F9}
+		{D9112D3C-62D2-401E-8EA1-86AC28A71C22} = {162DE45B-B7A2-4D4A-B90D-F1762133C31C}
+		{26CD35F7-A75E-439F-9473-D5F6A74B70FD} = {162DE45B-B7A2-4D4A-B90D-F1762133C31C}
+		{5E382C94-510F-4943-8F9E-E6EC3F139E8E} = {162DE45B-B7A2-4D4A-B90D-F1762133C31C}
+		{9F57C67B-F7EA-421D-8CB6-2CF17FEE5783} = {162DE45B-B7A2-4D4A-B90D-F1762133C31C}
+		{52DE429D-650F-4265-9E45-140D32EBB8FC} = {162DE45B-B7A2-4D4A-B90D-F1762133C31C}
+		{A27D360D-A4E3-4B4B-90A2-6428CEE073C1} = {162DE45B-B7A2-4D4A-B90D-F1762133C31C}
+		{BEDEB2CB-51AB-4AF6-85F9-6A596B4603BB} = {162DE45B-B7A2-4D4A-B90D-F1762133C31C}
+		{5168ABF4-2DCB-496B-8F76-DB9B716ACC4A} = {162DE45B-B7A2-4D4A-B90D-F1762133C31C}
+		{135E7F2B-1FE8-44E1-B1AD-0C80B972459E} = {DA48A112-2316-4576-84F7-2665282C75BE}
+		{D897399D-4BD0-4907-B34E-57C6DB0440DB} = {DA48A112-2316-4576-84F7-2665282C75BE}
+		{8FB35D65-3E80-483D-B38A-F4DE1AB08D71} = {DA48A112-2316-4576-84F7-2665282C75BE}
+		{C30B4F98-084A-4FC4-910E-2DEAE3505AD9} = {DA48A112-2316-4576-84F7-2665282C75BE}
+		{C9EAD437-56BA-45BB-A982-845AD72FE1C8} = {6270F84B-38B3-4602-803C-EAE9E8C924C6}
+		{C9D002E4-8ABE-4939-8668-6EA2A6146301} = {6270F84B-38B3-4602-803C-EAE9E8C924C6}
+		{8127EBEE-C5BB-4201-B899-9CA788688E83} = {6270F84B-38B3-4602-803C-EAE9E8C924C6}
+		{1DAC9A4B-2572-446A-99B8-9E86C1D9254B} = {6270F84B-38B3-4602-803C-EAE9E8C924C6}
+		{27EA5DBF-C871-4F2A-A5A0-5DB0F148E6D8} = {1F4484D6-CE9B-428E-B640-FB777F260F97}
+		{60902D0D-848C-4750-B479-5FD4AD9F1A13} = {1F4484D6-CE9B-428E-B640-FB777F260F97}
+		{2F07E89E-EB4C-4987-8021-8125ABB274DC} = {1F4484D6-CE9B-428E-B640-FB777F260F97}
+		{35BA4EE2-9321-494A-9B20-73E139097626} = {1F4484D6-CE9B-428E-B640-FB777F260F97}
+		{42085288-1C51-4F2A-A70E-DEBD80E62870} = {1F4484D6-CE9B-428E-B640-FB777F260F97}
+		{C179D5AA-66A3-4574-8839-CD9E53890937} = {1F4484D6-CE9B-428E-B640-FB777F260F97}
+		{C6ABBF91-35B6-44AA-B769-A6A16228484D} = {1F4484D6-CE9B-428E-B640-FB777F260F97}
+		{E7D45C75-2BC2-417F-B797-F1B0B56C0B7B} = {8C3710FE-B6C7-4261-81B6-897F4B286B2B}
+		{2C00539B-DBE9-4F0A-AE44-A5998888DAEA} = {8C3710FE-B6C7-4261-81B6-897F4B286B2B}
+		{47D96EC8-20F2-4FFA-8415-AD28276D3625} = {8C3710FE-B6C7-4261-81B6-897F4B286B2B}
+		{8A06B835-2476-497F-895C-929C94D5B99D} = {8C3710FE-B6C7-4261-81B6-897F4B286B2B}
+		{BEF2C500-F2AF-40C5-A802-73C43F38C234} = {8C3710FE-B6C7-4261-81B6-897F4B286B2B}
+		{B91E0F04-71C6-485B-8FC5-890994AAED7C} = {8C3710FE-B6C7-4261-81B6-897F4B286B2B}
+		{6AEA0DEC-BAF6-4FDE-98F1-B17121E0D45C} = {8C3710FE-B6C7-4261-81B6-897F4B286B2B}
+		{A6B36C41-DB02-43BB-88CA-A5042D6B365B} = {8C3710FE-B6C7-4261-81B6-897F4B286B2B}
+		{C436E4A5-3B2D-4E09-AE37-265F04D3FCCC} = {39402137-1859-4B82-93BD-30ADFB183F06}
+		{A4B19E44-FA3F-4718-A5D9-C096A57C65D5} = {39402137-1859-4B82-93BD-30ADFB183F06}
+		{0F7F5211-C275-4A4A-9575-6EFB533F7F1D} = {2B9538EF-853C-4160-A546-5848444157B0}
+		{6F5C52B2-96F2-478C-A662-3D8B7602C8EA} = {2B9538EF-853C-4160-A546-5848444157B0}
+		{2E50EB46-E3AD-4A18-A929-5F676ECEEEDC} = {52DE429D-650F-4265-9E45-140D32EBB8FC}
+		{CF369721-E54E-47C1-9B31-DAE84C35E449} = {52DE429D-650F-4265-9E45-140D32EBB8FC}
+		{1D2E4D59-5480-40CF-92EF-4944F8F17610} = {A56117CB-EF5A-4EE5-ABD0-284F084637A0}
+		{58E5120B-BF91-4D36-804F-FC294DAF183E} = {A56117CB-EF5A-4EE5-ABD0-284F084637A0}
+		{08A705E8-CD96-497C-976B-366EABDD439A} = {A56117CB-EF5A-4EE5-ABD0-284F084637A0}
+		{3DC0543B-B1DD-4F5E-9384-652A339FE7CC} = {A56117CB-EF5A-4EE5-ABD0-284F084637A0}
+		{B5C5A548-D22B-4BF2-8E10-19F67DF5D0AD} = {F63BBBF1-FC19-4F0A-81D7-2C4C27A1768A}
+		{F80CC0BE-3DA4-4889-A905-A0BE751C31E7} = {F63BBBF1-FC19-4F0A-81D7-2C4C27A1768A}
+		{DB390685-297C-41D9-B4AC-201E58A8364C} = {41BA68F9-3422-4FB0-B6DE-7097A22565E5}
+		{9D908408-CA30-447A-BC47-85048E5A2999} = {41BA68F9-3422-4FB0-B6DE-7097A22565E5}
+		{AC8F4CAF-A03F-4FF1-9079-0F309235FAB9} = {41BA68F9-3422-4FB0-B6DE-7097A22565E5}
+		{081ABDCF-EFA2-4F08-92AE-939F850E5949} = {41BA68F9-3422-4FB0-B6DE-7097A22565E5}
+		{87DB1DEF-5033-4EDF-947D-CC890E5B84B6} = {41BA68F9-3422-4FB0-B6DE-7097A22565E5}
+		{76B5BD1E-6E16-4E2D-9678-0E2B4E14DB3A} = {41BA68F9-3422-4FB0-B6DE-7097A22565E5}
+		{7C9B8FC8-7C8C-4448-95E6-50B0EE23B261} = {41BA68F9-3422-4FB0-B6DE-7097A22565E5}
+		{2A4AF4D2-E74C-4A8A-947B-1B7CE5BDB67A} = {B08AF9A4-DD22-4ACF-9387-9C3600D487DE}
+		{2156065F-74F7-420C-A7C9-F40B4751E36A} = {B08AF9A4-DD22-4ACF-9387-9C3600D487DE}
+		{5C9BE8AF-D2F1-4853-B683-C5D87AA0DBFC} = {4C91969A-ED94-4647-9816-D80254360B75}
+		{4B51A018-816B-4336-81F4-9182B16D3A42} = {4C91969A-ED94-4647-9816-D80254360B75}
+		{EA3BA85B-4C5F-4140-8FF9-40C98AF2DFED} = {A6B36C41-DB02-43BB-88CA-A5042D6B365B}
+		{B0238565-3C5A-4D9D-9938-A2B82770E525} = {A6B36C41-DB02-43BB-88CA-A5042D6B365B}
+		{F8982176-FC35-453D-AFAB-60CC3ED474C4} = {A6B36C41-DB02-43BB-88CA-A5042D6B365B}
+		{BB30D863-65B0-42BA-8D2C-29DE27C3A5FA} = {A6B36C41-DB02-43BB-88CA-A5042D6B365B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.2\lib\NET35
+	EndGlobalSection
+	GlobalSection(DPCodeReviewSolutionGUID) = preSolution
+		DPCodeReviewSolutionGUID = {00000000-0000-0000-0000-000000000000}
+	EndGlobalSection
+EndGlobal

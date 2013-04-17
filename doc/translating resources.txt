@@ -1,0 +1,64 @@
+1) Add a new file to Core35 project, for example Resources.nl-NL.resx
+2) Replace [LANGUAGECODE] in the code below with the right language, e.g. nl-NL
+3) Then add this to all project files, and rename [TARGETFRAMEWORK] by the target framework, for example Core40
+
+Core resources (in other core projects, replace "Properties\Catel.Core" by "Properties"):
+
+    <Compile Include="..\Catel.Core35\Properties\Translations\Resources.[LANGUAGECODE].[TARGETFRAMEWORK].Designer.cs">
+      <Link>Properties\Catel.Core\Translations\Resources.[LANGUAGECODE].[TARGETFRAMEWORK].Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.[LANGUAGECODE].resx</DependentUpon>
+    </Compile>    
+	<EmbeddedResource Include="..\Catel.Core35\Translations\Properties\Resources.[LANGUAGECODE].resx">
+      <Link>Properties\Catel.Core\Translations\Resources.[LANGUAGECODE].resx</Link>
+      <LastGenOutput>Resources.[LANGUAGECODE].[TARGETFRAMEWORK].Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <CustomToolNamespace>Catel.Properties</CustomToolNamespace>
+    </EmbeddedResource>	
+	
+	
+Windows resources (in other windows projects, replace "Properties\Catel.Windows" by "Properties"):
+
+    <Compile Include="..\Catel.Windows35\Properties\Translations\Resources.[LANGUAGECODE].[TARGETFRAMEWORK].Designer.cs">
+      <Link>Properties\Catel.Windows\Translations\Resources.[LANGUAGECODE].[TARGETFRAMEWORK].Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.[LANGUAGECODE].resx</DependentUpon>
+    </Compile>    
+	<EmbeddedResource Include="..\Catel.Windows35\Translations\Properties\Resources.[LANGUAGECODE].resx">
+      <Link>Properties\Catel.Windows\Translations\Resources.[LANGUAGECODE].resx</Link>
+      <LastGenOutput>Resources.[LANGUAGECODE].[TARGETFRAMEWORK].Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <CustomToolNamespace>Catel.Windows.Properties</CustomToolNamespace>
+    </EmbeddedResource>	
+	
+	
+Windows toolkit resources (WPF only):
+
+    <Compile Include="..\Catel.Windows.Toolkit35\Properties\Translations\Resources.[LANGUAGECODE].[TARGETFRAMEWORK].Designer.cs">
+      <Link>Properties\Translations\Resources.[LANGUAGECODE].[TARGETFRAMEWORK].Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.[LANGUAGECODE].resx</DependentUpon>
+    </Compile>    
+	<EmbeddedResource Include="..\Catel.Windows.Toolkit35\Properties\Translations\Resources.[LANGUAGECODE].resx">
+      <Link>Properties\Translations\Resources.[LANGUAGECODE].resx</Link>
+      <LastGenOutput>Resources.[LANGUAGECODE].[TARGETFRAMEWORK].Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <CustomToolNamespace>Catel.Windows.Properties</CustomToolNamespace>
+    </EmbeddedResource>	
+
+	
+Current projects:
+
+* Core40
+* Core45
+* Windows40
+* Windows45
+* WindowsToolkit40
+* WindowsToolkit45
+* SL4
+* SL5
+* WP7
+* WP7.Mango

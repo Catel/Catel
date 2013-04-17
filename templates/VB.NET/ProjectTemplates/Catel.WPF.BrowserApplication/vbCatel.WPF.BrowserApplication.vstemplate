@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <Name>WPF Browser Application with Catel</Name>
+    <Description>A project for creating a WPF browser application using the Catel framework.</Description>
+    <ProjectType>VisualBasic</ProjectType>
+	<TemplateGroupID>Windows</TemplateGroupID>
+	<TemplateID>Catel.WPF.BrowserApplication.VisualBasic</TemplateID>
+	<RequiredFrameworkVersion>3.0</RequiredFrameworkVersion>
+    <SortOrder>1000</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>WPFBrowserApplication</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>__TemplateIcon.ico</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="$safeprojectname$.vbproj" File="Catel.WPF.BrowserApplication.vbproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="Application.xaml">Application.xaml</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Application.xaml.vb">Application.xaml.vb</ProjectItem>
+      <Folder Name="My Project" TargetFolderName="My Project">
+        <ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.vb">AssemblyInfo.vb</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="Resources.resx">Resources.resx</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="Resources.Designer.vb">Resources.Designer.vb</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="Settings.settings">Settings.settings</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="Settings.Designer.vb">Settings.Designer.vb</ProjectItem>
+		<ProjectItem ReplaceParameters="true" TargetFileName="app.manifest">app.manifest</ProjectItem>
+		<Folder Name="MyExtensions" TargetFolderName="MyExtensions">
+		    <ProjectItem ReplaceParameters="true" TargetFileName="MyWpfExtension.vb">MyWpfExtension.vb</ProjectItem>
+		</Folder>		
+      </Folder>
+      <Folder Name="Models" TargetFolderName="Models">
+	  </Folder>
+      <Folder Name="ViewModels" TargetFolderName="ViewModels">
+        <ProjectItem ReplaceParameters="true" TargetFileName="MainPageViewModel.vb">MainPageViewModel.vb</ProjectItem>
+      </Folder>
+      <Folder Name="Views" TargetFolderName="Views">
+        <ProjectItem ReplaceParameters="true" TargetFileName="MainPage.xaml">MainPage.xaml</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="MainPage.xaml.vb">MainPage.xaml.vb</ProjectItem>
+      </Folder>
+    </Project>
+  </TemplateContent>
+  
+  <WizardExtension>
+    <Assembly>WinFxBrowserApplicationTemplateWizard</Assembly>
+    <FullClassName>Microsoft.VisualStudio.FidalgoTemplates.WinFxBrowserApplicationTemplateWizard</FullClassName>
+  </WizardExtension>  
+  
+</VSTemplate>

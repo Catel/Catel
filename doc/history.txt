@@ -1,0 +1,1308 @@
+Catel history
+=============
+
+(+) Added
+(*) Changed
+(-) Removed
+(x) Error / bug (fix)
+
+For more information about issues or new feature requests, please visit:
+
+Project website: http://catel.codeplex.com
+Issue tracker:   https://catelproject.atlassian.net
+Documentation:   https://catelproject.atlassian.net/wiki/display/CTL
+
+**********************************************************
+
+==================
+Version 3.6
+==================
+
+Release date:
+=============
+2012/xx/xx
+
+Added/fixed (BREAKING CHANGES):
+===============================
+(*) Moved all generic methods from the ServiceLocator to IServiceLocatorExtensions so its easier to implement the IServiceLocator
+    interface. It also gives us more freedom in the future to develop new features around the service locator. In very rare cases,
+    this will be a breaking change. To fix this, simply include the Catel.IoC namespace.
+
+Added/fixed:
+============
+(+) Added the IExceptionService.IsExceptionRegistered method to know if an exception type is registered for handling
+(+) Added circular dependency protection to the TypeFactory. This means that if there are types with a circular dependency using 
+    dependency injection, the TypeFactory will throw a CircularDependencyException with the exact type path which was used to create
+    the type instead of a StackOverflow without any info
+(+) Added batches to the MementoService which now allows to easily group multiple actions together in a batch
+(+) Added BindingWithValidation for NET40 and NET45 where {catel:BindingWithValidation MyProp} can now be used instead of
+    {Binding Path=MyProp, NotifyOnValidationErrors=True, ValidatesOnDataErrors=True}
+(+) Added IMessageMediator.IsMessageRegistered to know if a message type is registered
+(*) Changed UnitOfWork.SaveChanges default options to SaveOptions.DetectChangesBeforeSave | SaveOptions.AcceptAllChangesAfterSave
+(*) The MVC dependency resolver now also supports dependency injection in non-abstract non-registered classes (such as controllers)
+(*) Performance improvement on first validation sequence for non-existing properties in ModelBase
+(*) External container synchronization for the ServiceLocator now respects both Singleton and Transient registration types in the
+    the external containers unless they don't support this information (such as MEF and Castle Windsor)
+(-) Removed EffectsHelper class from Catel.Extensions.Controls because it was already included in Catel.MVVM
+(x) Fixed issue where the WeakEventListener could not handle explicitly implemented events
+(x) Fixed issue where default values were not correctly subscribed to via weak events. This caused the protected change notifications
+    not to work for default values
+(x) Fixed Windows Phone issue with the Lazy<T> class (which was used by the Argument checks)
+(x) Fixed issue in DragDrop behavior where DragStarted was called to many times
+(x) Fixed issue where in some very rare cases (when the same view model is used in views in the same chain of views), the UserControlLogic 
+    would cause a StackOverflow when saving or canceling a view model
+
+To-do:
+======
+See https://catelproject.atlassian.net
+
+Known bugs:
+===========
+See https://catelproject.atlassian.net
+
+**********************************************************
+
+==================
+Version 3.5
+==================
+
+Release date:
+=============
+2012/03/23
+
+Added/fixed (BREAKING CHANGES):
+===============================
+(x) Removed automatic property change notification of sub property models in the ModelBase. This logic is now implemented in the
+    ChangeNotificationWrapper class which is fully based on weak references and weak event listeners. This has been done to fix
+    a memory leak issue in the model base
+(*) Moved all type resolving from TypeHelper to TypeCache
+(-) Removed all .NET 3.5 projects, .NET 4.0 is now the minimal required version
+
+Added/fixed:
+============
+(+) Added Argument.InheritsFrom to check if an instance inherits from a type.
+(+) Added options to configure a service locator from configuration file.
+(+) Added ServiceLocator.CanResolveNonAbstractTypesWithoutRegistration to setup service locator behavior for non-abstract
+    types resolution without registration
+(+) ServiceLocator resolves non-abstract types without registration.
+(+) Added IsValid method in Argument class
+(+) Added ChangeNotificationWrapper to get no-memory-leak safe change notifications of objects and collections
+(+) Added ConsoleLogListener to write to the console for console applications
+(+) Added the SendMessageAsync method in IMessageMediator
+(+) Added INeedCustomInitialization to allow custom initialization of types created by the TypeFactory
+(+) Added Catel.Mvc libraries with features especially built for ASP.NET MVC
+(+) Added ServiceLocator.RemoveInstance and a couple of overloads of ServiceLocator.RemoveAllInstances methods to remove instance 
+    from the service locator
+(+) Added ServiceLocator.ResolveTypes method to resolve all instances for an interface type
+(+) Added auto register types via attributes feature to the service locator
+(+) Added expression overloads to IsMinimal, IsMaximum, ImplementsInterface, ImplementsOneOfTheInterfaces, IsOfType, 
+    IsOfOneOfTheTypes, IsNotOfType, IsNotOfOneOfTheTypes, IsNotMatch and IsMatch methods of Argument class
+(+) Added expression overloads to IsNotNull, IsNotNullOrEmpty, IsNotNullOrEmpty, IsNotNullOrEmpty, IsNotNullOrWhitespace, 
+    IsNotNullOrEmptyArray and IsNotOutOfRange methods of Argument class
+(+) Added support for Entity Framework 5 with repositories, unit of work and a DbContextManager
+(+) Added Composite expiration policy to combine serveral expiration policies into a single one
+(+) Added Custom expiration policy
+(+) Added some exception extensions
+(+) Added a generic overload to RegisterProperty method of the ModelBase class as option to avoid the usage of "magic strings" 
+    as property name. Now the property name can be computed from an existing property. 
+    The usage of this method improves the refactoring process
+(+) Added time related cache expiration policies including Absolute, Duration and Sliding
+(+) Added InfoBarMessageControl.DefaultTextPropertyValue to customize the Text property for a complete application
+(+) Added ValidationContextExtensions to merge ValidationContext objects
+(+) Added specification pattern implementation to Catel.Extensions.Data
+(+) Added TaskHelper with task helper methods for all frameworks (also for frameworks without Task class)
+(+) Added tag parameter to all CommandHelper methods
+(+) Added PropertyHelper which can resolve property names based on a linq expression
+(+) Added PropertyChangedEventArgs extensiosn which can check for specific property changes based on expressions
+(+) Added ServiceLocator.GetRegistrationInfo to retrieve registration info about a registered type
+(+) Added System.Threading.Timer to WinRT because the DispatcherThread can only be used on the UI thread (and causes unit tests
+    of view models to fail)
+(*) ModelBase now supports calculated properties as registered properties which can be used during validation
+(*) Updated RedirectDeserializationBinder LoadType method to call GetType from TypeCache instead from Type
+(*) The ModelBase.RegisterProperty now contains an override for the SetParent
+(*) Attribute validation on non-public properties in Silverlight is now disabled to prevent unnecessary exceptions
+(*) Logging now supports extra data which can be used in custom listeners and logging stategies
+(*) Moved some logic from Log to ILogExtensions so users don't have to reimplement the same logic in several loggers
+(*) Performance improvement when constructing view models without parameters
+(*) AssemblyHelper.RegisterAssembliesFromXap now automatically registers type in the TypeCache
+(*) AssemblyHelper.RegisterAssembliesFromXap now allows registering types in a background thread
+(*) UniqueIdentifierHelper is now thread-safe
+(*) Updated Catel.Extensions.CSLA dependency to 4.5.10
+(*) WeakEventListener now also supports explicitly implemented events
+(*) Catel.Extensions.FluentValidation no longer requires a reference to Catel.MVVM. A reference to Catel.Core is sufficient so
+    it can also be used on server side validation
+(x) Fixed issue with xml serialization where an object with just collections wasn't deserialized correctly
+(x) Fixed several issues with the Windows Phone navigation service and logic
+(x) Fixed LayoutCycleException in the PleaseWaitService for Silverlight when used in combination with DevExpress controls
+(x) Fixed issue in WeakEventListener for WinRT
+(x) Fixed possible multithreading issue in the ServiceLocator
+(x) Fixed memory leak in view model metadata
+(x) Fixed issue where initial errors were not always shown directly by the InfoBarMessageControl
+(x) Fixed memory leak in the PopupHelper for WPF
+
+To-do:
+======
+See https://catelproject.atlassian.net
+
+Known bugs:
+===========
+See https://catelproject.atlassian.net
+
+**********************************************************
+
+==================
+Version 3.4
+==================
+
+Release date:
+=============
+2012/12/15
+
+Fixed since beta 1:
+===================
+(+) Added DownloadingModuleCatalog for Silverlight to quickly set up prism applications using Catel and Silverlight
+(+) Added FastObservableCollections which supports raising single events while adding/removing multiple items
+(+) Added ModelBase.LeanAndMeanModel property to suspend both validation and change notifications at once
+(+) Added ObjectHelper.AreEqualReferences to check for reference equality. This method however also assumes that value types
+    with the same value are equal. This method is now used in the ModelBase.SetValue
+(+) Added WindowEventToCommand behavior for WPF to easily subscribe to window events
+(+) Added ViewModelBase.OnClosing and ViewModelBase.OnClosed methods
+(+) Added UserControl.CreateWarningAndErrorValidatorForViewModel to prevent the creation of the WarningAndErrorValidator
+    for a control when it is not being used
+(+) Added ModelBase.SuspendValidationForAllModels to suspend all validation for all classes deriving from ModelBase
+(*) InfoBarMessageControl.SubscribeWarningAndErrorValidator and UnsubscribeWarningAndErrorValidator are now public
+(*) WarningAndErrorValidator now checks both visual and logical tree instead of logical tree only for InfoBarMessageControl
+(*) CacheFactory is marked obsolete, you can now directly construct the CacheStorage class
+(*) ViewModelClosedEventArgs now contains the IViewModel instance that has been closed
+(*) When validation on the ModelBase is suspended, it will no longer validate values via data annotations. As soon as the
+    validation is enabled again, the properties will be checked
+(*) Updated the Activate extension method (from Prism extension) to ensure the viewmodel's parent-child relationship.
+(x) Fix in DebugLogListener for chrome where it sometimes throws an unhandled exception (the browser itself)
+(x) Simplified and improved the way change notifications are implemented for non-WPF technologies
+(x) Fixed the fake DirectDependency binding error
+(x) Fixed centering issue and status update issue in PleaseWaitService for Silverlight
+(x) Fixed several issues in view model lifetime management and the navigation service for Windows Phone
+(x) Fixed designer issues where the callstack would complain about _logic which is null
+
+Added/fixed:
+============
+(+) Added WinRT support (beta)
+(+) Added Windows Phone 8 support (beta)
+(+) Added NavigationViewModelBase which adds Back and Forward commands
+(+) ServiceLocator now supports service registrations with tags (such as names, but any type is supported)
+(+) Added Catel.Extensions.CSLA to support CSLA ViewModelBase in combination with Catel
+(+) Added Argument.IsNotNullOrEmpty for the Guid class which supports Guid.Empty checks
+(+) Added AuditingHelper which automatically adds auditing for an instance of IViewModel. This way, it's easier
+    to create custom implementations of IViewModel where only the events have to be implemented
+(+) Added ViewModelCommandManager which now manages the commands of a view model. This way, it's easier to create
+    custom implementations of IViewModel where only the events have to be implemented
+(+) Added IServiceLocator.TypeRegistered event which is invoked when a type is registered
+(+) Added ITypeFactory which caches constructors for type instantiated to ensure the best performance possible
+(+) Added IDispatcherService.BeginInvokeIfRequired as additional feature to the dispatcher service
+(+) Added expiration options to the CacheStorage, renamed CacheHelper to CacheFactory
+(+) Added Navigate behavior for the Hyperlink control in WPF
+(+) Added ServiceBase to Catel.Core so it is easy to derive custom services from now on without having to implement the
+    base logic yourself on every project
+(+) Added an extension method to the IUIVisualizerService, as part of Prism Extension, to activate a view model as child of an actived one. 
+    Now Prism UI composition is fully sopported from a view model first approach.
+(+) Added a thread safe and inheritable (with correcteness) version of ModuleCatalog.
+(+) Added experimental extension method to show a window from it's view model and notifies when the window is actually 
+    opened (registered in the ViewManager).
+(*) If an object supports ToString(IFormatProvider), the ObjectToStringHelper will pass CultureInfo.InvariantCulture
+    to make sure the values are converted to string without having to care about different cultures
+(*) Refactored ServiceLocator to improve performance of transient type resolving
+(*) IEditableObject implementations (DataObjectBase and ViewModelBase) now don't deserialize the backup fields
+    unless it is really necessary (a call to CancelEdit) which improves the startup performance with appr. 30 %
+(*) Performance improvements in general
+(*) UIVisualizerService for WPF now requires ContentControl instead of Window as minimum class to allow more customization
+(*) IServiceLocator now implements the IServiceProvider interface as well
+(*) Focus behavior now sets the focus at the end when the control is a textbox
+(*) ViewModelBase now supports all models instead of only the DataObjectBase as model with IEditableObject support
+(*) BREAKING CHANGE: Renamed DataObjectBase to ModelBase to provide a better industry standard name for the class
+(*) Exposed properties using the Expose attribute will now fall back to default values when model is set to null
+(*) ServiceLocator is now thread-safe
+(*) PleaseWaitService in silverlight now allows custom parent elements
+(*) Catel.Core assembly now automatically registers all services automatically at module initialization
+(*) If a view model is injected in a view, the view automatically sets its ViewModelBehavior to Injected instead of Dynamic
+    and the view model will not be updated for the lifetime of that view
+(*) Reimplemented CompositeModuleCatalog inheriting from the Catel.Modules.ModuleCatalog instead from 
+    Microsoft.Practices.Prism.Modularity.ModuleCatalog.
+(*) CompositeModuleCatalog allows cross module catalog's module dependencies.
+(*) Xml deserialization with xml namespaces is less strict so it can deserialize in case of wrong namespaces
+(-) Removed generic ModelBase<T> (previously known as DataObjectBase<T>), generic is not needed
+(x) Fix in shader effects which are not available during debugging although they work at runtime
+(x) Fixed issue that StackGrid did not work in VS2012/Blend designer
+(x) Fixed double initialization issue in Silverlight. This was causes by the fact that the Loaded event in WPF is called
+    from top => bottom, but in Silverlight from bottom => top. Catel now uses (abuses) the LayoutUpdated event to fake the
+    Loaded event (because the LayoutUpdated is called from top => bottom in Silverlight).
+(x) Fixed issue in LogicBase where dependency property changes of associated target controls were not properly called. This
+    fix makes to code easier to maintain and implements the logic as expected
+(x) IViewModelContainer now implements INotifyPropertyChanged so PropertyChanged events are actually picked up by the binding system
+(x) Fixed GetInstance method implementation of ServiceLocatorAdapter to register non-abstract classes with 
+    RegistrationType.Transient (just like Prism expect).
+(x) Fixed RegionAdapterMappings now is registered as singleton on ModuleInitializer (just like Prism expect).
+(x) Fixed the search of the first parent region manager to make IU composition feature works properly.
+(x) Fixed issue where ModelBase.PropertyChanging was called when the property values were equal. Now the ModelBase will not invoke
+    the PropertyChanging event when the values are equal, just like the PropertyChanged event
+
+To-do:
+======
+See http://catel.codeplex.com/workitem/list/basic
+
+Known bugs:
+===========
+See http://catel.codeplex.com/workitem/list/basic
+
+**********************************************************
+
+===========
+Version 3.3
+===========
+
+Release date:
+=============
+2012/09/09
+
+Fixed since RC 1:
+=================
+(*) Argument.IsOfType now ignore COM types because they cannot be checked
+
+Fixed since beta 2:
+===================
+(+) Added Module Manager View
+(x) Bug fix in case-insensitive search
+
+Fixed since beta 1:
+===================
+(+) Added ViewModelToViewConverter for WPF
+(*) ValueConvertBase now implements MarkupExtension in WPF and SL5
+(*) Enhanced the BooleanToGrayscaleConverter so it can be customized
+(*) TypeHelper now supports case-insensitive search for types
+(x) Fixed issue where re-using the same view model instance in a nested user control scenario caused a stackoverflow exception
+(x) Fixed issue where EventToCommand.DisableAssociatedObjectOnCannotExecute was not working correctly
+(x) Fixed issue where the designer was not always able to load views in silverlight
+
+Added/fixed:
+============
+(+) Added IViewModelManager.ActiveViewModels property which allows to retrieve all active viewmodels.
+(+) Added IViewModelManager.GetFirstOrDefaultInstance<TViewModel>() to get the first or default instance of the specified view model.
+(+) Added support to task smooth progress notification of an executing task by SplashScreenService when 
+    the viewmodel type of the splash screen window is specified.
+(+) Added support to notify progress of an ActionTask through of ITaskProgressTracker interface.
+(+) Added support to the SplashScreenService to notify the progress via IProgressNotifyableViewModel 
+    using IUVisualizerService
+(+) Added SplashScreenService to execute a batch of enqueued tasks and notify the progress through IPleaseWaitService
+(+) Added support to type resolution with object life cycle or style management (Singleton or Transient) for 
+    ServiceLocator including it's synchronization with external containers that support this kind of instantiation
+(+) DataObjectBase xml serializer now supports XmlIgnore, XmlElement and XmlAttribute attributes
+(+) Introduced IAdvancedNotifyPropertyChanging with AdvancedNotifyPropertyChangingEventArgs which allow
+    the developer to prevent a property change from happening
+(+) Added INotifyPropertyChanging interface for SL4
+(+) Added ViewModelBase.IsSaving property
+(+) Added ExceptionService to create a generic exception handling policy for an application
+(+) Added UpdateBindingOnPasswordChanged behavior
+(+) Added IViewManager to find a view that uses a specific view model
+(+) Added IViewModelManager to find all view models of a specific model
+(+) Added PropertyData.IncludeInBackup on the DataObjectBase to ignore specific properties from being supported 
+    in the IEditableObject implementation
+(+) Added actual implementation for ViewModelBase.HasDirtyModel
+(+) Added IServiceLocator.RegisterInstance(Type, Object)
+(*) BREAKING CHANGE: IViewModel.Canceling now supports CancelingEventArgs and allows the cancel to be canceled. This
+    also counts for the CancelViewModel and CancelAndCloseViewModel methods, which now behave the same like Save
+(*) TraceOutputControl now supports log messages from any thread
+(*) InfoBarMessageControl now supports multiple WarningAndErrorValidator elements at the same time
+(*) UIVisualizerService now supports ContentControl as window type in SL to support DXWindow (DevExpress)
+(*) Changed default value of ViewModelBase.InvalidateCommandsOnPropertyChanged to true for WPF as well
+(-) Removed json support in DataObjectBase. It is better to use an external json serializer like json.net
+(x) TagHelper.AreTagsEqual now checks the casing for tags as well
+(x) Fixed issue where ReflectionExtensions.IsInstanceOfTypeEx would return false for an integer that is
+    defined as a long. The IsInstanceOfTypeEx now also checks for implicit cast options
+(x) ViewModelBase.UnregisterCommands is now safer with try catch when setting a property to null fails
+(x) Fixed issue with hierarchical xml serialization and collection types that shared interfaces
+(x) Fix to prevent unneccessary view model instantiation due to a bug in WPF 4 (sentinel nodes)
+(x) Fixed issue in IViewModelLocator where postfixes were removed, even though it were not real postfixes. For
+    example, 'MyNameViewer' will now resolve 'MyNameViewerViewModel' instead of 'MyNameerViewModel'
+(x) Fixed issue where PleaseWaitWindow was not thread safe in all cases
+(x) Fixed designer issue when classes call LogManager.GetCurrentClassLogger in design mode
+(x) Fixed issue where SynchronizationContext would cause a deadlock in nested thread calls
+(x) Fixed the type registration implementation removing the existing registered instance to allow the 
+    change the instantiation style of a registered type
+
+To-do:
+======
+See http://catel.codeplex.com/workitem/list/basic
+
+Known bugs:
+===========
+See http://catel.codeplex.com/workitem/list/basic
+
+**********************************************************
+
+===========
+Version 3.2
+===========
+
+Release date:
+=============
+2012/07/08
+
+Fixed since RC 2:
+=================
+(+) Added EndEditEventArgs and CancelEditEventArgs which allows to cancel the actual call and allow 
+    customization of the IEditableObject implementation 
+(*) Introduced base class for all external helper classes for 3rd party IoC containers so it actually
+    doesn't matter what version of the external libraries you are using. It will always use the runtime
+    defined as external container. This means that you can, for example, use Unity 1 and Unity 2 together
+    at the same time
+(*) Small changes in ModuleBase and the Prism bootstrapper
+
+Fixed since RC 1:
+=================
+(+) Added BindingUpdateBehaviorBase so it is easier to create behaviors that update a binding
+(+) Added DependencyInjectionHelper so it is possible to use dependency injection for any type
+(+) Added ModuleBase in prism extension
+(+) Re-introduced TraceOutputControl in Catel.Extensions.Controls
+(+) Added generic prism bootstrapper so it is easier to instantiate a shell (just define the shell type)
+(*) Major performance improvements when (de)serializing xml in large AppDomains. Types from assemblies
+    are now cached instead of retrieved for every single type
+(x) DataObjectBase.SetValue no longer fails if value is a dynamic COM object and does not meet the property
+    type specification
+(x) Fix in Enum<T>.TryParse, no longer throws exceptions when it fails to parse
+(x) Fix in very rare and hard to reproduce issue where the .NET runtime keeps calling OnDeserialized on
+    objects that are already deserialized and can cause a stackoverflow
+
+Fixed since beta 5:
+===================
+(+) Added CommandBehaviorBase, CommandEventTriggerBase, CommandTriggerActionBase and CommandTriggerBase to
+    easily create any expression blend behaviors or triggers that support commands, command parameters and key
+    modifiers. All behaviors and triggers in Catel that support commands now also support command parameters and
+    key modifiers out of the box.
+(+) Added ObjectToStringHelper to easily convert an object (even when null) to a string
+(+) Added TypeHelper.ConvertTypeToVersionIndependentType and TypeHelper.GetInnerTypes methods
+(+) Added MessageRecipient attribute to easily subscribe to the message mediator
+(+) Added HashHelper.CombineHash to generate a unique hash for a combination of hashes
+(+) Added ServiceDependency markup extension to easily allow retrieval of services in the ServiceLocator in xaml
+(+) Added MemberInfoExtensions to get the signature of a ConstructorInfo or MethodInfo
+(+) ServiceLocator now supports dependency injection for constructors when resolving types
+(+) Added virtual property IDispatcherService.CurrentDispatcher to be able to customize the current dispatcher
+(*) ServiceLocator now always instantiates services when external container synchronization is enabled to make sure
+    all containers return the same instance of the services
+(*) DispatcherObservableObject now uses DispatcherServer.BeginInvoke instead of DispatcherService.Invoke
+(*) IEditableObject.BeginEdit no longer throws an exception when it is called twice, which comes closer to the
+    behavior as explained on MSDN
+(*) Moved TypeHelper.AreObjectsEqual to ObjectHelper.AreEqual
+(*) Several improvements to the prism bootstrapper in Catel.Extensions.Prism
+(x) Fix in SerializationHelper (binary) when using GetValue due to wrong string format string
+(x) IDataErrorInfo[columnName] and IDataWarningInfo[columnName] can now correctly handle string.Empty property changes
+
+Fixed since beta 4:
+===================
+(+) Added DispatcherObservableObject which invokes all change notifications on the UI thread
+(+) Added FocusFirstControl behavior for NET35 and NET40
+(+) Added ForceCloseAfterSettingDialogResult to WindowLogic and WindowBehavior
+(+) added IMessageRecipient.UnsubscribeRecipient to unsubscribe all handlers of a single
+    recipient instance at once
+(*) WindowLogic and WindowBehavior now support FrameworkElement instead of Window so 3rd party
+    classes such as the RadWindow are also supported (not deriving from Window)
+(*) All projects are now completely warning free (treat warnings as errors is true)
+(*) UIVisualizerService is now more flexible and supports more types, including those not deriving
+    from Window (but, for example FrameworkElement)
+(*) CanGoBack and CanGoForward are now virtual on the NavigationService
+(x) Small fix in DispatcherService.BeginInvoke when no dispatcher is available
+(-) Removed FilterTextBox for NET35 and NET40
+
+Fixed since beta 3:
+===================
+(*) Major refactorings to allow the usage of all classes in WinRT
+(x) Fixed issue where the use of the NavigationService would thrown an exception while retrieving the
+    "Instances" of the DynamicEventListener class
+
+Fixed since beta 2:
+===================
+(+) Added caching to all reflection by default to improve overall performance
+(*) BREAKING CHANGE: Moved TypeHelper to 'Catel.Reflection' namespace
+(*) BREAKING CHANGE: Moved AttributeHelper to 'Catel.Reflection' namespace
+(*) Marked ReflectionExtensions as obsolete, use TypeExtensions in Catel.Reflection instead
+(*) Moved all reflection code to TypeExtensions. This way, a caching mechanism or multiple platform support
+    can be added very easily
+(*) If EventToCommand.DisableAssociatedObjectOnCannotExecute is null or false, it will never touch the IsEnabled
+    property of the associated object so it can be bound to other properties / values
+(*) Updated Ninject support to 3.0
+(*) Updated Castle.Windsor support to 3.0
+(*) Updated FluentValidation support to 3.3.1
+(x) Fixed rare issue where managed view models executing a command would cause issues on interested view models
+    in a lower layer (direct childs)
+
+Fixed since beta 1:
+===================
+(+) Added RoutedEventTrigger to allow the subscription of routed or attached events for event triggers
+(+) Added LogicBase.TargetControlPropertyChanged so it is possible to get a PropertyChanged event on all views
+    and behaviors, even in SL and WP7
+(x) Fixed issue in NavigationService for Silverlight where it would throw exception when it could not find the
+    main window of the application
+(x) Bug fix in WarningAndErrorValidator where it would not accept multiple errors on the same property
+
+Added/fixed:
+============
+(+) Added Environment.RegisterDefaultViewModelServices to allow services to be registered before any view model is
+    actually instantiated (normally, the first instantiated view model automatically registers all services)
+(+) Added INavigationService.CloseApplication to allow the closing of an application via services. The closing can
+    also be prevented via the INavigationService.ApplicationClosing event
+(+) Added a MessageBase class which makes it easier to send messages with data using the MessageMediator
+(+) Added IView interface to easily retrieve information (such as a view model) from a view
+(+) Added INotifyableViewModel interface so 3rd party view models can also use the InterestedIn attribute notifications
+(+) Added IRelationalViewModel interface so 3rd party view models can also be used in nested user control scenarios
+(+) Added IViewModelFactory so the instantiation of view models can now be fully controlled and customized
+(+) Added Description property to IMementoSupport to allow a description to the end-user for memento classes
+(*) The IOpenFileService now supports multiple files and in WPF it also supports a title
+(*) Setting the owner window in WPF now uses the active window instead of the main process window, which should give
+    a better behavior when using multiple child windows. This behavior also has impact on the IPleaseWaitService,
+    IMessageService and IUIVisualizerService
+(*) InfoBarMessageControl.IsTabStop is now false by default
+(*) Major performance improvements in TypeHelper.InitializeTypes
+(*) Updated System.Windows.Interactivity.dll for SL5
+(*) IEditableObject implementation is more flexible now, and allows control using the OnBeginEdit method on DataObjectBase
+    and ViewModelBase to prevent it
+(x) Fixed issue that views and view models could not be resolved when a naming convention contained 2 or more [UP]
+    constants
+(x) Fixed issue where the ExposeAttribute did not work correctly
+(x) Fixed issue where a view model during design time did not work correctly in the binding editor of VS2010
+(x) Fixed issue where in some cases, the IOpenFileService and ISaveFileService would not correctly select the initial
+    directory when opening
+
+To-do:
+======
+See http://catel.codeplex.com/workitem/list/basic
+
+Known bugs:
+===========
+See http://catel.codeplex.com/workitem/list/basic
+
+**********************************************************
+
+===========
+Version 3.1
+===========
+
+Release date:
+=============
+2012/05/06
+
+Added/fixed:
+============
+(+) Added OnDataContextChanged and OnPropertyChanged to UserControl, DataWindow, Page and PhoneApplicationPage
+(+) Added DependencyPropertyHelper and DependencyPropertyChangedHelper to allow subscribtion to dependency property
+    change events, even in Silverlight and WP7
+(+) Added Silverlight and WP7 support for ViewToViewModel attributes
+(+) Added TabControl for WPF that will not unload the tab items from the visual tree when a tab is deselected
+(+) Added AsynchronousCommand which allows async command execution that does not block the UI thread
+(+) Added WatermarkTextBox for WPF
+(+) Added FilterTextBox for WPF
+(+) Added Memento pattern implementation (undo/redo support for objects and collections)
+(+) Added OnModelPropertyChanged method to ViewModelBase to easily get model change notifications without having
+    to care about event subscription/unsubscription and memory leaks
+(+) It is now possible to determine the view model type for a view based on the datacontext value at runtime
+(+) It is now possible to instantiate view models manually based on the current datacontext value at runtime, this
+    method is even more flexible and gives more controle than the GetViewModelType() method on the view. This method
+    allows to re-use view model instances in multiple different views
+(+) Added Tag property to ILog interface which is the type name by default. However, this tag can be customized to 
+    categorize the logging
+(*) UserControlLogic now wraps the user control in a grid which will contain the ViewModel as DataContext. This way,
+    the logic is made much easier and more stable, and saves lots of performance and other enhancements
+(*) Extended ValidationContext with HasWarnings and HasErrors properties, as well as with GetWarnings
+    and GetErrors methods
+(*) IEditableObject is now implemented explicit on the DataObjectBase, as well as some IDataObjectBase members
+    that are rarely required
+(*) IViewModelContainer for Silverlight must also implement PropertyChanged (which is possible using the helper class 
+    named DependencyPropertyChangedHelper) to allow ViewToViewModelAttributes to work in SL
+(*) Postfixes in naming conventions are handled a bit better (only the exact postfix is removed, not anything that comes
+    after that)
+(*) UserControl now has a DefaultSkipSearchingForInfoBarMessageControlValue to set application wide behavior for the
+    SkipSearchingForInfoBarMessageControlValue property
+(*) Improvements to DeferValidationUntilFirstSaveCall where it now hides the validation results (thus validation will
+    continue). This way, it is possible to query validations via the ValidationContext, but still provide UX where the
+    user must save the object at least once before validation results show up in the user interface
+(*) When an expose attribute is used on a view model in WPF, the dynamically created type descriptor now calls the property
+    on the view model instead of a direct call to SetValue / GetValue
+(*) DoubleClickToCommand in WPF now uses AddHandler and RemoveHandler to allow double click events even when the control
+    marks the routed event as handled
+(*) Several performance improvements
+(*) It is no longer required to call the base when overriding ViewModelBase.Close 
+(x) Fix where custom default action would not be handled on a key press (enter) by the DataWindow
+(x) Fixed all binding errors in the UserControl in nested user controls scenarios
+(x) Fixed bug in CollectionHelper where 2 different collections containing the same object reference would cause
+    an endless while loop
+(x) Fixed issue in DispatcherHelper where it would always return the dispatcher of the current thread instead of the
+    main application dispatcher. Now it returns the application (main UI) thread dispatcher
+(x) Fixed issue where SaveViewModel was not called when a user control was unloaded
+
+To-do:
+======
+See http://catel.codeplex.com/workitem/list/basic
+
+Known bugs:
+===========
+See http://catel.codeplex.com/workitem/list/basic
+
+**********************************************************
+
+===========
+Version 3.0
+===========
+
+Release date:
+=============
+2012/03/18
+
+Added/fixed:
+============
+(+) Added non-generic UserControl with same behavior as UserControl<TViewModel>
+(+) Added non-generic DataWindow with same behavior as DataWindow<TViewModel>
+(+) Added non-generic Page with same behavior as Page<TViewModel>
+(+) Added non-generic PhoneApplicationPage with same behavior as PhoneApplicationPage<TViewModel>
+(+) Added several collection extensions (MoveItemUp, MoveItemUpByIndex, MoveItemDown, MoveItemDownByIndex)
+(+) Added ViewHelper to instantiate views with a specific DataContext which can be either via injection
+    or by setting the DataContext manually (all wrapped up in 1 method)
+(+) IUIVisualizerService and INavigationService can now resolve views based on view model without
+    actually instantiating them
+(+) Added indent options to ILog interface (and implementation)
+(+) Added HideValidationResults property to DataObjectBase so the validation does occur, but the validation
+    results will not be exposed through the error interfaces such as IDataErrorInfo
+(+) Added additional methods to the Argument class
+(+) Added additional methods to the TypeHelper class to retrieve all information about a type
+(+) Improved naming convention so it supports the [UP] constant to use relative naming conventions in the 
+    UIVisualizerService and ViewModelLocator
+(+) Added PreventInvocationIfAssociatedObjectIsDisabled property so the EventToCommand trigger can work, even 
+    when the AssociatedObject is disabled
+(+) Added IDispatcherService to invoke methods using the dispatcher. The Dispatcher property on the ViewModelBase
+    is now marked obsolete, use the IDispatcherService instead
+(+) Added Modifiers property to EventToCommand to allow a modifier to be used in combination with an event
+(+) Added CommandParameter to the DoubleClickToCommand behavior
+(+) Added PleaseWaitService for Windows Phone 7
+(+) Added tombstoning methods to the PhoneApplicationPage to allow custom view tombstoning logic
+(*) BREAKING CHANGE: the DataWindow now only supports MVVM and cannot be used in its old form
+(*) BREAKING CHANGE: moved ObservableCollection extensions to new namespace (Catel.Collections)
+(*) BREAKING CHANGE: UIVisualizerService no longer registers types automatically. Views must be registered
+    manually or follow one of the (can be customized) naming conventions
+(*) BREAKING CHANGE: NavigationService no longer registers types automatically. Views must be registered
+    manually or follow one of the (can be customized) naming conventions
+(*) BREAKING CHANGE: WeakEventListener methods for PropertyChanged and CollectionChanged have changed and are
+    now available without specifying the event name
+(*) BREAKING CHANGE: Removed ViewModelBaseWithoutServices, there is now only a ViewModelBase
+(*) BREAKING CHANGE: Simplified lots of calls to services. An example is the IMessageService, of which lots of overloads
+    are removed and default parameter values are introduced. This gives a better understanding of what a method does and
+    this way you don't get lost in all the available methods
+(*) BREAKING CHANGE: Created separate assemblies of the Gyroscope and Compass services for Windows Phone 7 so older
+    devices are supported out of the box as well
+(*) Simplified the StackGrid by letting it derive from the Grid control directly
+(*) All obsolete validation calls in the DataObjectBase (and thus ViewModelBase) now caused compiler errors and
+    will be removed in the next version
+(*) DeferValidationUntilFirstSaveCall now uses the HideValidationResults instead of SuspendValidation (so validation will
+    be executed and available via the ValidationContext, but not exposed via the data error interfaces)
+(*) WarningAndErrorValidor (used by InfoBarMessageControl) now also checks whether the source is a IDataObjectBase. If 
+    so, it uses the ValidationContext to show the errors and warnigns. This allows the display of multiple business
+    rules at once or multiple validation errors for the same field
+(*) When a nested child view model fails to save (returns false), the parent view model will no longer save itself (thus the
+    whole chain will no longer save when a child cannot save)
+(*) Added cache behavior to ValidatorProviderBase. This allows that every class that inherits from 
+    ValidatorProviderBase use it by default.
+(*) All .NET assemblies now target the client framework instead of the full framework. The assemblies can still be used
+    by projects using the full framework.
+(x) Fixed issue in MessageMediator that it would not register more recipients for the same message
+(x) Fixed issue that an automatically centered DataWindow in silverlight was centered again after being repositioned
+(x) Fixed issue where the IsDirty property of the DataObjectBase would be set even when it was not dirty
+(x) Fixed issue where the TypeHelper would always initialize types and did not respect the "do not force" option
+(x) Fixed issue where a collection of non-serialized objects would still be marked as serialized
+(x) Fixed some issues with navigation on WP7 (when using the back button, the navigation events were not invoked)
+(x) Fixed issue where pressing escape on the DataWindow when it was not shown with the ShowDialog method would cause
+    an exception
+
+To-do:
+======
+See http://catel.codeplex.com/workitem/list/basic
+
+Known bugs:
+===========
+See http://catel.codeplex.com/workitem/list/basic
+
+**********************************************************
+
+===========
+Version 2.5
+===========
+
+Release date:
+=============
+2012/01/23
+
+Added/fixed:
+============
+(+) Added MessageMediator that implements the Mediator pattern
+(+) Added IValidationSummary to get an easy summary of a IValidationContext
+(+) Added ValidationToViewModel attribute to easily get validation summaries mapped onto properties of a view model
+(+) Added ViewModel extensions to retrieve a IValidationSummary that includes all child view models as well
+(+) Added CommandHelper that allows to automatically hook a command CanExecute to an IValidationSummary
+(+) Added SelectTextOnFocus behavior
+(+) Added GetBindingExpression extension method for DependencyObject in Silverlight to allow the retrieval of
+    bindings for non-FrameworkElement types that still do support bindings (such as behaviors and dependency objects)
+(+) Added IsAssociatedObjectLoaded to BehaviorBase, TriggerBase and TriggerActionBase
+(+) Added DeferValidationUntilFirstSaveCall to defer the validation until the first call to SaveViewModel
+(+) Added OnViewModelClosed methods to UserControl<TViewModel> and DataWindow<TViewModel>
+(+) Added caching to the ExpressionHelper to improve the performance on lambda expression parsing
+(+) Added nested view models validation summaries to allow the retrieval of a validation summary from a view model tree
+(*) WeakEventListener now also supports PropertyChangedEventHandler and NotifyCollectionChangedEventHandler
+(*) WeakEventListener now has convenience classes that automatically detects the types required so an event
+    can be subscribed like WeakEventListener.SubscribeToWeakPropertyChangedEvent(target, source, "MyEvent", MyHandler)
+(*) When ViewModelBase.ValidateModelsOnInitialization is set to false, properties decorated with the ViewModelToModel
+    attribute are notlonger validated on model changes
+(*) Small improvement in DependencyObjectExtensions.FindVisualDescendant where it will always loop the children when
+    the control is unknown instead of only with a panel
+(*) ViewModelBaseWithoutService now also unsubscribes itself as life instance as soon as it is closed
+(*) IViewModel now has a UniqueIdentifier property which is a counter. This way, the uniqueness of a view model is no
+    longer determined by its creation time (because in some very rare situations, the creation time of several view
+    models was equal)
+(*) PropertyHelper now caches reflection results for better performance
+(*) Project template for WPF application now starts the main window maximized
+(*) ViewModelToModel attribute now has a Mode property to specify the mapping mode
+(*) Improved the way models are uninitialized and initialized again when decorated with Model attribute
+(*) BREAKING CHANGE: Removed IsReadonly from Expose attribute, replaced by Mode property
+(*) BREAKING CHANGE: non-static PropertyData definitions are no longer allowed (would destroy serializations, and this
+    is actually not allowed anyway)
+(*) BREAKING CHANGE: Validation methods now use interfaces instead of classes
+(*) FrameworkElement.GetParent extension method now also uses VisualTreeHelper.GetParent
+(*) DataWindow in WPF now first focuses the default button before handling it to make sure all bindings are updated
+(*) WrapControlHelper is now public so it can be used by other classes as well
+(-) BREAKING CHANGE: Removed IDisposable from IViewModel and IDataObjectBase, objects no longer need to be disposed
+(-) Removed RetrySafetyCounter
+(x) Fixed issue where OnNavigationCompleted was not invoked when the back button was
+    used in navigation based applications
+(x) Added event keyword to MVVMBehaviorBase.ViewModelChanged and MVVMBehaviorBase.ViewModelPropertyChanged
+(x) Fixed issue that a view model would still map properties from view model to model when the view model was already
+    closed. This could lead to unexpected model updates if controls are written badly (and some 3rd party are)
+(x) Fixed issue where in VB.NET, the default value delegate was not working for property registrations. If a value is
+    passed as a delegate and does not return void, it will be casted to a function at all times
+(x) Fixed issue that if a model object would call RaisePropertyChanged(null), the DataObjectBase would cause an error
+(x) Small theme fixes that no longer uses sets the content of buttons using RoutedUICommands. This is a small performance
+    improvement and also solves a missing binding issue on the GrayScaleEffect for buttons
+(x) Fixed issue for Silverlight in case the Deployment.Current.Parts would throw a UnauthorizedAccessException
+(x) Fixed issue that reflection in Catel did not use the successfully loaded types in case of a ReflectionTypeLoadException
+(x) Constructor for AuditorBase is no longer internal
+(x) Fixed issue where the Nested User Controls would construct a view model twice for the same model
+(x) Fixed issue with automatic tombstoning, added additional logging and checks
+
+To-do:
+======
+See http://catel.codeplex.com/workitem/list/basic
+
+Known bugs:
+===========
+See http://catel.codeplex.com/workitem/list/basic
+
+**********************************************************
+
+===========
+Version 2.4
+===========
+
+Release date:
+=============
+2011/12/06
+
+Added/fixed:
+============
+(+) Added Authentication behavior that allows easy disabling, hiding or collapsing of
+    UI elements based on the runtime result of IAuthenticationProvider
+(+) PleaseWaitService in both Silverlight and WPF now support determinate modes besides
+    indeterminate mode
+(+) Added OnDataContextChanged method to UserControl<TViewModel> in Silverlight
+(+) Added ViewModelPropertyChanged event to IViewModelContainer so it is no longer required
+    to subscribe/unsubscribe to the view model itself in parent view model containers if
+    your are only interested in property changes of the view model
+(+) Added IsLoaded property to UserControl<TViewModel> and the behavior in Silverlight
+(+) Added DelayedBindingUpdate behavior
+(+) Added DynamicEventListener to be able to subscribe to dynamic unknown events
+(+) Added the possibility to inject an Action into the DoubleClickToCommand behavior to allow
+    the execution of a delegate when the behavior is created via code
+(+) Added LogManager.GetCurrentClassLogger() to simplify the retrieval of the logger for the 
+    current class
+(+) DataWindow in Silverlight now supports IsDefault and IsCancel by handling the KeyUp for Enter
+    and Escape
+(+) Added Focus behavior to set focus via a behavior
+(+) Added KeyPressToCommand behavior
+(+) Added Argument.IsSupported check which throws a NotSupportedException if not supported
+(+) Added SafeInvoke support for INotifyPropertyChanged and INotifyCollectionChanged
+(+) Added WeakEventListener to easily subscribe to long living instances without causing memory leaks
+(+) Added ILog.ErrorAndThrowException<TException> convenience method to log and throw an exception at
+    the same time
+(+) Added IValidator and IValidatorProvider to support external validators
+(+) Added IValidationContext to retrieve all validation results of an object
+(*) Changed default value of enabled state in Silverlight for non-Control UI elements
+    (such as Grid) to true instead of false (fixes a bug where EventToCommand would
+    not work for a grid)
+(*) BREAKING CHANGE: renamed ICommandAuthenticationProvider to IAuthenticationProvider
+(*) BREAKING CHANGE: overload of constructor with dictionary of services is no longer available
+(*) BREAKING CHANGE: ControlToViewModelAttribute is now called ViewToViewModelAttribute
+    overloads with a custom IServiceLocator are now available which is a much better way
+(*) BREAKING CHANGE: log classes are no longer protected but private so each class has it's own logger
+    and it is easier to see what logging comes from what class
+(*) Enabled automatic tombstoning for WP7
+(*) Improved DoubleClickToEvent trigger so it behaves better in a ListBox with a custom ItemTemplate
+(*) All controls now load resources at runtime so it is possible to change a new UI culture for
+    Catel at runtime
+(*) DataWindow now has it's own styles to the styles can be changed more easily, see 
+    DataWindow.generic.xaml. Also built in protection if a derived class of the DataWindow also 
+    changes the content in OnContentChanged
+(*) Window logic is a bit more generic so it also supports third party windows
+(*) TypeHelper has some small performance improvements for TypeHelper.GetTypeByAssembly
+(*) Catel now skips the validation of attributes on view models the first time. This is very useful when
+    properties are decorated with the [Required] attribute and you don't want the errors to show up
+    immediately. If you want this behavior, simple make a call to Validate(true, false) in the view model
+    and the view model will be forced to load the errors
+(*) Improvements to .NET version so all models with data annotations are validated (previously, only SL4
+    models of type Entity were validated)
+(*) LogManager no longer registers the DebugLogListener for performance reasons. The log listener can be
+    added manually or by using the LogManager.RegisterDebugListener() method
+(*) It is now possible to enable/disable specific log events per listener
+(*) It is now possible to disable Catel logging but let other log classes still write output
+(*) StyleManager now accepts a custom prefix in case default styles must be customized
+(x) Fixed issue where the same view model with the exact same property values was not recognized
+    as a different instance of the view model. Now the uniqueness of a view model is determined 
+    by the view model construction time and the type of the view model
+(x) Fixed issue where the Command property in the DoubleClickToCommand could not be null, but this
+    might be possible at the initialization of the view (thus the check is removed)
+(x) Fixed issue where a star (*) column definition in the StackGrid would not fill up the space
+(x) Fixed issue where the designer for Windows Phone 7 Mango applications would not show up with
+    a message that IDataErrorInfo could not be found
+(x) Fixed issue in DataObjectBase where it did not correctly de-serialize the right type in xml when
+    using a base class instead of the actual class 
+(x) Fixed issue in NavigationPage behavior in Silverlight that the navigation was never completed and the
+    arguments were not available (WP7 was working fine)
+(x) Fixed issue where ChildWindow (and thus the DataWindow) in Silverlight did not center when shown when
+    the browser is not the active window
+
+To-do:
+======
+See http://catel.codeplex.com/workitem/list/basic
+
+Known bugs:
+===========
+See http://catel.codeplex.com/workitem/list/basic
+
+**********************************************************
+
+===========
+Version 2.3
+===========
+
+Release date:
+=============
+2011/10/27
+
+Added/fixed:
+============
+(+) Added new (non-generic) overloads in ServiceLocator for registering types
+(+) WP7 version now supports tombstoning out of the box (automatic view model recovery
+    after recovering from tombstoning)
+(+) Added support for the Castle Windsor IoC container
+(+) Added option to provide a callback as default value for properties defined on the
+    DataObjectBase (and thus ViewModelBase) so it is possible to truely set a default
+    value for a reference type
+(+) Added support to (de)serialize the DataObjectBase to json and back
+(+) Added AdvancedPropertyChangedEventArgs which provides the old and new value in case
+    of a property change
+(+) Added full support for data annotations. For example, if a view model property is decorated
+    with the RequiredAttribute, the error is gathered and even provided to the ValidateFields and
+    finally exposed via the IDataErrorInfo interface (all validation eventually ends up in one place,
+    the IDataErrorInfo)
+(*) Only public constructors on view models are now used by the LogicBase
+    (before, also private constructors were used, but this doesn't work on
+    SL and WP7)
+(*) Moved implementation of IXmlSerializable from SavableDataObjectBase to
+    DataObjectBase
+(*) .NET implementation now uses DataContractSerialization for serializing data to
+    xml so the classes can be used in combination with WCF as well
+(*) DataWindowButton now only accepts delegates without parameters
+(*) Major performance improvements when (de)serializing interfaces via xml
+(*) Registered change event handlers using RegisterProperty are no longer called on refresh
+    updates (for example, errors changed). This can solve some rare bugs and is a small
+    improvement on performance
+(x) Fixed a bug where commands defined as ICommand are now also recognized,
+    where previously only interfaces or objects implementing ICommand were
+    registered
+(x) Finally fixed complex xml serialization in Silverlight and WP7
+(x) Fixed issue that it was possible to cancel a view model after it was already
+    closed. IF a view model is closed, the Save, Cancel and Close no longer handle
+    anything
+(x) Fixed very rare issue in MefHelper
+(x) Fixed issue for xml serialization using DataContractSerializer when collections contain
+    interfaces instead of actual types
+(x) Fixed issue for xml serialization with more than 3 levels deep using the default
+    DataContractSerializer class
+(x) Fixed issue with StackGrid being initialized several times in Silverlight
+(x) Fixed issue where the WarningAndErrorValidator would clear the Source property when being
+    unloaded and causing the InfoBarMessageControl not to show up again
+(x) Fixed issue where the UserControlLogic would not update a value when it is initially null
+    in a master/detail scenario
+(x) Fixed EventToCommand issues with Windows Phone 7 Mango
+(x) Fixed issue where the UserControl<TViewModel> prevented a datacontext change to be successful
+    in case when the initial datacontext value was null
+(-) Removed LLBLGen support (was deprecated anyway)
+
+To-do:
+======
+See http://catel.codeplex.com/workitem/list/basic
+
+Known bugs:
+===========
+See http://catel.codeplex.com/workitem/list/basic
+
+**********************************************************
+
+===========
+Version 2.2
+===========
+
+Release date:
+=============
+2011/10/02
+
+Added/fixed:
+============
+(+) Added PropertyHelper.IsPropertyAvailable
+(+) Added OnViewModelEvent so the InterestedIn attribute also provides events of
+    other view models the current view mode is interested in
+(+) All controls with generic view models (UserControl<TViewModel>, etc) now have a
+    method OnViewModelPropertyChanged so it is very easy to track view model changes
+(+) Aded ExposeAttribute for WPF which allows even easier exposing of model properties
+    in a view model simply by decorating a model property with the ExposeAttribute
+(+) Added EffectsHelper class that is able to dimm and blur a FrameworkElement. The new
+    default mode of the PleaseWaitWindow is Blur
+(+) Added Argument.IsNotNullOrEmptyArray() method
+(+) PropertyHelper now has TrySetPropertyValue and TryGetPropertyValue
+(+) Added support for WPF 4.5
+(+) Added support for Ninject as external IoC container
+(+) Added MouseInfo behavior (very useful for Silverlight which is missing IsMouseOver)
+(+) Added NumericTextBox behavior
+(*) Moved controls and windows from Catel.Windows to Catel.Windows.Toolkit to
+    separate the additional controls from the MVVM toolkit. This also saves some
+    space on the other assemblies (silverlight, WP7) because some images are no
+    longer required
+(*) Catel now logs all tracing to the console for Silverlight applications
+(*) DataObjectBase has now a more object oriented approach for validation. Instead of
+    calling SetFieldError and SetBusinessRuleError, simple override the validate methods
+    which provide a list of validation results. This way, validation could be completely
+    separated from the DataObjectBase and re-used
+(*) log4net is replaced by a more generic logging solution
+(*) Minimized number of times a dictionary is accessed for the same item, as well as changed
+    all event handlers to a thread-safe invocation manner
+(*) Item templates now use $viewname$Model. This way, if a CustomerView is created, it will
+    automatically be linked to CustomerViewModel instead of CustomerViewViewModel
+(*) IMessageService now also supports callbacks in case custom message boxes are used
+(x) DataWindow margin in Silverlight is finally fixed by customize the style of the ChildWindow
+    template and setting it manually (but it is still possible to override the styles)
+(x) All issues with the InfoBarMessageBar in Silverlight are now solved
+(x) Argument.IsOutOfRange, Argument.IsMaximum and Argument.IsMinimum now also work on WP7 (which
+    by default is not able to compile binary expressions)
+(-) Removed Security.Cryptography.CryptHelper
+(-) Removed Catel.Reflection.PropertySorter
+(-) Removed Catel.IO.File, Catel.IO.FileWatcher and Catel.IO.Directory
+
+To-do:
+======
+See http://catel.codeplex.com/workitem/list/basic
+
+Known bugs:
+===========
+See http://catel.codeplex.com/workitem/list/basic
+
+**********************************************************
+
+===========
+Version 2.1
+===========
+
+Release date:
+=============
+2011/09/13
+
+Added/fixed:
+============
+(+) Added FrameworkElementExtensions.FixUILanguageBug() to fix the Silverlight
+    UI language bug (for example, the dollar sign is used by SL instead of the
+    euro sign in euro countries, this fix solves that)
+(+) Added support for MEF in the ServiceLocator
+(+) Added support for INotifyDataErrorInfo for models in the ViewModelBase
+(+) Added InitializeViewModel() to IViewModel that is called as soon as an associated
+    UI element (usercontrol, window, ...) is loaded. This way, it is possible to delay
+    the retrieval of data until the element is actually loaded. Override Initialize()
+    on the ViewModelBase to use this behavior
+(+) Added extension method ObservableCollection.ReplaceRange() which clears the collection
+    and adds the specified range to the collection again
+(+) Added IUIVisualizerService.NamingConventions so multiple naming conventions are available
+(+) Added ExpressionHelper to keep the parsing of Expression objects (for example, for property
+    names) in a single place
+(+) UpdatedBindingOnTextChanged behavior now supports a delay so the command will not immediately
+    be executed after every text change event, but only when no new text change event occurs for
+    the specified delay
+(+) Properties decorated with the [Model] attribute and of type Entity (EF) are now automatically
+    validated in front so the errors are known/visible immediately
+(+) Extended Argument class with IsOfType and IsNotOfType method and an overload for the 
+    ImplementsInterface method which accepts an instance to check
+(+) Added ObservableObject, which extracts some logic out of the immensive DataObjectBase and makes it
+    easy to implement lightweight objects that support INotifyPropertyChanging and INotifyPropertyChanged
+(+) Added Enum<TEnum>.ConvertFromOtherEnumValue to easily translate equal enum values from different
+    enum types
+(+) Added PhoneApplicationPageBehavior in addition to all other MVVM behaviors
+(+) Added CameraService for Windows Phone 7 Mango
+(+) Added interfaces to UserControl<TViewModel>, DataWindow<TViewModel> and Page<TViewModel> so it
+    is now very easy to cast generic controls to an interface to change properties
+(+) UserControl<TViewModel> and DataWindow<TViewModel> now have an OnViewModelChanged method to save
+    a developer to subscribe/unsubscribe on the same user control or window
+(*) IUIVisualizerService.NamingConvention is now marked obsolete (use NamingConventions
+    instead)
+(*) Additional instances of IExternalContainerHelper classes can now be added to the
+    ServiceLocator so it is easy to extend the supported external IoC containers at
+    runtime
+(*) INotifyDataErrorInfo implementation in the DataObjectBase now returns all business
+    rule errors when string.Empty or null is passed in the GetErrors method
+(*) Designer class which initialized the design time view model is marked obsolete, it
+    is recommended to use the d:DataContext instead
+(*) PleaseWaitWindow now dimms all the windows instead of only the owner. This in case multiple
+    non-dialog windows are shown. To disable this new behavior, simply set the property 
+    PleaseWaitWindow.OnlyDimmOwnerWindow to true
+(*) IPleaseWaitService implementation for Silverlight now always centers the busy indicator correctly
+    and sets the IsHitTestVisible to false when the busy indicator is visible
+(*) Behaviors and triggers are improved so that they work even when the associated object is unloaded
+    and loaded several times for the same instance
+(*) ViewModelBase.OnNavigationCompleted is only invoked when there is a NavigationContext (previously,
+    the method was called twice)
+(*) Improved INavigationService so Uri's can be registered directly
+(*) Commands registered as ICommand are now also re-evaluated automatically for a view model. Previously,
+    only ICatelCommand implementations were re-evaluated
+(*) Small improvements to Command so Execute and CanExecute without parameters are possible
+(*) DataObjectBase.AlwaysInvokeNotifyChanged is now set to false by default
+(*) ViewModelBase.UpdateNavigationContext is now public to allow unit testing injection for navigation
+    based pages and controls
+(*) Updated SL5 project to Silverlight 5 RC
+(*) When a view model is set on a control which is already loaded, the InitializeViewModel is automatically 
+    called immediately so it is garantueed to be called
+(*) When a view model is set as the DataContext of a control, it will be used as the view model for that 
+    control so all the events are correctly called (this allows manual setting of the view model)
+(x) Fixed issue where the UserControlLogic would not subscribe to an existing DataContext
+(x) Fixed issue where design-time view models in Silverlight threw an error with
+    "XmlnsDeclaration references a namespace 'Catel.Windows.Input' that is not 
+    in the assembly"
+(x) If a SL4 assembly does not contain an AppManifest.xaml, it caused an exception in
+    AssemblyHelper.RegisterAssembliesFromXap. Added additional try/catch to prevent this
+(x) Dispatcher for SL4 is now retrieved from the current deployment if there is no current application
+    which might be possible in case of unit tests. Determining of the current dispatcher is moved
+    to the DispatcherHelper class
+(x) Fixed issue where the EventToCommand would not work on a user control that is loaded/unloaded several
+    times after eachother
+
+To-do:
+======
+See http://catel.codeplex.com/workitem/list/basic
+
+Known bugs:
+===========
+See http://catel.codeplex.com/workitem/list/basic
+
+**********************************************************
+
+===========
+Version 2.0
+===========
+
+Release date:
+=============
+2011/08/04
+
+Added/fixed:
+============
+(+) Added support for Windows Phone 7 Mango
+(+) Added MVVM services for the following WP7 capabilities:
+    * Accelerometer
+    * Compass
+    * Gyroscope
+    * Vibration
+(+) Added behavior for UserControl<TViewModel>, DataWindow<TViewModel> and Page<TViewModel>
+    so it is no longer required to derive from these classes to get the same behavior
+(+) Added support for auditing and analytics
+(+) Added support for data annotations, all registered properties on DataObjectBase 
+    and ViewModelBase can now be decorated with data annotation attributes
+(+) Added RaisePropertyChanged as alternative for OnPropertyChanged for the developers
+    that prefer it. Internally it still uses OnPropertyChanged. Also added type-safe way
+    to call the method: RaisePropertyChanged(() => MyProperty)
+(+) Added CloseViewModelOnUnloaded to UserControl<TViewModel>. If set to false, the control
+    will not close the view model and re-use it the next time
+(+) IPleaseWaitService now implements Pop and Push to allow multiple view models to use the
+    same please wait service without flickering. Each view model should Push when beginning
+    and Pop when ending an action. If the last view model calls Pop, the please wait window
+    is hidden
+(+) Added IPleaseWaitService support for Silverlight by using the BusyIndicator
+(+) IUIVisualizer now supports naming convention so it is easy to register windows via 
+    naming conventions when the Windows do not implement DataWindow<TViewModel>
+(+) BREAKING CHANGE: Added new ServiceLocator which also supports unity, but the references
+    to unity are no longer required for Catel
+(+) Added INavigationService for WPF and Silverlight
+(+) Added DoubleClickToCommand and UpdateBindingOnTextChanged interactivity behaviors
+(*) BREAKING CHANGE: properties on the EventToCommand implementation for WP7 can now be set
+    via direct values and bindings (until now, only bindings were supported). So set a value
+    via a direct value, use the [PropertyName]ByValue convention
+(*) BREAKING CHANGE: removed all obsolete methods marked obsolete in 1.4
+(*) BREAKING CHANGE: EventToCommand has been moved to a new namespace (Catel.Windows.Interactivity)
+(*) EventToCommand can now disable the associated object if required in Silverlight and WP7
+(*) If a view (such as a dialog) is closed from within a viewmodel, the DialogResult is now
+    correctly being set if supported by the view
+(*) Command class now accepts Execute and CanExecute methods without a parameter (very useful
+    in lots of cases where the parameter is not being used)
+(*) Most public methods in the MVVM Services are now marked virtual so it is easy to customize
+    an out-of-the-box service implementation
+(*) ViewModelBase now only registers services in the ServiceLocator when they are not already
+    registered. This allows customization of the ServiceLocator before viewmodels are actually
+    instantiated
+(*) It's now possible to add assemblies from a Xap file to AssemblyHelper.RegisterAssembliesFromXap
+    so AssemblyHelper.GetLoadedAssemblies() also includes dynamically loaded xap assemblies
+(*) ViewModelServiceManager is now deleted. Injected services in ViewModelBase always take precedence
+    over services registered in the ServiceLocator. Since the ServiceLocator fully takes care of 
+    caching, the ViewModelServiceManager is no longer required
+(*) DataObjectBase.InitializeProperty is now protected instead of private to enable dynamic property
+    registeration and initialization
+(*) DataObjectBase.SetFieldError() now has an override that accepts an expression so it can be written
+    as SetFieldError(() => IsDirty, "IsDirty has a field error");
+(*) Catel.Environment now has a property to check whether a view is in design mode or not (the default
+    DesignerProperties.GetIsInDesignMode does not seem to work in all cases)
+(*) All controls are now available via the namespace xmlns:catel="http://catel.codeplex.com"
+(x) Fixed generic theme references in .NET 4.0
+(x) Fixed issue with operator == on DataObjectBase, it is now thread-safe
+(x) Fixed issue that if a UserControl<TViewModel> was put on a DataWindow<TViewModel> in
+    Silverlight, the application would crash saying the child already had a parent
+(x) DataWindow<TViewModel> can now be designed by Visual Studio designer and blend
+(x) ISaveFileService and IOpenFileService now actually work for Silverlight (return stream)
+
+To-do:
+======
+See http://catel.codeplex.com/workitem/list/basic
+
+Known bugs:
+===========
+See http://catel.codeplex.com/workitem/list/basic
+
+**********************************************************
+
+===========
+Version 1.4
+===========
+
+Release date:
+=============
+2011/05/24
+
+Added/fixed:
+============
+(+) Added support for Windows Phone 7 and Silverlight 5 (beta)
+(+) Added support for complex and nested (de)serialization of SavableDataObjectBase
+    for Silverlight and Windows Phone 7 (WPF already had this implemented)
+(+) Added support for the ControlToViewModelMapping attribute in Silverlight and
+    WP7 (ViewModel to Control only)
+(+) Added ICommandAuthenticationProvider so it is possible to add role or other 
+    authentication methods to MVVM commands    
+(+) Added ViewModelBase.OnViewModelCommandExecuted to be able to be notified when
+    an interested view-model has executed a command
+(+) Added Argument class to validate arguments easily and log and throw exceptions when
+    an argument does not meet a specific condition
+(+) Added support for INotifyDataErrorInfo and INotifyDataWarningInfo in DataObjectBase
+    and thus also the ViewModelBase
+(*) BREAKING CHANGE: EventToCommand trigger is now located in the Catel.MVVM namespace
+    instead of the Catel.MVVM.Commands namespace to match the other command classes
+(*) BREAKING CHANGE: Simplified the IViewModel interface so all methods now have a 
+    'ViewModel' postfix so the actual methods on the ViewModelBaseWithoutService 
+    does not have to be casted explicitly to an IViewModel instance
+(*) BREAKING CHANGE: IViewModel.Initialize is now obsolete and logic can now be 
+    implemented in the constructor of the view-model. The next version will actually 
+    remove the call and break the build if it is still used
+(*) DataObjectBase serialization now uses a custom KeyValuePair object called 
+    PropertyValue to (de)serialize property values because KeyValuePair is not
+    serializable in Silverlight and Windows Phone 7
+(*) EmptyRow and EmptyColumn for StackGrid are no longer focusable by default
+(*) EventToCommand trigger is now compatible with Windows Phone 7
+(*) Command implementation now double checks whether execution of a command is 
+    allowed before calling Execute because some controls directly call Execute
+    without checking CanExecute
+(*) ViewModelBase now flattens hierarchy for view-models to allow deriving of 
+    view-models, which is very useful for designer purposes
+(*) View-model services are now only instantiated when really needed (lazy loading)
+(*) UserControl.Loaded event does not garantuee a visual tree, so a call to ApplyTemplate
+    is added in the Silverlight implementation of the UserControl<TViewModel> to garantuee
+    a visual tree in the user control. Same for DataWindow and PhoneApplicationPage
+(*) Renamed all projects so they include the version of the target framework, such as
+    Catel.SL4 and Catel.SL5 instead of Catel.Silverlight
+(x) Fixed bug in UserControl<TViewModel> in very rare situations that the old
+    view-model was not correctly removed as datacontext. Also made the class implementation
+    much easier to understand (but this doesn't make the material itself easy)
+(x) Fixed issue where view-models without properties were equal and thus never overwritten
+    in a SetValue call on the DataObjectBase
+
+To-do:
+======
+See http://catel.codeplex.com/workitem/list/basic
+
+Known bugs:
+===========
+See http://catel.codeplex.com/workitem/list/basic
+
+**********************************************************
+
+===========
+Version 1.3
+===========
+
+Release date:
+=============
+2011/03/18
+
+Added/fixed:
+============
+(+) Added BindingHelper class to evaluate binding values manually
+(+) UserControl<TViewModel> now supports master-detail views where the detail
+    view would have a nested UserControl<TViewModel> and no parent in the whole
+    tree had a valid binding to a data context (pfew, this was a tough one...)
+(+) Project and item templates are now installed when Catel is added to a project
+    via NuGet as well. Code snippets are now initialized during every startup
+    of every project that includes Catel, so if the package is removed from a
+    project, not all projects lose their code-snippets
+(+) Design time view models as example data are now supported by Catel via 
+    the Designer.ViewModel attached property
+(*) ViewModelBase will no longer throw an exception when a property cannot
+    be found on the model. This is because when an interface is used, the
+    property is not detected via reflection when FlattenHierarchy is used
+(*) DataWindow and DataWindow<TViewModel> are no longer abstract to support designer 
+    view
+(*) InfoBarMessageControl uses custom events instead of routed events so the control
+    works with Silverlight as well. This requires that all non-standard validation
+    now uses a WarningAndErrorValidation definition (which is already the case for the
+    DataWindow and UserControl). However, if you cannot live with these changes, you
+    can uncomment the USE_ROUTED_EVENTS defines in both InfoBarMessageControl.cs and 
+    WarningAndErrorValidator.cs
+(-) Removed default offset in DataWindow so it can be displayed in maximized
+    state as well. If you want to want to use the old offset, simply call 
+    DataWindow.EnableWindowOffset() or set the MaxWidth and MaxHeight properties
+(-) Removed Jetpack theme because it was not working and required a reference to
+    the WPFToolkit
+(x) Fixed issue with the UserControl item template for WPF
+	
+To-do:
+======
+-
+
+Known bugs:
+===========
+-
+
+**********************************************************
+
+===========
+Version 1.2
+===========
+
+Release date:
+=============
+2011/02/17
+
+Added/fixed:
+============
+(+) DataObjectBase now supports Isolated Storage out of the box: 
+    Person.Save(myStream) stores a whole object graph in Silverlight
+(+) DataObjectBase can now be converted to Json via Person.ToJson();
+(+) UserControl<TViewModel> can now automatically disable itself when there
+    is no view model constructed via the DisabledWhenNoViewModel property
+(+) InfoBarMessageControl now contains a Mode property so it is possible to
+    show the control either Inline or Overlay, DataWindow also has overloads
+    to specify this option
+(*) Added protection that a view model can only be initialized once
+(x) Silverlight Commands are now correctly cleaned up without exceptions
+(x) Fixed bug in SavableDataObjectBase.ToXml()
+(x) ViewModelBase will no longer get into an undefined state after the model 
+    becomes null because of the SelectedItem property of an ItemsControl
+
+To-do:
+======
+-
+
+Known bugs:
+===========
+-
+
+**********************************************************
+
+===========
+Version 1.1
+===========
+
+Release date:
+=============
+2011/01/26
+
+Added/fixed:
+============
+(+) Styles can now be changed dynamically, see Examples application for a how-to
+(+) ViewModelBase class now have a constructor that allows services injection
+(+) ViewModelBase services can now be configured by IoC (via Microsoft.Unity)
+(+) All ViewModelBase services now have a unit test implementation
+(+) Added IProcessService to run processes from a viewmodel with directly using
+    the process class (which makes it easier to unit test view models)
+(*) If the HasErrors property of DataObjectBase is used, and the object is not
+    yet validated, it will be validated automatically so the HasErrors is actually
+    correct as initial state
+(*) It is now possible to add buttons to the DataWindow via the AddCustomButton method
+(*) Text on InfoBarMessageControl can now be customized
+(*) UserControl<TViewModel> is no longer abstract to support design mode in WPF
+(*) DataWindow<TViewModel> now uses Dispatcher.BeginInvoke to initialize the view model
+    instead of calling it directly so the window can initialize and update itself before
+    long-duration view model initialization. For example, the window doesn't become black
+    when a messagebox is shown during initialization
+(*) PleaseWaitHelper no longer re-uses the same instance of the PleaseWaitWindow, but creates a
+    new window every time, works much better
+(x) Fixed issue that a messagebox during the PleaseWaitWindow show via the IMessageService
+    caused the main window to hide to the background
+(x) Fixed issue that ICommand implementations were not correctly cleaned up and the CommandManager
+    kept invoking On[Command]CanExecute. Now the ICatelCommand implements the IDisposable interface
+	and the ViewModelBase class correctly disposes the commands upon closing
+(x) Fixed several memory leaks that held view models in memory
+(x) WindowExtensions.SetOwnerWindow extension method that uses the process handle to set the owner
+    now respects the CenterScreen property of a WPF window
+(x) The first focusable control inside the DataWindow is now correctly focused
+(x) StackGrid now supports SizeToContent (it doesn't take all space any longer)
+
+To-do:
+======
+-
+
+Known bugs:
+===========
+-
+
+**********************************************************
+
+===========
+Version 1.0
+===========
+
+Release date:
+=============
+2010/12/28
+
+Added/fixed:
+============
+(*) First stable release
+
+To-do:
+======
+-
+
+Known bugs:
+===========
+-
+
+**********************************************************

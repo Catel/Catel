@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Catel.Data.SavableDataObjectBase&lt;T&gt;">
+    <Position X="10" Y="4" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAgIAAAAAAQBAAAIAAAAEAAAAAAiAEAAAIAAAAAAA=</HashCode>
+      <FileName>Data\SavableDataObjectBase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Catel.Data.DataObjectBase" Collapsed="true">
+    <Position X="10" Y="1.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>DMCVuIEHLOCAS4BsrQHQCpM5hAlwArUqKcsBikEgwzA=</HashCode>
+      <FileName>Data\DataObjectBase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Catel.Data.DataObjectBase&lt;T&gt;" Collapsed="true">
+    <Position X="10" Y="2.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\DataObjectBase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Tahoma" Size="8.25" />
+</ClassDiagram>
