@@ -10,11 +10,11 @@ namespace Catel.Test.ExceptionHandling
     using System.Globalization;
     using System.Linq;
     using Catel.ExceptionHandling;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    
 #if NETFX_CORE
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 #else
-
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
 #endif
 
     public class ExceptionServiceFacts
