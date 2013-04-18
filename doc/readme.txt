@@ -6,6 +6,4 @@ enterprise library classes. The MVVM framework differs itself from other framewo
 the simplicity and solves the "nested user control" problem with dynamic viewmodels for 
 user controls.
 
-For more information, visit http://catel.codeplex.com
-
-Searching for documentation? Visit http://catel.catenalogic.com
+For more information, visit https://github.com/Catel/Catel

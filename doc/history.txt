@@ -8,7 +8,7 @@ Catel history
 
 For more information about issues or new feature requests, please visit:
 
-Project website: http://catel.codeplex.com
+Project website: https://github.com/Catel/Catel
 Issue tracker:   https://catelproject.atlassian.net
 Documentation:   https://catelproject.atlassian.net/wiki/display/CTL
 
