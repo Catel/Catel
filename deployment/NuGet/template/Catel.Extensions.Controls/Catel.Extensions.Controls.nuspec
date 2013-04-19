@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>Catel.Extensions.Controls</id>
+    <version>[VERSION]</version>
+	<title>Catel.Extensions.Controls</title>
+    <authors>GeertvanHorrik</authors>
+	
+	<description>
+	  Catel.Extensions.Controls library which contains user controls, such as the StackGrid.
+	</description>
+	<summary>
+	</summary>
+	
+	<tags>windows controls stackgrid styles stylehelper</tags>
+	
+	<language>en-US</language>
+	<projectUrl>http://catel.codeplex.com</projectUrl>	
+	<licenseUrl>http://catel.codeplex.com/license</licenseUrl>
+		<!--<iconUrl>file://content/icon.png</iconUrl>-->
+	<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>
+	
+    <dependencies>
+      <dependency id="Catel.MVVM" version="[VERSION]" />
+    </dependencies>
+	
+  </metadata>
+</package>

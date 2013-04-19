@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>Catel.Extensions.FluentValidation</id>
+    <version>[VERSION]</version>
+	<title>Catel.Extensions.FluentValidation</title>
+    <authors>GeertvanHorrik</authors>
+	
+	<description>
+	  Catel.Extensions.FluentValidation library which contains fluent validation extensions.
+	</description>
+	<summary>
+	</summary>
+	
+	<tags>validation fluent fluentvalidation catel</tags>
+	
+	<language>en-US</language>
+	<projectUrl>http://catel.codeplex.com</projectUrl>	
+	<licenseUrl>http://catel.codeplex.com/license</licenseUrl>
+		<!--<iconUrl>file://content/icon.png</iconUrl>-->
+	<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>
+	
+    <dependencies>
+      <dependency id="Catel.Core" version="[VERSION]" />
+    </dependencies>
+	
+  </metadata>
+</package>

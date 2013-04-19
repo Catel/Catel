@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>Catel.Extensions.EntityFramework5</id>
+    <version>[VERSION]</version>
+	<title>Catel.Extensions.EntityFramework5</title>
+    <authors>GeertvanHorrik</authors>
+	
+	<description>
+	  Catel.Extensions.EntityFramework5 library which provides data classes such as repositories, unit of work, DbContextManager and more.
+	</description>
+	<summary>
+	</summary>
+	
+	<tags>catel entity framework entityframework EF EF5 UnitOfWork unit of work DbContextManager repository repositories database</tags>
+	
+	<language>en-US</language>
+	<projectUrl>http://catel.codeplex.com</projectUrl>	
+	<licenseUrl>http://catel.codeplex.com/license</licenseUrl>
+		<!--<iconUrl>file://content/icon.png</iconUrl>-->
+	<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>
+	
+	<dependencies>
+		<group targetFramework="net40">
+		  <dependency id="Catel.Core" version="[VERSION]" />
+		  <dependency id="EntityFramework" version="5.0.0" />
+		</group>
+		
+		<group targetFramework="net45">
+		  <dependency id="Catel.Core" version="[VERSION]" />
+		  <dependency id="EntityFramework" version="5.0.0" />
+		</group>
+	</dependencies>
+	
+  </metadata>
+</package>

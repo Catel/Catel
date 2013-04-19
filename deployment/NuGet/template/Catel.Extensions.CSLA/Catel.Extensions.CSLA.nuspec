@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>Catel.Extensions.CSLA</id>
+    <version>[VERSION]</version>
+	<title>Catel.Extensions.CSLA</title>
+    <authors>GeertvanHorrik</authors>
+	
+	<description>
+	  Catel.Extensions.CSLA library which provides CSLA.NET view models for Catel.
+	</description>
+	<summary>
+	</summary>
+	
+	<tags>catel csla clsa.net</tags>
+	
+	<language>en-US</language>
+	<projectUrl>http://catel.codeplex.com</projectUrl>	
+	<licenseUrl>http://catel.codeplex.com/license</licenseUrl>
+		<!--<iconUrl>file://content/icon.png</iconUrl>-->
+	<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>
+	
+	<dependencies>
+		<group targetFramework="net35">
+		  <dependency id="Catel.MVVM" version="[VERSION]" />
+		  <dependency id="CSLA-WPF" version="4.5.10" />
+		</group>
+		
+		<group targetFramework="net40">
+		  <dependency id="Catel.MVVM" version="[VERSION]" />
+		  <dependency id="CSLA-WPF" version="4.5.10" />
+		</group>	
+		
+		<group targetFramework="net45">
+		  <dependency id="Catel.MVVM" version="[VERSION]" />
+		  <dependency id="CSLA-WPF" version="4.5.10" />
+		</group>		
+		
+		<group targetFramework="sl4">
+		  <dependency id="Catel.MVVM" version="[VERSION]" />
+		  <dependency id="CSLA-Silverlight" version="4.5.10" />
+		</group>
+		
+		<group targetFramework="sl5">
+		  <dependency id="Catel.MVVM" version="[VERSION]" />
+		  <dependency id="CSLA-Silverlight" version="4.5.10" />
+		</group>	
+		
+		<group targetFramework="wp71">
+		  <dependency id="Catel.MVVM" version="[VERSION]" />
+		  <dependency id="CSLA-WindowsPhone" version="4.5.10" />
+		</group>	
+
+		<!-- TODO: Add WP8 and WinRT -->
+		
+	</dependencies>
+	
+  </metadata>
+</package>

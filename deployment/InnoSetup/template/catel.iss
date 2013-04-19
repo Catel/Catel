@@ -72,7 +72,7 @@ Name: {app}\templates;
 
 [Files]
 Source: readme.txt; DestDir: {app};
-Source: doc\catel.chm; DestDir: {app}\doc;
+; Source: doc\catel.chm; DestDir: {app}\doc;
 Source: resources\*; DestDir: {app}\resources;
 Source: resources\catel.ico; DestDir: {app}\resources;
 
@@ -166,7 +166,7 @@ Root: HKLM; SubKey: SOFTWARE\Microsoft\Microsoft SDKs\WindowsPhone\v8.0\Assembly
 [Icons]
 Name: "{group}\Go to Catel homepage"; Filename: http://catel.codeplex.com;
 Name: "{group}\Documentation (online)"; Filename: http://catel.catenalogic.com;
-Name: "{group}\Documentation (offline)"; Filename: {app}\doc\catel.chm; 
+;Name: "{group}\Documentation (offline)"; Filename: {app}\doc\catel.chm; 
 Name: "{group}\Uninstall Catel"; Filename: {app}\unins000.exe; WorkingDir: {app}; IconFilename: {app}\resources\catel.ico; 
 
 [Types]
