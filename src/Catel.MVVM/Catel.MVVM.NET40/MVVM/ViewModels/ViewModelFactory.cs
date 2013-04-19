@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ViewModelFactory.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -45,6 +45,28 @@ namespace Catel.MVVM
             Argument.IsNotNull("typeFactory", typeFactory);
 
             _typeFactory = typeFactory;
+        }
+
+        /// <summary>
+        /// Determines whether the specified view model as data context can be reused and allow the view to set itself as
+        /// owner of the inherited view model.
+        /// <para />
+        /// By default a view model is allowed to be inherited when it is of the same type as the expected view model type.
+        /// </summary>
+        /// <param name="viewType">Type of the view.</param>
+        /// <param name="viewModelType">Type of the view model.</param>
+        /// <param name="viewModelAsDataContext">The view model as data context which must be checked.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified view model instance ben be reused by the view; otherwise, <c>false</c>.
+        /// </returns>
+        public virtual bool CanReuseViewModel(Type viewType, Type viewModelType, IViewModel viewModelAsDataContext)
+        {
+            if (viewModelAsDataContext == null)
+            {
+                return false;
+            }
+
+            return viewModelType.IsInstanceOfTypeEx(viewModelAsDataContext);
         }
 
         /// <summary>

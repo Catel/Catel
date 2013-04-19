@@ -796,10 +796,10 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 viewModelType = determineViewModelTypeEventArgs.ViewModelType;
             }
 
-            // If injection is view model, use that one
-            if ((injectionObject != null) && (viewModelType.IsInstanceOfTypeEx(injectionObject)))
+            if (_viewModelFactory.CanReuseViewModel(TargetControlType, viewModelType, injectionObject as IViewModel))
             {
-                Log.Info("DataContext is of right view model type, using the current DataContext as view model");
+                Log.Info("DataContext of type '{0}' is allowed to be reused by view '{1}', using the current DataContext as view model",
+                    viewModelType.FullName, TargetControlType.FullName);
 
                 return (IViewModel)injectionObject;
             }

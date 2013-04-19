@@ -31,25 +31,26 @@ Added/fixed (BREAKING CHANGES):
 Added/fixed:
 ============
 (+) Added the IExceptionService.IsExceptionRegistered method to know if an exception type is registered for handling
-(+) Added circular dependency protection to the TypeFactory. This means that if there are types with a circular dependency using 
+(+) [CTL-29] Added circular dependency protection to the TypeFactory. This means that if there are types with a circular dependency using 
     dependency injection, the TypeFactory will throw a CircularDependencyException with the exact type path which was used to create
     the type instead of a StackOverflow without any info
-(+) Added batches to the MementoService which now allows to easily group multiple actions together in a batch
+(+) [CTL-36] Added batches to the MementoService which now allows to easily group multiple actions together in a batch
 (+) Added BindingWithValidation for NET40 and NET45 where {catel:BindingWithValidation MyProp} can now be used instead of
     {Binding Path=MyProp, NotifyOnValidationErrors=True, ValidatesOnDataErrors=True}
 (+) Added IMessageMediator.IsMessageRegistered to know if a message type is registered
-(*) Changed UnitOfWork.SaveChanges default options to SaveOptions.DetectChangesBeforeSave | SaveOptions.AcceptAllChangesAfterSave
-(*) The MVC dependency resolver now also supports dependency injection in non-abstract non-registered classes (such as controllers)
-(*) Performance improvement on first validation sequence for non-existing properties in ModelBase
-(*) External container synchronization for the ServiceLocator now respects both Singleton and Transient registration types in the
+(*) [CTL-51] Allow ViewModelFactory to determine whether a view model can be reused
+(*) [CTL-32] Changed UnitOfWork.SaveChanges default options to SaveOptions.DetectChangesBeforeSave | SaveOptions.AcceptAllChangesAfterSave
+(*) [CTL-31] The MVC dependency resolver now also supports dependency injection in non-abstract non-registered classes (such as controllers)
+(*) [CTL-35] Performance improvement on first validation sequence for non-existing properties in ModelBase
+(*) [CTL-44] External container synchronization for the ServiceLocator now respects both Singleton and Transient registration types in the
     the external containers unless they don't support this information (such as MEF and Castle Windsor)
 (-) Removed EffectsHelper class from Catel.Extensions.Controls because it was already included in Catel.MVVM
-(x) Fixed issue where the WeakEventListener could not handle explicitly implemented events
+(x) [CTL-20] Fixed issue where the WeakEventListener could not handle explicitly implemented events
 (x) Fixed issue where default values were not correctly subscribed to via weak events. This caused the protected change notifications
     not to work for default values
-(x) Fixed Windows Phone issue with the Lazy<T> class (which was used by the Argument checks)
+(x) [CTL-34] Fixed Windows Phone issue with the Lazy<T> class (which was used by the Argument checks)
 (x) Fixed issue in DragDrop behavior where DragStarted was called to many times
-(x) Fixed issue where in some very rare cases (when the same view model is used in views in the same chain of views), the UserControlLogic 
+(x) [CTL-46] Fixed issue where in some very rare cases (when the same view model is used in views in the same chain of views), the UserControlLogic 
     would cause a StackOverflow when saving or canceling a view model
 
 To-do:
