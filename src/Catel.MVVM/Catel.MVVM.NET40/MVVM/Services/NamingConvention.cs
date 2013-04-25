@@ -194,17 +194,6 @@ namespace Catel.MVVM.Services
                 result = string.Format("{0}{1}", prefix, conventionToUse.Substring(lastIndex + Up.Length));
             }
 
-                //while (occurrences > 0)
-                //{
-                //    int index = fullnamespace.LastIndexOf(separator, StringComparison.Ordinal);
-                //    if (index == -1)
-                //    {
-                //        break;
-                //    }
-
-                //    result = result.Replace(Up, fullnamespace.Remove(index));
-                //}
-
             return ResolveNamingConvention(constantsWithValues, result);
         }
 
