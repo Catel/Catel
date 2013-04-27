@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="LogicBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -77,11 +77,6 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// </summary>
         private bool _isFirstValidationAfterLoaded = true;
 
-        /// <summary>
-        /// The view model factory used to create the view model instances.
-        /// </summary>
-        private readonly IViewModelFactory _viewModelFactory;
-
 #if !NET
         private bool _isFirstLayoutUpdatedAfterUnloadedEvent;
 #endif
@@ -121,7 +116,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             var serviceLocator = ServiceLocator.Default;
 
             _viewManager = serviceLocator.ResolveType<IViewManager>();
-            _viewModelFactory = serviceLocator.ResolveType<IViewModelFactory>();
+            ViewModelFactory = serviceLocator.ResolveType<IViewModelFactory>();
 
             TargetControl = targetControl;
             ViewModelType = viewModelType;
@@ -174,6 +169,11 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         #endregion
 
         #region Properties
+        /// <summary>
+        /// The view model factory used to create the view model instances.
+        /// </summary>
+        protected IViewModelFactory ViewModelFactory { get; private set; }
+
         /// <summary>
         /// Gets or sets the view model.
         /// </summary>
@@ -796,17 +796,23 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 viewModelType = determineViewModelTypeEventArgs.ViewModelType;
             }
 
-            if (_viewModelFactory.CanReuseViewModel(TargetControlType, viewModelType, injectionObject as IViewModel))
+            var injectionObjectAsViewModel = injectionObject as IViewModel;
+            if (injectionObjectAsViewModel != null)
             {
-                Log.Info("DataContext of type '{0}' is allowed to be reused by view '{1}', using the current DataContext as view model",
-                    viewModelType.FullName, TargetControlType.FullName);
+                var injectionObjectViewModelType = injectionObject.GetType();
 
-                return (IViewModel)injectionObject;
+                if (ViewModelFactory.CanReuseViewModel(TargetControlType, viewModelType, injectionObjectViewModelType, injectionObject as IViewModel))
+                {
+                    Log.Info("DataContext of type '{0}' is allowed to be reused by view '{1}', using the current DataContext as view model",
+                             viewModelType.FullName, TargetControlType.FullName);
+
+                    return (IViewModel) injectionObject;
+                }
             }
 
-            Log.Debug("Using IViewModelFactory '{0}' to instantiate the view model", _viewModelFactory.GetType().FullName);
+            Log.Debug("Using IViewModelFactory '{0}' to instantiate the view model", ViewModelFactory.GetType().FullName);
 
-            var viewModelInstance = _viewModelFactory.CreateViewModel(viewModelType, injectionObject);
+            var viewModelInstance = ViewModelFactory.CreateViewModel(viewModelType, injectionObject);
             
             Log.Debug("Used IViewModelFactory to instantiate view model, the factory did{0} return a valid view model", 
                 (viewModelInstance != null) ? string.Empty : " NOT");

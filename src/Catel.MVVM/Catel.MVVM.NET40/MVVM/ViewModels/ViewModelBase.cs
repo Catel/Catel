@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ViewModelBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -914,6 +914,15 @@ namespace Catel.MVVM
 
                 ChildViewModels.RemoveAt(index);
             }
+        }
+
+        /// <summary>
+        /// Gets the child view models of this view model.
+        /// </summary>
+        /// <returns>An enumerable of current child view models.</returns>
+        protected IEnumerable<IViewModel> GetChildViewModels()
+        {
+            return ChildViewModels.ToArray();
         }
 
         /// <summary>

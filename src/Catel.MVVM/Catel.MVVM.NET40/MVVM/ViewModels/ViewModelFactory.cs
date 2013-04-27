@@ -54,19 +54,20 @@ namespace Catel.MVVM
         /// By default a view model is allowed to be inherited when it is of the same type as the expected view model type.
         /// </summary>
         /// <param name="viewType">Type of the view.</param>
-        /// <param name="viewModelType">Type of the view model.</param>
+        /// <param name="expectedViewModelType">The expected view model type according to the view.</param>
+        /// <param name="actualViewModelType">The actual view model type which is the type of the <paramref name="viewModelAsDataContext"/>.</param>
         /// <param name="viewModelAsDataContext">The view model as data context which must be checked.</param>
         /// <returns>
         ///   <c>true</c> if the specified view model instance ben be reused by the view; otherwise, <c>false</c>.
         /// </returns>
-        public virtual bool CanReuseViewModel(Type viewType, Type viewModelType, IViewModel viewModelAsDataContext)
+        public virtual bool CanReuseViewModel(Type viewType, Type expectedViewModelType, Type actualViewModelType, IViewModel viewModelAsDataContext)
         {
             if (viewModelAsDataContext == null)
             {
                 return false;
             }
 
-            return viewModelType.IsInstanceOfTypeEx(viewModelAsDataContext);
+            return expectedViewModelType.IsInstanceOfTypeEx(viewModelAsDataContext);
         }
 
         /// <summary>

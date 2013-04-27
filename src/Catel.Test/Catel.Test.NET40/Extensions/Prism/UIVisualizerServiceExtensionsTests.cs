@@ -6,7 +6,9 @@
 namespace Catel.Test.Extensions.Prism
 {
     using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Linq;
     using System.Threading;
     using System.Windows.Controls;
 
@@ -68,18 +70,10 @@ namespace Catel.Test.Extensions.Prism
             #endregion
 
             #region Methods
-
-            /// <summary>
-            /// The get child view models.
-            /// </summary>
-            /// <returns>
-            /// The <see cref="ReadOnlyCollection{IViewModel}"/>.
-            /// </returns>
-            public ReadOnlyCollection<IViewModel> GetChildViewModels()
+            public IEnumerable<IViewModel> GetChildViewModelsWrapper()
             {
-                return this.ChildViewModels.AsReadOnly();
+                return this.GetChildViewModels();
             }
-
             #endregion
         }
         #endregion
@@ -411,7 +405,7 @@ namespace Catel.Test.Extensions.Prism
                 this.VerifyDefaultRegionManagerBehavior();
 
                 Assert.AreEqual(fooParentViewModel, fooViewModel.GetParentViewModel());
-                Assert.IsTrue(fooParentViewModel.GetChildViewModels().Contains(fooViewModel));
+                Assert.IsTrue(fooParentViewModel.GetChildViewModelsWrapper().Contains(fooViewModel));
             }
 
             /// <summary>
@@ -447,7 +441,7 @@ namespace Catel.Test.Extensions.Prism
                 this.VerifyDefaultRegionManagerBehavior();
 
                 Assert.AreEqual(fooParentViewModel, fooViewModel.GetParentViewModel());
-                Assert.IsTrue(fooParentViewModel.GetChildViewModels().Contains(fooViewModel));
+                Assert.IsTrue(fooParentViewModel.GetChildViewModelsWrapper().Contains(fooViewModel));
 
                 this.regionManagerMock.Verify(manager => manager.CreateRegionManager(), Times.Once());
             }           

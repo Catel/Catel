@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UserBehavior.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+// <copyright file="UserControlLogic.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -536,7 +536,16 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 
             if (newDataContext != null)
             {
-                if (!(newDataContext.GetType().IsAssignableFromEx(ViewModelType)))
+                var dataContextAsViewModel = newDataContext as IViewModel;
+                if (dataContextAsViewModel != null)
+                {
+                    // If the DataContext is a view model, only create a new view model if required
+                    if (ViewModel == null)
+                    {
+                        ViewModel = ConstructViewModelUsingArgumentOrDefaultConstructor(newDataContext);
+                    }
+                }
+                else if (!(newDataContext.GetType().IsAssignableFromEx(ViewModelType)))
                 {
                     if (ViewModel != null)
                     {
