@@ -127,6 +127,7 @@
     <Compile Include="Data\ModelBase.serialization.cs" />
     <Compile Include="Data\ModelBase.validation.cs" />
     <Compile Include="Data\ObservableObject.cs" />
+    <Compile Include="Data\PropertyBag.cs" />
     <Compile Include="Data\PropertyData.cs" />
     <Compile Include="Data\PropertyDataManager.cs" />
     <Compile Include="Data\PropertyValue.cs" />

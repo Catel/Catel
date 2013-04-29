@@ -153,6 +153,7 @@
     <Compile Include="Data\Exceptions\PropertyNotRegisteredExceptionFacts.cs" />
     <Compile Include="Data\Helpers\EditableObjectHelperFacts.cs" />
     <Compile Include="Data\Helpers\ValidationContextHelperFacts.cs" />
+    <Compile Include="Data\PropertyBagFacts.cs" />
     <Compile Include="Data\PropertyDataManagerFacts.cs" />
     <Compile Include="Data\PropertyDataFacts.cs" />
     <Compile Include="Data\SavableModelBaseTest.cs" />

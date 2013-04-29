@@ -140,6 +140,9 @@
     <Compile Include="..\Catel.Test.NET40\Data\ModelBaseTestHelper.cs">
       <Link>Data\ModelBaseTestHelper.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\Data\PropertyBagFacts.cs">
+      <Link>Data\PropertyBagFacts.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\Data\PropertyDataFacts.cs">
       <Link>Data\PropertyDataFacts.cs</Link>
     </Compile>

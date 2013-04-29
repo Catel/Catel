@@ -253,6 +253,9 @@
     <Compile Include="..\Catel.Core.NET40\Data\ObservableObject.cs">
       <Link>Data\ObservableObject.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Data\PropertyBag.cs">
+      <Link>Data\PropertyBag.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\PropertyData.cs">
       <Link>Data\PropertyData.cs</Link>
     </Compile>

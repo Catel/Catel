@@ -89,7 +89,7 @@ namespace Catel.Data
 #if NET
         [field: NonSerialized]
 #endif
-        internal readonly Dictionary<string, object> _propertyValues = new Dictionary<string, object>();
+        internal readonly PropertyBag _propertyBag = new PropertyBag();
 
 #if !WP7
         /// <summary>
@@ -102,7 +102,7 @@ namespace Catel.Data
 #endif
 
         /// <summary>
-        /// Lock object for the <see cref="_propertyValues"/> field.
+        /// Lock object for the <see cref="_propertyBag"/> field.
         /// </summary>
 #if NET
         [field: NonSerialized]
@@ -265,7 +265,7 @@ namespace Catel.Data
 
             lock (firstObject._propertyValuesLock)
             {
-                foreach (var propertyValue in firstObject._propertyValues)
+                foreach (var propertyValue in firstObject._propertyBag.GetAllProperties())
                 {
                     // Only check if this is not an internal data object base property
                     if (!firstObject.IsModelBaseProperty(propertyValue.Key))
@@ -848,7 +848,7 @@ namespace Catel.Data
         {
             lock (_propertyValuesLock)
             {
-                _propertyValues[propertyName] = value;
+                _propertyBag.SetPropertyValue(propertyName, value);
 
                 HandleObjectEventsSubscription(propertyName, value);
 
@@ -867,10 +867,7 @@ namespace Catel.Data
         /// <returns>The value of the property.</returns>
         internal object GetValueFast(string propertyName)
         {
-            lock (_propertyValuesLock)
-            {
-                return _propertyValues[propertyName];
-            }
+            return _propertyBag.GetPropertyValue<object>(propertyName);
         }
 
         /// <summary>
@@ -1518,7 +1515,7 @@ namespace Catel.Data
 
             lock (_propertyValuesLock)
             {
-                if (!_propertyValues.ContainsKey(name))
+                if (!_propertyBag.IsPropertyAvailable(name))
                 {
                     SetValueFast(name, defaultValue);
                 }

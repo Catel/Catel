@@ -319,7 +319,7 @@ namespace Catel.Data
 
             lock (_propertyValuesLock)
             {
-                propertiesAsAttributes = (from propertyValue in _propertyValues
+                propertiesAsAttributes = (from propertyValue in _propertyBag.GetAllProperties()
                                           where PropertyDataManager.IsPropertyNameMappedToXmlAttribute(type, propertyValue.Key)
                                           select propertyValue);
             }
@@ -342,7 +342,7 @@ namespace Catel.Data
 
             lock (_propertyValuesLock)
             {
-                propertiesAsElements = (from propertyValue in _propertyValues
+                propertiesAsElements = (from propertyValue in _propertyBag.GetAllProperties()
                                         where PropertyDataManager.IsPropertyNameMappedToXmlElement(type, propertyValue.Key)
                                         select propertyValue);
             }
@@ -774,7 +774,7 @@ namespace Catel.Data
 
             lock (_propertyValuesLock)
             {
-                properties = ConvertDictionaryToListAndExcludeNonSerializableObjects(_propertyValues);
+                properties = ConvertDictionaryToListAndExcludeNonSerializableObjects(_propertyBag.GetAllProperties());
             }
 
             info.AddValue("Properties", properties, properties.GetType());
@@ -820,7 +820,7 @@ namespace Catel.Data
             {
                 lock (_propertyValuesLock)
                 {
-                    foreach (var property in _propertyValues)
+                    foreach (var property in _propertyBag.GetAllProperties())
                     {
                         CallOnDeserializationCallback(property.Value);
 
@@ -860,7 +860,7 @@ namespace Catel.Data
         }
 #endif
 
-#if !NET
+#if !NET_
         /// <summary>
         /// Serializes all the properties that are serializable on this object.
         /// </summary>
@@ -876,7 +876,7 @@ namespace Catel.Data
 
                 lock (_propertyValuesLock)
                 {
-                    objectToSerialize = ConvertDictionaryToListAndExcludeNonSerializableObjects(_propertyValues);
+                    objectToSerialize = ConvertDictionaryToListAndExcludeNonSerializableObjects(_propertyBag.GetAllProperties());
                 }
 
                 DataContractSerializer serializer = SerializationHelper.GetDataContractSerializer(GetType(), objectToSerialize.GetType(),

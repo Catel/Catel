@@ -30,11 +30,12 @@ Added/fixed (BREAKING CHANGES):
 
 Added/fixed:
 ============
-(+) Added the IExceptionService.IsExceptionRegistered method to know if an exception type is registered for handling
 (+) [CTL-29] Added circular dependency protection to the TypeFactory. This means that if there are types with a circular dependency using 
     dependency injection, the TypeFactory will throw a CircularDependencyException with the exact type path which was used to create
     the type instead of a StackOverflow without any info
 (+) [CTL-36] Added batches to the MementoService which now allows to easily group multiple actions together in a batch
+(+) [CTL-64] Added property bag to allow easy property registration of dynamic objects
+(+) Added the IExceptionService.IsExceptionRegistered method to know if an exception type is registered for handling
 (+) Added BindingWithValidation for NET40 and NET45 where {catel:BindingWithValidation MyProp} can now be used instead of
     {Binding Path=MyProp, NotifyOnValidationErrors=True, ValidatesOnDataErrors=True}
 (+) Added IMessageMediator.IsMessageRegistered to know if a message type is registered

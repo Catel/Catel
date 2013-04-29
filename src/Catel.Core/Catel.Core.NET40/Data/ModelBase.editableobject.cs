@@ -101,7 +101,7 @@ namespace Catel.Data
 
                     lock (_object._propertyValuesLock)
                     {
-                        objectsToSerialize = _object.ConvertDictionaryToListAndExcludeNonSerializableObjects(_object._propertyValues, propertiesToIgnore);
+                        objectsToSerialize = _object.ConvertDictionaryToListAndExcludeNonSerializableObjects(_object._propertyBag.GetAllProperties(), propertiesToIgnore);
                     }
 
 #if NET
