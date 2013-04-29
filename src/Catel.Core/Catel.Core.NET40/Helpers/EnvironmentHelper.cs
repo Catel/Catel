@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="EnvironmentHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -77,7 +77,7 @@ namespace Catel
         public static bool IsProcessCurrentlyHostedByVisualStudio()
         {
 #if NET
-            return Process.GetCurrentProcess().ProcessName.StartsWith("devenv", StringComparison.Ordinal);
+            return Process.GetCurrentProcess().ProcessName.StartsWith("devenv", StringComparison.OrdinalIgnoreCase);
 #elif NETFX_CORE
             return global::Windows.ApplicationModel.DesignMode.DesignModeEnabled;
 #else
@@ -95,7 +95,7 @@ namespace Catel
         public static bool IsProcessCurrentlyHostedByExpressionBlend()
         {
 #if NET
-            return Process.GetCurrentProcess().ProcessName.StartsWith("blend", StringComparison.Ordinal);
+            return Process.GetCurrentProcess().ProcessName.StartsWith("blend", StringComparison.OrdinalIgnoreCase);
 #elif NETFX_CORE
             return global::Windows.ApplicationModel.DesignMode.DesignModeEnabled;
 #else

@@ -54,6 +54,7 @@ Added/fixed:
 (x) [CTL-46] Fixed issue where in some very rare cases (when the same view model is used in views in the same chain of views), the UserControlLogic 
     would cause a StackOverflow when saving or canceling a view model
 (x) [CTL-61] Fix very rare cases of bad inheritance of view models in LogicBase
+(x) [CTL-65] Fixed issue where process tools in the EnvironmentHelper were not ignoring case for "blend.exe" and "devenv.exe"
 
 To-do:
 ======

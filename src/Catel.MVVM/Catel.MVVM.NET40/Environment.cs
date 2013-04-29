@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Environment.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -9,6 +9,7 @@ namespace Catel
     using System.Windows;
     using Data;
     using System;
+    using System.ComponentModel;
     using IoC;
     using Logging;
     using MVVM;
@@ -17,10 +18,7 @@ namespace Catel
     using global::Windows.UI.Xaml;
 #endif
 
-#if !NET
-    using System.ComponentModel;
-#else
-    using System.ComponentModel;
+#if NET
     using System.Diagnostics;
 #endif
 
@@ -46,7 +44,7 @@ namespace Catel
         /// Gets or sets a value indicating whether the environment is currently in design mode.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if the environment is in design mode; otherwise, <c>false</c>.
+        /// <c>true</c> if the environment is in design mode; otherwise, <c>false</c>.
         /// </value>
         public static bool IsInDesignMode
         {
