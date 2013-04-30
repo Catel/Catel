@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="IValidationSummary.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -17,7 +17,7 @@ namespace Catel.Data
         /// Gets a value indicating whether the summary contains warnings.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this instance has warnings; otherwise, <c>false</c>.
+        /// <c>true</c> if this instance has warnings; otherwise, <c>false</c>.
         /// </value>
         bool HasWarnings { get; }
 
@@ -25,7 +25,7 @@ namespace Catel.Data
         /// Gets a value indicating whether the summary contains errors.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this instance has errors; otherwise, <c>false</c>.
+        /// <c>true</c> if this instance has errors; otherwise, <c>false</c>.
         /// </value>
         bool HasErrors { get; }
 
@@ -33,7 +33,7 @@ namespace Catel.Data
         /// Gets a value indicating whether the summary contains field warnings.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this instance has field warnings; otherwise, <c>false</c>.
+        /// <c>true</c> if this instance has field warnings; otherwise, <c>false</c>.
         /// </value>
         bool HasFieldWarnings { get; }
 
@@ -41,7 +41,7 @@ namespace Catel.Data
         /// Gets a value indicating whether the summary contains field errors.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this instance has field errors; otherwise, <c>false</c>.
+        /// <c>true</c> if this instance has field errors; otherwise, <c>false</c>.
         /// </value>
         bool HasFieldErrors { get; }
 
@@ -49,7 +49,7 @@ namespace Catel.Data
         /// Gets a value indicating whether the summary contains business rule warnings.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this instance has business rule warnings; otherwise, <c>false</c>.
+        /// <c>true</c> if this instance has business rule warnings; otherwise, <c>false</c>.
         /// </value>
         bool HasBusinessRuleWarnings { get; }
 
@@ -57,7 +57,7 @@ namespace Catel.Data
         /// Gets a value indicating whether the summary contains business rule errors.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this instance has business rule errors; otherwise, <c>false</c>.
+        /// <c>true</c> if this instance has business rule errors; otherwise, <c>false</c>.
         /// </value>
         bool HasBusinessRuleErrors { get; }
 

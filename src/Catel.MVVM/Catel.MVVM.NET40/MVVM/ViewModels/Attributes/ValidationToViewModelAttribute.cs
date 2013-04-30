@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ValidationToViewModelAttribute.cs" company="Catel development team">
-//   Copyright (c) 2011 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -46,7 +46,7 @@ namespace Catel.MVVM
         /// The default value is <c>false</c>.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if the validation of the child view models should also be included; otherwise, <c>false</c>.
+        /// <c>true</c> if the validation of the child view models should also be included; otherwise, <c>false</c>.
         /// </value>
         public bool IncludeChildViewModels { get; set; }
 

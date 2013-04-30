@@ -45,7 +45,7 @@ namespace Catel.IoC
         private bool _hasInspectedTypesAtLeastOnce;
 
         /// <summary>
-        /// Indicates whether the loaded types are inspenting by this service locator. 
+        /// Indicates whether the loaded types are inspecting by this service locator. 
         /// </summary>
         private bool _isInspectedTypes;
         #endregion
@@ -61,6 +61,11 @@ namespace Catel.IoC
             Argument.IsNotNull("serviceLocator", serviceLocator);
 
             _serviceLocator = serviceLocator;
+
+            if (EnvironmentHelper.IsProcessCurrentlyHostedByTool())
+            {
+                return;
+            }
 
             TypeCache.AssemblyLoaded += (sender, args) =>
             {
@@ -97,11 +102,14 @@ namespace Catel.IoC
         /// Gets or sets a value indicating whether this service locators will automatically register types via attributes.
         /// </summary>
         /// <remarks>
-        /// By default, this value is <c>false</c>
+        /// By default, this value is <c>false</c>.
         /// </remarks>
         public bool AutoRegisterTypesViaAttributes
         {
-            get { return _autoRegisterTypesViaAttributes; }
+            get
+            {
+                return _autoRegisterTypesViaAttributes;
+            }
             set
             {
                 if (_autoRegisterTypesViaAttributes != value)

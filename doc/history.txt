@@ -8,7 +8,7 @@ Catel history
 
 For more information about issues or new feature requests, please visit:
 
-Project website: https://github.com/Catel/Catel
+Project website: http://www.catelproject.com
 Issue tracker:   https://catelproject.atlassian.net
 Documentation:   https://catelproject.atlassian.net/wiki/display/CTL
 
@@ -55,6 +55,7 @@ Added/fixed:
     would cause a StackOverflow when saving or canceling a view model
 (x) [CTL-61] Fix very rare cases of bad inheritance of view models in LogicBase
 (x) [CTL-65] Fixed issue where process tools in the EnvironmentHelper were not ignoring case for "blend.exe" and "devenv.exe"
+(x) [CTL-66] AutoRegistrationManager for ServiceLocator causes deadlock in design time
 
 To-do:
 ======
