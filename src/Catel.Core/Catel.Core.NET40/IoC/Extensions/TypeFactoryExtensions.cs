@@ -42,5 +42,20 @@ namespace Catel.IoC
 
             return (T)typeFactory.CreateInstanceUsingActivator(typeof(T));
         }
+
+        /// <summary>
+        /// Creates an instance of the specified type using the specified parameters as injection values.
+        /// </summary>
+        /// <typeparam name="T">The type to instantiate.</typeparam>
+        /// <param name="typeFactory">The type factory.</param>
+        /// <param name="parameters">The parameters to inject.</param>
+        /// <returns>The instantiated type using dependency injection.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="typeFactory"/> is <c>null</c>.</exception>
+        public static object CreateInstanceWithParameters<T>(this ITypeFactory typeFactory, params object[] parameters)
+        {
+            Argument.IsNotNull("typeFactory", typeFactory);
+
+            return (T)typeFactory.CreateInstanceWithParameters(typeof(T), parameters);
+        }
     }
 }
