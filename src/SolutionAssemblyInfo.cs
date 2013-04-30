@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SharedAssemblyInfo.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+// <copyright file="SolutionAssemblyInfo.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -36,7 +36,7 @@ using System.Runtime.CompilerServices;
 // by using the '*' as shown below:
 
 [assembly: AssemblyVersion("3.6")]
-[assembly: AssemblyInformationalVersion("3.6, Nightly, Released on 2013-04-13 15:15")]
+[assembly: AssemblyInformationalVersion("3.6, Nightly, Released on 2013-04-29 18:17")]
 
 #if DEBUG
 

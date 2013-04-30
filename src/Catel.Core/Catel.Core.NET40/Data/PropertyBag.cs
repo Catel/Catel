@@ -37,11 +37,42 @@ namespace Catel.Data
         public event PropertyChangedEventHandler PropertyChanged;
         #endregion
 
+        #region Properties
+        /// <summary>
+        /// Gets or sets the property using the indexer.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>The value of the property.</returns>
+        public object this[string name]
+        {
+            get { return GetPropertyValue<object>(name); }
+            set { SetPropertyValue(name, value); }
+        }
+        #endregion
+
         #region Methods
+        /// <summary>
+        /// Imports the properties in the existing dictionary.
+        /// <para />
+        /// This method will overwrite all existing property values in the property bag.
+        /// </summary>
+        /// <param name="propertiesToImport">The properties to import.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="propertiesToImport"/> is <c>null</c>.</exception>
+        public void Import(Dictionary<string, object> propertiesToImport)
+        {
+            Argument.IsNotNull("propertiesToImport", propertiesToImport);
+
+            foreach (var property in propertiesToImport)
+            {
+                SetPropertyValue(property.Key, property.Value);
+            }
+        }
+
         /// <summary>
         /// Determines whether the specified property is available on the property bag, which means it has a value.
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
+        /// <returns><c>true</c> if the property is available; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
         public bool IsPropertyAvailable(string propertyName)
         {
