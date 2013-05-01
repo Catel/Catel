@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Command.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -9,6 +9,9 @@ namespace Catel.MVVM
     using System;
     using System.Collections.Generic;
     using System.Windows.Input;
+
+    using Catel.MVVM.Services;
+
     using IoC;
 
     /// <summary>
@@ -20,6 +23,7 @@ namespace Catel.MVVM
     {
         #region Fields
         private static IAuthenticationProvider _authenticationProvider;
+        private static IDispatcherService _dispatcherService;
 
         private readonly Func<TCanExecuteParameter, bool> _canExecuteWithParameter;
         private readonly Func<bool> _canExecuteWithoutParameter;
@@ -42,6 +46,8 @@ namespace Catel.MVVM
             {
                 _authenticationProvider = ServiceLocator.Default.ResolveType<IAuthenticationProvider>();
             }
+
+            _dispatcherService = ServiceLocator.Default.ResolveType<IDispatcherService>();
         }
 
         /// <summary>
@@ -78,7 +84,9 @@ namespace Catel.MVVM
             _canExecuteWithoutParameter = canExecuteWithoutParameter;
             _executeWithParameter = executeWithParameter;
             _executeWithoutParameter = executeWithoutParameter;
+
             Tag = tag;
+            AutomaticallyDispatchEvents = true;
         }
 
         /// <summary>
@@ -143,6 +151,13 @@ namespace Catel.MVVM
         /// </summary>
         /// <value>The tag.</value>
         public object Tag { get; private set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether events should automatically be dispatched to the UI thread.
+        /// <para />
+        /// The default value is <c>true</c>.
+        /// </summary>
+        public bool AutomaticallyDispatchEvents { get; set; }
         #endregion
 
         #region Methods
@@ -271,16 +286,21 @@ namespace Catel.MVVM
         /// </summary>
         public void RaiseCanExecuteChanged()
         {
-#if NET
-            foreach (var handler in _subscribedEventHandlers)
+            var action = new Action(() =>
             {
-                handler.SafeInvoke(this);
-            }
+#if NET
+                foreach (var handler in _subscribedEventHandlers)
+                {
+                    handler.SafeInvoke(this);
+                }
 
-            CommandManager.InvalidateRequerySuggested();
+                CommandManager.InvalidateRequerySuggested();
 #else
-            CanExecuteChanged.SafeInvoke(this);
+                CanExecuteChanged.SafeInvoke(this);
 #endif
+            });
+
+            AutoDispatchIfRequired(action);
         }
 
         /// <summary>
@@ -289,7 +309,21 @@ namespace Catel.MVVM
         /// <param name="parameter">The parameter.</param>
         protected void RaiseExecuted(object parameter)
         {
-            Executed.SafeInvoke(this, new CommandExecutedEventArgs(this, parameter));
+            var action = new Action(() => Executed.SafeInvoke(this, new CommandExecutedEventArgs(this, parameter)));
+
+            AutoDispatchIfRequired(action);
+        }
+
+        private void AutoDispatchIfRequired(Action action)
+        {
+            if (AutomaticallyDispatchEvents)
+            {
+                _dispatcherService.BeginInvokeIfRequired(action);
+            }
+            else
+            {
+                action();
+            }
         }
         #endregion
 
