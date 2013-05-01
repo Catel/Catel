@@ -654,7 +654,7 @@
         public void InvalidateCommands_AutomaticByPropertyChange()
         {
             bool canExecuteChangedTriggered = false;
-            ManualResetEvent canExecuteChangedEvent = new ManualResetEvent(false);
+            var canExecuteChangedEvent = new ManualResetEvent(false);
 
             var viewModel = new TestViewModel();
             viewModel.SetInvalidateCommandsOnPropertyChanged(true);

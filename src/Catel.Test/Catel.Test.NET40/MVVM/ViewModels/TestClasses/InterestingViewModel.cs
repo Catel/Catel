@@ -79,8 +79,13 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
             : base()
         {
             TestCommand = new Command<object>(OnTestCommandExecute, null, "test");
+            TestCommand.AutomaticallyDispatchEvents = false;
+
             RegisteredCommand = new Command<object>(OnRegisteredCommandExecute, null, "registered");
+            RegisteredCommand.AutomaticallyDispatchEvents = false;
+
             NotRegisteredCommand = new Command<object>(OnUnregisteredCommandExecute, null, "unregistered");
+            NotRegisteredCommand.AutomaticallyDispatchEvents = false;
 
             InitializeViewModel();
         }

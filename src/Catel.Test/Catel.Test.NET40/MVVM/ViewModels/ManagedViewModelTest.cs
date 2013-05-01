@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ManagedViewModelTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -8,6 +8,7 @@ namespace Catel.Test.MVVM.ViewModels
 {
     using System;
     using Catel.MVVM;
+
     using TestClasses;
 
 #if NETFX_CORE
@@ -151,6 +152,7 @@ namespace Catel.Test.MVVM.ViewModels
             viewModel.AddInterestedViewModel(interestedViewModel);
 
             interestingViewModel.TestCommand.Execute(null);
+
             Assert.AreEqual(true, interestedViewModel.CommandHasBeenExecuted);
             Assert.AreEqual(false, interestedViewModel.CommandHasBeenExecutedWithParameter);
 

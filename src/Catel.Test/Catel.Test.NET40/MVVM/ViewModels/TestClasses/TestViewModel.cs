@@ -68,6 +68,7 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
             SpecialValidationModel = specialValidationModel;
 
             GenerateData = new Command<object, object>(OnGenerateDataExecute, OnGenerateDataCanExecute);
+            GenerateData.AutomaticallyDispatchEvents = false;
         }
         #endregion
 

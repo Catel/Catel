@@ -50,6 +50,7 @@ namespace Catel.Test.MVVM.Auditing
         public TestViewModel()
         {
             TestCommand = new Command<string>(OnTestCommandExecute);
+            TestCommand.AutomaticallyDispatchEvents = false;
 
             InitializeViewModel();
         }
