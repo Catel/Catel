@@ -400,6 +400,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ViewModelBase.navigation.cs">
       <Link>MVVM\ViewModels\ViewModelBase.navigation.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ViewModelBase.validation.cs">
+      <Link>MVVM\ViewModels\ViewModelBase.validation.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ViewModelFactory.cs">
       <Link>MVVM\ViewModels\ViewModelFactory.cs</Link>
     </Compile>

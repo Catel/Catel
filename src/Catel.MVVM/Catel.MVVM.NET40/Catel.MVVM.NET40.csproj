@@ -187,6 +187,7 @@
     <Compile Include="MVVM\ViewModels\ViewModelBase.cs" />
     <Compile Include="MVVM\ViewModels\ViewModelBase.customtypedescriptor.cs" />
     <Compile Include="MVVM\ViewModels\ViewModelBase.navigation.cs" />
+    <Compile Include="MVVM\ViewModels\ViewModelBase.validation.cs" />
     <Compile Include="MVVM\ViewModels\ViewModelFactory.cs" />
     <Compile Include="MVVM\ViewModels\ViewModelManager.cs" />
     <Compile Include="MVVM\ViewModels\ViewModelMetadata.cs" />

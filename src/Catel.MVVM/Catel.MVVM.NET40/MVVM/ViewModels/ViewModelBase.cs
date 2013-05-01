@@ -11,19 +11,20 @@ namespace Catel.MVVM
     using System.ComponentModel;
     using System.Linq;
     using System.Reflection;
-    using System.Windows.Input;
+
     using Collections;
     using Data;
     using IoC;
     using Auditing;
     using Logging;
-    using Memento;
     using Messaging;
     using Reflection;
     using Services;
 
-#if NET40 || SILVERLIGHT && !WINDOWS_PHONE
-    using System.ComponentModel.DataAnnotations;
+#if NETFX_CORE
+    using global::Windows.UI.Xaml;
+#else
+    using System.Windows.Threading;
 #endif
 
     #region Enums
@@ -60,7 +61,7 @@ namespace Catel.MVVM
     #endregion
 
     /// <summary>
-    /// View model base for MVVM implementations. This class is based on the <see cref="ModelBase"/>, and supports all
+    /// View model base for MVVM implementations. This class is based on the <see cref="ModelBase" />, and supports all
     /// common interfaces used by WPF.
     /// </summary>
     /// <remarks>This view model base does not add any services. The technique specific implementation should take care of that
@@ -198,15 +199,6 @@ namespace Catel.MVVM
 #endif
         private readonly Dictionary<string, ViewModelToModelMapping> _viewModelToModelMap = new Dictionary<string, ViewModelToModelMapping>();
 
-        /// <summary>
-        /// Dictionary of properties that are decorated with the <see cref="ValidationToViewModelAttribute"/>. These properties should be
-        /// updated after each validation sequence.
-        /// </summary>
-#if NET
-        [field: NonSerialized]
-#endif
-        private readonly Dictionary<string, ValidationToViewModelAttribute> _validationSummaries = new Dictionary<string, ValidationToViewModelAttribute>();
-
 #if NET
         /// <summary>
         /// The cached property descriptors. If the property is empty, the property descriptors are yet to be built. Otherwise
@@ -216,13 +208,61 @@ namespace Catel.MVVM
         private PropertyDescriptorCollection _propertyDescriptors;
 #endif
 
+        /// <summary>
+        /// The throttling timer.
+        /// </summary>
+#if NET
+        [field: NonSerialized]
+#endif
+        private readonly DispatcherTimer _throttlingTimer = new DispatcherTimer();
+
+        /// <summary>
+        /// The throttling rate.
+        /// </summary>
+#if NET
+        [field: NonSerialized]
+#endif
+        private TimeSpan _throttlingRate = new TimeSpan(0);
+
+        /// <summary>
+        /// A value indicating whether throttling is enabled.
+        /// </summary>
+#if NET
+        [field: NonSerialized]
+#endif
+        private bool _isThrottlingEnabled;
+
+        /// <summary>
+        /// A value indicating whether throttling is currently being handled.
+        /// </summary>
+#if NET
+        [field: NonSerialized]
+#endif
+        private bool _isHandlingThrottlingNotifications;
+
+        /// <summary>
+        /// Lock object for throttling.
+        /// </summary>
+#if NET
+        [field: NonSerialized]
+#endif
+        private object _throttlingLockObject = new object();
+
+        /// <summary>
+        /// The properties queue used when throttling is enabled.
+        /// </summary>
+#if NET
+        [field: NonSerialized]
+#endif
+        private Dictionary<string, DateTime> _throttlingQueue = new Dictionary<string, DateTime>();
+
 #if NET
         /// <summary>
         /// List of view model properties that are implemented as properties and can be ignored by reflection.
         /// </summary>
         [field: NonSerialized]
-#endif
         private static readonly HashSet<string> _viewModelImplementedProperties;
+#endif
         #endregion
 
         #region Constructors
@@ -236,9 +276,11 @@ namespace Catel.MVVM
             var serviceLocator = IoC.ServiceLocator.Default;
             serviceLocator.RegisterInstance<IViewModelManager>(ViewModelManager);
 
+#if NET
             var properties = (from property in typeof(ViewModelBase).GetPropertiesEx(false)
                               select property.Name);
             _viewModelImplementedProperties = new HashSet<string>(properties);
+#endif
         }
 
         /// <summary>
@@ -340,6 +382,8 @@ namespace Catel.MVVM
                 }
             }
 
+            _throttlingTimer.Tick += (sender, e) => OnThrottlingTimerTick();
+
             // Enable validation again like we promised some lines of code ago
             SuspendValidation = false;
         }
@@ -424,48 +468,6 @@ namespace Catel.MVVM
         protected bool InvalidateCommandsOnPropertyChanged { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether all validation should be deferred until the first call to <see cref="SaveViewModel"/>.
-        /// <para />
-        /// If this value is <c>true</c>, all validation will be suspended. As soon as the first call is made to the <see cref="SaveViewModel"/>,
-        /// the validation will no longer be suspended and activated.
-        /// <para />
-        /// The default value is <c>false</c>.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the validation should be deferred; otherwise, <c>false</c>.
-        /// </value>
-        /// <remarks>
-        /// If this value is used, it must be set as first property in the view model because the validation kicks in immediately
-        /// when properties change.
-        /// </remarks>
-        protected bool DeferValidationUntilFirstSaveCall
-        {
-            get
-            {
-                return HideValidationResults;
-            }
-            set
-            {
-                HideValidationResults = value;
-                RaisePropertyChanged(string.Empty);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to validate the models as soon as they are initialized. This means that
-        /// as soon as a model value is set, the view model checks whether the entity already contains errors.
-        /// <para />
-        /// If this value is <c>true</c>, the errors will immediately be returned for mappings on the model. Otherwise, the errors
-        /// will only become available when a value is entered and then being undone.
-        /// <para />
-        /// The default value is <c>true</c>.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the models should be validated on initialization; otherwise, <c>false</c>.
-        /// </value>
-        protected bool ValidateModelsOnInitialization { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether models that implement <see cref="IEditableObject"/> are supported correctly.
         /// </summary>
         /// <value>
@@ -485,6 +487,45 @@ namespace Catel.MVVM
         /// The default value is <c>false</c>.
         /// </summary>
         protected bool DispatchPropertyChangedEvent { get; set; }
+
+        /// <summary>
+        /// Gets or sets the throttling rate.
+        /// <para />
+        /// When throttling is enabled, the view model will raise property changed event in a timely manner to
+        /// reduce the number of updates the view has to do based on the properties.
+        /// </summary>
+        /// <value>The throttling rate.</value>
+        protected TimeSpan ThrottlingRate
+        {
+            get
+            {
+                return _throttlingRate;
+            }
+            set
+            {
+                Log.Debug("Updating throttling rate of view model '{0}' to an interval of '{1}' ms", UniqueIdentifier, value.TotalMilliseconds);
+
+                _throttlingRate = value;
+                if (_throttlingRate.TotalMilliseconds.Equals(0d))
+                {
+                    _isThrottlingEnabled = false;
+
+                    _throttlingTimer.Stop();
+
+                    Log.Debug("Throttling is disabled because the throttling rate is set to 0");
+                }
+                else
+                {
+                    _isThrottlingEnabled = true;
+
+                    _throttlingTimer.Stop();
+                    _throttlingTimer.Interval = _throttlingRate;
+                    _throttlingTimer.Start();
+
+                    Log.Debug("Throttling is enabled because the throttling rate is set to '{0}' ms", _throttlingRate.TotalMilliseconds);
+                }
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether this instance is closed. If a view model is closed, calling
@@ -545,6 +586,34 @@ namespace Catel.MVVM
 
         #region Methods
         /// <summary>
+        /// Called when the throttling timer ticks.
+        /// </summary>
+        private void OnThrottlingTimerTick()
+        {
+            Dictionary<string, DateTime> throttlingQueue;
+
+            lock (_throttlingLockObject)
+            {
+                throttlingQueue = _throttlingQueue;
+                _throttlingQueue = new Dictionary<string, DateTime>();
+            }
+
+            if (throttlingQueue.Count == 0)
+            {
+                return;
+            }
+
+            _isHandlingThrottlingNotifications = true;
+
+            foreach (var throttledProperty in throttlingQueue)
+            {
+                RaisePropertyChanged(throttledProperty.Key);
+            }
+
+            _isHandlingThrottlingNotifications = false;
+        }
+
+        /// <summary>
         /// Initializes the properties with attributes.
         /// </summary>
         private void InitializePropertiesWithAttributes()
@@ -569,7 +638,7 @@ namespace Catel.MVVM
                     if (!_viewModelImplementedProperties.Contains(propertyName))
                     {
                         var propertyData = RegisterProperty(propertyName, propertyDescriptor.PropertyType);
-                        InitializePropertyAfterConstruction(propertyData);                        
+                        InitializePropertyAfterConstruction(propertyData);
                     }
                 }
 
@@ -976,6 +1045,16 @@ namespace Catel.MVVM
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         protected override void RaisePropertyChanged(object sender, AdvancedPropertyChangedEventArgs e)
         {
+            if (_isThrottlingEnabled && !_isHandlingThrottlingNotifications)
+            {
+                lock (_throttlingLockObject)
+                {
+                    _throttlingQueue[e.PropertyName] = DateTime.Now;
+                }
+
+                return;
+            }
+
             if (DispatchPropertyChangedEvent)
             {
                 _dispatcherService.BeginInvoke(() => base.RaisePropertyChanged(sender, e));
@@ -1241,199 +1320,6 @@ namespace Catel.MVVM
         }
 
         /// <summary>
-        /// Called when the object is validating.
-        /// </summary>
-        protected override void OnValidating()
-        {
-            base.OnValidating();
-
-            lock (_modelObjects)
-            {
-                foreach (KeyValuePair<string, object> model in _modelObjects)
-                {
-                    if (model.Value == null) continue;
-
-                    var modelValueAsModelBaseBase = model.Value as ModelBase;
-                    if (modelValueAsModelBaseBase != null)
-                    {
-                        modelValueAsModelBaseBase.Validate();
-                    }
-                }
-            }
-
-            lock (ChildViewModels)
-            {
-                var previousValue = _childViewModelsHaveErrors;
-
-                _childViewModelsHaveErrors = false;
-
-                foreach (IViewModel childViewModel in ChildViewModels)
-                {
-                    childViewModel.ValidateViewModel();
-                    if (childViewModel.HasErrors)
-                    {
-                        _childViewModelsHaveErrors = true;
-                        RaisePropertyChanged(() => HasErrors);
-                    }
-                }
-
-                if (!_childViewModelsHaveErrors && (_childViewModelsHaveErrors != previousValue))
-                {
-                    RaisePropertyChanged(() => HasErrors);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Called when the object is validating the fields.
-        /// </summary>
-        protected override void OnValidatingFields()
-        {
-            base.OnValidatingFields();
-
-            // Map all field errors and warnings from the model to this viewmodel
-            foreach (KeyValuePair<string, ViewModelToModelMapping> viewModelToModelMap in _viewModelToModelMap)
-            {
-                ViewModelToModelMapping mapping = viewModelToModelMap.Value;
-                var model = GetValue(mapping.ModelProperty);
-                string modelProperty = mapping.ValueProperty;
-
-                bool hasSetFieldError = false;
-                bool hasSetFieldWarning = false;
-
-                // IDataErrorInfo
-                var dataErrorInfo = model as IDataErrorInfo;
-                if (dataErrorInfo != null)
-                {
-                    if (!string.IsNullOrEmpty(dataErrorInfo[modelProperty]))
-                    {
-                        SetFieldValidationResult(FieldValidationResult.CreateError(mapping.ViewModelProperty, dataErrorInfo[modelProperty]));
-
-                        hasSetFieldError = true;
-                    }
-                }
-
-                // IDataWarningInfo
-                var dataWarningInfo = model as IDataWarningInfo;
-                if (dataWarningInfo != null)
-                {
-                    if (!string.IsNullOrEmpty(dataWarningInfo[modelProperty]))
-                    {
-                        SetFieldValidationResult(FieldValidationResult.CreateWarning(mapping.ViewModelProperty, dataWarningInfo[modelProperty]));
-
-                        hasSetFieldWarning = true;
-                    }
-                }
-
-                // INotifyDataErrorInfo & INotifyDataWarningInfo
-                if (_modelErrorInfo.ContainsKey(mapping.ModelProperty))
-                {
-                    var modelErrorInfo = _modelErrorInfo[mapping.ModelProperty];
-
-                    if (!hasSetFieldError)
-                    {
-                        foreach (string error in modelErrorInfo.GetErrors(modelProperty))
-                        {
-                            if (!string.IsNullOrEmpty(error))
-                            {
-                                SetFieldValidationResult(FieldValidationResult.CreateError(mapping.ViewModelProperty, error));
-                                break;
-                            }
-                        }
-                    }
-
-                    if (!hasSetFieldWarning)
-                    {
-                        foreach (string warning in modelErrorInfo.GetWarnings(modelProperty))
-                        {
-                            if (!string.IsNullOrEmpty(warning))
-                            {
-                                SetFieldValidationResult(FieldValidationResult.CreateWarning(mapping.ViewModelProperty, warning));
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Called when the object is validating the business rules.
-        /// </summary>
-        protected override void OnValidatingBusinessRules()
-        {
-            base.OnValidatingBusinessRules();
-
-            lock (_modelObjects)
-            {
-                foreach (KeyValuePair<string, object> modelObject in _modelObjects)
-                {
-                    // IDataErrorInfo
-                    var dataErrorInfo = modelObject.Value as IDataErrorInfo;
-                    if ((dataErrorInfo != null) && !string.IsNullOrEmpty(dataErrorInfo.Error))
-                    {
-                        SetBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError(dataErrorInfo.Error));
-                    }
-
-                    // IDataWarningInfo
-                    var dataWarningInfo = modelObject.Value as IDataWarningInfo;
-                    if ((dataWarningInfo != null) && !string.IsNullOrEmpty(dataWarningInfo.Warning))
-                    {
-                        SetBusinessRuleValidationResult(BusinessRuleValidationResult.CreateWarning(dataWarningInfo.Warning));
-                    }
-
-                    // INotifyDataErrorInfo & INotifyDataWarningInfo
-                    if (_modelErrorInfo.ContainsKey(modelObject.Key))
-                    {
-                        var modelErrorInfo = _modelErrorInfo[modelObject.Key];
-
-                        foreach (string error in modelErrorInfo.GetErrors(string.Empty))
-                        {
-                            SetBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError(error));
-                        }
-
-                        foreach (string warning in modelErrorInfo.GetWarnings(string.Empty))
-                        {
-                            SetBusinessRuleValidationResult(BusinessRuleValidationResult.CreateWarning(warning));
-                        }
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Called when the object is validated.
-        /// </summary>
-        protected override void OnValidated()
-        {
-            bool updatedValidationSummaries = false;
-
-            foreach (var validationSummaryInfo in _validationSummaries)
-            {
-                IValidationSummary validationSummary;
-                if (validationSummaryInfo.Value.UseTagToFilter)
-                {
-                    validationSummary = this.GetValidationSummary(validationSummaryInfo.Value.IncludeChildViewModels, validationSummaryInfo.Value.Tag);
-                }
-                else
-                {
-                    validationSummary = this.GetValidationSummary(validationSummaryInfo.Value.IncludeChildViewModels);
-                }
-
-                PropertyHelper.SetPropertyValue(this, validationSummaryInfo.Key, validationSummary);
-
-                updatedValidationSummaries = true;
-            }
-
-            if (updatedValidationSummaries)
-            {
-                ViewModelCommandManager.InvalidateCommands();
-            }
-
-            base.OnValidated();
-        }
-
-        /// <summary>
         /// Initializes a model by subscribing to all events.
         /// </summary>
         /// <param name="modelProperty">The name of the model property.</param>
@@ -1554,7 +1440,7 @@ namespace Catel.MVVM
         /// Cancels the editing of the data.
         /// </summary>
         /// <returns>
-        /// 	<c>true</c> if successful; otherwise <c>false</c>.
+        ///	<c>true</c> if successful; otherwise <c>false</c>.
         /// </returns>
         protected virtual bool Cancel() { return true; }
 
@@ -1562,7 +1448,7 @@ namespace Catel.MVVM
         /// Saves the data.
         /// </summary>
         /// <returns>
-        /// 	<c>true</c> if successful; otherwise <c>false</c>.
+        /// <c>true</c> if successful; otherwise <c>false</c>.
         /// </returns>
         protected virtual bool Save() { return true; }
 
@@ -1597,7 +1483,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="name">The name of the registered model.</param>
         /// <returns>
-        /// 	<c>true</c> if a specific property is registered as a model; otherwise, <c>false</c>.
+        /// <c>true</c> if a specific property is registered as a model; otherwise, <c>false</c>.
         /// </returns>
         protected bool IsModelRegistered(string name)
         {
@@ -1677,38 +1563,9 @@ namespace Catel.MVVM
         protected virtual void Initialize() { }
 
         /// <summary>
-        /// Validates the specified notify changed properties only.
-        /// </summary>
-        /// <param name="force">if set to <c>true</c>, a validation is forced (even if the object knows it is already validated).</param>
-        /// <param name="notifyChangedPropertiesOnly">if set to <c>true</c> only the properties for which the warnings or errors have been changed
-        /// will be updated via <see cref="INotifyPropertyChanged.PropertyChanged"/>; otherwise all the properties that
-        /// had warnings or errors but not anymore and properties still containing warnings or errors will be updated.</param>
-        /// <returns>
-        /// 	<c>true</c> if validation succeeds; otherwise <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// This method is useful when the view model is initialized before the window, and therefore WPF does not update the errors and warnings.
-        /// </remarks>
-        public bool ValidateViewModel(bool force = false, bool notifyChangedPropertiesOnly = true)
-        {
-            if (IsClosed)
-            {
-                return true;
-            }
-
-            Validate(force, notifyChangedPropertiesOnly);
-
-            if (DeferValidationUntilFirstSaveCall)
-            {
-                return true;
-            }
-
-            return !HasErrors;
-        }
-
-        /// <summary>
         /// Cancels the editing of the data.
         /// </summary>
+        /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
         public bool CancelViewModel()
         {
             if (IsClosed)
@@ -1754,6 +1611,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Cancels the editing of the data, but also closes the view model in the same call.
         /// </summary>
+        /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
         public bool CancelAndCloseViewModel()
         {
             bool result = CancelViewModel();
@@ -1768,9 +1626,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Saves the data.
         /// </summary>
-        /// <returns>
-        /// 	<c>true</c> if successful; otherwise <c>false</c>.
-        /// </returns>
+        /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
         public bool SaveViewModel()
         {
             if (IsClosed)
@@ -1832,9 +1688,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Saves the data, but also closes the view model in the same call if the save succeeds.
         /// </summary>
-        /// <returns>
-        /// 	<c>true</c> if successful; otherwise <c>false</c>.
-        /// </returns>
+        /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
         public bool SaveAndCloseViewModel()
         {
             bool result = SaveViewModel();
@@ -1856,6 +1710,9 @@ namespace Catel.MVVM
             {
                 return;
             }
+
+            _isThrottlingEnabled = false;
+            _throttlingTimer.Stop();
 
             OnClosing();
 
