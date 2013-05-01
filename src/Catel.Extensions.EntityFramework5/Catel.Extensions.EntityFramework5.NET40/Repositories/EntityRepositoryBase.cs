@@ -105,11 +105,37 @@ namespace Catel.Data.Repositories
         }
 
         /// <summary>
+        /// Gets a single entity based on the matching criteria.
+        /// </summary>
+        /// <param name="predicate">The predicate.</param>
+        /// <returns>The entity or <c>null</c> if no entity matches the criteria.</returns>
+        public virtual TEntity SingleOrDefault(Expression<Func<TEntity, bool>> predicate = null)
+        {
+            var query = GetQuery();
+            predicate = EnsureValidatePredicate(predicate);
+
+            return query.SingleOrDefault(predicate);
+        }
+
+        /// <summary>
         /// Gets the first entity based on the matching criteria.
         /// </summary>
         /// <param name="predicate">The predicate.</param>
         /// <returns>The entity or <c>null</c> if no entity matches the criteria.</returns>
         public virtual TEntity First(Expression<Func<TEntity, bool>> predicate = null)
+        {
+            var query = GetQuery();
+            predicate = EnsureValidatePredicate(predicate);
+
+            return query.First(predicate);
+        }
+
+        /// <summary>
+        /// Gets the first entity based on the matching criteria.
+        /// </summary>
+        /// <param name="predicate">The predicate.</param>
+        /// <returns>The entity or <c>null</c> if no entity matches the criteria.</returns>
+        public virtual TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate = null)
         {
             var query = GetQuery();
             predicate = EnsureValidatePredicate(predicate);

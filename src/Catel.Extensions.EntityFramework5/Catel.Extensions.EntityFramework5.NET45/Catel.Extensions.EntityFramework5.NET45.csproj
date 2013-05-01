@@ -71,6 +71,9 @@
     <Compile Include="..\Catel.Extensions.EntityFramework5.NET40\Data\ConnectionStringManager.cs">
       <Link>Data\ConnectionStringManager.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.EntityFramework5.NET40\Data\ContextFactory.cs">
+      <Link>Data\ContextFactory.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Extensions.EntityFramework5.NET40\Data\ContextManager.cs">
       <Link>Data\ContextManager.cs</Link>
     </Compile>
@@ -88,6 +91,9 @@
     </Compile>
     <Compile Include="..\Catel.Extensions.EntityFramework5.NET40\Data\Interfaces\IConnectionStringManager.cs">
       <Link>Data\Interfaces\IConnectionStringManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.EntityFramework5.NET40\Data\Interfaces\IContextFactory.cs">
+      <Link>Data\Interfaces\IContextFactory.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Extensions.EntityFramework5.NET40\Data\Interfaces\IUnitOfWork.cs">
       <Link>Data\Interfaces\IUnitOfWork.cs</Link>

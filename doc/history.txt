@@ -35,6 +35,7 @@ Added/fixed:
     the type instead of a StackOverflow without any info
 (+) [CTL-36] Added batches to the MementoService which now allows to easily group multiple actions together in a batch
 (+) [CTL-64] Added property bag to allow easy property registration of dynamic objects
+(+) [CTL-67] Added IContextFactory to allow customization of DbContext instantiation
 (+) Added the IExceptionService.IsExceptionRegistered method to know if an exception type is registered for handling
 (+) Added BindingWithValidation for NET40 and NET45 where {catel:BindingWithValidation MyProp} can now be used instead of
     {Binding Path=MyProp, NotifyOnValidationErrors=True, ValidatesOnDataErrors=True}

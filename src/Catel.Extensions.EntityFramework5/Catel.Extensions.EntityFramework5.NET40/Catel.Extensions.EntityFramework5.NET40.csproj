@@ -69,10 +69,12 @@
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Data\ConnectionStringManager.cs" />
+    <Compile Include="Data\ContextFactory.cs" />
     <Compile Include="Data\ContextManager.cs" />
     <Compile Include="Data\Helpers\ConnectionStringHelper.cs" />
     <Compile Include="Data\Helpers\DbContextManagerHelper.cs" />
     <Compile Include="Data\Helpers\EfConnectionStringHelper.cs" />
+    <Compile Include="Data\Interfaces\IContextFactory.cs" />
     <Compile Include="Data\Interfaces\IConnectionStringManager.cs" />
     <Compile Include="Data\Interfaces\IUnitOfWork.cs" />
     <Compile Include="Data\ObjectContextManager.cs" />

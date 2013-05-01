@@ -26,6 +26,7 @@ namespace Catel
             var serviceLocator = ServiceLocator.Default;
 
             serviceLocator.RegisterTypeIfNotYetRegistered<IConnectionStringManager, ConnectionStringManager>();
+            serviceLocator.RegisterTypeIfNotYetRegistered<IContextFactory, ContextFactory>();
         }
         #endregion
     }

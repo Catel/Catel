@@ -47,11 +47,25 @@ namespace Catel.Data.Repositories
         TEntity Single(Expression<Func<TEntity, bool>> predicate = null);
 
         /// <summary>
+        /// Gets a single entity based on the matching criteria.
+        /// </summary>
+        /// <param name="predicate">The predicate.</param>
+        /// <returns>The entity or <c>null</c> if no entity matches the criteria.</returns>
+        TEntity SingleOrDefault(Expression<Func<TEntity, bool>> predicate = null);
+
+        /// <summary>
         /// Gets the first entity based on the matching criteria.
         /// </summary>
         /// <param name="predicate">The predicate.</param>
         /// <returns>The entity or <c>null</c> if no entity matches the criteria.</returns>
         TEntity First(Expression<Func<TEntity, bool>> predicate = null);
+
+        /// <summary>
+        /// Gets the first entity based on the matching criteria.
+        /// </summary>
+        /// <param name="predicate">The predicate.</param>
+        /// <returns>The entity or <c>null</c> if no entity matches the criteria.</returns>
+        TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate = null);
 
         /// <summary>
         /// Adds the specified entity to the repository.

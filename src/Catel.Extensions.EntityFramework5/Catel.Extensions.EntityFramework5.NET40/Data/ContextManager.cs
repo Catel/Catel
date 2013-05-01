@@ -55,10 +55,11 @@ namespace Catel.Data
             _label = label;
             _contextLogName = GetContextLogName(databaseNameOrConnectionStringName, label);
 
+            var serviceLocator = ServiceLocator.Default;
+
             // Option to override or late-bind connection string
             if (string.IsNullOrEmpty(databaseNameOrConnectionStringName))
             {
-                var serviceLocator = ServiceLocator.Default;
                 if (serviceLocator.IsTypeRegistered<IConnectionStringManager>())
                 {
                     var connectionStringManager = serviceLocator.ResolveType<IConnectionStringManager>();
@@ -66,29 +67,8 @@ namespace Catel.Data
                 }
             }
 
-            if (model != null)
-            {
-                if (!string.IsNullOrEmpty(databaseNameOrConnectionStringName))
-                {
-                    _context = (TContext)(Activator.CreateInstance(typeof(TContext), databaseNameOrConnectionStringName, model));
-                }
-                else
-                {
-                    _context = (TContext)(Activator.CreateInstance(typeof(TContext), model));
-                }
-            }
-            else if (context != null)
-            {
-                _context = (TContext)(Activator.CreateInstance(typeof(TContext), context, true));
-            }
-            else if (string.IsNullOrEmpty(databaseNameOrConnectionStringName))
-            {
-                _context = (TContext)(Activator.CreateInstance(typeof(TContext)));
-            }
-            else
-            {
-                _context = (TContext)(Activator.CreateInstance(typeof(TContext), databaseNameOrConnectionStringName));
-            }
+            var contextFactory = serviceLocator.ResolveType<IContextFactory>();
+            _context = contextFactory.CreateContext<TContext>(databaseNameOrConnectionStringName, label, model, context);
 
             Initialize(_context);
         }
