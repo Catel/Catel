@@ -40,7 +40,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
     <__IntermediateAppConfig>$(IntermediateOutputPath)$(MSBuildProjectFile).App.config</__IntermediateAppConfig>
   </PropertyGroup>
 
-  <UsingTask TaskName="EnsureBindingRedirects" AssemblyFile="$(MSBuildThisFileDirectory)Microsoft.Bcl.Build.Tasks.dll" />
+  <UsingTask TaskName="EnsureBindingRedirects" AssemblyFile="..\..\..\lib\Microsoft.Bcl.Build.1.0.5\tools\Microsoft.Bcl.Build.Tasks.dll" />
 
   <!-- 
     ===================================================================================================================
@@ -206,7 +206,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
     </PropertyGroup>
     ===================================================================================================================
     -->
-  <UsingTask TaskName="ValidatePackageReferences" AssemblyFile="$(MSBuildThisFileDirectory)Microsoft.Bcl.Build.Tasks.dll" />
+  <UsingTask TaskName="ValidatePackageReferences" AssemblyFile="..\..\..\lib\Microsoft.Bcl.Build.1.0.5\tools\Microsoft.Bcl.Build.Tasks.dll" />
   <Target Name="BclBuildValidateNugetPackageReferences"
           Condition="'$(BclBuildRunningFullBuild)' != 'true' AND '$(SkipValidatePackageReferences)' != 'true' AND '$(BuildingInsideVisualStudio)' == 'true'"
           BeforeTargets="GetTargetPath">
