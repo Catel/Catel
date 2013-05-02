@@ -75,7 +75,9 @@ namespace Catel.Test.Extensions.FluentValidation
             {
                 var personViewModel = new PersonViewModel();
                 personViewModel.Validate();
+
                 IValidationSummary validationSummary = personViewModel.ValidationContext.GetValidationSummary("Person");
+
                 Assert.IsTrue(validationSummary.HasErrors);
                 Assert.IsTrue(validationSummary.HasFieldErrors);
                 Assert.AreEqual(2, validationSummary.FieldErrors.Count);

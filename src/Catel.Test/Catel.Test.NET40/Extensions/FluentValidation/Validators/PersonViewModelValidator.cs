@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PersonViewModelValidator.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -31,8 +31,8 @@ namespace Catel.Test.Extensions.FluentValidation.Validators
         /// </summary>
         public PersonViewModelValidator()
         {
-            this.RuleFor(model => model.PersonFirstName).NotNull().NotEmpty();
-            this.RuleFor(model => model.PersonLastName).NotNull().NotEmpty();
+            RuleFor(model => model.PersonFirstName).NotNull().NotEmpty();
+            RuleFor(model => model.PersonLastName).NotNull().NotEmpty();
         }
 
         #endregion
@@ -51,8 +51,8 @@ namespace Catel.Test.Extensions.FluentValidation.Validators
         /// </summary>
         public PersonViewModelValidatorWarnings()
         {
-            this.RuleFor(model => model.PersonFirstName).Length(3, 20);
-            this.RuleFor(model => model.PersonLastName).Length(3, 20);
+            RuleFor(model => model.PersonFirstName).NotNull().Length(3, 20);
+            RuleFor(model => model.PersonLastName).NotNull().Length(3, 20);
         }
 
         #endregion
