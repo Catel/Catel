@@ -147,8 +147,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Test.SL5.Web", "Catel
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.FluentValidation.NET40", "Catel.Extensions.FluentValidation\Catel.Extensions.FluentValidation.NET40\Catel.Extensions.FluentValidation.NET40.csproj", "{135E7F2B-1FE8-44E1-B1AD-0C80B972459E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.FluentValidation.SL4", "Catel.Extensions.FluentValidation\Catel.Extensions.FluentValidation.SL4\Catel.Extensions.FluentValidation.SL4.csproj", "{D897399D-4BD0-4907-B34E-57C6DB0440DB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.FluentValidation.SL5", "Catel.Extensions.FluentValidation\Catel.Extensions.FluentValidation.SL5\Catel.Extensions.FluentValidation.SL5.csproj", "{8FB35D65-3E80-483D-B38A-F4DE1AB08D71}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Prism.NET40", "Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Catel.Extensions.Prism.NET40.csproj", "{C9EAD437-56BA-45BB-A982-845AD72FE1C8}"
@@ -285,9 +283,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Prism.NET45", "Catel.Extensions.Prism\Catel.Extensions.Prism.NET45\Catel.Extensions.Prism.NET45.csproj", "{1DAC9A4B-2572-446A-99B8-9E86C1D9254B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{1B3CA2AB-8528-4E7C-B487-71BAA66457B5}"
-	ProjectSection(SolutionItems) = preProject
-		nuget.config = nuget.config
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Extensions.CSLA", "Catel.Extensions.CSLA", "{A56117CB-EF5A-4EE5-ABD0-284F084637A0}"
 EndProject
@@ -439,10 +434,6 @@ Global
 		{135E7F2B-1FE8-44E1-B1AD-0C80B972459E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{135E7F2B-1FE8-44E1-B1AD-0C80B972459E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{135E7F2B-1FE8-44E1-B1AD-0C80B972459E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D897399D-4BD0-4907-B34E-57C6DB0440DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D897399D-4BD0-4907-B34E-57C6DB0440DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D897399D-4BD0-4907-B34E-57C6DB0440DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D897399D-4BD0-4907-B34E-57C6DB0440DB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8FB35D65-3E80-483D-B38A-F4DE1AB08D71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8FB35D65-3E80-483D-B38A-F4DE1AB08D71}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FB35D65-3E80-483D-B38A-F4DE1AB08D71}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -648,7 +639,6 @@ Global
 		{BEDEB2CB-51AB-4AF6-85F9-6A596B4603BB} = {162DE45B-B7A2-4D4A-B90D-F1762133C31C}
 		{5168ABF4-2DCB-496B-8F76-DB9B716ACC4A} = {162DE45B-B7A2-4D4A-B90D-F1762133C31C}
 		{135E7F2B-1FE8-44E1-B1AD-0C80B972459E} = {DA48A112-2316-4576-84F7-2665282C75BE}
-		{D897399D-4BD0-4907-B34E-57C6DB0440DB} = {DA48A112-2316-4576-84F7-2665282C75BE}
 		{8FB35D65-3E80-483D-B38A-F4DE1AB08D71} = {DA48A112-2316-4576-84F7-2665282C75BE}
 		{C30B4F98-084A-4FC4-910E-2DEAE3505AD9} = {DA48A112-2316-4576-84F7-2665282C75BE}
 		{C9EAD437-56BA-45BB-A982-845AD72FE1C8} = {6270F84B-38B3-4602-803C-EAE9E8C924C6}

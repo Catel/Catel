@@ -223,8 +223,9 @@ namespace Catel.Data
         {
             var validationResults = new List<IValidationResult>();
 
-            validationResults.AddRange(GetFieldErrors());
-            validationResults.AddRange(GetBusinessRuleErrors());
+            // Note: casts cannot be removed
+            validationResults.AddRange(GetFieldErrors().Cast<IValidationResult>());
+            validationResults.AddRange(GetBusinessRuleErrors().Cast<IValidationResult>());
 
             return validationResults;
         }
@@ -238,8 +239,9 @@ namespace Catel.Data
         {
             var validationResults = new List<IValidationResult>();
 
-            validationResults.AddRange(GetFieldErrors(tag));
-            validationResults.AddRange(GetBusinessRuleErrors(tag));
+            // Note: casts cannot be removed
+            validationResults.AddRange(GetFieldErrors(tag).Cast<IValidationResult>());
+            validationResults.AddRange(GetBusinessRuleErrors(tag).Cast<IValidationResult>());
 
             return validationResults;
         }
