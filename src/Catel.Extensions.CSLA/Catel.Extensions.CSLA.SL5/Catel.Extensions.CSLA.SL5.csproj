@@ -93,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Fody.targets" />
+    <None Include="Microsoft.Bcl.Build.targets" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -140,5 +141,5 @@
   </Target>
   <Import Project="$(ProjectPath)\..\..\..\..\Tools\Pepita\PepitaGet.targets" />
   <Import Project="Fody.targets" />
-  <Import Project="..\..\..\lib\Microsoft.Bcl.Build.1.0.5\tools\Microsoft.Bcl.Build.targets" />
+  <Import Project="Microsoft.Bcl.Build.targets" />
 </Project>
