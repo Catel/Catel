@@ -51,7 +51,7 @@ namespace Catel.IoC
         /// <param name="parameters">The parameters to inject.</param>
         /// <returns>The instantiated type using dependency injection.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeFactory"/> is <c>null</c>.</exception>
-        public static object CreateInstanceWithParameters<T>(this ITypeFactory typeFactory, params object[] parameters)
+        public static T CreateInstanceWithParameters<T>(this ITypeFactory typeFactory, params object[] parameters)
         {
             Argument.IsNotNull("typeFactory", typeFactory);
 
