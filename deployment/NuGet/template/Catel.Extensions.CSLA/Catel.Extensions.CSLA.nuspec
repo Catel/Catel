@@ -20,35 +20,25 @@
 		<!--<iconUrl>file://content/icon.png</iconUrl>-->
 	<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>
 	
-	<dependencies>
-		<group targetFramework="net35">
-		  <dependency id="Catel.MVVM" version="[VERSION]" />
-		  <dependency id="CSLA-WPF" version="4.5.10" />
-		</group>
-		
+	<dependencies>		
 		<group targetFramework="net40">
 		  <dependency id="Catel.MVVM" version="[VERSION]" />
-		  <dependency id="CSLA-WPF" version="4.5.10" />
+		  <dependency id="CSLA-WPF" version="4.5.20" />
 		</group>	
 		
 		<group targetFramework="net45">
 		  <dependency id="Catel.MVVM" version="[VERSION]" />
-		  <dependency id="CSLA-WPF" version="4.5.10" />
+		  <dependency id="CSLA-WPF" version="4.5.20" />
 		</group>		
-		
-		<group targetFramework="sl4">
-		  <dependency id="Catel.MVVM" version="[VERSION]" />
-		  <dependency id="CSLA-Silverlight" version="4.5.10" />
-		</group>
-		
+
 		<group targetFramework="sl5">
 		  <dependency id="Catel.MVVM" version="[VERSION]" />
-		  <dependency id="CSLA-Silverlight" version="4.5.10" />
+		  <dependency id="CSLA-Silverlight" version="4.5.20" />
 		</group>	
 		
 		<group targetFramework="wp71">
 		  <dependency id="Catel.MVVM" version="[VERSION]" />
-		  <dependency id="CSLA-WindowsPhone" version="4.5.10" />
+		  <dependency id="CSLA-WindowsPhone" version="4.5.20" />
 		</group>	
 
 		<!-- TODO: Add WP8 and WinRT -->
