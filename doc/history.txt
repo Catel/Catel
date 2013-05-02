@@ -29,6 +29,7 @@ Added/fixed (BREAKING CHANGES):
     this will be a breaking change. To fix this, simply include the Catel.IoC namespace.
 (*) [CTL-69] Updated FluentValidation extension to FluentValidation 4. Because this new version no longer supports SL4, the SL4 version
     of the extension is also dropped
+(*) [CTL-71] Updated CSLA to version 4.5.20. Because this new version no longer supports SL4, the SL4 version of the extension is also dropped
 
 Added/fixed:
 ============
