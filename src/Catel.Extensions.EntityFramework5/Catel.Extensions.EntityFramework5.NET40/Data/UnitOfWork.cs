@@ -31,8 +31,6 @@ namespace Catel.Data
         #region Fields
         private readonly IServiceLocator _serviceLocator;
         private readonly ITypeFactory _typeFactory;
-        private readonly DbContext _dbContext;
-        private readonly string _tag;
 
         private bool _disposed;
         private DbTransaction _transaction;
@@ -52,9 +50,23 @@ namespace Catel.Data
             _serviceLocator = ServiceLocator.Default;
             _typeFactory = _serviceLocator.ResolveType<ITypeFactory>();
 
-            _dbContext = context;
-            _tag = tag ?? UniqueIdentifierHelper.GetUniqueIdentifier<UnitOfWork>().ToString(CultureInfo.InvariantCulture);
+            DbContext = context;
+            Tag = tag ?? UniqueIdentifierHelper.GetUniqueIdentifier<UnitOfWork>().ToString(CultureInfo.InvariantCulture);
         }
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets the db context.
+        /// </summary>
+        /// <value>The db context.</value>
+        protected DbContext DbContext { get; private set; }
+
+        /// <summary>
+        /// Gets the tag.
+        /// </summary>
+        /// <value>The tag.</value>
+        protected string Tag { get; private set; }
         #endregion
 
         #region IUnitOfWork Members
@@ -72,9 +84,9 @@ namespace Catel.Data
         /// </summary>
         /// <param name="isolationLevel">The isolation level.</param>
         /// <exception cref="InvalidOperationException">A transaction is already running.</exception>
-        public void BeginTransaction(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
+        public virtual void BeginTransaction(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
         {
-            Log.Debug("Beginning transaction | {0}", _tag);
+            Log.Debug("Beginning transaction | {0}", Tag);
 
             if (_transaction != null)
             {
@@ -87,19 +99,19 @@ namespace Catel.Data
 
             OpenConnection();
 
-            var objectContext = _dbContext.GetObjectContext();
+            var objectContext = DbContext.GetObjectContext();
             _transaction = objectContext.Connection.BeginTransaction(isolationLevel);
 
-            Log.Debug("Began transaction | {0}", _tag);
+            Log.Debug("Began transaction | {0}", Tag);
         }
 
         /// <summary>
         /// Rolls back all the changes inside a transaction.
         /// </summary>
         /// <exception cref="InvalidOperationException">No transaction is currently running.</exception>
-        public void RollBackTransaction()
+        public virtual void RollBackTransaction()
         {
-            Log.Debug("Rolling back transaction | {0}", _tag);
+            Log.Debug("Rolling back transaction | {0}", Tag);
 
             if (_transaction == null)
             {
@@ -112,16 +124,16 @@ namespace Catel.Data
             _transaction.Rollback();
             ReleaseTransaction();
 
-            Log.Debug("Rolling back transaction | {0}", _tag);
+            Log.Debug("Rolling back transaction | {0}", Tag);
         }
 
         /// <summary>
         /// Commits all the changes inside a transaction.
         /// </summary>
         /// <exception cref="InvalidOperationException">No transaction is currently running.</exception>
-        public void CommitTransaction()
+        public virtual void CommitTransaction()
         {
-            Log.Debug("Committing transaction | {0}", _tag);
+            Log.Debug("Committing transaction | {0}", Tag);
 
             if (_transaction == null)
             {
@@ -133,18 +145,18 @@ namespace Catel.Data
 
             try
             {
-                var objectContext = _dbContext.GetObjectContext();
+                var objectContext = DbContext.GetObjectContext();
                 objectContext.SaveChanges();
 
                 _transaction.Commit();
 
                 ReleaseTransaction();
 
-                Log.Debug("Committed transaction | {0}", _tag);
+                Log.Debug("Committed transaction | {0}", Tag);
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "An exception occurred while committing the transaction, automatically rolling back | {0}", _tag);
+                Log.Error(ex, "An exception occurred while committing the transaction, automatically rolling back | {0}", Tag);
 
                 RollBackTransaction();
                 throw;
@@ -172,18 +184,18 @@ namespace Catel.Data
         /// <typeparam name="TEntityRepository">The type of the entity repository.</typeparam>
         /// <returns>The entity repository.</returns>
         /// <exception cref="NotSupportedException">The specified repository type cannot be found.</exception>
-        public TEntityRepository GetRepository<TEntityRepository>() 
+        public virtual TEntityRepository GetRepository<TEntityRepository>()
             where TEntityRepository : IEntityRepository
         {
-            var registrationInfo = _serviceLocator.GetRegistrationInfo(typeof (TEntityRepository));
+            var registrationInfo = _serviceLocator.GetRegistrationInfo(typeof(TEntityRepository));
             if (registrationInfo == null)
             {
-                string error = string.Format("The specified repository type '{0}' cannot be found. Make sure it is registered in the ServiceLocator.", typeof (TEntityRepository).FullName);
+                string error = string.Format("The specified repository type '{0}' cannot be found. Make sure it is registered in the ServiceLocator.", typeof(TEntityRepository).FullName);
                 Log.Error(error);
                 throw new NotSupportedException(error);
             }
 
-            var repository = _typeFactory.CreateInstanceWithParameters(registrationInfo.ImplementingType, _dbContext);
+            var repository = _typeFactory.CreateInstanceWithParameters(registrationInfo.ImplementingType, DbContext);
             return (TEntityRepository)repository;
         }
 
@@ -192,9 +204,9 @@ namespace Catel.Data
         /// </summary>
         /// <param name="saveOptions">The save options.</param>
         /// <exception cref="InvalidOperationException">A transaction is running. Call CommitTransaction instead.</exception>
-        public void SaveChanges(SaveOptions saveOptions = SaveOptions.DetectChangesBeforeSave | SaveOptions.AcceptAllChangesAfterSave)
+        public virtual void SaveChanges(SaveOptions saveOptions = SaveOptions.DetectChangesBeforeSave | SaveOptions.AcceptAllChangesAfterSave)
         {
-            Log.Debug("Saving changes | {0}", _tag);
+            Log.Debug("Saving changes | {0}", Tag);
 
             if (IsInTransaction)
             {
@@ -204,10 +216,10 @@ namespace Catel.Data
                 throw new InvalidOperationException(error);
             }
 
-            var objectContext = _dbContext.GetObjectContext();
+            var objectContext = DbContext.GetObjectContext();
             objectContext.SaveChanges(saveOptions);
 
-            Log.Debug("Saved changes | {0}", _tag);
+            Log.Debug("Saved changes | {0}", Tag);
         }
         #endregion
 
@@ -255,9 +267,9 @@ namespace Catel.Data
         /// </summary>
         protected void DisposeDbContext()
         {
-            if (_dbContext != null)
+            if (DbContext != null)
             {
-                _dbContext.Dispose();
+                DbContext.Dispose();
             }
         }
         #endregion
@@ -268,32 +280,32 @@ namespace Catel.Data
         /// <summary>
         /// Opens the connection to the database.
         /// </summary>
-        private void OpenConnection()
+        protected virtual void OpenConnection()
         {
-            var objectContext = _dbContext.GetObjectContext();
+            var objectContext = DbContext.GetObjectContext();
             if (objectContext.Connection.State != ConnectionState.Open)
             {
-                Log.Debug("Opening connection | {0}", _tag);
+                Log.Debug("Opening connection | {0}", Tag);
 
                 objectContext.Connection.Open();
 
-                Log.Debug("Opened connection | {0}", _tag);
+                Log.Debug("Opened connection | {0}", Tag);
             }
         }
 
         /// <summary>
         /// Releases the transaction.
         /// </summary>
-        private void ReleaseTransaction()
+        protected virtual void ReleaseTransaction()
         {
             if (_transaction != null)
             {
-                Log.Debug("Releasing transaction | {0}", _tag);
+                Log.Debug("Releasing transaction | {0}", Tag);
 
                 _transaction.Dispose();
                 _transaction = null;
 
-                Log.Debug("Released transaction | {0}", _tag);
+                Log.Debug("Released transaction | {0}", Tag);
             }
         }
         #endregion

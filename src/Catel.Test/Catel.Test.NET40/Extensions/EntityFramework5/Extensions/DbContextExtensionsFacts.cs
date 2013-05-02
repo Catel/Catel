@@ -6,6 +6,8 @@
 namespace Catel.Test.Extensions.EntityFramework5
 {
     using System;
+    using System.Data.Objects;
+
     using Catel.Data;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Test.EntityFramework5.DbContextTest;
@@ -99,6 +101,33 @@ namespace Catel.Test.Extensions.EntityFramework5
 
                 Assert.AreEqual("TestDbContextContainer.DbContextProducts", entitySetName);
             }   
+        }
+
+        [TestClass]
+        public class TheGetTableNameMethod
+        {
+            [TestMethod]
+            public void ThrowsArgumentNullExceptionForNullContext()
+            {
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => DbContextExtensions.GetTableName((ObjectContext)null, typeof(DbContextProduct)));
+            }
+
+            [TestMethod]
+            public void ThrowsArgumentNullExceptionForNullType()
+            {
+                var dbContext = new TestDbContextContainer();
+
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => dbContext.GetTableName(null));
+            }
+
+            [TestMethod]
+            public void ReturnsTableNameIncludingSchemaForType()
+            {
+                var dbContext = new TestDbContextContainer();
+                var tableName = dbContext.GetTableName<DbContextOrder>();
+
+                Assert.AreEqual("[dbo].[DbContextOrder]", tableName);
+            }
         }
     }
 }

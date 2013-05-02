@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DbContextManagerHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -62,7 +62,7 @@ namespace Catel.Data
             var key = GetDbContextKey<TDbContext>();
             var httpContext = HttpContext.Current;
 
-            var manager = (DbContextManager<TDbContext>)DbContextManager<TDbContext>.GetManager();
+            var manager = DbContextManager<TDbContext>.GetManager();
             httpContext.Items[key] = manager;
 
             return manager;

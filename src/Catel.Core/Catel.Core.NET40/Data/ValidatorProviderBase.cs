@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ValidatorProviderBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -32,6 +32,7 @@ namespace Catel.Data
         protected ValidatorProviderBase()
         {
             _cacheStorage = new CacheStorage<Type, IValidator>(storeNullValues: true);
+
             UseCache = true;
         }
 
@@ -40,10 +41,10 @@ namespace Catel.Data
         #region Properties
 
         /// <summary>
-        /// Gets or sets a value indicating whether use cache thats make faster the retrieval of the <see cref="IValidator"/> 
+        /// Gets or sets a value indicating whether use cache that make faster the retrieval of the <see cref="IValidator"/> 
         /// instance for the specified type <see cref="Type"/>.
         /// </summary>
-        /// <remarks>By default this property is set to <c>true</c></remarks>
+        /// <remarks>By default this property is set to <c>true</c>.</remarks>
         public bool UseCache { get; set; }
         #endregion
 
@@ -60,7 +61,7 @@ namespace Catel.Data
         /// </returns>
         IValidator IValidatorProvider.GetValidator<TTargetType>()
         {
-            return (this as IValidatorProvider).GetValidator(typeof(TTargetType));
+            return ((IValidatorProvider)this).GetValidator(typeof(TTargetType));
         }
 
         /// <summary>
@@ -78,6 +79,7 @@ namespace Catel.Data
         IValidator IValidatorProvider.GetValidator(Type targetType)
         {
             Argument.IsNotNull("targetType", targetType);
+
             return _cacheStorage.GetFromCacheOrFetch(targetType, () => GetValidator(targetType), !UseCache);
         }
 

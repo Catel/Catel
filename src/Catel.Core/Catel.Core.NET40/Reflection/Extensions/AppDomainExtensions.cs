@@ -138,7 +138,7 @@ namespace Catel.Reflection
 
             Log.Debug("Preloading assembly '{0}'", assembly.FullName);
 
-            LoadAssemblyIntoAppDomain(appDomain, assembly.GetName());
+            LoadAssemblyIntoAppDomain(appDomain, assembly.GetName(), includeReferencedAssemblies);
         }
 
         /// <summary>

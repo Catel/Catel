@@ -13,16 +13,19 @@ namespace Catel.Data
     using System.Data.Metadata.Edm;
     using System.Data.Objects;
     using System.Linq;
+    using System.Text.RegularExpressions;
+
     using Caching;
     using Reflection;
 
     /// <summary>
     /// Extensions to the <see cref="DbContext"/> class.
     /// </summary>
-    public static class DbContextExtensions
+    public static partial class DbContextExtensions
     {
         private static readonly ICacheStorage<Tuple<Type, Type>, string> _entityKeyPropertyNameCache = new CacheStorage<Tuple<Type, Type>, string>();
         private static readonly ICacheStorage<Tuple<Type, Type>, string> _entitySetNameCache = new CacheStorage<Tuple<Type, Type>, string>();
+        private static readonly ICacheStorage<Type, string> _tableNameCache = new CacheStorage<Type, string>();
 
         /// <summary>
         /// Gets the object context from the specified <see cref="DbContext"/>.
@@ -67,15 +70,9 @@ namespace Catel.Data
             Argument.IsNotNull("entityType", entityType);
             Argument.IsNotNull("keyValue", keyValue);
 
-            var objectContext = dbContext.GetObjectContext();
-
             var keyPropertyName = _entityKeyPropertyNameCache.GetFromCacheOrFetch(new Tuple<Type, Type>(dbContext.GetType(), entityType), () =>
             {
-                var createObjectSetMethod = objectContext.GetType().GetMethodEx("CreateObjectSet", new Type[] { });
-                var genericCreateObjectSetMethod = createObjectSetMethod.MakeGenericMethod(entityType);
-
-                var objectSet = genericCreateObjectSetMethod.Invoke(objectContext, new object[] { });
-                var entitySet = (EntitySet)PropertyHelper.GetPropertyValue(objectSet, "EntitySet");
+                var entitySet = GetEntitySet(dbContext, entityType);
                 return entitySet.ElementType.KeyMembers[0].ToString();
             });
 
@@ -148,6 +145,117 @@ namespace Catel.Data
             var objectContext = dbContext.GetObjectContext();
 
             return string.Format("{0}.{1}", objectContext.DefaultContainerName, entitySetName);
+        }
+
+        /// <summary>
+        /// Gets the entity set for the specified entity in the specified db context.
+        /// </summary>
+        /// <param name="dbContext">The db context.</param>
+        /// <param name="entityType">Type of the entity.</param>
+        /// <returns>The entity set.</returns>
+        public static object GetObjectSet(this DbContext dbContext, Type entityType)
+        {
+            Argument.IsNotNull("dbContext", dbContext);
+            Argument.IsNotNull("entityType", entityType);
+
+            var objectContext = dbContext.GetObjectContext();
+            return GetObjectSet(objectContext, entityType);
+        }
+
+        /// <summary>
+        /// Gets the entity set for the specified entity in the specified object context.
+        /// </summary>
+        /// <param name="objectContext">The object context.</param>
+        /// <param name="entityType">Type of the entity.</param>
+        /// <returns>The entity set.</returns>
+        public static object GetObjectSet(this ObjectContext objectContext, Type entityType)
+        {
+            Argument.IsNotNull("objectContext", objectContext);
+            Argument.IsNotNull("entityType", entityType);
+
+            var createObjectSetMethod = objectContext.GetType().GetMethodEx("CreateObjectSet", new Type[] { });
+            var genericCreateObjectSetMethod = createObjectSetMethod.MakeGenericMethod(entityType);
+
+            var objectSet = genericCreateObjectSetMethod.Invoke(objectContext, new object[] { });
+            return objectSet;
+        }
+
+        /// <summary>
+        /// Gets the entity set for the specified entity in the specified db context.
+        /// </summary>
+        /// <param name="dbContext">The db context.</param>
+        /// <param name="entityType">Type of the entity.</param>
+        /// <returns>The entity set.</returns>
+        public static EntitySet GetEntitySet(this DbContext dbContext, Type entityType)
+        {
+            Argument.IsNotNull("dbContext", dbContext);
+            Argument.IsNotNull("entityType", entityType);
+
+            var objectContext = dbContext.GetObjectContext();
+            return GetEntitySet(objectContext, entityType);
+        }
+
+        /// <summary>
+        /// Gets the entity set for the specified entity in the specified object context.
+        /// </summary>
+        /// <param name="objectContext">The object context.</param>
+        /// <param name="entityType">Type of the entity.</param>
+        /// <returns>The entity set.</returns>
+        public static EntitySet GetEntitySet(this ObjectContext objectContext, Type entityType)
+        {
+            Argument.IsNotNull("objectContext", objectContext);
+            Argument.IsNotNull("entityType", entityType);
+
+            var objectSet = GetObjectSet(objectContext, entityType);
+            var entitySet = (EntitySet)PropertyHelper.GetPropertyValue(objectSet, "EntitySet");
+            return entitySet;
+        }
+
+        /// <summary>
+        /// Gets the name of the table as it is mapped in the database.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="entityType">Type of the entity.</param>
+        /// <returns>
+        /// The table name including the schema.
+        /// </returns>
+        public static string GetTableName(this DbContext context, Type entityType)
+        {
+            Argument.IsNotNull("context", context);
+            Argument.IsNotNull("entityType", entityType);
+
+            return _tableNameCache.GetFromCacheOrFetch(entityType, () =>
+            {
+                var objectContext = context.GetObjectContext();
+                return GetTableName(objectContext, entityType);
+            });
+        }
+
+        /// <summary>
+        /// Gets the name of the table.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="entityType">Type of the entity.</param>
+        /// <returns>
+        /// The table name including the schema.
+        /// </returns>
+        public static string GetTableName(this ObjectContext context, Type entityType)
+        {
+            Argument.IsNotNull("context", context);
+            Argument.IsNotNull("entityType", entityType);
+
+            return _tableNameCache.GetFromCacheOrFetch(entityType, () =>
+            {
+                var objectSet = GetObjectSet(context, entityType);
+                var methodInfo = objectSet.GetType().GetMethodEx("ToTraceString");
+                var sql = (string)methodInfo.Invoke(objectSet, new object[] { });
+
+                var regex = new Regex("FROM (?<table>.*) AS");
+                var match = regex.Match(sql);
+
+                string table = match.Groups["table"].Value;
+                return table;
+            });
         }
     }
 }

@@ -151,9 +151,7 @@ namespace Catel.Data
         /// <summary>
         /// Gets the number of field and business rule warnings inside this context.
         /// </summary>
-        /// <returns>
-        /// The number of warnings available.
-        /// </returns>
+        /// <returns>The number of warnings available.</returns>
         public int GetWarningCount()
         {
             return GetWarnings().Count;
@@ -162,9 +160,8 @@ namespace Catel.Data
         /// <summary>
         /// Gets the number of field and business rule warnings with the specified tag inside this context.
         /// </summary>
-        /// <returns>
-        /// The number of warnings available.
-        /// </returns>
+        /// <param name="tag">The tag.</param>
+        /// <returns>The number of warnings available.</returns>
         public int GetWarningCount(object tag)
         {
             return GetWarnings(tag).Count;
@@ -173,9 +170,7 @@ namespace Catel.Data
         /// <summary>
         /// Gets all field and business rule warnings.
         /// </summary>
-        /// <returns>
-        /// List of <see cref="IValidationResult"/> items.
-        /// </returns>
+        /// <returns>List of <see cref="IValidationResult" /> items.</returns>
         public List<IValidationResult> GetWarnings()
         {
             var validationResults = new List<IValidationResult>();
@@ -189,9 +184,8 @@ namespace Catel.Data
         /// <summary>
         /// Gets all field and business rule warnings with the specified tag.
         /// </summary>
-        /// <returns>
-        /// List of <see cref="IValidationResult"/> items.
-        /// </returns>
+        /// <param name="tag">The tag.</param>
+        /// <returns>List of <see cref="IValidationResult" /> items.</returns>
         public List<IValidationResult> GetWarnings(object tag)
         {
             var validationResults = new List<IValidationResult>();
@@ -205,9 +199,7 @@ namespace Catel.Data
         /// <summary>
         /// Gets the number of field and business rule errors inside this context.
         /// </summary>
-        /// <returns>
-        /// The number of errors available.
-        /// </returns>
+        /// <returns>The number of errors available.</returns>
         public int GetErrorCount()
         {
             return GetErrors().Count;
@@ -216,9 +208,8 @@ namespace Catel.Data
         /// <summary>
         /// Gets the number of field and business rule errors with the specified tag inside this context.
         /// </summary>
-        /// <returns>
-        /// The number of errors available.
-        /// </returns>
+        /// <param name="tag">The tag.</param>
+        /// <returns>The number of errors available.</returns>
         public int GetErrorCount(object tag)
         {
             return GetErrors(tag).Count;
@@ -227,15 +218,13 @@ namespace Catel.Data
         /// <summary>
         /// Gets all field and business rule errors.
         /// </summary>
-        /// <returns>
-        /// List of <see cref="IValidationResult"/> items.
-        /// </returns>
+        /// <returns>List of <see cref="IValidationResult" /> items.</returns>
         public List<IValidationResult> GetErrors()
         {
             var validationResults = new List<IValidationResult>();
 
-            validationResults.AddRange(GetFieldErrors().Cast<IValidationResult>());
-            validationResults.AddRange(GetBusinessRuleErrors().Cast<IValidationResult>());
+            validationResults.AddRange(GetFieldErrors());
+            validationResults.AddRange(GetBusinessRuleErrors());
 
             return validationResults;
         }
@@ -243,15 +232,14 @@ namespace Catel.Data
         /// <summary>
         /// Gets all field and business rule errors with the specified tag.
         /// </summary>
-        /// <returns>
-        /// List of <see cref="IValidationResult"/> items.
-        /// </returns>
+        /// <param name="tag">The tag.</param>
+        /// <returns>List of <see cref="IValidationResult" /> items.</returns>
         public List<IValidationResult> GetErrors(object tag)
         {
             var validationResults = new List<IValidationResult>();
 
-            validationResults.AddRange(GetFieldErrors(tag).Cast<IValidationResult>());
-            validationResults.AddRange(GetBusinessRuleErrors(tag).Cast<IValidationResult>());
+            validationResults.AddRange(GetFieldErrors(tag));
+            validationResults.AddRange(GetBusinessRuleErrors(tag));
 
             return validationResults;
         }
@@ -259,9 +247,7 @@ namespace Catel.Data
         /// <summary>
         /// Gets the field validation count of all fields.
         /// </summary>
-        /// <returns>
-        /// The number of field validations available.
-        /// </returns>
+        /// <returns>The number of field validations available.</returns>
         public int GetFieldValidationCount()
         {
             return GetFieldValidations().Count;
@@ -271,9 +257,7 @@ namespace Catel.Data
         /// Gets the field validation count of all fields with the specified tag.
         /// </summary>
         /// <param name="tag">The tag.</param>
-        /// <returns>
-        /// The number of field validations available.
-        /// </returns>
+        /// <returns>The number of field validations available.</returns>
         public int GetFieldValidationCount(object tag)
         {
             return GetFieldValidations(tag).Count;
@@ -282,9 +266,7 @@ namespace Catel.Data
         /// <summary>
         /// Gets all the field validations.
         /// </summary>
-        /// <returns>
-        /// List of <see cref="IFieldValidationResult"/> items.
-        /// </returns>
+        /// <returns>List of <see cref="IFieldValidationResult" /> items.</returns>
         public List<IFieldValidationResult> GetFieldValidations()
         {
             lock (_fieldValidations)
@@ -300,9 +282,7 @@ namespace Catel.Data
         /// Gets all the field validations with the specified tag.
         /// </summary>
         /// <param name="tag">The tag.</param>
-        /// <returns>
-        /// List of <see cref="IFieldValidationResult"/> items.
-        /// </returns>
+        /// <returns>List of <see cref="IFieldValidationResult" /> items.</returns>
         public List<IFieldValidationResult> GetFieldValidations(object tag)
         {
             lock (_fieldValidations)
@@ -319,10 +299,8 @@ namespace Catel.Data
         /// Gets all the field validations for the specified property name.
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
-        /// <returns>
-        /// List of <see cref="IFieldValidationResult"/> items.
-        /// </returns>
-        /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
+        /// <returns>List of <see cref="IFieldValidationResult" /> items.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
         public List<IFieldValidationResult> GetFieldValidations(string propertyName)
         {
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
@@ -342,10 +320,8 @@ namespace Catel.Data
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="tag">The tag.</param>
-        /// <returns>
-        /// List of <see cref="IFieldValidationResult"/> items.
-        /// </returns>
-        /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
+        /// <returns>List of <see cref="IFieldValidationResult" /> items.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
         public List<IFieldValidationResult> GetFieldValidations(string propertyName, object tag)
         {
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
@@ -383,9 +359,7 @@ namespace Catel.Data
         /// <summary>
         /// Gets all the field warnings.
         /// </summary>
-        /// <returns>
-        /// List of <see cref="IFieldValidationResult"/> items.
-        /// </returns>
+        /// <returns>List of <see cref="IFieldValidationResult" /> items.</returns>
         public List<IFieldValidationResult> GetFieldWarnings()
         {
             lock (_fieldValidations)
@@ -402,9 +376,7 @@ namespace Catel.Data
         /// Gets all the field warnings with the specified tag.
         /// </summary>
         /// <param name="tag">The tag.</param>
-        /// <returns>
-        /// List of <see cref="IFieldValidationResult"/> items.
-        /// </returns>
+        /// <returns>List of <see cref="IFieldValidationResult" /> items.</returns>
         public List<IFieldValidationResult> GetFieldWarnings(object tag)
         {
             lock (_fieldValidations)
