@@ -180,6 +180,7 @@
     <Compile Include="Extensions\EntityFramework5\Data\ObjectContextManagerFacts.cs" />
     <Compile Include="Extensions\EntityFramework5\Data\UnitOfWorkFacts.cs" />
     <Compile Include="Extensions\EntityFramework5\Extensions\DbContextExtensionsFacts.cs" />
+    <Compile Include="Extensions\EntityFramework5\Repositories\EntityRepositoryFacts.cs" />
     <Compile Include="Extensions\EntityFramework5\TestClasses\TestConnectionStrings.cs" />
     <Compile Include="Extensions\FluentValidation\Attributes\DisplayNameAttributeFacts.cs" />
     <Compile Include="Extensions\FluentValidation\FluentValidatorToCatelValidatorAdapterFacts.cs" />
@@ -356,7 +357,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Extensions\EntityFramework5\Repositories\" />
     <Folder Include="IoC\Extensions\" />
     <Folder Include="Logging\Extensions\" />
   </ItemGroup>

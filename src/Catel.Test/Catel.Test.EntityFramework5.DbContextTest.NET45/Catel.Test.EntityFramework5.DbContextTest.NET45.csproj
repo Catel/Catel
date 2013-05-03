@@ -52,6 +52,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Catel.Test.EntityFramework5.DbContextTest.NET40\Repositories\DbContextCustomerRepository.cs">
+      <Link>Repositories\DbContextCustomerRepository.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.EntityFramework5.DbContextTest.NET40\Repositories\DbContextOrderRepository.cs">
+      <Link>Repositories\DbContextOrderRepository.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.EntityFramework5.DbContextTest.NET40\Repositories\DbContextProductRepository.cs">
+      <Link>Repositories\DbContextProductRepository.cs</Link>
+    </Compile>
     <Compile Include="DbContextCustomer.cs">
       <DependentUpon>TestDbContext.tt</DependentUpon>
     </Compile>
@@ -106,6 +115,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="FodyWeavers.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Catel.Extensions.EntityFramework5\Catel.Extensions.EntityFramework5.NET45\Catel.Extensions.EntityFramework5.NET45.csproj">
+      <Project>{2156065f-74f7-420c-a7c9-f40b4751e36a}</Project>
+      <Name>Catel.Extensions.EntityFramework5.NET45</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

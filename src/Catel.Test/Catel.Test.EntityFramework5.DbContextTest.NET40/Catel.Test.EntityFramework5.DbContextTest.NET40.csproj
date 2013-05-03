@@ -63,6 +63,9 @@
     </Compile>
     <Compile Include="ModuleInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\DbContextProductRepository.cs" />
+    <Compile Include="Repositories\DbContextCustomerRepository.cs" />
+    <Compile Include="Repositories\DbContextOrderRepository.cs" />
     <Compile Include="TestDbContext.Context.cs">
       <DependentUpon>TestDbContext.Context.tt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -106,6 +109,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="FodyWeavers.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Catel.Extensions.EntityFramework5\Catel.Extensions.EntityFramework5.NET40\Catel.Extensions.EntityFramework5.NET40.csproj">
+      <Project>{2a4af4d2-e74c-4a8a-947b-1b7ce5bdb67a}</Project>
+      <Name>Catel.Extensions.EntityFramework5.NET40</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

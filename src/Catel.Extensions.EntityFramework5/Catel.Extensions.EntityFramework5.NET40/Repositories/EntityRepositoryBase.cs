@@ -28,7 +28,7 @@ namespace Catel.Data.Repositories
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="EntityRepositoryBase{TEntity, TPrimaryKeyType}" /> class.
+        /// Initializes a new instance of the <see cref="EntityRepositoryBase{TEntity, TPrimaryKey}" /> class.
         /// </summary>
         /// <param name="dbContext">The db context. The caller is responsible for correctly disposing the <see cref="DbContext"/>.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="dbContext" /> is <c>null</c>.</exception>
@@ -46,7 +46,6 @@ namespace Catel.Data.Repositories
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
-        /// <exception cref="System.NotImplementedException"></exception>
         public void Dispose()
         {
         }
@@ -64,7 +63,7 @@ namespace Catel.Data.Repositories
             object originalItem;
             if (objectContext.TryGetObjectByKey(key, out originalItem))
             {
-                return (TEntity) originalItem;
+                return (TEntity)originalItem;
             }
 
             return null;

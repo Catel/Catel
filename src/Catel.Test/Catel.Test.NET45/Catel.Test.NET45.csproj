@@ -108,7 +108,6 @@
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Extensions\EntityFramework5\Repositories\" />
     <Folder Include="IoC\Extensions\" />
     <Folder Include="Logging\Extensions\" />
   </ItemGroup>
@@ -300,6 +299,9 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Extensions\EntityFramework5\Extensions\DbContextExtensionsFacts.cs">
       <Link>Extensions\EntityFramework5\Extensions\DbContextExtensionsFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\EntityFramework5\Repositories\EntityRepositoryFacts.cs">
+      <Link>Extensions\EntityFramework5\Repositories\EntityRepositoryFacts.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Extensions\EntityFramework5\TestClasses\TestConnectionStrings.cs">
       <Link>Extensions\EntityFramework5\TestClasses\TestConnectionStrings.cs</Link>
