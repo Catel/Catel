@@ -21,6 +21,41 @@ namespace Catel.IoC
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
+        /// Resolves the type from the <see cref="IServiceLocator" />. If the type is not registered, this method will return <c>null</c>.
+        /// </summary>
+        /// <typeparam name="T">The type of the service to retrieve.</typeparam>
+        /// <param name="serviceLocator">The service locator.</param>
+        /// <param name="tag">The tag.</param>
+        /// <returns>The resolved type or <c>null</c> if the type is not registered in the <see cref="IServiceLocator" />.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
+        public static T ResolveTypeAndReturnNullIfNotRegistered<T>(this IServiceLocator serviceLocator, object tag = null)
+        {
+            return (T)ResolveTypeAndReturnNullIfNotRegistered(serviceLocator, typeof(T), tag);
+        }
+
+        /// <summary>
+        /// Resolves the type from the <see cref="IServiceLocator"/>. If the type is not registered, this method will return <c>null</c>.
+        /// </summary>
+        /// <param name="serviceLocator">The service locator.</param>
+        /// <param name="serviceType">The type of the service to retrieve.</param>
+        /// <param name="tag">The tag.</param>
+        /// <returns>The resolved type or <c>null</c> if the type is not registered in the <see cref="IServiceLocator"/>.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="serviceType" /> is <c>null</c>.</exception>
+        public static object ResolveTypeAndReturnNullIfNotRegistered(this IServiceLocator serviceLocator, Type serviceType, object tag = null)
+        {
+            Argument.IsNotNull("serviceLocator", serviceLocator);
+            Argument.IsNotNull("serviceType", serviceType);
+
+            if (serviceLocator.IsTypeRegistered(serviceType, tag))
+            {
+                return serviceLocator.ResolveType(serviceType, tag);
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Resolves the type using parameters. This method combines the <see cref="IServiceLocator.GetRegistrationInfo" /> and
         /// the <see cref="ITypeFactory.CreateInstanceWithParameters" /> to provide the functionality.
         /// </summary>

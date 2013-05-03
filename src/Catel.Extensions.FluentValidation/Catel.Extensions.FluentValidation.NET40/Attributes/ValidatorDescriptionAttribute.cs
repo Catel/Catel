@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ValidatorDescriptionAttribute.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -17,17 +17,11 @@ namespace Catel
     public class ValidatorDescriptionAttribute : Attribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ValidatorDescriptionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="ValidatorDescriptionAttribute" /> class.
         /// </summary>
-        /// <param name="tag">
-        /// The validation tag.
-        /// </param>
-        /// <param name="validationResultType">
-        /// The validation result type.
-        /// </param>
-        /// <param name="validationType">
-        /// The validation type.
-        /// </param>
+        /// <param name="tag">The validation tag.</param>
+        /// <param name="validationResultType">The validation result type.</param>
+        /// <param name="validationType">The validation type.</param>
         public ValidatorDescriptionAttribute(string tag, ValidationResultType validationResultType = ValidationResultType.Error,
             ValidationType validationType = ValidationType.Field)
         {

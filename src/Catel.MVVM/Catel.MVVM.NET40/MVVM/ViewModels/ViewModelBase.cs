@@ -372,16 +372,6 @@ namespace Catel.MVVM
                 ViewModelManager.AddInterestedViewModelInstance(interestedInAttribute.ViewModelType, this);
             }
 
-            if (ServiceLocator.IsTypeRegistered<IValidatorProvider>())
-            {
-                var validatorProvider = ServiceLocator.ResolveType<IValidatorProvider>();
-                Validator = validatorProvider.GetValidator(GetType());
-                if (Validator != null)
-                {
-                    Log.Debug("Found validator '{0}' for view model '{1}'", Validator.GetType().Name, GetType().Name);
-                }
-            }
-
             _throttlingTimer.Tick += (sender, e) => OnThrottlingTimerTick();
 
             // Enable validation again like we promised some lines of code ago

@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CompositeValidator.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -21,12 +21,12 @@ namespace Catel.Data
         #region Constants and Fields
 
         /// <summary>
-        /// The validator list
+        /// The validator list.
         /// </summary>
         private readonly List<IValidator> _validators = new List<IValidator>();
 
         /// <summary>
-        /// The synchornization context
+        /// The synchronization context.
         /// </summary>
         private readonly SynchronizationContext _synchronizationContext = new SynchronizationContext();
 

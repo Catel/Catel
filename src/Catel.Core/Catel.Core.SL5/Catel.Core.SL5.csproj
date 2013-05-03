@@ -149,6 +149,12 @@
     <Compile Include="..\Catel.Core.NET40\Data\Attributes\AllowNonSerializableMembersAttribute.cs">
       <Link>Data\Attributes\AllowNonSerializableMembersAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Data\Attributes\ValidateModelAttribute.cs">
+      <Link>Data\Attributes\ValidateModelAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Data\AttributeValidatorProvider.cs">
+      <Link>Data\AttributeValidatorProvider.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\ChangeNotificationWrapper.cs">
       <Link>Data\ChangeNotificationWrapper.cs</Link>
     </Compile>

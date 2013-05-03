@@ -15,5 +15,22 @@ namespace Catel.Data
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class ValidateModelAttribute : Attribute
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ValidateModelAttribute"/> class.
+        /// </summary>
+        /// <param name="validatorType">Type of the validator.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="validatorType"/> is <c>null</c>.</exception>
+        public ValidateModelAttribute(Type validatorType)
+        {
+            Argument.IsNotNull("validatorType", validatorType);
+
+            ValidatorType = validatorType;
+        }
+
+        /// <summary>
+        /// Gets the type of the validator.
+        /// </summary>
+        /// <value>The type of the validator.</value>
+        public Type ValidatorType { get; private set; }
     }
 }

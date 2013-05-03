@@ -1,14 +1,16 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ModelBaseFacts.validation.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace Catel.Test.Data
 {
+    using System.Collections.Generic;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using Catel.Data;
+    using Catel.IoC;
 
 #if NETFX_CORE
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
@@ -97,7 +99,7 @@ namespace Catel.Test.Data
 
             //    Assert.IsFalse(validationObject.HasErrors);
             //}  
-            
+
             [TestMethod]
             public void ValidationUsingAnnotationsForNonCatelCalculatedProperties()
             {
@@ -514,6 +516,75 @@ namespace Catel.Test.Data
             }
 #endif
             #endregion
+        }
+
+        [TestClass]
+        public class TheValidateModelAttribute
+        {
+            [ValidateModel(typeof(TestValidator))]
+            public class TestValidatorModel : ModelBase
+            {
+                /// <summary>
+                /// Gets or sets the property value.
+                /// </summary>
+                public string FirstName
+                {
+                    get { return GetValue<string>(FirstNameProperty); }
+                    set { SetValue(FirstNameProperty, value); }
+                }
+
+                /// <summary>
+                /// Register the FirstName property so it is known in the class.
+                /// </summary>
+                public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), string.Empty);
+
+                /// <summary>
+                /// Gets or sets the property value.
+                /// </summary>
+                public string LastName
+                {
+                    get { return GetValue<string>(LastNameProperty); }
+                    set { SetValue(LastNameProperty, value); }
+                }
+
+                /// <summary>
+                /// Register the LastName property so it is known in the class.
+                /// </summary>
+                public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof(string), string.Empty);
+            }
+
+            public class TestValidator : ValidatorBase<TestValidatorModel>
+            {
+                public override void ValidateFields(TestValidatorModel instance, List<IFieldValidationResult> validationResults)
+                {
+                    if (string.IsNullOrWhiteSpace(instance.FirstName))
+                    {
+                        validationResults.Add(FieldValidationResult.CreateError(TestValidatorModel.FirstNameProperty, "First name is required"));
+                    }
+
+                    if (string.IsNullOrWhiteSpace(instance.LastName))
+                    {
+                        validationResults.Add(FieldValidationResult.CreateError(TestValidatorModel.FirstNameProperty, "First name is required"));
+                    }
+                }
+
+                public override void ValidateBusinessRules(TestValidatorModel instance, List<IBusinessRuleValidationResult> validationResults)
+                {
+                }
+            }
+
+            [TestMethod]
+            public void AutomaticallyCreatesValidator()
+            {
+                ServiceLocator.Default.RegisterType<IValidatorProvider, AttributeValidatorProvider>();
+                var testValidatorModel = new TestValidatorModel();
+
+                Assert.IsNotNull(testValidatorModel.Validator);
+
+                testValidatorModel.Validate(true);
+
+                Assert.IsTrue(testValidatorModel.HasErrors);
+            }
         }
 
         [TestClass]

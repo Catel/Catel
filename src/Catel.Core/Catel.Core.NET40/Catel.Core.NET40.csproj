@@ -94,6 +94,7 @@
     <Compile Include="Argument.expression.cs" />
     <Compile Include="Data\Attributes\AllowNonSerializableMembersAttribute.cs" />
     <Compile Include="Data\Attributes\ValidateModelAttribute.cs" />
+    <Compile Include="Data\AttributeValidatorProvider.cs" />
     <Compile Include="Data\ChangeNotificationWrapper.cs" />
     <Compile Include="Data\CompositeValidator.cs" />
     <Compile Include="Data\CompositeValidatorProvider.cs" />

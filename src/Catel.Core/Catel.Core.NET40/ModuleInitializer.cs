@@ -6,6 +6,8 @@
 
 namespace Catel
 {
+    using Catel.Data;
+
     using ExceptionHandling;
     using IoC;
     using Memento;
@@ -29,6 +31,8 @@ namespace Catel
             serviceLocator.RegisterInstance<IExceptionService>(ExceptionService.Default);
             serviceLocator.RegisterInstance<IMementoService>(MementoService.Default);
             serviceLocator.RegisterInstance<IMessageMediator>(MessageMediator.Default);
+
+            serviceLocator.RegisterTypeIfNotYetRegistered<IValidatorProvider, AttributeValidatorProvider>();
         }
     }
 }

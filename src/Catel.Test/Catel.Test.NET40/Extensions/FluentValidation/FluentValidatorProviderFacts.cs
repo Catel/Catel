@@ -28,9 +28,6 @@ namespace Catel.Test.Extensions.FluentValidation
         [TestClass]
         public class FluentValidatorProviderTest
         {
-            /// <summary>
-            /// The init.
-            /// </summary>
             [TestInitialize]
             public void Init()
             {

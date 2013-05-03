@@ -41,6 +41,7 @@ Added/fixed:
 (+) [CTL-67] Added IContextFactory to allow customization of DbContext instantiation
 (+) [CTL-56] Added ThrottlerRate to allow the throttling of change notifications to the UI to bring down the frame rate of applications
     so the CPU can be used for other tasks instead
+(+) [CTL-43] Added ValidateModelAttribute to specify external IValidator classes via annotations at Class level
 (+) Added the IExceptionService.IsExceptionRegistered method to know if an exception type is registered for handling
 (+) Added BindingWithValidation for NET40 and NET45 where {catel:BindingWithValidation MyProp} can now be used instead of
     {Binding Path=MyProp, NotifyOnValidationErrors=True, ValidatesOnDataErrors=True}

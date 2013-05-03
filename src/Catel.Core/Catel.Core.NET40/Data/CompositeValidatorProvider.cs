@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CompositeValidatorProvider.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -11,18 +11,18 @@ namespace Catel.Data
     using System.Linq;
 
     /// <summary>
-    /// Allows the combination of several validator providers into a single validatorprovider. 
+    /// Allows the combination of several validator providers into a single validator provider. 
     /// </summary>
     /// <remarks>
     /// This class can be used to unify instances of <see cref="IValidatorProvider"/> into a single one and provides several 
-    /// sources in order to retreive <see cref="IValidator"/> instances. 
+    /// sources in order to retrieve <see cref="IValidator"/> instances. 
     /// </remarks>
     public class CompositeValidatorProvider : ValidatorProviderBase
     {
         #region Constants and Fields
 
         /// <summary>
-        /// The locker
+        /// The locker.
         /// </summary>
         private readonly object _syncObj = new object();
 
@@ -37,12 +37,8 @@ namespace Catel.Data
         /// <summary>
         /// Add the validator provider to this composite validator provider.
         /// </summary>
-        /// <param name="validatorProvider">
-        /// The validator provider.
-        /// </param>
-        /// <exception cref="ArgumentNullException">
-        /// If <paramref name="validatorProvider"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="validatorProvider">The validator provider.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="validatorProvider" /> is <c>null</c>.</exception>
         public void Add(IValidatorProvider validatorProvider)
         {
             Argument.IsNotNull("validatorProvider", validatorProvider);
@@ -56,15 +52,9 @@ namespace Catel.Data
         /// <summary>
         /// Determines whether this composite validator provider contains the specified validator provider.
         /// </summary>
-        /// <param name="validatorProvider">
-        /// The validator provider
-        /// </param>
-        /// <returns>
-        /// <c>true</c> if this composite validator provider contains the specified validator; otherwise, <c>false</c>.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">
-        /// The <paramref name="validatorProvider"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="validatorProvider">The validator provider.</param>
+        /// <returns><c>true</c> if this composite validator provider contains the specified validator; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="validatorProvider" /> is <c>null</c>.</exception>
         public bool Contains(IValidatorProvider validatorProvider)
         {
             Argument.IsNotNull("validatorProvider", validatorProvider);
@@ -78,18 +68,10 @@ namespace Catel.Data
         /// <summary>
         /// Gets a validator for the specified target type.
         /// </summary>
-        /// <param name="targetType">
-        ///   The target type. 
-        /// </param>
-        /// <returns> 
-        /// The <see cref="IValidator"/> for the specified type or <c>null</c> if no validator is available for the specified type. 
-        /// </returns>
-        /// <exception cref="ArgumentNullException">
-        /// The <paramref name="targetType"/> is <c>null</c>.
-        /// </exception>
-        /// <remarks>
-        /// If there are more than once validator provider and they retrieve more than once validator all of these will be aggregated into a single <see cref="CompositeValidator"/>.
-        /// </remarks>
+        /// <param name="targetType">The target type.</param>
+        /// <returns>The <see cref="IValidator" /> for the specified type or <c>null</c> if no validator is available for the specified type.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="targetType" /> is <c>null</c>.</exception>
+        /// <remarks>If there are more than once validator provider and they retrieve more than once validator all of these will be aggregated into a single <see cref="CompositeValidator" />.</remarks>
         protected override IValidator GetValidator(Type targetType)
         {
             IValidator validator;
@@ -118,12 +100,8 @@ namespace Catel.Data
         /// <summary>
         /// Removes the validator provider from this composite validator provider.
         /// </summary>
-        /// <param name="validatorProvider">
-        /// The validator provider.
-        /// </param>
-        /// <exception cref="ArgumentNullException">
-        /// If <paramref name="validatorProvider"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="validatorProvider">The validator provider.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="validatorProvider" /> is <c>null</c>.</exception>
         public void Remove(IValidatorProvider validatorProvider)
         {
             Argument.IsNotNull("validatorProvider", validatorProvider);

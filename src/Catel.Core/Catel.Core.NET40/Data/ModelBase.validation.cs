@@ -14,6 +14,9 @@ namespace Catel.Data
     using System.Linq.Expressions;
     using System.Text;
     using System.Xml.Serialization;
+
+    using Catel.IoC;
+
     using Logging;
     using Reflection;
     using Text;
@@ -50,6 +53,22 @@ namespace Catel.Data
         [field: NonSerialized]
 #endif
         private bool _suspendValidation;
+
+        /// <summary>
+        /// Field that determines whether a validator has been retrieved yet.
+        /// </summary>
+#if NET
+        [field: NonSerialized]
+#endif
+        private bool _hasRetrievedValidatorOnce;
+
+        /// <summary>
+        /// The backing field for the <see cref="Validator"/> property.
+        /// </summary>
+#if NET
+        [field: NonSerialized]
+#endif
+        private IValidator _validator;
 
         /// <summary>
         /// Lock object to make sure that multiple validations at the same time are not allowed.
@@ -117,7 +136,7 @@ namespace Catel.Data
         /// Gets a value indicating whether the object is currently validating. During validation, no validation will be invoked.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if the object is validating; otherwise, <c>false</c>.
+        /// <c>true</c> if the object is validating; otherwise, <c>false</c>.
         /// </value>
 #if !WINDOWS_PHONE && !NETFX_CORE
         [Browsable(false)]
@@ -136,12 +155,43 @@ namespace Catel.Data
 
         /// <summary>
         /// Gets or sets the validator to use.
+        /// <para />
+        /// By default, this value retrieves the default validator from them <see cref="IValidatorProvider"/> if it is
+        /// registered in the <see cref="Catel.IoC.ServiceLocator"/>.
         /// </summary>
 #if !WINDOWS_PHONE && !NETFX_CORE
         [Browsable(false)]
 #endif
         [XmlIgnore]
-        public IValidator Validator { get; set; }
+        public IValidator Validator
+        {
+            get
+            {
+                if (_validator == null)
+                {
+                    if (!_hasRetrievedValidatorOnce)
+                    {
+                        var validatorProvider = ServiceLocator.Default.ResolveTypeAndReturnNullIfNotRegistered<IValidatorProvider>();
+                        if (validatorProvider != null)
+                        {
+                            _validator = validatorProvider.GetValidator(GetType());
+                            if (_validator != null)
+                            {
+                                Log.Debug("Found validator '{0}' for view model '{1}' via the registered IValidatorProvider", _validator.GetType().FullName, GetType().FullName);
+                            }
+                        }
+
+                        _hasRetrievedValidatorOnce = true;
+                    }
+                }
+
+                return _validator;
+            }
+            set
+            {
+                _validator = value;
+            }
+        }
 
         /// <summary>
         /// Gets the validation context which contains all information about the validation.
@@ -607,12 +657,12 @@ namespace Catel.Data
         /// <summary>
         /// Validates the current object for field and business rule errors.
         /// </summary>
-        /// <param name="force">if set to <c>true</c>, a validation is forced. When the validation is not forced, it means 
+        /// <param name="force">If set to <c>true</c>, a validation is forced. When the validation is not forced, it means 
         /// that when the object is already validated, and no properties have been changed, no validation actually occurs 
         /// since there is no reason for any values to have changed.
         /// </param>
         /// <remarks>
-        /// To check wether this object contains any errors, use the <see cref="HasErrors"/> property.
+        /// To check whether this object contains any errors, use the <see cref="HasErrors"/> property.
         /// </remarks>
         public void Validate(bool force = false)
         {
@@ -622,10 +672,10 @@ namespace Catel.Data
         /// <summary>
         /// Validates the current object for field and business rule errors.
         /// </summary>
-        /// <param name="force">if set to <c>true</c>, a validation is forced (even if the object knows it is already validated).</param>
-        /// <param name="validateDataAnnotations">if set to <c>true</c>, the data annotations will be checked. This value is only used if <paramref name="force"/> is set to <c>true</c>.</param>
+        /// <param name="force">If set to <c>true</c>, a validation is forced (even if the object knows it is already validated).</param>
+        /// <param name="validateDataAnnotations">If set to <c>true</c>, the data annotations will be checked. This value is only used if <paramref name="force"/> is set to <c>true</c>.</param>
         /// <remarks>
-        /// To check wether this object contains any errors, use the <see cref="HasErrors"/> property.
+        /// To check whether this object contains any errors, use the <see cref="HasErrors"/> property.
         /// </remarks>
         internal void Validate(bool force, bool validateDataAnnotations)
         {
