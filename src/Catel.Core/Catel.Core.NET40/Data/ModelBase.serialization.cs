@@ -107,13 +107,13 @@ namespace Catel.Data
             settings.IgnoreWhitespace = true;
             var newReader = XmlReader.Create(reader, settings);
 
-            if (!string.Equals(type.Name, newReader.LocalName, StringComparison.OrdinalIgnoreCase))
-            {
-                if (!newReader.Read())
-                {
-                    return;
-                }
-            }
+            //if (!string.Equals(type.Name, newReader.LocalName, StringComparison.OrdinalIgnoreCase))
+            //{
+            //    if (!newReader.Read())
+            //    {
+            //        return;
+            //    }
+            //}
 
             bool isAtXmlRoot = string.IsNullOrEmpty(newReader.LocalName) || string.Equals(newReader.LocalName, "xml", StringComparison.OrdinalIgnoreCase);
             if (isAtXmlRoot)

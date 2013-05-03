@@ -139,6 +139,7 @@
     <Compile Include="Data\CompositeValidatorProviderFacts.cs" />
     <Compile Include="Data\CompositeValidatorFacts.cs" />
     <Compile Include="Data\Extensions\ObservableObjectExtensionsFacts.cs" />
+    <Compile Include="Data\Helpers\SerializationTestHelper.cs" />
     <Compile Include="Data\ModelBaseFacts.cs" />
     <Compile Include="Data\ModelBaseFacts.editableobject.cs" />
     <Compile Include="Data\ModelBaseFacts.serialization.cs" />
@@ -158,6 +159,7 @@
     <Compile Include="Data\PropertyDataManagerFacts.cs" />
     <Compile Include="Data\PropertyDataFacts.cs" />
     <Compile Include="Data\SavableModelBaseTest.cs" />
+    <Compile Include="Data\TestClasses\ComplexSerializationHierarchy.cs" />
     <Compile Include="Data\ValidationContextFacts.cs" />
     <Compile Include="Data\ValidationResultFacts.cs" />
     <Compile Include="Data\ValidationSummaryFacts.cs" />

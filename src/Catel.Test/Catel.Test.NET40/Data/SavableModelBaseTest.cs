@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SavableModelBaseTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -20,130 +20,104 @@ namespace Catel.Test.Data
     [TestClass]
     public class SavableModelBaseTest
     {
-        #region Fields
-#if !NETFX_CORE
-        private static FilesHelper _filesHelper;
-#endif
-        #endregion
-
-        #region Initialization and cleanup
-#if !NETFX_CORE
-        [TestInitialize]
-        public void Initialize()
-        {
-            if (_filesHelper == null)
-            {
-                _filesHelper = new FilesHelper();
-            }
-        }
-
-        [TestCleanup]
-        public void CleanUp()
-        {
-            if (_filesHelper != null)
-            {
-                _filesHelper.CleanUp();
-                _filesHelper = null;
-            }
-        }
-#endif
-        #endregion
-
         #region Serialization tests
-        /// <summary>
-        /// Serializes and deserializes an object using the specified mode. Finally, it will check whether the original object is equal.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="testObject">The test object.</param>
-        /// <param name="mode">The mode.</param>
-        public static void SerializeAndDeserializeObject<T>(T testObject, SerializationMode mode)
-            where T : SavableModelBase<T>
-        {
-            if (_filesHelper == null)
-            {
-                _filesHelper = new FilesHelper();
-            }
-
-            var file = _filesHelper.GetTempFile();
-            testObject.Save(file, mode);
-
-#if SILVERLIGHT
-            file.Position = 0L;
-#endif
-            var loadedObject = SavableModelBase<T>.Load(file, mode);
-
-            Assert.AreEqual(testObject, loadedObject);
-        }
-
 #if NET
         [TestMethod]
         public void BinarySerializationLevel1()
         {
-            SerializeAndDeserializeObject(ModelBaseTestHelper.CreateIniEntryObject(), SerializationMode.Binary);
+            var originalObject = ModelBaseTestHelper.CreateIniEntryObject();
+            var clonedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Binary);
+
+            Assert.AreEqual(originalObject, clonedObject);
         }
 
         [TestMethod]
         public void BinarySerializationLevel2()
         {
-            SerializeAndDeserializeObject(ModelBaseTestHelper.CreateIniFileObject(), SerializationMode.Binary);
+            var originalObject = ModelBaseTestHelper.CreateIniFileObject();
+            var clonedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Binary);
+
+            Assert.AreEqual(originalObject, clonedObject);
         }
 
         [TestMethod]
         public void BinarySerializationLevel3()
         {
-            SerializeAndDeserializeObject(ModelBaseTestHelper.CreateComputerSettingsObject(), SerializationMode.Binary);
+            var originalObject = ModelBaseTestHelper.CreateComputerSettingsObject();
+            var clonedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Binary);
+
+            Assert.AreEqual(originalObject, clonedObject);
         }
 
         [TestMethod]
         public void BinarySerializationComplexGraphWithInheritance()
         {
-            SerializeAndDeserializeObject(ModelBaseTestHelper.CreateHierarchicalGraphWithInheritance(), SerializationMode.Binary);
+            var originalObject = ModelBaseTestHelper.CreateHierarchicalGraphWithInheritance();
+            var clonedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Binary);
+
+            Assert.AreEqual(originalObject, clonedObject);
         }
 
         [TestMethod]
         public void BinarySerializationWithPrivateMembers()
         {
             // Create new object
-            var objectWithPrivateMembers = new ObjectWithPrivateMembers("My private member");
-            objectWithPrivateMembers.PublicMember = "My public member";
+            var originalObject = new ObjectWithPrivateMembers("My private member");
+            originalObject.PublicMember = "My public member";
 
             // Test
-            SerializeAndDeserializeObject(objectWithPrivateMembers, SerializationMode.Binary);
+            var clonedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Binary);
+
+            Assert.AreEqual(originalObject, clonedObject);
         }
 
         [TestMethod]
         public void BinarySerializationWithPrivateParameterlessConstructor()
         {
             // Create new object
-            var objectWithPrivateConstructor = new ObjectWithPrivateConstructor("My private constructor test");
+            var originalObject = new ObjectWithPrivateConstructor("My private constructor test");
 
             // Test
-            SerializeAndDeserializeObject(objectWithPrivateConstructor, SerializationMode.Binary);
+            var clonedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Binary);
+
+            Assert.AreEqual(originalObject, clonedObject);
         }
 #endif
 
         [TestMethod]
         public void XmlSerializationLevel1()
         {
-            SerializeAndDeserializeObject(ModelBaseTestHelper.CreateIniEntryObject(), SerializationMode.Xml);
+            var originalObject = ModelBaseTestHelper.CreateIniEntryObject();
+            var clonedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Xml);
+
+            Assert.AreEqual(originalObject, clonedObject);
         }
 
         [TestMethod]
         public void XmlSerializationLevel2()
         {
-            SerializeAndDeserializeObject(ModelBaseTestHelper.CreateIniFileObject(), SerializationMode.Xml);
+            var originalObject = ModelBaseTestHelper.CreateIniFileObject();
+            var clonedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Xml);
+
+            Assert.AreEqual(originalObject, clonedObject);
         }
 
         [TestMethod]
         public void XmlSerializationLevel3()
         {
-            SerializeAndDeserializeObject(ModelBaseTestHelper.CreateComputerSettingsObject(), SerializationMode.Xml);
+            var originalObject = ModelBaseTestHelper.CreateComputerSettingsObject();
+            var clonedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Xml);
+
+            Assert.AreEqual(originalObject, clonedObject);
         }
 
         [TestMethod]
         public void XmlSerializationComplexGraphWithInheritance()
         {
-            SerializeAndDeserializeObject(ModelBaseTestHelper.CreateHierarchicalGraphWithInheritance(), SerializationMode.Xml);
+            var originalObject = ModelBaseTestHelper.CreateHierarchicalGraphWithInheritance();
+            var clonedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Xml);
+
+            Assert.AreEqual(originalObject, clonedObject);
         }
 
         [TestMethod]
@@ -159,19 +133,24 @@ namespace Catel.Test.Data
         [TestMethod]
         public void XmlSerializationWithXmlMappings()
         {
-            SerializeAndDeserializeObject(ModelBaseTestHelper.CreateComputerSettingsWithXmlMappingsObject(), SerializationMode.Xml);
+            var originalObject = ModelBaseTestHelper.CreateComputerSettingsWithXmlMappingsObject();
+            var clonedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Xml);
+
+            Assert.AreEqual(originalObject, clonedObject);
         }
 
         [TestMethod]
         public void XmlSerializationWithCustomTypes()
         {
             // Create object
-            var obj = new ObjectWithCustomType();
-            obj.FirstName = "Test";
-            obj.Gender = Gender.Female;
+            var originalObject = new ObjectWithCustomType();
+            originalObject.FirstName = "Test";
+            originalObject.Gender = Gender.Female;
 
             // Serialize and deserialize
-            SerializeAndDeserializeObject(obj, SerializationMode.Xml);
+            var clonedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Xml);
+
+            Assert.AreEqual(originalObject, clonedObject);
         }
 
         [TestMethod]
@@ -221,22 +200,21 @@ namespace Catel.Test.Data
         [TestMethod]
         public void XmlSerializationWithPrivateMembers()
         {
-            // Create new object
-            var objectWithPrivateMembers = new ObjectWithPrivateMembers("My private member");
-            objectWithPrivateMembers.PublicMember = "My public member";
+            var originalObject = new ObjectWithPrivateMembers("My private member");
+            originalObject.PublicMember = "My public member";
 
-            // Test
-            SerializeAndDeserializeObject(objectWithPrivateMembers, SerializationMode.Xml);
+            var clonedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Xml);
+
+            Assert.AreEqual(originalObject, clonedObject);
         }
 
         [TestMethod]
         public void XmlSerializationWithPrivateParameterlessConstructor()
         {
-            // Create new object
-            var objectWithPrivateConstructor = new ObjectWithPrivateConstructor("My private constructor test");
+            var originalObject = new ObjectWithPrivateConstructor("My private constructor test");
+            var clonedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Xml);
 
-            // Test
-            SerializeAndDeserializeObject(objectWithPrivateConstructor, SerializationMode.Xml);
+            Assert.AreEqual(originalObject, clonedObject);
         }
 #endif
 
@@ -250,45 +228,21 @@ namespace Catel.Test.Data
         #endregion
 
         #region Generic Loads
-        [TestMethod]
-        public void Load_FileName()
-        {
-            var file = _filesHelper.GetTempFile();
-            var originalObject = ModelBaseTestHelper.CreateIniFileObject();
-            originalObject.Save(file);
-
-#if SILVERLIGHT
-            file.Position = 0L;
-#endif
-            var loadedObject = IniFile.Load(file);
-
-            Assert.AreEqual(originalObject, loadedObject);
-        }
-
+#if NET
         [TestMethod]
         public void Load_FileName_EnableRedirects()
         {
-            var file = _filesHelper.GetTempFile();
             var originalObject = ModelBaseTestHelper.CreateIniFileObject();
-            originalObject.Save(file);
-
-#if SILVERLIGHT
-            file.Position = 0L;
-#endif
-            var loadedObject = IniFile.Load(file, true);
+            var loadedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Binary, true);
 
             Assert.AreEqual(originalObject, loadedObject);
         }
 
-#if NET
         [TestMethod]
         public void Load_FileName_SerializationMode_Binary()
         {
-            var file = _filesHelper.GetTempFile();
             var originalObject = ModelBaseTestHelper.CreateIniFileObject();
-            originalObject.Save(file, SerializationMode.Binary);
-
-            var loadedObject = IniFile.Load(file, SerializationMode.Binary);
+            var loadedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Binary, false);
 
             Assert.AreEqual(originalObject, loadedObject);
         }
@@ -297,43 +251,17 @@ namespace Catel.Test.Data
         [TestMethod]
         public void Load_FileName_SerializationMode_Xml()
         {
-            var file = _filesHelper.GetTempFile();
             var originalObject = ModelBaseTestHelper.CreateIniFileObject();
-            originalObject.Save(file, SerializationMode.Xml);
-
-#if SILVERLIGHT
-            file.Position = 0L;
-#endif
-            var loadedObject = IniFile.Load(file, SerializationMode.Xml);
+            var loadedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Xml, false);
 
             Assert.AreEqual(originalObject, loadedObject);
         }
-
-#if NET
-        [TestMethod]
-        public void Load_FileName_SerializationMode_Binary_EnableRedirects()
-        {
-            var file = _filesHelper.GetTempFile();
-            var originalObject = ModelBaseTestHelper.CreateIniFileObject();
-            originalObject.Save(file, SerializationMode.Binary);
-
-            var loadedObject = IniFile.Load(file, SerializationMode.Binary, true);
-
-            Assert.AreEqual(originalObject, loadedObject);
-        }
-#endif
 
         [TestMethod]
         public void Load_FileName_SerializationMode_Xml_EnableRedirects()
         {
-            var file = _filesHelper.GetTempFile();
             var originalObject = ModelBaseTestHelper.CreateIniFileObject();
-            originalObject.Save(file, SerializationMode.Xml);
-
-#if SILVERLIGHT
-            file.Position = 0L;
-#endif
-            var loadedObject = IniFile.Load(file, SerializationMode.Xml, true);
+            var loadedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Xml, true);
 
             Assert.AreEqual(originalObject, loadedObject);
         }
@@ -341,17 +269,18 @@ namespace Catel.Test.Data
         [TestMethod]
         public void Load_XDocument()
         {
-            var file = _filesHelper.GetTempFile();
-            var originalObject = ModelBaseTestHelper.CreateIniFileObject();
-            originalObject.Save(file, SerializationMode.Xml);
+            using (var memoryStream = new MemoryStream())
+            {
+                var originalObject = ModelBaseTestHelper.CreateIniFileObject();
+                originalObject.Save(memoryStream, SerializationMode.Xml);
 
-#if SILVERLIGHT
-            file.Position = 0L;
-#endif
-            XDocument document = XDocument.Load(file);
-            var loadedObject = IniFile.Load(document);
+                memoryStream.Position = 0L;
 
-            Assert.AreEqual(originalObject, loadedObject);
+                XDocument document = XDocument.Load(memoryStream);
+                var loadedObject = IniFile.Load(document);
+
+                Assert.AreEqual(originalObject, loadedObject);
+            }
         }
 
         [TestMethod]

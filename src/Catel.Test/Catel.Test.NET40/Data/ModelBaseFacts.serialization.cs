@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModelBaseBaseFacts.serialization.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+// <copyright file="ModelBaseFacts.serialization.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -370,32 +370,6 @@ namespace Catel.Test.Data
         }
         #endregion
 
-        // Disabled because Fody weaver is disabled
-//#if NET
-//        [TestClass]
-//        public class TheGetXmlSchema
-//        {
-//            [TestMethod]
-//            public void GetsWeavedAndCallsXmlSchemaManager()
-//            {
-//                Type type = typeof (Group);
-
-//                var xmlSchemaProviderAttribute = (from attribute in type.GetCustomAttributes(typeof (XmlSchemaProviderAttribute), false)
-//                                                  select attribute as XmlSchemaProviderAttribute).FirstOrDefault();
-//                Assert.IsNotNull(xmlSchemaProviderAttribute);
-
-//                var methodName = xmlSchemaProviderAttribute.MethodName;
-//                var method = type.GetMethod(methodName, BindingFlags.Static | BindingFlags.Public);
-
-//                Assert.IsNotNull(method);
-
-//                var xmlSchemaSet = new XmlSchemaSet();
-//                var xmlResult = (XmlQualifiedName)method.Invoke(null, new object[] { xmlSchemaSet });
-//                Assert.IsNotNull(xmlResult);
-//            }
-//        }
-//#endif
-
         [TestClass]
         public class TheXmlSerialization
         {
@@ -480,6 +454,16 @@ namespace Catel.Test.Data
                 Assert.AreEqual("myRoot", newRoot.Name);
                 Assert.AreEqual(1, newRoot.Items.Count);
                 Assert.AreEqual("myChild", newRoot.Items[0].Name);
+            }
+
+            [TestMethod]
+            public void CanSerializeAndDeserializeComplexHierarchies()
+            {
+                var complexHierarchy = ComplexSerializationHierarchy.CreateComplexHierarchy();
+
+                var deserializedObject = SerializationTestHelper.SerializeAndDeserializeObject(complexHierarchy, SerializationMode.Xml);
+
+                Assert.IsTrue(complexHierarchy == deserializedObject);
             }
         }
 
