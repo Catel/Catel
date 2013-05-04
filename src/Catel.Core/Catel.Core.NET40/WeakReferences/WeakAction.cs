@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="WeakAction.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -140,7 +140,7 @@ namespace Catel
         /// Executes the action. This only happens if the action's target is still alive.
         /// </summary>
         /// <returns>
-        /// 	<c>true</c> if the action is executed successfully; otherwise <c>false</c>.
+        /// <c>true</c> if the action is executed successfully; otherwise <c>false</c>.
         /// </returns>
         public bool Execute()
         {

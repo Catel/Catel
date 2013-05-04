@@ -43,6 +43,21 @@ namespace Catel.Reflection
 
         private static readonly Dictionary<string, string> _assemblyMappings = new Dictionary<string, string>();
 
+#if SL4
+        private static readonly List<Assembly> _frameworkAssemblies = new List<Assembly>(); 
+#endif
+
+        /// <summary>
+        /// Initializes static members of the <see cref="AssemblyHelper"/> class.
+        /// </summary>
+        static AssemblyHelper()
+        {
+#if SL4
+            _frameworkAssemblies.Add(Assembly.Load("mscorlib"));
+            _frameworkAssemblies.Add(typeof(Uri).Assembly); // system
+#endif
+        }
+
 #if SL4 || SL5
         private static readonly List<Assembly> _externalAssemblies = new List<Assembly>();
 
@@ -204,9 +219,13 @@ namespace Catel.Reflection
         {
             var assemblies = new List<Assembly>();
 
-#if NET || NETFX_CORE
-            assemblies.AddRange(appDomain.GetAssemblies());
+#if SL4
+            assemblies.AddRange(_frameworkAssemblies);
 #else
+            assemblies.AddRange(appDomain.GetAssemblies());
+#endif
+
+#if SILVERLIGHT
             try
             {
                 if (Deployment.Current != null)
@@ -244,6 +263,10 @@ namespace Catel.Reflection
             assemblies.AddRange(_externalAssemblies);
 #endif
 #endif
+
+            // Make sure to prevent duplicates
+            assemblies = assemblies.Distinct().ToList();
+
             // Map all assemblies
             foreach (var assembly in assemblies)
             {

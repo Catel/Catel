@@ -143,7 +143,7 @@ namespace Catel.IoC
             Argument.IsNotNull("container", container);
 
             var type = GetContainerType(typeName, container);
-            return Activator.CreateInstance(type);
+            return TypeFactory.Default.CreateInstance(type);
         }
 
         /// <summary>

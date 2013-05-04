@@ -65,6 +65,7 @@ Added/fixed:
 (x) [CTL-65] Fixed issue where process tools in the EnvironmentHelper were not ignoring case for "blend.exe" and "devenv.exe"
 (x) [CTL-66] AutoRegistrationManager for ServiceLocator causes deadlock in design time
 (x) [CTL-72] Serialization issue with very complex hierarchies and xml serialization
+(x) [CTL-41] Silverlight TypeCache doesn't load types from mscorlib and system
 
 To-do:
 ======

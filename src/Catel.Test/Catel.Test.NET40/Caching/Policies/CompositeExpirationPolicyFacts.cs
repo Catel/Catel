@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SlidingExpirationPolicyFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+// <copyright file="CompositeExpirationPolicyFacts.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 namespace Catel.Test.Caching.Policies
@@ -44,9 +44,9 @@ namespace Catel.Test.Caching.Policies
             public void ReturnsFalseIfAllPolicyCanNotBeReset()
             {
                 Assert.IsFalse(new CompositeExpirationPolicy().Add(new CustomExpirationPolicy(() => true)).Add(new CustomExpirationPolicy(() => true)).CanReset);
-            }         
-            
-            #if NET 
+            }
+
+#if NET 
             
             [TestMethod]
             public void DoesNotCauseDeathLock()
@@ -72,8 +72,8 @@ namespace Catel.Test.Caching.Policies
                 events[1].WaitOne(TimeSpan.FromSeconds(10));
             }
             
-            #endif
-            
+#endif
+
             #endregion
         }
         #endregion
@@ -112,13 +112,13 @@ namespace Catel.Test.Caching.Policies
             public void ReturnsFalseIfAllPolicyNonExpiresWasConfiguredToExpireOnlyIfAllPolicyExpires()
             {
                 Assert.IsFalse(new CompositeExpirationPolicy(true).Add(new CustomExpirationPolicy(() => false)).Add(new CustomExpirationPolicy(() => false)).IsExpired);
-            }         
+            }
 
             [TestMethod]
             public void ReturnsFalseIfAllPolicyNonExpires()
             {
                 Assert.IsFalse(new CompositeExpirationPolicy().Add(new CustomExpirationPolicy(() => false)).Add(new CustomExpirationPolicy(() => false)).IsExpired);
-            }         
+            }
 
             #endregion
         }
@@ -143,14 +143,14 @@ namespace Catel.Test.Caching.Policies
             {
                 bool actionInvoked1 = false;
                 bool actionInvoked2 = false;
-           
+
                 new CompositeExpirationPolicy().Add(new CustomExpirationPolicy(() => true, () => actionInvoked1 = true)).Add(new CustomExpirationPolicy(() => true, () => actionInvoked2 = true)).Reset();
-                
+
                 Assert.IsTrue(actionInvoked1);
                 Assert.IsTrue(actionInvoked2);
             }
 
-            #if NET
+#if NET
 
             [TestMethod]
             public void DoesNotCauseDeathLockIfPolicyCanNotBeResetAndThrowsInvalidOperationException()
@@ -176,7 +176,7 @@ namespace Catel.Test.Caching.Policies
                 events[1].WaitOne(TimeSpan.FromSeconds(10));
             }
             
-            #endif 
+#endif
 
             #endregion
         }

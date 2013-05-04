@@ -221,6 +221,7 @@
     <Compile Include="Reflection\ReflectionExtensionsFacts.methodinfo.cs" />
     <Compile Include="Reflection\ReflectionExtensionsFacts.propertyinfo.cs" />
     <Compile Include="Reflection\ReflectionExtensionsFacts.type.cs" />
+    <Compile Include="Reflection\TypeCacheFacts.cs" />
     <Compile Include="Reflection\TypeHelperFacts.cs" />
     <Compile Include="Helpers\WindowHelper.cs" />
     <Compile Include="IoC\Configuration\IoCConfigurationSectionTests.cs" />
