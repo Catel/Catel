@@ -1,11 +1,14 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ModuleInitializer.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace Catel.Test
 {
+    using Catel.IoC;
+    using Catel.Test.EntityFramework5.DbContextTest.Repositories;
+
     /// <summary>
     /// Class that gets called as soon as the module is loaded.
     /// </summary>
@@ -21,6 +24,11 @@ namespace Catel.Test
         /// </summary>
         public static void Initialize()
         {
+                var serviceLocator = ServiceLocator.Default;
+
+                serviceLocator.RegisterType<IDbContextCustomerRepository, DbContextCustomerRepository>(RegistrationType.Transient);
+                serviceLocator.RegisterType<IDbContextOrderRepository, DbContextOrderRepository>(RegistrationType.Transient);
+                serviceLocator.RegisterType<IDbContextProductRepository, DbContextProductRepository>(RegistrationType.Transient);
         }
 
         #endregion

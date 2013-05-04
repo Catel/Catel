@@ -5,11 +5,11 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="7a8ba94c933941dca35b574b7c45a741" Name="Diagram1" >
-        <EntityTypeShape EntityType="TestDbContext.DbContextCustomer" Width="1.5" PointX="0.9386468850721823" PointY="15.918454430959399" />
-        <EntityTypeShape EntityType="TestDbContext.DbContextOrder" Width="1.5" PointX="10.422321410115027" PointY="8.42186308299278" />
-        <EntityTypeShape EntityType="TestDbContext.DbContextProduct" Width="1.5" PointX="8.42800565456413" PointY="21.023460695996629" />
-        <AssociationConnector Association="TestDbContext.FK_OrderCustomer" />
-        <AssociationConnector Association="TestDbContext.FK_ProductOrder" />
+        <EntityTypeShape EntityType="TestDbContext.DbContextCustomer" Width="1.5" PointX="4.0293545406448441" PointY="2.1323207328712197" />
+        <EntityTypeShape EntityType="TestDbContext.DbContextOrder" Width="1.5" PointX="3.3658496958044584" PointY="14.165268725792537" />
+        <EntityTypeShape EntityType="TestDbContext.DbContextProduct" Width="1.5" PointX="11.317090501690792" PointY="28.560883743949645" />
+        <AssociationConnector Association="TestDbContext.FK_DbContextOrder_DbContextCustomer" />
+        <AssociationConnector Association="TestDbContext.FK_DbContextOrder_DbContextProduct" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -9,7 +9,11 @@ namespace Catel.Test.EntityFramework5.DbContextTest.Repositories
 
     using Catel.Data.Repositories;
 
-    public class DbContextCustomerRepository : EntityRepositoryBase<DbContextCustomer, int>
+    public interface IDbContextCustomerRepository : IEntityRepository<DbContextCustomer, int>
+    {
+    }
+
+    public class DbContextCustomerRepository : EntityRepositoryBase<DbContextCustomer, int>, IDbContextCustomerRepository
     {
         public DbContextCustomerRepository(DbContext dbContext)
             : base(dbContext)

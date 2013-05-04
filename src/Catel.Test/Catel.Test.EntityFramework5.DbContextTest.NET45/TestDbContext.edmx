@@ -9,11 +9,11 @@
           <EntitySet Name="DbContextCustomer" EntityType="TestDbContext.Store.DbContextCustomer" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="DbContextOrder" EntityType="TestDbContext.Store.DbContextOrder" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="DbContextProduct" EntityType="TestDbContext.Store.DbContextProduct" store:Type="Tables" Schema="dbo" />
-          <AssociationSet Name="FK_OrderCustomer" Association="TestDbContext.Store.FK_OrderCustomer">
+          <AssociationSet Name="FK_DbContextOrder_DbContextCustomer" Association="TestDbContext.Store.FK_DbContextOrder_DbContextCustomer">
             <End Role="DbContextCustomer" EntitySet="DbContextCustomer" />
             <End Role="DbContextOrder" EntitySet="DbContextOrder" />
           </AssociationSet>
-          <AssociationSet Name="FK_ProductOrder" Association="TestDbContext.Store.FK_ProductOrder">
+          <AssociationSet Name="FK_DbContextOrder_DbContextProduct" Association="TestDbContext.Store.FK_DbContextOrder_DbContextProduct">
             <End Role="DbContextProduct" EntitySet="DbContextProduct" />
             <End Role="DbContextOrder" EntitySet="DbContextOrder" />
           </AssociationSet>
@@ -22,7 +22,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="None" />
+          <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Street" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Country" Type="nvarchar(max)" Nullable="false" />
@@ -36,17 +36,15 @@
           <Property Name="CustomerId" Type="int" Nullable="false" />
           <Property Name="OrderCreated" Type="datetime" Nullable="false" />
           <Property Name="Amount" Type="int" Nullable="false" />
-          <Property Name="Product_Id" Type="int" Nullable="false" />
-          <Property Name="Customer_Id" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="DbContextProduct">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
-        <Association Name="FK_OrderCustomer">
+        <Association Name="FK_DbContextOrder_DbContextCustomer">
           <End Role="DbContextCustomer" Type="TestDbContext.Store.DbContextCustomer" Multiplicity="1" />
           <End Role="DbContextOrder" Type="TestDbContext.Store.DbContextOrder" Multiplicity="*" />
           <ReferentialConstraint>
@@ -54,11 +52,11 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="DbContextOrder">
-              <PropertyRef Name="Customer_Id" />
+              <PropertyRef Name="CustomerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ProductOrder">
+        <Association Name="FK_DbContextOrder_DbContextProduct">
           <End Role="DbContextProduct" Type="TestDbContext.Store.DbContextProduct" Multiplicity="1" />
           <End Role="DbContextOrder" Type="TestDbContext.Store.DbContextOrder" Multiplicity="*" />
           <ReferentialConstraint>
@@ -66,7 +64,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="DbContextOrder">
-              <PropertyRef Name="Product_Id" />
+              <PropertyRef Name="ProductId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -78,11 +76,11 @@
           <EntitySet Name="DbContextCustomers" EntityType="TestDbContext.DbContextCustomer" />
           <EntitySet Name="DbContextOrders" EntityType="TestDbContext.DbContextOrder" />
           <EntitySet Name="DbContextProducts" EntityType="TestDbContext.DbContextProduct" />
-          <AssociationSet Name="FK_OrderCustomer" Association="TestDbContext.FK_OrderCustomer">
+          <AssociationSet Name="FK_DbContextOrder_DbContextCustomer" Association="TestDbContext.FK_DbContextOrder_DbContextCustomer">
             <End Role="DbContextCustomer" EntitySet="DbContextCustomers" />
             <End Role="DbContextOrder" EntitySet="DbContextOrders" />
           </AssociationSet>
-          <AssociationSet Name="FK_ProductOrder" Association="TestDbContext.FK_ProductOrder">
+          <AssociationSet Name="FK_DbContextOrder_DbContextProduct" Association="TestDbContext.FK_DbContextOrder_DbContextProduct">
             <End Role="DbContextProduct" EntitySet="DbContextProducts" />
             <End Role="DbContextOrder" EntitySet="DbContextOrders" />
           </AssociationSet>
@@ -91,11 +89,11 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Type="Int32" Name="Id" Nullable="false" a:StoreGeneratedPattern="None" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="Int32" Name="Id" Nullable="false" />
           <Property Type="String" Name="Name" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Street" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Country" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="DbContextOrders" Relationship="TestDbContext.FK_OrderCustomer" FromRole="DbContextCustomer" ToRole="DbContextOrder" />
+          <NavigationProperty Name="DbContextOrders" Relationship="TestDbContext.FK_DbContextOrder_DbContextCustomer" FromRole="DbContextCustomer" ToRole="DbContextOrder" />
         </EntityType>
         <EntityType Name="DbContextOrder">
           <Key>
@@ -106,20 +104,18 @@
           <Property Type="Int32" Name="CustomerId" Nullable="false" />
           <Property Type="DateTime" Name="OrderCreated" Nullable="false" Precision="3" />
           <Property Type="Int32" Name="Amount" Nullable="false" />
-          <Property Type="Int32" Name="Product_Id" Nullable="false" />
-          <Property Type="Int32" Name="Customer_Id" Nullable="false" />
-          <NavigationProperty Name="DbContextCustomer" Relationship="TestDbContext.FK_OrderCustomer" FromRole="DbContextOrder" ToRole="DbContextCustomer" />
-          <NavigationProperty Name="DbContextProduct" Relationship="TestDbContext.FK_ProductOrder" FromRole="DbContextOrder" ToRole="DbContextProduct" />
+          <NavigationProperty Name="DbContextCustomer" Relationship="TestDbContext.FK_DbContextOrder_DbContextCustomer" FromRole="DbContextOrder" ToRole="DbContextCustomer" />
+          <NavigationProperty Name="DbContextProduct" Relationship="TestDbContext.FK_DbContextOrder_DbContextProduct" FromRole="DbContextOrder" ToRole="DbContextProduct" />
         </EntityType>
         <EntityType Name="DbContextProduct">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Type="Int32" Name="Id" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="Int32" Name="Id" Nullable="false" />
           <Property Type="String" Name="Name" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="DbContextOrders" Relationship="TestDbContext.FK_ProductOrder" FromRole="DbContextProduct" ToRole="DbContextOrder" />
+          <NavigationProperty Name="DbContextOrders" Relationship="TestDbContext.FK_DbContextOrder_DbContextProduct" FromRole="DbContextProduct" ToRole="DbContextOrder" />
         </EntityType>
-        <Association Name="FK_OrderCustomer">
+        <Association Name="FK_DbContextOrder_DbContextCustomer">
           <End Type="TestDbContext.DbContextCustomer" Role="DbContextCustomer" Multiplicity="1" />
           <End Type="TestDbContext.DbContextOrder" Role="DbContextOrder" Multiplicity="*" />
           <ReferentialConstraint>
@@ -127,11 +123,11 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="DbContextOrder">
-              <PropertyRef Name="Customer_Id" />
+              <PropertyRef Name="CustomerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ProductOrder">
+        <Association Name="FK_DbContextOrder_DbContextProduct">
           <End Type="TestDbContext.DbContextProduct" Role="DbContextProduct" Multiplicity="1" />
           <End Type="TestDbContext.DbContextOrder" Role="DbContextOrder" Multiplicity="*" />
           <ReferentialConstraint>
@@ -139,7 +135,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="DbContextOrder">
-              <PropertyRef Name="Product_Id" />
+              <PropertyRef Name="ProductId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -164,8 +160,6 @@
           <EntitySetMapping Name="DbContextOrders">
             <EntityTypeMapping TypeName="TestDbContext.DbContextOrder">
               <MappingFragment StoreEntitySet="DbContextOrder">
-                <ScalarProperty Name="Customer_Id" ColumnName="Customer_Id" />
-                <ScalarProperty Name="Product_Id" ColumnName="Product_Id" />
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
                 <ScalarProperty Name="OrderCreated" ColumnName="OrderCreated" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />

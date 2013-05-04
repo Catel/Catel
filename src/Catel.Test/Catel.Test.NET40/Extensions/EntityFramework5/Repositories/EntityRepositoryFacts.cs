@@ -15,31 +15,6 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
 
     public class EntityRepositoryFacts
     {
-        private static DbContextCustomer CreateCustomer(int id)
-        {
-            var customer = new DbContextCustomer { Id = id, Name = "Geert van Horrik", Street = "Unknown", Country = "The Netherlands" };
-            return customer;
-        }
-
-        private static void CreateCustomerIfNotAlreadyExists(int id)
-        {
-            using (var dbContext = new TestDbContextContainer())
-            {
-                using (var repository = new DbContextCustomerRepository(dbContext))
-                {
-                    var existingCustomer = repository.FirstOrDefault(x => x.Id == id);
-                    if (existingCustomer == null)
-                    {
-                        var customer = CreateCustomer(id);
-
-                        repository.Add(customer);
-
-                        dbContext.SaveChanges();
-                    }
-                }
-            }
-        }
-
         [TestClass]
         public class TheConstructor
         {
@@ -72,7 +47,7 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
                 {
                     using (var repository = new DbContextCustomerRepository(dbContext))
                     {
-                        CreateCustomerIfNotAlreadyExists(42);
+                        EFTestHelper.CreateCustomerIfNotAlreadyExists(42);
 
                         var existingCustomer = repository.GetByKey(42);
 
@@ -104,7 +79,7 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
                 {
                     using (var repository = new DbContextCustomerRepository(dbContext))
                     {
-                        CreateCustomerIfNotAlreadyExists(1);
+                        EFTestHelper.CreateCustomerIfNotAlreadyExists(1);
 
                         var customer = repository.Single(x => x.Id == 1);
 
@@ -138,7 +113,7 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
                 {
                     using (var repository = new DbContextCustomerRepository(dbContext))
                     {
-                        CreateCustomerIfNotAlreadyExists(1);
+                        EFTestHelper.CreateCustomerIfNotAlreadyExists(1);
 
                         var customer = repository.SingleOrDefault(x => x.Id == 1);
 
@@ -171,7 +146,7 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
                 {
                     using (var repository = new DbContextCustomerRepository(dbContext))
                     {
-                        CreateCustomerIfNotAlreadyExists(1);
+                        EFTestHelper.CreateCustomerIfNotAlreadyExists(1);
 
                         var customer = repository.First();
 
@@ -205,7 +180,7 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
                 {
                     using (var repository = new DbContextCustomerRepository(dbContext))
                     {
-                        CreateCustomerIfNotAlreadyExists(1);
+                        EFTestHelper.CreateCustomerIfNotAlreadyExists(1);
 
                         var customer = repository.FirstOrDefault();
 
@@ -238,7 +213,7 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
                 {
                     using (var repository = new DbContextCustomerRepository(dbContext))
                     {
-                        var customer = CreateCustomer(1234);
+                        var customer = EFTestHelper.CreateCustomer(1234);
 
                         repository.Add(customer);
 
@@ -273,7 +248,7 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
                 {
                     using (var repository = new DbContextCustomerRepository(dbContext))
                     {
-                        var customer = CreateCustomer(1235);
+                        var customer = EFTestHelper.CreateCustomer(1235);
 
                         repository.Attach(customer);
 
@@ -308,7 +283,7 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
                 {
                     using (var repository = new DbContextCustomerRepository(dbContext))
                     {
-                        CreateCustomerIfNotAlreadyExists(201);
+                        EFTestHelper.CreateCustomerIfNotAlreadyExists(201);
 
                         var customer1 = repository.GetByKey(201);
 
@@ -346,9 +321,9 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
                 {
                     using (var repository = new DbContextCustomerRepository(dbContext))
                     {
-                        CreateCustomerIfNotAlreadyExists(201);
-                        CreateCustomerIfNotAlreadyExists(202);
-                        CreateCustomerIfNotAlreadyExists(203);
+                        EFTestHelper.CreateCustomerIfNotAlreadyExists(201);
+                        EFTestHelper.CreateCustomerIfNotAlreadyExists(202);
+                        EFTestHelper.CreateCustomerIfNotAlreadyExists(203);
 
                         repository.Delete(x => x.Id >= 201 && x.Id <= 203);
 
@@ -384,7 +359,7 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
                 {
                     using (var repository = new DbContextCustomerRepository(dbContext))
                     {
-                        CreateCustomerIfNotAlreadyExists(301);
+                        EFTestHelper.CreateCustomerIfNotAlreadyExists(301);
 
                         var customer1 = repository.GetByKey(301);
                         customer1.Name = "John Doe";
@@ -412,9 +387,9 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
                 {
                     using (var repository = new DbContextCustomerRepository(dbContext))
                     {
-                        CreateCustomerIfNotAlreadyExists(100);
-                        CreateCustomerIfNotAlreadyExists(101);
-                        CreateCustomerIfNotAlreadyExists(102);
+                        EFTestHelper.CreateCustomerIfNotAlreadyExists(100);
+                        EFTestHelper.CreateCustomerIfNotAlreadyExists(101);
+                        EFTestHelper.CreateCustomerIfNotAlreadyExists(102);
 
                         var customers = repository.Find(x => x.Id >= 100 && x.Id <= 102).ToList();
 
@@ -434,9 +409,9 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
                 {
                     using (var repository = new DbContextCustomerRepository(dbContext))
                     {
-                        CreateCustomerIfNotAlreadyExists(100);
-                        CreateCustomerIfNotAlreadyExists(101);
-                        CreateCustomerIfNotAlreadyExists(102);
+                        EFTestHelper.CreateCustomerIfNotAlreadyExists(100);
+                        EFTestHelper.CreateCustomerIfNotAlreadyExists(101);
+                        EFTestHelper.CreateCustomerIfNotAlreadyExists(102);
 
                         var customers = repository.GetAll().ToList();
 
@@ -456,9 +431,9 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
                 {
                     using (var repository = new DbContextCustomerRepository(dbContext))
                     {
-                        CreateCustomerIfNotAlreadyExists(100);
-                        CreateCustomerIfNotAlreadyExists(101);
-                        CreateCustomerIfNotAlreadyExists(102);
+                        EFTestHelper.CreateCustomerIfNotAlreadyExists(100);
+                        EFTestHelper.CreateCustomerIfNotAlreadyExists(101);
+                        EFTestHelper.CreateCustomerIfNotAlreadyExists(102);
 
                         var customerCount = repository.Count(x => x.Id >= 100 && x.Id <= 102);
 

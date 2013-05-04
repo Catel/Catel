@@ -18,8 +18,6 @@ namespace Catel.Test.EntityFramework5.DbContextTest
         public int CustomerId { get; set; }
         public System.DateTime OrderCreated { get; set; }
         public int Amount { get; set; }
-        public int Product_Id { get; set; }
-        public int Customer_Id { get; set; }
     
         public virtual DbContextCustomer DbContextCustomer { get; set; }
         public virtual DbContextProduct DbContextProduct { get; set; }

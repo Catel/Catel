@@ -9,7 +9,11 @@ namespace Catel.Test.EntityFramework5.DbContextTest.Repositories
 
     using Catel.Data.Repositories;
 
-    public class DbContextOrderRepository : EntityRepositoryBase<DbContextOrder, int>
+    public interface IDbContextOrderRepository : IEntityRepository<DbContextOrder, int>
+    {
+    }
+
+    public class DbContextOrderRepository : EntityRepositoryBase<DbContextOrder, int>, IDbContextOrderRepository
     {
         #region Constructors
         public DbContextOrderRepository(DbContext dbContext)
