@@ -372,5 +372,33 @@ namespace Catel.Data
         /// List of <see cref="IBusinessRuleValidationResult"/> items.
         /// </returns>
         List<IBusinessRuleValidationResult> GetBusinessRuleErrors(object tag);
+
+        /// <summary>
+        /// Adds the field validation result.
+        /// </summary>
+        /// <param name="fieldValidationResult">The field validation result.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="fieldValidationResult"/> is <c>null</c>.</exception>
+        void AddFieldValidationResult(IFieldValidationResult fieldValidationResult);
+
+        /// <summary>
+        /// Removes the field validation result.
+        /// </summary>
+        /// <param name="fieldValidationResult">The field validation result.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="fieldValidationResult"/> is <c>null</c>.</exception>
+        void RemoveFieldValidationResult(IFieldValidationResult fieldValidationResult);
+
+        /// <summary>
+        /// Adds the business rule validation result.
+        /// </summary>
+        /// <param name="businessRuleValidationResult">The business rule validation result.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="businessRuleValidationResult"/> is <c>null</c>.</exception>
+        void AddBusinessRuleValidationResult(IBusinessRuleValidationResult businessRuleValidationResult);
+
+        /// <summary>
+        /// Removes the business rule validation result.
+        /// </summary>
+        /// <param name="businessRuleValidationResult">The business rule validation result.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="businessRuleValidationResult"/> is <c>null</c>.</exception>
+        void RemoveBusinessRuleValidationResult(IBusinessRuleValidationResult businessRuleValidationResult);
     }
 }

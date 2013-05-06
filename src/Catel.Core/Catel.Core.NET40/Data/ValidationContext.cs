@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ValidationContext.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -310,7 +310,7 @@ namespace Catel.Data
             lock (_fieldValidations)
             {
                 var list = (from validation in _fieldValidations
-                            where string.Compare(validation.PropertyName, propertyName) == 0
+                            where string.Equals(validation.PropertyName, propertyName, StringComparison.OrdinalIgnoreCase)
                             select validation).ToList();
 
                 return list;
@@ -331,7 +331,7 @@ namespace Catel.Data
             lock (_fieldValidations)
             {
                 var list = (from validation in _fieldValidations
-                            where string.Compare(validation.PropertyName, propertyName) == 0 &&
+                            where string.Equals(validation.PropertyName, propertyName, StringComparison.OrdinalIgnoreCase) &&
                                   TagHelper.AreTagsEqual(validation.Tag, tag)
                             select validation).ToList();
 
@@ -407,7 +407,7 @@ namespace Catel.Data
             lock (_fieldValidations)
             {
                 var list = (from validation in _fieldValidations
-                            where string.Compare(validation.PropertyName, propertyName) == 0 &&
+                            where string.Equals(validation.PropertyName, propertyName, StringComparison.OrdinalIgnoreCase) &&
                                   validation.ValidationResultType == ValidationResultType.Warning
                             select validation).ToList();
 
@@ -431,7 +431,7 @@ namespace Catel.Data
             lock (_fieldValidations)
             {
                 var list = (from validation in _fieldValidations
-                            where string.Compare(validation.PropertyName, propertyName) == 0 &&
+                            where string.Equals(validation.PropertyName, propertyName, StringComparison.OrdinalIgnoreCase) &&
                                   validation.ValidationResultType == ValidationResultType.Warning &&
                                   TagHelper.AreTagsEqual(validation.Tag, tag)
                             select validation).ToList();
@@ -512,7 +512,7 @@ namespace Catel.Data
             lock (_fieldValidations)
             {
                 var list = (from validation in _fieldValidations
-                            where string.Compare(validation.PropertyName, propertyName) == 0 &&
+                            where string.Equals(validation.PropertyName, propertyName, StringComparison.OrdinalIgnoreCase) &&
                                   validation.ValidationResultType == ValidationResultType.Error
                             select validation).ToList();
 
@@ -536,7 +536,7 @@ namespace Catel.Data
             lock (_fieldValidations)
             {
                 var list = (from validation in _fieldValidations
-                            where string.Compare(validation.PropertyName, propertyName) == 0 &&
+                            where string.Equals(validation.PropertyName, propertyName, StringComparison.OrdinalIgnoreCase) &&
                                   validation.ValidationResultType == ValidationResultType.Error &&
                                   TagHelper.AreTagsEqual(validation.Tag, tag)
                             select validation).ToList();
@@ -731,11 +731,14 @@ namespace Catel.Data
         /// </summary>
         /// <param name="fieldValidationResult">The field validation result.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="fieldValidationResult"/> is <c>null</c>.</exception>
-        internal void AddFieldValidationResult(IFieldValidationResult fieldValidationResult)
+        public void AddFieldValidationResult(IFieldValidationResult fieldValidationResult)
         {
             Argument.IsNotNull("fieldValidationResult", fieldValidationResult);
 
-            _fieldValidations.Add(fieldValidationResult);
+            lock (_fieldValidations)
+            {
+                _fieldValidations.Add(fieldValidationResult);
+            }
         }
 
         /// <summary>
@@ -743,11 +746,14 @@ namespace Catel.Data
         /// </summary>
         /// <param name="fieldValidationResult">The field validation result.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="fieldValidationResult"/> is <c>null</c>.</exception>
-        internal void RemoveFieldValidationResult(IFieldValidationResult fieldValidationResult)
+        public void RemoveFieldValidationResult(IFieldValidationResult fieldValidationResult)
         {
             Argument.IsNotNull("fieldValidationResult", fieldValidationResult);
 
-            _fieldValidations.Remove(fieldValidationResult);
+            lock (_fieldValidations)
+            {
+                _fieldValidations.Remove(fieldValidationResult);
+            }
         }
 
         /// <summary>
@@ -755,11 +761,14 @@ namespace Catel.Data
         /// </summary>
         /// <param name="businessRuleValidationResult">The business rule validation result.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="businessRuleValidationResult"/> is <c>null</c>.</exception>
-        internal void AddBusinessRuleValidationResult(IBusinessRuleValidationResult businessRuleValidationResult)
+        public void AddBusinessRuleValidationResult(IBusinessRuleValidationResult businessRuleValidationResult)
         {
             Argument.IsNotNull("businessRuleValidationResult", businessRuleValidationResult);
 
-            _businessRuleValidations.Add(businessRuleValidationResult);
+            lock (_businessRuleValidations)
+            {
+                _businessRuleValidations.Add(businessRuleValidationResult);
+            }
         }
 
         /// <summary>
@@ -767,11 +776,14 @@ namespace Catel.Data
         /// </summary>
         /// <param name="businessRuleValidationResult">The business rule validation result.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="businessRuleValidationResult"/> is <c>null</c>.</exception>
-        internal void RemoveBusinessRuleValidationResult(IBusinessRuleValidationResult businessRuleValidationResult)
+        public void RemoveBusinessRuleValidationResult(IBusinessRuleValidationResult businessRuleValidationResult)
         {
             Argument.IsNotNull("businessRuleValidationResult", businessRuleValidationResult);
 
-            _businessRuleValidations.Remove(businessRuleValidationResult);
+            lock (_businessRuleValidations)
+            {
+                _businessRuleValidations.Remove(businessRuleValidationResult);
+            }
         }
         #endregion
     }

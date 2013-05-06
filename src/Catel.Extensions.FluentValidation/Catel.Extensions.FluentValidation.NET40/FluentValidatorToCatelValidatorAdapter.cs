@@ -67,7 +67,7 @@ namespace Catel
         /// </summary>
         /// <param name="instance">The instance.</param>
         /// <param name="validationResults">The validation results.</param>
-        public override void ValidateBusinessRules(ModelBase instance, List<IBusinessRuleValidationResult> validationResults)
+        protected override void ValidateBusinessRules(ModelBase instance, List<IBusinessRuleValidationResult> validationResults)
         {
             if (_validatorDescriptionAttribute.ValidationType == ValidationType.BusinessRule)
             {
@@ -89,7 +89,7 @@ namespace Catel
         /// </summary>
         /// <param name="instance">The instance.</param>
         /// <param name="validationResults">The validation results.</param>
-        public override void ValidateFields(ModelBase instance, List<IFieldValidationResult> validationResults)
+        protected override void ValidateFields(ModelBase instance, List<IFieldValidationResult> validationResults)
         {
             if (_validatorDescriptionAttribute.ValidationType == ValidationType.Field)
             {

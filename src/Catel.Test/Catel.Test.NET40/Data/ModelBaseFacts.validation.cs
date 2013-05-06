@@ -469,6 +469,8 @@ namespace Catel.Test.Data
 
                 classWithValidator.Validate(true);
 
+                Assert.AreEqual(1, validator.ValidateCount);
+
                 Assert.AreEqual(1, validator.BeforeValidationCount);
 
                 Assert.AreEqual(1, validator.BeforeValidateFieldsCount);
@@ -555,7 +557,7 @@ namespace Catel.Test.Data
 
             public class TestValidator : ValidatorBase<TestValidatorModel>
             {
-                public override void ValidateFields(TestValidatorModel instance, List<IFieldValidationResult> validationResults)
+                protected override void ValidateFields(TestValidatorModel instance, List<IFieldValidationResult> validationResults)
                 {
                     if (string.IsNullOrWhiteSpace(instance.FirstName))
                     {
@@ -566,10 +568,6 @@ namespace Catel.Test.Data
                     {
                         validationResults.Add(FieldValidationResult.CreateError(TestValidatorModel.FirstNameProperty, "First name is required"));
                     }
-                }
-
-                public override void ValidateBusinessRules(TestValidatorModel instance, List<IBusinessRuleValidationResult> validationResults)
-                {
                 }
             }
 

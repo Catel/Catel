@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ValidatorBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -8,7 +8,6 @@ namespace Catel.Data
 {
     using System;
     using System.Collections.Generic;
-    using Logging;
     using Catel.Reflection;
 
     /// <summary>
@@ -21,9 +20,33 @@ namespace Catel.Data
         where TTargetType : class
     {
         /// <summary>
-        /// The log.
+        /// Validates the specified instance and allows the manipulation of the whole validation context.
+        /// <para />
+        /// This method can be used to manipulate the whole validation context and the implementation of this is enough.
         /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        /// <param name="instance">The instance to validate.</param>
+        /// <param name="validationContext">The validation context.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="instance"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="validationContext"/> is <c>null</c>.</exception>
+        public void Validate(object instance, ValidationContext validationContext)
+        {
+            var typedInstance = TypeHelper.GetTypedInstance<TTargetType>(instance);
+            Validate(typedInstance, validationContext);
+        }
+
+        /// <summary>
+        /// Validates the specified instance and allows the manipulation of the whole validation context.
+        /// <para />
+        /// This method can be used to manipulate the whole validation context and the implementation of this is enough.
+        /// </summary>
+        /// <param name="instance">The instance to validate.</param>
+        /// <param name="validationContext">The validation context.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="instance"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="validationContext"/> is <c>null</c>.</exception>
+        protected virtual void Validate(TTargetType instance, ValidationContext validationContext)
+        {
+            // No implementation by default
+        }
 
         /// <summary>
         /// Called just before any validation is caused.
@@ -51,13 +74,9 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="instance"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="previousFieldValidationResults"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="previousBusinessRuleValidationResults"/> is <c>null</c>.</exception>
-        public virtual void BeforeValidation(TTargetType instance, List<IFieldValidationResult> previousFieldValidationResults,
+        protected virtual void BeforeValidation(TTargetType instance, List<IFieldValidationResult> previousFieldValidationResults,
             List<IBusinessRuleValidationResult> previousBusinessRuleValidationResults)
         {
-            Argument.IsNotNull("instance", instance);
-            Argument.IsNotNull("previousFieldValidationResults", previousFieldValidationResults);
-            Argument.IsNotNull("previousBusinessRuleValidationResults", previousBusinessRuleValidationResults);
-
             // No implementation by default
         }
 
@@ -82,11 +101,8 @@ namespace Catel.Data
         /// <param name="previousValidationResults">The validation results.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="instance"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="previousValidationResults"/> is <c>null</c>.</exception>
-        public virtual void BeforeValidateFields(TTargetType instance, List<IFieldValidationResult> previousValidationResults)
+        protected virtual void BeforeValidateFields(TTargetType instance, List<IFieldValidationResult> previousValidationResults)
         {
-            Argument.IsNotNull("instance", instance);
-            Argument.IsNotNull("previousValidationResults", previousValidationResults);
-
             // No implementation by default
         }
 
@@ -116,7 +132,10 @@ namespace Catel.Data
         /// <remarks>
         /// There is no need to check for the arguments, they are already ensured to be correct in the <see cref="ValidatorBase{TTargetType}"/>.
         /// </remarks>
-        public abstract void ValidateFields(TTargetType instance, List<IFieldValidationResult> validationResults);
+        protected virtual void ValidateFields(TTargetType instance, List<IFieldValidationResult> validationResults)
+        {
+            // No implementation by default
+        }
 
         /// <summary>
         /// Called just after the specified instance has validated its fields.
@@ -139,11 +158,8 @@ namespace Catel.Data
         /// <param name="validationResults">The validation results.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="instance"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="validationResults"/> is <c>null</c>.</exception>
-        public virtual void AfterValidateFields(TTargetType instance, List<IFieldValidationResult> validationResults)
+        protected virtual void AfterValidateFields(TTargetType instance, List<IFieldValidationResult> validationResults)
         {
-            Argument.IsNotNull("instance", instance);
-            Argument.IsNotNull("validationResults", validationResults);
-
             // No implementation by default
         }
 
@@ -168,11 +184,8 @@ namespace Catel.Data
         /// <param name="previousValidationResults">The validation results.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="instance"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="previousValidationResults"/> is <c>null</c>.</exception>
-        public virtual void BeforeValidateBusinessRules(TTargetType instance, List<IBusinessRuleValidationResult> previousValidationResults)
+        protected virtual void BeforeValidateBusinessRules(TTargetType instance, List<IBusinessRuleValidationResult> previousValidationResults)
         {
-            Argument.IsNotNull("instance", instance);
-            Argument.IsNotNull("previousValidationResults", previousValidationResults);
-
             // No implementation by default
         }
 
@@ -202,7 +215,10 @@ namespace Catel.Data
         /// <remarks>
         /// There is no need to check for the arguments, they are already ensured to be correct in the <see cref="ValidatorBase{TTargetType}"/>.
         /// </remarks>
-        public abstract void ValidateBusinessRules(TTargetType instance, List<IBusinessRuleValidationResult> validationResults);
+        protected virtual void ValidateBusinessRules(TTargetType instance, List<IBusinessRuleValidationResult> validationResults)
+        {
+            // No implementation by default
+        }
 
         /// <summary>
         /// Called just after the specified instance has validated its business rules.
@@ -225,11 +241,8 @@ namespace Catel.Data
         /// <param name="validationResults">The validation results.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="instance"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="validationResults"/> is <c>null</c>.</exception>
-        public virtual void AfterValidateBusinessRules(TTargetType instance, List<IBusinessRuleValidationResult> validationResults)
+        protected virtual void AfterValidateBusinessRules(TTargetType instance, List<IBusinessRuleValidationResult> validationResults)
         {
-            Argument.IsNotNull("instance", instance);
-            Argument.IsNotNull("validationResults", validationResults);
-
             // No implementation by default
         }
 
@@ -259,13 +272,9 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="instance"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="fieldValidationResults"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="businessRuleValidationResults"/> is <c>null</c>.</exception>
-        public virtual void AfterValidation(TTargetType instance, List<IFieldValidationResult> fieldValidationResults,
+        protected virtual void AfterValidation(TTargetType instance, List<IFieldValidationResult> fieldValidationResults,
             List<IBusinessRuleValidationResult> businessRuleValidationResults)
         {
-            Argument.IsNotNull("instance", instance);
-            Argument.IsNotNull("fieldValidationResults", fieldValidationResults);
-            Argument.IsNotNull("businessRuleValidationResults", businessRuleValidationResults);
-
             // No implementation by default
         }
     }

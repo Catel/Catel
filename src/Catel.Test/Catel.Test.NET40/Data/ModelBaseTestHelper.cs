@@ -1805,23 +1805,30 @@ namespace Catel.Test.Data
 
     public class TestValidator : ValidatorBase<ClassWithValidator>
     {
+        public int ValidateCount { get; private set; }
+
+        protected override void Validate(ClassWithValidator instance, Catel.Data.ValidationContext validationContext)
+        {
+            ValidateCount++;
+        }
+
         public int BeforeValidationCount { get; private set; }
 
-        public override void BeforeValidation(ClassWithValidator instance, List<IFieldValidationResult> previousFieldValidationResults, List<IBusinessRuleValidationResult> previousBusinessRuleValidationResults)
+        protected override void BeforeValidation(ClassWithValidator instance, List<IFieldValidationResult> previousFieldValidationResults, List<IBusinessRuleValidationResult> previousBusinessRuleValidationResults)
         {
             BeforeValidationCount++;
         }
 
         public int BeforeValidateFieldsCount { get; private set; }
 
-        public override void BeforeValidateFields(ClassWithValidator instance, List<IFieldValidationResult> previousValidationResults)
+        protected override void BeforeValidateFields(ClassWithValidator instance, List<IFieldValidationResult> previousValidationResults)
         {
             BeforeValidateFieldsCount++;
         }
 
         public int ValidateFieldsCount { get; private set; }
 
-        public override void ValidateFields(ClassWithValidator instance, List<IFieldValidationResult> validationResults)
+        protected override void ValidateFields(ClassWithValidator instance, List<IFieldValidationResult> validationResults)
         {
             ValidateFieldsCount++;
 
@@ -1831,21 +1838,21 @@ namespace Catel.Test.Data
 
         public int AfterValidateFieldsCount { get; private set; }
 
-        public override void AfterValidateFields(ClassWithValidator instance, List<IFieldValidationResult> validationResults)
+        protected override void AfterValidateFields(ClassWithValidator instance, List<IFieldValidationResult> validationResults)
         {
             AfterValidateFieldsCount++;
         }
 
         public int BeforeValidateBusinessRulesCount { get; private set; }
 
-        public override void BeforeValidateBusinessRules(ClassWithValidator instance, List<IBusinessRuleValidationResult> previousValidationResults)
+        protected override void BeforeValidateBusinessRules(ClassWithValidator instance, List<IBusinessRuleValidationResult> previousValidationResults)
         {
             BeforeValidateBusinessRulesCount++;
         }
 
         public int ValidateBusinessRulesCount { get; private set; }
 
-        public override void ValidateBusinessRules(ClassWithValidator instance, List<IBusinessRuleValidationResult> validationResults)
+        protected override void ValidateBusinessRules(ClassWithValidator instance, List<IBusinessRuleValidationResult> validationResults)
         {
             ValidateBusinessRulesCount++;
 
@@ -1854,14 +1861,14 @@ namespace Catel.Test.Data
 
         public int AfterValidateBusinessRulesCount { get; private set; }
 
-        public override void AfterValidateBusinessRules(ClassWithValidator instance, List<IBusinessRuleValidationResult> validationResults)
+        protected override void AfterValidateBusinessRules(ClassWithValidator instance, List<IBusinessRuleValidationResult> validationResults)
         {
             AfterValidateBusinessRulesCount++;
         }
 
         public int AfterValidationCount { get; private set; }
 
-        public override void AfterValidation(ClassWithValidator instance, List<IFieldValidationResult> fieldValidationResults, List<IBusinessRuleValidationResult> businessRuleValidationResults)
+        protected override void AfterValidation(ClassWithValidator instance, List<IFieldValidationResult> fieldValidationResults, List<IBusinessRuleValidationResult> businessRuleValidationResults)
         {
             AfterValidationCount++;
         }

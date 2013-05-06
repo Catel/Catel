@@ -37,35 +37,27 @@ namespace Catel.Data
         /// <summary>
         /// Adds the validator to this composite validator.
         /// </summary>
-        /// <param name="validator">
-        /// The validator to add.
-        /// </param>
-        /// <exception cref="ArgumentNullException">
-        /// The <paramref name="validator"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="validator">The validator to add.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="validator" /> is <c>null</c>.</exception>
         public void Add(IValidator validator)
         {
             Argument.IsNotNull("validator", validator);
 
             _synchronizationContext.Execute(
                 () =>
+                {
+                    if (!_validators.Contains(validator))
                     {
-                        if (!_validators.Contains(validator))
-                        {
-                            _validators.Add(validator);
-                        }
-                    });
+                        _validators.Add(validator);
+                    }
+                });
         }
 
         /// <summary>
         /// Removes the validator from this composite validator.
         /// </summary>
-        /// <param name="validator">
-        /// The validator to remove.
-        /// </param>
-        /// <exception cref="ArgumentNullException">
-        /// The <paramref name="validator"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="validator">The validator to remove.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="validator" /> is <c>null</c>.</exception>
         public void Remove(IValidator validator)
         {
             Argument.IsNotNull("validator", validator);
@@ -76,20 +68,39 @@ namespace Catel.Data
         /// <summary>
         /// Determines whether this composite validator contains the specified validator.
         /// </summary>
-        /// <param name="validator">
-        /// The validator.
-        /// </param>
-        /// <returns>
-        /// <c>true</c> if this composite validator contains the specified validator; otherwise, <c>false</c>.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">
-        /// The <paramref name="validator"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="validator">The validator.</param>
+        /// <returns><c>true</c> if this composite validator contains the specified validator; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="validator" /> is <c>null</c>.</exception>
         public bool Contains(IValidator validator)
         {
             Argument.IsNotNull("validator", validator);
 
             return _synchronizationContext.Execute(() => _validators.Contains(validator));
+        }
+
+        /// <summary>
+        /// Validates the specified instance and allows the manipulation of the whole validation context.
+        /// <para />
+        /// This method can be used to manipulate the whole validation context and the implementation of this is enough.
+        /// </summary>
+        /// <param name="instance">The instance to validate.</param>
+        /// <param name="validationContext">The validation context.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="instance"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="validationContext"/> is <c>null</c>.</exception>
+        public void Validate(object instance, ValidationContext validationContext)
+        {
+            try
+            {
+                foreach (IValidator validator in _validators)
+                {
+                    validator.Validate(instance, validationContext);
+                }
+            }
+            catch (Exception)
+            {
+                _synchronizationContext.Release();
+                throw;
+            }
         }
 
         /// <summary>
@@ -116,6 +127,7 @@ namespace Catel.Data
         public void BeforeValidation(object instance, List<IFieldValidationResult> previousFieldValidationResults, List<IBusinessRuleValidationResult> previousBusinessRuleValidationResults)
         {
             _synchronizationContext.Acquire();
+
             try
             {
                 foreach (IValidator validator in _validators)
@@ -125,7 +137,7 @@ namespace Catel.Data
             }
             catch (Exception)
             {
-                _synchronizationContext.Release(); 
+                _synchronizationContext.Release();
                 throw;
             }
         }
@@ -156,7 +168,7 @@ namespace Catel.Data
             }
             catch (Exception)
             {
-                _synchronizationContext.Release(); 
+                _synchronizationContext.Release();
                 throw;
             }
         }

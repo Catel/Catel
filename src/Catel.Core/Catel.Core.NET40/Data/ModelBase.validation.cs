@@ -788,6 +788,11 @@ namespace Catel.Data
                     }
                     #endregion
 
+                    if (validator != null)
+                    {
+                        validator.Validate(this, validationContext);
+                    }
+
                     IsValidated = true;
 
                     // Clear internal validation

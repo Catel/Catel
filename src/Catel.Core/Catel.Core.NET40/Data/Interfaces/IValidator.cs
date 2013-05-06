@@ -15,6 +15,17 @@ namespace Catel.Data
     public interface IValidator
     {
         /// <summary>
+        /// Validates the specified instance and allows the manipulation of the whole validation context.
+        /// <para />
+        /// This method can be used to manipulate the whole validation context and the implementation of this is enough.
+        /// </summary>
+        /// <param name="instance">The instance to validate.</param>
+        /// <param name="validationContext">The validation context.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="instance"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="validationContext"/> is <c>null</c>.</exception>
+        void Validate(object instance, ValidationContext validationContext);
+
+        /// <summary>
         /// Called just before any validation is caused.
         /// </summary>
         /// <param name="instance">The instance that is about to be validated.</param>
