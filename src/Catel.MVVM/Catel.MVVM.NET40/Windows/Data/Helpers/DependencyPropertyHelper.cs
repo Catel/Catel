@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DependencyPropertyHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -8,6 +8,9 @@ namespace Catel.Windows.Data
 {
     using System;
     using System.Collections.Generic;
+
+    using Catel.Caching;
+
     using Reflection;
 
 #if NETFX_CORE
@@ -24,7 +27,7 @@ namespace Catel.Windows.Data
         /// <summary>
         /// Cache containing all dependency properties of a specific type.
         /// </summary>
-        private static readonly Dictionary<Type, List<DependencyProperty>> _cacheByParentType = new Dictionary<Type, List<DependencyProperty>>();
+        private static readonly Dictionary<Type, List<DependencyPropertyInfo>> _cacheByParentType = new Dictionary<Type, List<DependencyPropertyInfo>>();
 
         /// <summary>
         /// Cache containing a dependency property based on the type + propertyname, where the key is generated using the
@@ -39,12 +42,17 @@ namespace Catel.Windows.Data
         private static readonly Dictionary<DependencyProperty, string> _cacheByDependencyProperty = new Dictionary<DependencyProperty, string>();
 
         /// <summary>
+        /// The cache for the cache keys.
+        /// </summary>
+        private static readonly ICacheStorage<Type, string> _cacheKeyCache = new CacheStorage<Type, string>();  
+
+        /// <summary>
         /// Gets all dependency properties of the specified <see cref="FrameworkElement"/>.
         /// </summary>
         /// <param name="frameworkElement">The framework element.</param>
         /// <returns>List containing all dependency properties of the specified <see cref="FrameworkElement"/>.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="frameworkElement"/> is <c>null</c>.</exception>
-        public static List<DependencyProperty> GetDependencyProperties(this FrameworkElement frameworkElement)
+        public static List<DependencyPropertyInfo> GetDependencyProperties(this FrameworkElement frameworkElement)
         {
             Argument.IsNotNull("frameworkElement", frameworkElement);
 
@@ -99,7 +107,9 @@ namespace Catel.Windows.Data
         {
             Argument.IsNotNull("frameworkElement", frameworkElement);
 
-            return frameworkElement.GetType().FullName.Replace(".", "_");
+            var frameworkElementType = frameworkElement.GetType();
+
+            return _cacheKeyCache.GetFromCacheOrFetch(frameworkElementType, () => frameworkElement.GetType().FullName.Replace(".", "_"));
         }
 
         /// <summary>
@@ -133,11 +143,9 @@ namespace Catel.Windows.Data
                 return;
             }
 
-            var properties = new List<DependencyProperty>();
+            var properties = new List<DependencyPropertyInfo>();
 
             var parentType = type;
-            //while (parentType != null)
-            //{
             var fields = parentType.GetFieldsEx(BindingFlagsHelper.GetFinalBindingFlags(true, true));
             foreach (var field in fields)
             {
@@ -158,15 +166,13 @@ namespace Catel.Windows.Data
                     }
                         
                     var dependencyProperty = (DependencyProperty) field.GetValue(frameworkElement);
-                    properties.Add(dependencyProperty);
+                    properties.Add(new DependencyPropertyInfo(dependencyProperty, name));
 
                     var propertyKey = GetDependencyPropertyCacheKey(frameworkElement, name);
                     _cacheByPropertyName[propertyKey] = dependencyProperty;
                     _cacheByDependencyProperty[dependencyProperty] = name;
                 }
             }
-            //parentType = parentType.BaseType;
-            //}
 
             _cacheByParentType[type] = properties;
         }

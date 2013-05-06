@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DependencyPropertyChangedHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -88,8 +88,7 @@ namespace Catel.Windows.Data
             var dependencyProperties = frameworkElement.GetDependencyProperties();
             foreach (var dependencyProperty in dependencyProperties)
             {
-                var propertyName = frameworkElement.GetDependencyPropertyName(dependencyProperty);
-                SubscribeToDependencyProperty(frameworkElement, propertyName, handler);
+                SubscribeToDependencyProperty(frameworkElement, dependencyProperty.PropertyName, handler);
             }
         }
 
@@ -108,8 +107,7 @@ namespace Catel.Windows.Data
             var dependencyProperties = frameworkElement.GetDependencyProperties();
             foreach (var dependencyProperty in dependencyProperties)
             {
-                var propertyName = frameworkElement.GetDependencyPropertyName(dependencyProperty);
-                UnsubscribeFromDependencyProperty(frameworkElement, propertyName, handler);
+                UnsubscribeFromDependencyProperty(frameworkElement, dependencyProperty.PropertyName, handler);
             }
         }
 

@@ -142,6 +142,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.zh-CHS.resx</DependentUpon>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Helpers\DependencyPropertyInfo.cs">
+      <Link>Windows\Data\Helpers\DependencyPropertyInfo.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Windows\DataWindow\DataWindow.cs">
       <Link>Windows\Windows\DataWindow\DataWindow.cs</Link>
     </Compile>

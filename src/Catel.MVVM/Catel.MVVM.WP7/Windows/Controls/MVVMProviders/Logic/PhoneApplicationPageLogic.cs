@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PhoneApplicationPageLogic.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -69,7 +69,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// Default value is <c>true</c>.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if the back key cancels the view model; otherwise, <c>false</c>.
+        /// <c>true</c> if the back key cancels the view model; otherwise, <c>false</c>.
         /// </value>
         public bool BackKeyCancelsViewModel { get; set; }
 

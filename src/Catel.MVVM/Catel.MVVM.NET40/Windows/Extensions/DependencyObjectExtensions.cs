@@ -19,6 +19,9 @@ namespace Catel.Windows
     using System.Windows;
     using System.Windows.Data;
     using System.Windows.Media;
+
+    using Catel.Windows.Data;
+
 #endif
 
     /// <summary>
@@ -414,16 +417,16 @@ namespace Catel.Windows
         public static IEnumerable<BindingExpression> GetBindingExpressions(this FrameworkElement element, bool recursive = false)
         {
             var bindings = new List<BindingExpression>();
-            var dpList = new List<DependencyProperty>();
+            var dpList = new List<DependencyPropertyInfo>();
 
             //dpList.AddRange(GetDependencyProperties(element));
             //dpList.AddRange(GetAttachedProperties(element));
 
-            dpList.AddRange(Data.DependencyPropertyHelper.GetDependencyProperties(element));
+            dpList.AddRange(element.GetDependencyProperties());
 
-            foreach (DependencyProperty dp in dpList)
+            foreach (var dp in dpList)
             {
-                var bindingExpression = BindingOperations.GetBindingExpression(element, dp);
+                var bindingExpression = BindingOperations.GetBindingExpression(element, dp.DependencyProperty);
                 if (bindingExpression != null)
                 {
                     bindings.Add(bindingExpression);

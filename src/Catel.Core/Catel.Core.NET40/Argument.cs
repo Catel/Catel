@@ -43,11 +43,9 @@ namespace Catel
         [DebuggerStepThrough]
         public static void IsNotNull(string paramName, object paramValue)
         {
-            EnsureValidParamName(paramName);
-
             if (paramValue == null)
             {
-                Log.Error("Argument '{0}' cannot be null", paramName);
+                Log.Error("Argument '{0}' cannot be null", ObjectToStringHelper.ToString(paramName));
                 throw new ArgumentNullException(paramName);
             }
         }
@@ -62,11 +60,9 @@ namespace Catel
         [DebuggerStepThrough]
         public static void IsNotNullOrEmpty(string paramName, string paramValue)
         {
-            EnsureValidParamName(paramName);
-
             if (string.IsNullOrEmpty(paramValue))
             {
-                string error = string.Format("Argument '{0}' cannot be null or empty", paramName);
+                string error = string.Format("Argument '{0}' cannot be null or empty", ObjectToStringHelper.ToString(paramName));
 
                 Log.Error(error);
 
@@ -96,11 +92,9 @@ namespace Catel
         [DebuggerStepThrough]
         public static void IsNotNullOrEmpty(string paramName, Guid? paramValue)
         {
-            EnsureValidParamName(paramName);
-
             if (!paramValue.HasValue || paramValue.Value == Guid.Empty)
             {
-                string error = string.Format("Argument '{0}' cannot be null or Guid.Empty", paramName);
+                string error = string.Format("Argument '{0}' cannot be null or Guid.Empty", ObjectToStringHelper.ToString(paramName));
 
                 Log.Error(error);
 
@@ -118,11 +112,9 @@ namespace Catel
         [DebuggerStepThrough]
         public static void IsNotNullOrWhitespace(string paramName, string paramValue)
         {
-            EnsureValidParamName(paramName);
-
             if (string.IsNullOrEmpty(paramValue) || (string.CompareOrdinal(paramValue.Trim(), string.Empty) == 0))
             {
-                string error = string.Format("Argument '{0}' cannot be null or whitespace", paramName);
+                string error = string.Format("Argument '{0}' cannot be null or whitespace", ObjectToStringHelper.ToString(paramName));
 
                 Log.Error(error);
 
@@ -140,11 +132,9 @@ namespace Catel
         [DebuggerStepThrough]
         public static void IsNotNullOrEmptyArray(string paramName, Array paramValue)
         {
-            EnsureValidParamName(paramName);
-
             if ((paramValue == null) || (paramValue.Length == 0))
             {
-                string error = string.Format("Argument '{0}' cannot be null or an empty array", paramName);
+                string error = string.Format("Argument '{0}' cannot be null or an empty array", ObjectToStringHelper.ToString(paramName));
 
                 Log.Error(error);
 
@@ -167,13 +157,11 @@ namespace Catel
         [DebuggerStepThrough]
         public static void IsNotOutOfRange<T>(string paramName, T paramValue, T minimumValue, T maximumValue, Func<T, T, T, bool> validation)
         {
-            EnsureValidParamName(paramName);
-
             IsNotNull("validation", validation);
 
             if (!validation(paramValue, minimumValue, maximumValue))
             {
-                string error = string.Format("Argument '{0}' should be between {1} and {2}", paramName, minimumValue, maximumValue);
+                string error = string.Format("Argument '{0}' should be between {1} and {2}", ObjectToStringHelper.ToString(paramName), minimumValue, maximumValue);
 
                 Log.Error(error);
                 throw new ArgumentOutOfRangeException(paramName, error);
@@ -227,13 +215,11 @@ namespace Catel
         [DebuggerStepThrough]
         public static void IsMinimal<T>(string paramName, T paramValue, T minimumValue, Func<T, T, bool> validation)
         {
-            EnsureValidParamName(paramName);
-
             IsNotNull("validation", validation);
 
             if (!validation(paramValue, minimumValue))
             {
-                string error = string.Format("Argument '{0}' should be minimal {1}", paramName, minimumValue);
+                string error = string.Format("Argument '{0}' should be minimal {1}", ObjectToStringHelper.ToString(paramName), minimumValue);
 
                 Log.Error(error);
                 throw new ArgumentOutOfRangeException(paramName);
@@ -285,11 +271,9 @@ namespace Catel
         [DebuggerStepThrough]
         public static void IsMaximum<T>(string paramName, T paramValue, T maximumValue, Func<T, T, bool> validation)
         {
-            EnsureValidParamName(paramName);
-
             if (!validation(paramValue, maximumValue))
             {
-                string error = string.Format("Argument '{0}' should be at maximum {1}", paramName, maximumValue);
+                string error = string.Format("Argument '{0}' should be at maximum {1}", ObjectToStringHelper.ToString(paramName), maximumValue);
 
                 Log.Error(error);
                 throw new ArgumentOutOfRangeException(paramName, error);
@@ -348,8 +332,6 @@ namespace Catel
         [DebuggerStepThrough]
         public static void InheritsFrom(string paramName, Type type, Type baseType)
         {
-            EnsureValidParamName(paramName);
-
             IsNotNull("type", type);
             IsNotNull("baseType", baseType);
 
@@ -451,8 +433,6 @@ namespace Catel
         [DebuggerStepThrough]
         public static void ImplementsInterface(string paramName, Type type, Type interfaceType)
         {
-            EnsureValidParamName(paramName);
-
             Argument.IsNotNull("type", type);
             Argument.IsNotNull("interfaceType", interfaceType);
 
@@ -498,8 +478,6 @@ namespace Catel
         [DebuggerStepThrough]
         public static void ImplementsOneOfTheInterfaces(string paramName, Type type, Type[] interfaceTypes)
         {
-            EnsureValidParamName(paramName);
-
             Argument.IsNotNull("type", type);
             Argument.IsNotNullOrEmptyArray("interfaceTypes", interfaceTypes);
 
@@ -555,8 +533,6 @@ namespace Catel
         [DebuggerStepThrough]
         public static void IsOfType(string paramName, Type type, Type requiredType)
         {
-            EnsureValidParamName(paramName);
-
             Argument.IsNotNull("type", type);
             Argument.IsNotNull("requiredType", requiredType);
 
@@ -607,8 +583,6 @@ namespace Catel
         [DebuggerStepThrough]
         public static void IsOfOneOfTheTypes(string paramName, Type type, Type[] requiredTypes)
         {
-            EnsureValidParamName(paramName);
-
             Argument.IsNotNull("type", type);
             Argument.IsNotNullOrEmptyArray("requiredTypes", requiredTypes);
 
@@ -669,7 +643,6 @@ namespace Catel
         [DebuggerStepThrough]
         public static void IsNotOfType(string paramName, Type type, Type notRequiredType)
         {
-            EnsureValidParamName(paramName);
             Argument.IsNotNull("type", type);
             Argument.IsNotNull("notRequiredType", notRequiredType);
 
@@ -720,8 +693,6 @@ namespace Catel
         [DebuggerStepThrough]
         public static void IsNotOfOneOfTheTypes(string paramName, Type type, Type[] notRequiredTypes)
         {
-            EnsureValidParamName(paramName);
-
             Argument.IsNotNull("type", type);
             Argument.IsNotNullOrEmptyArray("notRequiredTypes", notRequiredTypes);
 
@@ -756,8 +727,6 @@ namespace Catel
         [DebuggerStepThrough]
         public static void IsNotMatch(string paramName, string paramValue, string pattern, RegexOptions regexOptions = RegexOptions.None)
         {
-            EnsureValidParamName(paramName);
-
             Argument.IsNotNull("paramValue", paramValue);
             Argument.IsNotNull("pattern", pattern);
 
@@ -784,8 +753,6 @@ namespace Catel
         [DebuggerStepThrough]
         public static void IsMatch(string paramName, string paramValue, string pattern, RegexOptions regexOptions = RegexOptions.None)
         {
-            EnsureValidParamName(paramName);
-
             Argument.IsNotNull("paramValue", paramValue);
             Argument.IsNotNull("pattern", pattern);
 
@@ -869,13 +836,11 @@ namespace Catel
         [DebuggerStepThrough]
         public static void IsValid<T>(string paramName, T paramValue, bool validation)
         {
-           EnsureValidParamName(paramName);
-
            Argument.IsNotNull("paramValue", paramValue);
 
            if (!validation)
            {
-               string error = string.Format("Argument '{0}' is not valid", paramName);
+               string error = string.Format("Argument '{0}' is not valid", ObjectToStringHelper.ToString(paramName));
 
                Log.Error(error);
 
@@ -904,26 +869,6 @@ namespace Catel
                 throw new NotSupportedException(error);
             }
         }
-
-        /// <summary>
-        /// Ensures that the name of the param is valid.
-        /// </summary>
-        /// <param name="paramName">Name of the param.</param>
-        /// <exception cref="System.ArgumentException">paramName</exception>
-        /// <exception cref="ArgumentException">If <paramref name="paramName" /> is <c>null</c> or whitespace.</exception>
-        [DebuggerStepThrough]
-        private static void EnsureValidParamName(string paramName)
-        {
-            if (string.IsNullOrEmpty(paramName))
-            {
-                string error = string.Format("Argument '{0}' cannot be null or whitespace", "paramName");
-
-                Log.Error(error);
-
-                throw new ArgumentException(error, "paramName");
-            }
-        }
-
         #endregion
     }
 }

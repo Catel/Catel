@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ViewModelPropertyDescriptor.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -43,7 +43,7 @@ namespace Catel.MVVM
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
             Argument.IsNotNull("propertyType", propertyType);
 
-            Log.Debug("Created property descriptor for '{0}' as type '{1}'", propertyName, propertyType.Name);
+            //Log.Debug("Created property descriptor for '{0}' as type '{1}'", propertyName, propertyType.Name);
 
             _viewModel = viewModel;
             _propertyName = propertyName;

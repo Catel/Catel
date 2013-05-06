@@ -671,6 +671,9 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Helpers\DependencyPropertyHelper.cs">
       <Link>Windows\Data\Helpers\DependencyPropertyHelper.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Helpers\DependencyPropertyInfo.cs">
+      <Link>Windows\Data\Helpers\DependencyPropertyInfo.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Extensions\ApplicationExtensions.cs">
       <Link>Windows\Extensions\ApplicationExtensions.cs</Link>
     </Compile>

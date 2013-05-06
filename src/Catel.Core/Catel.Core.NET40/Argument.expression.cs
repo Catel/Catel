@@ -24,21 +24,11 @@ namespace Catel
         /// <summary>
         /// The get parameter info.
         /// </summary>
-        /// <param name="expression">
-        /// The expression.
-        /// </param>
-        /// <typeparam name="T">
-        /// The type of the parameter.
-        /// </typeparam>
-        /// <returns>
-        /// The <see cref="ParameterInfo{T}"/>.
-        /// </returns>
-        /// <exception cref="System.ArgumentException">
-        /// The <paramref name="expression"/> body is not of type <see cref="MemberExpression"/>.
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="expression"/> is <c>null</c>.
-        /// </exception>
+        /// <typeparam name="T">The type of the parameter.</typeparam>
+        /// <param name="expression">The expression.</param>
+        /// <returns>The <see cref="ParameterInfo{T}" />.</returns>
+        /// <exception cref="System.ArgumentException">The <paramref name="expression" /> body is not of type <see cref="MemberExpression" />.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="expression" /> is <c>null</c>.</exception>
         private static ParameterInfo<T> GetParameterInfo<T>(Expression<Func<T>> expression)
         {
             IsNotNull("expression", expression);
@@ -53,21 +43,11 @@ namespace Catel
         /// <summary>
         /// Determines whether the specified argument is not <c>null</c>.
         /// </summary>
-        /// <typeparam name="T">
-        /// The parameter type. 
-        /// </typeparam>
-        /// <param name="expression">
-        /// The expression
-        /// </param>
-        /// <exception cref="ArgumentNullException">
-        /// If <paramref name="expression"/> value is <c>null</c>.
-        /// </exception>
-        /// <exception cref="System.ArgumentException">
-        /// The <paramref name="expression"/> body is not of type <see cref="MemberExpression"/>.
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="expression"/> is <c>null</c>.
-        /// </exception>
+        /// <typeparam name="T">The parameter type.</typeparam>
+        /// <param name="expression">The expression.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="expression" /> value is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentException">The <paramref name="expression" /> body is not of type <see cref="MemberExpression" />.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="expression" /> is <c>null</c>.</exception>
         [DebuggerStepThrough]
         public static void IsNotNull<T>(Expression<Func<T>> expression)
         {
@@ -78,18 +58,10 @@ namespace Catel
         /// <summary>
         /// Determines whether the specified argument is not <c>null</c> or empty.
         /// </summary>
-        /// <param name="expression">
-        /// The expression.
-        /// </param>
-        /// <exception cref="ArgumentException">
-        /// If <paramref name="expression"/> value is <c>null</c> or empty.
-        /// </exception>
-        /// <exception cref="System.ArgumentException">
-        /// The <paramref name="expression"/> body is not of type <see cref="MemberExpression"/>.
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="expression"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="expression">The expression.</param>
+        /// <exception cref="ArgumentException">If <paramref name="expression" /> value is <c>null</c> or empty.</exception>
+        /// <exception cref="System.ArgumentException">The <paramref name="expression" /> body is not of type <see cref="MemberExpression" />.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="expression" /> is <c>null</c>.</exception>
         [DebuggerStepThrough]
         public static void IsNotNullOrEmpty(Expression<Func<string>> expression)
         {
@@ -100,18 +72,10 @@ namespace Catel
         /// <summary>
         /// Determines whether the specified argument is not <c>null</c> or empty.
         /// </summary>
-        /// <param name="expression">
-        /// The expression.
-        /// </param>
-        /// <exception cref="ArgumentException">
-        /// If <paramref name="expression"/> value is <c>null</c> or empty.
-        /// </exception>
-        /// <exception cref="System.ArgumentException">
-        /// The <paramref name="expression"/> body is not of type <see cref="MemberExpression"/>.
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="expression"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="expression">The expression.</param>
+        /// <exception cref="ArgumentException">If <paramref name="expression" /> value is <c>null</c> or empty.</exception>
+        /// <exception cref="System.ArgumentException">The <paramref name="expression" /> body is not of type <see cref="MemberExpression" />.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="expression" /> is <c>null</c>.</exception>
         [DebuggerStepThrough]
         public static void IsNotNullOrEmpty(Expression<Func<Guid>> expression)
         {
@@ -122,18 +86,10 @@ namespace Catel
         /// <summary>
         /// Determines whether the specified argument is not <c>null</c> or empty.
         /// </summary>
-        /// <param name="expression">
-        /// The expression.
-        /// </param>
-        /// <exception cref="ArgumentException">
-        /// If <paramref name="expression"/> value is <c>null</c> or empty.
-        /// </exception>
-        /// <exception cref="System.ArgumentException">
-        /// The <paramref name="expression"/> body is not of type <see cref="MemberExpression"/>.
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="expression"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="expression">The expression.</param>
+        /// <exception cref="ArgumentException">If <paramref name="expression" /> value is <c>null</c> or empty.</exception>
+        /// <exception cref="System.ArgumentException">The <paramref name="expression" /> body is not of type <see cref="MemberExpression" />.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="expression" /> is <c>null</c>.</exception>
         [DebuggerStepThrough]
         public static void IsNotNullOrEmpty(Expression<Func<Guid?>> expression)
         {
@@ -144,18 +100,10 @@ namespace Catel
         /// <summary>
         /// Determines whether the specified argument is not <c>null</c> or a whitespace.
         /// </summary>
-        /// <param name="expression">
-        /// The expression.
-        /// </param>
-        /// <exception cref="ArgumentException">
-        /// If <paramref name="expression"/> value is <c>null</c> or a whitespace.
-        /// </exception>
-        /// <exception cref="System.ArgumentException">
-        /// The <paramref name="expression"/> body is not of type <see cref="MemberExpression"/>.
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="expression"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="expression">The expression.</param>
+        /// <exception cref="ArgumentException">If <paramref name="expression" /> value is <c>null</c> or a whitespace.</exception>
+        /// <exception cref="System.ArgumentException">The <paramref name="expression" /> body is not of type <see cref="MemberExpression" />.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="expression" /> is <c>null</c>.</exception>
         [DebuggerStepThrough]
         public static void IsNotNullOrWhitespace(Expression<Func<string>> expression)
         {
@@ -166,18 +114,10 @@ namespace Catel
         /// <summary>
         /// Determines whether the specified argument is not <c>null</c> or an empty array (.Length == 0).
         /// </summary>
-        /// <param name="expression">
-        /// The expression
-        /// </param>
-        /// <exception cref="ArgumentException">
-        /// If <paramref name="expression"/> value is <c>null</c> or an empty array.
-        /// </exception>
-        /// <exception cref="System.ArgumentException">
-        /// The <paramref name="expression"/> body is not of type <see cref="MemberExpression"/>.
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="expression"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="expression">The expression</param>
+        /// <exception cref="ArgumentException">If <paramref name="expression" /> value is <c>null</c> or an empty array.</exception>
+        /// <exception cref="System.ArgumentException">The <paramref name="expression" /> body is not of type <see cref="MemberExpression" />.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="expression" /> is <c>null</c>.</exception>
         [DebuggerStepThrough]
         public static void IsNotNullOrEmptyArray(Expression<Func<Array>> expression)
         {
