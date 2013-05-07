@@ -42,4 +42,22 @@ namespace Catel.Windows
             return new List<string>();
         }
     }
+
+    /// <summary>
+    /// Very fast dependency property selector because it does not select any dependency properties.
+    /// <para />
+    /// Use this one for best performance but loose the automatic dependency property change notifications.
+    /// </summary>
+    public class FastDependencyPropertySelector : DependencyPropertySelector
+    {
+        /// <summary>
+        /// Determines whether all dependency properties must be subscribed for this type.
+        /// </summary>
+        /// <param name="targetControlType">Type of the target control.</param>
+        /// <returns><c>true</c> if all dependency properties must be subscribed to, <c>false</c> otherwise.</returns>
+        public override bool MustSubscribeToAllDependencyProperties(Type targetControlType)
+        {
+            return false;
+        }
+    }
 }
