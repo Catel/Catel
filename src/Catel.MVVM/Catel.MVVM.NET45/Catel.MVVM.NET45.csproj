@@ -674,6 +674,9 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Helpers\DependencyPropertyInfo.cs">
       <Link>Windows\Data\Helpers\DependencyPropertyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\DependencyPropertySelector.cs">
+      <Link>Windows\DependencyPropertySelector.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Extensions\ApplicationExtensions.cs">
       <Link>Windows\Extensions\ApplicationExtensions.cs</Link>
     </Compile>
@@ -796,6 +799,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\WindowEventToCommand.cs">
       <Link>Windows\Interactivity\WindowEventToCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interfaces\IDependencyPropertySelector.cs">
+      <Link>Windows\Interfaces\IDependencyPropertySelector.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Markup\ServiceDependencyExtension.cs">
       <Link>Windows\Markup\ServiceDependencyExtension.cs</Link>

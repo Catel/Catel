@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="AssemblyExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -114,7 +114,7 @@ namespace Catel.Reflection
         /// Gets the company of a specific assembly.
         /// </summary>
         /// <param name="assembly">The assembly.</param>
-        /// <returns>The company of the assembly</returns>
+        /// <returns>The company of the assembly.</returns>
         public static string Company(this Assembly assembly)
         {
             return GetAssemblyAttributeValue(assembly, typeof(AssemblyCompanyAttribute), "Company");
@@ -152,7 +152,7 @@ namespace Catel.Reflection
         /// <summary>
         /// Gets the assembly attribute.
         /// </summary>
-        /// <typeparam name="TAttibute">The type of the attibute.</typeparam>
+        /// <typeparam name="TAttibute">The type of the attribute.</typeparam>
         /// <param name="assembly">The assembly.</param>
         /// <returns>The attribute that the assembly is decorated with or <c>null</c> if the assembly is not decorated with the attribute.</returns>
         private static TAttibute GetAssemblyAttribute<TAttibute>(Assembly assembly) 

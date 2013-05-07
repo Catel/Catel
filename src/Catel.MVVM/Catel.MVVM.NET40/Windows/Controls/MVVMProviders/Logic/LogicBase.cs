@@ -7,10 +7,12 @@
 namespace Catel.Windows.Controls.MVVMProviders.Logic
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Threading;
     using System.Windows;
 
+    using Catel.Caching;
     using Catel.Data;
     using Data;
     using IoC;
@@ -61,6 +63,16 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
+        /// The dependency property selector.
+        /// </summary>
+        private static readonly IDependencyPropertySelector _dependencyPropertySelector;
+
+        /// <summary>
+        /// A list of dependency properties to subscribe to per type.
+        /// </summary>
+        private static readonly ICacheStorage<Type, List<DependencyPropertyInfo>> _dependencyPropertiesToSubscribe = new CacheStorage<Type, List<DependencyPropertyInfo>>();
+
+        /// <summary>
         /// The view model instances currently held by this provider. This value should only be used
         /// inside the <see cref="ViewModel"/> property. For accessing the view model, use the 
         /// <see cref="ViewModel"/> property.
@@ -92,6 +104,8 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 
             serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelFactory, ViewModelFactory>();
             serviceLocator.RegisterTypeIfNotYetRegistered<IViewManager, ViewManager>();
+
+            _dependencyPropertySelector = serviceLocator.ResolveTypeAndReturnNullIfNotRegistered<IDependencyPropertySelector>();
         }
 
         /// <summary>
@@ -158,7 +172,13 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             TargetControl.Unloaded += OnTargetControlUnloadedInternal;
 
             // This also subscribes to DataContextChanged, don't double subscribe
-            TargetControl.SubscribeToAllDependencyProperties(OnTargetControlPropertyChangedInternal);
+            var dependencyPropertiesToSubscribe = DetermineInterestingDependencyProperties();
+            foreach (var dependencyPropertyToSubscribe in dependencyPropertiesToSubscribe)
+            {
+                TargetControl.SubscribeToDependencyProperty(dependencyPropertyToSubscribe.PropertyName, OnTargetControlPropertyChangedInternal);
+            }
+
+            //TargetControl.SubscribeToAllDependencyProperties(OnTargetControlPropertyChangedInternal);
 
 #if NET
             IsTargetControlLoaded = TargetControl.IsLoaded;
@@ -339,6 +359,44 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Determines the interesting dependency properties.
+        /// </summary>
+        /// <returns>A list of names with dependency properties to subscribe to.</returns>
+        private List<DependencyPropertyInfo> DetermineInterestingDependencyProperties()
+        {
+            var targetControlType = TargetControlType;
+
+            return _dependencyPropertiesToSubscribe.GetFromCacheOrFetch(targetControlType, () =>
+            {
+                var controlDependencyProperties = TargetControl.GetDependencyProperties();
+                var dependencyProperties = new List<DependencyPropertyInfo>();
+
+                if ((_dependencyPropertySelector == null) || (_dependencyPropertySelector.MustSubscribeToAllDependencyProperties(targetControlType)))
+                {
+                    dependencyProperties.AddRange(controlDependencyProperties);
+                }
+                else
+                {
+                    var dependencyPropertiesToSubscribe = _dependencyPropertySelector.GetDependencyPropertiesToSubscribeTo(targetControlType);
+                    if (!dependencyPropertiesToSubscribe.Contains("DataContext"))
+                    {
+                        dependencyPropertiesToSubscribe.Add("DataContext");
+                    }
+
+                    foreach (var gatheredDependencyProperty in controlDependencyProperties)
+                    {
+                        if (dependencyPropertiesToSubscribe.Contains(gatheredDependencyProperty.PropertyName))
+                        {
+                            dependencyProperties.Add(gatheredDependencyProperty);
+                        }
+                    }
+                }
+
+                return dependencyProperties;
+            });
+        }
+
         /// <summary>
         /// Sets the data context of the target control.
         /// <para />
@@ -538,7 +596,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         public virtual void OnTargetControlUnloaded(object sender, UIEventArgs e)
-        {   
+        {
         }
 
         /// <summary>
@@ -604,7 +662,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// <param name="e">The <see cref="DependencyPropertyValueChangedEventArgs"/> instance containing the event data.</param>
         public virtual void OnTargetControlPropertyChanged(object sender, DependencyPropertyValueChangedEventArgs e)
         {
-            TargetControlPropertyChanged.SafeInvoke(this, e);      
+            TargetControlPropertyChanged.SafeInvoke(this, e);
         }
 
         /// <summary>
@@ -658,7 +716,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 return false;
             }
 
-            bool result = ViewModel.ValidateViewModel(_isFirstValidationAfterLoaded, false);    
+            bool result = ViewModel.ValidateViewModel(_isFirstValidationAfterLoaded, false);
 
             _isFirstValidationAfterLoaded = false;
 
@@ -806,15 +864,15 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                     Log.Info("DataContext of type '{0}' is allowed to be reused by view '{1}', using the current DataContext as view model",
                              viewModelType.FullName, TargetControlType.FullName);
 
-                    return (IViewModel) injectionObject;
+                    return (IViewModel)injectionObject;
                 }
             }
 
             Log.Debug("Using IViewModelFactory '{0}' to instantiate the view model", ViewModelFactory.GetType().FullName);
 
             var viewModelInstance = ViewModelFactory.CreateViewModel(viewModelType, injectionObject);
-            
-            Log.Debug("Used IViewModelFactory to instantiate view model, the factory did{0} return a valid view model", 
+
+            Log.Debug("Used IViewModelFactory to instantiate view model, the factory did{0} return a valid view model",
                 (viewModelInstance != null) ? string.Empty : " NOT");
 
             return viewModelInstance;

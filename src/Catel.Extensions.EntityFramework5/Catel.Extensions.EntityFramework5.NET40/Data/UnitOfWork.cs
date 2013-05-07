@@ -33,7 +33,6 @@ namespace Catel.Data
         private readonly ITypeFactory _typeFactory;
 
         private bool _disposed;
-        private DbTransaction _transaction;
         #endregion
 
         #region Constructors
@@ -67,6 +66,12 @@ namespace Catel.Data
         /// </summary>
         /// <value>The tag.</value>
         protected string Tag { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the transaction.
+        /// </summary>
+        /// <value>The transaction.</value>
+        protected DbTransaction Transaction { get; set; }
         #endregion
 
         #region IUnitOfWork Members
@@ -76,7 +81,7 @@ namespace Catel.Data
         /// <value><c>true</c> if this instance is currently in a transaction; otherwise, <c>false</c>.</value>
         public bool IsInTransaction
         {
-            get { return _transaction != null; }
+            get { return Transaction != null; }
         }
 
         /// <summary>
@@ -88,7 +93,7 @@ namespace Catel.Data
         {
             Log.Debug("Beginning transaction | {0}", Tag);
 
-            if (_transaction != null)
+            if (Transaction != null)
             {
                 const string error = "Cannot begin a new transaction while an existing transaction is still running. " +
                                "Please commit or rollback the existing transaction before starting a new one.";
@@ -100,7 +105,7 @@ namespace Catel.Data
             OpenConnection();
 
             var objectContext = DbContext.GetObjectContext();
-            _transaction = objectContext.Connection.BeginTransaction(isolationLevel);
+            Transaction = objectContext.Connection.BeginTransaction(isolationLevel);
 
             Log.Debug("Began transaction | {0}", Tag);
         }
@@ -113,7 +118,7 @@ namespace Catel.Data
         {
             Log.Debug("Rolling back transaction | {0}", Tag);
 
-            if (_transaction == null)
+            if (Transaction == null)
             {
                 const string error = "Cannot roll back a transaction when there is no transaction running.";
 
@@ -121,7 +126,7 @@ namespace Catel.Data
                 throw new InvalidOperationException(error);
             }
 
-            _transaction.Rollback();
+            Transaction.Rollback();
             ReleaseTransaction();
 
             Log.Debug("Rolling back transaction | {0}", Tag);
@@ -135,7 +140,7 @@ namespace Catel.Data
         {
             Log.Debug("Committing transaction | {0}", Tag);
 
-            if (_transaction == null)
+            if (Transaction == null)
             {
                 const string error = "Cannot commit a transaction when there is no transaction running.";
 
@@ -148,7 +153,7 @@ namespace Catel.Data
                 var objectContext = DbContext.GetObjectContext();
                 objectContext.SaveChanges();
 
-                _transaction.Commit();
+                Transaction.Commit();
 
                 ReleaseTransaction();
 
@@ -298,12 +303,12 @@ namespace Catel.Data
         /// </summary>
         protected virtual void ReleaseTransaction()
         {
-            if (_transaction != null)
+            if (Transaction != null)
             {
                 Log.Debug("Releasing transaction | {0}", Tag);
 
-                _transaction.Dispose();
-                _transaction = null;
+                Transaction.Dispose();
+                Transaction = null;
 
                 Log.Debug("Released transaction | {0}", Tag);
             }

@@ -256,6 +256,8 @@
     <Compile Include="Windows\Controls\Interfaces\IUIElement.cs" />
     <Compile Include="Windows\Controls\Interfaces\IUserControl.cs" />
     <Compile Include="Windows\Controls\Interfaces\IView.cs" />
+    <Compile Include="Windows\DependencyPropertySelector.cs" />
+    <Compile Include="Windows\Interfaces\IDependencyPropertySelector.cs" />
     <Compile Include="Windows\Controls\MVVMProviders\Logic\EventArgs\DetermineViewModelInstanceEventArgs.cs" />
     <Compile Include="Windows\Controls\MVVMProviders\Logic\EventArgs\DetermineViewModelTypeEventArgs.cs" />
     <Compile Include="Windows\Controls\MVVMProviders\Logic\Extensions\LogicExtensions.cs" />
@@ -437,6 +439,7 @@
     <Resource Include="Resources\Images\Error.png" />
     <Resource Include="Resources\Images\Warning.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets. -->

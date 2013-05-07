@@ -640,6 +640,9 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Helpers\DependencyPropertyInfo.cs">
       <Link>Windows\Data\Helpers\DependencyPropertyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\DependencyPropertySelector.cs">
+      <Link>Windows\DependencyPropertySelector.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Extensions\DependencyObjectExtensions.cs">
       <Link>Windows\Extensions\DependencyObjectExtensions.cs</Link>
     </Compile>
@@ -717,6 +720,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\UpdateBindingOnTextChanged.cs">
       <Link>Windows\Interactivity\UpdateBindingOnTextChanged.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interfaces\IDependencyPropertySelector.cs">
+      <Link>Windows\Interfaces\IDependencyPropertySelector.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Threading\Helpers\Dispatcherhelper.cs">
       <Link>Windows\Threading\Helpers\Dispatcherhelper.cs</Link>

@@ -1,13 +1,13 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ReflectionExtensions.type.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 
 #pragma warning disable 1591
 
-#define ENABLE_CACHE
+//#define ENABLE_CACHE
 
 namespace Catel.Reflection
 {

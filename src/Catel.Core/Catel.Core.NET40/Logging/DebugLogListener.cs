@@ -1,6 +1,6 @@
 ﻿﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DebugLogListener.cs" company="Catel development team">
-//   Copyright (c) 2011 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2011 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 

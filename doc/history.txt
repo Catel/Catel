@@ -57,6 +57,9 @@ Added/fixed:
 (*) [CTL-44] External container synchronization for the ServiceLocator now respects both Singleton and Transient registration types in the
     the external containers unless they don't support this information (such as MEF and Castle Windsor)
 (*) [CTL-68] Command now dispatches events which is a major performance improvements when properties are changed from a background thread
+(*) [CTL-57] Performance improvements. Among these changes were disabling the reflection cache (was actually slower), disabling the default
+    subscription to MessageMediator (see CTL-74) and the introduction of the IDependencyPropertySelector. For more information about
+    performance, please check out the performance considerations: https://catelproject.atlassian.net/wiki/display/CTL/Performance+considerations
 (-) Removed EffectsHelper class from Catel.Extensions.Controls because it was already included in Catel.MVVM
 (x) [CTL-20] Fixed issue where the WeakEventListener could not handle explicitly implemented events
 (x) Fixed issue where default values were not correctly subscribed to via weak events. This caused the protected change notifications
