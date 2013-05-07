@@ -1529,7 +1529,7 @@ namespace Catel.MVVM
             {
                 _isViewModelInitialized = true;
 
-                MessageMediatorHelper.SubscribeRecipient(this);
+                //MessageMediatorHelper.SubscribeRecipient(this);
 
                 Initialize();
 
@@ -1712,7 +1712,7 @@ namespace Catel.MVVM
 
             SuspendValidation = true;
 
-            MessageMediatorHelper.UnsubscribeRecipient(this);
+            //MessageMediatorHelper.UnsubscribeRecipient(this);
 
             IsClosed = true;
 

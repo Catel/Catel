@@ -30,6 +30,8 @@ Added/fixed (BREAKING CHANGES):
 (*) [CTL-69] Updated FluentValidation extension to FluentValidation 4. Because this new version no longer supports SL4, the SL4 version
     of the extension is also dropped
 (*) [CTL-71] Updated CSLA to version 4.5.20. Because this new version no longer supports SL4, the SL4 version of the extension is also dropped
+(*) [CTL-74] Catel no longer subscribes to MessageMediator in ViewModelBase by default. If users want this behavior, they can implement it in 
+    their own ViewModelBase (deriving from Catel VMB), but not all users have to experience this negative impact on performance
 
 Added/fixed:
 ============
