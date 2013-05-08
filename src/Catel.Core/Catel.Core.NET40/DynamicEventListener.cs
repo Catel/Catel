@@ -30,6 +30,9 @@ namespace Catel
         /// <summary>
         /// A dictionary so the ILGenerator code can access the <c>Get</c> method.
         /// </summary>
+        /// <remarks>
+        /// Do NOT remove this type. It is required for dynamic reflection.
+        /// </remarks>
         public class HandlerDictionary : Dictionary<int, DynamicEventListener>
         {
             /// <summary>
@@ -54,14 +57,15 @@ namespace Catel
         /// Silverlight doesn't allow us to add a method to this class via ILGenerator.
         /// </summary>
         public static readonly HandlerDictionary Instances = new HandlerDictionary();
-        private static int _staticIncrement = 0;
-        private int _increment = -1;
 
         private readonly object _eventInstance;
+        private readonly Type _eventInstanceType;
         private readonly object _handlerInstance;
 
         private Delegate _handler;
         private EventInfo _eventInfo;
+
+        private bool _isSubscribed;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DynamicEventListener"/> class.
@@ -75,7 +79,10 @@ namespace Catel
             Argument.IsNotNull("eventInstance", eventInstance);
             Argument.IsNotNullOrWhitespace("eventName", eventName);
 
+            UniqueIdentifier = UniqueIdentifierHelper.GetUniqueIdentifier<DynamicEventListener>();
+
             _eventInstance = eventInstance;
+            _eventInstanceType = eventInstance.GetType();
             EventName = eventName;
 
             SubscribeToEvent();
@@ -114,6 +121,11 @@ namespace Catel
         /// </summary>
         /// <value>The name of the handler.</value>
         public string HandlerName { get; private set; }
+
+        /// <summary>
+        /// Gets the unique identifier.
+        /// </summary>
+        public int UniqueIdentifier { get; private set; }
         #endregion
 
         #region Events
@@ -129,20 +141,20 @@ namespace Catel
         /// </summary>
         private void SubscribeToEvent()
         {
-            if (_increment != -1)
+            if (_isSubscribed)
             {
                 return;
             }
 
             lock (Instances)
             {
-                Instances.Add(_increment = ++_staticIncrement, this);
+                Instances.Add(UniqueIdentifier, this);
             }
 
-            _eventInfo = _eventInstance.GetType().GetEventEx(EventName, BindingFlagsHelper.GetFinalBindingFlags(true, false));
+            _eventInfo = _eventInstanceType.GetEventEx(EventName, BindingFlagsHelper.GetFinalBindingFlags(true, false));
             if (_eventInfo == null)
             {
-                string error = string.Format("Cannot find the '{0}' event, implement the '{0}' event on '{1}'", EventName, _eventInstance.GetType().Name);
+                string error = string.Format("Cannot find the '{0}' event, implement the '{0}' event on '{1}'", EventName, _eventInstanceType.Name);
                 Log.Error(error);
 
                 throw new NotSupportedException(error);
@@ -165,8 +177,12 @@ namespace Catel
             _eventInfo = null;
             _handler = null;
 
-            Instances.Remove(_increment);
-            _increment = -1;
+            lock (Instances)
+            {
+                Instances.Remove(UniqueIdentifier);
+            }
+
+            _isSubscribed = false;
         }
 
         /// <summary>
@@ -184,7 +200,7 @@ namespace Catel
 
             // this.OnTargetWindowClosed
             ilgen.Emit(OpCodes.Ldsfld, typeof(DynamicEventListener).GetFieldEx("Instances", BindingFlagsHelper.GetFinalBindingFlags(false, true)));
-            ilgen.Emit(OpCodes.Ldc_I4, _increment);
+            ilgen.Emit(OpCodes.Ldc_I4, UniqueIdentifier);
             ilgen.Emit(OpCodes.Call, typeof(HandlerDictionary).GetMethodEx("Get", BindingFlagsHelper.GetFinalBindingFlags(true, false)));
             ilgen.Emit(OpCodes.Call, handlerMethodInfo);
             ilgen.Emit(OpCodes.Ret);

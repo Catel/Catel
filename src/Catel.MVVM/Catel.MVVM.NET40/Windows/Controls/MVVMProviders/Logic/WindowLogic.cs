@@ -73,7 +73,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// The default value is false.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if <c>Close</c> should be called directly after setting the <c>DialogResult</c>; otherwise, <c>false</c>.
+        /// <c>true</c> if <c>Close</c> should be called directly after setting the <c>DialogResult</c>; otherwise, <c>false</c>.
         /// </value>
         public bool ForceCloseAfterSettingDialogResult { get; set; }
 
