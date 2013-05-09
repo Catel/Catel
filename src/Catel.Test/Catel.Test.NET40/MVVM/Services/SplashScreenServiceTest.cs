@@ -10,6 +10,7 @@ namespace Catel.Test.MVVM.Services
     using System.Threading;
 
     using Catel.IoC;
+    using Catel.MVVM;
     using Catel.MVVM.Services;
     using Catel.MVVM.Tasks;
 
@@ -25,6 +26,12 @@ namespace Catel.Test.MVVM.Services
     {
         #region Methods
 
+        private static SplashScreenService CreateSplashScreenService()
+        {
+            return new SplashScreenService(new DispatcherService(), new MessageService(), new ViewModelFactory(TypeFactory.Default),
+                TypeFactory.Default.CreateInstance<UIVisualizerService>());
+        }
+
         [TestInitialize]
         public void Init()
         {
@@ -39,7 +46,7 @@ namespace Catel.Test.MVVM.Services
         [TestMethod]
         public void ProgressNotificationThroughIPleaseWaitService()
         {
-            var splashScreenService = new SplashScreenService();
+            var splashScreenService = CreateSplashScreenService();
             splashScreenService.Enqueue(new FooTask("Linking to satellite"));
             splashScreenService.Enqueue(new FooTask("Downloading original files from NASA servers"));
             splashScreenService.Enqueue(new FooTask("Replacing original files with fake ones"));
@@ -66,7 +73,7 @@ namespace Catel.Test.MVVM.Services
         [TestMethod]
         public void InvalidOperationExceptionIsRaisedIfThereAreNotTaskRegisteredCommiting()
         {
-            var splashScreenService = new SplashScreenService();
+            var splashScreenService = CreateSplashScreenService();
             ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => splashScreenService.Commit());
         }
 
@@ -76,7 +83,7 @@ namespace Catel.Test.MVVM.Services
         [TestMethod]
         public void InvalidOperationExceptionIsRaisedIfThereAreNotTaskRegisteredWhenCommitingAsycn()
         {
-            var splashScreenService = new SplashScreenService();
+            var splashScreenService = CreateSplashScreenService();
             ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => splashScreenService.CommitAsync());
         }
 
@@ -86,7 +93,7 @@ namespace Catel.Test.MVVM.Services
         [TestMethod]
         public void InvalidOperationExceptionIsRaisedIfIsCommitedWhenIsRunning()
         {
-            var splashScreenService = new SplashScreenService();
+            var splashScreenService = CreateSplashScreenService();
             splashScreenService.Enqueue(new FooTask("Linking to satellite"));
             splashScreenService.Enqueue(new FooTask("Downloading original files from NASA servers"));
             splashScreenService.Enqueue(new FooTask("Replacing original files with fake ones"));
@@ -121,7 +128,7 @@ namespace Catel.Test.MVVM.Services
         [TestMethod]
         public void InvalidOperationExceptionIsRaisedIfIsCommitedAsyncWhenIsRunning()
         {
-            var splashScreenService = new SplashScreenService();
+            var splashScreenService = CreateSplashScreenService();
             splashScreenService.Enqueue(new FooTask("Linking to satellite"));
             splashScreenService.Enqueue(new FooTask("Downloading original files from NASA servers"));
             splashScreenService.Enqueue(new FooTask("Replacing original files with fake ones"));
@@ -156,7 +163,7 @@ namespace Catel.Test.MVVM.Services
         [TestMethod]
         public void InvalidOperationExceptionIsRaisedIfTaskIsEnqueueWhenIsRunning()
         {
-            var splashScreenService = new SplashScreenService();
+            var splashScreenService = CreateSplashScreenService();
             splashScreenService.Enqueue(new FooTask("Linking to satellite"));
             splashScreenService.Enqueue(new FooTask("Downloading original files from NASA servers"));
             splashScreenService.Enqueue(new FooTask("Replacing original files with fake ones"));
@@ -191,7 +198,7 @@ namespace Catel.Test.MVVM.Services
         [TestMethod]
         public void InvalidOperationExceptionIsRaisedIfTaskIsEnqueueWhenIsCommiting()
         {
-            var splashScreenService = new SplashScreenService();
+            var splashScreenService = CreateSplashScreenService();
             splashScreenService.Enqueue(new FooTask("Linking to satellite"));
             splashScreenService.Enqueue(new FooTask("Downloading original files from NASA servers"));
             splashScreenService.Enqueue(new FooTask("Replacing original files with fake ones"));
@@ -220,7 +227,7 @@ namespace Catel.Test.MVVM.Services
         [TestMethod]
         public void InterationThroughtIMessageServiceAndNotifyProgressOfExecutionAndRollbackThroughtIPleaseWaitService()
         {
-            var splashScreenService = new SplashScreenService();
+            var splashScreenService = CreateSplashScreenService();
             splashScreenService.Enqueue(new FooTask("Linking to satellite"));
             splashScreenService.Enqueue(new FooTask("Downloading original files from NASA servers"));
             splashScreenService.Enqueue(new FooErrorTask("Replacing original files with fake ones"));

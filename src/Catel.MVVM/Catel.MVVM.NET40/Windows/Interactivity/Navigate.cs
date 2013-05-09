@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Navigate.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -17,6 +17,8 @@ namespace Catel.Windows.Interactivity
     /// </summary>
     public class Navigate : Behavior<Hyperlink>
     {
+        private static readonly IProcessService _processService = ServiceLocator.Default.ResolveType<IProcessService>();
+
         #region Methods
         /// <summary>
         /// Called after the behavior is attached to an AssociatedObject.
@@ -44,7 +46,7 @@ namespace Catel.Windows.Interactivity
 
             if (uri != null)
             {
-                ServiceLocator.Default.ResolveType<IProcessService>().StartProcess(uri.ToString());
+                _processService.StartProcess(uri.ToString());
             }
         }
         #endregion

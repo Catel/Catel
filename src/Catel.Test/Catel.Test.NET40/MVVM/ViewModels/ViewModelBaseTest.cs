@@ -48,7 +48,12 @@
             var serviceLocator = new ServiceLocator();
             var messageService = new MessageService();
             serviceLocator.RegisterInstance<IMessageService>(messageService);
-            var navigationService = new NavigationService();
+
+#if NETFX_CORE
+            var navigationService = new NavigationService(new ViewLocator());
+#else
+            var navigationService = new NavigationService(new UrlLocator());
+#endif
             serviceLocator.RegisterInstance<INavigationService>(navigationService);
 
             var viewModel = new TestViewModel(serviceLocator);

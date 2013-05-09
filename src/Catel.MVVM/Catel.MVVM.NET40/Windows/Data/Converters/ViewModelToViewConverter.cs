@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ViewModelToViewConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -21,6 +21,8 @@ namespace Catel.Windows.Data.Converters
 #endif
     public class ViewModelToViewConverter : ValueConverterBase
     {
+        private static readonly IViewLocator _viewLocator = ServiceLocator.Default.ResolveType<IViewLocator>();
+
         /// <summary>
         /// Modifies the source data before passing it to the target for display in the UI.
         /// </summary>
@@ -35,8 +37,7 @@ namespace Catel.Windows.Data.Converters
                 return ConverterHelper.DoNothingBindingValue;
             }
 
-            var viewLocator = ServiceLocator.Default.ResolveType<IViewLocator>();
-            var viewType = viewLocator.ResolveView(value.GetType());
+            var viewType = _viewLocator.ResolveView(value.GetType());
             return (viewType != null) ? ViewHelper.ConstructViewWithViewModel(viewType, value) : ConverterHelper.DoNothingBindingValue;
         }
     }

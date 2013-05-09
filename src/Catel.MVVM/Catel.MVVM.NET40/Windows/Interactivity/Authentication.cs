@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Authentication.cs" company="Catel development team">
-//   Copyright (c) 2011 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -53,6 +53,11 @@ namespace Catel.Windows.Interactivity
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// The authentication provider.
+        /// </summary>
+        private static readonly IAuthenticationProvider _authenticationProvider = ServiceLocator.Default.ResolveType<IAuthenticationProvider>();
         #endregion
 
         #region Properties
@@ -104,8 +109,7 @@ namespace Catel.Windows.Interactivity
                 throw new InvalidOperationException("IAuthenticationProvider is not registered in the IServiceLocator");
             }
 
-            var authenticationProvider = ServiceLocator.Default.ResolveType<IAuthenticationProvider>();
-            if (!authenticationProvider.HasAccessToUIElement(AssociatedObject, AssociatedObject.Tag, AuthenticationTag))
+            if (!_authenticationProvider.HasAccessToUIElement(AssociatedObject, AssociatedObject.Tag, AuthenticationTag))
             {
                 Log.Debug("User has no access to UI element with tag '{0}' and authentication tag '{1}'", 
                     ObjectToStringHelper.ToString(AssociatedObject.Tag), ObjectToStringHelper.ToString(AuthenticationTag));

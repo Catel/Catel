@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ServiceDependencyExtension.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -17,7 +17,7 @@ namespace Catel.Windows.Markup
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of a class derived from <see cref="T:System.Windows.Markup.MarkupExtension"/>.
+        /// Initializes a new instance of the <see cref="ServiceDependencyExtension"/> class.
         /// </summary>
         public ServiceDependencyExtension()
         {

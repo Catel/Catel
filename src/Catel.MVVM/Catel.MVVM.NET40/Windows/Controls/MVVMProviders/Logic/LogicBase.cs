@@ -63,9 +63,19 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
+        /// The view model factory.
+        /// </summary>
+        private static readonly IViewModelFactory _viewModelFactory = ServiceLocator.Default.ResolveType<IViewModelFactory>();
+
+        /// <summary>
+        /// The view manager.
+        /// </summary>
+        private static readonly IViewManager _viewManager = ServiceLocator.Default.ResolveType<IViewManager>();
+
+        /// <summary>
         /// The dependency property selector.
         /// </summary>
-        private static readonly IDependencyPropertySelector _dependencyPropertySelector;
+        private static readonly IDependencyPropertySelector _dependencyPropertySelector = ServiceLocator.Default.ResolveTypeAndReturnNullIfNotRegistered<IDependencyPropertySelector>();
 
         /// <summary>
         /// A list of dependency properties to subscribe to per type.
@@ -80,11 +90,6 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         private IViewModel _viewModel;
 
         /// <summary>
-        /// The view manager.
-        /// </summary>
-        private readonly IViewManager _viewManager;
-
-        /// <summary>
         /// Boolean representing whether this is the first validation after the control has been loaded.
         /// </summary>
         private bool _isFirstValidationAfterLoaded = true;
@@ -95,19 +100,6 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         #endregion
 
         #region Constructors
-        /// <summary>
-        /// Initializes static members of the <see cref="LogicBase" /> class.
-        /// </summary>
-        static LogicBase()
-        {
-            var serviceLocator = ServiceLocator.Default;
-
-            serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelFactory, ViewModelFactory>();
-            serviceLocator.RegisterTypeIfNotYetRegistered<IViewManager, ViewManager>();
-
-            _dependencyPropertySelector = serviceLocator.ResolveTypeAndReturnNullIfNotRegistered<IDependencyPropertySelector>();
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="LogicBase"/> class.
         /// </summary>
@@ -126,11 +118,6 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             UniqueIdentifier = UniqueIdentifierHelper.GetUniqueIdentifier<LogicBase>();
 
             Log.Debug("Constructing behavior '{0}' for '{1}' with unique id '{2}'", GetType().Name, targetControl.GetType().Name, UniqueIdentifier);
-
-            var serviceLocator = ServiceLocator.Default;
-
-            _viewManager = serviceLocator.ResolveType<IViewManager>();
-            ViewModelFactory = serviceLocator.ResolveType<IViewModelFactory>();
 
             TargetControl = targetControl;
             ViewModelType = viewModelType;
@@ -190,9 +177,12 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 
         #region Properties
         /// <summary>
-        /// The view model factory used to create the view model instances.
+        /// Gets the view model factory used to create the view model instances.
         /// </summary>
-        protected IViewModelFactory ViewModelFactory { get; private set; }
+        protected IViewModelFactory ViewModelFactory
+        {
+            get { return _viewModelFactory; }
+        }
 
         /// <summary>
         /// Gets or sets the view model.

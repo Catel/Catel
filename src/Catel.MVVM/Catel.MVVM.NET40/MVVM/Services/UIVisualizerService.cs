@@ -28,6 +28,8 @@ namespace Catel.MVVM.Services
     /// </summary>
     public class UIVisualizerService : ViewModelServiceBase, IUIVisualizerService
     {
+        private readonly IViewLocator _viewLocator;
+
         #region Fields
         /// <summary>
         /// The log.
@@ -39,6 +41,18 @@ namespace Catel.MVVM.Services
         /// </summary>
         protected readonly Dictionary<string, Type> RegisteredWindows = new Dictionary<string, Type>();
         #endregion
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UIVisualizerService"/> class.
+        /// </summary>
+        /// <param name="viewLocator">The view locator.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewLocator"/> is <c>null</c>.</exception>
+        public UIVisualizerService(IViewLocator viewLocator)
+        {
+            Argument.IsNotNull("viewLocator", viewLocator);
+
+            _viewLocator = viewLocator;
+        }
 
         #region Properties
         /// <summary>
@@ -114,7 +128,7 @@ namespace Catel.MVVM.Services
         /// </summary>
         /// <param name="viewModelType">Type of the view model to unregister.</param>
         /// <returns>
-        /// 	<c>true</c> if the view model is unregistered; otherwise <c>false</c>.
+        /// <c>true</c> if the view model is unregistered; otherwise <c>false</c>.
         /// </returns>
         public bool Unregister(Type viewModelType)
         {
@@ -128,7 +142,7 @@ namespace Catel.MVVM.Services
         /// </summary>
         /// <param name="name">Name of the registered window.</param>
         /// <returns>
-        /// 	<c>true</c> if the view model is unregistered; otherwise <c>false</c>.
+        /// <c>true</c> if the view model is unregistered; otherwise <c>false</c>.
         /// </returns>
         public virtual bool Unregister(string name)
         {
@@ -150,7 +164,7 @@ namespace Catel.MVVM.Services
         /// <param name="viewModel">The view model.</param>
         /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
         /// <returns>
-        /// 	<c>true</c> if the popup window is successfully opened; otherwise <c>false</c>.
+        /// <c>true</c> if the popup window is successfully opened; otherwise <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         /// <exception cref="ViewModelNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(System.Type,System.Type)"/> method first.</exception>
@@ -162,14 +176,10 @@ namespace Catel.MVVM.Services
 
             if (!RegisteredWindows.ContainsKey(viewModelTypeName))
             {
-                var viewLocator = ServiceLocator.Default.ResolveType<IViewLocator>();
-                if (viewLocator != null)
+                var viewType = _viewLocator.ResolveView(viewModel.GetType());
+                if (viewType != null)
                 {
-                    var viewType = viewLocator.ResolveView(viewModel.GetType());
-                    if (viewType != null)
-                    {
-                        Register(viewModel.GetType(), viewType);
-                    }
+                    Register(viewModel.GetType(), viewType);
                 }
             }
 
@@ -183,7 +193,7 @@ namespace Catel.MVVM.Services
         /// <param name="data">The data to set as data context. If <c>null</c>, the data context will be untouched.</param>
         /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
         /// <returns>
-        /// 	<c>true</c> if the popup window is successfully opened; otherwise <c>false</c>.
+        /// <c>true</c> if the popup window is successfully opened; otherwise <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type)"/> method first.</exception>
@@ -226,14 +236,10 @@ namespace Catel.MVVM.Services
 
             if (!RegisteredWindows.ContainsKey(viewModelTypeName))
             {
-                var viewLocator = ServiceLocator.Default.ResolveType<IViewLocator>();
-                if (viewLocator != null)
+                var viewType = _viewLocator.ResolveView(viewModel.GetType());
+                if (viewType != null)
                 {
-                    var viewType = viewLocator.ResolveView(viewModel.GetType());
-                    if (viewType != null)
-                    {
-                        Register(viewModel.GetType(), viewType);
-                    }
+                    Register(viewModel.GetType(), viewType);
                 }
             }
 

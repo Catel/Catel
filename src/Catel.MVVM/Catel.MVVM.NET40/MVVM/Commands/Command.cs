@@ -22,8 +22,8 @@ namespace Catel.MVVM
     public class Command<TExecuteParameter, TCanExecuteParameter> : ICatelCommand
     {
         #region Fields
-        private static IAuthenticationProvider _authenticationProvider;
-        private static IDispatcherService _dispatcherService;
+        private readonly static IAuthenticationProvider _authenticationProvider = ServiceLocator.Default.ResolveTypeAndReturnNullIfNotRegistered<IAuthenticationProvider>();
+        private readonly static IDispatcherService _dispatcherService = ServiceLocator.Default.ResolveType<IDispatcherService>();
 
         private readonly Func<TCanExecuteParameter, bool> _canExecuteWithParameter;
         private readonly Func<bool> _canExecuteWithoutParameter;
@@ -37,19 +37,6 @@ namespace Catel.MVVM
         #endregion
 
         #region Constructors
-        /// <summary>
-        /// Initializes the <see cref="Command{TExecuteParameter, TCanExecuteParameter}"/> class.
-        /// </summary>
-        static Command()
-        {
-            if (ServiceLocator.Default.IsTypeRegistered<IAuthenticationProvider>())
-            {
-                _authenticationProvider = ServiceLocator.Default.ResolveType<IAuthenticationProvider>();
-            }
-
-            _dispatcherService = ServiceLocator.Default.ResolveType<IDispatcherService>();
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Command{TCanExecuteParameter,TExecuteParameter}"/> class.
         /// </summary>

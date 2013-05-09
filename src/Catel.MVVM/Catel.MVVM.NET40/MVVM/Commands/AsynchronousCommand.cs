@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="AsynchronousCommand.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -24,6 +24,8 @@ namespace Catel.MVVM
     /// <typeparam name="TCanExecuteParameter">The type of the can execute parameter.</typeparam>
     public class AsynchronousCommand<TExecuteParameter, TCanExecuteParameter> : Command<TExecuteParameter, TCanExecuteParameter>
     {
+        private static readonly IDispatcherService _dispatcherService = ServiceLocator.Default.ResolveType<IDispatcherService>();
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="AsynchronousCommand{TCanExecuteParameter,TExecuteParameter}"/> class.
@@ -120,8 +122,7 @@ namespace Catel.MVVM
                 return;
             }
 
-            var dispatcherService = ServiceLocator.Default.ResolveType<IDispatcherService>();
-            dispatcherService.BeginInvoke(() =>
+            _dispatcherService.BeginInvoke(() =>
             {
                 action();
 

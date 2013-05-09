@@ -45,20 +45,12 @@ namespace Catel.Windows.Controls
         #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        private static readonly IViewModelLocator _viewModelLocator = ServiceLocator.Default.ResolveType<IViewModelLocator>();
+
         private readonly NavigationPageLogic _logic;
         #endregion
 
         #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Page"/> class.
-        /// <para />
-        /// Registers the <see cref="IViewModelLocator"/> in the <see cref="IServiceLocator"/> if it is not yet registered.
-        /// </summary>
-        static Page()
-        {
-            ServiceLocator.Default.RegisterTypeIfNotYetRegistered<IViewModelLocator, ViewModelLocator>();
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Page"/> class.
         /// </summary>
@@ -77,8 +69,7 @@ namespace Catel.Windows.Controls
             {
                 Log.Debug("GetViewModelType() returned null, using the ViewModelLocator to resolve the view model");
 
-                var viewModelLocator = ServiceLocator.Default.ResolveType<IViewModelLocator>();
-                viewModelType = viewModelLocator.ResolveViewModel(GetType());
+                viewModelType = _viewModelLocator.ResolveViewModel(GetType());
                 if (viewModelType == null)
                 {
                     const string error = "The view model of the view could not be resolved. Use either the GetViewModelType() method or IViewModelLocator";

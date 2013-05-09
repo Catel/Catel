@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="IUIVisualizerServiceExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 namespace Catel
@@ -12,9 +12,9 @@ namespace Catel
     using System.Windows;
 
     using Caching;
-    
+
     using IoC;
-    
+
     using Logging;
 
     using Microsoft.Practices.Prism.Regions;
@@ -22,9 +22,9 @@ namespace Catel
     using MVVM;
     using MVVM.Services;
     using MVVM.Views;
-    
+
     using Windows.Controls;
-    
+
     /// <summary>
     ///     Extension methods for the <see cref="IUIVisualizerService" />.
     /// </summary>
@@ -166,7 +166,7 @@ namespace Catel
             if (regionInfo != null)
             {
                 Activate(viewModel, regionInfo);
-                
+
                 if (parentViewModel is IRelationalViewModel)
                 {
                     (parentViewModel as IRelationalViewModel).RegisterChildViewModel(viewModel);
@@ -175,12 +175,12 @@ namespace Catel
                 if (viewModel is IRelationalViewModel)
                 {
                     (viewModel as IRelationalViewModel).SetParentViewModel(parentViewModel);
-                }                
+                }
             }
         }
-        
+
         /// <summary>
-  		/// Activates a view into a specific <see cref="IRegion"/> via <see cref="IRegionManager"/> from a given view model.
+        /// Activates a view into a specific <see cref="IRegion"/> via <see cref="IRegionManager"/> from a given view model.
         /// </summary>
         /// <param name="viewModel">
         /// The view model.
@@ -193,11 +193,11 @@ namespace Catel
         /// </exception>
         private static void Activate(IViewModel viewModel, IRegionInfo regionInfo)
         {
-         	Activate(viewModel, regionInfo.RegionName, regionInfo.RegionManager);
+            Activate(viewModel, regionInfo.RegionName, regionInfo.RegionManager);
         }
 
         /// <summary>
-  		/// Activates a view into a specific <see cref="IRegion"/> via <see cref="IRegionManager"/> from a given view model.
+        /// Activates a view into a specific <see cref="IRegion"/> via <see cref="IRegionManager"/> from a given view model.
         /// </summary>
         /// <param name="viewModel">
         /// The view model.
@@ -382,13 +382,13 @@ namespace Catel
 
             if (result && openedProc != null)
             {
-				DateTime startTime = DateTime.Now;
+                DateTime startTime = DateTime.Now;
                 ThreadPool.QueueUserWorkItem(state =>
                     {
                         var viewManager = viewModel.GetService<IViewManager>();
                         while (viewManager.GetViewsOfViewModel(viewModel).Length == 0 && DateTime.Now.Subtract(startTime).TotalMilliseconds < timeOutInMilliseconds)
                         {
-                            ThreadHelper.Sleep(100); 
+                            ThreadHelper.Sleep(100);
                         }
 
                         var dispatcherService = viewModel.GetService<IDispatcherService>();

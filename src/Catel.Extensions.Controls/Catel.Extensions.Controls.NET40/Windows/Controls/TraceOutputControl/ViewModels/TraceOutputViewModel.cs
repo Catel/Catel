@@ -42,11 +42,15 @@ namespace Catel.Windows.Controls
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="TraceOutputViewModel"/> class.
+        /// Initializes a new instance of the <see cref="TraceOutputViewModel" /> class.
         /// </summary>
-        public TraceOutputViewModel()
+        /// <param name="dispatcherService">The dispatcher service.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="dispatcherService"/> is <c>null</c>.</exception>
+        public TraceOutputViewModel(IDispatcherService dispatcherService)
         {
-            _dispatcherService = GetService<IDispatcherService>();
+            Argument.IsNotNull("dispatcherService", dispatcherService);
+
+            _dispatcherService = dispatcherService;
 
             CopyToClipboard = new Command(OnCopyToClipboardExecute, OnCopyToClipboardCanExecute);
             ClearOutput = new Command(OnClearOutputExecute);

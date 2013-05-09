@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ModuleManagerViewModel.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace Catel.Modules.ModuleManager.ViewModels
 {
+    using System;
     using System.Collections.ObjectModel;
     using System.Linq;
     using Data;
@@ -18,6 +19,8 @@ namespace Catel.Modules.ModuleManager.ViewModels
     /// </summary>
     public class ModuleManagerViewModel : ViewModelBase
     {
+        private readonly IModuleInfoManager _moduleInfoManager;
+
         #region Constants
         /// <summary>Register the ApplicationModules property so it is known in the class.</summary>
         public static readonly PropertyData ApplicationModulesProperty = RegisterProperty("ApplicationModules", typeof (ObservableCollection<ModuleTemplate>));
@@ -25,11 +28,16 @@ namespace Catel.Modules.ModuleManager.ViewModels
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="ModuleManagerViewModel"/> class.
+        /// Initializes a new instance of the <see cref="ModuleManagerViewModel" /> class.
         /// </summary>
-        public ModuleManagerViewModel()
+        /// <param name="moduleInfoManager">The module info manager.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="moduleInfoManager"/> is <c>null</c>.</exception>
+        public ModuleManagerViewModel(IModuleInfoManager moduleInfoManager)
         {
-            var knownModules = GetService<IModuleInfoManager>().KnownModules;
+            Argument.IsNotNull("moduleInfoManager", moduleInfoManager);
+
+            _moduleInfoManager = moduleInfoManager;
+            var knownModules = _moduleInfoManager.KnownModules;
             var tempModules = knownModules.Select(moduleInfo => new ModuleTemplate
                 {
                     ModuleName = moduleInfo.ModuleName,

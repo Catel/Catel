@@ -127,6 +127,8 @@ namespace Catel.Windows
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        private static readonly IViewModelLocator _viewModelLocator = ServiceLocator.Default.ResolveType<IViewModelLocator>();
+
         private bool _isWrapped;
 
         private ICommand _defaultOkCommand;
@@ -236,8 +238,7 @@ namespace Catel.Windows
             {
                 Log.Debug("GetViewModelType() returned null, using the ViewModelLocator to resolve the view model");
 
-                var viewModelLocator = ServiceLocator.Default.ResolveType<IViewModelLocator>();
-                viewModelType = viewModelLocator.ResolveViewModel(GetType());
+                viewModelType = _viewModelLocator.ResolveViewModel(GetType());
                 if (viewModelType == null)
                 {
                     const string error = "The view model of the view could not be resolved. Use either the GetViewModelType() method or IViewModelLocator";

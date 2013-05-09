@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="NavigationService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -34,6 +34,12 @@ namespace Catel.MVVM.Services
     /// </summary>
     public class NavigationService : ViewModelServiceBase, INavigationService
     {
+#if NETFX_CORE
+        private readonly IViewLocator _viewLocator;
+#else
+        private readonly IUrlLocator _urlLocator;
+#endif
+
         #region Fields
         /// <summary>
         /// The log.
@@ -51,11 +57,28 @@ namespace Catel.MVVM.Services
         #endregion
 
         #region Constructors
+#if NETFX_CORE
         /// <summary>
-        /// Initializes a new instance of the <see cref="NavigationService"/> class.
+        /// Initializes a new instance of the <see cref="NavigationService" /> class.
         /// </summary>
-        public NavigationService()
+        /// <param name="viewLocator">The view locator.</param>
+        public NavigationService(IViewLocator viewLocator)
         {
+            Argument.IsNotNull("viewLocator", viewLocator);
+
+            _viewLocator = viewLocator;
+#else
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NavigationService" /> class.
+        /// </summary>
+        /// <param name="urlLocator">The url locator.</param>
+        public NavigationService(IUrlLocator urlLocator)
+        {
+            Argument.IsNotNull("urlLocator", urlLocator);
+
+            _urlLocator = urlLocator;
+#endif
+
 #if NET || SL4 || SL5
             var mainWindow = Catel.Environment.MainWindow;
             if (mainWindow != null)
@@ -106,7 +129,7 @@ namespace Catel.MVVM.Services
         /// Gets a value indicating whether it is possible to navigate forward.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if it is possible to navigate backforward otherwise, <c>false</c>.
+        /// <c>true</c> if it is possible to navigate backforward otherwise, <c>false</c>.
         /// </value>
         public virtual bool CanGoForward
         {
@@ -284,11 +307,9 @@ namespace Catel.MVVM.Services
                 if (!_registeredUris.ContainsKey(viewModelTypeName))
                 {
 #if NETFX_CORE
-                    var viewLocator = ServiceLocator.Default.ResolveType<IViewLocator>();
-                    var url = viewLocator.ResolveView(viewModelType).AssemblyQualifiedName;
+                    var url = _viewLocator.ResolveView(viewModelType).AssemblyQualifiedName;
 #else
-                    var urlLocator = ServiceLocator.Default.ResolveType<IUrlLocator>();
-                    var url = urlLocator.ResolveUrl(viewModelType);
+                    var url = _urlLocator.ResolveUrl(viewModelType);
 #endif
 
                     _registeredUris.Add(viewModelTypeName, url);
@@ -364,7 +385,7 @@ namespace Catel.MVVM.Services
         /// </summary>
         /// <param name="viewModelType">Type of the view model to unregister.</param>
         /// <returns>
-        /// 	<c>true</c> if the view model is unregistered; otherwise <c>false</c>.
+        /// <c>true</c> if the view model is unregistered; otherwise <c>false</c>.
         /// </returns>
         public virtual bool Unregister(Type viewModelType)
         {
@@ -376,7 +397,7 @@ namespace Catel.MVVM.Services
         /// </summary>
         /// <param name="name">Name of the registered page.</param>
         /// <returns>
-        /// 	<c>true</c> if the view model is unregistered; otherwise <c>false</c>.
+        /// <c>true</c> if the view model is unregistered; otherwise <c>false</c>.
         /// </returns>
         public virtual bool Unregister(string name)
         {
