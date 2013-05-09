@@ -62,22 +62,27 @@ namespace Catel.MVVM.Views
         {
             Argument.IsNotNull("viewModelContainer", viewModelContainer);
 
+            Log.Debug("Initializing view model container to manage ViewToViewModel mappings");
+
             if (!(viewModelContainer is DependencyObject))
             {
                 throw new ArgumentException(ResourceHelper.GetString(typeof(ViewToViewModelMappingHelper), "Exceptions", "ViewModelContainerMustBeOfTypeDependencyObject"), "ViewModelContainer");
             }
 
             ViewModelContainer = viewModelContainer;
+            var viewModelContainerType = ViewModelContainerType;
 
-            if (!_viewToViewModelMappingContainers.ContainsKey(ViewModelContainerType))
+            if (!_viewToViewModelMappingContainers.ContainsKey(viewModelContainerType))
             {
-                _viewToViewModelMappingContainers.Add(ViewModelContainerType, new ViewToViewModelMappingContainer((DependencyObject)viewModelContainer));
+                _viewToViewModelMappingContainers.Add(viewModelContainerType, new ViewToViewModelMappingContainer((DependencyObject)ViewModelContainer));
             }
 
             ViewModelContainer.ViewModelChanged += OnViewModelChanged;
             ViewModelContainer.PropertyChanged += OnViewModelContainerPropertyChanged;
 
             InitializeViewModel(ViewModelContainer.ViewModel);
+
+            Log.Debug("Initialized view model container to manage ViewToViewModel mappings");
         }
         #endregion
 
@@ -123,11 +128,7 @@ namespace Catel.MVVM.Views
                 return;
             }
 
-            Log.Debug("Initializing view model container to manage ViewToViewModel mappings");
-
             _viewModelContainers.Add(viewModelContainer, new ViewToViewModelMappingHelper(viewModelContainer));
-
-            Log.Debug("Initialized view model container to manage ViewToViewModel mappings");
         }
 
         /// <summary>
@@ -167,7 +168,9 @@ namespace Catel.MVVM.Views
         /// <param name="viewModel">The view model.</param>
         private void InitializeViewModel(IViewModel viewModel)
         {
-            Log.Debug("Initializing view model '{0}'", ObjectToStringHelper.ToTypeString(viewModel));
+            var viewModelType = ObjectToStringHelper.ToTypeString(viewModel);
+
+            Log.Debug("Initializing view model '{0}'", viewModelType);
 
             UninitializeViewModel(PreviousViewModel);
 
@@ -176,7 +179,8 @@ namespace Catel.MVVM.Views
             if (viewModel != null)
             {
                 // If there are mappings, sync them in the right way
-                foreach (ViewToViewModelMapping mapping in _viewToViewModelMappingContainers[ViewModelContainerType].GetAllViewToViewModelMappings())
+                var viewModelContainerType = ViewModelContainerType;
+                foreach (ViewToViewModelMapping mapping in _viewToViewModelMappingContainers[viewModelContainerType].GetAllViewToViewModelMappings())
                 {
                     try
                     {
@@ -201,7 +205,7 @@ namespace Catel.MVVM.Views
                 viewModel.PropertyChanged += OnViewModelPropertyChanged;
             }
 
-            Log.Debug("Initialized view model '{0}'", ObjectToStringHelper.ToTypeString(viewModel));
+            Log.Debug("Initialized view model '{0}'", viewModelType);
         }
 
         /// <summary>
@@ -215,11 +219,13 @@ namespace Catel.MVVM.Views
                 return;
             }
 
-            Log.Debug("Uninitializing view model '{0}'", viewModel.GetType().Name);
+            var viewModelType = viewModel.GetType().Name;
+
+            Log.Debug("Uninitializing view model '{0}'", viewModelType);
 
             viewModel.PropertyChanged -= OnViewModelPropertyChanged;
 
-            Log.Debug("Uninitialized view model '{0}'", viewModel.GetType().Name);
+            Log.Debug("Uninitialized view model '{0}'", viewModelType);
         }
 
         /// <summary>
@@ -239,9 +245,10 @@ namespace Catel.MVVM.Views
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (_viewToViewModelMappingContainers[ViewModelContainerType].ContainsViewModelToViewMapping(e.PropertyName))
+            var viewModelContainerType = ViewModelContainerType;
+            if (_viewToViewModelMappingContainers[viewModelContainerType].ContainsViewModelToViewMapping(e.PropertyName))
             {
-                ViewToViewModelMapping mapping = _viewToViewModelMappingContainers[ViewModelContainerType].GetViewModelToViewMapping(e.PropertyName);
+                ViewToViewModelMapping mapping = _viewToViewModelMappingContainers[viewModelContainerType].GetViewModelToViewMapping(e.PropertyName);
                 if (_ignoredViewModelChanges.Contains(mapping.ViewPropertyName))
                 {
                     Log.Debug("Ignored property changed event for ViewModel.'{0}'", mapping.ViewPropertyName);
@@ -266,9 +273,10 @@ namespace Catel.MVVM.Views
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         private void OnViewModelContainerPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (_viewToViewModelMappingContainers[ViewModelContainerType].ContainsViewToViewModelMapping(e.PropertyName))
+            var viewModelContainerType = ViewModelContainerType;
+            if (_viewToViewModelMappingContainers[viewModelContainerType].ContainsViewToViewModelMapping(e.PropertyName))
             {
-                ViewToViewModelMapping mapping = _viewToViewModelMappingContainers[ViewModelContainerType].GetViewToViewModelMapping(e.PropertyName);
+                ViewToViewModelMapping mapping = _viewToViewModelMappingContainers[viewModelContainerType].GetViewToViewModelMapping(e.PropertyName);
                 if (_ignoredViewChanges.Contains(mapping.ViewPropertyName))
                 {
                     Log.Debug("Ignored property changed event for view.'{0}'", mapping.ViewPropertyName);
@@ -392,8 +400,6 @@ namespace Catel.MVVM.Views
             Log.Debug("Transferring value of {0}.{1} to {2}.{3}", source.GetType().Name, sourcePropertyName, target.GetType().Name, targetPropertyName);
 
             PropertyHelper.SetPropertyValue(target, targetPropertyName, valueToTransfer);
-
-            Log.Debug("Transferred value successfully");
         }
         #endregion
     }
