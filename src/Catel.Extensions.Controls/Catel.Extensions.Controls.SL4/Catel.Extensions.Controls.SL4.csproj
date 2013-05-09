@@ -91,12 +91,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.de.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.SL4.Designer.cs">
-      <Link>Properties\Resources.SL4.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.es.SL4.Designer.cs">
       <Link>Properties\Resources.es.SL4.Designer.cs</Link>
       <AutoGen>True</AutoGen>
@@ -120,6 +114,12 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.nl.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.SL4.Designer.cs">
+      <Link>Properties\Resources.SL4.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.tr.SL4.Designer.cs">
       <Link>Properties\Resources.tr.SL4.Designer.cs</Link>

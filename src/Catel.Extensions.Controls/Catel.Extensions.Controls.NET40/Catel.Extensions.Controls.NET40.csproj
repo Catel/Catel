@@ -133,6 +133,7 @@
     </Compile>
     <Compile Include="Windows\Controls\AnimatedGif.cs" />
     <Compile Include="Windows\Controls\DropDownButton.cs" />
+    <Compile Include="Windows\Controls\FrameRateCounter.cs" />
     <Compile Include="Windows\Controls\LinkLabel\BindableRun.cs" />
     <Compile Include="Windows\Controls\LinkLabel\LinkLabel.cs" />
     <Compile Include="Windows\Controls\LinkLabel\LinkLabelBehavior.cs" />

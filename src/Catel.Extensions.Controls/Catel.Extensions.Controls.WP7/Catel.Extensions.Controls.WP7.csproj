@@ -91,12 +91,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.de.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.WP7.Designer.cs">
-      <Link>Properties\Resources.WP7.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.es.WP7.Designer.cs">
       <Link>Properties\Resources.es.WP7.Designer.cs</Link>
       <AutoGen>True</AutoGen>
@@ -126,6 +120,12 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.tr.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.WP7.Designer.cs">
+      <Link>Properties\Resources.WP7.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.zh-CHS.WP7.Designer.cs">
       <Link>Properties\Resources.zh-CHS.WP7.Designer.cs</Link>

@@ -107,12 +107,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.de.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.NET45.Designer.cs">
-      <Link>Properties\Resources.NET45.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.es.NET45.Designer.cs">
       <Link>Properties\Resources.es.NET45.Designer.cs</Link>
       <AutoGen>True</AutoGen>
@@ -130,6 +124,12 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.it.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.NET45.Designer.cs">
+      <Link>Properties\Resources.NET45.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.nl.NET45.Designer.cs">
       <Link>Properties\Resources.nl.NET45.Designer.cs</Link>
@@ -154,6 +154,9 @@
     </Compile>
     <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\DropDownButton.cs">
       <Link>Windows\Controls\DropDownButton.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\FrameRateCounter.cs">
+      <Link>Windows\Controls\FrameRateCounter.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\LinkLabel\BindableRun.cs">
       <Link>Windows\Controls\LinkLabel\BindableRun.cs</Link>
