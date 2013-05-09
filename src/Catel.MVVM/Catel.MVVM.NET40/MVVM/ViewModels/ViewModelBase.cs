@@ -1047,7 +1047,7 @@ namespace Catel.MVVM
 
             if (DispatchPropertyChangedEvent)
             {
-                _dispatcherService.BeginInvoke(() => base.RaisePropertyChanged(sender, e));
+                _dispatcherService.BeginInvokeIfRequired(() => base.RaisePropertyChanged(sender, e));
             }
             else
             {

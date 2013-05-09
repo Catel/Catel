@@ -159,7 +159,7 @@ namespace Catel.MVVM.Services
         /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
         /// </summary>
         /// <param name="action">The action.</param>
-        /// <param name="onlyBeginInvokeWhenNoAccess">if set to <c>true</c>, the action will be executed directly if possible. Otherwise, 
+        /// <param name="onlyBeginInvokeWhenNoAccess">If set to <c>true</c>, the action will be executed directly if possible. Otherwise, 
         /// <c>Dispatcher.BeginInvoke</c> will be used.</param>
         private void BeginInvoke(Action action, bool onlyBeginInvokeWhenNoAccess)
         {

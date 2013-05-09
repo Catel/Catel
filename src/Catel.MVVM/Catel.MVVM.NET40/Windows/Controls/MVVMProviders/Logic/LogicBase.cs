@@ -22,6 +22,10 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
     using Reflection;
     using Windows.Threading;
 
+#if NET
+    using System.Windows.Threading;
+#endif
+
 #if NETFX_CORE
     using global::Windows.UI.Core;
     using global::Windows.UI.Xaml;
@@ -30,7 +34,6 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
     using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
 #else
     using System.Windows.Controls;
-
     using UIEventArgs = System.EventArgs;
 #endif
 
@@ -515,7 +518,11 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 
                     _isFirstValidationAfterLoaded = true;
                 }
+#if NET
+            }, DispatcherPriority.Send);
+#else
             });
+#endif
         }
 
         /// <summary>

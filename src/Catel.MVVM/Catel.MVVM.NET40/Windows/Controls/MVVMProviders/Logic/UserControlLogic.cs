@@ -99,7 +99,10 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// Gets the target control.
         /// </summary>
         /// <value>The target control.</value>
-        public new UserControl TargetControl { get { return (UserControl)base.TargetControl; } }
+        public new UserControl TargetControl
+        {
+            get { return (UserControl)base.TargetControl; }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether the user control should close any existing
@@ -111,7 +114,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// By default, this value is <c>true</c>.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if the view model should be closed when the control is unloaded; otherwise, <c>false</c>.
+        /// <c>true</c> if the view model should be closed when the control is unloaded; otherwise, <c>false</c>.
         /// </value>
         public bool CloseViewModelOnUnloaded { get; set; }
 
@@ -127,7 +130,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// The default value is <c>true</c>.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if parent view model containers are supported; otherwise, <c>false</c>.
+        /// <c>true</c> if parent view model containers are supported; otherwise, <c>false</c>.
         /// </value>
         public bool SupportParentViewModelContainers { get; set; }
 
@@ -184,7 +187,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// active view model.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if the user control should automatically be disabled when there is no active view model; otherwise, <c>false</c>.
+        /// <c>true</c> if the user control should automatically be disabled when there is no active view model; otherwise, <c>false</c>.
         /// </value>
         public bool DisableWhenNoViewModel { get; set; }
 
@@ -192,9 +195,12 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// Gets a value indicating whether there is a parent view model container available.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if there is a parent view model container available; otherwise, <c>false</c>.
+        /// <c>true</c> if there is a parent view model container available; otherwise, <c>false</c>.
         /// </value>
-        protected bool HasParentViewModelContainer { get { return _parentViewModelContainer != null; } }
+        protected bool HasParentViewModelContainer
+        {
+            get { return _parentViewModelContainer != null; }
+        }
 
         /// <summary>
         /// Gets the parent view model container.
@@ -203,15 +209,21 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// <remarks>
         /// For internal usage only.
         /// </remarks>
-        internal IViewModelContainer ParentViewModelContainer { get { return _parentViewModelContainer; } }
+        internal IViewModelContainer ParentViewModelContainer
+        {
+            get { return _parentViewModelContainer; }
+        }
 
         /// <summary>
         /// Gets a value indicating whether this instance is subscribed to a parent view model.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this instance is subscribed to a parent view model; otherwise, <c>false</c>.
+        /// <c>true</c> if this instance is subscribed to a parent view model; otherwise, <c>false</c>.
         /// </value>
-        protected bool IsSubscribedToParentViewModel { get { return (_parentViewModel != null); } }
+        protected bool IsSubscribedToParentViewModel
+        {
+            get { return (_parentViewModel != null); }
+        }
         #endregion
 
         #region Methods

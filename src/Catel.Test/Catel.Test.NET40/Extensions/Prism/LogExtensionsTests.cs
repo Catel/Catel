@@ -17,7 +17,6 @@ namespace Catel.Test.Extensions.Prism
     /// <summary>
     /// The log extensions test.
     /// </summary>
-    [TestClass]
     public class LogExtensionsTests
     {
         #region Nested type: TheDebugMethod

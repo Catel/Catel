@@ -6,6 +6,8 @@
 
 namespace Catel
 {
+    using Catel.MVVM.Views;
+
     using IoC;
     using MVVM;
 
@@ -22,7 +24,12 @@ namespace Catel
         /// </summary>
         public static void Initialize()
         {
-            ViewModelServiceHelper.RegisterDefaultViewModelServices(ServiceLocator.Default);
+            var serviceLocator = ServiceLocator.Default;
+
+            serviceLocator.RegisterTypeIfNotYetRegistered<IViewManager, ViewManager>();
+            serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelManager, ViewModelManager>();
+
+            ViewModelServiceHelper.RegisterDefaultViewModelServices(serviceLocator);
         }
     }
 }

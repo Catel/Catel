@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ObjectObserverTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+// <copyright file="ObjectObserverFacts.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -37,12 +37,6 @@ namespace Catel.Test.Memento
 
                 Assert.AreEqual(tag, observer.Tag);
             }
-        }
-
-        [TestClass]
-        public class TheCancelSubscriptionMethod
-        {
-            
         }
     }
 }
