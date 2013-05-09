@@ -35,6 +35,23 @@ namespace Catel.Windows.Controls
         }
         #endregion
 
+        #region Properties
+        /// <summary>
+        /// Gets or sets the prefix.
+        /// </summary>
+        /// <value>The prefix.</value>
+        public string Prefix
+        {
+            get { return (string)GetValue(PrefixProperty); }
+            set { SetValue(PrefixProperty, value); }
+        }
+
+        /// <summary>
+        /// The prefix dependency property definition.
+        /// </summary>
+        public static readonly DependencyProperty PrefixProperty = DependencyProperty.Register("Prefix", typeof(string), typeof(FrameRateCounter), new PropertyMetadata("Frame rate: "));
+        #endregion
+
         #region Methods
         private void OnControlLoaded(object sender, RoutedEventArgs e)
         {
@@ -57,7 +74,16 @@ namespace Catel.Windows.Controls
 
         private void OnFrameRateCounterElapsed()
         {
-             Text = _frameRateCounter.ToString();
+            string text = string.Empty;
+            if (!string.IsNullOrWhiteSpace(Prefix))
+            {
+                text += Prefix;
+            }
+
+            text += _frameRateCounter.ToString();
+
+            Text = text;
+
             _frameRateCounter = 0;
         }
         #endregion
