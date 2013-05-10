@@ -246,7 +246,7 @@ namespace Catel.MVVM
 #if NET
         [field: NonSerialized]
 #endif
-        private object _throttlingLockObject = new object();
+        private readonly object _throttlingLockObject = new object();
 
         /// <summary>
         /// The properties queue used when throttling is enabled.
@@ -261,7 +261,13 @@ namespace Catel.MVVM
         /// List of view model properties that are implemented as properties and can be ignored by reflection.
         /// </summary>
         [field: NonSerialized]
-        private static readonly HashSet<string> _viewModelImplementedProperties;
+        private static readonly HashSet<string> _viewModelBaseImplementedProperties;
+
+        /// <summary>
+        /// The view model properties by type.
+        /// </summary>
+        [field: NonSerialized]
+        private static readonly Dictionary<Type, HashSet<string>> _viewModelPropertiesByType = new Dictionary<Type, HashSet<string>>(); 
 #endif
         #endregion
 
@@ -279,7 +285,7 @@ namespace Catel.MVVM
 #if NET
             var properties = (from property in typeof(ViewModelBase).GetPropertiesEx(false)
                               select property.Name);
-            _viewModelImplementedProperties = new HashSet<string>(properties);
+            _viewModelBaseImplementedProperties = new HashSet<string>(properties);
 #endif
         }
 
@@ -318,6 +324,16 @@ namespace Catel.MVVM
             AuditingHelper.RegisterViewModel(this);
 
             Log.Debug("Creating view model of type '{0}' with unique identifier {1}", GetType().Name, UniqueIdentifier);
+
+#if NET
+            var viewModelType = GetType();
+            if (!_viewModelPropertiesByType.ContainsKey(viewModelType))
+            {
+                var properties = (from property in viewModelType.GetPropertiesEx()
+                                  select property.Name);
+                _viewModelPropertiesByType[viewModelType] = new HashSet<string>(properties);
+            }
+#endif
 
             _ignoreMultipleModelsWarning = ignoreMultipleModelsWarning;
 
@@ -617,6 +633,7 @@ namespace Catel.MVVM
             _validationSummaries.AddRange(metaData.Validations);
 
 #if NET
+            var viewModelProperties = _viewModelPropertiesByType[viewModelType];
             _propertyDescriptors = new PropertyDescriptorCollection(null);
             foreach (ViewModelPropertyDescriptor propertyDescriptor in metaData.PropertyDescriptors)
             {
@@ -625,7 +642,7 @@ namespace Catel.MVVM
                 if (!IsPropertyRegistered(propertyName))
                 {
                     // Make sure that this is not a view model property itself
-                    if (!_viewModelImplementedProperties.Contains(propertyName))
+                    if (!viewModelProperties.Contains(propertyName))
                     {
                         var propertyData = RegisterProperty(propertyName, propertyDescriptor.PropertyType);
                         InitializePropertyAfterConstruction(propertyData);
@@ -651,7 +668,6 @@ namespace Catel.MVVM
         {
             if (_metaData.ContainsKey(viewModelType))
             {
-                Log.Debug("Metadata for view model '{0}' is already determined once, re-using existing metadata", viewModelType.FullName);
                 return _metaData[viewModelType];
             }
 

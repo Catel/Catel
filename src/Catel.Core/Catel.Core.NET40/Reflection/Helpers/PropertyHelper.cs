@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PropertyHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -9,6 +9,9 @@ namespace Catel.Reflection
     using System;
     using System.Globalization;
     using System.Reflection;
+
+    using Catel.Caching;
+
     using Logging;
 
     /// <summary>
@@ -21,6 +24,8 @@ namespace Catel.Reflection
         /// The <see cref="ILog">log</see> object.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        private static readonly ICacheStorage<string, PropertyInfo> _availableProperties = new CacheStorage<string, PropertyInfo>();  
         #endregion
 
         #region Methods
@@ -37,7 +42,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("obj", obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
-            var propertyInfo = obj.GetType().GetPropertyEx(property);
+            var propertyInfo = GetPropertyInfo(obj, property);
             if (propertyInfo == null)
             {
                 return false;
@@ -69,7 +74,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("obj", obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
-            return obj.GetType().GetPropertyEx(property) != null;
+            return GetPropertyInfo(obj, property) != null;
         }
 
         /// <summary>
@@ -108,7 +113,7 @@ namespace Catel.Reflection
 
             TValue defaultValue = default(TValue);
 
-            var propertyInfo = obj.GetType().GetPropertyEx(property);
+            var propertyInfo = GetPropertyInfo(obj, property);
             if (propertyInfo == null)
             {
                 value = defaultValue;
@@ -148,7 +153,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("obj", obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
-            var propertyInfo = obj.GetType().GetPropertyEx(property);
+            var propertyInfo = GetPropertyInfo(obj, property);
             if (propertyInfo == null)
             {
                 Log.Error("Property '{0}' is not found on the object '{1}', probably the wrong field is being mapped", property, obj.GetType().Name);
@@ -235,7 +240,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("obj", obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
-            var propertyInfo = obj.GetType().GetPropertyEx(property);
+            var propertyInfo = GetPropertyInfo(obj, property);
             if (propertyInfo == null)
             {
                 Log.Error("Property '{0}' is not found on the object '{1}', probably the wrong field is being mapped", property, obj.GetType().Name);
@@ -301,6 +306,18 @@ namespace Catel.Reflection
         }
 
 #endif
+
+        /// <summary>
+        /// Gets the property info from the cache.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <param name="property">The property.</param>
+        /// <returns>PropertyInfo.</returns>
+        private static PropertyInfo GetPropertyInfo(object obj, string property)
+        {
+            string cacheKey = string.Format("{0}_{1}", obj.GetType().FullName, property);
+            return _availableProperties.GetFromCacheOrFetch(cacheKey, () => obj.GetType().GetPropertyEx(property));
+        }
         #endregion
     }
 }

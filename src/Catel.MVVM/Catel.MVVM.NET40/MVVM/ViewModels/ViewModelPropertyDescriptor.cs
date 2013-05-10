@@ -8,6 +8,10 @@ namespace Catel.MVVM
 {
     using System;
     using System.ComponentModel;
+    using System.Reflection;
+
+    using Catel.Caching;
+
     using Logging;
     using Reflection;
 
@@ -22,9 +26,13 @@ namespace Catel.MVVM
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        private static readonly ICacheStorage<string, PropertyInfo> _propertyInfoCache = new CacheStorage<string, PropertyInfo>(storeNullValues: true);  
+
         private readonly ViewModelBase _viewModel;
+        private readonly Type _viewModelType;
         private readonly string _propertyName;
         private readonly Type _propertyType;
+        private PropertyInfo _propertyInfo;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelPropertyDescriptor"/> class.
@@ -46,8 +54,15 @@ namespace Catel.MVVM
             //Log.Debug("Created property descriptor for '{0}' as type '{1}'", propertyName, propertyType.Name);
 
             _viewModel = viewModel;
+            _viewModelType = (viewModel != null) ? viewModel.GetType() : null;
             _propertyName = propertyName;
             _propertyType = propertyType;
+
+            if (_viewModelType != null)
+            {
+                string cacheKey = string.Format("{0}_{1}", _viewModelType.FullName, propertyName);
+                _propertyInfo = _propertyInfoCache.GetFromCacheOrFetch(cacheKey, () => _viewModelType.GetPropertyEx(propertyName));
+            }
         }
 
         #region Properties
@@ -60,7 +75,7 @@ namespace Catel.MVVM
         /// </returns>
         public override Type ComponentType
         {
-            get { return _viewModel.GetType(); }
+            get { return _viewModelType; }
         }
 
         /// <summary>
@@ -92,9 +107,7 @@ namespace Catel.MVVM
         /// When overridden in a derived class, returns whether resetting an object changes its value.
         /// </summary>
         /// <param name="component">The component to test for reset capability.</param>
-        /// <returns>
-        /// true if resetting the component changes its value; otherwise, false.
-        /// </returns>
+        /// <returns><c>true</c> if resetting the component changes its value; otherwise, <c>false</c>.</returns>
         public override bool CanResetValue(object component)
         {
             return false;
@@ -118,7 +131,7 @@ namespace Catel.MVVM
         /// </returns>
         public override object GetValue(object component)
         {
-            if (!PropertyHelper.IsPropertyAvailable(_viewModel, _propertyName))
+            if (_propertyInfo == null)
             {
                 if (_viewModel.IsPropertyRegistered(_propertyName))
                 {
@@ -130,7 +143,7 @@ namespace Catel.MVVM
                 throw new NotSupportedException(error);
             }
 
-            return PropertyHelper.GetPropertyValue(_viewModel, _propertyName);
+            return _propertyInfo.GetValue(_viewModel, null);
         }
 
         /// <summary>
@@ -145,7 +158,7 @@ namespace Catel.MVVM
                 return;
             }
 
-            if (!PropertyHelper.IsPropertyAvailable(_viewModel, _propertyName))
+            if (_propertyInfo == null)
             {
                 if (_viewModel.IsPropertyRegistered(_propertyName))
                 {
@@ -160,7 +173,7 @@ namespace Catel.MVVM
             }
             else
             {
-                PropertyHelper.SetPropertyValue(_viewModel, _propertyName, value);
+                _propertyInfo.SetValue(_viewModel, value, null);
             }
         }
 
