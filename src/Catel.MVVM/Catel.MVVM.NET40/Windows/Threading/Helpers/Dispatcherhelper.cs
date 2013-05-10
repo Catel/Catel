@@ -59,7 +59,7 @@ namespace Catel.Windows.Threading
 #endif
 
 #if NET
-        private static DispatcherOperationCallback exitFrameCallback = ExitFrame;
+        private static readonly DispatcherOperationCallback exitFrameCallback = ExitFrame;
 
         /// <summary>
         /// Processes all UI messages currently in the message queue.

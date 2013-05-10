@@ -10,7 +10,6 @@ namespace Catel.MVVM.Services
     using Windows.Threading;
 
 #if NETFX_CORE
-    using global::Windows.UI.Core;
     using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
 #else
     using System.Windows.Threading;
@@ -49,20 +48,7 @@ namespace Catel.MVVM.Services
             Argument.IsNotNull("action", action);
 
             var dispatcher = CurrentDispatcher;
-            if (dispatcher != null && !dispatcher.CheckAccess())
-            {
-#if NET
-                dispatcher.Invoke(action, null);
-#elif NETFX_CORE
-                dispatcher.BeginInvoke(action);
-#else
-                dispatcher.BeginInvoke(action);
-#endif
-            }
-            else
-            {
-                action.Invoke();
-            }
+            DispatcherExtensions.Invoke(dispatcher, action);
         }
 
         /// <summary>
@@ -80,20 +66,7 @@ namespace Catel.MVVM.Services
             Argument.IsNotNull("method", method);
 
             var dispatcher = CurrentDispatcher;
-            if (dispatcher != null && !dispatcher.CheckAccess())
-            {
-#if NET
-                dispatcher.Invoke(method, args);
-#elif NETFX_CORE
-                dispatcher.BeginInvoke(() => method.DynamicInvoke(args));
-#else
-                dispatcher.BeginInvoke(method, args);
-#endif
-            }
-            else
-            {
-                method.DynamicInvoke(args);
-            }
+            DispatcherExtensions.Invoke(dispatcher, method, args);
         }
 
         /// <summary>
@@ -154,7 +127,6 @@ namespace Catel.MVVM.Services
             BeginInvoke(() => method.DynamicInvoke(args), true);
         }
 
-
         /// <summary>
         /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
         /// </summary>
@@ -165,27 +137,8 @@ namespace Catel.MVVM.Services
         {
             Argument.IsNotNull("action", action);
 
-            bool actionInvoked = false;
-
             var dispatcher = CurrentDispatcher;
-            if (dispatcher != null)
-            {
-                if (!onlyBeginInvokeWhenNoAccess || !dispatcher.CheckAccess())
-                {
-#if NETFX_CORE
-                    dispatcher.BeginInvoke(action);
-#else
-                    dispatcher.BeginInvoke(action, null);
-#endif
-
-                    actionInvoked = true;
-                }
-            }
-
-            if (!actionInvoked)
-            {
-                action.Invoke();
-            }
+            DispatcherExtensions.BeginInvoke(dispatcher, action, onlyBeginInvokeWhenNoAccess);
         }
     }
 }

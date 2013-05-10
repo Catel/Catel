@@ -287,7 +287,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// Gets a value indicating whether the target control is loaded or not.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if the target control is loaded; otherwise, <c>false</c>.
+        /// <c>true</c> if the target control is loaded; otherwise, <c>false</c>.
         /// </value>
         public bool IsTargetControlLoaded { get; private set; }
 
@@ -493,11 +493,8 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 ViewToViewModelMappingHelper.InitializeViewToViewModelMappings(targetControlAsIViewModelContainer);
             }
 
-#if NETFX_CORE
-            TargetControl.Dispatcher.BeginInvoke(() =>
-#else
-            TargetControl.Dispatcher.BeginInvoke((ThreadStart)delegate
-#endif
+            var dispatcher = TargetControl.Dispatcher;
+            dispatcher.BeginInvokeIfRequired(() =>
             {
                 if (ViewModel != null)
                 {
@@ -518,11 +515,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 
                     _isFirstValidationAfterLoaded = true;
                 }
-#if NET
-            }, DispatcherPriority.Send);
-#else
             });
-#endif
         }
 
         /// <summary>
