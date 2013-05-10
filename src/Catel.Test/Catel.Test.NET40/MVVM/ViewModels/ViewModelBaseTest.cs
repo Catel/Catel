@@ -49,11 +49,7 @@
             var messageService = new MessageService();
             serviceLocator.RegisterInstance<IMessageService>(messageService);
 
-#if NETFX_CORE
-            var navigationService = new NavigationService(new ViewLocator());
-#else
-            var navigationService = new NavigationService(new UrlLocator());
-#endif
+            var navigationService = new NavigationService();
             serviceLocator.RegisterInstance<INavigationService>(navigationService);
 
             var viewModel = new TestViewModel(serviceLocator);
