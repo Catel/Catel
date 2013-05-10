@@ -34,12 +34,6 @@ namespace Catel.MVVM.Services
     /// </summary>
     public class NavigationService : ViewModelServiceBase, INavigationService
     {
-#if NETFX_CORE
-        private readonly IViewLocator _viewLocator;
-#else
-        private readonly IUrlLocator _urlLocator;
-#endif
-
         #region Fields
         /// <summary>
         /// The log.
@@ -57,28 +51,11 @@ namespace Catel.MVVM.Services
         #endregion
 
         #region Constructors
-#if NETFX_CORE
         /// <summary>
         /// Initializes a new instance of the <see cref="NavigationService" /> class.
         /// </summary>
-        /// <param name="viewLocator">The view locator.</param>
-        public NavigationService(IViewLocator viewLocator)
+        public NavigationService()
         {
-            Argument.IsNotNull("viewLocator", viewLocator);
-
-            _viewLocator = viewLocator;
-#else
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NavigationService" /> class.
-        /// </summary>
-        /// <param name="urlLocator">The url locator.</param>
-        public NavigationService(IUrlLocator urlLocator)
-        {
-            Argument.IsNotNull("urlLocator", urlLocator);
-
-            _urlLocator = urlLocator;
-#endif
-
 #if NET || SL4 || SL5
             var mainWindow = Catel.Environment.MainWindow;
             if (mainWindow != null)
@@ -118,7 +95,7 @@ namespace Catel.MVVM.Services
         /// Gets a value indicating whether it is possible to navigate back.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if it is possible to navigate back; otherwise, <c>false</c>.
+        /// <c>true</c> if it is possible to navigate back; otherwise, <c>false</c>.
         /// </value>
         public virtual bool CanGoBack
         {
@@ -307,9 +284,11 @@ namespace Catel.MVVM.Services
                 if (!_registeredUris.ContainsKey(viewModelTypeName))
                 {
 #if NETFX_CORE
-                    var url = _viewLocator.ResolveView(viewModelType).AssemblyQualifiedName;
+                    var viewLocator = ServiceLocator.Default.ResolveType<IViewLocator>();
+                    var url = viewLocator.ResolveView(viewModelType).AssemblyQualifiedName;
 #else
-                    var url = _urlLocator.ResolveUrl(viewModelType);
+                    var urlLocator = ServiceLocator.Default.ResolveType<IUrlLocator>();
+                    var url = urlLocator.ResolveUrl(viewModelType);
 #endif
 
                     _registeredUris.Add(viewModelTypeName, url);
