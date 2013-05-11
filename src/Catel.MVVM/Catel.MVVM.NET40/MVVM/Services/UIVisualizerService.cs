@@ -231,6 +231,11 @@ namespace Catel.MVVM.Services
 
             if (!RegisteredWindows.ContainsKey(viewModelTypeName))
             {
+                if (_viewLocator == null)
+                {
+                    _viewLocator = GetService<IViewLocator>();
+                }
+
                 var viewType = _viewLocator.ResolveView(viewModel.GetType());
                 if (viewType != null)
                 {
