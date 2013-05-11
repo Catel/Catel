@@ -9,7 +9,6 @@ namespace Catel.MVVM.Services
     using System;
     using System.Collections.Generic;
     using System.Windows;
-    using IoC;
     using Logging;
     using Properties;
     using Reflection;
@@ -28,8 +27,6 @@ namespace Catel.MVVM.Services
     /// </summary>
     public class UIVisualizerService : ViewModelServiceBase, IUIVisualizerService
     {
-        private readonly IViewLocator _viewLocator;
-
         #region Fields
         /// <summary>
         /// The log.
@@ -40,19 +37,12 @@ namespace Catel.MVVM.Services
         /// Dictionary of registered windows.
         /// </summary>
         protected readonly Dictionary<string, Type> RegisteredWindows = new Dictionary<string, Type>();
-        #endregion
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UIVisualizerService"/> class.
+        /// The view locator.
         /// </summary>
-        /// <param name="viewLocator">The view locator.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewLocator"/> is <c>null</c>.</exception>
-        public UIVisualizerService(IViewLocator viewLocator)
-        {
-            Argument.IsNotNull("viewLocator", viewLocator);
-
-            _viewLocator = viewLocator;
-        }
+        private IViewLocator _viewLocator;
+        #endregion
 
         #region Properties
         /// <summary>
@@ -176,6 +166,11 @@ namespace Catel.MVVM.Services
 
             if (!RegisteredWindows.ContainsKey(viewModelTypeName))
             {
+                if (_viewLocator == null)
+                {
+                    _viewLocator = GetService<IViewLocator>();
+                }
+
                 var viewType = _viewLocator.ResolveView(viewModel.GetType());
                 if (viewType != null)
                 {

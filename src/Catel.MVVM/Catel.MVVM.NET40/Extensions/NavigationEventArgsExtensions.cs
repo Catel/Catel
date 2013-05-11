@@ -24,7 +24,7 @@ namespace Catel
         /// </summary>
         /// <param name="e">The <see cref="NavigatingCancelEventArgs" /> instance containing the event data.</param>
         /// <param name="viewType">Type of the view.</param>
-        /// <returns><c>true</c> if the naviation is for the specified view model; otherwise, <c>false</c>.</returns>
+        /// <returns><c>true</c> if the navigation is for the specified view model; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="e"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="viewType"/> is <c>null</c>.</exception>
         public static bool IsNavigationForView(this NavigatingCancelEventArgs e, Type viewType)
@@ -41,7 +41,7 @@ namespace Catel
         /// </summary>
         /// <param name="e">The <see cref="NavigationEventArgs" /> instance containing the event data.</param>
         /// <param name="viewType">Type of the view.</param>
-        /// <returns><c>true</c> if the naviation is for the specified view model; otherwise, <c>false</c>.</returns>
+        /// <returns><c>true</c> if the navigation is for the specified view model; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="e"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="viewType"/> is <c>null</c>.</exception>
         public static bool IsNavigationForView(this NavigationEventArgs e, Type viewType)
@@ -58,7 +58,7 @@ namespace Catel
         /// </summary>
         /// <param name="uriString">The <see cref="NavigationEventArgs" /> instance containing the event data.</param>
         /// <param name="viewType">Type of the view.</param>
-        /// <returns><c>true</c> if the naviation is for the specified view model; otherwise, <c>false</c>.</returns>
+        /// <returns><c>true</c> if the navigation is for the specified view model; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentException">The <paramref name="uriString"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="viewType"/> is <c>null</c>.</exception>
         public static bool IsNavigationForView(string uriString, Type viewType)
@@ -118,14 +118,15 @@ namespace Catel
         {
             Argument.IsNotNull("uri", uri);
 
-            try
-            {
-                return uri.AbsoluteUri;
-            }
-            catch (Exception)
-            {
-                return uri.OriginalString;
-            }
+            return IsAbsoluteUrl(uri.ToString()) ? uri.AbsoluteUri : uri.OriginalString;
+        }
+
+        private static bool IsAbsoluteUrl(string url)
+        {
+            Argument.IsNotNull("url", url);
+
+            Uri result;
+            return Uri.TryCreate(url, UriKind.Absolute, out result);
         }
     }
 }

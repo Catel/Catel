@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ViewModelManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -57,7 +57,7 @@ namespace Catel.MVVM
         /// <remarks>
         /// The constructor is private because this is a singleton class.
         /// </remarks>
-        internal ViewModelManager()
+        public ViewModelManager()
         {
             _instances.Add(this);
 
