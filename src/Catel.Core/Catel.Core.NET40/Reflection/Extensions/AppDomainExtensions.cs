@@ -164,7 +164,7 @@ namespace Catel.Reflection
                     return;
                 }
 
-                var loadedAssembly = Assembly.Load(assemblyName);
+                var loadedAssembly = appDomain.Load(assemblyName);
                 if (includeReferencedAssemblies)
                 {
                     Log.Debug("Loading referenced assemblies of assembly '{0}'", assemblyName);
