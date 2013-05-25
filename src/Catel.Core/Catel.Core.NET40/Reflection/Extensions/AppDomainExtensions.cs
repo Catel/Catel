@@ -158,13 +158,13 @@ namespace Catel.Reflection
 
             try
             {
-                if (AppDomain.CurrentDomain.GetAssemblies().Any(assembly => AssemblyName.ReferenceMatchesDefinition(assemblyName, assembly.GetName())))
+                if (appDomain.GetAssemblies().Any(assembly => AssemblyName.ReferenceMatchesDefinition(assemblyName, assembly.GetName())))
                 {
                     Log.Debug("Assembly already loaded into the AppDomain");
                     return;
                 }
 
-                var loadedAssembly = Assembly.Load(assemblyName);
+                var loadedAssembly = appDomain.Load(assemblyName);
                 if (includeReferencedAssemblies)
                 {
                     Log.Debug("Loading referenced assemblies of assembly '{0}'", assemblyName);
@@ -183,6 +183,23 @@ namespace Catel.Reflection
             {
                 Log.Error(ex, "Failed to load assembly '{0}'", assemblyName);
             }
+        }
+
+        /// <summary>
+        /// Creates the instance in the specified <see cref="AppDomain" /> and unwraps it.
+        /// </summary>
+        /// <typeparam name="T">The type of instance to create.</typeparam>
+        /// <param name="appDomain">The app domain.</param>
+        /// <returns>The created instance of the specified type</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="appDomain"/> is <c>null</c>.</exception>
+        public static T CreateInstanceAndUnwrap<T>(this AppDomain appDomain)
+            where T : new()
+        {
+            Argument.IsNotNull("appDomain", appDomain);
+
+            Log.Debug("Creating instance of '{0}'", typeof(T).FullName);
+
+            return (T) appDomain.CreateInstanceAndUnwrap(typeof(T).Assembly.FullName, typeof(T).FullName);
         }
 #endif
     }
