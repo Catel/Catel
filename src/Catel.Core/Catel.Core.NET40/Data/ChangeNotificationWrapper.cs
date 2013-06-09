@@ -239,21 +239,19 @@ namespace Catel.Data
                         SubscribeNotifyChangedEvents(child, true);
                     }
                 }
-                else
+
+                var propertyChangedValue = value as INotifyPropertyChanged;
+                if (propertyChangedValue != null)
                 {
-                    var propertyChangedValue = value as INotifyPropertyChanged;
-                    if (propertyChangedValue != null)
+                    // ObservableObject implements PropertyChanged as protected, make sure we accept that in non-.NET languages such
+                    // as Silverlight, Windows Phone and WinRT
+                    try
                     {
-                        // ObservableObject implements PropertyChanged as protected, make sure we accept that in non-.NET languages such
-                        // as Silverlight, Windows Phone and WinRT
-                        try
-                        {
-                            SubscribeNotifyChangedEvent(propertyChangedValue, EventChangeType.Property, isCollectionItem);
-                        }
-                        catch (Exception ex)
-                        {
-                            Log.Warning(ex, "Failed to subscribe to PropertyChanged event, the event is probably not public");
-                        }
+                        SubscribeNotifyChangedEvent(propertyChangedValue, EventChangeType.Property, isCollectionItem);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Warning(ex, "Failed to subscribe to PropertyChanged event, the event is probably not public");
                     }
                 }
             }
