@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CountVisibilityConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -52,7 +52,7 @@ namespace Catel.Windows.Data.Converters
         /// <param name="targetType">The type of the binding target property.</param>
         /// <param name="parameter">The converter parameter to use.</param>
         /// <returns>
-        /// 	<c>true</c> if the specified value is visible; otherwise, <c>false</c>.
+        /// <c>true</c> if the specified value is visible; otherwise, <c>false</c>.
         /// </returns>
         protected override bool IsVisible(object value, Type targetType, object parameter)
         {

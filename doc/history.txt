@@ -48,6 +48,7 @@ Added/fixed:
     ValidationContext. This way it should be easier to write simple validators and modify the existing validation context
 (+) [CTL-75] Added FrameRate counter for WPF to easily measure the frame rate of an application
 (+) [CTL-88] Added SelectDirectoryService to let the user select a directory
+(+) [CTL-82] Added ViewModelToViewConverter to Silverlight projects
 (+) Added the IExceptionService.IsExceptionRegistered method to know if an exception type is registered for handling
 (+) Added BindingWithValidation for NET40 and NET45 where {catel:BindingWithValidation MyProp} can now be used instead of
     {Binding Path=MyProp, NotifyOnValidationErrors=True, ValidatesOnDataErrors=True}
