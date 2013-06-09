@@ -6,6 +6,7 @@
 
 namespace Catel.Data
 {
+    using System;
     using System.Collections.ObjectModel;
 
     /// <summary>
@@ -84,5 +85,11 @@ namespace Catel.Data
         /// </summary>
         /// <value>The business rule errors.</value>
         ReadOnlyCollection<IBusinessRuleValidationResult> BusinessRuleErrors { get; }
+
+        /// <summary>
+        /// Gets the last modified date/time.
+        /// </summary>
+        /// <value>The last modified date/time.</value>
+        DateTime LastModified { get; }
     }
 }

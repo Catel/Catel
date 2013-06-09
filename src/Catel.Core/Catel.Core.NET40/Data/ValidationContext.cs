@@ -32,9 +32,7 @@ namespace Catel.Data
         /// Initializes a new instance of the <see cref="ValidationContext"/> class.
         /// </summary>
         public ValidationContext()
-            : this(null, null)
-        {
-        }
+            : this(null, null) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ValidationContext"/> class.
@@ -42,6 +40,15 @@ namespace Catel.Data
         /// <param name="fieldValidationResults">The field validation results. Can be <c>null</c> to add no field validation results.</param>
         /// <param name="businessRuleValidationResults">The business rule validation results. Can be <c>null</c> to add no business rule validations.</param>
         public ValidationContext(IEnumerable<IFieldValidationResult> fieldValidationResults, IEnumerable<IBusinessRuleValidationResult> businessRuleValidationResults)
+            : this (fieldValidationResults, businessRuleValidationResults, DateTime.Now) { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ValidationContext" /> class.
+        /// </summary>
+        /// <param name="fieldValidationResults">The field validation results. Can be <c>null</c> to add no field validation results.</param>
+        /// <param name="businessRuleValidationResults">The business rule validation results. Can be <c>null</c> to add no business rule validations.</param>
+        /// <param name="lastModified">The last modified date/time.</param>
+        public ValidationContext(IEnumerable<IFieldValidationResult> fieldValidationResults, IEnumerable<IBusinessRuleValidationResult> businessRuleValidationResults, DateTime lastModified)
         {
             if (fieldValidationResults != null)
             {
@@ -52,10 +59,18 @@ namespace Catel.Data
             {
                 _businessRuleValidations.AddRange(businessRuleValidationResults);
             }
+
+            LastModified = lastModified;
         }
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets the last modified date/time.
+        /// </summary>
+        /// <value>The last modified date/time.</value>
+        public DateTime LastModified { get; private set; }
+
         /// <summary>
         /// Gets a value indicating whether this instance contains warnings.
         /// </summary>
@@ -738,6 +753,8 @@ namespace Catel.Data
             lock (_fieldValidations)
             {
                 _fieldValidations.Add(fieldValidationResult);
+
+                LastModified = DateTime.Now;
             }
         }
 
@@ -753,6 +770,8 @@ namespace Catel.Data
             lock (_fieldValidations)
             {
                 _fieldValidations.Remove(fieldValidationResult);
+
+                LastModified = DateTime.Now;
             }
         }
 
@@ -768,6 +787,8 @@ namespace Catel.Data
             lock (_businessRuleValidations)
             {
                 _businessRuleValidations.Add(businessRuleValidationResult);
+
+                LastModified = DateTime.Now;
             }
         }
 
@@ -783,6 +804,8 @@ namespace Catel.Data
             lock (_businessRuleValidations)
             {
                 _businessRuleValidations.Remove(businessRuleValidationResult);
+
+                LastModified = DateTime.Now;
             }
         }
         #endregion

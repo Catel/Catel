@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ValidationSummary.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -10,7 +10,7 @@ namespace Catel.Data
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
 
-    using Collections;
+    using Catel.Collections;
 
     /// <summary>
     /// The validation summary that contains a momentum of the <see cref="IValidationContext"/>.
@@ -45,7 +45,7 @@ namespace Catel.Data
         /// </summary>
         /// <param name="validationContext">The validation context to base the summary on.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="validationContext"/> is <c>null</c>.</exception>
-        internal ValidationSummary(IValidationContext validationContext)
+        public ValidationSummary(IValidationContext validationContext)
         {
             Argument.IsNotNull("validationContext", validationContext);
 
@@ -53,6 +53,8 @@ namespace Catel.Data
             _fieldErrors = validationContext.GetFieldErrors();
             _businessRuleWarnings = validationContext.GetBusinessRuleWarnings();
             _businessRuleErrors = validationContext.GetBusinessRuleErrors();
+
+            LastModified = validationContext.LastModified;
         }
 
         /// <summary>
@@ -61,23 +63,31 @@ namespace Catel.Data
         /// <param name="validationContext">The validation context to base the summary on.</param>
         /// <param name="tag">The tag.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="validationContext"/> is <c>null</c>.</exception>
-        internal ValidationSummary(IValidationContext validationContext, object tag)
+        public ValidationSummary(IValidationContext validationContext, object tag)
         {
             Argument.IsNotNull("validationContext", validationContext);
 
             _fieldWarnings = validationContext.GetFieldWarnings(tag);
             _fieldErrors = validationContext.GetFieldErrors(tag);
             _businessRuleWarnings = validationContext.GetBusinessRuleWarnings(tag);
-            _businessRuleErrors = validationContext.GetBusinessRuleErrors(tag);  
+            _businessRuleErrors = validationContext.GetBusinessRuleErrors(tag);
+
+            LastModified = validationContext.LastModified;
         }
         #endregion
 
         #region Properties
         /// <summary>
+        /// Gets the last modified date/time.
+        /// </summary>
+        /// <value>The last modified date/time.</value>
+        public DateTime LastModified { get; private set; }
+
+        /// <summary>
         /// Gets a value indicating whether the summary contains warnings.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this instance has warnings; otherwise, <c>false</c>.
+        /// <c>true</c> if this instance has warnings; otherwise, <c>false</c>.
         /// </value>
         public bool HasWarnings
         {
@@ -88,7 +98,7 @@ namespace Catel.Data
         /// Gets a value indicating whether the summary contains errors.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this instance has errors; otherwise, <c>false</c>.
+        /// <c>true</c> if this instance has errors; otherwise, <c>false</c>.
         /// </value>
         public bool HasErrors
         {
@@ -99,7 +109,7 @@ namespace Catel.Data
         /// Gets a value indicating whether the summary contains field warnings.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this instance has field warnings; otherwise, <c>false</c>.
+        /// <c>true</c> if this instance has field warnings; otherwise, <c>false</c>.
         /// </value>
         public bool HasFieldWarnings
         {
@@ -110,7 +120,7 @@ namespace Catel.Data
         /// Gets a value indicating whether the summary contains field errors.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this instance has field errors; otherwise, <c>false</c>.
+        /// <c>true</c> if this instance has field errors; otherwise, <c>false</c>.
         /// </value>
         public bool HasFieldErrors
         {
@@ -121,7 +131,7 @@ namespace Catel.Data
         /// Gets a value indicating whether the summary contains business rule warnings.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this instance has business rule warnings; otherwise, <c>false</c>.
+        /// <c>true</c> if this instance has business rule warnings; otherwise, <c>false</c>.
         /// </value>
         public bool HasBusinessRuleWarnings
         {
@@ -132,7 +142,7 @@ namespace Catel.Data
         /// Gets a value indicating whether the summary contains business rule errors.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this instance has business rule errors; otherwise, <c>false</c>.
+        /// <c>true</c> if this instance has business rule errors; otherwise, <c>false</c>.
         /// </value>
         public bool HasBusinessRuleErrors
         {
@@ -174,9 +184,6 @@ namespace Catel.Data
         {
             get { return _businessRuleErrors.AsReadOnly(); }
         }
-        #endregion
-
-        #region Methods
         #endregion
     }
 }

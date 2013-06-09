@@ -25,6 +25,12 @@ namespace Catel.Data
         bool HasErrors { get; }
 
         /// <summary>
+        /// Gets the last modified date/time.
+        /// </summary>
+        /// <value>The last modified date/time.</value>
+        DateTime LastModified { get; }
+
+        /// <summary>
         /// Gets the total validation count of all fields and business rules.
         /// </summary>
         /// <returns>

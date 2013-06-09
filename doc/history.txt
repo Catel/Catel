@@ -67,6 +67,7 @@ Added/fixed:
 (*) [CTL-84] All converters based on ValueConverterBase can now be chained after eachother by using the Link property
 (*) [CTL-86] Improved DoubleClickToCommand behavior for grids
 (*) [CTL-83] ChangeNotificationWrapper now supports both collection and property changes at the same time
+(*) [CTL-81] Prevent a change in case the validationsummary has not changed which should improve performance in some cases
 (-) Removed EffectsHelper class from Catel.Extensions.Controls because it was already included in Catel.MVVM
 (x) [CTL-20] Fixed issue where the WeakEventListener could not handle explicitly implemented events
 (x) Fixed issue where default values were not correctly subscribed to via weak events. This caused the protected change notifications

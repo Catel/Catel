@@ -356,6 +356,9 @@
     <Compile Include="..\Catel.Test.NET40\MVVM\ViewModels\Attributes\ViewModelToModelAttributeFacts.cs">
       <Link>MVVM\ViewModels\Attributes\ViewModelToModelAttributeFacts.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\ViewModels\Extensions\ViewModelExtensionsFacts.cs">
+      <Link>MVVM\ViewModels\Extensions\ViewModelExtensionsFacts.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\MVVM\ViewModels\ManagedViewModelTest.cs">
       <Link>MVVM\ViewModels\ManagedViewModelTest.cs</Link>
     </Compile>

@@ -212,6 +212,7 @@
     <Compile Include="ModuleInitializer.cs" />
     <Compile Include="MVVM\Commands\ViewModelCommandManagerFacts.cs" />
     <Compile Include="MVVM\Services\SplashScreenServiceTest.cs" />
+    <Compile Include="MVVM\ViewModels\Extensions\ViewModelExtensionsFacts.cs" />
     <Compile Include="Reflection\AttributeHelperFacts.cs" />
     <Compile Include="Helpers\ExpressionHelperFacts.cs" />
     <Compile Include="Helpers\FilesHelper.cs" />

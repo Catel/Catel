@@ -18,6 +18,7 @@ namespace Catel.MVVM
 
     public partial class ViewModelBase
     {
+        #region Fields
         /// <summary>
         /// Dictionary of properties that are decorated with the <see cref="ValidationToViewModelAttribute"/>. These properties should be
         /// updated after each validation sequence.
@@ -26,6 +27,15 @@ namespace Catel.MVVM
         [field: NonSerialized]
 #endif
         private readonly Dictionary<string, ValidationToViewModelAttribute> _validationSummaries = new Dictionary<string, ValidationToViewModelAttribute>();
+
+        /// <summary>
+        /// A date/time with the latest update stamp of each validation summary.
+        /// </summary>
+#if NET
+        [field: NonSerialized]
+#endif
+        private readonly Dictionary<string, DateTime> _validationSummariesUpdateStamps = new Dictionary<string, DateTime>();
+        #endregion
 
         #region Properties
 
@@ -276,6 +286,15 @@ namespace Catel.MVVM
 
             foreach (var validationSummaryInfo in _validationSummaries)
             {
+                var isSummaryUpdateRequired = false;
+                var lastUpdated = _validationSummariesUpdateStamps.ContainsKey(validationSummaryInfo.Key) ? _validationSummariesUpdateStamps[validationSummaryInfo.Key] : DateTime.MinValue;
+                
+                isSummaryUpdateRequired = this.IsValidationSummaryOutdated(lastUpdated, validationSummaryInfo.Value.IncludeChildViewModels);
+                if (!isSummaryUpdateRequired)
+                {
+                    continue;
+                }
+
                 IValidationSummary validationSummary;
                 if (validationSummaryInfo.Value.UseTagToFilter)
                 {
@@ -287,6 +306,7 @@ namespace Catel.MVVM
                 }
 
                 PropertyHelper.SetPropertyValue(this, validationSummaryInfo.Key, validationSummary);
+                _validationSummariesUpdateStamps[validationSummaryInfo.Key] = validationSummary.LastModified;
 
                 updatedValidationSummaries = true;
             }
