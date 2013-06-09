@@ -158,6 +158,9 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interfaces\IDependencyPropertySelector.cs">
       <Link>Windows\Interfaces\IDependencyPropertySelector.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Markup\ServiceDependencyExtension.cs">
+      <Link>Windows\Markup\ServiceDependencyExtension.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Threading\Extensions\DispatcherExtensions.cs">
       <Link>Windows\Threading\Extensions\DispatcherExtensions.cs</Link>
     </Compile>
@@ -864,9 +867,7 @@
   <ItemGroup>
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Windows\Markup\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="..\Catel.MVVM.NET40\Resources\Images\Error.png">
       <Link>Resources\Images\Error.png</Link>

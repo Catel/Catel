@@ -38,8 +38,16 @@ namespace Catel.Windows.Markup
         /// Gets or sets the type.
         /// </summary>
         /// <value>The type.</value>
+#if NET
         [ConstructorArgument("type")]
+#endif
         public Type Type { get; set; }
+
+        /// <summary>
+        /// Gets or sets the tag.
+        /// </summary>
+        /// <value>The tag.</value>
+        public object Tag { get; set; }
         #endregion
 
         #region Methods
@@ -55,7 +63,7 @@ namespace Catel.Windows.Markup
                 return null;
             }
 
-            return ServiceLocator.Default.ResolveType(Type);
+            return ServiceLocator.Default.ResolveType(Type, Tag);
         }
         #endregion
     }

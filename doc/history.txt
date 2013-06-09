@@ -49,6 +49,7 @@ Added/fixed:
 (+) [CTL-75] Added FrameRate counter for WPF to easily measure the frame rate of an application
 (+) [CTL-88] Added SelectDirectoryService to let the user select a directory
 (+) [CTL-82] Added ViewModelToViewConverter to Silverlight projects
+(+) [CTL-85] Added ServiceDependency markup extension to Silverlight 5 project (MarkupExtension is not supported in SL4)
 (+) Added the IExceptionService.IsExceptionRegistered method to know if an exception type is registered for handling
 (+) Added BindingWithValidation for NET40 and NET45 where {catel:BindingWithValidation MyProp} can now be used instead of
     {Binding Path=MyProp, NotifyOnValidationErrors=True, ValidatesOnDataErrors=True}
