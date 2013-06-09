@@ -63,6 +63,7 @@ Added/fixed:
     subscription to MessageMediator (see CTL-74) and the introduction of the IDependencyPropertySelector. For more information about
     performance, please check out the performance considerations: https://catelproject.atlassian.net/wiki/display/CTL/Performance+considerations
 (*) [CTL-84] All converters based on ValueConverterBase can now be chained after eachother by using the Link property
+(*) [CTL-86] Improved DoubleClickToCommand behavior for grids
 (-) Removed EffectsHelper class from Catel.Extensions.Controls because it was already included in Catel.MVVM
 (x) [CTL-20] Fixed issue where the WeakEventListener could not handle explicitly implemented events
 (x) Fixed issue where default values were not correctly subscribed to via weak events. This caused the protected change notifications

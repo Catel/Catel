@@ -1,21 +1,20 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DoubleClickToCommand.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace Catel.Windows.Interactivity
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Input;
     using System.Windows.Media;
     using System.Windows.Threading;
     using Logging;
-
-#if !NET
-    using System.Windows.Input;
-#endif
 
     /// <summary>
     /// This behavior allows any element that supports a double click to command for every element
@@ -64,7 +63,7 @@ namespace Catel.Windows.Interactivity
         /// Gets or sets a value indicating whether to automatically fix the ItemTemplate in a ListBox.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if the ItemTemplate in a ListBox should automatically be fixed; otherwise, <c>false</c>.
+        /// <c>true</c> if the ItemTemplate in a ListBox should automatically be fixed; otherwise, <c>false</c>.
         /// </value>
         public bool AutoFixListBoxItemTemplate
         {
@@ -81,17 +80,63 @@ namespace Catel.Windows.Interactivity
 
         #region Methods
         /// <summary>
+        /// Gets the hit elements.
+        /// </summary>
+        /// <param name="mousePosition">The mouse position.</param>
+        /// <returns>Enumerable of hit elements.</returns>
+        protected virtual IEnumerable<UIElement> GetHitElements(Point mousePosition)
+        {
+            var element = AssociatedObject as UIElement;
+            if (element == null)
+            {
+                return Enumerable.Empty<UIElement>();
+            }
+
+#if SILVERLIGHT
+            var mousePositionOffset = element.TransformToVisual(Application.Current.RootVisual).Transform(mousePosition);
+            return VisualTreeHelper.FindElementsInHostCoordinates(mousePositionOffset, element);
+#else
+
+            var elements = new List<UIElement>();
+            VisualTreeHelper.HitTest(element, null, hit =>
+                    {
+                        if (hit.VisualHit is UIElement)
+                        {
+                            elements.Add((UIElement)hit.VisualHit);
+                        }
+
+                        return HitTestResultBehavior.Continue;
+                    }, new PointHitTestParameters(mousePosition));
+
+            return elements;
+#endif
+        }
+
+        /// <summary>
+        /// Determines whether the element is hit.
+        /// </summary>
+        /// <param name="mousePosition">The mouse position.</param>
+        /// <returns><c>true</c> if the element is hit at the mouse position; otherwise, <c>false</c>.</returns>
+        protected virtual bool IsElementHit(Point mousePosition)
+        {
+#if !WINDOWS_PHONE
+            if (AssociatedObject is DataGrid)
+            {
+                return GetHitElements(mousePosition).OfType<DataGridRow>().FirstOrDefault() != null;
+            }
+#endif
+
+            return true;
+        }
+
+        /// <summary>
         /// Called when the associated object is loaded.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         protected override void OnAssociatedObjectLoaded(object sender, EventArgs e)
         {
-#if NET
-            AssociatedObject.AddHandler(UIElement.MouseLeftButtonDownEvent, new RoutedEventHandler(OnMouseButtonDown), true);
-#else
-            AssociatedObject.MouseLeftButtonDown += OnMouseButtonDown;
-#endif
+            AssociatedObject.AddHandler(UIElement.MouseLeftButtonDownEvent, new MouseButtonEventHandler(OnMouseButtonDown), true);
 
             if (AutoFixListBoxItemTemplate)
             {
@@ -123,11 +168,7 @@ namespace Catel.Windows.Interactivity
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         protected override void OnAssociatedObjectUnloaded(object sender, EventArgs e)
         {
-#if NET
-            AssociatedObject.RemoveHandler(UIElement.MouseLeftButtonDownEvent, new RoutedEventHandler(OnMouseButtonDown));
-#else
-            AssociatedObject.MouseLeftButtonDown -= OnMouseButtonDown;
-#endif
+            AssociatedObject.RemoveHandler(UIElement.MouseLeftButtonDownEvent, new MouseButtonEventHandler(OnMouseButtonDown));
 
             if (_timer.IsEnabled)
             {
@@ -135,16 +176,12 @@ namespace Catel.Windows.Interactivity
             }
         }
 
-#if NET
         /// <summary>
         /// Called when the <see cref="UIElement.MouseLeftButtonDown"/> occurs.
         /// </summary>
-        private void OnMouseButtonDown(object sender, RoutedEventArgs e)
-#else
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.Windows.Input.MouseButtonEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The event args instance containing the event data.</param>
         private void OnMouseButtonDown(object sender, MouseButtonEventArgs e)
-#endif
         {
             if (!_timer.IsEnabled)
             {
@@ -154,15 +191,18 @@ namespace Catel.Windows.Interactivity
 
             _timer.Stop();
 
-            if (_action != null)
+            if (IsElementHit(e.GetPosition(AssociatedObject)))
             {
-                Log.Debug("Executing action");
+                if (_action != null)
+                {
+                    Log.Debug("Executing action");
 
-                _action();
-            }
-            else
-            {
-                ExecuteCommand();
+                    _action();
+                }
+                else
+                {
+                    ExecuteCommand();
+                }
             }
         }
 
