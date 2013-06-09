@@ -619,6 +619,9 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\StringToIntConverter.cs">
       <Link>Windows\Data\Converters\StringToIntConverter.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\StringToTypeConverter.cs">
+      <Link>Windows\Data\Converters\StringToTypeConverter.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\ValueConverterBase.cs">
       <Link>Windows\Data\Converters\ValueConverterBase.cs</Link>
     </Compile>
