@@ -48,6 +48,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity">
       <HintPath>..\..\..\lib\NET45\Interactivity\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -251,6 +252,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ISaveFileService.cs">
       <Link>MVVM\Services\Interfaces\ISaveFileService.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ISelectDirectoryService.cs">
+      <Link>MVVM\Services\Interfaces\ISelectDirectoryService.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ISensorService.cs">
       <Link>MVVM\Services\Interfaces\ISensorService.cs</Link>
     </Compile>
@@ -286,6 +290,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\SaveFileService.cs">
       <Link>MVVM\Services\SaveFileService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\SelectDirectoryService.cs">
+      <Link>MVVM\Services\SelectDirectoryService.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\SplashScreenService.cs">
       <Link>MVVM\Services\SplashScreenService.cs</Link>

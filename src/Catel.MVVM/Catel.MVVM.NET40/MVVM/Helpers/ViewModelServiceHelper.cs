@@ -154,6 +154,7 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<IPleaseWaitService, PleaseWaitService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IProcessService, ProcessService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<ISaveFileService, SaveFileService>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<ISelectDirectoryService, SelectDirectoryService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IUIVisualizerService, UIVisualizerService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IUrlLocator, UrlLocator>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewLocator, ViewLocator>();

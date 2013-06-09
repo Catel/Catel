@@ -52,6 +52,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\NET40\Interactivity\System.Windows.Interactivity.dll</HintPath>
@@ -138,6 +139,7 @@
     <Compile Include="MVVM\Services\Interfaces\IPleaseWaitService.cs" />
     <Compile Include="MVVM\Services\Interfaces\IProcessService.cs" />
     <Compile Include="MVVM\Services\Interfaces\ISaveFileService.cs" />
+    <Compile Include="MVVM\Services\Interfaces\ISelectDirectoryService.cs" />
     <Compile Include="MVVM\Services\Interfaces\ISensorService.cs" />
     <Compile Include="MVVM\Services\Interfaces\ISplashScreenService.cs" />
     <Compile Include="MVVM\Services\Interfaces\IUIVisualizerService.cs" />
@@ -150,6 +152,7 @@
     <Compile Include="MVVM\Services\PleaseWaitService.cs" />
     <Compile Include="MVVM\Services\ProcessService.cs" />
     <Compile Include="MVVM\Services\SaveFileService.cs" />
+    <Compile Include="MVVM\Services\SelectDirectoryService.cs" />
     <Compile Include="MVVM\Services\SplashScreenService.cs" />
     <Compile Include="MVVM\Services\Test\MessageService.cs" />
     <Compile Include="MVVM\Services\Test\OpenFileService.cs" />
