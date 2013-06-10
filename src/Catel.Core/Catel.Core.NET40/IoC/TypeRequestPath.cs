@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypePath.cs" company="Catel development team">
+// <copyright file="TypeRequestPath.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -207,6 +207,13 @@ namespace Catel.IoC
                 {
                     return;
                 }
+            }
+
+            var lastTypeRequest = _typePath.LastOrDefault();
+            if (lastTypeRequest == typeRequestInfo)
+            {
+                Log.Debug("Requesting type {0} twice after eachother, ignoring second request", typeRequestInfo);
+                return;
             }
 
             bool alreadyContainsType = _typePath.Contains(typeRequestInfo);

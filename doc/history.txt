@@ -68,6 +68,10 @@ Added/fixed:
 (*) [CTL-86] Improved DoubleClickToCommand behavior for grids
 (*) [CTL-83] ChangeNotificationWrapper now supports both collection and property changes at the same time
 (*) [CTL-81] Prevent a change in case the validationsummary has not changed which should improve performance in some cases
+(*) [CTL-87] The TypeFactory circular dependency protection now ignores if duplicate types are requested directly
+    after eachother. This might result in unwanted behavior if the same type is used as injection in the same
+    type, but these cases are very rare. This changes fixes an issue where prism resolves the same type several times
+    after eachother
 (-) Removed EffectsHelper class from Catel.Extensions.Controls because it was already included in Catel.MVVM
 (x) [CTL-20] Fixed issue where the WeakEventListener could not handle explicitly implemented events
 (x) Fixed issue where default values were not correctly subscribed to via weak events. This caused the protected change notifications
