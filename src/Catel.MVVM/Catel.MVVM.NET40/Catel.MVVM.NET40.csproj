@@ -144,6 +144,7 @@
     <Compile Include="MVVM\Services\Interfaces\ISplashScreenService.cs" />
     <Compile Include="MVVM\Services\Interfaces\IUIVisualizerService.cs" />
     <Compile Include="MVVM\Services\Interfaces\IVibrateService.cs" />
+    <Compile Include="MVVM\Services\Interfaces\IViewExportService.cs" />
     <Compile Include="MVVM\Services\Interfaces\IViewModelService.cs" />
     <Compile Include="MVVM\Services\MessageService.cs" />
     <Compile Include="MVVM\Services\NamingConvention.cs" />
@@ -161,6 +162,7 @@
     <Compile Include="MVVM\Services\Test\SaveFileService.cs" />
     <Compile Include="MVVM\Services\Test\UIVisualizerService.cs" />
     <Compile Include="MVVM\Services\UIVisualizerService.cs" />
+    <Compile Include="MVVM\Services\ViewExportService.cs" />
     <Compile Include="MVVM\Services\ViewModelServiceBase.cs" />
     <Compile Include="MVVM\Tasks\ActionTask.cs" />
     <Compile Include="MVVM\Tasks\Interfaces\ITask.cs" />
