@@ -55,6 +55,8 @@ namespace Catel.Test.MVVM.ViewModels
 
                 var lastUpdated = DateTime.Now;
 
+                ThreadHelper.Sleep(50);
+
                 vm.FirstName = null;
 
                 Assert.IsTrue(vm.IsValidationSummaryOutdated(lastUpdated, true));

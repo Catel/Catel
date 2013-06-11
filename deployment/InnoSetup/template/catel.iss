@@ -58,7 +58,7 @@ SetupLogging=true
 ; For signing, the following sign tool must be configured
 ; Name: Signtool
 ; Command: "C:\Source\CatenaLogic_Certificates\Tools\signtool.exe" sign /t "http://timestamp.comodoca.com/authenticode" /f "C:\Source\CatenaLogic_Certificates\CodeSigning\current.pfx" "$f"
-SignTool=Signtool
+;SignTool=Signtool
 
 [InnoIDE_Settings]
 UseRelativePaths=true
