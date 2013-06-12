@@ -267,6 +267,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IVibrateService.cs">
       <Link>MVVM\Services\Interfaces\IVibrateService.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IViewExportService.cs">
+      <Link>MVVM\Services\Interfaces\IViewExportService.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IViewModelService.cs">
       <Link>MVVM\Services\Interfaces\IViewModelService.cs</Link>
     </Compile>
@@ -317,6 +320,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\UIVisualizerService.cs">
       <Link>MVVM\Services\UIVisualizerService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\ViewExportService.cs">
+      <Link>MVVM\Services\ViewExportService.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\ViewModelServiceBase.cs">
       <Link>MVVM\Services\ViewModelServiceBase.cs</Link>

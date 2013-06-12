@@ -51,6 +51,9 @@ using System.Windows.Markup;
 
 #if NET
 [assembly: XmlnsDefinition("http://catel.codeplex.com", "Catel.Windows.Data")]
+#endif
+
+#if NET || SL5
 [assembly: XmlnsDefinition("http://catel.codeplex.com", "Catel.Windows.Markup")]
 #endif
 

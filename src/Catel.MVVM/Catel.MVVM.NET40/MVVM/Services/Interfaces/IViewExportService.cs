@@ -18,10 +18,12 @@ namespace Catel.MVVM.Services
         /// </summary>
         Print,
 
+#if NET
         /// <summary>
         /// The clipboard export mode.
         /// </summary>
         Clipboard,
+#endif
 
         /// <summary>
         /// The file export mode
@@ -37,26 +39,14 @@ namespace Catel.MVVM.Services
         #region Methods
 
         /// <summary>
-        /// Exports the viewmodel view to the clipboard or to a print.
+        /// Exports the view model view to the clipboard or to a print.
         /// </summary>
-        /// <param name="viewModel">
-        /// The view model.
-        /// </param>
-        /// <param name="exportMode">
-        /// The export mode.
-        /// </param>
-        /// <param name="dpiX">
-        /// The dpi X.
-        /// </param>
-        /// <param name="dpiY">
-        /// The dpi Y.
-        /// </param>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="viewModel"/> is <c>null</c>.
-        /// </exception>
-        /// <remarks>
-        /// If <paramref name="exportMode"/> is <see cref="ExportMode.Print"/> then the <paramref name="dpiX"/> and <paramref name="dpiY"/> argument will be ignored.
-        /// </remarks>
+        /// <param name="viewModel">The view model.</param>
+        /// <param name="exportMode">The export mode.</param>
+        /// <param name="dpiX">The dpi X.</param>
+        /// <param name="dpiY">The dpi Y.</param>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="viewModel" /> is <c>null</c>.</exception>
+        /// <remarks>If <paramref name="exportMode" /> is <see cref="ExportMode.Print" /> then the <paramref name="dpiX" /> and <paramref name="dpiY" /> argument will be ignored.</remarks>
         void Export(IViewModel viewModel, ExportMode exportMode = ExportMode.Print, double dpiX = 96, double dpiY = 96);
         #endregion
     }

@@ -1,9 +1,8 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewExportService.cs" company="Cherry development team">
+// <copyright file="ViewExportService.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace Catel.MVVM.Services
 {
     using System;
@@ -11,15 +10,18 @@ namespace Catel.MVVM.Services
     using System.IO;
     using System.Linq;
     using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Media;
     using System.Windows.Media.Imaging;
 
-    using Catel;
     using Catel.Logging;
-    using Catel.MVVM;
     using Catel.MVVM.Views;
     using Catel.Services;
+
+#if SILVERLIGHT
+    using System.Windows.Printing;
+#else
+    using System.Windows.Controls;
+    using System.Windows.Media;
+#endif
 
     /// <summary>
     /// The ViewExportService interface.
@@ -27,7 +29,6 @@ namespace Catel.MVVM.Services
     public class ViewExportService : ServiceBase, IViewExportService
     {
         #region Constants
-
         /// <summary>
         /// The log.
         /// </summary>
@@ -35,34 +36,22 @@ namespace Catel.MVVM.Services
         #endregion
 
         #region IViewExportService Members
-
         /// <summary>
-        /// Exports the <paramref name="viewModel"/>'s view to the print or clipboard or file.
+        /// Exports the <paramref name="viewModel" />'s view to the print or clipboard or file.
         /// </summary>
-        /// <param name="viewModel">
-        /// The view model.
-        /// </param>
-        /// <param name="exportMode">
-        /// The export mode.
-        /// </param>
-        /// <param name="dpiX">
-        /// The dpi X.
-        /// </param>
-        /// <param name="dpiY">
-        /// The dpi Y.
-        /// </param>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="viewModel"/> is <c>null</c>.
-        /// </exception>
-        /// <remarks>
-        /// If <paramref name="exportMode"/> is <see cref="ExportMode.Print"/> then the <paramref name="dpiX"/> and <paramref name="dpiY"/> argument will be ignored.
-        /// </remarks>
-        public void Export(IViewModel viewModel, ExportMode exportMode = ExportMode.Print, double dpiX = 96, double dpiY = 96)
+        /// <param name="viewModel">The view model.</param>
+        /// <param name="exportMode">The export mode.</param>
+        /// <param name="dpiX">The dpi X.</param>
+        /// <param name="dpiY">The dpi Y.</param>
+        /// <exception cref="System.InvalidOperationException"></exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="viewModel" /> is <c>null</c>.</exception>
+        /// <remarks>If <paramref name="exportMode" /> is <see cref="ExportMode.Print" /> then the <paramref name="dpiX" /> and <paramref name="dpiY" /> argument will be ignored.</remarks>
+        public virtual void Export(IViewModel viewModel, ExportMode exportMode = ExportMode.Print, double dpiX = 96, double dpiY = 96)
         {
             Argument.IsNotNull(() => viewModel);
 
-            var viewManager = this.GetService<IViewManager>();
-            Visual view = viewManager.GetViewsOfViewModel(viewModel).OfType<Visual>().FirstOrDefault();
+            var viewManager = GetService<IViewManager>();
+            var view = viewManager.GetViewsOfViewModel(viewModel).OfType<UIElement>().FirstOrDefault();
             if (view == null)
             {
                 string message = string.Format(CultureInfo.InvariantCulture, "There no an active view for this view model of type '{0}'", viewModel.GetType().FullName);
@@ -72,60 +61,70 @@ namespace Catel.MVVM.Services
                 throw new InvalidOperationException(message);
             }
 
-            Rect bounds = VisualTreeHelper.GetDescendantBounds(view);
-            var drawingVisual = new DrawingVisual();
-            using (DrawingContext ctx = drawingVisual.RenderOpen())
-            {
-                ctx.DrawRectangle(new VisualBrush(view), null, new Rect(new Point(), bounds.Size));
-            }
-
             if (exportMode == ExportMode.Print)
             {
-                Print(drawingVisual);
+                Print(view);
             }
             else
             {
-                var bitmap = new RenderTargetBitmap((int)(bounds.Width * dpiX / 96), (int)(bounds.Height * dpiY / 96), dpiX, dpiY, PixelFormats.Pbgra32);
-                bitmap.Render(drawingVisual);
+                var bitmap = CreateImageFromUIElement(view, dpiX, dpiY);
 
-                if (exportMode == ExportMode.Clipboard)
+                switch (exportMode)
                 {
-                    Clipboard.SetImage(bitmap);
-                }
-                else
-                {
-                    this.SaveToFile(bitmap);
+                    case ExportMode.File:
+                        SaveToFile(bitmap);
+                        break;
+
+                    default:
+                        throw new ArgumentOutOfRangeException("exportMode");
                 }
             }
         }
-
         #endregion
 
         #region Methods
         /// <summary>
-        /// Prints a <see cref="DrawingVisual"/>.
+        /// Prints a <see cref="UIElement" />.
         /// </summary>
-        /// <param name="drawingVisual">
-        /// The drawing visual.
-        /// </param>
-        private static void Print(DrawingVisual drawingVisual)
+        /// <param name="visual">The visual.</param>
+        private static void Print(UIElement visual)
         {
+#if SILVERLIGHT
+            var printDocument = new PrintDocument();
+            printDocument.PrintPage += (s, e) => { e.PageVisual = visual; };
+            printDocument.Print("Silverlight printed document");
+#else
             var printDialog = new PrintDialog();
             if ((bool)printDialog.ShowDialog())
             {
-                printDialog.PrintVisual(drawingVisual, string.Empty);
+                printDialog.PrintVisual(visual, string.Empty);
             }
+#endif
         }
 
         /// <summary>
         /// The save to file.
         /// </summary>
-        /// <param name="bitmap">
-        /// The bitmap.
-        /// </param>
+        /// <param name="bitmap">The bitmap.</param>
         private void SaveToFile(BitmapSource bitmap)
         {
-            var saveFileService = this.GetService<ISaveFileService>();
+            var saveFileService = GetService<ISaveFileService>();
+
+#if SILVERLIGHT
+            saveFileService.Filter = "BMP (*.bmp) |*.bmp";
+            using (var stream = saveFileService.DetermineFile())
+            {
+                if (stream != null)
+                {
+                    using (var streamWriter = new StreamWriter(stream))
+                    {
+                        var writeableBitmap = new WriteableBitmap(bitmap);
+                        var byteArray = ConvertWritableBitmapToByteArray(writeableBitmap);
+                        streamWriter.Write(byteArray);
+                    }
+                }
+            }
+#else
             saveFileService.Filter = "PNG (*.png) |*.png";
             if (saveFileService.DetermineFile())
             {
@@ -137,7 +136,48 @@ namespace Catel.MVVM.Services
                     encoder.Save(stream);
                 }
             }
+#endif
         }
+
+        private static BitmapSource CreateImageFromUIElement(UIElement element, double dpiX, double dpiY)
+        {
+#if SILVERLIGHT
+            var bitmap = new WriteableBitmap((int)element.RenderSize.Width, (int)element.RenderSize.Height);
+
+            Array.Clear(bitmap.Pixels, 0, bitmap.Pixels.Length);
+            bitmap.Render(element, element.RenderTransform);
+            bitmap.Invalidate();            
+#else
+            var bitmap = new RenderTargetBitmap((int)(element.RenderSize.Width * dpiX / 96),
+                (int)(element.RenderSize.Height * dpiY / 96), dpiX, dpiY, PixelFormats.Pbgra32);
+            bitmap.Render(element);
+#endif
+
+            return bitmap;
+        }
+
+#if SILVERLIGHT
+        private static byte[] ConvertWritableBitmapToByteArray(WriteableBitmap bmp)
+        {
+            int w = bmp.PixelWidth;
+            int h = bmp.PixelHeight;
+            int[] p = bmp.Pixels;
+            int len = p.Length;
+            byte[] result = new byte[4 * w * h];
+
+            // Copy pixels to buffer
+            for (int i = 0, j = 0; i < len; i++, j += 4)
+            {
+                int color = p[i];
+                result[j + 0] = (byte)(color >> 24); // A
+                result[j + 1] = (byte)(color >> 16); // R
+                result[j + 2] = (byte)(color >> 8);  // G
+                result[j + 3] = (byte)(color);       // B
+            }
+
+            return result;
+        }
+#endif
         #endregion
     }
 }
