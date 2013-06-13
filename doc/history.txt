@@ -91,8 +91,8 @@ To-do:
 ======
 See https://catelproject.atlassian.net
 
-Known bugs:
-===========
+Known issues:
+=============
 See https://catelproject.atlassian.net
 
 **********************************************************
@@ -179,7 +179,7 @@ To-do:
 ======
 See https://catelproject.atlassian.net
 
-Known bugs:
+Known issues:
 ===========
 See https://catelproject.atlassian.net
 
@@ -284,7 +284,7 @@ To-do:
 ======
 See http://catel.codeplex.com/workitem/list/basic
 
-Known bugs:
+Known issues:
 ===========
 See http://catel.codeplex.com/workitem/list/basic
 
@@ -367,7 +367,7 @@ To-do:
 ======
 See http://catel.codeplex.com/workitem/list/basic
 
-Known bugs:
+Known issues:
 ===========
 See http://catel.codeplex.com/workitem/list/basic
 
@@ -509,7 +509,7 @@ To-do:
 ======
 See http://catel.codeplex.com/workitem/list/basic
 
-Known bugs:
+Known issues:
 ===========
 See http://catel.codeplex.com/workitem/list/basic
 
@@ -575,7 +575,7 @@ To-do:
 ======
 See http://catel.codeplex.com/workitem/list/basic
 
-Known bugs:
+Known issues:
 ===========
 See http://catel.codeplex.com/workitem/list/basic
 
@@ -656,7 +656,7 @@ To-do:
 ======
 See http://catel.codeplex.com/workitem/list/basic
 
-Known bugs:
+Known issues:
 ===========
 See http://catel.codeplex.com/workitem/list/basic
 
@@ -729,7 +729,7 @@ To-do:
 ======
 See http://catel.codeplex.com/workitem/list/basic
 
-Known bugs:
+Known issues:
 ===========
 See http://catel.codeplex.com/workitem/list/basic
 
@@ -819,7 +819,7 @@ To-do:
 ======
 See http://catel.codeplex.com/workitem/list/basic
 
-Known bugs:
+Known issues:
 ===========
 See http://catel.codeplex.com/workitem/list/basic
 
@@ -887,7 +887,7 @@ To-do:
 ======
 See http://catel.codeplex.com/workitem/list/basic
 
-Known bugs:
+Known issues:
 ===========
 See http://catel.codeplex.com/workitem/list/basic
 
@@ -946,7 +946,7 @@ To-do:
 ======
 See http://catel.codeplex.com/workitem/list/basic
 
-Known bugs:
+Known issues:
 ===========
 See http://catel.codeplex.com/workitem/list/basic
 
@@ -1039,7 +1039,7 @@ To-do:
 ======
 See http://catel.codeplex.com/workitem/list/basic
 
-Known bugs:
+Known issues:
 ===========
 See http://catel.codeplex.com/workitem/list/basic
 
@@ -1120,7 +1120,7 @@ To-do:
 ======
 See http://catel.codeplex.com/workitem/list/basic
 
-Known bugs:
+Known issues:
 ===========
 See http://catel.codeplex.com/workitem/list/basic
 
@@ -1183,7 +1183,7 @@ To-do:
 ======
 See http://catel.codeplex.com/workitem/list/basic
 
-Known bugs:
+Known issues:
 ===========
 See http://catel.codeplex.com/workitem/list/basic
 
@@ -1231,7 +1231,7 @@ To-do:
 ======
 -
 
-Known bugs:
+Known issues:
 ===========
 -
 
@@ -1265,7 +1265,7 @@ To-do:
 ======
 -
 
-Known bugs:
+Known issues:
 ===========
 -
 
@@ -1314,7 +1314,7 @@ To-do:
 ======
 -
 
-Known bugs:
+Known issues:
 ===========
 -
 
@@ -1336,7 +1336,7 @@ To-do:
 ======
 -
 
-Known bugs:
+Known issues:
 ===========
 -
 
