@@ -68,16 +68,18 @@ namespace Catel.MVVM.Services
             else
             {
                 var bitmap = CreateImageFromUIElement(view, dpiX, dpiY);
-
-                switch (exportMode)
+#if !SILVERLIGHT 
+                if (exportMode == ExportMode.File)
                 {
-                    case ExportMode.File:
-                        SaveToFile(bitmap);
-                        break;
-
-                    default:
-                        throw new ArgumentOutOfRangeException("exportMode");
+                    SaveToFile(bitmap);
                 }
+                else
+                {
+                    Clipboard.SetImage(bitmap);
+                }
+#else
+                SaveToFile(bitmap);
+#endif
             }
         }
         #endregion
@@ -116,12 +118,30 @@ namespace Catel.MVVM.Services
             {
                 if (stream != null)
                 {
-                    using (var streamWriter = new StreamWriter(stream))
-                    {
-                        var writeableBitmap = new WriteableBitmap(bitmap);
-                        var byteArray = ConvertWritableBitmapToByteArray(writeableBitmap);
-                        streamWriter.Write(byteArray);
-                    }
+                    var writeableBitmap = new WriteableBitmap(bitmap);
+                    var byteArray = ConvertWritableBitmapToByteArray(writeableBitmap);
+                    
+                    // TODO: Write the bitmap header.
+                    /* bfType1 : Byte ; (* "B" *)
+                    bfType2 : Byte ; (* "M" *)
+                    bfSize : LongInt ; (* Size of File. Zero is acceptable *)
+                    bfReserved1 : Word ; (* Zero *)
+                    bfReserved2 : Word ; (* Zero *)
+                    bfOffBits : LongInt ; (* Offset to beginning of BitMap *)
+                    biSize : LongInt ; (* Number of Bytes in Structure *)
+                    biWidth : LongInt ; (* Width of BitMap in Pixels *)
+                    biHeight : LongInt ; (* Height of BitMap in Pixels *)
+                    biPlanes : Word ; (* Planes in target device = 1 *)
+                    biBitCount : Word ; (* Bits per Pixel 1, 4, 8, or 24 *)
+                    biCompression : LongInt ; (* BI_RGB = 0, BI_RLE8, BI_RLE4 *)
+                    biSizeImage : LongInt ; (* Size of Image Part (often ignored) *)
+                    biXPelsPerMeter : LongInt ; (* Always Zero *)
+                    biYPelsPerMeter : LongInt ; (* Always Zero *)
+                    biClrUsed : LongInt ; (* Number of Colors used in Palette *)
+                    biClrImportant : LongInt ; (* Number of Colors that are Important *)
+                    */
+
+                    stream.Write(byteArray, 0, byteArray.Length);
                 }
             }
 #else
