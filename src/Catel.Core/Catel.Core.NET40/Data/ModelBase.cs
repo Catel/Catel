@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ModelBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -1192,7 +1192,7 @@ namespace Catel.Data
         /// <param name="propertyChangedEventHandler">The property changed event handler.</param>
         /// <param name="includeInSerialization">If set to <c>true</c>, the property should be included in the serialization.</param>
         /// <param name="includeInBackup">If set to <c>true</c>, the property should be included in the backup when handling IEditableObject.</param>
-        /// <param name="setParent">if set to <c>true</c>, the parent of the property will be set.</param>
+        /// <param name="setParent">If set to <c>true</c>, the parent of the property will be set.</param>
         /// <returns><see cref="PropertyData" /> containing the property information.</returns>
         /// <exception cref="System.ArgumentException">The member type of the body of the <paramref name="propertyExpression" /> of should be <see cref="MemberTypes.Property" />.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="propertyExpression" /> is <c>null</c>.</exception>

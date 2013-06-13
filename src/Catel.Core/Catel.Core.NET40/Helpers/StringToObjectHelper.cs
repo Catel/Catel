@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="StringToObjectHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -162,10 +162,10 @@ namespace Catel
         }
 
         /// <summary>
-        /// Converts a string to the right target type.
+        /// Converts a string to the right target type, such as <see cref="string"/>, <see cref="bool"/> and <see cref="DateTime"/>.
         /// </summary>
-        /// <param name="targetType">The target type.</param>
-        /// <param name="value">The value.</param>
+        /// <param name="targetType">The target type to convert to.</param>
+        /// <param name="value">The value to convert to the specified target type.</param>
         /// <returns>The converted value. If the <paramref name="value"/> is <c>null</c>, this method will return <c>null</c>.</returns>
         /// <exception cref="NotSupportedException">The specified <paramref name="targetType"/> is not supported.</exception>
         public static object ToRightType(Type targetType, string value)

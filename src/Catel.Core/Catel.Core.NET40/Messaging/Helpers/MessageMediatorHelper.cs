@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="MessageMediatorHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -14,7 +14,6 @@ namespace Catel.Messaging
     /// <summary>
     /// Helper class for the <see cref="MessageMediator"/> to allow easy subscription 
     /// </summary>
-    /// <remarks></remarks>
     public static class MessageMediatorHelper
     {
         /// <summary>
@@ -31,7 +30,6 @@ namespace Catel.Messaging
         /// <exception cref="NotSupportedException">The object has non-public methods decorated with the <see cref="MessageRecipientAttribute"/>, but the
         /// application is not written in .NET (but in SL, WP7 or WinRT).</exception>
         /// <exception cref="InvalidCastException">One of the methods cannot be casted to a valid message method.</exception>
-        /// <remarks>Note that it is only possible to</remarks>
         public static void SubscribeRecipient(object instance, IMessageMediator messageMediator = null)
         {
             Argument.IsNotNull("instance", instance);

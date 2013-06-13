@@ -335,7 +335,7 @@ namespace Catel.Messaging
         /// </summary>
         /// <param name="recipient">The recipient to unregister.</param>
         /// <param name="tag">The message tag.</param>
-        /// <param name="ignoreTag">if set to <c>true</c>, tags are ignored.</param>
+        /// <param name="ignoreTag">If set to <c>true</c>, tags are ignored.</param>
         /// <returns><c>true</c> if the handler is unregistered successfully; otherwise <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="recipient"/> is <c>null</c>.</exception>
         /// <remarks>A handler cannot be unregistered when it is not registered first. If a handler is unregistered while it
