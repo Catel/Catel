@@ -70,10 +70,10 @@ namespace Catel
             IValidator validator = null;
 
             // NOTE: Patch for performance issue the validator of a viewmodel must be in the same assembly of the view model.
-            Assembly assembly = targetType.Assembly;
-            Type[] exportedTypes = assembly.GetExportedTypes();
+            var assembly = targetType.Assembly;
+            var exportedTypes = assembly.GetExportedTypes();
             var validatorTypes = new List<Type>();
-            foreach (Type exportedType in exportedTypes)
+            foreach (var exportedType in exportedTypes)
             {
                 if (typeof(FluentValidation.IValidator).IsAssignableFromEx(exportedType))
                 {

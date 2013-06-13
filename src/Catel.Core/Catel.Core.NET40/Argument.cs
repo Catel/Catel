@@ -829,7 +829,6 @@ namespace Catel
         /// <param name="paramName">Name of the parameter.</param>
         /// <param name="paramValue">The parameter value.</param>
         /// <param name="validation">The validation function.</param>
-        /// <exception cref="System.ArgumentException"></exception>
         /// <exception cref="ArgumentException">If the <paramref name="validation" /> code returns <c>false</c>.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="paramName" /> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="paramValue" /> is <c>null</c>.</exception>

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="UrlLocator.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -45,8 +45,8 @@ namespace Catel.MVVM
         /// Resolves an url by the view model and the registered <see cref="ILocator.NamingConventions"/>.
         /// </summary>
         /// <param name="viewModelType">Type of the view model to resolve the url for.</param>
-        /// <param name="ensurePageExists">if set to <c>true</c>, the method checks whether the page resource actually exists.</param>
-        /// <returns>The resolved viurlew or <c>null</c> if the view could not be resolved.</returns>
+        /// <param name="ensurePageExists">If set to <c>true</c>, the method checks whether the page resource actually exists.</param>
+        /// <returns>The resolved url or <c>null</c> if the view could not be resolved.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
         /// <remarks>
         /// Keep in mind that all results are cached. The cache itself is not automatically cleared when the
@@ -94,22 +94,21 @@ namespace Catel.MVVM
         }
 
         /// <summary>
-        /// Not supported.
+        /// This method is not supported.
         /// </summary>
         /// <param name="assembly">The assembly name.</param>
         /// <param name="typeToResolveName">The full type name of the type to resolve.</param>
         /// <param name="namingConvention">The naming convention to use for resolving.</param>
-        /// <returns>Nothing.</returns>
+        /// <returns>Nothing, this method throws a <see cref="NotSupportedException"/>.</returns>
         protected override string ResolveNamingConvention(string assembly, string typeToResolveName, string namingConvention)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         /// <summary>
         /// Gets the default naming conventions.
         /// </summary>
         /// <returns>An enumerable of default naming conventions.</returns>
-        /// <remarks></remarks>
         protected override IEnumerable<string> GetDefaultNamingConventions()
         {
             var namingConventions = new List<string>();

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="StyleHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -599,7 +599,7 @@ namespace Catel.Windows
         /// <param name="resourceDictionaryUri">The resource dictionary URI.</param>
         /// <param name="styleKey">The style key.</param>
         /// <returns>
-        /// 	<see cref="Type"/> or <c>null</c> if the style is not based on a <see cref="FrameworkElement"/>.
+        /// <see cref="Type"/> or <c>null</c> if the style is not based on a <see cref="FrameworkElement"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="resourceDictionaryUri"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="styleKey"/> is <c>null</c>.</exception>
@@ -629,7 +629,7 @@ namespace Catel.Windows
                 else
                 {
                     StreamResourceInfo streamResourceInfo = Application.GetResourceStream(resourceDictionaryUri);
-                    XmlBamlReader reader = new XmlBamlReader(streamResourceInfo.Stream);
+                    var reader = new XmlBamlReader(streamResourceInfo.Stream);
 
                     doc = new XmlDocument();
                     doc.Load(reader);
@@ -639,7 +639,7 @@ namespace Catel.Windows
 
                 #region Create xml namespace manager
                 // Create namespace manager (all namespaces are required)
-                XmlNamespaceManager xmlNamespaceManager = new XmlNamespaceManager(doc.NameTable);
+                var xmlNamespaceManager = new XmlNamespaceManager(doc.NameTable);
                 foreach (XmlAttribute namespaceAttribute in doc.DocumentElement.Attributes)
                 {
                     // Clean up namespace (remove xmlns prefix)
@@ -653,7 +653,7 @@ namespace Catel.Windows
                 #endregion
 
                 string xpath = string.Format("/ctl:ResourceDictionary/ctl:Style[@x:Key='{0}']/@BasedOn", styleKey);
-                XmlAttribute xmlAttribute = doc.SelectSingleNode(xpath, xmlNamespaceManager) as XmlAttribute;
+                var xmlAttribute = doc.SelectSingleNode(xpath, xmlNamespaceManager) as XmlAttribute;
                 if (xmlAttribute == null)
                 {
                     Log.Warning("Style '{0}' does not have the 'BasedOn' attribute defined", styleKey);
@@ -701,7 +701,7 @@ namespace Catel.Windows
                 string[] splittedType = basedOnValue.Split(new[] { ':' });
                 string typeNamespace = (splittedType.Length == 2) ? splittedType[0] : "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
                 string typeName = (splittedType.Length == 2) ? splittedType[1] : splittedType[0];
-                Type type = xamlTypeMapper.GetType(typeNamespace, typeName);
+                var type = xamlTypeMapper.GetType(typeNamespace, typeName);
                 if (type == null)
                 {
                     _styleToFrameworkElementTypeCache.Add(styleKey, null);

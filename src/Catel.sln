@@ -687,4 +687,7 @@ Global
 	GlobalSection(DPCodeReviewSolutionGUID) = preSolution
 		DPCodeReviewSolutionGUID = {00000000-0000-0000-0000-000000000000}
 	EndGlobalSection
+	GlobalSection(NDepend) = preSolution
+		Project = "Catel.ndproj"
+	EndGlobalSection
 EndGlobal
