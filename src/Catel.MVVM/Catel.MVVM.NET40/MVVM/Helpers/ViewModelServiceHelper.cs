@@ -133,6 +133,7 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewExportService, ViewExportService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelLocator, ViewModelLocator>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelFactory, ViewModelFactory>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<IViewExportService, ViewExportService>();
 #else // WPF
                 if (!serviceLocator.IsTypeRegistered<IMessageMediator>())
                 {
@@ -167,6 +168,7 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelFactory, ViewModelFactory>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewExportService, ViewExportService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<ISplashScreenService, SplashScreenService>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<IViewExportService, ViewExportService>();
 #endif
 
                 Log.Debug("Registered default service implementations for IoC container");
