@@ -252,6 +252,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ISaveFileService.cs">
       <Link>MVVM\Services\Interfaces\ISaveFileService.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ISchedulerService.cs">
+      <Link>MVVM\Services\Interfaces\ISchedulerService.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ISelectDirectoryService.cs">
       <Link>MVVM\Services\Interfaces\ISelectDirectoryService.cs</Link>
     </Compile>
@@ -293,6 +296,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\SaveFileService.cs">
       <Link>MVVM\Services\SaveFileService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\SchedulerService.cs">
+      <Link>MVVM\Services\SchedulerService.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\SelectDirectoryService.cs">
       <Link>MVVM\Services\SelectDirectoryService.cs</Link>

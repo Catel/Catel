@@ -51,6 +51,7 @@ Added/fixed:
 (+) [CTL-82] Added ViewModelToViewConverter to Silverlight projects
 (+) [CTL-85] Added ServiceDependency markup extension to Silverlight 5 project (MarkupExtension is not supported in SL4)
 (+) [CTL-91] Added ViewExportService to print or save a visual element that belongs to a view model
+(+) [CTL-94] Added SchedulerService which allows to schedule actions in the relative or absolute future
 (+) Added the IExceptionService.IsExceptionRegistered method to know if an exception type is registered for handling
 (+) Added BindingWithValidation for NET40 and NET45 where {catel:BindingWithValidation MyProp} can now be used instead of
     {Binding Path=MyProp, NotifyOnValidationErrors=True, ValidatesOnDataErrors=True}

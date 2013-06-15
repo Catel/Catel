@@ -146,6 +146,7 @@
     <Compile Include="MVVM\Services\Interfaces\IVibrateService.cs" />
     <Compile Include="MVVM\Services\Interfaces\IViewExportService.cs" />
     <Compile Include="MVVM\Services\Interfaces\IViewModelService.cs" />
+    <Compile Include="MVVM\Services\Interfaces\ISchedulerService.cs" />
     <Compile Include="MVVM\Services\MessageService.cs" />
     <Compile Include="MVVM\Services\NamingConvention.cs" />
     <Compile Include="MVVM\Services\NavigationService.cs" />
@@ -153,6 +154,7 @@
     <Compile Include="MVVM\Services\PleaseWaitService.cs" />
     <Compile Include="MVVM\Services\ProcessService.cs" />
     <Compile Include="MVVM\Services\SaveFileService.cs" />
+    <Compile Include="MVVM\Services\SchedulerService.cs" />
     <Compile Include="MVVM\Services\SelectDirectoryService.cs" />
     <Compile Include="MVVM\Services\SplashScreenService.cs" />
     <Compile Include="MVVM\Services\Test\MessageService.cs" />

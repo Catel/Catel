@@ -225,6 +225,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ISaveFileService.cs">
       <Link>MVVM\Services\Interfaces\ISaveFileService.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ISchedulerService.cs">
+      <Link>MVVM\Services\Interfaces\ISchedulerService.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ISensorService.cs">
       <Link>MVVM\Services\Interfaces\ISensorService.cs</Link>
     </Compile>
@@ -248,6 +251,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\NavigationService.cs">
       <Link>MVVM\Services\NavigationService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\SchedulerService.cs">
+      <Link>MVVM\Services\SchedulerService.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Test\MessageService.cs">
       <Link>MVVM\Services\Test\MessageService.cs</Link>

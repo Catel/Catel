@@ -63,6 +63,7 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<INavigationService, NavigationService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IPleaseWaitService, PleaseWaitService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IProcessService, ProcessService>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<ISchedulerService, SchedulerService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IUrlLocator, UrlLocator>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewLocator, ViewLocator>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelLocator, ViewModelLocator>();
@@ -91,6 +92,7 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<IMessageService, MessageService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<INavigationService, NavigationService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IPleaseWaitService, PleaseWaitService>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<ISchedulerService, SchedulerService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IVibrateService, VibrateService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IUrlLocator, UrlLocator>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewLocator, ViewLocator>();
@@ -124,6 +126,7 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<IOpenFileService, OpenFileService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IPleaseWaitService, PleaseWaitService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<ISaveFileService, SaveFileService>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<ISchedulerService, SchedulerService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IUIVisualizerService, UIVisualizerService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IUrlLocator, UrlLocator>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewLocator, ViewLocator>();
@@ -155,6 +158,7 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<IPleaseWaitService, PleaseWaitService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IProcessService, ProcessService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<ISaveFileService, SaveFileService>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<ISchedulerService, SchedulerService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<ISelectDirectoryService, SelectDirectoryService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IUIVisualizerService, UIVisualizerService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IUrlLocator, UrlLocator>();
