@@ -11,14 +11,9 @@ namespace Catel.Data
     using System.ComponentModel;
     using System.IO;
     using System.Linq;
-    using System.Runtime.Serialization;
     using IO;
     using Logging;
     using Runtime.Serialization;
-
-#if NET
-    using System.Runtime.Serialization.Formatters.Binary;
-#endif
 
     public partial class ModelBase
     {
@@ -97,16 +92,19 @@ namespace Catel.Data
                                               where !propertyData.Value.IncludeInBackup
                                               select propertyData.Value.Name).ToArray();
 
-                    List<PropertyValue> objectsToSerialize;
+                    //List<PropertyValue> objectsToSerialize;
 
-                    lock (_object._propertyValuesLock)
-                    {
-                        objectsToSerialize = _object.ConvertDictionaryToListAndExcludeNonSerializableObjects(_object._propertyBag.GetAllProperties(), propertiesToIgnore);
-                    }
+                    //lock (_object._propertyValuesLock)
+                    //{
+                    //    objectsToSerialize = _object.ConvertDictionaryToListAndExcludeNonSerializableObjects(_object._propertyValues, propertiesToIgnore);
+                    //}
 
 #if NET
-                    var serializer = SerializationHelper.GetBinarySerializer(false);
-                    serializer.Serialize(stream, objectsToSerialize);
+                    var binarySerializer = SerializationFactory.GetBinarySerializer();
+                    binarySerializer.SerializeProperties(_object, stream, propertiesToIgnore);
+
+                    //var serializer = SerializationHelper.GetBinarySerializer(false);
+                    //serializer.Serialize(stream, objectsToSerialize);
 #else
                     // Xml backup, create serializer without using the cache since the dictionary is used for every object, and
                     // we need a "this" object specific dictionary.
@@ -141,23 +139,27 @@ namespace Catel.Data
                 using (var stream = new MemoryStream(_propertyValuesBackup))
                 {
 #if NET
-                    var serializer = SerializationHelper.GetBinarySerializer(false);
+                    var serializer = SerializationFactory.GetBinarySerializer();
+                    var properties = serializer.DeserializeProperties(_object.GetType(), stream);
+                    oldPropertyValues = properties.ToDictionary(property => property.Name, property => property.Value);
 
-                    try
-                    {
-                        var deserializedStream = serializer.Deserialize(stream);
-                        oldPropertyValues = _object.ConvertListToDictionary((List<PropertyValue>)deserializedStream);
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Warning(ex, "Failed to deserialize the data for backup, which is weird. Trying with redirects enabled");
+                    //var serializer = SerializationHelper.GetBinarySerializer(false);
 
-                        stream.Position = 0L;
+                    //try
+                    //{
+                    //    var deserializedStream = serializer.Deserialize(stream);
+                    //    oldPropertyValues = _object.ConvertListToDictionary((List<PropertyValue>)deserializedStream);
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    Log.Warning(ex, "Failed to deserialize the data for backup, which is weird. Trying with redirects enabled");
 
-                        var binaryFormatterWithRedirects = SerializationHelper.GetBinarySerializer(true);
-                        var deserializedStream = binaryFormatterWithRedirects.Deserialize(stream);
-                        oldPropertyValues = _object.ConvertListToDictionary((List<PropertyValue>)deserializedStream);
-                    }
+                    //    stream.Position = 0L;
+
+                    //    var binaryFormatterWithRedirects = SerializationHelper.GetBinarySerializer(true);
+                    //    var deserializedStream = binaryFormatterWithRedirects.Deserialize(stream);
+                    //    oldPropertyValues = _object.ConvertListToDictionary((List<PropertyValue>)deserializedStream);
+                    //}
 #else
                     // Xml backup, create serializer without using the cache since the dictionary is used for every object, and
                     // we need a "this" object specific dictionary.

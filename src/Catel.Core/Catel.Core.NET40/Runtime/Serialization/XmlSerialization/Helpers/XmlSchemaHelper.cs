@@ -19,7 +19,7 @@ namespace Catel.Runtime.Serialization
     using Reflection;
 
     /// <summary>
-    /// Helper class to generic 
+    /// Helper class for xml schemas.
     /// </summary>
     public static class XmlSchemaHelper
     {

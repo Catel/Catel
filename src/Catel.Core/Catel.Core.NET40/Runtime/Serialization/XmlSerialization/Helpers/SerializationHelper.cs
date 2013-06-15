@@ -44,7 +44,7 @@ namespace Catel.Runtime.Serialization
         /// <summary>
         /// Cache for the <see cref="XmlSerializer"/> per name.
         /// </summary>
-        private static readonly Dictionary<string, XmlSerializer> _xmlSerializers = new Dictionary<string, XmlSerializer>();
+        private static readonly Dictionary<string, System.Xml.Serialization.XmlSerializer> _xmlSerializers = new Dictionary<string, System.Xml.Serialization.XmlSerializer>();
 #endif
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace Catel.Runtime.Serialization
         /// <param name="type">The type to get the xml serializer for.</param>
         /// <param name="xmlName">Name of the property as known in XML.</param>
         /// <returns><see cref="XmlSerializer"/> for the given type.</returns>
-        public static XmlSerializer GetXmlSerializer(Type type, string xmlName)
+        public static System.Xml.Serialization.XmlSerializer GetXmlSerializer(Type type, string xmlName)
         {
             string key = string.Format("{0}|{1}", type.Name, xmlName);
 
@@ -76,7 +76,7 @@ namespace Catel.Runtime.Serialization
                 return _xmlSerializers[key];
             }
 
-            var xmlSerializer = new XmlSerializer(type, new XmlRootAttribute(xmlName));
+            var xmlSerializer = new System.Xml.Serialization.XmlSerializer(type, new XmlRootAttribute(xmlName));
 
             _xmlSerializers.Add(key, xmlSerializer);
 
@@ -204,7 +204,7 @@ namespace Catel.Runtime.Serialization
 
                     using (var fs = File.Create(fileName))
                     {
-                        var xs = new XmlSerializer(obj.GetType());
+                        var xs = new System.Xml.Serialization.XmlSerializer(obj.GetType());
                         xs.Serialize(fs, obj);
 
                         succeeded = true;
@@ -234,7 +234,7 @@ namespace Catel.Runtime.Serialization
             {
                 Stream stream = File.Open(fileName, FileMode.Open, FileAccess.Read);
 
-                var xs = new XmlSerializer(typeof(T));
+                var xs = new System.Xml.Serialization.XmlSerializer(typeof(T));
 
                 result = (T)xs.Deserialize(stream);
 

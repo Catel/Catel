@@ -8,10 +8,8 @@ namespace Catel.Data
 {
     using System;
     using System.Collections.Generic;
-
-#if !NET
     using System.Runtime.Serialization;
-#endif
+    using System.Xml.Serialization;
 
     /// <summary>
     /// Class holding a property value to serialize using the <see cref="ModelBase"/>.
@@ -22,6 +20,9 @@ namespace Catel.Data
     [Serializable]
 #endif
     public class PropertyValue
+#if NET
+        : ISerializable
+#endif
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertyValue"/> class.
@@ -31,21 +32,27 @@ namespace Catel.Data
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertyValue"/> class.
         /// </summary>
+        /// <param name="propertyData">The property data.</param>
         /// <param name="keyValuePair">The key value pair.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="propertyData"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <c>Key</c> of <paramref name="keyValuePair"/> is <c>null</c> or whitespace.</exception>
-        public PropertyValue(KeyValuePair<string, object> keyValuePair)
-            : this(keyValuePair.Key, keyValuePair.Value) { }
+        public PropertyValue(PropertyData propertyData, KeyValuePair<string, object> keyValuePair)
+            : this(propertyData, keyValuePair.Key, keyValuePair.Value) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertyValue"/> class.
         /// </summary>
+        /// <param name="propertyData">The property data.</param>
         /// <param name="name">The name of the property.</param>
         /// <param name="value">The value of the property.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="propertyData"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        public PropertyValue(string name, object value)
+        public PropertyValue(PropertyData propertyData, string name, object value)
         {
+            Argument.IsNotNull("propertyData", propertyData);
             Argument.IsNotNullOrWhitespace("name", name);
 
+            PropertyData = propertyData;
             Name = name;
             Value = value;
         }
@@ -67,5 +74,41 @@ namespace Catel.Data
         [DataMember]
 #endif
         public object Value { get; set; }
+
+        /// <summary>
+        /// Gets the property data.
+        /// </summary>
+        /// <value>The property data.</value>
+        [XmlIgnore]
+        public PropertyData PropertyData { get; private set; }
+
+#if NET
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PropertyValue"/> class.
+        /// </summary>
+        public PropertyValue(SerializationInfo info, StreamingContext context)
+        {
+            Argument.IsNotNull("info", info);
+
+            Name = info.GetString("Name");
+            Value = info.GetValue("Value", typeof(object));
+        }
+
+        /// <summary>
+        /// Populates a <see cref="T:System.Runtime.Serialization.SerializationInfo"/> with the data needed to serialize the target object.
+        /// </summary>
+        /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> to populate with data.</param>
+        /// <param name="context">The destination (see <see cref="T:System.Runtime.Serialization.StreamingContext"/>) for this serialization.</param>
+        /// <exception cref="T:System.Security.SecurityException">
+        /// The caller does not have the required permission.
+        /// </exception>
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            Argument.IsNotNull("info", info);
+
+            info.AddValue("Name", Name);
+            info.AddValue("Value", Value);
+        }
+#endif
     }
 }

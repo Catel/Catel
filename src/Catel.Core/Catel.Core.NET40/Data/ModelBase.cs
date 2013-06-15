@@ -109,14 +109,6 @@ namespace Catel.Data
 #endif
         internal readonly object _propertyValuesLock = new object();
 
-#if NET
-        /// <summary>
-        /// The <see cref="SerializationInfo"/> that is retrieved and will be used for deserialization.
-        /// </summary>
-        [field: NonSerialized]
-        private readonly SerializationInfo _serializationInfo;
-#endif
-
         /// <summary>
         /// The parent object of the current object.
         /// </summary>
@@ -172,57 +164,6 @@ namespace Catel.Data
         {
             // Do not write anything in this constructor. Use the Initialize method or the
             // OnInitializing or OnInitialized methods instead.
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ModelBase"/> class.
-        /// <para />
-        /// Only constructor for the ModelBase.
-        /// </summary>
-        /// <param name="info">SerializationInfo object, null if this is the first time construction.</param>
-        /// <param name="context">StreamingContext object, simple pass a default new StreamingContext() if this is the first time construction.</param>
-        /// <remarks>
-        /// Call this method, even when constructing the object for the first time (thus not deserializing).
-        /// </remarks>
-        protected ModelBase(SerializationInfo info, StreamingContext context)
-        {
-            OnInitializing();
-
-            Initialize();
-
-            // Make sure this is not a first time call
-            if (info == null)
-            {
-                FinishInitializationAfterConstructionOrDeserialization();
-            }
-            else
-            {
-                _serializationInfo = info;
-
-                bool succeeded = false;
-
-                try
-                {
-                    // First, try the "new" method (list of property values), but it might fail on old objects
-                    var properties = (List<PropertyValue>)SerializationHelper.GetObject(info, "Properties", typeof(List<PropertyValue>), new List<PropertyValue>());
-                    succeeded = properties.Count > 0;
-                }
-                catch (Exception)
-                {
-                    Log.Warning("Failed to deserialize properties using a list of property values, trying old mechanism (dictionary)");
-
-                    var properties = (List<KeyValuePair<string, object>>)SerializationHelper.GetObject(info, "Properties",
-                        typeof(List<KeyValuePair<string, object>>), new List<KeyValuePair<string, object>>());
-
-                    succeeded = properties.Count > 0;
-                }
-
-                GetDataFromSerializationInfoInternal(_serializationInfo);
-
-                DeserializationSucceeded = succeeded;
-            }
-
-            OnInitialized();
         }
 #endif
         #endregion
