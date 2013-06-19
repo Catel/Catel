@@ -11,6 +11,10 @@ namespace Catel
     using IoC;
     using MVVM;
 
+#if !NET
+    using Catel.Windows;
+#endif
+
     /// <summary>
     /// Class that gets called as soon as the module is loaded.
     /// </summary>
@@ -25,6 +29,10 @@ namespace Catel
         public static void Initialize()
         {
             var serviceLocator = ServiceLocator.Default;
+
+#if !NET
+            serviceLocator.RegisterTypeIfNotYetRegistered<IFrameworkElementLoadedManager, FrameworkElementLoadedManager>();
+#endif
 
             serviceLocator.RegisterTypeIfNotYetRegistered<IViewManager, ViewManager>();
             serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelManager, ViewModelManager>();

@@ -773,6 +773,12 @@
     <Compile Include="..\Catel.MVVM.SL4\Windows\Controls\ValidationRule.cs">
       <Link>Windows\Controls\ValidationRule.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.SL4\Windows\EventArgs\FrameworkElementLoadedEventArgs.cs">
+      <Link>Windows\EventArgs\FrameworkElementLoadedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.SL4\Windows\FrameworkElementLoadedManager.cs">
+      <Link>Windows\FrameworkElementLoadedManager.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.SL4\Windows\Helpers\DataContextChangedHelper.cs">
       <Link>Windows\Helpers\DataContextChangedHelper.cs</Link>
     </Compile>
@@ -782,6 +788,9 @@
     <Compile Include="..\Catel.MVVM.SL4\Windows\Helpers\SetterValueBindingHelper.cs">
       <Link>Windows\Helpers\SetterValueBindingHelper.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.SL4\Windows\Interfaces\IFrameworkElementLoadedManager.cs">
+      <Link>Windows\Interfaces\IFrameworkElementLoadedManager.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.SL4\Windows\PopupBehavior\Popup.cs">
       <Link>Windows\PopupBehavior\Popup.cs</Link>
     </Compile>
@@ -790,6 +799,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.SL4\Windows\PopupBehavior\PopupOrientationCollection.cs">
       <Link>Windows\PopupBehavior\PopupOrientationCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.SL4\Windows\WeakFrameworkElementInfo.cs">
+      <Link>Windows\WeakFrameworkElementInfo.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>

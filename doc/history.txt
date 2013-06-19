@@ -74,6 +74,8 @@ Added/fixed:
     after eachother. This might result in unwanted behavior if the same type is used as injection in the same
     type, but these cases are very rare. This changes fixes an issue where prism resolves the same type several times
     after eachother
+(*) CTL-96 Fixed unreliable loaded event in Silverlight (and WP and WinRT) which sometimes did not behave top => down on controls like the 
+    tab control. We fixed this by adding a FrameworkElementLoadedManager which will handle the right order of events for Catel
 (-) Removed EffectsHelper class from Catel.Extensions.Controls because it was already included in Catel.MVVM
 (x) [CTL-20] Fixed issue where the WeakEventListener could not handle explicitly implemented events
 (x) Fixed issue where default values were not correctly subscribed to via weak events. This caused the protected change notifications
