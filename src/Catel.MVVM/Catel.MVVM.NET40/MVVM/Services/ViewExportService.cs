@@ -120,38 +120,8 @@ namespace Catel.MVVM.Services
                 if (stream != null)
                 {
                     var writeableBitmap = new WriteableBitmap(bitmap);
-                    var header = new byte[56];
-                    
-                    // bitmap signature
-                    header[0] = (byte)'B';
-                    header[1] = (byte)'M';
-
-                    // offset
-                    header[10] = 56;
-                    
-                    // header size
-                    header[14] = 40;
-
-                    // width of the image
-                    SerializeIntIntoByteArray(writeableBitmap.PixelWidth, header, 18);
-
-                    // width of the height
-                    SerializeIntIntoByteArray(writeableBitmap.PixelHeight, header, 22);
-
-                    // planes
-                    header[26] = 1;
-
-                    // bytes per pixel
-                    header[28] = 32;
-
-                    // bitmap raw size
-                    var rawSize = writeableBitmap.PixelHeight * writeableBitmap.PixelHeight * 4;
-                    SerializeIntIntoByteArray(rawSize, header, 34);
-
-                    stream.Write(header, 0, header.Length);
-
-                    var byteArray = ConvertWritableBitmapToByteArray(writeableBitmap);
-                    stream.Write(byteArray, 0, byteArray.Length);
+                    var bitmapByteArray = ConvertWritableBitmapToByteArray(writeableBitmap);
+                    stream.Write(bitmapByteArray, 0, bitmapByteArray.Length);
                 }
             }
 #else
@@ -203,7 +173,8 @@ namespace Catel.MVVM.Services
         /// <remarks>
         ///   TODO: Create an extension method
         /// </remarks>
-        private static void SerializeIntIntoByteArray(int value, byte[] array, int offset)
+        /// <exception cref="ArgumentException">If <paramref name="array"/> is <c>null</c> or an empty array</exception>
+        private static void SerializeIntoByteArray(int value, byte[] array, int offset)
         {
             array[offset] = (byte)value;
             array[offset + 1] = (byte)(value >> 8);
@@ -221,7 +192,33 @@ namespace Catel.MVVM.Services
         /// </remarks>
         private static byte[] ConvertWritableBitmapToByteArray(WriteableBitmap bmp)
         {
-            var result = new byte[4 * bmp.PixelWidth * bmp.PixelHeight];
+            var result = new byte[56 + 4 * bmp.PixelWidth * bmp.PixelHeight];
+
+            // bitmap signature
+            result[0] = (byte)'B';
+            result[1] = (byte)'M';
+
+            // offset
+            result[10] = 56;
+
+            // header size
+            result[14] = 40;
+
+            // width of the image
+            SerializeIntoByteArray(bmp.PixelWidth, result, 18);
+
+            // width of the height
+            SerializeIntoByteArray(bmp.PixelHeight, result, 22);
+
+            // planes
+            result[26] = 1;
+
+            // bits per pixel
+            result[28] = 32;
+
+            // bitmap raw size, 4 bytes per pixel
+            var size = bmp.PixelHeight * bmp.PixelHeight * 4;
+            SerializeIntoByteArray(size, result, 34);
 
             int idx = result.Length - 1;
             for (int i = 0; i < bmp.PixelHeight; i++)
@@ -229,11 +226,7 @@ namespace Catel.MVVM.Services
                 for (int j = 0; j < bmp.PixelWidth; j++)
                 {
                     var color = bmp.Pixels[i * bmp.PixelWidth + (bmp.PixelWidth - j - 1)];
-                    result[idx - 0] = (byte)(color >> 24); // A
-                    result[idx - 1] = (byte)(color >> 16); // R
-                    result[idx - 2] = (byte)(color >> 8);  // G
-                    result[idx - 3] = (byte)(color);       // B
-                    
+                    SerializeIntoByteArray(color, result, idx - 3);
                     idx -= 4;
                 }
             }
