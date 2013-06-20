@@ -677,11 +677,32 @@ namespace Catel.Runtime.Serialization
             {
                 if (!_knownTypesByAttributesCache.ContainsKey(typeName))
                 {
+                    var additionalTypes = new List<Type>();
                     var knownTypeAttributes = type.GetCustomAttributesEx(typeof(KnownTypeAttribute), true);
-                    var additionalTypes = (from attr in knownTypeAttributes
-                                           where attr is KnownTypeAttribute
-                                           select ((KnownTypeAttribute)attr).Type).ToList();
-
+                    foreach (var attr in knownTypeAttributes)
+                    {
+                        var ktattr = attr as KnownTypeAttribute;
+                        if (ktattr != null)
+                        {
+                            if (ktattr.MethodName != null)
+                            {
+                                var mi = type.GetMethod(ktattr.MethodName, BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
+                                // this can be null because we are also getting here through the recursive behaviour
+                                // of GetCustomAttributesEx. We are getting at this point once per class derived from a
+                                // base class having a KnownType() with a method. This can be ignored
+                                if (mi != null)
+                                {
+                                    var types = mi.Invoke(null, null) as IEnumerable<Type>;
+                                    if (types != null)
+                                        additionalTypes.AddRange(types);
+                                }
+                            }
+                            else
+                            {
+                                additionalTypes.Add(ktattr.Type);
+                            }
+                        }
+                    }
                     _knownTypesByAttributesCache.Add(typeName, additionalTypes.ToArray());
                 }
 
