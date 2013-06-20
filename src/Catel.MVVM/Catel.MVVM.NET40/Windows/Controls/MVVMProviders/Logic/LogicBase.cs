@@ -98,11 +98,21 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         private bool _isFirstValidationAfterLoaded = true;
 
 #if !NET
-        private bool _isFirstLayoutUpdatedAfterUnloadedEvent;
+        private static readonly IFrameworkElementLoadedManager _frameworkElementLoadedManager;
 #endif
         #endregion
 
         #region Constructors
+        /// <summary>
+        /// Initializes static members of the <see cref="LogicBase"/> class.
+        /// </summary>
+        static LogicBase()
+        {
+#if !NET
+            _frameworkElementLoadedManager = ServiceLocator.Default.ResolveType<IFrameworkElementLoadedManager>();
+#endif
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LogicBase"/> class.
         /// </summary>
@@ -146,17 +156,8 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 #if NET
             TargetControl.Loaded += OnTargetControlLoadedInternal;
 #else
-            // Note: in silverlight, use LayoutUpdated instead of Loaded because the order is down => top instead of top => down
-            TargetControl.LayoutUpdated += (sender, e) =>
-            {
-                if (_isFirstLayoutUpdatedAfterUnloadedEvent)
-                {
-                    _isFirstLayoutUpdatedAfterUnloadedEvent = false;
-                    return;
-                }
-
-                OnTargetControlLoadedInternal(sender, new UIEventArgs());
-            };
+            // Note: in non-WPF, use LayoutUpdated instead of Loaded because the order is down => top instead of top => down
+            _frameworkElementLoadedManager.AddElement(TargetControl, () => OnTargetControlLoadedInternal(null, new RoutedEventArgs()));
 #endif
 
             TargetControl.Unloaded += OnTargetControlUnloadedInternal;
@@ -167,8 +168,6 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             {
                 TargetControl.SubscribeToDependencyProperty(dependencyPropertyToSubscribe.PropertyName, OnTargetControlPropertyChangedInternal);
             }
-
-            //TargetControl.SubscribeToAllDependencyProperties(OnTargetControlPropertyChangedInternal);
 
 #if NET
             IsTargetControlLoaded = TargetControl.IsLoaded;
@@ -552,9 +551,9 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 return;
             }
 
-#if !NET
-            _isFirstLayoutUpdatedAfterUnloadedEvent = true;
-#endif
+//#if !NET
+//            _isFirstLayoutUpdatedAfterUnloadedEvent = true;
+//#endif
 
             Log.Debug("Target control '{0}' is unloaded", TargetControl.GetType().Name);
 

@@ -225,6 +225,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ISaveFileService.cs">
       <Link>MVVM\Services\Interfaces\ISaveFileService.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ISchedulerService.cs">
+      <Link>MVVM\Services\Interfaces\ISchedulerService.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ISensorService.cs">
       <Link>MVVM\Services\Interfaces\ISensorService.cs</Link>
     </Compile>
@@ -248,6 +251,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\NavigationService.cs">
       <Link>MVVM\Services\NavigationService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\SchedulerService.cs">
+      <Link>MVVM\Services\SchedulerService.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Test\MessageService.cs">
       <Link>MVVM\Services\Test\MessageService.cs</Link>
@@ -672,6 +678,42 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Threading\Helpers\Dispatcherhelper.cs">
       <Link>Windows\Threading\Helpers\Dispatcherhelper.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.SL4\Windows\Controls\ValidationResult.cs">
+      <Link>Windows\Controls\ValidationResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.SL4\Windows\Controls\ValidationRule.cs">
+      <Link>Windows\Controls\ValidationRule.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.SL4\Windows\EventArgs\FrameworkElementLoadedEventArgs.cs">
+      <Link>Windows\EventArgs\FrameworkElementLoadedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.SL4\Windows\FrameworkElementLoadedManager.cs">
+      <Link>Windows\FrameworkElementLoadedManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.SL4\Windows\Helpers\DataContextChangedHelper.cs">
+      <Link>Windows\Helpers\DataContextChangedHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.SL4\Windows\Helpers\LogicalTreeHelper.cs">
+      <Link>Windows\Helpers\LogicalTreeHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.SL4\Windows\Helpers\SetterValueBindingHelper.cs">
+      <Link>Windows\Helpers\SetterValueBindingHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.SL4\Windows\Interfaces\IFrameworkElementLoadedManager.cs">
+      <Link>Windows\Interfaces\IFrameworkElementLoadedManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.SL4\Windows\PopupBehavior\Popup.cs">
+      <Link>Windows\PopupBehavior\Popup.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.SL4\Windows\PopupBehavior\PopupOrientation.cs">
+      <Link>Windows\PopupBehavior\PopupOrientation.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.SL4\Windows\PopupBehavior\PopupOrientationCollection.cs">
+      <Link>Windows\PopupBehavior\PopupOrientationCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.SL4\Windows\WeakFrameworkElementInfo.cs">
+      <Link>Windows\WeakFrameworkElementInfo.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.WP7\MVVM\Commands\Helpers\BindingListener.cs">
       <Link>MVVM\Commands\Helpers\BindingListener.cs</Link>
     </Compile>
@@ -807,7 +849,10 @@
     <Reference Include="System.Windows.Interactivity, Version=3.8.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Windows\Controls\InfoBarMessageControl\" />
     <Folder Include="Windows\Markup\" />
+    <Folder Include="Windows\Windows\DataWindow\" />
+    <Folder Include="Windows\Windows\Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\Catel.MVVM.NET40\Resources\Images\Error.png">
