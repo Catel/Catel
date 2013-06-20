@@ -29,116 +29,6 @@ namespace Catel.MVVM.Services
     /// </summary>
     public class ViewExportService : ServiceBase, IViewExportService
     {
-#if SILVERLIGHT 
-        /// <summary>
-        ///     The header bitmap.
-        /// </summary>
-        [StructLayout(LayoutKind.Explicit)]
-        public struct HeaderBitmap
-        {
-            /// <summary>
-            ///     The bf type 1.
-            /// </summary>
-            [FieldOffset(0)]
-            public byte bfType1;
-
-            /// <summary>
-            ///     The bf type 2.
-            /// </summary>
-            [FieldOffset(1)]
-            public byte bfType2;
-
-            /// <summary>
-            ///     The bf size.
-            /// </summary>
-            [FieldOffset(2)]
-            public int bfSize;
-
-            /// <summary>
-            ///     The bf reserved 1.
-            /// </summary>
-            [FieldOffset(6)]
-            public short bfReserved1;
-
-            /// <summary>
-            ///     The bf reserved 2.
-            /// </summary>
-            [FieldOffset(8)]
-            public short bfReserved2;
-
-            /// <summary>
-            ///     The bf offbits.
-            /// </summary>
-            [FieldOffset(12)]
-            public int bfOffbits;
-
-            /// <summary>
-            ///     The bi size.
-            /// </summary>
-            [FieldOffset(16)]
-            public int biSize;
-
-            /// <summary>
-            ///     The bi with.
-            /// </summary>
-            [FieldOffset(20)]
-            public int biWith;
-
-            /// <summary>
-            ///     The bi height.
-            /// </summary>
-            [FieldOffset(24)]
-            public int biHeight;
-
-            /// <summary>
-            ///     The bi planes.
-            /// </summary>
-            [FieldOffset(26)]
-            public short biPlanes;
-
-            /// <summary>
-            ///     The bi bit count.
-            /// </summary>
-            [FieldOffset(28)]
-            public short biBitCount;
-
-            /// <summary>
-            ///     The bi compression.
-            /// </summary>
-            [FieldOffset(32)]
-            public int biCompression;
-
-            /// <summary>
-            ///     The bi size image.
-            /// </summary>
-            [FieldOffset(36)]
-            public int biSizeImage;
-
-            /// <summary>
-            ///     The bi x pels per meter.
-            /// </summary>
-            [FieldOffset(40)]
-            public int biXPelsPerMeter;
-
-            /// <summary>
-            ///     The bi y pels per meter.
-            /// </summary>
-            [FieldOffset(44)]
-            public int biYPelsPerMeter;
-
-            /// <summary>
-            ///     The bi clr used.
-            /// </summary>
-            [FieldOffset(48)]
-            public int biClrUsed;
-
-            /// <summary>
-            ///     The bi clr important.
-            /// </summary>
-            [FieldOffset(52)]
-            public int biClrImportant;
-        }
-#endif
         #region Constants
         /// <summary>
         /// The log.
@@ -230,19 +120,35 @@ namespace Catel.MVVM.Services
                 if (stream != null)
                 {
                     var writeableBitmap = new WriteableBitmap(bitmap);
-                    var headerBitmap = new HeaderBitmap
-                                           {
-                                               bfType1 = 0x42,
-                                               bfType2 = 0x4D, 
-                                               biPlanes = 1, 
-                                               bfOffbits = 0x2621440, 
-                                               biBitCount = 24, 
-                                               biHeight = writeableBitmap.PixelHeight, 
-                                               biWith = writeableBitmap.PixelWidth, 
-                                           };
+                    var header = new byte[56];
+                    
+                    // bitmap signature
+                    header[0] = (byte)'B';
+                    header[1] = (byte)'M';
 
-                    var bitmapHeaderArray = RawSerialize(headerBitmap);
-                    stream.Write(bitmapHeaderArray, 0, bitmapHeaderArray.Length);
+                    // offset
+                    header[10] = 56;
+                    
+                    // header size
+                    header[14] = 40;
+
+                    // width of the image
+                    SerializeIntIntoByteArray(writeableBitmap.PixelWidth, header, 18);
+
+                    // width of the height
+                    SerializeIntIntoByteArray(writeableBitmap.PixelHeight, header, 22);
+
+                    // planes
+                    header[26] = 1;
+
+                    // bytes per pixel
+                    header[28] = 32;
+
+                    // bitmap raw size
+                    var rawSize = writeableBitmap.PixelHeight * writeableBitmap.PixelHeight * 4;
+                    SerializeIntIntoByteArray(rawSize, header, 34);
+
+                    stream.Write(header, 0, header.Length);
 
                     var byteArray = ConvertWritableBitmapToByteArray(writeableBitmap);
                     stream.Write(byteArray, 0, byteArray.Length);
@@ -283,36 +189,53 @@ namespace Catel.MVVM.Services
 #if SILVERLIGHT
 
         /// <summary>
-        /// 
+        /// Serializes an integer into a byte array
         /// </summary>
-        /// <param name="anything"></param>
-        /// <returns></returns>
-        public static byte[] RawSerialize<T>(T anything)
+        /// <param name="value">
+        ///     The value
+        /// </param>
+        /// <param name="array">
+        ///     The byte array
+        /// </param>
+        /// <param name="offset">
+        ///     The offset
+        /// </param>
+        /// <remarks>
+        ///   TODO: Create an extension method
+        /// </remarks>
+        private static void SerializeIntIntoByteArray(int value, byte[] array, int offset)
         {
-            int rawsize = Marshal.SizeOf(typeof(T));
-            var rawdata = new byte[rawsize];
-            GCHandle handle = GCHandle.Alloc(rawdata, GCHandleType.Pinned);
-            Marshal.StructureToPtr(anything, handle.AddrOfPinnedObject(), false);
-            handle.Free();
-            return rawdata;
+            array[offset] = (byte)value;
+            array[offset + 1] = (byte)(value >> 8);
+            array[offset + 2] = (byte)(value >> 16);
+            array[offset + 3] = (byte)(value >> 24);
         }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bmp"></param>
+        /// <returns></returns>
+        /// <remarks>
+        ///   TODO: Create an extension method
+        /// </remarks>
         private static byte[] ConvertWritableBitmapToByteArray(WriteableBitmap bmp)
         {
-            int w = bmp.PixelWidth;
-            int h = bmp.PixelHeight;
-            int[] p = bmp.Pixels;
-            int len = p.Length;
-            byte[] result = new byte[4 * w * h];
+            var result = new byte[4 * bmp.PixelWidth * bmp.PixelHeight];
 
-            // Copy pixels to buffer
-            for (int i = 0, j = 0; i < len; i++, j += 4)
+            int idx = result.Length - 1;
+            for (int i = 0; i < bmp.PixelHeight; i++)
             {
-                int color = p[i];
-                result[j + 0] = (byte)(color >> 24); // A
-                result[j + 1] = (byte)(color >> 16); // R
-                result[j + 2] = (byte)(color >> 8);  // G
-                result[j + 3] = (byte)(color);       // B
+                for (int j = 0; j < bmp.PixelWidth; j++)
+                {
+                    var color = bmp.Pixels[i * bmp.PixelWidth + (bmp.PixelWidth - j - 1)];
+                    result[idx - 0] = (byte)(color >> 24); // A
+                    result[idx - 1] = (byte)(color >> 16); // R
+                    result[idx - 2] = (byte)(color >> 8);  // G
+                    result[idx - 3] = (byte)(color);       // B
+                    
+                    idx -= 4;
+                }
             }
 
             return result;
