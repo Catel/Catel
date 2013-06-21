@@ -69,7 +69,9 @@ Added/fixed:
 (*) [CTL-84] All converters based on ValueConverterBase can now be chained after eachother by using the Link property
 (*) [CTL-86] Improved DoubleClickToCommand behavior for grids
 (*) [CTL-83] ChangeNotificationWrapper now supports both collection and property changes at the same time
-(*) [CTL-81] Prevent a change in case the validationsummary has not changed which should improve performance in some cases
+(*) [CTL-81] Prevent a change in case the validationsummary has not changed which should improve performance in some cases. Note that for this
+    to be reliable, Catel uses the Stopwatch instead of DateTime because DateTime is not accurate enough. Since the Stopwatch is only available
+    in the full .NET framework, all other target frameworks will always assume a validation context or summary is outdated
 (*) [CTL-87] The TypeFactory circular dependency protection now ignores if duplicate types are requested directly
     after eachother. This might result in unwanted behavior if the same type is used as injection in the same
     type, but these cases are very rare. This changes fixes an issue where prism resolves the same type several times
@@ -89,6 +91,7 @@ Added/fixed:
 (x) [CTL-66] AutoRegistrationManager for ServiceLocator causes deadlock in design time
 (x) [CTL-72] Serialization issue with very complex hierarchies and xml serialization
 (x) [CTL-41] Silverlight TypeCache doesn't load types from mscorlib and system
+(x) [PR-3] Added support for KnownTypeAttribute with method name instead of a type
 
 To-do:
 ======

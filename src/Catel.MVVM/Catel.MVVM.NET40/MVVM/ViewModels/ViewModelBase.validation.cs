@@ -34,7 +34,7 @@ namespace Catel.MVVM
 #if NET
         [field: NonSerialized]
 #endif
-        private readonly Dictionary<string, DateTime> _validationSummariesUpdateStamps = new Dictionary<string, DateTime>();
+        private readonly Dictionary<string, long> _validationSummariesUpdateStamps = new Dictionary<string, long>();
         #endregion
 
         #region Properties
@@ -287,7 +287,7 @@ namespace Catel.MVVM
             foreach (var validationSummaryInfo in _validationSummaries)
             {
                 var isSummaryUpdateRequired = false;
-                var lastUpdated = _validationSummariesUpdateStamps.ContainsKey(validationSummaryInfo.Key) ? _validationSummariesUpdateStamps[validationSummaryInfo.Key] : DateTime.MinValue;
+                var lastUpdated = _validationSummariesUpdateStamps.ContainsKey(validationSummaryInfo.Key) ? _validationSummariesUpdateStamps[validationSummaryInfo.Key] : 0L;
                 
                 isSummaryUpdateRequired = this.IsValidationSummaryOutdated(lastUpdated, validationSummaryInfo.Value.IncludeChildViewModels);
                 if (!isSummaryUpdateRequired)
@@ -306,7 +306,7 @@ namespace Catel.MVVM
                 }
 
                 PropertyHelper.SetPropertyValue(this, validationSummaryInfo.Key, validationSummary);
-                _validationSummariesUpdateStamps[validationSummaryInfo.Key] = validationSummary.LastModified;
+                _validationSummariesUpdateStamps[validationSummaryInfo.Key] = validationSummary.LastModifiedTicks;
 
                 updatedValidationSummaries = true;
             }

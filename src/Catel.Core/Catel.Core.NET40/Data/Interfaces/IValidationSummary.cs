@@ -88,8 +88,21 @@ namespace Catel.Data
 
         /// <summary>
         /// Gets the last modified date/time.
+        /// <para />
+        /// Note that this is just an informational value and should not be used for comparisons. The <see cref="DateTime"/> 
+        /// is not accurate enough. Use the <c>LastModifiedTicks</c> instead. 
         /// </summary>
         /// <value>The last modified date/time.</value>
         DateTime LastModified { get; }
+
+        /// <summary>
+        /// Gets the last modified ticks which is much more precise that the <see cref="LastModified"/>. Use this value
+        /// to compare last modification ticks on other validation contexts.
+        /// <para />
+        /// Because only full .NET provides a stopwatch, this property is only available in full .NET. All other target frameworks
+        /// will return the <see cref="DateTime.Ticks"/> which is <c>not</c> reliable.
+        /// </summary>
+        /// <value>The last modified ticks.</value>
+        long LastModifiedTicks { get; }
     }
 }

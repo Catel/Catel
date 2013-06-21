@@ -10,12 +10,23 @@ namespace Catel.Data
     using System.Collections.Generic;
     using System.Linq;
 
+#if NET
+    using System.Diagnostics;
+#endif
+
     /// <summary>
     /// Context containing all validation and provides several methods to gather this information.
     /// </summary>
     public class ValidationContext : IValidationContext
     {
         #region Fields
+#if NET
+        /// <summary>
+        /// The stop watch which will give accurate modification stamps.
+        /// </summary>
+        private static readonly Stopwatch _stopWatch = new Stopwatch();
+#endif
+
         /// <summary>
         /// List of field validations.
         /// </summary>
@@ -28,6 +39,16 @@ namespace Catel.Data
         #endregion
 
         #region Constructors
+#if NET
+        /// <summary>
+        /// Initializes static members of the <see cref="ValidationContext"/> class.
+        /// </summary>
+        static ValidationContext()
+        {
+            _stopWatch.Start();
+        }
+#endif
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ValidationContext"/> class.
         /// </summary>
@@ -60,16 +81,29 @@ namespace Catel.Data
                 _businessRuleValidations.AddRange(businessRuleValidationResults);
             }
 
-            LastModified = lastModified;
+            UpdateLastModificationStamp(lastModified);
         }
         #endregion
 
         #region Properties
         /// <summary>
         /// Gets the last modified date/time.
+        /// <para />
+        /// Note that this is just an informational value and should not be used for comparisons. The <see cref="DateTime"/> 
+        /// is not accurate enough. Use the <c>LastModifiedTicks</c> instead. 
         /// </summary>
         /// <value>The last modified date/time.</value>
         public DateTime LastModified { get; private set; }
+
+        /// <summary>
+        /// Gets the last modified ticks which is much more precise that the <see cref="LastModified"/>. Use this value
+        /// to compare last modification ticks on other validation contexts.
+        /// <para />
+        /// Because only full .NET provides a stopwatch, this property is only available in full .NET. All other target frameworks
+        /// will return the <see cref="DateTime.Ticks"/> which is <c>not</c> reliable.
+        /// </summary>
+        /// <value>The last modified ticks.</value>
+        public long LastModifiedTicks { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether this instance contains warnings.
@@ -754,7 +788,7 @@ namespace Catel.Data
             {
                 _fieldValidations.Add(fieldValidationResult);
 
-                LastModified = DateTime.Now;
+                UpdateLastModificationStamp(DateTime.Now);
             }
         }
 
@@ -771,7 +805,7 @@ namespace Catel.Data
             {
                 _fieldValidations.Remove(fieldValidationResult);
 
-                LastModified = DateTime.Now;
+                UpdateLastModificationStamp(DateTime.Now);
             }
         }
 
@@ -788,7 +822,7 @@ namespace Catel.Data
             {
                 _businessRuleValidations.Add(businessRuleValidationResult);
 
-                LastModified = DateTime.Now;
+                UpdateLastModificationStamp(DateTime.Now);
             }
         }
 
@@ -805,8 +839,19 @@ namespace Catel.Data
             {
                 _businessRuleValidations.Remove(businessRuleValidationResult);
 
-                LastModified = DateTime.Now;
+                UpdateLastModificationStamp(DateTime.Now);
             }
+        }
+
+        private void UpdateLastModificationStamp(DateTime dateTime)
+        {
+            LastModified = dateTime;
+
+#if NET
+            LastModifiedTicks = _stopWatch.ElapsedTicks;
+#else
+            LastModifiedTicks = dateTime.Ticks;
+#endif
         }
         #endregion
     }

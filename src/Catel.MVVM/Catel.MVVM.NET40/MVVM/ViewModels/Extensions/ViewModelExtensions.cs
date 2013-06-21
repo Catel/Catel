@@ -18,15 +18,20 @@ namespace Catel.MVVM
         /// Determines whether the specified validation summary is outdated by checking the last modified date/time on the validation context.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
-        /// <param name="lastUpdated">The last updated.</param>
+        /// <param name="lastUpdated">The last updated ticks.</param>
         /// <param name="includeChildViewModelValidations">If set to <c>true</c>, all validation from all child view models should be gathered as well.</param>
         /// <returns><c>true</c> if the validation summary is outdated; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
-        public static bool IsValidationSummaryOutdated(this ViewModelBase viewModel, DateTime lastUpdated, bool includeChildViewModelValidations)
+        public static bool IsValidationSummaryOutdated(this ViewModelBase viewModel, long lastUpdated, bool includeChildViewModelValidations)
         {
             Argument.IsNotNull("viewModel", viewModel);
 
-            if (viewModel.ValidationContext.LastModified > lastUpdated)
+#if !NET
+            // Only full .NET supports a reliable stopwatch. The other target frameworks don't have a reliable tick count
+            // so always assume invalidated
+            return true;
+#else
+            if (viewModel.ValidationContext.LastModifiedTicks > lastUpdated)
             {
                 return true;
             }
@@ -47,6 +52,7 @@ namespace Catel.MVVM
             }
 
             return false;
+#endif
         }
 
         /// <summary>

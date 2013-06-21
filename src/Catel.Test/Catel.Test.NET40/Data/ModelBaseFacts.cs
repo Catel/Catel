@@ -332,22 +332,5 @@ namespace Catel.Test.Data
                 Assert.IsTrue(model.HasCollectionChanged);
             }
         }
-
-        //[TestClass]
-        //public class TheSupportCollectionNotifyChangedEventsProperty
-        //{
-        //    [TestMethod]
-        //    public void GetsNoChangeNotificationsForChildCollections()
-        //    {
-        //        var model = new CollectionModel(true);
-
-        //        var propertyChanged = false;
-        //        model.PropertyChanged += (sender, e) => propertyChanged = true;
-
-        //        model.Items[0][0].Name = "test";
-
-        //        Assert.IsTrue(propertyChanged);
-        //    }
-        //}
     }
 }
