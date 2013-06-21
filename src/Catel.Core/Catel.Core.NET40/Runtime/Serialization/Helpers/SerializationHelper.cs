@@ -666,7 +666,7 @@ namespace Catel.Runtime.Serialization
         /// Gets the known types via attributes.
         /// </summary>
         /// <param name="type">The type.</param>
-        /// <returns></returns>
+        /// <returns>The list of known types via the <see cref="KnownTypeAttribute"/>.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         private static Type[] GetKnownTypesViaAttributes(Type type)
         {
@@ -686,7 +686,8 @@ namespace Catel.Runtime.Serialization
                         {
                             if (ktattr.MethodName != null)
                             {
-                                var mi = type.GetMethod(ktattr.MethodName, BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
+                                var mi = type.GetMethodEx(ktattr.MethodName, BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
+
                                 // this can be null because we are also getting here through the recursive behaviour
                                 // of GetCustomAttributesEx. We are getting at this point once per class derived from a
                                 // base class having a KnownType() with a method. This can be ignored
@@ -694,7 +695,9 @@ namespace Catel.Runtime.Serialization
                                 {
                                     var types = mi.Invoke(null, null) as IEnumerable<Type>;
                                     if (types != null)
+                                    {
                                         additionalTypes.AddRange(types);
+                                    }
                                 }
                             }
                             else
@@ -703,6 +706,7 @@ namespace Catel.Runtime.Serialization
                             }
                         }
                     }
+
                     _knownTypesByAttributesCache.Add(typeName, additionalTypes.ToArray());
                 }
 
@@ -720,7 +724,7 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns>
-        /// 	<c>true</c> if the specified type is a special collection type; otherwise, <c>false</c>.
+        /// <c>true</c> if the specified type is a special collection type; otherwise, <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         private static bool IsSpecialCollectionType(Type type)
@@ -841,7 +845,7 @@ namespace Catel.Runtime.Serialization
         /// <param name="fileStream">The file stream.</param>
         /// <param name="obj">The object.</param>
         /// <returns>
-        /// 	<c>true</c> if the object is serialized to xml successfully; otherwise <c>false</c>.
+        /// <c>true</c> if the object is serialized to xml successfully; otherwise <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <param ref="fileStream" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <param ref="obj" /> is <c>null</c>.</exception>

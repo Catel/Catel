@@ -695,6 +695,7 @@ namespace Catel.Windows
                     HandleDefaultButton();
                     e.Handled = true;
                 }
+
                 // Else let it go, it's a custom button
             }
 
