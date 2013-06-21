@@ -512,7 +512,8 @@ namespace Catel.Data
         /// </summary>
         /// <param name="validationResults">The validation results, add additional results to this list.</param>
         protected virtual void ValidateFields(List<IFieldValidationResult> validationResults)
-        { }
+        {
+        }
 
         /// <summary>
         /// Sets the field validation result.
@@ -562,7 +563,8 @@ namespace Catel.Data
         /// </summary>
         /// <param name="validationResults">The validation results, add additional results to this list.</param>
         protected virtual void ValidateBusinessRules(List<IBusinessRuleValidationResult> validationResults)
-        { }
+        {
+        }
 
         /// <summary>
         /// Sets the business rule validation result.
@@ -1264,6 +1266,38 @@ namespace Catel.Data
                         yield return warning.Message;
                     }
                 }
+            }
+        }
+        #endregion
+
+        #region Notifications
+        /// <summary>
+        /// Raises the right events based on the validation result.
+        /// </summary>
+        /// <param name="validationResult">The validation result.</param>
+        /// <param name="notifyGlobal">If set to <c>true</c>, the global properties such as <see cref="HasErrors" /> and <see cref="HasWarnings" /> are also raised.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="validationResult"/> is <c>null</c>.</exception>
+        protected void NotifyValidationResult(IValidationResult validationResult, bool notifyGlobal)
+        {
+            Argument.IsNotNull("validationResult", validationResult);
+
+            var propertyName = string.Empty;
+
+            var fieldValidationResult = validationResult as IFieldValidationResult;
+            if (fieldValidationResult != null)
+            {
+                propertyName = fieldValidationResult.PropertyName;
+            }
+
+            switch (validationResult.ValidationResultType)
+            {
+                case ValidationResultType.Warning:
+                    NotifyWarningsChanged(propertyName, notifyGlobal);
+                    break;
+
+                case ValidationResultType.Error:
+                    NotifyErrorsChanged(propertyName, notifyGlobal);
+                    break;
             }
         }
         #endregion
