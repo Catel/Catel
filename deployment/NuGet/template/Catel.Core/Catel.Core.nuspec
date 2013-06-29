@@ -7,12 +7,13 @@
     <authors>GeertvanHorrik</authors>
 	
 	<description>
-	  Catel.Core library which includes the DataObjectBase class.
+	  Catel.Core library which provides the core building blocks required when developing professional applications. This
+	  package contains an IoC container, logging, argument checking, message mediators and much more!
 	</description>
 	<summary>
 	</summary>
 	
-	<tags>mvvm model modelbase logging data object wpf c# ioc servicelocator</tags>
+	<tags>mvvm model modelbase logging data object wpf silverlight sl windows phone wp wp7 wp8 winrt c# ioc servicelocator typefactory messenger message mediator</tags>
 	
 	<language>en-US</language>
 	<projectUrl>http://www.catelproject.com</projectUrl>	
