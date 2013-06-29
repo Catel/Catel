@@ -15,6 +15,32 @@ Documentation:   https://catelproject.atlassian.net/wiki/display/CTL
 **********************************************************
 
 ==================
+Version 3.7
+==================
+
+Release date:
+=============
+2013/xx/xx
+
+Added/fixed (BREAKING CHANGES):
+===============================
+xxx
+
+Added/fixed:
+============
+xxxx
+
+To-do:
+======
+See https://catelproject.atlassian.net
+
+Known issues:
+=============
+See https://catelproject.atlassian.net
+
+**********************************************************
+
+==================
 Version 3.6
 ==================
 
