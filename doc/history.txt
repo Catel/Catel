@@ -20,7 +20,7 @@ Version 3.6
 
 Release date:
 =============
-2012/xx/xx
+2013/06/29
 
 Added/fixed (BREAKING CHANGES):
 ===============================
