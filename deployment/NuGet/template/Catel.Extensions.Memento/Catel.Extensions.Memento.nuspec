@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
-    <id>Catel.Extensions.Data</id>
+    <id>Catel.Extensions.Memento</id>
     <version>[VERSION]</version>
-	<title>Catel.Extensions.Data</title>
+	<title>Catel.Extensions.Memento</title>
     <authors>GeertvanHorrik</authors>
 	
 	<description>
-	  Catel.Extensions.Data library which provides data classes such as repositories.
+	  Catel.Extensions.Memento library which provides the memento pattern implementation as a service.
 	</description>
 	<summary>
 	</summary>
 	
-	<tags>catel data repository repositories</tags>
+	<tags>catel memento</tags>
 	
 	<language>en-US</language>
 	<projectUrl>http://www.catelproject.com</projectUrl>	
