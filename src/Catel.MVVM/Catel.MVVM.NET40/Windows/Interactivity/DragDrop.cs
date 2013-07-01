@@ -163,20 +163,28 @@ namespace Catel.Windows.Interactivity
 
             if (DataIsPresent(e) && CanDrop(itemsControl, GetData(e)))
             {
-                var itemToAdd = GetData(e);
+                var itemToAddOrMove = GetData(e);
                 var isControlPressed = ((e.KeyStates & DragDropKeyStates.ControlKey) != 0);
 
                 if (isControlPressed &&
                     !itemsControl.Items.IsNullOrEmpty() &&
-                    itemsControl.Items.Contains(itemToAdd))
+                    itemsControl.Items.Contains(itemToAddOrMove))
                 {
                     e.Effects = DragDropEffects.None;
                     return;
                 }
 
-                e.Effects = isControlPressed ? DragDropEffects.Copy : DragDropEffects.Move;
-
-                AddItem(itemsControl, itemToAdd, GetInsertionIndex(itemsControl, e));
+                if (isControlPressed)
+                {
+                    e.Effects = DragDropEffects.Copy;
+                    AddItem(itemsControl, itemToAddOrMove, GetInsertionIndex(itemsControl, e));
+                }
+                else
+                {
+                    e.Effects = DragDropEffects.Move;
+                    RemoveItem(itemsControl, itemToAddOrMove);
+                    AddItem(itemsControl, itemToAddOrMove, GetInsertionIndex(itemsControl, e));
+                }
             }
             else
             {
@@ -324,11 +332,7 @@ namespace Catel.Windows.Interactivity
 
             var dObject = ItemType != null ? new DataObject(ItemType, _myData) : new DataObject(DefaultDataFormatString, _myData);
 
-            var effects = System.Windows.DragDrop.DoDragDrop(itemsControl, dObject, DragDropEffects.Copy | DragDropEffects.Move);
-            if ((effects & DragDropEffects.Move) != 0)
-            {
-                RemoveItem(itemsControl, _myData);
-            }
+            System.Windows.DragDrop.DoDragDrop(itemsControl, dObject, DragDropEffects.Copy | DragDropEffects.Move);
 
             ResetState();
         }
