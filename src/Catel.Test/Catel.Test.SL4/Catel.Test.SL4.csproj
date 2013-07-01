@@ -673,6 +673,10 @@
       <Project>{ac8f4caf-a03f-4ff1-9079-0f309235fab9}</Project>
       <Name>Catel.Extensions.Data.SL4</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Catel.Extensions.Memento\Catel.Extensions.Memento.SL4\Catel.Extensions.Memento.SL4.csproj">
+      <Project>{3c0f4476-6f60-4853-adfa-9b461f3178af}</Project>
+      <Name>Catel.Extensions.Memento.SL4</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.SL4\Catel.Extensions.Prism.SL4.csproj">
       <Project>{C9D002E4-8ABE-4939-8668-6EA2A6146301}</Project>
       <Name>Catel.Extensions.Prism.SL4</Name>

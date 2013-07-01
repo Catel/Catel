@@ -12,7 +12,6 @@ namespace Catel.MVVM
 
     using IoC;
     using Logging;
-    using Memento;
     using Messaging;
     using Services;
 
@@ -45,11 +44,6 @@ namespace Catel.MVVM
                     serviceLocator.RegisterInstance(MessageMediator.Default);
                 }
 
-                if (!serviceLocator.IsTypeRegistered<IMementoService>())
-                {
-                    serviceLocator.RegisterInstance(MementoService.Default);
-                }
-
                 if (!serviceLocator.IsTypeRegistered<ExceptionHandling.IExceptionService>())
                 {
                     serviceLocator.RegisterInstance(ExceptionHandling.ExceptionService.Default);
@@ -72,11 +66,6 @@ namespace Catel.MVVM
                 if (!serviceLocator.IsTypeRegistered<IMessageMediator>())
                 {
                     serviceLocator.RegisterInstance(MessageMediator.Default);
-                }
-
-                if (!serviceLocator.IsTypeRegistered<IMementoService>())
-                {
-                    serviceLocator.RegisterInstance(MementoService.Default);
                 }
 
                 if (!serviceLocator.IsTypeRegistered<ExceptionHandling.IExceptionService>())
@@ -108,11 +97,6 @@ namespace Catel.MVVM
                     serviceLocator.RegisterInstance(MessageMediator.Default);
                 }
 
-                if (!serviceLocator.IsTypeRegistered<IMementoService>())
-                {
-                    serviceLocator.RegisterInstance(MementoService.Default);
-                }
-
                 if (!serviceLocator.IsTypeRegistered<ExceptionHandling.IExceptionService>())
                 {
                     serviceLocator.RegisterInstance(ExceptionHandling.ExceptionService.Default);
@@ -138,11 +122,6 @@ namespace Catel.MVVM
                 if (!serviceLocator.IsTypeRegistered<IMessageMediator>())
                 {
                     serviceLocator.RegisterInstance(MessageMediator.Default);
-                }
-
-                if (!serviceLocator.IsTypeRegistered<IMementoService>())
-                {
-                    serviceLocator.RegisterInstance(MementoService.Default);
                 }
 
                 if (!serviceLocator.IsTypeRegistered<ExceptionHandling.IExceptionService>())

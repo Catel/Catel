@@ -336,6 +336,10 @@
       <Project>{135E7F2B-1FE8-44E1-B1AD-0C80B972459E}</Project>
       <Name>Catel.Extensions.FluentValidation.NET40</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Catel.Extensions.Memento\Catel.Extensions.Memento.NET40\Catel.Extensions.Memento.NET40.csproj">
+      <Project>{918b3e4e-eda7-44d0-99ca-d1f40cd59e9d}</Project>
+      <Name>Catel.Extensions.Memento.NET40</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Catel.Extensions.Prism.NET40.csproj">
       <Project>{C9EAD437-56BA-45BB-A982-845AD72FE1C8}</Project>
       <Name>Catel.Extensions.Prism.NET40</Name>

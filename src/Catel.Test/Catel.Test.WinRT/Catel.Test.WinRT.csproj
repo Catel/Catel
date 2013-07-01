@@ -544,6 +544,10 @@
       <Project>{87db1def-5033-4edf-947d-cc890e5b84b6}</Project>
       <Name>Catel.Extensions.Data.WinRT</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Catel.Extensions.Memento\Catel.Extensions.Memento.WIN80\Catel.Extensions.Memento.WIN80.csproj">
+      <Project>{93a9f7d1-c007-46eb-bdf1-8dc01ef91a82}</Project>
+      <Name>Catel.Extensions.Memento.WIN80</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Catel.MVVM\Catel.MVVM.WinRT\Catel.MVVM.WinRT.csproj">
       <Project>{a27d360d-a4e3-4b4b-90a2-6428cee073c1}</Project>
       <Name>Catel.MVVM.WinRT</Name>

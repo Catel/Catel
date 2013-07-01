@@ -457,48 +457,6 @@
     <Compile Include="..\Catel.Core.NET40\Logging\LogManager.cs">
       <Link>Logging\LogManager.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\Memento\ActionUndo.cs">
-      <Link>Memento\ActionUndo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\Memento\Attributes\IgnoreMementoSupportAttribute.cs">
-      <Link>Memento\Attributes\IgnoreMementoSupportAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\Memento\Batch.cs">
-      <Link>Memento\Batch.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\Memento\CollectionChangeUndo.cs">
-      <Link>Memento\CollectionChangeUndo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\Memento\CollectionObserver.cs">
-      <Link>Memento\CollectionObserver.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\Memento\Interfaces\IMementoBatch.cs">
-      <Link>Memento\Interfaces\IMementoBatch.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\Memento\Interfaces\IMementoService.cs">
-      <Link>Memento\Interfaces\IMementoService.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\Memento\Interfaces\IMementoSupport.cs">
-      <Link>Memento\Interfaces\IMementoSupport.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\Memento\MementoService.cs">
-      <Link>Memento\MementoService.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\Memento\ObjectObserver.cs">
-      <Link>Memento\ObjectObserver.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\Memento\ObserverBase.cs">
-      <Link>Memento\ObserverBase.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\Memento\OperationSet.cs">
-      <Link>Memento\OperationSet.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\Memento\PropertyChangeUndo.cs">
-      <Link>Memento\PropertyChangeUndo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\Memento\UndoBase.cs">
-      <Link>Memento\UndoBase.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Core.NET40\Messaging\Attributes\MessageRecipientAttribute.cs">
       <Link>Messaging\Attributes\MessageRecipientAttribute.cs</Link>
     </Compile>

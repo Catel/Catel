@@ -24,11 +24,11 @@ Release date:
 
 Added/fixed (BREAKING CHANGES):
 ===============================
-xxx
+(*) Moved memento namespace to a separate extension (Catel.Extensions.Memento) to make the core more lightweight
 
 Added/fixed:
 ============
-xxxx
+(x) Fixed Drag and Drop behavior when the drop position is less then the initial item's position
 
 To-do:
 ======

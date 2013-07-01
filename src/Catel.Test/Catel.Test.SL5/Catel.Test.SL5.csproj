@@ -715,6 +715,10 @@
       <Project>{8FB35D65-3E80-483D-B38A-F4DE1AB08D71}</Project>
       <Name>Catel.Extensions.FluentValidation.SL5</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Catel.Extensions.Memento\Catel.Extensions.Memento.SL5\Catel.Extensions.Memento.SL5.csproj">
+      <Project>{5ef649e7-7704-4f3a-9923-227beaff07d1}</Project>
+      <Name>Catel.Extensions.Memento.SL5</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.SL5\Catel.Extensions.Prism.SL5.csproj">
       <Project>{8127EBEE-C5BB-4201-B899-9CA788688E83}</Project>
       <Name>Catel.Extensions.Prism.SL5</Name>
