@@ -9,12 +9,12 @@
     <ProjectGuid>{B91E0F04-71C6-485B-8FC5-890994AAED7C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WinRT.Test</RootNamespace>
+    <RootNamespace>Catel.Test</RootNamespace>
     <AssemblyName>Catel.Test</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <PackageCertificateKeyFile>Catel.Test.WinRT_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>Catel.Test.WIN80_TemporaryKey.pfx</PackageCertificateKeyFile>
     <PackageCertificateThumbprint>CD0C58B0274B7F50B519AC0643F7A9E3F4A8CB42</PackageCertificateThumbprint>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
@@ -24,8 +24,8 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\output\debug\WinRT\Test\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <OutputPath>..\..\..\output\debug\WIN80\Test\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WIN;WIN80</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,8 +33,8 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\output\release\WinRT\Test\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <OutputPath>..\..\..\output\release\WIN80\Test\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WIN;WIN80</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -533,24 +533,24 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Catel.Test.WinRT_TemporaryKey.pfx" />
+    <None Include="Catel.Test.WIN80_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Catel.Core\Catel.Core.WinRT\Catel.Core.WinRT.csproj">
+    <ProjectReference Include="..\..\Catel.Core\Catel.Core.WIN80\Catel.Core.WIN80.csproj">
       <Project>{b9ae0468-56bb-4afc-8533-8a493fddf8da}</Project>
-      <Name>Catel.Core.WinRT</Name>
+      <Name>Catel.Core.WIN80</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Catel.Extensions.Data\Catel.Extensions.Data.WinRT\Catel.Extensions.Data.WinRT.csproj">
+    <ProjectReference Include="..\..\Catel.Extensions.Data\Catel.Extensions.Data.WIN80\Catel.Extensions.Data.WIN80.csproj">
       <Project>{87db1def-5033-4edf-947d-cc890e5b84b6}</Project>
-      <Name>Catel.Extensions.Data.WinRT</Name>
+      <Name>Catel.Extensions.Data.WIN80</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Catel.Extensions.Memento\Catel.Extensions.Memento.WIN80\Catel.Extensions.Memento.WIN80.csproj">
       <Project>{93a9f7d1-c007-46eb-bdf1-8dc01ef91a82}</Project>
       <Name>Catel.Extensions.Memento.WIN80</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Catel.MVVM\Catel.MVVM.WinRT\Catel.MVVM.WinRT.csproj">
+    <ProjectReference Include="..\..\Catel.MVVM\Catel.MVVM.WIN80\Catel.MVVM.WIN80.csproj">
       <Project>{a27d360d-a4e3-4b4b-90a2-6428cee073c1}</Project>
-      <Name>Catel.MVVM.WinRT</Name>
+      <Name>Catel.MVVM.WIN80</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

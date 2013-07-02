@@ -36,7 +36,7 @@ using System.Runtime.CompilerServices;
 // by using the '*' as shown below:
 
 [assembly: AssemblyVersion("3.7")]
-[assembly: AssemblyInformationalVersion("3.7, Official, Released on 2013-06-29 13:39")]
+[assembly: AssemblyInformationalVersion("3.7, Nightly, Released on 2013-07-02 12:34")]
 
 #if DEBUG
 
@@ -52,10 +52,12 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("Silverlight 4, Debug")]
 #elif SL5
 [assembly: AssemblyConfiguration("Silverlight 5, Debug")]
-#elif WINDOWS_PHONE
+#elif WP7
 [assembly: AssemblyConfiguration("Windows Phone 7, Debug")]
-#elif NETFX_CORE
-[assembly: AssemblyConfiguration("WinRT, Debug")]
+#elif WP8
+[assembly: AssemblyConfiguration("Windows Phone 8, Debug")]
+#elif WIN80
+[assembly: AssemblyConfiguration("Windows 8, Debug")]
 #else
 [assembly: AssemblyConfiguration("Unknown, Debug")]
 #endif
@@ -74,10 +76,12 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("Silverlight 4, Release")]
 #elif SL5
 [assembly: AssemblyConfiguration("Silverlight 5, Release")]
-#elif WINDOWS_PHONE
+#elif WP7
 [assembly: AssemblyConfiguration("Windows Phone 7, Release")]
-#elif NETFX_CORE
-[assembly: AssemblyConfiguration("WinRT, Release")]
+#elif WP8
+[assembly: AssemblyConfiguration("Windows Phone 8, Release")]
+#elif WIN80
+[assembly: AssemblyConfiguration("Windows 8, Release")]
 #else
 [assembly: AssemblyConfiguration("Unknown, Release")]
 #endif

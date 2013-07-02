@@ -2324,29 +2324,29 @@
            </Member>
           </Members>
          </Type>
-         <Type Name="NotSupportedInWinRTException">
+         <Type Name="NotSupportedInWindows8Exception">
           <Messages>
            <Message TypeName="ImplementStandardExceptionConstructors" Category="Microsoft.Design" CheckId="CA1032" Created="2013-02-14 16:04:57Z" BreaksBuild="True">
             <Issue Name="MissingConstructor">
-             <Item>'NotSupportedInWinRTException'</Item>
-             <Item>protected NotSupportedInWinRTException(SerializationInfo, StreamingContext)</Item>
+             <Item>'NotSupportedInWindows8Exception'</Item>
+             <Item>protected NotSupportedInWindows8Exception(SerializationInfo, StreamingContext)</Item>
             </Issue>
             <Issue Name="MissingConstructor">
-             <Item>'NotSupportedInWinRTException'</Item>
-             <Item>public NotSupportedInWinRTException()</Item>
+             <Item>'NotSupportedInWindows8Exception'</Item>
+             <Item>public NotSupportedInWindows8Exception()</Item>
             </Issue>
             <Issue Name="MissingConstructor">
-             <Item>'NotSupportedInWinRTException'</Item>
-             <Item>public NotSupportedInWinRTException(String)</Item>
+             <Item>'NotSupportedInWindows8Exception'</Item>
+             <Item>public NotSupportedInWindows8Exception(String)</Item>
             </Issue>
             <Issue Name="MissingConstructor">
-             <Item>'NotSupportedInWinRTException'</Item>
-             <Item>public NotSupportedInWinRTException(String, Exception)</Item>
+             <Item>'NotSupportedInWindows8Exception'</Item>
+             <Item>public NotSupportedInWindows8Exception(String, Exception)</Item>
             </Issue>
            </Message>
            <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Created="2013-02-14 16:04:57Z" BreaksBuild="True">
             <Issue Certainty="95" Level="Error">
-             <Item>'NotSupportedInWinRTException'</Item>
+             <Item>'NotSupportedInWindows8Exception'</Item>
             </Issue>
            </Message>
           </Messages>
@@ -2356,7 +2356,7 @@
              <Message Id="System.String.Format(System.String,System.Object[])" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2013-02-14 16:04:57Z" BreaksBuild="True">
               <Issue Name="IFormatProviderAlternateString">
                <Item>'string.Format(string, params object[])'</Item>
-               <Item>'NotSupportedInWinRTException.NotSupportedInWinRTException(string, params object[])'</Item>
+               <Item>'NotSupportedInWindows8Exception.NotSupportedInWindows8Exception(string, params object[])'</Item>
                <Item>'string.Format(IFormatProvider, string, params object[])'</Item>
                <Item>'CultureInfo.CurrentCulture'</Item>
                <Item>'CultureInfo.InvariantCulture'</Item>

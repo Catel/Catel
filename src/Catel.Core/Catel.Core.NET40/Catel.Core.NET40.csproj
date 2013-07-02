@@ -150,7 +150,7 @@
     <Compile Include="ExceptionHandling\Interfaces\IExceptionService.cs" />
     <Compile Include="Exceptions\NotSupportedInSilverlightException.cs" />
     <Compile Include="Exceptions\NotSupportedInWindowsPhone7Exception.cs" />
-    <Compile Include="Exceptions\NotSupportedInWinRTException.cs" />
+    <Compile Include="Exceptions\NotSupportedInWindows8Exception.cs" />
     <Compile Include="ExceptionHandling\Extensions\ExceptionExtensions.cs" />
     <Compile Include="Generics\NullOp.cs" />
     <Compile Include="Generics\Operator.cs" />

@@ -310,8 +310,8 @@
     <Compile Include="..\Catel.Core.NET40\Exceptions\NotSupportedInWindowsPhone7Exception.cs">
       <Link>Exceptions\NotSupportedInWindowsPhone7Exception.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\Exceptions\NotSupportedInWinRTException.cs">
-      <Link>Exceptions\NotSupportedInWinRTException.cs</Link>
+    <Compile Include="..\Catel.Core.NET40\Exceptions\NotSupportedInWindows8Exception.cs">
+      <Link>Exceptions\NotSupportedInWindows8Exception.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Generics\NullOp.cs">
       <Link>Generics\NullOp.cs</Link>

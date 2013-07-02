@@ -1,4 +1,10 @@
-﻿using Catel.IoC;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ModuleInitializer.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+using Catel.IoC;
 using Catel.Memento;
 
 /// <summary>
@@ -6,6 +12,7 @@ using Catel.Memento;
 /// </summary>
 public static class ModuleInitializer
 {
+    #region Methods
     /// <summary>
     /// Initializes the module.
     /// </summary>
@@ -18,4 +25,5 @@ public static class ModuleInitializer
             serviceLocator.RegisterInstance(MementoService.Default);
         }
     }
+    #endregion
 }
