@@ -8,8 +8,12 @@ namespace Catel.Windows
     using System;
 
 #if NETFX_CORE
+    using LoadingEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
+    using LayoutUpdatedEventArgs = System.Object;
     using global::Windows.UI.Xaml;
 #else
+    using LoadingEventArgs = System.EventArgs;
+    using LayoutUpdatedEventArgs = System.EventArgs;
     using System.Windows;
 #endif
 
@@ -37,9 +41,9 @@ namespace Catel.Windows
             _frameworkElement = new WeakReference(frameworkElement);
             Action = action;
 
-            this.SubscribeToWeakGenericEvent<EventArgs>(frameworkElement, "Loaded", OnLoaded);
-            this.SubscribeToWeakGenericEvent<EventArgs>(frameworkElement, "LayoutUpdated", OnLayoutUpdated);
-            this.SubscribeToWeakGenericEvent<EventArgs>(frameworkElement, "Unloaded", OnUnloaded);
+            this.SubscribeToWeakGenericEvent<LoadingEventArgs>(frameworkElement, "Loaded", OnLoaded);
+            this.SubscribeToWeakGenericEvent<LoadingEventArgs>(frameworkElement, "Unloaded", OnUnloaded);
+            this.SubscribeToWeakGenericEvent<LayoutUpdatedEventArgs>(frameworkElement, "LayoutUpdated", OnLayoutUpdated);
         }
         #endregion
 
@@ -79,13 +83,9 @@ namespace Catel.Windows
         /// <summary>
         /// Called when the framework element is loaded.
         /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The <see cref="EventArgs"/> instance containing the event data.
-        /// </param>
-        public void OnLoaded(object sender, EventArgs e)
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
+        public void OnLoaded(object sender, LoadingEventArgs e)
         {
             if (IsLoaded)
             {
@@ -94,19 +94,19 @@ namespace Catel.Windows
 
             IsLoaded = true;
 
-            Loaded.SafeInvoke(this);
+            var loaded = Loaded;
+            if (loaded != null)
+            {
+                loaded(this, e);
+            }
         }
 
         /// <summary>
         /// Called when the framework element is unloaded.
         /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The <see cref="EventArgs"/> instance containing the event data.
-        /// </param>
-        public void OnUnloaded(object sender, EventArgs e)
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
+        public void OnUnloaded(object sender, LoadingEventArgs e)
         {
             if (!IsLoaded)
             {
@@ -115,37 +115,41 @@ namespace Catel.Windows
 
             IsLoaded = false;
 
-            Unloaded.SafeInvoke(this);
+            var unloaded = Unloaded;
+            if (unloaded != null)
+            {
+                unloaded(this, e);
+            }
         }
 
         /// <summary>
         /// Called when the framework element layout is updated.
         /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The <see cref="EventArgs"/> instance containing the event data.
-        /// </param>
-        public void OnLayoutUpdated(object sender, EventArgs e)
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
+        public void OnLayoutUpdated(object sender, LayoutUpdatedEventArgs e)
         {
-            LayoutUpdated.SafeInvoke(this);
+            var layoutUpdated = LayoutUpdated;
+            if (layoutUpdated != null)
+            {
+                layoutUpdated(this, e);
+            }
         }
         #endregion
 
         /// <summary>
         /// Occurs when the framework element is loaded.
         /// </summary>
-        public event EventHandler<EventArgs> Loaded;
+        public event EventHandler<LoadingEventArgs> Loaded;
 
         /// <summary>
         /// Occurs when the framework element is unloaded.
         /// </summary>
-        public event EventHandler<EventArgs> Unloaded;
+        public event EventHandler<LoadingEventArgs> Unloaded;
 
         /// <summary>
         /// Occurs when the framework element layout is updated.
         /// </summary>
-        public event EventHandler<EventArgs> LayoutUpdated;
+        public event EventHandler<LayoutUpdatedEventArgs> LayoutUpdated;
     }
 }

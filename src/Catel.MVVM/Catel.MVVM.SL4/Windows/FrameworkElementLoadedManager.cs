@@ -9,9 +9,13 @@ namespace Catel.Windows
     using System.Collections.Generic;
 
 #if NETFX_CORE
+    using LoadingEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
+    using LayoutUpdatedEventArgs = System.Object;
     using Catel.Windows.Threading;
     using global::Windows.UI.Xaml;
 #else
+    using LoadingEventArgs = System.EventArgs;
+    using LayoutUpdatedEventArgs = System.EventArgs;
     using System.Windows;
     using System.Windows.Threading;
 #endif
@@ -145,7 +149,7 @@ namespace Catel.Windows
         #endregion
 
         #region Methods
-        private void OnFrameworkElementLoaded(object sender, EventArgs e)
+        private void OnFrameworkElementLoaded(object sender, LoadingEventArgs e)
         {
             var elementInfo = (WeakFrameworkElementInfo)sender;
             elementInfo.LayoutUpdated += OnFrameworkElementLayoutUpdated;
@@ -160,12 +164,12 @@ namespace Catel.Windows
             }
         }
 
-        private void OnFrameworkElementUnloaded(object sender, EventArgs e)
+        private void OnFrameworkElementUnloaded(object sender, LoadingEventArgs e)
         {
             // Not interesting for now...
         }
 
-        private void OnFrameworkElementLayoutUpdated(object sender, EventArgs e)
+        private void OnFrameworkElementLayoutUpdated(object sender, LayoutUpdatedEventArgs e)
         {
             var elementInfo = (WeakFrameworkElementInfo)sender;
 

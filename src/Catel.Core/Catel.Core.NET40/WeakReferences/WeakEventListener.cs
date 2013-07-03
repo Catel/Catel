@@ -422,7 +422,7 @@ namespace Catel
         }
 
         /// <summary>
-        /// Subscribes to t he event using method.
+        /// Subscribes to the event using method.
         /// </summary>
         /// <param name="source">The source.</param>
         /// <param name="methodInfo">The method info.</param>
@@ -438,7 +438,14 @@ namespace Catel
             _internalEventDelegate = DelegateHelper.CreateDelegate(handlerType, this, "OnEvent");
 
 #if NETFX_CORE
-            _eventRegistrationToken = (EventRegistrationToken)methodInfo.Invoke(source, new object[] { _internalEventDelegate });
+            if (methodInfo.ReturnType == typeof(void))
+            {
+                methodInfo.Invoke(source, new object[] { _internalEventDelegate });
+            }
+            else
+            {
+                _eventRegistrationToken = (EventRegistrationToken)methodInfo.Invoke(source, new object[] { _internalEventDelegate });
+            }
 #else
             methodInfo.Invoke(source, new object[] { _internalEventDelegate });
 #endif
@@ -555,7 +562,14 @@ namespace Catel
             Argument.IsNotNull("methodInfo", methodInfo);
 
 #if NETFX_CORE
-            methodInfo.Invoke(source, new object[] { _eventRegistrationToken });
+            if (_eventRegistrationToken != null)
+            {
+                methodInfo.Invoke(source, new object[] { _eventRegistrationToken });
+            }
+            else
+            {
+                methodInfo.Invoke(source, new object[] { _internalEventDelegate });
+            }
 #else
             methodInfo.Invoke(source, new object[] { _internalEventDelegate });
 #endif

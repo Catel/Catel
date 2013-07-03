@@ -28,6 +28,7 @@ Added/fixed (BREAKING CHANGES):
 
 Added/fixed:
 ============
+(x) CTL-108 Fixed issues with WeakEventListeners and WinRT
 (x) Fixed Drag and Drop behavior when the drop position is less then the initial item's position
 
 To-do:
