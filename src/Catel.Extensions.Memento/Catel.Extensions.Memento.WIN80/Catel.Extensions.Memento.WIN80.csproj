@@ -9,7 +9,7 @@
     <ProjectGuid>{93A9F7D1-C007-46EB-BDF1-8DC01EF91A82}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Catel.Extensions.Memento</RootNamespace>
+    <RootNamespace>Catel</RootNamespace>
     <AssemblyName>Catel.Extensions.Memento</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>

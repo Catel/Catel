@@ -4,35 +4,35 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{918B3E4E-EDA7-44D0-99CA-D1F40CD59E9D}</ProjectGuid>
+    <ProjectGuid>{6BCC1122-5F7E-4322-9D18-C28E86B7F459}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Catel</RootNamespace>
-    <AssemblyName>Catel.Extensions.Memento</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <AssemblyName>Catel.Extensions.Interception</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FodyPath>..\..\..\lib\Fody.1.13.8.0</FodyPath>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\output\debug\NET40\Catel.Extensions.Memento\</OutputPath>
+    <OutputPath>..\..\..\output\debug\NET45\Catel.Extensions.Interception\</OutputPath>
     <DefineConstants>TRACE;DEBUG;NET; NET40</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>..\..\..\output\debug\NET40\Catel.Extensions.Memento\Catel.Extensions.Memento.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\output\debug\NET45\Catel.Extensions.Interception\Catel.Extensions.Interception.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\output\release\NET40\Catel.Extensions.Memento\</OutputPath>
+    <OutputPath>..\..\..\output\release\NET45\Catel.Extensions.Interception\</OutputPath>
     <DefineConstants>TRACE;NET; NET40</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\..\output\release\NET40\Catel.Extensions.Memento\Catel.Extensions.Memento.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\output\release\NET45\Catel.Extensions.Interception\Catel.Extensions.Interception.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Obsolete">
@@ -51,27 +51,14 @@
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ActionUndo.cs" />
-    <Compile Include="Attributes\IgnoreMementoSupportAttribute.cs" />
-    <Compile Include="Batch.cs" />
-    <Compile Include="CollectionChangeUndo.cs" />
-    <Compile Include="CollectionObserver.cs" />
-    <Compile Include="Interfaces\IMementoBatch.cs" />
-    <Compile Include="Interfaces\IMementoService.cs" />
-    <Compile Include="Interfaces\IMementoSupport.cs" />
-    <Compile Include="MementoService.cs" />
-    <Compile Include="ModuleInitializer.cs" />
-    <Compile Include="ObjectObserver.cs" />
-    <Compile Include="ObserverBase.cs" />
-    <Compile Include="OperationSet.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PropertyChangeUndo.cs" />
-    <Compile Include="UndoBase.cs" />
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Properties\AssemblyInfo.cs">
+      <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Catel.Core\Catel.Core.NET40\Catel.Core.NET40.csproj">
-      <Project>{43147a1a-c8a0-4645-824d-0e7caf0293fc}</Project>
-      <Name>Catel.Core.NET40</Name>
+    <ProjectReference Include="..\..\Catel.Core\Catel.Core.NET45\Catel.Core.NET45.csproj">
+      <Project>{d748be60-bad6-4d1b-be5a-c24943a56594}</Project>
+      <Name>Catel.Core.NET45</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -336,6 +336,10 @@
       <Project>{135E7F2B-1FE8-44E1-B1AD-0C80B972459E}</Project>
       <Name>Catel.Extensions.FluentValidation.NET40</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Catel.Extensions.Interception\Catel.Extensions.Interception.NET40\Catel.Extensions.Interception.NET40.csproj">
+      <Project>{9b000dc9-7110-4173-bf97-e975ed77c24b}</Project>
+      <Name>Catel.Extensions.Interception.NET40</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Catel.Extensions.Memento\Catel.Extensions.Memento.NET40\Catel.Extensions.Memento.NET40.csproj">
       <Project>{918b3e4e-eda7-44d0-99ca-d1f40cd59e9d}</Project>
       <Name>Catel.Extensions.Memento.NET40</Name>

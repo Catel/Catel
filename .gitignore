@@ -65,7 +65,6 @@ deployment/InnoSetup/template/templates
 deployment/InnoSetup/template/snippets
 deployment/InnoSetup/template/libraries
 deployment/InnoSetup/template/doc
-deployment/NuGet
 
 # Installshield output folder 
 [Ee]xpress

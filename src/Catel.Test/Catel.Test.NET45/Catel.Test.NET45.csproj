@@ -720,6 +720,10 @@
       <Project>{c30b4f98-084a-4fc4-910e-2deae3505ad9}</Project>
       <Name>Catel.Extensions.FluentValidation.NET45</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Catel.Extensions.Interception\Catel.Extensions.Interception.NET45\Catel.Extensions.Interception.NET45.csproj">
+      <Project>{6bcc1122-5f7e-4322-9d18-c28e86b7f459}</Project>
+      <Name>Catel.Extensions.Interception.NET45</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Catel.Extensions.Memento\Catel.Extensions.Memento.NET45\Catel.Extensions.Memento.NET45.csproj">
       <Project>{78940ad6-6cbe-4a64-b36e-8595633034fa}</Project>
       <Name>Catel.Extensions.Memento.NET45</Name>

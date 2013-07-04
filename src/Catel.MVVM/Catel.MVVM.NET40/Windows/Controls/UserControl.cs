@@ -170,7 +170,7 @@ namespace Catel.Windows.Controls
         /// By default, this value is <c>true</c>.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if the view model should be closed when the control is unloaded; otherwise, <c>false</c>.
+        /// <c>true</c> if the view model should be closed when the control is unloaded; otherwise, <c>false</c>.
         /// </value>
         public bool CloseViewModelOnUnloaded
         {
@@ -190,7 +190,7 @@ namespace Catel.Windows.Controls
         /// The default value is <c>true</c>.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if parent view model containers are supported; otherwise, <c>false</c>.
+        /// <c>true</c> if parent view model containers are supported; otherwise, <c>false</c>.
         /// </value>
         public bool SupportParentViewModelContainers
         {
@@ -271,7 +271,7 @@ namespace Catel.Windows.Controls
         /// active view model.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if the user control should automatically be disabled when there is no active view model; otherwise, <c>false</c>.
+        /// <c>true</c> if the user control should automatically be disabled when there is no active view model; otherwise, <c>false</c>.
         /// </value>
         public bool DisableWhenNoViewModel
         {

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>Catel.Extensions.Interception</id>
+    <version>[VERSION]</version>
+	<title>Catel.Extensions.Interception</title>
+    <authors>GeertvanHorrik</authors>
+	
+	<description>
+	  Catel.Extensions.Interception library which provides interception capabilities.
+	</description>
+	<summary>
+	</summary>
+	
+	<tags>catel interception</tags>
+	
+	<language>en-US</language>
+	<projectUrl>http://www.catelproject.com</projectUrl>	
+	<licenseUrl>http://www.catelproject.com/license/</licenseUrl>
+		<!--<iconUrl>file://content/icon.png</iconUrl>-->
+	<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>
+	
+    <dependencies>
+      <dependency id="Catel.Core" version="[VERSION]" />
+    </dependencies>
+	
+  </metadata>
+</package>
