@@ -8,6 +8,7 @@ namespace Catel
 {
     using IoC;
     using Microsoft.Practices.Prism.Regions;
+    using Tasks;
 
 #if NET
     using Modules.ModuleManager;
@@ -27,6 +28,8 @@ namespace Catel
         public static void Initialize()
         {
             var serviceLocator = ServiceLocator.Default;
+
+            serviceLocator.RegisterTypeIfNotYetRegistered<IBootstrapperTaskFactory, BootstrapperTaskFactory>();
 
             serviceLocator.RegisterType<RegionAdapterMappings, RegionAdapterMappings>();
 

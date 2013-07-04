@@ -778,7 +778,16 @@
     </d1p1:RootProject>
     <d1p1:RootProject>
       <Name>Catel.Extensions.Prism.NET40</Name>
-      <Rules xmlns:i="http://www.w3.org/2001/XMLSchema-instance" />
+      <Rules xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <d1p1:Rule>
+          <Name>Modules\ModuleManager</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+      </Rules>
     </d1p1:RootProject>
     <d1p1:RootProject>
       <Name>Catel.Extensions.Controls.NET40</Name>

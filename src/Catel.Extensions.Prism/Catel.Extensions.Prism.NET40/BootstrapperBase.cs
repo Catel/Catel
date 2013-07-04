@@ -9,7 +9,9 @@ namespace Catel
     using System;
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
-    
+
+    using Catel.Tasks;
+
     using IoC;
     using Logging;
 
@@ -28,7 +30,7 @@ namespace Catel
     using MVVM.Tasks;
     
     using Reflection;
-    
+
     /// <summary>
     /// The service locator bootstrapper.
     /// </summary>
@@ -46,11 +48,9 @@ namespace Catel
 
         #region Constructors
         /// <summary>
-        /// Initializes the bootstrapper base.
+        /// Initializes a new instance of the <see cref="BootstrapperBase"/> class.
         /// </summary>
-        /// <param name="serviceLocator">
-        /// The service locator.
-        /// </param>
+        /// <param name="serviceLocator">The service locator.</param>
         protected BootstrapperBase(IServiceLocator serviceLocator = null)
         {
             _serviceLocator = serviceLocator ?? ServiceLocator.Default;
@@ -68,14 +68,80 @@ namespace Catel
         protected IServiceLocator Container { get; private set; }
         #endregion
 
+        #region Events
+
+        /// <summary>
+        /// Occurs when the logger is created.
+        /// </summary>
+        public event EventHandler<EventArgs> CreatedLogger;
+
+        /// <summary>
+        /// Occurs when the module catalog is created.
+        /// </summary>
+        public event EventHandler<EventArgs> CreatedModuleCatalog;
+
+        /// <summary>
+        /// Occurs when the module catalog is configured.
+        /// </summary>
+        public event EventHandler<EventArgs> ConfiguredModuleCatalog;
+
+        /// <summary>
+        /// Occurs when the service locator container is created.
+        /// </summary>
+        public event EventHandler<EventArgs> CreatedServiceLocatorContainer;
+
+        /// <summary>
+        /// Occurs when the service locator container is configured.
+        /// </summary>
+        public event EventHandler<EventArgs> ConfiguredServiceLocatorContainer;
+
+        /// <summary>
+        /// Occurs when the service locator is configured.
+        /// </summary>
+        public event EventHandler<EventArgs> ConfiguredServiceLocator;
+
+        /// <summary>
+        /// Occurs when the region adapters are configured.
+        /// </summary>
+        public event EventHandler<EventArgs> ConfiguredRegionAdapters;
+
+        /// <summary>
+        /// Occurs when the default region behaviors are configured.
+        /// </summary>
+        public event EventHandler<EventArgs> ConfiguredDefaultRegionBehaviors;
+
+        /// <summary>
+        /// Occurs when the framework exception types are registered.
+        /// </summary>
+        public event EventHandler<EventArgs> RegisteredFrameworkExceptionTypes;
+
+        /// <summary>
+        /// Occurs when the shell is created.
+        /// </summary>
+        public event EventHandler<EventArgs> CreatedShell;
+
+        /// <summary>
+        /// Occurs when the modules are initialized.
+        /// </summary>
+        public event EventHandler<EventArgs> InitializedModules;
+
+        /// <summary>
+        /// Occurs when the shell is initialized.
+        /// </summary>
+        public event EventHandler<EventArgs> InitializedShell;
+
+        /// <summary>
+        /// Occurs when the bootstrapper is completed.
+        /// </summary>
+        public event EventHandler<EventArgs> BootstrapperCompleted;
+        #endregion
+
         #region Methods
 
         /// <summary>
         /// The create container.
         /// </summary>
-        /// <returns>
-        /// The current instance of <see cref="IServiceLocator"/>.
-        /// </returns>
+        /// <returns>The current instance of <see cref="IServiceLocator" />.</returns>
         private IServiceLocator CreateContainer()
         {
             return _serviceLocator;
@@ -84,13 +150,13 @@ namespace Catel
         /// <summary>
         /// Runs the bootstrapper.
         /// </summary>
-        /// <param name="runWithDefaultConfiguration">if set to <c>true</c>, the tasks should run with the default configuration.</param>
+        /// <param name="runWithDefaultConfiguration">If set to <c>true</c>, the tasks should run with the default configuration.</param>
         /// <exception cref="InvalidOperationException">
-        /// Thrown when the Logger is not successfully initialized
+        /// Thrown when the Logger is not successfully initialized.
         /// -or-
-        /// The ModuleCatalog is not successfully initialized
+        /// The ModuleCatalog is not successfully initialized.
         /// -or-
-        /// The ServiceLocator is not successfully initialized
+        /// The ServiceLocator is not successfully initialized.
         /// </exception>
         public override void Run(bool runWithDefaultConfiguration)
         {
@@ -106,13 +172,13 @@ namespace Catel
         /// Runs the bootstrapper using the <see cref="ISplashScreenService" />.
         /// </summary>
         /// <typeparam name="TViewModel">The type of the view model.</typeparam>
-        /// <param name="runWithDefaultConfiguration">if set to <c>true</c>, the tasks should run with the default configuration.</param>
+        /// <param name="runWithDefaultConfiguration">If set to <c>true</c>, the tasks should run with the default configuration.</param>
         /// <exception cref="InvalidOperationException">
-        /// Thrown when the Logger is not successfully initialized
+        /// Thrown when the Logger is not successfully initialized.
         /// -or-
-        /// The ModuleCatalog is not successfully initialized
+        /// The ModuleCatalog is not successfully initialized.
         /// -or-
-        /// The ServiceLocator is not successfully initialized
+        /// The ServiceLocator is not successfully initialized.
         /// </exception>
         public void RunWithSplashScreen<TViewModel>(bool runWithDefaultConfiguration = true)
             where TViewModel : IProgressNotifyableViewModel
@@ -132,22 +198,24 @@ namespace Catel
         /// <summary>
         /// Creates the initialization tasks.
         /// </summary>
-        /// <param name="runWithDefaultConfiguration">if set to <c>true</c>, the tasks should run with the default configuration.</param>
+        /// <param name="runWithDefaultConfiguration">If set to <c>true</c>, the tasks should run with the default configuration.</param>
         /// <returns>Array of tasks to execute to complete the initialization.</returns>
         /// <exception cref="InvalidOperationException">
-        /// Thrown when the Logger is not successfully initialized
+        /// Thrown when the Logger is not successfully initialized.
         /// -or-
-        /// The ModuleCatalog is not successfully initialized
+        /// The ModuleCatalog is not successfully initialized.
         /// -or-
-        /// The ServiceLocator is not successfully initialized
+        /// The ServiceLocator is not successfully initialized.
         /// </exception>
-        private ITask[] CreateInitializationTasks(bool runWithDefaultConfiguration)
+        protected virtual ITask[] CreateInitializationTasks(bool runWithDefaultConfiguration)
         {
             _useDefaultConfiguration = runWithDefaultConfiguration;
 
+            var taskFactory = ServiceLocator.Default.ResolveType<IBootstrapperTaskFactory>();
+
             var actions = new List<ITask>();
 
-            actions.Add(new ActionTask("Creating logger", x =>
+            actions.Add(taskFactory.CreateCreateLoggerTask(() =>
             {
                 Logger = CreateLogger();
                 /*
@@ -158,10 +226,12 @@ namespace Catel
                 }
                 */
 
+                CreatedLogger.SafeInvoke(this);
+
                 Logger.Log("Created logger", Category.Debug, Priority.Low);
             }));
 
-            actions.Add(new ActionTask("Creating module catalog", x =>
+            actions.Add(taskFactory.CreateCreateModuleCatalogTask(() =>
             {
                 Logger.Log("Creating module catalog", Category.Debug, Priority.Low);
 
@@ -171,80 +241,89 @@ namespace Catel
                     throw new InvalidOperationException("The IModuleCatalog is required and cannot be null in order to initialize the modules");
                 }
 
+                CreatedModuleCatalog.SafeInvoke(this);
+
                 Logger.Log("Created module catalog", Category.Debug, Priority.Low);
             }));
 
-            actions.Add(new ActionTask("Configuring module catalog", x =>
+            actions.Add(taskFactory.CreateConfigureModuleCatalogTask(() =>
             {
                 Logger.Log("Configuring module catalog", Category.Debug, Priority.Low);
 
                 ConfigureModuleCatalog();
 
+                ConfiguredModuleCatalog.SafeInvoke(this);
+
                 Logger.Log("Configured module catalog", Category.Debug, Priority.Low);
             }));
 
-            actions.Add(new ActionTask("Creating Service locator container", x =>
+            actions.Add(taskFactory.CreateCreateServiceLocatorContainerTask(() =>
             {
-                Logger.Log("Creating Service locator container", Category.Debug, Priority.Low);
+                Logger.Log("Creating service locator container", Category.Debug, Priority.Low);
 
                 Container = CreateContainer();
-                /*
-                This condition is always false.
-                if (Container == null)
-                {
-                    throw new InvalidOperationException("The IServiceLocator is required and cannot be null");
-                }
-                */
 
-                Logger.Log("Created Service locator container", Category.Debug, Priority.Low);
+                CreatedServiceLocatorContainer.SafeInvoke(this);
+
+                Logger.Log("Created service locator container", Category.Debug, Priority.Low);
             }));
 
-            actions.Add(new ActionTask("Configuring the container", x =>
+            actions.Add(taskFactory.CreateConfigureServiceLocatorContainerTask(() =>
             {
-                Logger.Log("Configuring the Service Locator container", Category.Debug, Priority.Low);
+                Logger.Log("Configuring the service locator container", Category.Debug, Priority.Low);
 
                 ConfigureContainer();
+
+                ConfiguredServiceLocatorContainer.SafeInvoke(this);
 
                 Logger.Log("Configured the container", Category.Debug, Priority.Low);
             }));
 
-            actions.Add(new ActionTask("Configuring service locator", x =>
+            actions.Add(taskFactory.CreateConfigureServiceLocatorTask(() =>
             {
                 Logger.Log("Configuring service locator", Category.Debug, Priority.Low);
 
                 ConfigureServiceLocator();
 
+                ConfiguredServiceLocator.SafeInvoke(this);
+
                 Logger.Log("Configured service locator", Category.Debug, Priority.Low);
             }));
 
-            actions.Add(new ActionTask("Configuring region adapters", x =>
+            actions.Add(taskFactory.CreateConfigureRegionAdaptersTask(() =>
             {
                 Logger.Log("Configuring region adapters", Category.Debug, Priority.Low);
 
                 ConfigureRegionAdapterMappings();
 
+                ConfiguredRegionAdapters.SafeInvoke(this);
+
                 Logger.Log("Configured region adapters", Category.Debug, Priority.Low);
             }));
 
-            actions.Add(new ActionTask("Configuring default region behaviors", x =>
+            actions.Add(taskFactory.CreateConfigureDefaultRegionBehaviorsTask(() =>
             {
                 Logger.Log("Configuring default region behaviors", Category.Debug, Priority.Low);
 
                 ConfigureDefaultRegionBehaviors();
 
+                ConfiguredDefaultRegionBehaviors.SafeInvoke(this);
+
                 Logger.Log("Configured default region behaviors", Category.Debug, Priority.Low);
             }));
 
-            actions.Add(new ActionTask("Registering Framework Exception Types", x =>
+            actions.Add(taskFactory.CreateRegisterFrameworkExceptionTypesTask(() =>
             {
                 Logger.Log("Registering Framework Exception Types", Category.Debug, Priority.Low);
 
                 RegisterFrameworkExceptionTypes();
 
+                RegisteredFrameworkExceptionTypes.SafeInvoke(this);
+
                 Logger.Log("Registered Framework Exception Types", Category.Debug, Priority.Low);
             }));
 
-            actions.Add(new ActionTask("Creating the shell", x =>
+            actions.Add(taskFactory.CreateCreateShellTask(() =>
             {
                 Logger.Log("Creating the shell", Category.Debug, Priority.Low);
 
@@ -257,18 +336,22 @@ namespace Catel
 
                     Logger.Log("Updating Regions", Category.Debug, Priority.Low);
                     RegionManager.UpdateRegions();
+
+                    CreatedShell.SafeInvoke(this);
                 }
 
                 Logger.Log("Created the shell", Category.Debug, Priority.Low);
             }));
 
-            actions.Add(new ActionTask("Initializing modules", x =>
+            actions.Add(taskFactory.CreateInitializeModulesTask(() =>
             {
                 if (Container.IsTypeRegistered<IModuleManager>())
                 {
                     Logger.Log("Initializing modules", Category.Debug, Priority.Low);
 
                     InitializeModules();
+
+                    InitializedModules.SafeInvoke(this);
 
                     Logger.Log("Initialized modules", Category.Debug, Priority.Low);
                 }
@@ -278,13 +361,18 @@ namespace Catel
             InitializeBootTasks(bootTasks);
             actions.AddRange(bootTasks);
 
-            actions.Add(new ActionTask("Starting application", x =>
+            actions.Add(taskFactory.CreateInitializingShellTask(() =>
             {
                 if (Shell != null)
                 {
                     Logger.Log("Initializing the shell", Category.Debug, Priority.Low);
+                    
                     InitializeShell();
+
+                    InitializedShell.SafeInvoke(this);
                 }
+
+                BootstrapperCompleted.SafeInvoke(this);
 
                 Logger.Log("Bootstrapper sequence completed", Category.Debug, Priority.Low);
             }));
@@ -295,18 +383,17 @@ namespace Catel
         /// <summary>
         /// Initialize boot tasks. 
         /// </summary>
-        /// <param name="bootTasks">The aditional boot tasks.</param>
-        /// <remarks>Override this method to add aditional tasks that will be executed before shell initialization.</remarks>
+        /// <param name="bootTasks">The additional boot tasks.</param>
+        /// <remarks>Override this method to add additional tasks that will be executed before shell initialization.</remarks>
         protected virtual void InitializeBootTasks(IList<ITask> bootTasks)
         {
         }
 
         /// <summary>
-        /// Create the <see cref="T:Microsoft.Practices.Prism.Logging.ILoggerFacade"/> used by the bootstrapper.
+        /// Create the <see cref="T:Microsoft.Practices.Prism.Logging.ILoggerFacade" /> used by the bootstrapper.
         /// </summary>
-        /// <returns>
-        /// An implementation of <see cref="ILoggerFacade"/>.
-        /// </returns>
+        /// <returns>An implementation of <see cref="ILoggerFacade" />.</returns>
+        /// <remarks>The base implementation returns a new TextLogger.</remarks>
         protected override sealed ILoggerFacade CreateLogger()
         {
             return new LoggerFacadeAdapter(LogManager.GetCurrentClassLogger());

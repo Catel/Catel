@@ -142,6 +142,12 @@
     <Compile Include="..\Catel.Extensions.Prism.NET40\ServiceLocatorAdapter.cs">
       <Link>ServiceLocatorAdapter.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Tasks\BootstrapperTaskFactory.cs">
+      <Link>Tasks\BootstrapperTaskFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Tasks\Interfaces\IBootstrapperTaskFactory.cs">
+      <Link>Tasks\Interfaces\IBootstrapperTaskFactory.cs</Link>
+    </Compile>
     <Compile Include="Helpers\HostHelper.cs" />
     <Compile Include="Modules\DownloadingModuleCatalog.cs" />
     <Compile Include="Modules\EventArgs\ModuleEventArgs.cs" />

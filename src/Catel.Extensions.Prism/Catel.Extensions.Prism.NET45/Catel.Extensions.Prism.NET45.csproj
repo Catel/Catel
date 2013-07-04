@@ -139,6 +139,12 @@
     <Compile Include="..\Catel.Extensions.Prism.NET40\ServiceLocatorAdapter.cs">
       <Link>ServiceLocatorAdapter.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Tasks\BootstrapperTaskFactory.cs">
+      <Link>Tasks\BootstrapperTaskFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Tasks\Interfaces\IBootstrapperTaskFactory.cs">
+      <Link>Tasks\Interfaces\IBootstrapperTaskFactory.cs</Link>
+    </Compile>
     <Compile Include="Modules\ModuleManager\Views\ModuleManagerView.xaml.cs">
       <DependentUpon>ModuleManagerView.xaml</DependentUpon>
     </Compile>

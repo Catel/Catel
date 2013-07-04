@@ -89,6 +89,8 @@
     <Compile Include="Extensions\ILogExtensions.cs" />
     <Compile Include="Extensions\IUIVisualizerServiceExtensions.cs" />
     <Compile Include="Extensions\IViewModelExtensions.cs" />
+    <Compile Include="Tasks\BootstrapperTaskFactory.cs" />
+    <Compile Include="Tasks\Interfaces\IBootstrapperTaskFactory.cs" />
     <Compile Include="Interfaces\IRegionInfo.cs" />
     <Compile Include="Interfaces\IModuleTracker.cs" />
     <Compile Include="Interfaces\IViewInfo.cs" />
@@ -119,6 +121,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets. -->
