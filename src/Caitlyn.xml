@@ -13,7 +13,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -25,7 +25,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -36,35 +36,35 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>IoC\Helpers\MefHelper.cs</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>IoC\Helpers\NinjectHelper.cs</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>IoC\Helpers\UnityHelper.cs</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>IoC\Helpers\WindsorHelper.cs</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -73,70 +73,70 @@
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Properties\Exceptions.resx</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Properties\Resources.de.resx</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Properties\Resources.es.resx</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Properties\Resources.fr.resx</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Properties\Resources.it.resx</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Properties\Resources.nl.resx</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Properties\Resources.resx</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Properties\Resources.tr.resx</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Properties\Resources.zh-CHS.resx</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -147,7 +147,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -158,7 +158,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -169,7 +169,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -180,14 +180,14 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Reflection\Helpers\StackTraceHelper.cs</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -208,7 +208,7 @@
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -217,7 +217,7 @@
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -228,7 +228,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -239,7 +239,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -250,7 +250,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -261,7 +261,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -272,7 +272,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -283,7 +283,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -294,7 +294,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -313,7 +313,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -324,7 +324,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -335,7 +335,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -346,7 +346,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -367,7 +367,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -378,7 +378,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -387,7 +387,7 @@
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -396,7 +396,7 @@
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -405,7 +405,7 @@
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -414,7 +414,7 @@
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -423,7 +423,7 @@
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -432,7 +432,7 @@
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -441,7 +441,7 @@
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -459,7 +459,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -470,7 +470,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -489,7 +489,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -520,7 +520,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -531,7 +531,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -542,7 +542,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -553,7 +553,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -563,112 +563,112 @@
             <d1p1:ProjectType>SL4</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Properties\Exceptions.resx</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Properties\Resources.de.resx</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Properties\Resources.es.resx</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Properties\Resources.fr.resx</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Properties\Resources.it.resx</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Properties\Resources.nl.resx</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Properties\Resources.resx</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Properties\Resources.tr.resx</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Properties\Resources.zh-CHS.resx</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Windows\Interactivity</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Windows\Controls\MVVMProviders\MVVMBehaviorBase.cs</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Windows\Controls\MVVMProviders\NavigationPageBehavior.cs</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Windows\Controls\MVVMProviders\UserControlBehavior.cs</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Windows\Data\Converters\GetFirstValidationErrorConverter.cs</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Resources</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -679,7 +679,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -698,7 +698,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -709,7 +709,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -720,7 +720,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -731,7 +731,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -742,14 +742,14 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Windows\Data\Converters\StringToTypeConverter.cs</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -758,7 +758,7 @@
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -767,7 +767,7 @@
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
       </Rules>
@@ -798,7 +798,7 @@
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
             <d1p1:ProjectType>SL4</d1p1:ProjectType>
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
           </ProjectTypes>
@@ -809,7 +809,7 @@
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
             <d1p1:ProjectType>SL4</d1p1:ProjectType>
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
           </ProjectTypes>
@@ -822,7 +822,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -831,7 +831,7 @@
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
             <d1p1:ProjectType>SL4</d1p1:ProjectType>
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
           </ProjectTypes>
@@ -844,7 +844,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -855,7 +855,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -864,7 +864,7 @@
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -873,7 +873,7 @@
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
             <d1p1:ProjectType>SL4</d1p1:ProjectType>
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
           </ProjectTypes>
@@ -886,7 +886,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -897,7 +897,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -908,7 +908,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -919,7 +919,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -930,7 +930,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -941,7 +941,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -952,7 +952,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -963,7 +963,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -974,7 +974,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -983,7 +983,7 @@
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
             <d1p1:ProjectType>SL4</d1p1:ProjectType>
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
           </ProjectTypes>
@@ -996,7 +996,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1005,7 +1005,7 @@
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
             <d1p1:ProjectType>SL4</d1p1:ProjectType>
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
           </ProjectTypes>
@@ -1018,7 +1018,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1029,7 +1029,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1040,7 +1040,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1051,77 +1051,77 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Properties\Exceptions.resx</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Properties\Resources.de.resx</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Properties\Resources.es.resx</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Properties\Resources.fr.resx</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Properties\Resources.it.resx</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Properties\Resources.nl.resx</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Properties\Resources.resx</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Properties\Resources.tr.resx</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Properties\Resources.zh-CHS.resx</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Windows\Helpers\StyleHelper.cs</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1130,7 +1130,7 @@
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
             <d1p1:ProjectType>SL4</d1p1:ProjectType>
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
           </ProjectTypes>
@@ -1141,7 +1141,7 @@
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1150,7 +1150,7 @@
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
             <d1p1:ProjectType>SL4</d1p1:ProjectType>
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
           </ProjectTypes>
@@ -1166,7 +1166,7 @@
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1177,7 +1177,7 @@
             <d1p1:ProjectType>NET45</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
       </Rules>
@@ -1193,42 +1193,42 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Data\Helpers\EditableObjectHelperFacts.cs</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Data\CompositeValidatorFacts.cs</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Data\CompositeValidatorProviderFacts.cs</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Data\SavableDataObjectBaseTest.cs</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Extensions\FluentValidation</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
             <d1p1:ProjectType>SL4</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
@@ -1238,63 +1238,63 @@
           <Name>Extensions\Prism</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Helpers\FilesHelper.cs</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Helpers\WindowHelper.cs</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>IoC\Helpers\MefHelperTest.cs</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>IoC\Helpers\NinjectHelperTest.cs</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>IoC\Helpers\UnityHelperTest.cs</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>IoC\Helpers\WindsorHelperTest.cs</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Reflection\AssemblyExtensionsTest.cs</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Windows\Data\Converters\GetFirstValidationErrorConverterTest.cs</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1305,14 +1305,14 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
           <Name>Data\SavableModelBaseTest.cs</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1321,7 +1321,7 @@
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1333,7 +1333,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1344,7 +1344,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1355,7 +1355,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1366,7 +1366,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1378,7 +1378,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1390,7 +1390,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
       </Rules>
@@ -1404,7 +1404,7 @@
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1413,7 +1413,7 @@
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
       </Rules>
@@ -1450,7 +1450,7 @@
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
-            <d1p1:ProjectType>WinRT</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
       </Rules>

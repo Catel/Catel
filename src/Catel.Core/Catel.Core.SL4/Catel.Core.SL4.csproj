@@ -326,6 +326,9 @@
     <Compile Include="..\Catel.Core.NET40\Exceptions\NotSupportedInWindows8Exception.cs">
       <Link>Exceptions\NotSupportedInWindows8Exception.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Fluent\Interfaces\IFluent.cs">
+      <Link>Fluent\Interfaces\IFluent.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Generics\NullOp.cs">
       <Link>Generics\NullOp.cs</Link>
     </Compile>
@@ -496,6 +499,54 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Properties\Exceptions.SL4.Designer.cs">
+      <Link>Properties\Exceptions.SL4.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Exceptions.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Properties\Resources.de.SL4.Designer.cs">
+      <Link>Properties\Resources.de.SL4.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.de.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Properties\Resources.es.SL4.Designer.cs">
+      <Link>Properties\Resources.es.SL4.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.es.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Properties\Resources.fr.SL4.Designer.cs">
+      <Link>Properties\Resources.fr.SL4.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.fr.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Properties\Resources.it.SL4.Designer.cs">
+      <Link>Properties\Resources.it.SL4.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.it.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Properties\Resources.nl.SL4.Designer.cs">
+      <Link>Properties\Resources.nl.SL4.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.nl.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Properties\Resources.SL4.Designer.cs">
+      <Link>Properties\Resources.SL4.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Properties\Resources.tr.SL4.Designer.cs">
+      <Link>Properties\Resources.tr.SL4.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.tr.resx</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Properties\Resources.zh-CHS.Designer.cs">
       <Link>Properties\Resources.zh-CHS.Designer.cs</Link>
