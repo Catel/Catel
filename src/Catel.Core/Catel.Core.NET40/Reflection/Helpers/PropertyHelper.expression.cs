@@ -19,9 +19,24 @@ namespace Catel.Reflection
         /// <summary>
         /// Gets the name of the property based on the expression.
         /// </summary>
+        /// <param name="propertyExpression">The property expression.</param>
+        /// <param name="allowNested">If set to <c>true</c>, nested properties are allowed.</param>
+        /// <returns>The string representing the property name.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="propertyExpression"/> is <c>null</c>.</exception>
+        /// <exception cref="NotSupportedException">The specified expression is not a member access expression.</exception>
+        public static string GetPropertyName(Expression propertyExpression, bool allowNested = false)
+        {
+            Argument.IsNotNull("propertyExpression", propertyExpression);
+
+            return GetPropertyName(propertyExpression, allowNested, false);
+        }
+
+        /// <summary>
+        /// Gets the name of the property based on the expression.
+        /// </summary>
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="propertyExpression">The property expression.</param>
-        /// <param name="allowNested">if set to <c>true</c>, nested properties are allowed.</param>
+        /// <param name="allowNested">If set to <c>true</c>, nested properties are allowed.</param>
         /// <returns>The string representing the property name.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="propertyExpression"/> is <c>null</c>.</exception>
         /// <exception cref="NotSupportedException">The specified expression is not a member access expression.</exception>
@@ -39,7 +54,7 @@ namespace Catel.Reflection
         /// <typeparam name="TModel">The type of the model.</typeparam>
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="propertyExpression">The property expression.</param>
-        /// <param name="allowNested">if set to <c>true</c>, nested properties are allowed.</param>
+        /// <param name="allowNested">If set to <c>true</c>, nested properties are allowed.</param>
         /// <returns>The string representing the property name.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="propertyExpression"/> is <c>null</c>.</exception>
         /// <exception cref="NotSupportedException">The specified expression is not a member access expression.</exception>
@@ -55,8 +70,8 @@ namespace Catel.Reflection
         /// Gets the name of the property based on the expression.
         /// </summary>
         /// <param name="propertyExpression">The property expression.</param>
-        /// <param name="allowNested">if set to <c>true</c>, nested properties are allowed.</param>
-        /// <param name="nested">if set to <c>true</c>, this is a nested call.</param>
+        /// <param name="allowNested">If set to <c>true</c>, nested properties are allowed.</param>
+        /// <param name="nested">If set to <c>true</c>, this is a nested call.</param>
         /// <returns>The string representing the property name or <see cref="string.Empty"/> if no property can be found.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="propertyExpression"/> is <c>null</c>.</exception>
         /// <exception cref="NotSupportedException">The specified expression is not a member access expression.</exception>

@@ -30,6 +30,7 @@ Added/fixed:
 ============
 (+) CTL-111 Added BootstrapperTaskFactory to allow customization of the bootstrapper tasks for prism. Also added
     a lot of events to the BootstrapperBase to allow fine-grained control without having to derive a custom bootstrapper
+(+) CTL-113 Added untyped expression overload for PropertyHelper.GetPropertyName
 (x) CTL-108 Fixed issues with WeakEventListeners and WinRT
 (x) CTL-112 Fixed issue where ViewToViewModel mappings did not work in WPF
 (x) Fixed Drag and Drop behavior when the drop position is less then the initial item's position
