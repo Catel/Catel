@@ -97,7 +97,10 @@ namespace Catel.MVVM.Views
         /// Gets the type of the view model container.
         /// </summary>
         /// <value>The type of the view model container.</value>
-        private Type ViewModelContainerType { get { return ViewModelContainer.GetType(); } }
+        private Type ViewModelContainerType
+        {
+            get { return ViewModelContainer.GetType(); }
+        }
 
         /// <summary>
         /// Gets or sets the previous view model.
@@ -109,7 +112,10 @@ namespace Catel.MVVM.Views
         /// Gets the current view model.
         /// </summary>
         /// <value>The current view model.</value>
-        private IViewModel CurrentViewModel { get { return ViewModelContainer.ViewModel; } }
+        private IViewModel CurrentViewModel
+        {
+            get { return ViewModelContainer.ViewModel; }
+        }
         #endregion
 
         #region Methods

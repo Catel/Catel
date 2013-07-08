@@ -88,7 +88,7 @@ namespace Catel.MVVM.Views
         /// </summary>
         /// <param name="viewPropertyName">Name of the view property.</param>
         /// <returns>
-        /// 	<c>true</c> if the manager contains a view to view model property mapping for the specified view property name; otherwise, <c>false</c>.
+        /// <c>true</c> if the manager contains a view to view model property mapping for the specified view property name; otherwise, <c>false</c>.
         /// </returns>
         public bool ContainsViewToViewModelMapping(string viewPropertyName)
         {
@@ -110,7 +110,7 @@ namespace Catel.MVVM.Views
         /// </summary>
         /// <param name="viewModelPropertyName">Name of the view model property.</param>
         /// <returns>
-        /// 	<c>true</c> if the manager contains a view model to view property mapping for the specified view model property name; otherwise, <c>false</c>.
+        /// <c>true</c> if the manager contains a view model to view property mapping for the specified view model property name; otherwise, <c>false</c>.
         /// </returns>
         public bool ContainsViewModelToViewMapping(string viewModelPropertyName)
         {

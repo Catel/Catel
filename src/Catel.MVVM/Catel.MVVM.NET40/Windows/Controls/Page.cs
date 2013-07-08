@@ -85,8 +85,15 @@ namespace Catel.Windows.Controls
                 // WPF already calls this method automatically
                 OnPropertyChanged(e.FxEventArgs);
 
-                // Do not call this for WPF, will cause problems with ActualWidth and ActualHeight
                 PropertyChanged.SafeInvoke(this, new PropertyChangedEventArgs(e.PropertyName));
+#else
+                // Do not call this for ActualWidth and ActualHeight WPF, will cause problems with NET 40 
+                // on systems where NET45 is *not* installed
+                if (!string.Equals(e.PropertyName, "ActualWidth", StringComparison.InvariantCulture) &&
+                    !string.Equals(e.PropertyName, "ActualHeight", StringComparison.InvariantCulture))
+                {
+                    PropertyChanged.SafeInvoke(this, new PropertyChangedEventArgs(e.PropertyName));
+                }
 #endif
             };
 
