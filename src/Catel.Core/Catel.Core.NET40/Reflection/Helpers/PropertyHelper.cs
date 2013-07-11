@@ -167,7 +167,7 @@ namespace Catel.Reflection
                 throw new CannotGetPropertyValueException(property);
             }
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             return propertyInfo.GetValue(obj, null);
 #else
             try
@@ -273,7 +273,7 @@ namespace Catel.Reflection
 #endif
         }
 
-#if !NETFX_CORE
+#if !NETFX_CORE && !PCL
         /// <summary>
         /// Gets hidden property value.
         /// </summary>

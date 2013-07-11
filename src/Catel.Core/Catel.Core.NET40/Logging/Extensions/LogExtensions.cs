@@ -257,7 +257,7 @@ namespace Catel.Logging
             {
                 exception = (Exception)Activator.CreateInstance(typeof(TException), message);
             }
-#if !NETFX_CORE
+#if !NETFX_CORE && !PCL
             catch (MissingMethodException)
 #else
             catch (Exception)

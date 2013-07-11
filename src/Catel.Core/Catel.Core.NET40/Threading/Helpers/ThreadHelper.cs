@@ -19,7 +19,7 @@ namespace Catel
         /// <param name="millisecondsTimeout">The milliseconds timeout.</param>
         public static void Sleep(int millisecondsTimeout)
         {
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             new System.Threading.ManualResetEvent(false).WaitOne(millisecondsTimeout);
 #else
             System.Threading.Thread.Sleep(millisecondsTimeout);

@@ -4,7 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-
 #pragma warning disable 1591
 
 //#define ENABLE_CACHE
@@ -286,7 +285,7 @@ namespace Catel.Reflection
 #elif NET
             return type.IsSerializable;
 #else
-			return true;
+            return true;
 #endif
         }
 
@@ -485,7 +484,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             return false;
 #else
             return type.IsCOMObject;
@@ -710,14 +709,9 @@ namespace Catel.Reflection
         /// <summary>
         /// The get constructors ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <returns>
-        /// </returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <returns>ConstructorInfo[][].</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         public static ConstructorInfo[] GetConstructorsEx(this Type type)
         {
             Argument.IsNotNull("type", type);
@@ -741,26 +735,13 @@ namespace Catel.Reflection
         /// <summary>
         /// The get field ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <param name="name">
-        /// The name.
-        /// </param>
-        /// <param name="flattenHierarchy">
-        /// The flatten hierarchy.
-        /// </param>
-        /// <param name="allowStaticMembers">
-        /// The allow static members.
-        /// </param>
-        /// <returns>
-        /// </returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="System.ArgumentException">
-        /// The <paramref name="name"/> is <c>null</c> or whitespace.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="flattenHierarchy">The flatten hierarchy.</param>
+        /// <param name="allowStaticMembers">The allow static members.</param>
+        /// <returns>FieldInfo.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
         public static FieldInfo GetFieldEx(this Type type, string name, bool flattenHierarchy = true, bool allowStaticMembers = false)
         {
             return GetFieldEx(type, name, BindingFlagsHelper.GetFinalBindingFlags(flattenHierarchy, allowStaticMembers));
@@ -769,21 +750,12 @@ namespace Catel.Reflection
         /// <summary>
         /// The get field ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <param name="name">
-        /// The name.
-        /// </param>
-        /// <param name="bindingFlags">
-        /// The binding Flags.
-        /// </param>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="System.ArgumentException">
-        /// The <paramref name="name"/> is <c>null</c> or whitespace.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="bindingFlags">The binding Flags.</param>
+        /// <returns>FieldInfo.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
         public static FieldInfo GetFieldEx(this Type type, string name, BindingFlags bindingFlags)
         {
             Argument.IsNotNull("type", type);
@@ -792,27 +764,18 @@ namespace Catel.Reflection
             var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Field, bindingFlags, name);
             return _fieldCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetField(name, bindingFlags));
 #else
-			return type.GetTypeInfo().GetField(name, bindingFlags);
+            return type.GetTypeInfo().GetField(name, bindingFlags);
 #endif
         }
 
         /// <summary>
         /// The get fields ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <param name="flattenHierarchy">
-        /// The flatten hierarchy.
-        /// </param>
-        /// <param name="allowStaticMembers">
-        /// The allow static members.
-        /// </param>
-        /// <returns>
-        /// </returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <param name="flattenHierarchy">The flatten hierarchy.</param>
+        /// <param name="allowStaticMembers">The allow static members.</param>
+        /// <returns>FieldInfo[][].</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         public static FieldInfo[] GetFieldsEx(this Type type, bool flattenHierarchy = true, bool allowStaticMembers = false)
         {
             return GetFieldsEx(type, BindingFlagsHelper.GetFinalBindingFlags(flattenHierarchy, allowStaticMembers));
@@ -821,15 +784,10 @@ namespace Catel.Reflection
         /// <summary>
         /// The get fields ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <param name="bindingFlags">
-        /// The binding Flags.
-        /// </param>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <param name="bindingFlags">The binding Flags.</param>
+        /// <returns>FieldInfo[][].</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         public static FieldInfo[] GetFieldsEx(this Type type, BindingFlags bindingFlags)
         {
             Argument.IsNotNull("type", type);
@@ -837,33 +795,20 @@ namespace Catel.Reflection
             var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Field, bindingFlags);
             return _fieldsCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetFields(bindingFlags));
 #else
-			return type.GetTypeInfo().GetFields(bindingFlags);
+            return type.GetTypeInfo().GetFields(bindingFlags);
 #endif
         }
 
         /// <summary>
         /// The get property ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <param name="name">
-        /// The name.
-        /// </param>
-        /// <param name="flattenHierarchy">
-        /// The flatten hierarchy.
-        /// </param>
-        /// <param name="allowStaticMembers">
-        /// The allow static members.
-        /// </param>
-        /// <returns>
-        /// </returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="System.ArgumentException">
-        /// The <paramref name="name"/> is <c>null</c> or whitespace.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="flattenHierarchy">The flatten hierarchy.</param>
+        /// <param name="allowStaticMembers">The allow static members.</param>
+        /// <returns>PropertyInfo.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
         public static PropertyInfo GetPropertyEx(this Type type, string name, bool flattenHierarchy = true, bool allowStaticMembers = false)
         {
             BindingFlags bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(flattenHierarchy, allowStaticMembers);
@@ -873,21 +818,12 @@ namespace Catel.Reflection
         /// <summary>
         /// The get property ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <param name="name">
-        /// The name.
-        /// </param>
-        /// <param name="bindingFlags">
-        /// The binding Flags.
-        /// </param>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="System.ArgumentException">
-        /// The <paramref name="name"/> is <c>null</c> or whitespace.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="bindingFlags">The binding Flags.</param>
+        /// <returns>PropertyInfo.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
         public static PropertyInfo GetPropertyEx(this Type type, string name, BindingFlags bindingFlags)
         {
             Argument.IsNotNull("type", type);
@@ -897,27 +833,18 @@ namespace Catel.Reflection
             var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Property, bindingFlags, name);
             return _propertyCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetProperty(name, bindingFlags));
 #else
-			return type.GetTypeInfo().GetProperty(name, bindingFlags);
+            return type.GetTypeInfo().GetProperty(name, bindingFlags);
 #endif
         }
 
         /// <summary>
         /// The get properties ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <param name="flattenHierarchy">
-        /// The flatten hierarchy.
-        /// </param>
-        /// <param name="allowStaticMembers">
-        /// The allow static members.
-        /// </param>
-        /// <returns>
-        /// </returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <param name="flattenHierarchy">The flatten hierarchy.</param>
+        /// <param name="allowStaticMembers">The allow static members.</param>
+        /// <returns>PropertyInfo[][].</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         public static PropertyInfo[] GetPropertiesEx(this Type type, bool flattenHierarchy = true, bool allowStaticMembers = false)
         {
             return GetPropertiesEx(type, BindingFlagsHelper.GetFinalBindingFlags(flattenHierarchy, allowStaticMembers));
@@ -926,15 +853,10 @@ namespace Catel.Reflection
         /// <summary>
         /// The get properties ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <param name="bindingFlags">
-        /// The binding Flags.
-        /// </param>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <param name="bindingFlags">The binding Flags.</param>
+        /// <returns>PropertyInfo[][].</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         public static PropertyInfo[] GetPropertiesEx(this Type type, BindingFlags bindingFlags)
         {
             Argument.IsNotNull("type", type);
@@ -943,31 +865,20 @@ namespace Catel.Reflection
             var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Property, bindingFlags);
             return _propertiesCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetProperties(bindingFlags));
 #else
-			return type.GetTypeInfo().GetProperties(bindingFlags);
+            return type.GetTypeInfo().GetProperties(bindingFlags);
 #endif
         }
 
         /// <summary>
         /// The get event ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <param name="name">
-        /// The name.
-        /// </param>
-        /// <param name="flattenHierarchy">
-        /// The flatten Hierarchy.
-        /// </param>
-        /// <param name="allowStaticMembers">
-        /// The allow Static Members.
-        /// </param>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="System.ArgumentException">
-        /// The <paramref name="name"/> is <c>null</c> or whitespace.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="flattenHierarchy">The flatten Hierarchy.</param>
+        /// <param name="allowStaticMembers">The allow Static Members.</param>
+        /// <returns>EventInfo.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
         public static EventInfo GetEventEx(this Type type, string name, bool flattenHierarchy = true, bool allowStaticMembers = false)
         {
             return GetEventEx(type, name, BindingFlagsHelper.GetFinalBindingFlags(flattenHierarchy, allowStaticMembers));
@@ -976,21 +887,12 @@ namespace Catel.Reflection
         /// <summary>
         /// The get event ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <param name="name">
-        /// The name.
-        /// </param>
-        /// <param name="bindingFlags">
-        /// The binding Flags.
-        /// </param>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="System.ArgumentException">
-        /// The <paramref name="name"/> is <c>null</c> or whitespace.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="bindingFlags">The binding Flags.</param>
+        /// <returns>EventInfo.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
         public static EventInfo GetEventEx(this Type type, string name, BindingFlags bindingFlags)
         {
             Argument.IsNotNullOrWhitespace("name", name);
@@ -999,25 +901,18 @@ namespace Catel.Reflection
             var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Event, bindingFlags, name);
             return _eventCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetEvent(name, bindingFlags));
 #else
-			return type.GetTypeInfo().GetEvent(name, bindingFlags);
+            return type.GetTypeInfo().GetEvent(name, bindingFlags);
 #endif
         }
 
         /// <summary>
         /// The get events ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <param name="flattenHierarchy">
-        /// The flatten Hierarchy.
-        /// </param>
-        /// <param name="allowStaticMembers">
-        /// The allow Static Members.
-        /// </param>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <param name="flattenHierarchy">The flatten Hierarchy.</param>
+        /// <param name="allowStaticMembers">The allow Static Members.</param>
+        /// <returns>EventInfo[][].</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         public static EventInfo[] GetEventsEx(this Type type, bool flattenHierarchy = true, bool allowStaticMembers = false)
         {
             Argument.IsNotNull("type", type);
@@ -1027,31 +922,20 @@ namespace Catel.Reflection
             var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Event, bindingFlags);
             return _eventsCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetEvents(bindingFlags));
 #else
-			return type.GetTypeInfo().GetEvents(bindingFlags);
+            return type.GetTypeInfo().GetEvents(bindingFlags);
 #endif
         }
 
         /// <summary>
         /// The get method ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <param name="name">
-        /// The name.
-        /// </param>
-        /// <param name="flattenHierarchy">
-        /// The flatten Hierarchy.
-        /// </param>
-        /// <param name="allowStaticMembers">
-        /// The allow Static Members.
-        /// </param>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="System.ArgumentException">
-        /// The <paramref name="name"/> is <c>null</c> or whitespace.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="flattenHierarchy">The flatten Hierarchy.</param>
+        /// <param name="allowStaticMembers">The allow Static Members.</param>
+        /// <returns>MethodInfo.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
         public static MethodInfo GetMethodEx(this Type type, string name, bool flattenHierarchy = true, bool allowStaticMembers = false)
         {
             return GetMethodEx(type, name, BindingFlagsHelper.GetFinalBindingFlags(flattenHierarchy, allowStaticMembers));
@@ -1060,21 +944,12 @@ namespace Catel.Reflection
         /// <summary>
         /// The get method ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <param name="name">
-        /// The name.
-        /// </param>
-        /// <param name="bindingFlags">
-        /// The binding Flags.
-        /// </param>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="System.ArgumentException">
-        /// The <paramref name="name"/> is <c>null</c> or whitespace.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="bindingFlags">The binding Flags.</param>
+        /// <returns>MethodInfo.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
         public static MethodInfo GetMethodEx(this Type type, string name, BindingFlags bindingFlags)
         {
             Argument.IsNotNull("type", type);
@@ -1084,34 +959,21 @@ namespace Catel.Reflection
             var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Method, bindingFlags, name);
             return _methodCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetMethod(name, bindingFlags));
 #else
-			return type.GetTypeInfo().GetMethod(name, bindingFlags);
+            return type.GetTypeInfo().GetMethod(name, bindingFlags);
 #endif
         }
 
         /// <summary>
         /// The get method ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <param name="name">
-        /// The name.
-        /// </param>
-        /// <param name="types">
-        /// The types.
-        /// </param>
-        /// <param name="flattenHierarchy">
-        /// The flatten Hierarchy.
-        /// </param>
-        /// <param name="allowStaticMembers">
-        /// The allow Static Members.
-        /// </param>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="System.ArgumentException">
-        /// The <paramref name="name"/> is <c>null</c> or whitespace.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="types">The types.</param>
+        /// <param name="flattenHierarchy">The flatten Hierarchy.</param>
+        /// <param name="allowStaticMembers">The allow Static Members.</param>
+        /// <returns>MethodInfo.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
         public static MethodInfo GetMethodEx(this Type type, string name, Type[] types, bool flattenHierarchy = true, bool allowStaticMembers = false)
         {
             return GetMethodEx(type, name, types, BindingFlagsHelper.GetFinalBindingFlags(flattenHierarchy, allowStaticMembers));
@@ -1120,24 +982,13 @@ namespace Catel.Reflection
         /// <summary>
         /// The get method ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <param name="name">
-        /// The name.
-        /// </param>
-        /// <param name="types">
-        /// The types.
-        /// </param>
-        /// <param name="bindingFlags">
-        /// The binding Flags.
-        /// </param>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="System.ArgumentException">
-        /// The <paramref name="name"/> is <c>null</c> or whitespace.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="types">The types.</param>
+        /// <param name="bindingFlags">The binding Flags.</param>
+        /// <returns>MethodInfo.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
         public static MethodInfo GetMethodEx(this Type type, string name, Type[] types, BindingFlags bindingFlags)
         {
             Argument.IsNotNull("type", type);
@@ -1146,7 +997,7 @@ namespace Catel.Reflection
 #if ENABLE_CACHE
             var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Method, bindingFlags, new object[] {name, types});
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             return _methodCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetMethod(name, bindingFlags));
 #else
             return _methodCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetMethod(name, bindingFlags, null, types, null));
@@ -1155,6 +1006,8 @@ namespace Catel.Reflection
 #else
 #if WP8
 			return type.GetTypeInfo().GetMethod(name, bindingFlags, null, types, null);
+#elif PCL
+            return type.GetTypeInfo().GetMethod(name, types);
 #else
             return type.GetTypeInfo().GetMethod(name, types, bindingFlags);
 #endif
@@ -1164,18 +1017,11 @@ namespace Catel.Reflection
         /// <summary>
         /// The get methods ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <param name="flattenHierarchy">
-        /// The flatten Hierarchy.
-        /// </param>
-        /// <param name="allowStaticMembers">
-        /// The allow Static Members.
-        /// </param>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <param name="flattenHierarchy">The flatten Hierarchy.</param>
+        /// <param name="allowStaticMembers">The allow Static Members.</param>
+        /// <returns>MethodInfo[][].</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         public static MethodInfo[] GetMethodsEx(this Type type, bool flattenHierarchy = true, bool allowStaticMembers = false)
         {
             return GetMethodsEx(type, BindingFlagsHelper.GetFinalBindingFlags(flattenHierarchy, allowStaticMembers));
@@ -1184,15 +1030,10 @@ namespace Catel.Reflection
         /// <summary>
         /// The get methods ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <param name="bindingFlags">
-        /// The binding Flags.
-        /// </param>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <param name="bindingFlags">The binding Flags.</param>
+        /// <returns>MethodInfo[][].</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         public static MethodInfo[] GetMethodsEx(this Type type, BindingFlags bindingFlags)
         {
             Argument.IsNotNull("type", type);
@@ -1201,11 +1042,11 @@ namespace Catel.Reflection
             var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Method, bindingFlags);
             return _methodsCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetMethods(bindingFlags));
 #else
-			return type.GetTypeInfo().GetMethods(bindingFlags);
+            return type.GetTypeInfo().GetMethods(bindingFlags);
 #endif
         }
 
-#if !NETFX_CORE && !WP8 && !NET45
+#if NET40 || SILVERLIGHT || WP7 || PCL
 
         /// <summary>
         /// The type infos cache.

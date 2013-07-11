@@ -777,7 +777,7 @@ namespace Catel
             }
             else if (handlerType.IsGenericTypeEx())
             {
-                eventArgsType = handlerType.GetTypeInfo().GenericTypeArguments[0];
+                eventArgsType = handlerType.GetGenericArgumentsEx()[0];
                 if (!typeof(EventArgsBase).IsAssignableFromEx(eventArgsType))
                 {
                     eventArgsType = null;

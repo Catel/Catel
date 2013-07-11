@@ -53,6 +53,8 @@ namespace Catel.Data
         /// </summary>
         /// <param name="fileStream">Stream that will contain the serialized data of this object.</param>
         void Save(IRandomAccessStream fileStream);
+#elif PCL
+        // Not supported in Portable Class Library
 #else
         /// <summary>
         /// Saves the object to an isolated storage file stream using the default formatting.

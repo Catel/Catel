@@ -16,9 +16,10 @@ namespace Catel.Data
     using System.Xml.Linq;
     using System.Xml.Schema;
     using System.Xml.Serialization;
-    using Runtime.Serialization;
 
     using Logging;
+
+    using Runtime.Serialization;
     using Catel.Reflection;
 
 #if !NET
@@ -35,6 +36,8 @@ namespace Catel.Data
     using System.Runtime.Serialization.Formatters.Binary;
 #elif NETFX_CORE
     using Windows.Storage.Streams;
+#elif PCL
+    // Not supported in Portable Class Library
 #else
     using System.IO.IsolatedStorage;
 #endif
@@ -428,6 +431,8 @@ namespace Catel.Data
         {
             return Load<T>(fileStream, SerializationMode.Xml, enableRedirects);
         }
+#elif PCL
+        // Not supported in Portable Class Library
 #else
         /// <summary>
         /// Loads the object from a file using xml formatting.
@@ -492,6 +497,8 @@ namespace Catel.Data
         {
             return Load<T>((Stream)fileStream, mode, enableRedirects);
         }
+#elif PCL
+        // Not supported in Portable Class Library
 #else
         /// <summary>
         /// Loads the object from a file using a specific formatting.
@@ -645,7 +652,7 @@ namespace Catel.Data
                     {
 #if NET
                         result = Activator.CreateInstance(typeof(T), true);
-#elif NETFX_CORE
+#elif NETFX_CORE || PCL
                         result = Activator.CreateInstance(typeof(T), true);
 #else
                         result = typeof(T).InvokeMember(null, BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.CreateInstance, null, null, new object[] { });
@@ -888,6 +895,8 @@ namespace Catel.Data
                 stream.Position = 0L;
                 var debugReader = new StreamReader(stream);
                 string content = debugReader.ReadToEnd();
+
+                System.Diagnostics.Debug.WriteLine(content);
 #endif
 
                 return stream.ToArray();
@@ -948,6 +957,8 @@ namespace Catel.Data
                 var debugReader = new StreamReader(stream);
                 string content = debugReader.ReadToEnd();
                 stream.Position = initialStreamPos;
+
+                System.Diagnostics.Debug.WriteLine(content);
 #endif
 
                 // Make sure to include all properties of the view model, the types must be known

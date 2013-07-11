@@ -8,7 +8,12 @@ namespace System
 {
     using Collections.Generic;
     using Reflection;
+
+#if NETFX_CORE
     using global::Windows.ApplicationModel;
+#else
+
+#endif
 
     /// <summary>
     /// WinRT implementation of the AppDomain class.
@@ -49,6 +54,7 @@ namespace System
             {
                 _loadedAssemblies = new List<Assembly>();
 
+#if NETFX_CORE
                 var folder = Package.Current.InstalledLocation;
 
                 var operation = folder.GetFilesAsync();
@@ -65,6 +71,9 @@ namespace System
                         _loadedAssemblies.Add(asm);
                     }
                 }
+#else
+                // TODO: Write
+#endif
             }
 
             return _loadedAssemblies.ToArray();

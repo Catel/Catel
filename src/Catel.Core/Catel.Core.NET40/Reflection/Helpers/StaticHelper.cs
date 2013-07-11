@@ -44,7 +44,7 @@ namespace Catel.Reflection
 #if NET
             var frame = new StackFrame(2, false);
             var type = frame.GetMethod().DeclaringType;
-#elif NETFX_CORE
+#elif NETFX_CORE || PCL
             var type = typeof(object);
 #else
             var frame = new StackTrace().GetFrame(2);

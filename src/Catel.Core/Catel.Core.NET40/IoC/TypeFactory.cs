@@ -329,7 +329,7 @@ namespace Catel.IoC
 
                         _canUseActivatorCache[typeToConstruct] = (instance != null);
                     }
-#if !NETFX_CORE
+#if !NETFX_CORE && !PCL
                     catch (MissingMethodException)
 #else
                     catch (Exception)

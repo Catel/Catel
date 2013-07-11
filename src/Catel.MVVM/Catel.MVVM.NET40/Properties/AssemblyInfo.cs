@@ -24,7 +24,9 @@ using System.Windows.Markup;
 // to COM components.  If you need to access a type in this assembly from 
 // COM, set the ComVisible attribute to true on that type.
 
+#if !PCL
 [assembly: ComVisible(false)]
+#endif
 
 // Theme info
 #if NET
@@ -39,7 +41,7 @@ using System.Windows.Markup;
 #endif
 
 // XmlnsDefinition is not supported in Windows Phone 7 and WinRT
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if !WINDOWS_PHONE && !NETFX_CORE && !PCL
 
 [assembly: XmlnsPrefix("http://catel.codeplex.com", "catel")]
 [assembly: XmlnsDefinition("http://catel.codeplex.com", "Catel.MVVM")]

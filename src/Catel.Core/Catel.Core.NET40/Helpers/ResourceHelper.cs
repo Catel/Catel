@@ -73,7 +73,9 @@ using System.Resources;
             Argument.IsNotNullOrWhitespace("resourceFile", resourceFile);
             Argument.IsNotNullOrWhitespace("resourceName", resourceName);
 
-            var resourceManager = GetResourceManager(callingType.GetTypeInfo().Assembly, resourceFile);
+            var callingTypeAssembly = callingType.GetAssemblyEx();
+            var resourceManager = GetResourceManager(callingTypeAssembly, resourceFile);
+
             return resourceManager.GetString(resourceName);
         }
 

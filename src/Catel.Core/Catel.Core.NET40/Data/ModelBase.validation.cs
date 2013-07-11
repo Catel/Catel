@@ -97,7 +97,7 @@ namespace Catel.Data
 #endif
         private readonly List<string> _propertiesNotCheckedDuringDisabledValidation = new List<string>();
 
-#if !WINDOWS_PHONE && !NETFX_CORE && !NET35
+#if !WINDOWS_PHONE && !NETFX_CORE && !PCL && !NET35
 
         /// <summary>
         /// The property names that failed to validate and should be skipped next time for NET 4.0 
@@ -138,7 +138,7 @@ namespace Catel.Data
         /// <value>
         /// <c>true</c> if the object is validating; otherwise, <c>false</c>.
         /// </value>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if NET || SILVERLIGHT
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -147,7 +147,7 @@ namespace Catel.Data
         /// <summary>
         /// Gets or sets a value indicating whether this object is validated or not.
         /// </summary>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if !WINDOWS_PHONE && !NETFX_CORE && !PCL
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -159,7 +159,7 @@ namespace Catel.Data
         /// By default, this value retrieves the default validator from them <see cref="IValidatorProvider"/> if it is
         /// registered in the <see cref="Catel.IoC.ServiceLocator"/>.
         /// </summary>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if !WINDOWS_PHONE && !NETFX_CORE && !PCL
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -197,7 +197,7 @@ namespace Catel.Data
         /// Gets the validation context which contains all information about the validation.
         /// </summary>
         /// <value>The validation context.</value>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if !WINDOWS_PHONE && !NETFX_CORE && !PCL
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -207,7 +207,7 @@ namespace Catel.Data
         /// Gets the number of field warnings.
         /// </summary>
         /// <value>The field warning count.</value>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if !WINDOWS_PHONE && !NETFX_CORE && !PCL
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -228,7 +228,7 @@ namespace Catel.Data
         /// Gets the number of business rule warnings.
         /// </summary>
         /// <value>The business rule warning count.</value>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if !WINDOWS_PHONE && !NETFX_CORE && !PCL
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -249,7 +249,7 @@ namespace Catel.Data
         /// Gets the number of field errors.
         /// </summary>
         /// <value>The field error count.</value>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if !WINDOWS_PHONE && !NETFX_CORE && !PCL
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -270,7 +270,7 @@ namespace Catel.Data
         /// Gets the number of business rule errors.
         /// </summary>
         /// <value>The business rule error count.</value>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if !WINDOWS_PHONE && !NETFX_CORE && !PCL
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -295,7 +295,7 @@ namespace Catel.Data
         /// Unlike the <see cref="HideValidationResults"/> property, this property will prevent validation. If you want validation
         /// and the ability to query results, but simply hide the validation results, use the <see cref="HideValidationResults"/> property.
         /// </remarks>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if !WINDOWS_PHONE && !NETFX_CORE && !PCL
         [Browsable(false)]
 #endif
         protected bool SuspendValidation
@@ -335,7 +335,7 @@ namespace Catel.Data
         /// Unlike the <see cref="SuspendValidation"/> property, this property will not prevent validation. It will only
         /// prevent the error interfaces to not expose them.
         /// </remarks>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if !WINDOWS_PHONE && !NETFX_CORE && !PCL
         [Browsable(false)]
 #endif
         protected bool HideValidationResults { get; set; }
@@ -437,7 +437,7 @@ namespace Catel.Data
                 return true;
             }
 
-#if !WINDOWS_PHONE && !NETFX_CORE && !NET35
+#if !WINDOWS_PHONE && !NETFX_CORE && !PCL && !NET35
             Type type = GetType();
 
             try
@@ -738,7 +738,7 @@ namespace Catel.Data
                         validator.ValidateFields(this, fieldValidationResults);
                     }
 
-#if !WINDOWS_PHONE && !NETFX_CORE && !NET35
+#if !WINDOWS_PHONE && !NETFX_CORE && !PCL && !NET35
                     // Support annotation validation
                     fieldValidationResults.AddRange(from fieldAnnotationValidation in _dataAnnotationValidationResults
                                                     where !string.IsNullOrEmpty(fieldAnnotationValidation.Value)
@@ -1158,9 +1158,9 @@ namespace Catel.Data
         /// Gets a value indicating whether this object contains any field or business errors.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this instance has errors; otherwise, <c>false</c>.
+        /// <c>true</c> if this instance has errors; otherwise, <c>false</c>.
         /// </value>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if !WINDOWS_PHONE && !NETFX_CORE && !PCL
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -1220,9 +1220,9 @@ namespace Catel.Data
         /// Gets a value indicating whether this object contains any field or business warnings.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this instance has warnings; otherwise, <c>false</c>.
+        /// <c>true</c> if this instance has warnings; otherwise, <c>false</c>.
         /// </value>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if !WINDOWS_PHONE && !NETFX_CORE && !PCL
         [Browsable(false)]
 #endif
         [XmlIgnore]

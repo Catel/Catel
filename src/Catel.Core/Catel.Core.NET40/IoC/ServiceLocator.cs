@@ -182,7 +182,7 @@ namespace Catel.IoC
             SupportDependencyInjection = true;
             CanResolveNonAbstractTypesWithoutRegistration = true;
 
-#if !NETFX_CORE
+#if !NETFX_CORE && !PCL
 #if !WINDOWS_PHONE
             RegisterExternalContainerHelper(new MefHelper());
             RegisterExternalContainerHelper(new UnityHelper());

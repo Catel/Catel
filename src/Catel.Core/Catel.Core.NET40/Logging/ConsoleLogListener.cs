@@ -24,7 +24,7 @@ namespace Catel.Logging
             string consoleMessage = string.Format("{0} => [{1}] {2}", DateTime.Now.ToString("hh:mm:ss:fff"),
                 logEvent.ToString().ToUpper(), message);
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             System.Diagnostics.Debug.WriteLine(consoleMessage);
 #else
             Console.WriteLine(consoleMessage);

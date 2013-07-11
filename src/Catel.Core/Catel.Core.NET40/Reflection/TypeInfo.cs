@@ -13,7 +13,7 @@ namespace Catel.Reflection
     using System.Runtime.InteropServices;
 #endif
 
-#if NET35 || NET40 || SL4 || SL5 || WP7
+#if !NET45 && !NETFX_CORE
 
     /// <summary>
     /// The type info.
@@ -54,6 +54,7 @@ namespace Catel.Reflection
             get { return _type.Name; }
         }
 
+#if !PCL
         /// <summary>
         /// Gets a value that identifies a metadata element.
         /// </summary>
@@ -66,6 +67,7 @@ namespace Catel.Reflection
         {
             get { return _type.MetadataToken; }
         }
+#endif
 
         /// <summary>
         /// Gets DeclaredEvents.
@@ -75,6 +77,7 @@ namespace Catel.Reflection
             get { return GetEvents(); }
         }
 
+#if !PCL
         /// <summary>
         /// Gets a <see cref="T:System.Reflection.MemberTypes"/> value indicating that this member is a type or a nested type.
         /// </summary>
@@ -86,6 +89,7 @@ namespace Catel.Reflection
         {
             get { return _type.MemberType; }
         }
+#endif
 
         /// <summary>
         /// Gets the type that declares the current nested type or generic type parameter.
@@ -139,6 +143,8 @@ namespace Catel.Reflection
         }
 
 #endif
+
+#if !PCL
         /// <summary>
         /// Gets the GUID associated with the <see cref="T:System.Type"/>.
         /// </summary>
@@ -162,6 +168,7 @@ namespace Catel.Reflection
         {
             get { return _type.Module; }
         }
+#endif
 
         /// <summary>
         /// Gets the <see cref="T:System.Reflection.Assembly"/> in which the type is declared. For generic types, gets the <see cref="T:System.Reflection.Assembly"/> in which the generic type is defined.
@@ -396,6 +403,7 @@ namespace Catel.Reflection
             get { return _type.IsNestedFamORAssem; }
         }
 
+#if !PCL
         /// <summary>
         /// Gets a value indicating whether the class layout attribute AutoLayout is selected for the <see cref="T:System.Type"/>.
         /// </summary>
@@ -407,6 +415,7 @@ namespace Catel.Reflection
         {
             get { return _type.IsAutoLayout; }
         }
+#endif
 
 #if NET 
 
@@ -519,6 +528,7 @@ namespace Catel.Reflection
             get { return _type.IsSpecialName; }
         }
 
+#if !PCL
         /// <summary>
         /// Gets a value indicating whether the <see cref="T:System.Type"/> has a <see cref="T:System.Runtime.InteropServices.ComImportAttribute"/> attribute applied, indicating that it was imported from a COM type library.
         /// </summary>
@@ -530,7 +540,7 @@ namespace Catel.Reflection
         {
             get { return _type.IsImport; }
         }
-
+#endif
 
         /// <summary>
         /// Gets a value indicating whether the <see cref="T:System.Type"/> is serializable.
@@ -544,13 +554,14 @@ namespace Catel.Reflection
             get
             {
 #if !NET
-                return true; 
+                return true;
 #else
                 return _type.IsSerializable;
 #endif
             }
         }
 
+#if !PCL
         /// <summary>
         /// Gets a value indicating whether the string format attribute AnsiClass is selected for the <see cref="T:System.Type"/>.
         /// </summary>
@@ -586,6 +597,7 @@ namespace Catel.Reflection
         {
             get { return _type.IsAutoClass; }
         }
+#endif
 
         /// <summary>
         /// Gets a value indicating whether the <see cref="T:System.Type"/> is an array.
@@ -695,6 +707,7 @@ namespace Catel.Reflection
             get { return _type.IsPrimitive; }
         }
 
+#if !PCL
         /// <summary>
         /// Gets a value indicating whether the <see cref="T:System.Type"/> is a COM object.
         /// </summary>
@@ -706,6 +719,7 @@ namespace Catel.Reflection
         {
             get { return _type.IsCOMObject; }
         }
+#endif
 
         /// <summary>
         /// Gets a value indicating whether the current <see cref="T:System.Type"/> encompasses or refers to another type; that is, whether the current <see cref="T:System.Type"/> is an array, a pointer, or is passed by reference.
@@ -1014,6 +1028,7 @@ namespace Catel.Reflection
             return _type.MakeArrayType(rank);
         }
 
+#if !PCL
         /// <summary>
         /// When overridden in a derived class, invokes the specified member, using the specified binding constraints and matching the specified argument list, modifiers and culture.
         /// </summary>
@@ -1108,6 +1123,7 @@ namespace Catel.Reflection
         {
             return _type.InvokeMember(name, invokeAttr, binder, target, args, modifiers, culture, namedParameters);
         }
+#endif
 
 #if NET 
 
@@ -1192,8 +1208,9 @@ namespace Catel.Reflection
         {
             return _type.InvokeMember(name, invokeAttr, binder, target, args, culture);
         }
-
 #endif
+
+#if !PCL
         /// <summary>
         /// Invokes the specified member, using the specified binding constraints and matching the specified argument list.
         /// </summary>
@@ -1273,6 +1290,7 @@ namespace Catel.Reflection
         {
             return _type.InvokeMember(name, invokeAttr, binder, target, args);
         }
+#endif
 
         /// <summary>
         /// Gets the number of dimensions in an <see cref="T:System.Array"/>.
@@ -1338,6 +1356,8 @@ namespace Catel.Reflection
             return _type.GetConstructor(bindingAttr, binder, callConvention, types, modifiers);
         }
 #endif
+
+#if !PCL
         /// <summary>
         /// Searches for a constructor whose parameters match the specified argument types and modifiers, using the specified binding constraints.
         /// </summary>
@@ -1381,6 +1401,7 @@ namespace Catel.Reflection
         {
             return _type.GetConstructor(bindingAttr, binder, types, modifiers);
         }
+#endif
 
         /// <summary>
         /// Searches for a public instance constructor whose parameters match the types in the specified array.
@@ -1391,7 +1412,7 @@ namespace Catel.Reflection
         /// <param name="types">
         /// An array of <see cref="T:System.Type"/> objects representing the number, order, and type of the parameters for the desired constructor.
         /// -or- 
-        /// An empty array of <see cref="T:System.Type"/> objects, to get a constructor that takes no parameters. Such an empty array is provided by the static field <see cref="F:System.Type.EmptyTypes"/>. 
+        /// An empty array of <see cref="T:System.Type"/> objects, to get a constructor that takes no parameters. 
         /// </param>
         /// <exception cref="T:System.ArgumentNullException">
         /// <paramref name="types"/> is null.
@@ -1436,6 +1457,7 @@ namespace Catel.Reflection
             return _type.GetConstructors(bindingAttr);
         }
 
+#if !PCL
         /// <summary>
         /// Searches for the specified method whose parameters match the specified argument types and modifiers, using the specified binding constraints and the specified calling convention.
         /// </summary>
@@ -1610,6 +1632,7 @@ namespace Catel.Reflection
         {
             return _type.GetMethod(name, types, modifiers);
         }
+#endif
 
         /// <summary>
         /// Searches for the specified public method whose parameters match the specified argument types.
@@ -1623,7 +1646,7 @@ namespace Catel.Reflection
         /// <param name="types">
         /// An array of <see cref="T:System.Type"/> objects representing the number, order, and type of the parameters for the method to get.
         /// -or- 
-        /// An empty array of <see cref="T:System.Type"/> objects (as provided by the <see cref="F:System.Type.EmptyTypes"/> field) to get a method that takes no parameters. 
+        /// An empty array of <see cref="T:System.Type"/> objects to get a method that takes no parameters. 
         /// </param>
         /// <exception cref="T:System.Reflection.AmbiguousMatchException">
         /// More than one method is found with the specified name and specified parameters. 
@@ -1760,7 +1783,7 @@ namespace Catel.Reflection
         /// <paramref name="name"/> is null. 
         /// </exception>
         /// <exception cref="T:System.NotSupportedException">
-        /// This <see cref="T:System.Type"/> object is a <see cref="T:System.Reflection.Emit.TypeBuilder"/> whose <see cref="M:System.Reflection.Emit.TypeBuilder.CreateType"/> method has not yet been called. 
+        /// This <see cref="T:System.Type"/> object is a <c>System.Reflection.Emit.TypeBuilder</c> whose <c>System.Reflection.Emit.TypeBuilder.CreateType</c> method has not yet been called. 
         /// </exception>
         /// <filterpriority>2</filterpriority>
         public FieldInfo GetField(string name)
@@ -1801,6 +1824,7 @@ namespace Catel.Reflection
             return _type.GetFields(bindingAttr);
         }
 
+#if !PCL
         /// <summary>
         /// Searches for the interface with the specified name.
         /// </summary>
@@ -1847,6 +1871,7 @@ namespace Catel.Reflection
         {
             return _type.GetInterface(name, ignoreCase);
         }
+#endif
 
         /// <summary>
         /// When overridden in a derived class, gets all the interfaces implemented or inherited by the current <see cref="T:System.Type"/>.
@@ -1964,6 +1989,7 @@ namespace Catel.Reflection
             return _type.GetEvents(bindingAttr);
         }
 
+#if !PCL
         /// <summary>
         /// Searches for the specified property whose parameters match the specified argument types and modifiers, using the specified binding constraints.
         /// </summary>
@@ -2061,6 +2087,7 @@ namespace Catel.Reflection
         {
             return _type.GetProperty(name, returnType, types, modifiers);
         }
+#endif
 
         /// <summary>
         /// Searches for the specified property, using the specified binding constraints.
@@ -2350,6 +2377,7 @@ namespace Catel.Reflection
             return _type.GetMember(name, bindingAttr);
         }
 
+#if !PCL
         /// <summary>
         /// Searches for the specified members of the specified member type, using the specified binding constraints.
         /// </summary>
@@ -2378,6 +2406,7 @@ namespace Catel.Reflection
         {
             return _type.GetMember(name, type, bindingAttr);
         }
+#endif
 
         /// <summary>
         /// Returns all the public members of the current <see cref="T:System.Type"/>.
@@ -2426,6 +2455,7 @@ namespace Catel.Reflection
             return _type.GetDefaultMembers();
         }
 
+#if !PCL
         /// <summary>
         /// Returns a filtered array of <see cref="T:System.Reflection.MemberInfo"/> objects of the specified member type.
         /// </summary>
@@ -2457,6 +2487,7 @@ namespace Catel.Reflection
         {
             return _type.FindMembers(memberType, bindingAttr, filter, filterCriteria);
         }
+#endif
 
         /// <summary>
         /// Returns an array of <see cref="T:System.Type"/> objects that represent the constraints on the current generic type parameter. 
@@ -2637,6 +2668,7 @@ namespace Catel.Reflection
             return Equals(o._type);
         }
 
+#if !PCL
         /// <summary>
         /// Returns an interface mapping for the specified interface type.
         /// </summary>
@@ -2654,15 +2686,16 @@ namespace Catel.Reflection
         /// </exception>
         /// <exception cref="T:System.InvalidOperationException">
         /// The current <see cref="T:System.Type"/> represents a generic type parameter; that is, <see cref="P:System.Type.IsGenericParameter"/> is true.
-        ///</exception>
+        /// </exception>
         /// <exception cref="T:System.NotSupportedException">
         /// The invoked method is not supported in the base class. Derived classes must provide an implementation.
-        ///</exception>
+        /// </exception>
         /// <filterpriority>2</filterpriority>
         public InterfaceMapping GetInterfaceMap(Type interfaceType)
         {
             return _type.GetInterfaceMap(interfaceType);
         }
+#endif
         #endregion
     }
 #endif

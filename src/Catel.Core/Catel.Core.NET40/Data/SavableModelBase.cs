@@ -22,6 +22,8 @@ namespace Catel.Data
 #elif NETFX_CORE
     using Windows.Storage.Streams;
     using Runtime.Serialization;
+#elif PCL
+    // Not supported in Portable Class Library
 #else
     using System.IO.IsolatedStorage;
     using Runtime.Serialization;
@@ -80,7 +82,7 @@ namespace Catel.Data
         /// Gets the bytes of the current binary serialized data object.
         /// </summary>
         /// <value>The bytes.</value>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if NET || SILVERLIGHT
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -163,6 +165,8 @@ namespace Catel.Data
         {
             Save((Stream)fileStream);
         }
+#elif PCL
+        // Not supported in Portable Class Library
 #else
         /// <summary>
         /// Saves the object to an isolated storage file stream using the default formatting.
@@ -253,6 +257,8 @@ namespace Catel.Data
         {
             return Load<T>(fileStream, enableRedirects);
         }
+#elif PCL
+        // Not supported in Portable Class Library
 #else
         /// <summary>
         /// Loads the object from a file using binary formatting.
@@ -302,6 +308,8 @@ namespace Catel.Data
         {
             return Load<T>(fileStream, mode, enableRedirects);
         }
+#elif PCL
+        // Not supported in Portable Class Library
 #else
         /// <summary>
         /// Loads the object from a file using a specific formatting.

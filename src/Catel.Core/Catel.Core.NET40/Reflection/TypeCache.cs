@@ -216,7 +216,7 @@ namespace Catel.Reflection
                 // Fallback to GetType
                 try
                 {
-#if NETFX_CORE
+#if NETFX_CORE || PCL
                     var type = Type.GetType(typeNameWithAssembly, false);
 #elif SILVERLIGHT
                     // Due to a FileLoadException when loading types without a specific version, we need to map the assembly version here
@@ -232,7 +232,7 @@ namespace Catel.Reflection
                         return type;
                     }
                 }
-#if !NETFX_CORE
+#if !NETFX_CORE && !PCL
                 catch (System.IO.FileLoadException fle)
                 {
                     Log.Debug(fle, "Failed to load type '{0}' using Type.GetType(), failed to load file", typeNameWithAssembly);

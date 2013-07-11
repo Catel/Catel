@@ -333,7 +333,7 @@ namespace Catel.Data
         /// The default value is <c>false</c>.
         /// </summary>
         /// <value><c>true</c> if all models should behave as lean and mean; otherwise, <c>false</c>.</value>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if NET || SILVERLIGHT
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -345,7 +345,7 @@ namespace Catel.Data
         /// A lean and mean model will not handle any validation code, nor will it raise any change notification events.
         /// </summary>
         /// <value><c>true</c> if this is a lean and mean model; otherwise, <c>false</c>.</value>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if NET || SILVERLIGHT
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -359,7 +359,7 @@ namespace Catel.Data
         /// Gets or sets a value indicating whether property change notifications are currently disabled for all instances.
         /// </summary>
         /// <value><c>true</c> if property change notifications should be disabled for all instances; otherwise, <c>false</c>.</value>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if NET || SILVERLIGHT
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -369,7 +369,7 @@ namespace Catel.Data
         /// Gets the property data manager that manages the properties of this object.
         /// </summary>
         /// <value>The property data manager.</value>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if NET || SILVERLIGHT
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -378,7 +378,7 @@ namespace Catel.Data
         /// <summary>
         /// Gets or sets a value indicating whether this object is subscribed to all childs.
         /// </summary>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if NET || SILVERLIGHT
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -388,9 +388,9 @@ namespace Catel.Data
         /// Gets a value indicating whether this object is currently initializing.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this object is currently initializing; otherwise, <c>false</c>.
+        /// <c>true</c> if this object is currently initializing; otherwise, <c>false</c>.
         /// </value>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if NET || SILVERLIGHT
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -400,9 +400,9 @@ namespace Catel.Data
         /// Gets a value indicating whether this object is initialized.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this object is initialized; otherwise, <c>false</c>.
+        /// <c>true</c> if this object is initialized; otherwise, <c>false</c>.
         /// </value>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if NET || SILVERLIGHT
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -412,7 +412,7 @@ namespace Catel.Data
         /// Gets or sets a value indicating whether the deserialized data is available, which means that
         /// OnDeserialized is invoked.
         /// </summary>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if NET || SILVERLIGHT
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -421,7 +421,7 @@ namespace Catel.Data
         /// <summary>
         /// Gets or sets a value indicating whether the object is fully deserialized.
         /// </summary>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if NET || SILVERLIGHT
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -431,9 +431,9 @@ namespace Catel.Data
         /// Gets a value indicating whether this instance contains non-serializable members.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this instance contains non-serializable members; otherwise, <c>false</c>.
+        /// <c>true</c> if this instance contains non-serializable members; otherwise, <c>false</c>.
         /// </value>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if NET || SILVERLIGHT
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -448,7 +448,7 @@ namespace Catel.Data
         /// <remarks>
         /// By default, this property is <c>false</c>.
         /// </remarks>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if NET || SILVERLIGHT
         [Browsable(false)]
 #endif
         protected bool AlwaysInvokeNotifyChanged { get; set; }
@@ -457,7 +457,7 @@ namespace Catel.Data
         /// Gets or sets a value indicating whether this object should handle (thus invoke the specific events) when
         /// a property of collection value has changed.
         /// </summary>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if NET || SILVERLIGHT
         [Browsable(false)]
 #endif
         protected bool HandlePropertyAndCollectionChanges { get; set; }
@@ -466,7 +466,7 @@ namespace Catel.Data
         /// Gets or sets a value indicating whether this object should automatically validate itself when a property value
         /// has changed.
         /// </summary>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if NET || SILVERLIGHT
         [Browsable(false)]
 #endif
         protected bool AutomaticallyValidateOnPropertyChanged { get; set; }
@@ -475,7 +475,7 @@ namespace Catel.Data
         /// Gets the parent.
         /// </summary>
         /// <value>The parent.</value>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if NET || SILVERLIGHT
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -488,7 +488,7 @@ namespace Catel.Data
         /// Gets the name of the object. By default, this is the hash code of all the properties combined.
         /// </summary>
         /// <value>The name of the key.</value>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if NET || SILVERLIGHT
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -501,7 +501,7 @@ namespace Catel.Data
         /// Gets the <see cref="SerializationMode"/> of this object.
         /// </summary>
         /// <value>The serialization mode.</value>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if NET || SILVERLIGHT
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -511,9 +511,9 @@ namespace Catel.Data
         /// Gets a value indicating whether the object is currently in an edit session, started by the <see cref="IEditableObject.BeginEdit"/> method.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this instance is currently in an edit session; otherwise, <c>false</c>.
+        /// <c>true</c> if this instance is currently in an edit session; otherwise, <c>false</c>.
         /// </value>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if NET || SILVERLIGHT
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -526,7 +526,7 @@ namespace Catel.Data
         /// Gets or sets a value indicating whether this object is dirty (contains unsaved data).
         /// </summary>
         /// <value><c>true</c> if this instance is dirty; otherwise, <c>false</c>.</value>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if NET || SILVERLIGHT
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -544,7 +544,7 @@ namespace Catel.Data
         /// <summary>
         /// Gets or sets a value indicating whether this object is currently read-only. When the object is read-only, values can only be read, not set.
         /// </summary>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if NET || SILVERLIGHT
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -564,7 +564,7 @@ namespace Catel.Data
         /// Gets a value indicating whether this object is editable. This is the opposite of the <see cref="IsReadOnly"/> property.
         /// </summary>
         /// <value><c>true</c> if this object is editable; otherwise, <c>false</c>.</value>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if NET || SILVERLIGHT
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -577,7 +577,7 @@ namespace Catel.Data
         /// Gets a value indicating whether the deserialization has succeeded. If automatic deserialization fails, the object
         /// should try to deserialize manually.
         /// </summary>
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if NET || SILVERLIGHT
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -1194,7 +1194,7 @@ namespace Catel.Data
         /// <param name="includeInBackup">If set to <c>true</c>, the property should be included in the backup when handling IEditableObject.</param>
         /// <param name="setParent">If set to <c>true</c>, the parent of the property will be set.</param>
         /// <returns><see cref="PropertyData" /> containing the property information.</returns>
-        /// <exception cref="System.ArgumentException">The member type of the body of the <paramref name="propertyExpression" /> of should be <see cref="MemberTypes.Property" />.</exception>
+        /// <exception cref="System.ArgumentException">The member type of the body of the <paramref name="propertyExpression" /> of should be <c>MemberTypes.Property</c>.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="propertyExpression" /> is <c>null</c>.</exception>
         public static PropertyData RegisterProperty<TModel, TValue>(Expression<Func<TModel, TValue>> propertyExpression, TValue defaultValue, 
             Action<TModel, AdvancedPropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true,
@@ -1204,10 +1204,13 @@ namespace Catel.Data
             Argument.IsOfType("propertyExpression.Body", propertyExpression.Body, typeof(MemberExpression));
 
             var memberExpression = (MemberExpression)propertyExpression.Body;
+
+#if !PCL
             if (memberExpression.Member.MemberType != MemberTypes.Property)
             {
                 throw new ArgumentException("The member type of the body of the property expression should be a property");
             }
+#endif
 
             var propertyName = memberExpression.Member.Name;
             return RegisterProperty(propertyName, typeof(TValue), defaultValue, (sender, args) =>
@@ -1232,7 +1235,7 @@ namespace Catel.Data
         /// <param name="includeInBackup">If set to <c>true</c>, the property should be included in the backup when handling IEditableObject.</param>
         /// <param name="setParent">if set to <c>true</c>, the parent of the property will be set.</param>
         /// <returns><see cref="PropertyData" /> containing the property information.</returns>
-        /// <exception cref="System.ArgumentException">The member type of the body of the <paramref name="propertyExpression" /> of should be <see cref="MemberTypes.Property" />.</exception>
+        /// <exception cref="System.ArgumentException">The member type of the body of the <paramref name="propertyExpression" /> of should be <c>MemberTypes.Property</c>.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="propertyExpression" /> is <c>null</c>.</exception>
         public static PropertyData RegisterProperty<TModel, TValue>(Expression<Func<TModel, TValue>> propertyExpression, Func<TValue> createDefaultValue = null,
             Action<TModel, AdvancedPropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, 
@@ -1242,10 +1245,13 @@ namespace Catel.Data
             Argument.IsOfType("propertyExpression.Body", propertyExpression.Body, typeof(MemberExpression));
 
             var memberExpression = (MemberExpression)propertyExpression.Body;
+
+#if !PCL
             if (memberExpression.Member.MemberType != MemberTypes.Property)
             {
                 throw new ArgumentException("The member type of the body of the property expression should be a property");
             }
+#endif
 
             object realDefaultValue = createDefaultValue;
             if (createDefaultValue == null)

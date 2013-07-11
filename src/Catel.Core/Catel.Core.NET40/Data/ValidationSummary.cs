@@ -172,7 +172,10 @@ namespace Catel.Data
         /// <value>The field warnings.</value>
         public ReadOnlyCollection<IFieldValidationResult> FieldWarnings
         {
-            get { return _fieldWarnings.AsReadOnly(); }
+            get
+            {
+                return new ReadOnlyCollection<IFieldValidationResult>(_fieldWarnings);
+            }
         }
 
         /// <summary>
@@ -181,7 +184,10 @@ namespace Catel.Data
         /// <value>The field errors.</value>
         public ReadOnlyCollection<IFieldValidationResult> FieldErrors
         {
-            get { return _fieldErrors.AsReadOnly(); }
+            get
+            {
+                return new ReadOnlyCollection<IFieldValidationResult>(_fieldErrors);
+            }
         }
 
         /// <summary>
@@ -190,7 +196,10 @@ namespace Catel.Data
         /// <value>The business warnings.</value>
         public ReadOnlyCollection<IBusinessRuleValidationResult> BusinessWarnings
         {
-            get { return _businessRuleWarnings.AsReadOnly(); }
+            get
+            {
+               return new ReadOnlyCollection<IBusinessRuleValidationResult>(_businessRuleWarnings);
+            }
         }
 
         /// <summary>
@@ -199,7 +208,10 @@ namespace Catel.Data
         /// <value>The business rule errors.</value>
         public ReadOnlyCollection<IBusinessRuleValidationResult> BusinessRuleErrors
         {
-            get { return _businessRuleErrors.AsReadOnly(); }
+            get
+            {
+                return new ReadOnlyCollection<IBusinessRuleValidationResult>(_businessRuleErrors);
+            }
         }
         #endregion
     }

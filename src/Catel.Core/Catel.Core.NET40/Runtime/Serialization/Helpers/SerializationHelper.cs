@@ -25,6 +25,8 @@ namespace Catel.Runtime.Serialization
     using System.Xml.Serialization;
 #elif NETFX_CORE
     using Windows.Storage.Streams;
+#elif PCL
+    // Not supported in Portable Class Library
 #else
     using System.IO.IsolatedStorage;
 #endif
@@ -260,7 +262,7 @@ namespace Catel.Runtime.Serialization
         /// <param name="xmlName">Name of the property as known in XML.</param>
         /// <param name="loadFromCache">if set to <c>true</c>, the serializer is retrieved from the cache if possible.</param>
         /// <returns>
-        /// 	<see cref="DataContractSerializer"/> for the given type.
+        /// <see cref="DataContractSerializer"/> for the given type.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="serializingType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="typeToSerialize"/> is <c>null</c>.</exception>
@@ -280,7 +282,7 @@ namespace Catel.Runtime.Serialization
         /// <param name="additionalKnownTypes">A list of additional types to add to the known types.</param>
         /// <param name="loadFromCache">if set to <c>true</c>, the serializer is retrieved from the cache if possible.</param>
         /// <returns>
-        /// 	<see cref="DataContractSerializer"/> for the given type.
+        /// <see cref="DataContractSerializer"/> for the given type.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="serializingType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="typeToSerialize"/> is <c>null</c>.</exception>
@@ -301,7 +303,7 @@ namespace Catel.Runtime.Serialization
         /// a child object of this object are added to the known types of the serializer.</param>
         /// <param name="loadFromCache">if set to <c>true</c>, the serializer is retrieved from the cache if possible.</param>
         /// <returns>
-        /// 	<see cref="DataContractSerializer"/> for the given type.
+        /// <see cref="DataContractSerializer"/> for the given type.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="serializingType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="typeToSerialize"/> is <c>null</c>.</exception>
@@ -323,7 +325,7 @@ namespace Catel.Runtime.Serialization
         /// <param name="additionalKnownTypes">A list of additional types to add to the known types.</param>
         /// <param name="loadFromCache">if set to <c>true</c>, the serializer is retrieved from the cache if possible.</param>
         /// <returns>
-        /// 	<see cref="DataContractSerializer"/> for the given type.
+        /// <see cref="DataContractSerializer"/> for the given type.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="serializingType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="typeToSerialize"/> is <c>null</c>.</exception>
@@ -541,7 +543,7 @@ namespace Catel.Runtime.Serialization
             // Fix generics
             if (type.FullName.StartsWith("System."))
             {
-                Type[] genericArguments = type.GetTypeInfo().GenericTypeArguments;
+                var genericArguments = type.GetGenericArgumentsEx();
                 foreach (var genericArgument in genericArguments)
                 {
                     Log.Debug("Retrieving known types for generic argument '{0}' of '{1}'", genericArgument.FullName, type.FullName);
@@ -592,7 +594,7 @@ namespace Catel.Runtime.Serialization
             }
 
             // If this isn't the base type, check that as well
-            var baseType = type.GetTypeInfo().BaseType;
+            var baseType = type.GetBaseTypeEx();
             if (baseType != null)
             {
                 Log.Debug("Checking base type of '{0}' for known types", type.FullName);
@@ -719,7 +721,7 @@ namespace Catel.Runtime.Serialization
         /// added to the serialization known types.
         /// <para />
         /// All generic collections in the <c>System.Collections.Generic</c> namespace are considered
-        /// special. Besides these classes, the <see cref="ObservableCollection{T}"/> is also considered
+        /// special. Besides these classes, the <c>ObservableCollection{T}</c> is also considered
         /// special.
         /// </summary>
         /// <param name="type">The type.</param>
@@ -839,6 +841,7 @@ namespace Catel.Runtime.Serialization
             return true;
         }
 
+#if !PCL
         /// <summary>
         /// Serializes the XML.
         /// </summary>
@@ -930,6 +933,7 @@ namespace Catel.Runtime.Serialization
 
             return result;
         }
+#endif // PLC
         #endregion
     }
 }
