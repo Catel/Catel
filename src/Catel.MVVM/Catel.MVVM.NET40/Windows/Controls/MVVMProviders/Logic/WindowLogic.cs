@@ -81,7 +81,10 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// Gets the target control as window object.
         /// </summary>
         /// <value>The target window.</value>
-        private FrameworkElement TargetWindow { get { return TargetControl; } }
+        private FrameworkElement TargetWindow
+        {
+            get { return TargetControl; }
+        }
         #endregion
 
         #region Methods
@@ -143,7 +146,9 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 // Support all windows (even those that do not derive from ChildWindow)
                 if (!PropertyHelper.TrySetPropertyValue(TargetWindow, "DialogResult", _closeInitiatedByViewModelResult))
                 {
-                    Log.Warning("Failed to set the 'DialogResult' property of window type '{0}'", TargetWindow.GetType().Name);
+                    Log.Warning("Failed to set the 'DialogResult' property of window type '{0}', closing window via method", TargetWindow.GetType().Name);
+
+                    InvokeCloseDynamically();
                 }
                 else if (ForceCloseAfterSettingDialogResult)
                 {
