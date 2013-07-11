@@ -209,6 +209,14 @@ namespace Catel.MVVM
 #endif
 
         /// <summary>
+        /// The backing field for the title property.
+        /// </summary>
+#if NET
+        [field: NonSerialized]
+#endif
+        private string _title;
+
+        /// <summary>
         /// The throttling timer.
         /// </summary>
 #if NET
@@ -547,7 +555,16 @@ namespace Catel.MVVM
         /// <value>The title.</value>
         public virtual string Title
         {
-            get { return string.Empty; }
+            get
+            {
+                return _title;
+            }
+            protected set
+            {
+                _title = value;
+
+                RaisePropertyChanged("Title");
+            }
         }
 
         /// <summary>
