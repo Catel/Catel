@@ -36,6 +36,7 @@ Added/fixed:
 (x) CTL-103 Fixed issue where WindowLogic could not correctly close a non-modal dialog in WPF
 (x) CTL-108 Fixed issues with WeakEventListeners and WinRT
 (x) CTL-112 Fixed issue where ViewToViewModel mappings did not work in WPF
+(x) CTL-116 Fixed issue where some referenced assemblies cause Catel to break the designer in Windows 8.1 apps
 (x) Fixed Drag and Drop behavior when the drop position is less then the initial item's position
 
 To-do:

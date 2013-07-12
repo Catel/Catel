@@ -6,13 +6,13 @@
 
 namespace System
 {
+    using Catel.Logging;
+
     using Collections.Generic;
     using Reflection;
 
 #if NETFX_CORE
     using global::Windows.ApplicationModel;
-#else
-
 #endif
 
     /// <summary>
@@ -20,6 +20,11 @@ namespace System
     /// </summary>
     public sealed class AppDomain
     {
+        /// <summary>
+        /// The log.
+        /// </summary>
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// List of loaded assemblies.
         /// </summary>
@@ -65,10 +70,17 @@ namespace System
                 {
                     if (file.FileType == ".dll" || file.FileType == ".exe")
                     {
-                        var filename = file.Name.Substring(0, file.Name.Length - file.FileType.Length);
-                        var name = new AssemblyName { Name = filename };
-                        var asm = Assembly.Load(name);
-                        _loadedAssemblies.Add(asm);
+                        try
+                        {
+                            var filename = file.Name.Substring(0, file.Name.Length - file.FileType.Length);
+                            var name = new AssemblyName { Name = filename };
+                            var asm = Assembly.Load(name);
+                            _loadedAssemblies.Add(asm);
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Warning(ex, "Failed to load assembly '{0}'", file.Name);
+                        }
                     }
                 }
 #else
