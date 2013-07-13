@@ -57,5 +57,22 @@ namespace Catel.IoC
 
             return (T)typeFactory.CreateInstanceWithParameters(typeof(T), parameters);
         }
+
+        /// <summary>
+        /// Creates an instance of the specified type using the specified parameters as injection values.
+        /// <para />
+        /// This method will also auto-complete any additional dependencies that can be resolved from the <see cref="IServiceLocator"/>.
+        /// </summary>
+        /// <typeparam name="T">The type to instantiate.</typeparam>
+        /// <param name="typeFactory">The type factory.</param>
+        /// <param name="parameters">The parameters to inject.</param>
+        /// <returns>The instantiated type using dependency injection.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="typeFactory"/> is <c>null</c>.</exception>
+        public static T CreateInstanceWithParametersAndAutoCompletion<T>(this ITypeFactory typeFactory, params object[] parameters)
+        {
+            Argument.IsNotNull("typeFactory", typeFactory);
+
+            return (T)typeFactory.CreateInstanceWithParametersAndAutoCompletion(typeof(T), parameters);
+        }
     }
 }

@@ -48,5 +48,16 @@ namespace Catel.IoC
         /// <see cref="IServiceLocator.TypeRegistered"/> event to invalidate the cache.
         /// </summary>
         void ClearCache();
+
+        /// <summary>
+        /// Creates an instance of the specified type using the specified parameters as injection values.
+        /// <para />
+        /// This method will also auto-complete any additional dependencies that can be resolved from the <see cref="IServiceLocator"/>.
+        /// </summary>
+        /// <param name="typeToConstruct">The type to construct.</param>
+        /// <param name="parameters">The parameters to inject.</param>
+        /// <returns>The instantiated type using dependency injection.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct"/> is <c>null</c>.</exception>
+        object CreateInstanceWithParametersAndAutoCompletion(Type typeToConstruct, params object[] parameters);
     }
 }

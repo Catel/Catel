@@ -91,7 +91,7 @@ namespace Catel.MVVM
             // be used when injection is not possible
             if (dataContext != null)
             {
-                viewModel = _typeFactory.CreateInstanceWithParameters(viewModelType, dataContext) as IViewModel;
+                viewModel = _typeFactory.CreateInstanceWithParametersAndAutoCompletion(viewModelType, dataContext) as IViewModel;
                 if (viewModel != null)
                 {
                     Log.Debug("Constructed view model '{0}' using injection of data context '{1}'", viewModelType.FullName, ObjectToStringHelper.ToTypeString(dataContext));

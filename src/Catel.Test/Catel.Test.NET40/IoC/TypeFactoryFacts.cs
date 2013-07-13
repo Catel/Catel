@@ -8,6 +8,7 @@ namespace Catel.Test.IoC
 {
     using System;
     using Catel.IoC;
+    using Catel.MVVM.Services;
     using Data;
 
 #if NETFX_CORE
@@ -69,6 +70,33 @@ namespace Catel.Test.IoC
             {
                 HasCalledCustomInitialization = true;
             }
+        }
+
+        public class AdvancedDependencyInjectionTestClass
+        {
+            public AdvancedDependencyInjectionTestClass(int intValue, IMessageService messageService, IProcessService processService)
+            {
+                Argument.IsNotNull(() => messageService);
+                Argument.IsNotNull(() => processService);
+
+                IntValue = intValue;
+            }
+
+            public AdvancedDependencyInjectionTestClass(string stringValue, int intValue, long longValue, IMessageService messageService, IProcessService processService)
+            {
+                Argument.IsNotNull(() => messageService);
+                Argument.IsNotNull(() => processService);
+
+                StringValue = stringValue;
+                IntValue = intValue;
+                LongValue = longValue;
+            }
+
+            public int IntValue { get; private set; }
+
+            public string StringValue { get; private set; }
+
+            public long LongValue { get; private set; }
         }
 
         [TestClass]
@@ -185,6 +213,30 @@ namespace Catel.Test.IoC
                 Assert.AreEqual(4, ex.TypePath.AllTypes.Length);
                 Assert.AreEqual(typeof(X), ex.TypePath.FirstType.Type);
                 Assert.AreEqual(typeof(X), ex.TypePath.LastType.Type);
+            }
+        }
+
+        [TestClass]
+        public class TheCreateInstanceWithAutoCompletionMethod
+        {
+            [TestMethod]
+            public void CreatesTypeUsingSimpleCustomInjectionAndAutoCompletion()
+            {
+                var instance = TypeFactory.Default.CreateInstanceWithParametersAndAutoCompletion<AdvancedDependencyInjectionTestClass>(42);
+
+                Assert.IsNotNull(instance);
+                Assert.AreEqual(42, instance.IntValue);
+            }
+
+            [TestMethod]
+            public void CreatesTypeUsingComplexCustomInjectionAndAutoCompletion()
+            {
+                var instance = TypeFactory.Default.CreateInstanceWithParametersAndAutoCompletion<AdvancedDependencyInjectionTestClass>("string", 42, 42L);
+
+                Assert.IsNotNull(instance);
+                Assert.AreEqual("string", instance.StringValue);
+                Assert.AreEqual(42, instance.IntValue);
+                Assert.AreEqual(42L, instance.LongValue);
             }
         }
     }

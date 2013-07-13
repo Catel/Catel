@@ -28,6 +28,8 @@ Added/fixed (BREAKING CHANGES):
 
 Added/fixed:
 ============
+(+) CTL-6 Dependency injection is now supported in child view models. This makes it possible to combine both model
+    injection with auto-completion from services registered in the ServiceLocator
 (+) CTL-111 Added BootstrapperTaskFactory to allow customization of the bootstrapper tasks for prism. Also added
     a lot of events to the BootstrapperBase to allow fine-grained control without having to derive a custom bootstrapper
 (+) CTL-113 Added untyped expression overload for PropertyHelper.GetPropertyName
