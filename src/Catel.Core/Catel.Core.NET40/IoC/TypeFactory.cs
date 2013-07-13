@@ -631,6 +631,8 @@ namespace Catel.IoC
 
         private class ConstructorCacheKey
         {
+            private readonly int _hashCode;
+
             #region Constructors
             public ConstructorCacheKey(Type type, object[] parameters)
             {
@@ -641,6 +643,7 @@ namespace Catel.IoC
                 }
 
                 Key = key;
+                _hashCode = Key.GetHashCode();
             }
             #endregion
 
@@ -667,7 +670,7 @@ namespace Catel.IoC
 
             public override int GetHashCode()
             {
-                return (Key != null ? Key.GetHashCode() : 0);
+                return _hashCode;
             }
             #endregion
         }

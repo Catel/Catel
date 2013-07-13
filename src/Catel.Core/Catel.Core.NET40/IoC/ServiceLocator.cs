@@ -79,13 +79,13 @@ namespace Catel.IoC
         #region Nested type: ServiceInfo
         private class ServiceInfo
         {
+            private int _hash;
+
             #region Constructors
             public ServiceInfo(Type type, object tag)
             {
                 Type = type;
                 Tag = tag;
-
-                Hash = HashHelper.CombineHash(type.GetHashCode(), tag != null ? tag.GetHashCode() : 0);
             }
             #endregion
 
@@ -94,7 +94,18 @@ namespace Catel.IoC
 
             public object Tag { get; private set; }
 
-            public int Hash { get; private set; }
+            public int Hash
+            {
+                get
+                {
+                    if (_hash == 0)
+                    {
+                        _hash = HashHelper.CombineHash(Type.GetHashCode(), Tag != null ? Tag.GetHashCode() : 0);
+                    }
+
+                    return _hash;
+                }
+            }
             #endregion
 
             #region Methods
@@ -570,7 +581,8 @@ namespace Catel.IoC
                 foreach (var type in types)
                 // ReSharper restore LoopCanBeConvertedToQuery
                 {
-                    values.Add(ResolveType(type));
+                    var resolvedType = ResolveType(type);
+                    values.Add(resolvedType);
                 }
 
                 return values.ToArray();
@@ -972,7 +984,7 @@ namespace Catel.IoC
                         object instance = externalContainerKeyValuePair.Value.ResolveType(externalContainerKeyValuePair.Key, serviceType);
 
                         if (registrationInfo.RegistrationType == RegistrationType.Singleton)
-                        {       
+                        {
                             RegisterInstance(serviceType, instance, tag, externalContainerKeyValuePair.Value);
                         }
                         else
