@@ -222,7 +222,7 @@ namespace Catel.Data.Repositories
         /// <param name="predicate">The predicate.</param>
         /// <returns>Enumerable of all matching entities.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="predicate" /> is <c>null</c>.</exception>
-        public virtual IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
+        public virtual IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
         {
             predicate = EnsureValidatePredicate(predicate);
 
@@ -235,9 +235,9 @@ namespace Catel.Data.Repositories
         /// Not that this method executes the default query returned by <see cref="GetQuery()" />/.
         /// </summary>
         /// <returns>Enumerable of all entities.</returns>
-        public virtual IEnumerable<TEntity> GetAll()
+        public virtual IQueryable<TEntity> GetAll()
         {
-            return GetQuery().AsEnumerable();
+            return GetQuery();
         }
 
         /// <summary>

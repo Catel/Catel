@@ -114,6 +114,9 @@
     <Compile Include="..\Catel.Extensions.EntityFramework5.NET40\Extensions\DbContextExtensions.generic.cs">
       <Link>Extensions\DbContextExtensions.generic.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.EntityFramework5.NET40\Extensions\QueryableExtensions.cs">
+      <Link>Extensions\QueryableExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Extensions.EntityFramework5.NET40\ModuleInitializer.cs">
       <Link>ModuleInitializer.cs</Link>
     </Compile>

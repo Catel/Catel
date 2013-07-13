@@ -110,7 +110,7 @@ namespace Catel.Data.Repositories
         /// <param name="predicate">The predicate.</param>
         /// <returns>Enumerable of all matching entities.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="predicate" /> is <c>null</c>.</exception>
-        IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
+        IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
 
         /// <summary>
         /// Gets all entities available in the repository.
@@ -118,7 +118,7 @@ namespace Catel.Data.Repositories
         /// Not that this method executes the default query returned by <see cref="GetQuery()" />/.
         /// </summary>
         /// <returns>Enumerable of all entities.</returns>
-        IEnumerable<TEntity> GetAll();
+        IQueryable<TEntity> GetAll();
 
         /// <summary>
         /// Counts entities with the specified criteria.

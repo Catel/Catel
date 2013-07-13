@@ -300,6 +300,9 @@
     <Compile Include="..\Catel.Test.NET40\Extensions\EntityFramework5\Extensions\DbContextExtensionsFacts.cs">
       <Link>Extensions\EntityFramework5\Extensions\DbContextExtensionsFacts.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\EntityFramework5\Extensions\QueryableExtensionsFacts.cs">
+      <Link>Extensions\EntityFramework5\Extensions\QueryableExtensionsFacts.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\Extensions\EntityFramework5\Helpers\EFTestHelper.cs">
       <Link>Extensions\EntityFramework5\Helpers\EFTestHelper.cs</Link>
     </Compile>

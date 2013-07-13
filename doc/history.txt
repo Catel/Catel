@@ -25,12 +25,14 @@ Release date:
 Added/fixed (BREAKING CHANGES):
 ===============================
 (*) Moved memento namespace to a separate extension (Catel.Extensions.Memento) to make the core more lightweight
+(*) IEntityRepository new returns an IQueryable instead of IEnumerable on retrieval methods
 
 Added/fixed:
 ============
 (+) CTL-6 Dependency injection is now supported in child view models. This makes it possible to combine both model
     injection with auto-completion from services registered in the ServiceLocator
 (+) CTL-7 Added support for empty cell in the StackGrid control
+(+) CTL-26 Added IQueryable<T>.Include extension so it is easier to include properties in an EF query
 (+) CTL-111 Added BootstrapperTaskFactory to allow customization of the bootstrapper tasks for prism. Also added
     a lot of events to the BootstrapperBase to allow fine-grained control without having to derive a custom bootstrapper
 (+) CTL-113 Added untyped expression overload for PropertyHelper.GetPropertyName
