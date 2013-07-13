@@ -144,6 +144,7 @@
     <Compile Include="Windows\Controls\RadioButtonEx.cs" />
     <Compile Include="Windows\Controls\RichToolTip.cs" />
     <Compile Include="Windows\Controls\ScrollViewerProperties.cs" />
+    <Compile Include="Windows\Controls\StackGrid\EmptyCell.cs" />
     <Compile Include="Windows\Controls\StackGrid\EmptyColumn.cs" />
     <Compile Include="Windows\Controls\StackGrid\EmptyRow.cs" />
     <Compile Include="Windows\Controls\StackGrid\StackGrid.cs" />

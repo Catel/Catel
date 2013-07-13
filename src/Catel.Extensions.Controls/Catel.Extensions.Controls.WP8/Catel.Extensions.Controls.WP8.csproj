@@ -113,6 +113,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.zh-CHS.resx</DependentUpon>
     </Compile>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\StackGrid\EmptyCell.cs">
+      <Link>Windows\Controls\StackGrid\EmptyCell.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\StackGrid\EmptyColumn.cs">
       <Link>Windows\Controls\StackGrid\EmptyColumn.cs</Link>
     </Compile>

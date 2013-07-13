@@ -37,8 +37,8 @@ namespace Catel.Windows.Controls
     ///   </StackGrid.RowDefinitions>
     /// 
     ///   <StackGrid.ColumnDefinitions>
-    ///		<ColumnDefinition Width="Auto" />
-    ///		<ColumnDefinition Width="*" />
+    ///	    <ColumnDefinition Width="Auto" />
+    ///	    <ColumnDefinition Width="*" />
     ///   </StackGrid.ColumnDefinitions>
     /// 
     ///   <!-- Name, will be set to row 0, column 1 and 2 -->
@@ -81,9 +81,6 @@ namespace Catel.Windows.Controls
 #endif
             }
         }
-        #endregion
-
-        #region Properties
         #endregion
 
         #region Method
