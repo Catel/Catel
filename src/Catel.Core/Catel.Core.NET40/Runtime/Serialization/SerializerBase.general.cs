@@ -21,8 +21,9 @@ namespace Catel.Runtime.Serialization
     //   - SerializeProperty => serializes a single property with option to customize, virtual
 
     /// <summary>
-    /// Base class for serializers that can serializer the <see cref="ModelBase"/>.
+    /// Base class for serializers that can serializer the <see cref="ModelBase" />.
     /// </summary>
+    /// <typeparam name="TSerializationContext">The type of the T serialization context.</typeparam>
     public abstract partial class SerializerBase<TSerializationContext> : IModelBaseSerializer<TSerializationContext>
         where TSerializationContext : class
     {
@@ -31,11 +32,24 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        /// <summary>
+        /// Determines whether the specified property on the specified model should be ignored by the serialization engine.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="property">The property.</param>
+        /// <returns><c>true</c> if the property should be ignored, <c>false</c> otherwise.</returns>
         protected virtual bool ShouldIgnoreProperty(ModelBase model, PropertyData property)
         {
             return false;
         }
 
+        /// <summary>
+        /// Gets the serializable properties for the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="propertiesToIgnore">The properties to ignore.</param>
+        /// <returns>The list of properties to serialize.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
         public virtual List<PropertyValue> GetSerializableProperties(ModelBase model, params string[] propertiesToIgnore)
         {
             Argument.IsNotNull("model", model);
@@ -43,11 +57,22 @@ namespace Catel.Runtime.Serialization
             return ConvertDictionaryToListAndExcludeNonSerializableObjects(model, propertiesToIgnore);
         }
 
+        /// <summary>
+        /// Converts the list to a dictionary.
+        /// </summary>
+        /// <param name="list">The list.</param>
+        /// <returns>Dictionary of property values.</returns>
         internal Dictionary<string, object> ConvertListToDictionary(IEnumerable<PropertyValue> list)
         {
             return ConvertListToDictionary(GetType(), list);
         }
 
+        /// <summary>
+        /// Converts the list to a dictionary.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="list">The list.</param>
+        /// <returns>Dictionary of property values.</returns>
         private static Dictionary<string, object> ConvertListToDictionary(Type type, IEnumerable<PropertyValue> list)
         {
             var result = new Dictionary<string, object>();
@@ -78,6 +103,12 @@ namespace Catel.Runtime.Serialization
             return result;
         }
 
+        /// <summary>
+        /// Converts the dictionary to list and exclude non serializable objects.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="propertiesToIgnore">The properties to ignore.</param>
+        /// <returns>List{PropertyValue}.</returns>
         private List<PropertyValue> ConvertDictionaryToListAndExcludeNonSerializableObjects(ModelBase model, params string[] propertiesToIgnore)
         {
             var propertiesToIgnoreHashSet = new HashSet<string>(propertiesToIgnore);
@@ -148,13 +179,32 @@ namespace Catel.Runtime.Serialization
             return listToSerialize;
         }
 
+        /// <summary>
+        /// Gets the context.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="context">The context.</param>
+        /// <returns>ISerializationContext{`0}.</returns>
         protected ISerializationContext<TSerializationContext> GetContext(ModelBase model, TSerializationContext context)
         {
             return new SerializationContext<TSerializationContext>(model, context);
         }
 
+        /// <summary>
+        /// Gets the context.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="stream">The stream.</param>
+        /// <returns>ISerializationContext{`0}.</returns>
         protected abstract ISerializationContext<TSerializationContext> GetContext(ModelBase model, Stream stream);
 
+        /// <summary>
+        /// Populates the model with the specified properties.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="properties">The properties.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>properties</c>.</exception>
         protected virtual void PopulateModel(ModelBase model, params PropertyValue[] properties)
         {
             Argument.IsNotNull("model", model);

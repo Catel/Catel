@@ -15,6 +15,11 @@ namespace Catel.Runtime.Serialization
     /// </summary>
     public class BinarySerializer : SerializerBase<SerializationInfo>, IBinarySerializer
     {
+        /// <summary>
+        /// Serializes the property.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="propertyValue">The property value.</param>
         protected override void SerializeProperty(ISerializationContext<SerializationInfo> context, PropertyValue propertyValue)
         {
             var serializationInfo = context.Context;
@@ -22,6 +27,12 @@ namespace Catel.Runtime.Serialization
             serializationInfo.AddValue(propertyValue.Name, propertyValue);
         }
 
+        /// <summary>
+        /// Deserializes the property.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="propertyValue">The property value.</param>
+        /// <returns>System.Object.</returns>
         protected override object DeserializeProperty(ISerializationContext<SerializationInfo> context, PropertyValue propertyValue)
         {
             var serializationInfo = context.Context;
@@ -30,6 +41,12 @@ namespace Catel.Runtime.Serialization
             return finalPropertyValue.Value;
         }
 
+        /// <summary>
+        /// Gets the context.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="stream">The stream.</param>
+        /// <returns>ISerializationContext{SerializationInfo}.</returns>
         protected override ISerializationContext<SerializationInfo> GetContext(ModelBase model, Stream stream)
         {
             var serializationInfo = new SerializationInfo(model.GetType(), new FormatterConverter());

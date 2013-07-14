@@ -15,6 +15,11 @@ namespace Catel.Runtime.Serialization
     /// </summary>
     public class XmlSerializer : SerializerBase<XElement>, IXmlSerializer
     {
+        /// <summary>
+        /// Serializes the property.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="propertyValue">The property value.</param>
         protected override void SerializeProperty(ISerializationContext<XElement> context, PropertyValue propertyValue)
         {
             var element = context.Context;
@@ -23,6 +28,12 @@ namespace Catel.Runtime.Serialization
             element.Add(childElement);
         }
 
+        /// <summary>
+        /// Deserializes the property.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="propertyValue">The property value.</param>
+        /// <returns>The deserialized property value.</returns>
         protected override object DeserializeProperty(ISerializationContext<XElement> context, PropertyValue propertyValue)
         {
             var element = context.Context;
@@ -30,6 +41,12 @@ namespace Catel.Runtime.Serialization
             return XmlHelper.ConvertToObject(element, propertyValue.PropertyData.Type, propertyValue.PropertyData.GetDefaultValue);
         }
 
+        /// <summary>
+        /// Gets the context.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="stream">The stream.</param>
+        /// <returns>The serialization context.</returns>
         protected override ISerializationContext<XElement> GetContext(ModelBase model, Stream stream)
         {
             var document = XDocument.Load(stream);
