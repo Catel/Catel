@@ -32,7 +32,10 @@ namespace Catel
 
             serviceLocator.RegisterTypeIfNotYetRegistered<IValidatorProvider, AttributeValidatorProvider>();
 
+#if NET
             serviceLocator.RegisterType<IBinarySerializer, BinarySerializer>();
+#endif
+
             serviceLocator.RegisterType<IXmlSerializer, XmlSerializer>();
         }
     }

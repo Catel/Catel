@@ -251,9 +251,6 @@
     <Compile Include="..\Catel.Core.NET40\Data\ModelBase.editableobject.cs">
       <Link>Data\ModelBase.editableobject.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\Data\ModelBase.serialization.binary.cs">
-      <Link>Data\ModelBase.serialization.binary.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\ModelBase.serialization.cs">
       <Link>Data\ModelBase.serialization.cs</Link>
     </Compile>
@@ -635,18 +632,6 @@
     <Compile Include="..\Catel.Core.NET40\Reflection\TypeInfo.cs">
       <Link>Reflection\TypeInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\BinarySerialization\Attributes\RedirectTypeAttribute.cs">
-      <Link>Runtime\Serialization\BinarySerialization\Attributes\RedirectTypeAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\BinarySerialization\BinarySerializer.cs">
-      <Link>Runtime\Serialization\BinarySerialization\BinarySerializer.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\BinarySerialization\Interfaces\IBinarySerializer.cs">
-      <Link>Runtime\Serialization\BinarySerialization\Interfaces\IBinarySerializer.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\BinarySerialization\RedirectDeserializationBinder.cs">
-      <Link>Runtime\Serialization\BinarySerialization\RedirectDeserializationBinder.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Interfaces\IModelBaseSerializer.cs">
       <Link>Runtime\Serialization\Interfaces\IModelBaseSerializer.cs</Link>
     </Compile>
@@ -674,14 +659,8 @@
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\Helpers\XmlHelper.cs">
       <Link>Runtime\Serialization\XmlSerialization\Helpers\XmlHelper.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\Helpers\XmlSchemaHelper.cs">
-      <Link>Runtime\Serialization\XmlSerialization\Helpers\XmlSchemaHelper.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\Interfaces\IXmlSerializer.cs">
       <Link>Runtime\Serialization\XmlSerialization\Interfaces\IXmlSerializer.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\XmlSchemaManager.cs">
-      <Link>Runtime\Serialization\XmlSerialization\XmlSchemaManager.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\XmlSerializer.cs">
       <Link>Runtime\Serialization\XmlSerialization\XmlSerializer.cs</Link>

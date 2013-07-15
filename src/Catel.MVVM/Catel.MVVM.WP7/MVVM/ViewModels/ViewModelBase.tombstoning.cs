@@ -8,6 +8,9 @@ namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using Catel.IoC;
+    using Catel.Runtime.Serialization;
     using Phone.Controls;
     using Logging;
 
@@ -105,7 +108,13 @@ namespace Catel.MVVM
         /// <returns>A byte array representing the data.</returns>
         internal byte[] SerializeForTombstoning()
         {
-            return SerializeProperties();
+            using (var memoryStream = new MemoryStream())
+            {
+                var xmlSerializer = ServiceLocator.ResolveType<IXmlSerializer>();
+                xmlSerializer.SerializeProperties(this, memoryStream);
+
+                return memoryStream.ToArray();
+            }
         }
 
         /// <summary>
@@ -116,16 +125,20 @@ namespace Catel.MVVM
         {
             try
             {
-                var propertyValues = DeserializeProperties(data);
-
-                LeanAndMeanModel = true;
-
-                foreach (var propertyValue in propertyValues)
+                using (var memoryStream = new MemoryStream(data))
                 {
-                    SetValue(propertyValue.Name, propertyValue.Value, false, false);
-                }
+                    var xmlSerializer = ServiceLocator.ResolveType<IXmlSerializer>();
+                    var propertyValues = xmlSerializer.DeserializeProperties(GetType(), memoryStream);
 
-                LeanAndMeanModel = false;
+                    LeanAndMeanModel = true;
+
+                    foreach (var propertyValue in propertyValues)
+                    {
+                        SetValue(propertyValue.Name, propertyValue.Value, false, false);
+                    }
+
+                    LeanAndMeanModel = false;
+                }
             }
             catch (Exception ex)
             {

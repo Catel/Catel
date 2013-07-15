@@ -14,13 +14,11 @@ namespace Catel.Data
 
     public partial class ModelBase
     {
-#if NET
         /// <summary>
         /// The <see cref="SerializationInfo"/> that is retrieved and will be used for deserialization.
         /// </summary>
         [field: NonSerialized]
         private readonly SerializationInfo _serializationInfo;
-#endif
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModelBase"/> class.

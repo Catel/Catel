@@ -14,6 +14,7 @@ namespace Catel.Runtime.Serialization
     /// </summary>
     public static class SerializationFactory
     {
+#if NET
         /// <summary>
         /// Gets the binary serializer.
         /// </summary>
@@ -22,6 +23,7 @@ namespace Catel.Runtime.Serialization
         {
             return ServiceLocator.Default.ResolveType<IBinarySerializer>();
         }
+#endif
 
         /// <summary>
         /// Gets the XML serializer.

@@ -1758,37 +1758,21 @@ namespace Catel.Data
         {
             try
             {
-#if NET
-                var stream = new MemoryStream();
-                var serializer = SerializationHelper.GetBinarySerializer(enableRedirects);
-
-                serializer.Serialize(stream, this);
-
-                stream.Position = 0L;
-
-                object clone = serializer.Deserialize(stream);
-
-                stream.Close();
-
-                return clone;
-#else
-                bool isDirty = IsDirty;
-
-                var clone = (ModelBase)Activator.CreateInstance(GetType());
-
-                byte[] data = SerializeProperties();
-
-                var propertyValues = DeserializeProperties(data);
-
-                foreach (var propertyValue in propertyValues)
+                using (var stream = new MemoryStream())
                 {
-                    var propertyData = GetPropertyData(propertyValue.Name);
-                    clone.SetValue(propertyData, propertyValue.Value, false, false);
-                }
-
-                clone.IsDirty = isDirty;
-                return clone;
+#if NET
+                    var serializer = SerializationFactory.GetXmlSerializer();
+#else
+                    var serializer = SerializationFactory.GetXmlSerializer();
 #endif
+
+                    serializer.Serialize(this, stream);
+
+                    stream.Position = 0L;
+
+                    object clone = serializer.Deserialize(GetType(), stream);
+                    return clone;
+                }                
             }
             catch (Exception ex)
             {

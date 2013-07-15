@@ -410,9 +410,6 @@
     <Compile Include="..\Catel.Test.NET40\Reflection\AppDomainExtensionsTest.cs">
       <Link>Reflection\AppDomainExtensionsTest.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Test.NET40\Reflection\AttributeHelperFacts.cs">
-      <Link>Reflection\AttributeHelperFacts.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Test.NET40\Reflection\PropertyHelperFacts.cs">
       <Link>Reflection\PropertyHelperFacts.cs</Link>
     </Compile>
@@ -436,9 +433,6 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Reflection\TypeHelperFacts.cs">
       <Link>Reflection\TypeHelperFacts.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\Attributes\RedirectTypeAttributeTest.cs">
-      <Link>Runtime\Serialization\Attributes\RedirectTypeAttributeTest.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\SerializationHelperTest.cs">
       <Link>Runtime\Serialization\SerializationHelperTest.cs</Link>
@@ -563,6 +557,7 @@
     <Folder Include="IoC\Extensions\" />
     <Folder Include="IoC\Helpers\" />
     <Folder Include="Logging\Extensions\" />
+    <Folder Include="Runtime\Serialization\Attributes\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
