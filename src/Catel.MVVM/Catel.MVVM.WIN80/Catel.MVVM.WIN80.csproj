@@ -656,12 +656,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\Images\" />
-    <Folder Include="Windows\Controls\InfoBarMessageControl\" />
-    <Folder Include="Windows\Interactivity\" />
     <Folder Include="Windows\Markup\" />
-    <Folder Include="Windows\Windows\DataWindow\" />
-    <Folder Include="Windows\Windows\Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Catel.MVVM.NET40\ClassDiagrams\ViewModelBase.cd">

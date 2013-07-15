@@ -849,10 +849,7 @@
     <Reference Include="System.Windows.Interactivity, Version=3.8.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Windows\Controls\InfoBarMessageControl\" />
     <Folder Include="Windows\Markup\" />
-    <Folder Include="Windows\Windows\DataWindow\" />
-    <Folder Include="Windows\Windows\Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\Catel.MVVM.NET40\Resources\Images\Error.png">

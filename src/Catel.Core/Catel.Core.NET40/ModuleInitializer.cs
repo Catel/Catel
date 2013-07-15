@@ -7,7 +7,7 @@
 namespace Catel
 {
     using Catel.Data;
-
+    using Catel.Runtime.Serialization;
     using ExceptionHandling;
     using IoC;
     using Messaging;
@@ -31,6 +31,9 @@ namespace Catel
             serviceLocator.RegisterInstance<IMessageMediator>(MessageMediator.Default);
 
             serviceLocator.RegisterTypeIfNotYetRegistered<IValidatorProvider, AttributeValidatorProvider>();
+
+            serviceLocator.RegisterType<IBinarySerializer, BinarySerializer>();
+            serviceLocator.RegisterType<IXmlSerializer, XmlSerializer>();
         }
     }
 }

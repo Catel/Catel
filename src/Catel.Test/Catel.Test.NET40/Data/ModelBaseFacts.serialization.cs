@@ -479,35 +479,35 @@ namespace Catel.Test.Data
                 public BinarySerializableObjectWithCustomCode(SerializationInfo info, StreamingContext context)
                     : base(info, context) { }
 
-                protected override object GetPropertyValueForSerialization(PropertyData property, object propertyValue)
-                {
-                    if (property == OnlySerializedDifferentlyProperty)
-                    {
-                        return string.Format("{0}_CUSTOMSERIALIZATION", propertyValue);
-                    }
+                //protected override object GetPropertyValueForSerialization(PropertyData property, object propertyValue)
+                //{
+                //    if (property == OnlySerializedDifferentlyProperty)
+                //    {
+                //        return string.Format("{0}_CUSTOMSERIALIZATION", propertyValue);
+                //    }
 
-                    if (property == CustomSerializationProperty)
-                    {
-                        return string.Format("{0}_CUSTOMSERIALIZATION", propertyValue);
-                    }
+                //    if (property == CustomSerializationProperty)
+                //    {
+                //        return string.Format("{0}_CUSTOMSERIALIZATION", propertyValue);
+                //    }
 
-                    return propertyValue;
-                }
+                //    return propertyValue;
+                //}
 
-                protected override object GetPropertyValueForDeserialization(PropertyData property, object serializedValue)
-                {
-                    if (property == OnlyDeserializedDifferentlyProperty)
-                    {
-                        return string.Format("{0}_CUSTOMDESERIALIZATION", serializedValue);
-                    }
+                //protected override object GetPropertyValueForDeserialization(PropertyData property, object serializedValue)
+                //{
+                //    if (property == OnlyDeserializedDifferentlyProperty)
+                //    {
+                //        return string.Format("{0}_CUSTOMDESERIALIZATION", serializedValue);
+                //    }
 
-                    if (property == CustomSerializationProperty)
-                    {
-                        return ((string)serializedValue).Replace("_CUSTOMSERIALIZATION", string.Empty);
-                    }
+                //    if (property == CustomSerializationProperty)
+                //    {
+                //        return ((string)serializedValue).Replace("_CUSTOMSERIALIZATION", string.Empty);
+                //    }
 
-                    return serializedValue;
-                }
+                //    return serializedValue;
+                //}
 
                 public string OnlySerializedDifferently
                 {
