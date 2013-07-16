@@ -11,6 +11,7 @@ namespace Catel.Runtime.Serialization
     using System.Collections.Generic;
     using System.IO;
     using System.Runtime.Serialization;
+    using Catel.IoC;
     using Data;
     using Logging;
 
@@ -55,52 +56,6 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("model", model);
 
             return ConvertDictionaryToListAndExcludeNonSerializableObjects(model, propertiesToIgnore);
-        }
-
-        /// <summary>
-        /// Converts the list to a dictionary.
-        /// </summary>
-        /// <param name="list">The list.</param>
-        /// <returns>Dictionary of property values.</returns>
-        internal Dictionary<string, object> ConvertListToDictionary(IEnumerable<PropertyValue> list)
-        {
-            return ConvertListToDictionary(GetType(), list);
-        }
-
-        /// <summary>
-        /// Converts the list to a dictionary.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        /// <param name="list">The list.</param>
-        /// <returns>Dictionary of property values.</returns>
-        private static Dictionary<string, object> ConvertListToDictionary(Type type, IEnumerable<PropertyValue> list)
-        {
-            var result = new Dictionary<string, object>();
-
-            var propertyDataManager = PropertyDataManager.Default;
-
-            foreach (var propertyValue in list)
-            {
-                if (propertyDataManager.IsPropertyRegistered(type, propertyValue.Name))
-                {
-#if NET
-                    if (propertyValue.Value != null)
-                    {
-                        var propertyValueAsIDeserializationCallback = propertyValue.Value as IDeserializationCallback;
-                        if ((propertyValueAsIDeserializationCallback != null) && (propertyValue.Value is ICollection))
-                        {
-                            // We are allowed to pass null, see remarks in OnDeserialization defined in this class
-                            propertyValueAsIDeserializationCallback.OnDeserialization(null);
-                        }
-                    }
-#endif
-
-                    // Store the value (since deserialized values always override default values)
-                    result[propertyValue.Name] = propertyValue.Value;
-                }
-            }
-
-            return result;
         }
 
         /// <summary>
@@ -151,14 +106,14 @@ namespace Catel.Runtime.Serialization
                 {
                     bool validCollection = true;
 
-                    foreach (var item in collection)
-                    {
-                        if ((item != null) && (item.GetType().GetCustomAttributes(typeof(SerializableAttribute), true).Length == 0))
-                        {
-                            validCollection = false;
-                            break;
-                        }
-                    }
+                    //foreach (var item in collection)
+                    //{
+                    //    if ((item != null) && (item.GetType().GetCustomAttributes(typeof(SerializableAttribute), true).Length == 0))
+                    //    {
+                    //        validCollection = false;
+                    //        break;
+                    //    }
+                    //}
 
                     if (!validCollection)
                     {
@@ -180,13 +135,56 @@ namespace Catel.Runtime.Serialization
         }
 
         /// <summary>
-        /// Gets the context.
+        /// Gets the context for the specified model type.
+        /// <para />
+        /// Use this method when no model instance is available. This method will create one.
+        /// </summary>
+        /// <param name="modelType">Type of the model.</param>
+        /// <param name="context">The context.</param>
+        /// <returns>The serialization context.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="modelType"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="context"/> is <c>null</c>.</exception>
+        protected ISerializationContext<TSerializationContext> GetContext(Type modelType, TSerializationContext context)
+        {
+            Argument.IsNotNull("modelType", modelType);
+            Argument.IsNotNull("context", context);
+
+            var model = (ModelBase)TypeFactory.Default.CreateInstance(modelType);
+            return GetContext(model, context);
+        }
+
+        /// <summary>
+        /// Gets the context for the specified model type.
+        /// <para />
+        /// Use this method when no model instance is available. This method will create one.
+        /// </summary>
+        /// <param name="modelType">Type of the model.</param>
+        /// <param name="stream">The stream.</param>
+        /// <returns>The serialization context.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="modelType"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="stream"/> is <c>null</c>.</exception>
+        protected ISerializationContext<TSerializationContext> GetContext(Type modelType, Stream stream)
+        {
+            Argument.IsNotNull("modelType", modelType);
+            Argument.IsNotNull("stream", stream);
+
+            var model = (ModelBase)TypeFactory.Default.CreateInstance(modelType);
+            return GetContext(model, stream);
+        }
+
+        /// <summary>
+        /// Gets the context for the specified model instance.
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="context">The context.</param>
-        /// <returns>ISerializationContext{`0}.</returns>
+        /// <returns>The serialization context.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="context"/> is <c>null</c>.</exception>
         protected ISerializationContext<TSerializationContext> GetContext(ModelBase model, TSerializationContext context)
         {
+            Argument.IsNotNull("model", model);
+            Argument.IsNotNull("context", context);
+
             return new SerializationContext<TSerializationContext>(model, context);
         }
 
@@ -195,8 +193,18 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="stream">The stream.</param>
-        /// <returns>ISerializationContext{`0}.</returns>
+        /// <returns>The serialization context.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="stream"/> is <c>null</c>.</exception>
         protected abstract ISerializationContext<TSerializationContext> GetContext(ModelBase model, Stream stream);
+
+        /// <summary>
+        /// Appends the serialization context to the specified stream. This way each serializer can handle the serialization
+        /// its own way and write the contents to the stream via this method.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="stream">The stream.</param>
+        protected abstract void AppendContextToStream(ISerializationContext<TSerializationContext> context, Stream stream);
 
         /// <summary>
         /// Populates the model with the specified properties.

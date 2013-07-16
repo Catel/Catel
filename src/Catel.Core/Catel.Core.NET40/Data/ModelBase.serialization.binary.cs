@@ -60,7 +60,7 @@ namespace Catel.Data
         [SecurityCritical]
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            var binarySerializer = ServiceLocator.Default.ResolveType<IBinarySerializer>();
+            var binarySerializer = SerializationFactory.GetBinarySerializer();
             binarySerializer.Serialize(this, info);
         }
 
@@ -75,7 +75,7 @@ namespace Catel.Data
 
             IsDeserializedDataAvailable = true;
 
-            var binarySerializer = ServiceLocator.Default.ResolveType<IBinarySerializer>();
+            var binarySerializer = SerializationFactory.GetBinarySerializer();
             binarySerializer.Deserialize(this, _serializationInfo);
 
             DeserializationSucceeded = true;

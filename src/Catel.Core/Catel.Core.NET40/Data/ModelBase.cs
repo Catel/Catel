@@ -1760,11 +1760,7 @@ namespace Catel.Data
             {
                 using (var stream = new MemoryStream())
                 {
-#if NET
                     var serializer = SerializationFactory.GetXmlSerializer();
-#else
-                    var serializer = SerializationFactory.GetXmlSerializer();
-#endif
 
                     serializer.Serialize(this, stream);
 

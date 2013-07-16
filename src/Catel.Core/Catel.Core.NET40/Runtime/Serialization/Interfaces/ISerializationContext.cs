@@ -6,6 +6,7 @@
 
 namespace Catel.Runtime.Serialization
 {
+    using System;
     using Data;
 
     /// <summary>
@@ -18,6 +19,12 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <value>The model.</value>
         ModelBase Model { get; }
+
+        /// <summary>
+        /// Gets the type of the model.
+        /// </summary>
+        /// <value>The type of the model.</value>
+        Type ModelType { get; }
     }
 
     /// <summary>

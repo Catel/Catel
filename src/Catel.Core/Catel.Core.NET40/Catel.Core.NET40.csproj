@@ -292,6 +292,7 @@
     <Compile Include="Runtime\Serialization\BinarySerialization\Interfaces\IBinarySerializer.cs" />
     <Compile Include="Runtime\Serialization\Interfaces\IModelBaseSerializer.cs" />
     <Compile Include="Runtime\Serialization\Interfaces\ISerializationContext.cs" />
+    <Compile Include="Runtime\Serialization\SerializationObject.cs" />
     <Compile Include="Runtime\Serialization\XmlSerialization\Interfaces\IXmlSerializer.cs" />
     <Compile Include="Runtime\Serialization\SerializationContext.cs" />
     <Compile Include="Runtime\Serialization\SerializationFactory.cs" />

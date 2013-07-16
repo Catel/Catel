@@ -308,7 +308,7 @@ namespace Catel.Reflection
                     catch (Exception ex)
                     {
                         Log.Warning(ex, "Failed to get types, '{0}' retries left", retryCount);
-                    }   
+                    }
                 }
 
                 return new Type[] { };
@@ -430,6 +430,11 @@ namespace Catel.Reflection
 
                 foreach (var type in typesToAdd)
                 {
+                    if (ShouldIgnoreType(type))
+                    {
+                        continue;
+                    }
+
                     var newAssemblyName = TypeHelper.GetAssemblyNameWithoutOverhead(type.GetAssemblyFullNameEx());
                     string newFullType = TypeHelper.FormatType(newAssemblyName, type.FullName);
                     if (!_typesWithAssembly.ContainsKey(newFullType))
@@ -443,6 +448,42 @@ namespace Catel.Reflection
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Determines whether the specified type must be ignored by the type cache.
+        /// </summary>
+        /// <param name="type">The type to check.</param>
+        /// <returns><c>true</c> if the type should be ignored, <c>false</c> otherwise.</returns>
+        private static bool ShouldIgnoreType(Type type)
+        {
+            if (type == null)
+            {
+                return true;
+            }
+
+            var typeName = type.FullName;
+
+            // Ignore useless types
+            if (typeName.Contains("<PrivateImplementationDetails>") ||
+                typeName.Contains("<>f__AnonymousType") ||
+                typeName.Contains("__DynamicallyInvokableAttribute") ||
+                typeName.Contains("ProcessedByFody") ||
+                typeName.Contains("FXAssembly") ||
+                typeName.Contains("ThisAssembly") ||
+                typeName.Contains("AssemblyRef"))
+            {
+                return true;
+            }
+
+            // Ignore types that might cause a security exception
+            if (typeName.Contains("System.Data.Metadata.Edm.") ||
+                typeName.Contains("System.Data.EntityModel.SchemaObjectModel."))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

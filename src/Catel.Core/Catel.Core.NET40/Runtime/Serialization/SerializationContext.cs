@@ -30,6 +30,7 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("context", context);
 
             Model = model;
+            ModelType = model.GetType();
             Context = context;
         }
 
@@ -38,6 +39,12 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <value>The model.</value>
         public ModelBase Model { get; private set; }
+
+        /// <summary>
+        /// Gets the type of the model.
+        /// </summary>
+        /// <value>The type of the model.</value>
+        public Type ModelType { get; private set; }
 
         /// <summary>
         /// Gets the context.

@@ -60,7 +60,6 @@ namespace Catel.Runtime.Serialization
             string xmlName = element.Name.LocalName;
             var dataContractSerializer = SerializationHelper.GetDataContractSerializer(typeof(object), objectType, xmlName);
 
-            //string attributeValue = element.GetAttribute("type", "http://catel.codeplex.com");
             var attribute = element.Attribute(XName.Get("type", "http://catel.codeplex.com"));
             if (attribute != null)
             {

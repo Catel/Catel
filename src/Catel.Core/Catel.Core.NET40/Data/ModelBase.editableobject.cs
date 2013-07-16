@@ -91,12 +91,7 @@ namespace Catel.Data
                                               where !propertyData.Value.IncludeInBackup
                                               select propertyData.Value.Name).ToArray();
 
-#if NET
-                    var serializer = SerializationFactory.GetBinarySerializer();
-#else
                     var serializer = SerializationFactory.GetXmlSerializer();
-#endif
-
                     serializer.SerializeProperties(_object, stream, propertiesToIgnore);
 
                     _propertyValuesBackup = stream.ToByteArray();
@@ -117,18 +112,14 @@ namespace Catel.Data
                 {
                     try
                     {
-#if NET
-                        var serializer = SerializationFactory.GetBinarySerializer();
-#else
                         var serializer = SerializationFactory.GetXmlSerializer();
-#endif
-
                         var properties = serializer.DeserializeProperties(_object.GetType(), stream);
+
                         oldPropertyValues = properties.ToDictionary(property => property.Name, property => property.Value);
                     }
                     catch (Exception ex)
                     {
-                        Log.Error(ex, "Failed to deserialize the data for backup, which is weird. However, for Silverlight, WP7 and WinRT there is no other option");
+                        Log.Error(ex, "Failed to deserialize the data for backup, which is weird. However, for Silverlight, Windows Phone and Windows 8 there is no other option");
                     }
                 }
 

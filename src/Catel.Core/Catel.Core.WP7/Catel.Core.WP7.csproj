@@ -631,6 +631,9 @@
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializationFactory.cs">
       <Link>Runtime\Serialization\SerializationFactory.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializationObject.cs">
+      <Link>Runtime\Serialization\SerializationObject.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializerBase.deserialization.cs">
       <Link>Runtime\Serialization\SerializerBase.deserialization.cs</Link>
     </Compile>

@@ -290,19 +290,8 @@ namespace Catel.Data
                 case SerializationMode.Binary:
                     try
                     {
-                        BinaryFormatter binaryFormatter = SerializationHelper.GetBinarySerializer(enableRedirects);
-
-                        Log.Debug("Resetting stream position to 0");
-
-                        stream.Position = 0L;
-
-                        Log.Debug("Resetted stream position to 0");
-
-                        Log.Debug("Deserializing binary stream for type '{0}'", typeof(T).Name);
-
-                        result = binaryFormatter.Deserialize(stream);
-
-                        Log.Debug("Deserialized binary stream");
+                        var binarySerializer = SerializationFactory.GetBinarySerializer();
+                        result = binarySerializer.Deserialize(typeof (T), stream);
                     }
                     catch (Exception ex)
                     {
@@ -313,20 +302,15 @@ namespace Catel.Data
 #endif
 
                 case SerializationMode.Xml:
-                    using (var xmlReader = XmlReader.Create(stream))
+                    try
                     {
-#if NET
-                        result = Activator.CreateInstance(typeof(T), true);
-#elif NETFX_CORE || PCL
-                        result = Activator.CreateInstance(typeof(T), true);
-#else
-                        result = typeof(T).InvokeMember(null, BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.CreateInstance, null, null, new object[] { });
-#endif
-
-                        var xmlSerializable = (IXmlSerializable)result;
-                        xmlSerializable.ReadXml(xmlReader);
+                        var xmlSerializer = SerializationFactory.GetXmlSerializer();
+                        result = xmlSerializer.Deserialize(typeof(T), stream);
                     }
-
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, "Failed to deserialize the binary object");
+                    }
                     break;
             }
 

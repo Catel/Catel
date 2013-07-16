@@ -28,6 +28,8 @@ namespace Catel.Runtime.Serialization
             var context = GetContext(model, stream);
 
             Serialize(model, context.Context);
+
+            AppendContextToStream(context, stream);
         }
 
         /// <summary>
@@ -70,6 +72,8 @@ namespace Catel.Runtime.Serialization
             var context = GetContext(model, stream);
 
             SerializeProperties(context, properties);
+
+            AppendContextToStream(context, stream);
         }
         #endregion
 

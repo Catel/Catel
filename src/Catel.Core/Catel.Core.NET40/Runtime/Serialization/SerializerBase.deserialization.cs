@@ -39,8 +39,8 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="propertyValue">The property value.</param>
-        /// <returns>The deserialized property value.</returns>
-        protected abstract object DeserializeProperty(ISerializationContext<TSerializationContext> context, PropertyValue propertyValue);
+        /// <returns>The <see cref="SerializationObject"/> representing the deserialized value or result.</returns>
+        protected abstract SerializationObject DeserializeProperty(ISerializationContext<TSerializationContext> context, PropertyValue propertyValue);
 
         /// <summary>
         /// Called after the serializer has deserialized a specific property.
@@ -92,6 +92,8 @@ namespace Catel.Runtime.Serialization
             DeserializeProperties(finalContext);
 
             AfterSerialization(finalContext);
+
+            model.FinishDeserialization();
         }
 
         /// <summary>
@@ -105,7 +107,7 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("stream", stream);
 
-            var context = GetContext(null, stream);
+            var context = GetContext(modelType, stream);
 
             return Deserialize(modelType, context.Context);
         }
@@ -139,7 +141,7 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("stream", stream);
 
-            var context = GetContext(null, stream);
+            var context = GetContext(modelType, stream);
 
             return DeserializeProperties(modelType, context.Context);
         }
@@ -155,8 +157,7 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("context", serializedContext);
 
-            var model = (ModelBase) TypeFactory.Default.CreateInstance(modelType);
-            var finalContext = GetContext(model, serializedContext);
+            var finalContext = GetContext(modelType, serializedContext);
 
             return DeserializeProperties(finalContext);
         }
@@ -175,13 +176,16 @@ namespace Catel.Runtime.Serialization
             {
                 BeforeDeserializeProperty(context, property);
 
-                var deserializedPropertyValue = DeserializeProperty(context, property);
-                var propertyValue = new PropertyValue(property.PropertyData, property.Name, deserializedPropertyValue);
-                deserializedPropertyValues.Add(propertyValue);
+                var serializationObject = DeserializeProperty(context, property);
+                if (serializationObject.IsSuccessful)
+                {
+                    var propertyValue = new PropertyValue(property.PropertyData, property.Name, serializationObject.PropertyValue);
+                    deserializedPropertyValues.Add(propertyValue);
 
-                PopulateModel(context.Model, propertyValue);
+                    AfterDeserializeProperty(context, property);
 
-                AfterDeserializeProperty(context, property);
+                    PopulateModel(context.Model, propertyValue);
+                }
             }
 
             return deserializedPropertyValues;

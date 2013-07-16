@@ -517,7 +517,7 @@ namespace Catel.Runtime.Serialization
                     //
                     // This is huge performance hit, but it's the cost for dynamic easy on-the-fly serialization in WPF and Silverlight. Luckily
                     // we already implemented caching.
-                    var typesDerivingFromInterface = TypeCache.GetTypes(t => t.IsAssignableFromEx(type));
+                    var typesDerivingFromInterface = TypeCache.GetTypes(t => t.ImplementsInterfaceEx(type));
                     foreach (var typeDerivingFromInterface in typesDerivingFromInterface)
                     {
                         if (typeDerivingFromInterface != type)
