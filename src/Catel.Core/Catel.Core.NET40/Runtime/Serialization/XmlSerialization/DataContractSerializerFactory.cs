@@ -137,20 +137,14 @@ namespace Catel.Runtime.Serialization
 
             Type objectType = obj.GetType();
 
-            if (!ShouldTypeBeHandled(objectType, serializerTypeInfo))
+            if (ShouldTypeBeIgnored(objectType, serializerTypeInfo))
             {
                 return;
             }
-
-            Log.Debug("Getting known types for instance of '{0}'", objectType.GetSafeFullName());
 
             GetKnownTypes(objectType, serializerTypeInfo);
 
-            if (objectType.FullName == null)
-            {
-                serializerTypeInfo.AddTypeAsHandled(objectType);
-                return;
-            }
+            // Note: the code below is specific for instants of objects, cannot be moved to the GetKnownTypes
 
             if (objectType == typeof(List<KeyValuePair<string, object>>))
             {
@@ -179,44 +173,6 @@ namespace Catel.Runtime.Serialization
                     }
                 }
             }
-
-            // Generic collections are special in Silverlight and WP7 (WHY?!)
-            else if (serializerTypeInfo.IsSpecialCollectionType(objectType) && !objectType.IsInterfaceEx())
-            {
-                AddTypeToKnownTypesIfSerializable(objectType, serializerTypeInfo);
-            }
-            else if (!objectType.GetSafeFullName().StartsWith("System."))
-            {
-                bool allowNonPublicReflection = AllowNonPublicReflection(objectType);
-
-                var fields = objectType.GetFieldsEx(BindingFlagsHelper.GetFinalBindingFlags(false, false, allowNonPublicReflection));
-                foreach (var field in fields)
-                {
-                    try
-                    {
-                        object value = field.GetValue(obj);
-                        GetKnownTypes(value == null ? field.FieldType : value.GetType(), serializerTypeInfo);
-                    }
-                    catch (Exception)
-                    {
-                        Log.Warning("Failed to get value for field '{0}' of type '{1}'", field.Name, objectType.GetSafeFullName());
-                    }
-                }
-
-                var properties = objectType.GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(false, false, allowNonPublicReflection));
-                foreach (var property in properties)
-                {
-                    try
-                    {
-                        object value = property.GetValue(obj, null);
-                        GetKnownTypes(value == null ? property.PropertyType : value.GetType(), serializerTypeInfo);
-                    }
-                    catch (Exception)
-                    {
-                        Log.Warning("Failed to get value for property '{0}' of type '{1}'", property.Name, objectType.GetSafeFullName());
-                    }
-                }
-            }
         }
 
         /// <summary>
@@ -227,7 +183,7 @@ namespace Catel.Runtime.Serialization
         /// <returns>Array of <see cref="Type"/> that are found in the object type.</returns>
         protected virtual void GetKnownTypes(Type type, XmlSerializerTypeInfo serializerTypeInfo)
         {
-            if (!ShouldTypeBeHandled(type, serializerTypeInfo))
+            if (ShouldTypeBeIgnored(type, serializerTypeInfo))
             {
                 return;
             }
@@ -291,57 +247,7 @@ namespace Catel.Runtime.Serialization
                 serializerTypeInfo.AddTypeAsHandled(type);
             }
 
-            var isModelBase = (type == typeof (ModelBase)) || typeof (ModelBase).IsAssignableFromEx(type);
-            if (isModelBase)
-            {
-                var modelBaseProperties = PropertyDataManager.Default.GetProperties(type);
-                foreach (var modelBaseProperty in modelBaseProperties)
-                {
-                    var propertyType = modelBaseProperty.Value.Type;
-                    if (propertyType.FullName != null)
-                    {
-                        GetKnownTypes(propertyType, serializerTypeInfo);
-                    }
-                    else
-                    {
-                        serializerTypeInfo.AddTypeAsHandled(propertyType);
-                    }
-                }
-            }
-            else
-            {
-                bool allowNonPublicReflection = AllowNonPublicReflection(type);
-                
-                // Fields
-                var fields = type.GetFieldsEx(BindingFlagsHelper.GetFinalBindingFlags(false, false, allowNonPublicReflection));
-                foreach (var field in fields)
-                {
-                    var fieldType = field.FieldType;
-                    if (fieldType.FullName != null)
-                    {
-                        GetKnownTypes(fieldType, serializerTypeInfo);
-                    }
-                    else
-                    {
-                        serializerTypeInfo.AddTypeAsHandled(fieldType);
-                    }
-                }
-
-                // Properties
-                var properties = type.GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(false, false, allowNonPublicReflection));
-                foreach (var property in properties)
-                {
-                    var propertyType = property.PropertyType;
-                    if (propertyType.FullName != null)
-                    {
-                        GetKnownTypes(propertyType, serializerTypeInfo);
-                    }
-                    else
-                    {
-                        serializerTypeInfo.AddTypeAsHandled(propertyType);
-                    }
-                }
-            }
+            AddTypeMembers(type, serializerTypeInfo);
 
             // If this isn't the base type, check that as well
             var baseType = type.GetBaseTypeEx();
@@ -380,24 +286,79 @@ namespace Catel.Runtime.Serialization
             }
         }
 
+        private void AddTypeMembers(Type type, XmlSerializerTypeInfo serializerTypeInfo)
+        {
+            var isModelBase = (type == typeof(ModelBase)) || typeof(ModelBase).IsAssignableFromEx(type);
+            if (isModelBase)
+            {
+                var modelBaseProperties = PropertyDataManager.Default.GetProperties(type);
+                foreach (var modelBaseProperty in modelBaseProperties)
+                {
+                    var propertyType = modelBaseProperty.Value.Type;
+                    if (propertyType.FullName != null)
+                    {
+                        GetKnownTypes(propertyType, serializerTypeInfo);
+                    }
+                    else
+                    {
+                        serializerTypeInfo.AddTypeAsHandled(propertyType);
+                    }
+                }
+            }
+            else
+            {
+                bool allowNonPublicReflection = AllowNonPublicReflection(type);
+
+                // Fields
+                var fields = type.GetFieldsEx(BindingFlagsHelper.GetFinalBindingFlags(false, false, allowNonPublicReflection));
+                foreach (var field in fields)
+                {
+                    var fieldType = field.FieldType;
+                    if (fieldType.FullName != null)
+                    {
+                        GetKnownTypes(fieldType, serializerTypeInfo);
+                    }
+                    else
+                    {
+                        serializerTypeInfo.AddTypeAsHandled(fieldType);
+                    }
+                }
+
+                // Properties
+                var properties = type.GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(false, false, allowNonPublicReflection));
+                foreach (var property in properties)
+                {
+                    var propertyType = property.PropertyType;
+                    if (propertyType.FullName != null)
+                    {
+                        GetKnownTypes(propertyType, serializerTypeInfo);
+                    }
+                    else
+                    {
+                        serializerTypeInfo.AddTypeAsHandled(propertyType);
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Determines whether the type should be handled.
         /// </summary>
         /// <param name="type">The type.</param>
         /// <param name="serializerTypeInfo">The serializer type info.</param>
         /// <returns><c>true</c> if the type should be handled; otherwise, <c>false</c>.</returns>
-        protected virtual bool ShouldTypeBeHandled(Type type, XmlSerializerTypeInfo serializerTypeInfo)
+        protected virtual bool ShouldTypeBeIgnored(Type type, XmlSerializerTypeInfo serializerTypeInfo)
         {
             if (type == null)
             {
-                return false;
+                return true;
             }
 
             // Note, although resharper says this isn't possible, it might be
             if (type.FullName == null)
             {
                 serializerTypeInfo.AddTypeAsHandled(type);
-                return false;
+                return true;
             }
 
             // Ignore non-generic .NET
@@ -405,10 +366,10 @@ namespace Catel.Runtime.Serialization
             {
                 // Log.Debug("Non-generic .NET system type, can be ignored");
                 serializerTypeInfo.AddTypeAsHandled(type);
-                return false;
+                return true;
             }
 
-            return !serializerTypeInfo.ContainsKnownType(type) && !serializerTypeInfo.IsTypeAlreadyHandled(type);
+            return serializerTypeInfo.ContainsKnownType(type) || serializerTypeInfo.IsTypeAlreadyHandled(type);
         }
 
         /// <summary>
