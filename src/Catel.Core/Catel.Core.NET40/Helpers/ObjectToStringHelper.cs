@@ -63,6 +63,12 @@ namespace Catel
                 return "null";
             }
 
+            var instanceAsType = instance as Type;
+            if (instanceAsType != null)
+            {
+                return instanceAsType.Name;
+            }
+
             return instance.GetType().Name;
         }
     }

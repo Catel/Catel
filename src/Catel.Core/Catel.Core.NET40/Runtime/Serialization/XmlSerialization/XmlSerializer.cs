@@ -12,19 +12,40 @@ namespace Catel.Runtime.Serialization
     using System.Text;
     using System.Xml;
     using System.Xml.Linq;
+    using Catel.Data;
     using Catel.Logging;
-    using Data;
 
     /// <summary>
     /// The xml serializer to serialize the <see cref="ModelBase"/> and derived classes.
     /// </summary>
     public class XmlSerializer : SerializerBase<XElement>, IXmlSerializer
     {
+        #region Constants
         /// <summary>
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        #endregion
 
+        #region Fields
+        private readonly IDataContractSerializerFactory _dataContractSerializerFactory;
+        #endregion
+
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlSerializer" /> class.
+        /// </summary>
+        /// <param name="dataContractSerializerFactory">The data contract serializer factory.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="dataContractSerializerFactory"/> is <c>null</c>.</exception>
+        public XmlSerializer(IDataContractSerializerFactory dataContractSerializerFactory)
+        {
+            Argument.IsNotNull(() => dataContractSerializerFactory);
+
+            _dataContractSerializerFactory = dataContractSerializerFactory;
+        }
+        #endregion
+
+        #region Methods
         /// <summary>
         /// Serializes the property.
         /// </summary>
@@ -65,12 +86,13 @@ namespace Catel.Runtime.Serialization
             var propertyDataManager = PropertyDataManager.Default;
             if (propertyDataManager.IsPropertyNameMappedToXmlAttribute(modelType, propertyValue.Name))
             {
-                Log.Debug("Deserializing property {0}.{1} as xml attribute", modelType.FullName, propertyValue.Name);
+                var mappedPropertyName = propertyDataManager.MapPropertyNameToXmlAttributeName(modelType, propertyValue.Name);
+
+                Log.Debug("Deserializing property {0}.{1} as xml attribute '{2}'", modelType.FullName, propertyValue.Name, mappedPropertyName);
 
                 foreach (var childAttribute in element.Attributes())
                 {
-                    var mappedPropertyName = propertyDataManager.MapXmlAttributeNameToPropertyName(modelType, childAttribute.Name.LocalName);
-                    if (string.Equals(mappedPropertyName, propertyValue.Name))
+                    if (string.Equals(mappedPropertyName, childAttribute.Name.LocalName))
                     {
                         var value = GetObjectFromXmlAttribute(childAttribute, propertyValue.PropertyData);
                         return SerializationObject.SucceededToDeserialize(modelType, propertyValue.Name, value);
@@ -80,12 +102,13 @@ namespace Catel.Runtime.Serialization
 
             if (propertyDataManager.IsPropertyNameMappedToXmlElement(modelType, propertyValue.Name))
             {
-                Log.Debug("Deserializing property {0}.{1} as xml element", modelType.FullName, propertyValue.Name);
+                var mappedPropertyName = propertyDataManager.MapPropertyNameToXmlElementName(modelType, propertyValue.Name);
+
+                Log.Debug("Deserializing property {0}.{1} as xml element '{2}'", modelType.FullName, propertyValue.Name, mappedPropertyName);
 
                 foreach (var childElement in element.Elements())
                 {
-                    var mappedPropertyName = propertyDataManager.MapXmlElementNameToPropertyName(modelType, childElement.Name.LocalName);
-                    if (string.Equals(mappedPropertyName, propertyValue.Name))
+                    if (string.Equals(mappedPropertyName, childElement.Name.LocalName))
                     {
                         var value = GetObjectFromXmlElement(childElement, propertyValue, modelType);
                         return SerializationObject.SucceededToDeserialize(modelType, propertyValue.Name, value);
@@ -113,8 +136,9 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="stream">The stream.</param>
+        /// <param name="contextMode">The context mode.</param>
         /// <returns>The serialization context.</returns>
-        protected override ISerializationContext<XElement> GetContext(ModelBase model, Stream stream)
+        protected override ISerializationContext<XElement> GetContext(ModelBase model, Stream stream, SerializationContextMode contextMode)
         {
             XDocument document = null;
 
@@ -136,7 +160,7 @@ namespace Catel.Runtime.Serialization
                 document = new XDocument(new XElement(rootName));
             }
 
-            return new SerializationContext<XElement>(model, document.Root);
+            return new SerializationContext<XElement>(model, document.Root, contextMode);
         }
 
         /// <summary>
@@ -177,23 +201,22 @@ namespace Catel.Runtime.Serialization
             {
                 var propertyTypeToDeserialize = propertyValue.PropertyData.Type;
 
-                var serializer = SerializationHelper.GetDataContractSerializer(modelType, propertyTypeToDeserialize, xmlName);
+                var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, propertyTypeToDeserialize, xmlName);
 
                 // TODO: check for null attribute?
-
-                var attribute = element.Attribute("type"); //.GetAttribute("type", "http://catel.codeplex.com");
+                var attribute = element.Attribute("type"); // .GetAttribute("type", "http://catel.codeplex.com");
                 var attributeValue = (attribute != null) ? attribute.Value : null;
                 if (!string.IsNullOrEmpty(attributeValue))
                 {
-                    Log.Debug("Property type for property '{0}' is '{1}' but found type info that it should be deserialized as '{2}'",
-                        propertyValue.Name, propertyValue.PropertyData.Type.FullName, attributeValue);
+                    Log.Debug("Property type for property '{0}' is '{1}' but found type info that it should be deserialized as '{2}'", 
+                              propertyValue.Name, propertyValue.PropertyData.Type.FullName, attributeValue);
 
                     var actualTypeToDeserialize = (from t in serializer.KnownTypes
                                                    where t.FullName == attributeValue
                                                    select t).FirstOrDefault();
                     if (actualTypeToDeserialize != null)
                     {
-                        serializer = SerializationHelper.GetDataContractSerializer(modelType, actualTypeToDeserialize, xmlName);
+                        serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, actualTypeToDeserialize, xmlName);
                     }
                     else
                     {
@@ -253,7 +276,7 @@ namespace Catel.Runtime.Serialization
             var propertyType = propertyValue.PropertyData.Type;
             var propertyTypeToSerialize = propertyValue.Value.GetType();
 
-            var serializer = SerializationHelper.GetDataContractSerializer(modelType, propertyTypeToSerialize, elementName, propertyValue.Value);
+            var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, propertyTypeToSerialize, elementName, propertyValue.Value);
 
             var stringBuilder = new StringBuilder();
             var xmlWriterSettings = new XmlWriterSettings();
@@ -262,7 +285,7 @@ namespace Catel.Runtime.Serialization
             {
                 if (propertyType != propertyTypeToSerialize)
                 {
-                    Log.Debug("Property type for property '{0}' is '{1}' but registered as '{2}', adding type info for deserialization",
+                    Log.Debug("Property type for property '{0}' is '{1}' but registered as '{2}', adding type info for deserialization", 
                               propertyValue.Name, propertyTypeToSerialize.FullName, propertyType.FullName);
 
                     serializer.WriteStartObject(xmlWriter, propertyValue.Value);
@@ -282,13 +305,25 @@ namespace Catel.Runtime.Serialization
             string ns1 = element.GetPrefixOfNamespace("http://catel.codeplex.com");
             if (ns1 == null)
             {
-                //element.Add(XNamespace.Get("http://catel.codeplex.com"));
-                //element.P.WriteAttributeString("xmlns", "ctl", null, "http://catel.codeplex.com");
+                var document = element.Document;
+                if (document != null)
+                {
+                    var documentRoot = document.Root;
+                    if (documentRoot != null)
+                    {
+                        var catelNamespaceName = XNamespace.Xmlns + "ctl";
+                        var catelNamespaceUrl = "http://catel.codeplex.com";
+                        var catelNamespace = new XAttribute(catelNamespaceName, catelNamespaceUrl);
+
+                        documentRoot.Add(catelNamespace);
+                    }
+                }
             }
 
             var childContent = stringBuilder.ToString();
             var childElement = XElement.Parse(childContent);
             element.Add(childElement);
         }
+        #endregion
     }
 }

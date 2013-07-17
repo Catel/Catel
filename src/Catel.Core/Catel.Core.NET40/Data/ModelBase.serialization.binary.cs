@@ -61,7 +61,9 @@ namespace Catel.Data
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             var binarySerializer = SerializationFactory.GetBinarySerializer();
-            binarySerializer.Serialize(this, info);
+            var binarySerializationContext = new BinarySerializationContextInfo(info);
+
+            binarySerializer.Serialize(this, binarySerializationContext);
         }
 
         /// <summary>
@@ -76,7 +78,9 @@ namespace Catel.Data
             IsDeserializedDataAvailable = true;
 
             var binarySerializer = SerializationFactory.GetBinarySerializer();
-            binarySerializer.Deserialize(this, _serializationInfo);
+            var binarySerializationContext = new BinarySerializationContextInfo(_serializationInfo);
+
+            binarySerializer.Deserialize(this, binarySerializationContext);
 
             DeserializationSucceeded = true;
         }

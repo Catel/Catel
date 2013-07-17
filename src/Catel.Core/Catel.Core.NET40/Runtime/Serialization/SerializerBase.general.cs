@@ -141,16 +141,17 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="modelType">Type of the model.</param>
         /// <param name="context">The context.</param>
+        /// <param name="contextMode">The context mode.</param>
         /// <returns>The serialization context.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="modelType"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="context"/> is <c>null</c>.</exception>
-        protected ISerializationContext<TSerializationContext> GetContext(Type modelType, TSerializationContext context)
+        /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="context" /> is <c>null</c>.</exception>
+        protected ISerializationContext<TSerializationContext> GetContext(Type modelType, TSerializationContext context, SerializationContextMode contextMode)
         {
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("context", context);
 
             var model = (ModelBase)TypeFactory.Default.CreateInstance(modelType);
-            return GetContext(model, context);
+            return GetContext(model, context, contextMode);
         }
 
         /// <summary>
@@ -160,16 +161,17 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="modelType">Type of the model.</param>
         /// <param name="stream">The stream.</param>
+        /// <param name="contextMode">The context mode.</param>
         /// <returns>The serialization context.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="modelType"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="stream"/> is <c>null</c>.</exception>
-        protected ISerializationContext<TSerializationContext> GetContext(Type modelType, Stream stream)
+        /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="stream" /> is <c>null</c>.</exception>
+        protected ISerializationContext<TSerializationContext> GetContext(Type modelType, Stream stream, SerializationContextMode contextMode)
         {
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("stream", stream);
 
             var model = (ModelBase)TypeFactory.Default.CreateInstance(modelType);
-            return GetContext(model, stream);
+            return GetContext(model, stream, contextMode);
         }
 
         /// <summary>
@@ -177,15 +179,16 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="context">The context.</param>
+        /// <param name="contextMode">The context mode.</param>
         /// <returns>The serialization context.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="context"/> is <c>null</c>.</exception>
-        protected ISerializationContext<TSerializationContext> GetContext(ModelBase model, TSerializationContext context)
+        /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="context" /> is <c>null</c>.</exception>
+        protected virtual ISerializationContext<TSerializationContext> GetContext(ModelBase model, TSerializationContext context, SerializationContextMode contextMode)
         {
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("context", context);
 
-            return new SerializationContext<TSerializationContext>(model, context);
+            return new SerializationContext<TSerializationContext>(model, context, contextMode);
         }
 
         /// <summary>
@@ -193,10 +196,11 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="stream">The stream.</param>
+        /// <param name="contextMode">The context mode.</param>
         /// <returns>The serialization context.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="stream"/> is <c>null</c>.</exception>
-        protected abstract ISerializationContext<TSerializationContext> GetContext(ModelBase model, Stream stream);
+        /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="stream" /> is <c>null</c>.</exception>
+        protected abstract ISerializationContext<TSerializationContext> GetContext(ModelBase model, Stream stream, SerializationContextMode contextMode);
 
         /// <summary>
         /// Appends the serialization context to the specified stream. This way each serializer can handle the serialization

@@ -18,15 +18,12 @@ namespace Catel.Data
 
 #if NET
     using System.Runtime.Serialization;
-    using System.Runtime.Serialization.Formatters.Binary;
 #elif NETFX_CORE
     using Windows.Storage.Streams;
-    using Runtime.Serialization;
 #elif PCL
     // Not supported in Portable Class Library
 #else
     using System.IO.IsolatedStorage;
-    using Runtime.Serialization;
 #endif
 
     /// <summary>

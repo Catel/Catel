@@ -552,11 +552,20 @@
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializerBase.serialization.cs">
       <Link>Runtime\Serialization\SerializerBase.serialization.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\Helpers\SerializationHelper.cs">
-      <Link>Runtime\Serialization\XmlSerialization\Helpers\SerializationHelper.cs</Link>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\DataContractNameResolver.cs">
+      <Link>Runtime\Serialization\XmlSerialization\DataContractNameResolver.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\DataContractSerializerFactory.cs">
+      <Link>Runtime\Serialization\XmlSerialization\DataContractSerializerFactory.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\Helpers\XmlHelper.cs">
       <Link>Runtime\Serialization\XmlSerialization\Helpers\XmlHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\Interfaces\IDataContractNameResolver.cs">
+      <Link>Runtime\Serialization\XmlSerialization\Interfaces\IDataContractNameResolver.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\Interfaces\IDataContractSerializerFactory.cs">
+      <Link>Runtime\Serialization\XmlSerialization\Interfaces\IDataContractSerializerFactory.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\Interfaces\IXmlSerializer.cs">
       <Link>Runtime\Serialization\XmlSerialization\Interfaces\IXmlSerializer.cs</Link>

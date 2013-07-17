@@ -24,8 +24,12 @@ Release date:
 
 Added/fixed (BREAKING CHANGES):
 ===============================
+(*) CTL-4 Completely rewritten the serialization engine. This means that the logic is now extracted from the 
+    ModelBase into separate serializers which can be easily customized. It should also fix a few minor issues
+    that were occurring due to the complexity of the old system
 (*) Moved memento namespace to a separate extension (Catel.Extensions.Memento) to make the core more lightweight
 (*) IEntityRepository new returns an IQueryable instead of IEnumerable on retrieval methods
+(-) CTL-4 Removed the SerializationHelper (now moved into separate classes registered in the ServiceLocator)
 
 Added/fixed:
 ============

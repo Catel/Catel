@@ -6,12 +6,10 @@
 
 namespace Catel.Runtime.Serialization
 {
-    using System.Runtime.Serialization;
-
     /// <summary>
     /// Interface for the binary serializer.
     /// </summary>
-    public interface IBinarySerializer : IModelBaseSerializer<SerializationInfo>
+    public interface IBinarySerializer : IModelBaseSerializer<BinarySerializationContextInfo>
     {
     }
 }

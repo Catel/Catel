@@ -10,6 +10,22 @@ namespace Catel.Runtime.Serialization
     using Data;
 
     /// <summary>
+    /// The mode in which a context is being used.
+    /// </summary>
+    public enum SerializationContextMode 
+    {
+        /// <summary>
+        /// The context is being used for serialization.
+        /// </summary>
+        Serialization,
+
+        /// <summary>
+        /// The context is being used for deserialization.
+        /// </summary>
+        Deserialization
+    }
+
+    /// <summary>
     /// Interface for the serialization context used to serialize and deserialize models.
     /// </summary>
     public interface ISerializationContext
@@ -25,6 +41,12 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <value>The type of the model.</value>
         Type ModelType { get; }
+
+        /// <summary>
+        /// Gets the context mode.
+        /// </summary>
+        /// <value>The context mode.</value>
+        SerializationContextMode ContextMode { get; }
     }
 
     /// <summary>

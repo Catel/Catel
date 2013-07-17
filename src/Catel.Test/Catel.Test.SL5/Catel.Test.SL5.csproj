@@ -592,9 +592,6 @@
     <Compile Include="..\Catel.Test.NET40\Reflection\TypeHelperFacts.cs">
       <Link>Reflection\TypeHelperFacts.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\SerializationHelperTest.cs">
-      <Link>Runtime\Serialization\SerializationHelperTest.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\SerializationObjectFacts.cs">
       <Link>Runtime\Serialization\SerializationObjectFacts.cs</Link>
     </Compile>

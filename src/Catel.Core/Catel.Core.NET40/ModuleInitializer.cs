@@ -36,6 +36,8 @@ namespace Catel
             serviceLocator.RegisterType<IBinarySerializer, BinarySerializer>();
 #endif
 
+            serviceLocator.RegisterType<IDataContractNameResolver, DataContractNameResolver>();
+            serviceLocator.RegisterType<IDataContractSerializerFactory, DataContractSerializerFactory>();
             serviceLocator.RegisterType<IXmlSerializer, XmlSerializer>();
         }
     }

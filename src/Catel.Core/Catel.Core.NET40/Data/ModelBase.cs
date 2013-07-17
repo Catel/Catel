@@ -1114,6 +1114,11 @@ namespace Catel.Data
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
         protected virtual void OnPropertyObjectCollectionItemPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            if (string.Equals(e.PropertyName, "IsDirty", StringComparison.Ordinal))
+            {
+                return;
+            }
+
             SetDirtyAndAutomaticallyValidate(string.Empty, true);
         }
 
@@ -1637,14 +1642,17 @@ namespace Catel.Data
             // If this is an internal data object base property, just leave
             if (IsModelBaseProperty(e.PropertyName))
             {
-                // Maybe this is a child object informing us that it's not dirty any longer
                 var senderAsModelBase = sender as ModelBase;
-                if ((senderAsModelBase != null) && (e.PropertyName == IsDirtyProperty.Name))
+                if ((senderAsModelBase != null) && (string.Equals(e.PropertyName, IsDirtyProperty.Name, StringComparison.Ordinal)))
                 {
+                    // Maybe this is a child object informing us that it's not dirty any longer
                     if (senderAsModelBase.GetValue<bool>(e.PropertyName) == false)
                     {
-                        // Ignore
-                        return;
+                        if (!ReferenceEquals(this, sender))
+                        {
+                            // Ignore
+                            return;
+                        }
                     }
 
                     // A child became dirty, we are dirty as well

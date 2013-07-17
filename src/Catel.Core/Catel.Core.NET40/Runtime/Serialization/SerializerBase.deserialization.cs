@@ -70,7 +70,7 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("stream", stream);
 
-            var context = GetContext(model, stream);
+            var context = GetContext(model, stream, SerializationContextMode.Deserialization);
 
             Deserialize(model, context.Context);
         }
@@ -85,13 +85,13 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("context", serializationContext);
 
-            var finalContext = GetContext(model, serializationContext);
+            var finalContext = GetContext(model, serializationContext, SerializationContextMode.Deserialization);
 
             BeforeDeserialization(finalContext);
 
             DeserializeProperties(finalContext);
 
-            AfterSerialization(finalContext);
+            AfterDeserialization(finalContext);
 
             model.FinishDeserialization();
         }
@@ -107,7 +107,7 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("stream", stream);
 
-            var context = GetContext(modelType, stream);
+            var context = GetContext(modelType, stream, SerializationContextMode.Deserialization);
 
             return Deserialize(modelType, context.Context);
         }
@@ -141,7 +141,7 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("stream", stream);
 
-            var context = GetContext(modelType, stream);
+            var context = GetContext(modelType, stream, SerializationContextMode.Deserialization);
 
             return DeserializeProperties(modelType, context.Context);
         }
@@ -157,7 +157,7 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("context", serializedContext);
 
-            var finalContext = GetContext(modelType, serializedContext);
+            var finalContext = GetContext(modelType, serializedContext, SerializationContextMode.Deserialization);
 
             return DeserializeProperties(finalContext);
         }

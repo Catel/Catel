@@ -9,6 +9,7 @@ namespace Catel.Runtime.Serialization
     using System;
     using System.Linq;
     using System.Xml.Linq;
+    using Catel.IoC;
     using Logging;
 
     /// <summary>
@@ -33,7 +34,8 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNullOrWhitespace("elementName", elementName);
             Argument.IsNotNull("objectType", objectType);
 
-            var dataContractSerializer = SerializationHelper.GetDataContractSerializer(typeof(object), objectType, elementName);
+            var dataContractSerializerFactory = ServiceLocator.Default.ResolveType<IDataContractSerializerFactory>();
+            var dataContractSerializer = dataContractSerializerFactory.GetDataContractSerializer(typeof(object), objectType, elementName);
 
             var document = new XDocument();
 
@@ -58,7 +60,9 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("objectType", objectType);
 
             string xmlName = element.Name.LocalName;
-            var dataContractSerializer = SerializationHelper.GetDataContractSerializer(typeof(object), objectType, xmlName);
+
+            var dataContractSerializerFactory = ServiceLocator.Default.ResolveType<IDataContractSerializerFactory>();
+            var dataContractSerializer = dataContractSerializerFactory.GetDataContractSerializer(typeof(object), objectType, xmlName);
 
             var attribute = element.Attribute(XName.Get("type", "http://catel.codeplex.com"));
             if (attribute != null)
@@ -68,7 +72,7 @@ namespace Catel.Runtime.Serialization
                                                select t).FirstOrDefault();
                 if (actualTypeToDeserialize != null)
                 {
-                    dataContractSerializer = SerializationHelper.GetDataContractSerializer(typeof(object), actualTypeToDeserialize, xmlName);
+                    dataContractSerializer = dataContractSerializerFactory.GetDataContractSerializer(typeof(object), actualTypeToDeserialize, xmlName);
                 }
                 else
                 {

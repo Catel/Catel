@@ -129,26 +129,34 @@ namespace Catel.Reflection
             };
 
         /// <summary>
+        /// Gets the full name of the type in a safe way. This means it checks for null first.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>The safe full name.</returns>
+        public static string GetSafeFullName(this Type type)
+        {
+            if (type == null)
+            {
+                return "NullType";
+            }
+
+            if (type.FullName == null)
+            {
+                return type.Name;
+            }
+
+            return type.FullName;
+        }
+
+        /// <summary>
         /// The get custom attribute ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <param name="attributeType">
-        /// The attribute type.
-        /// </param>
-        /// <param name="inherit">
-        /// The inherit.
-        /// </param>
-        /// <returns>
-        /// The get custom attribute ex.
-        /// </returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="attributeType"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <param name="attributeType">The attribute type.</param>
+        /// <param name="inherit">The inherit.</param>
+        /// <returns>The get custom attribute ex.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="attributeType" /> is <c>null</c>.</exception>
         public static object GetCustomAttributeEx(this Type type, Type attributeType, bool inherit)
         {
             Argument.IsNotNull("type", type);
@@ -238,21 +246,11 @@ namespace Catel.Reflection
         /// <summary>
         /// The has base type ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <param name="typeToCheck">
-        /// The type to check.
-        /// </param>
-        /// <returns>
-        /// The has base type ex.
-        /// </returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="typeToCheck"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <param name="typeToCheck">The type to check.</param>
+        /// <returns>The has base type ex.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         public static bool HasBaseTypeEx(this Type type, Type typeToCheck)
         {
             Argument.IsNotNull("type", type);

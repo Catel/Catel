@@ -290,7 +290,6 @@
     <Compile Include="Reflection\AssemblyExtensionsTest.cs" />
     <Compile Include="Reflection\PropertyHelperFacts.cs" />
     <Compile Include="Runtime\Serialization\Attributes\RedirectTypeAttributeTest.cs" />
-    <Compile Include="Runtime\Serialization\SerializationHelperTest.cs" />
     <Compile Include="Runtime\Serialization\SerializationObjectFacts.cs" />
     <Compile Include="Text\StringBuilderExtensionFacts.cs" />
     <Compile Include="Threading\SynchronizationContextFacts.cs" />

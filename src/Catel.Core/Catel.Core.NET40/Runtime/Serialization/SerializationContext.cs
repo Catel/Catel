@@ -18,13 +18,14 @@ namespace Catel.Runtime.Serialization
         where TContext : class
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="SerializationContext{TContext}"/> class.
+        /// Initializes a new instance of the <see cref="SerializationContext{TContext}" /> class.
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="context">The context.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="context"/> is <c>null</c>.</exception>
-        public SerializationContext(ModelBase model, TContext context)
+        /// <param name="contextMode">The context mode.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="context" /> is <c>null</c>.</exception>
+        public SerializationContext(ModelBase model, TContext context, SerializationContextMode contextMode)
         {
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("context", context);
@@ -32,6 +33,7 @@ namespace Catel.Runtime.Serialization
             Model = model;
             ModelType = model.GetType();
             Context = context;
+            ContextMode = contextMode;
         }
 
         /// <summary>
@@ -45,6 +47,12 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <value>The type of the model.</value>
         public Type ModelType { get; private set; }
+
+        /// <summary>
+        /// Gets the context mode.
+        /// </summary>
+        /// <value>The context mode.</value>
+        public SerializationContextMode ContextMode { get; private set; }
 
         /// <summary>
         /// Gets the context.

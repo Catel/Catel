@@ -25,7 +25,7 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("stream", stream);
 
-            var context = GetContext(model, stream);
+            var context = GetContext(model, stream, SerializationContextMode.Serialization);
 
             Serialize(model, context.Context);
 
@@ -42,7 +42,7 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("context", context);
 
-            var finalContext = GetContext(model, context);
+            var finalContext = GetContext(model, context, SerializationContextMode.Serialization);
 
             BeforeSerialization(finalContext);
 
@@ -69,7 +69,7 @@ namespace Catel.Runtime.Serialization
                 return;
             }
 
-            var context = GetContext(model, stream);
+            var context = GetContext(model, stream, SerializationContextMode.Serialization);
 
             SerializeProperties(context, properties);
 
