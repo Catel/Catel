@@ -53,9 +53,9 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentValidation, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="FluentValidation, Version=4.0.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\FluentValidation.4.0.0.0\lib\portable-wp8+sl5+win8\FluentValidation.dll</HintPath>
+      <HintPath>..\..\..\lib\FluentValidation.4.0.0.1\lib\portable-win+net40+sl50+wp80\FluentValidation.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Obsolete, Version=1.6.2.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
