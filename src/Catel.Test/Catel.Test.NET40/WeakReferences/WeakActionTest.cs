@@ -118,7 +118,7 @@ namespace Catel.Test
 
             ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => new WeakAction<int>(null, i => count = i));
 
-            Assert.AreNotEqual(0, count);
+            Assert.AreEqual(0, count);
         }
         #endregion
     }
