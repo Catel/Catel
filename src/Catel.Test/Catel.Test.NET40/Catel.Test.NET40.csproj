@@ -182,6 +182,7 @@
     <Compile Include="Extensions\EntityFramework5\Extensions\DbContextExtensionsFacts.cs" />
     <Compile Include="Extensions\EntityFramework5\Extensions\QueryableExtensionsFacts.cs" />
     <Compile Include="Extensions\EntityFramework5\Helpers\EFTestHelper.cs" />
+    <Compile Include="Extensions\EntityFramework5\Helpers\IsolationHelperFacts.cs" />
     <Compile Include="Extensions\EntityFramework5\Repositories\EntityRepositoryFacts.cs" />
     <Compile Include="Extensions\EntityFramework5\TestClasses\TestConnectionStrings.cs" />
     <Compile Include="Extensions\FluentValidation\Attributes\DisplayNameAttributeFacts.cs" />

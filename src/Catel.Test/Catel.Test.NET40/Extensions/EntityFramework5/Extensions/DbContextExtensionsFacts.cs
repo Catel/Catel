@@ -6,6 +6,8 @@
 namespace Catel.Test.Extensions.EntityFramework5
 {
     using System;
+    using System.Data;
+    using System.Data.Entity;
     using System.Data.Objects;
 
     using Catel.Data;
@@ -127,6 +129,16 @@ namespace Catel.Test.Extensions.EntityFramework5
                 var tableName = dbContext.GetTableName<DbContextOrder>();
 
                 Assert.AreEqual("[dbo].[DbContextOrder]", tableName);
+            }
+        }
+
+        [TestClass]
+        public class TheSetTransactionLevelMethod
+        {
+            [TestMethod]
+            public void ThrowsArgumentNullExceptionForNullDbContext()
+            {
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => DbContextExtensions.SetTransactionLevel(null, IsolationLevel.ReadUncommitted));
             }
         }
     }

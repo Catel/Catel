@@ -84,7 +84,9 @@
     <Compile Include="Data\UnitOfWork.generic.cs" />
     <Compile Include="Extensions\DbContextExtensions.cs" />
     <Compile Include="Extensions\DbContextExtensions.generic.cs" />
+    <Compile Include="Extensions\DbContextExtensions.transactions.cs" />
     <Compile Include="Extensions\QueryableExtensions.cs" />
+    <Compile Include="Helpers\IsolationHelper.cs" />
     <Compile Include="ModuleInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\Interfaces\IEntityRepository.cs" />
