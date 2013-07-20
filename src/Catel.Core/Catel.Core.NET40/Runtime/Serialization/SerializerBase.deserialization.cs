@@ -87,6 +87,9 @@ namespace Catel.Runtime.Serialization
 
             var finalContext = GetContext(model, serializationContext, SerializationContextMode.Deserialization);
 
+            var previousLeanAndMeanValue = model.LeanAndMeanModel;
+            model.LeanAndMeanModel = true;
+
             BeforeDeserialization(finalContext);
 
             DeserializeProperties(finalContext);
@@ -94,6 +97,8 @@ namespace Catel.Runtime.Serialization
             AfterDeserialization(finalContext);
 
             model.FinishDeserialization();
+
+            model.LeanAndMeanModel = previousLeanAndMeanValue;
         }
 
         /// <summary>

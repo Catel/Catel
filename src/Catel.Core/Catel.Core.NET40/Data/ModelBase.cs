@@ -290,7 +290,7 @@ namespace Catel.Data
         [Browsable(false)]
 #endif
         [XmlIgnore]
-        protected bool LeanAndMeanModel
+        protected internal bool LeanAndMeanModel
         {
             get { return _leanAndMeanModel || GlobalLeanAndMeanModel; }
             set { _leanAndMeanModel = value; }
