@@ -203,6 +203,10 @@
     <Compile Include="Helpers\ObjectHelperFacts.cs" />
     <Compile Include="Helpers\ObjectToStringHelperFacts.cs" />
     <Compile Include="Helpers\StringToObjectHelperFacts.cs" />
+    <Compile Include="Interception\MethodInterceptionTests.cs" />
+    <Compile Include="Interception\PropertyInterceptionTests.cs" />
+    <Compile Include="Interception\TestClasses\ITestService.cs" />
+    <Compile Include="Interception\TestClasses\TestService.cs" />
     <Compile Include="IoC\Exceptions\CircularDependencyExceptionFacts.cs" />
     <Compile Include="IoC\TypeFactoryFacts.cs" />
     <Compile Include="IoC\TypeRequestInfoFacts.cs" />
