@@ -11,7 +11,7 @@
     <AssemblyName>Catel.Extensions.Interception</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <FodyPath>..\..\..\lib\Fody.1.13.8.0</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.13.12</FodyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,6 +35,9 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core">
+      <HintPath>..\..\..\lib\Castle.Core.3.2.0\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Obsolete">
       <HintPath>..\..\..\lib\Obsolete.Fody.1.6.2.0\Lib\NET35\Obsolete.dll</HintPath>
       <Private>False</Private>
@@ -51,9 +54,127 @@
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Adapters\InterceptorAdapter.cs">
+      <Link>Adapters\InterceptorAdapter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Adapters\InvocationAdapter.cs">
+      <Link>Adapters\InvocationAdapter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Attributes\DoNotInterceptAttribute.cs">
+      <Link>Attributes\DoNotInterceptAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Callbacks\Callback.cs">
+      <Link>Callbacks\Callback.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Callbacks\CallbackBase.cs">
+      <Link>Callbacks\CallbackBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Callbacks\Interfaces\ICallbackVisitor.cs">
+      <Link>Callbacks\Interfaces\ICallbackVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Callbacks\OnAfterCallback.cs">
+      <Link>Callbacks\OnAfterCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Callbacks\OnBeforeCallback.cs">
+      <Link>Callbacks\OnBeforeCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Callbacks\OnCatchCallback.cs">
+      <Link>Callbacks\OnCatchCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Callbacks\OnFinallyCallback.cs">
+      <Link>Callbacks\OnFinallyCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Callbacks\OnInvokeCallback.cs">
+      <Link>Callbacks\OnInvokeCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Callbacks\OnReturnCallback.cs">
+      <Link>Callbacks\OnReturnCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Callbacks\SelectCallbackVisitor.cs">
+      <Link>Callbacks\SelectCallbackVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Collections\CallbackCollection.cs">
+      <Link>Collections\CallbackCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Collections\StateInterceptorCollection.cs">
+      <Link>Collections\StateInterceptorCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Definitions\Interfaces\IMemberDefinition.cs">
+      <Link>Definitions\Interfaces\IMemberDefinition.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Definitions\MemberDefinition.cs">
+      <Link>Definitions\MemberDefinition.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Exceptions\ProxyInitializationException.cs">
+      <Link>Exceptions\ProxyInitializationException.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Extensions\EnumerableExtensions.cs">
+      <Link>Extensions\EnumerableExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Extensions\ExpressionExtensions.cs">
+      <Link>Extensions\ExpressionExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Extensions\MethodInfoExtensions.cs">
+      <Link>Extensions\MethodInfoExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Extensions\ServiceLocatorExtensions.cs">
+      <Link>Extensions\ServiceLocatorExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Factories\Interfaces\IProxyFactory.cs">
+      <Link>Factories\Interfaces\IProxyFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Factories\ProxyFactory.cs">
+      <Link>Factories\ProxyFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Handlers\CallbackHandler.cs">
+      <Link>Handlers\CallbackHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Handlers\HandlerBase.cs">
+      <Link>Handlers\HandlerBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Handlers\InterceptorHandler.cs">
+      <Link>Handlers\InterceptorHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Handlers\Interfaces\ICallbackHandler.cs">
+      <Link>Handlers\Interfaces\ICallbackHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Handlers\Interfaces\IInterceptorHandler.cs">
+      <Link>Handlers\Interfaces\IInterceptorHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Interceptors\ContextInterceptor.cs">
+      <Link>Interceptors\ContextInterceptor.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Interceptors\FunctionInterceptor.cs">
+      <Link>Interceptors\FunctionInterceptor.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Interceptors\InterceptorBase.cs">
+      <Link>Interceptors\InterceptorBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Interceptors\Interfaces\IInterceptor.cs">
+      <Link>Interceptors\Interfaces\IInterceptor.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Interceptors\Interfaces\IStateInterceptor.cs">
+      <Link>Interceptors\Interfaces\IStateInterceptor.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Interceptors\StateInterceptor.cs">
+      <Link>Interceptors\StateInterceptor.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Invocations\Interfaces\IInvocation.cs">
+      <Link>Invocations\Interfaces\IInvocation.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Extensions.Interception.NET40\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Utilities\Confirm.cs">
+      <Link>Utilities\Confirm.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Utilities\It.cs">
+      <Link>Utilities\It.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\Utilities\Require.cs">
+      <Link>Utilities\Require.cs</Link>
+    </Compile>
+    <Compile Include="ModuleInitializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Catel.Core\Catel.Core.NET45\Catel.Core.NET45.csproj">
