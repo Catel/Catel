@@ -433,6 +433,9 @@
     <Compile Include="..\Catel.Core.NET40\Linq\ExpressionUtil.cs">
       <Link>Linq\ExpressionUtil.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Logging\BatchLogListenerBase.cs">
+      <Link>Logging\BatchLogListenerBase.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\ConsoleLogListener.cs">
       <Link>Logging\ConsoleLogListener.cs</Link>
     </Compile>
@@ -445,6 +448,9 @@
     <Compile Include="..\Catel.Core.NET40\Logging\Extensions\LogExtensions.cs">
       <Link>Logging\Extensions\LogExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Logging\Interfaces\IBatchLogListener.cs">
+      <Link>Logging\Interfaces\IBatchLogListener.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Interfaces\ILog.cs">
       <Link>Logging\Interfaces\ILog.cs</Link>
     </Compile>
@@ -453,6 +459,9 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Log.cs">
       <Link>Logging\Log.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Logging\LogBatchEntry.cs">
+      <Link>Logging\LogBatchEntry.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\LogEvent.cs">
       <Link>Logging\LogEvent.cs</Link>

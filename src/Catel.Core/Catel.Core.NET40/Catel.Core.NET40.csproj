@@ -197,13 +197,17 @@
     <Compile Include="IO\Extensions\StreamExtensions.cs" />
     <Compile Include="IO\Path.cs" />
     <Compile Include="Linq\ExpressionUtil.cs" />
+    <Compile Include="Logging\BatchLogListenerBase.cs" />
     <Compile Include="Logging\ConsoleLogListener.cs" />
     <Compile Include="Logging\DebugLogListener.cs" />
     <Compile Include="Logging\EventArgs\LogMessageEventArgs.cs" />
     <Compile Include="Logging\Extensions\LogExtensions.cs" />
+    <Compile Include="Logging\FileLogListener.cs" />
+    <Compile Include="Logging\Interfaces\IBatchLogListener.cs" />
     <Compile Include="Logging\Interfaces\ILog.cs" />
     <Compile Include="Logging\Interfaces\ILogListener.cs" />
     <Compile Include="Logging\Log.cs" />
+    <Compile Include="Logging\LogBatchEntry.cs" />
     <Compile Include="Logging\LogEvent.cs" />
     <Compile Include="Logging\LogListenerBase.cs" />
     <Compile Include="Logging\LogManager.cs" />
