@@ -286,6 +286,8 @@
     <Compile Include="Reflection\Helpers\TypeHelper.cs" />
     <Compile Include="Reflection\TypeCache.cs" />
     <Compile Include="Reflection\TypeInfo.cs" />
+    <Compile Include="Runtime\Serialization\Attributes\ExcludeFromSerializationAttribute.cs" />
+    <Compile Include="Runtime\Serialization\Attributes\IncludeInSerializationAttribute.cs" />
     <Compile Include="Runtime\Serialization\BinarySerialization\Attributes\RedirectTypeAttribute.cs" />
     <Compile Include="Runtime\Serialization\BinarySerialization\BinarySerializationContextInfo.cs" />
     <Compile Include="Runtime\Serialization\BinarySerialization\BinarySerializer.cs" />
@@ -293,6 +295,10 @@
     <Compile Include="Runtime\Serialization\BinarySerialization\Interfaces\IBinarySerializer.cs" />
     <Compile Include="Runtime\Serialization\Interfaces\IModelBaseSerializer.cs" />
     <Compile Include="Runtime\Serialization\Interfaces\ISerializationContext.cs" />
+    <Compile Include="Runtime\Serialization\Interfaces\ISerializationManager.cs" />
+    <Compile Include="Runtime\Serialization\MemberMetadata.cs" />
+    <Compile Include="Runtime\Serialization\MemberValue.cs" />
+    <Compile Include="Runtime\Serialization\SerializationManager.cs" />
     <Compile Include="Runtime\Serialization\SerializationObject.cs" />
     <Compile Include="Runtime\Serialization\XmlSerialization\DataContractSerializerFactory.cs" />
     <Compile Include="Runtime\Serialization\XmlSerialization\DataContractNameResolver.cs" />

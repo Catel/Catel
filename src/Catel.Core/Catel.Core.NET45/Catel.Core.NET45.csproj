@@ -637,6 +637,12 @@
     <Compile Include="..\Catel.Core.NET40\Reflection\TypeInfo.cs">
       <Link>Reflection\TypeInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Attributes\ExcludeFromSerializationAttribute.cs">
+      <Link>Runtime\Serialization\Attributes\ExcludeFromSerializationAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Attributes\IncludeInSerializationAttribute.cs">
+      <Link>Runtime\Serialization\Attributes\IncludeInSerializationAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\BinarySerialization\Attributes\RedirectTypeAttribute.cs">
       <Link>Runtime\Serialization\BinarySerialization\Attributes\RedirectTypeAttribute.cs</Link>
     </Compile>
@@ -658,11 +664,23 @@
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Interfaces\ISerializationContext.cs">
       <Link>Runtime\Serialization\Interfaces\ISerializationContext.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Interfaces\ISerializationManager.cs">
+      <Link>Runtime\Serialization\Interfaces\ISerializationManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\MemberMetadata.cs">
+      <Link>Runtime\Serialization\MemberMetadata.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\MemberValue.cs">
+      <Link>Runtime\Serialization\MemberValue.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializationContext.cs">
       <Link>Runtime\Serialization\SerializationContext.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializationFactory.cs">
       <Link>Runtime\Serialization\SerializationFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializationManager.cs">
+      <Link>Runtime\Serialization\SerializationManager.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializationObject.cs">
       <Link>Runtime\Serialization\SerializationObject.cs</Link>

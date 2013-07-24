@@ -73,8 +73,6 @@ namespace Catel.Data
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
         {
-            //Log.Debug("Received OnDeserialized event for '{0}'", GetType().Name);
-
             IsDeserializedDataAvailable = true;
 
             var binarySerializer = SerializationFactory.GetBinarySerializer();

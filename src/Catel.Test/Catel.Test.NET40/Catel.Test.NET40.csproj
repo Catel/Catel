@@ -26,7 +26,7 @@
     <DefineConstants>TRACE;DEBUG;NET; NET40</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,7 +35,7 @@
     <DefineConstants>TRACE;NET; NET40</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Castle.Core, Version=3.2.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
@@ -291,7 +291,12 @@
     <Compile Include="Reflection\AssemblyExtensionsTest.cs" />
     <Compile Include="Reflection\PropertyHelperFacts.cs" />
     <Compile Include="Runtime\Serialization\Attributes\RedirectTypeAttributeTest.cs" />
+    <Compile Include="Runtime\Serialization\BinarySerialization\BinarySerializerFacts.cs" />
+    <Compile Include="Runtime\Serialization\Helpers\SerializationTestHelper.cs" />
+    <Compile Include="Runtime\Serialization\SerializationManagerFacts.cs" />
     <Compile Include="Runtime\Serialization\SerializationObjectFacts.cs" />
+    <Compile Include="Runtime\Serialization\TestModels\TestModel.cs" />
+    <Compile Include="Runtime\Serialization\XmlSerialization\XmlSerializationFacts.cs" />
     <Compile Include="Text\StringBuilderExtensionFacts.cs" />
     <Compile Include="Threading\SynchronizationContextFacts.cs" />
     <Compile Include="Threading\TaskHelperFacts.cs" />

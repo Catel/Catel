@@ -80,7 +80,7 @@ namespace Catel.Data
         /// </summary>
         /// <value>The property data.</value>
         [XmlIgnore]
-        public PropertyData PropertyData { get; private set; }
+        public PropertyData PropertyData { get; internal set; }
 
 #if NET
         /// <summary>

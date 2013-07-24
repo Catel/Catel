@@ -7,26 +7,30 @@
 namespace Catel.Runtime.Serialization
 {
     using System;
+    using System.Reflection;
 
     /// <summary>
     /// Class containing information about a (de)serialized value.
     /// </summary>
     public class SerializationObject
     {
-        private readonly object _propertyValue;
+        private readonly object _memberValue;
 
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="SerializationObject" /> class.
         /// </summary>
         /// <param name="modelType">Type of the model.</param>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <param name="propertyValue">The property value.</param>
-        private SerializationObject(Type modelType, string propertyName, object propertyValue)
+        /// <param name="memberGroup">Group of the member.</param>
+        /// <param name="memberName">Name of the member.</param>
+        /// <param name="memberValue">The member value.</param>
+        private SerializationObject(Type modelType, SerializationMemberGroup memberGroup, string memberName, object memberValue)
         {
             ModelType = modelType;
-            PropertyName = propertyName;
-            _propertyValue = propertyValue;
+
+            MemberGroup = memberGroup;
+            MemberName = memberName;
+            _memberValue = memberValue;
         }
         #endregion
 
@@ -37,17 +41,23 @@ namespace Catel.Runtime.Serialization
         public Type ModelType { get; private set; }
 
         /// <summary>
+        /// Gets the group of the member.
+        /// </summary>
+        /// <value>The group of the member.</value>
+        public SerializationMemberGroup MemberGroup { get; private set; }
+
+        /// <summary>
         /// Gets the name of the property.
         /// </summary>
         /// <value>The name of the property.</value>
-        public string PropertyName { get; private set; }
+        public string MemberName { get; private set; }
 
         /// <summary>
-        /// Gets the property value.
+        /// Gets the member value.
         /// </summary>
-        /// <value>The property value.</value>
-        /// <exception cref="InvalidOperationException">The <see cref="IsSuccessful"/> is false and this property cannot be used.</exception>
-        public object PropertyValue
+        /// <value>The member value.</value>
+        /// <exception cref="InvalidOperationException">The <see cref="IsSuccessful"/> is false and this member cannot be used.</exception>
+        public object MemberValue
         {
             get
             {
@@ -56,7 +66,7 @@ namespace Catel.Runtime.Serialization
                     throw new InvalidOperationException();
                 }
 
-                return _propertyValue;
+                return _memberValue;
             }
         }
 
@@ -67,38 +77,41 @@ namespace Catel.Runtime.Serialization
         public bool IsSuccessful { get; private set; }
 
         /// <summary>
-        /// Creates an instance of the <see cref="SerializationObject"/> which represents a failed deserialized value.
+        /// Creates an instance of the <see cref="SerializationObject" /> which represents a failed deserialized value.
         /// </summary>
         /// <param name="modelType">Type of the model.</param>
-        /// <param name="propertyName">Name of the property.</param>
+        /// <param name="memberGroup">Type of the member.</param>
+        /// <param name="memberName">Name of the member.</param>
         /// <returns>SerializationObject.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="modelType"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
-        public static SerializationObject FailedToDeserialize(Type modelType, string propertyName)
+        /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="memberName" /> is <c>null</c> or whitespace.</exception>
+        public static SerializationObject FailedToDeserialize(Type modelType, SerializationMemberGroup memberGroup, string memberName)
         {
             Argument.IsNotNull("modelType", modelType);
-            Argument.IsNotNullOrWhitespace("propertyName", propertyName);
+            Argument.IsNotNullOrWhitespace("memberName", memberName);
 
-            var obj = new SerializationObject(modelType, propertyName, null);
+            var obj = new SerializationObject(modelType, memberGroup, memberName, null);
             obj.IsSuccessful = false;
 
             return obj;            
         }
 
         /// <summary>
-        /// Creates an instance of the <see cref="SerializationObject"/> which represents a succeeded deserialized value.
+        /// Creates an instance of the <see cref="SerializationObject" /> which represents a succeeded deserialized value.
         /// </summary>
         /// <param name="modelType">Type of the model.</param>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <param name="propertyValue">The property value.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="modelType"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
-        public static SerializationObject SucceededToDeserialize(Type modelType, string propertyName, object propertyValue)
+        /// <param name="memberGroup">Type of the member.</param>
+        /// <param name="memberName">Name of the property.</param>
+        /// <param name="memberValue">The member value.</param>
+        /// <returns>SerializationObject.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="memberName" /> is <c>null</c> or whitespace.</exception>
+        public static SerializationObject SucceededToDeserialize(Type modelType, SerializationMemberGroup memberGroup, string memberName, object memberValue)
         {
             Argument.IsNotNull("modelType", modelType);
-            Argument.IsNotNullOrWhitespace("propertyName", propertyName);
+            Argument.IsNotNullOrWhitespace("memberName", memberName);
 
-            var obj = new SerializationObject(modelType, propertyName, propertyValue);
+            var obj = new SerializationObject(modelType, memberGroup, memberName, memberValue);
             obj.IsSuccessful = true;
 
             return obj;

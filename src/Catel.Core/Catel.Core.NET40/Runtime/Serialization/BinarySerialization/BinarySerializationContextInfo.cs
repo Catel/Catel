@@ -27,7 +27,7 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("serializationInfo", serializationInfo);
 
             SerializationInfo = serializationInfo;
-            PropertyValues = new List<PropertyValue>();
+            MemberValues = new List<MemberValue>();
         }
 
         /// <summary>
@@ -35,19 +35,19 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="serializationInfo">The serialization info.</param>
         /// <param name="binaryFormatter">The binary formatter.</param>
-        /// <param name="propertyValues">The property values.</param>
+        /// <param name="memberValues">The member values.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationInfo" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="binaryFormatter" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="propertyValues" /> is <c>null</c>.</exception>
-        public BinarySerializationContextInfo(SerializationInfo serializationInfo, BinaryFormatter binaryFormatter, List<PropertyValue> propertyValues)
+        /// <exception cref="ArgumentNullException">The <paramref name="memberValues" /> is <c>null</c>.</exception>
+        public BinarySerializationContextInfo(SerializationInfo serializationInfo, BinaryFormatter binaryFormatter, List<MemberValue> memberValues)
         {
             Argument.IsNotNull("serializationInfo", serializationInfo);
             Argument.IsNotNull("binaryFormatter", binaryFormatter);
-            Argument.IsNotNull("propertyValues", propertyValues);
+            Argument.IsNotNull("propertyValues", memberValues);
 
             SerializationInfo = serializationInfo;
             BinaryFormatter = binaryFormatter;
-            PropertyValues = propertyValues;
+            MemberValues = memberValues;
         }
 
         /// <summary>
@@ -63,9 +63,9 @@ namespace Catel.Runtime.Serialization
         public BinaryFormatter BinaryFormatter { get; private set; }
 
         /// <summary>
-        /// Gets the property values.
+        /// Gets the member values.
         /// </summary>
-        /// <value>The property values.</value>
-        public List<PropertyValue> PropertyValues { get; internal set; }
+        /// <value>The member values.</value>
+        public List<MemberValue> MemberValues { get; internal set; }
     }
 }

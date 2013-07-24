@@ -92,7 +92,7 @@ namespace Catel.Data
                                               select propertyData.Value.Name).ToArray();
 
                     var serializer = SerializationFactory.GetXmlSerializer();
-                    serializer.SerializeProperties(_object, stream, propertiesToIgnore);
+                    serializer.SerializeMembers(_object, stream, propertiesToIgnore);
 
                     _propertyValuesBackup = stream.ToByteArray();
                 }
@@ -113,7 +113,7 @@ namespace Catel.Data
                     try
                     {
                         var serializer = SerializationFactory.GetXmlSerializer();
-                        var properties = serializer.DeserializeProperties(_object.GetType(), stream);
+                        var properties = serializer.DeserializeMembers(_object.GetType(), stream);
 
                         oldPropertyValues = properties.ToDictionary(property => property.Name, property => property.Value);
                     }

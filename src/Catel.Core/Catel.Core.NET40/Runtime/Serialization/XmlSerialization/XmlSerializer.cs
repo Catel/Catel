@@ -7,13 +7,17 @@
 namespace Catel.Runtime.Serialization
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Text;
     using System.Xml;
     using System.Xml.Linq;
+    using System.Xml.Serialization;
+    using Catel.Caching;
     using Catel.Data;
     using Catel.Logging;
+    using Catel.Reflection;
 
     /// <summary>
     /// The xml serializer to serialize the <see cref="ModelBase"/> and derived classes.
@@ -29,15 +33,20 @@ namespace Catel.Runtime.Serialization
 
         #region Fields
         private readonly IDataContractSerializerFactory _dataContractSerializerFactory;
+
+        private readonly CacheStorage<Type, List<string>> _ignoredMembersCache = new CacheStorage<Type, List<string>>();
         #endregion
 
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlSerializer" /> class.
         /// </summary>
+        /// <param name="serializationManager">The serialization manager.</param>
         /// <param name="dataContractSerializerFactory">The data contract serializer factory.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="dataContractSerializerFactory"/> is <c>null</c>.</exception>
-        public XmlSerializer(IDataContractSerializerFactory dataContractSerializerFactory)
+        /// <exception cref="ArgumentNullException">The <paramref name="serializationManager" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="dataContractSerializerFactory" /> is <c>null</c>.</exception>
+        public XmlSerializer(ISerializationManager serializationManager, IDataContractSerializerFactory dataContractSerializerFactory)
+            : base(serializationManager)
         {
             Argument.IsNotNull(() => dataContractSerializerFactory);
 
@@ -47,76 +56,128 @@ namespace Catel.Runtime.Serialization
 
         #region Methods
         /// <summary>
-        /// Serializes the property.
+        /// Serializes the member.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="propertyValue">The property value.</param>
-        protected override void SerializeProperty(ISerializationContext<XElement> context, PropertyValue propertyValue)
+        /// <param name="memberValue">The member value.</param>
+        protected override void SerializeMember(ISerializationContext<XElement> context, MemberValue memberValue)
         {
             var modelType = context.ModelType;
             var element = context.Context;
 
             var propertyDataManager = PropertyDataManager.Default;
-            if (propertyDataManager.IsPropertyNameMappedToXmlAttribute(modelType, propertyValue.Name))
+            if (propertyDataManager.IsPropertyNameMappedToXmlAttribute(modelType, memberValue.Name))
             {
-                Log.Debug("Serializing property {0}.{1} as xml attribute", modelType.FullName, propertyValue.Name);
+                var attributeName = propertyDataManager.MapPropertyNameToXmlAttributeName(modelType, memberValue.Name);
 
-                WriteXmlAttribute(element, propertyValue, modelType);
+                Log.Debug("Serializing property {0}.{1} as xml attribute '{2}'", modelType.FullName, memberValue.Name, attributeName);
+
+                WriteXmlAttribute(element, attributeName, memberValue);
             }
-
-            if (propertyDataManager.IsPropertyNameMappedToXmlElement(modelType, propertyValue.Name))
+            else
             {
-                Log.Debug("Serializing property {0}.{1} as xml element", modelType.FullName, propertyValue.Name);
+                var elementName = memberValue.Name;
 
-                WriteXmlElement(element, propertyValue, modelType);
+                if (propertyDataManager.IsPropertyNameMappedToXmlElement(modelType, memberValue.Name))
+                {
+                    elementName = propertyDataManager.MapPropertyNameToXmlElementName(modelType, memberValue.Name);
+                }
+
+                Log.Debug("Serializing property {0}.{1} as xml element '{2}'", modelType.FullName, memberValue.Name, elementName);
+
+                WriteXmlElement(element, elementName, memberValue, modelType);
             }
         }
 
         /// <summary>
-        /// Deserializes the property.
+        /// Deserializes the member.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="propertyValue">The property value.</param>
+        /// <param name="memberValue">The member value.</param>
         /// <returns>The <see cref="SerializationObject"/> representing the deserialized value or result.</returns>
-        protected override SerializationObject DeserializeProperty(ISerializationContext<XElement> context, PropertyValue propertyValue)
+        protected override SerializationObject DeserializeMember(ISerializationContext<XElement> context, MemberValue memberValue)
         {
             var modelType = context.ModelType;
             var element = context.Context;
 
-            var propertyDataManager = PropertyDataManager.Default;
-            if (propertyDataManager.IsPropertyNameMappedToXmlAttribute(modelType, propertyValue.Name))
+            try
             {
-                var mappedPropertyName = propertyDataManager.MapPropertyNameToXmlAttributeName(modelType, propertyValue.Name);
-
-                Log.Debug("Deserializing property {0}.{1} as xml attribute '{2}'", modelType.FullName, propertyValue.Name, mappedPropertyName);
-
-                foreach (var childAttribute in element.Attributes())
+                var propertyDataManager = PropertyDataManager.Default;
+                if (propertyDataManager.IsPropertyNameMappedToXmlAttribute(modelType, memberValue.Name))
                 {
-                    if (string.Equals(mappedPropertyName, childAttribute.Name.LocalName))
+                    var mappedPropertyName = propertyDataManager.MapPropertyNameToXmlAttributeName(modelType, memberValue.Name);
+
+                    Log.Debug("Deserializing property {0}.{1} as xml attribute '{2}'", modelType.FullName, memberValue.Name, mappedPropertyName);
+
+                    foreach (var childAttribute in element.Attributes())
                     {
-                        var value = GetObjectFromXmlAttribute(childAttribute, propertyValue.PropertyData);
-                        return SerializationObject.SucceededToDeserialize(modelType, propertyValue.Name, value);
+                        if (string.Equals(mappedPropertyName, childAttribute.Name.LocalName))
+                        {
+                            var value = GetObjectFromXmlAttribute(childAttribute, memberValue);
+                            return SerializationObject.SucceededToDeserialize(modelType, memberValue.MemberGroup, memberValue.Name, value);
+                        }
+                    }
+                }
+                else
+                {
+                    string elementName = memberValue.Name;
+
+                    if (propertyDataManager.IsPropertyNameMappedToXmlElement(modelType, memberValue.Name))
+                    {
+                        elementName = propertyDataManager.MapPropertyNameToXmlElementName(modelType, memberValue.Name);
+                    }
+
+                    Log.Debug("Deserializing property {0}.{1} as xml element '{2}'", modelType.FullName, memberValue.Name, elementName);
+
+                    foreach (var childElement in element.Elements())
+                    {
+                        if (string.Equals(elementName, childElement.Name.LocalName))
+                        {
+                            var value = GetObjectFromXmlElement(childElement, memberValue, modelType);
+                            return SerializationObject.SucceededToDeserialize(modelType, memberValue.MemberGroup, memberValue.Name, value);
+                        }
                     }
                 }
             }
-
-            if (propertyDataManager.IsPropertyNameMappedToXmlElement(modelType, propertyValue.Name))
+            catch (Exception)
             {
-                var mappedPropertyName = propertyDataManager.MapPropertyNameToXmlElementName(modelType, propertyValue.Name);
-
-                Log.Debug("Deserializing property {0}.{1} as xml element '{2}'", modelType.FullName, propertyValue.Name, mappedPropertyName);
-
-                foreach (var childElement in element.Elements())
-                {
-                    if (string.Equals(mappedPropertyName, childElement.Name.LocalName))
-                    {
-                        var value = GetObjectFromXmlElement(childElement, propertyValue, modelType);
-                        return SerializationObject.SucceededToDeserialize(modelType, propertyValue.Name, value);
-                    }
-                }
+                // Swallow
             }
 
-            return SerializationObject.FailedToDeserialize(modelType, propertyValue.Name);
+            return SerializationObject.FailedToDeserialize(modelType, memberValue.MemberGroup, memberValue.Name);
+        }
+
+        /// <summary>
+        /// Determines whether the specified member on the specified model should be ignored by the serialization engine.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="propertyName">Name of the member.</param>
+        /// <returns><c>true</c> if the member should be ignored, <c>false</c> otherwise.</returns>
+        protected override bool ShouldIgnoreMember(ModelBase model, string propertyName)
+        {
+            var ignoredMembers = _ignoredMembersCache.GetFromCacheOrFetch(model.GetType(), () =>
+            {
+                var modelType = model.GetType();
+                var ignoredProperties = new List<string>();
+
+                var properties = modelType.GetPropertiesEx();
+                foreach (var property in properties)
+                {
+                    if (AttributeHelper.IsDecoratedWithAttribute<XmlIgnoreAttribute>(property))
+                    {
+                        ignoredProperties.Add(property.Name);
+                    }
+                }
+
+                return ignoredProperties;
+            });
+
+            if (ignoredMembers.Contains(propertyName))
+            {
+                return true;
+            }
+
+            return base.ShouldIgnoreMember(model, propertyName);
         }
 
         /// <summary>
@@ -166,139 +227,122 @@ namespace Catel.Runtime.Serialization
         /// <summary>
         /// Gets the object from XML attribute.
         /// </summary>
+        /// <remarks>
+        /// Note that this method can cause exceptions. The caller will handle them.
+        /// </remarks>
         /// <param name="attribute">The attribute.</param>
-        /// <param name="propertyData">The property data.</param>
+        /// <param name="memberValue">The property data.</param>
         /// <returns>Object or <c>null</c>.</returns>
-        private object GetObjectFromXmlAttribute(XAttribute attribute, PropertyData propertyData)
+        private object GetObjectFromXmlAttribute(XAttribute attribute, MemberValue memberValue)
         {
             var value = attribute.Value;
 
-            try
-            {
-                return StringToObjectHelper.ToRightType(propertyData.Type, value);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Failed to convert '{0}' to type '{1}', returning default value", value, propertyData.Type.FullName);
-
-                return propertyData.GetDefaultValue();
-            }
+            return StringToObjectHelper.ToRightType(memberValue.Type, value);
         }
 
         /// <summary>
         /// Gets the object from XML element.
         /// </summary>
+        /// <remarks>
+        /// Note that this method can cause exceptions. The caller will handle them.
+        /// </remarks>
         /// <param name="element">The element.</param>
-        /// <param name="propertyValue">The property value.</param>
+        /// <param name="memberValue">The member value.</param>
         /// <param name="modelType">Type of the model.</param>
         /// <returns>Object or <c>null</c>.</returns>
-        private object GetObjectFromXmlElement(XElement element, PropertyValue propertyValue, Type modelType)
+        private object GetObjectFromXmlElement(XElement element, MemberValue memberValue, Type modelType)
         {
             object value = null;
             string xmlName = element.Name.LocalName;
 
-            try
+            var propertyTypeToDeserialize = memberValue.Type;
+
+            var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, propertyTypeToDeserialize, xmlName);
+
+            // TODO: check for null attribute?
+            var attribute = element.Attribute("type"); // .GetAttribute("type", "http://catel.codeplex.com");
+            var attributeValue = (attribute != null) ? attribute.Value : null;
+            if (!string.IsNullOrEmpty(attributeValue))
             {
-                var propertyTypeToDeserialize = propertyValue.PropertyData.Type;
+                Log.Debug("Property type for property '{0}' is '{1}' but found type info that it should be deserialized as '{2}'",
+                          memberValue.Name, memberValue.Type.FullName, attributeValue);
 
-                var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, propertyTypeToDeserialize, xmlName);
-
-                // TODO: check for null attribute?
-                var attribute = element.Attribute("type"); // .GetAttribute("type", "http://catel.codeplex.com");
-                var attributeValue = (attribute != null) ? attribute.Value : null;
-                if (!string.IsNullOrEmpty(attributeValue))
+                var actualTypeToDeserialize = (from t in serializer.KnownTypes
+                                               where t.FullName == attributeValue
+                                               select t).FirstOrDefault();
+                if (actualTypeToDeserialize != null)
                 {
-                    Log.Debug("Property type for property '{0}' is '{1}' but found type info that it should be deserialized as '{2}'", 
-                              propertyValue.Name, propertyValue.PropertyData.Type.FullName, attributeValue);
-
-                    var actualTypeToDeserialize = (from t in serializer.KnownTypes
-                                                   where t.FullName == attributeValue
-                                                   select t).FirstOrDefault();
-                    if (actualTypeToDeserialize != null)
-                    {
-                        serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, actualTypeToDeserialize, xmlName);
-                    }
-                    else
-                    {
-                        Log.Warning("Could not find type '{0}', falling back to original type '{1}'", attributeValue, propertyValue.PropertyData.Type.FullName);
-                    }
+                    serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, actualTypeToDeserialize, xmlName);
                 }
-
-                using (var xmlReader = element.CreateReader())
+                else
                 {
-                    value = serializer.ReadObject(xmlReader, false);
+                    Log.Warning("Could not find type '{0}', falling back to original type '{1}'", attributeValue, memberValue.Type.FullName);
                 }
             }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Failed to deserialize property '{0}' stored as '{1}', using default value", propertyValue.Name, xmlName);
 
-                value = propertyValue.PropertyData.GetDefaultValue();
+            using (var xmlReader = element.CreateReader())
+            {
+                value = serializer.ReadObject(xmlReader, false);
             }
 
             return value;
         }
 
         /// <summary>
-        /// Writes the XML attributes to the xml writer.
+        /// Writes the XML attribute to the xml element.
         /// </summary>
         /// <param name="element">The element.</param>
-        /// <param name="propertyValue">The property value.</param>
-        /// <param name="modelType">Type of the model.</param>
-        private void WriteXmlAttribute(XElement element, PropertyValue propertyValue, Type modelType)
+        /// <param name="attributeName">Name of the attribute.</param>
+        /// <param name="memberValue">The member value.</param>
+        private void WriteXmlAttribute(XElement element, string attributeName, MemberValue memberValue)
         {
-            var propertyDataManager = PropertyDataManager.Default;
-
-            var attributeName = propertyDataManager.MapPropertyNameToXmlAttributeName(modelType, propertyValue.Name);
-            var attributeValue = ObjectToStringHelper.ToString(propertyValue.Value);
+            var attributeValue = ObjectToStringHelper.ToString(memberValue.Value);
 
             var attribute = new XAttribute(attributeName, attributeValue);
             element.Add(attribute);
         }
 
         /// <summary>
-        /// Writes the XML elements to the xml writer.
+        /// Writes the XML element to the xml element.
         /// </summary>
         /// <param name="element">The element.</param>
-        /// <param name="propertyValue">The property value.</param>
+        /// <param name="elementName">Name of the element.</param>
+        /// <param name="memberValue">The member value.</param>
         /// <param name="modelType">Type of the model.</param>
-        private void WriteXmlElement(XElement element, PropertyValue propertyValue, Type modelType)
+        private void WriteXmlElement(XElement element, string elementName, MemberValue memberValue, Type modelType)
         {
             // TODO: Should we handle null differently? Add an attribute?
-            if (propertyValue.Value == null)
+            if (memberValue.Value == null)
             {
                 return;
             }
 
-            var propertyDataManager = PropertyDataManager.Default;
-            var elementName = propertyDataManager.MapPropertyNameToXmlElementName(modelType, propertyValue.Name);
+            var memberType = memberValue.Type;
+            var memberTypeToSerialize = memberValue.Value.GetType();
 
-            var propertyType = propertyValue.PropertyData.Type;
-            var propertyTypeToSerialize = propertyValue.Value.GetType();
-
-            var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, propertyTypeToSerialize, elementName, propertyValue.Value);
+            var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, memberTypeToSerialize, elementName, memberValue.Value);
 
             var stringBuilder = new StringBuilder();
             var xmlWriterSettings = new XmlWriterSettings();
             xmlWriterSettings.OmitXmlDeclaration = true;
             using (var xmlWriter = XmlWriter.Create(stringBuilder, xmlWriterSettings))
             {
-                if (propertyType != propertyTypeToSerialize)
+                if (memberType != memberTypeToSerialize)
                 {
-                    Log.Debug("Property type for property '{0}' is '{1}' but registered as '{2}', adding type info for deserialization", 
-                              propertyValue.Name, propertyTypeToSerialize.FullName, propertyType.FullName);
+                    Log.Debug("Property type for property '{0}' is '{1}' but registered as '{2}', adding type info for deserialization",
+                        memberValue.Name, memberTypeToSerialize.FullName, memberType.FullName);
 
-                    serializer.WriteStartObject(xmlWriter, propertyValue.Value);
+                    serializer.WriteStartObject(xmlWriter, memberValue.Value);
 
-                    xmlWriter.WriteAttributeString("ctl", "type", null, propertyTypeToSerialize.FullName);
+                    xmlWriter.WriteAttributeString("ctl", "type", null, memberTypeToSerialize.FullName);
 
-                    serializer.WriteObjectContent(xmlWriter, propertyValue.Value);
+                    serializer.WriteObjectContent(xmlWriter, memberValue.Value);
 
                     serializer.WriteEndObject(xmlWriter);
                 }
                 else
                 {
-                    serializer.WriteObject(xmlWriter, propertyValue.Value);
+                    serializer.WriteObject(xmlWriter, memberValue.Value);
                 }
             }
 

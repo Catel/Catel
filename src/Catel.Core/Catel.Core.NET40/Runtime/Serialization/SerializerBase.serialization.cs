@@ -46,32 +46,32 @@ namespace Catel.Runtime.Serialization
 
             BeforeSerialization(finalContext);
 
-            var properties = GetSerializableProperties(model);
-            SerializeProperties(finalContext, properties);
+            var members = GetSerializableMembers(model);
+            SerializeMembers(finalContext, members);
 
             AfterSerialization(finalContext);
         }
 
         /// <summary>
-        /// Serializes the properties.
+        /// Serializes the members.
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="stream">The stream.</param>
-        /// <param name="propertiesToIgnore">The properties to ignore.</param>
-        public virtual void SerializeProperties(ModelBase model, Stream stream, params string[] propertiesToIgnore)
+        /// <param name="membersToIgnore">The members to ignore.</param>
+        public virtual void SerializeMembers(ModelBase model, Stream stream, params string[] membersToIgnore)
         {
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("stream", stream);
 
-            var properties = GetSerializableProperties(model, propertiesToIgnore);
-            if (properties.Count == 0)
+            var members = GetSerializableMembers(model, membersToIgnore);
+            if (members.Count == 0)
             {
                 return;
             }
 
             var context = GetContext(model, stream, SerializationContextMode.Serialization);
 
-            SerializeProperties(context, properties);
+            SerializeMembers(context, members);
 
             AppendContextToStream(context, stream);
         }
@@ -87,28 +87,28 @@ namespace Catel.Runtime.Serialization
         }
 
         /// <summary>
-        /// Called before the serializer starts serializing a specific property.
+        /// Called before the serializer starts serializing a specific member.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="propertyValue">The property value.</param>
-        protected virtual void BeforeSerializeProperty(ISerializationContext<TSerializationContext> context, PropertyValue propertyValue)
+        /// <param name="memberValue">The member value.</param>
+        protected virtual void BeforeSerializeMember(ISerializationContext<TSerializationContext> context, MemberValue memberValue)
         {
         }
 
         /// <summary>
-        /// Serializes the property.
+        /// Serializes the member.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="propertyValue">The property value.</param>
-        /// <returns>The deserialized property value.</returns>
-        protected abstract void SerializeProperty(ISerializationContext<TSerializationContext> context, PropertyValue propertyValue);
+        /// <param name="memberValue">The member value.</param>
+        /// <returns>The deserialized member value.</returns>
+        protected abstract void SerializeMember(ISerializationContext<TSerializationContext> context, MemberValue memberValue);
 
         /// <summary>
-        /// Called after the serializer has serialized a specific property.
+        /// Called after the serializer has serialized a specific member.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="propertyValue">The property value.</param>
-        protected virtual void AfterSerializeProperty(ISerializationContext<TSerializationContext> context, PropertyValue propertyValue)
+        /// <param name="memberValue">The member value.</param>
+        protected virtual void AfterSerializeMember(ISerializationContext<TSerializationContext> context, MemberValue memberValue)
         {
         }
 
@@ -121,19 +121,19 @@ namespace Catel.Runtime.Serialization
         }
 
         /// <summary>
-        /// Serializes the properties.
+        /// Serializes the members.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="propertiesToSerialize">The properties to serialize.</param>
-        protected virtual void SerializeProperties(ISerializationContext<TSerializationContext> context, List<PropertyValue> propertiesToSerialize)
+        /// <param name="membersToSerialize">The members to serialize.</param>
+        protected virtual void SerializeMembers(ISerializationContext<TSerializationContext> context, List<MemberValue> membersToSerialize)
         {
-            foreach (var property in propertiesToSerialize)
+            foreach (var member in membersToSerialize)
             {
-                BeforeSerializeProperty(context, property);
+                BeforeSerializeMember(context, member);
 
-                SerializeProperty(context, property);
+                SerializeMember(context, member);
 
-                AfterSerializeProperty(context, property);
+                AfterSerializeMember(context, member);
             }
         }
         #endregion

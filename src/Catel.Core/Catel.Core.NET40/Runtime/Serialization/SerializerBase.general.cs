@@ -4,22 +4,16 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+
 namespace Catel.Runtime.Serialization
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.IO;
-    using System.Runtime.Serialization;
+    using Catel.Data;
     using Catel.IoC;
-    using Data;
-    using Logging;
-
-    // A solution might be:
-    //   - Serialize(stream) => serializes a complete object, virtual
-    //   - SerializeProperties(stream) => serializes all properties and calls GetPropertiesToSerialize, virtual
-    //   - SerializeProperties(TSerializationContext) => serializes the specified properties, created by SerializeProperties, abstract
-    //   - SerializeProperty => serializes a single property with option to customize, virtual
+    using Catel.Logging;
+    using Catel.Reflection;
 
     /// <summary>
     /// Base class for serializers that can serializer the <see cref="ModelBase" />.
@@ -28,110 +22,129 @@ namespace Catel.Runtime.Serialization
     public abstract partial class SerializerBase<TSerializationContext> : IModelBaseSerializer<TSerializationContext>
         where TSerializationContext : class
     {
+        #region Constants
         /// <summary>
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        #endregion
 
+        #region Constructors
         /// <summary>
-        /// Determines whether the specified property on the specified model should be ignored by the serialization engine.
+        /// Initializes a new instance of the <see cref="SerializerBase{TSerializationContext}"/> class.
         /// </summary>
-        /// <param name="model">The model.</param>
-        /// <param name="property">The property.</param>
-        /// <returns><c>true</c> if the property should be ignored, <c>false</c> otherwise.</returns>
-        protected virtual bool ShouldIgnoreProperty(ModelBase model, PropertyData property)
+        /// <param name="serializationManager">The serialization manager.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="serializationManager" /> is <c>null</c>.</exception>
+        protected SerializerBase(ISerializationManager serializationManager)
         {
-            return false;
-        }
+            Argument.IsNotNull("serializationManager", serializationManager);
 
+            SerializationManager = serializationManager;
+        }
+        #endregion
+
+        #region Properties
         /// <summary>
-        /// Gets the serializable properties for the specified model.
+        /// Gets the serialization manager.
+        /// </summary>
+        /// <value>The serialization manager.</value>
+        protected ISerializationManager SerializationManager { get; private set; }
+        #endregion
+
+        #region IModelBaseSerializer<TSerializationContext> Members
+        /// <summary>
+        /// Gets the serializable members for the specified model.
         /// </summary>
         /// <param name="model">The model.</param>
-        /// <param name="propertiesToIgnore">The properties to ignore.</param>
-        /// <returns>The list of properties to serialize.</returns>
+        /// <param name="membersToIgnore">The members to ignore.</param>
+        /// <returns>The list of members to serialize.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
-        public virtual List<PropertyValue> GetSerializableProperties(ModelBase model, params string[] propertiesToIgnore)
+        public virtual List<MemberValue> GetSerializableMembers(ModelBase model, params string[] membersToIgnore)
         {
             Argument.IsNotNull("model", model);
 
-            return ConvertDictionaryToListAndExcludeNonSerializableObjects(model, propertiesToIgnore);
-        }
-
-        /// <summary>
-        /// Converts the dictionary to list and exclude non serializable objects.
-        /// </summary>
-        /// <param name="model">The model.</param>
-        /// <param name="propertiesToIgnore">The properties to ignore.</param>
-        /// <returns>List{PropertyValue}.</returns>
-        private List<PropertyValue> ConvertDictionaryToListAndExcludeNonSerializableObjects(ModelBase model, params string[] propertiesToIgnore)
-        {
-            var propertiesToIgnoreHashSet = new HashSet<string>(propertiesToIgnore);
+            var membersToIgnoreHashSet = new HashSet<string>(membersToIgnore);
 
             var modelType = model.GetType();
-            var listToSerialize = new List<PropertyValue>();
+            var catelProperties = PropertyDataManager.Default.GetProperties(modelType);
 
-            var propertyDataManager = PropertyDataManager.Default;
+            var catelPropertyNames = SerializationManager.GetCatelPropertyNames(modelType);
+            var fieldsToSerialize = SerializationManager.GetFieldsToSerialize(modelType);
+            var propertiesToSerialize = SerializationManager.GetPropertiesToSerialize(modelType);
 
-            foreach (var dictionaryItem in model._propertyBag.GetAllProperties())
+            var listToSerialize = new List<MemberValue>();
+
+            foreach (var fieldToSerialize in fieldsToSerialize)
             {
-                var propertyData = propertyDataManager.GetPropertyData(modelType, dictionaryItem.Key);
-                if (!propertyData.IsSerializable)
+                if (membersToIgnoreHashSet.Contains(fieldToSerialize) || ShouldIgnoreMember(model, fieldToSerialize))
                 {
-                    Log.Warning("Property '{0}' is not serializable, so will be excluded from the serialization", propertyData.Name);
+                    Log.Debug("Field '{0}' is being ignored for serialization", fieldToSerialize);
                     continue;
                 }
 
-                if (!propertyData.IncludeInSerialization)
+                try
                 {
-                    Log.Debug("Property '{0}' is flagged to be excluded from serialization", propertyData.Name);
+                    Log.Debug("Adding field '{0}' to list of objects to serialize", fieldToSerialize);
+
+                    var fieldInfo = modelType.GetFieldEx(fieldToSerialize);
+                    var fieldValue = new MemberValue(SerializationMemberGroup.Field, modelType, fieldInfo.FieldType, fieldInfo.Name, fieldInfo.GetValue(model));
+
+                    listToSerialize.Add(fieldValue);
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning(ex, "Failed to get value of member '{0}.{1}', skipping item during serialization", modelType.GetSafeFullName(), fieldToSerialize);
+                }
+            }
+
+            foreach (var propertyToSerialize in propertiesToSerialize)
+            {
+                if (membersToIgnoreHashSet.Contains(propertyToSerialize) || ShouldIgnoreMember(model, propertyToSerialize))
+                {
+                    Log.Debug("Property '{0}' is being ignored for serialization", propertyToSerialize);
                     continue;
                 }
 
-                if (propertiesToIgnoreHashSet.Contains(propertyData.Name))
+                try
                 {
-                    Log.Info("Property '{0}' is being ignored for serialization", propertyData.Name);
-                    continue;
-                }
+                    Log.Debug("Adding property '{0}' to list of objects to serialize", propertyToSerialize);
 
-                if (ShouldIgnoreProperty(model, propertyData))
-                {
-                    Log.Info("Property '{0}' is being ignored for serialization", propertyData.Name);
-                    continue;
-                }
-
-#if NET
-                var collection = dictionaryItem.Value as ICollection;
-                if (collection != null)
-                {
-                    bool validCollection = true;
-
-                    //foreach (var item in collection)
-                    //{
-                    //    if ((item != null) && (item.GetType().GetCustomAttributes(typeof(SerializableAttribute), true).Length == 0))
-                    //    {
-                    //        validCollection = false;
-                    //        break;
-                    //    }
-                    //}
-
-                    if (!validCollection)
+                    if (catelPropertyNames.Contains(propertyToSerialize))
                     {
-                        Log.Debug("Property '{0}' is a collection containing non-serializable objects, so will be excluded from serialization", propertyData.Name);
-                        continue;
+                        var propertyData = catelProperties[propertyToSerialize];
+                        var actualPropertyValue = model.GetValueFast(propertyToSerialize);
+                        var propertyValue = new MemberValue(SerializationMemberGroup.CatelProperty, modelType, propertyData.Type, propertyData.Name, actualPropertyValue);
+
+                        listToSerialize.Add(propertyValue);
+                    }
+                    else
+                    {
+                        var propertyInfo = modelType.GetPropertyEx(propertyToSerialize);
+                        var propertyValue = new MemberValue(SerializationMemberGroup.RegularProperty, modelType, propertyInfo.PropertyType, propertyInfo.Name, propertyInfo.GetValue(model, null));
+
+                        listToSerialize.Add(propertyValue);
                     }
                 }
-#endif
-
-                Log.Debug("Adding property '{0}' to list of objects to serialize", propertyData.Name);
-
-                var actualValue = dictionaryItem.Value;
-                var serializingValue = model.GetPropertyValueForSerialization(propertyData, actualValue);
-
-                listToSerialize.Add(new PropertyValue(propertyData, propertyData.Name, serializingValue));
+                catch (Exception ex)
+                {
+                    Log.Warning(ex, "Failed to get value of member '{0}.{1}', skipping item during serialization", modelType.GetSafeFullName(), propertyToSerialize);
+                }
             }
 
             return listToSerialize;
+        }
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// Determines whether the specified member on the specified model should be ignored by the serialization engine.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="propertyName">Name of the member.</param>
+        /// <returns><c>true</c> if the member should be ignored, <c>false</c> otherwise.</returns>
+        protected virtual bool ShouldIgnoreMember(ModelBase model, string propertyName)
+        {
+            return false;
         }
 
         /// <summary>
@@ -211,21 +224,114 @@ namespace Catel.Runtime.Serialization
         protected abstract void AppendContextToStream(ISerializationContext<TSerializationContext> context, Stream stream);
 
         /// <summary>
-        /// Populates the model with the specified properties.
+        /// Populates the model with the specified members.
         /// </summary>
         /// <param name="model">The model.</param>
-        /// <param name="properties">The properties.</param>
+        /// <param name="members">The members.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>properties</c>.</exception>
-        protected virtual void PopulateModel(ModelBase model, params PropertyValue[] properties)
+        /// <exception cref="ArgumentNullException">The <paramref name="members"/> is <c>null</c>.</exception>
+        protected virtual void PopulateModel(ModelBase model, params MemberValue[] members)
         {
             Argument.IsNotNull("model", model);
-            Argument.IsNotNull("properties", properties);
+            Argument.IsNotNull("properties", members);
 
-            foreach (var property in properties)
+            var modelType = model.GetType();
+
+            var catelProperties = SerializationManager.GetCatelPropertyNames(modelType);
+            var fieldsToSerialize = SerializationManager.GetFieldsToSerialize(modelType);
+            var propertiesToSerialize = SerializationManager.GetPropertiesToSerialize(modelType);
+
+            foreach (var member in members)
             {
-                model.SetValue(property.Name, property.Value);
+                try
+                {
+                    if (catelProperties.Contains(member.Name))
+                    {
+                        model.SetValue(member.Name, member.Value);
+                    }
+                    else if (fieldsToSerialize.Contains(member.Name))
+                    {
+                        var fieldInfo = modelType.GetFieldEx(member.Name);
+                        if (fieldInfo == null)
+                        {
+                            Log.Warning("Failed to set field '{0}.{1}' because the member cannot be found on the model", modelType.GetSafeFullName(), member.Name);
+                        }
+                        else
+                        {
+                            fieldInfo.SetValue(model, member.Value);
+                        }
+                    }
+                    else if (propertiesToSerialize.Contains(member.Name))
+                    {
+                        var propertyInfo = modelType.GetPropertyEx(member.Name);
+                        if (propertyInfo == null)
+                        {
+                            Log.Warning("Failed to set property '{0}.{1}' because the member cannot be found on the model", modelType.GetSafeFullName(), member.Name);
+                        }
+                        else
+                        {
+                            propertyInfo.SetValue(model, member.Value, null);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning(ex, "Failed to populate '{0}.{1}', setting the member value threw an exception", modelType.GetSafeFullName(), member.Name);
+                }
             }
         }
+
+        /// <summary>
+        /// Gets the member group.
+        /// </summary>
+        /// <param name="modelType">Type of the model.</param>
+        /// <param name="memberName">Name of the member.</param>
+        /// <returns>The <see cref="SerializationMemberGroup"/>.</returns>
+        protected SerializationMemberGroup GetMemberGroup(Type modelType, string memberName)
+        {
+            var catelProperties = SerializationManager.GetCatelPropertyNames(modelType);
+            if (catelProperties.Contains(memberName))
+            {
+                return SerializationMemberGroup.CatelProperty;
+            }
+
+            var regularProperties = SerializationManager.GetRegularPropertyNames(modelType);
+            if (regularProperties.Contains(memberName))
+            {
+                return SerializationMemberGroup.RegularProperty;
+            }
+
+            return SerializationMemberGroup.Field;
+        }
+
+        /// <summary>
+        /// Gets the type of the member.
+        /// </summary>
+        /// <param name="modelType">Type of the model.</param>
+        /// <param name="memberName">Name of the member.</param>
+        /// <returns>The <see cref="Type"/> of the member.</returns>
+        protected Type GetMemberType(Type modelType, string memberName)
+        {
+            var catelProperties = SerializationManager.GetCatelProperties(modelType);
+            if (catelProperties.ContainsKey(memberName))
+            {
+                return catelProperties[memberName].MemberType;
+            }
+
+            var regularProperties = SerializationManager.GetRegularProperties(modelType);
+            if (regularProperties.ContainsKey(memberName))
+            {
+                return regularProperties[memberName].MemberType;
+            }
+
+            var fields = SerializationManager.GetFields(modelType);
+            if (fields.ContainsKey(memberName))
+            {
+                return fields[memberName].MemberType;
+            }
+
+            return null;
+        }
+        #endregion
     }
 }

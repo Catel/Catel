@@ -335,6 +335,7 @@ namespace Catel.Data
         /// <param name="property">The property.</param>
         /// <param name="propertyValue">The actual value of the property.</param>
         /// <returns>The value to serialize.</returns>
+        [ObsoleteEx(Message = "Replaced by new serialization engine", RemoveInVersion = "4.0", TreatAsErrorFromVersion = "3.7")]
         protected internal virtual object GetPropertyValueForSerialization(PropertyData property, object propertyValue)
         {
             return propertyValue;
@@ -348,6 +349,7 @@ namespace Catel.Data
         /// <param name="property">The property.</param>
         /// <param name="serializedValue">The value that was serialized.</param>
         /// <returns>The value to deserialize.</returns>
+        [ObsoleteEx(Message = "Replaced by new serialization engine", RemoveInVersion = "4.0", TreatAsErrorFromVersion = "3.7")]
         protected internal virtual object GetPropertyValueForDeserialization(PropertyData property, object serializedValue)
         {
             return serializedValue;

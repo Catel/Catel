@@ -4,6 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+
 namespace Catel.Runtime.Serialization
 {
     using System;
@@ -13,15 +14,16 @@ namespace Catel.Runtime.Serialization
     using System.Runtime.Serialization;
     using System.Runtime.Serialization.Formatters;
     using System.Runtime.Serialization.Formatters.Binary;
+    using Catel.Data;
     using Catel.IoC;
     using Catel.Logging;
-    using Data;
 
     /// <summary>
     /// The binary serializer.
     /// </summary>
     public class BinarySerializer : SerializerBase<BinarySerializationContextInfo>, IBinarySerializer
     {
+        #region Constants
         /// <summary>
         /// The property values key.
         /// </summary>
@@ -36,7 +38,21 @@ namespace Catel.Runtime.Serialization
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        #endregion
 
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BinarySerializer" /> class.
+        /// </summary>
+        /// <param name="serializationManager">The serialization manager.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="serializationManager" /> is <c>null</c>.</exception>
+        public BinarySerializer(ISerializationManager serializationManager)
+            : base(serializationManager)
+        {
+        }
+        #endregion
+
+        #region IBinarySerializer Members
         /// <summary>
         /// Deserializes the specified model type.
         /// </summary>
@@ -49,6 +65,8 @@ namespace Catel.Runtime.Serialization
         /// <returns>ModelBase.</returns>
         public override ModelBase Deserialize(Type modelType, Stream stream)
         {
+            Argument.IsNotNull("modelType", modelType);
+
             var model = (ModelBase)TypeFactory.Default.CreateInstance(modelType);
 
             Deserialize(model, stream);
@@ -67,48 +85,53 @@ namespace Catel.Runtime.Serialization
         /// <param name="stream">The stream.</param>
         public override void Deserialize(ModelBase model, Stream stream)
         {
+            Argument.IsNotNull("model", model);
+
             var binaryFormatter = CreateBinaryFormatter(SerializationContextMode.Deserialization);
 
             var propertyValues = (List<PropertyValue>)binaryFormatter.Deserialize(stream);
-            var context = GetContext(model, stream, SerializationContextMode.Deserialization, propertyValues);
+            var memberValues = ConvertPropertyValuesToMemberValues(model.GetType(), propertyValues);
+            var context = GetContext(model, stream, SerializationContextMode.Deserialization, memberValues);
 
             Deserialize(model, context.Context);
         }
+        #endregion
 
+        #region Methods
         /// <summary>
-        /// Serializes the property.
+        /// Serializes the member.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="propertyValue">The property value.</param>
-        protected override void SerializeProperty(ISerializationContext<BinarySerializationContextInfo> context, PropertyValue propertyValue)
+        /// <param name="memberValue">The member value.</param>
+        protected override void SerializeMember(ISerializationContext<BinarySerializationContextInfo> context, MemberValue memberValue)
         {
             var serializationContext = context.Context;
-            var propertyValues = serializationContext.PropertyValues;
+            var memberValues = serializationContext.MemberValues;
 
-            propertyValues.Add(propertyValue);
+            memberValues.Add(memberValue);
         }
 
         /// <summary>
-        /// Deserializes the property.
+        /// Deserializes the member.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="propertyValue">The property value.</param>
+        /// <param name="memberValue">The member value.</param>
         /// <returns>The <see cref="SerializationObject"/> representing the deserialized value or result.</returns>
-        protected override SerializationObject DeserializeProperty(ISerializationContext<BinarySerializationContextInfo> context, PropertyValue propertyValue)
+        protected override SerializationObject DeserializeMember(ISerializationContext<BinarySerializationContextInfo> context, MemberValue memberValue)
         {
             var serializationContext = context.Context;
-            var propertyValues = serializationContext.PropertyValues;
+            var memberValues = serializationContext.MemberValues;
 
-            var finalPropertyValue = (from x in propertyValues
-                                      where string.Equals(x.Name, propertyValue.Name, StringComparison.Ordinal)
-                                      select x).FirstOrDefault();
+            var finalMembervalue = (from x in memberValues
+                                    where string.Equals(x.Name, memberValue.Name, StringComparison.Ordinal)
+                                    select x).FirstOrDefault();
 
-            if (finalPropertyValue != null)
+            if (finalMembervalue != null)
             {
-                return SerializationObject.SucceededToDeserialize(context.ModelType, propertyValue.Name, finalPropertyValue.Value);
+                return SerializationObject.SucceededToDeserialize(context.ModelType, memberValue.MemberGroup, memberValue.Name, finalMembervalue.Value);
             }
 
-            return SerializationObject.FailedToDeserialize(context.ModelType, propertyValue.Name);
+            return SerializationObject.FailedToDeserialize(context.ModelType, memberValue.MemberGroup, memberValue.Name);
         }
 
         /// <summary>
@@ -129,19 +152,19 @@ namespace Catel.Runtime.Serialization
         /// <param name="model">The model.</param>
         /// <param name="stream">The stream.</param>
         /// <param name="contextMode">The context mode.</param>
-        /// <param name="propertyValues">The property values.</param>
-        /// <returns>The serialization context..</returns>
-        private ISerializationContext<BinarySerializationContextInfo> GetContext(ModelBase model, Stream stream, SerializationContextMode contextMode, List<PropertyValue> propertyValues)
+        /// <param name="memberValues">The member values.</param>
+        /// <returns>The serialization context.</returns>
+        private ISerializationContext<BinarySerializationContextInfo> GetContext(ModelBase model, Stream stream, SerializationContextMode contextMode, List<MemberValue> memberValues)
         {
             var serializationInfo = new SerializationInfo(model.GetType(), new FormatterConverter());
             var binaryFormatter = CreateBinaryFormatter(contextMode);
 
-            if (propertyValues == null)
+            if (memberValues == null)
             {
-                propertyValues = new List<PropertyValue>();
+                memberValues = new List<MemberValue>();
             }
 
-            var contextInfo = new BinarySerializationContextInfo(serializationInfo, binaryFormatter, propertyValues);
+            var contextInfo = new BinarySerializationContextInfo(serializationInfo, binaryFormatter, memberValues);
 
             return new SerializationContext<BinarySerializationContextInfo>(model, contextInfo, contextMode);
         }
@@ -156,7 +179,7 @@ namespace Catel.Runtime.Serialization
             var serializationContext = context.Context;
             var serializationInfo = serializationContext.SerializationInfo;
 
-            if (serializationContext.PropertyValues.Count > 0)
+            if (serializationContext.MemberValues.Count > 0)
             {
                 // Already done, this is probably a top-level object in the binary deserialization
                 return;
@@ -164,8 +187,10 @@ namespace Catel.Runtime.Serialization
 
             try
             {
+                // NOTE: this will deserialize a list of PropertyValue objects to maintain backwards compatibility!
                 var propertyValues = (List<PropertyValue>)serializationInfo.GetValue(PropertyValuesKey, typeof(List<PropertyValue>));
-                serializationContext.PropertyValues.AddRange(propertyValues);
+                var memberValues = ConvertPropertyValuesToMemberValues(context.ModelType, propertyValues);
+                serializationContext.MemberValues.AddRange(memberValues);
             }
             catch (Exception ex)
             {
@@ -182,7 +207,8 @@ namespace Catel.Runtime.Serialization
             // We need to add the serialized property values to the serialization info manually here
             var serializationContext = context.Context;
             var serializationInfo = serializationContext.SerializationInfo;
-            var propertyValues = serializationContext.PropertyValues;
+            var memberValues = serializationContext.MemberValues;
+            var propertyValues = ConvertMemberValuesToPropertyValues(memberValues);
 
             serializationInfo.AddValue(PropertyValuesKey, propertyValues);
         }
@@ -196,8 +222,11 @@ namespace Catel.Runtime.Serialization
         protected override void AppendContextToStream(ISerializationContext<BinarySerializationContextInfo> context, Stream stream)
         {
             var serializationContext = context.Context;
-            var propertyValues = serializationContext.PropertyValues;
+            var memberValues = serializationContext.MemberValues;
             var binaryFormatter = serializationContext.BinaryFormatter;
+
+            // NOTE: We have to keep backwards compatibility and serialize as PropertyValues list
+            var propertyValues = ConvertMemberValuesToPropertyValues(memberValues);
 
             binaryFormatter.Serialize(stream, propertyValues);
         }
@@ -226,5 +255,40 @@ namespace Catel.Runtime.Serialization
 
             return binaryFormatter;
         }
+
+        private List<PropertyValue> ConvertMemberValuesToPropertyValues(List<MemberValue> memberValues)
+        {
+            var propertyValues = new List<PropertyValue>();
+
+            foreach (var memberValue in memberValues)
+            {
+                var propertyValue = new PropertyValue
+                {
+                    Name = memberValue.Name,
+                    Value = memberValue.Value
+                };
+
+                propertyValues.Add(propertyValue);
+            }
+
+            return propertyValues;
+        }
+
+        private List<MemberValue> ConvertPropertyValuesToMemberValues(Type modelType, List<PropertyValue> propertyValues)
+        {
+            var memberValues = new List<MemberValue>();
+
+            foreach (var propertyValue in propertyValues)
+            {
+                var memberGroup = GetMemberGroup(modelType, propertyValue.Name);
+                var memberType = GetMemberType(modelType, propertyValue.Name);
+
+                var memberValue = new MemberValue(memberGroup, modelType, memberType, propertyValue.Name, propertyValue.Value);
+                memberValues.Add(memberValue);
+            }
+
+            return memberValues;
+        }
+        #endregion
     }
 }

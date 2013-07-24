@@ -26,28 +26,28 @@ namespace Catel.Runtime.Serialization
         }
 
         /// <summary>
-        /// Called before the serializer starts deserializing a specific property.
+        /// Called before the serializer starts deserializing a specific member.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="propertyValue">The property value.</param>
-        protected virtual void BeforeDeserializeProperty(ISerializationContext<TSerializationContext> context, PropertyValue propertyValue)
+        /// <param name="memberValue">The member value.</param>
+        protected virtual void BeforeDeserializeMember(ISerializationContext<TSerializationContext> context, MemberValue memberValue)
         {
         }
 
         /// <summary>
-        /// Deserializes the property.
+        /// Deserializes the member.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="propertyValue">The property value.</param>
-        /// <returns>The <see cref="SerializationObject"/> representing the deserialized value or result.</returns>
-        protected abstract SerializationObject DeserializeProperty(ISerializationContext<TSerializationContext> context, PropertyValue propertyValue);
+        /// <param name="memberValue">The member value.</param>
+        /// <returns>The <see cref="SerializationObject" /> representing the deserialized value or result.</returns>
+        protected abstract SerializationObject DeserializeMember(ISerializationContext<TSerializationContext> context, MemberValue memberValue);
 
         /// <summary>
-        /// Called after the serializer has deserialized a specific property.
+        /// Called after the serializer has deserialized a specific member.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="propertyValue">The property value.</param>
-        protected virtual void AfterDeserializeProperty(ISerializationContext<TSerializationContext> context, PropertyValue propertyValue)
+        /// <param name="memberValue">The member value.</param>
+        protected virtual void AfterDeserializeMember(ISerializationContext<TSerializationContext> context, MemberValue memberValue)
         {
         }
 
@@ -92,7 +92,7 @@ namespace Catel.Runtime.Serialization
 
             BeforeDeserialization(finalContext);
 
-            DeserializeProperties(finalContext);
+            DeserializeMembers(finalContext);
 
             AfterDeserialization(finalContext);
 
@@ -136,64 +136,65 @@ namespace Catel.Runtime.Serialization
         }
 
         /// <summary>
-        /// Deserializes the properties.
+        /// Deserializes the members.
         /// </summary>
         /// <param name="modelType">Type of the model.</param>
         /// <param name="stream">The stream.</param>
-        /// <returns>The deserialized list of property values.</returns>
-        public virtual List<PropertyValue> DeserializeProperties(Type modelType, Stream stream)
+        /// <returns>The deserialized list of member values.</returns>
+        public virtual List<MemberValue> DeserializeMembers(Type modelType, Stream stream)
         {
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("stream", stream);
 
             var context = GetContext(modelType, stream, SerializationContextMode.Deserialization);
 
-            return DeserializeProperties(modelType, context.Context);
+            return DeserializeMembers(modelType, context.Context);
         }
 
         /// <summary>
-        /// Deserializes the properties.
+        /// Deserializes the members.
         /// </summary>
         /// <param name="modelType">Type of the model.</param>
         /// <param name="serializedContext">The serialized context.</param>
-        /// <returns>The deserialized list of property values.</returns>
-        public virtual List<PropertyValue> DeserializeProperties(Type modelType, TSerializationContext serializedContext)
+        /// <returns>The deserialized list of member values.</returns>
+        public virtual List<MemberValue> DeserializeMembers(Type modelType, TSerializationContext serializedContext)
         {
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("context", serializedContext);
 
             var finalContext = GetContext(modelType, serializedContext, SerializationContextMode.Deserialization);
 
-            return DeserializeProperties(finalContext);
+            return DeserializeMembers(finalContext);
         }
 
         /// <summary>
-        /// Deserializes the properties.
+        /// Deserializes the members.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <returns>The deserialized list of property values.</returns>
-        protected virtual List<PropertyValue> DeserializeProperties(ISerializationContext<TSerializationContext> context)
+        /// <returns>The deserialized list of member values.</returns>
+        protected virtual List<MemberValue> DeserializeMembers(ISerializationContext<TSerializationContext> context)
         {
-            var deserializedPropertyValues = new List<PropertyValue>();
+            var deserializedMemberValues = new List<MemberValue>();
 
-            var propertiesToDeserialize = GetSerializableProperties(context.Model);
-            foreach (var property in propertiesToDeserialize)
+            var membersToDeserialize = GetSerializableMembers(context.Model);
+            foreach (var member in membersToDeserialize)
             {
-                BeforeDeserializeProperty(context, property);
+                BeforeDeserializeMember(context, member);
 
-                var serializationObject = DeserializeProperty(context, property);
+                var serializationObject = DeserializeMember(context, member);
                 if (serializationObject.IsSuccessful)
                 {
-                    var propertyValue = new PropertyValue(property.PropertyData, property.Name, serializationObject.PropertyValue);
-                    deserializedPropertyValues.Add(propertyValue);
+                    var memberValue = new MemberValue(member.MemberGroup, member.ModelType, member.Type, member.Name, serializationObject.MemberValue);
 
-                    AfterDeserializeProperty(context, property);
+                    deserializedMemberValues.Add(memberValue);
 
-                    PopulateModel(context.Model, propertyValue);
+                    AfterDeserializeMember(context, member);
+
+                    PopulateModel(context.Model, memberValue);
                 }
             }
 
-            return deserializedPropertyValues;
+            return deserializedMemberValues;
         }
         #endregion
     }
