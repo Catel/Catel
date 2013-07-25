@@ -116,7 +116,7 @@ namespace Catel.MVVM.ViewModels
         /// </exception>
         public void UpdateStatus(int currentItem, int totalItems, ITask task)
         {
-            Argument.IsNotNull("task", task);
+            Argument.IsNotNull(() => task);
 
             Task = task;
 

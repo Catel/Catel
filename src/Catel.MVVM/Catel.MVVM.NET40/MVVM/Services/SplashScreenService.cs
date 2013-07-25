@@ -7,10 +7,12 @@ namespace Catel.MVVM.Services
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading;
 
     using Catel.Logging;
     using Catel.MVVM.Tasks;
+    using Views;
 
     /// <summary>
     /// The splash screen service.
@@ -76,10 +78,6 @@ namespace Catel.MVVM.Services
         /// </summary>
         private Thread _thread;
 
-        /// <summary>
-        /// The view model type.
-        /// </summary>
-        private Type _viewModelType;
         #endregion
 
         #region Constructors
@@ -97,10 +95,10 @@ namespace Catel.MVVM.Services
         public SplashScreenService(IDispatcherService dispatcherService, IMessageService messageService, IViewModelFactory viewModelFactory,
             IUIVisualizerService uiVisualizerService)
         {
-            Argument.IsNotNull("dispatcherService", dispatcherService);
-            Argument.IsNotNull("messageService", messageService);
-            Argument.IsNotNull("viewModelFactory", viewModelFactory);
-            Argument.IsNotNull("uiVisualizerService", uiVisualizerService);
+            Argument.IsNotNull(() => dispatcherService);
+            Argument.IsNotNull(() => messageService);
+            Argument.IsNotNull(() => viewModelFactory);
+            Argument.IsNotNull(() => uiVisualizerService);
 
             _dispatcherService = dispatcherService;
             _messageService = messageService;
@@ -128,13 +126,27 @@ namespace Catel.MVVM.Services
         /// <typeparam name="TViewModel">
         /// The view model type.
         /// </typeparam>
+        /// <param name="viewModel">
+        /// The view model instance.
+        /// </param>
+        /// <param name="show">
+        /// Indicates whether the view model will be shown. If the view model is <c>null</c> then tthis argument will be ignored. 
+        /// </param>
         /// <exception cref="InvalidOperationException">
         /// If the batch is already committed and the execution is in progress or committing via async way.
         /// </exception>
-        public void Commit<TViewModel>() where TViewModel : IProgressNotifyableViewModel
+        public void Commit<TViewModel>(TViewModel viewModel = default(TViewModel), bool show = true) where TViewModel : IProgressNotifyableViewModel
         {
-            Commit(typeof(TViewModel));
+            if (!ReferenceEquals(viewModel, default(TViewModel)))
+            {
+                CommitUsingViewModel(viewModel, show);
+            }
+            else
+            {
+                Commit(typeof(TViewModel));
+            }
         }
+
 
         /// <summary>
         /// Enqueue a task to be executed as batch.
@@ -150,7 +162,7 @@ namespace Catel.MVVM.Services
         /// </exception>
         public void Enqueue(ITask task)
         {
-            Argument.IsNotNull("task", task);
+            Argument.IsNotNull(() => task);
 
             lock (_syncObj)
             {
@@ -174,12 +186,25 @@ namespace Catel.MVVM.Services
         /// <param name="completedCallback">
         /// The completed callback.
         /// </param>
+        /// <param name="viewModel">
+        /// The view model instance.
+        /// </param>
+        /// <param name="show">
+        /// Indicates whether the view model will be shown. If the view model is <c>null</c> then tthis argument will be ignored. 
+        /// </param>
         /// <exception cref="InvalidOperationException">
         /// If the batch is already committed and the execution is in progress or committing via async way.
         /// </exception>
-        public void CommitAsync<TViewModel>(Action completedCallback = null) where TViewModel : IProgressNotifyableViewModel
+        public void CommitAsync<TViewModel>(Action completedCallback = null, TViewModel viewModel = default(TViewModel), bool show = true) where TViewModel : IProgressNotifyableViewModel
         {
-            CommitAsync(completedCallback, typeof(TViewModel));
+            if (!ReferenceEquals(viewModel, default(TViewModel)))
+            {
+                CommitUsingViewModel(viewModel, show, true, completedCallback);
+            }
+            else
+            {
+                CommitAsync(completedCallback, typeof(TViewModel));
+            }
         }
 
         /// <summary>
@@ -199,47 +224,8 @@ namespace Catel.MVVM.Services
         /// </exception>
         public void CommitAsync(Action completedCallback = null, Type viewModelType = null)
         {
-            if (viewModelType != null)
-            {
-                Argument.IsOfType("viewModelType", viewModelType, typeof(IProgressNotifyableViewModel));
-            }
-
-            lock (_syncObj)
-            {
-                if (IsCommitting || IsRunning)
-                {
-                    throw new InvalidOperationException(ExecutionIsInProgressErrorMessage);
-                }
-
-                if (_tasks.Count == 0)
-                {
-                    throw new InvalidOperationException(AtLeastOneTaskShouldBeRegisteredErrorMessage);
-                }
-
-                _viewModelType = viewModelType;
-                if (_viewModelType != null)
-                {
-                    _progressNotifyableViewModel = (IProgressNotifyableViewModel)_viewModelFactory.CreateViewModel(_viewModelType, null);
-                    _uiVisualizerService.Show(_progressNotifyableViewModel);
-                }
-                else
-                {
-                    _progressNotifyableViewModel = null;
-                }
-
-                _thread = new Thread(() =>
-                    {
-                        // NOTE: Patch for delay a bit the thread start 
-                        ThreadHelper.Sleep(100);
-                        Execute();
-                    });
-
-                _thread.SetApartmentState(ApartmentState.STA);
-                _completedCallback = completedCallback;
-                IsCommitting = true;
-            }
-
-            _thread.Start();
+            var viewModel = CreateProgressNotifyableViewModelFrom(viewModelType);
+            CommitUsingViewModel(viewModel, true, true, completedCallback);
         }
 
         /// <summary>
@@ -256,42 +242,16 @@ namespace Catel.MVVM.Services
         /// </exception>
         public void Commit(Type viewModelType = null)
         {
-            if (viewModelType != null)
-            {
-                Argument.IsOfType("viewModelType", viewModelType, typeof(IProgressNotifyableViewModel));
-            }
-
-            lock (_syncObj)
-            {
-                if (IsCommitting || IsRunning)
-                {
-                    throw new InvalidOperationException(ExecutionIsInProgressErrorMessage);
-                }
-
-                if (_tasks.Count == 0)
-                {
-                    throw new InvalidOperationException(AtLeastOneTaskShouldBeRegisteredErrorMessage);
-                }
-
-                _viewModelType = viewModelType;
-                if (_viewModelType != null)
-                {
-                    _progressNotifyableViewModel = (IProgressNotifyableViewModel)_viewModelFactory.CreateViewModel(_viewModelType, null);
-                    _uiVisualizerService.Show(_progressNotifyableViewModel);
-                }
-                else
-                {
-                    _progressNotifyableViewModel = null;
-                }
-
-                IsCommitting = true;
-            }
-
-            Execute();
+            var viewModel = CreateProgressNotifyableViewModelFrom(viewModelType);
+            CommitUsingViewModel(viewModel);
         }
+
+      
         #endregion
 
         #region Methods
+
+     
         /// <summary>
         /// The execute.
         /// </summary>
@@ -305,7 +265,7 @@ namespace Catel.MVVM.Services
             }
 
             IPleaseWaitService pleaseWaitService = null;
-            if (_viewModelType == null)
+            if (_progressNotifyableViewModel == null)
             {
                 pleaseWaitService = GetService<IPleaseWaitService>();
             }
@@ -328,32 +288,39 @@ namespace Catel.MVVM.Services
                     try
                     {
                         Log.Debug("Executing task '{0}'. ", task.Name);
+                        
                         if (pleaseWaitService != null)
                         {
-                            pleaseWaitService.UpdateStatus(++progress, total, task.Name);
+                            // TODO: Display smooth detailed progress using the PleasWaitService
+// ReSharper disable AccessToModifiedClosure
+                            _dispatcherService.Invoke(() => pleaseWaitService.UpdateStatus(progress++, total, task.Name));
+// ReSharper restore AccessToModifiedClosure
                         }
                         else if (_progressNotifyableViewModel != null)
                         {
                             _progressNotifyableViewModel.UpdateStatus(progress++, total, task);
                         }
 
-                        _dispatcherService.Invoke(task.Execute);
+                        task.Execute();
                     }
                     catch (Exception e)
                     {
                         Log.Error(e);
 
-                        var messageResult = _messageService.Show(string.Format(TaskExecutionErrorMessagePattern, task.Name), "Error", MessageButton.YesNoCancel, MessageImage.Error);
-                        switch (messageResult)
-                        {
-                            case MessageResult.Yes:
-                                retry = true;
-                                break;
+                        _dispatcherService.Invoke(() =>
+                            {
+                                var messageResult = _messageService.Show(string.Format(TaskExecutionErrorMessagePattern, task.Name), "Error", MessageButton.YesNoCancel, MessageImage.Error);
+                                switch (messageResult)
+                                {
+                                    case MessageResult.Yes:
+                                        retry = true;
+                                        break;
 
-                            case MessageResult.Cancel:
-                                aborted = true;
-                                break;
-                        }
+                                    case MessageResult.Cancel:
+                                        aborted = true;
+                                        break;
+                                }        
+                            });
                     }
                 }
 
@@ -368,7 +335,9 @@ namespace Catel.MVVM.Services
                         {
                             if (pleaseWaitService != null)
                             {
-                                pleaseWaitService.UpdateStatus(progress--, total, string.Format("Rollback '{0}'", task.Name));
+// ReSharper disable AccessToModifiedClosure
+                                _dispatcherService.Invoke(() => pleaseWaitService.UpdateStatus(progress--, total, string.Format("Rollback '{0}'", task.Name)));
+// ReSharper restore AccessToModifiedClosure
                             }
                             else if (_progressNotifyableViewModel != null)
                             {
@@ -408,6 +377,83 @@ namespace Catel.MVVM.Services
                 }
             }
         }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="viewModel"></param>
+        /// <param name="show"></param>
+        /// <param name="asycn"></param>
+        /// <param name="completedCallback"></param>
+        private void CommitUsingViewModel(IProgressNotifyableViewModel viewModel, bool show = true, bool asycn = false, Action completedCallback = null)
+        {
+            StartCommitting(() => viewModel, show);
+            if (asycn)
+            {
+                _thread = new Thread(Execute);
+                _thread.SetApartmentState(ApartmentState.STA);
+                _completedCallback = completedCallback;
+                _thread.Start();
+            }
+            else
+            {
+                Execute();
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="viewModelType"></param>
+        /// <returns></returns>
+        private IProgressNotifyableViewModel CreateProgressNotifyableViewModelFrom(Type viewModelType)
+        {
+            IProgressNotifyableViewModel viewModel = null;
+
+            if (viewModelType != null)
+            {
+                Argument.IsOfType(() => viewModelType, typeof(IProgressNotifyableViewModel));
+
+                viewModel = (IProgressNotifyableViewModel)_viewModelFactory.CreateViewModel(viewModelType, null);
+            }
+
+            return viewModel;
+        }
+
+        /// <summary>
+        /// Verifies the state of the service and also sets the commiting state to <c>true</c>.  
+        /// </summary>
+        /// <param name="viewModelFunc">
+        /// The view model instance.
+        /// </param>
+        /// <param name="show">
+        /// Indicates whether the view model will be shown. If the view model is <c>null</c> then tthis argument will be ignored. 
+        /// </param>
+        /// <exception cref="InvalidOperationException">
+        /// If the batch is already committed and the execution is in progress or committing via async way.
+        /// </exception>
+        private void StartCommitting(Func<IProgressNotifyableViewModel> viewModelFunc = null, bool show = true)
+        {
+            lock (_syncObj)
+            {
+                if (IsCommitting || IsRunning)
+                {
+                    throw new InvalidOperationException(ExecutionIsInProgressErrorMessage);
+                }
+
+                if (_tasks.Count == 0)
+                {
+                    throw new InvalidOperationException(AtLeastOneTaskShouldBeRegisteredErrorMessage);
+                }
+
+                _progressNotifyableViewModel = viewModelFunc == null ? null : viewModelFunc.Invoke();
+                if (_progressNotifyableViewModel != null && show)
+                {
+                    _uiVisualizerService.Show(_progressNotifyableViewModel);        
+                }
+
+                IsCommitting = true;
+            }
+        }
+
         #endregion
     }
 }

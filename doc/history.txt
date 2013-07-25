@@ -33,6 +33,7 @@ Added/fixed (BREAKING CHANGES):
 
 Added/fixed:
 ============
+(+) Added support to Commit enqueued tasks using an existing instance view model for SplashScreenService
 (+) CTL-6 Dependency injection is now supported in child view models. This makes it possible to combine both model
     injection with auto-completion from services registered in the ServiceLocator
 (+) CTL-7 Added support for empty cell in the StackGrid control
@@ -50,6 +51,7 @@ Added/fixed:
 (+) CTL-130 Added FileLogListener which writes to a log file in batches
 (*) CTL-117 Title property on ViewModelBase now has a setter as well which implements INotifyPropertyChanged
 (*) CTL-126 Upgrade support for FluentValidation to 4.0.0.1
+(x) Removed the usage of the DispatcherService to execute a task in SplashScreenService to allow smoothly notification of the task progress
 (x) CTL-103 Fixed issue where WindowLogic could not correctly close a non-modal dialog in WPF
 (x) CTL-108 Fixed issues with WeakEventListeners and WinRT
 (x) CTL-112 Fixed issue where ViewToViewModel mappings did not work in WPF

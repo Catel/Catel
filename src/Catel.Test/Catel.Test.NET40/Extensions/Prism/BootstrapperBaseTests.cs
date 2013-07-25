@@ -607,7 +607,7 @@ namespace Catel.Test.Extensions.Prism
                 serviceLocator.RegisterInstance<ISplashScreenService>(splashScreenServiceMock.Object);
                 new FooBootstrapper(serviceLocator).RunWithSplashScreen<ProgressNotifyableViewModel>();
                 splashScreenServiceMock.Verify(service => service.Enqueue(It.IsAny<ITask>()), Times.AtLeast(12));
-                splashScreenServiceMock.Verify(service => service.CommitAsync<ProgressNotifyableViewModel>(null), Times.Once());
+                splashScreenServiceMock.Verify(service => service.CommitAsync<ProgressNotifyableViewModel>(null, null, true), Times.Once());
             }
 
             #endregion
