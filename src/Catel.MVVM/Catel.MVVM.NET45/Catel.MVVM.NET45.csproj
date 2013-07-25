@@ -849,6 +849,8 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Windows\PleaseWaitHelper.cs">
       <Link>Windows\Windows\PleaseWaitHelper.cs</Link>
     </Compile>
+    <Compile Include="MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs" />
+    <Compile Include="MVVM\Commands\TaskCommand.cs" />
     <Compile Include="Windows\Windows\LoaderAnimation.xaml.cs">
       <DependentUpon>LoaderAnimation.xaml</DependentUpon>
     </Compile>
