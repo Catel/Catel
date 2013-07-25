@@ -375,6 +375,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Extensions\ViewModelExtensions.cs">
       <Link>MVVM\ViewModels\Extensions\ViewModelExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Extensions\ViewModelManagerExtensions.cs">
+      <Link>MVVM\ViewModels\Extensions\ViewModelManagerExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Interfaces\INotifyableViewModel.cs">
       <Link>MVVM\ViewModels\Interfaces\INotifyableViewModel.cs</Link>
     </Compile>

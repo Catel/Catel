@@ -180,6 +180,7 @@
     <Compile Include="MVVM\ViewModels\EventArgs\SavingEventArgs.cs" />
     <Compile Include="MVVM\ViewModels\EventArgs\ViewModelClosedEventArgs.cs" />
     <Compile Include="MVVM\ViewModels\Extensions\ViewModelExtensions.cs" />
+    <Compile Include="MVVM\ViewModels\Extensions\ViewModelManagerExtensions.cs" />
     <Compile Include="MVVM\ViewModels\Interfaces\INotifyableViewModel.cs" />
     <Compile Include="MVVM\ViewModels\Interfaces\IProgressNotifyableViewModel.cs" />
     <Compile Include="MVVM\ViewModels\Interfaces\IRelationalViewModel.cs" />

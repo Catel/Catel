@@ -101,6 +101,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\ViewExportService.cs">
       <Link>MVVM\Services\ViewExportService.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Extensions\ViewModelManagerExtensions.cs">
+      <Link>MVVM\ViewModels\Extensions\ViewModelManagerExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ViewModelBase.validation.cs">
       <Link>MVVM\ViewModels\ViewModelBase.validation.cs</Link>
     </Compile>

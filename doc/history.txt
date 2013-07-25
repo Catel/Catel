@@ -39,6 +39,8 @@ Added/fixed:
 (+) CTL-26 Added IQueryable<T>.Include extension so it is easier to include properties in an EF query
 (+) CTL-58 Automatic de/serialization of specified fields within ModelBase using the IncludeInSerialization and
     ExcludeFromSerialization attributes which also work on regular properties and fields
+(+) CTL-99 Added extensions methods for the IViewModelManager to allow the closing of all view models that match a 
+    specified predicate
 (+) CTL-111 Added BootstrapperTaskFactory to allow customization of the bootstrapper tasks for prism. Also added
     a lot of events to the BootstrapperBase to allow fine-grained control without having to derive a custom bootstrapper
 (+) CTL-113 Added untyped expression overload for PropertyHelper.GetPropertyName
