@@ -57,6 +57,7 @@ Added/fixed:
 (x) CTL-124 Fixed issue in PropertyBag where it checked whether the old value was equal to the new value. This could
     cause a StackOverflow when 2 different instances were equal (but not the same reference). The PropertyBag now checks
     whether the values are equal by reference
+(x) CTL-128 Problem with navigation in WinRT apps
 (x) CTL-132 Fixed bug where LinkLabel.Command actually returned the CommandParameter
 (x) Fixed Drag and Drop behavior when the drop position is less then the initial item's position
 
