@@ -32,8 +32,6 @@ namespace Catel
         {
             IsNotNull("expression", expression);
 
-            var bodyExpression = expression.Body.ToString();
-
             var parameterExpression = (MemberExpression)expression.Body;
             var parameterInfo = new ParameterInfo<T>(parameterExpression.Member.Name, expression.Compile().Invoke());
 
