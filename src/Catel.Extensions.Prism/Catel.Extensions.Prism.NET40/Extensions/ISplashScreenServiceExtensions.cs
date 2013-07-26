@@ -8,6 +8,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace Catel
 {
+    using System;
+
     using MVVM;
     using MVVM.Services;
 
@@ -17,7 +19,6 @@ namespace Catel
     public static class ISplashScreenServiceExtensions
     {
         #region Public Methods and Operators
-
         /// <summary>
         /// The commit asyc.
         /// </summary>
@@ -30,15 +31,16 @@ namespace Catel
         /// <param name="regionName">
         /// The region name.
         /// </param>
+        /// <param name="completedCallback">
+        /// The completed callback.
+        /// </param>
         /// <typeparam name="TViewModel">
         /// The view model type.
         /// </typeparam>
-        public static void CommitAsyc<TViewModel>(
-            this ISplashScreenService @this, TViewModel viewModel, string regionName)
-            where TViewModel : IProgressNotifyableViewModel
+        public static void CommitAsyc<TViewModel>(this ISplashScreenService @this, TViewModel viewModel, string regionName, Action completedCallback = null) where TViewModel : IProgressNotifyableViewModel
         {
             viewModel.GetService<IUIVisualizerService>().Activate(viewModel, regionName);
-            @this.CommitAsync(viewModel: viewModel, show: false);
+            @this.CommitAsync(viewModel: viewModel, show: false, completedCallback: completedCallback);
         }
 
         /// <summary>
@@ -56,15 +58,17 @@ namespace Catel
         /// <param name="regionName">
         /// The region name.
         /// </param>
+        /// <param name="completedCallback">
+        /// The completed callback.
+        /// </param>
         /// <typeparam name="TViewModel">
         /// The view model type.
         /// </typeparam>
-        public static void CommitAsyc<TViewModel>(
-            this ISplashScreenService @this, TViewModel viewModel, IViewModel parentViewModel, string regionName)
+        public static void CommitAsyc<TViewModel>(this ISplashScreenService @this, TViewModel viewModel, IViewModel parentViewModel, string regionName, Action completedCallback = null)
             where TViewModel : IProgressNotifyableViewModel
         {
             viewModel.GetService<IUIVisualizerService>().Activate(viewModel, parentViewModel, regionName);
-            @this.CommitAsync(viewModel: viewModel, show: false);
+            @this.CommitAsync(viewModel: viewModel, show: false, completedCallback: completedCallback);
         }
 
         #endregion
