@@ -390,7 +390,9 @@ namespace Catel.MVVM.Services
             if (asycn)
             {
                 _thread = new Thread(Execute);
+#if !SILVERLIGHT
                 _thread.SetApartmentState(ApartmentState.STA);
+#endif                
                 _completedCallback = completedCallback;
                 _thread.Start();
             }

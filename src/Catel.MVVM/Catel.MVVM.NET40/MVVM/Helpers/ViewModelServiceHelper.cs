@@ -117,6 +117,7 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewExportService, ViewExportService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelLocator, ViewModelLocator>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelFactory, ViewModelFactory>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<ISplashScreenService, SplashScreenService>(RegistrationType.Transient);
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewExportService, ViewExportService>();
 #else // WPF
                 if (!serviceLocator.IsTypeRegistered<IMessageMediator>())
@@ -146,7 +147,7 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelLocator, ViewModelLocator>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelFactory, ViewModelFactory>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewExportService, ViewExportService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<ISplashScreenService, SplashScreenService>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<ISplashScreenService, SplashScreenService>(RegistrationType.Transient);
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewExportService, ViewExportService>();
 #endif
 
