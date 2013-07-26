@@ -6,8 +6,11 @@
 
 namespace Catel.MVVM.ViewModels
 {
-    using Data;
-    using Tasks;
+    using System.ComponentModel;
+
+    using Catel.Data;
+    using Catel.IoC;
+    using Catel.MVVM.Tasks;
 
     /// <summary>
     /// The progress notifyable view model base.
@@ -15,7 +18,6 @@ namespace Catel.MVVM.ViewModels
     public class ProgressNotifyableViewModel : ViewModelBase, IProgressNotifyableViewModel
     {
         #region Constants
-
         /// <summary>Register the Task property so it is known in the class.</summary>
         public static readonly PropertyData TaskProperty = RegisterProperty("Task", typeof(ITask), default(ITask));
 
@@ -33,7 +35,6 @@ namespace Catel.MVVM.ViewModels
         #endregion
 
         #region Fields
-
         /// <summary>
         /// The _current item.
         /// </summary>
@@ -45,8 +46,44 @@ namespace Catel.MVVM.ViewModels
         private int _totalItems;
         #endregion
 
-        #region Properties
+        #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProgressNotifyableViewModel"/> class.
+        /// </summary>
+        /// <param name="supportIEditableObject">if set to <c>true</c>, the view model will natively support models that
+        /// implement the <see cref="IEditableObject"/> interface.</param>
+        /// <param name="ignoreMultipleModelsWarning">if set to <c>true</c>, the warning when using multiple models is ignored.</param>
+        /// <param name="skipViewModelAttributesInitialization">
+        /// if set to <c>true</c>, the initialization will be skipped and must be done manually via <see cref="ViewModelBase.InitializeViewModelAttributes"/>.
+        /// </param>
+        /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
+        /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
+        public ProgressNotifyableViewModel(bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false)
+            : base(supportIEditableObject, ignoreMultipleModelsWarning, skipViewModelAttributesInitialization)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
+        /// <para/>
+        /// This constructor allows the injection of a custom <see cref="IServiceLocator"/>.
+        /// </summary>
+        /// <param name="serviceLocator">The service locator to inject. If <c>null</c>, the <see cref="Catel.IoC.ServiceLocator.Default"/> will be used.</param>
+        /// <param name="supportIEditableObject">if set to <c>true</c>, the view model will natively support models that
+        /// implement the <see cref="IEditableObject"/> interface.</param>
+        /// <param name="ignoreMultipleModelsWarning">if set to <c>true</c>, the warning when using multiple models is ignored.</param>
+        /// <param name="skipViewModelAttributesInitialization">if set to <c>true</c>, the initialization will be skipped and must be done manually via <see cref="ViewModelBase.InitializeViewModelAttributes"/>.</param>
+        /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
+        /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
+        public ProgressNotifyableViewModel(IServiceLocator serviceLocator, bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false)
+            : base(serviceLocator, supportIEditableObject, ignoreMultipleModelsWarning, skipViewModelAttributesInitialization)
+        {
+        }
+
+        #endregion
+
+        #region Properties
         /// <summary>
         /// Gets or sets the task message.
         /// </summary>
@@ -79,7 +116,6 @@ namespace Catel.MVVM.ViewModels
         #endregion
 
         #region IProgressNotifyableViewModel Members
-
         /// <summary>
         /// Gets the task.
         /// </summary>
@@ -150,7 +186,6 @@ namespace Catel.MVVM.ViewModels
         #endregion
 
         #region Methods
-
         /// <summary>Occurs when the value of the TaskMessage property is changed.</summary>
         private void OnTaskMessageChanged()
         {
