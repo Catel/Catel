@@ -123,6 +123,11 @@ namespace Catel.Data
                     }
                 }
 
+                if (oldPropertyValues == null)
+                {
+                    return;
+                }
+
                 foreach (KeyValuePair<string, object> propertyValue in oldPropertyValues)
                 {
                     // Set value so the PropertyChanged event is invoked

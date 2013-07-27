@@ -52,7 +52,7 @@ namespace Catel.MVVM.ViewModels
         /// </summary>
         /// <remarks>Must have a public constructor in order to be serializable.</remarks>
         public ProgressNotifyableViewModel()
-            : this(true, false, false)
+            : this(false, false, false)
         {
         }
 
