@@ -289,6 +289,10 @@ namespace Catel.MVVM
             }
         }
 
+        /// <summary>
+        /// Raises the <see cref="Command{TExecuteParameter, TCanExecuteParameter}.CanExecuteChanged"/> event
+        /// and raise can-execute-changed method of the <see cref="CancelCommand"/>.
+        /// </summary>
         public override void RaiseCanExecuteChanged()
         {
             base.RaiseCanExecuteChanged();
