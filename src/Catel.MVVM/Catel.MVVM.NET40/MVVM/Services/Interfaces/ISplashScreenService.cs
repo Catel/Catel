@@ -20,6 +20,14 @@ namespace Catel.MVVM.Services
         bool IsRunning { get; }
 
         /// <summary>
+        /// Gets and sets a value indicating whether the service will close the view model when done.
+        /// </summary>
+        /// <remarks>
+        /// The default value is <c>true</c>.
+        /// </remarks>
+        bool CloseViewModelOnTerminated { get; set; }
+
+        /// <summary>
         /// The enqueue.
         /// </summary>
         /// <param name="task">The task.</param>
