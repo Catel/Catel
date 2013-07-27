@@ -8,13 +8,10 @@
 namespace Catel.MVVM
 {
     using System;
-    using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
-    using System.Windows.Input;
-    using Catel.IoC;
+
     using Catel.Logging;
-    using Catel.MVVM.Services;
 
     /// <summary>
     /// Interface for task progress report.
@@ -35,24 +32,10 @@ namespace Catel.MVVM
     /// <typeparam name="TExecuteParameter">The type of the execute parameter.</typeparam>
     /// <typeparam name="TCanExecuteParameter">The type of the can execute parameter.</typeparam>
     /// <typeparam name="TProgress">The type of the progress report value.</typeparam>
-    public class TaskCommand<TExecuteParameter, TCanExecuteParameter, TProgress> : ICatelTaskCommand<TProgress>
+    public class TaskCommand<TExecuteParameter, TCanExecuteParameter, TProgress> : Command<TExecuteParameter, TCanExecuteParameter>, ICatelTaskCommand<TProgress>
         where TProgress : ITaskProgressReport
     {
         #region Fields
-        // ReSharper disable StaticFieldInGenericType
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-        private static readonly IAuthenticationProvider AuthenticationProvider =
-            ServiceLocator.Default.ResolveTypeAndReturnNullIfNotRegistered<IAuthenticationProvider>();
-
-        private static readonly IDispatcherService DispatcherService = ServiceLocator.Default.ResolveType<IDispatcherService>();
-
-        // ReSharper restore StaticFieldInGenericType
-
-        private readonly Func<TCanExecuteParameter, bool> _canExecuteWithParameter;
-
-        private readonly Func<bool> _canExecuteWithoutParameter;
-
         private readonly Action<TProgress> _reportProgress;
 
         private readonly Func<TExecuteParameter, CancellationToken, IProgress<TProgress>, Task> _execute;
@@ -61,10 +44,6 @@ namespace Catel.MVVM
 
         private CancellationTokenSource _cancellationTokenSource;
 
-        /// <summary>
-        ///     List of subscribed event handlers so the commands can be unsubscribed upon disposing.
-        /// </summary>
-        private readonly List<EventHandler> _subscribedEventHandlers = new List<EventHandler>();
         #endregion
 
         #region Constructors
@@ -154,15 +133,11 @@ namespace Catel.MVVM
         /// parameter.</param>
         /// <param name="reportProgress">Action is executed each time task progress is reported.</param>
         /// <param name="tag">The tag of the command.</param>
-        internal TaskCommand(Func<TCanExecuteParameter, bool> canExecuteWithParameter = null, Func<bool> canExecuteWithoutParameter = null,
+        private TaskCommand(Func<TCanExecuteParameter, bool> canExecuteWithParameter = null, Func<bool> canExecuteWithoutParameter = null,
             Action<TProgress> reportProgress = null, object tag = null)
+            : base(null, null, canExecuteWithParameter, canExecuteWithoutParameter, tag)
         {
-            _canExecuteWithParameter = canExecuteWithParameter;
-            _canExecuteWithoutParameter = canExecuteWithoutParameter;
             _reportProgress = reportProgress;
-
-            Tag = tag;
-            AutomaticallyDispatchEvents = true;
 
             CancelCommand = new Command(() =>
             {
@@ -186,40 +161,6 @@ namespace Catel.MVVM
         #endregion
 
         #region Events
-#if NET
-        /// <summary>
-        /// Occurs when changes occur that affect whether or not the command should execute.
-        /// </summary>
-        public event EventHandler CanExecuteChanged
-        {
-            add
-            {
-                CommandManager.RequerySuggested += value;
-
-                lock (_subscribedEventHandlers)
-                {
-                    _subscribedEventHandlers.Add(value);
-                }
-            }
-
-            remove
-            {
-                lock (_subscribedEventHandlers)
-                {
-                    _subscribedEventHandlers.Remove(value);
-                }
-
-                CommandManager.RequerySuggested -= value;
-            }
-        }
-#else
-        public event EventHandler CanExecuteChanged;
-#endif
-
-        /// <summary>
-        /// Occurs when the command has just been executed successfully.
-        /// </summary>
-        public event EventHandler<CommandExecutedEventArgs> Executed;
 
         /// <summary>
         /// Occurs when the command is about to execute.
@@ -238,22 +179,6 @@ namespace Catel.MVVM
         #endregion
 
         #region Properties
-        /// <summary>
-        /// Gets the tag for this command. A tag is a way to link any object to a command so you can use your own
-        /// methods to recognize the commands, for example by ID or string.
-        /// <para />
-        /// By default, the value is <c>null</c>.
-        /// </summary>
-        /// <value>The tag.</value>
-        public object Tag { get; private set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether events should automatically be dispatched to the UI thread.
-        /// <para />
-        /// The default value is <c>true</c>.
-        /// </summary>
-        /// <value><c>true</c> if [automatically dispatch events]; otherwise, <c>false</c>.</value>
-        public bool AutomaticallyDispatchEvents { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is executing.
@@ -282,72 +207,13 @@ namespace Catel.MVVM
 
         #region Methods
         /// <summary>
-        /// Defines the method that determines whether the command can execute in its current state.
-        /// </summary>
-        /// <returns><c>true</c> if this command can be executed; otherwise, <c>false</c>.</returns>
-        /// <remarks>Not a default parameter value because the <see cref="ICommand.CanExecute" /> has no default parameter value.</remarks>
-        public bool CanExecute()
-        {
-            return CanExecute(null);
-        }
-
-        /// <summary>
-        /// Defines the method that determines whether the command can execute in its current state.
-        /// </summary>
-        /// <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can
-        /// be set to null.</param>
-        /// <returns><c>true</c> if this command can be executed; otherwise, <c>false</c>.</returns>
-        public bool CanExecute(object parameter)
-        {
-            if (!(parameter is TExecuteParameter))
-            {
-                parameter = default(TCanExecuteParameter);
-            }
-
-            return CanExecute((TCanExecuteParameter) parameter);
-        }
-
-        /// <summary>
         /// Determines whether this instance can execute the specified parameter.
         /// </summary>
         /// <param name="parameter">The parameter.</param>
         /// <returns><c>true</c> if this instance can execute the specified parameter; otherwise, <c>false</c>.</returns>
-        public virtual bool CanExecute(TCanExecuteParameter parameter)
+        public override bool CanExecute(TCanExecuteParameter parameter)
         {
-            if (IsExecuting)
-            {
-                return false;
-            }
-
-            if (AuthenticationProvider != null)
-            {
-                if (!AuthenticationProvider.CanCommandBeExecuted(this, parameter))
-                {
-                    return false;
-                }
-            }
-
-            if (_canExecuteWithParameter != null)
-            {
-                return _canExecuteWithParameter(parameter);
-            }
-
-            if (_canExecuteWithoutParameter != null)
-            {
-                return _canExecuteWithoutParameter();
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Defines the method to be called when the command is invoked.
-        /// </summary>
-        /// <returns><c>true</c> if this instance can execute; otherwise, <c>false</c>.</returns>
-        /// <remarks>Not a default parameter value because the <see cref="ICommand.Execute" /> has no default parameter value.</remarks>
-        public void Execute()
-        {
-            Execute(null);
+            return !IsExecuting && base.CanExecute(parameter);
         }
 
         /// <summary>
@@ -355,34 +221,9 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can
         /// be set to null.</param>
-        public void Execute(object parameter)
-        {
-            if (!(parameter is TExecuteParameter))
-            {
-                parameter = default(TCanExecuteParameter);
-            }
-
-            Execute((TExecuteParameter) parameter);
-        }
-
-        /// <summary>
-        /// Defines the method to be called when the command is invoked.
-        /// </summary>
-        /// <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can
-        /// be set to null.</param>
-        public void Execute(TExecuteParameter parameter)
-        {
-            ExecuteAsync(parameter, false);
-        }
-
-        /// <summary>
-        /// Defines the method to be called when the command is invoked.
-        /// </summary>
-        /// <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can
-        /// be set to null.</param>
-        /// <param name="ignoreCanExecuteCheck">if set to <c>true</c>, the check on <see cref="CanExecute()" /> will be used before
+        /// <param name="ignoreCanExecuteCheck">if set to <c>true</c>, the check on <see cref="Command{TExecuteParameter, TCanExecuteParameter}.CanExecute()" /> will be used before
         /// actually executing the action.</param>
-        protected virtual async void ExecuteAsync(TExecuteParameter parameter, bool ignoreCanExecuteCheck)
+        protected override async void Execute(TExecuteParameter parameter, bool ignoreCanExecuteCheck)
         {
             // Double check whether execution is allowed, some controls directly call Execute
             if (_execute == null || IsExecuting || (!ignoreCanExecuteCheck && !CanExecute(parameter)))
@@ -438,28 +279,6 @@ namespace Catel.MVVM
         }
 
         /// <summary>
-        /// Raises the <see cref="CanExecuteChanged" /> event.
-        /// </summary>
-        public void RaiseCanExecuteChanged()
-        {
-            var action = new Action(() =>
-            {
-#if NET
-                foreach (EventHandler handler in _subscribedEventHandlers)
-                {
-                    handler.SafeInvoke(this);
-                }
-
-                CommandManager.InvalidateRequerySuggested();
-#else
-                CanExecuteChanged.SafeInvoke(this);
-#endif
-            });
-
-            AutoDispatchIfRequired(action);
-        }
-
-        /// <summary>
         /// Requests cancellation of the command.
         /// </summary>
         public void Cancel()
@@ -468,16 +287,6 @@ namespace Catel.MVVM
             {
                 CancelCommand.Execute();
             }
-        }
-
-        /// <summary>
-        /// Raises the <see cref="Executed" /> event.
-        /// </summary>
-        /// <param name="parameter">The parameter.</param>
-        protected void RaiseExecuted(object parameter)
-        {
-            var action = new Action(() => Executed.SafeInvoke(this, new CommandExecutedEventArgs(this, parameter)));
-            AutoDispatchIfRequired(action);
         }
 
         private void OnProgressChanged(TProgress progress)
@@ -505,35 +314,18 @@ namespace Catel.MVVM
         #endregion
 
         #region IDisposable Members
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
 
         /// <summary>
         /// Releases unmanaged and - optionally - managed resources.
         /// </summary>
         /// <param name="disposeManagedResources"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to
         /// release only unmanaged resources.</param>
-        protected virtual void Dispose(bool disposeManagedResources)
+        protected override void Dispose(bool disposeManagedResources)
         {
+            base.Dispose(disposeManagedResources);
+
             if (disposeManagedResources)
             {
-                lock (_subscribedEventHandlers)
-                {
-#if NET
-                    foreach (EventHandler eventHandler in _subscribedEventHandlers)
-                    {
-                        CommandManager.RequerySuggested -= eventHandler;
-                    }
-#endif
-
-                    _subscribedEventHandlers.Clear();
-                }
                 CancelCommand.Dispose();
             }
         }
