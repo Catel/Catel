@@ -289,6 +289,13 @@ namespace Catel.MVVM
             }
         }
 
+        public override void RaiseCanExecuteChanged()
+        {
+            base.RaiseCanExecuteChanged();
+
+            CancelCommand.RaiseCanExecuteChanged();
+        }
+
         private void OnProgressChanged(TProgress progress)
         {
             if (_reportProgress != null)

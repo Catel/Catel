@@ -286,7 +286,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Raises the <see cref="CanExecuteChanged"/> event.
         /// </summary>
-        public void RaiseCanExecuteChanged()
+        public virtual void RaiseCanExecuteChanged()
         {
             var action = new Action(() =>
             {
