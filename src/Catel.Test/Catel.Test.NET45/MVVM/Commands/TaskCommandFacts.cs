@@ -16,7 +16,7 @@ namespace Catel.Test.MVVM.Commands
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
-    public class TaskCommandTest
+    public class TaskCommandFacts
     {
         #region Constants
         private static readonly TimeSpan TaskDelay = TimeSpan.FromSeconds(9);

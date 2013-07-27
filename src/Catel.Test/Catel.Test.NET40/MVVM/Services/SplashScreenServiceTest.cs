@@ -36,7 +36,7 @@ namespace Catel.Test.MVVM.Services
             //ServiceLocator.Default.RegisterInstance<IDispatcherService>(dispatcherServiceMock.Object);
 
             return new SplashScreenService(dispatcherServiceMock.Object, messageService, new ViewModelFactory(TypeFactory.Default),
-                TypeFactory.Default.CreateInstance<UIVisualizerService>());
+                TypeFactory.Default.CreateInstance<UIVisualizerService>(), TypeFactory.Default.CreateInstance<IPleaseWaitService>());
         }
 
         /// <summary>

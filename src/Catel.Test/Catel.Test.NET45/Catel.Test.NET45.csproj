@@ -723,7 +723,7 @@
     <Compile Include="..\Catel.Test.NET40\Windows\Helpers\ResourceHelperFacts.cs">
       <Link>Windows\Helpers\ResourceHelperFacts.cs</Link>
     </Compile>
-    <Compile Include="MVVM\Commands\TaskCommandTest.cs" />
+    <Compile Include="MVVM\Commands\TaskCommandFacts.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Catel.Core\Catel.Core.NET45\Catel.Core.NET45.csproj">
