@@ -47,6 +47,14 @@ namespace Catel.MVVM.ViewModels
         #endregion
 
         #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProgressNotifyableViewModel"/> class.
+        /// </summary>
+        /// <remarks>Must have a public constructor in order to be serializable.</remarks>
+        public ProgressNotifyableViewModel()
+            : this(true, false, false)
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProgressNotifyableViewModel"/> class.
@@ -59,7 +67,7 @@ namespace Catel.MVVM.ViewModels
         /// </param>
         /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
         /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
-        public ProgressNotifyableViewModel(bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false)
+        public ProgressNotifyableViewModel(bool supportIEditableObject, bool ignoreMultipleModelsWarning, bool skipViewModelAttributesInitialization)
             : base(supportIEditableObject, ignoreMultipleModelsWarning, skipViewModelAttributesInitialization)
         {
         }
