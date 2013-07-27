@@ -53,6 +53,8 @@ namespace Catel
             {
                 Application.Current.MainWindow = shell;
 
+                shell.Owner = null;
+                
                 shell.Show();
                 shell.BringWindowToTop();
             }

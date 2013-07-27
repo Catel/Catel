@@ -363,13 +363,13 @@ namespace Catel.MVVM.Services
 
                 IsRunning = false;
 
-                _dispatcherService.Invoke(() =>
-                    {
+ //               _dispatcherService.Invoke(() =>
+ //                   {
                         if (_progressNotifyableViewModel != null)
                         {
                             _progressNotifyableViewModel.CloseViewModel(null);
                         }
-                    });
+ //                   });
 
                 if (_completedCallback != null)
                 {
@@ -449,7 +449,7 @@ namespace Catel.MVVM.Services
                 _progressNotifyableViewModel = viewModelFunc == null ? null : viewModelFunc.Invoke();
                 if (_progressNotifyableViewModel != null && show)
                 {
-                    _uiVisualizerService.Show(_progressNotifyableViewModel);        
+                    _uiVisualizerService.Show(_progressNotifyableViewModel);
                 }
 
                 IsCommitting = true;
