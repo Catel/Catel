@@ -109,14 +109,6 @@ namespace Catel.Data
 #endif
         internal readonly object _propertyValuesLock = new object();
 
-#if NET
-        /// <summary>
-        /// The <see cref="SerializationInfo"/> that is retrieved and will be used for deserialization.
-        /// </summary>
-        [field: NonSerialized]
-        private readonly SerializationInfo _serializationInfo;
-#endif
-
         /// <summary>
         /// The parent object of the current object.
         /// </summary>
@@ -172,57 +164,6 @@ namespace Catel.Data
         {
             // Do not write anything in this constructor. Use the Initialize method or the
             // OnInitializing or OnInitialized methods instead.
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ModelBase"/> class.
-        /// <para />
-        /// Only constructor for the ModelBase.
-        /// </summary>
-        /// <param name="info">SerializationInfo object, null if this is the first time construction.</param>
-        /// <param name="context">StreamingContext object, simple pass a default new StreamingContext() if this is the first time construction.</param>
-        /// <remarks>
-        /// Call this method, even when constructing the object for the first time (thus not deserializing).
-        /// </remarks>
-        protected ModelBase(SerializationInfo info, StreamingContext context)
-        {
-            OnInitializing();
-
-            Initialize();
-
-            // Make sure this is not a first time call
-            if (info == null)
-            {
-                FinishInitializationAfterConstructionOrDeserialization();
-            }
-            else
-            {
-                _serializationInfo = info;
-
-                bool succeeded = false;
-
-                try
-                {
-                    // First, try the "new" method (list of property values), but it might fail on old objects
-                    var properties = (List<PropertyValue>)SerializationHelper.GetObject(info, "Properties", typeof(List<PropertyValue>), new List<PropertyValue>());
-                    succeeded = properties.Count > 0;
-                }
-                catch (Exception)
-                {
-                    Log.Warning("Failed to deserialize properties using a list of property values, trying old mechanism (dictionary)");
-
-                    var properties = (List<KeyValuePair<string, object>>)SerializationHelper.GetObject(info, "Properties",
-                        typeof(List<KeyValuePair<string, object>>), new List<KeyValuePair<string, object>>());
-
-                    succeeded = properties.Count > 0;
-                }
-
-                GetDataFromSerializationInfoInternal(_serializationInfo);
-
-                DeserializationSucceeded = succeeded;
-            }
-
-            OnInitialized();
         }
 #endif
         #endregion
@@ -349,7 +290,7 @@ namespace Catel.Data
         [Browsable(false)]
 #endif
         [XmlIgnore]
-        protected bool LeanAndMeanModel
+        protected internal bool LeanAndMeanModel
         {
             get { return _leanAndMeanModel || GlobalLeanAndMeanModel; }
             set { _leanAndMeanModel = value; }
@@ -1173,6 +1114,11 @@ namespace Catel.Data
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
         protected virtual void OnPropertyObjectCollectionItemPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            if (string.Equals(e.PropertyName, "IsDirty", StringComparison.Ordinal))
+            {
+                return;
+            }
+
             SetDirtyAndAutomaticallyValidate(string.Empty, true);
         }
 
@@ -1696,14 +1642,17 @@ namespace Catel.Data
             // If this is an internal data object base property, just leave
             if (IsModelBaseProperty(e.PropertyName))
             {
-                // Maybe this is a child object informing us that it's not dirty any longer
                 var senderAsModelBase = sender as ModelBase;
-                if ((senderAsModelBase != null) && (e.PropertyName == IsDirtyProperty.Name))
+                if ((senderAsModelBase != null) && (string.Equals(e.PropertyName, IsDirtyProperty.Name, StringComparison.Ordinal)))
                 {
+                    // Maybe this is a child object informing us that it's not dirty any longer
                     if (senderAsModelBase.GetValue<bool>(e.PropertyName) == false)
                     {
-                        // Ignore
-                        return;
+                        if (!ReferenceEquals(this, sender))
+                        {
+                            // Ignore
+                            return;
+                        }
                     }
 
                     // A child became dirty, we are dirty as well
@@ -1817,37 +1766,17 @@ namespace Catel.Data
         {
             try
             {
-#if NET
-                var stream = new MemoryStream();
-                var serializer = SerializationHelper.GetBinarySerializer(enableRedirects);
-
-                serializer.Serialize(stream, this);
-
-                stream.Position = 0L;
-
-                object clone = serializer.Deserialize(stream);
-
-                stream.Close();
-
-                return clone;
-#else
-                bool isDirty = IsDirty;
-
-                var clone = (ModelBase)Activator.CreateInstance(GetType());
-
-                byte[] data = SerializeProperties();
-
-                var propertyValues = DeserializeProperties(data);
-
-                foreach (var propertyValue in propertyValues)
+                using (var stream = new MemoryStream())
                 {
-                    var propertyData = GetPropertyData(propertyValue.Name);
-                    clone.SetValue(propertyData, propertyValue.Value, false, false);
-                }
+                    var serializer = SerializationFactory.GetXmlSerializer();
 
-                clone.IsDirty = isDirty;
-                return clone;
-#endif
+                    serializer.Serialize(this, stream);
+
+                    stream.Position = 0L;
+
+                    object clone = serializer.Deserialize(GetType(), stream);
+                    return clone;
+                }                
             }
             catch (Exception ex)
             {

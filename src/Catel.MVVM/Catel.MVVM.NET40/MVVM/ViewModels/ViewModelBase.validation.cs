@@ -143,7 +143,8 @@ namespace Catel.MVVM
 
                 _childViewModelsHaveErrors = false;
 
-                foreach (IViewModel childViewModel in ChildViewModels)
+                var childViewModels = ChildViewModels.ToArray();
+                foreach (IViewModel childViewModel in childViewModels)
                 {
                     childViewModel.ValidateViewModel();
                     if (childViewModel.HasErrors)

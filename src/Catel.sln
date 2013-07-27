@@ -97,6 +97,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "design", "design", "{4B5D57
 		..\design\Catel logo (wpf).png = ..\design\Catel logo (wpf).png
 		..\design\Catel logo.ico = ..\design\Catel logo.ico
 		..\design\Catel logo.png = ..\design\Catel logo.png
+		..\design\logo_pcl.jpg = ..\design\logo_pcl.jpg
+		..\design\logo_plc_large.png = ..\design\logo_plc_large.png
+		..\design\logo_silverlight.jpg = ..\design\logo_silverlight.jpg
+		..\design\logo_windows8.jpg = ..\design\logo_windows8.jpg
+		..\design\logo_wp.jpg = ..\design\logo_wp.jpg
+		..\design\logo_wpf.jpg = ..\design\logo_wpf.jpg
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Core", "Catel.Core", "{3F661942-9946-4292-9FE7-6B576782D5F9}"

@@ -15,6 +15,7 @@ namespace Catel.Reflection
     using System.Linq;
     using System.Reflection;
     using Caching;
+    using Catel.Logging;
 
     /// <summary>
     /// Reflection extension class.
@@ -128,26 +129,34 @@ namespace Catel.Reflection
             };
 
         /// <summary>
+        /// Gets the full name of the type in a safe way. This means it checks for null first.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>The safe full name.</returns>
+        public static string GetSafeFullName(this Type type)
+        {
+            if (type == null)
+            {
+                return "NullType";
+            }
+
+            if (type.FullName == null)
+            {
+                return type.Name;
+            }
+
+            return type.FullName;
+        }
+
+        /// <summary>
         /// The get custom attribute ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <param name="attributeType">
-        /// The attribute type.
-        /// </param>
-        /// <param name="inherit">
-        /// The inherit.
-        /// </param>
-        /// <returns>
-        /// The get custom attribute ex.
-        /// </returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="attributeType"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <param name="attributeType">The attribute type.</param>
+        /// <param name="inherit">The inherit.</param>
+        /// <returns>The get custom attribute ex.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="attributeType" /> is <c>null</c>.</exception>
         public static object GetCustomAttributeEx(this Type type, Type attributeType, bool inherit)
         {
             Argument.IsNotNull("type", type);
@@ -237,21 +246,11 @@ namespace Catel.Reflection
         /// <summary>
         /// The has base type ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <param name="typeToCheck">
-        /// The type to check.
-        /// </param>
-        /// <returns>
-        /// The has base type ex.
-        /// </returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="typeToCheck"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <param name="typeToCheck">The type to check.</param>
+        /// <returns>The has base type ex.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         public static bool HasBaseTypeEx(this Type type, Type typeToCheck)
         {
             Argument.IsNotNull("type", type);
@@ -455,15 +454,9 @@ namespace Catel.Reflection
         /// <summary>
         /// The is enum ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <returns>
-        /// The is enum ex.
-        /// </returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <returns>The is enum ex.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         public static bool IsEnumEx(this Type type)
         {
             Argument.IsNotNull("type", type);
@@ -517,16 +510,11 @@ namespace Catel.Reflection
         /// <summary>
         /// The get generic arguments ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <returns>
-        /// </returns>
-        /// <exception cref="NotSupportedException">
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <returns>Type[][].</returns>
+        /// <exception cref="System.NotSupportedException"></exception>
+        /// <exception cref="NotSupportedException"></exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         public static Type[] GetGenericArgumentsEx(this Type type)
         {
             Argument.IsNotNull("type", type);
@@ -546,14 +534,9 @@ namespace Catel.Reflection
         /// <summary>
         /// The get interfaces ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <returns>
-        /// </returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <returns>Type[][].</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         public static Type[] GetInterfacesEx(this Type type)
         {
             Argument.IsNotNull("type", type);
@@ -568,14 +551,9 @@ namespace Catel.Reflection
         /// <summary>
         /// The get base type ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <returns>
-        /// </returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <returns>Type.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         public static Type GetBaseTypeEx(this Type type)
         {
             Argument.IsNotNull("type", type);
@@ -590,21 +568,11 @@ namespace Catel.Reflection
         /// <summary>
         /// The is assignable from ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <param name="typeToCheck">
-        /// The type to check.
-        /// </param>
-        /// <returns>
-        /// The is assignable from ex.
-        /// </returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="typeToCheck"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <param name="typeToCheck">The type to check.</param>
+        /// <returns>The is assignable from ex.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="typeToCheck" /> is <c>null</c>.</exception>
         public static bool IsAssignableFromEx(this Type type, Type typeToCheck)
         {
             Argument.IsNotNull("type", type);
@@ -620,21 +588,11 @@ namespace Catel.Reflection
         /// <summary>
         /// The is instance of type ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <param name="objectToCheck">
-        /// The object to check.
-        /// </param>
-        /// <returns>
-        /// The is instance of type ex.
-        /// </returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="objectToCheck"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <param name="objectToCheck">The object to check.</param>
+        /// <returns>The is instance of type ex.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="objectToCheck" /> is <c>null</c>.</exception>
         public static bool IsInstanceOfTypeEx(this Type type, object objectToCheck)
         {
             Argument.IsNotNull("type", type);
@@ -671,20 +629,11 @@ namespace Catel.Reflection
         /// <summary>
         /// The get constructor ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <param name="types">
-        /// The types.
-        /// </param>
-        /// <returns>
-        /// </returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="types"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <param name="types">The types.</param>
+        /// <returns>ConstructorInfo.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="types" /> is <c>null</c>.</exception>
         public static ConstructorInfo GetConstructorEx(this Type type, Type[] types)
         {
             Argument.IsNotNull("type", type);

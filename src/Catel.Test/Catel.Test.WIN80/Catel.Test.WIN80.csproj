@@ -18,7 +18,7 @@
     <PackageCertificateThumbprint>CD0C58B0274B7F50B519AC0643F7A9E3F4A8CB42</PackageCertificateThumbprint>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.13.8.0</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.13.12</FodyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -410,9 +410,6 @@
     <Compile Include="..\Catel.Test.NET40\Reflection\AppDomainExtensionsTest.cs">
       <Link>Reflection\AppDomainExtensionsTest.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Test.NET40\Reflection\AttributeHelperFacts.cs">
-      <Link>Reflection\AttributeHelperFacts.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Test.NET40\Reflection\PropertyHelperFacts.cs">
       <Link>Reflection\PropertyHelperFacts.cs</Link>
     </Compile>
@@ -437,11 +434,20 @@
     <Compile Include="..\Catel.Test.NET40\Reflection\TypeHelperFacts.cs">
       <Link>Reflection\TypeHelperFacts.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\Attributes\RedirectTypeAttributeTest.cs">
-      <Link>Runtime\Serialization\Attributes\RedirectTypeAttributeTest.cs</Link>
+    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\Helpers\SerializationTestHelper.cs">
+      <Link>Runtime\Serialization\Helpers\SerializationTestHelper.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\SerializationHelperTest.cs">
-      <Link>Runtime\Serialization\SerializationHelperTest.cs</Link>
+    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\SerializationManagerFacts.cs">
+      <Link>Runtime\Serialization\SerializationManagerFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\SerializationObjectFacts.cs">
+      <Link>Runtime\Serialization\SerializationObjectFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\TestModels\TestModel.cs">
+      <Link>Runtime\Serialization\TestModels\TestModel.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\XmlSerialization\XmlSerializationFacts.cs">
+      <Link>Runtime\Serialization\XmlSerialization\XmlSerializationFacts.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Text\StringBuilderExtensionFacts.cs">
       <Link>Text\StringBuilderExtensionFacts.cs</Link>
@@ -563,13 +569,14 @@
     <Folder Include="IoC\Extensions\" />
     <Folder Include="IoC\Helpers\" />
     <Folder Include="Logging\Extensions\" />
+    <Folder Include="Runtime\Serialization\Attributes\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Obsolete">
-      <HintPath>..\..\..\lib\Obsolete.Fody.1.6.2.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
+      <HintPath>..\..\..\lib\Obsolete.Fody.2.3.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>

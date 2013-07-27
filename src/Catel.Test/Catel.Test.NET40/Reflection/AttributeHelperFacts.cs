@@ -37,8 +37,7 @@ namespace Catel.Test.Reflection
             public void ThrowsArgumentNullExceptionForNullPropertyInfo()
             {
                 RedirectTypeAttribute attribute;
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(
-                    () => AttributeHelper.TryGetAttribute((MemberInfo)null, out attribute));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => AttributeHelper.TryGetAttribute((MemberInfo)null, out attribute));
             }
 
             #endregion

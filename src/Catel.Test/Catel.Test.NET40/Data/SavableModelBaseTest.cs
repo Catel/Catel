@@ -70,18 +70,6 @@ namespace Catel.Test.Data
 
             Assert.AreEqual(originalObject, clonedObject);
         }
-
-        [TestMethod]
-        public void BinarySerializationWithPrivateParameterlessConstructor()
-        {
-            // Create new object
-            var originalObject = new ObjectWithPrivateConstructor("My private constructor test");
-
-            // Test
-            var clonedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Binary);
-
-            Assert.AreEqual(originalObject, clonedObject);
-        }
 #endif
 
         [TestMethod]
@@ -203,15 +191,6 @@ namespace Catel.Test.Data
             var originalObject = new ObjectWithPrivateMembers("My private member");
             originalObject.PublicMember = "My public member";
 
-            var clonedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Xml);
-
-            Assert.AreEqual(originalObject, clonedObject);
-        }
-
-        [TestMethod]
-        public void XmlSerializationWithPrivateParameterlessConstructor()
-        {
-            var originalObject = new ObjectWithPrivateConstructor("My private constructor test");
             var clonedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Xml);
 
             Assert.AreEqual(originalObject, clonedObject);

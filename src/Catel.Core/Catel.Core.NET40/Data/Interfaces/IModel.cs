@@ -23,7 +23,7 @@ namespace Catel.Data
     public interface IModel : INotifyPropertyChanging, INotifyPropertyChanged, IParent, INotifyDataErrorInfo, INotifyDataWarningInfo
                                         , IDataErrorInfo, IDataWarningInfo, IAdvancedEditableObject, IXmlSerializable
 #if NET
-                                        , ICloneable, ISerializable, IDeserializationCallback
+                                        , ICloneable, ISerializable
 #endif
     {
         #region Properties

@@ -61,7 +61,12 @@ namespace Catel.Reflection
         /// <returns>
         /// A value which, in combination with <see cref="P:System.Reflection.MemberInfo.Module"/>, uniquely identifies a metadata element.
         /// </returns>
-        /// <exception cref="T:System.InvalidOperationException">The current <see cref="T:System.Reflection.MemberInfo"/> represents an array method, such as Address, on an array type whose element type is a dynamic type that has not been completed. To get a metadata token in this case, pass the <see cref="T:System.Reflection.MemberInfo"/> object to the <see cref="M:System.Reflection.Emit.ModuleBuilder.GetMethodToken(System.Reflection.MethodInfo)"/> method; or use the <see cref="M:System.Reflection.Emit.ModuleBuilder.GetArrayMethodToken(System.Type,System.String,System.Reflection.CallingConventions,System.Type,System.Type[])"/>  method to get the token directly, instead of using the <see cref="M:System.Reflection.Emit.ModuleBuilder.GetArrayMethod(System.Type,System.String,System.Reflection.CallingConventions,System.Type,System.Type[])"/> method to get a <see cref="T:System.Reflection.MethodInfo"/> first.
+        /// <exception cref="T:System.InvalidOperationException">The current <see cref="T:System.Reflection.MemberInfo"/> represents an array method, such 
+        /// as Address, on an array type whose element type is a dynamic type that has not been completed. To get a metadata token in this case, pass 
+        /// the <see cref="T:System.Reflection.MemberInfo"/> object to the <c>System.Reflection.Emit.ModuleBuilder.GetMethodToken(System.Reflection.MethodInfo)</c>
+        /// method; or use the <c>System.Reflection.Emit.ModuleBuilder.GetArrayMethodToken(System.Type,System.String,System.Reflection.CallingConventions,System.Type,System.Type[])</c> 
+        ///  method to get the token directly, instead of using the <c>System.Reflection.Emit.ModuleBuilder.GetArrayMethod(System.Type,System.String,System.Reflection.CallingConventions,System.Type,System.Type[])</c> 
+        /// method to get a <see cref="T:System.Reflection.MethodInfo"/> first.
         /// </exception>
         public int MetadataToken
         {

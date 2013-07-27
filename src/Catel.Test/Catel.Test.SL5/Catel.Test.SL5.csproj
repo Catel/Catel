@@ -31,7 +31,7 @@
     <LinkedServerProject />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.13.8.0</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.13.12</FodyPath>
   </PropertyGroup>
   <!--
   //
@@ -64,7 +64,7 @@
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -75,7 +75,7 @@
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Castle.Core, Version=3.2.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
@@ -86,9 +86,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Castle.Windsor.3.2.0\lib\sl5\Castle.Windsor.dll</HintPath>
     </Reference>
-    <Reference Include="FluentValidation, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="FluentValidation, Version=4.0.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\FluentValidation.4.0.0.0\lib\portable-wp8+sl5+win8\FluentValidation.dll</HintPath>
+      <HintPath>..\..\..\lib\FluentValidation.4.0.0.1\lib\portable-win+net40+sl50+wp80\FluentValidation.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Prism">
       <HintPath>..\..\..\lib\Prism.4.1.0.0\lib\SL5\Microsoft.Practices.Prism.dll</HintPath>
@@ -112,9 +112,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Ninject.3.0.1.10\lib\sl5\Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="Obsolete, Version=1.6.2.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
+    <Reference Include="Obsolete, Version=2.3.0.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Obsolete.Fody.1.6.2.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
+      <HintPath>..\..\..\lib\Obsolete.Fody.2.3.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System.ComponentModel.Composition, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -568,9 +568,6 @@
     <Compile Include="..\Catel.Test.NET40\Reflection\AssemblyExtensionsTest.cs">
       <Link>Reflection\AssemblyExtensionsTest.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Test.NET40\Reflection\AttributeHelperFacts.cs">
-      <Link>Reflection\AttributeHelperFacts.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Test.NET40\Reflection\PropertyHelperFacts.cs">
       <Link>Reflection\PropertyHelperFacts.cs</Link>
     </Compile>
@@ -595,11 +592,20 @@
     <Compile Include="..\Catel.Test.NET40\Reflection\TypeHelperFacts.cs">
       <Link>Reflection\TypeHelperFacts.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\Attributes\RedirectTypeAttributeTest.cs">
-      <Link>Runtime\Serialization\Attributes\RedirectTypeAttributeTest.cs</Link>
+    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\Helpers\SerializationTestHelper.cs">
+      <Link>Runtime\Serialization\Helpers\SerializationTestHelper.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\SerializationHelperTest.cs">
-      <Link>Runtime\Serialization\SerializationHelperTest.cs</Link>
+    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\SerializationManagerFacts.cs">
+      <Link>Runtime\Serialization\SerializationManagerFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\SerializationObjectFacts.cs">
+      <Link>Runtime\Serialization\SerializationObjectFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\TestModels\TestModel.cs">
+      <Link>Runtime\Serialization\TestModels\TestModel.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\XmlSerialization\XmlSerializationFacts.cs">
+      <Link>Runtime\Serialization\XmlSerialization\XmlSerializationFacts.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Text\StringBuilderExtensionFacts.cs">
       <Link>Text\StringBuilderExtensionFacts.cs</Link>
@@ -697,6 +703,7 @@
   <ItemGroup>
     <Folder Include="IoC\Extensions\" />
     <Folder Include="Logging\Extensions\" />
+    <Folder Include="Runtime\Serialization\Attributes\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Catel.Core\Catel.Core.SL5\Catel.Core.SL5.csproj">

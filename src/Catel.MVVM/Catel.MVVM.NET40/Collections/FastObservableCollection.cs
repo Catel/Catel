@@ -200,7 +200,7 @@ namespace Catel.Collections
         }
 
         /// <summary>
-        /// Raises the <see cref="ObservableCollection{T}.PropertyChanged" /> event, but also makes sure the event is dispatched to the UI thread.
+        /// Raises the <c>ObservableCollection{T}.PropertyChanged</c> event, but also makes sure the event is dispatched to the UI thread.
         /// </summary>
         /// <param name="e">The <see cref="PropertyChangedEventArgs" /> instance containing the event data.</param>
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)

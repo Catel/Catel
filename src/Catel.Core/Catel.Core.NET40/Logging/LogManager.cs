@@ -160,6 +160,29 @@ namespace Catel.Logging
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         #endregion
 
+        #region Constructors
+        /// <summary>
+        /// Initializes static members of the <see cref="LogManager" /> class.
+        /// </summary>
+        static LogManager()
+        {
+#if NET
+            AppDomain.CurrentDomain.DomainUnload += (sender, e) => FlushAll();
+#endif
+
+#if NET || SILVERLIGHT
+            AppDomain.CurrentDomain.UnhandledException += (sender, e) => FlushAll();
+#endif
+        }
+        #endregion
+
+        #region Events
+        /// <summary>
+        /// Occurs when a log message is written to one of the logs.
+        /// </summary>
+        public static event EventHandler<LogMessageEventArgs> LogMessage;
+        #endregion
+
         #region Methods
         /// <summary>
         /// Gets the current class logger.
@@ -204,7 +227,7 @@ namespace Catel.Logging
 
             if (debugLogListener == null)
             {
-                debugLogListener = new DebugLogListener {IgnoreCatelLogging = ignoreCatelLogging};
+                debugLogListener = new DebugLogListener { IgnoreCatelLogging = ignoreCatelLogging };
                 AddListener(debugLogListener);
             }
 
@@ -232,6 +255,24 @@ namespace Catel.Logging
                 }
 
                 return _loggers[type];
+            }
+        }
+
+        /// <summary>
+        /// Flushes all listeners that implement the <see cref="IBatchLogListener"/> by calling <see cref="IBatchLogListener.Flush"/>.
+        /// </summary>
+        public static void FlushAll()
+        {
+            lock (_logListeners)
+            {
+                foreach (var listener in _logListeners)
+                {
+                    var batchListener = listener as IBatchLogListener;
+                    if (batchListener != null)
+                    {
+                        batchListener.Flush();
+                    }
+                }
             }
         }
 
@@ -394,11 +435,7 @@ namespace Catel.Logging
                     throw new ArgumentOutOfRangeException("logEvent");
             }
         }
-        #endregion
 
-        /// <summary>
-        /// Occurs when a log message is written to one of the logs.
-        /// </summary>
-        public static event EventHandler<LogMessageEventArgs> LogMessage;
+        #endregion
     }
 }

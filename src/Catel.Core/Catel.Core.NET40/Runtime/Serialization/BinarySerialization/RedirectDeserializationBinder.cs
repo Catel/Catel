@@ -44,11 +44,7 @@ namespace Catel.Runtime.Serialization
         /// </remarks>
         public RedirectDeserializationBinder()
         {
-            Log.Debug("Creating redirect deserialization binder");
-
             Initialize();
-
-            Log.Debug("Created redirect deserialization binder");
         }
         #endregion
 

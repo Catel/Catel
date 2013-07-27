@@ -596,7 +596,10 @@ namespace Catel.MVVM
                     return true;
                 }
 
-                return ChildViewModels.Any(childViewModel => childViewModel.HasDirtyModel);
+                lock (ChildViewModels)
+                {
+                    return ChildViewModels.Any(childViewModel => childViewModel.HasDirtyModel);
+                }
             }
         }
 
@@ -1014,7 +1017,10 @@ namespace Catel.MVVM
         /// <returns>An enumerable of current child view models.</returns>
         protected IEnumerable<IViewModel> GetChildViewModels()
         {
-            return ChildViewModels.ToArray();
+            lock (ChildViewModels)
+            {
+                return ChildViewModels.ToArray();
+            }
         }
 
         /// <summary>

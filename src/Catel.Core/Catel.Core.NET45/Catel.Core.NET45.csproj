@@ -13,7 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.13.8.0</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.13.12</FodyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,9 +36,9 @@
     <DocumentationFile>..\..\..\output\release\NET45\Catel.Core\Catel.Core.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Obsolete, Version=1.6.2.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
+    <Reference Include="Obsolete, Version=2.3.0.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Obsolete.Fody.1.6.2.0\Lib\NET35\Obsolete.dll</HintPath>
+      <HintPath>..\..\..\lib\Obsolete.Fody.2.3.0\Lib\NET35\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -241,8 +241,14 @@
     <Compile Include="..\Catel.Core.NET40\Data\ModelBase.editableobject.cs">
       <Link>Data\ModelBase.editableobject.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Data\ModelBase.serialization.binary.cs">
+      <Link>Data\ModelBase.serialization.binary.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\ModelBase.serialization.cs">
       <Link>Data\ModelBase.serialization.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Data\ModelBase.serialization.xml.cs">
+      <Link>Data\ModelBase.serialization.xml.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\ModelBase.validation.cs">
       <Link>Data\ModelBase.validation.cs</Link>
@@ -445,6 +451,9 @@
     <Compile Include="..\Catel.Core.NET40\Linq\ExpressionUtil.cs">
       <Link>Linq\ExpressionUtil.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Logging\BatchLogListenerBase.cs">
+      <Link>Logging\BatchLogListenerBase.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\ConsoleLogListener.cs">
       <Link>Logging\ConsoleLogListener.cs</Link>
     </Compile>
@@ -457,6 +466,12 @@
     <Compile Include="..\Catel.Core.NET40\Logging\Extensions\LogExtensions.cs">
       <Link>Logging\Extensions\LogExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Logging\FileLogListener.cs">
+      <Link>Logging\FileLogListener.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Logging\Interfaces\IBatchLogListener.cs">
+      <Link>Logging\Interfaces\IBatchLogListener.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Interfaces\ILog.cs">
       <Link>Logging\Interfaces\ILog.cs</Link>
     </Compile>
@@ -465,6 +480,9 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Log.cs">
       <Link>Logging\Log.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Logging\LogBatchEntry.cs">
+      <Link>Logging\LogBatchEntry.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\LogEvent.cs">
       <Link>Logging\LogEvent.cs</Link>
@@ -631,20 +649,89 @@
     <Compile Include="..\Catel.Core.NET40\Reflection\TypeInfo.cs">
       <Link>Reflection\TypeInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Attributes\RedirectTypeAttribute.cs">
-      <Link>Runtime\Serialization\Attributes\RedirectTypeAttribute.cs</Link>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Attributes\ExcludeFromSerializationAttribute.cs">
+      <Link>Runtime\Serialization\Attributes\ExcludeFromSerializationAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Helpers\SerializationHelper.cs">
-      <Link>Runtime\Serialization\Helpers\SerializationHelper.cs</Link>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Attributes\IncludeInSerializationAttribute.cs">
+      <Link>Runtime\Serialization\Attributes\IncludeInSerializationAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Helpers\XmlSchemaHelper.cs">
-      <Link>Runtime\Serialization\Helpers\XmlSchemaHelper.cs</Link>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\BinarySerialization\Attributes\RedirectTypeAttribute.cs">
+      <Link>Runtime\Serialization\BinarySerialization\Attributes\RedirectTypeAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\RedirectDeserializationBinder.cs">
-      <Link>Runtime\Serialization\RedirectDeserializationBinder.cs</Link>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\BinarySerialization\BinarySerializationContextInfo.cs">
+      <Link>Runtime\Serialization\BinarySerialization\BinarySerializationContextInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSchemaManager.cs">
-      <Link>Runtime\Serialization\XmlSchemaManager.cs</Link>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\BinarySerialization\BinarySerializer.cs">
+      <Link>Runtime\Serialization\BinarySerialization\BinarySerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\BinarySerialization\Interfaces\IBinarySerializer.cs">
+      <Link>Runtime\Serialization\BinarySerialization\Interfaces\IBinarySerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\BinarySerialization\RedirectDeserializationBinder.cs">
+      <Link>Runtime\Serialization\BinarySerialization\RedirectDeserializationBinder.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Interfaces\IModelBaseSerializer.cs">
+      <Link>Runtime\Serialization\Interfaces\IModelBaseSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Interfaces\ISerializationContext.cs">
+      <Link>Runtime\Serialization\Interfaces\ISerializationContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Interfaces\ISerializationManager.cs">
+      <Link>Runtime\Serialization\Interfaces\ISerializationManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\MemberMetadata.cs">
+      <Link>Runtime\Serialization\MemberMetadata.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\MemberValue.cs">
+      <Link>Runtime\Serialization\MemberValue.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializationContext.cs">
+      <Link>Runtime\Serialization\SerializationContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializationFactory.cs">
+      <Link>Runtime\Serialization\SerializationFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializationManager.cs">
+      <Link>Runtime\Serialization\SerializationManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializationObject.cs">
+      <Link>Runtime\Serialization\SerializationObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializerBase.deserialization.cs">
+      <Link>Runtime\Serialization\SerializerBase.deserialization.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializerBase.general.cs">
+      <Link>Runtime\Serialization\SerializerBase.general.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializerBase.serialization.cs">
+      <Link>Runtime\Serialization\SerializerBase.serialization.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\DataContractNameResolver.cs">
+      <Link>Runtime\Serialization\XmlSerialization\DataContractNameResolver.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\DataContractSerializerFactory.cs">
+      <Link>Runtime\Serialization\XmlSerialization\DataContractSerializerFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\Helpers\XmlHelper.cs">
+      <Link>Runtime\Serialization\XmlSerialization\Helpers\XmlHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\Helpers\XmlSchemaHelper.cs">
+      <Link>Runtime\Serialization\XmlSerialization\Helpers\XmlSchemaHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\Interfaces\IDataContractNameResolver.cs">
+      <Link>Runtime\Serialization\XmlSerialization\Interfaces\IDataContractNameResolver.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\Interfaces\IDataContractSerializerFactory.cs">
+      <Link>Runtime\Serialization\XmlSerialization\Interfaces\IDataContractSerializerFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\Interfaces\IXmlSerializer.cs">
+      <Link>Runtime\Serialization\XmlSerialization\Interfaces\IXmlSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\XmlSchemaManager.cs">
+      <Link>Runtime\Serialization\XmlSerialization\XmlSchemaManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\XmlSerializer.cs">
+      <Link>Runtime\Serialization\XmlSerialization\XmlSerializer.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Services\Interfaces\IService.cs">
       <Link>Services\Interfaces\IService.cs</Link>

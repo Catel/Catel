@@ -14,6 +14,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -26,6 +28,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -37,6 +41,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -44,6 +50,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -51,6 +59,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -58,6 +68,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -65,6 +77,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -74,6 +88,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -81,6 +97,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -88,6 +106,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -95,6 +115,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -102,6 +124,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -109,6 +133,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -116,6 +142,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -123,6 +151,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -130,6 +160,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -137,6 +169,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -148,6 +182,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -159,6 +195,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -170,6 +208,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -181,6 +221,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -188,6 +230,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -195,6 +239,71 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Runtime\Serialization\BinarySerialization</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Runtime\Serialization\XmlSerialization\Helpers\XmlSchemaHelper.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Runtime\Serialization\XmlSerialization\XmlSchemaManager.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Data\ModelBase.serialization.binary.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Logging\FileLogListener.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
       </Rules>
@@ -209,6 +318,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -218,6 +329,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -229,6 +342,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -240,6 +355,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -251,6 +368,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -262,6 +381,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -273,6 +394,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -284,6 +407,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -295,6 +420,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -314,6 +441,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -325,6 +454,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -336,6 +467,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -347,6 +480,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -368,6 +503,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -379,6 +516,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -388,6 +527,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -397,6 +538,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -406,6 +549,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -415,6 +560,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -424,6 +571,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -433,6 +582,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -442,6 +593,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -460,6 +613,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -471,6 +626,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -490,6 +647,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -521,6 +680,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -532,6 +693,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -543,6 +706,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -554,6 +719,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -564,6 +731,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -571,6 +740,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -578,6 +749,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -585,6 +758,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -592,6 +767,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -599,6 +776,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -606,6 +785,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -613,6 +794,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -620,6 +803,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -627,6 +812,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -634,6 +821,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -641,6 +830,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -648,6 +839,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -655,6 +848,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -662,6 +857,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -669,6 +866,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -680,6 +879,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -699,6 +900,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -710,6 +913,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -721,6 +926,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -732,6 +939,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -743,6 +952,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -750,6 +961,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -759,6 +972,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -768,6 +983,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
       </Rules>
@@ -799,6 +1016,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
             <d1p1:ProjectType>SL4</d1p1:ProjectType>
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
           </ProjectTypes>
@@ -810,6 +1029,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
             <d1p1:ProjectType>SL4</d1p1:ProjectType>
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
           </ProjectTypes>
@@ -823,6 +1044,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -832,6 +1055,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
             <d1p1:ProjectType>SL4</d1p1:ProjectType>
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
           </ProjectTypes>
@@ -845,6 +1070,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -856,6 +1083,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -865,6 +1094,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -874,6 +1105,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
             <d1p1:ProjectType>SL4</d1p1:ProjectType>
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
           </ProjectTypes>
@@ -887,6 +1120,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -898,6 +1133,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -909,6 +1146,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -920,6 +1159,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -931,6 +1172,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -942,6 +1185,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -953,6 +1198,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -964,6 +1211,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -975,6 +1224,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -984,6 +1235,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
             <d1p1:ProjectType>SL4</d1p1:ProjectType>
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
           </ProjectTypes>
@@ -997,6 +1250,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1006,6 +1261,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
             <d1p1:ProjectType>SL4</d1p1:ProjectType>
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
           </ProjectTypes>
@@ -1019,6 +1276,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1030,6 +1289,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1041,6 +1302,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1052,6 +1315,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1059,6 +1324,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1066,6 +1333,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1073,6 +1342,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1080,6 +1351,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1087,6 +1360,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1094,6 +1369,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1101,6 +1378,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1108,6 +1387,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1115,6 +1396,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1122,6 +1405,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1131,6 +1416,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
             <d1p1:ProjectType>SL4</d1p1:ProjectType>
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
           </ProjectTypes>
@@ -1142,6 +1429,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1151,6 +1440,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
             <d1p1:ProjectType>SL4</d1p1:ProjectType>
             <d1p1:ProjectType>SL5</d1p1:ProjectType>
           </ProjectTypes>
@@ -1167,6 +1458,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1178,6 +1471,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
       </Rules>
@@ -1194,6 +1489,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1201,6 +1498,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1208,6 +1507,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1215,6 +1516,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1222,6 +1525,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1229,6 +1534,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
             <d1p1:ProjectType>SL4</d1p1:ProjectType>
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
@@ -1239,6 +1546,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1246,6 +1555,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1253,6 +1564,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1260,6 +1573,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1267,6 +1582,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1274,6 +1591,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1281,6 +1600,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1288,6 +1609,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1295,6 +1618,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1306,6 +1631,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1313,6 +1640,8 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1322,6 +1651,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1334,6 +1665,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1345,6 +1678,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1356,6 +1691,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1367,6 +1704,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1379,6 +1718,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1391,6 +1732,47 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Runtime\Serialization\Attributes\RedirectTypeAttributeTest.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Reflection\AttributeHelperFacts.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Runtime\Serialization\BinarySerialization</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
       </Rules>
@@ -1405,6 +1787,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
@@ -1414,6 +1798,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
       </Rules>
@@ -1451,6 +1837,8 @@
             <d1p1:ProjectType>WP7</d1p1:ProjectType>
             <d1p1:ProjectType>WP8</d1p1:ProjectType>
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
       </Rules>
