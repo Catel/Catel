@@ -97,10 +97,14 @@
     <Compile Include="MVVM\Commands\EventArgs\CommandCanceledEventArgs.cs" />
     <Compile Include="MVVM\Commands\EventArgs\CommandEventArgs.cs" />
     <Compile Include="MVVM\Commands\EventArgs\CommandExecutedEventArgs.cs" />
+    <Compile Include="MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs" />
     <Compile Include="MVVM\Commands\Helpers\CommandHelper.cs" />
     <Compile Include="MVVM\Commands\Interfaces\IAuthenticationProvider.cs" />
     <Compile Include="MVVM\Commands\Interfaces\ICatelCommand.cs" />
+    <Compile Include="MVVM\Commands\Interfaces\ICatelTaskCommand.cs" />
+    <Compile Include="MVVM\Commands\Interfaces\ITaskProgressReport.cs" />
     <Compile Include="MVVM\Commands\Interfaces\IViewModelCommandManager.cs" />
+    <Compile Include="MVVM\Commands\TaskCommand.cs" />
     <Compile Include="MVVM\Commands\ViewModelCommandManager.cs" />
     <Compile Include="MVVM\Exceptions\InvalidViewModelException.cs" />
     <Compile Include="MVVM\Exceptions\ModelNotRegisteredException.cs" />

@@ -16,24 +16,22 @@ namespace Catel.MVVM
     using IoC;
 
     /// <summary>
-    /// Base class for generic command classes.
-    /// Contains protected static services for using in derived classes.
+    /// Base class for generic command classes. Contains protected static services for using in derived classes.
     /// </summary>
     public abstract class CommandBase
     {
         /// <summary>
-        ///     Log interface.
+        /// Log interface.
         /// </summary>
         protected static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
-        ///     Authentication provider.
+        /// Authentication provider.
         /// </summary>
-        protected static readonly IAuthenticationProvider AuthenticationProvider =
-            ServiceLocator.Default.ResolveTypeAndReturnNullIfNotRegistered<IAuthenticationProvider>();
+        protected static readonly IAuthenticationProvider AuthenticationProvider = ServiceLocator.Default.ResolveTypeAndReturnNullIfNotRegistered<IAuthenticationProvider>();
 
         /// <summary>
-        ///     Dispatcher service.
+        /// Dispatcher service.
         /// </summary>
         protected static readonly IDispatcherService DispatcherService = ServiceLocator.Default.ResolveType<IDispatcherService>();
     }

@@ -4,6 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if !NET40 && !SILVERLIGHT && !WP7
 
 namespace Catel.MVVM
 {
@@ -61,3 +62,5 @@ namespace Catel.MVVM
         event EventHandler<CommandProgressChangedEventArgs<TProgress>> ProgressChanged;
     }
 }
+
+#endif

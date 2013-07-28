@@ -167,8 +167,17 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ICatelCommand.cs">
       <Link>MVVM\Commands\Interfaces\ICatelCommand.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ICatelTaskCommand.cs">
+      <Link>MVVM\Commands\Interfaces\ICatelTaskCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ITaskProgressReport.cs">
+      <Link>MVVM\Commands\Interfaces\ITaskProgressReport.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\IViewModelCommandManager.cs">
       <Link>MVVM\Commands\Interfaces\IViewModelCommandManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\TaskCommand.cs">
+      <Link>MVVM\Commands\TaskCommand.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\ViewModelCommandManager.cs">
       <Link>MVVM\Commands\ViewModelCommandManager.cs</Link>
@@ -625,12 +634,6 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET45\MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs">
       <Link>MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET45\MVVM\Commands\Interfaces\ICatelTaskCommand.cs">
-      <Link>MVVM\Commands\Interfaces\ICatelTaskCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET45\MVVM\Commands\TaskCommand.cs">
-      <Link>MVVM\Commands\TaskCommand.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.SL4\Windows\Controls\ValidationResult.cs">
       <Link>Windows\Controls\ValidationResult.cs</Link>

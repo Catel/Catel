@@ -4,6 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if !NET40 && !SILVERLIGHT && !WP7
 
 namespace Catel.MVVM
 {
@@ -12,19 +13,6 @@ namespace Catel.MVVM
     using System.Threading.Tasks;
 
     using Catel.Logging;
-
-    /// <summary>
-    /// Interface for task progress report.
-    /// </summary>
-    public interface ITaskProgressReport
-    {
-        #region Properties
-        /// <summary>
-        ///     Status of the task progress.
-        /// </summary>
-        string Status { get; }
-        #endregion
-    }
 
     /// <summary>
     /// Class to implement asynchronous task commands in the <see cref="ViewModelBase" />.
@@ -368,10 +356,7 @@ namespace Catel.MVVM
         /// <param name="execute">The action to execute.</param>
         /// <param name="canExecute">The function to call to determine wether the command can be executed.</param>
         /// <param name="tag">The tag of the command.</param>
-        public TaskCommand(
-            Func<TExecuteParameter, CancellationToken, Task> execute,
-            Func<TExecuteParameter, bool> canExecute = null,
-            object tag = null)
+        public TaskCommand(Func<TExecuteParameter, CancellationToken, Task> execute, Func<TExecuteParameter, bool> canExecute = null, object tag = null)
             : base(execute, canExecute, tag)
         {
         }
@@ -457,3 +442,5 @@ namespace Catel.MVVM
         #endregion
     }
 }
+
+#endif

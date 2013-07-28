@@ -135,8 +135,17 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ICatelCommand.cs">
       <Link>MVVM\Commands\Interfaces\ICatelCommand.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ICatelTaskCommand.cs">
+      <Link>MVVM\Commands\Interfaces\ICatelTaskCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ITaskProgressReport.cs">
+      <Link>MVVM\Commands\Interfaces\ITaskProgressReport.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\IViewModelCommandManager.cs">
       <Link>MVVM\Commands\Interfaces\IViewModelCommandManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\TaskCommand.cs">
+      <Link>MVVM\Commands\TaskCommand.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\ViewModelCommandManager.cs">
       <Link>MVVM\Commands\ViewModelCommandManager.cs</Link>
@@ -853,8 +862,6 @@
       <Link>Windows\Windows\PleaseWaitHelper.cs</Link>
     </Compile>
     <Compile Include="MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs" />
-    <Compile Include="MVVM\Commands\Interfaces\ICatelTaskCommand.cs" />
-    <Compile Include="MVVM\Commands\TaskCommand.cs" />
     <Compile Include="Windows\Windows\LoaderAnimation.xaml.cs">
       <DependentUpon>LoaderAnimation.xaml</DependentUpon>
     </Compile>

@@ -50,7 +50,7 @@ Added/fixed:
 (+) CTL-127 Added DbContextExtensions to set the isolation level of a DbContext
 (+) CTL-129 Added BatchLogListenerBase to write log events in configurable batches
 (+) CTL-130 Added FileLogListener which writes to a log file in batches
-(+) CTL-135 Added TaskCommand to Catel.MVVM (NET45 only)
+(+) CTL-135 Added TaskCommand to Catel.MVVM (NET45, WIN80 and WP8 only)
 (*) CTL-117 Title property on ViewModelBase now has a setter as well which implements INotifyPropertyChanged
 (*) CTL-126 Upgrade support for FluentValidation to 4.0.0.1
 (x) Ensured the value of Owner property of Shell to NULL in order to avoid the application close  when the SplashScreenService done

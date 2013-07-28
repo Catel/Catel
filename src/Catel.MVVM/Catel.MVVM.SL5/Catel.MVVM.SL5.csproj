@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -89,6 +89,18 @@
     <Compile Include="..\Catel.MVVM.NET40\ModuleInitializer.cs">
       <Link>ModuleInitializer.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs">
+      <Link>MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ICatelTaskCommand.cs">
+      <Link>MVVM\Commands\Interfaces\ICatelTaskCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ITaskProgressReport.cs">
+      <Link>MVVM\Commands\Interfaces\ITaskProgressReport.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\TaskCommand.cs">
+      <Link>MVVM\Commands\TaskCommand.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ISchedulerService.cs">
       <Link>MVVM\Services\Interfaces\ISchedulerService.cs</Link>
     </Compile>
@@ -97,6 +109,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\SchedulerService.cs">
       <Link>MVVM\Services\SchedulerService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\SplashScreenService.cs">
+      <Link>MVVM\Services\SplashScreenService.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\ViewExportService.cs">
       <Link>MVVM\Services\ViewExportService.cs</Link>
@@ -295,9 +310,6 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\DispatcherService.cs">
       <Link>MVVM\Services\DispatcherService.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\SplashScreenService.cs">
-      <Link>MVVM\Services\SplashScreenService.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\EventArgs\AccelerometerValueChangedEventArgs.cs">
       <Link>MVVM\Services\EventArgs\AccelerometerValueChangedEventArgs.cs</Link>
