@@ -10,21 +10,42 @@ namespace Catel.MVVM
     using System.Collections.Generic;
     using System.Windows.Input;
 
+    using Catel.Logging;
     using Catel.MVVM.Services;
 
     using IoC;
+
+    /// <summary>
+    /// Base class for generic command classes.
+    /// Contains protected static services for using in derived classes.
+    /// </summary>
+    public abstract class CommandBase
+    {
+        /// <summary>
+        ///     Log interface.
+        /// </summary>
+        protected static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        ///     Authentication provider.
+        /// </summary>
+        protected static readonly IAuthenticationProvider AuthenticationProvider =
+            ServiceLocator.Default.ResolveTypeAndReturnNullIfNotRegistered<IAuthenticationProvider>();
+
+        /// <summary>
+        ///     Dispatcher service.
+        /// </summary>
+        protected static readonly IDispatcherService DispatcherService = ServiceLocator.Default.ResolveType<IDispatcherService>();
+    }
 
     /// <summary>
     /// Class to implement commands in the <see cref="ViewModelBase"/>.
     /// </summary>
     /// <typeparam name="TExecuteParameter">The type of the execute parameter.</typeparam>
     /// <typeparam name="TCanExecuteParameter">The type of the can execute parameter.</typeparam>
-    public class Command<TExecuteParameter, TCanExecuteParameter> : ICatelCommand
+    public class Command<TExecuteParameter, TCanExecuteParameter> : CommandBase, ICatelCommand
     {
         #region Fields
-        private readonly static IAuthenticationProvider _authenticationProvider = ServiceLocator.Default.ResolveTypeAndReturnNullIfNotRegistered<IAuthenticationProvider>();
-        private readonly static IDispatcherService _dispatcherService = ServiceLocator.Default.ResolveType<IDispatcherService>();
-
         private readonly Func<TCanExecuteParameter, bool> _canExecuteWithParameter;
         private readonly Func<bool> _canExecuteWithoutParameter;
         private readonly Action<TExecuteParameter> _executeWithParameter;
@@ -95,28 +116,22 @@ namespace Catel.MVVM
         {
             add
             {
-                if ((_canExecuteWithParameter != null) || (_canExecuteWithoutParameter != null))
-                {
-                    CommandManager.RequerySuggested += value;
+                CommandManager.RequerySuggested += value;
 
-                    lock (_subscribedEventHandlers)
-                    {
-                        _subscribedEventHandlers.Add(value);
-                    }
+                lock (_subscribedEventHandlers)
+                {
+                    _subscribedEventHandlers.Add(value);
                 }
             }
 
             remove
             {
-                if ((_canExecuteWithParameter != null) || (_canExecuteWithoutParameter != null))
+                lock (_subscribedEventHandlers)
                 {
-                    lock (_subscribedEventHandlers)
-                    {
-                        _subscribedEventHandlers.Remove(value);
-                    }
-
-                    CommandManager.RequerySuggested -= value;
+                    _subscribedEventHandlers.Remove(value);
                 }
+
+                CommandManager.RequerySuggested -= value;
             }
         }
 #else
@@ -188,9 +203,9 @@ namespace Catel.MVVM
         /// </returns>
         public virtual bool CanExecute(TCanExecuteParameter parameter)
         {
-            if (_authenticationProvider != null)
+            if (AuthenticationProvider != null)
             {
-                if (!_authenticationProvider.CanCommandBeExecuted(this, parameter))
+                if (!AuthenticationProvider.CanCommandBeExecuted(this, parameter))
                 {
                     return false;
                 }
@@ -271,7 +286,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Raises the <see cref="CanExecuteChanged"/> event.
         /// </summary>
-        public void RaiseCanExecuteChanged()
+        public virtual void RaiseCanExecuteChanged()
         {
             var action = new Action(() =>
             {
@@ -305,7 +320,7 @@ namespace Catel.MVVM
         {
             if (AutomaticallyDispatchEvents)
             {
-                _dispatcherService.BeginInvokeIfRequired(action);
+                DispatcherService.BeginInvokeIfRequired(action);
             }
             else
             {
