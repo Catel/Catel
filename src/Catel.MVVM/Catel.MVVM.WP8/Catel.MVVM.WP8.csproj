@@ -681,6 +681,15 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Threading\Helpers\Dispatcherhelper.cs">
       <Link>Windows\Threading\Helpers\Dispatcherhelper.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET45\MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs">
+      <Link>MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET45\MVVM\Commands\Interfaces\ICatelTaskCommand.cs">
+      <Link>MVVM\Commands\Interfaces\ICatelTaskCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET45\MVVM\Commands\TaskCommand.cs">
+      <Link>MVVM\Commands\TaskCommand.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.SL4\Windows\Controls\ValidationResult.cs">
       <Link>Windows\Controls\ValidationResult.cs</Link>
     </Compile>
