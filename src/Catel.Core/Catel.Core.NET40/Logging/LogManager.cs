@@ -170,7 +170,7 @@ namespace Catel.Logging
             AppDomain.CurrentDomain.DomainUnload += (sender, e) => FlushAll();
 #endif
 
-#if NET || SILVERLIGHT
+#if NET
             AppDomain.CurrentDomain.UnhandledException += (sender, e) => FlushAll();
 #endif
         }

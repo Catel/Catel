@@ -29,6 +29,9 @@ namespace Catel.MVVM.ViewModels
 
         /// <summary>Register the TaskPercentage property so it is known in the class.</summary>
         public static readonly PropertyData TaskPercentageProperty = RegisterProperty("TaskPercentage", typeof(int), default(int), (s, e) => ((ProgressNotifyableViewModel)s).OnTaskPercentageChanged());
+       
+        /// <summary>Register the TaskPercentage property so it is known in the class.</summary>
+        public static readonly PropertyData TaskIsIndeterminateProperty = RegisterProperty("TaskIsIndeterminate", typeof(bool), true);
 
         /// <summary>Register the DetailedMessage property so it is known in the class.</summary>
         public static readonly PropertyData DetailedMessageProperty = RegisterProperty("DetailedMessage", typeof(string));
@@ -47,6 +50,14 @@ namespace Catel.MVVM.ViewModels
         #endregion
 
         #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProgressNotifyableViewModel"/> class.
+        /// </summary>
+        /// <remarks>Must have a public constructor in order to be serializable.</remarks>
+        public ProgressNotifyableViewModel()
+            : this(false, false, false)
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProgressNotifyableViewModel"/> class.
@@ -59,7 +70,7 @@ namespace Catel.MVVM.ViewModels
         /// </param>
         /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
         /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
-        public ProgressNotifyableViewModel(bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false)
+        public ProgressNotifyableViewModel(bool supportIEditableObject, bool ignoreMultipleModelsWarning, bool skipViewModelAttributesInitialization)
             : base(supportIEditableObject, ignoreMultipleModelsWarning, skipViewModelAttributesInitialization)
         {
         }
@@ -91,7 +102,6 @@ namespace Catel.MVVM.ViewModels
         public string TaskMessage
         {
             get { return GetValue<string>(TaskMessageProperty); }
-            set { SetValue(TaskMessageProperty, value); }
         }
 
         /// <summary>
@@ -101,7 +111,6 @@ namespace Catel.MVVM.ViewModels
         public string TaskName
         {
             get { return GetValue<string>(TaskNameProperty); }
-            set { SetValue(TaskNameProperty, value); }
         }
 
         /// <summary>
@@ -111,8 +120,17 @@ namespace Catel.MVVM.ViewModels
         public int TaskPercentage
         {
             get { return GetValue<int>(TaskPercentageProperty); }
-            set { SetValue(TaskPercentageProperty, value); }
         }
+        
+        /// <summary>
+        /// Gets or sets the task percentage.
+        /// </summary>
+        [ViewModelToModel("Task", "IsIndeterminate")]
+        public bool TaskIsIndeterminate
+        {
+            get { return GetValue<bool>(TaskIsIndeterminateProperty); }
+        }
+
         #endregion
 
         #region IProgressNotifyableViewModel Members
@@ -134,6 +152,29 @@ namespace Catel.MVVM.ViewModels
             get { return GetValue<string>(DetailedMessageProperty); }
             private set { SetValue(DetailedMessageProperty, value); }
         }
+
+        /// <summary>
+        /// Gets the percentage.
+        /// </summary>
+        public int Percentage
+        {
+            get
+            {
+                if (_totalItems <= 0)
+                {
+                    return 0;
+                }
+
+                var nextPercentage = (int)((100.0f * (_currentItem + 1)) / _totalItems);
+                var currentPercentage = (int)((100.0f * _currentItem) / _totalItems);
+
+                float deltaPercentage = nextPercentage - currentPercentage;
+                float scaledTaskPercentage = Task.Percentage * deltaPercentage / 100.0f;
+
+                return (int)(currentPercentage + scaledTaskPercentage);
+            }
+        }
+
 
         /// <summary>
         /// The update status.
@@ -162,27 +203,6 @@ namespace Catel.MVVM.ViewModels
             RaisePropertyChanged(() => Percentage);
         }
 
-        /// <summary>
-        /// Gets the percentage.
-        /// </summary>
-        public int Percentage
-        {
-            get
-            {
-                if (_totalItems <= 0)
-                {
-                    return 0;
-                }
-
-                var nextPercentage = (int)((100.0f * (_currentItem + 1)) / _totalItems);
-                var currentPercentage = (int)((100.0f * _currentItem) / _totalItems);
-
-                float deltaPercentage = nextPercentage - currentPercentage;
-                float scaledTaskPercentage = Task.Percentage * deltaPercentage / 100.0f;
-
-                return (int)(currentPercentage + scaledTaskPercentage);
-            }
-        }
         #endregion
 
         #region Methods

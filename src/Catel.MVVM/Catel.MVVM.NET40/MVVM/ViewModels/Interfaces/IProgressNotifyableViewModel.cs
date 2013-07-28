@@ -6,7 +6,7 @@
 
 namespace Catel.MVVM
 {
-    using Tasks;
+    using Catel.MVVM.Tasks;
 
     /// <summary>
     /// The ProgressNotifyableViewModel interface.
@@ -27,8 +27,27 @@ namespace Catel.MVVM
         /// <summary>
         /// Gets the task.
         /// </summary>
-        [Model]
         ITask Task { get; }
+
+        /// <summary>
+        /// Gets or sets the task message.
+        /// </summary>
+        string TaskMessage { get; }
+
+        /// <summary>
+        /// Gets or sets the task name.
+        /// </summary>
+        string TaskName { get; }
+
+        /// <summary>
+        /// Gets or sets the task percentage.
+        /// </summary>
+        int TaskPercentage { get; }
+
+        /// <summary>
+        /// Gets or sets the task percentage.
+        /// </summary>
+        bool TaskIsIndeterminate { get; }
         #endregion
 
         #region Methods
@@ -45,10 +64,9 @@ namespace Catel.MVVM
         /// The task
         /// </param>
         /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="task"/> is <c>null</c>.
+        /// The <paramref name="task" /> is <c>null</c>.
         /// </exception>
         void UpdateStatus(int currentItem, int totalItems, ITask task);
-
         #endregion
     }
 }
