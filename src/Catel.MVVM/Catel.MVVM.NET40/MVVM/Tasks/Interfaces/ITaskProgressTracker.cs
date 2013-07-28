@@ -12,17 +12,37 @@ namespace Catel.MVVM.Tasks
     public interface ITaskProgressTracker
     {
         #region Methods
+        /// <summary>
+        /// Update the task status.
+        /// </summary>
+        /// <param name="message">
+        /// The message.
+        /// </param>
+        /// <param name="percentage">
+        /// The percentage.
+        /// </param>
+        void UpdateStatus(string message, int percentage);
 
         /// <summary>
         /// Update the task status.
         /// </summary>
-        /// <param name="percentage">
-        /// The percentage.
-        /// </param>
         /// <param name="message">
         /// The message.
         /// </param>
-        void UpdateStatus(int percentage, string message);
+        void UpdateStatus(string message);
+
+
+        /// <summary>
+        /// Update the task status.
+        /// </summary>
+        /// <param name="message">
+        /// The message.
+        /// </param>
+        /// <param name="indeterminate">
+        /// The indeterminate state.
+        /// </param>
+        void UpdateStatus(string message, bool indeterminate);
+
         #endregion
     }
 }

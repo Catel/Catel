@@ -24,6 +24,7 @@ Release date:
 
 Added/fixed (BREAKING CHANGES):
 ===============================
+(*) Change UpdateStatus method signature of ITaskProgressTracker.
 (*) CTL-4 Completely rewritten the serialization engine. This means that the logic is now extracted from the 
     ModelBase into separate serializers which can be easily customized. It should also fix a few minor issues
     that were occurring due to the complexity of the old system

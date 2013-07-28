@@ -302,8 +302,8 @@ namespace Catel.MVVM.Services
                     {
                         Log.Debug("Executing task '{0}'. ", task.Name);
                         if (_progressNotifyableViewModel != null)
-                        {     
-                            _progressNotifyableViewModel.UpdateStatus(progress++, total, task);
+                        {
+                            _dispatcherService.Invoke(() => _progressNotifyableViewModel.UpdateStatus(progress++, total, task));
                         }
                         else
                         {
@@ -364,7 +364,7 @@ namespace Catel.MVVM.Services
                         {
                             if (_progressNotifyableViewModel != null)
                             {
-                                _progressNotifyableViewModel.UpdateStatus(--progress, total, task);
+                                _dispatcherService.Invoke(() => _progressNotifyableViewModel.UpdateStatus(--progress, total, task));
                             }
                             else
                             {
@@ -378,7 +378,7 @@ namespace Catel.MVVM.Services
             {
                 if (_pleaseWaitService != null)
                 {
-                    _pleaseWaitService.Hide();
+                    _dispatcherService.Invoke(() => _pleaseWaitService.Hide());
                 }
 
                 IsRunning = false;
