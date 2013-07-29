@@ -51,8 +51,7 @@ namespace Catel.MVVM.Tasks
         /// </summary>
         public override void Execute()
         {
-            // TODO: Inject the Dispatcher service from the same service locator?
-            _action.Invoke(new ActionTaskTaskProgressTracker(this, ServiceLocator.Default.ResolveType<IDispatcherService>()));
+            _action.Invoke(new ActionTaskTaskProgressTracker(this));
         }
         #endregion
 
@@ -68,10 +67,6 @@ namespace Catel.MVVM.Tasks
             /// </summary>
             private readonly ActionTask _actionTask;
             
-            /// <summary>
-            /// The dispatcher service. 
-            /// </summary>
-            private readonly IDispatcherService _dispatcherService;
             #endregion
 
             #region Constructors
@@ -81,13 +76,9 @@ namespace Catel.MVVM.Tasks
             /// <param name="actionTask">
             /// The action task.
             /// </param>
-            /// <param name="dispatcherService">
-            /// The dispathcher service.
-            /// </param>
-            public ActionTaskTaskProgressTracker(ActionTask actionTask, IDispatcherService dispatcherService)
+            public ActionTaskTaskProgressTracker(ActionTask actionTask)
             {
                 _actionTask = actionTask;
-                _dispatcherService = dispatcherService;
             }
             #endregion
 
@@ -104,7 +95,7 @@ namespace Catel.MVVM.Tasks
             public void UpdateStatus(string message, int percentage)
             {
                 UpdateStatus(message);
-                _dispatcherService.Invoke(() => _actionTask.Percentage = percentage);
+                 _actionTask.Percentage = percentage;
             }
 
             /// <summary>
@@ -115,7 +106,7 @@ namespace Catel.MVVM.Tasks
             /// </param>
             public void UpdateStatus(string message)
             {
-                _dispatcherService.Invoke(() => _actionTask.Message = message);
+                _actionTask.Message = message;
             }
 
             /// <summary>
@@ -130,7 +121,7 @@ namespace Catel.MVVM.Tasks
             public void UpdateStatus(string message, bool indeterminate)
             {
                 UpdateStatus(message);
-                _dispatcherService.Invoke(() => _actionTask.IsIndeterminate = indeterminate);
+                _actionTask.IsIndeterminate = indeterminate;
             }
             #endregion
         }
