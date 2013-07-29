@@ -7,8 +7,6 @@ namespace Catel.MVVM.Services
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Linq;
     using System.Threading;
 
     using Catel.Logging;
@@ -303,7 +301,7 @@ namespace Catel.MVVM.Services
                         Log.Debug("Executing task '{0}'. ", task.Name);
                         if (_progressNotifyableViewModel != null)
                         {
-                            _dispatcherService.Invoke(() => _progressNotifyableViewModel.UpdateStatus(progress++, total, task));
+                            _progressNotifyableViewModel.UpdateStatus(progress++, total, task);
                         }
                         else
                         {
@@ -364,7 +362,7 @@ namespace Catel.MVVM.Services
                         {
                             if (_progressNotifyableViewModel != null)
                             {
-                                _dispatcherService.Invoke(() => _progressNotifyableViewModel.UpdateStatus(--progress, total, task));
+                                _progressNotifyableViewModel.UpdateStatus(--progress, total, task);
                             }
                             else
                             {

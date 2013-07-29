@@ -57,6 +57,7 @@ namespace Catel.MVVM.ViewModels
         public ProgressNotifyableViewModel()
             : this(false, false, false)
         {
+            DispatchPropertyChangedEvent = true;
         }
 
         /// <summary>
@@ -73,6 +74,7 @@ namespace Catel.MVVM.ViewModels
         public ProgressNotifyableViewModel(bool supportIEditableObject, bool ignoreMultipleModelsWarning, bool skipViewModelAttributesInitialization)
             : base(supportIEditableObject, ignoreMultipleModelsWarning, skipViewModelAttributesInitialization)
         {
+            DispatchPropertyChangedEvent = true;
         }
 
         /// <summary>
@@ -90,6 +92,7 @@ namespace Catel.MVVM.ViewModels
         public ProgressNotifyableViewModel(IServiceLocator serviceLocator, bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false)
             : base(serviceLocator, supportIEditableObject, ignoreMultipleModelsWarning, skipViewModelAttributesInitialization)
         {
+            DispatchPropertyChangedEvent = true;
         }
 
         #endregion
