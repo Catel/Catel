@@ -4,6 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+
 namespace Catel.MVVM.Views
 {
     using System;
@@ -17,17 +18,36 @@ namespace Catel.MVVM.Views
     /// </summary>
     public class ViewManager : IViewManager
     {
+        #region Constants
         /// <summary>
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        #endregion
 
+        #region Fields
         /// <summary>
         /// List of views and the unique identifyer of the view models they own.
         /// </summary>
         private readonly Dictionary<IView, int?> _registeredViews = new Dictionary<IView, int?>();
 
         private readonly object _syncObj = new object();
+        #endregion
+
+        #region IViewManager Members
+        /// <summary>
+        /// Gets the active views presently registered.
+        /// </summary>
+        public IEnumerable<IView> ActiveViews
+        {
+            get
+            {
+                lock (_syncObj)
+                {
+                    return _registeredViews.Select(row => row.Key);
+                }
+            }
+        }
 
         /// <summary>
         /// Registers a view so it can be linked to a view model instance.
@@ -103,8 +123,8 @@ namespace Catel.MVVM.Views
 
             lock (_syncObj)
             {
-                views.AddRange(from registeredView in _registeredViews 
-                               where registeredView.Value == viewModel.UniqueIdentifier 
+                views.AddRange(from registeredView in _registeredViews
+                               where registeredView.Value == viewModel.UniqueIdentifier
                                select registeredView.Key);
             }
 
@@ -114,13 +134,43 @@ namespace Catel.MVVM.Views
         }
 
         /// <summary>
+        /// Gets the first or default instance of the specified view type.
+        /// </summary>
+        /// <typeparam name="TView">The type of the view.</typeparam>
+        /// <returns>
+        /// The <see cref="TView" /> or <c>null</c> if the view is not registered.
+        /// </returns>
+        public TView GetFirstOrDefaultInstance<TView>() where TView : IView
+        {
+            var viewType = typeof(TView);
+
+            return (TView)GetFirstOrDefaultInstance(viewType);
+        }
+
+        /// <summary>
+        /// Gets the first or default instance of the specified view type.
+        /// </summary>
+        /// <param name="viewType">Type of the view.</param>
+        /// <returns>
+        /// The <see cref="IViewModel" /> or <c>null</c> if the view model is not registered.
+        /// </returns>
+        public IView GetFirstOrDefaultInstance(Type viewType)
+        {
+            Argument.IsNotNull("viewType", viewType);
+
+            return ActiveViews.FirstOrDefault(view => ObjectHelper.AreEqual(view.GetType(), viewType));
+        }
+        #endregion
+
+        #region Methods
+        /// <summary>
         /// Called when the view model of a view has changed.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="eventArgs">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void OnViewModelChanged(object sender, EventArgs eventArgs)
         {
-            var view = ((IView)sender);
+            var view = ((IView) sender);
             SyncViewModelOfView(view);
         }
 
@@ -139,5 +189,6 @@ namespace Catel.MVVM.Views
                 _registeredViews[view] = (activeViewModel != null) ? activeViewModel.UniqueIdentifier : (int?) null;
             }
         }
+        #endregion
     }
 }

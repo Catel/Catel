@@ -4,9 +4,11 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+
 namespace Catel.MVVM.Views
 {
     using System;
+    using System.Collections.Generic;
     using Windows.Controls;
 
     /// <summary>
@@ -14,6 +16,14 @@ namespace Catel.MVVM.Views
     /// </summary>
     public interface IViewManager
     {
+        #region Properties
+        /// <summary>
+        /// Gets the active views presently registered.
+        /// </summary>
+        IEnumerable<IView> ActiveViews { get; }
+        #endregion
+
+        #region Methods
         /// <summary>
         /// Registers a view so it can be linked to a view model instance.
         /// </summary>
@@ -35,5 +45,21 @@ namespace Catel.MVVM.Views
         /// <returns>An array containing all the views that are linked to the view.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         IView[] GetViewsOfViewModel(IViewModel viewModel);
+
+        /// <summary>
+        /// Gets the first or default instance of the specified view type.
+        /// </summary>
+        /// <typeparam name="TView">The type of the view.</typeparam>
+        /// <returns>The <see cref="TView"/> or <c>null</c> if the view is not registered.</returns>
+        TView GetFirstOrDefaultInstance<TView>() where TView : IView;
+
+        /// <summary>
+        /// Gets the first or default instance of the specified view type.
+        /// </summary>
+        /// <param name="viewType">Type of the view.</param>
+        /// <returns>The <see cref="IViewModel"/> or <c>null</c> if the view model is not registered.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewType"/> is <c>null</c>.</exception>
+        IView GetFirstOrDefaultInstance(Type viewType);
+        #endregion
     }
 }

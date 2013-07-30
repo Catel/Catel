@@ -35,6 +35,7 @@ Added/fixed (BREAKING CHANGES):
 Added/fixed:
 ============
 (+) Added extension method for ISplashScreenService for Prism to show progress control in a region
+(+) Added some additionnals members in IViewManager.
 (+) Added support to Commit enqueued tasks using an existing instance view model for SplashScreenService
 (+) CTL-6 Dependency injection is now supported in child view models. This makes it possible to combine both model
     injection with auto-completion from services registered in the ServiceLocator
