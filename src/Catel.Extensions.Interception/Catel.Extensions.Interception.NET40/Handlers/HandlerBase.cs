@@ -37,7 +37,6 @@ namespace Catel.Interception.Handlers
             ServiceType = serviceType;
             Tag = tag;
             _serviceLocator = serviceLocator ?? ServiceLocator.Default;
-            
         }
         #endregion
 

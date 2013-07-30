@@ -246,7 +246,7 @@ namespace Catel.Test.Interception
 
         [Ignore]
         [TestMethod]
-        public void ShouldInterceptMethodUsingAFilter()
+        public void ShouldInterceptMethodUsingPredicate()
         {
             var index = 0;
             _serviceLocator.ConfigureInterceptionForType<ITestService, TestService>()

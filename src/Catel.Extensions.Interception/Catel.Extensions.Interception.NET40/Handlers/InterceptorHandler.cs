@@ -4,6 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+
 namespace Catel.Interception.Handlers
 {
     using System;
@@ -26,6 +27,13 @@ namespace Catel.Interception.Handlers
                                                                                IInterceptorHandler<TService, TServiceImplementation>
         where TServiceImplementation : TService
     {
+        #region Fields
+        /// <summary>
+        /// The type factory
+        /// </summary>
+        private readonly ITypeFactory _typeFactory;
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the
@@ -36,9 +44,11 @@ namespace Catel.Interception.Handlers
         /// </summary>
         /// <param name="serviceLocator">The service locator. If <c>null</c>, <see cref="ServiceLocator.Default" /> will be used.</param>
         /// <param name="tag">The tag.</param>
-        public InterceptorHandler(IServiceLocator serviceLocator = null, object tag = null)
+        /// <param name="typeFactory">The type factory. If <c>null</c>, <see cref="TypeFactory.Default" /> will be used.</param>
+        public InterceptorHandler(IServiceLocator serviceLocator = null, object tag = null, ITypeFactory typeFactory = null)
             : base(typeof (TService), tag, serviceLocator)
         {
+            _typeFactory = typeFactory ?? GetService<ITypeFactory>();
             ImplementedTypes = new List<Type>();
 
             Callbacks = new CacheStorage<IMemberDefinition, CallbackCollection>();
@@ -79,7 +89,9 @@ namespace Catel.Interception.Handlers
             var memberDefinitions = GetMethodsToIntercept(ServiceType).Select(method => method.ExtractDefinition());
 
             RegisterMemberDefinitions(memberDefinitions);
-            return new CallbackHandler<TService, TServiceImplementation>(this);
+
+            var callbackHandler = CreateCallBackHandler();
+            return callbackHandler;
         }
 
         /// <summary>
@@ -94,7 +106,9 @@ namespace Catel.Interception.Handlers
             var memberDefinitions = getters.Select(getter => getter.ExtractDefinition());
 
             RegisterMemberDefinitions(memberDefinitions);
-            return new CallbackHandler<TService, TServiceImplementation>(this);
+
+            var callbackHandler = CreateCallBackHandler();
+            return callbackHandler;
         }
 
         /// <summary>
@@ -109,7 +123,9 @@ namespace Catel.Interception.Handlers
             var memberDefinitions = setters.Select(setter => setter.ExtractDefinition());
 
             RegisterMemberDefinitions(memberDefinitions);
-            return new CallbackHandler<TService, TServiceImplementation>(this);
+
+            var callbackHandler = CreateCallBackHandler();
+            return callbackHandler;
         }
 
         /// <summary>
@@ -122,7 +138,9 @@ namespace Catel.Interception.Handlers
                 .Select(method => method.ExtractDefinition());
 
             RegisterMemberDefinitions(memberDefinitions);
-            return new CallbackHandler<TService, TServiceImplementation>(this);
+
+            var callbackHandler = CreateCallBackHandler();
+            return callbackHandler;
         }
 
         /// <summary>
@@ -140,7 +158,9 @@ namespace Catel.Interception.Handlers
                 methods.Select(method => method.GetMethodExpression().Method.ExtractDefinition());
 
             RegisterMemberDefinitions(memberDefinitions);
-            return new CallbackHandler<TService, TServiceImplementation>(this);
+
+            var callbackHandler = CreateCallBackHandler();
+            return callbackHandler;
         }
 
         /// <summary>
@@ -159,7 +179,9 @@ namespace Catel.Interception.Handlers
             var memberDefinitions = methods.Select(method => method.ExtractDefinition());
 
             RegisterMemberDefinitions(memberDefinitions);
-            return new CallbackHandler<TService, TServiceImplementation>(this);
+
+            var callbackHandler = CreateCallBackHandler();
+            return callbackHandler;
         }
 
         /// <summary>
@@ -175,7 +197,9 @@ namespace Catel.Interception.Handlers
             var methodExpression = method.GetMethodExpression();
 
             RegisterMethods(methodExpression);
-            return new CallbackHandler<TService, TServiceImplementation>(this);
+
+            var callbackHandler = CreateCallBackHandler();
+            return callbackHandler;
         }
 
         /// <summary>
@@ -191,7 +215,9 @@ namespace Catel.Interception.Handlers
 
             var methodExpression = method.GetMethodExpression();
             RegisterMethods(methodExpression);
-            return new CallbackHandler<TService, TServiceImplementation>(this);
+
+            var callbackHandler = CreateCallBackHandler();
+            return callbackHandler;
         }
 
         /// <summary>
@@ -203,7 +229,9 @@ namespace Catel.Interception.Handlers
             Expression<Func<TService, object>> property)
         {
             RegisterProperty(property, Type.EmptyTypes, "get_");
-            return new CallbackHandler<TService, TServiceImplementation>(this);
+
+            var callbackHandler = CreateCallBackHandler();
+            return callbackHandler;
         }
 
         /// <summary>
@@ -215,7 +243,9 @@ namespace Catel.Interception.Handlers
             Expression<Func<TService, object>> property)
         {
             RegisterProperty(property, new[] {property.Body.Type}, "set_");
-            return new CallbackHandler<TService, TServiceImplementation>(this);
+
+            var callbackHandler = CreateCallBackHandler();
+            return callbackHandler;
         }
         #endregion
 
@@ -284,6 +314,17 @@ namespace Catel.Interception.Handlers
         {
             return type.GetMethodsToIntercept()
                        .Where(method => !AttributeHelper.IsDecoratedWithAttribute<DoNotInterceptAttribute>(method));
+        }
+
+        /// <summary>
+        /// Creates the call back handler.
+        /// </summary>
+        /// <returns></returns>
+        private ICallbackHandler<TService, TServiceImplementation> CreateCallBackHandler()
+        {
+            var callbackHandler = _typeFactory.CreateInstanceWithParametersAndAutoCompletion<CallbackHandler<TService, TServiceImplementation>>(this);
+
+            return callbackHandler;
         }
         #endregion
     }
