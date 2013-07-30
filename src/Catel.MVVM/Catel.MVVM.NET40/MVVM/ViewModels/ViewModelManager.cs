@@ -275,11 +275,11 @@ namespace Catel.MVVM
         /// <returns>
         /// The <see cref="IViewModel"/> or <c>null</c> if the view model is not registered.
         /// </returns>
-        public IViewModel GetFirstOrDefaultInstance<TViewModel>() where TViewModel : IViewModel
+        public TViewModel GetFirstOrDefaultInstance<TViewModel>() where TViewModel : IViewModel
         {
             var viewModelType = typeof(TViewModel);
 
-            return GetFirstOrDefaultInstance(viewModelType);
+            return (TViewModel)GetFirstOrDefaultInstance(viewModelType);
         }
 
         /// <summary>

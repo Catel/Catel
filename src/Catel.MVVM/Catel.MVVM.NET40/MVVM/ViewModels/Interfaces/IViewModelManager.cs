@@ -67,7 +67,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <typeparam name="TViewModel">The type of the view model.</typeparam>
         /// <returns>The <see cref="IViewModel"/> or <c>null</c> if the view model is not registered.</returns>
-        IViewModel GetFirstOrDefaultInstance<TViewModel>() where TViewModel : IViewModel;
+        TViewModel GetFirstOrDefaultInstance<TViewModel>() where TViewModel : IViewModel;
 
         /// <summary>
         /// Gets the first or default instance of the specified view model.
