@@ -41,7 +41,7 @@ namespace Catel.MVVM.Services
         /// </summary>
         /// <returns><c>true</c> if a file is selected; otherwise <c>false</c>.</returns>
         /// <remarks>
-        /// If this method returns <c>true</c>, the <see cref="IOpenFileService.FileName"/> property will be filled with the filename. Otherwise,
+        /// If this method returns <c>true</c>, the <c>FileName</c> property will be filled with the filename. Otherwise,
         /// no changes will occur to the data of this object.
         /// </remarks>
         public virtual bool DetermineFile()
@@ -71,7 +71,7 @@ namespace Catel.MVVM.Services
         /// </summary>
         /// <returns>The <see cref="Stream"/> of the file or <c>null</c> if no file was selected by the user.</returns>
         /// <remarks>
-        /// If this method returns a valid <see cref="Stream"/> object, the <see cref="IOpenFileService.FileName"/> property will be filled 
+        /// If this method returns a valid <see cref="Stream"/> object, the <c>FileName</c> property will be filled 
         /// with the safe filename. This can be used for display purposes only.
         /// </remarks>
         public virtual Stream[] DetermineFile()

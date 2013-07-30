@@ -137,10 +137,9 @@ namespace Catel.MVVM.Views
         /// Gets the first or default instance of the specified view type.
         /// </summary>
         /// <typeparam name="TView">The type of the view.</typeparam>
-        /// <returns>
-        /// The <see cref="TView" /> or <c>null</c> if the view is not registered.
-        /// </returns>
-        public TView GetFirstOrDefaultInstance<TView>() where TView : IView
+        /// <returns>The vie or <c>null</c> if the view is not registered.</returns>
+        public TView GetFirstOrDefaultInstance<TView>() 
+            where TView : IView
         {
             var viewType = typeof(TView);
 
@@ -158,7 +157,10 @@ namespace Catel.MVVM.Views
         {
             Argument.IsNotNull("viewType", viewType);
 
-            return ActiveViews.FirstOrDefault(view => ObjectHelper.AreEqual(view.GetType(), viewType));
+            lock (_syncObj)
+            {
+                return ActiveViews.FirstOrDefault(view => ObjectHelper.AreEqual(view.GetType(), viewType));
+            }
         }
         #endregion
 

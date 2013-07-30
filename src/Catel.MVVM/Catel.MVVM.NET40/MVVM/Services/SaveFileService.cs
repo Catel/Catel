@@ -53,7 +53,7 @@ namespace Catel.MVVM.Services
         /// </summary>
         /// <returns>The <see cref="Stream"/> of the file or <c>null</c> if no file was selected by the user..</returns>
         /// <remarks>
-        /// If this method returns a valid <see cref="Stream"/> object, the <see cref="ISaveFileService.FileName"/> property will be filled 
+        /// If this method returns a valid <see cref="Stream"/> object, the <c>FileName</c> property will be filled 
         /// with the safe filename. This can be used for display purposes only.
         /// </remarks>
         public virtual Stream DetermineFile()
