@@ -8,9 +8,21 @@ namespace Catel.MVVM.Services
     /// <summary>
     /// Interface for the Select Directory service.
     /// </summary>
-    public interface ISelectDirectoryService : IFileSupport
+    public interface ISelectDirectoryService
     {
         #region Properties
+        /// <summary>
+        /// Gets or sets the name of the file.
+        /// </summary>
+        /// <value>The name of the file.</value>
+        string FileName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the filter to use when opening or saving the file.
+        /// </summary>
+        /// <value>The filter.</value>
+        string Filter { get; set; }
+
         /// <summary>
         /// Gets the directory name.
         /// </summary>

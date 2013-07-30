@@ -1,64 +1,36 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SaveFileService.cs" company="Catel development team">
+// <copyright file="FileServiceBase.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.MVVM.Services.Test
+
+namespace Catel.MVVM.Services
 {
     using System;
-    using System.Collections.Generic;
 
-#if !NET
-    using System.IO;
+#if NET
+    using Microsoft.Win32;
 #endif
 
     /// <summary>
-    /// Test implementation of the <see cref="ISaveFileService"/>.
+    /// Base class for file services.
     /// </summary>
-    /// <example>
-    /// <code>
-    /// <![CDATA[
-    /// 
-    /// Test.SaveFileService service = (Test.SaveFileService)GetService<ISaveFileService>();
-    /// 
-    /// // Queue the next expected result
-    /// service.ExpectedResults.Add(() =>
-    ///              {
-    ///                service.FileName = @"c:\test.txt";
-    ///                return true;
-    ///              });
-    /// 
-    /// ]]>
-    /// </code>
-    /// </example>
-    public class SaveFileService : ISaveFileService
+    public abstract class FileServiceBase : ViewModelServiceBase, IFileSupport
     {
-        #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="OpenFileService"/> class.
+        /// Initializes a new instance of the <see cref="FileServiceBase"/> class.
         /// </summary>
-        public SaveFileService()
+        protected FileServiceBase()
         {
-#if !NET
-            ExpectedResults = new Queue<Func<Stream>>();       
-#else
-            ExpectedResults = new Queue<Func<bool>>();
+#if NET
+            AddExtension = true;
+            CheckFileExists = false;
+            CheckPathExists = true;
+            FilterIndex = 1;
+            ValidateNames = false;
 #endif
         }
-        #endregion
-
-        #region Properties
-        /// <summary>
-        /// Gets the queue of expected results.
-        /// </summary>
-        /// <value>The expected results.</value>
-#if NET
-        public Queue<Func<bool>> ExpectedResults { get; private set; }
-        
-#else
-        public Queue<Func<Stream>> ExpectedResults { get; private set; }
-#endif
 
         /// <summary>
         /// Gets or sets the name of the file.
@@ -73,18 +45,6 @@ namespace Catel.MVVM.Services.Test
         public string Filter { get; set; }
 
 #if NET
-        /// <summary>
-        /// Gets or sets the initial directory.
-        /// </summary>
-        /// <value>The initial directory.</value>
-        public string InitialDirectory { get; set; }
-
-        /// <summary>
-        /// Gets or sets the title which will be used for display.
-        /// </summary>
-        /// <value>The title.</value>
-        public string Title { get; set; }
-
         /// <summary>
         /// Gets or sets a value indicating whether a file dialog automatically adds an extension to a file name if the user omits an extension.
         /// </summary>
@@ -110,37 +70,49 @@ namespace Catel.MVVM.Services.Test
         public int FilterIndex { get; set; }
 
         /// <summary>
+        /// Gets or sets the initial directory.
+        /// </summary>
+        /// <value>The initial directory.</value>
+        public string InitialDirectory { get; set; }
+
+        /// <summary>
+        /// Gets or sets the title which will be used for display.
+        /// </summary>
+        /// <value>The title.</value>
+        public string Title { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the dialog accepts only valid Win32 file names.
         /// </summary>
         /// <value><c>true</c> if warnings will be shown when an invalid file name is provided; otherwise, <c>false</c>. The default is <c>false</c>.</value>
         public bool ValidateNames { get; set; }
-#endif
-        #endregion
 
-        #region Methods
         /// <summary>
-        /// Determines the filename of the file what will be used.
+        /// Configures the file dialog.
         /// </summary>
-        /// <returns>
-        /// 	<c>true</c> if a file is selected; otherwise <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// If this method returns <c>true</c>, the <see cref="FileName"/> property will be filled with the filename. Otherwise,
-        /// no changes will occur to the data of this object.
-        /// </remarks>
-#if !NET
-        public Stream DetermineFile()
-#else
-        public bool DetermineFile()
-#endif
+        /// <param name="fileDialog">The file dialog.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="fileDialog"/> is <c>null</c>.</exception>
+        protected void ConfigureFileDialog(FileDialog fileDialog)
         {
-            if (ExpectedResults.Count == 0)
+            Argument.IsNotNull("fileDialog", fileDialog);
+
+            string initialDirectory = string.Empty;
+            if (!string.IsNullOrEmpty(InitialDirectory))
             {
-                throw new Exception(ResourceHelper.GetString(typeof(SaveFileService), "Exceptions", "NoExpectedResultsInQueueForUnitTest"));
+                initialDirectory = IO.Path.AppendTrailingSlash(InitialDirectory);
             }
 
-            return ExpectedResults.Dequeue().Invoke();
+            fileDialog.Filter = Filter;
+            fileDialog.FileName = FileName;
+
+            fileDialog.AddExtension = AddExtension;
+            fileDialog.CheckFileExists = CheckFileExists;
+            fileDialog.CheckPathExists = CheckPathExists;
+            fileDialog.FilterIndex = FilterIndex;
+            fileDialog.InitialDirectory = initialDirectory;
+            fileDialog.Title = Title;
+            fileDialog.ValidateNames = ValidateNames;
         }
-        #endregion
+#endif
     }
 }

@@ -225,6 +225,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Exceptions\WindowNotRegisteredException.cs">
       <Link>MVVM\Services\Exceptions\WindowNotRegisteredException.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\FileServiceBase.cs">
+      <Link>MVVM\Services\FileServiceBase.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IAccelerometerService.cs">
       <Link>MVVM\Services\Interfaces\IAccelerometerService.cs</Link>
     </Compile>

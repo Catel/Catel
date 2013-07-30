@@ -130,6 +130,7 @@
     <Compile Include="MVVM\Services\EventArgs\UICompletedEventArgs.cs" />
     <Compile Include="MVVM\Services\Exceptions\PageNotRegisteredException.cs" />
     <Compile Include="MVVM\Services\Exceptions\WindowNotRegisteredException.cs" />
+    <Compile Include="MVVM\Services\FileServiceBase.cs" />
     <Compile Include="MVVM\Services\Interfaces\IAccelerometerService.cs" />
     <Compile Include="MVVM\Services\Interfaces\IAccelerometerValue.cs" />
     <Compile Include="MVVM\Services\Interfaces\ICameraService.cs" />
