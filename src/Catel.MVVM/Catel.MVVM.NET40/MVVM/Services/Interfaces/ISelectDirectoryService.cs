@@ -33,6 +33,18 @@ namespace Catel.MVVM.Services
         /// </summary>
         /// <value><c>true</c> if the new folder button should be shown; otherwise, <c>false</c>.</value>
         bool ShowNewFolderButton { get; set; }
+
+        /// <summary>
+        /// Gets or sets the initial directory.
+        /// </summary>
+        /// <value>The initial directory.</value>
+        string InitialDirectory { get; set; }
+
+        /// <summary>
+        /// Gets or sets the title which will be used for display.
+        /// </summary>
+        /// <value>The title.</value>
+        string Title { get; set; }
         #endregion
 
         #region Methods
