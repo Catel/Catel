@@ -107,7 +107,7 @@ using System.Resources;
 
 #if NETFX_CORE
             // TODO: Write
-            resourceFile = string.Format("{0}/{1}", assemblyName, resourceFile);
+            resourceFile = string.Format("{0}/{1}", originalAssemblyName, resourceFile);
 #else
             resourceFile = string.Format("{0}.Properties.{1}", assemblyName, resourceFile);
 #endif
