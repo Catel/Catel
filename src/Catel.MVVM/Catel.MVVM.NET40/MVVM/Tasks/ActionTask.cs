@@ -8,9 +8,6 @@ namespace Catel.MVVM.Tasks
 {
     using System;
 
-    using Catel.IoC;
-    using Catel.MVVM.Services;
-
     /// <summary>
     /// The action task.
     /// </summary>
@@ -27,15 +24,9 @@ namespace Catel.MVVM.Tasks
         /// <summary>
         /// Initializes a new instance of the <see cref="ActionTask" /> class.
         /// </summary>
-        /// <param name="name">
-        /// The name.
-        /// </param>
-        /// <param name="action">
-        /// The action.
-        /// </param>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="action" /> is <c>null</c>.
-        /// </exception>
+        /// <param name="name">The name.</param>
+        /// <param name="action">The action.</param>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="action" /> is <c>null</c>.</exception>
         public ActionTask(string name, Action<ITaskProgressTracker> action)
             : base(name)
         {

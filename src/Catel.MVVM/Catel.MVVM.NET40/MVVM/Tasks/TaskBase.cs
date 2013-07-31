@@ -40,12 +40,8 @@ namespace Catel.MVVM.Tasks
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskBase" /> class.
         /// </summary>
-        /// <param name="name">
-        /// The task name name.
-        /// </param>
-        /// <exception cref="ArgumentNullException">
-        /// The <paramref name="name" /> is <c>null</c>.
-        /// </exception>
+        /// <param name="name">The task name name.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="name" /> is <c>null</c>.</exception>
         protected TaskBase(string name)
         {
             Argument.IsNotNull(() => name);
@@ -55,6 +51,20 @@ namespace Catel.MVVM.Tasks
         #endregion
 
         #region ITask Members
+        /// <summary>
+        /// Gets or sets whether this task should automatically be dispatched to the UI thread.
+        /// </summary>
+        public bool AutomaticallyDispatch
+        {
+            get { return GetValue<bool>(AutomaticallyDispatchProperty); }
+            set { SetValue(AutomaticallyDispatchProperty, value); }
+        }
+
+        /// <summary>
+        /// Register the AutomaticallyDispatch property so it is known in the class.
+        /// </summary>
+        public static readonly PropertyData AutomaticallyDispatchProperty = RegisterProperty("AutomaticallyDispatch", typeof(bool), false);
+
         /// <summary>
         /// Gets the name.
         /// </summary>

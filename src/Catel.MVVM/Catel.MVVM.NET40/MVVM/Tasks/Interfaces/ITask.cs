@@ -39,6 +39,10 @@ namespace Catel.MVVM.Tasks
         /// </summary>
         bool IsIndeterminate { get; }
 
+        /// <summary>
+        /// Gets or sets whether this task should automatically be dispatched to the UI thread.
+        /// </summary>
+        bool AutomaticallyDispatch { get; set; }
         #endregion
 
         #region Methods
