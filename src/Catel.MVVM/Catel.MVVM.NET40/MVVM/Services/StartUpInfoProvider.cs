@@ -42,7 +42,7 @@ namespace Catel.MVVM.Services
                     var arguments = Process.GetCurrentProcess().StartInfo.Arguments;
 
                     string current = string.Empty;
-                    for (int i = 0; i < Process.GetCurrentProcess().StartInfo.Arguments.Length; i++)
+                    for (int i = 0; i < arguments.Length; i++)
                     {
                         if (arguments[i] == '\"')
                         {
