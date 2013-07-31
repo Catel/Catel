@@ -682,6 +682,15 @@
     </None>
     <None Include="Fody.targets" />
     <None Include="packages.config" />
+    <PRIResource Include="Strings\de\Resources.resw" />
+    <PRIResource Include="Strings\es\Resources.resw" />
+    <PRIResource Include="Strings\en-US\Exceptions.resw" />
+    <PRIResource Include="Strings\fr\Resources.resw" />
+    <PRIResource Include="Strings\it\Resources.resw" />
+    <PRIResource Include="Strings\nl\Resources.resw" />
+    <PRIResource Include="Strings\en-US\Resources.resw" />
+    <PRIResource Include="Strings\tr\Resources.resw" />
+    <PRIResource Include="Strings\zh-CHS\Resources.resw" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FodyWeavers.xml" />

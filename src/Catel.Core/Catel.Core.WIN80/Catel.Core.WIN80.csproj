@@ -740,6 +740,12 @@
     </None>
     <None Include="Fody.targets" />
     <None Include="packages.config" />
+    <PRIResource Include="Strings\es\Resources.resw" />
+    <PRIResource Include="Strings\fr\Resources.resw" />
+    <PRIResource Include="Strings\it\Resources.resw" />
+    <PRIResource Include="Strings\nl\Resources.resw" />
+    <PRIResource Include="Strings\tr\Resources.resw" />
+    <PRIResource Include="Strings\zh-CHS\Resources.resw" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FodyWeavers.xml" />
@@ -749,6 +755,12 @@
       <HintPath>..\..\..\lib\Obsolete.Fody.2.3.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <PRIResource Include="Strings\de\Resources.resw" />
+    <PRIResource Include="Strings\en-US\Exceptions.resw" />
+    <PRIResource Include="Strings\en-US\Resources.resw" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>
