@@ -38,6 +38,7 @@ Added/fixed:
     injection with auto-completion from services registered in the ServiceLocator
 (+) CTL-7 Added support for empty cell in the StackGrid control
 (+) CTL-26 Added IQueryable<T>.Include extension so it is easier to include properties in an EF query
+(+) CTL-39 Added IStartUpInfoProvider to allow the access to information such as InitParams (SL) or Arguments (NET) from any application point
 (+) CTL-58 Automatic de/serialization of specified fields within ModelBase using the IncludeInSerialization and
     ExcludeFromSerialization attributes which also work on regular properties and fields
 (+) CTL-99 Added extensions methods for the IViewModelManager to allow the closing of all view models that match a 

@@ -147,6 +147,7 @@
     <Compile Include="MVVM\Services\Interfaces\ISelectDirectoryService.cs" />
     <Compile Include="MVVM\Services\Interfaces\ISensorService.cs" />
     <Compile Include="MVVM\Services\Interfaces\ISplashScreenService.cs" />
+    <Compile Include="MVVM\Services\Interfaces\IStartUpInfoProvider.cs" />
     <Compile Include="MVVM\Services\Interfaces\IUIVisualizerService.cs" />
     <Compile Include="MVVM\Services\Interfaces\IVibrateService.cs" />
     <Compile Include="MVVM\Services\Interfaces\IViewExportService.cs" />
@@ -162,6 +163,7 @@
     <Compile Include="MVVM\Services\SchedulerService.cs" />
     <Compile Include="MVVM\Services\SelectDirectoryService.cs" />
     <Compile Include="MVVM\Services\SplashScreenService.cs" />
+    <Compile Include="MVVM\Services\StartUpInfoProvider.cs" />
     <Compile Include="MVVM\Services\Test\MessageService.cs" />
     <Compile Include="MVVM\Services\Test\OpenFileService.cs" />
     <Compile Include="MVVM\Services\Test\PleaseWaitService.cs" />

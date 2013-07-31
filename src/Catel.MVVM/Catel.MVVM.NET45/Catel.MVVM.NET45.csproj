@@ -276,6 +276,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ISplashScreenService.cs">
       <Link>MVVM\Services\Interfaces\ISplashScreenService.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IStartUpInfoProvider.cs">
+      <Link>MVVM\Services\Interfaces\IStartUpInfoProvider.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IUIVisualizerService.cs">
       <Link>MVVM\Services\Interfaces\IUIVisualizerService.cs</Link>
     </Compile>
@@ -317,6 +320,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\SplashScreenService.cs">
       <Link>MVVM\Services\SplashScreenService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\StartUpInfoProvider.cs">
+      <Link>MVVM\Services\StartUpInfoProvider.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Test\MessageService.cs">
       <Link>MVVM\Services\Test\MessageService.cs</Link>

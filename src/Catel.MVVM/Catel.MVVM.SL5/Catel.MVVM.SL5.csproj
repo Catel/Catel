@@ -107,6 +107,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ISchedulerService.cs">
       <Link>MVVM\Services\Interfaces\ISchedulerService.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IStartUpInfoProvider.cs">
+      <Link>MVVM\Services\Interfaces\IStartUpInfoProvider.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IViewExportService.cs">
       <Link>MVVM\Services\Interfaces\IViewExportService.cs</Link>
     </Compile>
@@ -115,6 +118,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\SplashScreenService.cs">
       <Link>MVVM\Services\SplashScreenService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\StartUpInfoProvider.cs">
+      <Link>MVVM\Services\StartUpInfoProvider.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\ViewExportService.cs">
       <Link>MVVM\Services\ViewExportService.cs</Link>
