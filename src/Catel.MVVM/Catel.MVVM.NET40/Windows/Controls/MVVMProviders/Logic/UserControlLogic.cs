@@ -22,6 +22,8 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 
     using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
 #else
+    using Catel.Windows.Threading;
+
     using System.Windows;
     using System.Windows.Threading;
     using System.Windows.Controls;
@@ -252,45 +254,42 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// </summary>
         private void CreateViewModelGrid()
         {
-            var update = new Action(
-                () =>
+            var update = new Action(() =>
+            {
+                var content = TargetControl.Content as FrameworkElement;
+                if (content == null || ReferenceEquals(content, _viewModelGrid))
                 {
-                    var content = TargetControl.Content as FrameworkElement;
-                    if (content == null || ReferenceEquals(TargetControl.Content, _viewModelGrid))
-                    {
-                        return;
-                    }
+                    return;
+                }
 
-                    Log.Debug("Creating target control content wrapper grid that will serve as view model container.");
+                Log.Debug("Creating target control content wrapper grid that will serve as view model container.");
 
-                    _viewModelGrid = new Grid();
-                    _viewModelGrid.SetBinding(
-                        FrameworkElement.DataContextProperty,
-                        new Binding { Path = new PropertyPath("ViewModel"), Source = this });
+                _viewModelGrid = new Grid();
+                _viewModelGrid.SetBinding(FrameworkElement.DataContextProperty, new Binding { Path = new PropertyPath("ViewModel"), Source = this });
 
 #if NET || SL4 || SL5
-                    if (CreateWarningAndErrorValidatorForViewModel)
-                    {
-                        var warningAndErrorValidator = new WarningAndErrorValidator();
-                        warningAndErrorValidator.SetBinding(WarningAndErrorValidator.SourceProperty, new Binding());
+                if (CreateWarningAndErrorValidatorForViewModel)
+                {
+                    var warningAndErrorValidator = new WarningAndErrorValidator();
+                    warningAndErrorValidator.SetBinding(WarningAndErrorValidator.SourceProperty, new Binding());
 
-                        _viewModelGrid.Children.Add(warningAndErrorValidator);
-                    }
+                    _viewModelGrid.Children.Add(warningAndErrorValidator);
+                }
 #endif
 
-                    TargetControl.Content = null;
-                    _viewModelGrid.Children.Add(content);
-                    TargetControl.Content = _viewModelGrid;
+                TargetControl.Content = null;
+                _viewModelGrid.Children.Add(content);
+                TargetControl.Content = _viewModelGrid;
 
-                    Log.Debug("Created target control content wrapper grid for view model.");
-                });
+                Log.Debug("Created target control content wrapper grid for view model.");
+            });
 
-            // NOTE: Begining invoke (running async) because setting of TargetControl Content property causes memory faults
+            // NOTE: Beginning invoke (running async) because setting of TargetControl Content property causes memory faults
             // when this method called by TargetControlContentChanged handler.
 #if NETFX_CORE
             TargetControl.Dispatcher.RunAsync(CoreDispatcherPriority.High, () => update());
 #else
-            TargetControl.Dispatcher.BeginInvoke(update, DispatcherPriority.Send);
+            TargetControl.Dispatcher.Invoke(update);
 #endif
         }
 

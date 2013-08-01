@@ -69,6 +69,7 @@ Added/fixed:
 (x) CTL-128 Problem with navigation in WinRT apps
 (x) CTL-132 Fixed bug where LinkLabel.Command actually returned the CommandParameter
 (x) CTL-141 'ResourceMap Not Found' in WIN80 project
+(x) CTL-143 [WIN80] UseControl content change subscription does not work
 (x) Fixed Drag and Drop behavior when the drop position is less then the initial item's position
 (x) Ensured the value of Owner property of Shell to NULL in order to avoid the application close  when the SplashScreenService done
 (x) Ensured Bootstrapper UI tasks calls using DispatcherService
