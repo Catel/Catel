@@ -550,6 +550,10 @@
       <Project>{87db1def-5033-4edf-947d-cc890e5b84b6}</Project>
       <Name>Catel.Extensions.Data.WIN80</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.WIN80\Catel.Extensions.DynamicObjects.WIN80.csproj">
+      <Project>{22cd7b2d-2a87-4f00-9881-aeff09714902}</Project>
+      <Name>Catel.Extensions.DynamicObjects.WIN80</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Catel.Extensions.Memento\Catel.Extensions.Memento.WIN80\Catel.Extensions.Memento.WIN80.csproj">
       <Project>{93a9f7d1-c007-46eb-bdf1-8dc01ef91a82}</Project>
       <Name>Catel.Extensions.Memento.WIN80</Name>

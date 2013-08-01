@@ -718,6 +718,10 @@
       <Project>{081abdcf-efa2-4f08-92ae-939f850e5949}</Project>
       <Name>Catel.Extensions.Data.SL5</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.SL5\Catel.Extensions.DynamicObjects.SL5.csproj">
+      <Project>{e2e9cbe2-8852-4f78-ad4a-d850bc550cd1}</Project>
+      <Name>Catel.Extensions.DynamicObjects.SL5</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Catel.Extensions.FluentValidation\Catel.Extensions.FluentValidation.SL5\Catel.Extensions.FluentValidation.SL5.csproj">
       <Project>{8FB35D65-3E80-483D-B38A-F4DE1AB08D71}</Project>
       <Name>Catel.Extensions.FluentValidation.SL5</Name>

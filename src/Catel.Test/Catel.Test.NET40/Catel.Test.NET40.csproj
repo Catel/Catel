@@ -335,6 +335,10 @@
       <Project>{db390685-297c-41d9-b4ac-201e58a8364c}</Project>
       <Name>Catel.Extensions.Data.NET40</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.NET40\Catel.Extensions.DynamicObjects.NET40.csproj">
+      <Project>{a1b5d494-32d5-4dce-8dc1-00cecc821f58}</Project>
+      <Name>Catel.Extensions.DynamicObjects.NET40</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Catel.Extensions.EntityFramework5\Catel.Extensions.EntityFramework5.NET40\Catel.Extensions.EntityFramework5.NET40.csproj">
       <Project>{2a4af4d2-e74c-4a8a-947b-1b7ce5bdb67a}</Project>
       <Name>Catel.Extensions.EntityFramework5.NET40</Name>
