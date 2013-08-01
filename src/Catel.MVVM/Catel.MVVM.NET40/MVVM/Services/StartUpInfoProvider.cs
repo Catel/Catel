@@ -6,11 +6,15 @@
 
 namespace Catel.MVVM.Services
 {
-    using System.Collections.Generic;
 #if NET
     using System.Diagnostics;
+
+    using Catel.Windows;
+
 #endif
 #if SILVERLIGHT
+    using System.Collections.Generic;
+
     using System.Windows;
 #endif
 
@@ -23,7 +27,7 @@ namespace Catel.MVVM.Services
         /// <summary>
         /// The command argument list.
         /// </summary>
-        private List<string> _argumentList;
+        private string[] _arguments;
 #endif
 
         #region IStartUpInfoProvider Members
@@ -33,49 +37,7 @@ namespace Catel.MVVM.Services
         /// </summary>
         public string[] Arguments
         {
-            get
-            {
-                if (_argumentList == null)
-                {
-                    _argumentList = new List<string>();
-
-                    var arguments = Process.GetCurrentProcess().StartInfo.Arguments;
-
-                    string current = string.Empty;
-                    for (int i = 0; i < Process.GetCurrentProcess().StartInfo.Arguments.Length; i++)
-                    {
-                        if (arguments[i] == '\"')
-                        {
-                            int j = i + 1;
-                            while (j < arguments.Length && arguments[j] != '\"')
-                            {
-                                current += arguments[j++];
-                            }
-
-                            i = j - 1;
-                        }
-                        else if (arguments[i] == ' ')
-                        {
-                            if (current != string.Empty)
-                            {
-                                _argumentList.Add(current);
-                                current = string.Empty;
-                            }
-                        }
-                        else
-                        {
-                            current += arguments[i];
-                        }
-                    }
-
-                    if (current != string.Empty)
-                    {
-                        _argumentList.Add(current);
-                    }
-                }
-
-                return _argumentList.ToArray();
-            }
+            get { return _arguments ?? (_arguments = CommandLineHelper.Parse(Process.GetCurrentProcess().StartInfo.Arguments)); }
         }
 #endif
 
