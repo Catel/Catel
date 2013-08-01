@@ -8,19 +8,22 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 {
     using System;
     using System.Collections.Generic;
-    using System.Windows;
     using Data;
+
     using Logging;
     using MVVM;
     using Reflection;
 
 #if NETFX_CORE
+    using global::Windows.UI.Core;
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Data;
 
     using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
 #else
+    using System.Windows;
+    using System.Windows.Threading;
     using System.Windows.Controls;
     using System.Windows.Data;
 
@@ -83,14 +86,9 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             CreateWarningAndErrorValidatorForViewModel = DefaultCreateWarningAndErrorValidatorForViewModelValue;
 #endif
 
-            if (targetControl.Content == null)
-            {
-                targetControl.SubscribeToDependencyProperty("Content", OnTargetControlContentChanged);
-            }
-            else
-            {
-                CreateViewModelGrid();
-            }
+            // NOTE: There is NO unsubscription for this subscription.
+            // Hence target control content wrapper grid will be recreated each time content changes.
+            targetControl.SubscribeToDependencyProperty("Content", OnTargetControlContentChanged);
         }
         #endregion
 
@@ -246,42 +244,54 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// <param name="e">The <see cref="Catel.Windows.Data.DependencyPropertyValueChangedEventArgs"/> instance containing the event data.</param>
         private void OnTargetControlContentChanged(object sender, DependencyPropertyValueChangedEventArgs e)
         {
-            TargetControl.UnsubscribeFromDependencyProperty("Content", OnTargetControlContentChanged);
-
             CreateViewModelGrid();
         }
 
         /// <summary>
-        /// Creates the grid that contains the view model as a data context.
+        /// Creates the target control content wrapper grid that contains the view model as a data context.
         /// </summary>
         private void CreateViewModelGrid()
         {
-            var content = TargetControl.Content as FrameworkElement;
-            if (content == null)
-            {
-                return;
-            }
+            var update = new Action(
+                () =>
+                {
+                    var content = TargetControl.Content as FrameworkElement;
+                    if (content == null || ReferenceEquals(TargetControl.Content, _viewModelGrid))
+                    {
+                        return;
+                    }
 
-            Log.Debug("Creating view model grid that will serve as view model container");
+                    Log.Debug("Creating target control content wrapper grid that will serve as view model container.");
 
-            _viewModelGrid = new Grid();
-            _viewModelGrid.SetBinding(FrameworkElement.DataContextProperty, new Binding { Path = new PropertyPath("ViewModel"), Source = this });
+                    _viewModelGrid = new Grid();
+                    _viewModelGrid.SetBinding(
+                        FrameworkElement.DataContextProperty,
+                        new Binding { Path = new PropertyPath("ViewModel"), Source = this });
 
 #if NET || SL4 || SL5
-            if (CreateWarningAndErrorValidatorForViewModel)
-            {
-                var warningAndErrorValidator = new WarningAndErrorValidator();
-                warningAndErrorValidator.SetBinding(WarningAndErrorValidator.SourceProperty, new Binding());
+                    if (CreateWarningAndErrorValidatorForViewModel)
+                    {
+                        var warningAndErrorValidator = new WarningAndErrorValidator();
+                        warningAndErrorValidator.SetBinding(WarningAndErrorValidator.SourceProperty, new Binding());
 
-                _viewModelGrid.Children.Add(warningAndErrorValidator);
-            }
+                        _viewModelGrid.Children.Add(warningAndErrorValidator);
+                    }
 #endif
 
-            TargetControl.Content = null;
-            _viewModelGrid.Children.Add(content);
-            TargetControl.Content = _viewModelGrid;
+                    TargetControl.Content = null;
+                    _viewModelGrid.Children.Add(content);
+                    TargetControl.Content = _viewModelGrid;
 
-            Log.Debug("Created view model grid");
+                    Log.Debug("Created target control content wrapper grid for view model.");
+                });
+
+            // NOTE: Begining invoke (running async) because setting of TargetControl Content property causes memory faults
+            // when this method called by TargetControlContentChanged handler.
+#if NETFX_CORE
+            TargetControl.Dispatcher.RunAsync(CoreDispatcherPriority.High, () => update());
+#else
+            TargetControl.Dispatcher.BeginInvoke(update, DispatcherPriority.Send);
+#endif
         }
 
         /// <summary>
@@ -293,6 +303,11 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         {
             // Do not call base because it will create a VM. We will create the VM ourselves
             //base.OnTargetControlLoaded(sender, e);
+
+            // Manually updating target control content wrapper here (not by content property changed event handler),
+            // because in WinRT UserControl does NOT update bindings while InitializeComponents() method is executing,
+            // even if the Content property was changed while InitializeComponents() running there is no triggering of a binding update.
+            CreateViewModelGrid();
 
 #if NET || SL4 || SL5
             if (!SkipSearchingForInfoBarMessageControl)
@@ -354,7 +369,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             }
             else
             {
-                Log.Debug("Skipping 'CloseAndDisposeViewModel' because 'CloseViewModelOnUnloaded' is set to true");
+                Log.Debug("Skipping 'CloseAndDisposeViewModel' because 'CloseViewModelOnUnloaded' is set to false.");
             }
         }
 
@@ -383,7 +398,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// Called when the <c>DataContext</c> property of the <see cref="TargetControl"/> has changed.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.Windows.DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         public override void OnTargetControlDataContextChanged(object sender, DependencyPropertyValueChangedEventArgs e)
         {
             // Fix in WinRT to make sure inner grid is created
@@ -391,8 +406,6 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             {
                 if (TargetControl.Content != null)
                 {
-                    TargetControl.UnsubscribeFromDependencyProperty("Content", OnTargetControlContentChanged);
-
                     CreateViewModelGrid();
                 }
                 else
@@ -605,7 +618,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         {
             UnsubscribeFromParentViewModel();
 
-            IViewModelContainer viewModelContainer = null;
+            IViewModelContainer viewModelContainer;
 
             var senderAsLogic = sender as LogicBase;
             if (senderAsLogic != null)
