@@ -273,6 +273,7 @@
     <Compile Include="Windows\Controls\Interfaces\IView.cs" />
     <Compile Include="Windows\Data\Converters\StringToTypeConverter.cs" />
     <Compile Include="Windows\DependencyPropertySelector.cs" />
+    <Compile Include="Windows\Helpers\CommandLineHelper.cs" />
     <Compile Include="Windows\Threading\Extensions\DispatcherExtensions.cs" />
     <Compile Include="Windows\Interfaces\IDependencyPropertySelector.cs" />
     <Compile Include="Windows\Controls\MVVMProviders\Logic\EventArgs\DetermineViewModelInstanceEventArgs.cs" />

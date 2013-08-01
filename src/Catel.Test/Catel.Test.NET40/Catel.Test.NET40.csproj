@@ -320,6 +320,7 @@
     <Compile Include="Windows\Data\Converters\ReferenceToBooleanConverterTest.cs" />
     <Compile Include="Windows\Data\Converters\ReferenceToCollapsingVisibilityConverterTest.cs" />
     <Compile Include="Windows\Data\Converters\ShortDateFormattingConverterTest.cs" />
+    <Compile Include="Windows\Helpers\CommandLineHelperFacts.cs" />
     <Compile Include="Windows\Helpers\ResourceHelperFacts.cs" />
   </ItemGroup>
   <ItemGroup>
