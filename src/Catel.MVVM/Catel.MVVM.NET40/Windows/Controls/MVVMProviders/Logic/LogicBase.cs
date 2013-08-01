@@ -592,7 +592,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// Called when the <c>DataContext</c> property of the <see cref="TargetControl"/> has changed.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.Windows.DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         public virtual void OnTargetControlDataContextChanged(object sender, DependencyPropertyValueChangedEventArgs e)
         {
             Log.Debug("DataContext of TargetControl '{0}' has changed to '{1}'", TargetControl.GetType().Name, ObjectToStringHelper.ToTypeString(TargetControl.DataContext));
