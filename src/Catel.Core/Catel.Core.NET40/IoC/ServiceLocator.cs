@@ -169,6 +169,11 @@ namespace Catel.IoC
         private readonly List<IExternalContainerHelper> _supportedExternalContainers = new List<IExternalContainerHelper>();
 
         /// <summary>
+        /// The types currently being exported.
+        /// </summary>
+        private readonly List<ServiceInfo> _typesCurrentlyBeingExported = new List<ServiceInfo>(); 
+
+        /// <summary>
         /// The synchronization object.
         /// </summary>
         private readonly object _syncObject = new object();
@@ -1022,10 +1027,19 @@ namespace Catel.IoC
                     var value = keyValuePair.Value;
 
                     var serviceInfo = new ServiceInfo(value.DeclaringType, key.Tag);
+                    if (_typesCurrentlyBeingExported.Contains(serviceInfo))
+                    {
+                        continue;
+                    }
+
                     if (!_registeredInstances.ContainsKey(serviceInfo) && IsTypeRegisteredAsSingleton(value.DeclaringType))
                     {
+                        _typesCurrentlyBeingExported.Add(serviceInfo);
+
                         // Resolving automatically creates an instance
                         ResolveTypeFromKnownContainer(value.DeclaringType, key.Tag);
+
+                        _typesCurrentlyBeingExported.Remove(serviceInfo);
                     }
                 }
             }
