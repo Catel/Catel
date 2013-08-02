@@ -86,6 +86,7 @@ using System.Resources;
 #endif
         {
             var originalAssemblyName = TypeHelper.GetAssemblyNameWithoutOverhead(assembly.FullName);
+#if !NETFX_CORE
             var assemblyName = originalAssemblyName;
 
             // Allow mapping of assemblies
@@ -93,6 +94,7 @@ using System.Resources;
             {
                 assemblyName = _assemblyMappings[originalAssemblyName];
             }
+#endif
 
             if (!_dictionaryMappings.ContainsKey(originalAssemblyName))
             {
