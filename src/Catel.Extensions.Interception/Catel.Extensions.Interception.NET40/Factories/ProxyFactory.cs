@@ -46,10 +46,12 @@ namespace Catel.Interception
         /// <summary>
         /// Initializes a new instance of the <see cref="ProxyFactory"/> class.
         /// </summary>
+        /// <param name="serviceLocator">The service locator. If <c>null</c>, <see cref="ServiceLocator.Default" /> will be used.</param>
+        /// <param name="typeFactory">The type factory. If <c>null</c>, <see cref="TypeFactory.Default" /> will be used.</param>
         public ProxyFactory(IServiceLocator serviceLocator = null, ITypeFactory typeFactory = null)
         {
             _serviceLocator = serviceLocator ?? ServiceLocator.Default;
-            _typeFactory = typeFactory ?? _serviceLocator.ResolveType<ITypeFactory>();
+            _typeFactory = typeFactory ?? TypeFactory.Default;
             _proxyGenerator = _typeFactory.CreateInstance<ProxyGenerator>();
         }
         #endregion

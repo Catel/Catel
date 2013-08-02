@@ -64,7 +64,7 @@ namespace Catel.Interception.Handlers
         /// <value>
         ///     The default <see cref="IServiceLocator" /> instance.
         /// </value>
-        protected internal IServiceLocator Container
+        protected IServiceLocator Container
         {
             get { return _serviceLocator; }
         }

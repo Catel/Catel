@@ -9,7 +9,7 @@ namespace Catel.Interception.Utilities
     using System;
 
     /// <summary>
-    /// 
+    /// The assertions helper.
     /// </summary>
     public static class Confirm
     {
@@ -59,7 +59,7 @@ namespace Catel.Interception.Utilities
         /// <summary>
         /// Assertions the specified condition.
         /// </summary>
-        /// <param name="condition">if set to <c>true</c> [condition].</param>
+        /// <param name="condition">if set to <c>true</c> condition.</param>
         /// <param name="message">The message.</param>
         public static void Assertion(bool condition, string message)
         {
@@ -69,7 +69,7 @@ namespace Catel.Interception.Utilities
         /// <summary>
         /// Assertions the specified condition.
         /// </summary>
-        /// <param name="condition">if set to <c>true</c> [condition].</param>
+        /// <param name="condition">if set to <c>true</c> condition.</param>
         /// <param name="exception">The exception.</param>
         public static void Assertion(bool condition, Exception exception)
         {

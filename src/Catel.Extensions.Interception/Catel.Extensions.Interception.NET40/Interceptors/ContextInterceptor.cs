@@ -55,34 +55,38 @@ namespace Catel.Interception.Interceptors
 
             var memberDefinition = invocation.Method.ExtractDefinition();
 
-            var interceptorState = FindStateInterceptorByMemberDefinition(memberDefinition);
-
-            var hasInterceptorState = interceptorState != null;
-            var hasTargetObject = invocation.Target != null;
-            var hasTargetMethod = hasInterceptorState && interceptorState.OnInvokeWasRegistered;
-
-            Func<IInvocation, object> call = any => invocation.Method.Invoke(invocation.Target, invocation.Arguments);
-
-            if (!hasTargetMethod && hasTargetObject && hasInterceptorState)
+            if (memberDefinition != null)
             {
-                interceptorState.CallbackCollection.Add(new OnInvokeCallback(call));
-                hasTargetMethod = true;
-            }
+                var interceptorState = FindStateInterceptorByMemberDefinition(memberDefinition);
 
-            #region Execution
+                var hasInterceptorState = interceptorState != null;
+                var hasTargetObject = invocation.Target != null;
+                var hasTargetMethod = hasInterceptorState && interceptorState.OnInvokeWasRegistered;
 
-            if (hasInterceptorState && hasTargetMethod)
-            {
-                return interceptorState.Intercept(invocation);
-            }
+                Func<IInvocation, object> call = any => invocation.Method.Invoke(invocation.Target, invocation.Arguments);
 
-            if (hasTargetObject)
-            {
-                return call(invocation);
+                if (!hasTargetMethod && hasTargetObject && hasInterceptorState)
+                {
+                    interceptorState.CallbackCollection.Add(new OnInvokeCallback(call));
+                    hasTargetMethod = true;
+                }
+
+                #region Execution
+
+                if (hasInterceptorState && hasTargetMethod)
+                {
+                    return interceptorState.Intercept(invocation);
+                }
+
+                if (hasTargetObject)
+                {
+                    return call(invocation);
+                }
+                #endregion
             }
 
             throw new InvalidOperationException(string.Format("Unable to execute method: '{0}'. Speficy a target object or a target method utilizing Target() or OnInvoke() method.", invocation.Method.Name));
-            #endregion
+            
         }
         #endregion
 
@@ -92,8 +96,11 @@ namespace Catel.Interception.Interceptors
         /// </summary>
         /// <param name="definition">The signature.</param>
         /// <returns></returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="definition"/> is <c>null</c>.</exception>
         private StateInterceptor FindStateInterceptorByMemberDefinition(IMemberDefinition definition)
         {
+            Argument.IsNotNull(() => definition);
+
             return StateInterceptorCollection.FirstOrDefault(interceptor => interceptor.MemberDefinition.Equals(definition));
         }
         #endregion

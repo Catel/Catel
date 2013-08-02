@@ -67,8 +67,8 @@ namespace Catel.Interception.Handlers
         /// Initializes a new instance of the <see cref="CallbackHandler{TService, TServiceImplementation}"/> class.
         /// </summary>
         /// <param name="interceptorHandler">The intercetor handler.</param>
-        /// <param name="proxyFactory">The proxy factory.</param>
-        /// <param name="typeFactory">The type factory.</param>
+        /// <param name="proxyFactory">The proxy factory. If <c>null</c>, <see cref="ProxyFactory.Default" /> will be used.</param>
+        /// <param name="typeFactory">The type factory. If <c>null</c>, <see cref="TypeFactory.Default" /> will be used.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="interceptorHandler"/> is <c>null</c>.</exception>
         public CallbackHandler(InterceptorHandler<TService, TServiceImplementation> interceptorHandler, IProxyFactory proxyFactory = null, ITypeFactory typeFactory = null) :
             base(interceptorHandler.ServiceType, interceptorHandler.Tag)
@@ -76,8 +76,8 @@ namespace Catel.Interception.Handlers
             Argument.IsNotNull(() => interceptorHandler);
 
             _interceptorHandler = interceptorHandler;
-            _proxyFactory = proxyFactory ?? GetService<IProxyFactory>();
-            _typeFactory = typeFactory ?? GetService<ITypeFactory>();
+            _proxyFactory = proxyFactory ?? ProxyFactory.Default;
+            _typeFactory = typeFactory ?? TypeFactory.Default;
 
             _target = _typeFactory.CreateInstance<TServiceImplementation>();
         }

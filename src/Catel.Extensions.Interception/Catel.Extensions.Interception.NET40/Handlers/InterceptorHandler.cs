@@ -48,7 +48,8 @@ namespace Catel.Interception.Handlers
         public InterceptorHandler(IServiceLocator serviceLocator = null, object tag = null, ITypeFactory typeFactory = null)
             : base(typeof (TService), tag, serviceLocator)
         {
-            _typeFactory = typeFactory ?? GetService<ITypeFactory>();
+            _typeFactory = typeFactory ?? TypeFactory.Default;
+
             ImplementedTypes = new List<Type>();
 
             Callbacks = new CacheStorage<IMemberDefinition, CallbackCollection>();
@@ -310,8 +311,11 @@ namespace Catel.Interception.Handlers
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns></returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         private IEnumerable<MethodInfo> GetMethodsToIntercept(Type type)
         {
+            Argument.IsNotNull(() => type);
+
             return type.GetMethodsToIntercept()
                        .Where(method => !AttributeHelper.IsDecoratedWithAttribute<DoNotInterceptAttribute>(method));
         }

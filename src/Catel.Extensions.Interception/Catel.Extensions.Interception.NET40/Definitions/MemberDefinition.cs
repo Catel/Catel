@@ -64,24 +64,19 @@ namespace Catel.Interception
                 return false;
             }
 
-            var member = obj as MemberDefinition;
+            var memberDefinition = obj as IMemberDefinition;
 
-            if (member == null)
+            if (memberDefinition == null)
             {
                 return false;
             }
 
-            if (Parameters.Count != member.Parameters.Count)
+            if (Parameters.Count != memberDefinition.Parameters.Count)
             {
                 return false;
             }
 
-            if (Parameters.Where((parameter, index) => !parameter.IsGenericParameter && parameter != member.Parameters[index]).Any())
-            {
-                return false;
-            }
-
-            return MemberName == member.MemberName;
+            return !Parameters.Where((parameter, index) => !parameter.IsGenericParameter && parameter != memberDefinition.Parameters[index]).Any() && TagHelper.AreTagsEqual(MemberName, memberDefinition.MemberName);
         }
 
         /// <summary>
