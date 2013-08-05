@@ -5,18 +5,19 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E2E9CBE2-8852-4F78-AD4A-D850BC550CD1}</ProjectGuid>
+    <ProjectGuid>{C437F38D-6A88-462B-A71A-0B981D3E1805}</ProjectGuid>
     <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Catel</RootNamespace>
     <AssemblyName>Catel.Extensions.DynamicObjects</AssemblyName>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
     <SilverlightApplication>false</SilverlightApplication>
     <ValidateXaml>true</ValidateXaml>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <!-- This property group is only here to support building this project using the 
        MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
@@ -28,25 +29,25 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\output\debug\SL5\Catel.Extensions.DynamicObjects\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;SILVERLIGHT; SL5</DefineConstants>
+    <OutputPath>..\..\..\output\debug\SL4\Catel.Extensions.DynamicObjects\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT; SL4</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>..\..\..\output\debug\SL5\Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.XML</DocumentationFile>
+    <DocumentationFile>..\..\..\output\debug\SL4\Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\output\release\SL5\Catel.Extensions.DynamicObjects\</OutputPath>
-    <DefineConstants>TRACE;SILVERLIGHT; SL5</DefineConstants>
+    <OutputPath>..\..\..\output\release\SL4\Catel.Extensions.DynamicObjects\</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT; SL4</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\..\output\release\SL5\Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.XML</DocumentationFile>
+    <DocumentationFile>..\..\..\output\release\SL4\Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.XML</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
@@ -61,12 +62,6 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Catel.Core\Catel.Core.SL5\Catel.Core.SL5.csproj">
-      <Project>{2b6db2b2-c289-4779-97c1-507bc779ba25}</Project>
-      <Name>Catel.Core.SL5</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
@@ -79,6 +74,12 @@
     <Compile Include="..\Catel.Extensions.DynamicObjects.NET40\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Catel.Core\Catel.Core.SL4\Catel.Core.SL4.csproj">
+      <Project>{5f6a19ba-47bc-4ddc-8c4c-06ccea6be0ba}</Project>
+      <Name>Catel.Core.SL4</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>

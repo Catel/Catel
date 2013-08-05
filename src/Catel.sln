@@ -390,6 +390,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.DynamicObj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.DynamicObjects.WIN80", "Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.WIN80\Catel.Extensions.DynamicObjects.WIN80.csproj", "{22CD7B2D-2A87-4F00-9881-AEFF09714902}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.DynamicObjects.SL4", "Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.SL4\Catel.Extensions.DynamicObjects.SL4.csproj", "{C437F38D-6A88-462B-A71A-0B981D3E1805}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1126,6 +1128,16 @@ Global
 		{22CD7B2D-2A87-4F00-9881-AEFF09714902}.Release|x64.Build.0 = Release|x64
 		{22CD7B2D-2A87-4F00-9881-AEFF09714902}.Release|x86.ActiveCfg = Release|x86
 		{22CD7B2D-2A87-4F00-9881-AEFF09714902}.Release|x86.Build.0 = Release|x86
+		{C437F38D-6A88-462B-A71A-0B981D3E1805}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C437F38D-6A88-462B-A71A-0B981D3E1805}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C437F38D-6A88-462B-A71A-0B981D3E1805}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{C437F38D-6A88-462B-A71A-0B981D3E1805}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C437F38D-6A88-462B-A71A-0B981D3E1805}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C437F38D-6A88-462B-A71A-0B981D3E1805}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C437F38D-6A88-462B-A71A-0B981D3E1805}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C437F38D-6A88-462B-A71A-0B981D3E1805}.Release|ARM.ActiveCfg = Release|Any CPU
+		{C437F38D-6A88-462B-A71A-0B981D3E1805}.Release|x64.ActiveCfg = Release|Any CPU
+		{C437F38D-6A88-462B-A71A-0B981D3E1805}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1239,6 +1251,7 @@ Global
 		{A4396138-135C-4ABE-B671-3DC0C041DD37} = {B5ED1A50-E238-4C92-996A-08ED76033DF3}
 		{E2E9CBE2-8852-4F78-AD4A-D850BC550CD1} = {B5ED1A50-E238-4C92-996A-08ED76033DF3}
 		{22CD7B2D-2A87-4F00-9881-AEFF09714902} = {B5ED1A50-E238-4C92-996A-08ED76033DF3}
+		{C437F38D-6A88-462B-A71A-0B981D3E1805} = {B5ED1A50-E238-4C92-996A-08ED76033DF3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.2\lib\NET35

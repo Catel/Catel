@@ -51,6 +51,7 @@ Added/fixed:
 (+) CTL-129 Added BatchLogListenerBase to write log events in configurable batches
 (+) CTL-130 Added FileLogListener which writes to a log file in batches
 (+) CTL-135 Added TaskCommand to Catel.MVVM (NET45, WIN80 and WP8 only)
+(+) CTL-139 Added DynamicObjects extension
 (+) Added extension method for ISplashScreenService for Prism to show progress control in a region
 (+) Added some additionnals members in IViewManager.
 (+) Added support to Commit enqueued tasks using an existing instance view model for SplashScreenService

@@ -1387,7 +1387,7 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="property"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidPropertyException">The name of the property is invalid.</exception>
         /// <exception cref="PropertyAlreadyRegisteredException">The property is already registered.</exception>
-        protected void InitializePropertyAfterConstruction(PropertyData property)
+        protected internal void InitializePropertyAfterConstruction(PropertyData property)
         {
             Argument.IsNotNull("property", property);
 

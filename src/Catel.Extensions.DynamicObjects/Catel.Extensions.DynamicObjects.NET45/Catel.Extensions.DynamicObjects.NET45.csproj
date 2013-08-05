@@ -52,6 +52,12 @@
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.DynamicObjects.NET40\Data\DynamicModelBase.cs">
+      <Link>Data\DynamicModelBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.DynamicObjects.NET40\Data\DynamicModelBaseMetaObject.cs">
+      <Link>Data\DynamicModelBaseMetaObject.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Extensions.DynamicObjects.NET40\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>

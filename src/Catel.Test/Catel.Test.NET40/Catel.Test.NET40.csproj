@@ -53,6 +53,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\FluentValidation.4.0.0.1\lib\Net40\FluentValidation.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\lib\Prism.4.1.0.0\lib\NET40\Microsoft.Expression.Interactions.dll</HintPath>
     </Reference>
@@ -172,6 +173,7 @@
     <Compile Include="Extensions\Data\Specifications\CompositeSpecificationFacts.cs" />
     <Compile Include="Extensions\Data\Specifications\OrSpecificationFacts.cs" />
     <Compile Include="Extensions\Data\Specifications\SpecificationTestData.cs" />
+    <Compile Include="Extensions\DynamicObjects\DynamicModelBaseFacts.cs" />
     <Compile Include="Extensions\EntityFramework5\Data\ConnectionStringManagerFacts.cs" />
     <Compile Include="Extensions\EntityFramework5\Data\ContextManagerFacts.cs" />
     <Compile Include="Extensions\EntityFramework5\Data\DbContextManagerFacts.cs" />
@@ -208,8 +210,8 @@
     <Compile Include="IoC\TypeFactoryFacts.cs" />
     <Compile Include="IoC\TypeRequestInfoFacts.cs" />
     <Compile Include="IoC\TypeRequestPathFacts.cs" />
-    <Compile Include="Memento\BatchFacts.cs" />
-    <Compile Include="Memento\OperationSetFacts.cs" />
+    <Compile Include="Extensions\Memento\BatchFacts.cs" />
+    <Compile Include="Extensions\Memento\OperationSetFacts.cs" />
     <Compile Include="Messaging\MessageMediatorHelperFacts.cs" />
     <Compile Include="ModuleInitializer.cs" />
     <Compile Include="MVVM\Commands\ViewModelCommandManagerFacts.cs" />
@@ -240,14 +242,14 @@
     <Compile Include="Logging\EventArgs\LogMessageEventArgsTest.cs" />
     <Compile Include="Logging\LogManagerTest.cs" />
     <Compile Include="Logging\LogFacts.cs" />
-    <Compile Include="Memento\ActionUndoFacts.cs" />
-    <Compile Include="Memento\CollectionChangeUndoFacts.cs" />
-    <Compile Include="Memento\CollectionObserverFacts.cs" />
-    <Compile Include="Memento\MementoServiceFacts.cs" />
-    <Compile Include="Memento\Mocks\MockModel.cs" />
-    <Compile Include="Memento\Mocks\MockUndo.cs" />
-    <Compile Include="Memento\ObjectObserverFacts.cs" />
-    <Compile Include="Memento\PropertyChangeUndoFacts.cs" />
+    <Compile Include="Extensions\Memento\ActionUndoFacts.cs" />
+    <Compile Include="Extensions\Memento\CollectionChangeUndoFacts.cs" />
+    <Compile Include="Extensions\Memento\CollectionObserverFacts.cs" />
+    <Compile Include="Extensions\Memento\MementoServiceFacts.cs" />
+    <Compile Include="Extensions\Memento\Mocks\MockModel.cs" />
+    <Compile Include="Extensions\Memento\Mocks\MockUndo.cs" />
+    <Compile Include="Extensions\Memento\ObjectObserverFacts.cs" />
+    <Compile Include="Extensions\Memento\PropertyChangeUndoFacts.cs" />
     <Compile Include="Messaging\MessageBaseFacts.cs" />
     <Compile Include="Messaging\MessageMediatorFacts.cs" />
     <Compile Include="MVVM\Auditing\AuditingManagerTest.cs" />
@@ -380,6 +382,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Extensions\Interception\" />
     <Folder Include="IoC\Extensions\" />
     <Folder Include="Logging\Extensions\" />
   </ItemGroup>

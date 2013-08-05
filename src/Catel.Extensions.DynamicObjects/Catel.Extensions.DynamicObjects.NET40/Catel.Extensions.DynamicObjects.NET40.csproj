@@ -48,6 +48,7 @@
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Data\DynamicModelBase.cs" />
+    <Compile Include="Data\DynamicModelBaseMetaObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

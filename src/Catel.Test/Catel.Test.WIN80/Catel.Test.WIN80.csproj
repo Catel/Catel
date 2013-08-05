@@ -194,6 +194,39 @@
     <Compile Include="..\Catel.Test.NET40\Extensions\Data\Specifications\SpecificationTestData.cs">
       <Link>Extensions\Data\Specifications\SpecificationTestData.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\DynamicObjects\DynamicModelBaseFacts.cs">
+      <Link>Extensions\DynamicObjects\DynamicModelBaseFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\Memento\ActionUndoFacts.cs">
+      <Link>Extensions\Memento\ActionUndoFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\Memento\BatchFacts.cs">
+      <Link>Extensions\Memento\BatchFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\Memento\CollectionChangeUndoFacts.cs">
+      <Link>Extensions\Memento\CollectionChangeUndoFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\Memento\CollectionObserverFacts.cs">
+      <Link>Extensions\Memento\CollectionObserverFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\Memento\MementoServiceFacts.cs">
+      <Link>Extensions\Memento\MementoServiceFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\Memento\Mocks\MockModel.cs">
+      <Link>Extensions\Memento\Mocks\MockModel.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\Memento\Mocks\MockUndo.cs">
+      <Link>Extensions\Memento\Mocks\MockUndo.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\Memento\ObjectObserverFacts.cs">
+      <Link>Extensions\Memento\ObjectObserverFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\Memento\OperationSetFacts.cs">
+      <Link>Extensions\Memento\OperationSetFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\Memento\PropertyChangeUndoFacts.cs">
+      <Link>Extensions\Memento\PropertyChangeUndoFacts.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\GlobalInitialization.cs">
       <Link>GlobalInitialization.cs</Link>
     </Compile>
@@ -247,36 +280,6 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Logging\LogManagerTest.cs">
       <Link>Logging\LogManagerTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Memento\ActionUndoFacts.cs">
-      <Link>Memento\ActionUndoFacts.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Memento\BatchFacts.cs">
-      <Link>Memento\BatchFacts.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Memento\CollectionChangeUndoFacts.cs">
-      <Link>Memento\CollectionChangeUndoFacts.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Memento\CollectionObserverFacts.cs">
-      <Link>Memento\CollectionObserverFacts.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Memento\MementoServiceFacts.cs">
-      <Link>Memento\MementoServiceFacts.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Memento\Mocks\MockModel.cs">
-      <Link>Memento\Mocks\MockModel.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Memento\Mocks\MockUndo.cs">
-      <Link>Memento\Mocks\MockUndo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Memento\ObjectObserverFacts.cs">
-      <Link>Memento\ObjectObserverFacts.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Memento\OperationSetFacts.cs">
-      <Link>Memento\OperationSetFacts.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Memento\PropertyChangeUndoFacts.cs">
-      <Link>Memento\PropertyChangeUndoFacts.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Messaging\MessageBaseFacts.cs">
       <Link>Messaging\MessageBaseFacts.cs</Link>
@@ -570,6 +573,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Extensions\Interception\" />
     <Folder Include="IoC\Extensions\" />
     <Folder Include="IoC\Helpers\" />
     <Folder Include="Logging\Extensions\" />
