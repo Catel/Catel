@@ -7,10 +7,11 @@
 namespace Catel.Windows.Data
 {
     using System;
-    using System.Windows;
 
 #if NETFX_CORE
     using global::Windows.UI.Xaml;
+#else
+    using System.Windows;
 #endif
 
     /// <summary>
@@ -22,7 +23,7 @@ namespace Catel.Windows.Data
         /// Initializes a new instance of the <see cref="DependencyPropertyValueChangedEventArgs"/> class.
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
-        /// <param name="e">The <see cref="System.Windows.DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="e"/> is <c>null</c>.</exception>
         internal DependencyPropertyValueChangedEventArgs(string propertyName, DependencyPropertyChangedEventArgs e)
@@ -40,6 +41,30 @@ namespace Catel.Windows.Data
             DependencyProperty = e.Property;
             OldValue = e.OldValue;
             NewValue = e.NewValue;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DependencyPropertyValueChangedEventArgs"/> class.
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <param name="dependencyProperty">Dependency property.</param>
+        /// <param name="oldValue">Old value.</param>
+        /// <param name="newValue">New value.</param>
+        public DependencyPropertyValueChangedEventArgs(string propertyName, DependencyProperty dependencyProperty, object oldValue, object newValue)
+        {
+            Argument.IsNotNullOrWhitespace("propertyName", propertyName);
+            Argument.IsNotNull("dependencyProperty", dependencyProperty);
+
+#if NET
+            FxEventArgs = new DependencyPropertyChangedEventArgs(dependencyProperty, oldValue, newValue);
+#else
+            FxEventArgs = this;
+#endif
+
+            PropertyName = propertyName;
+            DependencyProperty = dependencyProperty;
+            OldValue = oldValue;
+            NewValue = newValue;
         }
 
         /// <summary>

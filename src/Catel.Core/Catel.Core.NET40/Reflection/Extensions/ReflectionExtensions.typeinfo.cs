@@ -6,6 +6,7 @@
 
 namespace Catel.Reflection
 {
+    using System.Collections.Generic;
 #if NETFX_CORE || NET45
     using System;
     using System.Linq;
@@ -54,13 +55,6 @@ namespace Catel.Reflection
                                     where member.IsStatic
                                     select member);
                 }
-            }
-
-            if (!includeStatics)
-            {
-                source = (from x in source
-                            where !x.IsStatic
-                            select x).ToList();
             }
 
             return (from x in source
@@ -139,19 +133,30 @@ namespace Catel.Reflection
         /// <summary>
         /// Gets the properties.
         /// </summary>
-        /// <param name="typeInfo">The <see cref="TypeInfo"/>.</param>
+        /// <param name="typeInfo">The <see cref="TypeInfo" />.</param>
         /// <param name="bindingFlags">The binding flags.</param>
-        /// <returns>An array of <see cref="PropertyInfo"/>.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="typeInfo"/> is <c>null</c>.</exception>
+        /// <returns>An array of <see cref="PropertyInfo" />.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="typeInfo" /> is <c>null</c>.</exception>
         public static PropertyInfo[] GetProperties(this TypeInfo typeInfo, BindingFlags bindingFlags)
         {
             Argument.IsNotNull("typeInfo", typeInfo);
 
-            var flattenHierarchy = ShouldFlattenHierarchy(bindingFlags);
-            var source = flattenHierarchy ? typeInfo.AsType().GetRuntimeProperties() : typeInfo.DeclaredProperties;
+            bool flattenHierarchy = ShouldFlattenHierarchy(bindingFlags);
+            List<PropertyInfo> source = (flattenHierarchy ? typeInfo.AsType().GetRuntimeProperties() : typeInfo.DeclaredProperties).ToList();
 
-            return (from x in source
-                    select x).ToArray();
+            bool includeStatics = Enum<BindingFlags>.Flags.IsFlagSet(bindingFlags, BindingFlags.Static);
+
+            // TODO: This is a fix because static members are not included in FlattenHierarcy, remove when this is fixed in WinRT
+            if (flattenHierarchy)
+            {
+                Type baseType = typeInfo.BaseType;
+                if ((baseType != null) && (baseType != typeof(object)))
+                {
+                    source.AddRange(from member in GetProperties(baseType.GetTypeInfo(), bindingFlags) where member.IsStatic() select member);
+                }
+            }
+
+            return (from x in source where x.IsStatic() == includeStatics select x).ToArray();
         }
 
         /// <summary>
