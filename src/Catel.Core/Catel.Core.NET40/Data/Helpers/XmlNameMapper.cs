@@ -160,6 +160,11 @@ namespace Catel.Data
                 foreach (var propertyData in _propertyDataManager.GetProperties(type))
                 {
                     var propertyInfo = type.GetPropertyEx(propertyData.Key, BindingFlagsHelper.GetFinalBindingFlags(true, false));
+                    if (propertyInfo == null)
+                    {
+                        // Dynamic property, not mapped (always fixed)
+                        continue;
+                    }
 
                     // 1st, check if XmlIgnore is used
                     if (AttributeHelper.IsDecoratedWithAttribute<XmlIgnoreAttribute>(propertyInfo))

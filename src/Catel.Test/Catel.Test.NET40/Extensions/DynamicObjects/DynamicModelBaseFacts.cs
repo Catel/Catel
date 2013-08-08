@@ -8,8 +8,9 @@
 namespace Catel.Test.Extensions.DynamicObjects
 {
     using System;
+    using System.IO;
     using Catel.Data;
-
+    using Catel.Runtime.Serialization;
 #if NETFX_CORE
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 #else
@@ -20,13 +21,6 @@ namespace Catel.Test.Extensions.DynamicObjects
     {
         public class DynamicModel : DynamicModelBase
         {
-            public string FirstName
-            {
-                get { return GetValue<string>(FirstNameProperty); }
-                set { SetValue(FirstNameProperty, value); }
-            }
-
-            public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), string.Empty);
         }
 
         [TestClass]
@@ -60,6 +54,33 @@ namespace Catel.Test.Extensions.DynamicObjects
                 model.NonExistingSetProperty = "test";
 
                 Assert.IsTrue(dynamicModel.IsPropertyRegistered("NonExistingSetProperty"));
+            }
+        }
+
+        [TestClass]
+        public class TheModelBaseFunctionality
+        {
+            [TestMethod]
+            public void SupportsSerialization()
+            {
+                dynamic model = new DynamicModel();
+                model.NonExistingProperty = "a dynamic value";
+
+                var serializer = SerializationFactory.GetXmlSerializer();
+
+                using (var memoryStream = new MemoryStream())
+                {
+                    var dynamicModel = (DynamicModel)model;
+                    serializer.Serialize(dynamicModel, memoryStream);
+
+                    memoryStream.Position = 0L;
+
+                    dynamic deserializedModel = serializer.Deserialize(typeof(DynamicModel), memoryStream);
+                    var deserializedDynamicModel = (DynamicModel) deserializedModel;
+
+                    Assert.IsTrue(deserializedDynamicModel.IsPropertyRegistered("NonExistingProperty"));
+                    Assert.AreEqual("a dynamic value", deserializedModel.NonExistingProperty);
+                }
             }
         }
     }

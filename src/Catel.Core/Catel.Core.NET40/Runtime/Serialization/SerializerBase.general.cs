@@ -73,9 +73,12 @@ namespace Catel.Runtime.Serialization
             var propertiesToSerialize = SerializationManager.GetPropertiesToSerialize(modelType);
 
             var listToSerialize = new List<MemberValue>();
+            var checkedMemberNames = new List<string>();
 
             foreach (var fieldToSerialize in fieldsToSerialize)
             {
+                checkedMemberNames.Add(fieldToSerialize);
+
                 if (membersToIgnoreHashSet.Contains(fieldToSerialize) || ShouldIgnoreMember(model, fieldToSerialize))
                 {
                     Log.Debug("Field '{0}' is being ignored for serialization", fieldToSerialize);
@@ -99,6 +102,8 @@ namespace Catel.Runtime.Serialization
 
             foreach (var propertyToSerialize in propertiesToSerialize)
             {
+                checkedMemberNames.Add(propertyToSerialize);
+
                 if (membersToIgnoreHashSet.Contains(propertyToSerialize) || ShouldIgnoreMember(model, propertyToSerialize))
                 {
                     Log.Debug("Property '{0}' is being ignored for serialization", propertyToSerialize);

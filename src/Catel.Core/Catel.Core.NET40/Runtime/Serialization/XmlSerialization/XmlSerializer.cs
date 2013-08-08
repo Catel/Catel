@@ -257,28 +257,21 @@ namespace Catel.Runtime.Serialization
 
             var propertyTypeToDeserialize = memberValue.Type;
 
-            var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, propertyTypeToDeserialize, xmlName);
-
-            // TODO: check for null attribute?
             var attribute = element.Attribute("type"); // .GetAttribute("type", "http://catel.codeplex.com");
             var attributeValue = (attribute != null) ? attribute.Value : null;
             if (!string.IsNullOrEmpty(attributeValue))
             {
-                Log.Debug("Property type for property '{0}' is '{1}' but found type info that it should be deserialized as '{2}'",
-                          memberValue.Name, memberValue.Type.FullName, attributeValue);
+                var typeToDeserialize = TypeCache.GetTypeWithoutAssembly(attributeValue);
+                if (typeToDeserialize != null)
+                {
+                    Log.Debug("Property type for property '{0}' is '{1}' but found type info that it should be deserialized as '{2}'",
+                        memberValue.Name, memberValue.Type.FullName, attributeValue);
 
-                var actualTypeToDeserialize = (from t in serializer.KnownTypes
-                                               where t.FullName == attributeValue
-                                               select t).FirstOrDefault();
-                if (actualTypeToDeserialize != null)
-                {
-                    serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, actualTypeToDeserialize, xmlName);
-                }
-                else
-                {
-                    Log.Warning("Could not find type '{0}', falling back to original type '{1}'", attributeValue, memberValue.Type.FullName);
+                    propertyTypeToDeserialize = typeToDeserialize;
                 }
             }
+
+            var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, propertyTypeToDeserialize, xmlName);
 
             using (var xmlReader = element.CreateReader())
             {

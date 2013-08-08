@@ -105,6 +105,11 @@ namespace Catel.Runtime.Serialization
                             properties.Add(modelProperty.Key);
                         }
                     }
+                    else
+                    {
+                        // Dynamic property, always include
+                        properties.Add(modelProperty.Key);
+                    }
                 }
 
                 var typeProperties = type.GetPropertiesEx();
