@@ -116,8 +116,10 @@ using System.Resources;
 
             if (!dictionary.ContainsKey(resourceFile))
             {
-#if NETFX_CORE
+#if NETFX_CORE && !WIN81
                 dictionary[resourceFile] = new ResourceLoader(resourceFile);
+#elif WIN81
+                dictionary[resourceFile] = ResourceLoader.GetForCurrentView(resourceFile);
 #else
                 dictionary[resourceFile] = new ResourceManager(resourceFile, assembly);
 #endif

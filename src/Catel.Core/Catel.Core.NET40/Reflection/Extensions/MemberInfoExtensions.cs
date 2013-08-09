@@ -88,6 +88,19 @@ namespace Catel.Reflection
 
             return stringBuilder.ToString();
         }
+
+        /// <summary>
+        /// Returns whether property is static.
+        /// </summary>
+        /// <param name="propertyInfo">Property info.</param>
+        public static bool IsStatic(this PropertyInfo propertyInfo)
+        {
+#if NETFX_CORE
+            return (propertyInfo.CanRead && propertyInfo.GetMethod.IsStatic) || (propertyInfo.CanWrite && propertyInfo.SetMethod.IsStatic);
+#else
+            return (propertyInfo.CanRead && propertyInfo.GetGetMethod().IsStatic) || (propertyInfo.CanWrite && propertyInfo.GetSetMethod().IsStatic);
+#endif
+        }
         #endregion
     }
 }

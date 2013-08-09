@@ -6,7 +6,7 @@
 namespace Catel.Windows.Data
 {
     using System;
-
+    using System.Diagnostics;
 #if NETFX_CORE
     using global::Windows.UI.Xaml;
 #else
@@ -16,6 +16,7 @@ namespace Catel.Windows.Data
     /// <summary>
     /// Information about a dependency property.
     /// </summary>
+    [DebuggerDisplay("{PropertyName}")]
     public class DependencyPropertyInfo
     {
         /// <summary>

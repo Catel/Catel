@@ -162,6 +162,11 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 
             TargetControl.Unloaded += OnTargetControlUnloadedInternal;
 
+#if WIN81
+            // TODO: make the same for WIN80. There is no DataContextChanged event in WIN80.
+            TargetControl.DataContextChanged += (sender, args) => OnTargetControlDataContextChanged(sender, new DependencyPropertyValueChangedEventArgs("DataContext", FrameworkElement.DataContextProperty, null, args.NewValue));
+#endif
+
             // This also subscribes to DataContextChanged, don't double subscribe
             var dependencyPropertiesToSubscribe = DetermineInterestingDependencyProperties();
             foreach (var dependencyPropertyToSubscribe in dependencyPropertiesToSubscribe)
@@ -636,10 +641,13 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 
             //Log.Debug("Property '{0}' of TargetControl '{1}' has changed", e.PropertyName, TargetControl.GetType().Name);
 
+            // Note: in WIN81 we manually subscribe to DataContextChanged event
+#if !WIN81
             if (string.Equals(e.PropertyName, "DataContext", StringComparison.OrdinalIgnoreCase))
             {
                 OnTargetControlDataContextChanged(sender, e);
             }
+#endif
 
             OnTargetControlPropertyChanged(sender, e);
         }
