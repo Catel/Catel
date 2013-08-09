@@ -289,7 +289,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 #if NETFX_CORE
             TargetControl.Dispatcher.RunAsync(CoreDispatcherPriority.High, () => update());
 #else
-            TargetControl.Dispatcher.Invoke(update);
+            update();
 #endif
         }
 
