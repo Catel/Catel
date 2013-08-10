@@ -419,6 +419,18 @@
     <Compile Include="..\Catel.Test.NET40\Helpers\WindowHelper.cs">
       <Link>Helpers\WindowHelper.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\Interception\MethodInterceptionTests.cs">
+      <Link>Interception\MethodInterceptionTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Interception\PropertyInterceptionTests.cs">
+      <Link>Interception\PropertyInterceptionTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Interception\TestClasses\ITestService.cs">
+      <Link>Interception\TestClasses\ITestService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Interception\TestClasses\TestService.cs">
+      <Link>Interception\TestClasses\TestService.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\IoC\Configuration\IoCConfigurationSectionTests.cs">
       <Link>IoC\Configuration\IoCConfigurationSectionTests.cs</Link>
     </Compile>
