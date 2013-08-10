@@ -34,6 +34,7 @@ Added/fixed (BREAKING CHANGES):
 
 Added/fixed:
 ============
+(+) CTL-5 Added Interception extension to create runtime interception of methods and properties
 (+) CTL-6 Dependency injection is now supported in child view models. This makes it possible to combine both model
     injection with auto-completion from services registered in the ServiceLocator
 (+) CTL-7 Added support for empty cell in the StackGrid control

@@ -206,10 +206,10 @@
     <Compile Include="Helpers\ObjectHelperFacts.cs" />
     <Compile Include="Helpers\ObjectToStringHelperFacts.cs" />
     <Compile Include="Helpers\StringToObjectHelperFacts.cs" />
-    <Compile Include="Interception\MethodInterceptionTests.cs" />
-    <Compile Include="Interception\PropertyInterceptionTests.cs" />
-    <Compile Include="Interception\TestClasses\ITestService.cs" />
-    <Compile Include="Interception\TestClasses\TestService.cs" />
+    <Compile Include="Extensions\Interception\MethodInterceptionTests.cs" />
+    <Compile Include="Extensions\Interception\PropertyInterceptionTests.cs" />
+    <Compile Include="Extensions\Interception\TestClasses\ITestService.cs" />
+    <Compile Include="Extensions\Interception\TestClasses\TestService.cs" />
     <Compile Include="IoC\Exceptions\CircularDependencyExceptionFacts.cs" />
     <Compile Include="IoC\TypeFactoryFacts.cs" />
     <Compile Include="IoC\TypeRequestInfoFacts.cs" />
@@ -386,7 +386,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Extensions\Interception\" />
     <Folder Include="IoC\Extensions\" />
     <Folder Include="Logging\Extensions\" />
   </ItemGroup>

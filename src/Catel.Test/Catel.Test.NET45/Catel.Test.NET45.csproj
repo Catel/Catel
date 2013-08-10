@@ -109,7 +109,6 @@
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Extensions\Interception\" />
     <Folder Include="IoC\Extensions\" />
     <Folder Include="Logging\Extensions\" />
   </ItemGroup>
@@ -350,6 +349,18 @@
     <Compile Include="..\Catel.Test.NET40\Extensions\FluentValidation\ViewModels\PersonViewModelWithModel.cs">
       <Link>Extensions\FluentValidation\ViewModels\PersonViewModelWithModel.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\Interception\MethodInterceptionTests.cs">
+      <Link>Extensions\Interception\MethodInterceptionTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\Interception\PropertyInterceptionTests.cs">
+      <Link>Extensions\Interception\PropertyInterceptionTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\Interception\TestClasses\ITestService.cs">
+      <Link>Extensions\Interception\TestClasses\ITestService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\Interception\TestClasses\TestService.cs">
+      <Link>Extensions\Interception\TestClasses\TestService.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\Extensions\Memento\ActionUndoFacts.cs">
       <Link>Extensions\Memento\ActionUndoFacts.cs</Link>
     </Compile>
@@ -418,18 +429,6 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Helpers\WindowHelper.cs">
       <Link>Helpers\WindowHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Interception\MethodInterceptionTests.cs">
-      <Link>Interception\MethodInterceptionTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Interception\PropertyInterceptionTests.cs">
-      <Link>Interception\PropertyInterceptionTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Interception\TestClasses\ITestService.cs">
-      <Link>Interception\TestClasses\ITestService.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Interception\TestClasses\TestService.cs">
-      <Link>Interception\TestClasses\TestService.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\IoC\Configuration\IoCConfigurationSectionTests.cs">
       <Link>IoC\Configuration\IoCConfigurationSectionTests.cs</Link>
