@@ -120,12 +120,17 @@
     <Compile Include="..\Catel.Extensions.DynamicObjects.NET40\Data\DynamicModelBaseMetaObject.cs">
       <Link>Data\DynamicModelBaseMetaObject.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.DynamicObjects.NET40\ModuleInitializer.cs">
+      <Link>ModuleInitializer.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Extensions.DynamicObjects.NET40\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FodyWeavers.xml" />
+    <Content Include="FodyWeavers.xml">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="Fody.targets" />
