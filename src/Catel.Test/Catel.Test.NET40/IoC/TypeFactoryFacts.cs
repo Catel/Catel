@@ -74,18 +74,18 @@ namespace Catel.Test.IoC
 
         public class AdvancedDependencyInjectionTestClass
         {
-            public AdvancedDependencyInjectionTestClass(int intValue, IMessageService messageService, IProcessService processService)
+            public AdvancedDependencyInjectionTestClass(int intValue, IMessageService messageService, INavigationService navigationService)
             {
                 Argument.IsNotNull(() => messageService);
-                Argument.IsNotNull(() => processService);
+                Argument.IsNotNull(() => navigationService);
 
                 IntValue = intValue;
             }
 
-            public AdvancedDependencyInjectionTestClass(string stringValue, int intValue, long longValue, IMessageService messageService, IProcessService processService)
+            public AdvancedDependencyInjectionTestClass(string stringValue, int intValue, long longValue, IMessageService messageService, INavigationService navigationService)
             {
                 Argument.IsNotNull(() => messageService);
-                Argument.IsNotNull(() => processService);
+                Argument.IsNotNull(() => navigationService);
 
                 StringValue = stringValue;
                 IntValue = intValue;
