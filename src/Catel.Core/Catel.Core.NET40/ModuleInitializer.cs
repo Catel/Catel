@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel
+namespace Catel.Core
 {
     using Catel.Data;
     using Catel.Runtime.Serialization;

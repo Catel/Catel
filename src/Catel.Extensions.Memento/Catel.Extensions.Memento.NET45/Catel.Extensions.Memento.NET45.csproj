@@ -11,7 +11,7 @@
     <AssemblyName>Catel.Extensions.Memento</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <FodyPath>..\..\..\lib\Fody.1.13.12</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.14.0</FodyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

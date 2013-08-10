@@ -408,14 +408,16 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// </summary>
         protected IViewModel CreateViewModelByUsingDataContextOrConstructor()
         {
+            var dataContext = TargetControl.DataContext;
+
             // It might be possible that a view model is already set, so use it if the datacontext is a view model
-            var dataContextAsIViewModel = TargetControl.DataContext as IViewModel;
+            var dataContextAsIViewModel = dataContext as IViewModel;
             if ((dataContextAsIViewModel != null) && (dataContextAsIViewModel.GetType() == ViewModelType))
             {
                 return dataContextAsIViewModel;
             }
 
-            return ConstructViewModelUsingArgumentOrDefaultConstructor(TargetControl.DataContext);
+            return ConstructViewModelUsingArgumentOrDefaultConstructor(dataContext);
         }
 
         /// <summary>

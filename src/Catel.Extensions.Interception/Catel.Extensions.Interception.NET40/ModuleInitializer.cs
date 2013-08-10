@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel
+namespace Catel.Extensions.Interception
 {
     /// <summary>
     /// Class that gets called as soon as the module is loaded.

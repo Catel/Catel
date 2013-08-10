@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -15,7 +15,7 @@
     <WarningLevel>4</WarningLevel>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.13.12</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.14.0</FodyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -758,7 +758,7 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Helpers\CommandLineHelper.cs">
       <Link>Windows\Helpers\CommandLineHelper.cs</Link>
-    </Compile>   
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\Authentication.cs">
       <Link>Windows\Interactivity\Authentication.cs</Link>
     </Compile>
