@@ -78,6 +78,30 @@ namespace Catel.Test.Memento
         }
 
         [TestClass]
+        public class TheIsEnabledProperty
+        {
+            [TestMethod]
+            public void IsTrueByDefault()
+            {
+                var mementoService = new MementoService();
+
+                Assert.IsTrue(mementoService.IsEnabled);
+            }
+
+            [TestMethod]
+            public void PreventsAdditionsWhenDisabled()
+            {
+                var mementoService = new MementoService();
+                mementoService.IsEnabled = false;
+
+                var undo1 = new MockUndo(true);
+                mementoService.Add(undo1);
+
+                Assert.IsFalse(mementoService.CanRedo);
+            }
+        }
+
+        [TestClass]
         public class TheBeginBatchMethod
         {
             [TestMethod]
