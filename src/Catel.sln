@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{BE079DB6-FD92-4167-8DF4-CACB2E1422FC}"
+	ProjectSection(SolutionItems) = preProject
+		..\lib\readme.txt = ..\lib\readme.txt
+		..\lib\repositories.config = ..\lib\repositories.config
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{58F62039-8645-499C-B264-66048F4F0F75}"
 EndProject

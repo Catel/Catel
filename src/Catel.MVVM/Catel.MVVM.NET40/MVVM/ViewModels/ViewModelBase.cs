@@ -1532,6 +1532,7 @@ namespace Catel.MVVM
         /// <typeparam name="T">Type of the service.</typeparam>
         /// <param name="tag">The tag.</param>
         /// <returns>Service object or <c>null</c> if the service is not found.</returns>
+        [ObsoleteEx(Message = "GetService is no longer recommended. It is better to inject all dependencies (which the TypeFactory fully supports)", TreatAsErrorFromVersion = "3.7", RemoveInVersion = "4.0")]
         public T GetService<T>(object tag = null)
         {
             return (T)ServiceLocator.ResolveType(typeof(T), tag);

@@ -42,23 +42,6 @@
             }            
         }
 
-        [TestMethod]
-        public void Constructor_InjectedServiceLocator()
-        {
-            var serviceLocator = new ServiceLocator();
-            var messageService = new MessageService();
-            serviceLocator.RegisterInstance<IMessageService>(messageService);
-
-            var navigationService = new NavigationService();
-            serviceLocator.RegisterInstance<INavigationService>(navigationService);
-
-            var viewModel = new TestViewModel(serviceLocator);
-            Assert.AreEqual(messageService, viewModel.GetService<IMessageService>());
-            Assert.IsTrue(ReferenceEquals(messageService, viewModel.GetService<IMessageService>()));
-            Assert.AreEqual(navigationService, viewModel.GetService<INavigationService>());
-            Assert.IsTrue(ReferenceEquals(navigationService, viewModel.GetService<INavigationService>()));
-        }
-
         #region ViewModelToModel mappings
         [TestMethod]
         public void ViewModelWithViewModelToModelMappings_DoubleModels()

@@ -5,6 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace Catel
 {
+    using System;
     using IoC;
     using MVVM;
 
@@ -22,11 +23,14 @@ namespace Catel
         /// <param name="tag">The tag.</param>
         /// <returns>Service object or <c>null</c> if the service is not found.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="this"/> is <c>null</c>.</exception>
+        [ObsoleteEx(Message = "GetService is no longer recommended. It is better to inject all dependencies (which the TypeFactory fully supports)", TreatAsErrorFromVersion = "3.7", RemoveInVersion = "4.0")]
         public static T GetService<T>(this IViewModel @this, object tag = null)
         {
-            Argument.IsNotNull("@this", @this);
+            //Argument.IsNotNull("@this", @this);
 
-            return @this is ViewModelBase ? (@this as ViewModelBase).GetService<T>(tag) : (T)ServiceLocator.Default.ResolveType(typeof(T), tag);
+            //return @this is ViewModelBase ? (@this as ViewModelBase).GetService<T>(tag) : (T)ServiceLocator.Default.ResolveType(typeof(T), tag);
+
+            throw new NotSupportedException();
         }
         #endregion
     }
