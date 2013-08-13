@@ -109,9 +109,6 @@
     <Compile Include="..\Catel.Extensions.Prism.NET40\Extensions\IUIVisualizerServiceExtensions.cs">
       <Link>Extensions\IUIVisualizerServiceExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Extensions.Prism.NET40\Extensions\IViewModelExtensions.cs">
-      <Link>Extensions\IViewModelExtensions.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Extensions.Prism.NET40\Extensions\ISplashScreenServiceExtensions.cs">
       <Link>Extensions\ISplashScreenServiceExtensions.cs</Link>
     </Compile>

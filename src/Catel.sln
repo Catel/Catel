@@ -292,8 +292,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.FluentVali
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Prism.NET45", "Catel.Extensions.Prism\Catel.Extensions.Prism.NET45\Catel.Extensions.Prism.NET45.csproj", "{1DAC9A4B-2572-446A-99B8-9E86C1D9254B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{1B3CA2AB-8528-4E7C-B487-71BAA66457B5}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Extensions.CSLA", "Catel.Extensions.CSLA", "{A56117CB-EF5A-4EE5-ABD0-284F084637A0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.CSLA.NET40", "Catel.Extensions.CSLA\Catel.Extensions.CSLA.NET40\Catel.Extensions.CSLA.NET40.csproj", "{1D2E4D59-5480-40CF-92EF-4944F8F17610}"
