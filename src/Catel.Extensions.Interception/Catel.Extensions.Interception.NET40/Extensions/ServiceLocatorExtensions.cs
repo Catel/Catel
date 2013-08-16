@@ -22,14 +22,15 @@ namespace Catel
         /// <typeparam name="TServiceImplementation">The type of the service implementation.</typeparam>
         /// <param name="serviceLocator">The service locator.</param>
         /// <param name="tag">The tag.</param>
+        /// <param name="targetInstanceToUse">The target instance you want use in proxy instanciation.</param>
         /// <returns></returns>
         public static IInterceptorHandler<TService, TServiceImplementation> ConfigureInterceptionForType
             <TService, TServiceImplementation>(this IServiceLocator serviceLocator,
-                                               object tag = null)
+                                               object tag = null, object targetInstanceToUse = null)
             where TServiceImplementation : TService
         {
             return
-                new InterceptorHandler<TService, TServiceImplementation>(serviceLocator, tag);
+                new InterceptorHandler<TService, TServiceImplementation>(serviceLocator, tag, targetInstanceToUse);
         }
         #endregion
     }

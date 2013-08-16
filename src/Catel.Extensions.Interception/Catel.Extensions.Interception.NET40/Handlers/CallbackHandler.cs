@@ -42,11 +42,6 @@ namespace Catel.Interception.Handlers
         private readonly TService _target;
 
         /// <summary>
-        /// The type factory
-        /// </summary>
-        private readonly ITypeFactory _typeFactory;
-
-        /// <summary>
         ///     The context
         /// </summary>
         private ContextInterceptor _context;
@@ -68,18 +63,18 @@ namespace Catel.Interception.Handlers
         /// </summary>
         /// <param name="interceptorHandler">The intercetor handler.</param>
         /// <param name="proxyFactory">The proxy factory. If <c>null</c>, <see cref="ProxyFactory.Default" /> will be used.</param>
+        /// <param name="serviceLocator">The service locator. If <c>null</c>, <see cref="ServiceLocator.Default" /> will be used.</param>
         /// <param name="typeFactory">The type factory. If <c>null</c>, <see cref="TypeFactory.Default" /> will be used.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="interceptorHandler"/> is <c>null</c>.</exception>
-        public CallbackHandler(InterceptorHandler<TService, TServiceImplementation> interceptorHandler, IProxyFactory proxyFactory = null, ITypeFactory typeFactory = null) :
-            base(interceptorHandler.ServiceType, interceptorHandler.Tag)
+        public CallbackHandler(InterceptorHandler<TService, TServiceImplementation> interceptorHandler, IProxyFactory proxyFactory = null, IServiceLocator serviceLocator = null, ITypeFactory typeFactory = null) :
+            base(interceptorHandler.ServiceType, interceptorHandler.Tag, serviceLocator, interceptorHandler.TargetInstanceToUse, typeFactory)
         {
             Argument.IsNotNull(() => interceptorHandler);
 
             _interceptorHandler = interceptorHandler;
             _proxyFactory = proxyFactory ?? ProxyFactory.Default;
-            _typeFactory = typeFactory ?? TypeFactory.Default;
 
-            _target = _typeFactory.CreateInstance<TServiceImplementation>();
+            _target = TargetInstanceToUse is TService ? (TService) TargetInstanceToUse : TypeFactory.CreateInstance<TServiceImplementation>();
         }
         #endregion
 
@@ -361,13 +356,13 @@ namespace Catel.Interception.Handlers
                     return;
                 }
 
-                _states = _typeFactory.CreateInstance<StateInterceptorCollection>();
+                _states = TypeFactory.CreateInstance<StateInterceptorCollection>();
 
-                var stateIntercepors = Callbacks.Keys.Select(key => _typeFactory.CreateInstanceWithParameters<StateInterceptor>(key, Callbacks[key]));
+                var stateIntercepors = Callbacks.Keys.Select(key => TypeFactory.CreateInstanceWithParameters<StateInterceptor>(key, Callbacks[key]));
 
                 stateIntercepors.ForEach(stateInterceptor => _states.Add(stateInterceptor));
 
-                _context = _typeFactory.CreateInstanceWithParameters<ContextInterceptor>(_states);
+                _context = TypeFactory.CreateInstanceWithParameters<ContextInterceptor>(_states);
 
                 _instance = _proxyFactory.Create(_target, _context, ImplementedTypes.ToArray());
 
