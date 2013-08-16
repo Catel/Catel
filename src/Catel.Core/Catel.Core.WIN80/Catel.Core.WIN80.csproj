@@ -407,6 +407,12 @@
     <Compile Include="..\Catel.Core.NET40\IoC\Attributes\ServiceLocatorRegistrationAttribute.cs">
       <Link>IoC\Attributes\ServiceLocatorRegistrationAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\CatelDependencyResolver.cs">
+      <Link>IoC\CatelDependencyResolver.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\DependencyResolverManager.cs">
+      <Link>IoC\DependencyResolverManager.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\EventArgs\MissingTypeEventArgs.cs">
       <Link>IoC\EventArgs\MissingTypeEventArgs.cs</Link>
     </Compile>
@@ -419,6 +425,9 @@
     <Compile Include="..\Catel.Core.NET40\IoC\Exceptions\ExternalContainerNotSupportedException.cs">
       <Link>IoC\Exceptions\ExternalContainerNotSupportedException.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\Extensions\DependencyResolverExtensions.cs">
+      <Link>IoC\Extensions\DependencyResolverExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Extensions\ServiceLocatorExtensions.cs">
       <Link>IoC\Extensions\ServiceLocatorExtensions.cs</Link>
     </Compile>
@@ -430,6 +439,12 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Helpers\ExternalContainerHelperBase.cs">
       <Link>IoC\Helpers\ExternalContainerHelperBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\Interfaces\IDependencyResolver.cs">
+      <Link>IoC\Interfaces\IDependencyResolver.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\Interfaces\IDependencyResolverManager.cs">
+      <Link>IoC\Interfaces\IDependencyResolverManager.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Interfaces\IExternalContainerHelper.cs">
       <Link>IoC\Interfaces\IExternalContainerHelper.cs</Link>

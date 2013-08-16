@@ -190,7 +190,11 @@ namespace Catel.IoC
         /// </summary>
         public ServiceLocator()
         {
-            _typeFactory = new TypeFactory(this);
+            // Must be registered first, already resolved by TypeFactory
+            RegisterInstance(typeof(IServiceLocator), this);
+
+            var dependencyResolver = new CatelDependencyResolver(this);
+            _typeFactory = new TypeFactory(dependencyResolver);
             _autoRegistrationManager = new ServiceLocatorAutoRegistrationManager(this);
 
             IgnoreRuntimeIncorrectUsageOfRegisterAttribute = true;
@@ -204,12 +208,11 @@ namespace Catel.IoC
             RegisterExternalContainerHelper(new UnityHelper());
             RegisterExternalContainerHelper(new WindsorHelper());
 #endif
-
             RegisterExternalContainerHelper(new NinjectHelper());
 #endif
 
-            RegisterInstance(typeof(IServiceLocator), this);
             RegisterInstance(typeof(ITypeFactory), _typeFactory);
+            RegisterInstance(typeof(IDependencyResolver), dependencyResolver);
         }
         #endregion
 

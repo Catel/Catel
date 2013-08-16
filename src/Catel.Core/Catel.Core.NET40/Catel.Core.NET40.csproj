@@ -171,10 +171,13 @@
     <Compile Include="IoC\Configuration\Registration.cs" />
     <Compile Include="IoC\Configuration\ServiceLocatorConfiguration.cs" />
     <Compile Include="IoC\Configuration\ServiceLocatorConfigurationCollection.cs" />
+    <Compile Include="IoC\CatelDependencyResolver.cs" />
+    <Compile Include="IoC\DependencyResolverManager.cs" />
     <Compile Include="IoC\EventArgs\MissingTypeEventArgs.cs" />
     <Compile Include="IoC\EventArgs\TypeRegisteredEventArgs.cs" />
     <Compile Include="IoC\Exceptions\ExternalContainerNotSupportedException.cs" />
     <Compile Include="IoC\Exceptions\CircularDependencyException.cs" />
+    <Compile Include="IoC\Extensions\DependencyResolverExtensions.cs" />
     <Compile Include="IoC\Extensions\ServiceLocatorExtensions.cs" />
     <Compile Include="IoC\Extensions\TypeFactoryExtensions.cs" />
     <Compile Include="IoC\Helpers\DependencyInjectionHelper.cs" />
@@ -183,6 +186,8 @@
     <Compile Include="IoC\Helpers\NinjectHelper.cs" />
     <Compile Include="IoC\Helpers\UnityHelper.cs" />
     <Compile Include="IoC\Helpers\WindsorHelper.cs" />
+    <Compile Include="IoC\Interfaces\IDependencyResolverManager.cs" />
+    <Compile Include="IoC\Interfaces\IDependencyResolver.cs" />
     <Compile Include="IoC\Interfaces\IExternalContainerHelper.cs" />
     <Compile Include="IoC\Interfaces\INeedCustomInitialization.cs" />
     <Compile Include="IoC\Interfaces\IServiceLocator.cs" />

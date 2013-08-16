@@ -183,6 +183,20 @@ namespace Catel.Test.IoC
                 Assert.IsTrue(instance.HasCalledCustomInitialization);
             }
 
+            [TestMethod]
+            public void AutomaticallyRegistersDependencyResolverInDependencyResolverManager()
+            {
+                var serviceLocator = new ServiceLocator();
+                var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+
+                var instance = typeFactory.CreateInstance<DependencyInjectionTestClass>();
+                var dependencyResolverManager = DependencyResolverManager.Default;
+                var actualDependencyResolver = dependencyResolverManager.GetDependencyResolverForInstance(instance);
+
+                Assert.AreEqual(dependencyResolver, actualDependencyResolver);
+            }
+
             public class X
             {
                 public X(Y y) { }

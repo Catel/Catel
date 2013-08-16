@@ -245,6 +245,12 @@
     <Compile Include="..\Catel.Test.NET40\Helpers\TagHelperFacts.cs">
       <Link>Helpers\TagHelperFacts.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\IoC\CatelDependencyResolverFacts.cs">
+      <Link>IoC\CatelDependencyResolverFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\IoC\DependencyResolverManagerFacts.cs">
+      <Link>IoC\DependencyResolverManagerFacts.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\IoC\EventArgs\MissingTypeEventArgsFacts.cs">
       <Link>IoC\EventArgs\MissingTypeEventArgsFacts.cs</Link>
     </Compile>
@@ -573,7 +579,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Extensions\Interception\" />
     <Folder Include="IoC\Extensions\" />
     <Folder Include="IoC\Helpers\" />
     <Folder Include="Logging\Extensions\" />

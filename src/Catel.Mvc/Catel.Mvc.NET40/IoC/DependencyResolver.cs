@@ -8,12 +8,11 @@ namespace Catel.IoC
 {
     using System;
     using System.Collections.Generic;
-    using System.Web.Mvc;
 
     /// <summary>
     /// Dependency resolver.
     /// </summary>
-    public class DependencyResolver : IDependencyResolver
+    public class DependencyResolver : System.Web.Mvc.IDependencyResolver
     {
         private readonly IServiceLocator _serviceLocator;
         private readonly ITypeFactory _typeFactory;

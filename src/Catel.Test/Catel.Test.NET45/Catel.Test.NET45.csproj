@@ -430,8 +430,14 @@
     <Compile Include="..\Catel.Test.NET40\Helpers\WindowHelper.cs">
       <Link>Helpers\WindowHelper.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\IoC\CatelDependencyResolverFacts.cs">
+      <Link>IoC\CatelDependencyResolverFacts.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\IoC\Configuration\IoCConfigurationSectionTests.cs">
       <Link>IoC\Configuration\IoCConfigurationSectionTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\IoC\DependencyResolverManagerFacts.cs">
+      <Link>IoC\DependencyResolverManagerFacts.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\IoC\EventArgs\MissingTypeEventArgsFacts.cs">
       <Link>IoC\EventArgs\MissingTypeEventArgsFacts.cs</Link>

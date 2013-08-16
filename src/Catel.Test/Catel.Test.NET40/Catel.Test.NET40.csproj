@@ -210,6 +210,8 @@
     <Compile Include="Extensions\Interception\PropertyInterceptionTests.cs" />
     <Compile Include="Extensions\Interception\TestClasses\ITestService.cs" />
     <Compile Include="Extensions\Interception\TestClasses\TestService.cs" />
+    <Compile Include="IoC\CatelDependencyResolverFacts.cs" />
+    <Compile Include="IoC\DependencyResolverManagerFacts.cs" />
     <Compile Include="IoC\Exceptions\CircularDependencyExceptionFacts.cs" />
     <Compile Include="IoC\TypeFactoryFacts.cs" />
     <Compile Include="IoC\TypeRequestInfoFacts.cs" />

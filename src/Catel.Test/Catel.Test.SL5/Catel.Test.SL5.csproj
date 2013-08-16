@@ -389,6 +389,12 @@
     <Compile Include="..\Catel.Test.NET40\Helpers\WindowHelper.cs">
       <Link>Helpers\WindowHelper.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\IoC\CatelDependencyResolverFacts.cs">
+      <Link>IoC\CatelDependencyResolverFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\IoC\DependencyResolverManagerFacts.cs">
+      <Link>IoC\DependencyResolverManagerFacts.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\IoC\EventArgs\MissingTypeEventArgsFacts.cs">
       <Link>IoC\EventArgs\MissingTypeEventArgsFacts.cs</Link>
     </Compile>
@@ -705,7 +711,6 @@
     <None Include="Properties\AppManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Extensions\Interception\" />
     <Folder Include="IoC\Extensions\" />
     <Folder Include="Logging\Extensions\" />
     <Folder Include="Runtime\Serialization\Attributes\" />
