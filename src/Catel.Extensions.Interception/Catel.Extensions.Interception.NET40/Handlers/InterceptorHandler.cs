@@ -28,10 +28,6 @@ namespace Catel.Interception.Handlers
         where TServiceImplementation : TService
     {
         #region Fields
-        /// <summary>
-        /// The type factory
-        /// </summary>
-        private readonly ITypeFactory _typeFactory;
         #endregion
 
         #region Constructors
@@ -44,12 +40,11 @@ namespace Catel.Interception.Handlers
         /// </summary>
         /// <param name="serviceLocator">The service locator. If <c>null</c>, <see cref="ServiceLocator.Default" /> will be used.</param>
         /// <param name="tag">The tag.</param>
+        /// <param name="targetInstanceToUse">The target instance you want use in proxy instanciation.</param>
         /// <param name="typeFactory">The type factory. If <c>null</c>, <see cref="TypeFactory.Default" /> will be used.</param>
-        public InterceptorHandler(IServiceLocator serviceLocator = null, object tag = null, ITypeFactory typeFactory = null)
-            : base(typeof (TService), tag, serviceLocator)
+        public InterceptorHandler(IServiceLocator serviceLocator = null, object tag = null, object targetInstanceToUse = null, ITypeFactory typeFactory = null)
+            : base(typeof(TService), tag, serviceLocator, targetInstanceToUse, typeFactory)
         {
-            _typeFactory = typeFactory ?? TypeFactory.Default;
-
             ImplementedTypes = new List<Type>();
 
             Callbacks = new CacheStorage<IMemberDefinition, CallbackCollection>();
@@ -326,7 +321,7 @@ namespace Catel.Interception.Handlers
         /// <returns></returns>
         private ICallbackHandler<TService, TServiceImplementation> CreateCallBackHandler()
         {
-            var callbackHandler = _typeFactory.CreateInstanceWithParametersAndAutoCompletion<CallbackHandler<TService, TServiceImplementation>>(this);
+            var callbackHandler = TypeFactory.CreateInstanceWithParametersAndAutoCompletion<CallbackHandler<TService, TServiceImplementation>>(this);
 
             return callbackHandler;
         }

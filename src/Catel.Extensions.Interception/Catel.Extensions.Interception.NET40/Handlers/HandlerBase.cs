@@ -19,10 +19,6 @@ namespace Catel.Interception.Handlers
     public class HandlerBase : ServiceBase
     {
         #region Fields
-        /// <summary>
-        ///     The _service locator
-        /// </summary>
-        private readonly IServiceLocator _serviceLocator;
         #endregion
 
         #region Constructors
@@ -32,11 +28,15 @@ namespace Catel.Interception.Handlers
         /// <param name="serviceType">Type of the service.</param>
         /// <param name="tag">The tag.</param>
         /// <param name="serviceLocator">The service locator. If <c>null</c>, <see cref="ServiceLocator.Default" /> will be used.</param>
-        public HandlerBase(Type serviceType, object tag = null, IServiceLocator serviceLocator = null)
+        /// <param name="typeFactory">The type factory. If <c>null</c>, <see cref="Catel.IoC.TypeFactory.Default" /> will be used.</param>
+        /// <param name="targetInstanceToUse">The target instance you want use in proxy instanciation.</param>
+        public HandlerBase(Type serviceType, object tag = null, IServiceLocator serviceLocator = null, object targetInstanceToUse = null, ITypeFactory typeFactory = null)
         {
             ServiceType = serviceType;
             Tag = tag;
-            _serviceLocator = serviceLocator ?? ServiceLocator.Default;
+            TypeFactory = typeFactory ?? IoC.TypeFactory.Default;
+            Container = serviceLocator ?? ServiceLocator.Default;
+            TargetInstanceToUse = targetInstanceToUse;
         }
         #endregion
 
@@ -59,15 +59,28 @@ namespace Catel.Interception.Handlers
         protected internal object Tag { get; private set; }
 
         /// <summary>
+        ///     Gets the default <see cref="ITypeFactory" /> for the application.
+        /// </summary>
+        /// <value>
+        ///     The default <see cref="ITypeFactory" /> instance.
+        /// </value>
+        protected internal ITypeFactory TypeFactory { get; private set; }
+
+        /// <summary>
+        ///     Gets the specified target instance to use in proxy instanciation.
+        /// </summary>
+        /// <value>
+        ///     The specified target instance.
+        /// </value>
+        protected internal object TargetInstanceToUse { get; private set; }
+
+        /// <summary>
         ///     Gets the default <see cref="IServiceLocator" /> for the application.
         /// </summary>
         /// <value>
         ///     The default <see cref="IServiceLocator" /> instance.
         /// </value>
-        protected IServiceLocator Container
-        {
-            get { return _serviceLocator; }
-        }
+        protected IServiceLocator Container { get; private set; }
 
         /// <summary>
         ///     Gets the implemented types.

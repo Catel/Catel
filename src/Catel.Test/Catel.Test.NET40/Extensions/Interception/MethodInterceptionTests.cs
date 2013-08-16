@@ -292,6 +292,49 @@ namespace Catel.Test.Interception
 
             Assert.AreEqual(3, index);
         }
+
+        [TestMethod]
+        public void ShouldUseTheProvidedTargetInstance()
+        {
+            var testService = new TestService{Name = "providedInstance"};
+            _serviceLocator.ConfigureInterceptionForType<ITestService, TestService>(targetInstanceToUse: testService)
+                           .Intercept(service => service.Perform())
+                           .OnBefore(invocation => Assert.AreEqual(testService.Name, ((ITestService) invocation.Target).Name));
+
+            var resolvedTestService = _serviceLocator.ResolveType<ITestService>();
+
+            resolvedTestService.Perform();
+        }
+
+        [TestMethod]
+        public void ShouldInferTargetMethodIfATargetObjectExists()
+        {
+            var testService = new TestService();
+            _serviceLocator.ConfigureInterceptionForType<ITestService, TestService>(targetInstanceToUse: testService)
+                           .Intercept(service => service.Perform())
+                           .OnBefore(invocation => Assert.IsFalse(testService.WasExecuted));
+
+            var resolvedTestService = _serviceLocator.ResolveType<ITestService>();
+
+            resolvedTestService.Perform();
+
+            Assert.IsTrue(testService.WasExecuted);
+        }
+
+        [TestMethod]
+        public void ShouldSkipTarget()
+        {
+            var testService = new TestService();
+            _serviceLocator.ConfigureInterceptionForType<ITestService, TestService>(targetInstanceToUse: testService)
+                           .Intercept(service => service.Return())
+                           .OnInvoke(invocation => -2);
+
+            var resolvedTestService = _serviceLocator.ResolveType<ITestService>();
+
+            Assert.AreEqual(-2, resolvedTestService.Return());
+
+            Assert.IsFalse(testService.WasExecuted);
+        }
         #endregion
     }
 }
