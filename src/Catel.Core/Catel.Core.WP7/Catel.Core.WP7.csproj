@@ -376,6 +376,9 @@
     <Compile Include="..\Catel.Core.NET40\IoC\Extensions\DependencyResolverExtensions.cs">
       <Link>IoC\Extensions\DependencyResolverExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\Extensions\ObjectExtensions.cs">
+      <Link>IoC\Extensions\ObjectExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Extensions\ServiceLocatorExtensions.cs">
       <Link>IoC\Extensions\ServiceLocatorExtensions.cs</Link>
     </Compile>

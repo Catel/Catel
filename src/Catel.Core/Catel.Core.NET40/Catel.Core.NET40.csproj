@@ -178,6 +178,7 @@
     <Compile Include="IoC\Exceptions\ExternalContainerNotSupportedException.cs" />
     <Compile Include="IoC\Exceptions\CircularDependencyException.cs" />
     <Compile Include="IoC\Extensions\DependencyResolverExtensions.cs" />
+    <Compile Include="IoC\Extensions\ObjectExtensions.cs" />
     <Compile Include="IoC\Extensions\ServiceLocatorExtensions.cs" />
     <Compile Include="IoC\Extensions\TypeFactoryExtensions.cs" />
     <Compile Include="IoC\Helpers\DependencyInjectionHelper.cs" />

@@ -109,7 +109,6 @@
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="IoC\Extensions\" />
     <Folder Include="Logging\Extensions\" />
   </ItemGroup>
   <ItemGroup>
@@ -447,6 +446,9 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\IoC\Exceptions\ExternalContainerNotSupportedExceptionTest.cs">
       <Link>IoC\Exceptions\ExternalContainerNotSupportedExceptionTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\IoC\Extensions\ObjectExtensionsFacts.cs">
+      <Link>IoC\Extensions\ObjectExtensionsFacts.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\IoC\Helpers\MefHelperTest.cs">
       <Link>IoC\Helpers\MefHelperTest.cs</Link>

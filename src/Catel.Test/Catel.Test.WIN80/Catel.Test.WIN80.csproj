@@ -260,6 +260,9 @@
     <Compile Include="..\Catel.Test.NET40\IoC\Exceptions\ExternalContainerNotSupportedExceptionTest.cs">
       <Link>IoC\Exceptions\ExternalContainerNotSupportedExceptionTest.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\IoC\Extensions\ObjectExtensionsFacts.cs">
+      <Link>IoC\Extensions\ObjectExtensionsFacts.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\IoC\ServiceLocatorFacts.cs">
       <Link>IoC\ServiceLocatorFacts.cs</Link>
     </Compile>
@@ -579,7 +582,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="IoC\Extensions\" />
     <Folder Include="IoC\Helpers\" />
     <Folder Include="Logging\Extensions\" />
     <Folder Include="Runtime\Serialization\Attributes\" />

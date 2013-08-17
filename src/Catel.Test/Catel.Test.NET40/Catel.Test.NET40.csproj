@@ -213,6 +213,7 @@
     <Compile Include="IoC\CatelDependencyResolverFacts.cs" />
     <Compile Include="IoC\DependencyResolverManagerFacts.cs" />
     <Compile Include="IoC\Exceptions\CircularDependencyExceptionFacts.cs" />
+    <Compile Include="IoC\Extensions\ObjectExtensionsFacts.cs" />
     <Compile Include="IoC\TypeFactoryFacts.cs" />
     <Compile Include="IoC\TypeRequestInfoFacts.cs" />
     <Compile Include="IoC\TypeRequestPathFacts.cs" />
@@ -388,7 +389,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="IoC\Extensions\" />
     <Folder Include="Logging\Extensions\" />
   </ItemGroup>
   <ItemGroup>
