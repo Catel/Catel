@@ -31,7 +31,7 @@ namespace Catel.Test.IoC
             public void ReturnsDefaultTypeFactoryForObjectNotCreatedWithTypeFactory()
             {
                 var obj = new object();
-                var defaultTypeFactory = ServiceLocator.Default.ResolveType<ITypeFactory>();
+                var defaultTypeFactory = TypeFactory.Default;
                 var usedTypeFactory = obj.GetTypeFactory();
 
                 Assert.IsTrue(ReferenceEquals(defaultTypeFactory, usedTypeFactory));
@@ -47,6 +47,39 @@ namespace Catel.Test.IoC
                 var usedTypeFactory = obj.GetTypeFactory();
 
                 Assert.IsTrue(ReferenceEquals(typeFactory, usedTypeFactory));
+            }
+        }
+
+        [TestClass]
+        public class TheGetDependencyResolverMethod
+        {
+            [TestMethod]
+            public void ThrowsArgumentNullExceptionForNullObject()
+            {
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ObjectExtensions.GetDependencyResolver(null));
+            }
+
+            [TestMethod]
+            public void ReturnsDefaultDependencyResolverForObjectNotCreatedWithTypeFactory()
+            {
+                var obj = new object();
+                var defaultDependencyResolver = ServiceLocator.Default.ResolveType<IDependencyResolver>();
+                var dependencyResolver = obj.GetDependencyResolver();
+
+                Assert.IsTrue(ReferenceEquals(defaultDependencyResolver, dependencyResolver));
+            }
+
+            [TestMethod]
+            public void ReturnsDependencyResolverUsedToCreateObject()
+            {
+                var serviceLocator = new ServiceLocator();
+                var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                var typeFactory = dependencyResolver.Resolve<ITypeFactory>();
+                var obj = typeFactory.CreateInstance<object>();
+
+                var usedDependencyResolver = obj.GetDependencyResolver();
+
+                Assert.IsTrue(ReferenceEquals(dependencyResolver, usedDependencyResolver));
             }
         }
     }

@@ -111,7 +111,7 @@ namespace Catel.IoC
             {
                 if (_default == null)
                 {
-                    _default = new TypeFactory(ServiceLocator.Default.ResolveType<IDependencyResolver>());
+                    _default = (TypeFactory)ServiceLocator.Default.ResolveType<ITypeFactory>();
                 }
 
                 return _default;
