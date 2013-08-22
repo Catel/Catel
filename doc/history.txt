@@ -78,6 +78,7 @@ Added/fixed:
 (x) CTL-144 ServiceLocator exporting might cause CircularDependencyException
 (x) CTL-147 GetFirstValidationErrorConverter might throw NullReferenceException
 (x) CTL-148 NumberTextBox behavior no longer allows pasting of text without numeric values
+(x) CTL-156 PleaseWaitService.Push doesn't show correct message
 (x) Fixed Drag and Drop behavior when the drop position is less then the initial item's position
 (x) Ensured the value of Owner property of Shell to NULL in order to avoid the application close  when the SplashScreenService done
 (x) Ensured Bootstrapper UI tasks calls using DispatcherService
