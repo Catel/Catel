@@ -342,6 +342,11 @@ namespace Catel.IoC
         /// <param name="obj">The object to initialize.</param>
         private void InitializeAfterConstruction(object obj)
         {
+            if (obj == null)
+            {
+                return;
+            }
+
             var dependencyResolverManager = DependencyResolverManager.Default;
             dependencyResolverManager.RegisterDependencyResolverForInstance(obj, _dependencyResolver);
 
