@@ -257,8 +257,15 @@ namespace Catel.Runtime.Serialization
 
             var propertyTypeToDeserialize = memberValue.Type;
 
-            var attribute = element.Attribute("type"); // .GetAttribute("type", "http://catel.codeplex.com");
-            var attributeValue = (attribute != null) ? attribute.Value : null;
+            var isNullAttribute = element.Attribute("IsNull");
+            var isNull = (isNullAttribute != null) ? StringToObjectHelper.ToBool(isNullAttribute.Value) : false;
+            if (isNull)
+            {
+                return null;
+            }
+
+            var typeAttribute = element.Attribute("type"); // .GetAttribute("type", "http://catel.codeplex.com");
+            var attributeValue = (typeAttribute != null) ? typeAttribute.Value : null;
             if (!string.IsNullOrEmpty(attributeValue))
             {
                 var typeToDeserialize = TypeCache.GetTypeWithoutAssembly(attributeValue);
@@ -304,42 +311,58 @@ namespace Catel.Runtime.Serialization
         /// <param name="modelType">Type of the model.</param>
         private void WriteXmlElement(XElement element, string elementName, MemberValue memberValue, Type modelType)
         {
-            // TODO: Should we handle null differently? Add an attribute?
-            if (memberValue.Value == null)
-            {
-                return;
-            }
-
-            var memberType = memberValue.Type;
-            var memberTypeToSerialize = memberValue.Value.GetType();
-
-            var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, memberTypeToSerialize, elementName, memberValue.Value);
-
             var stringBuilder = new StringBuilder();
             var xmlWriterSettings = new XmlWriterSettings();
+
+            var catelNamespacePrefix = GetCatelNamespacePrefix();
+
             xmlWriterSettings.OmitXmlDeclaration = true;
             using (var xmlWriter = XmlWriter.Create(stringBuilder, xmlWriterSettings))
             {
-                if (memberType != memberTypeToSerialize)
+                var memberTypeToSerialize = memberValue.Value != null ? memberValue.Value.GetType() : typeof(object);
+                var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, memberTypeToSerialize, elementName, memberValue.Value);
+
+                if (memberValue.Value == null)
                 {
-                    Log.Debug("Property type for property '{0}' is '{1}' but registered as '{2}', adding type info for deserialization",
-                        memberValue.Name, memberTypeToSerialize.FullName, memberType.FullName);
-
-                    serializer.WriteStartObject(xmlWriter, memberValue.Value);
-
-                    xmlWriter.WriteAttributeString("ctl", "type", null, memberTypeToSerialize.FullName);
-
-                    serializer.WriteObjectContent(xmlWriter, memberValue.Value);
-
-                    serializer.WriteEndObject(xmlWriter);
+                    xmlWriter.WriteStartElement(elementName);
+                    xmlWriter.WriteAttributeString(catelNamespacePrefix, "IsNull", null, "true");
+                    xmlWriter.WriteEndElement();
                 }
                 else
                 {
-                    serializer.WriteObject(xmlWriter, memberValue.Value);
+                    var memberType = memberValue.Type;
+                    if (memberType != memberTypeToSerialize)
+                    {
+                        serializer.WriteStartObject(xmlWriter, memberValue.Value);
+
+                        xmlWriter.WriteAttributeString(catelNamespacePrefix, "type", null, memberTypeToSerialize.FullName);
+
+                        serializer.WriteObjectContent(xmlWriter, memberValue.Value);
+
+                        serializer.WriteEndObject(xmlWriter);
+                    }
+                    else
+                    {
+                        serializer.WriteObject(xmlWriter, memberValue.Value);
+                    }
                 }
             }
 
-            string ns1 = element.GetPrefixOfNamespace("http://catel.codeplex.com");
+            EnsureCatelNamespaceInXmlDocument(element);
+
+            var childContent = stringBuilder.ToString();
+            var childElement = XElement.Parse(childContent);
+            element.Add(childElement);
+        }
+
+        /// <summary>
+        /// Ensures the catel namespace in the xml document.
+        /// </summary>
+        /// <param name="element">The element.</param>
+        private void EnsureCatelNamespaceInXmlDocument(XElement element)
+        {
+            var catelNamespaceUrl = GetCatelNamespaceUrl();
+            string ns1 = element.GetPrefixOfNamespace(catelNamespaceUrl);
             if (ns1 == null)
             {
                 var document = element.Document;
@@ -348,18 +371,31 @@ namespace Catel.Runtime.Serialization
                     var documentRoot = document.Root;
                     if (documentRoot != null)
                     {
-                        var catelNamespaceName = XNamespace.Xmlns + "ctl";
-                        var catelNamespaceUrl = "http://catel.codeplex.com";
+                        var catelNamespaceName = XNamespace.Xmlns + GetCatelNamespacePrefix();
                         var catelNamespace = new XAttribute(catelNamespaceName, catelNamespaceUrl);
 
                         documentRoot.Add(catelNamespace);
                     }
                 }
             }
+        }
 
-            var childContent = stringBuilder.ToString();
-            var childElement = XElement.Parse(childContent);
-            element.Add(childElement);
+        /// <summary>
+        /// Gets the catel namespace prefix.
+        /// </summary>
+        /// <returns>The namespace prefix..</returns>
+        private string GetCatelNamespacePrefix()
+        {
+            return "ctl";
+        }
+
+        /// <summary>
+        /// Gets the catel namespace.
+        /// </summary>
+        /// <returns>The namespace.</returns>
+        private string GetCatelNamespaceUrl()
+        {
+            return "http://catel.codeplex.com";
         }
         #endregion
     }

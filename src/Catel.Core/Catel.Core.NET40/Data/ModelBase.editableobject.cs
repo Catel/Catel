@@ -130,8 +130,11 @@ namespace Catel.Data
 
                 foreach (KeyValuePair<string, object> propertyValue in oldPropertyValues)
                 {
-                    // Set value so the PropertyChanged event is invoked
-                    _object.SetValue(propertyValue.Key, propertyValue.Value);
+                    if (PropertyDataManager.IsPropertyRegistered(_object.GetType(), propertyValue.Key))
+                    {
+                        // Set value so the PropertyChanged event is invoked
+                        _object.SetValue(propertyValue.Key, propertyValue.Value);
+                    }
                 }
 
                 _object.IsDirty = (bool)_objectValuesBackup[IsDirty];

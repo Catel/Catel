@@ -8,6 +8,7 @@
 namespace Catel.Test.Runtime.Serialization
 {
     using System;
+    using System.ComponentModel;
     using Catel.Data;
     using Catel.Runtime.Serialization;
 
@@ -46,6 +47,23 @@ namespace Catel.Test.Runtime.Serialization
 
                 Assert.AreEqual(null, clonedModel.ExcludedCatelProperty);
                 Assert.AreEqual("included", clonedModel.IncludedCatelProperty);
+            }
+
+            [TestMethod]
+            public void CorrectlyHandlesNullValues()
+            {
+                var testModel = new TestModel();
+
+                testModel.IncludedCatelProperty = null;
+
+                var editableObject = testModel as IEditableObject;
+                editableObject.BeginEdit();
+
+                testModel.IncludedCatelProperty = "included";
+
+                editableObject.CancelEdit();
+
+                Assert.IsNull(testModel.IncludedCatelProperty);
             }
         }
     }

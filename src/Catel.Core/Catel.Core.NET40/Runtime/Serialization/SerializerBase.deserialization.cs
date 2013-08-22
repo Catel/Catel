@@ -189,9 +189,12 @@ namespace Catel.Runtime.Serialization
                     deserializedMemberValues.Add(memberValue);
 
                     AfterDeserializeMember(context, member);
-
-                    PopulateModel(context.Model, memberValue);
                 }
+            }
+
+            if (deserializedMemberValues.Count > 0)
+            {
+                PopulateModel(context.Model, deserializedMemberValues.ToArray());
             }
 
             return deserializedMemberValues;
