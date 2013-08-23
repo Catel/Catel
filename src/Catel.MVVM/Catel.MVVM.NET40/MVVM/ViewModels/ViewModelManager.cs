@@ -298,6 +298,44 @@ namespace Catel.MVVM
         }
 
         /// <summary>
+        /// Gets the childen viewModels of the specified view model.
+        /// </summary>
+        /// <param name="parentViewModel">The parent viewModel</param>
+        /// <returns>
+        /// The children viewModels
+        /// </returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="parentViewModel"/> is <c>null</c>.</exception>
+        public IEnumerable<IRelationalViewModel> GetChildrenViewModels(IViewModel parentViewModel)
+        {
+            Argument.IsNotNull(() => parentViewModel);
+
+            var childViewModels = GetChildrenViewModels(parentViewModel.UniqueIdentifier);
+
+            return childViewModels;
+        }
+
+        /// <summary>
+        /// Gets the children viewModels of the specified view model unique identifier.
+        /// </summary>
+        /// <param name="parentUniqueIdentifier">The parent unique identifier</param>
+        /// <returns>
+        /// The children viewModels
+        /// </returns>
+        public IEnumerable<IRelationalViewModel> GetChildrenViewModels(int parentUniqueIdentifier)
+        {
+            if (!ActiveViewModels.Any(viewModel => viewModel is IRelationalViewModel))
+            {
+                return null;
+            }
+
+            var relationalViewModels = ActiveViewModels.OfType<IRelationalViewModel>();
+
+            var childViewModels = relationalViewModels.Where(viewModel => viewModel.ParentViewModel != null && viewModel.ParentViewModel.UniqueIdentifier == parentUniqueIdentifier);
+
+            return childViewModels;
+        }
+
+        /// <summary>
         /// Clears all the current view model managers.
         /// </summary>
         /// <remarks>

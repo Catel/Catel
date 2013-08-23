@@ -14,6 +14,12 @@ namespace Catel.MVVM
     public interface IRelationalViewModel
     {
         /// <summary>
+        /// Gets the parent view model.
+        /// </summary>
+        /// <value>The parent view model.</value>
+        IViewModel ParentViewModel { get; }
+
+        /// <summary>
         /// Sets the new parent view model of this view model.
         /// </summary>
         /// <param name="parentViewModel">The parent view model.</param>

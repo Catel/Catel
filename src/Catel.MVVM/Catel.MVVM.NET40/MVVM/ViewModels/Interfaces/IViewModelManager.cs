@@ -76,6 +76,21 @@ namespace Catel.MVVM
         /// <returns>The <see cref="IViewModel"/> or <c>null</c> if the view model is not registered.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
         IViewModel GetFirstOrDefaultInstance(Type viewModelType);
+
+        /// <summary>
+        /// Gets the childen viewModels of the specified view model.
+        /// </summary>
+        /// <param name="parentViewModel">The parent viewModel</param>
+        /// <returns>The children viewModels</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="parentViewModel"/> is <c>null</c>.</exception>
+        IEnumerable<IRelationalViewModel> GetChildrenViewModels(IViewModel parentViewModel);
+
+        /// <summary>
+        /// Gets the children viewModels of the specified view model unique identifier.
+        /// </summary>
+        /// <param name="parentUniqueIdentifier">The parent unique identifier</param>
+        /// <returns>The children viewModels</returns>
+        IEnumerable<IRelationalViewModel> GetChildrenViewModels(int parentUniqueIdentifier);
         #endregion
     }
 }

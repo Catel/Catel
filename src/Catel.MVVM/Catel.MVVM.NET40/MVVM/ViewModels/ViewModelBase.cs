@@ -462,7 +462,7 @@ namespace Catel.MVVM
         /// Gets the parent view model.
         /// </summary>
         /// <value>The parent view model.</value>
-        protected IViewModel ParentViewModel { get; private set; }
+        public IViewModel ParentViewModel { get; private set; }
 
         /// <summary>
         /// Gets the <see cref="ViewModelCommandManager"/> of this view model.

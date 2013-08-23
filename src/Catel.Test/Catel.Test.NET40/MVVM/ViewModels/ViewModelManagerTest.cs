@@ -193,6 +193,39 @@ namespace Catel.Test.MVVM.ViewModels
         }
 
         [TestClass]
+        public class TheGetChildrenViewModelsMethod
+        {
+            [TestMethod]
+            public void ReturnsNullForUnregisteredChildrenViewModels()
+            {
+                var viewModelManager = new ViewModelManager();
+
+                var foundViewModels = viewModelManager.GetChildrenViewModels(42);
+
+                Assert.IsNull(foundViewModels);
+            }
+
+            [TestMethod]
+            public void ReturnsChildrenViewModelsUsingParentInstance()
+            {
+                var parentViewModel = new TestViewModel() as IRelationalViewModel;
+                var childViewModel = new TestViewModel() as IRelationalViewModel;
+                var viewModelManager = new ViewModelManager();
+
+                parentViewModel.RegisterChildViewModel(childViewModel as IViewModel);
+                childViewModel.SetParentViewModel(parentViewModel as IViewModel);
+
+                viewModelManager.RegisterViewModelInstance(parentViewModel as IViewModel);
+                viewModelManager.RegisterViewModelInstance(childViewModel as IViewModel);
+
+                var foundViewModels = viewModelManager.GetChildrenViewModels(parentViewModel as IViewModel);
+
+                Assert.IsNotNull(foundViewModels);
+                Assert.IsTrue(foundViewModels.Contains(childViewModel));
+            }
+        }
+
+        [TestClass]
         public class TheGetFirstOrDefaultInstanceMethod
         {
             [TestMethod]
