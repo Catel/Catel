@@ -200,7 +200,7 @@ namespace Catel.Test.MVVM.ViewModels
             {
                 var viewModelManager = new ViewModelManager();
 
-                var foundViewModels = viewModelManager.GetChildrenViewModels(42);
+                var foundViewModels = viewModelManager.GetChildViewModels(42);
 
                 Assert.IsNull(foundViewModels);
             }
@@ -218,7 +218,7 @@ namespace Catel.Test.MVVM.ViewModels
                 viewModelManager.RegisterViewModelInstance(parentViewModel as IViewModel);
                 viewModelManager.RegisterViewModelInstance(childViewModel as IViewModel);
 
-                var foundViewModels = viewModelManager.GetChildrenViewModels(parentViewModel as IViewModel);
+                var foundViewModels = viewModelManager.GetChildViewModels(parentViewModel as IViewModel);
 
                 Assert.IsNotNull(foundViewModels);
                 Assert.IsTrue(foundViewModels.Contains(childViewModel));
