@@ -298,36 +298,26 @@ namespace Catel.MVVM
         }
 
         /// <summary>
-        /// Gets the childen viewModels of the specified view model.
+        /// Gets the child view models of the specified view model.
         /// </summary>
-        /// <param name="parentViewModel">The parent viewModel</param>
-        /// <returns>
-        /// The children viewModels
-        /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="parentViewModel"/> is <c>null</c>.</exception>
-        public IEnumerable<IRelationalViewModel> GetChildrenViewModels(IViewModel parentViewModel)
+        /// <param name="parentViewModel">The parent view model.</param>
+        /// <returns>The child view models.</returns>
+        public IEnumerable<IRelationalViewModel> GetChildViewModels(IViewModel parentViewModel)
         {
             Argument.IsNotNull(() => parentViewModel);
 
-            var childViewModels = GetChildrenViewModels(parentViewModel.UniqueIdentifier);
+            var childViewModels = GetChildViewModels(parentViewModel.UniqueIdentifier);
 
             return childViewModels;
         }
 
         /// <summary>
-        /// Gets the children viewModels of the specified view model unique identifier.
+        /// Gets the child view models of the specified view model unique identifier.
         /// </summary>
-        /// <param name="parentUniqueIdentifier">The parent unique identifier</param>
-        /// <returns>
-        /// The children viewModels
-        /// </returns>
-        public IEnumerable<IRelationalViewModel> GetChildrenViewModels(int parentUniqueIdentifier)
+        /// <param name="parentUniqueIdentifier">The parent unique identifier.</param>
+        /// <returns>The child view models.</returns>
+        public IEnumerable<IRelationalViewModel> GetChildViewModels(int parentUniqueIdentifier)
         {
-            if (!ActiveViewModels.Any(viewModel => viewModel is IRelationalViewModel))
-            {
-                return null;
-            }
-
             var relationalViewModels = ActiveViewModels.OfType<IRelationalViewModel>();
 
             var childViewModels = relationalViewModels.Where(viewModel => viewModel.ParentViewModel != null && viewModel.ParentViewModel.UniqueIdentifier == parentUniqueIdentifier);
