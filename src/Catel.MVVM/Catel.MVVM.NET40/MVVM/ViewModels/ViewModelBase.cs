@@ -300,6 +300,16 @@ namespace Catel.MVVM
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
         /// </summary>
+        /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
+        /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
+        protected ViewModelBase() : 
+            this(true, false, false)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
+        /// </summary>
         /// <param name="supportIEditableObject">if set to <c>true</c>, the view model will natively support models that
         /// implement the <see cref="IEditableObject"/> interface.</param>
         /// <param name="ignoreMultipleModelsWarning">if set to <c>true</c>, the warning when using multiple models is ignored.</param>
