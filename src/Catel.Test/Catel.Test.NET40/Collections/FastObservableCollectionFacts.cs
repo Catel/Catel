@@ -7,6 +7,7 @@
 namespace Catel.Test.Collections
 {
     using System;
+    using System.Linq;
     using Catel.Collections;
 
 #if NETFX_CORE
@@ -95,6 +96,27 @@ namespace Catel.Test.Collections
                 }
 
                 Assert.AreEqual(1, counter);
+            }
+        }
+
+        [TestClass]
+        public class SupportsLinq
+        {
+            [TestMethod]
+            public void ReturnsSingleElementUsingLinq()
+            {
+                var fastCollection = new FastObservableCollection<int>();
+
+                for (int i = 0; i < 43; i++)
+                {
+                    fastCollection.Add(i);
+                }
+
+                var allInts = (from x in fastCollection
+                               where x == 42
+                               select x).FirstOrDefault();
+
+                Assert.AreEqual(42, allInts);
             }
         }
     }
