@@ -29,7 +29,7 @@ namespace Catel.ExceptionHandling
         /// <returns>
         ///   <c>true</c> if the exception type is registered; otherwise, <c>false</c>.
         /// </returns>
-        bool IsExceptionRegistered<TException>();
+        bool IsExceptionRegistered<TException>() where TException : Exception;
 
         /// <summary>
         /// Determines whether the specified exception type is registered.
@@ -48,7 +48,7 @@ namespace Catel.ExceptionHandling
         /// <param name="handler">The action to execute when the exception occurs.</param>
         /// <returns>The handler to use.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        IExceptionHandler Register<TException>(Action<Exception> handler)
+        IExceptionHandler Register<TException>(Action<TException> handler)
             where TException : Exception;
 
         /// <summary>
