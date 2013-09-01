@@ -89,6 +89,7 @@
     <Compile Include="Extensions\ILogExtensions.cs" />
     <Compile Include="Extensions\IUIVisualizerServiceExtensions.cs" />
     <Compile Include="Extensions\ISplashScreenServiceExtensions.cs" />
+    <Compile Include="Modules\SafeDirectoryModuleCatalog.cs" />
     <Compile Include="Tasks\BootstrapperTaskFactory.cs" />
     <Compile Include="Tasks\Interfaces\IBootstrapperTaskFactory.cs" />
     <Compile Include="Interfaces\IRegionInfo.cs" />

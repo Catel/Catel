@@ -133,6 +133,9 @@
     <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\ModuleManager\ViewModels\ModuleManagerViewModel.cs">
       <Link>Modules\ModuleManager\ViewModels\ModuleManagerViewModel.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\SafeDirectoryModuleCatalog.cs">
+      <Link>Modules\SafeDirectoryModuleCatalog.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Extensions.Prism.NET40\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
