@@ -39,7 +39,8 @@ Added/fixed:
     injection with auto-completion from services registered in the ServiceLocator
 (+) CTL-7 Added support for empty cell in the StackGrid control
 (+) CTL-26 Added IQueryable<T>.Include extension so it is easier to include properties in an EF query
-(+) CTL-39 Added IStartUpInfoProvider to allow the access to information such as InitParams (SL) or Arguments (NET) from any application point
+(+) CTL-39 Added IStartUpInfoProvider to allow the access to information such as InitParams (SL) or Arguments (NET) 
+    from any application point
 (+) CTL-58 Automatic de/serialization of specified fields within ModelBase using the IncludeInSerialization and
     ExcludeFromSerialization attributes which also work on regular properties and fields
 (+) CTL-99 Added extensions methods for the IViewModelManager to allow the closing of all view models that match a 
@@ -54,8 +55,10 @@ Added/fixed:
 (+) CTL-135 Added TaskCommand to Catel.MVVM (NET45, WIN80 and WP8 only)
 (+) CTL-139 Added DynamicObjects extension
 (+) CTL-152 Added MementoService.IsEnabled to temporarily disable addition of batches and actions
-(+) CTL-153 Added GetChildrenViewModels to IViewModelManager to allow retrieving all alive children view models instances of a specified view model.
+(+) CTL-153 Added GetChildrenViewModels to IViewModelManager to allow retrieving all alive children view models instances of 
+    a specified view model
 (+) CTL-154 Added DependencyResolver and DependencyResolverManager
+(+) CTL-167 Implemented SafeDirectoryModuleCatalog in Extensions.Prism because the default Prism directory catalog is not safe
 (+) Added extension method for ISplashScreenService for Prism to show progress control in a region
 (+) Added some additionnals members in IViewManager.
 (+) Added support to Commit enqueued tasks using an existing instance view model for SplashScreenService
@@ -83,7 +86,8 @@ Added/fixed:
 (x) Fixed Drag and Drop behavior when the drop position is less then the initial item's position
 (x) Ensured the value of Owner property of Shell to NULL in order to avoid the application close  when the SplashScreenService done
 (x) Ensured Bootstrapper UI tasks calls using DispatcherService
-(x) Removed the usage of the DispatcherService to execute a task in SplashScreenService to allow smoothly notification of the task progress
+(x) Removed the usage of the DispatcherService to execute a task in SplashScreenService to allow smoothly notification 
+    of the task progress
 
 To-do:
 ======

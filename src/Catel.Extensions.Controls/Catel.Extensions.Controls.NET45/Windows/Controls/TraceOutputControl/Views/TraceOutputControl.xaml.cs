@@ -95,7 +95,11 @@ namespace Catel.Windows.Controls
                 {
                     if (ViewModel != null)
                     {
-                        logListView.ScrollIntoView(ViewModel.TraceEntryCollection.Last());
+                        var lastEntry = ViewModel.TraceEntryCollection.LastOrDefault();
+                        if (lastEntry != null)
+                        {
+                            logListView.ScrollIntoView(lastEntry);
+                        }
                     }
                 }
             }

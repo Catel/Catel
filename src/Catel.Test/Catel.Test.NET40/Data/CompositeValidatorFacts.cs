@@ -9,8 +9,6 @@ namespace Catel.Test.Data
     using System;
     using System.Linq.Expressions;
 
-    using Castle.DynamicProxy;
-
     using Catel.Data;
 
 #if NETFX_CORE

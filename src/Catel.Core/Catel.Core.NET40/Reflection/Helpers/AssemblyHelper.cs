@@ -193,6 +193,12 @@ namespace Catel.Reflection
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to get types from assembly '{0}'", assembly.FullName);
+
+                foundAssemblyTypes = new Type[] { };
+            }
 
             return foundAssemblyTypes;
         }

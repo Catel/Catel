@@ -15,7 +15,7 @@
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.14.0</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.15.0.0</FodyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -89,6 +89,7 @@
     <Compile Include="Extensions\ILogExtensions.cs" />
     <Compile Include="Extensions\IUIVisualizerServiceExtensions.cs" />
     <Compile Include="Extensions\ISplashScreenServiceExtensions.cs" />
+    <Compile Include="Modules\SafeDirectoryModuleCatalog.cs" />
     <Compile Include="Tasks\BootstrapperTaskFactory.cs" />
     <Compile Include="Tasks\Interfaces\IBootstrapperTaskFactory.cs" />
     <Compile Include="Interfaces\IRegionInfo.cs" />

@@ -57,11 +57,14 @@ namespace Catel.Windows.Interactivity.DragDropHelpers
 		/// <param name="drawingContext">The drawing instructions for a specific element. This context is provided to the layout system.</param>
 		protected override void OnRender(DrawingContext drawingContext)
 		{
-			if (drawingContext == null) throw new ArgumentNullException("drawingContext");
+            Argument.IsNotNull("drawingContext", drawingContext);
 
 		    var points = _myDrawHorizontal ? DetermineHorizontalLinePoints() : DetermineVerticalLinePoints();
 
-			drawingContext.DrawLine(_myPen, points.First(), points.Last());
+		    if (points.Length > 0)
+		    {
+		        drawingContext.DrawLine(_myPen, points.First(), points.Last());
+		    }
 		}
 
 		private Point[] DetermineHorizontalLinePoints()
