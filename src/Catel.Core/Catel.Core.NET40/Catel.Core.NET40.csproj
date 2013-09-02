@@ -148,8 +148,11 @@
     <Compile Include="EventHandlerExtensions.cs" />
     <Compile Include="ExceptionHandling\ExceptionHandler.cs" />
     <Compile Include="ExceptionHandling\ExceptionService.cs" />
+    <Compile Include="ExceptionHandling\Extensions\ExceptionHandlerExtensions.cs" />
+    <Compile Include="ExceptionHandling\Frequency.cs" />
     <Compile Include="ExceptionHandling\Interfaces\IExceptionHandler.cs" />
     <Compile Include="ExceptionHandling\Interfaces\IExceptionService.cs" />
+    <Compile Include="ExceptionHandling\Interfaces\IFrequency.cs" />
     <Compile Include="Exceptions\NotSupportedInSilverlightException.cs" />
     <Compile Include="Exceptions\NotSupportedInWindowsPhone7Exception.cs" />
     <Compile Include="Exceptions\NotSupportedInWindows8Exception.cs" />
