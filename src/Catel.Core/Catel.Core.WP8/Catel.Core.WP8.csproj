@@ -46,6 +46,19 @@
     <DocumentationFile>..\..\..\output\release\WP8\Catel.Core\Catel.Core.XML</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;WP8</DefineConstants>
+    <OutputPath>..\..\..\output\debug\WP8\Catel.Core\</OutputPath>
+    <DocumentationFile>..\..\..\output\debug\WP8\Catel.Core\Catel.Core.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE;WP8</DefineConstants>
+    <Optimize>true</Optimize>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <OutputPath>..\..\..\output\release\WP8\Catel.Core\</OutputPath>
+    <DocumentationFile>..\..\..\output\release\WP8\Catel.Core\Catel.Core.XML</DocumentationFile>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>

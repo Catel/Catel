@@ -45,6 +45,19 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DocumentationFile>..\..\..\output\release\WP8\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;WP8</DefineConstants>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>..\..\..\output\debug\WP8\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>
+    <OutputPath>..\..\..\output\debug\WP8\Catel.MVVM\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE;WP8</DefineConstants>
+    <Optimize>true</Optimize>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>..\..\..\output\release\WP8\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>
+    <OutputPath>..\..\..\output\release\WP8\Catel.MVVM\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <None Include="..\Catel.MVVM.NET40\ClassDiagrams\ViewModelBase.cd">
       <Link>ClassDiagrams\ViewModelBase.cd</Link>
