@@ -9,6 +9,7 @@ namespace Catel.Test.ExceptionHandling
     using System;
     using System.Globalization;
     using System.Linq;
+    using System.Threading;
     using Catel.ExceptionHandling;
     
 #if NETFX_CORE
@@ -276,6 +277,36 @@ namespace Catel.Test.ExceptionHandling
                 Assert.AreEqual(exceptionService.ExceptionHandlers.Count(), 0);
 
                 Assert.IsFalse(exceptionService.Unregister<ArgumentException>());
+            }
+            #endregion
+        }
+        #endregion
+
+        #region Nested type: TheUsingToleranceMethod
+        [TestClass]
+        public class TheUsingToleranceMethod
+        {
+            #region Methods
+            [TestMethod]
+            public void MultipleExceptionsOfSameTypeThrownTooManyTimesProducesOnlyOneException()
+            {
+                var exceptionService = new ExceptionService();
+
+                exceptionService.Register<DivideByZeroException>(exception => { })
+                                .UsingTolerance(9, TimeSpan.FromSeconds(10.0));
+
+                var index = 0;
+                var exceptionHandledAt10Th = false;
+
+                for (; index < 10; index++)
+                {
+                    Thread.Sleep(100);
+                    exceptionHandledAt10Th = exceptionService.HandleException(new DivideByZeroException());
+                }
+
+                Assert.IsTrue(exceptionHandledAt10Th);
+                Assert.AreEqual(10, index);
+
             }
             #endregion
         }

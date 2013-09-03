@@ -287,11 +287,20 @@
     <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Extensions\ExceptionExtensions.cs">
       <Link>ExceptionHandling\Extensions\ExceptionExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Extensions\ExceptionHandlerExtensions.cs">
+      <Link>ExceptionHandling\Extensions\ExceptionHandlerExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Frequency.cs">
+      <Link>ExceptionHandling\Frequency.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Interfaces\IExceptionHandler.cs">
       <Link>ExceptionHandling\Interfaces\IExceptionHandler.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Interfaces\IExceptionService.cs">
       <Link>ExceptionHandling\Interfaces\IExceptionService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Interfaces\IFrequency.cs">
+      <Link>ExceptionHandling\Interfaces\IFrequency.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Exceptions\NotSupportedInSilverlightException.cs">
       <Link>Exceptions\NotSupportedInSilverlightException.cs</Link>

@@ -4,6 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+
 namespace Catel.ExceptionHandling
 {
     using System;
@@ -27,10 +28,15 @@ namespace Catel.ExceptionHandling
         /// <summary>
         /// The static instance of the exception service.
         /// </summary>
-        private static readonly IExceptionService Instance = new ExceptionService();
+        private static readonly IExceptionService _default = new ExceptionService();
         #endregion
 
         #region Fields
+        /// <summary>
+        /// The _exception counts
+        /// </summary>
+        private readonly Dictionary<Type, Queue<DateTime>> _exceptionCounter = new Dictionary<Type, Queue<DateTime>>();
+
         /// <summary>
         /// The _exception handlers
         /// </summary>
@@ -44,7 +50,7 @@ namespace Catel.ExceptionHandling
         /// <value>The default instance.</value>
         public static IExceptionService Default
         {
-            get { return Instance; }
+            get { return _default; }
         }
         #endregion
 
@@ -87,7 +93,7 @@ namespace Catel.ExceptionHandling
         /// <exception cref="ArgumentNullException">The <paramref ref="exceptionType"/> is <c>null</c>.</exception>
         public bool IsExceptionRegistered(Type exceptionType)
         {
-            Argument.IsOfType("exceptionType", exceptionType, typeof(Exception));
+            Argument.IsOfType("exceptionType", exceptionType, typeof (Exception));
 
             lock (_exceptionHandlers)
             {
@@ -121,7 +127,7 @@ namespace Catel.ExceptionHandling
                     Log.Debug("Added exception handler for type '{0}'", exceptionType.Name);
                 }
 
-                return _exceptionHandlers[exceptionType]; 
+                return _exceptionHandlers[exceptionType];
             }
         }
 
@@ -173,7 +179,33 @@ namespace Catel.ExceptionHandling
                 {
                     if (exceptionHandler.Key.IsAssignableFromEx(exceptionInstanceType))
                     {
+                        if (exceptionHandler.Value.AllowedFrequency != null)
+                        {
+                            if (!_exceptionCounter.ContainsKey(exceptionHandler.Key))
+                            {
+                                _exceptionCounter.Add(exceptionHandler.Key, new Queue<DateTime>());
+                            }
+
+                            _exceptionCounter[exceptionHandler.Key].Enqueue(DateTime.Now);
+
+                            if (_exceptionCounter[exceptionHandler.Key].Count <= exceptionHandler.Value.AllowedFrequency.NumberOfTimes)
+                            {
+                                continue;
+                            }
+
+                            var dateTime = _exceptionCounter[exceptionHandler.Key].Dequeue();
+
+                            var duration = (DateTime.Now - dateTime);
+
+                            if (duration >= exceptionHandler.Value.AllowedFrequency.Duration && exceptionHandler.Value.AllowedFrequency.Duration != TimeSpan.Zero)
+                            {
+                                continue;
+                            }
+                            _exceptionCounter[exceptionHandler.Key].Clear();
+                        }
+
                         handler = exceptionHandler.Value;
+
                         break;
                     }
                 }

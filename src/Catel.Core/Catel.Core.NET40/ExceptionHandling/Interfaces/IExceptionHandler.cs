@@ -19,6 +19,14 @@ namespace Catel.ExceptionHandling
         Type Exception { get; }
 
         /// <summary>
+        /// Gets the allowed frequency.
+        /// </summary>
+        /// <value>
+        /// The allowed frequency.
+        /// </value>
+        IFrequency AllowedFrequency { get; set; }
+
+        /// <summary>
         /// Handles the exception using the action that was passed into the constructor.
         /// </summary>
         /// <param name="exception">The exception.</param>
