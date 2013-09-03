@@ -36,6 +36,11 @@ namespace Catel.Caching
         /// The synchronization object.
         /// </summary>
         private readonly object _syncObj = new object();
+        
+        /// <summary>
+        /// The synchronization objects.
+        /// </summary>
+        private readonly Dictionary<TKey, object> _syncObjs = new Dictionary<TKey, object>();
 
         /// <summary>
         /// The timer that is being executed to invalidate the cache.
@@ -103,7 +108,7 @@ namespace Catel.Caching
         /// <exception cref="ArgumentNullException">The <paramref name="key" /> is <c>null</c>.</exception>
         public TValue Get(TKey key)
         {
-            Argument.IsNotNull("key", key);
+            Argument.IsNotNull(() => key);
 
             CacheStorageValueInfo<TValue> valueInfo;
 
@@ -123,7 +128,7 @@ namespace Catel.Caching
         /// <exception cref="ArgumentNullException">The <paramref name="key" /> is <c>null</c>.</exception>
         public bool Contains(TKey key)
         {
-            Argument.IsNotNull("key", key);
+            Argument.IsNotNull(() => key);
 
             lock (_syncObj)
             {
@@ -144,11 +149,20 @@ namespace Catel.Caching
         [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1027:TabsMustNotBeUsed", Justification = "Reviewed. Suppression is OK here.")]
         public TValue GetFromCacheOrFetch(TKey key, Func<TValue> code, ExpirationPolicy expirationPolicy, bool @override = false)
         {
-            Argument.IsNotNull("key", key);
-            Argument.IsNotNull("code", code);
+            Argument.IsNotNull(() => key);
+            Argument.IsNotNull(() => code);
+            
+            lock (_syncObj)
+            {
+                var containsKey = _syncObjs.ContainsKey(key);
+                if (!containsKey)
+                {
+                    _syncObjs[key] = new object();
+                }
+            }
 
             TValue value;
-            lock (_syncObj)
+            lock (_syncObjs[key])
             {
                 bool containsKey = _dictionary.ContainsKey(key);
                 if (!containsKey || @override)
@@ -162,7 +176,10 @@ namespace Catel.Caching
 	                    }
 	
 	                    var valueInfo = new CacheStorageValueInfo<TValue>(value, expirationPolicy);
-	                    _dictionary[key] = valueInfo;
+	                    lock (_syncObj)
+	                    {
+	                    	_dictionary[key] = valueInfo;
+	                    }
 	
 	                    if (valueInfo.CanExpire)
 	                    {
@@ -172,7 +189,10 @@ namespace Catel.Caching
                 }
                 else
                 {
-                    value = _dictionary[key].Value;
+                  lock (_syncObj)
+	              {
+                    	value = _dictionary[key].Value;
+                  }
                 }
             }
 
@@ -217,11 +237,11 @@ namespace Catel.Caching
         /// <exception cref="ArgumentNullException">The <paramref name="key" /> is <c>null</c>.</exception>
         public void Add(TKey key, TValue @value, ExpirationPolicy expirationPolicy, bool @override = false)
         {
-            Argument.IsNotNull("key", key);
+            Argument.IsNotNull(() => key);
 
             if (!_storeNullValues)
             {
-                Argument.IsNotNull("value", value);
+                Argument.IsNotNull(() => value);
             }
 
             GetFromCacheOrFetch(key, () => @value, expirationPolicy, @override);
@@ -235,7 +255,7 @@ namespace Catel.Caching
         /// <exception cref="ArgumentNullException">The <paramref name="key" /> is <c>null</c>.</exception>
         public void Remove(TKey key, Action action = null)
         {
-            Argument.IsNotNull("key", key);
+            Argument.IsNotNull(() => key);
 
             lock (_syncObj)
             {
