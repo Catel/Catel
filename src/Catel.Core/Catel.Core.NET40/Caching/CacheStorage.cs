@@ -111,12 +111,14 @@ namespace Catel.Caching
             Argument.IsNotNull(() => key);
 
             CacheStorageValueInfo<TValue> valueInfo;
-
-            lock (_syncObj)
+            lock (GetLockByKey(key))
             {
-                _dictionary.TryGetValue(key, out valueInfo);
+                lock (_syncObj)
+                {
+                    _dictionary.TryGetValue(key, out valueInfo);
+                }
             }
-
+     
             return (valueInfo != null) ? valueInfo.Value : default(TValue);
         }
 
@@ -130,9 +132,12 @@ namespace Catel.Caching
         {
             Argument.IsNotNull(() => key);
 
-            lock (_syncObj)
+            lock (GetLockByKey(key))
             {
-                return _dictionary.ContainsKey(key);
+                lock (_syncObj)
+                {
+                    return _dictionary.ContainsKey(key);
+                }
             }
         }
 
@@ -152,17 +157,8 @@ namespace Catel.Caching
             Argument.IsNotNull(() => key);
             Argument.IsNotNull(() => code);
             
-            lock (_syncObj)
-            {
-                var containsKey = _syncObjs.ContainsKey(key);
-                if (!containsKey)
-                {
-                    _syncObjs[key] = new object();
-                }
-            }
-
             TValue value;
-            lock (_syncObjs[key])
+            lock (GetLockByKey(key))
             {
                 bool containsKey = _dictionary.ContainsKey(key);
                 if (!containsKey || @override)
@@ -257,17 +253,20 @@ namespace Catel.Caching
         {
             Argument.IsNotNull(() => key);
 
-            lock (_syncObj)
+            lock (GetLockByKey(key))
             {
-                if (_dictionary.ContainsKey(key))
+                lock (_syncObj)
                 {
-                    if (action != null)
+                    if (_dictionary.ContainsKey(key))
                     {
-                        action.Invoke();
-                    }
+                        if (action != null)
+                        {
+                            action.Invoke();
+                        }
 
-                    _dictionary.Remove(key);
-                }
+                        _dictionary.Remove(key);
+                    }
+                }     
             }
         }
 
@@ -276,23 +275,36 @@ namespace Catel.Caching
         /// </summary>
         public void Clear()
         {
+            var keysToRemove = new List<TKey>();
             lock (_syncObj)
             {
-                _dictionary.Clear();
+                keysToRemove.AddRange(_dictionary.Keys);
+            }
+
+            foreach (var keyToRemove in keysToRemove)
+            {
+                lock (GetLockByKey(keyToRemove))
+                {
+                    lock (_syncObj)
+                    {
+                        _dictionary.Remove(keyToRemove);
+                    }
+                }
             }
         }
 
         /// <summary>
         /// Removes the expired items from the cache.
         /// </summary>
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1409:RemoveUnnecessaryCode", Justification = "Reviewed. Suppression is OK here.")]
         private void RemoveExpiredItems()
         {
             bool containsItemsThatCanExpire = false;
 
+            var keysToRemove = new List<TKey>();
+
             lock (_syncObj)
             {
-                var keysToRemove = new List<TKey>();
-
                 foreach (var cacheItem in _dictionary)
                 {
                     var valueInfo = cacheItem.Value;
@@ -306,14 +318,43 @@ namespace Catel.Caching
                         containsItemsThatCanExpire = true;
                     }
                 }
+            }
 
-                foreach (var keyToRemove in keysToRemove)
+            foreach (var keyToRemove in keysToRemove)
+            {
+                lock (GetLockByKey(keyToRemove))
                 {
-                    _dictionary.Remove(keyToRemove);
+                    lock (_syncObj)
+                    {
+                        _dictionary.Remove(keyToRemove);
+                    }
+                }
+            }
+   
+            _checkForExpiredItems = containsItemsThatCanExpire;
+        }
+
+        /// <summary>
+        /// Gets the lock by key
+        /// </summary>
+        /// <param name="key">
+        /// The key
+        /// </param>
+        /// <returns>
+        /// The lock object
+        /// </returns>
+        private object GetLockByKey(TKey key)
+        {
+            lock (_syncObj)
+            {
+                var containsKey = _syncObjs.ContainsKey(key);
+                if (!containsKey)
+                {
+                    _syncObjs[key] = new object();
                 }
             }
 
-            _checkForExpiredItems = containsItemsThatCanExpire;
+            return _syncObjs[key];
         }
 
         /// <summary>
