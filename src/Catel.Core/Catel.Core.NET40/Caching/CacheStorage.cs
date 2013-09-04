@@ -113,10 +113,7 @@ namespace Catel.Caching
             CacheStorageValueInfo<TValue> valueInfo;
             lock (GetLockByKey(key))
             {
-                lock (_syncObj)
-                {
-                    _dictionary.TryGetValue(key, out valueInfo);
-                }
+                _dictionary.TryGetValue(key, out valueInfo);
             }
      
             return (valueInfo != null) ? valueInfo.Value : default(TValue);
@@ -134,10 +131,7 @@ namespace Catel.Caching
 
             lock (GetLockByKey(key))
             {
-                lock (_syncObj)
-                {
-                    return _dictionary.ContainsKey(key);
-                }
+                return _dictionary.ContainsKey(key);
             }
         }
 
@@ -185,10 +179,7 @@ namespace Catel.Caching
                 }
                 else
                 {
-                  lock (_syncObj)
-	              {
-                    	value = _dictionary[key].Value;
-                  }
+					value = _dictionary[key].Value;
                 }
             }
 
@@ -255,18 +246,15 @@ namespace Catel.Caching
 
             lock (GetLockByKey(key))
             {
-                lock (_syncObj)
+                if (_dictionary.ContainsKey(key))
                 {
-                    if (_dictionary.ContainsKey(key))
+                    if (action != null)
                     {
-                        if (action != null)
-                        {
-                            action.Invoke();
-                        }
-
-                        _dictionary.Remove(key);
+                        action.Invoke();
                     }
-                }     
+
+                    _dictionary.Remove(key);
+                }
             }
         }
 
@@ -285,10 +273,7 @@ namespace Catel.Caching
             {
                 lock (GetLockByKey(keyToRemove))
                 {
-                    lock (_syncObj)
-                    {
-                        _dictionary.Remove(keyToRemove);
-                    }
+                    _dictionary.Remove(keyToRemove);
                 }
             }
         }
@@ -324,10 +309,7 @@ namespace Catel.Caching
             {
                 lock (GetLockByKey(keyToRemove))
                 {
-                    lock (_syncObj)
-                    {
-                        _dictionary.Remove(keyToRemove);
-                    }
+                    _dictionary.Remove(keyToRemove);
                 }
             }
    
