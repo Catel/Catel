@@ -108,7 +108,7 @@ namespace Catel.Caching
         /// <exception cref="ArgumentNullException">The <paramref name="key" /> is <c>null</c>.</exception>
         public TValue Get(TKey key)
         {
-            Argument.IsNotNull(() => key);
+            Argument.IsNotNull("key", key);
 
             CacheStorageValueInfo<TValue> valueInfo;
             lock (GetLockByKey(key))
@@ -130,7 +130,7 @@ namespace Catel.Caching
         /// <exception cref="ArgumentNullException">The <paramref name="key" /> is <c>null</c>.</exception>
         public bool Contains(TKey key)
         {
-            Argument.IsNotNull(() => key);
+            Argument.IsNotNull("key", key);
 
             lock (GetLockByKey(key))
             {
@@ -154,8 +154,8 @@ namespace Catel.Caching
         [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1027:TabsMustNotBeUsed", Justification = "Reviewed. Suppression is OK here.")]
         public TValue GetFromCacheOrFetch(TKey key, Func<TValue> code, ExpirationPolicy expirationPolicy, bool @override = false)
         {
-            Argument.IsNotNull(() => key);
-            Argument.IsNotNull(() => code);
+            Argument.IsNotNull("key", key);
+            Argument.IsNotNull("code", code);
             
             TValue value;
             lock (GetLockByKey(key))
@@ -233,11 +233,11 @@ namespace Catel.Caching
         /// <exception cref="ArgumentNullException">The <paramref name="key" /> is <c>null</c>.</exception>
         public void Add(TKey key, TValue @value, ExpirationPolicy expirationPolicy, bool @override = false)
         {
-            Argument.IsNotNull(() => key);
+            Argument.IsNotNull("key", key);
 
             if (!_storeNullValues)
             {
-                Argument.IsNotNull(() => value);
+                Argument.IsNotNull("value", value);
             }
 
             GetFromCacheOrFetch(key, () => @value, expirationPolicy, @override);
@@ -251,7 +251,7 @@ namespace Catel.Caching
         /// <exception cref="ArgumentNullException">The <paramref name="key" /> is <c>null</c>.</exception>
         public void Remove(TKey key, Action action = null)
         {
-            Argument.IsNotNull(() => key);
+            Argument.IsNotNull("key", key);
 
             lock (GetLockByKey(key))
             {
