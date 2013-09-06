@@ -9,6 +9,8 @@ namespace Catel.Data
     using System;
     using System.Runtime.Serialization;
     using System.Security;
+    using Catel.Runtime;
+    using Catel.Scoping;
     using IoC;
     using Runtime.Serialization;
 
@@ -44,6 +46,24 @@ namespace Catel.Data
             else
             {
                 _serializationInfo = info;
+
+                // Too bad we cannot put this in the BinarySerializer, but BinarySerialization works bottom => top. We
+                // do need the GraphId though, thus we are setting it here
+                var scopeName = string.Format("Thread_{0}", ThreadHelper.GetCurrentThreadId());
+                using (var scopeManager = ScopeManager<ReferenceManager>.GetScopeManager(scopeName))
+                {
+                    var referenceManager = scopeManager.ScopeObject;
+
+                    try
+                    {
+                        var graphId = (int)info.GetValue("GraphId", typeof (int));
+                        referenceManager.RegisterManually(graphId, this);
+                    }
+                    catch (Exception)
+                    {
+                        // Swallow
+                    }
+                }
             }
 
             OnInitialized();

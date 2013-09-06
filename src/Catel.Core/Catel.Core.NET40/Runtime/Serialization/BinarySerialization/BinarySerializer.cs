@@ -17,6 +17,7 @@ namespace Catel.Runtime.Serialization
     using Catel.Data;
     using Catel.IoC;
     using Catel.Logging;
+    using Catel.Reflection;
 
     /// <summary>
     /// The binary serializer.
@@ -24,6 +25,9 @@ namespace Catel.Runtime.Serialization
     public class BinarySerializer : SerializerBase<BinarySerializationContextInfo>, IBinarySerializer
     {
         #region Constants
+        private const string GraphId = "GraphId";
+        private const string GraphRefId = "GraphRefId";
+
         /// <summary>
         /// The property values key.
         /// </summary>
@@ -87,12 +91,21 @@ namespace Catel.Runtime.Serialization
         {
             Argument.IsNotNull("model", model);
 
-            var binaryFormatter = CreateBinaryFormatter(SerializationContextMode.Deserialization);
-
-            var propertyValues = (List<PropertyValue>)binaryFormatter.Deserialize(stream);
-            var memberValues = ConvertPropertyValuesToMemberValues(model.GetType(), propertyValues);
-            using (var context = GetContext(model, stream, SerializationContextMode.Deserialization, memberValues))
+            using (var context = (SerializationContext<BinarySerializationContextInfo>)GetContext(model, stream, SerializationContextMode.Deserialization))
             {
+                var referenceManager = context.ReferenceManager;
+                if (referenceManager.Count == 0)
+                {
+                    Log.Debug("Reference manager contains no objects yet, adding initial reference which is the first model in the graph");
+
+                    referenceManager.GetInfo(context.Model);
+                }
+
+                var binaryFormatter = CreateBinaryFormatter(SerializationContextMode.Deserialization);
+                var propertyValues = (List<PropertyValue>)binaryFormatter.Deserialize(stream);
+                var memberValues = ConvertPropertyValuesToMemberValues(context, model.GetType(), propertyValues);
+                context.Context.MemberValues.AddRange(memberValues);
+
                 Deserialize(model, context.Context);
             }
         }
@@ -171,6 +184,23 @@ namespace Catel.Runtime.Serialization
         }
 
         /// <summary>
+        /// Called before the serializer starts serializing an object.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        protected override void BeforeSerialization(ISerializationContext<BinarySerializationContextInfo> context)
+        {
+            base.BeforeSerialization(context);
+
+            var referenceManager = context.ReferenceManager;
+            if (referenceManager.Count == 0)
+            {
+                Log.Debug("Reference manager contains no objects yet, adding initial reference which is the first model in the graph");
+
+                referenceManager.GetInfo(context.Model);
+            }
+        }
+
+        /// <summary>
         /// Called before the serializer starts deserializing an object.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -186,11 +216,30 @@ namespace Catel.Runtime.Serialization
                 return;
             }
 
+            // Note: the ModelBase.serialization.binary.cs also contains logic to add models to the reference manager
+            // because the binary serialization is used bottom => top which is not good if we need the references.
+            try
+            {
+                var graphId = (int)serializationInfo.GetValue(GraphId, typeof(int));
+                if (graphId != 0)
+                {
+                    var referenceManager = context.ReferenceManager;
+                    if (referenceManager.GetInfoById(graphId) == null)
+                    {
+                        referenceManager.RegisterManually(graphId, context.Model);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // Swallow
+            }
+
             try
             {
                 // NOTE: this will deserialize a list of PropertyValue objects to maintain backwards compatibility!
                 var propertyValues = (List<PropertyValue>)serializationInfo.GetValue(PropertyValuesKey, typeof(List<PropertyValue>));
-                var memberValues = ConvertPropertyValuesToMemberValues(context.ModelType, propertyValues);
+                var memberValues = ConvertPropertyValuesToMemberValues(context, context.ModelType, propertyValues);
                 serializationContext.MemberValues.AddRange(memberValues);
             }
             catch (Exception ex)
@@ -209,9 +258,15 @@ namespace Catel.Runtime.Serialization
             var serializationContext = context.Context;
             var serializationInfo = serializationContext.SerializationInfo;
             var memberValues = serializationContext.MemberValues;
-            var propertyValues = ConvertMemberValuesToPropertyValues(memberValues);
+            var propertyValues = ConvertMemberValuesToPropertyValues(context, memberValues);
+
+            serializationContext.PropertyValues.AddRange(propertyValues);
 
             serializationInfo.AddValue(PropertyValuesKey, propertyValues);
+
+            var referenceManager = context.ReferenceManager;
+            var referenceInfo = referenceManager.GetInfo(context.Model);
+            serializationInfo.AddValue(GraphId, referenceInfo.Id);
         }
 
         /// <summary>
@@ -219,15 +274,13 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="stream">The stream.</param>
-        /// <exception cref="System.NotImplementedException"></exception>
         protected override void AppendContextToStream(ISerializationContext<BinarySerializationContextInfo> context, Stream stream)
         {
             var serializationContext = context.Context;
-            var memberValues = serializationContext.MemberValues;
             var binaryFormatter = serializationContext.BinaryFormatter;
 
             // NOTE: We have to keep backwards compatibility and serialize as PropertyValues list
-            var propertyValues = ConvertMemberValuesToPropertyValues(memberValues);
+            var propertyValues = serializationContext.PropertyValues;
 
             binaryFormatter.Serialize(stream, propertyValues);
         }
@@ -257,9 +310,11 @@ namespace Catel.Runtime.Serialization
             return binaryFormatter;
         }
 
-        private List<PropertyValue> ConvertMemberValuesToPropertyValues(List<MemberValue> memberValues)
+        private List<PropertyValue> ConvertMemberValuesToPropertyValues(ISerializationContext context, List<MemberValue> memberValues)
         {
             var propertyValues = new List<PropertyValue>();
+
+            var referenceManager = context.ReferenceManager;
 
             foreach (var memberValue in memberValues)
             {
@@ -269,20 +324,60 @@ namespace Catel.Runtime.Serialization
                     Value = memberValue.Value
                 };
 
+                if (memberValue.Value != null && TypeHelper.IsClassType(memberValue.Value.GetType()))
+                {
+                    var referenceInfo = referenceManager.GetInfo(memberValue.Value);
+
+                    if (referenceInfo.IsFirstUsage)
+                    {
+                        propertyValue.GraphId = referenceInfo.Id;
+                    }
+                    else
+                    {
+                        propertyValue.GraphRefId = referenceInfo.Id;
+                        propertyValue.Value = null;
+                    }
+                }
+
                 propertyValues.Add(propertyValue);
             }
 
             return propertyValues;
         }
 
-        private List<MemberValue> ConvertPropertyValuesToMemberValues(Type modelType, List<PropertyValue> propertyValues)
+        private List<MemberValue> ConvertPropertyValuesToMemberValues(ISerializationContext context, Type modelType, List<PropertyValue> propertyValues)
         {
             var memberValues = new List<MemberValue>();
+
+            var referenceManager = context.ReferenceManager;
 
             foreach (var propertyValue in propertyValues)
             {
                 var memberGroup = GetMemberGroup(modelType, propertyValue.Name);
                 var memberType = GetMemberType(modelType, propertyValue.Name);
+
+                if (propertyValue.GraphId != 0)
+                {
+                    if (referenceManager.GetInfoById(propertyValue.GraphId) == null)
+                    {
+                        referenceManager.RegisterManually(propertyValue.GraphId, propertyValue.Value);
+                    }
+                }
+
+                if (propertyValue.GraphRefId != 0)
+                {
+                    var graphId = propertyValue.GraphRefId;
+                    var referenceInfo = referenceManager.GetInfoById(graphId);
+                    if (referenceInfo == null)
+                    {
+                        Log.Error("Expected to find graph object with id '{0}' in ReferenceManager, but it was not found. Defaulting value for member '{1}' to null", graphId, propertyValue.Name);
+                        propertyValue.Value = null;
+                    }
+                    else
+                    {
+                        propertyValue.Value = referenceInfo.Instance;
+                    }
+                }
 
                 var memberValue = new MemberValue(memberGroup, modelType, memberType, propertyValue.Name, propertyValue.Value);
                 memberValues.Add(memberValue);

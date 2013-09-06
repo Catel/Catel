@@ -82,6 +82,20 @@ namespace Catel.Data
         [XmlIgnore]
         public PropertyData PropertyData { get; internal set; }
 
+        /// <summary>
+        /// Gets or sets the graph identifier.
+        /// </summary>
+        /// <value>The graph identifier.</value>
+        [XmlIgnore]
+        public int GraphId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the graph reference identifier.
+        /// </summary>
+        /// <value>The graph reference identifier.</value>
+        [XmlIgnore]
+        public int GraphRefId { get; set; }
+
 #if NET
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertyValue"/> class.
@@ -92,6 +106,16 @@ namespace Catel.Data
 
             Name = info.GetString("Name");
             Value = info.GetValue("Value", typeof(object));
+
+            try
+            {
+                GraphId = (int)info.GetValue("GraphId", typeof(int));
+                GraphRefId = (int)info.GetValue("GraphRefId", typeof(int));
+            }
+            catch (Exception)
+            {
+                // Required for backwards compatibility
+            }
         }
 
         /// <summary>
@@ -108,6 +132,8 @@ namespace Catel.Data
 
             info.AddValue("Name", Name);
             info.AddValue("Value", Value);
+            info.AddValue("GraphId", GraphId);
+            info.AddValue("GraphRefId", GraphRefId);
         }
 #endif
     }

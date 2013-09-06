@@ -47,6 +47,17 @@ namespace Catel.Test.Runtime.Serialization
                 Assert.AreEqual(null, clonedModel.ExcludedCatelProperty);
                 Assert.AreEqual("included", clonedModel.IncludedCatelProperty);
             }
+
+            [TestMethod]
+            public void CorrectlyHandlesSameInstancesInGraph()
+            {
+                var graph = SerializationTestHelper.CreateComplexCircularTestModelGraph();
+
+                var clonedGraph = SerializationTestHelper.SerializeAndDeserialize(graph, SerializationFactory.GetBinarySerializer());
+
+                Assert.IsNotNull(clonedGraph);
+                Assert.IsTrue(ReferenceEquals(clonedGraph, clonedGraph.CircularModel.CircularModel));
+            }
         }
     }
 }

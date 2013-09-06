@@ -28,6 +28,7 @@ namespace Catel.Runtime.Serialization
 
             SerializationInfo = serializationInfo;
             MemberValues = new List<MemberValue>();
+            PropertyValues = new List<PropertyValue>();
         }
 
         /// <summary>
@@ -48,6 +49,7 @@ namespace Catel.Runtime.Serialization
             SerializationInfo = serializationInfo;
             BinaryFormatter = binaryFormatter;
             MemberValues = memberValues;
+            PropertyValues = new List<PropertyValue>();
         }
 
         /// <summary>
@@ -67,5 +69,11 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <value>The member values.</value>
         public List<MemberValue> MemberValues { get; internal set; }
+
+        /// <summary>
+        /// Gets the property values.
+        /// </summary>
+        /// <value>The property values.</value>
+        public List<PropertyValue> PropertyValues { get; internal set; } 
     }
 }
