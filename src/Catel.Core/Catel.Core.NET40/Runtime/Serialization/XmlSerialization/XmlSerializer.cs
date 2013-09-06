@@ -432,7 +432,10 @@ namespace Catel.Runtime.Serialization
                             xmlWriter.WriteAttributeString(namespacePrefix, GraphId, null, referenceInfo.Id.ToString());
                         }
 
-                        xmlWriter.WriteAttributeString(namespacePrefix, "type", null, memberTypeToSerialize.FullName);
+                        if (memberTypeToSerialize != memberValue.Type)
+                        {
+                            xmlWriter.WriteAttributeString(namespacePrefix, "type", null, memberTypeToSerialize.FullName);
+                        }
 
                         serializer.WriteObjectContent(xmlWriter, memberValue.Value);
 

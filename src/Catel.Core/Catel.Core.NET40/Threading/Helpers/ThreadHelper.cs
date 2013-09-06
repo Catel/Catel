@@ -12,6 +12,19 @@ namespace Catel
     public static class ThreadHelper
     {
         /// <summary>
+        /// Gets the current thread identifier.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public static int GetCurrentThreadId()
+        {
+#if NETFX_CORE
+            return System.Environment.CurrentManagedThreadId;
+#else
+            return System.Threading.Thread.CurrentThread.ManagedThreadId;
+#endif
+        }
+
+        /// <summary>
         /// Lets the current execution thread sleep for the specified milliseconds.
         /// <para />
         /// In WinRT, this method uses the Task to delay.

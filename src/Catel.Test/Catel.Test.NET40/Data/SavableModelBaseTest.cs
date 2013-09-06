@@ -146,9 +146,9 @@ namespace Catel.Test.Data
         {
             const string ExpectedXmlContent = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
                                               @"
-<IniFile xmlns:ctl=" + "\"http://catel.codeplex.com\">" + @"
+<IniFile graphid=" + "\"1\" xmlns:ctl=" + "\"http://catel.codeplex.com\">" + @"
   <FileName>MyIniFile</FileName>
-  <IniEntryCollection xmlns:d1p1=" + "\"http://schemas.datacontract.org/2004/07/Catel.Test.Data\"" + " xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"" + @">
+  <IniEntryCollection xmlns:d1p1=" + "\"http://schemas.datacontract.org/2004/07/Catel.Test.Data\" graphid=\"2\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"" + @">
     <d1p1:IniEntry>
       <Group>Group 0</Group>
       <Key>Key 0</Key>

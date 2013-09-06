@@ -7,6 +7,7 @@
 namespace Catel.Runtime.Serialization
 {
     using System;
+    using System.Threading;
     using Catel.Scoping;
     using Data;
 
@@ -37,7 +38,8 @@ namespace Catel.Runtime.Serialization
             Context = context;
             ContextMode = contextMode;
 
-            _referenceManagerScopeManager = ScopeManager<ReferenceManager>.GetScopeManager();
+            var scopeName = string.Format("Thread_{0}", ThreadHelper.GetCurrentThreadId());
+            _referenceManagerScopeManager = ScopeManager<ReferenceManager>.GetScopeManager(scopeName);
 
             ReferenceManager = _referenceManagerScopeManager.ScopeObject;
         }

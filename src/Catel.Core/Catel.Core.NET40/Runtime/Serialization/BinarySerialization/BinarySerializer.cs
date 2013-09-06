@@ -91,9 +91,10 @@ namespace Catel.Runtime.Serialization
 
             var propertyValues = (List<PropertyValue>)binaryFormatter.Deserialize(stream);
             var memberValues = ConvertPropertyValuesToMemberValues(model.GetType(), propertyValues);
-            var context = GetContext(model, stream, SerializationContextMode.Deserialization, memberValues);
-
-            Deserialize(model, context.Context);
+            using (var context = GetContext(model, stream, SerializationContextMode.Deserialization, memberValues))
+            {
+                Deserialize(model, context.Context);
+            }
         }
         #endregion
 
