@@ -300,13 +300,16 @@
     <Compile Include="Reflection\AppDomainExtensionsTest.cs" />
     <Compile Include="Reflection\AssemblyExtensionsTest.cs" />
     <Compile Include="Reflection\PropertyHelperFacts.cs" />
+    <Compile Include="Runtime\ReferenceManagerFacts.cs" />
     <Compile Include="Runtime\Serialization\Attributes\RedirectTypeAttributeTest.cs" />
     <Compile Include="Runtime\Serialization\BinarySerialization\BinarySerializerFacts.cs" />
     <Compile Include="Runtime\Serialization\Helpers\SerializationTestHelper.cs" />
     <Compile Include="Runtime\Serialization\SerializationManagerFacts.cs" />
     <Compile Include="Runtime\Serialization\SerializationObjectFacts.cs" />
+    <Compile Include="Runtime\Serialization\TestModels\CircularTestModel.cs" />
     <Compile Include="Runtime\Serialization\TestModels\TestModel.cs" />
     <Compile Include="Runtime\Serialization\XmlSerialization\XmlSerializationFacts.cs" />
+    <Compile Include="Scoping\ScopeManagerFacts.cs" />
     <Compile Include="Text\StringBuilderExtensionFacts.cs" />
     <Compile Include="Threading\SynchronizationContextFacts.cs" />
     <Compile Include="Threading\TaskHelperFacts.cs" />

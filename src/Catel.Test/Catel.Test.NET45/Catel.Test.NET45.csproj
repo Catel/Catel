@@ -655,6 +655,9 @@
     <Compile Include="..\Catel.Test.NET40\Reflection\TypeHelperFacts.cs">
       <Link>Reflection\TypeHelperFacts.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\Runtime\ReferenceManagerFacts.cs">
+      <Link>Runtime\ReferenceManagerFacts.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\Attributes\RedirectTypeAttributeTest.cs">
       <Link>Runtime\Serialization\Attributes\RedirectTypeAttributeTest.cs</Link>
     </Compile>
@@ -669,6 +672,9 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\SerializationObjectFacts.cs">
       <Link>Runtime\Serialization\SerializationObjectFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\TestModels\CircularTestModel.cs">
+      <Link>Runtime\Serialization\TestModels\CircularTestModel.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\TestModels\TestModel.cs">
       <Link>Runtime\Serialization\TestModels\TestModel.cs</Link>

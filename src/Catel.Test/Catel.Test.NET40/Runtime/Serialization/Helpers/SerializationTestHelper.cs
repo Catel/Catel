@@ -32,5 +32,21 @@ namespace Catel.Test.Runtime.Serialization
                 return (TModel)serializer.Deserialize(typeof (TModel), memoryStream);
             }
         }
+
+        /// <summary>
+        /// Creates a complex circular test model graph.
+        /// </summary>
+        /// <returns>A graph of circular test models.</returns>
+        public static CircularTestModel CreateComplexCircularTestModelGraph()
+        {
+            var graph = new CircularTestModel();
+
+            var innerElement = new CircularTestModel();
+            innerElement.CircularModel = graph;
+
+            graph.CircularModel = innerElement;
+
+            return graph;
+        }
     }
 }

@@ -17,6 +17,46 @@ namespace Catel.Runtime.Serialization
     public interface IModelBaseSerializer
     {
         /// <summary>
+        /// Occurs when an object is about to be serialized.
+        /// </summary>
+        event EventHandler<SerializationEventArgs> Serializing;
+
+        /// <summary>
+        /// Occurs when an object is about to serialize a specific member.
+        /// </summary>
+        event EventHandler<MemberSerializationEventArgs> SerializingMember;
+
+        /// <summary>
+        /// Occurs when an object has just serialized a specific member.
+        /// </summary>
+        event EventHandler<MemberSerializationEventArgs> SerializedMember;
+
+        /// <summary>
+        /// Occurs when an object has just been serialized.
+        /// </summary>
+        event EventHandler<SerializationEventArgs> Serialized;
+
+        /// <summary>
+        /// Occurs when an object is about to be deserialized.
+        /// </summary>
+        event EventHandler<SerializationEventArgs> Deserializing;
+
+        /// <summary>
+        /// Occurs when an object is about to deserialize a specific member.
+        /// </summary>
+        event EventHandler<MemberSerializationEventArgs> DeserializingMember;
+
+        /// <summary>
+        /// Occurs when an object has just deserialized a specific member.
+        /// </summary>
+        event EventHandler<MemberSerializationEventArgs> DeserializedMember;
+
+        /// <summary>
+        /// Occurs when an object has just been deserialized.
+        /// </summary>
+        event EventHandler<SerializationEventArgs> Deserialized;
+
+        /// <summary>
         /// Serializes the specified model.
         /// </summary>
         /// <param name="model">The model.</param>

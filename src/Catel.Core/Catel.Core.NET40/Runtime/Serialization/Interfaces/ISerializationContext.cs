@@ -28,7 +28,7 @@ namespace Catel.Runtime.Serialization
     /// <summary>
     /// Interface for the serialization context used to serialize and deserialize models.
     /// </summary>
-    public interface ISerializationContext
+    public interface ISerializationContext : IDisposable
     {
         /// <summary>
         /// Gets the model that needs serialization or deserialization.
@@ -47,6 +47,12 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <value>The context mode.</value>
         SerializationContextMode ContextMode { get; }
+
+        /// <summary>
+        /// Gets the reference manager.
+        /// </summary>
+        /// <value>The reference manager.</value>
+        ReferenceManager ReferenceManager { get; }
     }
 
     /// <summary>

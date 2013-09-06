@@ -300,7 +300,7 @@ namespace Catel.Test.ExceptionHandling
 
                 for (; index < 10; index++)
                 {
-                    Thread.Sleep(100);
+                    ThreadHelper.Sleep(100);
                     exceptionHandledAt10Th = exceptionService.HandleException(new DivideByZeroException());
                 }
 

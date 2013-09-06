@@ -17,6 +17,28 @@ namespace Catel.Runtime.Serialization
     /// </summary>
     public partial class SerializerBase<TSerializationContext>
     {
+        #region Events
+        /// <summary>
+        /// Occurs when an object is about to be serialized.
+        /// </summary>
+        public event EventHandler<SerializationEventArgs> Serializing;
+
+        /// <summary>
+        /// Occurs when an object is about to serialize a specific member.
+        /// </summary>
+        public event EventHandler<MemberSerializationEventArgs> SerializingMember;
+
+        /// <summary>
+        /// Occurs when an object has just serialized a specific member.
+        /// </summary>
+        public event EventHandler<MemberSerializationEventArgs> SerializedMember;
+
+        /// <summary>
+        /// Occurs when an object has just been serialized.
+        /// </summary>
+        public event EventHandler<SerializationEventArgs> Serialized;
+        #endregion
+
         /// <summary>
         /// Called before the serializer starts deserializing an object.
         /// </summary>
@@ -70,9 +92,10 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("stream", stream);
 
-            var context = GetContext(model, stream, SerializationContextMode.Deserialization);
-
-            Deserialize(model, context.Context);
+            using (var context = GetContext(model, stream, SerializationContextMode.Deserialization))
+            {
+                Deserialize(model, context.Context);
+            }
         }
 
         /// <summary>
@@ -85,20 +108,27 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("context", serializationContext);
 
-            var finalContext = GetContext(model, serializationContext, SerializationContextMode.Deserialization);
+            using (var finalContext = GetContext(model, serializationContext, SerializationContextMode.Deserialization))
+            {
+                var previousLeanAndMeanValue = model.LeanAndMeanModel;
+                model.LeanAndMeanModel = true;
 
-            var previousLeanAndMeanValue = model.LeanAndMeanModel;
-            model.LeanAndMeanModel = true;
+                var serializingEventArgs = new SerializationEventArgs(finalContext);
 
-            BeforeDeserialization(finalContext);
+                Deserializing.SafeInvoke(this, serializingEventArgs);
 
-            DeserializeMembers(finalContext);
+                BeforeDeserialization(finalContext);
 
-            AfterDeserialization(finalContext);
+                DeserializeMembers(finalContext);
 
-            model.FinishDeserialization();
+                AfterDeserialization(finalContext);
 
-            model.LeanAndMeanModel = previousLeanAndMeanValue;
+                Deserialized.SafeInvoke(this, serializingEventArgs);
+
+                model.FinishDeserialization();
+
+                model.LeanAndMeanModel = previousLeanAndMeanValue;
+            }
         }
 
         /// <summary>
@@ -112,9 +142,10 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("stream", stream);
 
-            var context = GetContext(modelType, stream, SerializationContextMode.Deserialization);
-
-            return Deserialize(modelType, context.Context);
+            using (var context = GetContext(modelType, stream, SerializationContextMode.Deserialization))
+            {
+                return Deserialize(modelType, context.Context);
+            }
         }
 
         /// <summary>
@@ -146,9 +177,10 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("stream", stream);
 
-            var context = GetContext(modelType, stream, SerializationContextMode.Deserialization);
-
-            return DeserializeMembers(modelType, context.Context);
+            using (var context = GetContext(modelType, stream, SerializationContextMode.Deserialization))
+            {
+                return DeserializeMembers(modelType, context.Context);
+            }
         }
 
         /// <summary>
@@ -162,9 +194,10 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("context", serializedContext);
 
-            var finalContext = GetContext(modelType, serializedContext, SerializationContextMode.Deserialization);
-
-            return DeserializeMembers(finalContext);
+            using (var finalContext = GetContext(modelType, serializedContext, SerializationContextMode.Deserialization))
+            {
+                return DeserializeMembers(finalContext);
+            }
         }
 
         /// <summary>
@@ -179,16 +212,26 @@ namespace Catel.Runtime.Serialization
             var membersToDeserialize = GetSerializableMembers(context.Model);
             foreach (var member in membersToDeserialize)
             {
+                var memberSerializationEventArgs = new MemberSerializationEventArgs(context, member);
+
+                DeserializingMember.SafeInvoke(this, memberSerializationEventArgs);
+
                 BeforeDeserializeMember(context, member);
 
                 var serializationObject = DeserializeMember(context, member);
                 if (serializationObject.IsSuccessful)
                 {
+                    // Note that we need to sync the member values every time
                     var memberValue = new MemberValue(member.MemberGroup, member.ModelType, member.Type, member.Name, serializationObject.MemberValue);
+                    member.Value = memberValue.Value;
 
                     deserializedMemberValues.Add(memberValue);
 
                     AfterDeserializeMember(context, member);
+                    memberValue.Value = member.Value;
+
+                    DeserializedMember.SafeInvoke(this, memberSerializationEventArgs);
+                    memberValue.Value = member.Value;
                 }
             }
 

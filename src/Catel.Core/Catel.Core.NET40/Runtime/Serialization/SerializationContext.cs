@@ -7,7 +7,7 @@
 namespace Catel.Runtime.Serialization
 {
     using System;
-
+    using Catel.Scoping;
     using Data;
 
     /// <summary>
@@ -17,6 +17,8 @@ namespace Catel.Runtime.Serialization
     public class SerializationContext<TContext> : ISerializationContext<TContext>
         where TContext : class
     {
+        private ScopeManager<ReferenceManager> _referenceManagerScopeManager; 
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SerializationContext{TContext}" /> class.
         /// </summary>
@@ -34,6 +36,10 @@ namespace Catel.Runtime.Serialization
             ModelType = model.GetType();
             Context = context;
             ContextMode = contextMode;
+
+            _referenceManagerScopeManager = ScopeManager<ReferenceManager>.GetScopeManager();
+
+            ReferenceManager = _referenceManagerScopeManager.ScopeObject;
         }
 
         /// <summary>
@@ -59,5 +65,23 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <value>The context.</value>
         public TContext Context { get; private set; }
+
+        /// <summary>
+        /// Gets the reference manager.
+        /// </summary>
+        /// <value>The reference manager.</value>
+        public ReferenceManager ReferenceManager { get; private set; }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            if (_referenceManagerScopeManager != null)
+            {
+                _referenceManagerScopeManager.Dispose();
+                _referenceManagerScopeManager = null;
+            }
+        }
     }
 }

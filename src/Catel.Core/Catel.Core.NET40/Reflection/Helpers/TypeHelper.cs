@@ -503,12 +503,36 @@ namespace Catel.Reflection
         }
 
         /// <summary>
-        ///   Returns whether a type is nullable or not.
+        /// Determines whether the specified type is a class type, meaning it is not a value type but also not a string
+        /// or any of the primitive types in .NET.
         /// </summary>
-        /// <param name = "type">Type to check.</param>
-        /// <returns>
-        ///   True if the type is nullable, otherwise false.
-        /// </returns>
+        /// <param name="type">The type.</param>
+        /// <returns><c>true</c> if this type is a class type; otherwise, <c>false</c>.</returns>
+        public static bool IsClassType(Type type)
+        {
+            if (type == null)
+            {
+                return false;
+            }
+
+            if (type.IsValueTypeEx())
+            {
+                return false;
+            }
+
+            if (type == typeof(string))
+            {
+                return false;
+            }
+
+            return type.IsClassEx();
+        }
+
+        /// <summary>
+        /// Returns whether a type is nullable or not.
+        /// </summary>
+        /// <param name="type">Type to check.</param>
+        /// <returns>True if the type is nullable, otherwise false.</returns>
         public static bool IsTypeNullable(Type type)
         {
             if (type == null)

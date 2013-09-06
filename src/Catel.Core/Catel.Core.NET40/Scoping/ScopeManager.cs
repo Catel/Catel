@@ -137,6 +137,22 @@ namespace Catel.Scoping
         }
 
         /// <summary>
+        /// Determines whether the specified scope exists.
+        /// </summary>
+        /// <param name="scopeName">Name of the scope.</param>
+        /// <returns><c>true</c> if the scope exists, <c>false</c> otherwise.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="scopeName"/> is <c>null</c>.</exception>
+        public static bool ScopeExists(string scopeName = "")
+        {
+            Argument.IsNotNull("scopeName", scopeName);
+
+            lock (_lock)
+            {
+                return _instances.ContainsKey(scopeName);
+            }
+        }
+
+        /// <summary>
         /// Gets the ContextManager object for the specified database.
         /// </summary>
         /// <param name="scopeName">Name of the scope.</param>

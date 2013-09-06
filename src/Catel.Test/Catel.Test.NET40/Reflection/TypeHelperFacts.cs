@@ -546,6 +546,34 @@ namespace Catel.Test.Reflection
         }
         #endregion
 
+        [TestClass]
+        public class TheIsClassTypeMethod
+        {
+            [TestMethod]
+            public void ReturnsFalseForNullType()
+            {
+                Assert.IsFalse(TypeHelper.IsClassType(null));
+            }
+
+            [TestMethod]
+            public void ReturnsFalseForValueType()
+            {
+                Assert.IsFalse(TypeHelper.IsClassType(typeof(int)));
+            }
+
+            [TestMethod]
+            public void ReturnsFalseForStringType()
+            {
+                Assert.IsFalse(TypeHelper.IsClassType(typeof(string)));
+            }
+
+            [TestMethod]
+            public void ReturnsTrueForClassType()
+            {
+                Assert.IsTrue(TypeHelper.IsClassType(typeof(TypeHelper)));
+            }
+        }
+
         #region Nested type: TheIsTypeNullableMethod
         [TestClass]
         public class TheIsTypeNullableMethod

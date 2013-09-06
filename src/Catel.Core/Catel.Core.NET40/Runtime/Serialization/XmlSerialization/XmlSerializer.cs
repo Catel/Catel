@@ -25,6 +25,9 @@ namespace Catel.Runtime.Serialization
     public class XmlSerializer : SerializerBase<XElement>, IXmlSerializer
     {
         #region Constants
+        private const string GraphId = "graphid";
+        private const string GraphRefId = "graphrefid";
+
         /// <summary>
         /// The log.
         /// </summary>
@@ -56,6 +59,50 @@ namespace Catel.Runtime.Serialization
 
         #region Methods
         /// <summary>
+        /// Called before the serializer starts serializing an object.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        protected override void BeforeSerialization(ISerializationContext<XElement> context)
+        {
+            base.BeforeSerialization(context);
+
+            var referenceManager = context.ReferenceManager;
+            if (referenceManager.Count == 0)
+            {
+                Log.Debug("Reference manager contains no objects yet, adding initial reference which is the first model in the graph");
+
+                referenceManager.GetInfo(context.Model);
+            }
+        }
+
+        /// <summary>
+        /// Called before the serializer starts deserializing an object.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        protected override void BeforeDeserialization(ISerializationContext<XElement> context)
+        {
+            base.BeforeDeserialization(context);
+
+            var element = context.Context;
+
+            var graphIdAttribute = element.Attribute(GraphId);
+            if (graphIdAttribute != null)
+            {
+                var graphId = int.Parse(graphIdAttribute.Value);
+
+                var referenceManager = context.ReferenceManager;
+                var referenceInfo = referenceManager.GetInfoById(graphId);
+                if (referenceInfo != null)
+                {
+                    Log.Warning("Trying to register custom object in graph with graph id '{0}', but it seems it is already registered", graphId);
+                    return;
+                }
+
+                referenceManager.RegisterManually(graphId, context.Model);
+            }
+        }
+
+        /// <summary>
         /// Serializes the member.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -85,7 +132,7 @@ namespace Catel.Runtime.Serialization
 
                 Log.Debug("Serializing property {0}.{1} as xml element '{2}'", modelType.FullName, memberValue.Name, elementName);
 
-                WriteXmlElement(element, elementName, memberValue, modelType);
+                WriteXmlElement(context, element, elementName, memberValue, modelType);
             }
         }
 
@@ -133,7 +180,7 @@ namespace Catel.Runtime.Serialization
                     {
                         if (string.Equals(elementName, childElement.Name.LocalName))
                         {
-                            var value = GetObjectFromXmlElement(childElement, memberValue, modelType);
+                            var value = GetObjectFromXmlElement(context, childElement, memberValue, modelType);
                             return SerializationObject.SucceededToDeserialize(modelType, memberValue.MemberGroup, memberValue.Name, value);
                         }
                     }
@@ -215,13 +262,21 @@ namespace Catel.Runtime.Serialization
                 Log.Warning(ex, "Failed to load document from stream, falling back to empty document");
             }
 
-            if (document == null)
+            bool isNewDocument = document == null;
+            if (isNewDocument)
             {
                 var rootName = (model != null) ? model.GetType().Name : "root";
                 document = new XDocument(new XElement(rootName));
             }
 
-            return new SerializationContext<XElement>(model, document.Root, contextMode);
+            var context = new SerializationContext<XElement>(model, document.Root, contextMode);
+
+            if (isNewDocument)
+            {
+                AddReferenceId(context, document.Root, model);
+            }
+
+            return context;
         }
 
         /// <summary>
@@ -243,14 +298,13 @@ namespace Catel.Runtime.Serialization
         /// <summary>
         /// Gets the object from XML element.
         /// </summary>
-        /// <remarks>
-        /// Note that this method can cause exceptions. The caller will handle them.
-        /// </remarks>
+        /// <param name="context">The context.</param>
         /// <param name="element">The element.</param>
         /// <param name="memberValue">The member value.</param>
         /// <param name="modelType">Type of the model.</param>
         /// <returns>Object or <c>null</c>.</returns>
-        private object GetObjectFromXmlElement(XElement element, MemberValue memberValue, Type modelType)
+        /// <remarks>Note that this method can cause exceptions. The caller will handle them.</remarks>
+        private object GetObjectFromXmlElement(ISerializationContext context, XElement element, MemberValue memberValue, Type modelType)
         {
             object value = null;
             string xmlName = element.Name.LocalName;
@@ -262,6 +316,22 @@ namespace Catel.Runtime.Serialization
             if (isNull)
             {
                 return null;
+            }
+
+            var graphRefIdAttribute = element.Attribute(GraphRefId);
+            if (graphRefIdAttribute != null)
+            {
+                var graphId = int.Parse(graphRefIdAttribute.Value);
+
+                var referenceManager = context.ReferenceManager;
+                var referenceInfo = referenceManager.GetInfoById(graphId);
+                if (referenceInfo == null)
+                {
+                    Log.Error("Expected to find graph object with id '{0}' in ReferenceManager, but it was not found. Defaulting value for member '{1}' to null", graphId, element.Name);
+                    return null;
+                }
+
+                return referenceInfo.Instance;
             }
 
             var typeAttribute = element.Attribute("type"); // .GetAttribute("type", "http://catel.codeplex.com");
@@ -305,16 +375,17 @@ namespace Catel.Runtime.Serialization
         /// <summary>
         /// Writes the XML element to the xml element.
         /// </summary>
+        /// <param name="context">The context.</param>
         /// <param name="element">The element.</param>
         /// <param name="elementName">Name of the element.</param>
         /// <param name="memberValue">The member value.</param>
         /// <param name="modelType">Type of the model.</param>
-        private void WriteXmlElement(XElement element, string elementName, MemberValue memberValue, Type modelType)
+        private void WriteXmlElement(ISerializationContext context, XElement element, string elementName, MemberValue memberValue, Type modelType)
         {
             var stringBuilder = new StringBuilder();
             var xmlWriterSettings = new XmlWriterSettings();
 
-            var catelNamespacePrefix = GetCatelNamespacePrefix();
+            var namespacePrefix = GetNamespacePrefix();
 
             xmlWriterSettings.OmitXmlDeclaration = true;
             using (var xmlWriter = XmlWriter.Create(stringBuilder, xmlWriterSettings))
@@ -325,30 +396,52 @@ namespace Catel.Runtime.Serialization
                 if (memberValue.Value == null)
                 {
                     xmlWriter.WriteStartElement(elementName);
-                    xmlWriter.WriteAttributeString(catelNamespacePrefix, "IsNull", null, "true");
+                    xmlWriter.WriteAttributeString(namespacePrefix, "IsNull", null, "true");
                     xmlWriter.WriteEndElement();
                 }
                 else
                 {
-                    var memberType = memberValue.Type;
-                    if (memberType != memberTypeToSerialize)
+                    ReferenceInfo referenceInfo = null;
+                    bool serializeElement = true;
+                    var isClassType = TypeHelper.IsClassType(memberTypeToSerialize);
+                    if (isClassType)
+                    {
+                        var referenceManager = context.ReferenceManager;
+                        referenceInfo = referenceManager.GetInfo(memberValue.Value);
+
+                        if (!referenceInfo.IsFirstUsage)
+                        {
+                            Log.Debug("Existing reference detected for element type '{0}' with id '{1}', only storing id", memberTypeToSerialize.GetSafeFullName(), referenceInfo.Id);
+
+                            serializer.WriteStartObject(xmlWriter, memberValue.Value);
+
+                            xmlWriter.WriteAttributeString(namespacePrefix, GraphRefId, null, referenceInfo.Id.ToString());
+
+                            serializer.WriteEndObject(xmlWriter);
+
+                            serializeElement = false;
+                        }
+                    }
+
+                    if (serializeElement)
                     {
                         serializer.WriteStartObject(xmlWriter, memberValue.Value);
 
-                        xmlWriter.WriteAttributeString(catelNamespacePrefix, "type", null, memberTypeToSerialize.FullName);
+                        if (referenceInfo != null)
+                        {
+                            xmlWriter.WriteAttributeString(namespacePrefix, GraphId, null, referenceInfo.Id.ToString());
+                        }
+
+                        xmlWriter.WriteAttributeString(namespacePrefix, "type", null, memberTypeToSerialize.FullName);
 
                         serializer.WriteObjectContent(xmlWriter, memberValue.Value);
 
                         serializer.WriteEndObject(xmlWriter);
                     }
-                    else
-                    {
-                        serializer.WriteObject(xmlWriter, memberValue.Value);
-                    }
                 }
             }
 
-            EnsureCatelNamespaceInXmlDocument(element);
+            EnsureNamespaceInXmlDocument(element);
 
             var childContent = stringBuilder.ToString();
             var childElement = XElement.Parse(childContent);
@@ -356,12 +449,26 @@ namespace Catel.Runtime.Serialization
         }
 
         /// <summary>
+        /// Adds the reference unique identifier as attribute.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="element">The element.</param>
+        /// <param name="model">The model.</param>
+        private void AddReferenceId(ISerializationContext context, XElement element, IModel model)
+        {
+            var referenceManager = context.ReferenceManager;
+            var referenceInfo = referenceManager.GetInfo(model);
+
+            element.Add(new XAttribute(GraphId, referenceInfo.Id));
+        }
+
+        /// <summary>
         /// Ensures the catel namespace in the xml document.
         /// </summary>
         /// <param name="element">The element.</param>
-        private void EnsureCatelNamespaceInXmlDocument(XElement element)
+        private void EnsureNamespaceInXmlDocument(XElement element)
         {
-            var catelNamespaceUrl = GetCatelNamespaceUrl();
+            var catelNamespaceUrl = GetNamespaceUrl();
             string ns1 = element.GetPrefixOfNamespace(catelNamespaceUrl);
             if (ns1 == null)
             {
@@ -371,7 +478,7 @@ namespace Catel.Runtime.Serialization
                     var documentRoot = document.Root;
                     if (documentRoot != null)
                     {
-                        var catelNamespaceName = XNamespace.Xmlns + GetCatelNamespacePrefix();
+                        var catelNamespaceName = XNamespace.Xmlns + GetNamespacePrefix();
                         var catelNamespace = new XAttribute(catelNamespaceName, catelNamespaceUrl);
 
                         documentRoot.Add(catelNamespace);
@@ -381,19 +488,19 @@ namespace Catel.Runtime.Serialization
         }
 
         /// <summary>
-        /// Gets the catel namespace prefix.
+        /// Gets the namespace prefix.
         /// </summary>
         /// <returns>The namespace prefix..</returns>
-        private string GetCatelNamespacePrefix()
+        protected virtual string GetNamespacePrefix()
         {
             return "ctl";
         }
 
         /// <summary>
-        /// Gets the catel namespace.
+        /// Gets the namespace.
         /// </summary>
         /// <returns>The namespace.</returns>
-        private string GetCatelNamespaceUrl()
+        protected virtual string GetNamespaceUrl()
         {
             return "http://catel.codeplex.com";
         }

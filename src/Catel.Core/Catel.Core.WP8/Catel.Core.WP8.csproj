@@ -641,11 +641,26 @@
     <Compile Include="..\Catel.Core.NET40\Reflection\TypeInfo.cs">
       <Link>Reflection\TypeInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\ReferenceEqualityComparer.cs">
+      <Link>Runtime\ReferenceEqualityComparer.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\ReferenceInfo.cs">
+      <Link>Runtime\ReferenceInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\ReferenceManager.cs">
+      <Link>Runtime\ReferenceManager.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Attributes\ExcludeFromSerializationAttribute.cs">
       <Link>Runtime\Serialization\Attributes\ExcludeFromSerializationAttribute.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Attributes\IncludeInSerializationAttribute.cs">
       <Link>Runtime\Serialization\Attributes\IncludeInSerializationAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\EventArgs\MemberSerializationEventArgs.cs">
+      <Link>Runtime\Serialization\EventArgs\MemberSerializationEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\EventArgs\SerializationEventArgs.cs">
+      <Link>Runtime\Serialization\EventArgs\SerializationEventArgs.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Interfaces\IModelBaseSerializer.cs">
       <Link>Runtime\Serialization\Interfaces\IModelBaseSerializer.cs</Link>
@@ -703,6 +718,9 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\XmlSerializer.cs">
       <Link>Runtime\Serialization\XmlSerialization\XmlSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Scoping\ScopeManager.cs">
+      <Link>Scoping\ScopeManager.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Services\Interfaces\IService.cs">
       <Link>Services\Interfaces\IService.cs</Link>

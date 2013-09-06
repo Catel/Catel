@@ -5,6 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace Catel.Runtime.Serialization
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using Catel.Data;
@@ -14,6 +15,28 @@ namespace Catel.Runtime.Serialization
     /// </summary>
     public partial class SerializerBase<TSerializationContext>
     {
+        #region Events
+        /// <summary>
+        /// Occurs when an object is about to be deserialized.
+        /// </summary>
+        public event EventHandler<SerializationEventArgs> Deserializing;
+
+        /// <summary>
+        /// Occurs when an object is about to deserialize a specific member.
+        /// </summary>
+        public event EventHandler<MemberSerializationEventArgs> DeserializingMember;
+
+        /// <summary>
+        /// Occurs when an object has just deserialized a specific member.
+        /// </summary>
+        public event EventHandler<MemberSerializationEventArgs> DeserializedMember;
+
+        /// <summary>
+        /// Occurs when an object has just been deserialized.
+        /// </summary>
+        public event EventHandler<SerializationEventArgs> Deserialized;
+        #endregion
+
         #region IModelBaseSerializer<TSerializationContext> Members
         /// <summary>
         /// Serializes the specified model.
@@ -25,11 +48,12 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("stream", stream);
 
-            var context = GetContext(model, stream, SerializationContextMode.Serialization);
+            using (var context = GetContext(model, stream, SerializationContextMode.Serialization))
+            {
+                Serialize(model, context.Context);
 
-            Serialize(model, context.Context);
-
-            AppendContextToStream(context, stream);
+                AppendContextToStream(context, stream);
+            }
         }
 
         /// <summary>
@@ -42,14 +66,21 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("context", context);
 
-            var finalContext = GetContext(model, context, SerializationContextMode.Serialization);
+            using (var finalContext = GetContext(model, context, SerializationContextMode.Serialization))
+            {
+                var serializingEventArgs = new SerializationEventArgs(finalContext);
 
-            BeforeSerialization(finalContext);
+                Serializing.SafeInvoke(this, serializingEventArgs);
 
-            var members = GetSerializableMembers(model);
-            SerializeMembers(finalContext, members);
+                BeforeSerialization(finalContext);
 
-            AfterSerialization(finalContext);
+                var members = GetSerializableMembers(model);
+                SerializeMembers(finalContext, members);
+
+                AfterSerialization(finalContext);
+
+                Serialized.SafeInvoke(this, serializingEventArgs);
+            }
         }
 
         /// <summary>
@@ -69,11 +100,12 @@ namespace Catel.Runtime.Serialization
                 return;
             }
 
-            var context = GetContext(model, stream, SerializationContextMode.Serialization);
+            using (var context = GetContext(model, stream, SerializationContextMode.Serialization))
+            {
+                SerializeMembers(context, members);
 
-            SerializeMembers(context, members);
-
-            AppendContextToStream(context, stream);
+                AppendContextToStream(context, stream);
+            }
         }
         #endregion
 
@@ -129,11 +161,17 @@ namespace Catel.Runtime.Serialization
         {
             foreach (var member in membersToSerialize)
             {
+                var memberSerializationEventArgs = new MemberSerializationEventArgs(context, member);
+
+                SerializingMember.SafeInvoke(this, memberSerializationEventArgs);
+
                 BeforeSerializeMember(context, member);
 
                 SerializeMember(context, member);
 
                 AfterSerializeMember(context, member);
+
+                SerializedMember.SafeInvoke(this, memberSerializationEventArgs);
             }
         }
         #endregion

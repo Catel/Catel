@@ -10,6 +10,7 @@ namespace Catel.Test.Runtime.Serialization
     using System;
     using System.ComponentModel;
     using Catel.Data;
+    using Catel.IoC;
     using Catel.Runtime.Serialization;
 
 #if NETFX_CORE
@@ -64,6 +65,63 @@ namespace Catel.Test.Runtime.Serialization
                 editableObject.CancelEdit();
 
                 Assert.IsNull(testModel.IncludedCatelProperty);
+            }
+
+            [TestMethod]
+            public void CorrectlyHandlesCustomizedValuesDuringSerialization()
+            {
+                var testModel = new TestModel();
+                testModel.IncludedCatelProperty = "BeforeSerializingMember";
+
+                var xmlSerializer = ServiceLocator.Default.ResolveType<IXmlSerializer>();
+                xmlSerializer.SerializingMember += (sender, e) =>
+                {
+                    if (ReferenceEquals(e.SerializationContext.Model, testModel))
+                    {
+                        if (e.MemberValue.Name == "IncludedCatelProperty")
+                        {
+                            Assert.AreEqual("BeforeSerializingMember", e.MemberValue.Value);
+
+                            e.MemberValue.Value = "AfterSerializingMember";
+                        }
+                    }
+                };
+
+                xmlSerializer.SerializedMember += (sender, e) =>
+                {
+                    if (ReferenceEquals(e.SerializationContext.Model, testModel))
+                    {
+                        if (e.MemberValue.Name == "IncludedCatelProperty")
+                        {
+                            Assert.AreEqual("AfterSerializingMember", e.MemberValue.Value);
+                        }
+                    }
+                };
+
+                xmlSerializer.DeserializedMember += (sender, e) =>
+                {
+                    if (e.MemberValue.Name == "IncludedCatelProperty")
+                    {
+                        Assert.AreEqual("AfterSerializingMember", e.MemberValue.Value);
+
+                        e.MemberValue.Value = "AfterDeserializedMember";
+                    }
+                };
+
+                var clonedModel = SerializationTestHelper.SerializeAndDeserialize(testModel, SerializationFactory.GetXmlSerializer());
+
+                Assert.AreEqual("AfterDeserializedMember", clonedModel.IncludedCatelProperty);
+            }
+
+            [TestMethod]
+            public void CorrectlyHandlesSameInstancesInGraph()
+            {
+                var graph = SerializationTestHelper.CreateComplexCircularTestModelGraph();
+
+                var clonedGraph = SerializationTestHelper.SerializeAndDeserialize(graph, SerializationFactory.GetXmlSerializer());
+
+                Assert.IsNotNull(clonedGraph);
+                Assert.IsTrue(ReferenceEquals(clonedGraph, clonedGraph.CircularModel.CircularModel));
             }
         }
     }

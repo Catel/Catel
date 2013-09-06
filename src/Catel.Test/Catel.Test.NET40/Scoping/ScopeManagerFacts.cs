@@ -7,6 +7,7 @@
 
 namespace Catel.Test.Scoping
 {
+    using System;
     using Catel.Scoping;
 
 #if NETFX_CORE
@@ -17,6 +18,35 @@ namespace Catel.Test.Scoping
 
     internal class ScopeManagerFacts
     {
+        [TestClass]
+        public class TheScopeExistsMethod
+        {
+            [TestMethod]
+            public void ThrowsArgumentNullExceptionForNullScopeName()
+            {
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ScopeManager<string>.ScopeExists(null));
+            }
+
+            [TestMethod]
+            public void ReturnsFalseForNonExistingScope()
+            {
+                Assert.IsFalse(ScopeManager<string>.ScopeExists());
+            }
+
+            [TestMethod]
+            public void ReturnsTrueForExistignScope()
+            {
+                Assert.IsFalse(ScopeManager<string>.ScopeExists());
+
+                using (var scopeManager = ScopeManager<string>.GetScopeManager())
+                {
+                    Assert.IsTrue(ScopeManager<string>.ScopeExists());    
+                }
+
+                Assert.IsFalse(ScopeManager<string>.ScopeExists());
+            }
+        }
+
         #region Nested type: ScopingTest
         [TestClass]
         public class ScopingTest
