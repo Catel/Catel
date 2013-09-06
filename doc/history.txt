@@ -59,6 +59,7 @@ Added/fixed:
     a specified view model
 (+) CTL-154 Added DependencyResolver and DependencyResolverManager
 (+) CTL-167 Implemented SafeDirectoryModuleCatalog in Extensions.Prism because the default Prism directory catalog is not safe
+(+) CTL-171 Added ReferenceManager to create a dictionary of references and unique identifiers
 (+) CTL-172 Added ScopeManager to create custom scopes for any objects
 (+) Added extension method for ISplashScreenService for Prism to show progress control in a region
 (+) Added some additionnals members in IViewManager.
