@@ -308,6 +308,7 @@
     <Compile Include="Runtime\Serialization\BinarySerialization\Interfaces\IBinarySerializer.cs" />
     <Compile Include="Runtime\Serialization\EventArgs\MemberSerializationEventArgs.cs" />
     <Compile Include="Runtime\Serialization\EventArgs\SerializationEventArgs.cs" />
+    <Compile Include="Runtime\Serialization\Helpers\SerializationContextHelper.cs" />
     <Compile Include="Runtime\Serialization\Interfaces\IModelBaseSerializer.cs" />
     <Compile Include="Runtime\Serialization\Interfaces\ISerializationContext.cs" />
     <Compile Include="Runtime\Serialization\Interfaces\ISerializationManager.cs" />
