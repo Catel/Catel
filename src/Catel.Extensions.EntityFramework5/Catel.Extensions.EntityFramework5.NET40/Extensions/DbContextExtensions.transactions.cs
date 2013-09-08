@@ -31,7 +31,7 @@ namespace Catel.Data
         {
             Argument.IsNotNull(() => dbContext);
 
-            Log.Info("Setting transaction isolation level to '{0}' for DbContext '{1}'", isolationLevel, ObjectToStringHelper.ToTypeString(dbContext));
+            Log.Info("Setting transaction isolation level to '{0}' for DbContext '{1}'", isolationLevel, ObjectToStringHelper.ToFullTypeString(dbContext));
 
             var sqlCommand = IsolationHelper.TranslateTransactionLevelToSql(isolationLevel);
             var objectContext = dbContext.GetObjectContext();

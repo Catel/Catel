@@ -656,7 +656,7 @@ namespace Catel.Reflection
 
             if (!TryCast(value, out output))
             {
-                var tI = ObjectToStringHelper.ToTypeString(value.GetType());
+                var tI = value.GetType().GetSafeFullName();
                 string tO = typeof(TOutput).FullName;
                 string vl = string.Concat(value);
                 string msg = "Failed to cast from '{0}' to '{1}'";
