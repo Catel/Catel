@@ -21,6 +21,31 @@ namespace Catel.Test.Runtime.Serialization
     public class SerializationManagerFacts
     {
         [TestClass]
+        public class TheGetSerializerModifiersMethod
+        {
+            [TestMethod]
+            public void ThrowsArgumentNullExceptionForNullType()
+            {
+                var serializationManager = new SerializationManager();
+
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.GetSerializerModifiers(null));
+            }
+
+            [TestMethod]
+            public void ReturnsRightModifiersInRightOrderForInheritedClasses()
+            {
+                var serializationManager = new SerializationManager();
+
+                var modifiers = serializationManager.GetSerializerModifiers(typeof(TestModels.ModelC));
+
+                Assert.AreEqual(3, modifiers.Length);
+                Assert.AreEqual(typeof(TestModels.ModelASerializerModifier), modifiers[0].GetType());
+                Assert.AreEqual(typeof(TestModels.ModelBSerializerModifier), modifiers[1].GetType());
+                Assert.AreEqual(typeof(TestModels.ModelCSerializerModifier), modifiers[2].GetType());
+            }
+        }
+
+        [TestClass]
         public class TheGetFieldsToSerializeMethod
         {
             [TestMethod]

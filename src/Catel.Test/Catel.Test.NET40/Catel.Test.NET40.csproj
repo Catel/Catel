@@ -306,7 +306,9 @@
     <Compile Include="Runtime\Serialization\Helpers\SerializationTestHelper.cs" />
     <Compile Include="Runtime\Serialization\SerializationManagerFacts.cs" />
     <Compile Include="Runtime\Serialization\SerializationObjectFacts.cs" />
+    <Compile Include="Runtime\Serialization\SerializerModifierFacts.cs" />
     <Compile Include="Runtime\Serialization\TestModels\CircularTestModel.cs" />
+    <Compile Include="Runtime\Serialization\TestModels\SerializerModifierModels.cs" />
     <Compile Include="Runtime\Serialization\TestModels\TestModel.cs" />
     <Compile Include="Runtime\Serialization\XmlSerialization\XmlSerializationFacts.cs" />
     <Compile Include="Scoping\ScopeManagerFacts.cs" />

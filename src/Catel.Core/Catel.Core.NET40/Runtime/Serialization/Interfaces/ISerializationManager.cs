@@ -78,5 +78,16 @@ namespace Catel.Runtime.Serialization
         /// <returns>A hash set containing the fields.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         Dictionary<string, MemberMetadata> GetFields(Type type);
+
+        /// <summary>
+        /// Gets the serializer modifiers for the specified type.
+        /// <para />
+        /// Note that the order is important because the modifiers will be called in the returned order during serialization
+        /// and in reversed order during deserialization.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>An array containing the modifiers. Never <c>null</c>, but can be an empty array.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
+        ISerializerModifier[] GetSerializerModifiers(Type type);
     }
 }

@@ -9,6 +9,9 @@ namespace Catel.Runtime.Serialization
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
+    using Catel.Logging;
+    using Catel.Reflection;
     using Data;
     using IoC;
 
@@ -113,6 +116,10 @@ namespace Catel.Runtime.Serialization
                 var previousLeanAndMeanValue = model.LeanAndMeanModel;
                 model.LeanAndMeanModel = true;
 
+                var serializerModifiers = SerializationManager.GetSerializerModifiers(finalContext.ModelType);
+                
+                Log.Debug("Using '{0}' serializer modifiers to deserialize type '{1}'", serializerModifiers.Length, finalContext.ModelType.GetSafeFullName());
+
                 var serializingEventArgs = new SerializationEventArgs(finalContext);
 
                 Deserializing.SafeInvoke(this, serializingEventArgs);
@@ -209,6 +216,8 @@ namespace Catel.Runtime.Serialization
         {
             var deserializedMemberValues = new List<MemberValue>();
 
+            var serializerModifiers = SerializationManager.GetSerializerModifiers(context.ModelType).Reverse();
+
             var membersToDeserialize = GetSerializableMembers(context.Model);
             foreach (var member in membersToDeserialize)
             {
@@ -226,6 +235,11 @@ namespace Catel.Runtime.Serialization
                     member.Value = memberValue.Value;
 
                     deserializedMemberValues.Add(memberValue);
+
+                    foreach (var serializerModifier in serializerModifiers)
+                    {
+                        serializerModifier.SerializeMember(context, member);
+                    }
 
                     AfterDeserializeMember(context, member);
                     memberValue.Value = member.Value;

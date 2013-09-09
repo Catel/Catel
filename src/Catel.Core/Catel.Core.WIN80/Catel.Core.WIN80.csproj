@@ -653,6 +653,9 @@
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Attributes\IncludeInSerializationAttribute.cs">
       <Link>Runtime\Serialization\Attributes\IncludeInSerializationAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Attributes\SerializerModifierAttribute.cs">
+      <Link>Runtime\Serialization\Attributes\SerializerModifierAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\EventArgs\MemberSerializationEventArgs.cs">
       <Link>Runtime\Serialization\EventArgs\MemberSerializationEventArgs.cs</Link>
     </Compile>
@@ -670,6 +673,9 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Interfaces\ISerializationManager.cs">
       <Link>Runtime\Serialization\Interfaces\ISerializationManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Interfaces\ISerializerModifier.cs">
+      <Link>Runtime\Serialization\Interfaces\ISerializerModifier.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\MemberMetadata.cs">
       <Link>Runtime\Serialization\MemberMetadata.cs</Link>
@@ -697,6 +703,12 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializerBase.serialization.cs">
       <Link>Runtime\Serialization\SerializerBase.serialization.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializerModifierBase.cs">
+      <Link>Runtime\Serialization\SerializerModifierBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializerModifierBase.generic.cs">
+      <Link>Runtime\Serialization\SerializerModifierBase.generic.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\DataContractNameResolver.cs">
       <Link>Runtime\Serialization\XmlSerialization\DataContractNameResolver.cs</Link>

@@ -9,6 +9,8 @@ namespace Catel.Runtime.Serialization
     using System.Collections.Generic;
     using System.IO;
     using Catel.Data;
+    using Catel.Logging;
+    using Catel.Reflection;
 
     /// <summary>
     /// Base class for all serializers.
@@ -68,9 +70,18 @@ namespace Catel.Runtime.Serialization
 
             using (var finalContext = GetContext(model, context, SerializationContextMode.Serialization))
             {
+                var serializerModifiers = SerializationManager.GetSerializerModifiers(finalContext.ModelType);
+
+                Log.Debug("Using '{0}' serializer modifiers to deserialize type '{1}'", serializerModifiers.Length, finalContext.ModelType.GetSafeFullName());
+
                 var serializingEventArgs = new SerializationEventArgs(finalContext);
 
                 Serializing.SafeInvoke(this, serializingEventArgs);
+
+                foreach (var serializerModifier in serializerModifiers)
+                {
+                    serializerModifier.OnSerializing(finalContext, model);
+                }
 
                 BeforeSerialization(finalContext);
 
@@ -78,6 +89,11 @@ namespace Catel.Runtime.Serialization
                 SerializeMembers(finalContext, members);
 
                 AfterSerialization(finalContext);
+
+                foreach (var serializerModifier in serializerModifiers)
+                {
+                    serializerModifier.OnSerialized(finalContext, model);
+                }
 
                 Serialized.SafeInvoke(this, serializingEventArgs);
             }
@@ -159,13 +175,35 @@ namespace Catel.Runtime.Serialization
         /// <param name="membersToSerialize">The members to serialize.</param>
         protected virtual void SerializeMembers(ISerializationContext<TSerializationContext> context, List<MemberValue> membersToSerialize)
         {
+            var serializerModifiers = SerializationManager.GetSerializerModifiers(context.ModelType);
+
             foreach (var member in membersToSerialize)
             {
+                bool skipByModifiers = false;
+                foreach (var serializerModifier in serializerModifiers)
+                {
+                    if (serializerModifier.ShouldIgnoreMember(context, context.Model, member))
+                    {
+                        skipByModifiers = true;
+                        break;
+                    }
+                }
+
+                if (skipByModifiers)
+                {
+                    continue;
+                }
+
                 var memberSerializationEventArgs = new MemberSerializationEventArgs(context, member);
 
                 SerializingMember.SafeInvoke(this, memberSerializationEventArgs);
 
                 BeforeSerializeMember(context, member);
+
+                foreach (var serializerModifier in serializerModifiers)
+                {
+                    serializerModifier.SerializeMember(context, member);
+                }
 
                 SerializeMember(context, member);
 
