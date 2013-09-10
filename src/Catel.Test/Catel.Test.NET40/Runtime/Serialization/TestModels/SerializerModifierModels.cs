@@ -56,27 +56,23 @@ namespace Catel.Test.Runtime.Serialization.TestModels
 
     public class ModelASerializerModifier : SerializerModifierBase<ModelA>
     {
-        public override MemberValue SerializeMember(ISerializationContext context, MemberValue memberValue)
+        public override void SerializeMember(ISerializationContext context, MemberValue memberValue)
         {
             if (string.Equals(memberValue.Name, "ModelAProperty"))
             {
                 memberValue.Value = "ModifiedA";
             }
-
-            return memberValue;
         }
     }
 
     public class ModelBSerializerModifier : SerializerModifierBase<ModelB>
     {
-        public override MemberValue SerializeMember(ISerializationContext context, MemberValue memberValue)
+        public override void SerializeMember(ISerializationContext context, MemberValue memberValue)
         {
             if (string.Equals(memberValue.Name, "ModelBProperty"))
             {
                 memberValue.Value = "ModifiedB";
             }
-
-            return memberValue;
         }
     }
 
@@ -92,14 +88,12 @@ namespace Catel.Test.Runtime.Serialization.TestModels
             return false;
         }
 
-        public override MemberValue SerializeMember(ISerializationContext context, MemberValue memberValue)
+        public override void SerializeMember(ISerializationContext context, MemberValue memberValue)
         {
             if (string.Equals(memberValue.Name, "ModelCProperty"))
             {
                 memberValue.Value = "ModifiedC";
             }
-
-            return memberValue;
         }
     }
 }

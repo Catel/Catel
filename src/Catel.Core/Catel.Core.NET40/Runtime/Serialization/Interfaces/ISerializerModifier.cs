@@ -35,8 +35,7 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="memberValue">The member value.</param>
-        /// <returns>The final <see cref="MemberValue"/> that will be serialized.</returns>
-        MemberValue SerializeMember(ISerializationContext context, MemberValue memberValue);
+        void SerializeMember(ISerializationContext context, MemberValue memberValue);
 
         /// <summary>
         /// Called when the object is serialized.
@@ -57,8 +56,7 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="memberValue">The member value.</param>
-        /// <returns>The final <see cref="MemberValue"/> that will be deserialized.</returns>
-        MemberValue DeserializeMember(ISerializationContext context, MemberValue memberValue);
+        void DeserializeMember(ISerializationContext context, MemberValue memberValue);
 
         /// <summary>
         /// Called when the object is deserialized.

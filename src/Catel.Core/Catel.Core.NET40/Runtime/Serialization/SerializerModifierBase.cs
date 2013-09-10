@@ -33,7 +33,6 @@ namespace Catel.Runtime.Serialization
         /// <param name="model">The model.</param>
         public virtual void OnSerializing(ISerializationContext context, IModel model)
         {
-            
         }
 
         /// <summary>
@@ -41,10 +40,8 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="memberValue">The member value.</param>
-        /// <returns>The final <see cref="MemberValue"/> that will be serialized.</returns>
-        public virtual MemberValue SerializeMember(ISerializationContext context, MemberValue memberValue)
+        public virtual void SerializeMember(ISerializationContext context, MemberValue memberValue)
         {
-            return memberValue;
         }
 
         /// <summary>
@@ -54,7 +51,6 @@ namespace Catel.Runtime.Serialization
         /// <param name="model">The model.</param>
         public virtual void OnSerialized(ISerializationContext context, IModel model)
         {
-
         }
 
         /// <summary>
@@ -64,7 +60,6 @@ namespace Catel.Runtime.Serialization
         /// <param name="model">The model.</param>
         public virtual void OnDeserializing(ISerializationContext context, IModel model)
         {
-
         }
 
         /// <summary>
@@ -73,9 +68,8 @@ namespace Catel.Runtime.Serialization
         /// <param name="context">The context.</param>
         /// <param name="memberValue">The member value.</param>
         /// <returns>The final <see cref="MemberValue"/> that will be deserialized.</returns>
-        public virtual MemberValue DeserializeMember(ISerializationContext context, MemberValue memberValue)
+        public virtual void DeserializeMember(ISerializationContext context, MemberValue memberValue)
         {
-            return memberValue;
         }
 
         /// <summary>
@@ -85,7 +79,6 @@ namespace Catel.Runtime.Serialization
         /// <param name="model">The model.</param>
         public virtual void OnDeserialized(ISerializationContext context, IModel model)
         {
-
         }
     }
 }

@@ -117,18 +117,28 @@ namespace Catel.Runtime.Serialization
                 model.LeanAndMeanModel = true;
 
                 var serializerModifiers = SerializationManager.GetSerializerModifiers(finalContext.ModelType);
-                
+
                 Log.Debug("Using '{0}' serializer modifiers to deserialize type '{1}'", serializerModifiers.Length, finalContext.ModelType.GetSafeFullName());
 
                 var serializingEventArgs = new SerializationEventArgs(finalContext);
 
                 Deserializing.SafeInvoke(this, serializingEventArgs);
 
+                foreach (var serializerModifier in serializerModifiers)
+                {
+                    serializerModifier.OnDeserializing(finalContext, model);
+                }
+
                 BeforeDeserialization(finalContext);
 
                 DeserializeMembers(finalContext);
 
                 AfterDeserialization(finalContext);
+
+                foreach (var serializerModifier in serializerModifiers)
+                {
+                    serializerModifier.OnDeserialized(finalContext, model);
+                }
 
                 Deserialized.SafeInvoke(this, serializingEventArgs);
 
@@ -238,7 +248,8 @@ namespace Catel.Runtime.Serialization
 
                     foreach (var serializerModifier in serializerModifiers)
                     {
-                        serializerModifier.SerializeMember(context, member);
+                        serializerModifier.DeserializeMember(context, member);
+                        memberValue.Value = member.Value;
                     }
 
                     AfterDeserializeMember(context, member);
