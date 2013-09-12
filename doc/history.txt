@@ -64,6 +64,7 @@ Added/fixed:
 (+) Added extension method for ISplashScreenService for Prism to show progress control in a region
 (+) Added some additionnals members in IViewManager.
 (+) Added support to Commit enqueued tasks using an existing instance view model for SplashScreenService
+(+) Added RegisterViewWithRegion<TView> method extension for IRegionManager to easily register a view type for a region
 (*) CTL-11 IOpenFileService and ISaveFileService for NET40 and NET45 now implement all FileDialog properties that are
     available. The ISelectDirectorService no long implements interface IFileSupport
 (*) CTL-117 Title property on ViewModelBase now has a setter as well which implements INotifyPropertyChanged

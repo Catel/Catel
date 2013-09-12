@@ -87,6 +87,7 @@
     <Compile Include="BootstrapperBase.generic.cs" />
     <Compile Include="Extensions\DependencyObjectExtensions.cs" />
     <Compile Include="Extensions\ILogExtensions.cs" />
+    <Compile Include="Extensions\IRegionManagerExtensions.cs" />
     <Compile Include="Extensions\IUIVisualizerServiceExtensions.cs" />
     <Compile Include="Extensions\ISplashScreenServiceExtensions.cs" />
     <Compile Include="Modules\SafeDirectoryModuleCatalog.cs" />
