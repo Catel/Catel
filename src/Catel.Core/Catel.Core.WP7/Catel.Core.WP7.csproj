@@ -793,6 +793,9 @@
     <Compile Include="..\Catel.Core.NET40\WeakReferences\WeakEventListener.cs">
       <Link>WeakReferences\WeakEventListener.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.SL4\Threading\ReaderWriterLockSlim.cs">
+      <Link>Threading\ReaderWriterLockSlim.cs</Link>
+    </Compile>
     <Compile Include="Collections\HashSet.cs" />
     <Compile Include="Lazy.cs" />
     <Compile Include="Runtime\CompilerServices\ConditionalWeakTable.cs" />

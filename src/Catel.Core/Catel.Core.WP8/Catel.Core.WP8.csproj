@@ -792,6 +792,9 @@
     <Compile Include="..\Catel.Core.NET40\WeakReferences\WeakEventListener.cs">
       <Link>WeakReferences\WeakEventListener.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.SL4\Threading\ReaderWriterLockSlim.cs">
+      <Link>Threading\ReaderWriterLockSlim.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="FodyWeavers.xml">

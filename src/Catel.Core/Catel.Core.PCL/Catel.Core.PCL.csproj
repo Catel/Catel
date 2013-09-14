@@ -708,6 +708,9 @@
     <Compile Include="..\Catel.Core.SL4\ComponentModel\INotifyPropertyChanging.cs">
       <Link>ComponentModel\INotifyPropertyChanging.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.SL4\Threading\ReaderWriterLockSlim.cs">
+      <Link>Threading\ReaderWriterLockSlim.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.WIN80\AppDomain.cs">
       <Link>AppDomain.cs</Link>
     </Compile>

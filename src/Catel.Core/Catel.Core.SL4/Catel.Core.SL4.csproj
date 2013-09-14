@@ -808,6 +808,7 @@
     </Compile>
     <Compile Include="ComponentModel\EventArgs\PropertyChangingEventArgs.cs" />
     <Compile Include="ComponentModel\INotifyPropertyChanging.cs" />
+    <Compile Include="Threading\ReaderWriterLockSlim.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Catel.Core.NET40\ClassDiagrams\DataObjectBase.cd">
