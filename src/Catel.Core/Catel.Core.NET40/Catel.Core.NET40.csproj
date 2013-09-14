@@ -197,6 +197,7 @@
     <Compile Include="IoC\Interfaces\IServiceLocator.cs" />
     <Compile Include="IoC\Interfaces\ITypeFactory.cs" />
     <Compile Include="IoC\Interfaces\ITypeRequestPath.cs" />
+    <Compile Include="IoC\IoCConfiguration.cs" />
     <Compile Include="IoC\RegistrationInfo.cs" />
     <Compile Include="IoC\ServiceLocator.cs" />
     <Compile Include="IoC\ServiceLocatorAutoRegistrationManager.cs" />

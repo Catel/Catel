@@ -135,11 +135,6 @@ namespace Catel.IoC
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-        /// <summary>
-        /// Singleton instance of the service locator.
-        /// </summary>
-        private static ServiceLocator _default;
         #endregion
 
         #region Fields
@@ -228,19 +223,14 @@ namespace Catel.IoC
         }
 
         /// <summary>
-        /// Gets the instance of the default service locator. This property serves as as singleton.
+        /// Gets or sets the instance of the default service locator. This property serves as as singleton.
         /// </summary>
         /// <value>The default instance.</value>
         public static IServiceLocator Default
         {
             get
             {
-                if (_default == null)
-                {
-                    _default = new ServiceLocator();
-                }
-
-                return _default;
+                return IoCConfiguration.DefaultServiceLocator;
             }
         }
         #endregion

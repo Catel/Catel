@@ -15,6 +15,33 @@ namespace Catel.IoC
     public static class ObjectExtensions
     {
         /// <summary>
+        /// Gets the <see cref="IServiceLocator"/> that was used to create the specified object.
+        /// <para />
+        /// This is a convenience call that internally does this:
+        /// <para />
+        /// <code>
+        /// <![CDATA[
+        /// var serviceLocator = DependencyResolverManager.Default;
+        /// var dependencyResolver = dependencyResolverManager.GetDependencyResolverForInstance(obj);
+        /// var serviceLocator = dependencyResolver.Resolve<IServiceLocator>();
+        /// ]]>
+        /// </code>
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <returns>The <see cref="IServiceLocator"/> used to create this object.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="obj"/> is <c>null</c>.</exception>
+        public static IServiceLocator GetServiceLocator(this object obj)
+        {
+            Argument.IsNotNull("obj", obj);
+
+            var dependencyResolverManager = DependencyResolverManager.Default;
+            var dependencyResolver = dependencyResolverManager.GetDependencyResolverForInstance(obj);
+            var serviceLocator = dependencyResolver.Resolve<IServiceLocator>();
+
+            return serviceLocator;
+        }
+
+        /// <summary>
         /// Gets the <see cref="ITypeFactory"/> that was used to create the specified object.
         /// <para />
         /// This is a convenience call that internally does this:

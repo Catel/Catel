@@ -31,11 +31,6 @@ namespace Catel.IoC
 
         #region Fields
         /// <summary>
-        /// The default type factory for the default service locator.
-        /// </summary>
-        private static TypeFactory _default;
-
-        /// <summary>
         /// Cache containing all last used constructors for a type.
         /// </summary>
         private readonly Dictionary<ConstructorCacheKey, ConstructorInfo> _constructorCache = new Dictionary<ConstructorCacheKey, ConstructorInfo>();
@@ -109,12 +104,7 @@ namespace Catel.IoC
         {
             get
             {
-                if (_default == null)
-                {
-                    _default = (TypeFactory)ServiceLocator.Default.ResolveType<ITypeFactory>();
-                }
-
-                return _default;
+                return IoCConfiguration.DefaultTypeFactory;
             }
         }
         #endregion
