@@ -75,7 +75,7 @@ namespace Catel.Collections
         {
             get
             {
-                return this._suspendChangeNotifications;
+                return _suspendChangeNotifications;
             }
         }
 
@@ -101,7 +101,7 @@ namespace Catel.Collections
             {
                 foreach (var item in collection)
                 {
-                    this.Insert(index++, item);
+                    Insert(index++, item);
                 }
             }
         }
@@ -131,7 +131,7 @@ namespace Catel.Collections
         /// </summary>
         public void Reset()
         {
-            this.NotifyChanges();
+            NotifyChanges();
         }
 
         /// <summary>
@@ -189,7 +189,7 @@ namespace Catel.Collections
             {
                 foreach (var item in collection)
                 {
-                    this.Remove(item);
+                    Remove(item);
                 }
             }
         }
