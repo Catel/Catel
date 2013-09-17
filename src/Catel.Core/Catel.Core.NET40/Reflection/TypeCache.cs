@@ -192,17 +192,22 @@ namespace Catel.Reflection
                 var typeNameWithAssembly = string.IsNullOrEmpty(assemblyName) ? null : TypeHelper.FormatType(assemblyName, typeName);
                 if (typeNameWithAssembly == null)
                 {
-                    // Simple types without assembly cannot be resolved afterwards, thus if it is not known
-                    // at this point, just return null;
-                    //
-                    // This *must* be the case-sensitive dictionary because a case-correct one will be resolved from
-                    // typesWithoutAssembly[typeName]
                     if (typesWithoutAssembly.ContainsKey(typeName))
                     {
-                        return _typesWithAssembly[typesWithoutAssembly[typeName]];
+                        return typesWithAssembly[typesWithoutAssembly[typeName]];
                     }
 
-                    return Type.GetType(typeName);
+                    var fallbackType = Type.GetType(typeName);
+                    if (fallbackType != null)
+                    {
+                        // Though it was not initially found, we still have found a new type, register it
+                        var newAssemblyName = TypeHelper.GetAssemblyNameWithoutOverhead(fallbackType.GetAssemblyFullNameEx());
+                        string newFullType = TypeHelper.FormatType(newAssemblyName, fallbackType.FullName);
+
+                        typesWithoutAssembly[typeName] = newFullType;
+                    }
+
+                    return fallbackType;
                 }
 
                 if (typesWithAssembly.ContainsKey(typeNameWithAssembly))
@@ -449,7 +454,7 @@ namespace Catel.Reflection
 
                         var typeNameWithoutAssembly = TypeHelper.GetTypeName(newFullType);
                         _typesWithoutAssembly[typeNameWithoutAssembly] = newFullType;
-                        _typesWithoutAssemblyLowerCase[typeNameWithoutAssembly.ToLowerInvariant()] = newFullType;
+                        _typesWithoutAssemblyLowerCase[typeNameWithoutAssembly.ToLowerInvariant()] = newFullType.ToLowerInvariant();
                     }
                 }
             }
