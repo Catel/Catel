@@ -191,7 +191,7 @@ namespace Catel.Runtime.Serialization
 
             if (innerTypes.Length > 0)
             {
-                newType = newType.Replace(string.Format(CultureInfo.InvariantCulture, "[{0}]", TypeHelper.FormatInnerTypes(innerTypes)), string.Empty);
+                newType = newType.Replace(string.Format(CultureInfo.InvariantCulture, "[{0}]", TypeHelper.FormatInnerTypes(innerTypes, false)), string.Empty);
                 for (int i = 0; i < innerTypes.Length; i++)
                 {
                     innerTypes[i] = ConvertTypeToNewType(innerTypes[i]);
@@ -208,7 +208,7 @@ namespace Catel.Runtime.Serialization
                 int innerTypesIndex = newType.IndexOf(InnerTypesEnd);
                 if (innerTypesIndex >= 0)
                 {
-                    newType = newType.Insert(innerTypesIndex, string.Format(CultureInfo.InvariantCulture, "[{0}]", TypeHelper.FormatInnerTypes(innerTypes)));
+                    newType = newType.Insert(innerTypesIndex, string.Format(CultureInfo.InvariantCulture, "[{0}]", TypeHelper.FormatInnerTypes(innerTypes, false)));
                 }
             }
 

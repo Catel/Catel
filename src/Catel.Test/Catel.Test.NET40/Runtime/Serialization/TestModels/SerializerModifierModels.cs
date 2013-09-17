@@ -7,6 +7,8 @@
 
 namespace Catel.Test.Runtime.Serialization.TestModels
 {
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using Catel.Data;
     using Catel.Runtime.Serialization;
 
@@ -54,6 +56,24 @@ namespace Catel.Test.Runtime.Serialization.TestModels
         public static readonly PropertyData IgnoredMemberProperty = RegisterProperty("IgnoredMember", typeof(string), null);
     }
 
+    [SerializerModifier(typeof(ChangingTypeSerializerModifier))]
+    public class ChangingType : ModelBase
+    {
+        /// <summary>
+        /// Gets or sets the property value.
+        /// </summary>
+        public ObservableCollection<int> CustomizedCollection
+        {
+            get { return GetValue<ObservableCollection<int>>(CustomizedCollectionProperty); }
+	        set { SetValue(CustomizedCollectionProperty, value); }
+        }
+
+        /// <summary>
+        /// Register the CustomizedCollection property so it is known in the class.
+        /// </summary>
+        public static readonly PropertyData CustomizedCollectionProperty = RegisterProperty("CustomizedCollection", typeof(ObservableCollection<int>), () => new ObservableCollection<int>());
+    }
+
     public class ModelASerializerModifier : SerializerModifierBase<ModelA>
     {
         public override void SerializeMember(ISerializationContext context, MemberValue memberValue)
@@ -93,6 +113,45 @@ namespace Catel.Test.Runtime.Serialization.TestModels
             if (string.Equals(memberValue.Name, "ModelCProperty"))
             {
                 memberValue.Value = "ModifiedC";
+            }
+        }
+    }
+
+    public class ChangingTypeSerializerModifier : SerializerModifierBase<ChangingType>
+    {
+        public override void SerializeMember(ISerializationContext context, MemberValue memberValue)
+        {
+            if (string.Equals(memberValue.Name, "CustomizedCollection"))
+            {
+                var originalCollection = memberValue.Value as ObservableCollection<int>;
+                if (originalCollection != null)
+                {
+                    var customizedCollection = new List<string>();
+                    foreach (var item in originalCollection)
+                    {
+                        customizedCollection.Add(string.Format("Item {0}", item));
+                    }
+
+                    memberValue.Value = customizedCollection;
+                }
+            }
+        }
+
+        public override void DeserializeMember(ISerializationContext context, MemberValue memberValue)
+        {
+            if (string.Equals(memberValue.Name, "CustomizedCollection"))
+            {
+                var customizedCollection = memberValue.Value as List<string>;
+                if (customizedCollection != null)
+                {
+                    var originalCollection = new List<int>();
+                    foreach (var item in customizedCollection)
+                    {
+                        originalCollection.Add(int.Parse(item.Replace("Item ", string.Empty)));
+                    }
+
+                    memberValue.Value = originalCollection;
+                }
             }
         }
     }

@@ -270,10 +270,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNullOrWhitespace("fullTypeName", fullTypeName);
 
-            int splitterPos = fullTypeName.IndexOf(", ", StringComparison.Ordinal);
-
-            var typeName = (splitterPos != -1) ? fullTypeName.Substring(0, splitterPos).Trim() : fullTypeName;
-            return typeName;
+            return ConvertTypeToVersionIndependentType(fullTypeName, true);
         }
 
         /// <summary>
@@ -329,19 +326,25 @@ namespace Catel.Reflection
         }
 
         /// <summary>
-        ///   Formats multiple inner types into one string.
+        /// Formats multiple inner types into one string.
         /// </summary>
-        /// <param name = "innerTypes">The inner types.</param>
-        /// <returns>
-        ///   string representing a combination of all inner types.
-        /// </returns>
-        public static string FormatInnerTypes(string[] innerTypes)
+        /// <param name="innerTypes">The inner types.</param>
+        /// <param name="stripAssemblies">if set to <c>true</c>, the assembly names will be stripped as well.</param>
+        /// <returns>string representing a combination of all inner types.</returns>
+        public static string FormatInnerTypes(string[] innerTypes, bool stripAssemblies = false)
         {
             string result = string.Empty;
 
             for (int i = 0; i < innerTypes.Length; i++)
             {
-                result += string.Format(CultureInfo.InvariantCulture, "[{0}]", innerTypes[i]);
+                var innerType = innerTypes[i];
+                string innerTypeName = innerType;
+                if (stripAssemblies)
+                {
+                    innerTypeName = ConvertTypeToVersionIndependentType(innerType, true);    
+                }
+
+                result += string.Format(CultureInfo.InvariantCulture, "[{0}]", innerTypeName);
 
                 // Postfix a comma if this is not the last
                 if (i < innerTypes.Length - 1)
@@ -357,9 +360,10 @@ namespace Catel.Reflection
         /// Converts a string representation of a type to a version independent type by removing the assembly version information.
         /// </summary>
         /// <param name="type">Type to convert.</param>
+        /// <param name="stripAssemblies">if set to <c>true</c>, the assembly names will be stripped as well.</param>
         /// <returns>String representing the type without version information.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="type"/> is <c>null</c> or whitespace.</exception>
-        public static string ConvertTypeToVersionIndependentType(string type)
+        /// <exception cref="ArgumentException">The <paramref name="type" /> is <c>null</c> or whitespace.</exception>
+        public static string ConvertTypeToVersionIndependentType(string type, bool stripAssemblies = false)
         {
             Argument.IsNotNullOrWhitespace("type", type);
 
@@ -370,32 +374,40 @@ namespace Catel.Reflection
 
             if (innerTypes.Length > 0)
             {
-                // Remove inner types
-                newType = newType.Replace(string.Format(CultureInfo.InvariantCulture, "[{0}]", FormatInnerTypes(innerTypes)), string.Empty);
+                // Remove inner types, but never strip assemblies because we need the real original type
+                newType = newType.Replace(string.Format(CultureInfo.InvariantCulture, "[{0}]", FormatInnerTypes(innerTypes, false)), string.Empty);
                 for (int i = 0; i < innerTypes.Length; i++)
                 {
-                    innerTypes[i] = ConvertTypeToVersionIndependentType(innerTypes[i]);
+                    innerTypes[i] = ConvertTypeToVersionIndependentType(innerTypes[i], stripAssemblies);
                 }
             }
 
-            string typeName = GetTypeName(newType);
+            int splitterPos = newType.IndexOf(", ", StringComparison.Ordinal);
+            var typeName = (splitterPos != -1) ? newType.Substring(0, splitterPos).Trim() : newType;
             string assemblyName = GetAssemblyName(newType);
 
             // Remove version info from assembly (if not signed by Microsoft)
-            bool isMicrosoftAssembly = MicrosoftPublicKeyTokens.Any(t => assemblyName.Contains(t));
-            if (!isMicrosoftAssembly)
+            if (!string.IsNullOrWhiteSpace(assemblyName) && !stripAssemblies)
             {
-                assemblyName = GetAssemblyNameWithoutOverhead(assemblyName);
-            }
+                bool isMicrosoftAssembly = MicrosoftPublicKeyTokens.Any(t => assemblyName.Contains(t));
+                if (!isMicrosoftAssembly)
+                {
+                    assemblyName = GetAssemblyNameWithoutOverhead(assemblyName);
+                }
 
-            newType = FormatType(assemblyName, typeName);
+                newType = FormatType(assemblyName, typeName);
+            }
+            else
+            {
+                newType = typeName;
+            }
 
             if (innerTypes.Length > 0)
             {
-                int innerTypesIndex = newType.IndexOf(innerTypesEnd);
+                int innerTypesIndex = stripAssemblies ? newType.Length : newType.IndexOf(innerTypesEnd);
                 if (innerTypesIndex >= 0)
                 {
-                    newType = newType.Insert(innerTypesIndex, string.Format(CultureInfo.InvariantCulture, "[{0}]", FormatInnerTypes(innerTypes)));
+                    newType = newType.Insert(innerTypesIndex, string.Format(CultureInfo.InvariantCulture, "[{0}]", FormatInnerTypes(innerTypes, stripAssemblies)));
                 }
             }
 

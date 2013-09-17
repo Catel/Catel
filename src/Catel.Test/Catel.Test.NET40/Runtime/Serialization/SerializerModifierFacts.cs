@@ -8,10 +8,12 @@
 namespace Catel.Test.Runtime.Serialization
 {
     using System;
+    using System.Collections.ObjectModel;
     using System.Linq;
     using Catel.Data;
     using Catel.Runtime.Serialization;
     using Catel.Test.Data;
+    using Catel.Test.Runtime.Serialization.TestModels;
 #if NETFX_CORE
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 #else
@@ -66,6 +68,21 @@ namespace Catel.Test.Runtime.Serialization
                 var clonedModelC = SerializationTestHelper.SerializeAndDeserialize(modelC, SerializationFactory.GetXmlSerializer());
 
                 Assert.AreEqual(null, clonedModelC.IgnoredMember);
+            }
+
+            [TestMethod]
+            public void SerializesAndDeserializesCompletelyDifferentType()
+            {
+                var changingType = new ChangingType();
+
+                for (int i = 0; i < 10; i++)
+                {
+                    changingType.CustomizedCollection.Add(i);
+                }
+
+                var clone = SerializationTestHelper.SerializeAndDeserialize(changingType, SerializationFactory.GetXmlSerializer());
+
+                Assert.AreEqual(10, clone.CustomizedCollection.Count);
             }
         }
     }

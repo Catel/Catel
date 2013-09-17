@@ -197,7 +197,12 @@ namespace Catel.Reflection
                     //
                     // This *must* be the case-sensitive dictionary because a case-correct one will be resolved from
                     // typesWithoutAssembly[typeName]
-                    return typesWithoutAssembly.ContainsKey(typeName) ? _typesWithAssembly[typesWithoutAssembly[typeName]] : null;
+                    if (typesWithoutAssembly.ContainsKey(typeName))
+                    {
+                        return _typesWithAssembly[typesWithoutAssembly[typeName]];
+                    }
+
+                    return Type.GetType(typeName);
                 }
 
                 if (typesWithAssembly.ContainsKey(typeNameWithAssembly))

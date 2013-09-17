@@ -282,6 +282,15 @@ namespace Catel.Test.Reflection
             {
                 Assert.AreEqual("Catel.Test.TypeHelper", TypeHelper.GetTypeName("Catel.Test.TypeHelper, Catel.Core"));
             }
+
+            [TestMethod]
+            public void ReturnsTypeNameForGenericTypes()
+            {
+                string input = "System.Collections.Generic.List`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]";
+                string expectedOutput = "System.Collections.Generic.List`1[[System.String]]";
+
+                Assert.AreEqual(expectedOutput, TypeHelper.GetTypeName(input));
+            }
             #endregion
         }
         #endregion
@@ -505,8 +514,6 @@ namespace Catel.Test.Reflection
             #endregion
         }
         #endregion
-
-        // TODO: InitializeTypes method
 
         #region Nested type: TheIsSubclassOfRawGenericMethod
         [TestClass]

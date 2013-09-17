@@ -382,12 +382,14 @@ namespace Catel.Runtime.Serialization
         /// <param name="modelType">Type of the model.</param>
         private void WriteXmlElement(ISerializationContext context, XElement element, string elementName, MemberValue memberValue, Type modelType)
         {
+            var namespacePrefix = GetNamespacePrefix();
             var stringBuilder = new StringBuilder();
             var xmlWriterSettings = new XmlWriterSettings();
 
-            var namespacePrefix = GetNamespacePrefix();
-
             xmlWriterSettings.OmitXmlDeclaration = true;
+            xmlWriterSettings.CheckCharacters = false;
+            xmlWriterSettings.ConformanceLevel = ConformanceLevel.Fragment;
+
             using (var xmlWriter = XmlWriter.Create(stringBuilder, xmlWriterSettings))
             {
                 var memberTypeToSerialize = memberValue.Value != null ? memberValue.Value.GetType() : typeof(object);
@@ -434,7 +436,8 @@ namespace Catel.Runtime.Serialization
 
                         if (memberTypeToSerialize != memberValue.Type)
                         {
-                            xmlWriter.WriteAttributeString(namespacePrefix, "type", null, memberTypeToSerialize.FullName);
+                            var memberTypeToSerializerName = TypeHelper.GetTypeName(memberTypeToSerialize.FullName);
+                            xmlWriter.WriteAttributeString(namespacePrefix, "type", null, memberTypeToSerializerName);
                         }
 
                         serializer.WriteObjectContent(xmlWriter, memberValue.Value);
