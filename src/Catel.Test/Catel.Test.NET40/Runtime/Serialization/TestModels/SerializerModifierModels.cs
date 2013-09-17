@@ -144,7 +144,7 @@ namespace Catel.Test.Runtime.Serialization.TestModels
                 var customizedCollection = memberValue.Value as List<string>;
                 if (customizedCollection != null)
                 {
-                    var originalCollection = new List<int>();
+                    var originalCollection = new ObservableCollection<int>();
                     foreach (var item in customizedCollection)
                     {
                         originalCollection.Add(int.Parse(item.Replace("Item ", string.Empty)));

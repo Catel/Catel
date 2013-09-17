@@ -346,6 +346,11 @@ namespace Catel.Runtime.Serialization
 
                     propertyTypeToDeserialize = typeToDeserialize;
                 }
+                else
+                {
+                    Log.Warning("Property type for property '{0}' is '{1}' but found type info that it should be deserialized as '{2}'. Unfortunately the type cannot be found so the deserialization will probably fail.",
+                        memberValue.Name, memberValue.Type.FullName, attributeValue);
+                }
             }
 
             var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, propertyTypeToDeserialize, xmlName);

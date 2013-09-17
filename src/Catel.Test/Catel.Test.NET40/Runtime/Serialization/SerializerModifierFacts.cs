@@ -83,6 +83,10 @@ namespace Catel.Test.Runtime.Serialization
                 var clone = SerializationTestHelper.SerializeAndDeserialize(changingType, SerializationFactory.GetXmlSerializer());
 
                 Assert.AreEqual(10, clone.CustomizedCollection.Count);
+                for (int i = 0; i < 10; i++)
+                {
+                    Assert.AreEqual(i, clone.CustomizedCollection[i]);
+                }
             }
         }
     }
