@@ -1,0 +1,299 @@
+<Object Type="RedGate.Profiler.Project.ProjectSettings,RedGate.Profiler.Project">
+  <Property Name="DotNetDesktopApplicationSettings">
+    <Object Type="RedGate.Profiler.Project.DotNetDesktopApplicationSettings,RedGate.Profiler.Project">
+      <Property Name="WorkingDirectory">
+        <Object Type="System.String">C:\Source\Catel\output\debug\NET40\Test</Object>
+      </Property>
+      <Property Name="ExecutablePath">
+        <Object Type="System.String">C:\Program Files (x86)\Microsoft Visual Studio 11.0\Common7\IDE\MSTest.exe</Object>
+      </Property>
+      <Property Name="Arguments">
+        <Object Type="System.String">/testcontainer:"C:\Source\Catel\output\debug\NET40\Test\Catel.Test.dll"</Object>
+      </Property>
+    </Object>
+  </Property>
+  <Property Name="WinRTSettings">
+    <Object Type="RedGate.Profiler.Project.WinRTSettings,RedGate.Profiler.Project">
+      <Property Name="PackageFullName">
+        <Object Type="System.String" />
+      </Property>
+      <Property Name="AppUserModelId">
+        <Object Type="System.String" />
+      </Property>
+      <Property Name="DisplayName">
+        <Object Type="System.String" />
+      </Property>
+    </Object>
+  </Property>
+  <Property Name="AttachSettings">
+    <Object Type="RedGate.Profiler.Project.AttachSettings,RedGate.Profiler.Project">
+      <Property Name="ProcessId">
+        <Object Type="System.Int32">0</Object>
+      </Property>
+      <Property Name="ProcessName">
+        <NullValue />
+      </Property>
+    </Object>
+  </Property>
+  <Property Name="AspNetIISSettings">
+    <Object Type="RedGate.Profiler.Project.AspNetIISSettings,RedGate.Profiler.Project">
+      <Property Name="IIS5Settings">
+        <Object Type="RedGate.Profiler.Project.IIS5Settings,RedGate.Profiler.Project">
+          <Property Name="ASPApplication">
+            <NullValue />
+          </Property>
+          <Property Name="Username">
+            <NullValue />
+          </Property>
+          <Property Name="SecurePassword">
+            <Object Type="System.String" />
+          </Property>
+          <Property Name="DetectAspAccount">
+            <Object Type="System.Boolean">True</Object>
+          </Property>
+        </Object>
+      </Property>
+      <Property Name="IIS6_7Settings">
+        <Object Type="RedGate.Profiler.Project.IIS6_7Settings,RedGate.Profiler.Project">
+          <Property Name="ProfileOnUnusedPort">
+            <Object Type="System.Boolean">True</Object>
+          </Property>
+          <Property Name="UseOriginalPort">
+            <Object Type="System.Boolean">False</Object>
+          </Property>
+          <Property Name="UnusedPortNumber">
+            <Object Type="System.Int32">8013</Object>
+          </Property>
+          <Property Name="Username">
+            <NullValue />
+          </Property>
+          <Property Name="Domain">
+            <NullValue />
+          </Property>
+          <Property Name="SecurePassword">
+            <NullValue />
+          </Property>
+          <Property Name="SpecifyAspAccount">
+            <Object Type="System.Boolean">False</Object>
+          </Property>
+          <Property Name="PathToWebApplication">
+            <NullValue />
+          </Property>
+        </Object>
+      </Property>
+    </Object>
+  </Property>
+  <Property Name="AspNetWebDevServerSettings">
+    <Object Type="RedGate.Profiler.Project.AspNetWebDevServerSettings,RedGate.Profiler.Project">
+      <Property Name="WebServerVirtualDirectory">
+        <Object Type="System.String">/</Object>
+      </Property>
+      <Property Name="BrowserStartPage">
+        <NullValue />
+      </Property>
+      <Property Name="PortToBindWebServer">
+        <Object Type="System.Int32">8013</Object>
+      </Property>
+      <Property Name="NetVersion">
+        <Object Type="System.Int32">4</Object>
+      </Property>
+      <Property Name="PathToWebApplication">
+        <NullValue />
+      </Property>
+    </Object>
+  </Property>
+  <Property Name="SilverlightSettings">
+    <Object Type="RedGate.Profiler.Project.SilverlightSettings,RedGate.Profiler.Project">
+      <Property Name="Url">
+        <NullValue />
+      </Property>
+      <Property Name="Origin">
+        <NullValue />
+      </Property>
+      <Property Name="Browser">
+        <NullValue />
+      </Property>
+    </Object>
+  </Property>
+  <Property Name="WindowsServiceSettings">
+    <Object Type="RedGate.Profiler.Project.WindowsServiceSettings,RedGate.Profiler.Project">
+      <Property Name="WindowsServiceName">
+        <NullValue />
+      </Property>
+      <Property Name="Arguments">
+        <NullValue />
+      </Property>
+    </Object>
+  </Property>
+  <Property Name="ComPlusSettings">
+    <Object Type="RedGate.Profiler.Project.ComPlusSettings,RedGate.Profiler.Project">
+      <Property Name="ComPlusServerApplication">
+        <NullValue />
+      </Property>
+      <Property Name="ExecutablePath">
+        <NullValue />
+      </Property>
+      <Property Name="Arguments">
+        <NullValue />
+      </Property>
+    </Object>
+  </Property>
+  <Property Name="XbapSettings">
+    <Object Type="RedGate.Profiler.Project.XbapSettings,RedGate.Profiler.Project">
+      <Property Name="ExecutablePath">
+        <NullValue />
+      </Property>
+      <Property Name="Arguments">
+        <NullValue />
+      </Property>
+    </Object>
+  </Property>
+  <Property Name="SelectedFrontEndClientId">
+    <Object Type="System.String">Google Chrome</Object>
+  </Property>
+  <Property Name="ProjectType">
+    <Object Type="RedGate.Profiler.Project.ProjectType,RedGate.Profiler.Project">DotNetDesktopApplication</Object>
+  </Property>
+  <Property Name="ProfilingMode">
+    <Object Type="RedGate.Profiler.Project.ProfilingMode,RedGate.Profiler.Project">Detailed</Object>
+  </Property>
+  <Property Name="TimeStyle">
+    <Object Type="RedGate.Profiler.Project.TimeStyle,RedGate.Profiler.Project">CPU</Object>
+  </Property>
+  <Property Name="RecordEtwEvents">
+    <Object Type="System.Boolean">False</Object>
+  </Property>
+  <Property Name="TimingDisplayFormat">
+    <Object Type="RedGate.Profiler.Project.TimingDisplayFormat,RedGate.Profiler.Project">Percentages</Object>
+  </Property>
+  <Property Name="ProfileChildProcesses">
+    <Object Type="System.Boolean">True</Object>
+  </Property>
+  <Property Name="EnableInlining">
+    <Object Type="System.Boolean">True</Object>
+  </Property>
+  <Property Name="BakeSourceFilesIntoLog">
+    <Object Type="System.Boolean">True</Object>
+  </Property>
+  <Property Name="CallTreeType">
+    <Object Type="RedGate.Profiler.Project.CallTreeType,RedGate.Profiler.Project">TopDownAbridged</Object>
+  </Property>
+  <Property Name="AllMethodsGridType">
+    <Object Type="RedGate.Profiler.Project.AllMethodsGridType,RedGate.Profiler.Project">WithSourceOnly</Object>
+  </Property>
+  <Property Name="CallGraphType">
+    <Object Type="RedGate.Profiler.Project.CallGraphType,RedGate.Profiler.Project">EqualWeightingToAllMethods</Object>
+  </Property>
+  <Property Name="HideInsignificantMethodsInTree">
+    <Object Type="System.Boolean">True</Object>
+  </Property>
+  <Property Name="AspNetIISESettings">
+    <Object Type="RedGate.Profiler.Project.AspNetIISESettings,RedGate.Profiler.Project">
+      <Property Name="ConfigPath">
+        <Object Type="System.String">C:\Users\Geert\SkyDrive\Documents\IISExpress\config\applicationhost.config</Object>
+      </Property>
+      <Property Name="SiteName">
+        <Object Type="System.String">Catel.Test.SL4.Web</Object>
+      </Property>
+      <Property Name="BrowserStartPage">
+        <Object Type="System.String">/</Object>
+      </Property>
+      <Property Name="ProfilePort">
+        <Object Type="System.Int32">8013</Object>
+      </Property>
+      <Property Name="NetVersion">
+        <Object Type="System.Int32">4</Object>
+      </Property>
+      <Property Name="Use64Bit">
+        <Object Type="System.Boolean">True</Object>
+      </Property>
+      <Property Name="PathToWebApplication">
+        <NullValue />
+      </Property>
+    </Object>
+  </Property>
+  <Property Name="AspNetSharePointSettings">
+    <Object Type="RedGate.Profiler.Project.AspNetSharePointSettings,RedGate.Profiler.Project">
+      <Property Name="IIS5Settings">
+        <Object Type="RedGate.Profiler.Project.IIS5Settings,RedGate.Profiler.Project">
+          <Property Name="ASPApplication">
+            <NullValue />
+          </Property>
+          <Property Name="Username">
+            <NullValue />
+          </Property>
+          <Property Name="SecurePassword">
+            <Object Type="System.String" />
+          </Property>
+          <Property Name="DetectAspAccount">
+            <Object Type="System.Boolean">True</Object>
+          </Property>
+        </Object>
+      </Property>
+      <Property Name="IIS6_7Settings">
+        <Object Type="RedGate.Profiler.Project.IIS6_7Settings,RedGate.Profiler.Project">
+          <Property Name="ProfileOnUnusedPort">
+            <Object Type="System.Boolean">True</Object>
+          </Property>
+          <Property Name="UseOriginalPort">
+            <Object Type="System.Boolean">False</Object>
+          </Property>
+          <Property Name="UnusedPortNumber">
+            <Object Type="System.Int32">8013</Object>
+          </Property>
+          <Property Name="Username">
+            <NullValue />
+          </Property>
+          <Property Name="Domain">
+            <NullValue />
+          </Property>
+          <Property Name="SecurePassword">
+            <NullValue />
+          </Property>
+          <Property Name="SpecifyAspAccount">
+            <Object Type="System.Boolean">False</Object>
+          </Property>
+          <Property Name="PathToWebApplication">
+            <NullValue />
+          </Property>
+        </Object>
+      </Property>
+    </Object>
+  </Property>
+  <Property Name="PerformanceCounters">
+    <Collection>
+      <CollectionValue>
+        <Object Type="RedGate.Profiler.Project.PerformanceCounterInfo,RedGate.Profiler.Project">
+          <Property Name="CategoryName">
+            <Object Type="System.String">Process</Object>
+          </Property>
+          <Property Name="CounterName">
+            <Object Type="System.String">% Processor Time</Object>
+          </Property>
+          <Property Name="IsInstanced">
+            <Object Type="System.Boolean">True</Object>
+          </Property>
+          <Property Name="Default">
+            <Object Type="System.Boolean">True</Object>
+          </Property>
+          <Property Name="AlwaysSelected">
+            <Object Type="System.Boolean">True</Object>
+          </Property>
+          <Property Name="Units">
+            <Object Type="System.String">Percentage</Object>
+          </Property>
+          <Property Name="Warning">
+            <NullValue />
+          </Property>
+          <Property Name="Description">
+            <Object Type="System.String">% Processor Time: The percentage of elapsed time used by all threads to execute instructions on the processor, for the process you are profiling. If you are profiling on a dual-core machine, this counter may exceed 100% occasionally, due to overhead introduced by the profiler.
+
+Code executed to handle some hardware interrupts and trap conditions is also included in this counter.
+
+Values recorded for this counter may be slightly delayed, so if you are focussing on a processor spike in the timeline, ensure that you select the entire spike, starting from the point at which the counter value begins to rise.</Object>
+          </Property>
+        </Object>
+      </CollectionValue>
+    </Collection>
+  </Property>
+</Object>
