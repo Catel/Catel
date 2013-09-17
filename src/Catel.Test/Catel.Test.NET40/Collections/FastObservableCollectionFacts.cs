@@ -19,6 +19,35 @@ namespace Catel.Test.Collections
     public class FastObservableCollectionFacts
     {
         [TestClass]
+        public class TheIsDirtyProperty
+        {
+            [TestMethod]
+            public void ReturnsFalseWhenNoPendingNotificationsAreListed()
+            {
+                var fastCollection = new FastObservableCollection<int>();
+
+                fastCollection.Add(1);
+
+                Assert.IsFalse(fastCollection.IsDirty);
+            }
+
+            [TestMethod]
+            public void ReturnsTrueWhenPendingNotificationsAreListed()
+            {
+                var fastCollection = new FastObservableCollection<int>();
+
+                using (fastCollection.SuspendChangeNotifications())
+                {
+                    fastCollection.Add(1);
+
+                    Assert.IsTrue(fastCollection.IsDirty);
+                }
+
+                Assert.IsFalse(fastCollection.IsDirty);
+            }
+        }
+
+        [TestClass]
         public class TheAddRangeMethod
         {
             [TestMethod]
