@@ -36,7 +36,7 @@ namespace Catel.Runtime.Serialization
         /// <summary>
         /// The deserialization binder with redirect support.
         /// </summary>
-        private static RedirectDeserializationBinder _deserializationBinder;
+        protected static RedirectDeserializationBinder DeserializationBinder;
 
         /// <summary>
         /// The log.
@@ -53,6 +53,7 @@ namespace Catel.Runtime.Serialization
         public BinarySerializer(ISerializationManager serializationManager)
             : base(serializationManager)
         {
+            DeserializationBinder = new RedirectDeserializationBinder();
         }
         #endregion
 
@@ -299,12 +300,7 @@ namespace Catel.Runtime.Serialization
 
             if (contextMode == SerializationContextMode.Deserialization)
             {
-                if (_deserializationBinder == null)
-                {
-                    _deserializationBinder = new RedirectDeserializationBinder();
-                }
-
-                binaryFormatter.Binder = _deserializationBinder;
+                binaryFormatter.Binder = DeserializationBinder;
             }
 
             return binaryFormatter;

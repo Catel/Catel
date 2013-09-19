@@ -18,7 +18,7 @@ namespace Catel.Runtime.Serialization
     /// <summary>
     /// <see cref="SerializationBinder"/> class that supports backwards compatible serialization.
     /// </summary>
-    internal sealed class RedirectDeserializationBinder : SerializationBinder
+    public sealed class RedirectDeserializationBinder : SerializationBinder
     {
         #region Fields
         /// <summary>
