@@ -65,7 +65,7 @@ namespace Catel.Runtime.Serialization
         /// impact the first time a type is serialized.
         /// </summary>
         /// <param name="types">The types to warmp up. If <c>null</c>, all types will be initialized.</param>
-        /// <param name="typesPerThread">The types per thread.</param>
+        /// <param name="typesPerThread">The types per thread. If <c>-1</c>, all types will be initialized on the same thread.</param>
         void Warmup(IEnumerable<Type> types = null, int typesPerThread = 1000);
 
         /// <summary>
