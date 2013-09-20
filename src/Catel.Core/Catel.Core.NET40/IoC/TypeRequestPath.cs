@@ -162,6 +162,25 @@ namespace Catel.IoC
         }
 
         /// <summary>
+        /// Marks the type as created and removes all the history until this type from the request path.
+        /// </summary>
+        /// <param name="typeRequestInfo">The type request info.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="typeRequestInfo"/> is <c>null</c>.</exception>
+        public void MarkTypeAsCreated(TypeRequestInfo typeRequestInfo)
+        {
+            Argument.IsNotNull("typeRequestInfo", typeRequestInfo);
+
+            for (int i = _typePath.Count - 1; i >= 0; i--)
+            {
+                if (_typePath[i] == typeRequestInfo)
+                {
+                    _typePath.RemoveRange(i, _typePath.Count - i);
+                    return;
+                }
+            }
+        }
+
+        /// <summary>
         /// Pops the last added type from the type path.
         /// </summary>
         /// <exception cref="InvalidOperationException">The path reaches zero types which is not allowed.</exception>

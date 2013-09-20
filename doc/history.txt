@@ -90,6 +90,8 @@ Added/fixed:
 (x) CTL-148 NumberTextBox behavior no longer allows pasting of text without numeric values
 (x) CTL-156 PleaseWaitService.Push doesn't show correct message
 (x) CTL-176 Fixed issue in TypeHelper.GetTypeName for generic types where the inner types would not be handled
+(x) CTL-177 TypeFactory scoping too strict to allow inner type construction. The TypeRequestPath now removes types from the
+    path when they are successfully instantiated to provide a better and less strict scoping mechanism
 (x) Fixed Drag and Drop behavior when the drop position is less then the initial item's position
 (x) Ensured the value of Owner property of Shell to NULL in order to avoid the application close  when the SplashScreenService done
 (x) Ensured Bootstrapper UI tasks calls using DispatcherService
