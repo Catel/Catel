@@ -4,10 +4,10 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Interception.Utilities
+namespace Catel
 {
     /// <summary>
-    /// 
+    /// The class which helps to get default value of types.
     /// </summary>
     public static class It
     {
@@ -15,9 +15,9 @@ namespace Catel.Interception.Utilities
         /// <summary>
         /// Returns any instance.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public static T Any<T>()
+        /// <typeparam name="T">The specified type.</typeparam>
+        /// <returns>The default value.</returns>
+        public static T IsAny<T>()
         {
             return default(T);
         }
