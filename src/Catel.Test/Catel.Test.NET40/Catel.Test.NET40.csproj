@@ -303,6 +303,7 @@
     <Compile Include="Runtime\ReferenceManagerFacts.cs" />
     <Compile Include="Runtime\Serialization\Attributes\RedirectTypeAttributeTest.cs" />
     <Compile Include="Runtime\Serialization\BinarySerialization\BinarySerializerFacts.cs" />
+    <Compile Include="Runtime\Serialization\BinarySerialization\RedirectDeserializationBinderFacts.cs" />
     <Compile Include="Runtime\Serialization\Helpers\SerializationTestHelper.cs" />
     <Compile Include="Runtime\Serialization\SerializationManagerFacts.cs" />
     <Compile Include="Runtime\Serialization\SerializationObjectFacts.cs" />

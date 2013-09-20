@@ -9,9 +9,10 @@ namespace Catel.Runtime.Serialization
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using System.Linq;
     using System.Reflection;
     using System.Runtime.Serialization;
-
+    using Catel.Threading;
     using Logging;
     using Reflection;
 
@@ -30,20 +31,26 @@ namespace Catel.Runtime.Serialization
         /// A dictionary of all <see cref="RedirectTypeAttribute"/> found.
         /// </summary>
         private readonly Dictionary<string, RedirectTypeAttribute> _redirectAttributes = new Dictionary<string, RedirectTypeAttribute>();
+
+        /// <summary>
+        /// The number of types per thread to initialize. If <c>-1</c>, the types will be initialized in a single thread.
+        /// </summary>
+        private readonly int _typesPerThread;
         #endregion
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="RedirectDeserializationBinder"/> class.
+        /// Initializes a new instance of the <see cref="RedirectDeserializationBinder" /> class.
         /// <para />
         /// Creates a custom binder that redirects all the types to new types if required. All properties
-        /// decorated with the <see cref="RedirectTypeAttribute"/> will be redirected.
+        /// decorated with the <see cref="RedirectTypeAttribute" /> will be redirected.
         /// </summary>
-        /// <remarks>
-        /// This constructor searches for attributes in a specific application domain.
-        /// </remarks>
-        public RedirectDeserializationBinder()
+        /// <param name="typesPerThread">The number of types per thread to initialize. If <c>-1</c>, the types will be initialized in a single thread.</param>
+        /// <remarks>This constructor searches for attributes in a specific application domain.</remarks>
+        public RedirectDeserializationBinder(int typesPerThread = 1000)
         {
+            _typesPerThread = typesPerThread;
+
             Initialize();
         }
         #endregion
@@ -57,17 +64,73 @@ namespace Catel.Runtime.Serialization
         {
             Log.Debug("Initializing redirect deserialization binder");
 
+            var allTypes = new List<Type>(TypeCache.GetTypes());
+
+            var initializationGroups = new List<List<Type>>();
+            if (_typesPerThread > 0)
+            {
+                var typeCount = allTypes.Count;
+                for (int i = 0; i < typeCount; i = i + _typesPerThread)
+                {
+                    int itemsToSkip = i;
+                    int itemsToTake = _typesPerThread;
+                    if (itemsToTake >= typeCount)
+                    {
+                        itemsToTake = typeCount - i;
+                    }
+
+                    initializationGroups.Add(allTypes.Skip(itemsToSkip).Take(itemsToTake).ToList());
+                }
+            }
+            else
+            {
+                initializationGroups.Add(new List<Type>(allTypes));
+            }
+
+            if (initializationGroups.Count == 1)
+            {
+                InitializeTypeGroup(initializationGroups[0]);
+            }
+            else
+            {
+                var actions = new List<Action>();
+                foreach (var initializationGroup in initializationGroups)
+                {
+                    List<Type> @group = initializationGroup;
+                    actions.Add(() => InitializeTypeGroup(@group));
+                }
+
+                TaskHelper.RunAndWait(actions.ToArray());
+            }
+
+            Log.Debug("Initialized redirect deserialization binder");
+        }
+
+        private void InitializeTypeGroup(List<Type> types)
+        {
+            Log.Debug("Initializing {0} types", types.Count);
+
             var attributeType = typeof(RedirectTypeAttribute);
 
-            foreach (var type in TypeCache.GetTypes())
+            foreach (var type in types)
             {
-                InitializeAttributes(type, (RedirectTypeAttribute[])type.GetCustomAttributes(attributeType, true));
+                if (!IsTypeBinarySerializable(type))
+                {
+                    continue;
+                }
+
+                var typeRedirectAttributes = (RedirectTypeAttribute[])type.GetCustomAttributes(attributeType, true);
+                if (typeRedirectAttributes.Length > 0)
+                {
+                    InitializeAttributes(type, typeRedirectAttributes);
+                }
 
                 var members = new List<MemberInfo>();
 
                 try
                 {
-                    members.AddRange(type.GetMembers());
+                    var typeMembers = type.GetMembers();
+                    members.AddRange(typeMembers);
                 }
                 catch (Exception ex)
                 {
@@ -76,11 +139,24 @@ namespace Catel.Runtime.Serialization
 
                 foreach (var member in members)
                 {
-                    InitializeAttributes(member, (RedirectTypeAttribute[])member.GetCustomAttributes(attributeType, true));
+                    var memberRedirectAttributes = (RedirectTypeAttribute[])member.GetCustomAttributes(attributeType, true);
+                    if (memberRedirectAttributes.Length > 0)
+                    {
+                        InitializeAttributes(member, memberRedirectAttributes);
+                    }
                 }
             }
+        }
 
-            Log.Debug("Initialized redirect deserialization binder");
+        private bool IsTypeBinarySerializable(Type type)
+        {
+            if (type == null)
+            {
+                return false;
+            }
+
+            var ctor = type.GetConstructor(new [] { typeof(SerializationInfo), typeof(StreamingContext) });
+            return ctor != null;
         }
 
         /// <summary>
