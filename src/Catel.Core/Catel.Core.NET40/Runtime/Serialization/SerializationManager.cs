@@ -44,34 +44,27 @@ namespace Catel.Runtime.Serialization
         private readonly ICacheStorage<Type, Dictionary<string, MemberMetadata>> _fieldsCache = new CacheStorage<Type, Dictionary<string, MemberMetadata>>();
 
         /// <summary>
-        /// Gets the serializer modifiers for the specified type.
-        /// <para />
-        /// Note that the order is important because the modifiers will be called in the returned order during serialization
-        /// and in reversed order during deserialization.
+        /// Warmups the specified type by calling all the methods for the specified type.
         /// </summary>
         /// <param name="type">The type.</param>
-        /// <returns>An array containing the modifiers. Never <c>null</c>, but can be an empty array.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        public virtual ISerializerModifier[] GetSerializerModifiers(Type type)
+        public void Warmup(Type type)
         {
             Argument.IsNotNull("type", type);
 
-            return _serializationModifiersPerTypeCache.GetFromCacheOrFetch(type, () =>
-            {
-                var serializers = new List<ISerializerModifier>();
-                var serializerModifierAttributes = FindSerializerModifiers(type);
+            GetFieldsToSerialize(type);
+            GetPropertiesToSerialize(type);
 
-                foreach (var serializerModifierAttribute in serializerModifierAttributes)
-                {
-                    var innerAttribute = serializerModifierAttribute;
-                    serializers.Add(_serializerModifierCache.GetFromCacheOrFetch(innerAttribute.SerializerModifierType, () =>
-                    {
-                        return (ISerializerModifier)_typeFactory.CreateInstance(innerAttribute.SerializerModifierType);
-                    }));
-                }
+            GetCatelPropertyNames(type);
+            GetCatelProperties(type);
 
-                return serializers.ToArray();
-            });
+            GetRegularPropertyNames(type);
+            GetRegularProperties(type);
+
+            GetFieldNames(type);
+            GetFields(type);
+
+            GetSerializerModifiers(type);
         }
 
         /// <summary>
@@ -319,6 +312,37 @@ namespace Catel.Runtime.Serialization
                 }
 
                 return dictionary;
+            });
+        }
+
+        /// <summary>
+        /// Gets the serializer modifiers for the specified type.
+        /// <para />
+        /// Note that the order is important because the modifiers will be called in the returned order during serialization
+        /// and in reversed order during deserialization.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>An array containing the modifiers. Never <c>null</c>, but can be an empty array.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
+        public virtual ISerializerModifier[] GetSerializerModifiers(Type type)
+        {
+            Argument.IsNotNull("type", type);
+
+            return _serializationModifiersPerTypeCache.GetFromCacheOrFetch(type, () =>
+            {
+                var serializers = new List<ISerializerModifier>();
+                var serializerModifierAttributes = FindSerializerModifiers(type);
+
+                foreach (var serializerModifierAttribute in serializerModifierAttributes)
+                {
+                    var innerAttribute = serializerModifierAttribute;
+                    serializers.Add(_serializerModifierCache.GetFromCacheOrFetch(innerAttribute.SerializerModifierType, () =>
+                    {
+                        return (ISerializerModifier)_typeFactory.CreateInstance(innerAttribute.SerializerModifierType);
+                    }));
+                }
+
+                return serializers.ToArray();
             });
         }
 

@@ -9,6 +9,7 @@ namespace Catel.Runtime.Serialization
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using Catel.Reflection;
     using Data;
 
     /// <summary>
@@ -55,6 +56,17 @@ namespace Catel.Runtime.Serialization
         /// Occurs when an object has just been deserialized.
         /// </summary>
         event EventHandler<SerializationEventArgs> Deserialized;
+
+        /// <summary>
+        /// Warms up the specified types. If the <paramref name="types" /> is <c>null</c>, all types known
+        /// in the <see cref="TypeCache" /> deriving from the <see cref="ModelBase"/> class will be initialized.
+        /// <para />
+        /// Note that it is not required to call this, but it can help to prevent an additional performance
+        /// impact the first time a type is serialized.
+        /// </summary>
+        /// <param name="types">The types to warmp up. If <c>null</c>, all types will be initialized.</param>
+        /// <param name="typesPerThread">The types per thread.</param>
+        void Warmup(IEnumerable<Type> types = null, int typesPerThread = 1000);
 
         /// <summary>
         /// Serializes the specified model.

@@ -16,6 +16,13 @@ namespace Catel.Runtime.Serialization
     public interface ISerializationManager
     {
         /// <summary>
+        /// Warmups the specified type by calling all the methods for the specified type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
+        void Warmup(Type type);
+
+        /// <summary>
         /// Gets the fields to serialize for the specified object.
         /// </summary>
         /// <param name="type">The type.</param>

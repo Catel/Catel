@@ -9,8 +9,9 @@ namespace Catel.Test.Runtime.Serialization
 {
     using System;
     using System.ComponentModel;
+    using System.Linq;
     using Catel.Data;
-    using Catel.IoC;
+    using Catel.Reflection;
     using Catel.Runtime.Serialization;
 
 #if NETFX_CORE
@@ -123,6 +124,50 @@ namespace Catel.Test.Runtime.Serialization
 
                 Assert.IsNotNull(clonedGraph);
                 Assert.IsTrue(ReferenceEquals(clonedGraph, clonedGraph.CircularModel.CircularModel));
+            }
+        }
+
+        [TestClass]
+        public class TheWarmupMethod
+        {
+            [TestMethod]
+            public void WarmsUpSpecificTypes()
+            {
+                var typesToWarmup = new Type[] { typeof(CircularTestModel), typeof(TestModel) };
+
+                var serializer = SerializationFactory.GetXmlSerializer();
+
+                TimeMeasureHelper.MeasureAction(5, "Xml serializer warmup",
+                    () => serializer.Warmup(typesToWarmup),
+                    () =>
+                    {
+                        TypeCache.InitializeTypes(false);
+
+                        ConsoleHelper.Write("TypeCache contains {0} items", TypeCache.GetTypes().Count());
+                        ConsoleHelper.Write("TypeCache contains {0} ModelBase items", TypeCache.GetTypes(x => typeof(ModelBase).IsAssignableFromEx(x)).Count());
+                    });
+
+                // TODO: No way to see if this is cached (otherwise we have to write this feature on DataContractSerializerFactory)
+                // This unit test is written to easily test this functionality though.
+            }
+
+            [TestMethod]
+            public void WarmsUpAllTypes()
+            {
+                var serializer = SerializationFactory.GetXmlSerializer();
+
+                TimeMeasureHelper.MeasureAction(5, "Xml serializer warmup",
+                    () => serializer.Warmup(),
+                    () =>
+                    {
+                        TypeCache.InitializeTypes(false);
+
+                        ConsoleHelper.Write("TypeCache contains {0} items", TypeCache.GetTypes().Count());
+                        ConsoleHelper.Write("TypeCache contains {0} ModelBase items", TypeCache.GetTypes(x => typeof(ModelBase).IsAssignableFromEx(x)).Count());
+                    });
+
+                // TODO: No way to see if this is cached (otherwise we have to write this feature on DataContractSerializerFactory)
+                // This unit test is written to easily test this functionality though.
             }
         }
     }

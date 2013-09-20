@@ -409,6 +409,9 @@
     <Compile Include="..\Catel.Test.NET40\GlobalInitialization.cs">
       <Link>GlobalInitialization.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\Helpers\ConsoleHelper.cs">
+      <Link>Helpers\ConsoleHelper.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\Helpers\ExpressionHelperFacts.cs">
       <Link>Helpers\ExpressionHelperFacts.cs</Link>
     </Compile>
@@ -426,6 +429,9 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Helpers\TagHelperFacts.cs">
       <Link>Helpers\TagHelperFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Helpers\TimeMeasureHelper.cs">
+      <Link>Helpers\TimeMeasureHelper.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Helpers\WindowHelper.cs">
       <Link>Helpers\WindowHelper.cs</Link>
@@ -663,6 +669,9 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\BinarySerialization\BinarySerializerFacts.cs">
       <Link>Runtime\Serialization\BinarySerialization\BinarySerializerFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\BinarySerialization\RedirectDeserializationBinderFacts.cs">
+      <Link>Runtime\Serialization\BinarySerialization\RedirectDeserializationBinderFacts.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\Helpers\SerializationTestHelper.cs">
       <Link>Runtime\Serialization\Helpers\SerializationTestHelper.cs</Link>

@@ -10,10 +10,12 @@ namespace Catel.Runtime.Serialization
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using Catel.Data;
     using Catel.IoC;
     using Catel.Logging;
     using Catel.Reflection;
+    using Catel.Threading;
 
     /// <summary>
     /// Base class for serializers that can serializer the <see cref="ModelBase" />.
@@ -141,6 +143,91 @@ namespace Catel.Runtime.Serialization
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Warms up the specified types. If the <paramref name="types" /> is <c>null</c>, all types known
+        /// in the <see cref="TypeCache" /> will be initialized.
+        /// <para />
+        /// Note that it is not required to call this, but it can help to prevent an additional performance
+        /// impact the first time a type is serialized.
+        /// </summary>
+        /// <param name="types">The types to warmp up. If <c>null</c>, all types will be initialized.</param>
+        /// <param name="typesPerThread">The types per thread.</param>
+        public void Warmup(IEnumerable<Type> types, int typesPerThread = 1000)
+        {
+            if (types == null)
+            {
+                types = TypeCache.GetTypes(x => typeof(ModelBase).IsAssignableFromEx(x));
+            }
+
+            var allTypes = new List<Type>(types);
+
+            var wrampupGroup = new List<List<Type>>();
+            if (typesPerThread > 0)
+            {
+                var typeCount = allTypes.Count;
+                for (int i = 0; i < typeCount; i = i + typesPerThread)
+                {
+                    int itemsToSkip = i;
+                    int itemsToTake = typesPerThread;
+                    if (itemsToTake >= typeCount)
+                    {
+                        itemsToTake = typeCount - i;
+                    }
+
+                    wrampupGroup.Add(allTypes.Skip(itemsToSkip).Take(itemsToTake).ToList());
+                }
+            }
+            else
+            {
+                wrampupGroup.Add(new List<Type>(allTypes));
+            }
+
+            if (wrampupGroup.Count == 1)
+            {
+                WarmupGroup(wrampupGroup[0]);
+            }
+            else
+            {
+                var actions = new List<Action>();
+                foreach (var initializationGroup in wrampupGroup)
+                {
+                    List<Type> @group = initializationGroup;
+                    actions.Add(() => WarmupGroup(@group));
+                }
+
+                TaskHelper.RunAndWait(actions.ToArray());
+            }
+        }
+
+        /// <summary>
+        /// Warms up the group.
+        /// </summary>
+        /// <param name="types">The types.</param>
+        private void WarmupGroup(IEnumerable<Type> types)
+        {
+            foreach (var type in types)
+            {
+                try
+                {
+                    // General warmup
+                    SerializationManager.Warmup(type);
+
+                    // Specific (customized) warmup
+                    Warmup(type);
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning(ex, "An error occurred while warming up the XmlSerializer for type '{0}'", type.GetSafeFullName());
+                }
+            }
+        }
+
+        /// <summary>
+        /// Warms up the specified type.
+        /// </summary>
+        /// <param name="type">The type to warmup.</param>
+        protected abstract void Warmup(Type type);
+
         /// <summary>
         /// Determines whether the specified member on the specified model should be ignored by the serialization engine.
         /// </summary>

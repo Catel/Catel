@@ -230,6 +230,9 @@
     <Compile Include="..\Catel.Test.NET40\GlobalInitialization.cs">
       <Link>GlobalInitialization.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\Helpers\ConsoleHelper.cs">
+      <Link>Helpers\ConsoleHelper.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\Helpers\ExpressionHelperFacts.cs">
       <Link>Helpers\ExpressionHelperFacts.cs</Link>
     </Compile>
@@ -244,6 +247,9 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Helpers\TagHelperFacts.cs">
       <Link>Helpers\TagHelperFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Helpers\TimeMeasureHelper.cs">
+      <Link>Helpers\TimeMeasureHelper.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\IoC\CatelDependencyResolverFacts.cs">
       <Link>IoC\CatelDependencyResolverFacts.cs</Link>

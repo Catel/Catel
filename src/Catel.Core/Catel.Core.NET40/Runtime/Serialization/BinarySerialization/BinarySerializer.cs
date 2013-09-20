@@ -114,6 +114,15 @@ namespace Catel.Runtime.Serialization
 
         #region Methods
         /// <summary>
+        /// Warms up the specified type.
+        /// </summary>
+        /// <param name="type">The type to warmup.</param>
+        protected override void Warmup(Type type)
+        {
+            // No additional warmup required by the binary serializer
+        }
+
+        /// <summary>
         /// Serializes the member.
         /// </summary>
         /// <param name="context">The context.</param>

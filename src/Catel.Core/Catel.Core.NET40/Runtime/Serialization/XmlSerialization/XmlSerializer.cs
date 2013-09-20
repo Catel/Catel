@@ -59,6 +59,48 @@ namespace Catel.Runtime.Serialization
 
         #region Methods
         /// <summary>
+        /// Warms up the specified type.
+        /// </summary>
+        /// <param name="type">The type to warmup.</param>
+        protected override void Warmup(Type type)
+        {
+            if (type == null)
+            {
+                return;
+            }
+
+            var propertyDataManager = PropertyDataManager.Default;
+
+            var fieldsToSerialize = SerializationManager.GetFieldsToSerialize(type);
+            foreach (var fieldToSerialize in fieldsToSerialize)
+            {
+                var fieldInfo = type.GetFieldEx(fieldToSerialize);
+                string xmlName = fieldToSerialize;
+
+                if (propertyDataManager.IsPropertyNameMappedToXmlElement(type, fieldToSerialize))
+                {
+                    xmlName = propertyDataManager.MapPropertyNameToXmlElementName(type, fieldToSerialize);
+                }
+
+                _dataContractSerializerFactory.GetDataContractSerializer(type, fieldInfo.FieldType, xmlName);
+            }
+
+            var propertiesToSerialize = SerializationManager.GetPropertiesToSerialize(type);
+            foreach (var propertyToSerialize in propertiesToSerialize)
+            {
+                var propertyInfo = type.GetPropertyEx(propertyToSerialize);
+                string xmlName = propertyToSerialize;
+
+                if (propertyDataManager.IsPropertyNameMappedToXmlElement(type, propertyToSerialize))
+                {
+                    xmlName = propertyDataManager.MapPropertyNameToXmlElementName(type, propertyToSerialize);
+                }
+
+                _dataContractSerializerFactory.GetDataContractSerializer(type, propertyInfo.PropertyType, xmlName);
+            }
+        }
+
+        /// <summary>
         /// Called before the serializer starts serializing an object.
         /// </summary>
         /// <param name="context">The context.</param>

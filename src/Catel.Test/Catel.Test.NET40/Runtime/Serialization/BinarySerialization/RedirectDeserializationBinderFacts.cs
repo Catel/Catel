@@ -55,19 +55,9 @@ namespace Catel.Test.Runtime.Serialization
 
             private void PerformanceTest(int typesPerThread)
             {
-                TypeCache.InitializeTypes(false);
-
-                var stopwatch = new Stopwatch();
-                stopwatch.Start();
-
-                for (int i = 0; i < 5; i++)
-                {
-                    var binder = new RedirectDeserializationBinder(typesPerThread);
-                }
-
-                stopwatch.Stop();
-
-                Console.WriteLine("Multithreading average ({0} types / thread): {1}ms", typesPerThread, (stopwatch.Elapsed.TotalMilliseconds / 5));
+                TimeMeasureHelper.MeasureAction(5, "Multithreaded initialization", 
+                    () => new RedirectDeserializationBinder(typesPerThread), 
+                    () => TypeCache.InitializeTypes(false));
             }
         }
     }
