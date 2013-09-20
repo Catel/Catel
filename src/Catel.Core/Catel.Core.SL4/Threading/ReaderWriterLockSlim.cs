@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ReaderWriterLock.cs" company="Catel development team">
+// <copyright file="ReaderWriterLockSlim.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -26,7 +26,7 @@ namespace System.Threading
     /// <para />
     /// This code is originally found at http://www.orktane.com/post/2009/03/08/Silverlight-ReaderWriterLock-Implementation.aspx.
     /// </remarks>
-    public class ReaderWriterLock
+    public class ReaderWriterLockSlim
     {
         /// <summary>
         /// The log.
@@ -53,9 +53,9 @@ namespace System.Threading
         EventWaitHandle _upgradeEvent;  // thread waiting to upgrade a read lock to a write lock go here (at most one)
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ReaderWriterLock"/> class.
+        /// Initializes a new instance of the <see cref="ReaderWriterLockSlim"/> class.
         /// </summary>
-        public ReaderWriterLock()
+        public ReaderWriterLockSlim()
         {
             // All state can start out zeroed. 
         }
@@ -64,7 +64,7 @@ namespace System.Threading
         /// Acquires the reader lock.
         /// </summary>
         /// <param name="millisecondsTimeout">The timeout in milliseconds.</param>
-        public void AcquireReaderLock(int millisecondsTimeout)
+        public void EnterReadLock(int millisecondsTimeout = -1)
         {
             EnterMyLock();
 
@@ -96,7 +96,7 @@ namespace System.Threading
         /// Acquires the writer lock.
         /// </summary>
         /// <param name="millisecondsTimeout">The timeout in milliseconds.</param>
-        public void AcquireWriterLock(int millisecondsTimeout)
+        public void EnterWriteLock(int millisecondsTimeout = -1)
         {
             EnterMyLock();
 
@@ -165,7 +165,7 @@ namespace System.Threading
         /// <summary>
         /// Releases the reader lock.
         /// </summary>
-        public void ReleaseReaderLock()
+        public void ExitReadLock()
         {
             EnterMyLock();
 
@@ -177,7 +177,7 @@ namespace System.Threading
         /// <summary>
         /// Releases the writer lock.
         /// </summary>
-        public void ReleaseWriterLock()
+        public void ExitWriteLock()
         {
             EnterMyLock();
 

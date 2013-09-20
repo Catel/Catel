@@ -270,13 +270,13 @@ namespace Catel.Test.Caching
             [TestMethod]
             public void AutomaticallyRemovesExpiredItemsOfACacheStorageWithDefaultExpirationPolicyInitializationCode()
             {
-                var cache = new CacheStorage<string, int>(() => ExpirationPolicy.Duration(TimeSpan.FromSeconds(3)));
+                var cache = new CacheStorage<string, int>(() => ExpirationPolicy.Duration(TimeSpan.FromSeconds(2)));
 
                 cache.Add("1", 1);
 
                 Assert.IsTrue(cache.Contains("1"));
 
-                ThreadHelper.Sleep(5500);
+                ThreadHelper.Sleep(3000);
 
                 Assert.IsFalse(cache.Contains("1"));
             }
