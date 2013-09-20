@@ -8,7 +8,6 @@ namespace Catel.Test.Interception
 {
     using System;
     using System.Reflection;
-    using Catel.Interception.Utilities;
     using Catel.IoC;
     using Catel.Reflection;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -174,14 +173,14 @@ namespace Catel.Test.Interception
         {
             var index = 0;
             _serviceLocator.ConfigureInterceptionForType<ITestService, TestService>()
-                           .InterceptMethod(service => service.Perform<int>(It.Any<int>()))
+                           .InterceptMethod(service => service.Perform<int>(It.IsAny<int>()))
                            .OnBefore(invocation =>
                                {
                                    Assert.IsFalse(((ITestService) invocation.Target).WasExecuted);
                                    index++;
                                })
                            .And()
-                           .InterceptMethod(service => service.Perform<string>(It.Any<string>()))
+                           .InterceptMethod(service => service.Perform<string>(It.IsAny<string>()))
                            .OnAfter(() => index++);
 
             var resolvedTestService = _serviceLocator.ResolveType<ITestService>();
@@ -189,7 +188,7 @@ namespace Catel.Test.Interception
             resolvedTestService.Perform<int>(1); // intercepted
             resolvedTestService.Perform<string>(string.Empty); // intercepted
             resolvedTestService.Perform(2d); // not intercepted
-            resolvedTestService.Perform(It.Any<object>()); // not intercepted
+            resolvedTestService.Perform(It.IsAny<object>()); // not intercepted
 
             Assert.IsTrue(resolvedTestService.WasExecuted);
             Assert.AreEqual(2, index);
@@ -233,7 +232,7 @@ namespace Catel.Test.Interception
         {
             var value = false;
             _serviceLocator.ConfigureInterceptionForType<ITestService, TestService>()
-                           .InterceptMethod(service => service.Perform(It.Any<string>()))
+                           .InterceptMethod(service => service.Perform(It.IsAny<string>()))
                            .OnBefore(() => value = true);
 
             var resolvedTestService = _serviceLocator.ResolveType<ITestService>();
@@ -275,7 +274,7 @@ namespace Catel.Test.Interception
             _serviceLocator.ConfigureInterceptionForType<ITestService, TestService>()
                            .InterceptMethods(
                                service => service.Return(),
-                               service => service.Perform<int>(It.Any<int>()),
+                               service => service.Perform<int>(It.IsAny<int>()),
                                service => service.Perform())
                            .OnBefore(() => index++);
 
