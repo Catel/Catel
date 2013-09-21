@@ -9,7 +9,6 @@ namespace Catel.Runtime.Serialization
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Reflection;
     using System.Runtime.Serialization;
     using Catel.Caching;
@@ -31,12 +30,12 @@ namespace Catel.Runtime.Serialization
         /// <summary>
         /// Cache for the <see cref="DataContractSerializer"/> per name.
         /// </summary>
-        private readonly Dictionary<string, DataContractSerializer> _dataContractSerializers = new Dictionary<string, DataContractSerializer>();
+        private readonly CacheStorage<string, DataContractSerializer> _dataContractSerializersCache = new CacheStorage<string, DataContractSerializer>(storeNullValues: true);
 
         /// <summary>
         /// Cache for known attributes per type.
         /// </summary>
-        private readonly Dictionary<string, Type[]> _knownTypesByAttributesCache = new Dictionary<string, Type[]>();
+        private readonly CacheStorage<string, Type[]> _knownTypesByAttributesCache = new CacheStorage<string, Type[]>();
 
         private readonly IDataContractNameResolver _dataContractNameResolver;
         #endregion
@@ -78,46 +77,39 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNullOrWhitespace("xmlName", xmlName);
 
             string key = string.Format("{0}|{1}", typeToSerialize.GetSafeFullName(), xmlName);
-            if (_dataContractSerializers.ContainsKey(key))
-            {
-                return _dataContractSerializers[key];
-            }
 
-            Log.Debug("Getting known types for xml serialization of '{0}'", typeToSerialize.GetSafeFullName());
-
-            var serializerTypeInfo = new XmlSerializerTypeInfo(serializingType, typeToSerialize, additionalKnownTypes);
-
-            if (serializingObject != null)
+            return _dataContractSerializersCache.GetFromCacheOrFetch(key, () =>
             {
-                GetKnownTypesForInstance(serializingObject, serializerTypeInfo);
-            }
-            else
-            {
-                GetKnownTypes(typeToSerialize, serializerTypeInfo);
-            }
+                Log.Debug("Getting known types for xml serialization of '{0}'", typeToSerialize.GetSafeFullName());
 
-            var knownTypesViaAttributes = GetKnownTypesViaAttributes(serializingType);
-            foreach (var knownTypeViaAttribute in knownTypesViaAttributes)
-            {
-                GetKnownTypes(knownTypeViaAttribute, serializerTypeInfo);
-            }
+                var serializerTypeInfo = new XmlSerializerTypeInfo(serializingType, typeToSerialize, additionalKnownTypes);
 
-            if (additionalKnownTypes != null)
-            {
-                foreach (var additionalKnownType in additionalKnownTypes)
+                if (serializingObject != null)
                 {
-                    GetKnownTypes(additionalKnownType, serializerTypeInfo);
+                    GetKnownTypesForInstance(serializingObject, serializerTypeInfo);
                 }
-            }
+                else
+                {
+                    GetKnownTypes(typeToSerialize, serializerTypeInfo);
+                }
 
-            var xmlSerializer = new DataContractSerializer(typeToSerialize, xmlName, string.Empty, serializerTypeInfo.KnownTypes);
+                var knownTypesViaAttributes = GetKnownTypesViaAttributes(serializingType);
+                foreach (var knownTypeViaAttribute in knownTypesViaAttributes)
+                {
+                    GetKnownTypes(knownTypeViaAttribute, serializerTypeInfo);
+                }
 
-            if (!string.IsNullOrEmpty(key))
-            {
-                _dataContractSerializers[key] = xmlSerializer;
-            }
+                if (additionalKnownTypes != null)
+                {
+                    foreach (var additionalKnownType in additionalKnownTypes)
+                    {
+                        GetKnownTypes(additionalKnownType, serializerTypeInfo);
+                    }
+                }
 
-            return xmlSerializer;
+                var xmlSerializer = new DataContractSerializer(typeToSerialize, xmlName, string.Empty, serializerTypeInfo.KnownTypes);
+                return xmlSerializer;
+            });
         }
         #endregion
 
@@ -383,45 +375,41 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("type", type);
 
             string typeName = type.AssemblyQualifiedName;
-            lock (_knownTypesByAttributesCache)
-            {
-                if (!_knownTypesByAttributesCache.ContainsKey(typeName))
-                {
-                    var additionalTypes = new List<Type>();
-                    var knownTypeAttributes = type.GetCustomAttributesEx(typeof(KnownTypeAttribute), true);
-                    foreach (var attr in knownTypeAttributes)
-                    {
-                        var ktattr = attr as KnownTypeAttribute;
-                        if (ktattr != null)
-                        {
-                            if (ktattr.MethodName != null)
-                            {
-                                var mi = type.GetMethodEx(ktattr.MethodName, BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
 
-                                // this can be null because we are also getting here through the recursive behaviour
-                                // of GetCustomAttributesEx. We are getting at this point once per class derived from a
-                                // base class having a KnownType() with a method. This can be ignored
-                                if (mi != null)
+            return _knownTypesByAttributesCache.GetFromCacheOrFetch(typeName, () =>
+            {
+                var additionalTypes = new List<Type>();
+                var knownTypeAttributes = type.GetCustomAttributesEx(typeof(KnownTypeAttribute), true);
+                foreach (var attr in knownTypeAttributes)
+                {
+                    var ktattr = attr as KnownTypeAttribute;
+                    if (ktattr != null)
+                    {
+                        if (ktattr.MethodName != null)
+                        {
+                            var mi = type.GetMethodEx(ktattr.MethodName, BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
+
+                            // this can be null because we are also getting here through the recursive behaviour
+                            // of GetCustomAttributesEx. We are getting at this point once per class derived from a
+                            // base class having a KnownType() with a method. This can be ignored
+                            if (mi != null)
+                            {
+                                var types = mi.Invoke(null, null) as IEnumerable<Type>;
+                                if (types != null)
                                 {
-                                    var types = mi.Invoke(null, null) as IEnumerable<Type>;
-                                    if (types != null)
-                                    {
-                                        additionalTypes.AddRange(types);
-                                    }
+                                    additionalTypes.AddRange(types);
                                 }
                             }
-                            else
-                            {
-                                additionalTypes.Add(ktattr.Type);
-                            }
+                        }
+                        else
+                        {
+                            additionalTypes.Add(ktattr.Type);
                         }
                     }
-
-                    _knownTypesByAttributesCache.Add(typeName, additionalTypes.ToArray());
                 }
 
-                return _knownTypesByAttributesCache[typeName];
-            }
+                return additionalTypes.ToArray();
+            });
         }
 
         /// <summary>
