@@ -204,6 +204,22 @@ namespace Catel.Test
         }
 
         [TestClass]
+        public class TheParseMethod
+        {
+            [TestMethod]
+            public void ThrowsExceptionForInvalidValue()
+            {
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Enum<Enum1>.Parse("hi there"));
+            }
+
+            [TestMethod]
+            public void ReturnsTrueForValidValue()
+            {
+                Assert.AreEqual(Enum1.MySecondValue, Enum<Enum1>.Parse("MySecondValue"));
+            }
+        }
+
+        [TestClass]
         public class TheTryParseMethod
         {
             [TestMethod]

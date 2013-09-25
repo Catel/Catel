@@ -118,6 +118,17 @@ namespace Catel
         }
 
         /// <summary>
+        /// Parses the specified input.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <param name="ignoreCase">if set to <c>true</c>, the case should be ignored.</param>
+        /// <returns>The enum value.</returns>
+        public static TEnum Parse(string input, bool ignoreCase = false)
+        {
+            return (TEnum) Enum.Parse(typeof (TEnum), input, ignoreCase);
+        }
+
+        /// <summary>
         /// Tries to parse an enum value name.
         /// </summary>
         /// <param name="input">The input.</param>
