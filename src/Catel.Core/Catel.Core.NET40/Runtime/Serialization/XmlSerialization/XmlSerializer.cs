@@ -75,8 +75,13 @@ namespace Catel.Runtime.Serialization
             foreach (var fieldToSerialize in fieldsToSerialize)
             {
                 var fieldInfo = type.GetFieldEx(fieldToSerialize);
-                string xmlName = fieldToSerialize;
+                if (fieldInfo == null)
+                {
+                    Log.Warning("Failed to retrieve the field info of '{0}.{1}' during warmup", type.GetSafeFullName(), fieldToSerialize);
+                    continue;
+                }
 
+                string xmlName = fieldToSerialize;
                 if (propertyDataManager.IsPropertyNameMappedToXmlElement(type, fieldToSerialize))
                 {
                     xmlName = propertyDataManager.MapPropertyNameToXmlElementName(type, fieldToSerialize);
@@ -89,8 +94,13 @@ namespace Catel.Runtime.Serialization
             foreach (var propertyToSerialize in propertiesToSerialize)
             {
                 var propertyInfo = type.GetPropertyEx(propertyToSerialize);
-                string xmlName = propertyToSerialize;
+                if (propertyInfo == null)
+                {
+                    Log.Warning("Failed to retrieve the property info of '{0}.{1}' during warmup", type.GetSafeFullName(), propertyToSerialize);
+                    continue;
+                }
 
+                string xmlName = propertyToSerialize;
                 if (propertyDataManager.IsPropertyNameMappedToXmlElement(type, propertyToSerialize))
                 {
                     xmlName = propertyDataManager.MapPropertyNameToXmlElementName(type, propertyToSerialize);
