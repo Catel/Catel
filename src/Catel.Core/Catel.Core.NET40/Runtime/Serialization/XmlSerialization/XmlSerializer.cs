@@ -9,7 +9,6 @@ namespace Catel.Runtime.Serialization
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Text;
     using System.Xml;
     using System.Xml.Linq;
@@ -24,6 +23,15 @@ namespace Catel.Runtime.Serialization
     /// </summary>
     public class XmlSerializer : SerializerBase<XElement>, IXmlSerializer
     {
+        #region Enums
+        private enum MemberType
+        {
+            Field,
+
+            Property
+        }
+        #endregion
+
         #region Constants
         private const string GraphId = "graphid";
         private const string GraphRefId = "graphrefid";
@@ -69,44 +77,62 @@ namespace Catel.Runtime.Serialization
                 return;
             }
 
-            var propertyDataManager = PropertyDataManager.Default;
-
             var fieldsToSerialize = SerializationManager.GetFieldsToSerialize(type);
             foreach (var fieldToSerialize in fieldsToSerialize)
             {
-                var fieldInfo = type.GetFieldEx(fieldToSerialize);
-                if (fieldInfo == null)
-                {
-                    Log.Warning("Failed to retrieve the field info of '{0}.{1}' during warmup", type.GetSafeFullName(), fieldToSerialize);
-                    continue;
-                }
-
-                string xmlName = fieldToSerialize;
-                if (propertyDataManager.IsPropertyNameMappedToXmlElement(type, fieldToSerialize))
-                {
-                    xmlName = propertyDataManager.MapPropertyNameToXmlElementName(type, fieldToSerialize);
-                }
-
-                _dataContractSerializerFactory.GetDataContractSerializer(type, fieldInfo.FieldType, xmlName);
+                WarmupMember(type, fieldToSerialize, MemberType.Field);
             }
 
             var propertiesToSerialize = SerializationManager.GetPropertiesToSerialize(type);
             foreach (var propertyToSerialize in propertiesToSerialize)
             {
-                var propertyInfo = type.GetPropertyEx(propertyToSerialize);
-                if (propertyInfo == null)
+                WarmupMember(type, propertyToSerialize, MemberType.Property);
+            }
+        }
+
+        private void WarmupMember(Type type, string memberName, MemberType memberType)
+        {
+            var propertyDataManager = PropertyDataManager.Default;
+
+            try
+            {
+                Type memberRepresentedType = null;
+                switch (memberType)
                 {
-                    Log.Warning("Failed to retrieve the property info of '{0}.{1}' during warmup", type.GetSafeFullName(), propertyToSerialize);
-                    continue;
+                    case MemberType.Field:
+                        var fieldInfo = type.GetFieldEx(memberName);
+                        if (fieldInfo == null)
+                        {
+                            Log.Warning("Failed to retrieve the field info of '{0}.{1}' during warmup", type.GetSafeFullName(), memberName);
+                            return;
+                        }
+
+                        memberRepresentedType = fieldInfo.FieldType;
+                        break;
+
+                    case MemberType.Property:
+                        var propertyInfo = type.GetPropertyEx(memberName);
+                        if (propertyInfo == null)
+                        {
+                            Log.Warning("Failed to retrieve the property info of '{0}.{1}' during warmup", type.GetSafeFullName(), memberName);
+                            return;
+                        }
+
+                        memberRepresentedType = propertyInfo.PropertyType;
+                        break;
                 }
 
-                string xmlName = propertyToSerialize;
-                if (propertyDataManager.IsPropertyNameMappedToXmlElement(type, propertyToSerialize))
+                string xmlName = memberName;
+                if (propertyDataManager.IsPropertyNameMappedToXmlElement(type, memberName))
                 {
-                    xmlName = propertyDataManager.MapPropertyNameToXmlElementName(type, propertyToSerialize);
+                    xmlName = propertyDataManager.MapPropertyNameToXmlElementName(type, memberName);
                 }
 
-                _dataContractSerializerFactory.GetDataContractSerializer(type, propertyInfo.PropertyType, xmlName);
+                _dataContractSerializerFactory.GetDataContractSerializer(type, memberRepresentedType, xmlName);
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, "Failed to warmup member '{0}.{1}'. This member might cause problems during serialization", type.GetSafeFullName(), memberName);
             }
         }
 
