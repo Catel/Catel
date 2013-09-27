@@ -112,6 +112,7 @@
     <Compile Include="Data\Helpers\EditableObjectHelper.cs" />
     <Compile Include="Data\Helpers\ValidationContextHelper.cs" />
     <Compile Include="Data\Helpers\XmlNameMapper.cs" />
+    <Compile Include="Data\Interfaces\IModelEqualityComparer.cs" />
     <Compile Include="Data\Interfaces\IAdvancedNotifyPropertyChanged.cs" />
     <Compile Include="Data\Interfaces\IAdvancedNotifyPropertyChanging.cs" />
     <Compile Include="Data\Interfaces\IDataObjectBase.cs" />
@@ -131,6 +132,7 @@
     <Compile Include="Data\ModelBase.serialization.cs" />
     <Compile Include="Data\ModelBase.serialization.xml.cs" />
     <Compile Include="Data\ModelBase.validation.cs" />
+    <Compile Include="Data\ModelEqualityComparer.cs" />
     <Compile Include="Data\ObservableObject.cs" />
     <Compile Include="Data\PropertyBag.cs" />
     <Compile Include="Data\PropertyData.cs" />

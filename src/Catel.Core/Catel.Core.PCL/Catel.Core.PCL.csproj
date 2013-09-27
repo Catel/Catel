@@ -186,6 +186,9 @@
     <Compile Include="..\Catel.Core.NET40\Data\Interfaces\IModel.cs">
       <Link>Data\Interfaces\IModel.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Data\Interfaces\IModelEqualityComparer.cs">
+      <Link>Data\Interfaces\IModelEqualityComparer.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\Interfaces\IParent.cs">
       <Link>Data\Interfaces\IParent.cs</Link>
     </Compile>
@@ -227,6 +230,9 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\ModelBase.validation.cs">
       <Link>Data\ModelBase.validation.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Data\ModelEqualityComparer.cs">
+      <Link>Data\ModelEqualityComparer.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\ObservableObject.cs">
       <Link>Data\ObservableObject.cs</Link>

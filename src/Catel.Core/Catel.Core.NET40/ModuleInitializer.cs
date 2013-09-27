@@ -40,6 +40,8 @@ namespace Catel.Core
             serviceLocator.RegisterType<IDataContractSerializerFactory, DataContractSerializerFactory>();
             serviceLocator.RegisterType<IXmlSerializer, XmlSerializer>();
             serviceLocator.RegisterType<ISerializationManager, SerializationManager>();
+
+            serviceLocator.RegisterType<IModelEqualityComparer, ModelEqualityComparer>();
         }
     }
 }

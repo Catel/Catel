@@ -62,6 +62,8 @@ Added/fixed:
 (+) CTL-171 Added ReferenceManager to create a dictionary of references and unique identifiers
 (+) CTL-172 Added ScopeManager to create custom scopes for any objects
 (+) CTL-175 It is now possible to customize and replace of IoC components (for example, to use an external IoC container)
+(+) CTL-178 Added possibility to implement a custom the ModelEqualityComparer. It can be overridden by instance (setting
+    the EqualityComparer) or for all models (registering it in the ServiceLocator)
 (+) Added extension method for ISplashScreenService for Prism to show progress control in a region
 (+) Added some additionnals members in IViewManager.
 (+) Added support to Commit enqueued tasks using an existing instance view model for SplashScreenService

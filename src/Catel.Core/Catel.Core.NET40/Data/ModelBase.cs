@@ -17,6 +17,7 @@ namespace Catel.Data
     using System.Reflection;
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
+    using Catel.IoC;
     using Collections;
 
     using Reflection;
@@ -57,7 +58,7 @@ namespace Catel.Data
         /// </summary>
         internal static readonly Type InternalSerializationType = typeof(List<PropertyValue>);
         #endregion
-
+        
         #region Fields
         /// <summary>
         /// The log.
@@ -124,6 +125,22 @@ namespace Catel.Data
         [field: NonSerialized]
 #endif
         private bool _leanAndMeanModel;
+
+        /// <summary>
+        /// Backing field for the <see cref="EqualityComparer"/> property. Because it has custom logic, it needs a backing field.
+        /// </summary>
+#if NET
+        [field: NonSerialized]
+#endif
+        private IModelEqualityComparer _equalityComparer;
+
+        /// <summary>
+        /// Backing field for the <see cref="GetHashCode"/> method so it only has to be calculated once to gain the best performance possible.
+        /// </summary>
+#if NET
+        [field: NonSerialized]
+#endif
+        private int? _hashCode;
         #endregion
 
         #region Constructors
@@ -187,69 +204,7 @@ namespace Catel.Data
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(ModelBase firstObject, ModelBase secondObject)
         {
-            if (ReferenceEquals(firstObject, secondObject))
-            {
-                return true;
-            }
-
-            if (((object)firstObject == null) || ((object)secondObject == null))
-            {
-                return false;
-            }
-
-            // Fix for issue 6633 (see http://catel.codeplex.com/workitem/6633)
-            // Check types before the "expensive" operation of checking all property values
-            if (firstObject.GetType() != secondObject.GetType())
-            {
-                return false;
-            }
-
-            lock (firstObject._propertyValuesLock)
-            {
-                foreach (var propertyValue in firstObject._propertyBag.GetAllProperties())
-                {
-                    // Only check if this is not an internal data object base property
-                    if (!firstObject.IsModelBaseProperty(propertyValue.Key))
-                    {
-                        object valueA = propertyValue.Value;
-                        if (!secondObject.IsPropertyRegistered(propertyValue.Key))
-                        {
-                            return false;
-                        }
-
-                        object valueB = secondObject.GetValue(propertyValue.Key);
-
-                        if (!ReferenceEquals(valueA, valueB))
-                        {
-                            if ((valueA == null) || (valueB == null))
-                            {
-                                return false;
-                            }
-
-                            // Is this an IEnumerable (but not a string)?
-                            var valueAAsIEnumerable = valueA as IEnumerable;
-                            if ((valueAAsIEnumerable != null) && !(valueA is string))
-                            {
-                                // Yes, loop all sub items and check them
-                                if (!CollectionHelper.IsEqualTo(valueAAsIEnumerable, (IEnumerable)valueB))
-                                {
-                                    return false;
-                                }
-                            }
-                            else
-                            {
-                                // No, check objects via equals method
-                                if (!valueA.Equals(valueB))
-                                {
-                                    return false;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            return true;
+            return Equals(firstObject, secondObject);
         }
 
         /// <summary>
@@ -266,6 +221,33 @@ namespace Catel.Data
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets or sets the equality comparer used to compare model bases with each other.
+        /// </summary>
+        /// <value>The equality comparer.</value>
+#if NET || SILVERLIGHT
+        [Browsable(false)]
+#endif
+        [XmlIgnore]
+        protected IModelEqualityComparer EqualityComparer
+        {
+            get
+            {
+                if (_equalityComparer == null)
+                {
+                    var dependencyResolver = this.GetDependencyResolver();
+
+                    _equalityComparer = dependencyResolver.Resolve<IModelEqualityComparer>();
+                }
+
+                return _equalityComparer;
+            }
+            set
+            {
+                _equalityComparer = value;
+            }
+        }
+
         /// <summary>
         /// Gets or sets a value indicating whether all models should behave as a lean and mean model.
         /// <para />
@@ -944,26 +926,8 @@ namespace Catel.Data
         /// </exception>
         public override bool Equals(object obj)
         {
-            // ReSharper disable RedundantCast
-
-            if ((object)obj == null)
-            {
-                return false;
-            }
-
-            // ReSharper restore RedundantCast
-
-            var objAsModelBase = obj as ModelBase;
-            if (objAsModelBase == null)
-            {
-                return false;
-            }
-
-            // ReSharper disable RedundantCast
-
-            return (ModelBase)this == objAsModelBase;
-
-            // ReSharper restore RedundantCast
+            var equalityComparer = EqualityComparer;
+            return equalityComparer.Equals(this, obj);
         }
 
         // ReSharper disable RedundantOverridenMember
@@ -976,7 +940,13 @@ namespace Catel.Data
         /// </returns>
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            if (!_hashCode.HasValue)
+            {
+                var equalityComparer = EqualityComparer;
+                _hashCode = equalityComparer.GetHashCode(this);
+            }
+
+            return _hashCode.Value;
         }
 
         /// <summary>

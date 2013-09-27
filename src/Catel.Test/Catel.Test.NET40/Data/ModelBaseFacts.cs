@@ -243,7 +243,7 @@ namespace Catel.Test.Data
                 model.Validate(true);
                 Assert.IsFalse(model.HasErrors);
 
-                var propertyData = PropertyDataManager.Default.GetPropertyData(typeof (LatePropertyRegistrationModel), "CanSave");
+                var propertyData = PropertyDataManager.Default.GetPropertyData(typeof(LatePropertyRegistrationModel), "CanSave");
                 Assert.IsTrue(propertyData.IsCalculatedProperty);
             }
         }
@@ -330,6 +330,102 @@ namespace Catel.Test.Data
                 model.Collection.Add(4);
 
                 Assert.IsTrue(model.HasCollectionChanged);
+            }
+        }
+
+        [TestClass]
+        public class TheEqualsChecks
+        {
+            public interface ITestModel
+            {
+
+            }
+
+            public class TestModel : ModelBase, ITestModel
+            {
+
+            }
+
+            public class TestModelWithCustomizedEquals : ModelBase, ITestModel
+            {
+                public override bool Equals(object obj)
+                {
+                    return this == obj;
+                }
+            }
+
+            //[TestMethod]
+            //public void EqualsWorksWithoutProperties()
+            //{
+            //    var collection = new ObservableCollection<ITestModel>();
+            //    var a = new TestModel();
+            //    var b = new TestModel();
+
+            //    AddToCollection(collection, a);
+            //    AddToCollection(collection, b);
+
+            //    Assert.AreEqual(2, collection.Count);
+            //    Assert.IsTrue(collection.Contains(a));
+            //    Assert.IsTrue(collection.Contains(b));
+            //}
+
+            [TestMethod]
+            public void EqualsWorksWithoutPropertiesOverridingEqualsMethod()
+            {
+                //Solution1: overide the Equal Method of myclass 
+                var collection = new ObservableCollection<ITestModel>();
+                var a = new TestModelWithCustomizedEquals();
+                var b = new TestModelWithCustomizedEquals();
+                AddToCollection(collection, a);
+                AddToCollection(collection, b);
+
+                Assert.AreEqual(2, collection.Count);
+                Assert.IsTrue(collection.Contains(a));
+                Assert.IsTrue(collection.Contains(b));
+            }
+
+            [TestMethod]
+            public void EqualsWorksWithoutPropertiesCustomizingAddMethod()
+            {
+                //Solution2:not using  the default Contains methord of ICollection<T>
+                var collection = new ObservableCollection<ITestModel>();
+                var a = new TestModelWithCustomizedEquals();
+                var b = new TestModelWithCustomizedEquals();
+                AddToCollection_CompareByReference(collection, a);
+                AddToCollection_CompareByReference(collection, b);
+
+                Assert.AreEqual(2, collection.Count);
+                Assert.IsTrue(collection.Contains(a));
+                Assert.IsTrue(collection.Contains(b));
+            }
+
+            private static void AddToCollection(ObservableCollection<ITestModel> collection, ITestModel m)
+            {
+                if (!collection.Contains(m))
+                {
+                    collection.Add(m);
+                }
+            }
+
+            private static void AddToCollection_CompareByReference(ObservableCollection<ITestModel> collection, ITestModel m)
+            {
+                if (!Contains_CompareByReference(collection, m))
+                {
+                    collection.Add(m);
+                }
+            }
+
+            private static bool Contains_CompareByReference<T>(IEnumerable<T> collection, T item)
+            {
+                foreach (var document in collection)
+                {
+                    if (ReferenceEquals(document, item))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
             }
         }
     }
