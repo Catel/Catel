@@ -926,6 +926,20 @@ namespace Catel.Data
         /// </exception>
         public override bool Equals(object obj)
         {
+            // Note: at first we only implemented the EqualityComparer, but the IEqualityComparer of Microsoft
+            // throws an exception when the 2 types are not the same. Although MS does recommend not to throw exceptions,
+            // they do it themselves. Check for null and check the types before feeding it to the equality comparer.
+
+            if (obj == null)
+            {
+                return false;
+            }
+
+            if (GetType() != obj.GetType())
+            {
+                return false;
+            }
+
             var equalityComparer = EqualityComparer;
             return equalityComparer.Equals(this, obj);
         }
