@@ -51,6 +51,13 @@
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\..\lib\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Web.XmlTransform">
+      <HintPath>..\..\..\lib\Microsoft.Web.Xdt.1.0.0\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
+    </Reference>
+    <Reference Include="NuGet.Core, Version=2.7.40808.167, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\NuGet.Core.2.7.0\lib\net40-Client\NuGet.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Obsolete, Version=2.3.0.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Obsolete.Fody.2.3.0\Lib\NET35\Obsolete.dll</HintPath>
@@ -90,6 +97,12 @@
     <Compile Include="Extensions\IRegionManagerExtensions.cs" />
     <Compile Include="Extensions\IUIVisualizerServiceExtensions.cs" />
     <Compile Include="Extensions\ISplashScreenServiceExtensions.cs" />
+    <Compile Include="Modules\ModuleManager\InstallPackageRequest.cs" />
+    <Compile Include="Modules\Extensions\ModuleInfoExtensions.cs" />
+    <Compile Include="Modules\ModuleManager\ModuleManager.cs" />
+    <Compile Include="Modules\Extensions\NuGetBasedModuleCatalogExtensions.cs" />
+    <Compile Include="Modules\ModuleManager\NuGetModuleTypeLoader.cs" />
+    <Compile Include="Modules\NuGetBasedModuleCatalog.cs" />
     <Compile Include="Modules\SafeDirectoryModuleCatalog.cs" />
     <Compile Include="Tasks\BootstrapperTaskFactory.cs" />
     <Compile Include="Tasks\Interfaces\IBootstrapperTaskFactory.cs" />
