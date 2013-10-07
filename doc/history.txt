@@ -96,6 +96,7 @@ Added/fixed:
     path when they are successfully instantiated to provide a better and less strict scoping mechanism
 (x) CTL-179 Fixed issue when Modifiers="None" was used on behaviors (default value), pressing SHIFT and a character wouldn't
     trigger the events
+(x) CTL-182 Fixed memory leak in nested view models and view models that had SupportIEditableObject set to false
 (x) Fixed Drag and Drop behavior when the drop position is less then the initial item's position
 (x) Ensured the value of Owner property of Shell to NULL in order to avoid the application close  when the SplashScreenService done
 (x) Ensured Bootstrapper UI tasks calls using DispatcherService

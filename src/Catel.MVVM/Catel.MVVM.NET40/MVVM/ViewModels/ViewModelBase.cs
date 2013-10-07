@@ -275,7 +275,7 @@ namespace Catel.MVVM
         /// The view model properties by type.
         /// </summary>
         [field: NonSerialized]
-        private static readonly Dictionary<Type, HashSet<string>> _viewModelPropertiesByType = new Dictionary<Type, HashSet<string>>(); 
+        private static readonly Dictionary<Type, HashSet<string>> _viewModelPropertiesByType = new Dictionary<Type, HashSet<string>>();
 #endif
         #endregion
 
@@ -302,7 +302,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
         /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
-        protected ViewModelBase() : 
+        protected ViewModelBase() :
             this(true, false, false)
         {
         }
@@ -1630,14 +1630,11 @@ namespace Catel.MVVM
                 return false;
             }
 
-            if (SupportIEditableObject)
+            lock (_modelObjects)
             {
-                lock (_modelObjects)
+                foreach (KeyValuePair<string, object> modelKeyValuePair in _modelObjects)
                 {
-                    foreach (KeyValuePair<string, object> modelKeyValuePair in _modelObjects)
-                    {
-                        UninitializeModel(modelKeyValuePair.Key, modelKeyValuePair.Value, ModelCleanUpMode.CancelEdit);
-                    }
+                    UninitializeModel(modelKeyValuePair.Key, modelKeyValuePair.Value, ModelCleanUpMode.CancelEdit);
                 }
             }
 
@@ -1706,14 +1703,11 @@ namespace Catel.MVVM
 
             if (saved)
             {
-                if (SupportIEditableObject)
+                lock (_modelObjects)
                 {
-                    lock (_modelObjects)
+                    foreach (KeyValuePair<string, object> modelKeyValuePair in _modelObjects)
                     {
-                        foreach (KeyValuePair<string, object> modelKeyValuePair in _modelObjects)
-                        {
-                            UninitializeModel(modelKeyValuePair.Key, modelKeyValuePair.Value, ModelCleanUpMode.EndEdit);
-                        }
+                        UninitializeModel(modelKeyValuePair.Key, modelKeyValuePair.Value, ModelCleanUpMode.EndEdit);
                     }
                 }
 
@@ -1761,8 +1755,6 @@ namespace Catel.MVVM
             Close();
 
             SuspendValidation = true;
-
-            //MessageMediatorHelper.UnsubscribeRecipient(this);
 
             IsClosed = true;
 

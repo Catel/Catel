@@ -471,6 +471,10 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         {
             if (_parentViewModelContainer != null)
             {
+                // Fix for https://catelproject.atlassian.net/browse/CTL-182, we might be subscribed to a parent
+                // while that doesn't change, we might be unloaded and we always need to unsubscribe from the parent view model
+                UnsubscribeFromParentViewModel();
+
                 _parentViewModelContainer.ViewModelChanged -= OnParentViewModelContainerViewModelChanged;
 
                 _parentViewModelContainer = null;

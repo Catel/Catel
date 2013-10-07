@@ -11,7 +11,7 @@ namespace Catel
     using System.ComponentModel;
     using System.Linq;
     using System.Reflection;
-
+    using Catel.Caching;
     using Logging;
     using Reflection;
 
@@ -642,6 +642,11 @@ namespace Catel
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
+        /// The event handler event arguments cache.
+        /// </summary>
+        private static readonly ICacheStorage<Type, Type> _eventHandlerEventArgsCache = new CacheStorage<Type, Type>();   
+
+        /// <summary>
         /// Subscribes to a weak event by using one single method. This method also takes care of automatic
         /// unsubscription of the event.
         /// </summary>
@@ -764,25 +769,30 @@ namespace Catel
             Argument.IsNotNullOrWhitespace("eventName", eventName);
             Argument.IsNotNull("handler", handler);
 
-            Type handlerType = handler.GetType();
-            Type eventArgsType = null;
+            var handlerType = handler.GetType();
+            var eventArgsType = _eventHandlerEventArgsCache.GetFromCacheOrFetch(handlerType, () =>
+            {
+                Type type = null;
 
-            if (handlerType == typeof(PropertyChangedEventHandler))
-            {
-                eventArgsType = typeof(PropertyChangedEventArgs);
-            }
-            else if (handlerType == typeof(NotifyCollectionChangedEventHandler))
-            {
-                eventArgsType = typeof(NotifyCollectionChangedEventArgs);
-            }
-            else if (handlerType.IsGenericTypeEx())
-            {
-                eventArgsType = handlerType.GetGenericArgumentsEx()[0];
-                if (!typeof(EventArgsBase).IsAssignableFromEx(eventArgsType))
+                if (handlerType == typeof(PropertyChangedEventHandler))
                 {
-                    eventArgsType = null;
+                    type = typeof(PropertyChangedEventArgs);
                 }
-            }
+                else if (handlerType == typeof(NotifyCollectionChangedEventHandler))
+                {
+                    type = typeof(NotifyCollectionChangedEventArgs);
+                }
+                else if (handlerType.IsGenericTypeEx())
+                {
+                    type = handlerType.GetGenericArgumentsEx()[0];
+                    if (!typeof(EventArgsBase).IsAssignableFromEx(type))
+                    {
+                        type = null;
+                    }
+                }
+
+                return type;
+            });
 
             if (eventArgsType == null)
             {
