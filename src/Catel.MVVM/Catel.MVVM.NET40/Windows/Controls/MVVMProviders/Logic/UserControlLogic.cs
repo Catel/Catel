@@ -577,7 +577,6 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 {
                     if (ViewModel != null)
                     {
-                        CancelViewModel();
                         CloseAndDiposeViewModel(false);
                     }
 
@@ -588,10 +587,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             {
                 if (ViewModel != null)
                 {
-                    CancelViewModel();
                     CloseAndDiposeViewModel(false);
-
-                    ViewModel = null;
                 }
 
                 // We closed our previous view-model, but it might be possible to construct a new view-model
@@ -607,7 +603,15 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         {
             if (ViewModel != null)
             {
-                ViewModel.CloseViewModel(result);
+                if (result ?? false)
+                {
+                    ViewModel.SaveAndCloseViewModel();
+                }
+                else
+                {
+                    ViewModel.CancelAndCloseViewModel();
+                }
+
                 ViewModel = null;
             }
         }
