@@ -2,7 +2,7 @@
 #define SourceDirectory ""
 ; #define AppVersion "3.1"
 #define AppVersion "[VERSION]"
-; #define AppVersionAsText "3.1 beta 1"
+; #define AppDisplayVersion "3.1 beta 1"
 #define AppDisplayVersion "[VERSION_DISPLAY]"
 #define AppNameWithDisplayVersion "{#AppName} {#AppDisplayVersion}"
 #define AppNameWithVersion "{#AppName} {#AppVersion}"
@@ -15,7 +15,7 @@
 #define VS11Root "{pf32}\Microsoft Visual Studio 11.0"
 #define VS12Root "{pf32}\Microsoft Visual Studio 12.0"
 
-#define OutputFileWithSpaces OutputPrefix + "_" + AppVersionAsText
+#define OutputFileWithSpaces OutputPrefix + "_" + AppDisplayVersion
 #define OutputFile StringChange(OutputFileWithSpaces, " ", "_")
 
 [_ISTool]
