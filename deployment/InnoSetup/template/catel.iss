@@ -4,6 +4,7 @@
 #define AppVersion "[VERSION]"
 ; #define AppVersionAsText "3.1 beta 1"
 #define AppVersionAsText "[VERSION_DISPLAY]"
+#define AppNameWithVersion "{#AppName} {#AppVersion}"
 #define Website "http://www.catelproject.com"
 #define OutputPrefix "catel"
 #define Company "CatenaLogic"
@@ -21,17 +22,17 @@ EnableISX=false
 Use7zip=false
 
 [Setup]
-AppName={#AppName}
-AppVerName={#AppName} {#AppVersionAsText}
-AppID={#AppName}
+AppName={#AppVersionAsText}
+AppVerName={#AppVersionAsText}
+AppID={#AppVersionAsText}
 AppPublisher={#Company}
 AppCopyright={#Company}
-DefaultDirName={pf32}\{#AppName} {#AppVersion}
-DefaultGroupName={#AppName}
+DefaultDirName={pf32}\{#AppVersionAsText}
+DefaultGroupName={#AppVersionAsText}
 UsePreviousSetupType=true
 OutputDir=..\output
 OutputBaseFilename={#OutputFile}
-UninstallDisplayName={#AppName}
+UninstallDisplayName={#AppVersionAsText}
 Compression=lzma2/Ultra64
 UseSetupLdr=true
 SolidCompression=true
@@ -44,7 +45,7 @@ AppSupportURL={#Website}
 AppUpdatesURL={#Website}
 AppContact={#Website}
 VersionInfoCompany={#Company}
-AppMutex={#AppName}
+AppMutex={#AppVersionAsText}
 LanguageDetectionMethod=none
 DisableStartupPrompt=True
 WizardImageFile=resources\[WIZARDIMAGEFILE].bmp
