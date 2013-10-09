@@ -4,13 +4,14 @@
 #define AppVersion "[VERSION]"
 ; #define AppVersionAsText "3.1 beta 1"
 #define AppVersionAsText "[VERSION_DISPLAY]"
-#define Website "http://catel.codeplex.com"
+#define Website "http://www.catelproject.com"
 #define OutputPrefix "catel"
 #define Company "CatenaLogic"
 
 #define VS9Root "{pf32}\Microsoft Visual Studio 9.0"
 #define VS10Root "{pf32}\Microsoft Visual Studio 10.0"
 #define VS11Root "{pf32}\Microsoft Visual Studio 11.0"
+#define VS12Root "{pf32}\Microsoft Visual Studio 12.0"
 
 #define OutputFileWithSpaces OutputPrefix + "_" + AppVersionAsText
 #define OutputFile StringChange(OutputFileWithSpaces, " ", "_")
@@ -164,8 +165,8 @@ Root: HKLM; SubKey: SOFTWARE\Microsoft\Microsoft SDKs\WindowsPhone\v8.0\Assembly
 ;Root: HKLM; SubKey: SOFTWARE\Microsoft\Microsoft SDKs\Silverlight for WindowsPhone\v4.0\AssemblyFoldersEx\Catel (WinRT); ValueType: string; ValueData: {app}\Libraries\WinRT; Flags: UninsDeleteKey
 
 [Icons]
-Name: "{group}\Go to Catel homepage"; Filename: http://catel.codeplex.com;
-Name: "{group}\Documentation (online)"; Filename: http://catel.catenalogic.com;
+Name: "{group}\Go to Catel homepage"; Filename: http://www.catelproject.com;
+Name: "{group}\Documentation (online)"; Filename: http://www.catelproject.com/support/documentation;
 ;Name: "{group}\Documentation (offline)"; Filename: {app}\doc\catel.chm; 
 Name: "{group}\Uninstall Catel"; Filename: {app}\unins000.exe; WorkingDir: {app}; IconFilename: {app}\resources\catel.ico; 
 
@@ -220,6 +221,9 @@ Filename: {#VS10Root}\Common7\IDE\VCSExpress.exe; Parameters: /installvstemplate
 ; VS 11 (VS 2012) 
 Filename: {#VS11Root}\Common7\IDE\devenv.exe; Parameters: /installvstemplates; StatusMsg: "Updating Visual Studio 2012 templates cache (can take a minute or two)"; Components: templates; Flags: SkipIfDoesntExist;
 Filename: {#VS11Root}\Common7\IDE\VCSExpress.exe; Parameters: /installvstemplates; StatusMsg: "Updating Visual Studio 2012 Express templates cache (can take a minute or two)"; Components: templates; Flags: SkipIfDoesntExist;
+
+[ThirdParty]
+CompileLogMethod=append
 
 [Code]
 //=========================================================================
@@ -349,6 +353,31 @@ begin
   sPath := ExpandConstant('{#VS11Root}\Common7\IDE\VCSExpress.exe');
   
   Log('Checking path "' + sPath + '" to determine whether VS11 Express is installed');
+  
+  Result := FileExists(sPath);
+end;
+
+
+//================================
+
+function IsVs12Installed : Boolean;
+var
+  sPath: string;
+begin
+  sPath := ExpandConstant('{#VS12Root}\Common7\IDE\devenv.exe');
+  
+  Log('Checking path "' + sPath + '" to determine whether VS12 is installed');
+  
+  Result := FileExists(sPath);
+end;
+
+function IsVs12ExpressInstalled : Boolean;
+var
+  sPath: string;
+begin
+  sPath := ExpandConstant('{#VS12Root}\Common7\IDE\VCSExpress.exe');
+  
+  Log('Checking path "' + sPath + '" to determine whether VS12 Express is installed');
   
   Result := FileExists(sPath);
 end;
