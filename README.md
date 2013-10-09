@@ -15,6 +15,7 @@ Catel also provides the following extensions:
 - Data
 - Entity Framework
 - FluentValidation
+- Interception
 - Prism
 
 ## Documentation

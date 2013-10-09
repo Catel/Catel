@@ -1,4 +1,4 @@
 Catel projects explanation
 ==========================
 
-For more information, see https://catelproject.atlassian.net/wiki/display/CTL
+For more information, see http://www.catelproject.com
