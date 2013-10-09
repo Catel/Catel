@@ -3,7 +3,8 @@
 ; #define AppVersion "3.1"
 #define AppVersion "[VERSION]"
 ; #define AppVersionAsText "3.1 beta 1"
-#define AppVersionAsText "[VERSION_DISPLAY]"
+#define AppDisplayVersion "[VERSION_DISPLAY]"
+#define AppNameWithDisplayVersion "{#AppName} {#AppDisplayVersion}"
 #define AppNameWithVersion "{#AppName} {#AppVersion}"
 #define Website "http://www.catelproject.com"
 #define OutputPrefix "catel"
@@ -22,30 +23,30 @@ EnableISX=false
 Use7zip=false
 
 [Setup]
-AppName={#AppVersionAsText}
-AppVerName={#AppVersionAsText}
-AppID={#AppVersionAsText}
+AppName={#AppNameWithVersion}
+AppVerName={#AppNameWithDisplayVersion}
+AppID={#AppNameWithVersion}
 AppPublisher={#Company}
 AppCopyright={#Company}
-DefaultDirName={pf32}\{#AppVersionAsText}
-DefaultGroupName={#AppVersionAsText}
+DefaultDirName={pf32}\{#AppNameWithVersion}
+DefaultGroupName={#AppNameWithVersion}
 UsePreviousSetupType=true
 OutputDir=..\output
 OutputBaseFilename={#OutputFile}
-UninstallDisplayName={#AppVersionAsText}
+UninstallDisplayName={#AppNameWithVersion}
 Compression=lzma2/Ultra64
 UseSetupLdr=true
 SolidCompression=true
 ShowLanguageDialog=yes
-VersionInfoVersion={#AppVersion}
-AppVersion={#AppVersionAsText}
+VersionInfoVersion={#AppNameWithVersion}
+AppVersion={#AppNameWithDisplayVersion}
 InternalCompressLevel=Ultra64
 AppPublisherURL={#Website}
 AppSupportURL={#Website}
 AppUpdatesURL={#Website}
 AppContact={#Website}
 VersionInfoCompany={#Company}
-AppMutex={#AppVersionAsText}
+AppMutex={#AppNameWithVersion}
 LanguageDetectionMethod=none
 DisableStartupPrompt=True
 WizardImageFile=resources\[WIZARDIMAGEFILE].bmp
