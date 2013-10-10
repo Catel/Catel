@@ -90,24 +90,33 @@ Source: libraries\*; DestDir: {app}\libraries\; Flags: createallsubdirs recurses
 ; Snippets
 ;----------
 
-Source: snippets\C#\*; DestDir: {#VS9Root}\VC#\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs9Installed;
-Source: snippets\VB.NET\*; DestDir: {#VS9Root}\VB\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs9Installed;
-Source: snippets\C#\*; DestDir: {#VS9Root}\VC#\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs9ExpressInstalled;
-Source: snippets\VB.NET\*; DestDir: {#VS9Root}\VB\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs9ExpressInstalled;
+Source: snippets\*; DestDir: {app}\snippets\; Flags: createallsubdirs recursesubdirs; Components: snippets;
+
+Source: snippets\C#\*; DestDir: {#VS9Root}\VC#\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs9Installed;
+Source: snippets\VB.NET\*; DestDir: {#VS9Root}\VB\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs9Installed;
+Source: snippets\C#\*; DestDir: {#VS9Root}\VC#\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs9ExpressInstalled;
+Source: snippets\VB.NET\*; DestDir: {#VS9Root}\VB\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs9ExpressInstalled;
  
-Source: snippets\C#\*; DestDir: {#VS10Root}\VC#\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs10Installed;
-Source: snippets\VB.NET\*; DestDir: {#VS10Root}\VB\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs10Installed;
-Source: snippets\C#\*; DestDir: {#VS10Root}\VC#\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs10ExpressInstalled;
-Source: snippets\VB.NET\*; DestDir: {#VS10Root}\VB\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs10ExpressInstalled;
+Source: snippets\C#\*; DestDir: {#VS10Root}\VC#\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs10Installed;
+Source: snippets\VB.NET\*; DestDir: {#VS10Root}\VB\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs10Installed;
+Source: snippets\C#\*; DestDir: {#VS10Root}\VC#\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs10ExpressInstalled;
+Source: snippets\VB.NET\*; DestDir: {#VS10Root}\VB\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs10ExpressInstalled;
  
-Source: snippets\C#\*; DestDir: {#VS11Root}\VC#\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs11Installed;
-Source: snippets\VB.NET\*; DestDir: {#VS11Root}\VB\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs11Installed;
-Source: snippets\C#\*; DestDir: {#VS11Root}\VC#\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs11ExpressInstalled;
-Source: snippets\VB.NET\*; DestDir: {#VS11Root}\VB\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs11ExpressInstalled; 
+Source: snippets\C#\*; DestDir: {#VS11Root}\VC#\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs11Installed;
+Source: snippets\VB.NET\*; DestDir: {#VS11Root}\VB\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs11Installed;
+Source: snippets\C#\*; DestDir: {#VS11Root}\VC#\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs11ExpressInstalled;
+Source: snippets\VB.NET\*; DestDir: {#VS11Root}\VB\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs11ExpressInstalled; 
+
+Source: snippets\C#\*; DestDir: {#VS12Root}\VC#\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs12Installed;
+Source: snippets\VB.NET\*; DestDir: {#VS12Root}\VB\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs12Installed;
+Source: snippets\C#\*; DestDir: {#VS12Root}\VC#\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs12ExpressInstalled;
+Source: snippets\VB.NET\*; DestDir: {#VS12Root}\VB\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs12ExpressInstalled; 
 
 ;----------
 ; Templates
 ;----------
+
+Source: templates\*; DestDir: {app}\templates\; Flags: createallsubdirs recursesubdirs; Components: templates;
 
 ; VS 9 (VS 2008)
 Source: templates\C#\itemtemplates\*; DestDir: {#VS9Root}\Common7\IDE\ItemTemplates\CSharp\Catel\1033; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs9Installed; 
@@ -144,6 +153,18 @@ Source: templates\C#\itemtemplates\*; DestDir: {#VS11Root}\Common7\IDE\VCSExpres
 Source: templates\C#\projecttemplates\*; DestDir: {#VS11Root}\Common7\IDE\VCSExpress\ProjectTemplates\CSharp\Catel\1033; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs11ExpressInstalled;
 Source: templates\VB.NET\itemtemplates\*; DestDir: {#VS11Root}\Common7\IDE\VCSExpress\ItemTemplates\VisualBasic\Catel\1033; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs11ExpressInstalled;
 Source: templates\VB.NET\projecttemplates\*; DestDir: {#VS11Root}\Common7\IDE\VCSExpress\ProjectTemplates\VisualBasic\Catel\1033; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs11ExpressInstalled;
+
+; VS 12 (VS 12)
+Source: templates\C#\itemtemplates\*; DestDir: {#VS12Root}\Common7\IDE\ItemTemplates\CSharp\Catel\1033; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs12Installed;
+Source: templates\C#\projecttemplates\*; DestDir: {#VS12Root}\Common7\IDE\ProjectTemplates\CSharp\Catel\1033; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs12Installed;
+Source: templates\VB.NET\itemtemplates\*; DestDir: {#VS12Root}\Common7\IDE\ItemTemplates\VisualBasic\Catel\1033; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs12Installed;
+Source: templates\VB.NET\projecttemplates\*; DestDir: {#VS12Root}\Common7\IDE\ProjectTemplates\VisualBasic\Catel\1033; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs12Installed;
+
+; VS 12 (VS 12 Express)
+Source: templates\C#\itemtemplates\*; DestDir: {#VS12Root}\Common7\IDE\VCSExpress\ItemTemplates\CSharp\Catel\1033; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs12ExpressInstalled;
+Source: templates\C#\projecttemplates\*; DestDir: {#VS12Root}\Common7\IDE\VCSExpress\ProjectTemplates\CSharp\Catel\1033; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs12ExpressInstalled;
+Source: templates\VB.NET\itemtemplates\*; DestDir: {#VS12Root}\Common7\IDE\VCSExpress\ItemTemplates\VisualBasic\Catel\1033; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs12ExpressInstalled;
+Source: templates\VB.NET\projecttemplates\*; DestDir: {#VS12Root}\Common7\IDE\VCSExpress\ProjectTemplates\VisualBasic\Catel\1033; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs12ExpressInstalled;
 
 [CustomMessages]
 DotNetMissing=This setup requires the .NET Framework. Please download and install the .NET Framework and run this setup again. Do you want to download the framework now?
