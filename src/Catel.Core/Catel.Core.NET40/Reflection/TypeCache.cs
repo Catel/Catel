@@ -192,6 +192,11 @@ namespace Catel.Reflection
                 var typeNameWithAssembly = string.IsNullOrEmpty(assemblyName) ? null : TypeHelper.FormatType(assemblyName, typeName);
                 if (typeNameWithAssembly == null)
                 {
+                    if (typesWithoutAssembly.ContainsKey(typeName))
+                    {
+                        return typesWithAssembly[typesWithoutAssembly[typeName]];
+                    }
+
                     // Note that lazy-loaded types (a few lines below) are added to the types *with* assemblies so we have
                     // a direct access cache
                     if (typesWithAssembly.ContainsKey(typeName))
