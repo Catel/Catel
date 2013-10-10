@@ -99,6 +99,7 @@ Added/fixed:
     trigger the events
 (x) CTL-182 Fixed memory leak in nested view models and view models that had SupportIEditableObject set to false
 (x) CTL-185 Unloading a view via UserControlLogic might resolve in memory leaks
+(x) CTL-190 TypeCache throws exception when same non-existing late-bound type is queried twice
 (x) Unloading a view via UserControlLogic might resolve in memory leaks
 (x) Fixed Drag and Drop behavior when the drop position is less then the initial item's position
 (x) Ensured the value of Owner property of Shell to NULL in order to avoid the application close  when the SplashScreenService done

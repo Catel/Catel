@@ -192,19 +192,18 @@ namespace Catel.Reflection
                 var typeNameWithAssembly = string.IsNullOrEmpty(assemblyName) ? null : TypeHelper.FormatType(assemblyName, typeName);
                 if (typeNameWithAssembly == null)
                 {
-                    if (typesWithoutAssembly.ContainsKey(typeName))
+                    // Note that lazy-loaded types (a few lines below) are added to the types *with* assemblies so we have
+                    // a direct access cache
+                    if (typesWithAssembly.ContainsKey(typeName))
                     {
-                        return typesWithAssembly[typesWithoutAssembly[typeName]];
+                        return typesWithAssembly[typeName];
                     }
 
                     var fallbackType = Type.GetType(typeName);
                     if (fallbackType != null)
                     {
                         // Though it was not initially found, we still have found a new type, register it
-                        var newAssemblyName = TypeHelper.GetAssemblyNameWithoutOverhead(fallbackType.GetAssemblyFullNameEx());
-                        string newFullType = TypeHelper.FormatType(newAssemblyName, fallbackType.FullName);
-
-                        typesWithoutAssembly[typeName] = newFullType;
+                        typesWithAssembly[typeName] = fallbackType;
                     }
 
                     return fallbackType;
