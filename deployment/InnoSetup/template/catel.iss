@@ -4,8 +4,8 @@
 #define AppVersion "[VERSION]"
 ; #define AppDisplayVersion "3.1 beta 1"
 #define AppDisplayVersion "[VERSION_DISPLAY]"
-#define AppNameWithDisplayVersion AppName AppDisplayVersion
-#define AppNameWithVersion AppName AppVersion
+#define AppNameWithDisplayVersion AppName + " " + AppDisplayVersion
+#define AppNameWithVersion AppName + " " + AppVersion
 #define Website "http://www.catelproject.com"
 #define OutputPrefix "catel"
 #define Company "CatenaLogic"
