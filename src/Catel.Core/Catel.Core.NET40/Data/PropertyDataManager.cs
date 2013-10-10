@@ -17,7 +17,7 @@ namespace Catel.Data
     /// <summary>
     /// Property data manager.
     /// </summary>
-    internal class PropertyDataManager
+    public class PropertyDataManager
     {
         #region Fields
         /// <summary>
