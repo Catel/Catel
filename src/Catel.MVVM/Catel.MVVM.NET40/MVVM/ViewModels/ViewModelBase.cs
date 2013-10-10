@@ -711,7 +711,9 @@ namespace Catel.MVVM
             var existingProperties = viewModelType.GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(true, false));
             foreach (var existingProperty in existingProperties)
             {
-                propertyDescriptors.Add(new ViewModelPropertyDescriptor(null, existingProperty.Name, existingProperty.PropertyType));
+                var attributes = existingProperty.GetCustomAttributesEx(true);
+                var propertyDescriptor = ViewModelPropertyDescriptorFactory.CreatePropertyDescriptor(null, existingProperty.Name, existingProperty.PropertyType, attributes);
+                propertyDescriptors.Add(propertyDescriptor);
             }
 #endif
 
@@ -784,7 +786,9 @@ namespace Catel.MVVM
                             throw new InvalidOperationException(error);
                         }
 
-                        propertyDescriptors.Add(ViewModelPropertyDescriptorFactory.CreatePropertyDescriptor(null, exposeAttribute.PropertyName, modelPropertyInfo.PropertyType));
+                        var attributes = modelPropertyInfo.GetCustomAttributesEx(true);
+                        var propertyDescriptor = ViewModelPropertyDescriptorFactory.CreatePropertyDescriptor(null, exposeAttribute.PropertyName, modelPropertyInfo.PropertyType, attributes);
+                        propertyDescriptors.Add(propertyDescriptor);
                     }
                 }
 #endif

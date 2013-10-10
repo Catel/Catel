@@ -525,6 +525,9 @@
     <Compile Include="..\Catel.Core.NET40\Reflection\Extensions\MemberInfoExtensions.cs">
       <Link>Reflection\Extensions\MemberInfoExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Reflection\Extensions\ObjectExtensions.cs">
+      <Link>Reflection\Extensions\ObjectExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Reflection\Extensions\ReflectionExtensions.assembly.cs">
       <Link>Reflection\Extensions\ReflectionExtensions.assembly.cs</Link>
     </Compile>

@@ -158,7 +158,7 @@ namespace Catel.Reflection
         private static TAttibute GetAssemblyAttribute<TAttibute>(Assembly assembly) 
             where TAttibute : Attribute
         {
-            object[] attibutes = assembly.GetCustomAttributesEx(typeof(TAttibute), false);
+            var attibutes = assembly.GetCustomAttributesEx(typeof(TAttibute));
             return attibutes.Length > 0 ? attibutes[0] as TAttibute : null;
         }
 
@@ -171,8 +171,7 @@ namespace Catel.Reflection
         /// <returns>Value of the attribute or empty if the attribute is not found.</returns>
         private static string GetAssemblyAttributeValue(Assembly assembly, Type attribute, string property)
         {
-            object[] attributes = assembly.GetCustomAttributesEx(attribute, false);
-
+            var attributes = assembly.GetCustomAttributesEx(attribute);
             if (attributes.Length == 0)
             {
                 return string.Empty;

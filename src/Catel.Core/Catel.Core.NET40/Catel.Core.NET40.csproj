@@ -285,6 +285,7 @@
     <Compile Include="Reflection\Extensions\AssemblyExtensions.cs" />
     <Compile Include="Reflection\Extensions\DelegateExtensions.cs" />
     <Compile Include="Reflection\Extensions\MemberInfoExtensions.cs" />
+    <Compile Include="Reflection\Extensions\ObjectExtensions.cs" />
     <Compile Include="Reflection\Extensions\ReflectionExtensions.assembly.cs" />
     <Compile Include="Reflection\Extensions\ReflectionExtensions.cache.cs" />
     <Compile Include="Reflection\Extensions\ReflectionExtensions.methodinfo.cs" />

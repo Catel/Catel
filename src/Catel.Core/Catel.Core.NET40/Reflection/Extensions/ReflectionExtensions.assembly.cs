@@ -32,21 +32,21 @@ namespace Catel.Reflection
 #endif
         }
 
-        public static object GetCustomAttributeEx(this Assembly assembly, Type attributeType, bool inherit)
+        public static Attribute GetCustomAttributeEx(this Assembly assembly, Type attributeType)
         {
-            var attributes = GetCustomAttributesEx(assembly, attributeType, inherit);
+            var attributes = GetCustomAttributesEx(assembly, attributeType);
             return (attributes.Length > 0) ? attributes[0] : null;
         }
 
-        public static object[] GetCustomAttributesEx(this Assembly assembly, Type attributeType, bool inherit)
+        public static Attribute[] GetCustomAttributesEx(this Assembly assembly, Type attributeType)
         {
             Argument.IsNotNull("assembly", assembly);
             Argument.IsNotNull("attributeType", attributeType);
 
 #if NETFX_CORE || WP8
-            return assembly.GetCustomAttributes(attributeType).ToArray<object>();
+            return assembly.GetCustomAttributes(attributeType).ToArray();
 #else
-            return assembly.GetCustomAttributes(attributeType, inherit);
+            return assembly.GetCustomAttributes(attributeType, true).ToAttributeArray();
 #endif
         }
     }

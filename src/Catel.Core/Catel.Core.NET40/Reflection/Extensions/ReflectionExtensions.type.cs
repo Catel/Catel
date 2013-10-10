@@ -157,58 +157,60 @@ namespace Catel.Reflection
         /// <returns>The get custom attribute ex.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="attributeType" /> is <c>null</c>.</exception>
-        public static object GetCustomAttributeEx(this Type type, Type attributeType, bool inherit)
+        public static Attribute GetCustomAttributeEx(this Type type, Type attributeType, bool inherit)
         {
             Argument.IsNotNull("type", type);
             Argument.IsNotNull("attributeType", attributeType);
 
-            object[] attributes = GetCustomAttributesEx(type, attributeType, inherit);
+            var attributes = GetCustomAttributesEx(type, attributeType, inherit);
             return (attributes.Length > 0) ? attributes[0] : null;
         }
 
         /// <summary>
         /// The get custom attributes ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <param name="attributeType">
-        /// The attribute type.
-        /// </param>
-        /// <param name="inherit">
-        /// The inherit.
-        /// </param>
-        /// <returns>
-        /// </returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="attributeType"/> is <c>null</c>.
-        /// </exception>
-        public static object[] GetCustomAttributesEx(this Type type, Type attributeType, bool inherit)
+        /// <param name="type">The type.</param>
+        /// <param name="inherit">The inherit.</param>
+        /// <returns>System.Object[][].</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        public static Attribute[] GetCustomAttributesEx(this Type type, bool inherit)
+        {
+            Argument.IsNotNull("type", type);
+
+#if NETFX_CORE
+            return type.GetTypeInfo().GetCustomAttributes(inherit).ToArray();
+#else
+            return type.GetCustomAttributes(inherit).ToAttributeArray();
+#endif
+        }
+
+        /// <summary>
+        /// The get custom attributes ex.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="attributeType">The attribute type.</param>
+        /// <param name="inherit">The inherit.</param>
+        /// <returns>System.Object[][].</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="attributeType" /> is <c>null</c>.</exception>
+        public static Attribute[] GetCustomAttributesEx(this Type type, Type attributeType, bool inherit)
         {
             Argument.IsNotNull("type", type);
             Argument.IsNotNull("attributeType", attributeType);
 
 #if NETFX_CORE
-            return type.GetTypeInfo().GetCustomAttributes(attributeType, false).ToArray<object>();
+            return type.GetTypeInfo().GetCustomAttributes(attributeType, inherit).ToArray();
 #else
-            return type.GetCustomAttributes(attributeType, inherit);
+            return type.GetCustomAttributes(attributeType, inherit).ToAttributeArray();
 #endif
         }
 
         /// <summary>
         /// The get assembly ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <returns>
-        /// </returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <returns>Assembly.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         public static Assembly GetAssemblyEx(this Type type)
         {
             Argument.IsNotNull("type", type);
@@ -223,15 +225,9 @@ namespace Catel.Reflection
         /// <summary>
         /// The get assembly full name ex.
         /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <returns>
-        /// The get assembly full name ex.
-        /// </returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="type"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="type">The type.</param>
+        /// <returns>The get assembly full name ex.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         public static string GetAssemblyFullNameEx(this Type type)
         {
             Argument.IsNotNull("type", type);
