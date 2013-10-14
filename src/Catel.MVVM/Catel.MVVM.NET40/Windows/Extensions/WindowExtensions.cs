@@ -11,7 +11,8 @@ namespace Catel.Windows
     using System.Runtime.InteropServices;
     using System.Windows;
     using System.Windows.Interop;
-
+    using Catel.Reflection;
+    using Catel.Windows.Threading;
     using Logging;
 
     /// <summary>
@@ -264,6 +265,13 @@ namespace Catel.Windows
                 if (ownerWindow == window)
                 {
                     Log.Warning("Cannot set owner window to itself, no owner window set");
+                    return;
+                }
+
+                if (window.Dispatcher.GetThreadId() != ownerWindow.Dispatcher.GetThreadId())
+                {
+                    Log.Warning("The owner window '{0}' is not created on the same thread as the current window '{1}', cannot set owner window",
+                        ownerWindow.GetType().GetSafeFullName(), window.GetType().GetSafeFullName());
                     return;
                 }
 

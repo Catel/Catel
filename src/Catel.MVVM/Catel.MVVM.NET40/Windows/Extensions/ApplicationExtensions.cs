@@ -8,6 +8,7 @@
 
 namespace Catel.Windows
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -25,7 +26,17 @@ namespace Catel.Windows
         /// </returns>
         public static System.Windows.Window GetActiveWindow(this System.Windows.Application application)
         {
+            return application.Dispatcher.Invoke(new Func<System.Windows.Window>(() =>
+            {
+                return GetActiveWindowForApplication(application); 
+                
+            })) as System.Windows.Window;
+        }
+
+        private static System.Windows.Window GetActiveWindowForApplication(this System.Windows.Application application)
+        {
             System.Windows.Window activeWindow = null;
+
             if (application != null && application.Windows.Count > 0)
             {
                 var windowList = new List<System.Windows.Window>(application.Windows.Cast<System.Windows.Window>());
