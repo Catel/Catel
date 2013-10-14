@@ -899,6 +899,13 @@ namespace Catel.IoC
             Argument.IsNotNull("serviceType", serviceType);
             Argument.IsNotNull("implementingType", serviceImplementationType);
 
+            if (serviceImplementationType.IsInterfaceEx())
+            {
+                string error = string.Format("Cannot register interface type '{0}' as implementation, make sure to specify an actual class", serviceImplementationType.GetSafeFullName());
+                Log.Error(error);
+                throw new InvalidOperationException(error);
+            }
+
             /* TODO: This code have to be here to ensure the right usage of non-generic overloads of register methods.
              * TODO: If it is finally accepted then remove it from ServiceLocatorAutoRegistrationManager
             if (serviceImplementationType.IsAbstractEx() || !serviceType.IsAssignableFromEx(serviceImplementationType))
