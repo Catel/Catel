@@ -146,6 +146,8 @@ namespace Catel.IoC
 
                 try
                 {
+                    var typeFactory = _serviceLocator.ResolveType<ITypeFactory>();
+
                     while (_pendingTypes.Count > 0)
                     {
                         var type = _pendingTypes.Dequeue();
@@ -167,7 +169,31 @@ namespace Catel.IoC
                             }
                             else
                             {
-                                _serviceLocator.RegisterTypeIfNotYetRegistered(attribute.InterfaceType, type, attribute.Tag, attribute.RegistrationType);
+                                switch (attribute.RegistrationMode)
+                                {
+                                    case ServiceLocatorRegistrationMode.Transient:
+                                    case ServiceLocatorRegistrationMode.SingletonInstantiateWhenRequired:
+                                        _serviceLocator.RegisterTypeIfNotYetRegistered(attribute.InterfaceType, type, attribute.Tag, attribute.RegistrationType);
+                                        break;
+
+                                    case ServiceLocatorRegistrationMode.SingletonInstantiateImmediately:
+                                        if (!_serviceLocator.IsTypeRegistered(attribute.InterfaceType))
+                                        {
+                                            var instance = typeFactory.CreateInstance(type);
+                                            if (instance == null)
+                                            {
+                                                Log.Error("Failed to instantiate type '{0}', cannot automatically register the instance", type.GetSafeFullName());
+                                            }
+                                            else
+                                            {
+                                                _serviceLocator.RegisterInstance(attribute.InterfaceType, instance, attribute.Tag);
+                                            }
+                                        }
+                                        break;
+
+                                    default:
+                                        throw new ArgumentOutOfRangeException();
+                                }
                             }
                         }
                     }

@@ -75,6 +75,7 @@ Added/fixed:
 (*) CTL-151 Marked GetService on ViewModelBase and ServiceBase as obsolete => use dependency injection instead
 (*) CTL-168 Buffering in Exception Handling so multiple exceptions can be throttled to prevent spamming
 (*) CTL-187 Access to PropertyDataManager is now public to query properties of types
+(*) CTL-194 ServiceLocatorRegistration attribute must be able to directly instantiate
 (*) CTL-195 ServiceLocator.RegisterType with interface type should throw clear exception
 (*) Changed the returned type of IViewModelManager.GetFirstOrDefaultInstance to the specified view model type
 (*) Improved GetFromCacheOrFetch performance avoiding the serialization of multiples threads calls with different keys
@@ -112,11 +113,11 @@ Added/fixed:
 
 To-do:
 ======
-See https://catelproject.atlassian.net
+See http://www.catelproject.com/support/issue-tracker
 
 Known issues:
 =============
-See https://catelproject.atlassian.net
+See http://www.catelproject.com/support/issue-tracker
 
 **********************************************************
 
