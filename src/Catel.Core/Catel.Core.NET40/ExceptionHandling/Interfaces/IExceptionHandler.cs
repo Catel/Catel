@@ -27,6 +27,14 @@ namespace Catel.ExceptionHandling
         IFrequency AllowedFrequency { get; set; }
 
         /// <summary>
+        /// Gets the retry policy.
+        /// </summary>
+        /// <value>
+        /// The retry policy.
+        /// </value>
+        IRetryPolicy RetryPolicy { get; set; }
+
+        /// <summary>
         /// Handles the exception using the action that was passed into the constructor.
         /// </summary>
         /// <param name="exception">The exception.</param>

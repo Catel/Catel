@@ -4,18 +4,18 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+
 namespace Catel.Test.ExceptionHandling
 {
     using System;
     using System.Globalization;
     using System.Linq;
-    using System.Threading;
     using Catel.ExceptionHandling;
-    
 #if NETFX_CORE
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 #else
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 #endif
 
     public class ExceptionServiceFacts
@@ -293,7 +293,7 @@ namespace Catel.Test.ExceptionHandling
                 var exceptionService = new ExceptionService();
 
                 exceptionService.Register<DivideByZeroException>(exception => { })
-                                .UsingTolerance(9, TimeSpan.FromSeconds(10.0));
+                    .UsingTolerance(9, TimeSpan.FromSeconds(10.0));
 
                 var index = 0;
                 var exceptionHandledAt10Th = false;
@@ -306,9 +306,35 @@ namespace Catel.Test.ExceptionHandling
 
                 Assert.IsTrue(exceptionHandledAt10Th);
                 Assert.AreEqual(10, index);
-
             }
             #endregion
+        }
+
+        [TestClass]
+        public class TheOnErrorRetryImmediatelyMethod
+        {
+            [TestMethod]
+            public void ShouldCallBackOnRetrying()
+            {
+                var exceptionService = new ExceptionService();
+
+                var index = 0;
+
+                exceptionService.Retrying += (sender, args) => index++;
+
+                exceptionService
+                    .Register<DivideByZeroException>(exception => { })
+                    .OnErrorRetryImmediately(2);
+
+                exceptionService.ProcessWithRetry(() => { throw new DivideByZeroException(); });
+
+                Assert.AreEqual(2, index);
+            }
+        }
+
+        [TestClass]
+        public class TheOnErrorRetryMethod
+        {
         }
         #endregion
     }

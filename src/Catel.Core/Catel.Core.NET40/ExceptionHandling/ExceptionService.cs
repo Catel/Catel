@@ -10,6 +10,7 @@ namespace Catel.ExceptionHandling
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using Logging;
     using Reflection;
 
@@ -29,6 +30,13 @@ namespace Catel.ExceptionHandling
         /// The static instance of the exception service.
         /// </summary>
         private static readonly IExceptionService _default = new ExceptionService();
+        #endregion
+
+        #region Events
+        /// <summary>
+        /// Occurs when retrying.
+        /// </summary>
+        public event EventHandler<RetryingEventArgs> Retrying;
         #endregion
 
         #region Fields
@@ -270,6 +278,117 @@ namespace Catel.ExceptionHandling
             }
 
             return default(TResult);
+        }
+
+        /// <summary>
+        /// Processes the specified action with possibilty to retry on error.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        public void ProcessWithRetry(Action action)
+        {
+            Argument.IsNotNull("action", action);
+
+            ProcessWithRetry(() => { action(); return default(object); });
+        }
+
+        /// <summary>
+        /// Processes the with retry.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        public TResult ProcessWithRetry<TResult>(Func<TResult> action)
+        {
+            var retryCount = 0;
+            var interval = TimeSpan.Zero;
+
+            while (true)
+            {
+                Exception lastError;
+                try
+                {
+                    return action();
+                }
+                catch (Exception exception)
+                {
+                    lock (_exceptionHandlers)
+                    {
+                        lastError = exception;
+
+                        IExceptionHandler exceptionHandler;
+                        _exceptionHandlers.TryGetValue(lastError.GetType(), out exceptionHandler);
+
+                        if (exceptionHandler != null && exceptionHandler.RetryPolicy != null)
+                        {
+                            var retryPolicy = exceptionHandler.RetryPolicy;
+
+                            retryCount++;
+
+                            if (retryCount <= retryPolicy.Attempts)
+                            {
+                                interval = retryPolicy.Interval;
+                            }
+                            else
+                            {
+                                if (!HandleException(exception))
+                                {
+                                    throw;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (!HandleException(exception))
+                            {
+                                throw;
+                            }
+                        }
+                    }
+                }
+
+                if (interval.TotalMilliseconds < 0)
+                {
+                    interval = TimeSpan.FromMilliseconds(1);
+                }
+
+                OnRetrying(retryCount, lastError, interval);
+
+                Delay(interval.TotalMilliseconds).Wait();
+            }
+        }
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// Delays the specified milliseconds.
+        /// </summary>
+        /// <param name="milliseconds">The milliseconds.</param>
+        /// <returns></returns>
+        private static Task Delay(double milliseconds)
+        {
+            var taskCompletionSource = new TaskCompletionSource<bool>();
+            var timer = new System.Timers.Timer();
+            timer.Elapsed += (obj, args) => taskCompletionSource.TrySetResult(true);
+            timer.Interval = milliseconds;
+            timer.AutoReset = false;
+            timer.Start();
+            return taskCompletionSource.Task;
+        }
+
+        /// <summary>
+        /// Notifies the subscribers whenever a retry event occurs.
+        /// </summary>
+        /// <param name="retryCount">The current retry attempt count.</param>
+        /// <param name="lastError">The exception that caused the retry conditions to occur.</param>
+        /// <param name="delay">The delay that indicates how long the current thread will be suspended before the next iteration is invoked.</param>
+        protected virtual void OnRetrying(int retryCount, Exception lastError, TimeSpan delay)
+        {
+            if (Retrying != null)
+            {
+                Retrying(this, new RetryingEventArgs(retryCount, delay, lastError));
+            }
         }
         #endregion
     }
