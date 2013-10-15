@@ -14,6 +14,13 @@ namespace Catel.ExceptionHandling
     /// </summary>
     public interface IExceptionService
     {
+        #region Events
+        /// <summary>
+        /// Occurs when retrying.
+        /// </summary>
+        event EventHandler<RetryingEventArgs> Retrying;
+        #endregion
+
         #region Properties
         /// <summary>
         /// Gets the exception handlers.
@@ -71,6 +78,7 @@ namespace Catel.ExceptionHandling
         /// Processes the specified action.
         /// </summary>
         /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         void Process(Action action);
 
         /// <summary>
@@ -79,7 +87,24 @@ namespace Catel.ExceptionHandling
         /// <typeparam name="TResult">The result type.</typeparam>
         /// <param name="action">The action.</param>
         /// <returns></returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         TResult Process<TResult>(Func<TResult> action);
+
+        /// <summary>
+        /// Processes the specified action with possibilty to retry on error.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        void ProcessWithRetry(Action action);
+
+        /// <summary>
+        /// Processes the specified action with possibilty to retry on error.
+        /// </summary>
+        /// <typeparam name="TResult">The result type.</typeparam>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        TResult ProcessWithRetry<TResult>(Func<TResult> action);
         #endregion
     }
 }

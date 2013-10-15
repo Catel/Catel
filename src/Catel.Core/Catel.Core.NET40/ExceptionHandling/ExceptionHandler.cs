@@ -11,7 +11,7 @@ namespace Catel.ExceptionHandling
     /// <summary>
     /// This implements the exception treatment mechanics.
     /// </summary>
-    internal class ExceptionHandler : IExceptionHandler
+    public class ExceptionHandler : IExceptionHandler
     {
         #region Fields
         private readonly Action<Exception> _action;
@@ -48,6 +48,14 @@ namespace Catel.ExceptionHandling
         /// The allowed frequency.
         /// </value>
         public IFrequency AllowedFrequency { get; set; }
+
+        /// <summary>
+        /// Gets or sets the retry policy.
+        /// </summary>
+        /// <value>
+        /// The retry policy.
+        /// </value>
+        public IRetryPolicy RetryPolicy { get; set; }
 
         /// <summary>
         /// Handles the exception using the action that was passed into the constructor.
