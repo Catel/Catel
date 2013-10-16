@@ -34,6 +34,15 @@ namespace Catel.Windows.Interactivity
         public bool IsAssociatedObjectLoaded { get; private set; }
 
         /// <summary>
+        /// Gets a value indicating whether this instance is in design mode.
+        /// </summary>
+        /// <value><c>true</c> if this instance is in design mode; otherwise, <c>false</c>.</value>
+        protected bool IsInDesignMode
+        {
+            get { return Catel.Environment.IsInDesignMode; }
+        }
+
+        /// <summary>
         /// Gets the object to which the trigger is attached.
         /// </summary>
         /// <value>The associated object.</value>
@@ -54,6 +63,11 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         protected override sealed void OnAttached()
         {
+            if (IsInDesignMode)
+            {
+                return;
+            }
+
             base.OnAttached();
 
             AssociatedObject.Loaded += OnAssociatedObjectLoadedInternal;
@@ -71,6 +85,11 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         protected override sealed void OnDetaching()
         {
+            if (IsInDesignMode)
+            {
+                return;
+            }
+
             CleanUp();
 
             if (AssociatedObject != null)
