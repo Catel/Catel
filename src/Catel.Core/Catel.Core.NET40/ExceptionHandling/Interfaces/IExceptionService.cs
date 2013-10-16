@@ -16,9 +16,14 @@ namespace Catel.ExceptionHandling
     {
         #region Events
         /// <summary>
-        /// Occurs when retrying.
+        /// Occurs when an action is retrying.
         /// </summary>
-        event EventHandler<RetryingEventArgs> Retrying;
+        event EventHandler<RetryingEventArgs> RetryingAction;
+
+        /// <summary>
+        /// Occurs when an exception is buffered. 
+        /// </summary>
+        event EventHandler<BufferedEventArgs> ExceptionBuffered;
         #endregion
 
         #region Properties

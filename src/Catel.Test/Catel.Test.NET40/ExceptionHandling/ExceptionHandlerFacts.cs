@@ -39,7 +39,7 @@ namespace Catel.Test.ExceptionHandling
             {
                 var type = typeof (Exception);
                 var handler = new ExceptionHandler(type, exception => { });
-                Assert.AreEqual(type, handler.Exception);
+                Assert.AreEqual(type, handler.ExceptionType);
             }
             #endregion
         }

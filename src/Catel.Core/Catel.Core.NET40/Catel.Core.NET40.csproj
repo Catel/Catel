@@ -148,6 +148,7 @@
     <Compile Include="DynamicEventListener.cs" />
     <Compile Include="Enum.cs" />
     <Compile Include="EventHandlerExtensions.cs" />
+    <Compile Include="ExceptionHandling\EventArgs\BufferedEventArgs.cs" />
     <Compile Include="ExceptionHandling\EventArgs\RetryingEventArgs.cs" />
     <Compile Include="ExceptionHandling\ExceptionHandler.cs" />
     <Compile Include="ExceptionHandling\ExceptionService.cs" />
