@@ -206,6 +206,39 @@ namespace Catel.Test.ExceptionHandling
         }
         #endregion
 
+        #region Nested type: TheOnErrorRetryImmediatelyMethod
+        [TestClass]
+        public class TheOnErrorRetryImmediatelyMethod
+        {
+            #region Methods
+            [TestMethod]
+            public void ShouldCallBackOnRetrying()
+            {
+                var exceptionService = new ExceptionService();
+
+                var index = 0;
+
+                exceptionService.RetryingAction += (sender, args) => index++;
+
+                exceptionService
+                    .Register<DivideByZeroException>(exception => { })
+                    .OnErrorRetryImmediately(2);
+
+                exceptionService.ProcessWithRetry(() => { throw new DivideByZeroException(); });
+
+                Assert.AreEqual(2, index);
+            }
+            #endregion
+        }
+        #endregion
+
+        #region Nested type: TheOnErrorRetryMethod
+        [TestClass]
+        public class TheOnErrorRetryMethod
+        {
+        }
+        #endregion
+
         #region Nested type: TheRegisterMethod
         [TestClass]
         public class TheRegisterMethod
@@ -220,7 +253,7 @@ namespace Catel.Test.ExceptionHandling
 
                 exceptionService.Register<ArgumentException>(exception => { });
 
-                Assert.IsTrue(exceptionService.ExceptionHandlers.ToList().Any(row => row.Exception == typeof (ArgumentException)));
+                Assert.IsTrue(exceptionService.ExceptionHandlers.ToList().Any(row => row.ExceptionType == typeof (ArgumentException)));
                 Assert.AreEqual(exceptionService.ExceptionHandlers.Count(), 1);
             }
 
@@ -234,7 +267,7 @@ namespace Catel.Test.ExceptionHandling
                 exceptionService.Register<ArgumentException>(exception => { });
                 exceptionService.Register<ArgumentException>(exception => { });
 
-                Assert.IsTrue(exceptionService.ExceptionHandlers.ToList().Any(row => row.Exception == typeof (ArgumentException)));
+                Assert.IsTrue(exceptionService.ExceptionHandlers.ToList().Any(row => row.ExceptionType == typeof (ArgumentException)));
                 Assert.AreEqual(exceptionService.ExceptionHandlers.Count(), 1);
             }
             #endregion
@@ -253,12 +286,12 @@ namespace Catel.Test.ExceptionHandling
 
                 exceptionService.Register<ArgumentException>(exception => { });
 
-                Assert.IsTrue(exceptionService.ExceptionHandlers.ToList().Any(row => row.Exception == typeof (ArgumentException)));
+                Assert.IsTrue(exceptionService.ExceptionHandlers.ToList().Any(row => row.ExceptionType == typeof (ArgumentException)));
                 Assert.AreEqual(exceptionService.ExceptionHandlers.Count(), 1);
 
                 Assert.IsTrue(exceptionService.Unregister<ArgumentException>());
 
-                Assert.IsFalse(exceptionService.ExceptionHandlers.ToList().Any(row => row.Exception == typeof (ArgumentException)));
+                Assert.IsFalse(exceptionService.ExceptionHandlers.ToList().Any(row => row.ExceptionType == typeof (ArgumentException)));
                 Assert.AreEqual(exceptionService.ExceptionHandlers.Count(), 0);
             }
 
@@ -269,11 +302,11 @@ namespace Catel.Test.ExceptionHandling
 
                 exceptionService.Register<ArgumentException>(exception => { });
 
-                Assert.IsTrue(exceptionService.ExceptionHandlers.ToList().Any(row => row.Exception == typeof (ArgumentException)));
+                Assert.IsTrue(exceptionService.ExceptionHandlers.ToList().Any(row => row.ExceptionType == typeof (ArgumentException)));
                 Assert.AreEqual(exceptionService.ExceptionHandlers.Count(), 1);
 
                 Assert.IsTrue(exceptionService.Unregister<ArgumentException>());
-                Assert.IsFalse(exceptionService.ExceptionHandlers.ToList().Any(row => row.Exception == typeof (ArgumentException)));
+                Assert.IsFalse(exceptionService.ExceptionHandlers.ToList().Any(row => row.ExceptionType == typeof (ArgumentException)));
                 Assert.AreEqual(exceptionService.ExceptionHandlers.Count(), 0);
 
                 Assert.IsFalse(exceptionService.Unregister<ArgumentException>());
@@ -308,33 +341,6 @@ namespace Catel.Test.ExceptionHandling
                 Assert.AreEqual(10, index);
             }
             #endregion
-        }
-
-        [TestClass]
-        public class TheOnErrorRetryImmediatelyMethod
-        {
-            [TestMethod]
-            public void ShouldCallBackOnRetrying()
-            {
-                var exceptionService = new ExceptionService();
-
-                var index = 0;
-
-                exceptionService.Retrying += (sender, args) => index++;
-
-                exceptionService
-                    .Register<DivideByZeroException>(exception => { })
-                    .OnErrorRetryImmediately(2);
-
-                exceptionService.ProcessWithRetry(() => { throw new DivideByZeroException(); });
-
-                Assert.AreEqual(2, index);
-            }
-        }
-
-        [TestClass]
-        public class TheOnErrorRetryMethod
-        {
         }
         #endregion
     }

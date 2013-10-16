@@ -14,9 +14,9 @@ namespace Catel.ExceptionHandling
     public interface IExceptionHandler
     {
         /// <summary>
-        /// Gets the exception handled.
+        /// Gets the type of the handled exception.
         /// </summary>
-        Type Exception { get; }
+        Type ExceptionType { get; }
 
         /// <summary>
         /// Gets the allowed frequency.
