@@ -104,6 +104,7 @@ Added/fixed:
 (x) CTL-186 ViewModelPropertyDescriptor not respect the custom attribute, ViewModelPropertyDescriptor.Attributes.Count always 0
 (x) CTL-190 TypeCache throws exception when same non-existing late-bound type is queried twice
 (x) CTL-193 Unable to create catel window in seperate thread
+(x) CTL-197 Behaviors no longer handle logic in design mode so properties will never throw exceptions at design time
 (x) Unloading a view via UserControlLogic might resolve in memory leaks
 (x) Fixed Drag and Drop behavior when the drop position is less then the initial item's position
 (x) Ensured the value of Owner property of Shell to NULL in order to avoid the application close  when the SplashScreenService done
