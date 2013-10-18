@@ -6,31 +6,38 @@
 
 namespace Catel.Windows.Interactivity
 {
+    using System;
     using System.Windows.Controls;
     using System.Collections.Generic;
     using System.Windows;
     using System.Windows.Data;
     using System.Windows.Input;
+    using Catel.Logging;
 
     /// <summary>
     /// Behavior to only allow numeric input on a <see cref="TextBox"/>.
     /// </summary>
     public class NumericTextBox : BehaviorBase<TextBox>
     {
-        private const string _minusCharacter = "-";
-        private const string _periodCharacter = ".";
-        private const string _commaCharacter = ",";
+        /// <summary>
+        /// The log.
+        /// </summary>
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        private const string MinusCharacter = "-";
+        private const string PeriodCharacter = ".";
+        private const string CommaCharacter = ",";
 
         private static readonly List<Key> AllowedKeys = new List<Key>
         {
             Key.Back,
             Key.CapsLock,                                                                
-            #if SILVERLIGHT                                                                
-                //Key.Ctrl
-            #else
-                Key.LeftCtrl,
-                Key.RightCtrl,
-            #endif                                                                
+#if SILVERLIGHT                                                                
+            //Key.Ctrl
+#else
+            Key.LeftCtrl,
+            Key.RightCtrl,
+#endif                                                                
             Key.Down,
             Key.End,
             Key.Enter,
@@ -41,12 +48,12 @@ namespace Catel.Windows.Interactivity
             Key.PageDown,
             Key.PageUp,
             Key.Right,
-            #if SILVERLIGHT
-                //Key.Shift                                                                
-            #else
-                Key.LeftShift,
-                Key.RightShift,
-            #endif
+#if SILVERLIGHT
+            //Key.Shift                                                                
+#else
+            Key.LeftShift,
+            Key.RightShift,
+#endif
             Key.Tab,
             Key.Up                                                                                                                                                                                          
         };
@@ -58,8 +65,27 @@ namespace Catel.Windows.Interactivity
         {
             base.Initialize();
 
+#if NET
+            DataObject.AddPastingHandler(AssociatedObject, OnPaste);
+#endif
+
             AssociatedObject.KeyDown += OnAssociatedObjectKeyDown;
             AssociatedObject.TextChanged += OnAssociatedObjectTextChanged;
+        }
+
+        /// <summary>
+        /// Uninitializes this instance.
+        /// </summary>
+        protected override void Uninitialize()
+        {
+#if NET
+            DataObject.RemovePastingHandler(AssociatedObject, OnPaste);
+#endif
+
+            AssociatedObject.KeyDown -= OnAssociatedObjectKeyDown;
+            AssociatedObject.TextChanged -= OnAssociatedObjectTextChanged;
+
+            base.Uninitialize();
         }
 
         /// <summary>
@@ -74,15 +100,15 @@ namespace Catel.Windows.Interactivity
             set
             {
                 if (value)
-                {                    
+                {
 #if NET
                     AllowedKeys.Add(Key.OemMinus);
                 }
                 else
-                {                  
+                {
                     if (AllowedKeys.Contains(Key.OemMinus))
                     {
-                        AllowedKeys.Remove(Key.OemMinus);                        
+                        AllowedKeys.Remove(Key.OemMinus);
                     }
 #endif
                 }
@@ -90,7 +116,7 @@ namespace Catel.Windows.Interactivity
                 SetValue(IsNegativeAllowedProperty, value);
             }
         }
-        
+
         /// <summary>
         /// Are negative numbers allowed
         /// </summary>
@@ -101,18 +127,18 @@ namespace Catel.Windows.Interactivity
         /// Gets or sets a value indicating whether decimal values are allowed.
         /// </summary>
         /// <value>
-        ///   <c>true</c> if [IS decimal allowed]; otherwise, <c>false</c>.
+        ///   <c>true</c> if decimal values are allowed; otherwise, <c>false</c>.
         /// </value>
         public bool IsDecimalAllowed
         {
-            get { return (bool)GetValue( IsDecimalAllowedProperty); }
-            set { SetValue( IsDecimalAllowedProperty, value); }
+            get { return (bool)GetValue(IsDecimalAllowedProperty); }
+            set { SetValue(IsDecimalAllowedProperty, value); }
         }
 
         /// <summary>
         /// Using a DependencyProperty as the backing store for IsDecimalAllowed.  This enables animation, styling, binding, etc... 
         /// </summary>
-        public static readonly DependencyProperty  IsDecimalAllowedProperty =
+        public static readonly DependencyProperty IsDecimalAllowedProperty =
             DependencyProperty.Register("IsDecimalAllowed", typeof(bool), typeof(NumericTextBox), new PropertyMetadata(true));
 
         /// <summary>
@@ -133,7 +159,7 @@ namespace Catel.Windows.Interactivity
                 handled = AssociatedObject.Text.Contains(numberDecimalSeparator);
             }
 #if SILVERLIGHT
-            else if (keyValue == _minusCharacter && IsNegativeAllowed)
+            else if (keyValue == MinusCharacter && IsNegativeAllowed)
             {
                 handled = AssociatedObject.Text.Length > 0;  
             }
@@ -144,7 +170,7 @@ namespace Catel.Windows.Interactivity
 #else
             else if (AllowedKeys.Contains(e.Key) || IsDigit(e.Key))
             {
-                handled = (e.Key == Key.OemMinus && ((TextBox)sender).CaretIndex > 0 && IsNegativeAllowed );                
+                handled = (e.Key == Key.OemMinus && ((TextBox)sender).CaretIndex > 0 && IsNegativeAllowed);
             }
 #endif
             e.Handled = handled;
@@ -156,7 +182,7 @@ namespace Catel.Windows.Interactivity
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.Windows.Controls.TextChangedEventArgs"/> instance containing the event data.</param>
         private void OnAssociatedObjectTextChanged(object sender, TextChangedEventArgs e)
-        {            
+        {
             var binding = AssociatedObject.GetBindingExpression(TextBox.TextProperty);
             if (binding == null)
             {
@@ -164,7 +190,50 @@ namespace Catel.Windows.Interactivity
             }
 
             binding.UpdateSource();
-        }       
+        }
+
+#if NET
+        /// <summary>
+        /// Called when text is pasted into the TextBox.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="DataObjectPastingEventArgs"/> instance containing the event data.</param>
+        private void OnPaste(object sender, DataObjectPastingEventArgs e)
+        {
+            if (e.DataObject.GetDataPresent(typeof (string)))
+            {
+                var text = (string) e.DataObject.GetData(typeof (string));
+                if (!IsDigitsOnly(text))
+                {
+                    Log.Warning("Pasted text '{0}' contains non-acceptable characters, paste is not allowed", text);
+
+                    e.CancelCommand();
+                }
+            }
+            else
+            {
+                e.CancelCommand();
+            }
+        }
+#endif
+
+        /// <summary>
+        /// Determines whether the input string only consists of digits.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns><c>true</c> if the input string only consists of digits; otherwise, <c>false</c>.</returns>
+        private bool IsDigitsOnly(string input)
+        {
+            foreach (char c in input)
+            {
+                if (c < '0' || c > '9')
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
 
         /// <summary>
         /// Determines whether the specified key is a digit.
@@ -188,7 +257,7 @@ namespace Catel.Windows.Interactivity
                 isDigit = key >= Key.NumPad0 && key <= Key.NumPad9;
             }
 
-            return isDigit; 
+            return isDigit;
         }
 
         /// <summary>
@@ -203,28 +272,28 @@ namespace Catel.Windows.Interactivity
 #if NET
             if (e.Key == Key.OemMinus)
             {
-                keyValue = _minusCharacter;
+                keyValue = MinusCharacter;
             }
             else if (e.Key == Key.OemComma)
             {
-                keyValue = _commaCharacter;
+                keyValue = CommaCharacter;
             }
             else if (e.Key == Key.OemPeriod)
             {
-                keyValue = _periodCharacter;
+                keyValue = PeriodCharacter;
             }
 #else
             if (e.PlatformKeyCode == 190 || e.PlatformKeyCode == 110)
             {
-                keyValue = _periodCharacter;
+                keyValue = PeriodCharacter;
             }
             else if(e.PlatformKeyCode == 188)
             {                 
-                keyValue = _commaCharacter;
+                keyValue = CommaCharacter;
             }
             else if(e.PlatformKeyCode == 189)
             {                 
-                keyValue = _minusCharacter;
+                keyValue = MinusCharacter;
             }
             else
             {

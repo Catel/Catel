@@ -225,9 +225,12 @@ namespace Catel.Windows.Interactivity
                 return false;
             }
 
-            if (Keyboard.Modifiers != Modifiers)
+            if (Modifiers != ModifierKeys.None)
             {
-                return false;
+                if (Keyboard.Modifiers != Modifiers)
+                {
+                    return false;
+                }
             }
 
             return command.CanExecute(parameter);

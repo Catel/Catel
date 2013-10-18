@@ -104,7 +104,7 @@ namespace Catel.MVVM.Services
 
             if (_showCounter > 0)
             {
-                Show();
+                Show(status);
             }
         }
 

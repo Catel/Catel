@@ -72,5 +72,29 @@ namespace Catel.Test
                 Assert.AreEqual("Int32", ObjectToStringHelper.ToTypeString(42));
             }
         }
+
+        [TestClass]
+        public class TheToFullTypeStringMethod
+        {
+            [TestMethod]
+            public void ReturnsNullStringForNullInstance()
+            {
+                Assert.AreEqual("null", ObjectToStringHelper.ToFullTypeString(null));
+            }
+
+#if !NETFX_CORE
+            [TestMethod]
+            public void ReturnsDbNullStringForDbNullInstance()
+            {
+                Assert.AreEqual("System.DBNull", ObjectToStringHelper.ToFullTypeString(DBNull.Value));
+            }
+#endif
+
+            [TestMethod]
+            public void ReturnsTypeNameForInt()
+            {
+                Assert.AreEqual("System.Int32", ObjectToStringHelper.ToFullTypeString(42));
+            }
+        }
     }
 }

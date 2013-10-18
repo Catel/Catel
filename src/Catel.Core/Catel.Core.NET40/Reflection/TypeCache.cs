@@ -192,12 +192,26 @@ namespace Catel.Reflection
                 var typeNameWithAssembly = string.IsNullOrEmpty(assemblyName) ? null : TypeHelper.FormatType(assemblyName, typeName);
                 if (typeNameWithAssembly == null)
                 {
-                    // Simple types without assembly cannot be resolved afterwards, thus if it is not known
-                    // at this point, just return null;
-                    //
-                    // This *must* be the case-sensitive dictionary because a case-correct one will be resolved from
-                    // typesWithoutAssembly[typeName]
-                    return typesWithoutAssembly.ContainsKey(typeName) ? _typesWithAssembly[typesWithoutAssembly[typeName]] : null;
+                    if (typesWithoutAssembly.ContainsKey(typeName))
+                    {
+                        return typesWithAssembly[typesWithoutAssembly[typeName]];
+                    }
+
+                    // Note that lazy-loaded types (a few lines below) are added to the types *with* assemblies so we have
+                    // a direct access cache
+                    if (typesWithAssembly.ContainsKey(typeName))
+                    {
+                        return typesWithAssembly[typeName];
+                    }
+
+                    var fallbackType = Type.GetType(typeName);
+                    if (fallbackType != null)
+                    {
+                        // Though it was not initially found, we still have found a new type, register it
+                        typesWithAssembly[typeName] = fallbackType;
+                    }
+
+                    return fallbackType;
                 }
 
                 if (typesWithAssembly.ContainsKey(typeNameWithAssembly))
@@ -308,7 +322,7 @@ namespace Catel.Reflection
                     catch (Exception ex)
                     {
                         Log.Warning(ex, "Failed to get types, '{0}' retries left", retryCount);
-                    }   
+                    }
                 }
 
                 return new Type[] { };
@@ -430,6 +444,11 @@ namespace Catel.Reflection
 
                 foreach (var type in typesToAdd)
                 {
+                    if (ShouldIgnoreType(type))
+                    {
+                        continue;
+                    }
+
                     var newAssemblyName = TypeHelper.GetAssemblyNameWithoutOverhead(type.GetAssemblyFullNameEx());
                     string newFullType = TypeHelper.FormatType(newAssemblyName, type.FullName);
                     if (!_typesWithAssembly.ContainsKey(newFullType))
@@ -439,10 +458,46 @@ namespace Catel.Reflection
 
                         var typeNameWithoutAssembly = TypeHelper.GetTypeName(newFullType);
                         _typesWithoutAssembly[typeNameWithoutAssembly] = newFullType;
-                        _typesWithoutAssemblyLowerCase[typeNameWithoutAssembly.ToLowerInvariant()] = newFullType;
+                        _typesWithoutAssemblyLowerCase[typeNameWithoutAssembly.ToLowerInvariant()] = newFullType.ToLowerInvariant();
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Determines whether the specified type must be ignored by the type cache.
+        /// </summary>
+        /// <param name="type">The type to check.</param>
+        /// <returns><c>true</c> if the type should be ignored, <c>false</c> otherwise.</returns>
+        private static bool ShouldIgnoreType(Type type)
+        {
+            if (type == null)
+            {
+                return true;
+            }
+
+            var typeName = type.FullName;
+
+            // Ignore useless types
+            if (typeName.Contains("<PrivateImplementationDetails>") ||
+                typeName.Contains("<>f__AnonymousType") ||
+                typeName.Contains("__DynamicallyInvokableAttribute") ||
+                typeName.Contains("ProcessedByFody") ||
+                typeName.Contains("FXAssembly") ||
+                typeName.Contains("ThisAssembly") ||
+                typeName.Contains("AssemblyRef"))
+            {
+                return true;
+            }
+
+            // Ignore types that might cause a security exception
+            if (typeName.Contains("System.Data.Metadata.Edm.") ||
+                typeName.Contains("System.Data.EntityModel.SchemaObjectModel."))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

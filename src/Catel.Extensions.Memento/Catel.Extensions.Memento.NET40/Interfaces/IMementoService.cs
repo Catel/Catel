@@ -45,6 +45,12 @@ namespace Catel.Memento
         /// </summary>
         /// <value>The undo batches.</value>
         IEnumerable<IMementoBatch> UndoBatches { get; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the service is enabled.
+        /// </summary>
+        /// <value><c>true</c> if the service is enabled; otherwise, <c>false</c>.</value>
+        bool IsEnabled { get; set; }
         #endregion
 
         #region Methods

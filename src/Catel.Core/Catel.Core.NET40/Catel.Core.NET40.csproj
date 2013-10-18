@@ -15,7 +15,7 @@
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.13.8.0</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.15.0.0</FodyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,9 +44,9 @@
     <None Include="ClassDiagrams\ServiceLocator.cd" />
     <None Include="Fody.targets" />
     <None Include="packages.config" />
-    <Reference Include="Obsolete, Version=1.6.2.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
+    <Reference Include="Obsolete, Version=2.3.0.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Obsolete.Fody.1.6.2.0\Lib\NET35\Obsolete.dll</HintPath>
+      <HintPath>..\..\..\lib\Obsolete.Fody.2.3.0\Lib\NET35\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="PresentationFramework" />
@@ -112,6 +112,7 @@
     <Compile Include="Data\Helpers\EditableObjectHelper.cs" />
     <Compile Include="Data\Helpers\ValidationContextHelper.cs" />
     <Compile Include="Data\Helpers\XmlNameMapper.cs" />
+    <Compile Include="Data\Interfaces\IModelEqualityComparer.cs" />
     <Compile Include="Data\Interfaces\IAdvancedNotifyPropertyChanged.cs" />
     <Compile Include="Data\Interfaces\IAdvancedNotifyPropertyChanging.cs" />
     <Compile Include="Data\Interfaces\IDataObjectBase.cs" />
@@ -127,8 +128,11 @@
     <Compile Include="Data\Interfaces\IValueValidator.cs" />
     <Compile Include="Data\ModelBase.cs" />
     <Compile Include="Data\ModelBase.editableobject.cs" />
+    <Compile Include="Data\ModelBase.serialization.binary.cs" />
     <Compile Include="Data\ModelBase.serialization.cs" />
+    <Compile Include="Data\ModelBase.serialization.xml.cs" />
     <Compile Include="Data\ModelBase.validation.cs" />
+    <Compile Include="Data\ModelEqualityComparer.cs" />
     <Compile Include="Data\ObservableObject.cs" />
     <Compile Include="Data\PropertyBag.cs" />
     <Compile Include="Data\PropertyData.cs" />
@@ -146,8 +150,11 @@
     <Compile Include="EventHandlerExtensions.cs" />
     <Compile Include="ExceptionHandling\ExceptionHandler.cs" />
     <Compile Include="ExceptionHandling\ExceptionService.cs" />
+    <Compile Include="ExceptionHandling\Extensions\ExceptionHandlerExtensions.cs" />
+    <Compile Include="ExceptionHandling\Frequency.cs" />
     <Compile Include="ExceptionHandling\Interfaces\IExceptionHandler.cs" />
     <Compile Include="ExceptionHandling\Interfaces\IExceptionService.cs" />
+    <Compile Include="ExceptionHandling\Interfaces\IFrequency.cs" />
     <Compile Include="Exceptions\NotSupportedInSilverlightException.cs" />
     <Compile Include="Exceptions\NotSupportedInWindowsPhone7Exception.cs" />
     <Compile Include="Exceptions\NotSupportedInWindows8Exception.cs" />
@@ -169,10 +176,14 @@
     <Compile Include="IoC\Configuration\Registration.cs" />
     <Compile Include="IoC\Configuration\ServiceLocatorConfiguration.cs" />
     <Compile Include="IoC\Configuration\ServiceLocatorConfigurationCollection.cs" />
+    <Compile Include="IoC\CatelDependencyResolver.cs" />
+    <Compile Include="IoC\DependencyResolverManager.cs" />
     <Compile Include="IoC\EventArgs\MissingTypeEventArgs.cs" />
     <Compile Include="IoC\EventArgs\TypeRegisteredEventArgs.cs" />
     <Compile Include="IoC\Exceptions\ExternalContainerNotSupportedException.cs" />
     <Compile Include="IoC\Exceptions\CircularDependencyException.cs" />
+    <Compile Include="IoC\Extensions\DependencyResolverExtensions.cs" />
+    <Compile Include="IoC\Extensions\ObjectExtensions.cs" />
     <Compile Include="IoC\Extensions\ServiceLocatorExtensions.cs" />
     <Compile Include="IoC\Extensions\TypeFactoryExtensions.cs" />
     <Compile Include="IoC\Helpers\DependencyInjectionHelper.cs" />
@@ -181,11 +192,14 @@
     <Compile Include="IoC\Helpers\NinjectHelper.cs" />
     <Compile Include="IoC\Helpers\UnityHelper.cs" />
     <Compile Include="IoC\Helpers\WindsorHelper.cs" />
+    <Compile Include="IoC\Interfaces\IDependencyResolverManager.cs" />
+    <Compile Include="IoC\Interfaces\IDependencyResolver.cs" />
     <Compile Include="IoC\Interfaces\IExternalContainerHelper.cs" />
     <Compile Include="IoC\Interfaces\INeedCustomInitialization.cs" />
     <Compile Include="IoC\Interfaces\IServiceLocator.cs" />
     <Compile Include="IoC\Interfaces\ITypeFactory.cs" />
     <Compile Include="IoC\Interfaces\ITypeRequestPath.cs" />
+    <Compile Include="IoC\IoCConfiguration.cs" />
     <Compile Include="IoC\RegistrationInfo.cs" />
     <Compile Include="IoC\ServiceLocator.cs" />
     <Compile Include="IoC\ServiceLocatorAutoRegistrationManager.cs" />
@@ -195,13 +209,17 @@
     <Compile Include="IO\Extensions\StreamExtensions.cs" />
     <Compile Include="IO\Path.cs" />
     <Compile Include="Linq\ExpressionUtil.cs" />
+    <Compile Include="Logging\BatchLogListenerBase.cs" />
     <Compile Include="Logging\ConsoleLogListener.cs" />
     <Compile Include="Logging\DebugLogListener.cs" />
     <Compile Include="Logging\EventArgs\LogMessageEventArgs.cs" />
     <Compile Include="Logging\Extensions\LogExtensions.cs" />
+    <Compile Include="Logging\FileLogListener.cs" />
+    <Compile Include="Logging\Interfaces\IBatchLogListener.cs" />
     <Compile Include="Logging\Interfaces\ILog.cs" />
     <Compile Include="Logging\Interfaces\ILogListener.cs" />
     <Compile Include="Logging\Log.cs" />
+    <Compile Include="Logging\LogBatchEntry.cs" />
     <Compile Include="Logging\LogEvent.cs" />
     <Compile Include="Logging\LogListenerBase.cs" />
     <Compile Include="Logging\LogManager.cs" />
@@ -267,6 +285,7 @@
     <Compile Include="Reflection\Extensions\AssemblyExtensions.cs" />
     <Compile Include="Reflection\Extensions\DelegateExtensions.cs" />
     <Compile Include="Reflection\Extensions\MemberInfoExtensions.cs" />
+    <Compile Include="Reflection\Extensions\ObjectExtensions.cs" />
     <Compile Include="Reflection\Extensions\ReflectionExtensions.assembly.cs" />
     <Compile Include="Reflection\Extensions\ReflectionExtensions.cache.cs" />
     <Compile Include="Reflection\Extensions\ReflectionExtensions.methodinfo.cs" />
@@ -284,11 +303,45 @@
     <Compile Include="Reflection\Helpers\TypeHelper.cs" />
     <Compile Include="Reflection\TypeCache.cs" />
     <Compile Include="Reflection\TypeInfo.cs" />
-    <Compile Include="Runtime\Serialization\Attributes\RedirectTypeAttribute.cs" />
-    <Compile Include="Runtime\Serialization\Helpers\SerializationHelper.cs" />
-    <Compile Include="Runtime\Serialization\Helpers\XmlSchemaHelper.cs" />
-    <Compile Include="Runtime\Serialization\RedirectDeserializationBinder.cs" />
-    <Compile Include="Runtime\Serialization\XmlSchemaManager.cs" />
+    <Compile Include="Runtime\Serialization\Attributes\ExcludeFromSerializationAttribute.cs" />
+    <Compile Include="Runtime\Serialization\Attributes\IncludeInSerializationAttribute.cs" />
+    <Compile Include="Runtime\Serialization\Attributes\SerializerModifierAttribute.cs" />
+    <Compile Include="Runtime\Serialization\BinarySerialization\Attributes\RedirectTypeAttribute.cs" />
+    <Compile Include="Runtime\Serialization\BinarySerialization\BinarySerializationContextInfo.cs" />
+    <Compile Include="Runtime\Serialization\BinarySerialization\BinarySerializer.cs" />
+    <Compile Include="Runtime\Serialization\BinarySerialization\RedirectDeserializationBinder.cs" />
+    <Compile Include="Runtime\Serialization\BinarySerialization\Interfaces\IBinarySerializer.cs" />
+    <Compile Include="Runtime\Serialization\SerializerModifierBase.generic.cs" />
+    <Compile Include="Runtime\Serialization\EventArgs\MemberSerializationEventArgs.cs" />
+    <Compile Include="Runtime\Serialization\EventArgs\SerializationEventArgs.cs" />
+    <Compile Include="Runtime\Serialization\Helpers\SerializationContextHelper.cs" />
+    <Compile Include="Runtime\Serialization\Interfaces\IModelBaseSerializer.cs" />
+    <Compile Include="Runtime\Serialization\Interfaces\ISerializationContext.cs" />
+    <Compile Include="Runtime\Serialization\Interfaces\ISerializationManager.cs" />
+    <Compile Include="Runtime\Serialization\Interfaces\ISerializerModifier.cs" />
+    <Compile Include="Runtime\Serialization\MemberMetadata.cs" />
+    <Compile Include="Runtime\Serialization\MemberValue.cs" />
+    <Compile Include="Runtime\Serialization\SerializationManager.cs" />
+    <Compile Include="Runtime\Serialization\SerializationObject.cs" />
+    <Compile Include="Runtime\ReferenceInfo.cs" />
+    <Compile Include="Runtime\ReferenceManager.cs" />
+    <Compile Include="Runtime\Serialization\SerializerModifierBase.cs" />
+    <Compile Include="Runtime\Serialization\XmlSerialization\DataContractSerializerFactory.cs" />
+    <Compile Include="Runtime\Serialization\XmlSerialization\DataContractNameResolver.cs" />
+    <Compile Include="Runtime\Serialization\XmlSerialization\Interfaces\IDataContractSerializerFactory.cs" />
+    <Compile Include="Runtime\Serialization\XmlSerialization\Interfaces\IDataContractNameResolver.cs" />
+    <Compile Include="Runtime\Serialization\XmlSerialization\Interfaces\IXmlSerializer.cs" />
+    <Compile Include="Runtime\Serialization\SerializationContext.cs" />
+    <Compile Include="Runtime\Serialization\SerializationFactory.cs" />
+    <Compile Include="Runtime\Serialization\SerializerBase.deserialization.cs" />
+    <Compile Include="Runtime\Serialization\SerializerBase.general.cs" />
+    <Compile Include="Runtime\Serialization\SerializerBase.serialization.cs" />
+    <Compile Include="Runtime\Serialization\XmlSerialization\Helpers\XmlHelper.cs" />
+    <Compile Include="Runtime\Serialization\XmlSerialization\Helpers\XmlSchemaHelper.cs" />
+    <Compile Include="Runtime\ReferenceEqualityComparer.cs" />
+    <Compile Include="Runtime\Serialization\XmlSerialization\XmlSchemaManager.cs" />
+    <Compile Include="Runtime\Serialization\XmlSerialization\XmlSerializer.cs" />
+    <Compile Include="Scoping\ScopeManager.cs" />
     <Compile Include="Services\Interfaces\IService.cs" />
     <Compile Include="Services\ServiceBase.cs" />
     <Compile Include="Test\ExceptionTester.cs" />

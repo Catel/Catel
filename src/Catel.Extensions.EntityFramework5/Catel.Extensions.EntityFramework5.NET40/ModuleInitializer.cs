@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel
+namespace Catel.Extensions.EntityFramework5
 {
     using Data;
     using IoC;

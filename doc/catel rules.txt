@@ -9,7 +9,8 @@ NET45		NET, NET45
 SL4			SILVERLIGHT, SL4
 SL5			SILVERLIGHT, SL5
 WP7			SILVERLIGHT, WINDOWS_PHONE
-WINRT		WINRT
+WINRT		WIN80
+PCL			PCL
 
 Note that defines must be set for Debug and Release configurations
 
@@ -45,13 +46,13 @@ that must be located in the NET35 project and referenced by all other projects.
 Caitlyn
 =======
 
-See http://caitlyn.codeplex.com
+See https://github.com/GeertvanHorrik/Caitlyn
 
 I have created a tool that makes it easier to create the linked files. So, from now
 on you only have to add files to the NET35 project. Then, simply run Caitlyn
 via the Visual Studio extension.
 
-It will automatically loop all the files in "Catel.Core.NET35"
+It will automatically loop all the files in "Catel.Core.NET40"
 and create them in the following projects (if they exist):
 
 * Catel.Core.NET40
@@ -59,6 +60,8 @@ and create them in the following projects (if they exist):
 * Catel.Core.SL4
 * Catel.Core.SL5
 * Catel.Core.WP7
-* Catel.Core.WinRT
+* Catel.Core.WP8
+* Catel.Core.WIN80
+* Catel.Core.PCL
 
 This makes the development a lot easier!

@@ -162,6 +162,11 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 
             TargetControl.Unloaded += OnTargetControlUnloadedInternal;
 
+#if WIN81
+            // TODO: make the same for WIN80. There is no DataContextChanged event in WIN80.
+            TargetControl.DataContextChanged += (sender, args) => OnTargetControlDataContextChanged(sender, new DependencyPropertyValueChangedEventArgs("DataContext", FrameworkElement.DataContextProperty, null, args.NewValue));
+#endif
+
             // This also subscribes to DataContextChanged, don't double subscribe
             var dependencyPropertiesToSubscribe = DetermineInterestingDependencyProperties();
             foreach (var dependencyPropertyToSubscribe in dependencyPropertiesToSubscribe)
@@ -403,14 +408,16 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// </summary>
         protected IViewModel CreateViewModelByUsingDataContextOrConstructor()
         {
+            var dataContext = TargetControl.DataContext;
+
             // It might be possible that a view model is already set, so use it if the datacontext is a view model
-            var dataContextAsIViewModel = TargetControl.DataContext as IViewModel;
+            var dataContextAsIViewModel = dataContext as IViewModel;
             if ((dataContextAsIViewModel != null) && (dataContextAsIViewModel.GetType() == ViewModelType))
             {
                 return dataContextAsIViewModel;
             }
 
-            return ConstructViewModelUsingArgumentOrDefaultConstructor(TargetControl.DataContext);
+            return ConstructViewModelUsingArgumentOrDefaultConstructor(dataContext);
         }
 
         /// <summary>
@@ -592,7 +599,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// Called when the <c>DataContext</c> property of the <see cref="TargetControl"/> has changed.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.Windows.DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         public virtual void OnTargetControlDataContextChanged(object sender, DependencyPropertyValueChangedEventArgs e)
         {
             Log.Debug("DataContext of TargetControl '{0}' has changed to '{1}'", TargetControl.GetType().Name, ObjectToStringHelper.ToTypeString(TargetControl.DataContext));
@@ -636,10 +643,13 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 
             //Log.Debug("Property '{0}' of TargetControl '{1}' has changed", e.PropertyName, TargetControl.GetType().Name);
 
+            // Note: in WIN81 we manually subscribe to DataContextChanged event
+#if !WIN81
             if (string.Equals(e.PropertyName, "DataContext", StringComparison.OrdinalIgnoreCase))
             {
                 OnTargetControlDataContextChanged(sender, e);
             }
+#endif
 
             OnTargetControlPropertyChanged(sender, e);
         }

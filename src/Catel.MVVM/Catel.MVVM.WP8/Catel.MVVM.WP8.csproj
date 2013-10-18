@@ -18,7 +18,7 @@
     <ValidateXaml>true</ValidateXaml>
     <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
-    <FodyPath>..\..\..\lib\Fody.1.13.8.0</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.15.0.0</FodyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,6 +44,19 @@
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DocumentationFile>..\..\..\output\release\WP8\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;WP8</DefineConstants>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>..\..\..\output\debug\WP8\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>
+    <OutputPath>..\..\..\output\debug\WP8\Catel.MVVM\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE;WP8</DefineConstants>
+    <Optimize>true</Optimize>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>..\..\..\output\release\WP8\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>
+    <OutputPath>..\..\..\output\release\WP8\Catel.MVVM\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\Catel.MVVM.NET40\ClassDiagrams\ViewModelBase.cd">
@@ -108,8 +121,17 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ICatelCommand.cs">
       <Link>MVVM\Commands\Interfaces\ICatelCommand.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ICatelTaskCommand.cs">
+      <Link>MVVM\Commands\Interfaces\ICatelTaskCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ITaskProgressReport.cs">
+      <Link>MVVM\Commands\Interfaces\ITaskProgressReport.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\IViewModelCommandManager.cs">
       <Link>MVVM\Commands\Interfaces\IViewModelCommandManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\TaskCommand.cs">
+      <Link>MVVM\Commands\TaskCommand.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\ViewModelCommandManager.cs">
       <Link>MVVM\Commands\ViewModelCommandManager.cs</Link>
@@ -185,6 +207,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Exceptions\WindowNotRegisteredException.cs">
       <Link>MVVM\Services\Exceptions\WindowNotRegisteredException.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\FileServiceBase.cs">
+      <Link>MVVM\Services\FileServiceBase.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IAccelerometerService.cs">
       <Link>MVVM\Services\Interfaces\IAccelerometerService.cs</Link>
@@ -317,6 +342,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Extensions\ViewModelExtensions.cs">
       <Link>MVVM\ViewModels\Extensions\ViewModelExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Extensions\ViewModelManagerExtensions.cs">
+      <Link>MVVM\ViewModels\Extensions\ViewModelManagerExtensions.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Interfaces\INotifyableViewModel.cs">
       <Link>MVVM\ViewModels\Interfaces\INotifyableViewModel.cs</Link>
@@ -678,6 +706,9 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Threading\Helpers\Dispatcherhelper.cs">
       <Link>Windows\Threading\Helpers\Dispatcherhelper.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET45\MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs">
+      <Link>MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.SL4\Windows\Controls\ValidationResult.cs">
       <Link>Windows\Controls\ValidationResult.cs</Link>
     </Compile>
@@ -841,18 +872,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Obsolete, Version=1.6.2.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
+    <Reference Include="Obsolete, Version=2.3.0.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Obsolete.Fody.1.6.2.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
+      <HintPath>..\..\..\lib\Obsolete.Fody.2.3.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="System.Windows.Interactivity, Version=3.8.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Interactivity, Version=3.9.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Windows\Controls\InfoBarMessageControl\" />
     <Folder Include="Windows\Markup\" />
-    <Folder Include="Windows\Windows\DataWindow\" />
-    <Folder Include="Windows\Windows\Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\Catel.MVVM.NET40\Resources\Images\Error.png">

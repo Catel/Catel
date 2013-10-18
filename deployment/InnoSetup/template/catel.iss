@@ -2,17 +2,20 @@
 #define SourceDirectory ""
 ; #define AppVersion "3.1"
 #define AppVersion "[VERSION]"
-; #define AppVersionAsText "3.1 beta 1"
-#define AppVersionAsText "[VERSION_DISPLAY]"
-#define Website "http://catel.codeplex.com"
+; #define AppDisplayVersion "3.1 beta 1"
+#define AppDisplayVersion "[VERSION_DISPLAY]"
+#define AppNameWithDisplayVersion AppName + " " + AppDisplayVersion
+#define AppNameWithVersion AppName + " " + AppVersion
+#define Website "http://www.catelproject.com"
 #define OutputPrefix "catel"
 #define Company "CatenaLogic"
 
 #define VS9Root "{pf32}\Microsoft Visual Studio 9.0"
 #define VS10Root "{pf32}\Microsoft Visual Studio 10.0"
 #define VS11Root "{pf32}\Microsoft Visual Studio 11.0"
+#define VS12Root "{pf32}\Microsoft Visual Studio 12.0"
 
-#define OutputFileWithSpaces OutputPrefix + "_" + AppVersionAsText
+#define OutputFileWithSpaces OutputPrefix + "_" + AppDisplayVersion
 #define OutputFile StringChange(OutputFileWithSpaces, " ", "_")
 
 [_ISTool]
@@ -20,30 +23,30 @@ EnableISX=false
 Use7zip=false
 
 [Setup]
-AppName={#AppName}
-AppVerName={#AppName} {#AppVersionAsText}
-AppID={#AppName}
+AppName={#AppNameWithVersion}
+AppVerName={#AppNameWithDisplayVersion}
+AppID={#AppNameWithVersion}
 AppPublisher={#Company}
 AppCopyright={#Company}
-DefaultDirName={pf32}\{#AppName} {#AppVersion}
-DefaultGroupName={#AppName}
+DefaultDirName={pf32}\{#AppNameWithVersion}
+DefaultGroupName={#AppNameWithVersion}
 UsePreviousSetupType=true
 OutputDir=..\output
 OutputBaseFilename={#OutputFile}
-UninstallDisplayName={#AppName}
+UninstallDisplayName={#AppNameWithVersion}
 Compression=lzma2/Ultra64
 UseSetupLdr=true
 SolidCompression=true
 ShowLanguageDialog=yes
 VersionInfoVersion={#AppVersion}
-AppVersion={#AppVersionAsText}
+AppVersion={#AppVersion}
 InternalCompressLevel=Ultra64
 AppPublisherURL={#Website}
 AppSupportURL={#Website}
 AppUpdatesURL={#Website}
 AppContact={#Website}
 VersionInfoCompany={#Company}
-AppMutex={#AppName}
+AppMutex={#AppNameWithVersion}
 LanguageDetectionMethod=none
 DisableStartupPrompt=True
 WizardImageFile=resources\[WIZARDIMAGEFILE].bmp
@@ -87,24 +90,33 @@ Source: libraries\*; DestDir: {app}\libraries\; Flags: createallsubdirs recurses
 ; Snippets
 ;----------
 
-Source: snippets\C#\*; DestDir: {#VS9Root}\VC#\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs9Installed;
-Source: snippets\VB.NET\*; DestDir: {#VS9Root}\VB\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs9Installed;
-Source: snippets\C#\*; DestDir: {#VS9Root}\VC#\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs9ExpressInstalled;
-Source: snippets\VB.NET\*; DestDir: {#VS9Root}\VB\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs9ExpressInstalled;
+Source: snippets\*; DestDir: {app}\snippets\; Flags: createallsubdirs recursesubdirs; Components: snippets;
+
+Source: snippets\C#\*; DestDir: {#VS9Root}\VC#\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs9Installed;
+Source: snippets\VB.NET\*; DestDir: {#VS9Root}\VB\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs9Installed;
+Source: snippets\C#\*; DestDir: {#VS9Root}\VC#\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs9ExpressInstalled;
+Source: snippets\VB.NET\*; DestDir: {#VS9Root}\VB\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs9ExpressInstalled;
  
-Source: snippets\C#\*; DestDir: {#VS10Root}\VC#\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs10Installed;
-Source: snippets\VB.NET\*; DestDir: {#VS10Root}\VB\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs10Installed;
-Source: snippets\C#\*; DestDir: {#VS10Root}\VC#\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs10ExpressInstalled;
-Source: snippets\VB.NET\*; DestDir: {#VS10Root}\VB\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs10ExpressInstalled;
+Source: snippets\C#\*; DestDir: {#VS10Root}\VC#\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs10Installed;
+Source: snippets\VB.NET\*; DestDir: {#VS10Root}\VB\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs10Installed;
+Source: snippets\C#\*; DestDir: {#VS10Root}\VC#\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs10ExpressInstalled;
+Source: snippets\VB.NET\*; DestDir: {#VS10Root}\VB\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs10ExpressInstalled;
  
-Source: snippets\C#\*; DestDir: {#VS11Root}\VC#\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs11Installed;
-Source: snippets\VB.NET\*; DestDir: {#VS11Root}\VB\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs11Installed;
-Source: snippets\C#\*; DestDir: {#VS11Root}\VC#\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs11ExpressInstalled;
-Source: snippets\VB.NET\*; DestDir: {#VS11Root}\VB\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs11ExpressInstalled; 
+Source: snippets\C#\*; DestDir: {#VS11Root}\VC#\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs11Installed;
+Source: snippets\VB.NET\*; DestDir: {#VS11Root}\VB\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs11Installed;
+Source: snippets\C#\*; DestDir: {#VS11Root}\VC#\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs11ExpressInstalled;
+Source: snippets\VB.NET\*; DestDir: {#VS11Root}\VB\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs11ExpressInstalled; 
+
+Source: snippets\C#\*; DestDir: {#VS12Root}\VC#\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs12Installed;
+Source: snippets\VB.NET\*; DestDir: {#VS12Root}\VB\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs12Installed;
+Source: snippets\C#\*; DestDir: {#VS12Root}\VC#\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs12ExpressInstalled;
+Source: snippets\VB.NET\*; DestDir: {#VS12Root}\VB\Snippets\1033\other\Catel; Flags: createallsubdirs recursesubdirs; Components: snippets; Check: IsVs12ExpressInstalled; 
 
 ;----------
 ; Templates
 ;----------
+
+Source: templates\*; DestDir: {app}\templates\; Flags: createallsubdirs recursesubdirs; Components: templates;
 
 ; VS 9 (VS 2008)
 Source: templates\C#\itemtemplates\*; DestDir: {#VS9Root}\Common7\IDE\ItemTemplates\CSharp\Catel\1033; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs9Installed; 
@@ -142,6 +154,18 @@ Source: templates\C#\projecttemplates\*; DestDir: {#VS11Root}\Common7\IDE\VCSExp
 Source: templates\VB.NET\itemtemplates\*; DestDir: {#VS11Root}\Common7\IDE\VCSExpress\ItemTemplates\VisualBasic\Catel\1033; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs11ExpressInstalled;
 Source: templates\VB.NET\projecttemplates\*; DestDir: {#VS11Root}\Common7\IDE\VCSExpress\ProjectTemplates\VisualBasic\Catel\1033; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs11ExpressInstalled;
 
+; VS 12 (VS 12)
+Source: templates\C#\itemtemplates\*; DestDir: {#VS12Root}\Common7\IDE\ItemTemplates\CSharp\Catel\1033; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs12Installed;
+Source: templates\C#\projecttemplates\*; DestDir: {#VS12Root}\Common7\IDE\ProjectTemplates\CSharp\Catel\1033; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs12Installed;
+Source: templates\VB.NET\itemtemplates\*; DestDir: {#VS12Root}\Common7\IDE\ItemTemplates\VisualBasic\Catel\1033; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs12Installed;
+Source: templates\VB.NET\projecttemplates\*; DestDir: {#VS12Root}\Common7\IDE\ProjectTemplates\VisualBasic\Catel\1033; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs12Installed;
+
+; VS 12 (VS 12 Express)
+Source: templates\C#\itemtemplates\*; DestDir: {#VS12Root}\Common7\IDE\VCSExpress\ItemTemplates\CSharp\Catel\1033; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs12ExpressInstalled;
+Source: templates\C#\projecttemplates\*; DestDir: {#VS12Root}\Common7\IDE\VCSExpress\ProjectTemplates\CSharp\Catel\1033; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs12ExpressInstalled;
+Source: templates\VB.NET\itemtemplates\*; DestDir: {#VS12Root}\Common7\IDE\VCSExpress\ItemTemplates\VisualBasic\Catel\1033; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs12ExpressInstalled;
+Source: templates\VB.NET\projecttemplates\*; DestDir: {#VS12Root}\Common7\IDE\VCSExpress\ProjectTemplates\VisualBasic\Catel\1033; Flags: createallsubdirs recursesubdirs; Components: templates; Check: IsVs12ExpressInstalled;
+
 [CustomMessages]
 DotNetMissing=This setup requires the .NET Framework. Please download and install the .NET Framework and run this setup again. Do you want to download the framework now?
 
@@ -164,8 +188,8 @@ Root: HKLM; SubKey: SOFTWARE\Microsoft\Microsoft SDKs\WindowsPhone\v8.0\Assembly
 ;Root: HKLM; SubKey: SOFTWARE\Microsoft\Microsoft SDKs\Silverlight for WindowsPhone\v4.0\AssemblyFoldersEx\Catel (WinRT); ValueType: string; ValueData: {app}\Libraries\WinRT; Flags: UninsDeleteKey
 
 [Icons]
-Name: "{group}\Go to Catel homepage"; Filename: http://catel.codeplex.com;
-Name: "{group}\Documentation (online)"; Filename: http://catel.catenalogic.com;
+Name: "{group}\Go to Catel homepage"; Filename: http://www.catelproject.com;
+Name: "{group}\Documentation (online)"; Filename: http://www.catelproject.com/support/documentation;
 ;Name: "{group}\Documentation (offline)"; Filename: {app}\doc\catel.chm; 
 Name: "{group}\Uninstall Catel"; Filename: {app}\unins000.exe; WorkingDir: {app}; IconFilename: {app}\resources\catel.ico; 
 
@@ -220,6 +244,9 @@ Filename: {#VS10Root}\Common7\IDE\VCSExpress.exe; Parameters: /installvstemplate
 ; VS 11 (VS 2012) 
 Filename: {#VS11Root}\Common7\IDE\devenv.exe; Parameters: /installvstemplates; StatusMsg: "Updating Visual Studio 2012 templates cache (can take a minute or two)"; Components: templates; Flags: SkipIfDoesntExist;
 Filename: {#VS11Root}\Common7\IDE\VCSExpress.exe; Parameters: /installvstemplates; StatusMsg: "Updating Visual Studio 2012 Express templates cache (can take a minute or two)"; Components: templates; Flags: SkipIfDoesntExist;
+
+[ThirdParty]
+CompileLogMethod=append
 
 [Code]
 //=========================================================================
@@ -349,6 +376,31 @@ begin
   sPath := ExpandConstant('{#VS11Root}\Common7\IDE\VCSExpress.exe');
   
   Log('Checking path "' + sPath + '" to determine whether VS11 Express is installed');
+  
+  Result := FileExists(sPath);
+end;
+
+
+//================================
+
+function IsVs12Installed : Boolean;
+var
+  sPath: string;
+begin
+  sPath := ExpandConstant('{#VS12Root}\Common7\IDE\devenv.exe');
+  
+  Log('Checking path "' + sPath + '" to determine whether VS12 is installed');
+  
+  Result := FileExists(sPath);
+end;
+
+function IsVs12ExpressInstalled : Boolean;
+var
+  sPath: string;
+begin
+  sPath := ExpandConstant('{#VS12Root}\Common7\IDE\VCSExpress.exe');
+  
+  Log('Checking path "' + sPath + '" to determine whether VS12 Express is installed');
   
   Result := FileExists(sPath);
 end;

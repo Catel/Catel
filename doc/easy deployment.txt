@@ -9,4 +9,4 @@ http://www.nuget.org/
 
 Guidance on using Catel and NuGet 
 ---------------------------------
-http://catel.catenalogic.com
+http://www.catelproject.com

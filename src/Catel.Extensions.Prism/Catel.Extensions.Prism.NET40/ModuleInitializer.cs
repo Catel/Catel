@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel
+namespace Catel.Extensions.Prism
 {
     using IoC;
     using Microsoft.Practices.Prism.Regions;

@@ -275,7 +275,7 @@ namespace Catel.MVVM
         /// The view model properties by type.
         /// </summary>
         [field: NonSerialized]
-        private static readonly Dictionary<Type, HashSet<string>> _viewModelPropertiesByType = new Dictionary<Type, HashSet<string>>(); 
+        private static readonly Dictionary<Type, HashSet<string>> _viewModelPropertiesByType = new Dictionary<Type, HashSet<string>>();
 #endif
         #endregion
 
@@ -300,6 +300,16 @@ namespace Catel.MVVM
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
         /// </summary>
+        /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
+        /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
+        protected ViewModelBase() :
+            this(true, false, false)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
+        /// </summary>
         /// <param name="supportIEditableObject">if set to <c>true</c>, the view model will natively support models that
         /// implement the <see cref="IEditableObject"/> interface.</param>
         /// <param name="ignoreMultipleModelsWarning">if set to <c>true</c>, the warning when using multiple models is ignored.</param>
@@ -308,7 +318,7 @@ namespace Catel.MVVM
         /// </param>
         /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
         /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
-        protected ViewModelBase(bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false)
+        protected ViewModelBase(bool supportIEditableObject, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false)
             : this(null, supportIEditableObject, ignoreMultipleModelsWarning, skipViewModelAttributesInitialization) { }
 
         /// <summary>
@@ -462,7 +472,7 @@ namespace Catel.MVVM
         /// Gets the parent view model.
         /// </summary>
         /// <value>The parent view model.</value>
-        protected IViewModel ParentViewModel { get; private set; }
+        public IViewModel ParentViewModel { get; private set; }
 
         /// <summary>
         /// Gets the <see cref="ViewModelCommandManager"/> of this view model.
@@ -596,7 +606,10 @@ namespace Catel.MVVM
                     return true;
                 }
 
-                return ChildViewModels.Any(childViewModel => childViewModel.HasDirtyModel);
+                lock (ChildViewModels)
+                {
+                    return ChildViewModels.Any(childViewModel => childViewModel.HasDirtyModel);
+                }
             }
         }
 
@@ -698,7 +711,9 @@ namespace Catel.MVVM
             var existingProperties = viewModelType.GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(true, false));
             foreach (var existingProperty in existingProperties)
             {
-                propertyDescriptors.Add(new ViewModelPropertyDescriptor(null, existingProperty.Name, existingProperty.PropertyType));
+                var attributes = existingProperty.GetCustomAttributesEx(true);
+                var propertyDescriptor = ViewModelPropertyDescriptorFactory.CreatePropertyDescriptor(null, existingProperty.Name, existingProperty.PropertyType, attributes);
+                propertyDescriptors.Add(propertyDescriptor);
             }
 #endif
 
@@ -771,7 +786,9 @@ namespace Catel.MVVM
                             throw new InvalidOperationException(error);
                         }
 
-                        propertyDescriptors.Add(ViewModelPropertyDescriptorFactory.CreatePropertyDescriptor(null, exposeAttribute.PropertyName, modelPropertyInfo.PropertyType));
+                        var attributes = modelPropertyInfo.GetCustomAttributesEx(true);
+                        var propertyDescriptor = ViewModelPropertyDescriptorFactory.CreatePropertyDescriptor(null, exposeAttribute.PropertyName, modelPropertyInfo.PropertyType, attributes);
+                        propertyDescriptors.Add(propertyDescriptor);
                     }
                 }
 #endif
@@ -1014,7 +1031,10 @@ namespace Catel.MVVM
         /// <returns>An enumerable of current child view models.</returns>
         protected IEnumerable<IViewModel> GetChildViewModels()
         {
-            return ChildViewModels.ToArray();
+            lock (ChildViewModels)
+            {
+                return ChildViewModels.ToArray();
+            }
         }
 
         /// <summary>
@@ -1526,6 +1546,7 @@ namespace Catel.MVVM
         /// <typeparam name="T">Type of the service.</typeparam>
         /// <param name="tag">The tag.</param>
         /// <returns>Service object or <c>null</c> if the service is not found.</returns>
+        [ObsoleteEx(Message = "GetService is no longer recommended. It is better to inject all dependencies (which the TypeFactory fully supports)", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
         public T GetService<T>(object tag = null)
         {
             return (T)ServiceLocator.ResolveType(typeof(T), tag);
@@ -1613,14 +1634,11 @@ namespace Catel.MVVM
                 return false;
             }
 
-            if (SupportIEditableObject)
+            lock (_modelObjects)
             {
-                lock (_modelObjects)
+                foreach (KeyValuePair<string, object> modelKeyValuePair in _modelObjects)
                 {
-                    foreach (KeyValuePair<string, object> modelKeyValuePair in _modelObjects)
-                    {
-                        UninitializeModel(modelKeyValuePair.Key, modelKeyValuePair.Value, ModelCleanUpMode.CancelEdit);
-                    }
+                    UninitializeModel(modelKeyValuePair.Key, modelKeyValuePair.Value, ModelCleanUpMode.CancelEdit);
                 }
             }
 
@@ -1689,14 +1707,11 @@ namespace Catel.MVVM
 
             if (saved)
             {
-                if (SupportIEditableObject)
+                lock (_modelObjects)
                 {
-                    lock (_modelObjects)
+                    foreach (KeyValuePair<string, object> modelKeyValuePair in _modelObjects)
                     {
-                        foreach (KeyValuePair<string, object> modelKeyValuePair in _modelObjects)
-                        {
-                            UninitializeModel(modelKeyValuePair.Key, modelKeyValuePair.Value, ModelCleanUpMode.EndEdit);
-                        }
+                        UninitializeModel(modelKeyValuePair.Key, modelKeyValuePair.Value, ModelCleanUpMode.EndEdit);
                     }
                 }
 
@@ -1744,8 +1759,6 @@ namespace Catel.MVVM
             Close();
 
             SuspendValidation = true;
-
-            //MessageMediatorHelper.UnsubscribeRecipient(this);
 
             IsClosed = true;
 

@@ -69,7 +69,7 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="property"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="messageFormat"/> is <c>null</c> or whitespace.</exception>
         public FieldValidationResult(PropertyData property, ValidationResultType validationResultType, string messageFormat, params object[] args)
-            : this(property.Name, validationResultType, string.Format(messageFormat, args)) { }
+            : this(property.Name, validationResultType, messageFormat, args) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FieldValidationResult"/> class.
@@ -81,7 +81,7 @@ namespace Catel.Data
         /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentException">The <paramref name="messageFormat"/> is <c>null</c> or whitespace.</exception>
         public FieldValidationResult(string propertyName, ValidationResultType validationResultType, string messageFormat, params object[] args)
-            : base(validationResultType, string.Format(messageFormat, args))
+            : base(validationResultType, (args == null || args.Length == 0) ? messageFormat : string.Format(messageFormat, args))
         {
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
             Argument.IsNotNull("messageFormat", messageFormat);
@@ -111,7 +111,7 @@ namespace Catel.Data
             Argument.IsNotNull("propertyData", propertyData);
             Argument.IsNotNullOrWhitespace("messageFormat", messageFormat);
 
-            return CreateWarning(propertyData.Name, string.Format(messageFormat, args));
+            return CreateWarning(propertyData.Name, messageFormat, args);
         }
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace Catel.Data
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
             Argument.IsNotNullOrWhitespace("messageFormat", messageFormat);
 
-            return new FieldValidationResult(propertyName, ValidationResultType.Warning, string.Format(messageFormat, args));
+            return new FieldValidationResult(propertyName, ValidationResultType.Warning, messageFormat, args);
         }
 
         /// <summary>
@@ -187,7 +187,7 @@ namespace Catel.Data
             Argument.IsNotNull("propertyData", propertyData);
             Argument.IsNotNullOrWhitespace("messageFormat", messageFormat);
 
-            return CreateError(propertyData.Name, string.Format(messageFormat, args));
+            return CreateError(propertyData.Name, messageFormat, args);
         }
 
         /// <summary>
@@ -206,7 +206,7 @@ namespace Catel.Data
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
             Argument.IsNotNullOrWhitespace("messageFormat", messageFormat);
 
-            return new FieldValidationResult(propertyName, ValidationResultType.Error, string.Format(messageFormat, args));
+            return new FieldValidationResult(propertyName, ValidationResultType.Error, messageFormat, args);
         }
 
         /// <summary>
@@ -261,7 +261,7 @@ namespace Catel.Data
         /// <param name="args">The args.</param>
         /// <exception cref="ArgumentException">The <paramref name="messageFormat"/> is <c>null</c> or whitespace.</exception>
         public BusinessRuleValidationResult(ValidationResultType validationResultType, string messageFormat, params object[] args)
-            : base(validationResultType,  string.Format(messageFormat, args))
+            : base(validationResultType, (args == null || args.Length == 0) ? messageFormat : string.Format(messageFormat, args))
         {
         }
 
@@ -278,7 +278,7 @@ namespace Catel.Data
         {
             Argument.IsNotNullOrWhitespace("messageFormat", messageFormat);
 
-            return new BusinessRuleValidationResult(ValidationResultType.Warning, string.Format(messageFormat, args));
+            return new BusinessRuleValidationResult(ValidationResultType.Warning, messageFormat, args);
         }
 
         /// <summary>
@@ -311,7 +311,7 @@ namespace Catel.Data
         {
             Argument.IsNotNullOrWhitespace("messageFormat", messageFormat);
 
-            return new BusinessRuleValidationResult(ValidationResultType.Error, string.Format(messageFormat, args));
+            return new BusinessRuleValidationResult(ValidationResultType.Error, messageFormat, args);
         }
 
         /// <summary>

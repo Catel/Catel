@@ -4,6 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+
 namespace Catel.ExceptionHandling
 {
     using System;
@@ -27,10 +28,15 @@ namespace Catel.ExceptionHandling
         /// <summary>
         /// The static instance of the exception service.
         /// </summary>
-        private static readonly IExceptionService Instance = new ExceptionService();
+        private static readonly IExceptionService _default = new ExceptionService();
         #endregion
 
         #region Fields
+        /// <summary>
+        /// The _exception counts
+        /// </summary>
+        private readonly Dictionary<Type, Queue<DateTime>> _exceptionCounter = new Dictionary<Type, Queue<DateTime>>();
+
         /// <summary>
         /// The _exception handlers
         /// </summary>
@@ -44,7 +50,7 @@ namespace Catel.ExceptionHandling
         /// <value>The default instance.</value>
         public static IExceptionService Default
         {
-            get { return Instance; }
+            get { return _default; }
         }
         #endregion
 
@@ -70,7 +76,7 @@ namespace Catel.ExceptionHandling
         /// <returns>
         ///   <c>true</c> if the exception type is registered; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsExceptionRegistered<TException>()
+        public bool IsExceptionRegistered<TException>() where TException : Exception
         {
             var exceptionType = typeof (TException);
 
@@ -87,7 +93,7 @@ namespace Catel.ExceptionHandling
         /// <exception cref="ArgumentNullException">The <paramref ref="exceptionType"/> is <c>null</c>.</exception>
         public bool IsExceptionRegistered(Type exceptionType)
         {
-            Argument.IsNotNull("exceptionType", exceptionType);
+            Argument.IsOfType("exceptionType", exceptionType, typeof (Exception));
 
             lock (_exceptionHandlers)
             {
@@ -102,7 +108,7 @@ namespace Catel.ExceptionHandling
         /// <param name="handler">The action to execute when the exception occurs.</param>
         /// <returns>The handler to use.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        public IExceptionHandler Register<TException>(Action<Exception> handler)
+        public IExceptionHandler Register<TException>(Action<TException> handler)
             where TException : Exception
         {
             Argument.IsNotNull("handler", handler);
@@ -113,13 +119,15 @@ namespace Catel.ExceptionHandling
             {
                 if (!_exceptionHandlers.ContainsKey(exceptionType))
                 {
-                    var exceptionHandler = new ExceptionHandler(exceptionType, handler);
+                    var exceptionAction = new Action<Exception>(exception => handler((TException) exception));
+
+                    var exceptionHandler = new ExceptionHandler(exceptionType, exceptionAction);
                     _exceptionHandlers.Add(exceptionType, exceptionHandler);
 
                     Log.Debug("Added exception handler for type '{0}'", exceptionType.Name);
                 }
 
-                return _exceptionHandlers[exceptionType]; 
+                return _exceptionHandlers[exceptionType];
             }
         }
 
@@ -171,7 +179,33 @@ namespace Catel.ExceptionHandling
                 {
                     if (exceptionHandler.Key.IsAssignableFromEx(exceptionInstanceType))
                     {
+                        if (exceptionHandler.Value.AllowedFrequency != null)
+                        {
+                            if (!_exceptionCounter.ContainsKey(exceptionHandler.Key))
+                            {
+                                _exceptionCounter.Add(exceptionHandler.Key, new Queue<DateTime>());
+                            }
+
+                            _exceptionCounter[exceptionHandler.Key].Enqueue(DateTime.Now);
+
+                            if (_exceptionCounter[exceptionHandler.Key].Count <= exceptionHandler.Value.AllowedFrequency.NumberOfTimes)
+                            {
+                                continue;
+                            }
+
+                            var dateTime = _exceptionCounter[exceptionHandler.Key].Dequeue();
+
+                            var duration = (DateTime.Now - dateTime);
+
+                            if (duration >= exceptionHandler.Value.AllowedFrequency.Duration && exceptionHandler.Value.AllowedFrequency.Duration != TimeSpan.Zero)
+                            {
+                                continue;
+                            }
+                            _exceptionCounter[exceptionHandler.Key].Clear();
+                        }
+
                         handler = exceptionHandler.Value;
+
                         break;
                     }
                 }

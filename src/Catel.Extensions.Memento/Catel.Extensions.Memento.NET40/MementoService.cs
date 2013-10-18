@@ -65,6 +65,7 @@ namespace Catel.Memento
             Argument.IsMinimal("maximumSupportedBatches", maximumSupportedBatches, 0);
 
             MaximumSupportedBatches = maximumSupportedBatches;
+            IsEnabled = true;
 
             Log.Debug("Initialized MementoService with {0} supported batches", maximumSupportedBatches);
         }
@@ -110,6 +111,12 @@ namespace Catel.Memento
                 }
             }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the service is enabled.
+        /// </summary>
+        /// <value><c>true</c> if the service is enabled; otherwise, <c>false</c>.</value>
+        public bool IsEnabled { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether there is at least one Undo operation we can perform.
@@ -341,6 +348,11 @@ namespace Catel.Memento
         {
             Argument.IsNotNull("operation", operation);
 
+            if (!IsEnabled)
+            {
+                return false;
+            }
+
             if (noInsertIfExecutingOperation && _isUndoingOperation)
             {
                 return false;
@@ -374,6 +386,11 @@ namespace Catel.Memento
         public bool Add(IMementoBatch batch, bool noInsertIfExecutingOperation = true)
         {
             Argument.IsNotNull("batch", batch);
+
+            if (!IsEnabled)
+            {
+                return false;
+            }
 
             if (noInsertIfExecutingOperation && _isUndoingOperation)
             {

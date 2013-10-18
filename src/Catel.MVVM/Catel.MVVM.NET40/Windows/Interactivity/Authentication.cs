@@ -35,7 +35,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Disables the associated control.
         /// </summary>
-        Disable  
+        Disable
     }
 
     /// <summary>
@@ -57,7 +57,33 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// The authentication provider.
         /// </summary>
-        private static readonly IAuthenticationProvider _authenticationProvider = ServiceLocator.Default.ResolveType<IAuthenticationProvider>();
+        private static IAuthenticationProvider _authenticationProvider;
+        #endregion
+
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Authentication"/> class.
+        /// </summary>
+        public Authentication()
+        {
+            if (IsInDesignMode)
+            {
+                return;
+            }
+
+            if (_authenticationProvider == null)
+            {
+                var dependencyResolver = this.GetDependencyResolver();
+                _authenticationProvider = dependencyResolver.Resolve<IAuthenticationProvider>();
+            }
+
+            if (_authenticationProvider == null)
+            {
+                const string error = "No IAuthenticationProvider is registered, cannot use the Authentication behavior without an IAuthenticationProvider";
+                Log.Error(error);
+                throw new NotSupportedException(error);
+            }
+        }
         #endregion
 
         #region Properties
@@ -74,7 +100,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Using a DependencyProperty as the backing store for Action.  This enables animation, styling, binding, etc... 
         /// </summary>
-        public static readonly DependencyProperty ActionProperty = DependencyProperty.Register("Action", typeof(AuthenticationAction), 
+        public static readonly DependencyProperty ActionProperty = DependencyProperty.Register("Action", typeof(AuthenticationAction),
             typeof(Authentication), new PropertyMetadata(AuthenticationAction.Disable));
 
         /// <summary>
@@ -104,14 +130,9 @@ namespace Catel.Windows.Interactivity
         /// <exception cref="InvalidOperationException">The <see cref="Action"/> is set to <see cref="AuthenticationAction.Disable"/> and the <see cref="Behavior{T}.AssociatedObject"/> is not a <see cref="Control"/>.</exception>
         protected override void OnAssociatedObjectLoaded(object sender, EventArgs e)
         {
-            if (!ServiceLocator.Default.IsTypeRegistered<IAuthenticationProvider>())
-            {
-                throw new InvalidOperationException("IAuthenticationProvider is not registered in the IServiceLocator");
-            }
-
             if (!_authenticationProvider.HasAccessToUIElement(AssociatedObject, AssociatedObject.Tag, AuthenticationTag))
             {
-                Log.Debug("User has no access to UI element with tag '{0}' and authentication tag '{1}'", 
+                Log.Debug("User has no access to UI element with tag '{0}' and authentication tag '{1}'",
                     ObjectToStringHelper.ToString(AssociatedObject.Tag), ObjectToStringHelper.ToString(AuthenticationTag));
 
                 switch (Action)

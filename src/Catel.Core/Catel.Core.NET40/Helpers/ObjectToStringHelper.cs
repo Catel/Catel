@@ -49,7 +49,7 @@ namespace Catel
         }
 
         /// <summary>
-        /// Returns a <see cref="string"/> that represents the type of the instance.
+        /// Returns a <see cref="string"/> that represents the type name of the instance.
         /// <para />
         /// If the <paramref name="instance"/> is <c>null</c>, this method will return "null". This
         /// method is great when the value of a property must be logged.
@@ -63,7 +63,37 @@ namespace Catel
                 return "null";
             }
 
+            var instanceAsType = instance as Type;
+            if (instanceAsType != null)
+            {
+                return instanceAsType.Name;
+            }
+
             return instance.GetType().Name;
+        }
+
+        /// <summary>
+        /// Returns a <see cref="string"/> that represents the full type name of the instance.
+        /// <para />
+        /// If the <paramref name="instance"/> is <c>null</c>, this method will return "null". This
+        /// method is great when the value of a property must be logged.
+        /// </summary>
+        /// <param name="instance">The instance.</param>
+        /// <returns>A <see cref="string"/> that represents the type of the instance.</returns>
+        public static string ToFullTypeString(object instance)
+        {
+            if (instance == null)
+            {
+                return "null";
+            }
+
+            var instanceAsType = instance as Type;
+            if (instanceAsType != null)
+            {
+                return instanceAsType.GetSafeFullName();
+            }
+
+            return instance.GetType().GetSafeFullName();
         }
     }
 }

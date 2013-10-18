@@ -67,7 +67,8 @@ namespace Catel.MVVM
         /// </summary>
         /// <typeparam name="TViewModel">The type of the view model.</typeparam>
         /// <returns>The <see cref="IViewModel"/> or <c>null</c> if the view model is not registered.</returns>
-        IViewModel GetFirstOrDefaultInstance<TViewModel>() where TViewModel : IViewModel;
+        TViewModel GetFirstOrDefaultInstance<TViewModel>() 
+            where TViewModel : IViewModel;
 
         /// <summary>
         /// Gets the first or default instance of the specified view model.
@@ -76,6 +77,21 @@ namespace Catel.MVVM
         /// <returns>The <see cref="IViewModel"/> or <c>null</c> if the view model is not registered.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
         IViewModel GetFirstOrDefaultInstance(Type viewModelType);
+
+        /// <summary>
+        /// Gets the child view models of the specified view model.
+        /// </summary>
+        /// <param name="parentViewModel">The parent view model.</param>
+        /// <returns>The child view models.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="parentViewModel"/> is <c>null</c>.</exception>
+        IEnumerable<IRelationalViewModel> GetChildViewModels(IViewModel parentViewModel);
+
+        /// <summary>
+        /// Gets the child view models of the specified view model unique identifier.
+        /// </summary>
+        /// <param name="parentUniqueIdentifier">The parent unique identifier.</param>
+        /// <returns>The child view models.</returns>
+        IEnumerable<IRelationalViewModel> GetChildViewModels(int parentUniqueIdentifier);
         #endregion
     }
 }

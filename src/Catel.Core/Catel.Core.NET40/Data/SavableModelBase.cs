@@ -14,19 +14,16 @@ namespace Catel.Data
     using System.Xml.Serialization;
 
     using Logging;
+    using Catel.Runtime.Serialization;
 
 #if NET
-    using Catel.Runtime.Serialization;
     using System.Runtime.Serialization;
-    using System.Runtime.Serialization.Formatters.Binary;
 #elif NETFX_CORE
     using Windows.Storage.Streams;
-    using Runtime.Serialization;
 #elif PCL
     // Not supported in Portable Class Library
 #else
     using System.IO.IsolatedStorage;
-    using Runtime.Serialization;
 #endif
 
     /// <summary>
@@ -86,7 +83,10 @@ namespace Catel.Data
         [Browsable(false)]
 #endif
         [XmlIgnore]
-        public byte[] Bytes { get { return ToByteArray(); } }
+        public byte[] Bytes
+        {
+            get { return ToByteArray(); }
+        }
         #endregion
 
         #region Methods
@@ -200,23 +200,14 @@ namespace Catel.Data
             {
 #if NET
                 case SerializationMode.Binary:
-                    BinaryFormatter binaryFormatter = SerializationHelper.GetBinarySerializer(false);
-                    binaryFormatter.Serialize(stream, this);
+                    var binarySerializer = SerializationFactory.GetBinarySerializer();
+                    binarySerializer.Serialize(this, stream);
                     break;
 #endif
 
                 case SerializationMode.Xml:
-                    var settings = new XmlWriterSettings();
-                    settings.OmitXmlDeclaration = false;
-                    settings.Indent = true;
-
-                    using (XmlWriter xmlWriter = XmlWriter.Create(stream, settings))
-                    {
-                        xmlWriter.WriteStartElement(GetType().Name);
-                        ((IXmlSerializable)this).WriteXml(xmlWriter);
-                        xmlWriter.WriteEndElement();
-                    }
-
+                    var xmlSerializer = SerializationFactory.GetXmlSerializer();
+                    xmlSerializer.Serialize(this, stream);
                     break;
             }
 

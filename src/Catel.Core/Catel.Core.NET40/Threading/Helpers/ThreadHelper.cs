@@ -6,11 +6,26 @@
 
 namespace Catel
 {
+    using System.Threading;
+
     /// <summary>
     /// Helper class for thread methods.
     /// </summary>
     public static class ThreadHelper
     {
+        /// <summary>
+        /// Gets the current thread identifier.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public static int GetCurrentThreadId()
+        {
+#if NETFX_CORE
+            return System.Environment.CurrentManagedThreadId;
+#else
+            return Thread.CurrentThread.ManagedThreadId;
+#endif
+        }
+
         /// <summary>
         /// Lets the current execution thread sleep for the specified milliseconds.
         /// <para />
@@ -20,9 +35,29 @@ namespace Catel
         public static void Sleep(int millisecondsTimeout)
         {
 #if NETFX_CORE || PCL
-            new System.Threading.ManualResetEvent(false).WaitOne(millisecondsTimeout);
+            new ManualResetEvent(false).WaitOne(millisecondsTimeout);
 #else
-            System.Threading.Thread.Sleep(millisecondsTimeout);
+            Thread.Sleep(millisecondsTimeout);
+#endif
+        }
+
+        /// <summary>
+        /// Causes a thread to wait the number of times defined by the iterations parameter.
+        /// </summary>
+        /// <param name="iterations">The number of iterations.</param>
+        public static void SpinWait(int iterations)
+        {
+#if NETFX_CORE
+            var spinWait = new SpinWait();
+
+            while (spinWait.Count < iterations)
+            {
+                spinWait.SpinOnce();
+            }
+#elif PCL
+            Sleep(1); // alternative for PCL
+#else
+            Thread.SpinWait(20);
 #endif
         }
     }

@@ -20,13 +20,14 @@ namespace Catel.Tasks
         /// Creates the create logger task.
         /// </summary>
         /// <param name="action">The action to execute.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public virtual ITask CreateCreateLoggerTask(Action action)
+        public virtual ITask CreateCreateLoggerTask(Action action, bool dispatch = false)
         {
             Argument.IsNotNull(() => action);
 
-            return CreateCreateLoggerTask(action, "Creating logger");
+            return CreateCreateLoggerTask(action, "Creating logger", dispatch);
         }
 
         /// <summary>
@@ -34,28 +35,30 @@ namespace Catel.Tasks
         /// </summary>
         /// <param name="action">The action to execute.</param>
         /// <param name="description">The description.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="description"/> is <c>null</c>.</exception>
-        protected virtual ITask CreateCreateLoggerTask(Action action, string description)
+        protected virtual ITask CreateCreateLoggerTask(Action action, string description, bool dispatch)
         {
             Argument.IsNotNull(() => action);
             Argument.IsNotNull(() => description);
 
-            return new ActionTask(description, x => action());
+            return new ActionTask(description, x => action()) { AutomaticallyDispatch = dispatch };
         }
 
         /// <summary>
         /// Creates the create module catalog task.
         /// </summary>
         /// <param name="action">The action to execute.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public virtual ITask CreateCreateModuleCatalogTask(Action action)
+        public virtual ITask CreateCreateModuleCatalogTask(Action action, bool dispatch = false)
         {
             Argument.IsNotNull(() => action);
 
-            return CreateCreateModuleCatalogTask(action, "Creating module catalog");
+            return CreateCreateModuleCatalogTask(action, "Creating module catalog", dispatch);
         }
 
         /// <summary>
@@ -63,28 +66,30 @@ namespace Catel.Tasks
         /// </summary>
         /// <param name="action">The action to execute.</param>
         /// <param name="description">The description.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="description"/> is <c>null</c>.</exception>
-        protected virtual ITask CreateCreateModuleCatalogTask(Action action, string description)
+        protected virtual ITask CreateCreateModuleCatalogTask(Action action, string description, bool dispatch)
         {
             Argument.IsNotNull(() => action);
             Argument.IsNotNull(() => description);
 
-            return new ActionTask(description, x => action());
+            return new ActionTask(description, x => action()) { AutomaticallyDispatch = dispatch };
         }
 
         /// <summary>
         /// Creates the configure module catalog task.
         /// </summary>
         /// <param name="action">The action to execute.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public virtual ITask CreateConfigureModuleCatalogTask(Action action)
+        public virtual ITask CreateConfigureModuleCatalogTask(Action action, bool dispatch = false)
         {
             Argument.IsNotNull(() => action);
 
-            return CreateConfigureModuleCatalogTask(action, "Configuring module catalog");
+            return CreateConfigureModuleCatalogTask(action, "Configuring module catalog", dispatch);
         }
 
         /// <summary>
@@ -92,28 +97,30 @@ namespace Catel.Tasks
         /// </summary>
         /// <param name="action">The action to execute.</param>
         /// <param name="description">The description.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="description"/> is <c>null</c>.</exception>
-        protected virtual ITask CreateConfigureModuleCatalogTask(Action action, string description)
+        protected virtual ITask CreateConfigureModuleCatalogTask(Action action, string description, bool dispatch)
         {
             Argument.IsNotNull(() => action);
             Argument.IsNotNull(() => description);
 
-            return new ActionTask(description, x => action());
+            return new ActionTask(description, x => action()) { AutomaticallyDispatch = dispatch };
         }
 
         /// <summary>
         /// Creates the create service locator container task.
         /// </summary>
         /// <param name="action">The action to execute.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public virtual ITask CreateCreateServiceLocatorContainerTask(Action action)
+        public virtual ITask CreateCreateServiceLocatorContainerTask(Action action, bool dispatch = false)
         {
             Argument.IsNotNull(() => action);
 
-            return CreateCreateServiceLocatorContainerTask(action, "Creating service locator container");
+            return CreateCreateServiceLocatorContainerTask(action, "Creating service locator container", dispatch);
         }
 
         /// <summary>
@@ -121,28 +128,30 @@ namespace Catel.Tasks
         /// </summary>
         /// <param name="action">The action to execute.</param>
         /// <param name="description">The description.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="description"/> is <c>null</c>.</exception>
-        protected virtual ITask CreateCreateServiceLocatorContainerTask(Action action, string description)
+        protected virtual ITask CreateCreateServiceLocatorContainerTask(Action action, string description, bool dispatch)
         {
             Argument.IsNotNull(() => action);
             Argument.IsNotNull(() => description);
 
-            return new ActionTask(description, x => action());
+            return new ActionTask(description, x => action()) { AutomaticallyDispatch = dispatch };
         }
 
         /// <summary>
         /// Creates the configure service locator container task.
         /// </summary>
         /// <param name="action">The action to execute.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public virtual ITask CreateConfigureServiceLocatorContainerTask(Action action)
+        public virtual ITask CreateConfigureServiceLocatorContainerTask(Action action, bool dispatch = false)
         {
             Argument.IsNotNull(() => action);
 
-            return CreateConfigureServiceLocatorContainerTask(action, "Configuring service locator container");
+            return CreateConfigureServiceLocatorContainerTask(action, "Configuring service locator container", dispatch);
         }
 
         /// <summary>
@@ -150,28 +159,30 @@ namespace Catel.Tasks
         /// </summary>
         /// <param name="action">The action to execute.</param>
         /// <param name="description">The description.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="description"/> is <c>null</c>.</exception>
-        protected virtual ITask CreateConfigureServiceLocatorContainerTask(Action action, string description)
+        protected virtual ITask CreateConfigureServiceLocatorContainerTask(Action action, string description, bool dispatch)
         {
             Argument.IsNotNull(() => action);
             Argument.IsNotNull(() => description);
 
-            return new ActionTask(description, x => action());
+            return new ActionTask(description, x => action()) { AutomaticallyDispatch = dispatch };
         }
 
         /// <summary>
         /// Creates the configure service locator task.
         /// </summary>
         /// <param name="action">The action to execute.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public virtual ITask CreateConfigureServiceLocatorTask(Action action)
+        public virtual ITask CreateConfigureServiceLocatorTask(Action action, bool dispatch = false)
         {
             Argument.IsNotNull(() => action);
 
-            return CreateConfigureServiceLocatorTask(action, "Configuring service locator");
+            return CreateConfigureServiceLocatorTask(action, "Configuring service locator", dispatch);
         }
 
         /// <summary>
@@ -179,28 +190,30 @@ namespace Catel.Tasks
         /// </summary>
         /// <param name="action">The action to execute.</param>
         /// <param name="description">The description.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="description"/> is <c>null</c>.</exception>
-        protected virtual ITask CreateConfigureServiceLocatorTask(Action action, string description)
+        protected virtual ITask CreateConfigureServiceLocatorTask(Action action, string description, bool dispatch)
         {
             Argument.IsNotNull(() => action);
             Argument.IsNotNull(() => description);
 
-            return new ActionTask(description, x => action());
+            return new ActionTask(description, x => action()) { AutomaticallyDispatch = dispatch };
         }
 
         /// <summary>
         /// Creates the configure region adapters task.
         /// </summary>
         /// <param name="action">The action to execute.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public virtual ITask CreateConfigureRegionAdaptersTask(Action action)
+        public virtual ITask CreateConfigureRegionAdaptersTask(Action action, bool dispatch = false)
         {
             Argument.IsNotNull(() => action);
 
-            return CreateConfigureRegionAdaptersTask(action, "Configuring region adapters");
+            return CreateConfigureRegionAdaptersTask(action, "Configuring region adapters", dispatch);
         }
 
         /// <summary>
@@ -208,28 +221,30 @@ namespace Catel.Tasks
         /// </summary>
         /// <param name="action">The action to execute.</param>
         /// <param name="description">The description.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="description"/> is <c>null</c>.</exception>
-        protected virtual ITask CreateConfigureRegionAdaptersTask(Action action, string description)
+        protected virtual ITask CreateConfigureRegionAdaptersTask(Action action, string description, bool dispatch)
         {
             Argument.IsNotNull(() => action);
             Argument.IsNotNull(() => description);
 
-            return new ActionTask(description, x => action());
+            return new ActionTask(description, x => action()) { AutomaticallyDispatch = dispatch };
         }
 
         /// <summary>
         /// Creates the configure default region behaviors task.
         /// </summary>
         /// <param name="action">The action to execute.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public virtual ITask CreateConfigureDefaultRegionBehaviorsTask(Action action)
+        public virtual ITask CreateConfigureDefaultRegionBehaviorsTask(Action action, bool dispatch = false)
         {
             Argument.IsNotNull(() => action);
 
-            return CreateConfigureDefaultRegionBehaviorsTask(action, "Configuring default region behaviors");
+            return CreateConfigureDefaultRegionBehaviorsTask(action, "Configuring default region behaviors", dispatch);
         }
 
         /// <summary>
@@ -237,28 +252,30 @@ namespace Catel.Tasks
         /// </summary>
         /// <param name="action">The action to execute.</param>
         /// <param name="description">The description.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="description"/> is <c>null</c>.</exception>
-        protected virtual ITask CreateConfigureDefaultRegionBehaviorsTask(Action action, string description)
+        protected virtual ITask CreateConfigureDefaultRegionBehaviorsTask(Action action, string description, bool dispatch)
         {
             Argument.IsNotNull(() => action);
             Argument.IsNotNull(() => description);
 
-            return new ActionTask(description, x => action());
+            return new ActionTask(description, x => action()) { AutomaticallyDispatch = dispatch };
         }
 
         /// <summary>
         /// Creates the register framework exception types task.
         /// </summary>
         /// <param name="action">The action to execute.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public virtual ITask CreateRegisterFrameworkExceptionTypesTask(Action action)
+        public virtual ITask CreateRegisterFrameworkExceptionTypesTask(Action action, bool dispatch = false)
         {
             Argument.IsNotNull(() => action);
 
-            return CreateRegisterFrameworkExceptionTypesTask(action, "Registering framework exception types");
+            return CreateRegisterFrameworkExceptionTypesTask(action, "Registering framework exception types", dispatch);
         }
 
         /// <summary>
@@ -266,28 +283,30 @@ namespace Catel.Tasks
         /// </summary>
         /// <param name="action">The action to execute.</param>
         /// <param name="description">The description.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="description"/> is <c>null</c>.</exception>
-        protected virtual ITask CreateRegisterFrameworkExceptionTypesTask(Action action, string description)
+        protected virtual ITask CreateRegisterFrameworkExceptionTypesTask(Action action, string description, bool dispatch)
         {
             Argument.IsNotNull(() => action);
             Argument.IsNotNull(() => description);
 
-            return new ActionTask(description, x => action());
+            return new ActionTask(description, x => action()) { AutomaticallyDispatch = dispatch };
         }
 
         /// <summary>
         /// Creates the create shell task.
         /// </summary>
         /// <param name="action">The action to execute.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public virtual ITask CreateCreateShellTask(Action action)
+        public virtual ITask CreateCreateShellTask(Action action, bool dispatch = true)
         {
             Argument.IsNotNull(() => action);
 
-            return CreateCreateShellTask(action, "Creating the shell");
+            return CreateCreateShellTask(action, "Creating the shell", dispatch);
         }
 
         /// <summary>
@@ -295,28 +314,30 @@ namespace Catel.Tasks
         /// </summary>
         /// <param name="action">The action to execute.</param>
         /// <param name="description">The description.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="description"/> is <c>null</c>.</exception>
-        protected virtual ITask CreateCreateShellTask(Action action, string description)
+        protected virtual ITask CreateCreateShellTask(Action action, string description, bool dispatch)
         {
             Argument.IsNotNull(() => action);
             Argument.IsNotNull(() => description);
 
-            return new ActionTask(description, x => action());
+            return new ActionTask(description, x => action()) { AutomaticallyDispatch = dispatch };
         }
 
         /// <summary>
         /// Creates the initialize modules task.
         /// </summary>
         /// <param name="action">The action to execute.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public virtual ITask CreateInitializeModulesTask(Action action)
+        public virtual ITask CreateInitializeModulesTask(Action action, bool dispatch = true)
         {
             Argument.IsNotNull(() => action);
 
-            return CreateInitializeModulesTask(action, "Initializing modules");
+            return CreateInitializeModulesTask(action, "Initializing modules", dispatch);
         }
 
         /// <summary>
@@ -324,28 +345,30 @@ namespace Catel.Tasks
         /// </summary>
         /// <param name="action">The action to execute.</param>
         /// <param name="description">The description.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="description"/> is <c>null</c>.</exception>
-        protected virtual ITask CreateInitializeModulesTask(Action action, string description)
+        protected virtual ITask CreateInitializeModulesTask(Action action, string description, bool dispatch)
         {
             Argument.IsNotNull(() => action);
             Argument.IsNotNull(() => description);
 
-            return new ActionTask(description, x => action());
+            return new ActionTask(description, x => action()) { AutomaticallyDispatch = dispatch };
         }
 
         /// <summary>
         /// Creates the initializing shell task.
         /// </summary>
         /// <param name="action">The action to execute.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public virtual ITask CreateInitializingShellTask(Action action)
+        public virtual ITask CreateInitializingShellTask(Action action, bool dispatch = true)
         {
             Argument.IsNotNull(() => action);
 
-            return CreateInitializeModulesTask(action, "Initializing the shell");
+            return CreateInitializingShellTask(action, "Initializing the shell", dispatch);
         }
 
         /// <summary>
@@ -353,15 +376,16 @@ namespace Catel.Tasks
         /// </summary>
         /// <param name="action">The action to execute.</param>
         /// <param name="description">The description.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="description"/> is <c>null</c>.</exception>
-        protected virtual ITask CreateInitializingShellTask(Action action, string description)
+        protected virtual ITask CreateInitializingShellTask(Action action, string description, bool dispatch)
         {
             Argument.IsNotNull(() => action);
             Argument.IsNotNull(() => description);
 
-            return new ActionTask(description, x => action());
+            return new ActionTask(description, x => action()) {AutomaticallyDispatch = dispatch};
         }
     }
 }

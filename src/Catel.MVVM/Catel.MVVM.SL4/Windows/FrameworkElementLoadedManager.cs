@@ -175,24 +175,27 @@ namespace Catel.Windows
 
             lock (_lock)
             {
-                var lastLoadedElementInfo = _loadedStack.Peek();
-                if (ReferenceEquals(elementInfo.FrameworkElement, lastLoadedElementInfo.FrameworkElement))
+                if (_loadedStack.Count > 0)
                 {
-                    // We have reach the top control, now iterate the stack
-                    while (_loadedStack.Count > 0)
+                    var lastLoadedElementInfo = _loadedStack.Peek();
+                    if (ReferenceEquals(elementInfo.FrameworkElement, lastLoadedElementInfo.FrameworkElement))
                     {
-                        var innerElementInfo = _loadedStack.Pop();
-                        innerElementInfo.LayoutUpdated -= OnFrameworkElementLayoutUpdated;
-
-                        if (innerElementInfo.Action != null)
+                        // We have reach the top control, now iterate the stack
+                        while (_loadedStack.Count > 0)
                         {
-                            innerElementInfo.Action();
-                        }
+                            var innerElementInfo = _loadedStack.Pop();
+                            innerElementInfo.LayoutUpdated -= OnFrameworkElementLayoutUpdated;
 
-                        var frameworkElementLoaded = FrameworkElementLoaded;
-                        if (frameworkElementLoaded != null)
-                        {
-                            frameworkElementLoaded(this, new FrameworkElementLoadedEventArgs(innerElementInfo.FrameworkElement));
+                            if (innerElementInfo.Action != null)
+                            {
+                                innerElementInfo.Action();
+                            }
+
+                            var frameworkElementLoaded = FrameworkElementLoaded;
+                            if (frameworkElementLoaded != null)
+                            {
+                                frameworkElementLoaded(this, new FrameworkElementLoadedEventArgs(innerElementInfo.FrameworkElement));
+                            }
                         }
                     }
                 }

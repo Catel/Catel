@@ -70,18 +70,6 @@ namespace Catel.Test.Data
 
             Assert.AreEqual(originalObject, clonedObject);
         }
-
-        [TestMethod]
-        public void BinarySerializationWithPrivateParameterlessConstructor()
-        {
-            // Create new object
-            var originalObject = new ObjectWithPrivateConstructor("My private constructor test");
-
-            // Test
-            var clonedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Binary);
-
-            Assert.AreEqual(originalObject, clonedObject);
-        }
 #endif
 
         [TestMethod]
@@ -158,9 +146,9 @@ namespace Catel.Test.Data
         {
             const string ExpectedXmlContent = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
                                               @"
-<IniFile xmlns:ctl=" + "\"http://catel.codeplex.com\">" + @"
+<IniFile graphid=" + "\"1\" xmlns:ctl=" + "\"http://catel.codeplex.com\">" + @"
   <FileName>MyIniFile</FileName>
-  <IniEntryCollection xmlns:d1p1=" + "\"http://schemas.datacontract.org/2004/07/Catel.Test.Data\"" + " xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"" + @">
+  <IniEntryCollection xmlns:d1p1=" + "\"http://schemas.datacontract.org/2004/07/Catel.Test.Data\" graphid=\"2\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"" + @">
     <d1p1:IniEntry>
       <Group>Group 0</Group>
       <Key>Key 0</Key>
@@ -203,15 +191,6 @@ namespace Catel.Test.Data
             var originalObject = new ObjectWithPrivateMembers("My private member");
             originalObject.PublicMember = "My public member";
 
-            var clonedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Xml);
-
-            Assert.AreEqual(originalObject, clonedObject);
-        }
-
-        [TestMethod]
-        public void XmlSerializationWithPrivateParameterlessConstructor()
-        {
-            var originalObject = new ObjectWithPrivateConstructor("My private constructor test");
             var clonedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Xml);
 
             Assert.AreEqual(originalObject, clonedObject);

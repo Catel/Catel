@@ -31,7 +31,7 @@
     <LinkedServerProject />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.13.8.0</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.15.0.0</FodyPath>
   </PropertyGroup>
   <!--
   //
@@ -64,7 +64,7 @@
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -83,8 +83,9 @@
     </Reference>
     <Reference Include="Castle.Windsor, Version=3.2.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Castle.Windsor.3.2.0\lib\sl4\Castle.Windsor.dll</HintPath>
+      <HintPath>..\..\..\lib\Castle.Windsor.3.2.1\lib\sl4\Castle.Windsor.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Practices.Prism">
       <HintPath>..\..\..\lib\Prism.4.1.0.0\lib\SL4\Microsoft.Practices.Prism.dll</HintPath>
     </Reference>
@@ -100,16 +101,17 @@
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight">
       <HintPath>$(MSBuildExtensionsPath)\..\Microsoft SDKs\Silverlight\v4.0\Toolkit\Apr10\Testing\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll</HintPath>
     </Reference>
-    <Reference Include="Moq.Silverlight">
-      <HintPath>..\..\..\lib\Moq.4.0.10827\lib\Silverlight4\Moq.Silverlight.dll</HintPath>
+    <Reference Include="Moq.Silverlight, Version=4.1.1308.2321, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Moq.4.1.1308.2321\lib\sl4\Moq.Silverlight.dll</HintPath>
     </Reference>
     <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Ninject.3.0.1.10\lib\sl4\Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="Obsolete, Version=1.6.2.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
+    <Reference Include="Obsolete, Version=2.3.0.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Obsolete.Fody.1.6.2.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
+      <HintPath>..\..\..\lib\Obsolete.Fody.2.3.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System.ComponentModel.Composition, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -281,6 +283,39 @@
     <Compile Include="..\Catel.Test.NET40\Extensions\Data\Specifications\SpecificationTestData.cs">
       <Link>Extensions\Data\Specifications\SpecificationTestData.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\DynamicObjects\DynamicModelBaseFacts.cs">
+      <Link>Extensions\DynamicObjects\DynamicModelBaseFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\Memento\ActionUndoFacts.cs">
+      <Link>Extensions\Memento\ActionUndoFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\Memento\BatchFacts.cs">
+      <Link>Extensions\Memento\BatchFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\Memento\CollectionChangeUndoFacts.cs">
+      <Link>Extensions\Memento\CollectionChangeUndoFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\Memento\CollectionObserverFacts.cs">
+      <Link>Extensions\Memento\CollectionObserverFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\Memento\MementoServiceFacts.cs">
+      <Link>Extensions\Memento\MementoServiceFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\Memento\Mocks\MockModel.cs">
+      <Link>Extensions\Memento\Mocks\MockModel.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\Memento\Mocks\MockUndo.cs">
+      <Link>Extensions\Memento\Mocks\MockUndo.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\Memento\ObjectObserverFacts.cs">
+      <Link>Extensions\Memento\ObjectObserverFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\Memento\OperationSetFacts.cs">
+      <Link>Extensions\Memento\OperationSetFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\Memento\PropertyChangeUndoFacts.cs">
+      <Link>Extensions\Memento\PropertyChangeUndoFacts.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\Extensions\Prism\BootstrapperBaseTests.cs">
       <Link>Extensions\Prism\BootstrapperBaseTests.cs</Link>
     </Compile>
@@ -298,6 +333,9 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\GlobalInitialization.cs">
       <Link>GlobalInitialization.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Helpers\ConsoleHelper.cs">
+      <Link>Helpers\ConsoleHelper.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Helpers\ExpressionHelperFacts.cs">
       <Link>Helpers\ExpressionHelperFacts.cs</Link>
@@ -317,8 +355,17 @@
     <Compile Include="..\Catel.Test.NET40\Helpers\TagHelperFacts.cs">
       <Link>Helpers\TagHelperFacts.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\Helpers\TimeMeasureHelper.cs">
+      <Link>Helpers\TimeMeasureHelper.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\Helpers\WindowHelper.cs">
       <Link>Helpers\WindowHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\IoC\CatelDependencyResolverFacts.cs">
+      <Link>IoC\CatelDependencyResolverFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\IoC\DependencyResolverManagerFacts.cs">
+      <Link>IoC\DependencyResolverManagerFacts.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\IoC\EventArgs\MissingTypeEventArgsFacts.cs">
       <Link>IoC\EventArgs\MissingTypeEventArgsFacts.cs</Link>
@@ -328,6 +375,9 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\IoC\Exceptions\ExternalContainerNotSupportedExceptionTest.cs">
       <Link>IoC\Exceptions\ExternalContainerNotSupportedExceptionTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\IoC\Extensions\ObjectExtensionsFacts.cs">
+      <Link>IoC\Extensions\ObjectExtensionsFacts.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\IoC\Helpers\MefHelperTest.cs">
       <Link>IoC\Helpers\MefHelperTest.cs</Link>
@@ -367,36 +417,6 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Logging\LogManagerTest.cs">
       <Link>Logging\LogManagerTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Memento\ActionUndoFacts.cs">
-      <Link>Memento\ActionUndoFacts.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Memento\BatchFacts.cs">
-      <Link>Memento\BatchFacts.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Memento\CollectionChangeUndoFacts.cs">
-      <Link>Memento\CollectionChangeUndoFacts.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Memento\CollectionObserverFacts.cs">
-      <Link>Memento\CollectionObserverFacts.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Memento\MementoServiceFacts.cs">
-      <Link>Memento\MementoServiceFacts.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Memento\Mocks\MockModel.cs">
-      <Link>Memento\Mocks\MockModel.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Memento\Mocks\MockUndo.cs">
-      <Link>Memento\Mocks\MockUndo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Memento\ObjectObserverFacts.cs">
-      <Link>Memento\ObjectObserverFacts.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Memento\OperationSetFacts.cs">
-      <Link>Memento\OperationSetFacts.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Memento\PropertyChangeUndoFacts.cs">
-      <Link>Memento\PropertyChangeUndoFacts.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Messaging\MessageBaseFacts.cs">
       <Link>Messaging\MessageBaseFacts.cs</Link>
@@ -533,9 +553,6 @@
     <Compile Include="..\Catel.Test.NET40\Reflection\AssemblyExtensionsTest.cs">
       <Link>Reflection\AssemblyExtensionsTest.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Test.NET40\Reflection\AttributeHelperFacts.cs">
-      <Link>Reflection\AttributeHelperFacts.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Test.NET40\Reflection\PropertyHelperFacts.cs">
       <Link>Reflection\PropertyHelperFacts.cs</Link>
     </Compile>
@@ -560,11 +577,35 @@
     <Compile Include="..\Catel.Test.NET40\Reflection\TypeHelperFacts.cs">
       <Link>Reflection\TypeHelperFacts.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\Attributes\RedirectTypeAttributeTest.cs">
-      <Link>Runtime\Serialization\Attributes\RedirectTypeAttributeTest.cs</Link>
+    <Compile Include="..\Catel.Test.NET40\Runtime\ReferenceManagerFacts.cs">
+      <Link>Runtime\ReferenceManagerFacts.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\SerializationHelperTest.cs">
-      <Link>Runtime\Serialization\SerializationHelperTest.cs</Link>
+    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\Helpers\SerializationTestHelper.cs">
+      <Link>Runtime\Serialization\Helpers\SerializationTestHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\SerializationManagerFacts.cs">
+      <Link>Runtime\Serialization\SerializationManagerFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\SerializationObjectFacts.cs">
+      <Link>Runtime\Serialization\SerializationObjectFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\SerializerModifierFacts.cs">
+      <Link>Runtime\Serialization\SerializerModifierFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\TestModels\CircularTestModel.cs">
+      <Link>Runtime\Serialization\TestModels\CircularTestModel.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\TestModels\SerializerModifierModels.cs">
+      <Link>Runtime\Serialization\TestModels\SerializerModifierModels.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\TestModels\TestModel.cs">
+      <Link>Runtime\Serialization\TestModels\TestModel.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\XmlSerialization\XmlSerializationFacts.cs">
+      <Link>Runtime\Serialization\XmlSerialization\XmlSerializationFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Scoping\ScopeManagerFacts.cs">
+      <Link>Scoping\ScopeManagerFacts.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Text\StringBuilderExtensionFacts.cs">
       <Link>Text\StringBuilderExtensionFacts.cs</Link>
@@ -657,8 +698,8 @@
     <None Include="Properties\AppManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="IoC\Extensions\" />
     <Folder Include="Logging\Extensions\" />
+    <Folder Include="Runtime\Serialization\Attributes\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Catel.Core\Catel.Core.SL4\Catel.Core.SL4.csproj">
@@ -672,6 +713,10 @@
     <ProjectReference Include="..\..\Catel.Extensions.Data\Catel.Extensions.Data.SL4\Catel.Extensions.Data.SL4.csproj">
       <Project>{ac8f4caf-a03f-4ff1-9079-0f309235fab9}</Project>
       <Name>Catel.Extensions.Data.SL4</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.SL4\Catel.Extensions.DynamicObjects.SL4.csproj">
+      <Project>{c437f38d-6a88-462b-a71a-0b981d3e1805}</Project>
+      <Name>Catel.Extensions.DynamicObjects.SL4</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Catel.Extensions.Memento\Catel.Extensions.Memento.SL4\Catel.Extensions.Memento.SL4.csproj">
       <Project>{3c0f4476-6f60-4853-adfa-9b461f3178af}</Project>

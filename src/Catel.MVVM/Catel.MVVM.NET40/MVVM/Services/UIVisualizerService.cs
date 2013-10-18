@@ -41,8 +41,20 @@ namespace Catel.MVVM.Services
         /// <summary>
         /// The view locator.
         /// </summary>
-        private IViewLocator _viewLocator;
+        private readonly IViewLocator _viewLocator;
         #endregion
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UIVisualizerService"/> class.
+        /// </summary>
+        /// <param name="viewLocator">The view locator.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewLocator"/> is <c>null</c>.</exception>
+        public UIVisualizerService(IViewLocator viewLocator)
+        {
+            Argument.IsNotNull(() => viewLocator);
+
+            _viewLocator = viewLocator;
+        }
 
         #region Properties
         /// <summary>
@@ -166,11 +178,6 @@ namespace Catel.MVVM.Services
 
             if (!RegisteredWindows.ContainsKey(viewModelTypeName))
             {
-                if (_viewLocator == null)
-                {
-                    _viewLocator = GetService<IViewLocator>();
-                }
-
                 var viewType = _viewLocator.ResolveView(viewModel.GetType());
                 if (viewType != null)
                 {
@@ -231,11 +238,6 @@ namespace Catel.MVVM.Services
 
             if (!RegisteredWindows.ContainsKey(viewModelTypeName))
             {
-                if (_viewLocator == null)
-                {
-                    _viewLocator = GetService<IViewLocator>();
-                }
-
                 var viewType = _viewLocator.ResolveView(viewModel.GetType());
                 if (viewType != null)
                 {

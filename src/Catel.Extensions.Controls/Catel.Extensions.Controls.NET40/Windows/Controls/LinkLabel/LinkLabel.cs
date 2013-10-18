@@ -48,7 +48,7 @@ namespace Catel.Windows.Controls
 		/// </summary>
 		public LinkLabel()
 		{
-			Unloaded += LinkLabel_Unloaded;
+			Unloaded += OnLinkLabelUnloaded;
 		}
 		#endregion
 
@@ -57,7 +57,7 @@ namespace Catel.Windows.Controls
 		/// DependencyProperty definition as the backing store for Url
 		/// </summary>
 		public static readonly DependencyProperty UrlProperty =
-			DependencyProperty.Register("Url", typeof(Uri), typeof(LinkLabel), new UIPropertyMetadata(Url_PropertyChanged));
+			DependencyProperty.Register("Url", typeof(Uri), typeof(LinkLabel), new UIPropertyMetadata(OnUrlPropertyChanged));
 
 		/// <summary>
 		/// Gets or sets the URL.
@@ -150,7 +150,7 @@ namespace Catel.Windows.Controls
 		/// DependencyProperty definition as the backing store for ClickBehavior
 		/// </summary>
 		public static readonly DependencyProperty ClickBehaviorProperty =
-			DependencyProperty.Register("ClickBehavior", typeof(LinkLabelClickBehavior), typeof(LinkLabel), new UIPropertyMetadata(LinkLabelClickBehavior.Undefined, ClickBehavior_Changed));
+			DependencyProperty.Register("ClickBehavior", typeof(LinkLabelClickBehavior), typeof(LinkLabel), new UIPropertyMetadata(LinkLabelClickBehavior.Undefined, OnClickBehaviorChanged));
 
 
 		/// <summary>
@@ -189,8 +189,8 @@ namespace Catel.Windows.Controls
 		[Localizability(LocalizationCategory.NeverLocalize), Bindable(true), Category("Action")]
 		public ICommand Command
 		{
-			get { return (ICommand)GetValue(CommandParameterProperty); }
-			set { SetValue(CommandParameterProperty, value); }
+			get { return (ICommand)GetValue(CommandProperty); }
+            set { SetValue(CommandProperty, value); }
 		}
 
 		/// <summary>
@@ -243,7 +243,7 @@ namespace Catel.Windows.Controls
 		/// </summary>
 		/// <param name="sender">The source of the event.</param>
 		/// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
-		private void LinkLabel_Unloaded(object sender, RoutedEventArgs e)
+		private void OnLinkLabelUnloaded(object sender, RoutedEventArgs e)
 		{
 			// Clear events
 			Click -= OpenBrowserBehaviorImpl;
@@ -254,12 +254,12 @@ namespace Catel.Windows.Controls
 		/// </summary>
 		/// <param name="sender">A sender.</param>
 		/// <param name="args">Event args.</param>
-		private static void Url_PropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+		private static void OnUrlPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
 		{
-			LinkLabel typedSender = sender as LinkLabel;
+			var typedSender = sender as LinkLabel;
 			if (typedSender != null)
 			{
-				Uri url = args.NewValue as Uri;
+				var url = args.NewValue as Uri;
 				typedSender.HasUrl = url != null && !String.IsNullOrEmpty(url.OriginalString);
 				typedSender.IsEnabled = typedSender.HasUrl;
 			}
@@ -270,9 +270,9 @@ namespace Catel.Windows.Controls
 		/// </summary>
 		/// <param name="sender">The event sender.</param>
 		/// <param name="args">The event arguments.</param>
-		private static void ClickBehavior_Changed(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+		private static void OnClickBehaviorChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
 		{
-			LinkLabel label = sender as LinkLabel;
+			var label = sender as LinkLabel;
 			if (label == null)
 			{
 			    return;
@@ -283,8 +283,8 @@ namespace Catel.Windows.Controls
 			    return;
 			}
 
-			LinkLabelClickBehavior previous = (LinkLabelClickBehavior)args.OldValue;
-			LinkLabelClickBehavior next = (LinkLabelClickBehavior)args.NewValue;
+			var previous = (LinkLabelClickBehavior)args.OldValue;
+			var next = (LinkLabelClickBehavior)args.NewValue;
 
 			if (previous == LinkLabelClickBehavior.OpenUrlInBrowser)
 			{
@@ -304,11 +304,11 @@ namespace Catel.Windows.Controls
 		{
 			base.OnApplyTemplate();
 
-			Hyperlink innerHyperlink = GetTemplateChild("PART_InnerHyperlink") as Hyperlink;
+			var innerHyperlink = GetTemplateChild("PART_InnerHyperlink") as Hyperlink;
 			if (innerHyperlink != null)
 			{
-				innerHyperlink.Click += InnerHyperlink_Click;
-				innerHyperlink.RequestNavigate += InnerHyperlink_RequestNavigate;
+				innerHyperlink.Click += OnInnerHyperlinkClick;
+				innerHyperlink.RequestNavigate += OnInnerHyperlinkRequestNavigate;
 			}
 		}
 
@@ -317,9 +317,9 @@ namespace Catel.Windows.Controls
 		/// </summary>
 		/// <param name="sender">The source of the event.</param>
 		/// <param name="e">The <see cref="System.Windows.Navigation.RequestNavigateEventArgs"/> instance containing the event data.</param>
-		private void InnerHyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+		private void OnInnerHyperlinkRequestNavigate(object sender, RequestNavigateEventArgs e)
 		{
-			RequestNavigateEventArgs args = new RequestNavigateEventArgs(e.Uri, String.Empty);
+			var args = new RequestNavigateEventArgs(e.Uri, String.Empty);
 			args.Source = this;
 			args.RoutedEvent = LinkLabel.RequestNavigateEvent;
 			RaiseEvent(args);
@@ -330,7 +330,7 @@ namespace Catel.Windows.Controls
 		/// </summary>
 		/// <param name="sender">The source of the event.</param>
 		/// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
-		private void InnerHyperlink_Click(object sender, RoutedEventArgs e)
+		private void OnInnerHyperlinkClick(object sender, RoutedEventArgs e)
 		{
 			RaiseEvent(new RoutedEventArgs(LinkLabel.ClickEvent, this));
 		}
@@ -342,14 +342,14 @@ namespace Catel.Windows.Controls
 		/// <param name="args">Event arguments</param>
 		private static void OpenBrowserBehaviorImpl(object sender, RoutedEventArgs args)
 		{
-			Hyperlink hyperlinkSender = sender as Hyperlink;
-			LinkLabel linklabelSender = sender as LinkLabel;
+			var hyperlinkSender = sender as Hyperlink;
+			var linklabelSender = sender as LinkLabel;
 			if (hyperlinkSender == null && linklabelSender == null)
 			{
                 return;   
 			}
 
-			Uri destinationUrl = hyperlinkSender != null ? hyperlinkSender.NavigateUri : linklabelSender.Url;
+			var destinationUrl = hyperlinkSender != null ? hyperlinkSender.NavigateUri : linklabelSender.Url;
 			if (destinationUrl == null || String.IsNullOrEmpty(destinationUrl.ToString()))
 			{
 				return;
@@ -368,7 +368,7 @@ namespace Catel.Windows.Controls
 				{
                     Log.Warning(ex, "Default handler for http-scheme not valid in Windows");
 
-					ProcessStartInfo processStartInfo = new ProcessStartInfo(@"iexplore.exe", destinationUrl.ToString());
+					var processStartInfo = new ProcessStartInfo(@"iexplore.exe", destinationUrl.ToString());
 					processStartInfo.UseShellExecute = false;
 					Process.Start(processStartInfo);
 				}

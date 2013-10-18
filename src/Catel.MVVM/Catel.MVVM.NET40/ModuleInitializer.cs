@@ -4,12 +4,11 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel
+namespace Catel.MVVM
 {
     using Catel.MVVM.Views;
 
     using IoC;
-    using MVVM;
 
 #if !NET
     using Catel.Windows;

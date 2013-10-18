@@ -31,11 +31,6 @@ namespace Catel.IoC
 
         #region Fields
         /// <summary>
-        /// The default type factory for the default service locator.
-        /// </summary>
-        private static TypeFactory _default;
-
-        /// <summary>
         /// Cache containing all last used constructors for a type.
         /// </summary>
         private readonly Dictionary<ConstructorCacheKey, ConstructorInfo> _constructorCache = new Dictionary<ConstructorCacheKey, ConstructorInfo>();
@@ -61,9 +56,9 @@ namespace Catel.IoC
         private readonly Dictionary<Type, bool> _canUseActivatorCache = new Dictionary<Type, bool>();
 
         /// <summary>
-        /// The service locator.
+        /// The dependency resolver.
         /// </summary>
-        private readonly IServiceLocator _serviceLocator;
+        private readonly IDependencyResolver _dependencyResolver;
 
 #if !DISABLE_TYPEPATH
         /// <summary>
@@ -82,14 +77,18 @@ namespace Catel.IoC
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeFactory" /> class.
         /// </summary>
-        /// <param name="serviceLocator">The service locator.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator"/> is <c>null</c>.</exception>
-        public TypeFactory(IServiceLocator serviceLocator)
+        /// <param name="dependencyResolver">The dependency resolver.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="dependencyResolver"/> is <c>null</c>.</exception>
+        public TypeFactory(IDependencyResolver dependencyResolver)
         {
-            Argument.IsNotNull("serviceLocator", serviceLocator);
+            Argument.IsNotNull("dependencyResolver", dependencyResolver);
 
-            _serviceLocator = serviceLocator;
-            _serviceLocator.TypeRegistered += OnServiceLocatorTypeRegistered;
+            _dependencyResolver = dependencyResolver;
+            var serviceLocator = _dependencyResolver.Resolve<IServiceLocator>();
+            if (serviceLocator != null)
+            {
+                serviceLocator.TypeRegistered += OnServiceLocatorTypeRegistered;
+            }
         }
         #endregion
 
@@ -105,12 +104,7 @@ namespace Catel.IoC
         {
             get
             {
-                if (_default == null)
-                {
-                    _default = new TypeFactory(ServiceLocator.Default);
-                }
-
-                return _default;
+                return IoCConfiguration.DefaultTypeFactory;
             }
         }
         #endregion
@@ -323,7 +317,12 @@ namespace Catel.IoC
             {
                 if (_currentTypeRequestPath != null)
                 {
-                    if (_currentTypeRequestPath.FirstType == typeRequestInfoForTypeJustConstructed)
+                    if (_currentTypeRequestPath.LastType == typeRequestInfoForTypeJustConstructed)
+                    {
+                        _currentTypeRequestPath.MarkTypeAsCreated(typeRequestInfoForTypeJustConstructed);
+                    }
+
+                    if (_currentTypeRequestPath.TypeCount == 0)
                     {
                         _currentTypeRequestPath = null;
                     }
@@ -338,6 +337,14 @@ namespace Catel.IoC
         /// <param name="obj">The object to initialize.</param>
         private void InitializeAfterConstruction(object obj)
         {
+            if (obj == null)
+            {
+                return;
+            }
+
+            var dependencyResolverManager = DependencyResolverManager.Default;
+            dependencyResolverManager.RegisterDependencyResolverForInstance(obj, _dependencyResolver);
+
             var objAsINeedCustomInitialization = obj as INeedCustomInitialization;
             if (objAsINeedCustomInitialization != null)
             {
@@ -457,7 +464,7 @@ namespace Catel.IoC
                         // check if all the additional parameters are registered in the service locator
                         for (int j = parameters.Length; j < ctorParameters.Length; j++)
                         {
-                            if (!_serviceLocator.IsTypeRegistered(ctorParameters[j].ParameterType))
+                            if (!_dependencyResolver.CanResolve(ctorParameters[j].ParameterType))
                             {
                                 validConstructor = false;
                                 break;
@@ -527,12 +534,12 @@ namespace Catel.IoC
             }
 
             var parametersArray = parametersList.ToArray();
-            if (!_serviceLocator.AreAllTypesRegistered(parametersArray))
+            if (!_dependencyResolver.CanResolveAll(parametersArray))
             {
                 return null;
             }
 
-            var parameters = _serviceLocator.ResolveAllTypes(parametersArray);
+            var parameters = _dependencyResolver.ResolveAll(parametersArray);
 
             return TryCreateWithConstructorInjectionWithParameters(typeToConstruct, constructorInfo, parameters);
         }
@@ -564,7 +571,7 @@ namespace Catel.IoC
                 var ctorParameters = constructor.GetParameters();
                 for (int i = parameters.Length; i < ctorParameters.Length; i++)
                 {
-                    var ctorParameterValue = _serviceLocator.ResolveType(ctorParameters[i].ParameterType);
+                    var ctorParameterValue = _dependencyResolver.Resolve(ctorParameters[i].ParameterType);
                     finalParameters.Add(ctorParameterValue);
                 }
 
@@ -636,10 +643,10 @@ namespace Catel.IoC
             #region Constructors
             public ConstructorCacheKey(Type type, object[] parameters)
             {
-                string key = type.FullName;
+                string key = type.GetSafeFullName();
                 foreach (var parameter in parameters)
                 {
-                    key += "_" + ObjectToStringHelper.ToTypeString(parameter);
+                    key += "_" + ObjectToStringHelper.ToFullTypeString(parameter);
                 }
 
                 Key = key;

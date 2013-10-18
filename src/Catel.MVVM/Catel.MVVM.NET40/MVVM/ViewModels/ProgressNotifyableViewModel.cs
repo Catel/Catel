@@ -6,8 +6,11 @@
 
 namespace Catel.MVVM.ViewModels
 {
-    using Data;
-    using Tasks;
+    using System.ComponentModel;
+
+    using Catel.Data;
+    using Catel.IoC;
+    using Catel.MVVM.Tasks;
 
     /// <summary>
     /// The progress notifyable view model base.
@@ -15,7 +18,6 @@ namespace Catel.MVVM.ViewModels
     public class ProgressNotifyableViewModel : ViewModelBase, IProgressNotifyableViewModel
     {
         #region Constants
-
         /// <summary>Register the Task property so it is known in the class.</summary>
         public static readonly PropertyData TaskProperty = RegisterProperty("Task", typeof(ITask), default(ITask));
 
@@ -27,13 +29,15 @@ namespace Catel.MVVM.ViewModels
 
         /// <summary>Register the TaskPercentage property so it is known in the class.</summary>
         public static readonly PropertyData TaskPercentageProperty = RegisterProperty("TaskPercentage", typeof(int), default(int), (s, e) => ((ProgressNotifyableViewModel)s).OnTaskPercentageChanged());
+       
+        /// <summary>Register the TaskPercentage property so it is known in the class.</summary>
+        public static readonly PropertyData TaskIsIndeterminateProperty = RegisterProperty("TaskIsIndeterminate", typeof(bool), true);
 
         /// <summary>Register the DetailedMessage property so it is known in the class.</summary>
         public static readonly PropertyData DetailedMessageProperty = RegisterProperty("DetailedMessage", typeof(string));
         #endregion
 
         #region Fields
-
         /// <summary>
         /// The _current item.
         /// </summary>
@@ -45,8 +49,55 @@ namespace Catel.MVVM.ViewModels
         private int _totalItems;
         #endregion
 
-        #region Properties
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProgressNotifyableViewModel"/> class.
+        /// </summary>
+        /// <remarks>Must have a public constructor in order to be serializable.</remarks>
+        public ProgressNotifyableViewModel()
+            : this(false, false, false)
+        {
+            DispatchPropertyChangedEvent = true;
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProgressNotifyableViewModel"/> class.
+        /// </summary>
+        /// <param name="supportIEditableObject">if set to <c>true</c>, the view model will natively support models that
+        /// implement the <see cref="IEditableObject"/> interface.</param>
+        /// <param name="ignoreMultipleModelsWarning">if set to <c>true</c>, the warning when using multiple models is ignored.</param>
+        /// <param name="skipViewModelAttributesInitialization">
+        /// if set to <c>true</c>, the initialization will be skipped and must be done manually via <see cref="ViewModelBase.InitializeViewModelAttributes"/>.
+        /// </param>
+        /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
+        /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
+        public ProgressNotifyableViewModel(bool supportIEditableObject, bool ignoreMultipleModelsWarning, bool skipViewModelAttributesInitialization)
+            : base(supportIEditableObject, ignoreMultipleModelsWarning, skipViewModelAttributesInitialization)
+        {
+            DispatchPropertyChangedEvent = true;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
+        /// <para/>
+        /// This constructor allows the injection of a custom <see cref="IServiceLocator"/>.
+        /// </summary>
+        /// <param name="serviceLocator">The service locator to inject. If <c>null</c>, the <see cref="Catel.IoC.ServiceLocator.Default"/> will be used.</param>
+        /// <param name="supportIEditableObject">if set to <c>true</c>, the view model will natively support models that
+        /// implement the <see cref="IEditableObject"/> interface.</param>
+        /// <param name="ignoreMultipleModelsWarning">if set to <c>true</c>, the warning when using multiple models is ignored.</param>
+        /// <param name="skipViewModelAttributesInitialization">if set to <c>true</c>, the initialization will be skipped and must be done manually via <see cref="ViewModelBase.InitializeViewModelAttributes"/>.</param>
+        /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
+        /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
+        public ProgressNotifyableViewModel(IServiceLocator serviceLocator, bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false)
+            : base(serviceLocator, supportIEditableObject, ignoreMultipleModelsWarning, skipViewModelAttributesInitialization)
+        {
+            DispatchPropertyChangedEvent = true;
+        }
+
+        #endregion
+
+        #region Properties
         /// <summary>
         /// Gets or sets the task message.
         /// </summary>
@@ -54,7 +105,6 @@ namespace Catel.MVVM.ViewModels
         public string TaskMessage
         {
             get { return GetValue<string>(TaskMessageProperty); }
-            set { SetValue(TaskMessageProperty, value); }
         }
 
         /// <summary>
@@ -64,7 +114,6 @@ namespace Catel.MVVM.ViewModels
         public string TaskName
         {
             get { return GetValue<string>(TaskNameProperty); }
-            set { SetValue(TaskNameProperty, value); }
         }
 
         /// <summary>
@@ -74,12 +123,20 @@ namespace Catel.MVVM.ViewModels
         public int TaskPercentage
         {
             get { return GetValue<int>(TaskPercentageProperty); }
-            set { SetValue(TaskPercentageProperty, value); }
         }
+        
+        /// <summary>
+        /// Gets or sets the task percentage.
+        /// </summary>
+        [ViewModelToModel("Task", "IsIndeterminate")]
+        public bool TaskIsIndeterminate
+        {
+            get { return GetValue<bool>(TaskIsIndeterminateProperty); }
+        }
+
         #endregion
 
         #region IProgressNotifyableViewModel Members
-
         /// <summary>
         /// Gets the task.
         /// </summary>
@@ -97,33 +154,6 @@ namespace Catel.MVVM.ViewModels
         {
             get { return GetValue<string>(DetailedMessageProperty); }
             private set { SetValue(DetailedMessageProperty, value); }
-        }
-
-        /// <summary>
-        /// The update status.
-        /// </summary>
-        /// <param name="currentItem">
-        /// The current item.
-        /// </param>
-        /// <param name="totalItems">
-        /// The total items.
-        /// </param>
-        /// <param name="task">
-        /// The task
-        /// </param>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="task"/> is <c>null</c>. 
-        /// </exception>
-        public void UpdateStatus(int currentItem, int totalItems, ITask task)
-        {
-            Argument.IsNotNull("task", task);
-
-            Task = task;
-
-            _currentItem = currentItem;
-            _totalItems = totalItems;
-
-            RaisePropertyChanged(() => Percentage);
         }
 
         /// <summary>
@@ -147,10 +177,38 @@ namespace Catel.MVVM.ViewModels
                 return (int)(currentPercentage + scaledTaskPercentage);
             }
         }
+
+
+        /// <summary>
+        /// The update status.
+        /// </summary>
+        /// <param name="currentItem">
+        /// The current item.
+        /// </param>
+        /// <param name="totalItems">
+        /// The total items.
+        /// </param>
+        /// <param name="task">
+        /// The task
+        /// </param>
+        /// <exception cref="System.ArgumentNullException">
+        /// The <paramref name="task"/> is <c>null</c>. 
+        /// </exception>
+        public void UpdateStatus(int currentItem, int totalItems, ITask task)
+        {
+            Argument.IsNotNull(() => task);
+
+            Task = task;
+
+            _currentItem = currentItem;
+            _totalItems = totalItems;
+
+            RaisePropertyChanged(() => Percentage);
+        }
+
         #endregion
 
         #region Methods
-
         /// <summary>Occurs when the value of the TaskMessage property is changed.</summary>
         private void OnTaskMessageChanged()
         {

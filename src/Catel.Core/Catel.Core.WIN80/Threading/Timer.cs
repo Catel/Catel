@@ -3,6 +3,7 @@
 //   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+#if !WIN81
 namespace System.Threading
 {
     using Tasks;
@@ -124,3 +125,4 @@ namespace System.Threading
         #endregion
     }
 }
+#endif

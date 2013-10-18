@@ -58,7 +58,7 @@ namespace Catel.Test.Data
             [TestMethod]
             public void SetsValuesCorrectlyWithTheeArgumentsExceptOldValue()
             {
-                IniEntry iniEntry = new IniEntry();
+                var iniEntry = new IniEntry();
 
                 var eventArgs = new AdvancedPropertyChangedEventArgs(iniEntry, "PropertyName", (object) "new value");
 
@@ -74,7 +74,7 @@ namespace Catel.Test.Data
             [TestMethod]
             public void SetsValuesCorrectlyWithAllARguments()
             {
-                IniEntry iniEntry = new IniEntry();
+                var iniEntry = new IniEntry();
 
                 var eventArgs = new AdvancedPropertyChangedEventArgs(iniEntry, "PropertyName", (object) "old value", "new value");
 
@@ -90,8 +90,8 @@ namespace Catel.Test.Data
             [TestMethod]
             public void SetsValuesCorrectlyWithPropertyNameOnly()
             {
-                IniEntry iniEntry = new IniEntry();
-                IniFile iniFile = new IniFile();
+                var iniEntry = new IniEntry();
+                var iniFile = new IniFile();
 
                 var eventArgs = new AdvancedPropertyChangedEventArgs(iniEntry, iniFile, "PropertyName");
 
@@ -107,7 +107,7 @@ namespace Catel.Test.Data
             [TestMethod]
             public void CanAutomaticallyDetectNewValue()
             {
-                IniEntry iniEntry = new IniEntry();
+                var iniEntry = new IniEntry();
                 iniEntry.Key = "mykey";
 
                 var eventArgs = new AdvancedPropertyChangedEventArgs(iniEntry, "Key");

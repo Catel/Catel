@@ -16,7 +16,7 @@
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.13.8.0</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.15.0.0</FodyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -260,6 +260,9 @@
     <Compile Include="..\Catel.Core.NET40\Data\Interfaces\IModel.cs">
       <Link>Data\Interfaces\IModel.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Data\Interfaces\IModelEqualityComparer.cs">
+      <Link>Data\Interfaces\IModelEqualityComparer.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\Interfaces\IParent.cs">
       <Link>Data\Interfaces\IParent.cs</Link>
     </Compile>
@@ -296,8 +299,14 @@
     <Compile Include="..\Catel.Core.NET40\Data\ModelBase.serialization.cs">
       <Link>Data\ModelBase.serialization.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Data\ModelBase.serialization.xml.cs">
+      <Link>Data\ModelBase.serialization.xml.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\ModelBase.validation.cs">
       <Link>Data\ModelBase.validation.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Data\ModelEqualityComparer.cs">
+      <Link>Data\ModelEqualityComparer.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\ObservableObject.cs">
       <Link>Data\ObservableObject.cs</Link>
@@ -350,11 +359,20 @@
     <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Extensions\ExceptionExtensions.cs">
       <Link>ExceptionHandling\Extensions\ExceptionExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Extensions\ExceptionHandlerExtensions.cs">
+      <Link>ExceptionHandling\Extensions\ExceptionHandlerExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Frequency.cs">
+      <Link>ExceptionHandling\Frequency.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Interfaces\IExceptionHandler.cs">
       <Link>ExceptionHandling\Interfaces\IExceptionHandler.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Interfaces\IExceptionService.cs">
       <Link>ExceptionHandling\Interfaces\IExceptionService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Interfaces\IFrequency.cs">
+      <Link>ExceptionHandling\Interfaces\IFrequency.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Exceptions\NotSupportedInSilverlightException.cs">
       <Link>Exceptions\NotSupportedInSilverlightException.cs</Link>
@@ -364,6 +382,9 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Exceptions\NotSupportedInWindows8Exception.cs">
       <Link>Exceptions\NotSupportedInWindows8Exception.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Fluent\Interfaces\IFluent.cs">
+      <Link>Fluent\Interfaces\IFluent.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Generics\NullOp.cs">
       <Link>Generics\NullOp.cs</Link>
@@ -401,6 +422,12 @@
     <Compile Include="..\Catel.Core.NET40\IoC\Attributes\ServiceLocatorRegistrationAttribute.cs">
       <Link>IoC\Attributes\ServiceLocatorRegistrationAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\CatelDependencyResolver.cs">
+      <Link>IoC\CatelDependencyResolver.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\DependencyResolverManager.cs">
+      <Link>IoC\DependencyResolverManager.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\EventArgs\MissingTypeEventArgs.cs">
       <Link>IoC\EventArgs\MissingTypeEventArgs.cs</Link>
     </Compile>
@@ -413,6 +440,12 @@
     <Compile Include="..\Catel.Core.NET40\IoC\Exceptions\ExternalContainerNotSupportedException.cs">
       <Link>IoC\Exceptions\ExternalContainerNotSupportedException.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\Extensions\DependencyResolverExtensions.cs">
+      <Link>IoC\Extensions\DependencyResolverExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\Extensions\ObjectExtensions.cs">
+      <Link>IoC\Extensions\ObjectExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Extensions\ServiceLocatorExtensions.cs">
       <Link>IoC\Extensions\ServiceLocatorExtensions.cs</Link>
     </Compile>
@@ -424,6 +457,12 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Helpers\ExternalContainerHelperBase.cs">
       <Link>IoC\Helpers\ExternalContainerHelperBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\Interfaces\IDependencyResolver.cs">
+      <Link>IoC\Interfaces\IDependencyResolver.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\Interfaces\IDependencyResolverManager.cs">
+      <Link>IoC\Interfaces\IDependencyResolverManager.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Interfaces\IExternalContainerHelper.cs">
       <Link>IoC\Interfaces\IExternalContainerHelper.cs</Link>
@@ -439,6 +478,9 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Interfaces\ITypeRequestPath.cs">
       <Link>IoC\Interfaces\ITypeRequestPath.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\IoCConfiguration.cs">
+      <Link>IoC\IoCConfiguration.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\RegistrationInfo.cs">
       <Link>IoC\RegistrationInfo.cs</Link>
@@ -467,6 +509,9 @@
     <Compile Include="..\Catel.Core.NET40\Linq\ExpressionUtil.cs">
       <Link>Linq\ExpressionUtil.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Logging\BatchLogListenerBase.cs">
+      <Link>Logging\BatchLogListenerBase.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\ConsoleLogListener.cs">
       <Link>Logging\ConsoleLogListener.cs</Link>
     </Compile>
@@ -479,6 +524,9 @@
     <Compile Include="..\Catel.Core.NET40\Logging\Extensions\LogExtensions.cs">
       <Link>Logging\Extensions\LogExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Logging\Interfaces\IBatchLogListener.cs">
+      <Link>Logging\Interfaces\IBatchLogListener.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Interfaces\ILog.cs">
       <Link>Logging\Interfaces\ILog.cs</Link>
     </Compile>
@@ -487,6 +535,9 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Log.cs">
       <Link>Logging\Log.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Logging\LogBatchEntry.cs">
+      <Link>Logging\LogBatchEntry.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\LogEvent.cs">
       <Link>Logging\LogEvent.cs</Link>
@@ -548,6 +599,9 @@
     <Compile Include="..\Catel.Core.NET40\Reflection\Extensions\MemberInfoExtensions.cs">
       <Link>Reflection\Extensions\MemberInfoExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Reflection\Extensions\ObjectExtensions.cs">
+      <Link>Reflection\Extensions\ObjectExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Reflection\Extensions\ReflectionExtensions.assembly.cs">
       <Link>Reflection\Extensions\ReflectionExtensions.assembly.cs</Link>
     </Compile>
@@ -596,11 +650,101 @@
     <Compile Include="..\Catel.Core.NET40\Reflection\TypeInfo.cs">
       <Link>Reflection\TypeInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Attributes\RedirectTypeAttribute.cs">
-      <Link>Runtime\Serialization\Attributes\RedirectTypeAttribute.cs</Link>
+    <Compile Include="..\Catel.Core.NET40\Runtime\ReferenceEqualityComparer.cs">
+      <Link>Runtime\ReferenceEqualityComparer.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Helpers\SerializationHelper.cs">
-      <Link>Runtime\Serialization\Helpers\SerializationHelper.cs</Link>
+    <Compile Include="..\Catel.Core.NET40\Runtime\ReferenceInfo.cs">
+      <Link>Runtime\ReferenceInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\ReferenceManager.cs">
+      <Link>Runtime\ReferenceManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Attributes\ExcludeFromSerializationAttribute.cs">
+      <Link>Runtime\Serialization\Attributes\ExcludeFromSerializationAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Attributes\IncludeInSerializationAttribute.cs">
+      <Link>Runtime\Serialization\Attributes\IncludeInSerializationAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Attributes\SerializerModifierAttribute.cs">
+      <Link>Runtime\Serialization\Attributes\SerializerModifierAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\EventArgs\MemberSerializationEventArgs.cs">
+      <Link>Runtime\Serialization\EventArgs\MemberSerializationEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\EventArgs\SerializationEventArgs.cs">
+      <Link>Runtime\Serialization\EventArgs\SerializationEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Helpers\SerializationContextHelper.cs">
+      <Link>Runtime\Serialization\Helpers\SerializationContextHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Interfaces\IModelBaseSerializer.cs">
+      <Link>Runtime\Serialization\Interfaces\IModelBaseSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Interfaces\ISerializationContext.cs">
+      <Link>Runtime\Serialization\Interfaces\ISerializationContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Interfaces\ISerializationManager.cs">
+      <Link>Runtime\Serialization\Interfaces\ISerializationManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\Interfaces\ISerializerModifier.cs">
+      <Link>Runtime\Serialization\Interfaces\ISerializerModifier.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\MemberMetadata.cs">
+      <Link>Runtime\Serialization\MemberMetadata.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\MemberValue.cs">
+      <Link>Runtime\Serialization\MemberValue.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializationContext.cs">
+      <Link>Runtime\Serialization\SerializationContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializationFactory.cs">
+      <Link>Runtime\Serialization\SerializationFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializationManager.cs">
+      <Link>Runtime\Serialization\SerializationManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializationObject.cs">
+      <Link>Runtime\Serialization\SerializationObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializerBase.deserialization.cs">
+      <Link>Runtime\Serialization\SerializerBase.deserialization.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializerBase.general.cs">
+      <Link>Runtime\Serialization\SerializerBase.general.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializerBase.serialization.cs">
+      <Link>Runtime\Serialization\SerializerBase.serialization.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializerModifierBase.cs">
+      <Link>Runtime\Serialization\SerializerModifierBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializerModifierBase.generic.cs">
+      <Link>Runtime\Serialization\SerializerModifierBase.generic.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\DataContractNameResolver.cs">
+      <Link>Runtime\Serialization\XmlSerialization\DataContractNameResolver.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\DataContractSerializerFactory.cs">
+      <Link>Runtime\Serialization\XmlSerialization\DataContractSerializerFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\Helpers\XmlHelper.cs">
+      <Link>Runtime\Serialization\XmlSerialization\Helpers\XmlHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\Interfaces\IDataContractNameResolver.cs">
+      <Link>Runtime\Serialization\XmlSerialization\Interfaces\IDataContractNameResolver.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\Interfaces\IDataContractSerializerFactory.cs">
+      <Link>Runtime\Serialization\XmlSerialization\Interfaces\IDataContractSerializerFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\Interfaces\IXmlSerializer.cs">
+      <Link>Runtime\Serialization\XmlSerialization\Interfaces\IXmlSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\XmlSerializer.cs">
+      <Link>Runtime\Serialization\XmlSerialization\XmlSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Scoping\ScopeManager.cs">
+      <Link>Scoping\ScopeManager.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Services\Interfaces\IService.cs">
       <Link>Services\Interfaces\IService.cs</Link>
@@ -668,16 +812,27 @@
     </None>
     <None Include="Fody.targets" />
     <None Include="packages.config" />
+    <PRIResource Include="Strings\es\Resources.resw" />
+    <PRIResource Include="Strings\fr\Resources.resw" />
+    <PRIResource Include="Strings\it\Resources.resw" />
+    <PRIResource Include="Strings\nl\Resources.resw" />
+    <PRIResource Include="Strings\tr\Resources.resw" />
+    <PRIResource Include="Strings\zh-CHS\Resources.resw" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Obsolete, Version=1.6.2.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Obsolete.Fody.1.6.2.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
+    <Reference Include="Obsolete">
+      <HintPath>..\..\..\lib\Obsolete.Fody.2.3.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <PRIResource Include="Strings\de\Resources.resw" />
+    <PRIResource Include="Strings\en-US\Exceptions.resw" />
+    <PRIResource Include="Strings\en-US\Resources.resw" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>

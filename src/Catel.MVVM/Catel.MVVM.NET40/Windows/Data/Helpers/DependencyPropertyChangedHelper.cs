@@ -8,6 +8,8 @@ namespace Catel.Windows.Data
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
+
     using Logging;
 
 #if NETFX_CORE
@@ -37,7 +39,9 @@ namespace Catel.Windows.Data
         /// <summary>
         /// Dictionary containing values whether a property is a real dependency property.
         /// </summary>
-        private static readonly Dictionary<string, bool> _realDependencyPropertiesCache = new Dictionary<string, bool>(); 
+        private static readonly Dictionary<string, bool> _realDependencyPropertiesCache = new Dictionary<string, bool>();
+
+        //private static readonly ILog Log = LogManager.GetLogger(typeof(DependencyPropertyChangedHelper));
 
         /// <summary>
         /// Determines whether the specified dependency property is a real dependency or a wrapper or handler one for internal usage.
@@ -187,11 +191,13 @@ namespace Catel.Windows.Data
         /// Called when a dependency property has changed.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.Windows.DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void OnDependencyPropertyChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             var frameworkElement = ((FrameworkElement) sender);
             var propertyName = _wrapperDependencyProperties[e.Property];
+
+            //Log.Debug("OnDependencyPropertyChanged: '{0}' to {1}", propertyName, e.NewValue);
 
             var handlerDependencyProperty = GetDependencyProperty<EventHandler<DependencyPropertyValueChangedEventArgs>>(frameworkElement, GetHandlerDependencyPropertyName(propertyName));
             var handler = frameworkElement.GetValue(handlerDependencyProperty) as EventHandler<DependencyPropertyValueChangedEventArgs>;

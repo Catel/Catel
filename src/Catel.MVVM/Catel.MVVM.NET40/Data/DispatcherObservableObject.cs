@@ -41,7 +41,7 @@ namespace Catel.Data
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangingEventArgs"/> instance containing the event data.</param>
         protected override void RaisePropertyChanging(object sender, AdvancedPropertyChangingEventArgs e)
         {
-            _dispatcherService.BeginInvoke(() => base.RaisePropertyChanging(sender, e));
+            _dispatcherService.BeginInvokeIfRequired(() => base.RaisePropertyChanging(sender, e));
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Catel.Data
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         protected override void RaisePropertyChanged(object sender, AdvancedPropertyChangedEventArgs e)
         {
-            _dispatcherService.BeginInvoke(() => base.RaisePropertyChanged(sender, e));
+            _dispatcherService.BeginInvokeIfRequired(() => base.RaisePropertyChanged(sender, e));
         }
     }
 }

@@ -8,8 +8,11 @@ namespace Catel.Windows.Data
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Reflection;
 
     using Catel.Caching;
+    using Catel.Logging;
 
     using Reflection;
 
@@ -145,35 +148,68 @@ namespace Catel.Windows.Data
 
             var properties = new List<DependencyPropertyInfo>();
 
-            var parentType = type;
-            var fields = parentType.GetFieldsEx(BindingFlagsHelper.GetFinalBindingFlags(true, true));
-            foreach (var field in fields)
+            var typeMembers = new List<MemberInfo>();
+            typeMembers.AddRange(type.GetFieldsEx(BindingFlagsHelper.GetFinalBindingFlags(true, true)));
+            typeMembers.AddRange(type.GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(true, true)));
+
+            foreach (MemberInfo member in typeMembers)
             {
-                if (typeof(DependencyProperty).IsAssignableFromEx(field.FieldType))
+                var fieldInfo = member as FieldInfo;
+                var propertyInfo = member as PropertyInfo;
+
+                if (fieldInfo != null)
                 {
-                    var names = field.ToString().Split(new[] { ' ' });
-                    var name = names[names.Length - 1];
-
-                    int propertyPostfixIndex = name.LastIndexOf("Property");
-                    if (propertyPostfixIndex != -1)
-                    {
-                        name = name.Substring(0, propertyPostfixIndex);
-                    }
-
-                    if (string.Equals(name, "__Direct") || string.Equals(name, "DirectDependency"))
+                    if (!typeof(DependencyProperty).IsAssignableFromEx(fieldInfo.FieldType))
                     {
                         continue;
                     }
-                        
-                    var dependencyProperty = (DependencyProperty) field.GetValue(frameworkElement);
-                    properties.Add(new DependencyPropertyInfo(dependencyProperty, name));
-
-                    var propertyKey = GetDependencyPropertyCacheKey(frameworkElement, name);
-                    _cacheByPropertyName[propertyKey] = dependencyProperty;
-                    _cacheByDependencyProperty[dependencyProperty] = name;
                 }
-            }
+                else if (propertyInfo != null)
+                {
+                    if (!typeof(DependencyProperty).IsAssignableFromEx(propertyInfo.PropertyType))
+                    {
+                        continue;
+                    }
+                }
 
+                string name = member.Name;
+
+                int propertyPostfixIndex = name.LastIndexOf("Property", StringComparison.Ordinal);
+                if (propertyPostfixIndex != -1)
+                {
+                    name = name.Substring(0, propertyPostfixIndex);
+                }
+
+                if (string.Equals(name, "__Direct") || string.Equals(name, "DirectDependency"))
+                {
+                    continue;
+                }
+
+                DependencyProperty dependencyProperty;
+                if (fieldInfo != null)
+                {
+                    dependencyProperty = (DependencyProperty)fieldInfo.GetValue(frameworkElement);
+                }
+                else if (propertyInfo != null)
+                {
+#if NETFX_CORE
+                    dependencyProperty = (DependencyProperty)propertyInfo.GetValue(frameworkElement);
+#else
+                    dependencyProperty = (DependencyProperty)propertyInfo.GetValue(frameworkElement, null);
+#endif
+                }
+                else
+                {
+                    continue;
+                }
+
+                properties.Add(new DependencyPropertyInfo(dependencyProperty, name));
+
+                string propertyKey = GetDependencyPropertyCacheKey(frameworkElement, name);
+                _cacheByPropertyName[propertyKey] = dependencyProperty;
+                _cacheByDependencyProperty[dependencyProperty] = name;
+            }
+            
             _cacheByParentType[type] = properties;
         }
     }

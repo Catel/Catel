@@ -53,11 +53,11 @@ namespace Catel.Windows.Media.Effects
         /// <summary>
         /// Property definition for <see cref="DesaturationFactor"/>.
         /// </summary>
-        public static readonly DependencyProperty DesaturationFactorProperty = DependencyProperty.Register("DesaturationFactor", typeof(double), typeof(GrayscaleEffect), 
+        public static readonly DependencyProperty DesaturationFactorProperty = DependencyProperty.Register("DesaturationFactor", typeof(double),
 #if SILVERLIGHT
-            new PropertyMetadata(0.0, OnDesaturationFactorChanged));
+            typeof(GrayscaleEffect), new PropertyMetadata(0.0, OnDesaturationFactorChanged));
 #else
-            new PropertyMetadata(0.0, PixelShaderConstantCallback(0), CoerceDesaturationFactor));
+            typeof(GrayscaleEffect), new PropertyMetadata(0.0, OnDesaturationFactorChanged, CoerceDesaturationFactor));
 #endif
         #endregion
 
@@ -68,10 +68,9 @@ namespace Catel.Windows.Media.Effects
         /// <returns><see cref="PixelShader"/>.</returns>
         protected override PixelShader CreatePixelShader()
         {
-            return new PixelShader() { UriSource = new Uri(@"/Catel.Extensions.Controls;component/Windows/Media/Effects/GrayscaleEffect/GrayscaleEffect.ps", UriKind.RelativeOrAbsolute) };
+            return new PixelShader { UriSource = new Uri(@"/Catel.Extensions.Controls;component/Windows/Media/Effects/GrayscaleEffect/GrayscaleEffect.ps", UriKind.RelativeOrAbsolute) };
         }
 
-#if SILVERLIGHT
         /// <summary>
         /// Called when the <see cref="DesaturationFactor"/> property has changed.
         /// </summary>
@@ -82,9 +81,12 @@ namespace Catel.Windows.Media.Effects
         /// </remarks>
         private static void OnDesaturationFactorChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
+#if SILVERLIGHT
             PixelShaderConstantCallback((int)CoerceDesaturationFactor((DependencyObject)sender, e.NewValue));
-        }
+#else
+            PixelShaderConstantCallback(0).Invoke((DependencyObject)sender, e);
 #endif
+        }
 
         /// <summary>
         /// Coerces the desaturation factor.
@@ -94,8 +96,8 @@ namespace Catel.Windows.Media.Effects
         /// <returns>New factor.</returns>
         private static object CoerceDesaturationFactor(DependencyObject d, object value)
         {
-            GrayscaleEffect effect = (GrayscaleEffect)d;
-            double newFactor = (double)value;
+            var effect = (GrayscaleEffect)d;
+            var newFactor = (double)value;
 
             if (newFactor < 0.0 || newFactor > 1.0)
             {

@@ -237,7 +237,7 @@ namespace Catel.Windows.Controls
         }
 
         /// <summary>
-        /// When overridden in a derived class, is invoked whenever application code or internal processes call <see cref="M:System.Windows.FrameworkElement.ApplyTemplate"/>.
+        /// When overridden in a derived class, is invoked whenever application code or internal processes call <c>System.Windows.FrameworkElement.ApplyTemplate</c>.
         /// </summary>
         public override void OnApplyTemplate()
         {

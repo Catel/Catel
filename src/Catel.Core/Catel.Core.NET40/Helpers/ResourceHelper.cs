@@ -86,6 +86,7 @@ using System.Resources;
 #endif
         {
             var originalAssemblyName = TypeHelper.GetAssemblyNameWithoutOverhead(assembly.FullName);
+#if !NETFX_CORE
             var assemblyName = originalAssemblyName;
 
             // Allow mapping of assemblies
@@ -93,6 +94,7 @@ using System.Resources;
             {
                 assemblyName = _assemblyMappings[originalAssemblyName];
             }
+#endif
 
             if (!_dictionaryMappings.ContainsKey(originalAssemblyName))
             {
@@ -107,15 +109,17 @@ using System.Resources;
 
 #if NETFX_CORE
             // TODO: Write
-            resourceFile = string.Format("{0}/{1}", assemblyName, resourceFile);
+            resourceFile = string.Format("{0}/{1}", originalAssemblyName, resourceFile);
 #else
             resourceFile = string.Format("{0}.Properties.{1}", assemblyName, resourceFile);
 #endif
 
             if (!dictionary.ContainsKey(resourceFile))
             {
-#if NETFX_CORE
+#if NETFX_CORE && !WIN81
                 dictionary[resourceFile] = new ResourceLoader(resourceFile);
+#elif WIN81
+                dictionary[resourceFile] = ResourceLoader.GetForCurrentView(resourceFile);
 #else
                 dictionary[resourceFile] = new ResourceManager(resourceFile, assembly);
 #endif

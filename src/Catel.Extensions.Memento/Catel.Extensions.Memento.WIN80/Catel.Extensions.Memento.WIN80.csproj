@@ -14,7 +14,7 @@
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <FodyPath>..\..\..\lib\Fody.1.13.8.0</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.15.0.0</FodyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -104,9 +104,6 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\Catel.Core\Catel.Core.WIN80\Catel.Core.WIN80.csproj">
       <Project>{b9ae0468-56bb-4afc-8533-8a493fddf8da}</Project>
       <Name>Catel.Core.WIN80</Name>
@@ -120,12 +117,6 @@
   <ItemGroup>
     <None Include="Fody.targets" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Obsolete">
-      <HintPath>..\..\..\lib\Obsolete.Fody.1.6.2.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
@@ -179,6 +170,12 @@
     <Compile Include="..\Catel.Extensions.Memento.NET40\UndoBase.cs">
       <Link>UndoBase.cs</Link>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Obsolete">
+      <HintPath>..\..\..\lib\Obsolete.Fody.2.3.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>

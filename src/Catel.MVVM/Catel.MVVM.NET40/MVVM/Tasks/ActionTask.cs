@@ -3,6 +3,7 @@
 //   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Catel.MVVM.Tasks
 {
     using System;
@@ -13,7 +14,6 @@ namespace Catel.MVVM.Tasks
     public class ActionTask : TaskBase
     {
         #region Fields
-
         /// <summary>
         /// The _action.
         /// </summary>
@@ -21,19 +21,12 @@ namespace Catel.MVVM.Tasks
         #endregion
 
         #region Constructors
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="ActionTask"/> class.
+        /// Initializes a new instance of the <see cref="ActionTask" /> class.
         /// </summary>
-        /// <param name="name">
-        /// The name.
-        /// </param>
-        /// <param name="action">
-        /// The action.
-        /// </param>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="action"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="name">The name.</param>
+        /// <param name="action">The action.</param>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="action" /> is <c>null</c>.</exception>
         public ActionTask(string name, Action<ITaskProgressTracker> action)
             : base(name)
         {
@@ -44,7 +37,6 @@ namespace Catel.MVVM.Tasks
         #endregion
 
         #region Methods
-
         /// <summary>
         /// The execute.
         /// </summary>
@@ -54,23 +46,23 @@ namespace Catel.MVVM.Tasks
         }
         #endregion
 
+        #region Nested type: ActionTaskTaskProgressTracker
         /// <summary>
         /// The action task progress log.
         /// </summary>
         internal class ActionTaskTaskProgressTracker : ITaskProgressTracker
         {
             #region Fields
-
             /// <summary>
-            /// The _action task.
+            /// The action task.
             /// </summary>
             private readonly ActionTask _actionTask;
+            
             #endregion
 
             #region Constructors
-
             /// <summary>
-            /// Initializes a new instance of the <see cref="ActionTaskTaskProgressTracker"/> class.
+            /// Initializes a new instance of the <see cref="ActionTaskTaskProgressTracker" /> class.
             /// </summary>
             /// <param name="actionTask">
             /// The action task.
@@ -79,27 +71,51 @@ namespace Catel.MVVM.Tasks
             {
                 _actionTask = actionTask;
             }
-
             #endregion
 
-            #region IProgressLog Members
-
+            #region ITaskProgressTracker Members
             /// <summary>
-            /// The update.
+            /// Update the task status.
             /// </summary>
-            /// <param name="percentage">
-            /// The percentage.
-            /// </param>
             /// <param name="message">
             /// The message.
             /// </param>
-            public void UpdateStatus(int percentage, string message)
+            /// <param name="percentage">
+            /// The percentage.
+            /// </param>
+            public void UpdateStatus(string message, int percentage)
             {
-                _actionTask.Message = message;
-                _actionTask.Percentage = percentage;
+                UpdateStatus(message);
+                 _actionTask.Percentage = percentage;
             }
 
+            /// <summary>
+            /// Update the task status.
+            /// </summary>
+            /// <param name="message">
+            /// The message.
+            /// </param>
+            public void UpdateStatus(string message)
+            {
+                _actionTask.Message = message;
+            }
+
+            /// <summary>
+            /// Update the task status.
+            /// </summary>
+            /// <param name="message">
+            /// The message.
+            /// </param>
+            /// <param name="indeterminate">
+            /// The indeterminate state.
+            /// </param>
+            public void UpdateStatus(string message, bool indeterminate)
+            {
+                UpdateStatus(message);
+                _actionTask.IsIndeterminate = indeterminate;
+            }
             #endregion
         }
+        #endregion
     }
 }

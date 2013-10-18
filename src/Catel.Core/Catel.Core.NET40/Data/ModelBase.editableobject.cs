@@ -11,13 +11,12 @@ namespace Catel.Data
     using System.ComponentModel;
     using System.IO;
     using System.Linq;
-    using System.Runtime.Serialization;
     using IO;
     using Logging;
     using Runtime.Serialization;
 
-#if NET
-    using System.Runtime.Serialization.Formatters.Binary;
+#if !NET
+    using System.Runtime.Serialization;
 #endif
 
     public partial class ModelBase
@@ -56,11 +55,6 @@ namespace Catel.Data
             /// Backup of the object values.
             /// </summary>
             private Dictionary<string, object> _objectValuesBackup;
-
-#if !NET
-            private List<Type> _knownTypesForDeserialization;
-#endif
-
             #endregion
 
             #region Constructors
@@ -97,32 +91,8 @@ namespace Catel.Data
                                               where !propertyData.Value.IncludeInBackup
                                               select propertyData.Value.Name).ToArray();
 
-                    List<PropertyValue> objectsToSerialize;
-
-                    lock (_object._propertyValuesLock)
-                    {
-                        objectsToSerialize = _object.ConvertDictionaryToListAndExcludeNonSerializableObjects(_object._propertyBag.GetAllProperties(), propertiesToIgnore);
-                    }
-
-#if NET
-                    var serializer = SerializationHelper.GetBinarySerializer(false);
-                    serializer.Serialize(stream, objectsToSerialize);
-#else
-                    // Xml backup, create serializer without using the cache since the dictionary is used for every object, and
-                    // we need a "this" object specific dictionary.
-                    var serializer = SerializationHelper.GetDataContractSerializer(GetType(), objectsToSerialize.GetType(),
-                        "backup", objectsToSerialize, false);
-                    serializer.WriteObject(stream, objectsToSerialize);
-
-                    _knownTypesForDeserialization = new List<Type>();
-                    foreach (var objectToSerialize in objectsToSerialize)
-                    {
-                        if (objectToSerialize.Value != null)
-                        {
-                            _knownTypesForDeserialization.Add(objectToSerialize.Value.GetType());
-                        }
-                    }
-#endif
+                    var serializer = SerializationFactory.GetXmlSerializer();
+                    serializer.SerializeMembers(_object, stream, propertiesToIgnore);
 
                     _propertyValuesBackup = stream.ToByteArray();
                 }
@@ -140,46 +110,31 @@ namespace Catel.Data
 
                 using (var stream = new MemoryStream(_propertyValuesBackup))
                 {
-#if NET
-                    var serializer = SerializationHelper.GetBinarySerializer(false);
-
                     try
                     {
-                        var deserializedStream = serializer.Deserialize(stream);
-                        oldPropertyValues = _object.ConvertListToDictionary((List<PropertyValue>)deserializedStream);
+                        var serializer = SerializationFactory.GetXmlSerializer();
+                        var properties = serializer.DeserializeMembers(_object.GetType(), stream);
+
+                        oldPropertyValues = properties.ToDictionary(property => property.Name, property => property.Value);
                     }
                     catch (Exception ex)
                     {
-                        Log.Warning(ex, "Failed to deserialize the data for backup, which is weird. Trying with redirects enabled");
-
-                        stream.Position = 0L;
-
-                        var binaryFormatterWithRedirects = SerializationHelper.GetBinarySerializer(true);
-                        var deserializedStream = binaryFormatterWithRedirects.Deserialize(stream);
-                        oldPropertyValues = _object.ConvertListToDictionary((List<PropertyValue>)deserializedStream);
+                        Log.Error(ex, "Failed to deserialize the data for backup, which is weird. However, for Silverlight, Windows Phone and Windows 8 there is no other option");
                     }
-#else
-                    // Xml backup, create serializer without using the cache since the dictionary is used for every object, and
-                    // we need a "this" object specific dictionary.
-                    var serializer = SerializationHelper.GetDataContractSerializer(GetType(), typeof(List<PropertyValue>),
-                        "backup", _knownTypesForDeserialization, false);
+                }
 
-                    try
-                    {
-                        var deserializedStream = serializer.ReadObject(stream);
-                        oldPropertyValues = _object.ConvertListToDictionary((List<PropertyValue>)deserializedStream);
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error(ex, "Failed to deserialize the data for backup, which is weird. However, for Silverlight, WP7 and WinRT there is no other option");
-                    }
-#endif
+                if (oldPropertyValues == null)
+                {
+                    return;
                 }
 
                 foreach (KeyValuePair<string, object> propertyValue in oldPropertyValues)
                 {
-                    // Set value so the PropertyChanged event is invoked
-                    _object.SetValue(propertyValue.Key, propertyValue.Value);
+                    if (PropertyDataManager.IsPropertyRegistered(_object.GetType(), propertyValue.Key))
+                    {
+                        // Set value so the PropertyChanged event is invoked
+                        _object.SetValue(propertyValue.Key, propertyValue.Value);
+                    }
                 }
 
                 _object.IsDirty = (bool)_objectValuesBackup[IsDirty];

@@ -275,11 +275,11 @@ namespace Catel.MVVM
         /// <returns>
         /// The <see cref="IViewModel"/> or <c>null</c> if the view model is not registered.
         /// </returns>
-        public IViewModel GetFirstOrDefaultInstance<TViewModel>() where TViewModel : IViewModel
+        public TViewModel GetFirstOrDefaultInstance<TViewModel>() where TViewModel : IViewModel
         {
             var viewModelType = typeof(TViewModel);
 
-            return GetFirstOrDefaultInstance(viewModelType);
+            return (TViewModel)GetFirstOrDefaultInstance(viewModelType);
         }
 
         /// <summary>
@@ -295,6 +295,34 @@ namespace Catel.MVVM
             Argument.IsNotNull("viewModeType", viewModelType);
 
             return ActiveViewModels.FirstOrDefault(row => ObjectHelper.AreEqual(row.GetType(), viewModelType));
+        }
+
+        /// <summary>
+        /// Gets the child view models of the specified view model.
+        /// </summary>
+        /// <param name="parentViewModel">The parent view model.</param>
+        /// <returns>The child view models.</returns>
+        public IEnumerable<IRelationalViewModel> GetChildViewModels(IViewModel parentViewModel)
+        {
+            Argument.IsNotNull(() => parentViewModel);
+
+            var childViewModels = GetChildViewModels(parentViewModel.UniqueIdentifier);
+
+            return childViewModels;
+        }
+
+        /// <summary>
+        /// Gets the child view models of the specified view model unique identifier.
+        /// </summary>
+        /// <param name="parentUniqueIdentifier">The parent unique identifier.</param>
+        /// <returns>The child view models.</returns>
+        public IEnumerable<IRelationalViewModel> GetChildViewModels(int parentUniqueIdentifier)
+        {
+            var relationalViewModels = ActiveViewModels.OfType<IRelationalViewModel>();
+
+            var childViewModels = relationalViewModels.Where(viewModel => viewModel.ParentViewModel != null && viewModel.ParentViewModel.UniqueIdentifier == parentUniqueIdentifier);
+
+            return childViewModels;
         }
 
         /// <summary>

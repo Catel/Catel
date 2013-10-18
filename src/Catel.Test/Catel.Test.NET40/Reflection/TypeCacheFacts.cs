@@ -6,7 +6,7 @@
 namespace Catel.Test.Reflection
 {
     using System;
-
+    using System.Collections.Generic;
     using Catel.Reflection;
 
 #if NETFX_CORE
@@ -42,6 +42,16 @@ namespace Catel.Test.Reflection
                 var type = TypeCache.GetType("System.Lazy`1");
 
                 Assert.AreEqual(typeof(Lazy<>), type);
+            }
+
+            [TestMethod]
+            public void ReturnsTypeForLateBoundGenericTypeMultipleTimes()
+            {
+                var type = TypeCache.GetType("System.Collections.Generic.List`1[[System.Int32]]");
+                Assert.AreEqual(typeof(List<int>), type);
+
+                var type2 = TypeCache.GetType("System.Collections.Generic.List`1[[System.Int32]]");
+                Assert.AreEqual(typeof(List<int>), type2);
             }
         }
     }

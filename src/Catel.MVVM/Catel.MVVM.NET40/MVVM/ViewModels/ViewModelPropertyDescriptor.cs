@@ -35,23 +35,20 @@ namespace Catel.MVVM
         private PropertyInfo _propertyInfo;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ViewModelPropertyDescriptor"/> class.
+        /// Initializes a new instance of the <see cref="ViewModelPropertyDescriptor" /> class.
         /// </summary>
         /// <param name="viewModel">The view model. Can be <c>null</c> for generic property definitions.</param>
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="propertyType">Type of the property.</param>
-        /// <remarks>
-        /// Must be kept internal because it contains special generic options such as a null view model.
-        /// </remarks>
-        /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="propertyType"/> is <c>null</c>.</exception>
-        internal ViewModelPropertyDescriptor(ViewModelBase viewModel, string propertyName, Type propertyType)
-            : base(propertyName, null)
+        /// <param name="attributes">The attributes.</param>
+        /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="propertyType" /> is <c>null</c>.</exception>
+        /// <remarks>Must be kept internal because it contains special generic options such as a null view model.</remarks>
+        internal ViewModelPropertyDescriptor(ViewModelBase viewModel, string propertyName, Type propertyType, Attribute[] attributes)
+            : base(propertyName, attributes)
         {
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
             Argument.IsNotNull("propertyType", propertyType);
-
-            //Log.Debug("Created property descriptor for '{0}' as type '{1}'", propertyName, propertyType.Name);
 
             _viewModel = viewModel;
             _viewModelType = (viewModel != null) ? viewModel.GetType() : null;

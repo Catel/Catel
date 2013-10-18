@@ -61,4 +61,4 @@ Current projects:
 * SL4
 * SL5
 * WP7
-* WP7.Mango
+* WP8

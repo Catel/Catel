@@ -113,7 +113,7 @@ namespace Catel.Windows.Controls
 
 #if NET
         /// <summary>
-        /// Invoked whenever an unhandled <see cref="E:System.Windows.Input.Keyboard.GotKeyboardFocus"/> attached routed event reaches an element derived from this class in its route. Implement this method to add class handling for this event.
+        /// Invoked whenever an unhandled <c>System.Windows.Input.Keyboard.GotKeyboardFocus</c> attached routed event reaches an element derived from this class in its route. Implement this method to add class handling for this event.
         /// </summary>
         /// <param name="e">Provides data about the event.</param>
         /// <remarks></remarks>

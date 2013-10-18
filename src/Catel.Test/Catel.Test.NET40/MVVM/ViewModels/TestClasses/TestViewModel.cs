@@ -35,9 +35,10 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TestViewModel"/> class.
+        /// Initializes a new instance of the <see cref="TestViewModel" /> class.
         /// </summary>
         /// <param name="person">The person.</param>
+        /// <param name="validateModelsOnInitialization">if set to <c>true</c>, the view model will validate on initialization.</param>
         public TestViewModel(IPerson person, bool validateModelsOnInitialization = true)
             : this(null, person, null, validateModelsOnInitialization)
         {
@@ -58,6 +59,7 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         /// <param name="serviceLocator">The service locator.</param>
         /// <param name="person">The person.</param>
         /// <param name="specialValidationModel">The special validation model.</param>
+        /// <param name="validateModelsOnInitialization">if set to <c>true</c>, the view model will validate on initialization.</param>
         private TestViewModel(IServiceLocator serviceLocator, IPerson person, SpecialValidationModel specialValidationModel,
                               bool validateModelsOnInitialization = true)
             : base(serviceLocator)
@@ -278,7 +280,7 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
 
         #region Methods
         /// <summary>
-        /// Test wrapper for the protected <see cref="ViewModelBaseWithoutServices.ParentViewModel"/> property.
+        /// Test wrapper for the protected <see cref="ViewModelBase.ParentViewModel"/> property.
         /// </summary>
         /// <returns></returns>
         public IViewModel GetParentViewModelForTest()
@@ -287,7 +289,7 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         }
 
         /// <summary>
-        /// Test wrapper for the protected <see cref="GetAllModels"/> method.
+        /// Test wrapper for the protected <see cref="ViewModelBase.GetAllModels"/> method.
         /// </summary>
         /// <returns></returns>
         public object[] GetAllModelsForTest()
@@ -296,7 +298,7 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         }
 
         /// <summary>
-        /// Test wrapper for the protected <see cref="IsModelRegistered"/> method.
+        /// Test wrapper for the protected <see cref="ViewModelBase.IsModelRegistered"/> method.
         /// </summary>
         public bool IsModelRegisteredForTest(string name)
         {
@@ -304,7 +306,7 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         }
 
         /// <summary>
-        /// Test wrapper to set the <see cref="InvalidateCommandsOnPropertyChanged"/> property.
+        /// Test wrapper to set the <see cref="ViewModelBase.InvalidateCommandsOnPropertyChanged"/> property.
         /// </summary>
         public void SetInvalidateCommandsOnPropertyChanged(bool value)
         {

@@ -18,6 +18,21 @@ namespace Catel.Windows.Threading
     /// </summary>
     public static class DispatcherExtensions
     {
+#if NET
+        /// <summary>
+        /// Gets the managed thread identifier for the specified dispatcher.
+        /// </summary>
+        /// <param name="dispatcher">The dispatcher.</param>
+        /// <returns>The managed thread id.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="dispatcher" /> is <c>null</c>.</exception>
+        public static int GetThreadId(this Dispatcher dispatcher)
+        {
+            Argument.IsNotNull("dispatcher", dispatcher);
+
+            return dispatcher.Thread.ManagedThreadId;
+        }
+#endif
+
         /// <summary>
         /// Executes the specified action with the specified arguments synchronously on the thread the Dispatcher is associated with.
         /// </summary>

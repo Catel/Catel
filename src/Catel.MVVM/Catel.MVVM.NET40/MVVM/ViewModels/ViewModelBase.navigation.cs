@@ -80,11 +80,11 @@ namespace Catel.MVVM
                     {
                         _navigationContext.Add(key, navigationContext[key]);
                     }
-
-                    NavigationCompleted.SafeInvoke(this);
-
-                    OnNavigationCompleted();
                 }
+
+                NavigationCompleted.SafeInvoke(this);
+
+                OnNavigationCompleted();
             }
         }
 

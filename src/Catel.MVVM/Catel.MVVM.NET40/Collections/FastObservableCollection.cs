@@ -55,6 +55,31 @@ namespace Catel.Collections
 
         #region Properties
         /// <summary>
+        /// Gets or sets a value indicating whether change to the collection is made when
+        /// its notifications are suspended.
+        /// </summary>
+        /// <value><c>true</c> if this instance is has been changed while notifications are
+        /// suspended; otherwise, <c>false</c>.</value>
+        public bool IsDirty
+        {
+            get; protected set;
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether change notifications are suspended.
+        /// </summary>
+        /// <value>
+        /// 	<c>True</c> if notifications are suspended, otherwise, <c>false</c>.
+        /// </value>
+        public bool NotificationsSuspended
+        {
+            get
+            {
+                return _suspendChangeNotifications;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether events should automatically be dispatched to the UI thread.
         /// </summary>
         /// <value><c>true</c> if events should automatically be dispatched to the UI thread; otherwise, <c>false</c>.</value>
@@ -62,6 +87,53 @@ namespace Catel.Collections
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Inserts the elements of the specified collection at the specified index.
+        /// </summary>
+        /// <param name="collection">The collection.</param>
+        /// <param name="index">The start index.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
+        public virtual void InsertItems(IEnumerable<T> collection, int index)
+        {
+            Argument.IsNotNull("collection", collection);
+
+            using (SuspendChangeNotifications())
+            {
+                foreach (var item in collection)
+                {
+                    Insert(index++, item);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Inserts the elements of the specified collection at the specified index.
+        /// </summary>
+        /// <param name="collection">The collection.</param>
+        /// <param name="index">The start index.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
+        public virtual void InsertItems(IEnumerable collection, int index)
+        {
+            Argument.IsNotNull("collection", collection);
+
+            using (SuspendChangeNotifications())
+            {
+                foreach (var item in collection)
+                {
+                    ((IList)this).Insert(index++, item);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Raises <see cref="E:System.Collections.Specialized.INotifyCollectionChanged.CollectionChanged" /> with 
+        /// <see cref="F:System.Collections.Specialized.NotifyCollectionChangedAction.Reset" /> changed action.
+        /// </summary>
+        public void Reset()
+        {
+            NotifyChanges();
+        }
+
         /// <summary>
         /// Adds the specified items to the collection without causing a change notification for all items.
         /// <para />
@@ -117,7 +189,7 @@ namespace Catel.Collections
             {
                 foreach (var item in collection)
                 {
-                    this.Remove(item);
+                    Remove(item);
                 }
             }
         }
@@ -196,11 +268,15 @@ namespace Catel.Collections
                 {
                     base.OnCollectionChanged(e);
                 }
+
+                return;
             }
+
+            IsDirty = true;
         }
 
         /// <summary>
-        /// Raises the <see cref="ObservableCollection{T}.PropertyChanged" /> event, but also makes sure the event is dispatched to the UI thread.
+        /// Raises the <c>ObservableCollection{T}.PropertyChanged</c> event, but also makes sure the event is dispatched to the UI thread.
         /// </summary>
         /// <param name="e">The <see cref="PropertyChangedEventArgs" /> instance containing the event data.</param>
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)
@@ -245,7 +321,12 @@ namespace Catel.Collections
                 if (_collection != null)
                 {
                     _collection._suspendChangeNotifications = _oldSuspendChangeNotifications;
-                    _collection.NotifyChanges();
+                    if (_collection.IsDirty && !_collection._suspendChangeNotifications)
+                    {
+                        _collection.IsDirty = false;
+                        _collection.NotifyChanges();
+                    }
+					
                     _collection = null;
                 }
             }

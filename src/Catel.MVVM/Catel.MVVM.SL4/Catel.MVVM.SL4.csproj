@@ -19,7 +19,7 @@
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.13.8.0</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.15.0.0</FodyPath>
   </PropertyGroup>
   <!-- This property group is only here to support building this project using the 
        MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
@@ -54,9 +54,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
-    <Reference Include="Obsolete, Version=1.6.2.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
+    <Reference Include="Obsolete, Version=2.3.0.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Obsolete.Fody.1.6.2.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
+      <HintPath>..\..\..\lib\Obsolete.Fody.2.3.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations, Version=2.0.5.0, Culture=neutral, PublicKeyToken=ddd0da4d3e678217, processorArchitecture=MSIL" />
@@ -128,6 +128,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\EventArgs\CommandExecutedEventArgs.cs">
       <Link>MVVM\Commands\EventArgs\CommandExecutedEventArgs.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs">
+      <Link>MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Helpers\CommandHelper.cs">
       <Link>MVVM\Commands\Helpers\CommandHelper.cs</Link>
     </Compile>
@@ -137,8 +140,17 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ICatelCommand.cs">
       <Link>MVVM\Commands\Interfaces\ICatelCommand.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ICatelTaskCommand.cs">
+      <Link>MVVM\Commands\Interfaces\ICatelTaskCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ITaskProgressReport.cs">
+      <Link>MVVM\Commands\Interfaces\ITaskProgressReport.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\IViewModelCommandManager.cs">
       <Link>MVVM\Commands\Interfaces\IViewModelCommandManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\TaskCommand.cs">
+      <Link>MVVM\Commands\TaskCommand.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\ViewModelCommandManager.cs">
       <Link>MVVM\Commands\ViewModelCommandManager.cs</Link>
@@ -215,6 +227,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Exceptions\WindowNotRegisteredException.cs">
       <Link>MVVM\Services\Exceptions\WindowNotRegisteredException.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\FileServiceBase.cs">
+      <Link>MVVM\Services\FileServiceBase.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IAccelerometerService.cs">
       <Link>MVVM\Services\Interfaces\IAccelerometerService.cs</Link>
     </Compile>
@@ -263,6 +278,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ISplashScreenService.cs">
       <Link>MVVM\Services\Interfaces\ISplashScreenService.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IStartUpInfoProvider.cs">
+      <Link>MVVM\Services\Interfaces\IStartUpInfoProvider.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IUIVisualizerService.cs">
       <Link>MVVM\Services\Interfaces\IUIVisualizerService.cs</Link>
     </Compile>
@@ -292,6 +310,12 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\SchedulerService.cs">
       <Link>MVVM\Services\SchedulerService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\SplashScreenService.cs">
+      <Link>MVVM\Services\SplashScreenService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\StartUpInfoProvider.cs">
+      <Link>MVVM\Services\StartUpInfoProvider.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Test\MessageService.cs">
       <Link>MVVM\Services\Test\MessageService.cs</Link>
@@ -361,6 +385,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Extensions\ViewModelExtensions.cs">
       <Link>MVVM\ViewModels\Extensions\ViewModelExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Extensions\ViewModelManagerExtensions.cs">
+      <Link>MVVM\ViewModels\Extensions\ViewModelManagerExtensions.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Interfaces\INotifyableViewModel.cs">
       <Link>MVVM\ViewModels\Interfaces\INotifyableViewModel.cs</Link>

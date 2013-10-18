@@ -15,7 +15,7 @@
     <WarningLevel>4</WarningLevel>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.13.8.0</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.15.0.0</FodyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,9 +39,9 @@
     <DocumentationFile>..\..\..\output\release\NET45\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Obsolete, Version=1.6.2.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
+    <Reference Include="Obsolete, Version=2.3.0.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Obsolete.Fody.1.6.2.0\Lib\NET35\Obsolete.dll</HintPath>
+      <HintPath>..\..\..\lib\Obsolete.Fody.2.3.0\Lib\NET35\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -135,8 +135,17 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ICatelCommand.cs">
       <Link>MVVM\Commands\Interfaces\ICatelCommand.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ICatelTaskCommand.cs">
+      <Link>MVVM\Commands\Interfaces\ICatelTaskCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ITaskProgressReport.cs">
+      <Link>MVVM\Commands\Interfaces\ITaskProgressReport.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\IViewModelCommandManager.cs">
       <Link>MVVM\Commands\Interfaces\IViewModelCommandManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\TaskCommand.cs">
+      <Link>MVVM\Commands\TaskCommand.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\ViewModelCommandManager.cs">
       <Link>MVVM\Commands\ViewModelCommandManager.cs</Link>
@@ -213,6 +222,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Exceptions\WindowNotRegisteredException.cs">
       <Link>MVVM\Services\Exceptions\WindowNotRegisteredException.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\FileServiceBase.cs">
+      <Link>MVVM\Services\FileServiceBase.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IAccelerometerService.cs">
       <Link>MVVM\Services\Interfaces\IAccelerometerService.cs</Link>
     </Compile>
@@ -264,6 +276,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ISplashScreenService.cs">
       <Link>MVVM\Services\Interfaces\ISplashScreenService.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IStartUpInfoProvider.cs">
+      <Link>MVVM\Services\Interfaces\IStartUpInfoProvider.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IUIVisualizerService.cs">
       <Link>MVVM\Services\Interfaces\IUIVisualizerService.cs</Link>
     </Compile>
@@ -305,6 +320,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\SplashScreenService.cs">
       <Link>MVVM\Services\SplashScreenService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\StartUpInfoProvider.cs">
+      <Link>MVVM\Services\StartUpInfoProvider.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Test\MessageService.cs">
       <Link>MVVM\Services\Test\MessageService.cs</Link>
@@ -374,6 +392,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Extensions\ViewModelExtensions.cs">
       <Link>MVVM\ViewModels\Extensions\ViewModelExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Extensions\ViewModelManagerExtensions.cs">
+      <Link>MVVM\ViewModels\Extensions\ViewModelManagerExtensions.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Interfaces\INotifyableViewModel.cs">
       <Link>MVVM\ViewModels\Interfaces\INotifyableViewModel.cs</Link>
@@ -735,6 +756,9 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Helpers\WrapControlHelper.cs">
       <Link>Windows\Helpers\WrapControlHelper.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Helpers\CommandLineHelper.cs">
+      <Link>Windows\Helpers\CommandLineHelper.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\Authentication.cs">
       <Link>Windows\Interactivity\Authentication.cs</Link>
     </Compile>
@@ -849,6 +873,7 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Windows\PleaseWaitHelper.cs">
       <Link>Windows\Windows\PleaseWaitHelper.cs</Link>
     </Compile>
+    <Compile Include="MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs" />
     <Compile Include="Windows\Windows\LoaderAnimation.xaml.cs">
       <DependentUpon>LoaderAnimation.xaml</DependentUpon>
     </Compile>

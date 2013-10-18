@@ -15,6 +15,7 @@ namespace Catel.Windows.Controls
     using MVVMProviders.Logic;
 
 #if NETFX_CORE
+    using global::Windows.UI.Xaml;
     using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
 #else
     using System.Windows;

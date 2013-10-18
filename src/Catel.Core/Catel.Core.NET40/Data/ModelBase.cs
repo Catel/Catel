@@ -17,6 +17,7 @@ namespace Catel.Data
     using System.Reflection;
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
+    using Catel.IoC;
     using Collections;
 
     using Reflection;
@@ -57,7 +58,7 @@ namespace Catel.Data
         /// </summary>
         internal static readonly Type InternalSerializationType = typeof(List<PropertyValue>);
         #endregion
-
+        
         #region Fields
         /// <summary>
         /// The log.
@@ -109,14 +110,6 @@ namespace Catel.Data
 #endif
         internal readonly object _propertyValuesLock = new object();
 
-#if NET
-        /// <summary>
-        /// The <see cref="SerializationInfo"/> that is retrieved and will be used for deserialization.
-        /// </summary>
-        [field: NonSerialized]
-        private readonly SerializationInfo _serializationInfo;
-#endif
-
         /// <summary>
         /// The parent object of the current object.
         /// </summary>
@@ -132,6 +125,22 @@ namespace Catel.Data
         [field: NonSerialized]
 #endif
         private bool _leanAndMeanModel;
+
+        /// <summary>
+        /// Backing field for the <see cref="EqualityComparer"/> property. Because it has custom logic, it needs a backing field.
+        /// </summary>
+#if NET
+        [field: NonSerialized]
+#endif
+        private IModelEqualityComparer _equalityComparer;
+
+        /// <summary>
+        /// Backing field for the <see cref="GetHashCode"/> method so it only has to be calculated once to gain the best performance possible.
+        /// </summary>
+#if NET
+        [field: NonSerialized]
+#endif
+        private int? _hashCode;
         #endregion
 
         #region Constructors
@@ -173,57 +182,6 @@ namespace Catel.Data
             // Do not write anything in this constructor. Use the Initialize method or the
             // OnInitializing or OnInitialized methods instead.
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ModelBase"/> class.
-        /// <para />
-        /// Only constructor for the ModelBase.
-        /// </summary>
-        /// <param name="info">SerializationInfo object, null if this is the first time construction.</param>
-        /// <param name="context">StreamingContext object, simple pass a default new StreamingContext() if this is the first time construction.</param>
-        /// <remarks>
-        /// Call this method, even when constructing the object for the first time (thus not deserializing).
-        /// </remarks>
-        protected ModelBase(SerializationInfo info, StreamingContext context)
-        {
-            OnInitializing();
-
-            Initialize();
-
-            // Make sure this is not a first time call
-            if (info == null)
-            {
-                FinishInitializationAfterConstructionOrDeserialization();
-            }
-            else
-            {
-                _serializationInfo = info;
-
-                bool succeeded = false;
-
-                try
-                {
-                    // First, try the "new" method (list of property values), but it might fail on old objects
-                    var properties = (List<PropertyValue>)SerializationHelper.GetObject(info, "Properties", typeof(List<PropertyValue>), new List<PropertyValue>());
-                    succeeded = properties.Count > 0;
-                }
-                catch (Exception)
-                {
-                    Log.Warning("Failed to deserialize properties using a list of property values, trying old mechanism (dictionary)");
-
-                    var properties = (List<KeyValuePair<string, object>>)SerializationHelper.GetObject(info, "Properties",
-                        typeof(List<KeyValuePair<string, object>>), new List<KeyValuePair<string, object>>());
-
-                    succeeded = properties.Count > 0;
-                }
-
-                GetDataFromSerializationInfoInternal(_serializationInfo);
-
-                DeserializationSucceeded = succeeded;
-            }
-
-            OnInitialized();
-        }
 #endif
         #endregion
 
@@ -246,69 +204,7 @@ namespace Catel.Data
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(ModelBase firstObject, ModelBase secondObject)
         {
-            if (ReferenceEquals(firstObject, secondObject))
-            {
-                return true;
-            }
-
-            if (((object)firstObject == null) || ((object)secondObject == null))
-            {
-                return false;
-            }
-
-            // Fix for issue 6633 (see http://catel.codeplex.com/workitem/6633)
-            // Check types before the "expensive" operation of checking all property values
-            if (firstObject.GetType() != secondObject.GetType())
-            {
-                return false;
-            }
-
-            lock (firstObject._propertyValuesLock)
-            {
-                foreach (var propertyValue in firstObject._propertyBag.GetAllProperties())
-                {
-                    // Only check if this is not an internal data object base property
-                    if (!firstObject.IsModelBaseProperty(propertyValue.Key))
-                    {
-                        object valueA = propertyValue.Value;
-                        if (!secondObject.IsPropertyRegistered(propertyValue.Key))
-                        {
-                            return false;
-                        }
-
-                        object valueB = secondObject.GetValue(propertyValue.Key);
-
-                        if (!ReferenceEquals(valueA, valueB))
-                        {
-                            if ((valueA == null) || (valueB == null))
-                            {
-                                return false;
-                            }
-
-                            // Is this an IEnumerable (but not a string)?
-                            var valueAAsIEnumerable = valueA as IEnumerable;
-                            if ((valueAAsIEnumerable != null) && !(valueA is string))
-                            {
-                                // Yes, loop all sub items and check them
-                                if (!CollectionHelper.IsEqualTo(valueAAsIEnumerable, (IEnumerable)valueB))
-                                {
-                                    return false;
-                                }
-                            }
-                            else
-                            {
-                                // No, check objects via equals method
-                                if (!valueA.Equals(valueB))
-                                {
-                                    return false;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            return true;
+            return Equals(firstObject, secondObject);
         }
 
         /// <summary>
@@ -325,6 +221,33 @@ namespace Catel.Data
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets or sets the equality comparer used to compare model bases with each other.
+        /// </summary>
+        /// <value>The equality comparer.</value>
+#if NET || SILVERLIGHT
+        [Browsable(false)]
+#endif
+        [XmlIgnore]
+        protected IModelEqualityComparer EqualityComparer
+        {
+            get
+            {
+                if (_equalityComparer == null)
+                {
+                    var dependencyResolver = this.GetDependencyResolver();
+
+                    _equalityComparer = dependencyResolver.Resolve<IModelEqualityComparer>();
+                }
+
+                return _equalityComparer;
+            }
+            set
+            {
+                _equalityComparer = value;
+            }
+        }
+
         /// <summary>
         /// Gets or sets a value indicating whether all models should behave as a lean and mean model.
         /// <para />
@@ -349,7 +272,7 @@ namespace Catel.Data
         [Browsable(false)]
 #endif
         [XmlIgnore]
-        protected bool LeanAndMeanModel
+        protected internal bool LeanAndMeanModel
         {
             get { return _leanAndMeanModel || GlobalLeanAndMeanModel; }
             set { _leanAndMeanModel = value; }
@@ -1003,26 +926,22 @@ namespace Catel.Data
         /// </exception>
         public override bool Equals(object obj)
         {
-            // ReSharper disable RedundantCast
+            // Note: at first we only implemented the EqualityComparer, but the IEqualityComparer of Microsoft
+            // throws an exception when the 2 types are not the same. Although MS does recommend not to throw exceptions,
+            // they do it themselves. Check for null and check the types before feeding it to the equality comparer.
 
-            if ((object)obj == null)
+            if (obj == null)
             {
                 return false;
             }
 
-            // ReSharper restore RedundantCast
-
-            var objAsModelBase = obj as ModelBase;
-            if (objAsModelBase == null)
+            if (GetType() != obj.GetType())
             {
                 return false;
             }
 
-            // ReSharper disable RedundantCast
-
-            return (ModelBase)this == objAsModelBase;
-
-            // ReSharper restore RedundantCast
+            var equalityComparer = EqualityComparer;
+            return equalityComparer.Equals(this, obj);
         }
 
         // ReSharper disable RedundantOverridenMember
@@ -1035,7 +954,13 @@ namespace Catel.Data
         /// </returns>
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            if (!_hashCode.HasValue)
+            {
+                var equalityComparer = EqualityComparer;
+                _hashCode = equalityComparer.GetHashCode(this);
+            }
+
+            return _hashCode.Value;
         }
 
         /// <summary>
@@ -1173,6 +1098,11 @@ namespace Catel.Data
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
         protected virtual void OnPropertyObjectCollectionItemPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            if (string.Equals(e.PropertyName, "IsDirty", StringComparison.Ordinal))
+            {
+                return;
+            }
+
             SetDirtyAndAutomaticallyValidate(string.Empty, true);
         }
 
@@ -1441,7 +1371,7 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="property"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidPropertyException">The name of the property is invalid.</exception>
         /// <exception cref="PropertyAlreadyRegisteredException">The property is already registered.</exception>
-        protected void InitializePropertyAfterConstruction(PropertyData property)
+        protected internal void InitializePropertyAfterConstruction(PropertyData property)
         {
             Argument.IsNotNull("property", property);
 
@@ -1696,14 +1626,17 @@ namespace Catel.Data
             // If this is an internal data object base property, just leave
             if (IsModelBaseProperty(e.PropertyName))
             {
-                // Maybe this is a child object informing us that it's not dirty any longer
                 var senderAsModelBase = sender as ModelBase;
-                if ((senderAsModelBase != null) && (e.PropertyName == IsDirtyProperty.Name))
+                if ((senderAsModelBase != null) && (string.Equals(e.PropertyName, IsDirtyProperty.Name, StringComparison.Ordinal)))
                 {
+                    // Maybe this is a child object informing us that it's not dirty any longer
                     if (senderAsModelBase.GetValue<bool>(e.PropertyName) == false)
                     {
-                        // Ignore
-                        return;
+                        if (!ReferenceEquals(this, sender))
+                        {
+                            // Ignore
+                            return;
+                        }
                     }
 
                     // A child became dirty, we are dirty as well
@@ -1817,37 +1750,17 @@ namespace Catel.Data
         {
             try
             {
-#if NET
-                var stream = new MemoryStream();
-                var serializer = SerializationHelper.GetBinarySerializer(enableRedirects);
-
-                serializer.Serialize(stream, this);
-
-                stream.Position = 0L;
-
-                object clone = serializer.Deserialize(stream);
-
-                stream.Close();
-
-                return clone;
-#else
-                bool isDirty = IsDirty;
-
-                var clone = (ModelBase)Activator.CreateInstance(GetType());
-
-                byte[] data = SerializeProperties();
-
-                var propertyValues = DeserializeProperties(data);
-
-                foreach (var propertyValue in propertyValues)
+                using (var stream = new MemoryStream())
                 {
-                    var propertyData = GetPropertyData(propertyValue.Name);
-                    clone.SetValue(propertyData, propertyValue.Value, false, false);
-                }
+                    var serializer = SerializationFactory.GetXmlSerializer();
 
-                clone.IsDirty = isDirty;
-                return clone;
-#endif
+                    serializer.Serialize(this, stream);
+
+                    stream.Position = 0L;
+
+                    object clone = serializer.Deserialize(GetType(), stream);
+                    return clone;
+                }                
             }
             catch (Exception ex)
             {

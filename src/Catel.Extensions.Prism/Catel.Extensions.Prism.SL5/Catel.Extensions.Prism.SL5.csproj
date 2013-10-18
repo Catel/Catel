@@ -19,7 +19,7 @@
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.13.8.0</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.15.0.0</FodyPath>
   </PropertyGroup>
   <!-- This property group is only here to support building this project using the 
        MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
@@ -66,9 +66,9 @@
       <HintPath>..\..\..\lib\CommonServiceLocator.1.0\lib\SL30\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib" />
-    <Reference Include="Obsolete, Version=1.6.2.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
+    <Reference Include="Obsolete, Version=2.3.0.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Obsolete.Fody.1.6.2.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
+      <HintPath>..\..\..\lib\Obsolete.Fody.2.3.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="system" />
@@ -106,11 +106,14 @@
     <Compile Include="..\Catel.Extensions.Prism.NET40\Extensions\ILogExtensions.cs">
       <Link>Extensions\ILogExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Extensions\IRegionManagerExtensions.cs">
+      <Link>Extensions\IRegionManagerExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Extensions.Prism.NET40\Extensions\IUIVisualizerServiceExtensions.cs">
       <Link>Extensions\IUIVisualizerServiceExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Extensions.Prism.NET40\Extensions\IViewModelExtensions.cs">
-      <Link>Extensions\IViewModelExtensions.cs</Link>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Extensions\ISplashScreenServiceExtensions.cs">
+      <Link>Extensions\ISplashScreenServiceExtensions.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Extensions.Prism.NET40\Interfaces\IModuleTracker.cs">
       <Link>Interfaces\IModuleTracker.cs</Link>

@@ -168,8 +168,6 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 return;
             }
 
-            var uriString = e.GetUriWithoutQueryInfo();
-
             _hasNavigatedButNotNavigatedAway = false;
 
 #if WINDOWS_PHONE
@@ -196,8 +194,8 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 HasHandledSaveAndCancelLogic = true;
 
 #if NETFX_CORE
-                //_rootFrame.Navigating -= OnNavigatingEvent;
-                //_rootFrame.Navigated -= OnNavigatedEvent;
+                _rootFrame.Navigating -= OnNavigatingEvent;
+                _rootFrame.Navigated -= OnNavigatedEvent;
 #elif WINDOWS_PHONE
                 //_rootFrame.BackKeyPress -= OnBackKeyPress;
                 //_rootFrame.Navigating -= OnNavigatingEvent;
@@ -240,8 +238,6 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             {
                 return;
             }
-
-            var uriString = e.GetUriWithoutQueryInfo();
 
             // If this navigation event is not meant for this page, exit
             if (!e.IsNavigationForView(TargetControlType))
@@ -331,16 +327,16 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             }
 
 #if NETFX_CORE
-            _rootFrame = ((Page)TargetControl).Frame;
+            _rootFrame = Window.Current.Content as Frame ?? ((Page)TargetControl).Frame;
             if (_rootFrame == null)
             {
                 return;
             }
 
-            this.SubscribeToWeakGenericEvent<NavigatingCancelEventArgs>(_rootFrame, "Navigating", OnNavigatingEvent);
-            this.SubscribeToWeakGenericEvent<NavigationEventArgs>(_rootFrame, "Navigated", OnNavigatedEvent);
-            //_rootFrame.Navigating += OnNavigatingEvent;
-            //_rootFrame.Navigated += OnNavigatedEvent;
+            //this.SubscribeToWeakGenericEvent<NavigatingCancelEventArgs>(_rootFrame, "Navigating", OnNavigatingEvent);
+            //this.SubscribeToWeakGenericEvent<NavigationEventArgs>(_rootFrame, "Navigated", OnNavigatedEvent);
+            _rootFrame.Navigating += OnNavigatingEvent;
+            _rootFrame.Navigated += OnNavigatedEvent;
 #elif WINDOWS_PHONE
             _rootFrame = Application.Current.RootVisual.FindVisualDescendant(e => e is PhoneApplicationFrame) as PhoneApplicationFrame;
             if (_rootFrame == null)

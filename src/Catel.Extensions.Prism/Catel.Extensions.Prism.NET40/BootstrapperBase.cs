@@ -326,16 +326,17 @@ namespace Catel
             actions.Add(taskFactory.CreateCreateShellTask(() =>
             {
                 Logger.Log("Creating the shell", Category.Debug, Priority.Low);
+                var dispatcherService = Container.ResolveType<IDispatcherService>();
 
-                Shell = CreateShell();
+                dispatcherService.Invoke(() => Shell = CreateShell());
 
                 if (Shell != null)
                 {
                     Logger.Log("Setting the RegionManager", Category.Debug, Priority.Low);
-                    RegionManager.SetRegionManager(Shell, Container.ResolveType<IRegionManager>());
+                    dispatcherService.Invoke(() => RegionManager.SetRegionManager(Shell, Container.ResolveType<IRegionManager>()));
 
                     Logger.Log("Updating Regions", Category.Debug, Priority.Low);
-                    RegionManager.UpdateRegions();
+                    dispatcherService.Invoke(RegionManager.UpdateRegions);
 
                     CreatedShell.SafeInvoke(this);
                 }
@@ -366,8 +367,9 @@ namespace Catel
                 if (Shell != null)
                 {
                     Logger.Log("Initializing the shell", Category.Debug, Priority.Low);
-                    
-                    InitializeShell();
+
+                    var dispatcherService = Container.ResolveType<IDispatcherService>();
+                    dispatcherService.Invoke(InitializeShell);
 
                     InitializedShell.SafeInvoke(this);
                 }

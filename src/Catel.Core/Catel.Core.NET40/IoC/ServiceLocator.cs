@@ -135,11 +135,6 @@ namespace Catel.IoC
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-        /// <summary>
-        /// Singleton instance of the service locator.
-        /// </summary>
-        private static ServiceLocator _default;
         #endregion
 
         #region Fields
@@ -169,6 +164,11 @@ namespace Catel.IoC
         private readonly List<IExternalContainerHelper> _supportedExternalContainers = new List<IExternalContainerHelper>();
 
         /// <summary>
+        /// The types currently being exported.
+        /// </summary>
+        private readonly List<ServiceInfo> _typesCurrentlyBeingExported = new List<ServiceInfo>(); 
+
+        /// <summary>
         /// The synchronization object.
         /// </summary>
         private readonly object _syncObject = new object();
@@ -185,7 +185,11 @@ namespace Catel.IoC
         /// </summary>
         public ServiceLocator()
         {
-            _typeFactory = new TypeFactory(this);
+            // Must be registered first, already resolved by TypeFactory
+            RegisterInstance(typeof(IServiceLocator), this);
+
+            var dependencyResolver = new CatelDependencyResolver(this);
+            _typeFactory = new TypeFactory(dependencyResolver);
             _autoRegistrationManager = new ServiceLocatorAutoRegistrationManager(this);
 
             IgnoreRuntimeIncorrectUsageOfRegisterAttribute = true;
@@ -199,12 +203,11 @@ namespace Catel.IoC
             RegisterExternalContainerHelper(new UnityHelper());
             RegisterExternalContainerHelper(new WindsorHelper());
 #endif
-
             RegisterExternalContainerHelper(new NinjectHelper());
 #endif
 
-            RegisterInstance(typeof(IServiceLocator), this);
             RegisterInstance(typeof(ITypeFactory), _typeFactory);
+            RegisterInstance(typeof(IDependencyResolver), dependencyResolver);
         }
         #endregion
 
@@ -220,19 +223,14 @@ namespace Catel.IoC
         }
 
         /// <summary>
-        /// Gets the instance of the default service locator. This property serves as as singleton.
+        /// Gets or sets the instance of the default service locator. This property serves as as singleton.
         /// </summary>
         /// <value>The default instance.</value>
         public static IServiceLocator Default
         {
             get
             {
-                if (_default == null)
-                {
-                    _default = new ServiceLocator();
-                }
-
-                return _default;
+                return IoCConfiguration.DefaultServiceLocator;
             }
         }
         #endregion
@@ -901,6 +899,13 @@ namespace Catel.IoC
             Argument.IsNotNull("serviceType", serviceType);
             Argument.IsNotNull("implementingType", serviceImplementationType);
 
+            if (serviceImplementationType.IsInterfaceEx())
+            {
+                string error = string.Format("Cannot register interface type '{0}' as implementation, make sure to specify an actual class", serviceImplementationType.GetSafeFullName());
+                Log.Error(error);
+                throw new InvalidOperationException(error);
+            }
+
             /* TODO: This code have to be here to ensure the right usage of non-generic overloads of register methods.
              * TODO: If it is finally accepted then remove it from ServiceLocatorAutoRegistrationManager
             if (serviceImplementationType.IsAbstractEx() || !serviceType.IsAssignableFromEx(serviceImplementationType))
@@ -1022,10 +1027,19 @@ namespace Catel.IoC
                     var value = keyValuePair.Value;
 
                     var serviceInfo = new ServiceInfo(value.DeclaringType, key.Tag);
+                    if (_typesCurrentlyBeingExported.Contains(serviceInfo))
+                    {
+                        continue;
+                    }
+
                     if (!_registeredInstances.ContainsKey(serviceInfo) && IsTypeRegisteredAsSingleton(value.DeclaringType))
                     {
+                        _typesCurrentlyBeingExported.Add(serviceInfo);
+
                         // Resolving automatically creates an instance
                         ResolveTypeFromKnownContainer(value.DeclaringType, key.Tag);
+
+                        _typesCurrentlyBeingExported.Remove(serviceInfo);
                     }
                 }
             }

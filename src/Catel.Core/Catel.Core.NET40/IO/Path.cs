@@ -7,16 +7,19 @@
 namespace Catel.IO
 {
     using System;
+
+#if NET
     using System.IO;
     using System.Reflection;
 
     using Reflection;
+#endif
 
-	/// <summary>
+    /// <summary>
     /// Static class that implements some path methods
     /// </summary>
     public static class Path
-	{
+    {
 #if NET
         /// <summary>
 		/// Gets the application data directory for the company and product as defined the the assembly information of the entry assembly. 
@@ -67,37 +70,37 @@ namespace Catel.IO
 		}
 #endif
 
-		/// <summary>
-		/// Gets the name of the directory.
-		/// </summary>
-		/// <param name="path">The path to get the directory name from.</param>
-		/// <returns>The directory name.</returns>
+        /// <summary>
+        /// Gets the name of the directory.
+        /// </summary>
+        /// <param name="path">The path to get the directory name from.</param>
+        /// <returns>The directory name.</returns>
         /// <exception cref="ArgumentException">The <paramref name="path"/> is <c>null</c> or whitespace.</exception>
-		public static string GetDirectoryName(string path)
-		{
+        public static string GetDirectoryName(string path)
+        {
             Argument.IsNotNullOrWhitespace("path", path);
 
-			return GetParentDirectory(path);
-		}
+            return GetParentDirectory(path);
+        }
 
-		/// <summary>
-		/// Gets the name of the file.
-		/// </summary>
-		/// <param name="path">The path to get the file name from.</param>
-		/// <returns>The file name.</returns>
+        /// <summary>
+        /// Gets the name of the file.
+        /// </summary>
+        /// <param name="path">The path to get the file name from.</param>
+        /// <returns>The file name.</returns>
         /// <exception cref="ArgumentException">The <paramref name="path"/> is <c>null</c> or whitespace.</exception>
-		public static string GetFileName(string path)
-		{
+        public static string GetFileName(string path)
+        {
             Argument.IsNotNullOrWhitespace("path", path);
 
-			int lastSlashPosition = path.LastIndexOf(@"\");
-			if (lastSlashPosition == -1)
-			{
-				return path;
-			}
+            int lastSlashPosition = path.LastIndexOf(@"\");
+            if (lastSlashPosition == -1)
+            {
+                return path;
+            }
 
-			return path.Remove(0, lastSlashPosition + 1);
-		}
+            return path.Remove(0, lastSlashPosition + 1);
+        }
 
         /// <summary>
         /// Gets the parent directory.
@@ -113,13 +116,13 @@ namespace Catel.IO
 
             if (string.IsNullOrEmpty(path))
             {
-            	return parent;
+                return parent;
             }
 
             path = RemoveTrailingSlashes(path);
             if (!path.Contains(@"\"))
             {
-            	return parent;
+                return parent;
             }
 
             int lastSlashPosition = path.LastIndexOf(@"\");
@@ -130,7 +133,7 @@ namespace Catel.IO
             return parent;
         }
 
-	    /// <summary>
+        /// <summary>
         /// Returns a relative path string from a full path.
         /// <para />
         /// The path to convert. Can be either a file or a directory
@@ -150,7 +153,7 @@ namespace Catel.IO
         {
             Argument.IsNotNullOrWhitespace("fullPath", fullPath);
 
-#if !NETFX_CORE
+#if !NETFX_CORE && !PCL
             if (string.IsNullOrEmpty(basePath))
             {
                 basePath = Environment.CurrentDirectory;
@@ -160,11 +163,11 @@ namespace Catel.IO
             fullPath = RemoveTrailingSlashes(fullPath.ToLower());
             basePath = RemoveTrailingSlashes(basePath.ToLower());
 
-			// Check if the base path is really the full path (not just a subpath, for example "C:\MyTes" in "C:\MyTest")
-			string fullPathWithTrailingBackslash = AppendTrailingSlash(fullPath);
-			string basePathWithTrailingBackslash = AppendTrailingSlash(basePath);
+            // Check if the base path is really the full path (not just a subpath, for example "C:\MyTes" in "C:\MyTest")
+            string fullPathWithTrailingBackslash = AppendTrailingSlash(fullPath);
+            string basePathWithTrailingBackslash = AppendTrailingSlash(basePath);
 
-			if (fullPathWithTrailingBackslash.IndexOf(basePathWithTrailingBackslash) > -1)
+            if (fullPathWithTrailingBackslash.IndexOf(basePathWithTrailingBackslash) > -1)
             {
                 string result = fullPath.Replace(basePath, string.Empty);
                 if (result.StartsWith("\\"))
@@ -175,7 +178,7 @@ namespace Catel.IO
                 return result;
             }
 
-			string backDirs = string.Empty;
+            string backDirs = string.Empty;
             string partialPath = basePath;
             int index = partialPath.LastIndexOf("\\");
             while (index > 0)
@@ -196,7 +199,7 @@ namespace Catel.IO
                     else
                     {
                         // *** We're dealing with a file or a start path
-						return fullPath.Replace(partialPath + (fullPath == partialPath ? string.Empty : "\\"), backDirs);
+                        return fullPath.Replace(partialPath + (fullPath == partialPath ? string.Empty : "\\"), backDirs);
                     }
                 }
 
@@ -260,12 +263,13 @@ namespace Catel.IO
 
             if (path[path.Length - 1] == slash)
             {
-            	return path;
+                return path;
             }
 
             return path + slash;
         }
 
+#if !PCL
         /// <summary>
         /// Returns a combination of multiple paths.
         /// </summary>
@@ -273,25 +277,25 @@ namespace Catel.IO
         /// <returns>Combination of all the paths passed.</returns>
         public static string Combine(params string[] paths)
         {
-			string result = string.Empty;
+            string result = string.Empty;
 
             // Make sure we have any values
-			if (paths.Length == 0)
-			{
-				return string.Empty;
-			}
+            if (paths.Length == 0)
+            {
+                return string.Empty;
+            }
 
             if (paths.Length == 1)
             {
-            	return paths[0];
+                return paths[0];
             }
 
             for (int i = 0; i < paths.Length; i++)
             {
-				if (!string.IsNullOrEmpty(paths[i]))
-				{
-					result = System.IO.Path.Combine(result, paths[i]);
-				}
+                if (!string.IsNullOrEmpty(paths[i]))
+                {
+                    result = System.IO.Path.Combine(result, paths[i]);
+                }
             }
 
             return result;
@@ -306,14 +310,14 @@ namespace Catel.IO
         {
             string result = string.Empty;
 
-			if (urls.Length == 0)
-			{
-				return string.Empty;
-			}
+            if (urls.Length == 0)
+            {
+                return string.Empty;
+            }
 
             if (urls.Length == 1)
             {
-            	return ReplacePathSlashesByUrlSlashes(urls[0]);
+                return ReplacePathSlashesByUrlSlashes(urls[0]);
             }
 
             // Store first path (remove trailing slashes only since we want to support root urls)
@@ -333,6 +337,7 @@ namespace Catel.IO
 
             return ReplacePathSlashesByUrlSlashes(result);
         }
+#endif
 
         /// <summary>
         /// Replaces path slashes (\) by url slashes (/).

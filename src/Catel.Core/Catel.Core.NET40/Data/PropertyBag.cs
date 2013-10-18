@@ -134,7 +134,7 @@ namespace Catel.Data
 
             lock (_lockObject)
             {
-                if (!_properties.ContainsKey(propertyName) || !ObjectHelper.AreEqual(_properties[propertyName], value))
+                if (!_properties.ContainsKey(propertyName) || !ObjectHelper.AreEqualReferences(_properties[propertyName], value))
                 {
                     _properties[propertyName] = value;
 

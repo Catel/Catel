@@ -4,10 +4,10 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel
+namespace Catel.Core
 {
     using Catel.Data;
-
+    using Catel.Runtime.Serialization;
     using ExceptionHandling;
     using IoC;
     using Messaging;
@@ -31,6 +31,17 @@ namespace Catel
             serviceLocator.RegisterInstance<IMessageMediator>(MessageMediator.Default);
 
             serviceLocator.RegisterTypeIfNotYetRegistered<IValidatorProvider, AttributeValidatorProvider>();
+
+#if NET
+            serviceLocator.RegisterType<IBinarySerializer, BinarySerializer>();
+#endif
+
+            serviceLocator.RegisterType<IDataContractNameResolver, DataContractNameResolver>();
+            serviceLocator.RegisterType<IDataContractSerializerFactory, DataContractSerializerFactory>();
+            serviceLocator.RegisterType<IXmlSerializer, XmlSerializer>();
+            serviceLocator.RegisterType<ISerializationManager, SerializationManager>();
+
+            serviceLocator.RegisterType<IModelEqualityComparer, ModelEqualityComparer>();
         }
     }
 }

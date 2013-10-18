@@ -58,14 +58,14 @@ Public Class $name$
 	''' <summary>
 	''' Validates the fields.
 	''' </summary>
-	Protected Overrides Sub ValidateFields()
+	Protected Overrides Sub ValidateFields(validationResults as List<IFieldValidationResult>)
 		' TODO: Implement any field validation of this object. Simply set any error by using the SetFieldError method
 	End Sub
 
 	''' <summary>
 	''' Validates the business rules.
 	''' </summary>
-	Protected Overrides Sub ValidateBusinessRules()
+	Protected Overrides Sub ValidateBusinessRules(validationResults as List<IBusinessRuleValidationResult>)
 		' TODO: Implement any business rules of this object. Simply set any error by using the SetBusinessRuleError method
 	End Sub
 	#End Region

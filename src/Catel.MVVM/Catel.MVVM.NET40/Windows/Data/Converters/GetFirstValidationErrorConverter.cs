@@ -41,7 +41,18 @@ namespace Catel.Windows.Data.Converters
                 return string.Empty;
             }
 
-            return (errorCollection.Count > 0) ? errorCollection.First().ErrorContent.ToString() : string.Empty;
+            var firstError = errorCollection.FirstOrDefault();
+            if (firstError == null)
+            {
+                return string.Empty;
+            }
+
+            if (firstError.ErrorContent == null)
+            {
+                return string.Empty;
+            }
+
+            return firstError.ErrorContent.ToString();
         }
 	}
 }

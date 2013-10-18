@@ -36,6 +36,27 @@ namespace Catel.MVVM.Services
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         #endregion
 
+        #region Fields
+        private readonly IViewManager _viewManager;
+        private readonly ISaveFileService _saveFileService;
+        #endregion
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ViewExportService" /> class.
+        /// </summary>
+        /// <param name="viewManager">The view manager.</param>
+        /// <param name="saveFileService">The save file service.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewManager" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="saveFileService" /> is <c>null</c>.</exception>
+        public ViewExportService(IViewManager viewManager, ISaveFileService saveFileService)
+        {
+            Argument.IsNotNull(() => viewManager);
+            Argument.IsNotNull(() => saveFileService);
+
+            _viewManager = viewManager;
+            _saveFileService = saveFileService;
+        }
+
         #region IViewExportService Members
         /// <summary>
         /// Exports the <paramref name="viewModel" />'s view to the print or clipboard or file.
@@ -51,8 +72,7 @@ namespace Catel.MVVM.Services
         {
             Argument.IsNotNull(() => viewModel);
 
-            var viewManager = GetService<IViewManager>();
-            var view = viewManager.GetViewsOfViewModel(viewModel).OfType<UIElement>().FirstOrDefault();
+            var view = _viewManager.GetViewsOfViewModel(viewModel).OfType<UIElement>().FirstOrDefault();
             if (view == null)
             {
                 string message = string.Format(CultureInfo.InvariantCulture, "There no an active view for this view model of type '{0}'", viewModel.GetType().FullName);
@@ -111,11 +131,9 @@ namespace Catel.MVVM.Services
         /// <param name="bitmap">The bitmap.</param>
         private void SaveToFile(BitmapSource bitmap)
         {
-            var saveFileService = GetService<ISaveFileService>();
-
 #if SILVERLIGHT
-            saveFileService.Filter = "BMP (*.bmp) |*.bmp";
-            using (var stream = saveFileService.DetermineFile())
+            _saveFileService.Filter = "BMP (*.bmp) |*.bmp";
+            using (var stream = _saveFileService.DetermineFile())
             {
                 if (stream != null)
                 {
@@ -125,10 +143,10 @@ namespace Catel.MVVM.Services
                 }
             }
 #else
-            saveFileService.Filter = "PNG (*.png) |*.png";
-            if (saveFileService.DetermineFile())
+            _saveFileService.Filter = "PNG (*.png) |*.png";
+            if (_saveFileService.DetermineFile())
             {
-                string fileName = saveFileService.FileName;
+                string fileName = _saveFileService.FileName;
                 using (var stream = new FileStream(fileName, FileMode.Create))
                 {
                     var encoder = new PngBitmapEncoder { Interlace = PngInterlaceOption.On };

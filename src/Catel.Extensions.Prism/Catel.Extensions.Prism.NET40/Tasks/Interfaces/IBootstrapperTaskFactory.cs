@@ -18,96 +18,108 @@ namespace Catel.Tasks
         /// Creates the create logger task.
         /// </summary>
         /// <param name="action">The action to execute.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        ITask CreateCreateLoggerTask(Action action);
+        ITask CreateCreateLoggerTask(Action action, bool dispatch = false);
 
         /// <summary>
         /// Creates the create module catalog task.
         /// </summary>
         /// <param name="action">The action to execute.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        ITask CreateCreateModuleCatalogTask(Action action);
+        ITask CreateCreateModuleCatalogTask(Action action, bool dispatch = false);
 
         /// <summary>
         /// Creates the configure module catalog task.
         /// </summary>
         /// <param name="action">The action to execute.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        ITask CreateConfigureModuleCatalogTask(Action action);
+        ITask CreateConfigureModuleCatalogTask(Action action, bool dispatch = false);
 
         /// <summary>
         /// Creates the create service locator container task.
         /// </summary>
         /// <param name="action">The action to execute.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        ITask CreateCreateServiceLocatorContainerTask(Action action);
+        ITask CreateCreateServiceLocatorContainerTask(Action action, bool dispatch = false);
 
         /// <summary>
         /// Creates the configure service locator container task.
         /// </summary>
         /// <param name="action">The action to execute.</param>
+        /// /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        ITask CreateConfigureServiceLocatorContainerTask(Action action);
+        ITask CreateConfigureServiceLocatorContainerTask(Action action, bool dispatch = false);
 
         /// <summary>
         /// Creates the configure service locator task.
         /// </summary>
         /// <param name="action">The action to execute.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        ITask CreateConfigureServiceLocatorTask(Action action);
+        ITask CreateConfigureServiceLocatorTask(Action action, bool dispatch = false);
 
         /// <summary>
         /// Creates the configure region adapters task.
         /// </summary>
         /// <param name="action">The action to execute.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        ITask CreateConfigureRegionAdaptersTask(Action action);
+        ITask CreateConfigureRegionAdaptersTask(Action action, bool dispatch = false);
 
         /// <summary>
         /// Creates the configure default region behaviors task.
         /// </summary>
         /// <param name="action">The action to execute.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        ITask CreateConfigureDefaultRegionBehaviorsTask(Action action);
+        ITask CreateConfigureDefaultRegionBehaviorsTask(Action action, bool dispatch = false);
 
         /// <summary>
         /// Creates the register framework exception types task.
         /// </summary>
         /// <param name="action">The action to execute.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        ITask CreateRegisterFrameworkExceptionTypesTask(Action action);
+        ITask CreateRegisterFrameworkExceptionTypesTask(Action action, bool dispatch = false);
 
         /// <summary>
         /// Creates the create shell task.
         /// </summary>
         /// <param name="action">The action to execute.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        ITask CreateCreateShellTask(Action action);
+        /// <exception cref="ArgumentNullException">The <paramref name="action" /> is <c>null</c>.</exception>
+        ITask CreateCreateShellTask(Action action, bool dispatch = true);
 
         /// <summary>
         /// Creates the initialize modules task.
         /// </summary>
         /// <param name="action">The action to execute.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        ITask CreateInitializeModulesTask(Action action);
+        ITask CreateInitializeModulesTask(Action action, bool dispatch = true);
 
         /// <summary>
         /// Creates the initializing shell task.
         /// </summary>
         /// <param name="action">The action to execute.</param>
+        /// <param name="dispatch">if set to <c>true</c>, this action is dispatched to the UI thread.</param>
         /// <returns>The task.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        ITask CreateInitializingShellTask(Action action);
+        ITask CreateInitializingShellTask(Action action, bool dispatch = true);
     }
 }

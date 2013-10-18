@@ -344,10 +344,10 @@ namespace Catel.Test.Data
                 // IsDirty change 2
                 model.ClearIsDirty();
 
-                // IsDirty change 3
+                // IsDirty change 3 + 4 (Name change back to null, and restoreof IsDirty)
                 ((IEditableObject)model).CancelEdit();
 
-                Assert.AreEqual(2, isDirtyChangedCalls);
+                Assert.AreEqual(4, isDirtyChangedCalls);
             }
         }
     }

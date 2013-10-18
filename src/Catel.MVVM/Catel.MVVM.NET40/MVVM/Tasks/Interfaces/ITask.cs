@@ -15,6 +15,11 @@ namespace Catel.MVVM.Tasks
     {
         #region Properties
         /// <summary>
+        /// Occurs when a property of this object has changed.
+        /// </summary>
+        event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
         /// Gets the name.
         /// </summary>
         string Name { get; }
@@ -30,10 +35,14 @@ namespace Catel.MVVM.Tasks
         int Percentage { get; }
 
         /// <summary>
-        /// Occurs when a property of this object has changed.
+        /// Indicates whether the task progress is indeterminate. 
         /// </summary>
-        event PropertyChangedEventHandler PropertyChanged;
+        bool IsIndeterminate { get; }
 
+        /// <summary>
+        /// Gets or sets whether this task should automatically be dispatched to the UI thread.
+        /// </summary>
+        bool AutomaticallyDispatch { get; set; }
         #endregion
 
         #region Methods

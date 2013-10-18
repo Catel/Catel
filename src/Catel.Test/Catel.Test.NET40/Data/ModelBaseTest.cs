@@ -203,7 +203,7 @@
         public void CreateAndVerifyPropertiesOnInheritedClass()
         {
             // Create extend ini entry
-            ExtendedIniEntry extendedIniEntry = new ExtendedIniEntry();
+            var extendedIniEntry = new ExtendedIniEntry();
 
             // Try to set original properties
             extendedIniEntry.Value = "MyValue";

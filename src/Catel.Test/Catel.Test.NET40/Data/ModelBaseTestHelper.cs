@@ -1099,12 +1099,7 @@ namespace Catel.Test.Data
         /// <summary>
         /// Initializes a new object from scratch.
         /// </summary>
-#if SILVERLIGHT
-        public
-#else
-        private
-#endif
- Parent()
+        public Parent()
         {
         }
 

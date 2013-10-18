@@ -7,6 +7,7 @@
 namespace Catel.Test.Collections
 {
     using System;
+    using System.Linq;
     using Catel.Collections;
 
 #if NETFX_CORE
@@ -17,6 +18,35 @@ namespace Catel.Test.Collections
 
     public class FastObservableCollectionFacts
     {
+        [TestClass]
+        public class TheIsDirtyProperty
+        {
+            [TestMethod]
+            public void ReturnsFalseWhenNoPendingNotificationsAreListed()
+            {
+                var fastCollection = new FastObservableCollection<int>();
+
+                fastCollection.Add(1);
+
+                Assert.IsFalse(fastCollection.IsDirty);
+            }
+
+            [TestMethod]
+            public void ReturnsTrueWhenPendingNotificationsAreListed()
+            {
+                var fastCollection = new FastObservableCollection<int>();
+
+                using (fastCollection.SuspendChangeNotifications())
+                {
+                    fastCollection.Add(1);
+
+                    Assert.IsTrue(fastCollection.IsDirty);
+                }
+
+                Assert.IsFalse(fastCollection.IsDirty);
+            }
+        }
+
         [TestClass]
         public class TheAddRangeMethod
         {
@@ -95,6 +125,27 @@ namespace Catel.Test.Collections
                 }
 
                 Assert.AreEqual(1, counter);
+            }
+        }
+
+        [TestClass]
+        public class SupportsLinq
+        {
+            [TestMethod]
+            public void ReturnsSingleElementUsingLinq()
+            {
+                var fastCollection = new FastObservableCollection<int>();
+
+                for (int i = 0; i < 43; i++)
+                {
+                    fastCollection.Add(i);
+                }
+
+                var allInts = (from x in fastCollection
+                               where x == 42
+                               select x).FirstOrDefault();
+
+                Assert.AreEqual(42, allInts);
             }
         }
     }

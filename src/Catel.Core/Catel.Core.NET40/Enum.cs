@@ -48,11 +48,11 @@ namespace Catel
         public static TEnum ConvertFromOtherEnumValue(object inputEnumValue)
         {
             Argument.IsNotNull("inputEnumValue", inputEnumValue);
-            Argument.IsOfType("inputEnumValue", inputEnumValue, typeof (Enum));
+            Argument.IsOfType("inputEnumValue", inputEnumValue, typeof(Enum));
 
             string value = inputEnumValue.ToString();
 
-            return (TEnum) Enum.Parse(typeof (TEnum), value, true);
+            return (TEnum)Enum.Parse(typeof(TEnum), value, true);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace Catel
         /// <returns>The name of the value.</returns>
         public static string GetName(int value)
         {
-            return Enum.GetName(typeof (TEnum), value);
+            return Enum.GetName(typeof(TEnum), value);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Catel
         /// <returns>The name of the value.</returns>
         public static string GetName(long value)
         {
-            return Enum.GetName(typeof (TEnum), value);
+            return Enum.GetName(typeof(TEnum), value);
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace Catel
         /// <returns>Array of names of an enum.</returns>
         public static string[] GetNames()
         {
-            var enumType = typeof (TEnum);
+            var enumType = typeof(TEnum);
 
             var fields = from field in GetFields(enumType)
                          select field.Name;
@@ -95,7 +95,7 @@ namespace Catel
         /// <returns><see cref="List{TEnum}"/> of values.</returns>
         public static List<TEnum> GetValues()
         {
-            var enumType = typeof (TEnum);
+            var enumType = typeof(TEnum);
 
             var fields = GetFields(enumType);
 
@@ -118,6 +118,17 @@ namespace Catel
         }
 
         /// <summary>
+        /// Parses the specified input.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <param name="ignoreCase">if set to <c>true</c>, the case should be ignored.</param>
+        /// <returns>The enum value.</returns>
+        public static TEnum Parse(string input, bool ignoreCase = false)
+        {
+            return (TEnum)Enum.Parse(typeof(TEnum), input, ignoreCase);
+        }
+
+        /// <summary>
         /// Tries to parse an enum value name.
         /// </summary>
         /// <param name="input">The input.</param>
@@ -126,20 +137,20 @@ namespace Catel
         public static bool TryParse(string input, out TEnum? result)
         {
             result = null;
-            if (!Enum.IsDefined(typeof (TEnum), input))
+            if (!Enum.IsDefined(typeof(TEnum), input))
             {
                 return false;
             }
 
             try
             {
-                result = (TEnum)Enum.Parse(typeof(TEnum), input, true);    
+                result = (TEnum)Enum.Parse(typeof(TEnum), input, true);
             }
             catch (Exception)
             {
                 return false;
             }
-            
+
             return true;
         }
 
@@ -157,7 +168,7 @@ namespace Catel
                 // input not found in the Enum, fill the out parameter with the first item from the enum
                 var values = GetValues().ToArray();
 
-                result = (TEnum) values.GetValue(values.GetLowerBound(0));
+                result = (TEnum)values.GetValue(values.GetLowerBound(0));
                 return false;
             }
 
@@ -172,7 +183,7 @@ namespace Catel
         /// <returns>The name of the value.</returns>
         private static string GetName(TEnum value)
         {
-            return Enum.GetName(typeof (TEnum), value);
+            return Enum.GetName(typeof(TEnum), value);
         }
         #endregion
 
@@ -200,7 +211,7 @@ namespace Catel
             /// <returns>List containing bindable enums based on the format name.</returns>
             public static IList<IBindableEnum<TEnum>> CreateList(FormatEnumName formatName = null)
             {
-                Array values = Enum.GetValues(typeof (TEnum));
+                Array values = Enum.GetValues(typeof(TEnum));
 
                 return (from TEnum value in values
                         select formatName != null ? new InternalBindableEnum(value, formatName(value)) : new InternalBindableEnum(value)).Cast<IBindableEnum<TEnum>>().ToList();
@@ -356,9 +367,9 @@ namespace Catel
             /// <returns>Flags without the flag that should be cleared.</returns>
             public static TEnum ClearFlag(int flags, int flagToClear)
             {
-// ReSharper disable RedundantCast
-                return ClearFlag((long) flags, (long) flagToClear);
-// ReSharper restore RedundantCast
+                // ReSharper disable RedundantCast
+                return ClearFlag((long)flags, (long)flagToClear);
+                // ReSharper restore RedundantCast
             }
 
             /// <summary>
@@ -374,7 +385,7 @@ namespace Catel
                     flags &= ~flagToClear;
                 }
 
-                return (TEnum) Enum.ToObject(typeof (TEnum), flags);
+                return (TEnum)Enum.ToObject(typeof(TEnum), flags);
             }
 
             /// <summary>
@@ -483,9 +494,9 @@ namespace Catel
             /// <returns>Flags with the flag that should be set.</returns>
             public static TEnum SetFlag(int flags, int flagToSet)
             {
-// ReSharper disable RedundantCast
-                return SetFlag((long) flags, (long) flagToSet);
-// ReSharper restore RedundantCast
+                // ReSharper disable RedundantCast
+                return SetFlag((long)flags, (long)flagToSet);
+                // ReSharper restore RedundantCast
             }
 
             /// <summary>
@@ -501,7 +512,7 @@ namespace Catel
                     flags |= flagToSet;
                 }
 
-                return (TEnum) Enum.ToObject(typeof (TEnum), flags);
+                return (TEnum)Enum.ToObject(typeof(TEnum), flags);
             }
 
             /// <summary>
@@ -545,9 +556,9 @@ namespace Catel
             /// <returns>Flags with the flag swapped that should be swapped.</returns>
             public static TEnum SwapFlag(int flags, int flagToSwap)
             {
-// ReSharper disable RedundantCast
-                return SwapFlag((long) flags, (long) flagToSwap);
-// ReSharper restore RedundantCast
+                // ReSharper disable RedundantCast
+                return SwapFlag((long)flags, (long)flagToSwap);
+                // ReSharper restore RedundantCast
             }
 
             /// <summary>

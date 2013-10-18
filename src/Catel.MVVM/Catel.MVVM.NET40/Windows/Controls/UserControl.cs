@@ -16,6 +16,7 @@ namespace Catel.Windows.Controls
     using MVVM;
 
 #if NETFX_CORE
+    using global::Windows.UI.Xaml;
     using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
 #else
     using UIEventArgs = System.EventArgs;
@@ -58,14 +59,14 @@ namespace Catel.Windows.Controls
         #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private static readonly IViewModelLocator _viewModelLocator = ServiceLocator.Default.ResolveType<IViewModelLocator>();
+        private static readonly IViewModelLocator ViewModelLocator = ServiceLocator.Default.ResolveType<IViewModelLocator>();
 
         private readonly UserControlLogic _logic;
         #endregion
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:System.Windows.FrameworkElement"/> class.
+        /// Initializes a new instance of the <see cref="UserControl"/> class.
         /// </summary>
         /// <remarks>
         /// This method is required for design time support.
@@ -89,7 +90,7 @@ namespace Catel.Windows.Controls
             {
                 Log.Debug("GetViewModelType() returned null, using the ViewModelLocator to resolve the view model");
 
-                viewModelType = _viewModelLocator.ResolveViewModel(GetType());
+                viewModelType = ViewModelLocator.ResolveViewModel(GetType());
                 if (viewModelType == null)
                 {
                     const string error = "The view model of the view could not be resolved. Use either the GetViewModelType() method or IViewModelLocator";

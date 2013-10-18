@@ -36,7 +36,7 @@ using System.Runtime.CompilerServices;
 // by using the '*' as shown below:
 
 [assembly: AssemblyVersion("3.7")]
-[assembly: AssemblyInformationalVersion("3.7, Nightly, Released on 2013-07-08 19:28")]
+[assembly: AssemblyInformationalVersion("3.7, Nightly, Released on 2013-09-01 11:53")]
 
 #if DEBUG
 
@@ -121,12 +121,16 @@ using System.Runtime.CompilerServices;
 #else
 [assembly: InternalsVisibleTo("Catel.Core")]
 [assembly: InternalsVisibleTo("Catel.MVVM")]
+[assembly: InternalsVisibleTo("Catel.Mvc")]
 
 [assembly: InternalsVisibleTo("Catel.Extensions.Controls")]
 [assembly: InternalsVisibleTo("Catel.Extensions.CSLA")]
 [assembly: InternalsVisibleTo("Catel.Extensions.Data")]
+[assembly: InternalsVisibleTo("Catel.Extensions.DynamicObjects")]
 [assembly: InternalsVisibleTo("Catel.Extensions.EntityFramework5")]
 [assembly: InternalsVisibleTo("Catel.Extensions.FluentValidation")]
+[assembly: InternalsVisibleTo("Catel.Extensions.Interception")]
+[assembly: InternalsVisibleTo("Catel.Extensions.Memento")]
 [assembly: InternalsVisibleTo("Catel.Extensions.Prism")]
 
 [assembly: InternalsVisibleTo("Catel.Test")]

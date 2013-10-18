@@ -5,12 +5,13 @@ What steps to perform when releasing:
     * Version numbers in final builder
     * History.txt
     * SolutionAssemblyInfo.cs
-3)  Create download on catelproject.com (with own download category)
-4)  Create release page under "Download" section
+3)  Create release on github (https://github.com/Catel/Catel/releases)
+4)  Create release page under "Download" section on catelproject.com
 5)  Release via Codeplex => just a forwarding release
 6)  Release version in jira
 7)  Update docs on confluence (create copy of LATEST space)
     See https://confluence.atlassian.com/display/CONFKB/Copy+or+Rename+a+Space+in+Confluence
-8)  Write blog post on catelproject.com
-9)  Share via Twitter
-10) Share via LinkedIn
+8)  Export the actual docs to PDF and make it available on github (see https://catelproject.atlassian.net/browse/CTL-170)
+9)  Write blog post on catelproject.com
+10) Share via Twitter
+11) Share via LinkedIn

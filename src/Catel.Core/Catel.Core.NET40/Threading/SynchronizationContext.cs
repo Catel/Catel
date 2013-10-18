@@ -38,17 +38,11 @@ namespace Catel.Threading
         #region Methods
 
         /// <summary>
-        /// This method execute the <paramref name="code"/> into a exclusive lock.
+        /// This method execute the <paramref name="code" /> into a exclusive lock.
         /// </summary>
-        /// <remarks>
-        /// If the lock is acquired before call this method, then the <paramref name="code"/> execution is delayed until the lock would released. 
-        /// </remarks>
-        /// <param name="code">
-        /// The code to be executed.
-        /// </param>
-        /// <exception cref="ArgumentNullException">
-        /// If <paramref name="code"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="code">The code to be executed.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
+        /// <remarks>If the lock is acquired before call this method, then the <paramref name="code" /> execution is delayed until the lock would released.</remarks>
         public void Execute(Action code)
         {
             Argument.IsNotNull("code", code);
@@ -69,22 +63,14 @@ namespace Catel.Threading
         }
 
         /// <summary>
-        /// This method enqueue the execution of the <paramref name="code"/> into a exclusive lock.
+        /// This method enqueue the execution of the <paramref name="code" /> into a exclusive lock.
         /// </summary>
-        /// <remarks>
-        /// If the lock is acquired before call this method, then the <paramref name="code"/> execution is delayed until the lock would released, without blocking the current thread.
-        /// This method relay the execution of the code into an instance of <see cref="BackgroundWorker"/>.
-        /// </remarks>
-        /// <param name="code">
-        /// The code to be executed.
-        /// </param>
-        /// <param name="runWorkerCompletedEventHandler">
-        /// Method that will handle the RunWorkerCompleted event of a <see cref="BackgroundWorker"/> class. 
-        ///  It occurs when the background operation has completed, has been canceled, or has raised an exception. 
-        /// </param>
-        /// <exception cref="ArgumentNullException">
-        /// If <paramref name="code"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="code">The code to be executed.</param>
+        /// <param name="runWorkerCompletedEventHandler">Method that will handle the RunWorkerCompleted event of a <see cref="BackgroundWorker" /> class.
+        /// It occurs when the background operation has completed, has been canceled, or has raised an exception.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
+        /// <remarks>If the lock is acquired before call this method, then the <paramref name="code" /> execution is delayed until the lock would released, without blocking the current thread.
+        /// This method relay the execution of the code into an instance of <see cref="BackgroundWorker" />.</remarks>
         public void Enqueue(Action code, RunWorkerCompletedEventHandler runWorkerCompletedEventHandler = null)
         {
             Argument.IsNotNull("code", code);
@@ -104,25 +90,15 @@ namespace Catel.Threading
         }
 
         /// <summary>
-        /// This method execute the <paramref name="code"/> into a exclusive lock and returns a value.
+        /// This method execute the <paramref name="code" /> into a exclusive lock and returns a value.
         /// </summary>
-        /// <remarks>
-        /// If the lock is acquired before call this method, then the <paramref name="code"/> execution is delayed until the lock would released, blocking the current thread. 
-        /// This method relay the execution of the code into an instance of <see cref="BackgroundWorker"/>.
-        /// </remarks>
-        /// <param name="code">
-        /// The code to be executed.
-        /// </param>
-        /// <param name="runWorkerCompletedEventHandler">
-        /// Method that will handle the RunWorkerCompleted event of a <see cref="BackgroundWorker"/> class. 
-        ///  It occurs when the background operation has completed, has been canceled, or has raised an exception. 
-        /// </param>
-        /// <typeparam name="T">
-        /// The result type.
-        /// </typeparam>
-        /// <exception cref="ArgumentNullException">
-        /// If <paramref name="code"/> is <c>null</c>.
-        /// </exception>
+        /// <typeparam name="T">The result type.</typeparam>
+        /// <param name="code">The code to be executed.</param>
+        /// <param name="runWorkerCompletedEventHandler">Method that will handle the RunWorkerCompleted event of a <see cref="BackgroundWorker" /> class.
+        /// It occurs when the background operation has completed, has been canceled, or has raised an exception.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
+        /// <remarks>If the lock is acquired before call this method, then the <paramref name="code" /> execution is delayed until the lock would released, blocking the current thread.
+        /// This method relay the execution of the code into an instance of <see cref="BackgroundWorker" />.</remarks>
         public void Enqueue<T>(Func<T> code, RunWorkerCompletedEventHandler runWorkerCompletedEventHandler = null)
         {
             Argument.IsNotNull("code", code);
@@ -142,23 +118,13 @@ namespace Catel.Threading
         }
 
         /// <summary>
-        /// This method execute the <paramref name="code"/> into a exclusive lock and returns a value.
+        /// This method execute the <paramref name="code" /> into a exclusive lock and returns a value.
         /// </summary>
-        /// <remarks>
-        /// If the lock is acquired before call this method, then the <paramref name="code"/> execution is delayed until the lock would released, blocking the current thread. 
-        /// </remarks>
-        /// <param name="code">
-        /// The code to be executed.
-        /// </param>
-        /// <typeparam name="T">
-        /// The result type.
-        /// </typeparam>
-        /// <returns>
-        /// The result of execute the code.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">
-        /// If <paramref name="code"/> is <c>null</c>.
-        /// </exception>
+        /// <typeparam name="T">The result type.</typeparam>
+        /// <param name="code">The code to be executed.</param>
+        /// <returns>The result of execute the code.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
+        /// <remarks>If the lock is acquired before call this method, then the <paramref name="code" /> execution is delayed until the lock would released, blocking the current thread.</remarks>
         public T Execute<T>(Func<T> code)
         {
             Argument.IsNotNull("code", code);

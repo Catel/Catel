@@ -9,8 +9,8 @@ Catel history
 For more information about issues or new feature requests, please visit:
 
 Project website: http://www.catelproject.com
-Issue tracker:   https://catelproject.atlassian.net
-Documentation:   https://catelproject.atlassian.net/wiki/display/CTL
+Issue tracker:   http://www.catelproject.com/support/issue-tracker
+Documentation:   http://www.catelproject.com/support/documentation
 
 **********************************************************
 
@@ -20,37 +20,106 @@ Version 3.7
 
 Release date:
 =============
-2013/xx/xx
+2013/10/18
 
 Added/fixed (BREAKING CHANGES):
 ===============================
+(*) CTL-4 Completely rewritten the serialization engine. This means that the logic is now extracted from the 
+    ModelBase into separate serializers which can be easily customized. It should also fix a few minor issues
+    that were occurring due to the complexity of the old system
 (*) Moved memento namespace to a separate extension (Catel.Extensions.Memento) to make the core more lightweight
+(*) Change UpdateStatus method signature of ITaskProgressTracker
 (*) IEntityRepository new returns an IQueryable instead of IEnumerable on retrieval methods
+(-) CTL-4 Removed the SerializationHelper (now moved into separate classes registered in the ServiceLocator)
 
 Added/fixed:
 ============
+(+) CTL-5 Added Interception extension to create runtime interception of methods and properties
 (+) CTL-6 Dependency injection is now supported in child view models. This makes it possible to combine both model
     injection with auto-completion from services registered in the ServiceLocator
 (+) CTL-7 Added support for empty cell in the StackGrid control
 (+) CTL-26 Added IQueryable<T>.Include extension so it is easier to include properties in an EF query
+(+) CTL-39 Added IStartUpInfoProvider to allow the access to information such as InitParams (SL) or Arguments (NET) 
+    from any application point
+(+) CTL-58 Automatic de/serialization of specified fields within ModelBase using the IncludeInSerialization and
+    ExcludeFromSerialization attributes which also work on regular properties and fields
+(+) CTL-99 Added extensions methods for the IViewModelManager to allow the closing of all view models that match a 
+    specified predicate
 (+) CTL-111 Added BootstrapperTaskFactory to allow customization of the bootstrapper tasks for prism. Also added
     a lot of events to the BootstrapperBase to allow fine-grained control without having to derive a custom bootstrapper
 (+) CTL-113 Added untyped expression overload for PropertyHelper.GetPropertyName
 (+) CTL-118 Added support for Portable Class Library (PCL)
+(+) CTL-127 Added DbContextExtensions to set the isolation level of a DbContext
+(+) CTL-129 Added BatchLogListenerBase to write log events in configurable batches
+(+) CTL-130 Added FileLogListener which writes to a log file in batches
+(+) CTL-135 Added TaskCommand to Catel.MVVM (NET45, WIN80 and WP8 only)
+(+) CTL-139 Added DynamicObjects extension
+(+) CTL-152 Added MementoService.IsEnabled to temporarily disable addition of batches and actions
+(+) CTL-153 Added GetChildrenViewModels to IViewModelManager to allow retrieving all alive children view models instances of 
+    a specified view model
+(+) CTL-154 Added DependencyResolver and DependencyResolverManager
+(+) CTL-167 Implemented SafeDirectoryModuleCatalog in Extensions.Prism because the default Prism directory catalog is not safe
+(+) CTL-171 Added ReferenceManager to create a dictionary of references and unique identifiers
+(+) CTL-172 Added ScopeManager to create custom scopes for any objects
+(+) CTL-175 It is now possible to customize and replace of IoC components (for example, to use an external IoC container)
+(+) CTL-178 Added possibility to implement a custom the ModelEqualityComparer. It can be overridden by instance (setting
+    the EqualityComparer) or for all models (registering it in the ServiceLocator)
+(+) Added extension method for ISplashScreenService for Prism to show progress control in a region
+(+) Added some additionnals members in IViewManager.
+(+) Added support to Commit enqueued tasks using an existing instance view model for SplashScreenService
+(+) Added RegisterViewWithRegion<TView> method extension for IRegionManager to easily register a view type for a region
+(*) CTL-11 IOpenFileService and ISaveFileService for NET40 and NET45 now implement all FileDialog properties that are
+    available. The ISelectDirectorService no long implements interface IFileSupport
 (*) CTL-117 Title property on ViewModelBase now has a setter as well which implements INotifyPropertyChanged
+(*) CTL-126 Upgrade support for FluentValidation to 4.0.0.1
+(*) CTL-151 Marked GetService on ViewModelBase and ServiceBase as obsolete => use dependency injection instead
+(*) CTL-168 Buffering in Exception Handling so multiple exceptions can be throttled to prevent spamming
+(*) CTL-187 Access to PropertyDataManager is now public to query properties of types
+(*) CTL-194 ServiceLocatorRegistration attribute must be able to directly instantiate
+(*) CTL-195 ServiceLocator.RegisterType with interface type should throw clear exception
+(*) Changed the returned type of IViewModelManager.GetFirstOrDefaultInstance to the specified view model type
+(*) Improved GetFromCacheOrFetch performance avoiding the serialization of multiples threads calls with different keys
 (x) CTL-103 Fixed issue where WindowLogic could not correctly close a non-modal dialog in WPF
 (x) CTL-108 Fixed issues with WeakEventListeners and WinRT
 (x) CTL-112 Fixed issue where ViewToViewModel mappings did not work in WPF
 (x) CTL-116 Fixed issue where some referenced assemblies cause Catel to break the designer in Windows 8.1 apps
+(x) CTL-124 Fixed issue in PropertyBag where it checked whether the old value was equal to the new value. This could
+    cause a StackOverflow when 2 different instances were equal (but not the same reference). The PropertyBag now checks
+    whether the values are equal by reference
+(x) CTL-128 Problem with navigation in WinRT apps
+(x) CTL-132 Fixed bug where LinkLabel.Command actually returned the CommandParameter
+(x) CTL-141 'ResourceMap Not Found' in WIN80 project
+(x) CTL-143 [WIN80] UseControl content change subscription does not work
+(x) CTL-144 ServiceLocator exporting might cause CircularDependencyException
+(x) CTL-147 GetFirstValidationErrorConverter might throw NullReferenceException
+(x) CTL-148 NumberTextBox behavior no longer allows pasting of text without numeric values
+(x) CTL-156 PleaseWaitService.Push doesn't show correct message
+(x) CTL-176 Fixed issue in TypeHelper.GetTypeName for generic types where the inner types would not be handled
+(x) CTL-177 TypeFactory scoping too strict to allow inner type construction. The TypeRequestPath now removes types from the
+    path when they are successfully instantiated to provide a better and less strict scoping mechanism
+(x) CTL-179 Fixed issue when Modifiers="None" was used on behaviors (default value), pressing SHIFT and a character wouldn't
+    trigger the events
+(x) CTL-182 Fixed memory leak in nested view models and view models that had SupportIEditableObject set to false
+(x) CTL-185 Unloading a view via UserControlLogic might resolve in memory leaks
+(x) CTL-186 ViewModelPropertyDescriptor not respect the custom attribute, ViewModelPropertyDescriptor.Attributes.Count always 0
+(x) CTL-190 TypeCache throws exception when same non-existing late-bound type is queried twice
+(x) CTL-193 Unable to create catel window in seperate thread
+(x) CTL-197 Behaviors no longer handle logic in design mode so properties will never throw exceptions at design time
+(x) CTL-198 Exception on FieldValidationResult.CreateError when validate formatting string contains braces
+(x) Unloading a view via UserControlLogic might resolve in memory leaks
 (x) Fixed Drag and Drop behavior when the drop position is less then the initial item's position
+(x) Ensured the value of Owner property of Shell to NULL in order to avoid the application close  when the SplashScreenService done
+(x) Ensured Bootstrapper UI tasks calls using DispatcherService
+(x) Removed the usage of the DispatcherService to execute a task in SplashScreenService to allow smoothly notification 
+    of the task progress
 
 To-do:
 ======
-See https://catelproject.atlassian.net
+See http://www.catelproject.com/support/issue-tracker
 
 Known issues:
 =============
-See https://catelproject.atlassian.net
+See http://www.catelproject.com/support/issue-tracker
 
 **********************************************************
 

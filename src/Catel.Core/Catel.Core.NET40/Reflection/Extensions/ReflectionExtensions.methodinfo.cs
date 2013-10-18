@@ -11,7 +11,7 @@ namespace Catel.Reflection
     using System;
     using System.Reflection;
 
-#if NETFX_CORE || WP8
+#if NETFX_CORE
     using System.Linq;
 #endif
 
@@ -20,21 +20,32 @@ namespace Catel.Reflection
     /// </summary>
     public static partial class ReflectionExtensions
     {
-        public static object GetCustomAttributeEx(this MethodInfo methodInfo, Type attributeType, bool inherit)
+        public static Attribute GetCustomAttributeEx(this MethodInfo methodInfo, Type attributeType, bool inherit)
         {
             var attributes = GetCustomAttributesEx(methodInfo, attributeType, inherit);
             return (attributes.Length > 0) ? attributes[0] : null;
         }
 
-        public static object[] GetCustomAttributesEx(this MethodInfo methodInfo, Type attributeType, bool inherit)
+        public static Attribute[] GetCustomAttributesEx(this MethodInfo methodInfo, bool inherit)
+        {
+            Argument.IsNotNull("methodInfo", methodInfo);
+
+#if NETFX_CORE
+            return methodInfo.GetCustomAttributes(inherit).ToArray();
+#else
+            return methodInfo.GetCustomAttributes(inherit).ToAttributeArray();
+#endif
+        }
+
+        public static Attribute[] GetCustomAttributesEx(this MethodInfo methodInfo, Type attributeType, bool inherit)
         {
             Argument.IsNotNull("methodInfo", methodInfo);
             Argument.IsNotNull("attributeType", attributeType);
 
-#if NETFX_CORE || WP8
-            return methodInfo.GetCustomAttributes(attributeType).ToArray<object>();
+#if NETFX_CORE
+            return methodInfo.GetCustomAttributes(attributeType, inherit).ToArray();
 #else
-            return methodInfo.GetCustomAttributes(attributeType, inherit);
+            return methodInfo.GetCustomAttributes(attributeType, inherit).ToAttributeArray();
 #endif
         }
     }

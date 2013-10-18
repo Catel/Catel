@@ -327,14 +327,14 @@ namespace Catel.Windows
 
             IEnumerable<Style> defaultStyles = FindDefaultStyles(sourceResources, defaultPrefix);
 
-            foreach (Style defaultStyle in defaultStyles)
+            foreach (var defaultStyle in defaultStyles)
             {
                 try
                 {
-                    Type targetType = defaultStyle.TargetType;
+                    var targetType = defaultStyle.TargetType;
                     if (targetType != null)
                     {
-                        ResourceDictionary resourceDictionaryDefiningStyle = FindResourceDictionaryDeclaringType(targetResources, targetType);
+                        var resourceDictionaryDefiningStyle = FindResourceDictionaryDeclaringType(targetResources, targetType);
                         if (resourceDictionaryDefiningStyle != null)
                         {
                             Log.Debug("Completing the style info for '{0}' with the additional info from the default style definition", targetType);
@@ -343,7 +343,7 @@ namespace Catel.Windows
                         }
                         else
                         {
-                            Log.Debug("Couln't find style definition for '{0}', creating style forwarder", targetType);
+                            Log.Debug("Couldn't find style definition for '{0}', creating style forwarder", targetType);
 
 #if SILVERLIGHT
                             var targetStyle = new Style(targetType);
@@ -389,7 +389,7 @@ namespace Catel.Windows
                 return rootResourceDictionary;
             }
 
-            foreach (ResourceDictionary mergedResourceDictionary in rootResourceDictionary.MergedDictionaries)
+            foreach (var mergedResourceDictionary in rootResourceDictionary.MergedDictionaries)
             {
                 var foundResourceDictionary = FindResourceDictionaryDeclaringType(mergedResourceDictionary, targetType);
                 if (foundResourceDictionary != null)
@@ -628,7 +628,7 @@ namespace Catel.Windows
                 }
                 else
                 {
-                    StreamResourceInfo streamResourceInfo = Application.GetResourceStream(resourceDictionaryUri);
+                    var streamResourceInfo = Application.GetResourceStream(resourceDictionaryUri);
                     var reader = new XmlBamlReader(streamResourceInfo.Stream);
 
                     doc = new XmlDocument();

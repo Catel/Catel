@@ -368,6 +368,13 @@
         public class TheRegisterTypeMethod
         {
             [TestMethod]
+            public void ThrowsInvalidOperationExceptionForInterfaceAsImplementation()
+            {
+                var serviceLocator = new ServiceLocator();
+                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => serviceLocator.RegisterType<ITestInterface, ITestInterface>());
+            }
+
+            [TestMethod]
             public void RegisterType_Generic()
             {
                 var serviceLocator = new ServiceLocator();

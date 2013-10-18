@@ -20,6 +20,14 @@ namespace Catel.MVVM.Services
         bool IsRunning { get; }
 
         /// <summary>
+        /// Gets and sets a value indicating whether the service will close the view model when done.
+        /// </summary>
+        /// <remarks>
+        /// The default value is <c>true</c>.
+        /// </remarks>
+        bool CloseViewModelOnTerminated { get; set; }
+
+        /// <summary>
         /// The enqueue.
         /// </summary>
         /// <param name="task">The task.</param>
@@ -40,8 +48,12 @@ namespace Catel.MVVM.Services
         /// </summary>
         /// <typeparam name="TViewModel">The view model type.</typeparam>
         /// <param name="completedCallback">The completed callback.</param>
+        /// <param name="viewModel">The viewmodel instance.</param>
+        /// <param name="show">
+        /// Indicates whether the view model will be shown. If the view model is <c>null</c> then tthis argument will be ignored. 
+        /// </param>
         /// <exception cref="InvalidOperationException">If the batch is already committed and the execution is in progress or committing via async way.</exception>
-        void CommitAsync<TViewModel>(Action completedCallback = null) where TViewModel : IProgressNotifyableViewModel;
+        void CommitAsync<TViewModel>(Action completedCallback = null, TViewModel viewModel = default(TViewModel), bool show = true) where TViewModel : IProgressNotifyableViewModel;
 
         /// <summary>
         /// Execute in batch mode the enqueued tasks.
@@ -54,7 +66,11 @@ namespace Catel.MVVM.Services
         /// Execute in batch mode the enqueued tasks.
         /// </summary>
         /// <typeparam name="TViewModel">The view model type.</typeparam>
+        /// <param name="viewModel">The viewmodel instance.</param>
+        /// <param name="show">
+        /// Indicates whether the view model will be shown. If the view model is <c>null</c> then tthis argument will be ignored. 
+        /// </param>
         /// <exception cref="InvalidOperationException">If the batch is already committed and the execution is in progress or committing via async way.</exception>
-       void Commit<TViewModel>() where TViewModel : IProgressNotifyableViewModel;
+        void Commit<TViewModel>(TViewModel viewModel = default(TViewModel), bool show = true) where TViewModel : IProgressNotifyableViewModel;
     }
 }
