@@ -20,7 +20,7 @@ Version 3.7
 
 Release date:
 =============
-2013/xx/xx
+2013/10/18
 
 Added/fixed (BREAKING CHANGES):
 ===============================
