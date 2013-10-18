@@ -942,7 +942,7 @@
             {
             }
 
-            [ServiceLocatorRegistration(typeof(IFooService2), RegistrationType.Transient)]
+            [ServiceLocatorRegistration(typeof(IFooService2), ServiceLocatorRegistrationMode.Transient)]
             public class FooService2 : IFooService2
             {
             }
@@ -1002,12 +1002,12 @@
             {
             }
 
-            [ServiceLocatorRegistration(typeof(IFooService), RegistrationType.Singleton, "FooService1")]
+            [ServiceLocatorRegistration(typeof(IFooService), ServiceLocatorRegistrationMode.SingletonInstantiateWhenRequired, "FooService1")]
             public class FooService1 : IFooService
             {
             }
 
-            [ServiceLocatorRegistration(typeof(IFooService), RegistrationType.Transient, "FooService2")]
+            [ServiceLocatorRegistration(typeof(IFooService), ServiceLocatorRegistrationMode.Transient, "FooService2")]
             public class FooService2 : IFooService
             {
             }
@@ -1103,12 +1103,12 @@
             {
             }
 
-            [ServiceLocatorRegistration(typeof(IFooService), RegistrationType.Singleton, "FooService1")]
+            [ServiceLocatorRegistration(typeof(IFooService), ServiceLocatorRegistrationMode.SingletonInstantiateWhenRequired, "FooService1")]
             public class FooService1 : IFooService
             {
             }
 
-            [ServiceLocatorRegistration(typeof(IFooService), RegistrationType.Singleton, "FooService2")]
+            [ServiceLocatorRegistration(typeof(IFooService), ServiceLocatorRegistrationMode.SingletonInstantiateWhenRequired, "FooService2")]
             public class FooService2 : IFooService
             {
             }
@@ -1140,12 +1140,12 @@
             {
             }
 
-            [ServiceLocatorRegistration(typeof(IFooService), RegistrationType.Singleton, "FooService1")]
+            [ServiceLocatorRegistration(typeof(IFooService), ServiceLocatorRegistrationMode.SingletonInstantiateWhenRequired, "FooService1")]
             public class FooService1 : IFooService
             {
             }
 
-            [ServiceLocatorRegistration(typeof(IFooService), RegistrationType.Singleton, "FooService2")]
+            [ServiceLocatorRegistration(typeof(IFooService), ServiceLocatorRegistrationMode.SingletonInstantiateWhenRequired, "FooService2")]
             public class FooService2 : IFooService
             {
             }
