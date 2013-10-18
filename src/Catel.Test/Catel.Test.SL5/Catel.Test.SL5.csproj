@@ -711,15 +711,12 @@
     <Compile Include="..\Catel.Test.NET40\Windows\Helpers\ResourceHelperFacts.cs">
       <Link>Windows\Helpers\ResourceHelperFacts.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Test.SL4\Helpers\ViewModels\IncreaseQuotaViewModel.cs">
-      <Link>Helpers\ViewModels\IncreaseQuotaViewModel.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.SL4\Helpers\Views\IncreaseQuotaWindow.xaml.cs">
-      <Link>Helpers\Views\IncreaseQuotaWindow.xaml.cs</Link>
-      <DependentUpon>IncreaseQuotaWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\ViewModels\IncreaseQuotaViewModel.cs" />
+    <Compile Include="Helpers\Views\IncreaseQuotaWindow.xaml.cs">
+      <DependentUpon>IncreaseQuotaWindow.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -774,14 +771,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="..\Catel.Test.SL4\Helpers\Views\IncreaseQuotaWindow.xaml">
-      <Link>Helpers\Views\IncreaseQuotaWindow.xaml</Link>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Helpers\Views\IncreaseQuotaWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <Import Condition="$(SilverlightVersion)=='v3.0'" Project="$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SilverlightToolkit\Tools\v3.0)Microsoft.Silverlight.Toolkit.Build.targets" />

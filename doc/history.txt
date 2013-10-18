@@ -24,7 +24,8 @@ Release date:
 
 Added/fixed (BREAKING CHANGES):
 ===============================
-xxxx
+(-) CTL-199 Removed support for Windows Phone 7.x
+(-) CTL-200 Removed support for Silverlight 4
 
 Added/fixed:
 ============

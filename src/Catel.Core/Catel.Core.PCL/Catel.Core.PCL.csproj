@@ -714,20 +714,20 @@
     <Compile Include="..\Catel.Core.NET40\WeakReferences\WeakEventListener.cs">
       <Link>WeakReferences\WeakEventListener.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.SL4\ComponentModel\EventArgs\PropertyChangingEventArgs.cs">
-      <Link>ComponentModel\EventArgs\PropertyChangingEventArgs.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.SL4\ComponentModel\INotifyPropertyChanging.cs">
-      <Link>ComponentModel\INotifyPropertyChanging.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.SL4\Threading\ReaderWriterLockSlim.cs">
+    <Compile Include="..\Catel.Core.SL5\Threading\ReaderWriterLockSlim.cs">
       <Link>Threading\ReaderWriterLockSlim.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.WIN80\AppDomain.cs">
       <Link>AppDomain.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.WIN80\ComponentModel\EventArgs\PropertyChangingEventArgs.cs">
+      <Link>ComponentModel\EventArgs\PropertyChangingEventArgs.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.WIN80\ComponentModel\IDataErrorInfo.cs">
       <Link>ComponentModel\IDataErrorInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.WIN80\ComponentModel\INotifyPropertyChanging.cs">
+      <Link>ComponentModel\INotifyPropertyChanging.cs</Link>
     </Compile>
     <Compile Include="ComponentModel\AsyncOperation.cs" />
     <Compile Include="ComponentModel\AsyncOperationManager.cs" />

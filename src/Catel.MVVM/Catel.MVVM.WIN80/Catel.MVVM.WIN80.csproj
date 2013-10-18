@@ -647,31 +647,28 @@
     <Compile Include="..\Catel.MVVM.NET45\MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs">
       <Link>MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\Controls\ValidationResult.cs">
+    <Compile Include="..\Catel.MVVM.SL5\Windows\Controls\ValidationResult.cs">
       <Link>Windows\Controls\ValidationResult.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\Controls\ValidationRule.cs">
+    <Compile Include="..\Catel.MVVM.SL5\Windows\Controls\ValidationRule.cs">
       <Link>Windows\Controls\ValidationRule.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\EventArgs\FrameworkElementLoadedEventArgs.cs">
+    <Compile Include="..\Catel.MVVM.SL5\Windows\EventArgs\FrameworkElementLoadedEventArgs.cs">
       <Link>Windows\EventArgs\FrameworkElementLoadedEventArgs.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\FrameworkElementLoadedManager.cs">
+    <Compile Include="..\Catel.MVVM.SL5\Windows\FrameworkElementLoadedManager.cs">
       <Link>Windows\FrameworkElementLoadedManager.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\Helpers\DataContextChangedHelper.cs">
+    <Compile Include="..\Catel.MVVM.SL5\Windows\Helpers\DataContextChangedHelper.cs">
       <Link>Windows\Helpers\DataContextChangedHelper.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\Helpers\LogicalTreeHelper.cs">
+    <Compile Include="..\Catel.MVVM.SL5\Windows\Helpers\LogicalTreeHelper.cs">
       <Link>Windows\Helpers\LogicalTreeHelper.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\Helpers\SetterValueBindingHelper.cs">
-      <Link>Windows\Helpers\SetterValueBindingHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\Interfaces\IFrameworkElementLoadedManager.cs">
+    <Compile Include="..\Catel.MVVM.SL5\Windows\Interfaces\IFrameworkElementLoadedManager.cs">
       <Link>Windows\Interfaces\IFrameworkElementLoadedManager.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\WeakFrameworkElementInfo.cs">
+    <Compile Include="..\Catel.MVVM.SL5\Windows\WeakFrameworkElementInfo.cs">
       <Link>Windows\WeakFrameworkElementInfo.cs</Link>
     </Compile>
     <Compile Include="MVVM\Services\PleaseWaitService.cs" />
@@ -683,7 +680,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Windows\Markup\" />
+    <Folder Include="Windows\Controls\InfoBarMessageControl\" />
+    <Folder Include="Windows\Interactivity\DragDropHelpers\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Catel.MVVM.NET40\ClassDiagrams\ViewModelBase.cd">
