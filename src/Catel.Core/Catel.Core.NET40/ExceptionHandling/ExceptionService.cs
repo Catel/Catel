@@ -91,7 +91,7 @@ namespace Catel.ExceptionHandling
         /// </returns>
         public bool IsExceptionRegistered<TException>() where TException : Exception
         {
-            var exceptionType = typeof (TException);
+            var exceptionType = typeof(TException);
 
             return IsExceptionRegistered(exceptionType);
         }
@@ -106,7 +106,7 @@ namespace Catel.ExceptionHandling
         /// <exception cref="ArgumentNullException">The <paramref ref="exceptionType"/> is <c>null</c>.</exception>
         public bool IsExceptionRegistered(Type exceptionType)
         {
-            Argument.IsOfType("exceptionType", exceptionType, typeof (Exception));
+            Argument.IsOfType("exceptionType", exceptionType, typeof(Exception));
 
             lock (_exceptionHandlers)
             {
@@ -126,13 +126,13 @@ namespace Catel.ExceptionHandling
         {
             Argument.IsNotNull("handler", handler);
 
-            var exceptionType = typeof (TException);
+            var exceptionType = typeof(TException);
 
             lock (_exceptionHandlers)
             {
                 if (!_exceptionHandlers.ContainsKey(exceptionType))
                 {
-                    var exceptionAction = new Action<Exception>(exception => handler((TException) exception));
+                    var exceptionAction = new Action<Exception>(exception => handler((TException)exception));
 
                     var exceptionHandler = new ExceptionHandler(exceptionType, exceptionAction);
                     _exceptionHandlers.Add(exceptionType, exceptionHandler);
@@ -152,7 +152,7 @@ namespace Catel.ExceptionHandling
         public bool Unregister<TException>()
             where TException : Exception
         {
-            var exceptionType = typeof (TException);
+            var exceptionType = typeof(TException);
 
             lock (_exceptionHandlers)
             {
@@ -386,7 +386,7 @@ namespace Catel.ExceptionHandling
         /// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="milliseconds"/> is larger than <c>1</c>.</exception>
         private static Task Delay(double milliseconds)
         {
-            Argument.IsMinimal("milliseconds", milliseconds,  1);
+            Argument.IsMinimal("milliseconds", milliseconds, 1);
 
             var taskCompletionSource = new TaskCompletionSource<bool>();
             var timer = new System.Timers.Timer();
@@ -394,6 +394,7 @@ namespace Catel.ExceptionHandling
             timer.Interval = milliseconds;
             timer.AutoReset = false;
             timer.Start();
+
             return taskCompletionSource.Task;
         }
 #endif
@@ -406,10 +407,7 @@ namespace Catel.ExceptionHandling
         /// <param name="delay">The delay that indicates how long the current thread will be suspended before the next iteration is invoked.</param>
         protected virtual void OnRetryingAction(int retryCount, Exception lastError, TimeSpan delay)
         {
-            if (RetryingAction != null)
-            {
-                RetryingAction(this, new RetryingEventArgs(retryCount, delay, lastError));
-            }
+            RetryingAction.SafeInvoke(this, new RetryingEventArgs(retryCount, delay, lastError));
         }
 
         /// <summary>
@@ -419,10 +417,7 @@ namespace Catel.ExceptionHandling
         /// <param name="dateTime"></param>
         protected virtual void OnExceptionBuffered(Exception bufferedException, DateTime dateTime)
         {
-            if (RetryingAction != null)
-            {
-                ExceptionBuffered(this, new BufferedEventArgs(bufferedException, dateTime));
-            }
+            ExceptionBuffered.SafeInvoke(this, new BufferedEventArgs(bufferedException, dateTime));
         }
         #endregion
     }
