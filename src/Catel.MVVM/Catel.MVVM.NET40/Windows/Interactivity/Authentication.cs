@@ -6,11 +6,18 @@
 
 namespace Catel.Windows.Interactivity
 {
-    using System;
+#if NETFX_CORE
+    using global::Windows.UI.Xaml;
+    using global::Windows.UI.Xaml.Controls;
+    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
+#else
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Interactivity;
+    using UIEventArgs = System.EventArgs;
+#endif
 
+    using System;
     using IoC;
     using Logging;
     using MVVM;
@@ -128,7 +135,7 @@ namespace Catel.Windows.Interactivity
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         /// <exception cref="InvalidOperationException">No instance of <see cref="IAuthenticationProvider"/> is registered in the <see cref="IServiceLocator"/>.</exception>
         /// <exception cref="InvalidOperationException">The <see cref="Action"/> is set to <see cref="AuthenticationAction.Disable"/> and the <see cref="Behavior{T}.AssociatedObject"/> is not a <see cref="Control"/>.</exception>
-        protected override void OnAssociatedObjectLoaded(object sender, EventArgs e)
+        protected override void OnAssociatedObjectLoaded(object sender, UIEventArgs e)
         {
             if (!_authenticationProvider.HasAccessToUIElement(AssociatedObject, AssociatedObject.Tag, AuthenticationTag))
             {
@@ -148,10 +155,10 @@ namespace Catel.Windows.Interactivity
                         break;
 
                     case AuthenticationAction.Disable:
-#if SILVERLIGHT
+#if SILVERLIGHT || NETFX_CORE
                         if (!(AssociatedObject is Control))
                         {
-                            throw new InvalidOperationException("The AssociatedObject is not a Control instance, only AuthenticationAction.Collapse is allowed in Silverlight");
+                            throw new InvalidOperationException("The AssociatedObject is not a Control instance, only AuthenticationAction.Collapse is allowed in SL, Windows Phone and WinRT");
                         }
 
                         ((Control)AssociatedObject).IsEnabled = false;

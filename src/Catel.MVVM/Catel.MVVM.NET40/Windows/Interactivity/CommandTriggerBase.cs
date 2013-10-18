@@ -7,8 +7,18 @@
 namespace Catel.Windows.Interactivity
 {
     using System;
-    using System.Windows;
     using System.Windows.Input;
+    using Catel.Windows.Input;
+
+#if NETFX_CORE
+    using global::Windows.UI.Xaml;
+    using Key = global::Windows.System.VirtualKey;
+    using ModifierKeys = global::Windows.System.VirtualKeyModifiers;
+    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
+#else
+    using System.Windows;
+    using UIEventArgs = System.EventArgs;
+#endif
 
     /// <summary>
     /// Trigger base class that handles a safe unsubscribe and clean up because the default
@@ -225,9 +235,12 @@ namespace Catel.Windows.Interactivity
                 return false;
             }
 
-            if (Keyboard.Modifiers != Modifiers)
+            if (Modifiers != ModifierKeys.None)
             {
-                return false;
+                if (!KeyboardHelper.AreKeyboardModifiersPressed(Modifiers))
+                {
+                    return false;
+                }
             }
 
             return command.CanExecute(parameter);

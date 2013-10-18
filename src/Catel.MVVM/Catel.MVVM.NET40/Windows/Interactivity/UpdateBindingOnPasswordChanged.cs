@@ -6,8 +6,16 @@
 
 namespace Catel.Windows.Interactivity
 {
+#if NETFX_CORE
+    using global::Windows.UI.Xaml;
+    using global::Windows.UI.Xaml.Controls;
+    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
+#else
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Interactivity;
+    using UIEventArgs = System.EventArgs;
+#endif
 
     /// <summary>
     /// This behavior automatically updates the binding of a <see cref="PasswordBox"/> when the
@@ -53,7 +61,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnAssociatedObjectLoaded(object sender, System.EventArgs e)
+        protected override void OnAssociatedObjectLoaded(object sender, UIEventArgs e)
         {
             AssociatedObject.PasswordChanged += OnPasswordChanged;
         }
@@ -63,7 +71,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnAssociatedObjectUnloaded(object sender, System.EventArgs e)
+        protected override void OnAssociatedObjectUnloaded(object sender, UIEventArgs e)
         {
             AssociatedObject.PasswordChanged -= OnPasswordChanged;
         }

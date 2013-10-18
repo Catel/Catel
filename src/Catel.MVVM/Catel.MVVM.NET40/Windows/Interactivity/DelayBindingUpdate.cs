@@ -6,12 +6,23 @@
 
 namespace Catel.Windows.Interactivity
 {
-    using System;
+    
+#if NETFX_CORE
+    using global::Windows.UI.Xaml;
+    using global::Windows.UI.Xaml.Data;
+    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
+    using TimerTickEventArgs = System.Object;
+#else
     using System.Reflection;
     using System.Windows;
     using System.Windows.Data;
     using System.Windows.Interactivity;
     using System.Windows.Threading;
+    using UIEventArgs = System.EventArgs;
+    using TimerTickEventArgs = System.EventArgs;
+#endif
+
+    using System;
     using Data;
     using Logging;
     using Reflection;
@@ -138,7 +149,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnAssociatedObjectLoaded(object sender, EventArgs e)
+        protected override void OnAssociatedObjectLoaded(object sender, UIEventArgs e)
         {
             var dependencyProperty = GetDependencyProperty();
             var bindingExpression = AssociatedObject.GetBindingExpression(dependencyProperty);
@@ -171,7 +182,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnAssociatedObjectUnloaded(object sender, EventArgs e)
+        protected override void OnAssociatedObjectUnloaded(object sender, UIEventArgs e)
         {
             var dependencyProperty = GetDependencyProperty();
 
@@ -218,7 +229,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name = "sender">The sender.</param>
         /// <param name = "e">The <see cref = "System.EventArgs" /> instance containing the event data.</param>
-        private void OnTimerTick(object sender, EventArgs e)
+        private void OnTimerTick(object sender, TimerTickEventArgs e)
         {
             _timer.Stop();
 

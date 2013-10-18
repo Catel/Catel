@@ -6,10 +6,20 @@
 
 namespace Catel.Windows.Interactivity
 {
+    using System.Windows.Input;
+    using Catel.Windows.Input;
+#if NETFX_CORE
+    using global::Windows.UI.Core;
+    using global::Windows.UI.Xaml;
+    using Key = global::Windows.System.VirtualKey;
+    using ModifierKeys = global::Windows.System.VirtualKeyModifiers;
+    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
+#else
     using System;
     using System.Windows;
-    using System.Windows.Input;
     using System.Windows.Interactivity;
+    using UIEventArgs = System.EventArgs;
+#endif
 
     /// <summary>
     /// Behavior base class that handles a safe unsubscribe and clean up because the default
@@ -18,7 +28,8 @@ namespace Catel.Windows.Interactivity
     /// This class extends the <see cref="BehaviorBase{T}"/> class by adding supports for commands.
     /// </summary>
     /// <typeparam name="T">The <see cref="FrameworkElement"/> this behavior should attach to.</typeparam>
-    public abstract class CommandBehaviorBase<T> : BehaviorBase<T> where T : FrameworkElement
+    public abstract class CommandBehaviorBase<T> : BehaviorBase<T> 
+        where T : FrameworkElement
     {
         #region Fields
         private ICommand _command;
@@ -82,7 +93,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnCommandCanExecuteChangedInternal(object sender, EventArgs e)
+        private void OnCommandCanExecuteChangedInternal(object sender, System.EventArgs e)
         {
             OnCommandCanExecuteChanged(sender, e);
         }
@@ -92,7 +103,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected virtual void OnCommandCanExecuteChanged(object sender, EventArgs e)
+        protected virtual void OnCommandCanExecuteChanged(object sender, System.EventArgs e)
         {
         }
 
@@ -101,7 +112,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnAssociatedObjectLoaded(object sender, System.EventArgs e)
+        protected override void OnAssociatedObjectLoaded(object sender, UIEventArgs e)
         {
             base.OnAssociatedObjectLoaded(sender, e);
 
@@ -113,7 +124,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnAssociatedObjectUnloaded(object sender, System.EventArgs e)
+        protected override void OnAssociatedObjectUnloaded(object sender, UIEventArgs e)
         {
             UnsubscribeFromCommand();
 
@@ -225,9 +236,12 @@ namespace Catel.Windows.Interactivity
                 return false;
             }
 
-            if (Keyboard.Modifiers != Modifiers)
+            if (Modifiers != ModifierKeys.None)
             {
-                return false;
+                if (!KeyboardHelper.AreKeyboardModifiersPressed(Modifiers))
+                {
+                    return false;
+                }
             }
 
             return command.CanExecute(parameter);

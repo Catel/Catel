@@ -197,6 +197,12 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\DependencyPropertySelector.cs">
       <Link>Windows\DependencyPropertySelector.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Helpers\CommandLineHelper.cs">
+      <Link>Windows\Helpers\CommandLineHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Input\Helpers\KeyboardHelper.cs">
+      <Link>Windows\Input\Helpers\KeyboardHelper.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interfaces\IDependencyPropertySelector.cs">
       <Link>Windows\Interfaces\IDependencyPropertySelector.cs</Link>
     </Compile>

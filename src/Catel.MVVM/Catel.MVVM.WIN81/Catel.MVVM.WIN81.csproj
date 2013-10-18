@@ -639,6 +639,39 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Helpers\CommandLineHelper.cs">
       <Link>Windows\Helpers\CommandLineHelper.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Input\Helpers\KeyboardHelper.cs">
+      <Link>Windows\Input\Helpers\KeyboardHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\Authentication.cs">
+      <Link>Windows\Interactivity\Authentication.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\BehaviorBase.cs">
+      <Link>Windows\Interactivity\BehaviorBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\CommandBehaviorBase.cs">
+      <Link>Windows\Interactivity\CommandBehaviorBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\DelayBindingUpdate.cs">
+      <Link>Windows\Interactivity\DelayBindingUpdate.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\Focus.cs">
+      <Link>Windows\Interactivity\Focus.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\KeyPressToCommand.cs">
+      <Link>Windows\Interactivity\KeyPressToCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\SelectTextOnFocus.cs">
+      <Link>Windows\Interactivity\SelectTextOnFocus.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\UpdateBindingBehaviorBase.cs">
+      <Link>Windows\Interactivity\UpdateBindingBehaviorBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\UpdateBindingOnPasswordChanged.cs">
+      <Link>Windows\Interactivity\UpdateBindingOnPasswordChanged.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\UpdateBindingOnTextChanged.cs">
+      <Link>Windows\Interactivity\UpdateBindingOnTextChanged.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interfaces\IDependencyPropertySelector.cs">
       <Link>Windows\Interfaces\IDependencyPropertySelector.cs</Link>
     </Compile>
@@ -678,6 +711,7 @@
     <Compile Include="..\Catel.MVVM.WIN80\MVVM\Services\PleaseWaitService.cs">
       <Link>MVVM\Services\PleaseWaitService.cs</Link>
     </Compile>
+    <Compile Include="Windows\Interactivity\Behavior.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Catel.Core\Catel.Core.WIN81\Catel.Core.WIN81.csproj">
@@ -730,6 +764,11 @@
       <HintPath>..\..\..\lib\Obsolete.Fody.2.3.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0">
+      <Name>Behaviors SDK %28XAML%29</Name>
+    </SDKReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

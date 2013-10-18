@@ -7,9 +7,19 @@
 namespace Catel.Windows.Interactivity
 {
     using System;
+
+#if NETFX_CORE
+    using global::Windows.UI.Xaml;
+    using global::Windows.UI.Xaml.Controls;
+    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
+    using TimerTickEventArgs = System.Object;
+#else
     using System.Windows.Controls;
     using System.Windows.Interactivity;
     using System.Windows.Threading;
+    using UIEventArgs = System.EventArgs;
+    using TimerTickEventArgs = System.EventArgs;
+#endif
 
     /// <summary>
     /// This behavior automatically updates the binding of a <see cref="TextBox"/> when the
@@ -55,7 +65,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnAssociatedObjectLoaded(object sender, EventArgs e)
+        protected override void OnAssociatedObjectLoaded(object sender, UIEventArgs e)
         {
             AssociatedObject.TextChanged += OnAssociatedObjectTextChanged;
 
@@ -67,7 +77,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnAssociatedObjectUnloaded(object sender, EventArgs e)
+        protected override void OnAssociatedObjectUnloaded(object sender, UIEventArgs e)
         {
             _timer.Stop();
             _timer.Tick -= OnTimerTick;
@@ -107,7 +117,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnTimerTick(object sender, EventArgs e)
+        private void OnTimerTick(object sender, TimerTickEventArgs e)
         {
             _timer.Stop();
 

@@ -41,7 +41,7 @@ namespace Catel.MVVM.Services
         }
 #endif
 
-#if SILVERLIGHT
+#if SL4 || SL5
         /// <summary>
         /// Gets the silverlight application initialization parameters.
         /// </summary>

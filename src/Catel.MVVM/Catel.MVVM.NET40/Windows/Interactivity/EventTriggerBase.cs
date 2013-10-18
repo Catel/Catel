@@ -7,7 +7,14 @@
 namespace Catel.Windows.Interactivity
 {
     using System;
+
+#if NETFX_CORE
+    using global::Windows.UI.Xaml;
+    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
+#else
     using System.Windows;
+    using UIEventArgs = System.EventArgs;
+#endif
 
     /// <summary>
     /// Trigger base class that handles a safe unsubscribe and clean up because the default
@@ -17,7 +24,11 @@ namespace Catel.Windows.Interactivity
     /// which is automatically called when the trigger is attached.
     /// </summary>
     /// <typeparam name="T">The <see cref="FrameworkElement"/> this trigger should attach to.</typeparam>
+#if NETFX_CORE
+    public abstract class EventTriggerBase<T> : EventTriggerBehavior
+#else
     public abstract class EventTriggerBase<T> : System.Windows.Interactivity.EventTriggerBase<T>
+#endif
         where T : FrameworkElement
     {
         #region Fields

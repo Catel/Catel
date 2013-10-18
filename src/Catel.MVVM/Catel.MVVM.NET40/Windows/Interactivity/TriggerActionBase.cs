@@ -8,7 +8,14 @@ namespace Catel.Windows.Interactivity
 {
     using System;
     using System.Windows;
+
+#if NETFX_CORE
+    using global::Windows.UI.Xaml;
+    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
+#else
     using System.Windows.Interactivity;
+    using UIEventArgs = System.EventArgs;
+#endif
 
     /// <summary>
     /// TriggerAction base class that handles a safe unsubscribe and clean up because the default
@@ -106,7 +113,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnAssociatedObjectLoadedInternal(object sender, EventArgs e)
+        private void OnAssociatedObjectLoadedInternal(object sender, UIEventArgs e)
         {
             if (IsAssociatedObjectLoaded)
             {
@@ -125,7 +132,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected virtual void OnAssociatedObjectLoaded(object sender, EventArgs e)
+        protected virtual void OnAssociatedObjectLoaded(object sender, UIEventArgs e)
         {
         }
 
@@ -135,7 +142,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnAssociatedObjectUnloadedInternal(object sender, EventArgs e)
+        private void OnAssociatedObjectUnloadedInternal(object sender, UIEventArgs e)
         {
             if (!IsAssociatedObjectLoaded)
             {
@@ -154,7 +161,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected virtual void OnAssociatedObjectUnloaded(object sender, EventArgs e)
+        protected virtual void OnAssociatedObjectUnloaded(object sender, UIEventArgs e)
         {
         }
 

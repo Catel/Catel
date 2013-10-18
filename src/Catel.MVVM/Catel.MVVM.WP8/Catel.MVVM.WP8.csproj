@@ -259,6 +259,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ISplashScreenService.cs">
       <Link>MVVM\Services\Interfaces\ISplashScreenService.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IStartUpInfoProvider.cs">
+      <Link>MVVM\Services\Interfaces\IStartUpInfoProvider.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IUIVisualizerService.cs">
       <Link>MVVM\Services\Interfaces\IUIVisualizerService.cs</Link>
     </Compile>
@@ -631,11 +634,17 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Helpers\AutoDisposeHelper.cs">
       <Link>Windows\Helpers\AutoDisposeHelper.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Helpers\CommandLineHelper.cs">
+      <Link>Windows\Helpers\CommandLineHelper.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Helpers\EffectsHelper.cs">
       <Link>Windows\Helpers\EffectsHelper.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Helpers\ResourceHelper.cs">
       <Link>Windows\Helpers\ResourceHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Input\Helpers\KeyboardHelper.cs">
+      <Link>Windows\Input\Helpers\KeyboardHelper.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\Authentication.cs">
       <Link>Windows\Interactivity\Authentication.cs</Link>
@@ -672,9 +681,6 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\KeyPressToCommand.cs">
       <Link>Windows\Interactivity\KeyPressToCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\MouseInfo.cs">
-      <Link>Windows\Interactivity\MouseInfo.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\NumericTextBox.cs">
       <Link>Windows\Interactivity\NumericTextBox.cs</Link>
@@ -840,7 +846,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Windows\Controls\InfoBarMessageControl\" />
+    <Folder Include="Windows\Markup\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\Catel.MVVM.NET40\Resources\Images\Error.png">
