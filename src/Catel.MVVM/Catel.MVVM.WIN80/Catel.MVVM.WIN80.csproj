@@ -680,7 +680,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Windows\Controls\InfoBarMessageControl\" />
     <Folder Include="Windows\Interactivity\DragDropHelpers\" />
   </ItemGroup>
   <ItemGroup>

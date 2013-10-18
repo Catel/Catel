@@ -16,7 +16,7 @@
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.13.12</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.15.0.0</FodyPath>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
   </PropertyGroup>
@@ -264,6 +264,9 @@
     <Compile Include="..\Catel.Core.NET40\Data\Interfaces\IModel.cs">
       <Link>Data\Interfaces\IModel.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Data\Interfaces\IModelEqualityComparer.cs">
+      <Link>Data\Interfaces\IModelEqualityComparer.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\Interfaces\IParent.cs">
       <Link>Data\Interfaces\IParent.cs</Link>
     </Compile>
@@ -305,6 +308,9 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\ModelBase.validation.cs">
       <Link>Data\ModelBase.validation.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Data\ModelEqualityComparer.cs">
+      <Link>Data\ModelEqualityComparer.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\ObservableObject.cs">
       <Link>Data\ObservableObject.cs</Link>
@@ -348,6 +354,15 @@
     <Compile Include="..\Catel.Core.NET40\EventHandlerExtensions.cs">
       <Link>EventHandlerExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Buffering\Frequency.cs">
+      <Link>ExceptionHandling\Buffering\Frequency.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ExceptionHandling\EventArgs\BufferedEventArgs.cs">
+      <Link>ExceptionHandling\EventArgs\BufferedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ExceptionHandling\EventArgs\RetryingEventArgs.cs">
+      <Link>ExceptionHandling\EventArgs\RetryingEventArgs.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\ExceptionHandling\ExceptionHandler.cs">
       <Link>ExceptionHandling\ExceptionHandler.cs</Link>
     </Compile>
@@ -360,9 +375,6 @@
     <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Extensions\ExceptionHandlerExtensions.cs">
       <Link>ExceptionHandling\Extensions\ExceptionHandlerExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Frequency.cs">
-      <Link>ExceptionHandling\Frequency.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Interfaces\IExceptionHandler.cs">
       <Link>ExceptionHandling\Interfaces\IExceptionHandler.cs</Link>
     </Compile>
@@ -371,6 +383,12 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Interfaces\IFrequency.cs">
       <Link>ExceptionHandling\Interfaces\IFrequency.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Interfaces\IRetryPolicy.cs">
+      <Link>ExceptionHandling\Interfaces\IRetryPolicy.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Retrying\RetryPolicy.cs">
+      <Link>ExceptionHandling\Retrying\RetryPolicy.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Exceptions\NotSupportedInSilverlightException.cs">
       <Link>Exceptions\NotSupportedInSilverlightException.cs</Link>
@@ -597,6 +615,9 @@
     <Compile Include="..\Catel.Core.NET40\Reflection\Extensions\MemberInfoExtensions.cs">
       <Link>Reflection\Extensions\MemberInfoExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Reflection\Extensions\ObjectExtensions.cs">
+      <Link>Reflection\Extensions\ObjectExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Reflection\Extensions\ReflectionExtensions.assembly.cs">
       <Link>Reflection\Extensions\ReflectionExtensions.assembly.cs</Link>
     </Compile>
@@ -789,8 +810,14 @@
     <Compile Include="..\Catel.Core.WIN80\ComponentModel\BackgroundWorker.cs">
       <Link>ComponentModel\BackgroundWorker.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.WIN80\ComponentModel\EventArgs\PropertyChangingEventArgs.cs">
+      <Link>ComponentModel\EventArgs\PropertyChangingEventArgs.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.WIN80\ComponentModel\IDataErrorInfo.cs">
       <Link>ComponentModel\IDataErrorInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.WIN80\ComponentModel\INotifyPropertyChanging.cs">
+      <Link>ComponentModel\INotifyPropertyChanging.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.WIN80\Reflection\BindingFlags.cs">
       <Link>Reflection\BindingFlags.cs</Link>

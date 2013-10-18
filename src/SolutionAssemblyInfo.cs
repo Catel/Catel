@@ -57,7 +57,9 @@ using System.Runtime.CompilerServices;
 #elif WP8
 [assembly: AssemblyConfiguration("Windows Phone 8, Debug")]
 #elif WIN80
-[assembly: AssemblyConfiguration("Windows 8, Debug")]
+[assembly: AssemblyConfiguration("Windows 8.0, Debug")]
+#elif WIN81
+[assembly: AssemblyConfiguration("Windows 8.1, Debug")]
 #else
 [assembly: AssemblyConfiguration("Unknown, Debug")]
 #endif
@@ -81,7 +83,9 @@ using System.Runtime.CompilerServices;
 #elif WP8
 [assembly: AssemblyConfiguration("Windows Phone 8, Release")]
 #elif WIN80
-[assembly: AssemblyConfiguration("Windows 8, Release")]
+[assembly: AssemblyConfiguration("Windows 8.0, Release")]
+#elif WIN81
+[assembly: AssemblyConfiguration("Windows 8.1, Release")]
 #else
 [assembly: AssemblyConfiguration("Unknown, Release")]
 #endif

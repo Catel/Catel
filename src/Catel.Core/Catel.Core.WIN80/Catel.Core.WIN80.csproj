@@ -350,6 +350,15 @@
     <Compile Include="..\Catel.Core.NET40\EventHandlerExtensions.cs">
       <Link>EventHandlerExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Buffering\Frequency.cs">
+      <Link>ExceptionHandling\Buffering\Frequency.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ExceptionHandling\EventArgs\BufferedEventArgs.cs">
+      <Link>ExceptionHandling\EventArgs\BufferedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ExceptionHandling\EventArgs\RetryingEventArgs.cs">
+      <Link>ExceptionHandling\EventArgs\RetryingEventArgs.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\ExceptionHandling\ExceptionHandler.cs">
       <Link>ExceptionHandling\ExceptionHandler.cs</Link>
     </Compile>
@@ -362,9 +371,6 @@
     <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Extensions\ExceptionHandlerExtensions.cs">
       <Link>ExceptionHandling\Extensions\ExceptionHandlerExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Frequency.cs">
-      <Link>ExceptionHandling\Frequency.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Interfaces\IExceptionHandler.cs">
       <Link>ExceptionHandling\Interfaces\IExceptionHandler.cs</Link>
     </Compile>
@@ -373,6 +379,12 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Interfaces\IFrequency.cs">
       <Link>ExceptionHandling\Interfaces\IFrequency.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Interfaces\IRetryPolicy.cs">
+      <Link>ExceptionHandling\Interfaces\IRetryPolicy.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Retrying\RetryPolicy.cs">
+      <Link>ExceptionHandling\Retrying\RetryPolicy.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Exceptions\NotSupportedInSilverlightException.cs">
       <Link>Exceptions\NotSupportedInSilverlightException.cs</Link>

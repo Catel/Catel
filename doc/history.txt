@@ -29,7 +29,7 @@ Added/fixed (BREAKING CHANGES):
 
 Added/fixed:
 ============
-xxxx
+(+) CTL-142 Added support for WIN81
 
 Roadmap:
 ========
