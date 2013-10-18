@@ -206,31 +206,31 @@ namespace Catel.Test.ExceptionHandling
         }
         #endregion
 
-        #region Nested type: TheOnErrorRetryImmediatelyMethod
-        [TestClass]
-        public class TheOnErrorRetryImmediatelyMethod
-        {
-            #region Methods
-            [TestMethod]
-            public void ShouldCallBackOnRetrying()
-            {
-                var exceptionService = new ExceptionService();
+        //#region Nested type: TheOnErrorRetryImmediatelyMethod
+        //[TestClass]
+        //public class TheOnErrorRetryImmediatelyMethod
+        //{
+        //    #region Methods
+        //    [TestMethod]
+        //    public void ShouldCallBackOnRetrying()
+        //    {
+        //        var exceptionService = new ExceptionService();
 
-                var index = 0;
+        //        var index = 0;
 
-                exceptionService.RetryingAction += (sender, args) => index++;
+        //        exceptionService.RetryingAction += (sender, args) => index++;
 
-                exceptionService
-                    .Register<DivideByZeroException>(exception => { })
-                    .OnErrorRetryImmediately(2);
+        //        exceptionService
+        //            .Register<DivideByZeroException>(exception => { })
+        //            .OnErrorRetryImmediately(2);
 
-                exceptionService.ProcessWithRetry(() => { throw new DivideByZeroException(); });
+        //        exceptionService.ProcessWithRetry(() => { throw new DivideByZeroException(); });
 
-                Assert.AreEqual(2, index);
-            }
-            #endregion
-        }
-        #endregion
+        //        Assert.AreEqual(2, index);
+        //    }
+        //    #endregion
+        //}
+        //#endregion
 
         #region Nested type: TheOnErrorRetryMethod
         [TestClass]
