@@ -148,13 +148,17 @@
     <Compile Include="DynamicEventListener.cs" />
     <Compile Include="Enum.cs" />
     <Compile Include="EventHandlerExtensions.cs" />
+    <Compile Include="ExceptionHandling\EventArgs\BufferedEventArgs.cs" />
+    <Compile Include="ExceptionHandling\EventArgs\RetryingEventArgs.cs" />
     <Compile Include="ExceptionHandling\ExceptionHandler.cs" />
     <Compile Include="ExceptionHandling\ExceptionService.cs" />
     <Compile Include="ExceptionHandling\Extensions\ExceptionHandlerExtensions.cs" />
-    <Compile Include="ExceptionHandling\Frequency.cs" />
+    <Compile Include="ExceptionHandling\Buffering\Frequency.cs" />
     <Compile Include="ExceptionHandling\Interfaces\IExceptionHandler.cs" />
     <Compile Include="ExceptionHandling\Interfaces\IExceptionService.cs" />
     <Compile Include="ExceptionHandling\Interfaces\IFrequency.cs" />
+    <Compile Include="ExceptionHandling\Interfaces\IRetryPolicy.cs" />
+    <Compile Include="ExceptionHandling\Retrying\RetryPolicy.cs" />
     <Compile Include="Exceptions\NotSupportedInSilverlightException.cs" />
     <Compile Include="Exceptions\NotSupportedInWindowsPhone7Exception.cs" />
     <Compile Include="Exceptions\NotSupportedInWindows8Exception.cs" />
@@ -395,6 +399,7 @@
       <LastGenOutput>Resources.zh-CHS.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets. -->

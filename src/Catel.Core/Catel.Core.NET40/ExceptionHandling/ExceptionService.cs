@@ -10,6 +10,7 @@ namespace Catel.ExceptionHandling
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using Logging;
     using Reflection;
 
@@ -29,6 +30,18 @@ namespace Catel.ExceptionHandling
         /// The static instance of the exception service.
         /// </summary>
         private static readonly IExceptionService _default = new ExceptionService();
+        #endregion
+
+        #region Events
+        /// <summary>
+        /// Occurs when an action is retrying.
+        /// </summary>
+        public event EventHandler<RetryingEventArgs> RetryingAction;
+
+        /// <summary>
+        /// Occurs when an exception is buffered. 
+        /// </summary>
+        public event EventHandler<BufferedEventArgs> ExceptionBuffered;
         #endregion
 
         #region Fields
@@ -172,12 +185,12 @@ namespace Catel.ExceptionHandling
                     return false;
                 }
 
-                var exceptionInstanceType = exception.GetType();
+                var exceptionType = exception.GetType();
 
                 IExceptionHandler handler = null;
                 foreach (var exceptionHandler in _exceptionHandlers)
                 {
-                    if (exceptionHandler.Key.IsAssignableFromEx(exceptionInstanceType))
+                    if (exceptionHandler.Key.IsAssignableFromEx(exceptionType))
                     {
                         if (exceptionHandler.Value.AllowedFrequency != null)
                         {
@@ -190,6 +203,8 @@ namespace Catel.ExceptionHandling
 
                             if (_exceptionCounter[exceptionHandler.Key].Count <= exceptionHandler.Value.AllowedFrequency.NumberOfTimes)
                             {
+                                OnExceptionBuffered(exception, DateTime.Now);
+                                Log.Debug("[{0}] Exception '{1}' buffered", DateTime.Now, exceptionType.Name);
                                 continue;
                             }
 
@@ -199,6 +214,8 @@ namespace Catel.ExceptionHandling
 
                             if (duration >= exceptionHandler.Value.AllowedFrequency.Duration && exceptionHandler.Value.AllowedFrequency.Duration != TimeSpan.Zero)
                             {
+                                OnExceptionBuffered(exception, DateTime.Now);
+                                Log.Debug("[{0}] Exception '{1}' buffered", DateTime.Now, exceptionType.Name);
                                 continue;
                             }
                             _exceptionCounter[exceptionHandler.Key].Clear();
@@ -270,6 +287,142 @@ namespace Catel.ExceptionHandling
             }
 
             return default(TResult);
+        }
+
+        /// <summary>
+        /// Processes the specified action with possibilty to retry on error.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        public void ProcessWithRetry(Action action)
+        {
+            Argument.IsNotNull("action", action);
+
+            ProcessWithRetry(() => { action(); return default(object); });
+        }
+
+        /// <summary>
+        /// Processes the with retry.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        public TResult ProcessWithRetry<TResult>(Func<TResult> action)
+        {
+            var retryCount = 0;
+            var interval = TimeSpan.FromMilliseconds(1);
+
+            while (true)
+            {
+                Exception lastError;
+                try
+                {
+                    return action();
+                }
+                catch (Exception exception)
+                {
+                    lock (_exceptionHandlers)
+                    {
+                        lastError = exception;
+
+                        var exceptionHandler = ExceptionHandlers.FirstOrDefault(handler => handler.ExceptionType.IsAssignableFromEx(lastError.GetType()));
+
+                        if (exceptionHandler != null && exceptionHandler.RetryPolicy != null)
+                        {
+                            var retryPolicy = exceptionHandler.RetryPolicy;
+
+                            retryCount++;
+
+                            if (retryCount <= retryPolicy.Attempts)
+                            {
+                                interval = retryPolicy.Interval;
+                            }
+                            else
+                            {
+                                if (!HandleException(lastError))
+                                {
+                                    throw;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (!HandleException(lastError))
+                            {
+                                throw;
+                            }
+                        }
+                    }
+                }
+
+                if (interval.TotalMilliseconds < 0)
+                {
+                    interval = TimeSpan.FromMilliseconds(1);
+                }
+
+                OnRetryingAction(retryCount, lastError, interval);
+
+#if NET40
+                Delay(interval.TotalMilliseconds).Wait();
+#endif
+
+#if NET45
+                Task.Delay(interval).Wait();
+#endif
+                Log.Debug("Retrying action for the '{0}' times", retryCount);
+            }
+        }
+        #endregion
+
+        #region Methods
+
+#if NET40
+        /// <summary>
+        /// Delays the specified milliseconds.
+        /// </summary>
+        /// <param name="milliseconds">The milliseconds.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="milliseconds"/> is larger than <c>1</c>.</exception>
+        private static Task Delay(double milliseconds)
+        {
+            Argument.IsMinimal("milliseconds", milliseconds,  1);
+
+            var taskCompletionSource = new TaskCompletionSource<bool>();
+            var timer = new System.Timers.Timer();
+            timer.Elapsed += (obj, args) => taskCompletionSource.TrySetResult(true);
+            timer.Interval = milliseconds;
+            timer.AutoReset = false;
+            timer.Start();
+            return taskCompletionSource.Task;
+        }
+#endif
+
+        /// <summary>
+        /// Notifies the subscribers whenever a retry event occurs.
+        /// </summary>
+        /// <param name="retryCount">The current retry attempt count.</param>
+        /// <param name="lastError">The exception that caused the retry conditions to occur.</param>
+        /// <param name="delay">The delay that indicates how long the current thread will be suspended before the next iteration is invoked.</param>
+        protected virtual void OnRetryingAction(int retryCount, Exception lastError, TimeSpan delay)
+        {
+            if (RetryingAction != null)
+            {
+                RetryingAction(this, new RetryingEventArgs(retryCount, delay, lastError));
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bufferedException"></param>
+        /// <param name="dateTime"></param>
+        protected virtual void OnExceptionBuffered(Exception bufferedException, DateTime dateTime)
+        {
+            if (RetryingAction != null)
+            {
+                ExceptionBuffered(this, new BufferedEventArgs(bufferedException, dateTime));
+            }
         }
         #endregion
     }

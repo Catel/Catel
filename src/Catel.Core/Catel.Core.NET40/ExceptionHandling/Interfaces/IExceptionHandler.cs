@@ -14,9 +14,9 @@ namespace Catel.ExceptionHandling
     public interface IExceptionHandler
     {
         /// <summary>
-        /// Gets the exception handled.
+        /// Gets the type of the handled exception.
         /// </summary>
-        Type Exception { get; }
+        Type ExceptionType { get; }
 
         /// <summary>
         /// Gets the allowed frequency.
@@ -25,6 +25,14 @@ namespace Catel.ExceptionHandling
         /// The allowed frequency.
         /// </value>
         IFrequency AllowedFrequency { get; set; }
+
+        /// <summary>
+        /// Gets the retry policy.
+        /// </summary>
+        /// <value>
+        /// The retry policy.
+        /// </value>
+        IRetryPolicy RetryPolicy { get; set; }
 
         /// <summary>
         /// Handles the exception using the action that was passed into the constructor.
