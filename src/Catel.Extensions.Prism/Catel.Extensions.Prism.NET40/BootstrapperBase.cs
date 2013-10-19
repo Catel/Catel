@@ -413,7 +413,7 @@ namespace Catel
             {
                 Container.RegisterTypeIfNotYetRegistered<Microsoft.Practices.ServiceLocation.IServiceLocator, ServiceLocatorAdapter>();
                 Container.RegisterTypeIfNotYetRegistered<IModuleInitializer, Microsoft.Practices.Prism.Modularity.ModuleInitializer>();
-                Container.RegisterTypeIfNotYetRegistered<IModuleManager, ModuleManager>();
+                Container.RegisterTypeIfNotYetRegistered<IModuleManager, Modules.ModuleManager.ModuleManager>();
                 Container.RegisterTypeIfNotYetRegistered<RegionAdapterMappings, RegionAdapterMappings>();
                 Container.RegisterTypeIfNotYetRegistered<IRegionManager, RegionManager>();
                 Container.RegisterTypeIfNotYetRegistered<IEventAggregator, EventAggregator>();
