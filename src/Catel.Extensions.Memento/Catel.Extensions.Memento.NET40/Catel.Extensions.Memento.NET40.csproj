@@ -56,6 +56,7 @@
     <Compile Include="Batch.cs" />
     <Compile Include="CollectionChangeUndo.cs" />
     <Compile Include="CollectionObserver.cs" />
+    <Compile Include="ExtensionsMementoModule.cs" />
     <Compile Include="Interfaces\IMementoBatch.cs" />
     <Compile Include="Interfaces\IMementoService.cs" />
     <Compile Include="Interfaces\IMementoSupport.cs" />

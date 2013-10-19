@@ -85,6 +85,9 @@
     <Compile Include="..\Catel.MVVM.NET40\ModuleInitializer.cs">
       <Link>ModuleInitializer.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVMModule.cs">
+      <Link>MVVMModule.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Auditing\AuditingManager.cs">
       <Link>MVVM\Auditing\AuditingManager.cs</Link>
     </Compile>
@@ -666,9 +669,6 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\DelayBindingUpdate.cs">
       <Link>Windows\Interactivity\DelayBindingUpdate.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\DoubleClickToCommand.cs">
-      <Link>Windows\Interactivity\DoubleClickToCommand.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\EventToCommand.cs">
       <Link>Windows\Interactivity\EventToCommand.cs</Link>

@@ -84,6 +84,9 @@
     <Compile Include="..\Catel.Extensions.FluentValidation.NET40\Attributes\ValidatorDescriptionAttribute.cs">
       <Link>Attributes\ValidatorDescriptionAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.FluentValidation.NET40\ExtensionsFluentValidationModule.cs">
+      <Link>ExtensionsFluentValidationModule.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Extensions.FluentValidation.NET40\FluentValidatorProvider.cs">
       <Link>FluentValidatorProvider.cs</Link>
     </Compile>

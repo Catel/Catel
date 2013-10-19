@@ -85,6 +85,7 @@
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="BootstrapperBase.generic.cs" />
+    <Compile Include="ExtensionsPrismModule.cs" />
     <Compile Include="Extensions\DependencyObjectExtensions.cs" />
     <Compile Include="Extensions\ILogExtensions.cs" />
     <Compile Include="Extensions\IRegionManagerExtensions.cs" />

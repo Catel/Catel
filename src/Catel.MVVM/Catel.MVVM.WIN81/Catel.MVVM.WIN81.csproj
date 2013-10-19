@@ -135,6 +135,9 @@
     <Compile Include="..\Catel.MVVM.NET40\ModuleInitializer.cs">
       <Link>ModuleInitializer.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVMModule.cs">
+      <Link>MVVMModule.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Auditing\AuditingManager.cs">
       <Link>MVVM\Auditing\AuditingManager.cs</Link>
     </Compile>

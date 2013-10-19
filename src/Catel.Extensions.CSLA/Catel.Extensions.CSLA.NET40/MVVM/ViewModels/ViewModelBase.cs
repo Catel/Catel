@@ -56,7 +56,8 @@ namespace Catel.MVVM.CSLA
             _viewModelCommandManager.AddHandler((viewModel, propertyName, command, commandParameter) =>
                 _catelCommandExecuted.SafeInvoke(this, new CommandExecutedEventArgs((ICatelCommand)command, commandParameter, propertyName)));
 
-            ServiceLocator = IoC.ServiceLocator.Default;
+            ServiceLocator = IoCConfiguration.DefaultServiceLocator;
+            DependencyResolver = ServiceLocator.ResolveType<IDependencyResolver>();
             RegisterViewModelServices(ServiceLocator);
 
             ViewModelManager.RegisterViewModelInstance(this);
@@ -68,14 +69,21 @@ namespace Catel.MVVM.CSLA
         /// Gets the service locator that provides all the implementations for interfaces required by the view-model.
         /// </summary>
         /// <value>The service locator.</value>
+        [ObsoleteEx(Message = "ServiceLocator is no longer recommended to retrieve the types, use the DependencyResolver instead", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
         protected IServiceLocator ServiceLocator { get; private set; }
+
+        /// <summary>
+        /// Gets the dependency resolver.
+        /// </summary>
+        /// <value>The dependency resolver.</value>
+        protected IDependencyResolver DependencyResolver { get; private set; }
 
         /// <summary>
         /// Gets the view model manager.
         /// </summary>
         private ViewModelManager ViewModelManager
         {
-            get { return (ViewModelManager)ServiceLocator.ResolveType<IViewModelManager>(); }
+            get { return (ViewModelManager)DependencyResolver.Resolve<IViewModelManager>(); }
         }
 
         /// <summary>
@@ -477,9 +485,10 @@ namespace Catel.MVVM.CSLA
         /// </summary>
         /// <param name="serviceType">Type of the service.</param>
         /// <returns>Service object or <c>null</c> if the service is not found.</returns>
+        [ObsoleteEx(Message = "GetService is no longer recommended. It is better to inject all dependencies (which the TypeFactory fully supports)", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
         public object GetService(Type serviceType)
         {
-            return ServiceLocator.ResolveType(serviceType);
+            return DependencyResolver.Resolve(serviceType);
         }
 
         /// <summary>
@@ -487,6 +496,7 @@ namespace Catel.MVVM.CSLA
         /// </summary>
         /// <typeparam name="T">Type of the service.</typeparam>
         /// <returns>Service object or <c>null</c> if the service is not found.</returns>
+        [ObsoleteEx(Message = "GetService is no longer recommended. It is better to inject all dependencies (which the TypeFactory fully supports)", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
         public T GetService<T>()
         {
             return (T)GetService(typeof(T));

@@ -17,9 +17,19 @@ namespace Catel.Windows.Interactivity
     /// </summary>
     public class Navigate : Behavior<Hyperlink>
     {
-        private static readonly IProcessService _processService = ServiceLocator.Default.ResolveType<IProcessService>();
+        private static readonly IProcessService _processService;
 
         #region Methods
+        /// <summary>
+        /// Initializes static members of the <see cref="Navigate"/> class.
+        /// </summary>
+        static Navigate()
+        {
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+
+            _processService = dependencyResolver.Resolve<IProcessService>();
+        }
+
         /// <summary>
         /// Called after the behavior is attached to an AssociatedObject.
         /// </summary>
@@ -43,7 +53,6 @@ namespace Catel.Windows.Interactivity
         private void AssociatedObjectRequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             var uri = AssociatedObject.NavigateUri;
-
             if (uri != null)
             {
                 _processService.StartProcess(uri.ToString());

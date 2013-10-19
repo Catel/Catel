@@ -21,7 +21,17 @@ namespace Catel.Windows.Data.Converters
 #endif
     public class ViewModelToViewConverter : ValueConverterBase
     {
-        private static readonly IViewLocator _viewLocator = ServiceLocator.Default.ResolveType<IViewLocator>();
+        private static readonly IViewLocator _viewLocator;
+
+        /// <summary>
+        /// Initializes static members of the <see cref="ViewModelToViewConverter"/> class.
+        /// </summary>
+        static ViewModelToViewConverter()
+        {
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+
+            _viewLocator = dependencyResolver.Resolve<IViewLocator>();
+        }
 
         /// <summary>
         /// Modifies the source data before passing it to the target for display in the UI.

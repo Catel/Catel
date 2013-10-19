@@ -95,6 +95,9 @@
     <Compile Include="..\Catel.Mvc.NET40\ModuleInitializer.cs">
       <Link>ModuleInitializer.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Mvc.NET40\MvcModule.cs">
+      <Link>MvcModule.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Mvc.NET40\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>

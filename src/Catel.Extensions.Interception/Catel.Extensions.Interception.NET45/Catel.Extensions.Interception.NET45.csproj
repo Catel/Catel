@@ -54,6 +54,9 @@
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\ExtensionsInterceptionModule.cs">
+      <Link>ExtensionsInterceptionModule.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Extensions.Interception.NET40\ModuleInitializer.cs">
       <Link>ModuleInitializer.cs</Link>
     </Compile>

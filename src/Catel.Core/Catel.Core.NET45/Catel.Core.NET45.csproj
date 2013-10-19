@@ -136,6 +136,9 @@
     <Compile Include="..\Catel.Core.NET40\Configuration\Extensions\ConfigurationExtensions.cs">
       <Link>Configuration\Extensions\ConfigurationExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\CoreModule.cs">
+      <Link>CoreModule.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\Attributes\AllowNonSerializableMembersAttribute.cs">
       <Link>Data\Attributes\AllowNonSerializableMembersAttribute.cs</Link>
     </Compile>

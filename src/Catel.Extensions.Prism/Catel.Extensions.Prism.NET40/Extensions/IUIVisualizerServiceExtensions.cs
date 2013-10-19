@@ -56,7 +56,8 @@ namespace Catel
         #region Methods
         private static T ResolveTypeFromContainer<T>()
         {
-            return ServiceLocator.Default.ResolveType<T>();
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+            return dependencyResolver.Resolve<T>();
         }
 
         /// <summary>

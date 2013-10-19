@@ -34,7 +34,13 @@ namespace Catel.Messaging
         {
             Argument.IsNotNull("instance", instance);
 
-            var mediator = messageMediator ?? ServiceLocator.Default.ResolveType<IMessageMediator>();
+            if (messageMediator == null)
+            {
+                var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+                messageMediator = dependencyResolver.Resolve<IMessageMediator>();
+            }
+
+            var mediator = messageMediator;
             var methodInfos = instance.GetType().GetMethodsEx(BindingFlagsHelper.GetFinalBindingFlags(true, false));
 
             foreach (var methodInfo in methodInfos)
@@ -86,8 +92,13 @@ namespace Catel.Messaging
         {
             Argument.IsNotNull("instance", instance);
 
-            var mediator = messageMediator ?? ServiceLocator.Default.ResolveType<IMessageMediator>();
-            mediator.UnregisterRecipient(instance);
+            if (messageMediator == null)
+            {
+                var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+                messageMediator = dependencyResolver.Resolve<IMessageMediator>();
+            }
+
+            messageMediator.UnregisterRecipient(instance);
         }
     }
 }

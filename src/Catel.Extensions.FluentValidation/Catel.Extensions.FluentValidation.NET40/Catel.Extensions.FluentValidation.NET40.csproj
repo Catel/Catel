@@ -67,6 +67,7 @@
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Attributes\DisplayNameAttribute.cs" />
+    <Compile Include="ExtensionsFluentValidationModule.cs" />
     <Compile Include="FluentValidatorProvider.cs" />
     <Compile Include="FluentValidatorToCatelValidatorAdapter.cs" />
     <Compile Include="ModuleInitializer.cs" />

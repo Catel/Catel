@@ -283,11 +283,13 @@ namespace Catel.MVVM.Services
             {
                 if (!_registeredUris.ContainsKey(viewModelTypeName))
                 {
+                    var dependencyResolver = this.GetDependencyResolver();
+
 #if NETFX_CORE
-                    var viewLocator = ServiceLocator.Default.ResolveType<IViewLocator>();
+                    var viewLocator = dependencyResolver.Resolve<IViewLocator>();
                     var url = viewLocator.ResolveView(viewModelType).AssemblyQualifiedName;
 #else
-                    var urlLocator = ServiceLocator.Default.ResolveType<IUrlLocator>();
+                    var urlLocator = dependencyResolver.Resolve<IUrlLocator>();
                     var url = urlLocator.ResolveUrl(viewModelType);
 #endif
 

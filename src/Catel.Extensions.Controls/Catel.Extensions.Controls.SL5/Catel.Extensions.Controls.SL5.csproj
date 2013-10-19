@@ -73,6 +73,9 @@
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\ExtensionsControlsModule.cs">
+      <Link>ExtensionsControlsModule.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Extensions.Controls.NET40\ModuleInitializer.cs">
       <Link>ModuleInitializer.cs</Link>
     </Compile>

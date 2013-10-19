@@ -35,12 +35,22 @@ namespace Catel.Phone.Controls
         #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private static readonly IViewModelLocator _viewModelLocator = ServiceLocator.Default.ResolveType<IViewModelLocator>();
+        private static readonly IViewModelLocator _viewModelLocator;
 
         private readonly PhoneApplicationPageLogic _logic;
         #endregion
 
         #region Constructors
+        /// <summary>
+        /// Initializes static members of the <see cref="PhoneApplicationPage"/> class.
+        /// </summary>
+        static PhoneApplicationPage()
+        {
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+
+            _viewModelLocator = dependencyResolver.Resolve<IViewModelLocator>();
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PhoneApplicationPage"/> class.
         /// </summary>

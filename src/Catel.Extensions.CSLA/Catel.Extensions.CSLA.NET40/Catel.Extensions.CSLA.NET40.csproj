@@ -100,6 +100,7 @@
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ExtensionsCSLAModule.cs" />
     <Compile Include="ModuleInitializer.cs" />
     <Compile Include="MVVM\ViewModels\Interfaces\IViewModel.cs" />
     <Compile Include="MVVM\ViewModels\ViewModelBase.cs" />

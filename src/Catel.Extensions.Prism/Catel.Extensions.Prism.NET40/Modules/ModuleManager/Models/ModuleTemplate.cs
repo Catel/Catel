@@ -36,8 +36,8 @@ namespace Catel.Modules.ModuleManager.Models
 
                 var instance = (ModuleTemplate) sender;
 
-                var moduleManager = ServiceLocator.Default.ResolveType<IModuleManager>();
-
+                var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+                var moduleManager = dependencyResolver.Resolve<IModuleManager>();
                 if (moduleManager == null)
                 {
                     return;

@@ -128,6 +128,9 @@
     <Compile Include="..\Catel.Extensions.Memento.NET40\CollectionObserver.cs">
       <Link>CollectionObserver.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.Memento.NET40\ExtensionsMementoModule.cs">
+      <Link>ExtensionsMementoModule.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Extensions.Memento.NET40\Interfaces\IMementoBatch.cs">
       <Link>Interfaces\IMementoBatch.cs</Link>
     </Compile>

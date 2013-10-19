@@ -6,6 +6,8 @@
 
 namespace Catel.Mvc
 {
+    using Catel.IoC;
+
     /// <summary>
     /// Class that gets called as soon as the module is loaded.
     /// </summary>
@@ -19,7 +21,8 @@ namespace Catel.Mvc
         /// </summary>
         public static void Initialize()
         {
-
+            var serviceLocator = ServiceLocator.Default;
+            MvcModule.RegisterServices(serviceLocator);
         }
     }
 }

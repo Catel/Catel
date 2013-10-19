@@ -171,7 +171,8 @@ namespace Catel.Data
                 {
                     if (!_hasRetrievedValidatorOnce)
                     {
-                        var validatorProvider = ServiceLocator.Default.ResolveTypeAndReturnNullIfNotRegistered<IValidatorProvider>();
+                        var dependencyResolver = this.GetDependencyResolver();
+                        var validatorProvider = dependencyResolver.Resolve<IValidatorProvider>();
                         if (validatorProvider != null)
                         {
                             _validator = validatorProvider.GetValidator(GetType());

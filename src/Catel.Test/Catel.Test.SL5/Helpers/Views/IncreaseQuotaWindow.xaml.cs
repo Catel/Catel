@@ -1,4 +1,11 @@
-﻿namespace Catel.Test.Helpers.Views
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="IncreaseQuotaWindow.xaml.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+
+namespace Catel.Test.Helpers.Views
 {
     using System.IO.IsolatedStorage;
     using Catel.IoC;
@@ -7,11 +14,16 @@
 
     public partial class IncreaseQuotaWindow : DataWindow
     {
+        #region Fields
         private readonly long _quotaToIncreaseTo;
+        #endregion
 
+        #region Constructors
         static IncreaseQuotaWindow()
         {
-            var viewModelLocator = ServiceLocator.Default.ResolveType<IViewModelLocator>();
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+
+            var viewModelLocator = dependencyResolver.Resolve<IViewModelLocator>();
             viewModelLocator.NamingConventions.Add(string.Format("Catel.Test.Helpers.ViewModels.[VW]ViewModel"));
         }
 
@@ -25,7 +37,9 @@
 
             InitializeComponent();
         }
+        #endregion
 
+        #region Methods
         /// <summary>
         /// Applies all changes made by this window.
         /// </summary>
@@ -39,6 +53,6 @@
 
             return base.ApplyChanges();
         }
+        #endregion
     }
 }
-

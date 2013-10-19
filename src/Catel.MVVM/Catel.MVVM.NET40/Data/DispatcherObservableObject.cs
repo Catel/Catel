@@ -25,7 +25,7 @@ namespace Catel.Data
         /// </summary>
         static DispatcherObservableObject()
         {
-            var serviceLocator = ServiceLocator.Default;
+            var serviceLocator = IoCConfiguration.DefaultServiceLocator;
             serviceLocator.RegisterTypeIfNotYetRegistered<IDispatcherService, DispatcherService>();
 
             _dispatcherService = serviceLocator.ResolveType<IDispatcherService>();

@@ -27,7 +27,13 @@ namespace Catel.Memento
         {
             Tag = tag;
 
-            _mementoService = mementoService ?? ServiceLocator.Default.ResolveType<IMementoService>();
+            if (mementoService == null)
+            {
+                var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+                mementoService = dependencyResolver.Resolve<IMementoService>();
+            }
+
+            _mementoService = mementoService;
         }
 
         /// <summary>

@@ -92,6 +92,7 @@
     <Compile Include="ComponentModel\INotifyDataErrorInfo.cs" />
     <Compile Include="ComponentModel\INotifyDataWarningInfo.cs" />
     <Compile Include="Argument.expression.cs" />
+    <Compile Include="CoreModule.cs" />
     <Compile Include="Data\Attributes\AllowNonSerializableMembersAttribute.cs" />
     <Compile Include="Data\Attributes\ValidateModelAttribute.cs" />
     <Compile Include="Data\AttributeValidatorProvider.cs" />

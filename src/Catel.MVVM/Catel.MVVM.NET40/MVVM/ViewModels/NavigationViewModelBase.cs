@@ -57,7 +57,7 @@ namespace Catel.MVVM
             Back = new Command(OnBackExecute, OnBackCanExecute);
             Forward = new Command(OnForwardExecute, OnForwardCanExecute);
 
-            _navigationService = ServiceLocator.ResolveType<INavigationService>();
+            _navigationService = DependencyResolver.Resolve<INavigationService>();
         }
         #endregion
 

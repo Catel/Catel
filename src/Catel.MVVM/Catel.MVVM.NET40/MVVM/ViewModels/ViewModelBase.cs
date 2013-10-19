@@ -366,8 +366,10 @@ namespace Catel.MVVM
                 Log.Debug("Using the default instance of the IServiceLocator");
 
                 // We always need an IoC provider
-                ServiceLocator = IoC.ServiceLocator.Default;
+                ServiceLocator = IoCConfiguration.DefaultServiceLocator;
             }
+
+            DependencyResolver = ServiceLocator.ResolveType<IDependencyResolver>();
 
             Log.Debug("Registering view model services");
 
@@ -375,7 +377,7 @@ namespace Catel.MVVM
 
             Log.Debug("Registered view model services");
 
-            _dispatcherService = ServiceLocator.ResolveType<IDispatcherService>();
+            _dispatcherService = DependencyResolver.Resolve<IDispatcherService>();
 
             // In silverlight, automatically invalidate commands when property changes
 #if !WINDOWS_PHONE && !NET35
@@ -617,7 +619,14 @@ namespace Catel.MVVM
         /// Gets the service locator that provides all the implementations for interfaces required by the view-model.
         /// </summary>
         /// <value>The service locator.</value>
+        [ObsoleteEx(Message = "ServiceLocator is no longer recommended to retrieve the types, use the DependencyResolver instead", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
         protected IServiceLocator ServiceLocator { get; private set; }
+
+        /// <summary>
+        /// Gets the dependency resolver.
+        /// </summary>
+        /// <value>The dependency resolver.</value>
+        protected IDependencyResolver DependencyResolver { get; private set; }
         #endregion
 
         #region Methods
@@ -1549,7 +1558,7 @@ namespace Catel.MVVM
         [ObsoleteEx(Message = "GetService is no longer recommended. It is better to inject all dependencies (which the TypeFactory fully supports)", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
         public T GetService<T>(object tag = null)
         {
-            return (T)ServiceLocator.ResolveType(typeof(T), tag);
+            return (T)DependencyResolver.Resolve(typeof(T), tag);
         }
 
         /// <summary>

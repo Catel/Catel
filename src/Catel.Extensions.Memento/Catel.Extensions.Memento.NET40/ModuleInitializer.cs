@@ -21,11 +21,7 @@ namespace Catel.Extensions.Memento
         public static void Initialize()
         {
             var serviceLocator = ServiceLocator.Default;
-
-            if (!serviceLocator.IsTypeRegistered<IMementoService>())
-            {
-                serviceLocator.RegisterInstance(MementoService.Default);
-            }
+            ExtensionsMementoModule.RegisterServices(serviceLocator);
         }
         #endregion
     }

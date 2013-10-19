@@ -26,22 +26,7 @@ namespace Catel.Core
         public static void Initialize()
         {
             var serviceLocator = ServiceLocator.Default;
-
-            serviceLocator.RegisterInstance<IExceptionService>(ExceptionService.Default);
-            serviceLocator.RegisterInstance<IMessageMediator>(MessageMediator.Default);
-
-            serviceLocator.RegisterTypeIfNotYetRegistered<IValidatorProvider, AttributeValidatorProvider>();
-
-#if NET
-            serviceLocator.RegisterType<IBinarySerializer, BinarySerializer>();
-#endif
-
-            serviceLocator.RegisterType<IDataContractNameResolver, DataContractNameResolver>();
-            serviceLocator.RegisterType<IDataContractSerializerFactory, DataContractSerializerFactory>();
-            serviceLocator.RegisterType<IXmlSerializer, XmlSerializer>();
-            serviceLocator.RegisterType<ISerializationManager, SerializationManager>();
-
-            serviceLocator.RegisterType<IModelEqualityComparer, ModelEqualityComparer>();
+            CoreModule.RegisterServices(serviceLocator);
         }
     }
 }

@@ -127,7 +127,7 @@ namespace Catel.Windows
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private static readonly IViewModelLocator _viewModelLocator = ServiceLocator.Default.ResolveType<IViewModelLocator>();
+        private static readonly IViewModelLocator _viewModelLocator;
 
         private bool _isWrapped;
 
@@ -150,7 +150,9 @@ namespace Catel.Windows
         /// </summary>
         static DataWindow()
         {
-            ServiceLocator.Default.RegisterTypeIfNotYetRegistered<IViewModelLocator, ViewModelLocator>();
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+
+            _viewModelLocator = dependencyResolver.Resolve<IViewModelLocator>();
         }
 
         /// <summary>

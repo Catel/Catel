@@ -73,6 +73,7 @@
     <Compile Include="Definitions\Interfaces\IMemberDefinition.cs" />
     <Compile Include="Definitions\MemberDefinition.cs" />
     <Compile Include="Exceptions\ProxyInitializationException.cs" />
+    <Compile Include="ExtensionsInterceptionModule.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\ExpressionExtensions.cs" />
     <Compile Include="Extensions\MethodInfoExtensions.cs" />

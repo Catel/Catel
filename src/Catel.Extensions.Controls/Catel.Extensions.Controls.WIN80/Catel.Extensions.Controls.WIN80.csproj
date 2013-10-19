@@ -107,6 +107,9 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <Folder Include="Windows\Helpers\" />
+    <Folder Include="Windows\Media\Extensions\" />
+    <Folder Include="Windows\Media\Imaging\Extensions\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Catel.Core\Catel.Core.WIN80\Catel.Core.WIN80.csproj">
@@ -121,6 +124,9 @@
   <ItemGroup>
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\ExtensionsControlsModule.cs">
+      <Link>ExtensionsControlsModule.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Extensions.Controls.NET40\ModuleInitializer.cs">
       <Link>ModuleInitializer.cs</Link>

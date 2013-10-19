@@ -63,6 +63,9 @@
     <Compile Include="..\Catel.Extensions.DynamicObjects.NET40\Data\DynamicModelBaseMetaObject.cs">
       <Link>Data\DynamicModelBaseMetaObject.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.DynamicObjects.NET40\ExtensionsDynamicObjectsModule.cs">
+      <Link>ExtensionsDynamicObjectsModule.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Extensions.DynamicObjects.NET40\ModuleInitializer.cs">
       <Link>ModuleInitializer.cs</Link>
     </Compile>

@@ -100,6 +100,9 @@
     <Compile Include="..\Catel.Extensions.Prism.NET40\BootstrapperBase.generic.cs">
       <Link>BootstrapperBase.generic.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\ExtensionsPrismModule.cs">
+      <Link>ExtensionsPrismModule.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Extensions.Prism.NET40\Extensions\DependencyObjectExtensions.cs">
       <Link>Extensions\DependencyObjectExtensions.cs</Link>
     </Compile>

@@ -26,9 +26,10 @@ namespace Catel
         /// <param name="viewModel">The view model.</param>
         /// <param name="regionName">The region name.</param>
         /// <param name="completedCallback">The completed callback.</param>
-        public static void CommitAsyc<TViewModel>(this ISplashScreenService @this, TViewModel viewModel, string regionName, Action completedCallback = null) where TViewModel : IProgressNotifyableViewModel
+        public static void CommitAsync<TViewModel>(this ISplashScreenService @this, TViewModel viewModel, string regionName, Action completedCallback = null) where TViewModel : IProgressNotifyableViewModel
         {
-            var uiVisualizerService = ServiceLocator.Default.ResolveType<IUIVisualizerService>();
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+            var uiVisualizerService = dependencyResolver.Resolve<IUIVisualizerService>();
 
             uiVisualizerService.Activate(viewModel, regionName);
 
@@ -44,10 +45,11 @@ namespace Catel
         /// <param name="parentViewModel">The parent view model.</param>
         /// <param name="regionName">The region name.</param>
         /// <param name="completedCallback">The completed callback.</param>
-        public static void CommitAsyc<TViewModel>(this ISplashScreenService @this, TViewModel viewModel, IViewModel parentViewModel, string regionName, Action completedCallback = null)
+        public static void CommitAsync<TViewModel>(this ISplashScreenService @this, TViewModel viewModel, IViewModel parentViewModel, string regionName, Action completedCallback = null)
             where TViewModel : IProgressNotifyableViewModel
         {
-            var uiVisualizerService = ServiceLocator.Default.ResolveType<IUIVisualizerService>();
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+            var uiVisualizerService = dependencyResolver.Resolve<IUIVisualizerService>();
 
             uiVisualizerService.Activate(viewModel, parentViewModel, regionName);
 

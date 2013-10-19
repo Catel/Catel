@@ -86,6 +86,7 @@
     <Compile Include="Collections\FastObservableCollection.cs" />
     <Compile Include="Data\DispatcherObservableObject.cs" />
     <Compile Include="Environment.cs" />
+    <Compile Include="MVVMModule.cs" />
     <Compile Include="Extensions\NavigationEventArgsExtensions.cs" />
     <Compile Include="ModuleInitializer.cs" />
     <Compile Include="MVVM\Auditing\AuditingManager.cs" />

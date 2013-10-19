@@ -28,12 +28,23 @@ namespace Catel.MVVM
         /// <summary>
         /// Authentication provider.
         /// </summary>
-        protected static readonly IAuthenticationProvider AuthenticationProvider = ServiceLocator.Default.ResolveTypeAndReturnNullIfNotRegistered<IAuthenticationProvider>();
+        protected static readonly IAuthenticationProvider AuthenticationProvider;
 
         /// <summary>
         /// Dispatcher service.
         /// </summary>
-        protected static readonly IDispatcherService DispatcherService = ServiceLocator.Default.ResolveType<IDispatcherService>();
+        protected static readonly IDispatcherService DispatcherService;
+
+        /// <summary>
+        /// Initializes static members of the <see cref="CommandBase"/> class.
+        /// </summary>
+        static CommandBase()
+        {
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+
+            AuthenticationProvider = dependencyResolver.Resolve<IAuthenticationProvider>();
+            DispatcherService = dependencyResolver.Resolve<IDispatcherService>();
+        }
     }
 
     /// <summary>
