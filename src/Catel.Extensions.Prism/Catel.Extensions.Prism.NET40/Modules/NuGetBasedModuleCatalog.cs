@@ -17,12 +17,13 @@ namespace Catel.Modules
         /// </summary>
         public NuGetBasedModuleCatalog()
         {
-            this.PackageSource = "https://nuget.org/api/v2/";
-            this.OutputDirectory = "packages";
-            this.AllowPrereleaseVersions = false;
-            this.IgnoreDependencies = true;
+            PackageSource = "https://nuget.org/api/v2/";
+            OutputDirectory = "packages";
+            AllowPrereleaseVersions = false;
+            IgnoreDependencies = true;
+
 #if NET40
-            this.FrameworkNameIdentifier = "NET40";
+            FrameworkNameIdentifier = "NET40";
 #elif NET45 
             FrameworkNameIdentifier = "NET45";
 #else
