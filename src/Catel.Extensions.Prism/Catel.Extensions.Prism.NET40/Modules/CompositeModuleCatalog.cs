@@ -66,7 +66,7 @@ namespace Catel.Modules
 
                 foreach (IModuleCatalog moduleCatalog in _moduleCatalogs)
                 {
-                	IEnumerable<IModuleCatalogItem> moduleCatalogItems = null;
+                    IEnumerable<IModuleCatalogItem> moduleCatalogItems = null;
 
                     if (moduleCatalog is ModuleCatalog)
                     {
@@ -77,13 +77,13 @@ namespace Catel.Modules
                         moduleCatalogItems = (moduleCatalog as Microsoft.Practices.Prism.Modularity.ModuleCatalog).Items;
                     }
 
-					if (moduleCatalogItems != null)
-					{
-	                    foreach (IModuleCatalogItem moduleCatalogItem in moduleCatalogItems)
-	                    {
-	                        yield return moduleCatalogItem;    
-	                    }
-					}
+                    if (moduleCatalogItems != null)
+                    {
+                        foreach (IModuleCatalogItem moduleCatalogItem in moduleCatalogItems)
+                        {
+                            yield return moduleCatalogItem;    
+                        }
+                    }
                 }
             }
         }
@@ -117,7 +117,7 @@ namespace Catel.Modules
                         }
                     }
                 });
-			
+
             base.Initialize();
         }
 

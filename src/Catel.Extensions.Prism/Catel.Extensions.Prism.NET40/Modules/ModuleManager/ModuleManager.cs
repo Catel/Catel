@@ -56,7 +56,7 @@ namespace Catel.Modules.ModuleManager
                 List<IModuleTypeLoader> moduleTypeLoaders = base.ModuleTypeLoaders.ToList();
                 if (moduleTypeLoaders.All(loader => loader.GetType() != typeof(NuGetModuleTypeLoader)))
                 {
-                    moduleTypeLoaders.Add(new NuGetModuleTypeLoader(this.ModuleCatalog));
+                    moduleTypeLoaders.Add(new NuGetModuleTypeLoader(ModuleCatalog));
                 }
 
                 return moduleTypeLoaders;

@@ -1,10 +1,7 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NuGetBasedModuleCatalogExtensions.cs" company="">
-//   
+// <copyright file="NuGetBasedModuleCatalogExtensions.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
-// <summary>
-//   The nu get based module catalog extensions.
-// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace Catel.Modules.Extensions
@@ -18,17 +15,14 @@ namespace Catel.Modules.Extensions
     /// </summary>
     internal static class NuGetBasedModuleCatalogExtensions
     {
-        #region Static Fields
-
+        #region Constants
         /// <summary>
         /// The package repository cache.
         /// </summary>
         private static readonly CacheStorage<string, IPackageRepository> PackageRepositoryCache = new CacheStorage<string, IPackageRepository>();
-
         #endregion
 
-        #region Public Methods and Operators
-
+        #region Methods
         /// <summary>
         /// Gets the package repository.
         /// </summary>
@@ -38,11 +32,13 @@ namespace Catel.Modules.Extensions
         /// <returns>
         /// The <see cref="IPackageRepository"/>.
         /// </returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="moduleCatalog"/> is <c>null</c>.</exception>
         public static IPackageRepository GetPackageRepository(this NuGetBasedModuleCatalog moduleCatalog)
         {
+            Argument.IsNotNull(() => moduleCatalog);
+
             return PackageRepositoryCache.GetFromCacheOrFetch(moduleCatalog.PackageSource, () => PackageRepositoryFactory.Default.CreateRepository(moduleCatalog.PackageSource));
         }
-
         #endregion
     }
 }

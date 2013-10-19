@@ -1,10 +1,7 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InstallPackageRequest.cs" company="">
-//   
+// <copyright file="InstallPackageRequest.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
-// <summary>
-//   The install package request.
-// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace Catel.Modules.ModuleManager
@@ -20,16 +17,13 @@ namespace Catel.Modules.ModuleManager
     internal class InstallPackageRequest
     {
         #region Fields
-
         /// <summary>
         /// The module catalog.
         /// </summary>
-        private readonly NuGetBasedModuleCatalog moduleCatalog;
-
+        private readonly NuGetBasedModuleCatalog _moduleCatalog;
         #endregion
 
-        #region Constructors and Destructors
-
+        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="InstallPackageRequest"/> class.
         /// </summary>
@@ -42,20 +36,22 @@ namespace Catel.Modules.ModuleManager
         /// <param name="moduleCatalog">
         /// The module catalog.
         /// </param>
-        public InstallPackageRequest(
-            IPackageRepository packageRepository, 
-            IPackage package, 
-            NuGetBasedModuleCatalog moduleCatalog)
+        /// <exception cref="System.ArgumentNullException">The <paramref name="packageRepository"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="package"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="moduleCatalog"/> is <c>null</c>.</exception>
+        public InstallPackageRequest(IPackageRepository packageRepository, IPackage package, NuGetBasedModuleCatalog moduleCatalog)
         {
-            this.PackageRepository = packageRepository;
-            this.Package = package;
-            this.moduleCatalog = moduleCatalog;
+            Argument.IsNotNull(() => packageRepository);
+            Argument.IsNotNull(() => moduleCatalog);
+            Argument.IsNotNull(() => package);
+         
+            PackageRepository = packageRepository;
+            Package = package;
+            _moduleCatalog = moduleCatalog;
         }
-
         #endregion
 
-        #region Public Properties
-
+        #region Properties
         /// <summary>
         /// Gets a value indicating whether allow prerelease versions.
         /// </summary>
@@ -63,7 +59,7 @@ namespace Catel.Modules.ModuleManager
         {
             get
             {
-                return this.moduleCatalog.AllowPrereleaseVersions;
+                return _moduleCatalog.AllowPrereleaseVersions;
             }
         }
 
@@ -74,7 +70,7 @@ namespace Catel.Modules.ModuleManager
         {
             get
             {
-                return this.moduleCatalog.FrameworkNameIdentifier;
+                return _moduleCatalog.FrameworkNameIdentifier;
             }
         }
 
@@ -85,7 +81,7 @@ namespace Catel.Modules.ModuleManager
         {
             get
             {
-                return this.moduleCatalog.IgnoreDependencies;
+                return _moduleCatalog.IgnoreDependencies;
             }
         }
 
@@ -96,11 +92,11 @@ namespace Catel.Modules.ModuleManager
         {
             get
             {
-                string outputDirectory = this.moduleCatalog.OutputDirectory;
+                string outputDirectory = _moduleCatalog.OutputDirectory;
                 if (!Path.IsPathRooted(outputDirectory))
                 {
                     string mainModuleDirectory = IO.Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
-                    outputDirectory = IO.Path.Combine(mainModuleDirectory, this.moduleCatalog.OutputDirectory);
+                    outputDirectory = IO.Path.Combine(mainModuleDirectory, _moduleCatalog.OutputDirectory);
                 }
 
                 return outputDirectory;
@@ -116,7 +112,6 @@ namespace Catel.Modules.ModuleManager
         /// Gets the package repository.
         /// </summary>
         public IPackageRepository PackageRepository { get; private set; }
-
         #endregion
     }
 }
