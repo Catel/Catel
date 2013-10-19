@@ -306,6 +306,7 @@ namespace Catel.Windows
             }
 
             CanClose = true;
+            CanCloseUsingEscape = true;
 
             Loaded += (sender, e) => Initialize();
             Closing += OnDataWindowClosing;
@@ -354,6 +355,12 @@ namespace Catel.Windows
         /// </summary>
         /// <value><c>true</c> if this instance can close; otherwise, <c>false</c>.</value>
         protected bool CanClose { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance can close using escape.
+        /// </summary>
+        /// <value><c>true</c> if this instance can close using escape; otherwise, <c>false</c>.</value>
+        public bool CanCloseUsingEscape { get; set; }
 
         /// <summary>
         /// Gets the commands that are currently available on the data window.
@@ -708,7 +715,7 @@ namespace Catel.Windows
                 // Else let it go, it's a custom button
             }
 
-            if (e.Key == Key.Escape)
+            if (e.Key == Key.Escape && CanCloseUsingEscape)
             {
                 if (_defaultCancelCommand != null)
                 {
