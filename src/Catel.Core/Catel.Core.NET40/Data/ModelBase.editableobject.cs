@@ -250,7 +250,7 @@ namespace Catel.Data
 
             if (eventArgs.Cancel)
             {
-                Log.Info("IEditableObject.CancelEDit is canceled by the event args");
+                Log.Info("IEditableObject.CancelEdit is canceled by the event args");
                 return;
             }
 

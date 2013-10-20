@@ -289,6 +289,14 @@ namespace Catel.Data
         internal static bool DisablePropertyChangeNotifications { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether event subscriptions of child values should be disabled.
+        /// <para />
+        /// The default value is <c>false</c>.
+        /// </summary>
+        /// <value><c>true</c> if event subscriptions of child values should be disabled; otherwise, <c>false</c>.</value>
+        protected bool DisableEventSubscriptionsOfChildValues { get; set; }
+
+        /// <summary>
         /// Gets the property data manager that manages the properties of this object.
         /// </summary>
         /// <value>The property data manager.</value>
@@ -1032,6 +1040,11 @@ namespace Catel.Data
         /// <param name="propertyValue">The property value.</param>
         private void HandleObjectEventsSubscription(string propertyName, object propertyValue)
         {
+            if (DisableEventSubscriptionsOfChildValues)
+            {
+                return;
+            }
+
 #if !WP7
             lock (_propertyValuesLock)
             {
