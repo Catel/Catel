@@ -34,6 +34,7 @@ Added/fixed:
 (*) CTL-155 Replace usages of IServiceLocator by IDependencyResolver
 (*) CTL-196 Argument class methods are now decorated with DebuggerNonUserCode instead of DebuggerStepThrough to provide
     a better callstack during exceptions at runtime
+(x) CTL-133 Start and Update the PleasewaitWindow in an Workerthread throws exception
 
 Roadmap:
 ========
