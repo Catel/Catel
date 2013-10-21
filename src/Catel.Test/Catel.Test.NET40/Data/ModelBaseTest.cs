@@ -163,7 +163,7 @@
 #if SILVERLIGHT
             file.Position = 0L;
 #endif
-            var loadedParent = SavableModelBase<Parent>.Load(file);
+            var loadedParent = ModelBase.Load<Parent>(file, SerializationMode.Binary);
 
             Assert.AreEqual(parent, ((IParent)loadedParent.Children[0]).Parent);
         }
@@ -187,7 +187,7 @@
 
                 memoryStream.Position = 0L;
 
-                loadedParent = SavableModelBase<Parent>.Load(memoryStream, SerializationMode.Xml);
+                loadedParent = ModelBase.Load<Parent>(memoryStream, SerializationMode.Xml);
             }
 
             Assert.AreEqual(parent, ((IParent)loadedParent.Children[0]).Parent);
