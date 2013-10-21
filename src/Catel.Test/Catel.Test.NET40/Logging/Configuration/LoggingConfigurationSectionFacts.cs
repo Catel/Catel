@@ -46,9 +46,9 @@ namespace Catel.Test.Logging.Configuration
             
             Assert.IsTrue(fileLogListener.IgnoreCatelLogging);
             Assert.IsFalse(fileLogListener.IsDebugEnabled);
-            Assert.IsFalse(fileLogListener.IsInfoEnabled);
-            Assert.IsFalse(fileLogListener.IsWarningEnabled);
-            Assert.IsFalse(fileLogListener.IsErrorEnabled);
+            Assert.IsTrue(fileLogListener.IsInfoEnabled);
+            Assert.IsTrue(fileLogListener.IsWarningEnabled);
+            Assert.IsTrue(fileLogListener.IsErrorEnabled);
             Assert.AreEqual(fileLogListener.FilePath, "CatelLogging.txt");
         }
         #endregion
