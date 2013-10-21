@@ -40,7 +40,7 @@ namespace Catel
         /// <param name="paramValue">Value of the parameter.</param>
         /// <exception cref="System.ArgumentNullException"></exception>
         /// <exception cref="ArgumentNullException">If <paramref name="paramValue" /> is <c>null</c>.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsNotNull(string paramName, object paramValue)
         {
             if (paramValue == null)
@@ -57,7 +57,7 @@ namespace Catel
         /// <param name="paramValue">Value of the parameter.</param>
         /// <exception cref="System.ArgumentException"></exception>
         /// <exception cref="ArgumentException">If <paramref name="paramValue" /> is <c>null</c> or empty.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsNotNullOrEmpty(string paramName, string paramValue)
         {
             if (string.IsNullOrEmpty(paramValue))
@@ -76,7 +76,7 @@ namespace Catel
         /// <param name="paramName">Name of the parameter.</param>
         /// <param name="paramValue">Value of the parameter.</param>
         /// <exception cref="ArgumentException">If <paramref name="paramValue" /> is <c>null</c> or empty.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsNotNullOrEmpty(string paramName, Guid paramValue)
         {
             IsNotNullOrEmpty(paramName, (Guid?)paramValue);
@@ -89,7 +89,7 @@ namespace Catel
         /// <param name="paramValue">Value of the parameter.</param>
         /// <exception cref="System.ArgumentException"></exception>
         /// <exception cref="ArgumentException">If <paramref name="paramValue" /> is <c>null</c> or empty.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsNotNullOrEmpty(string paramName, Guid? paramValue)
         {
             if (!paramValue.HasValue || paramValue.Value == Guid.Empty)
@@ -109,7 +109,7 @@ namespace Catel
         /// <param name="paramValue">Value of the parameter.</param>
         /// <exception cref="System.ArgumentException"></exception>
         /// <exception cref="ArgumentException">If <paramref name="paramValue" /> is <c>null</c> or a whitespace.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsNotNullOrWhitespace(string paramName, string paramValue)
         {
             if (string.IsNullOrEmpty(paramValue) || (string.CompareOrdinal(paramValue.Trim(), string.Empty) == 0))
@@ -129,7 +129,7 @@ namespace Catel
         /// <param name="paramValue">Value of the parameter.</param>
         /// <exception cref="System.ArgumentException"></exception>
         /// <exception cref="ArgumentException">If <paramref name="paramValue" /> is <c>null</c> or an empty array.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsNotNullOrEmptyArray(string paramName, Array paramValue)
         {
             if ((paramValue == null) || (paramValue.Length == 0))
@@ -154,7 +154,7 @@ namespace Catel
         /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         /// <exception cref="ArgumentNullException">The <paramref name="validation" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="paramValue" /> is out of range.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsNotOutOfRange<T>(string paramName, T paramValue, T minimumValue, T maximumValue, Func<T, T, T, bool> validation)
         {
             IsNotNull("validation", validation);
@@ -176,7 +176,7 @@ namespace Catel
         /// <param name="minimumValue">The minimum value.</param>
         /// <param name="maximumValue">The maximum value.</param>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="paramValue" /> is out of range.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsNotOutOfRange(string paramName, int paramValue, int minimumValue, int maximumValue)
         {
             IsNotOutOfRange(paramName, paramValue, minimumValue, maximumValue, (innerParamValue, innerMinimalValue, innerMaximumValue) => innerParamValue >= innerMinimalValue && innerParamValue <= innerMaximumValue);
@@ -193,7 +193,7 @@ namespace Catel
         /// <param name="minimumValue">The minimum value.</param>
         /// <param name="maximumValue">The maximum value.</param>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="paramValue" /> is out of range.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsNotOutOfRange<T>(string paramName, T paramValue, T minimumValue, T maximumValue)
         {
             IsNotOutOfRange(paramName, paramValue, minimumValue, maximumValue, (innerParamValue, innerMinimalValue, innerMaximumValue) => !Operator<T>.LessThan(innerParamValue, innerMinimalValue) && !Operator<T>.GreaterThan(innerParamValue, innerMaximumValue));
@@ -212,7 +212,7 @@ namespace Catel
         /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         /// <exception cref="ArgumentNullException">The <paramref name="validation" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="paramValue" /> is out of range.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsMinimal<T>(string paramName, T paramValue, T minimumValue, Func<T, T, bool> validation)
         {
             IsNotNull("validation", validation);
@@ -233,7 +233,7 @@ namespace Catel
         /// <param name="paramValue">Value of the parameter.</param>
         /// <param name="minimumValue">The minimum value.</param>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="paramValue" /> is out of range.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsMinimal(string paramName, int paramValue, int minimumValue)
         {
             IsMinimal(paramName, paramValue, minimumValue, (internalParamValue, internalMinimumValue) => internalParamValue >= internalMinimumValue);
@@ -249,7 +249,7 @@ namespace Catel
         /// <param name="paramValue">Value of the parameter.</param>
         /// <param name="minimumValue">The minimum value.</param>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="paramValue" /> is out of range.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsMinimal<T>(string paramName, T paramValue, T minimumValue)
         {
             IsMinimal(paramName, paramValue, minimumValue, (internalParamValue, internalMinimumValue) => Operator<T>.GreaterThanOrEqual(internalParamValue, internalMinimumValue));
@@ -268,7 +268,7 @@ namespace Catel
         /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         /// <exception cref="ArgumentNullException">The <paramref name="validation" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="paramValue" /> is out of range.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsMaximum<T>(string paramName, T paramValue, T maximumValue, Func<T, T, bool> validation)
         {
             if (!validation(paramValue, maximumValue))
@@ -295,7 +295,7 @@ namespace Catel
         /// <exception cref="ArgumentOutOfRangeException">
         /// If <paramref name="paramValue"/> is out of range.
         /// </exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsMaximum(string paramName, int paramValue, int maximumValue)
         {
             IsMaximum(paramName, paramValue, maximumValue, (innerParamValue, innerMaximumValue) => innerParamValue <= maximumValue);
@@ -311,7 +311,7 @@ namespace Catel
         /// <param name="paramValue">Value of the parameter.</param>
         /// <param name="maximumValue">The maximum value.</param>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="paramValue" /> is out of range.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsMaximum<T>(string paramName, T paramValue, T maximumValue)
         {
             IsMaximum(paramName, paramValue, maximumValue, (innerParamValue, innerMaximumValue) => Operator<T>.LessThanOrEqual(innerParamValue, innerMaximumValue));
@@ -329,7 +329,7 @@ namespace Catel
         /// <exception cref="ArgumentException">The <paramref name="paramName" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="baseType" /> is <c>null</c>.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void InheritsFrom(string paramName, Type type, Type baseType)
         {
             IsNotNull("type", type);
@@ -362,7 +362,7 @@ namespace Catel
         /// <param name="baseType">The base type.</param>
         /// <exception cref="ArgumentException">The <paramref name="paramName" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="instance" /> is <c>null</c>.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void InheritsFrom(string paramName, object instance, Type baseType)
         {
             IsNotNull("instance", instance);
@@ -378,7 +378,7 @@ namespace Catel
         /// <param name="instance">The instance.</param>
         /// <exception cref="ArgumentException">The <paramref name="paramName" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="instance" /> is <c>null</c>.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void InheritsFrom<TBase>(string paramName, object instance) 
             where TBase : class
         {
@@ -395,7 +395,7 @@ namespace Catel
         /// <param name="interfaceType">The type of the interface to check for.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="instance" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="instance" /> does not implement the <paramref name="interfaceType" />.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void ImplementsInterface(string paramName, object instance, Type interfaceType)
         {
             Argument.IsNotNull("instance", instance);
@@ -411,7 +411,7 @@ namespace Catel
         /// <param name="instance">The instance to check.</param>
         /// <exception cref="ArgumentException">The <paramref name="paramName" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="instance" /> is <c>null</c>.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void ImplementsInterface<TInterface>(string paramName, object instance)
             where TInterface : class
         {
@@ -430,7 +430,7 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="interfaceType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="type" /> does not implement the <paramref name="interfaceType" />.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void ImplementsInterface(string paramName, Type type, Type interfaceType)
         {
             Argument.IsNotNull("type", type);
@@ -457,7 +457,7 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <paramref name="instance" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="interfaceTypes" /> is <c>null</c> or an empty array.</exception>
         /// <exception cref="ArgumentException">The <paramref name="instance" /> does not implement at least one of the <paramref name="interfaceTypes" />.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void ImplementsOneOfTheInterfaces(string paramName, object instance, Type[] interfaceTypes)
         {
             Argument.IsNotNull("instance", instance);
@@ -475,7 +475,7 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="interfaceTypes" /> is <c>null</c> or an empty array.</exception>
         /// <exception cref="ArgumentException">The <paramref name="type" /> does not implement the <paramref name="interfaceTypes" />.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void ImplementsOneOfTheInterfaces(string paramName, Type type, Type[] interfaceTypes)
         {
             Argument.IsNotNull("type", type);
@@ -512,7 +512,7 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <paramref name="instance" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="instance" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="instance" /> is not of type <paramref name="requiredType" />.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsOfType(string paramName, object instance, Type requiredType)
         {
             Argument.IsNotNull("instance", instance);
@@ -530,7 +530,7 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="type" /> is not of type <paramref name="requiredType" />.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsOfType(string paramName, Type type, Type requiredType)
         {
             Argument.IsNotNull("type", type);
@@ -562,7 +562,7 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <paramref name="instance" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="requiredTypes" /> is <c>null</c> or an empty array.</exception>
         /// <exception cref="ArgumentException">The <paramref name="instance" /> is not at least one of the <paramref name="requiredTypes" />.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsOfOneOfTheTypes(string paramName, object instance, Type[] requiredTypes)
         {
             Argument.IsNotNull("instance", instance);
@@ -580,7 +580,7 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="requiredTypes" /> is <c>null</c> or an empty array.</exception>
         /// <exception cref="ArgumentException">The <paramref name="type" /> is not at least one of the <paramref name="requiredTypes" />.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsOfOneOfTheTypes(string paramName, Type type, Type[] requiredTypes)
         {
             Argument.IsNotNull("type", type);
@@ -622,7 +622,7 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <paramref name="instance" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="notRequiredType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="instance" /> is of type <paramref name="notRequiredType" />.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsNotOfType(string paramName, object instance, Type notRequiredType)
         {
             Argument.IsNotNull("instance", instance);
@@ -640,7 +640,7 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="notRequiredType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="type" /> is of type <paramref name="notRequiredType" />.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsNotOfType(string paramName, Type type, Type notRequiredType)
         {
             Argument.IsNotNull("type", type);
@@ -672,7 +672,7 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <paramref name="instance" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="notRequiredTypes" /> is <c>null</c> or empty array.</exception>
         /// <exception cref="ArgumentException">The <paramref name="instance" /> is of one of the <paramref name="notRequiredTypes" />.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsNotOfOneOfTheTypes(string paramName, object instance, Type[] notRequiredTypes)
         {
             Argument.IsNotNull("instance", instance);
@@ -690,7 +690,7 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="notRequiredTypes" /> is <c>null</c> or empty array.</exception>
         /// <exception cref="ArgumentException">The <paramref name="type" /> is of one of the <paramref name="notRequiredTypes" />.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsNotOfOneOfTheTypes(string paramName, Type type, Type[] notRequiredTypes)
         {
             Argument.IsNotNull("type", type);
@@ -724,7 +724,7 @@ namespace Catel
         /// <exception cref="System.ArgumentException">The <paramref name="paramName" /> is <c>null</c> or whitespace.</exception>
         /// <exception cref="System.ArgumentException">The <paramref name="paramValue" /> is <c>null</c> or whitespace.</exception>
         /// <exception cref="System.ArgumentException">The <paramref name="pattern" /> is <c>null</c> or whitespace.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsNotMatch(string paramName, string paramValue, string pattern, RegexOptions regexOptions = RegexOptions.None)
         {
             Argument.IsNotNull("paramValue", paramValue);
@@ -750,7 +750,7 @@ namespace Catel
         /// <exception cref="ArgumentException">The <paramref name="paramName" /> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentException">The <paramref name="paramValue" /> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentException">The <paramref name="pattern" /> is <c>null</c> or whitespace.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsMatch(string paramName, string paramValue, string pattern, RegexOptions regexOptions = RegexOptions.None)
         {
             Argument.IsNotNull("paramValue", paramValue);
@@ -776,7 +776,7 @@ namespace Catel
         /// <exception cref="ArgumentException">If the <paramref name="validation" /> code returns <c>false</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="paramName" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="paramValue" /> is <c>null</c>.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsValid<T>(string paramName, T paramValue, Func<bool> validation)
         {
             Argument.IsNotNull("validation", validation);
@@ -795,7 +795,7 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <paramref name="paramName" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="paramValue" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="validation" /> is <c>null</c>.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsValid<T>(string paramName, T paramValue, Func<T, bool> validation)
         {
             Argument.IsNotNull("validation", validation);
@@ -814,7 +814,7 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <paramref name="paramName" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="paramValue" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="validator" /> is <c>null</c>.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsValid<T>(string paramName, T paramValue, IValueValidator<T> validator)
         {
             Argument.IsNotNull("validator", validator);
@@ -832,7 +832,7 @@ namespace Catel
         /// <exception cref="ArgumentException">If the <paramref name="validation" /> code returns <c>false</c>.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="paramName" /> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="paramValue" /> is <c>null</c>.</exception>
-        [DebuggerNonUserCode]
+        [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsValid<T>(string paramName, T paramValue, bool validation)
         {
            Argument.IsNotNull("paramValue", paramValue);

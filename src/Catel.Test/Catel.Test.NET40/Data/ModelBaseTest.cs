@@ -489,12 +489,15 @@
 
             obj.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
                                     {
-                                        isInvoked = true;
-
-                                        if (string.Compare(e.PropertyName, "Value") != 0)
+                                        if (!isInvoked)
                                         {
-                                            Assert.Fail("Wrong PropertyChanged property name");
+                                            if (string.Compare(e.PropertyName, "Value") != 0)
+                                            {
+                                                Assert.Fail("Wrong PropertyChanged property name");
+                                            }
                                         }
+
+                                        isInvoked = true;
                                     };
 
             obj.Value = "MyNewValue";
@@ -514,12 +517,15 @@
 
             obj.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
             {
-                isInvoked = true;
-
-                if (string.Compare(e.PropertyName, "Value") != 0)
+                if (!isInvoked)
                 {
-                    Assert.Fail("Wrong PropertyChanged property name");
+                    if (string.Compare(e.PropertyName, "Value") != 0)
+                    {
+                        Assert.Fail("Wrong PropertyChanged property name");
+                    }
                 }
+
+                isInvoked = true;
             };
 
             obj.RaisePropertyChanged((() => obj.Value));
@@ -539,12 +545,15 @@
 
             obj.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
             {
-                isInvoked = true;
-
-                if (string.Compare(e.PropertyName, "Value") != 0)
+                if (!isInvoked)
                 {
-                    Assert.Fail("Wrong PropertyChanged property name");
+                    if (string.Compare(e.PropertyName, "Value") != 0)
+                    {
+                        Assert.Fail("Wrong PropertyChanged property name");
+                    }
                 }
+
+                isInvoked = true;
             };
 
             obj.RaisePropertyChanged("Value");

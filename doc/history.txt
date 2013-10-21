@@ -35,6 +35,7 @@ Added/fixed:
 (*) CTL-196 Argument class methods are now decorated with DebuggerNonUserCode instead of DebuggerStepThrough to provide
     a better callstack during exceptions at runtime
 (*) CTL-202 Small improvements in ModelEqualityComparer to improve performance on large collections
+(*) CTL-207 Improve performance on ModelBase instantiation
 (x) CTL-133 Start and Update the PleasewaitWindow in an Workerthread throws exception
 
 Roadmap:
