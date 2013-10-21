@@ -10,7 +10,7 @@ namespace Catel.ExceptionHandling
     using System;
 
     /// <summary>
-    /// 
+    /// Represents the retry policy.
     /// </summary>
     public interface IRetryPolicy
     {
@@ -21,7 +21,7 @@ namespace Catel.ExceptionHandling
         /// <value>
         /// The number of attempts.
         /// </value>
-        int Attempts { get; }
+        int NumberOfAttempts { get; }
 
         /// <summary>
         /// Gets or sets the interval.

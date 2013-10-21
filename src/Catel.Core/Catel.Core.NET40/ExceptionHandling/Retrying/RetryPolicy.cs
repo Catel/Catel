@@ -10,32 +10,32 @@ namespace Catel.ExceptionHandling
     using System;
 
     /// <summary>
-    /// 
+    /// Represents the retry policy.
     /// </summary>
     public class RetryPolicy : IRetryPolicy
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="RetryPolicy"/> class.
         /// </summary>
-        /// <param name="attempts">The attempts.</param>
+        /// <param name="numberOfAttempts">The number of attempts.</param>
         /// <param name="interval">The interval.</param>
-        /// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="attempts"/> is larger than <c>1</c>.</exception>
-        public RetryPolicy(int attempts, TimeSpan interval)
+        /// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="numberOfAttempts"/> is larger than <c>1</c>.</exception>
+        public RetryPolicy(int numberOfAttempts, TimeSpan interval)
         {
-            Argument.IsMinimal(() => attempts,  1);
+            Argument.IsMinimal("numberOfAttempts", numberOfAttempts,  1);
 
-            Attempts = attempts;
+            NumberOfAttempts = numberOfAttempts;
             Interval = interval;
         }
 
         #region IRetryPolicy Members
         /// <summary>
-        /// Gets the attempts.
+        /// Gets the number of attempts.
         /// </summary>
         /// <value>
-        /// The attempts.
+        /// The number of attempts.
         /// </value>
-        public int Attempts { get; private set; }
+        public int NumberOfAttempts { get; private set; }
 
         /// <summary>
         /// Gets the interval.

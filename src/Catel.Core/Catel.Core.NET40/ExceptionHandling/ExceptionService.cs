@@ -14,6 +14,10 @@ namespace Catel.ExceptionHandling
     using Logging;
     using Reflection;
 
+#if NET45
+    using System.Threading;
+#endif
+
     /// <summary>
     /// The exception service allows the usage of the Try/Catch mechanics. This means that this service provides possibilities
     /// to handle all exception types previously registered.
@@ -204,7 +208,7 @@ namespace Catel.ExceptionHandling
                             if (_exceptionCounter[exceptionHandler.Key].Count <= exceptionHandler.Value.AllowedFrequency.NumberOfTimes)
                             {
                                 OnExceptionBuffered(exception, DateTime.Now);
-                                Log.Debug("[{0}] Exception '{1}' buffered", DateTime.Now, exceptionType.Name);
+                                Log.Debug("[{0}] '{1}' buffered", DateTime.Now, exceptionType.Name);
                                 continue;
                             }
 
@@ -215,7 +219,7 @@ namespace Catel.ExceptionHandling
                             if (duration >= exceptionHandler.Value.AllowedFrequency.Duration && exceptionHandler.Value.AllowedFrequency.Duration != TimeSpan.Zero)
                             {
                                 OnExceptionBuffered(exception, DateTime.Now);
-                                Log.Debug("[{0}] Exception '{1}' buffered", DateTime.Now, exceptionType.Name);
+                                Log.Debug("[{0}] '{1}' buffered", DateTime.Now, exceptionType.Name);
                                 continue;
                             }
                             _exceptionCounter[exceptionHandler.Key].Clear();
@@ -302,7 +306,7 @@ namespace Catel.ExceptionHandling
         }
 
         /// <summary>
-        /// Processes the with retry.
+        /// Processes the specified action with possibilty to retry on error.
         /// </summary>
         /// <typeparam name="TResult">The type of the result.</typeparam>
         /// <param name="action">The action.</param>
@@ -310,6 +314,8 @@ namespace Catel.ExceptionHandling
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         public TResult ProcessWithRetry<TResult>(Func<TResult> action)
         {
+            Argument.IsNotNull("action", action);
+
             var retryCount = 0;
             var interval = TimeSpan.FromMilliseconds(1);
 
@@ -334,7 +340,7 @@ namespace Catel.ExceptionHandling
 
                             retryCount++;
 
-                            if (retryCount <= retryPolicy.Attempts)
+                            if (retryCount <= retryPolicy.NumberOfAttempts)
                             {
                                 interval = retryPolicy.Interval;
                             }
@@ -363,6 +369,8 @@ namespace Catel.ExceptionHandling
 
                 OnRetryingAction(retryCount, lastError, interval);
 
+                Log.Debug("Retrying action for the '{0}' times", retryCount);
+
 #if NET40
                 Delay(interval.TotalMilliseconds).Wait();
 #endif
@@ -370,9 +378,53 @@ namespace Catel.ExceptionHandling
 #if NET45
                 Task.Delay(interval).Wait();
 #endif
-                Log.Debug("Retrying action for the '{0}' times", retryCount);
+                
             }
         }
+
+#if NET45
+        /// <summary>
+        /// Processes the specified action. The action will be executed asynchrounously.
+        /// </summary>
+        public async Task ProcessAsync(Action action, CancellationToken cancellationToken = new CancellationToken())
+        {
+            Argument.IsNotNull("action", action);
+
+            try
+            {
+                await Task.Run(action, cancellationToken);
+            }
+            catch (Exception exception)
+            {
+                if (!HandleException(exception))
+                {
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Processes the specified action. The action will be executed asynchrounously.
+        /// </summary>
+        public async Task<TResult> ProcessAsync<TResult>(Func<Task<TResult>> action, CancellationToken cancellationToken = new CancellationToken())
+        {
+            Argument.IsNotNull("action", action);
+
+            try
+            {
+                return await Task.Run(action, cancellationToken);
+            }
+            catch (Exception exception)
+            {
+                if (!HandleException(exception))
+                {
+                    throw;
+                }
+            }
+
+            return default(TResult);
+        }
+#endif
         #endregion
 
         #region Methods
@@ -411,10 +463,10 @@ namespace Catel.ExceptionHandling
         }
 
         /// <summary>
-        /// 
+        /// Notifies the subscribers whenever a exception buffered event occurs.
         /// </summary>
-        /// <param name="bufferedException"></param>
-        /// <param name="dateTime"></param>
+        /// <param name="bufferedException">The buffered exception</param>
+        /// <param name="dateTime">The date and time when the event occurs.</param>
         protected virtual void OnExceptionBuffered(Exception bufferedException, DateTime dateTime)
         {
             ExceptionBuffered.SafeInvoke(this, new BufferedEventArgs(bufferedException, dateTime));
