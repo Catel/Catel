@@ -215,6 +215,9 @@
     <Compile Include="IO\Path.cs" />
     <Compile Include="Linq\ExpressionUtil.cs" />
     <Compile Include="Logging\BatchLogListenerBase.cs" />
+    <Compile Include="Logging\Configuration\LoggingConfigurationSection.cs" />
+    <Compile Include="Logging\Configuration\LogListenerConfigurationCollection.cs" />
+    <Compile Include="Logging\Configuration\LogListenerConfiguration.cs" />
     <Compile Include="Logging\ConsoleLogListener.cs" />
     <Compile Include="Logging\DebugLogListener.cs" />
     <Compile Include="Logging\EventArgs\LogMessageEventArgs.cs" />

@@ -32,10 +32,11 @@ Added/fixed:
 (+) CTL-142 Added support for WIN81
 (+) CTL-157 Provide an option to prevent close with Escape for datawindows
 (+) CTL-184 Added Retry methods on IExceptionService to allow retrying actions
+(+) CTL-191 Create LogListeners from the application config
 (+) CTL-205 Added Async methods on IExceptionService
 (*) CTL-155 Replace usages of IServiceLocator by IDependencyResolver
-(*) CTL-196 Argument class methods are now decorated with DebuggerNonUserCode instead of DebuggerStepThrough to provide
-    a better callstack during exceptions at runtime
+(*) CTL-196 Argument class methods are now decorated with DebuggerNonUserCode instead of DebuggerStepThrough 
+    to provide a better callstack during exceptions at runtime
 (*) CTL-202 Small improvements in ModelEqualityComparer to improve performance on large collections
 (*) CTL-207 Improve performance on ModelBase instantiation
 (x) CTL-133 Start and Update the PleasewaitWindow in an Workerthread throws exception

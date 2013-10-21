@@ -33,7 +33,7 @@ namespace Catel.Configuration
             TSection section = null;
             if (!string.IsNullOrEmpty(sectionGroupName))
             {
-                ConfigurationSectionGroup configurationSectionGroup = @this.GetSectionGroup(sectionGroupName);
+                var configurationSectionGroup = @this.GetSectionGroup(sectionGroupName);
                 if (configurationSectionGroup != null)
                 {
                     section = (TSection) configurationSectionGroup.Sections[sectionName];

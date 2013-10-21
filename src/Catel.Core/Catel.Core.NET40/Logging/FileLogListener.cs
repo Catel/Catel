@@ -15,8 +15,14 @@ namespace Catel.Logging
     /// </summary>
     public class FileLogListener : BatchLogListenerBase
     {
-        private readonly string _filePath;
-        private readonly int _maxSizeInKiloBytes;
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileLogListener"/> class.
+        /// </summary>
+        public FileLogListener()
+        {
+            MaxSizeInKiloBytes = 1000*10; // 10 MB
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileLogListener" /> class.
@@ -28,10 +34,26 @@ namespace Catel.Logging
         {
             Argument.IsNotNullOrWhitespace(() => filePath);
 
-            _filePath = filePath;
-            _maxSizeInKiloBytes = maxSizeInKiloBytes;
+            FilePath = filePath;
+            MaxSizeInKiloBytes = maxSizeInKiloBytes;
         }
+        #endregion
 
+        #region Properties
+        /// <summary>
+        /// Gets or sets the file path.
+        /// </summary>
+        /// <value>The file path.</value>
+        public string FilePath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the maximum size information kilo bytes.
+        /// </summary>
+        /// <value>The maximum size information kilo bytes.</value>
+        public int MaxSizeInKiloBytes { get; set; }
+        #endregion
+
+        #region Methods
         /// <summary>
         /// Writes the batch of entries.
         /// </summary>
@@ -40,13 +62,15 @@ namespace Catel.Logging
         {
             try
             {
-                var fileInfo = new FileInfo(_filePath);
-                if (fileInfo.Exists && (fileInfo.Length / 1024 >= _maxSizeInKiloBytes))
+                var filePath = FilePath;
+
+                var fileInfo = new FileInfo(filePath);
+                if (fileInfo.Exists && (fileInfo.Length/1024 >= MaxSizeInKiloBytes))
                 {
-                    CreateCopyOfCurrentLogFile(_filePath);
+                    CreateCopyOfCurrentLogFile(FilePath);
                 }
 
-                using (var fileStream = new FileStream(_filePath, FileMode.Append, FileAccess.Write, FileShare.Read))
+                using (var fileStream = new FileStream(filePath, FileMode.Append, FileAccess.Write, FileShare.Read))
                 {
                     using (var writer = new StreamWriter(fileStream))
                     {
@@ -76,5 +100,6 @@ namespace Catel.Logging
                 }
             }
         }
+        #endregion
     }
 }

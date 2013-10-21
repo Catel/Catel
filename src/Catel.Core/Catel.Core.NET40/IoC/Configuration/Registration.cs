@@ -3,11 +3,13 @@
 //   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+
+
 namespace Catel.IoC
 {
     using System;
     using System.Configuration;
-    using Reflection;
+    using Catel.Reflection;
 
     /// <summary>
     /// The registration element.
@@ -15,7 +17,6 @@ namespace Catel.IoC
     public class Registration : ConfigurationElement
     {
         #region Constants
-
         /// <summary>
         /// The interface type property name.
         /// </summary>
@@ -30,83 +31,56 @@ namespace Catel.IoC
         /// The registration type property name.
         /// </summary>
         private const string RegistrationTypePropertyName = "registrationType";
-        
+
         /// <summary>
         /// The registration tag property name.
         /// </summary>
         private const string TagPropertyName = "tag";
-        
         #endregion
 
         #region Properties
-
         /// <summary>
         /// Gets or sets the interface type name.
         /// </summary>
+        /// <value>The name of the interface type.</value>
         [ConfigurationProperty(InterfaceTypePropertyName, IsRequired = true)]
         public string InterfaceTypeName
         {
-            get
-            {
-                return (string)this[InterfaceTypePropertyName];
-            }
-
-            set
-            {
-                this[InterfaceTypePropertyName] = value;
-            }
+            get { return (string) this[InterfaceTypePropertyName]; }
+            set { this[InterfaceTypePropertyName] = value; }
         }
 
         /// <summary>
         /// Gets or sets the implementation type name.
         /// </summary>
+        /// <value>The name of the implementation type.</value>
         [ConfigurationProperty(ImplementationTypePropertyName, IsRequired = true)]
         public string ImplementationTypeName
         {
-            get
-            {
-                return (string)this[ImplementationTypePropertyName];
-            }
-
-            set
-            {
-                this[ImplementationTypePropertyName] = value;
-            }
+            get { return (string) this[ImplementationTypePropertyName]; }
+            set { this[ImplementationTypePropertyName] = value; }
         }
 
         /// <summary>
         /// Gets or sets the registration type.
         /// </summary>
+        /// <value>The type of the registration.</value>
         [ConfigurationProperty(RegistrationTypePropertyName, DefaultValue = RegistrationType.Singleton)]
         public RegistrationType RegistrationType
         {
-            get
-            {
-                return (RegistrationType)this[RegistrationTypePropertyName];
-            }
-
-            set
-            {
-                this[RegistrationTypePropertyName] = value;
-            }
+            get { return (RegistrationType) this[RegistrationTypePropertyName]; }
+            set { this[RegistrationTypePropertyName] = value; }
         }
-        
-        
-		/// <summary>
+
+        /// <summary>
         /// Gets or sets the tag.
         /// </summary>
+        /// <value>The tag.</value>
         [ConfigurationProperty(TagPropertyName)]
         public string Tag
         {
-            get
-            {
-                return (string)this[TagPropertyName];
-            }
-
-            set
-            {
-                this[TagPropertyName] = value;
-            }
+            get { return (string) this[TagPropertyName]; }
+            set { this[TagPropertyName] = value; }
         }
 
         /// <summary>
@@ -114,10 +88,7 @@ namespace Catel.IoC
         /// </summary>
         public Type InterfaceType
         {
-            get
-            {
-                return TypeCache.GetType(InterfaceTypeName);
-            }
+            get { return TypeCache.GetType(InterfaceTypeName); }
         }
 
         /// <summary>
@@ -125,10 +96,7 @@ namespace Catel.IoC
         /// </summary>
         public Type ImplementationType
         {
-            get
-            {
-                return TypeCache.GetType(ImplementationTypeName);
-            }
+            get { return TypeCache.GetType(ImplementationTypeName); }
         }
         #endregion
     }
