@@ -176,6 +176,7 @@
     <Compile Include="Helpers\StringToObjectHelper.cs" />
     <Compile Include="Helpers\TagHelper.cs" />
     <Compile Include="Helpers\UniqueIdentifierHelper.cs" />
+    <Compile Include="IoC\Attributes\InjectionConstructorAttribute.cs" />
     <Compile Include="IoC\Attributes\ServiceLocatorRegistrationAttribute.cs" />
     <Compile Include="IoC\Configuration\\IoCConfigurationSection.cs" />
     <Compile Include="IoC\Configuration\Registration.cs" />

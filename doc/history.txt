@@ -36,6 +36,9 @@ Added/fixed:
 (+) CTL-184 Added Retry methods on IExceptionService to allow retrying actions
 (+) CTL-191 Create LogListeners from the application config
 (+) CTL-205 Added Async methods on IExceptionService
+(*) CTL-125 TypeFactory selects wrong constructor when there is more than 1 option. It now tries parameters which 
+    accept Object or DynamicObject the latest. Also introduced the InjectionConstructorAttribute so the right constructor
+    can be decorated so it is always selected first by Catel
 (*) CTL-155 Replace usages of IServiceLocator by IDependencyResolver
 (*) CTL-196 Argument class methods are now decorated with DebuggerNonUserCode instead of DebuggerStepThrough 
     to provide a better callstack during exceptions at runtime

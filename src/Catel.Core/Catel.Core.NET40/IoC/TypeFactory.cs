@@ -8,9 +8,12 @@ namespace Catel.IoC
 {
     using System;
     using System.Collections.Generic;
+    using System.Dynamic;
     using System.Linq;
     using System.Reflection;
+    using System.Text.RegularExpressions;
     using Catel.Caching;
+    using Catel.Collections;
     using Catel.Logging;
     using Catel.Reflection;
 
@@ -138,7 +141,7 @@ namespace Catel.IoC
                     {
                         _currentTypeRequestPath.PushType(typeRequestInfo, true);
                     }
-                     
+
                     var constructorCacheKey = new ConstructorCacheKey(typeToConstruct, new object[] { });
                     if (_constructorCache.ContainsKey(constructorCacheKey))
                     {
@@ -158,10 +161,8 @@ namespace Catel.IoC
 
                     Log.Debug("Creating instance of type '{0}'. No constructor found in the cache, so searching for the right one.", typeToConstruct.FullName);
 
-                    var constructors = (from constructor in typeToConstruct.GetConstructorsEx()
-                                        orderby constructor.GetParameters().Count() descending
-                                        select constructor).ToList();
-
+                    var typeConstructorsMetadata = GetConstructorsMetadata(typeToConstruct);
+                    var constructors = typeConstructorsMetadata.GetConstructors();
                     foreach (var constructor in constructors)
                     {
                         var instanceCreatedWithInjection = TryCreateWithConstructorInjection(typeToConstruct, constructor);
@@ -378,12 +379,7 @@ namespace Catel.IoC
 
                 Log.Debug("Creating instance of type '{0}' using specific parameters. No constructor found in the cache, so searching for the right one.", typeToConstruct.FullName);
 
-                if (!_typeConstructorsMetadata.ContainsKey(typeToConstruct))
-                {
-                    _typeConstructorsMetadata.Add(typeToConstruct, new TypeConstructorsMetadata(typeToConstruct));
-                }
-
-                var typeConstructorsMetadata = _typeConstructorsMetadata[typeToConstruct];
+                var typeConstructorsMetadata = GetConstructorsMetadata(typeToConstruct);
                 var constructors = typeConstructorsMetadata.GetConstructors(parameters.Count(), !autoCompleteDependencies);
 
                 foreach (var constructor in constructors)
@@ -423,6 +419,22 @@ namespace Catel.IoC
             }
 
             return _specificConstructorCacheWithoutAutoCompletion;
+        }
+
+        /// <summary>
+        /// Gets the constructors metadata.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>The <see cref="TypeConstructorsMetadata"/>.</returns>
+        private TypeConstructorsMetadata GetConstructorsMetadata(Type type)
+        {
+            if (!_typeConstructorsMetadata.ContainsKey(type))
+            {
+                _typeConstructorsMetadata.Add(type, new TypeConstructorsMetadata(type));
+            }
+
+            var typeConstructorsMetadata = _typeConstructorsMetadata[type];
+            return typeConstructorsMetadata;
         }
 
         /// <summary>
@@ -707,25 +719,74 @@ namespace Catel.IoC
 
             public Type Type { get; private set; }
 
+            public List<ConstructorInfo> GetConstructors()
+            {
+                return GetConstructors(-1, false);
+            }
+
             public List<ConstructorInfo> GetConstructors(int parameterCount, bool mustMatchExactCount)
             {
                 string key = string.Format("{0}_{1}", parameterCount, mustMatchExactCount);
 
                 return _callCache.GetFromCacheOrFetch(key, () =>
                 {
-                    if (mustMatchExactCount)
-                    {
-                        return (from constructor in Type.GetConstructorsEx()
-                                where constructor.GetParameters().Length >= parameterCount
-                                select constructor).ToList();
-                    }
+                    var constructors = new List<ConstructorInfo>();
 
-                    return (from constructor in Type.GetConstructorsEx()
-                            where constructor.GetParameters().Length >= parameterCount
-                            orderby constructor.GetParameters().Length descending 
-                            select constructor).ToList();
+                    constructors.AddRange(GetConstructors(parameterCount, mustMatchExactCount, true));
+                    constructors.AddRange(GetConstructors(parameterCount, mustMatchExactCount, false));
+
+                    return constructors;
                 });
             }
+
+            private List<ConstructorInfo> GetConstructors(int parameterCount, bool mustMatchExactCount, bool decoratedWithInjectionConstructorAttribute)
+            {
+                List<ConstructorInfo> constructors;
+
+                if (mustMatchExactCount)
+                {
+                    constructors = (from ctor in Type.GetConstructorsEx()
+                                    where ctor.GetParameters().Length == parameterCount
+                                    orderby ctor.GetParameters().Length descending, CountSpecialObjects(ctor)
+                                    select ctor).ToList();
+                }
+                else
+                {
+                    constructors = (from ctor in Type.GetConstructorsEx()
+                                    where ctor.GetParameters().Length >= parameterCount
+                                    orderby ctor.GetParameters().Length descending, CountSpecialObjects(ctor)
+                                    select ctor).ToList();
+                }
+
+                if (decoratedWithInjectionConstructorAttribute)
+                {
+                    constructors = (from ctor in constructors
+                                    where AttributeHelper.IsDecoratedWithAttribute<InjectionConstructorAttribute>(ctor)
+                                    select ctor).ToList();
+                }
+                else
+                {
+                    constructors = (from ctor in constructors
+                                    where !AttributeHelper.IsDecoratedWithAttribute<InjectionConstructorAttribute>(ctor)
+                                    select ctor).ToList();
+                }
+
+                return constructors;
+            }
+        }
+
+        /// <summary>
+        /// Gets the special objects count for the specific constructor.
+        /// </summary>
+        /// <param name="constructor">The constructor.</param>
+        /// <returns>The number of special objects.</returns>
+        private static int CountSpecialObjects(ConstructorInfo constructor)
+        {
+            var specialObjects = (from parameter in constructor.GetParameters()
+                                  where parameter.ParameterType == typeof(DynamicObject) || parameter.ParameterType == typeof(Object)
+                                  select parameter).Count();
+
+            return specialObjects;
         }
     }
 }

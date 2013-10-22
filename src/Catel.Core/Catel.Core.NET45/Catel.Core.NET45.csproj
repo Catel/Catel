@@ -388,6 +388,9 @@
     <Compile Include="..\Catel.Core.NET40\Helpers\UniqueIdentifierHelper.cs">
       <Link>Helpers\UniqueIdentifierHelper.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\Attributes\InjectionConstructorAttribute.cs">
+      <Link>IoC\Attributes\InjectionConstructorAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Attributes\ServiceLocatorRegistrationAttribute.cs">
       <Link>IoC\Attributes\ServiceLocatorRegistrationAttribute.cs</Link>
     </Compile>
