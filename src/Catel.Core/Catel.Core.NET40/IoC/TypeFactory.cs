@@ -27,6 +27,11 @@ namespace Catel.IoC
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// The type request path name.
+        /// </summary>
+        private const string TypeRequestPathName = "TypeFactory";
         #endregion
 
         #region Fields
@@ -60,12 +65,10 @@ namespace Catel.IoC
         /// </summary>
         private readonly IDependencyResolver _dependencyResolver;
 
-#if !DISABLE_TYPEPATH
         /// <summary>
         /// The current type request path.
         /// </summary>
         private TypeRequestPath _currentTypeRequestPath;
-#endif
 
         /// <summary>
         /// The lock object.
@@ -126,18 +129,16 @@ namespace Catel.IoC
 
                 try
                 {
-#if !DISABLE_TYPEPATH
                     typeRequestInfo = new TypeRequestInfo(typeToConstruct);
                     if (_currentTypeRequestPath == null)
                     {
-                        _currentTypeRequestPath = new TypeRequestPath(typeRequestInfo);
+                        _currentTypeRequestPath = new TypeRequestPath(typeRequestInfo, name: TypeRequestPathName);
                     }
                     else
                     {
                         _currentTypeRequestPath.PushType(typeRequestInfo, true);
                     }
-#endif
-
+                     
                     var constructorCacheKey = new ConstructorCacheKey(typeToConstruct, new object[] { });
                     if (_constructorCache.ContainsKey(constructorCacheKey))
                     {
@@ -145,9 +146,7 @@ namespace Catel.IoC
                         var instanceCreatedWithInjection = TryCreateWithConstructorInjection(typeToConstruct, cachedConstructor);
                         if (instanceCreatedWithInjection != null)
                         {
-#if !DISABLE_TYPEPATH
                             CompleteTypeRequestPathIfRequired(typeRequestInfo);
-#endif
 
                             return instanceCreatedWithInjection;
                         }
@@ -168,9 +167,7 @@ namespace Catel.IoC
                         var instanceCreatedWithInjection = TryCreateWithConstructorInjection(typeToConstruct, constructor);
                         if (instanceCreatedWithInjection != null)
                         {
-#if !DISABLE_TYPEPATH
                             CompleteTypeRequestPathIfRequired(typeRequestInfo);
-#endif
 
                             // We found a constructor that works, cache it
                             _constructorCache[constructorCacheKey] = constructor;
@@ -182,9 +179,7 @@ namespace Catel.IoC
                     var createdInstanceUsingActivator = CreateInstanceUsingActivator(typeToConstruct);
                     if (createdInstanceUsingActivator != null)
                     {
-#if !DISABLE_TYPEPATH
                         CompleteTypeRequestPathIfRequired(typeRequestInfo);
-#endif
 
                         return createdInstanceUsingActivator;
                     }
@@ -195,14 +190,14 @@ namespace Catel.IoC
                 }
                 catch (Exception ex)
                 {
-                    CloseCurrentTypeTypeIfRequired(typeRequestInfo);
+                    CloseCurrentTypeIfRequired(typeRequestInfo);
 
                     Log.Warning(ex, "Failed to construct type '{0}'", typeToConstruct.FullName);
 
                     throw;
                 }
 
-                CloseCurrentTypeTypeIfRequired(typeRequestInfo);
+                CloseCurrentTypeIfRequired(typeRequestInfo);
 
                 return null;
             }
@@ -283,13 +278,12 @@ namespace Catel.IoC
             return instance;
         }
 
-#if !DISABLE_TYPEPATH
         /// <summary>
         /// Marks the specified type as not being created. If this was the only type being constructed, the type request
         /// path will be closed.
         /// </summary>
         /// <param name="typeRequestInfoForTypeJustConstructed">The type request info for type just constructed.</param>
-        private void CloseCurrentTypeTypeIfRequired(TypeRequestInfo typeRequestInfoForTypeJustConstructed)
+        private void CloseCurrentTypeIfRequired(TypeRequestInfo typeRequestInfoForTypeJustConstructed)
         {
             lock (_lockObject)
             {
@@ -329,7 +323,6 @@ namespace Catel.IoC
                 }
             }
         }
-#endif
 
         /// <summary>
         /// Initializes the created object after its construction.
@@ -539,9 +532,22 @@ namespace Catel.IoC
                 return null;
             }
 
-            var parameters = _dependencyResolver.ResolveAll(parametersArray);
+            try
+            {
+                var parameters = _dependencyResolver.ResolveAll(parametersArray);
 
-            return TryCreateWithConstructorInjectionWithParameters(typeToConstruct, constructorInfo, parameters);
+                return TryCreateWithConstructorInjectionWithParameters(typeToConstruct, constructorInfo, parameters);
+            }
+            catch (CircularDependencyException ex)
+            {
+                // Only handle CircularDependencyExceptions we throw ourselves
+                if (string.Equals(TypeRequestPathName, ex.TypePath.Name, StringComparison.Ordinal))
+                {
+                    throw;
+                }
+
+                return null;
+            }
         }
 
         /// <summary>
@@ -590,6 +596,14 @@ namespace Catel.IoC
             catch (TargetParameterCountException)
             {
                 // Ignore, we accept this
+            }
+            catch (CircularDependencyException ex)
+            {
+                // Only handle CircularDependencyExceptions we throw ourselves
+                if (string.Equals(TypeRequestPathName, ex.TypePath.Name, StringComparison.Ordinal))
+                {
+                    throw;
+                }
             }
             catch (Exception ex)
             {

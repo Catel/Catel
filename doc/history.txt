@@ -31,6 +31,8 @@ Added/fixed:
 ============
 (+) CTL-142 Added support for WIN81
 (+) CTL-157 Provide an option to prevent close with Escape for datawindows
+(+) CTL-161 Allow registration and resolving of generic types, this means that one can now register an open
+    generic type like IDictionary<,> and resolve it as IDictionary<string, int>
 (+) CTL-184 Added Retry methods on IExceptionService to allow retrying actions
 (+) CTL-191 Create LogListeners from the application config
 (+) CTL-205 Added Async methods on IExceptionService

@@ -515,11 +515,6 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-            if (!IsGenericTypeEx(type))
-            {
-                throw new NotSupportedException(string.Format("The type '{0}' is not generic, cannot get generic arguments", type.FullName));
-            }
-
 #if NETFX_CORE
             return type.GetTypeInfo().GenericTypeArguments;
 #else
