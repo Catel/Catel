@@ -10,6 +10,7 @@ namespace Catel.Modules
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
+    using System.Runtime.Versioning;
     using System.Text.RegularExpressions;
 
     using Catel.Logging;
@@ -29,6 +30,15 @@ namespace Catel.Modules
         /// The type name pattern.
         /// </summary>
         private const string TypeNamePattern = "[^,]+,([^,]+).*";
+
+        /// <summary>
+        /// The framework identifier conversion map.
+        /// </summary>
+        private readonly Dictionary<string, string> frameworkIdentifierConversionMap = new Dictionary<string, string>()
+                                                                     {
+                                                                         {".NETFramework,Version=v4.0", "NET40"},
+                                                                         {".NETFramework,Version=v4.5", "NET45"}
+                                                                     };
 
         /// <summary>
         /// The log.
@@ -137,18 +147,12 @@ namespace Catel.Modules
                         IPackage package;
                         if (repository.TryFindPackage(packageName.Id, packageName.Version, out package))
                         {
-                            /*
-                            TODO: Convert name.Identifier to a simplified framework identifier to be compare with moduleCatalog.FrameworkNameIdentifier 
-                            IEnumerable<FrameworkName> supportedFrameworks = package.GetSupportedFrameworks();
-                            if (supportedFrameworks == null || supportedFrameworks.Any(name => name.Identifier.Equals(moduleCatalog.FrameworkNameIdentifier)))
+                            var supportedFrameworks = package.GetSupportedFrameworks();
+                            if (supportedFrameworks != null && supportedFrameworks.Any(name => frameworkIdentifierConversionMap.ContainsKey(name.FullName) && frameworkIdentifierConversionMap[name.FullName].Equals(moduleCatalog.FrameworkNameIdentifier)))
                             {
-                                Log.Warning("The package may have no support for framework '{0}'", moduleCatalog.FrameworkNameIdentifier);
                                 canLoad = true;
-                            }*/
-                            _installPackageRequests.Add(moduleInfo, new InstallPackageRequest(moduleCatalog, package));
-
-                            // TODO: Remove this line when the code above will be fixed
-                            canLoad = true;
+                                _installPackageRequests.Add(moduleInfo, new InstallPackageRequest(moduleCatalog, package));
+                            }
                         }                        
                     }
                 }
