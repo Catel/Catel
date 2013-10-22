@@ -146,7 +146,7 @@
             Assert.AreEqual(parent, ((IParent)child).Parent);
         }
 
-#if !NETFX_CORE
+#if NET
         /// <summary>
         /// Tests the parent and child relations after deserialization.
         /// </summary>
@@ -160,9 +160,7 @@
 
             var file = _filesHelper.GetTempFile();
             parent.Save(file);
-#if SILVERLIGHT
-            file.Position = 0L;
-#endif
+
             var loadedParent = ModelBase.Load<Parent>(file, SerializationMode.Binary);
 
             Assert.AreEqual(parent, ((IParent)loadedParent.Children[0]).Parent);
