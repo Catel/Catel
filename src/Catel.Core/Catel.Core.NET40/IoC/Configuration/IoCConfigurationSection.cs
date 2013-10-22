@@ -10,7 +10,7 @@ namespace Catel.IoC
     using System.Linq;
 
     /// <summary>
-    /// IoC configuration section
+    /// IoC configuration section.
     /// </summary>
     /// <example>
     /// <code>
@@ -46,7 +46,7 @@ namespace Catel.IoC
         #region Constants
         
         /// <summary>
-        /// The service locator configuration collection property name
+        /// The service locator configuration collection property name.
         /// </summary>
         private const string ServiceLocatorConfigurationCollectionPropertyName = "serviceLocatorConfigurations";
         
@@ -54,7 +54,7 @@ namespace Catel.IoC
 
         #region Properties
         /// <summary>
-        /// Gets the IoC configuration collection
+        /// Gets the IoC configuration collection.
         /// </summary>
         [ConfigurationProperty(ServiceLocatorConfigurationCollectionPropertyName, IsDefaultCollection = false)]
         public ServiceLocatorConfigurationCollection ServiceLocatorConfigurationCollection
@@ -66,7 +66,7 @@ namespace Catel.IoC
         }
         
         /// <summary>
-        /// Gets the Default service locator configuration
+        /// Gets the Default service locator configuration.
         /// </summary>
         public ServiceLocatorConfiguration DefaultServiceLocatorConfiguration
         {

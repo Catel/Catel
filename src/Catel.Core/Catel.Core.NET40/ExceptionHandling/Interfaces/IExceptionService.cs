@@ -8,6 +8,11 @@ namespace Catel.ExceptionHandling
 {
     using System;
     using System.Collections.Generic;
+    
+#if NET45
+    using System.Threading;
+    using System.Threading.Tasks;
+#endif
 
     /// <summary>
     /// This interface describes a simple Exception service.
@@ -110,6 +115,18 @@ namespace Catel.ExceptionHandling
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         TResult ProcessWithRetry<TResult>(Func<TResult> action);
+
+#if NET45
+        /// <summary>
+        /// Processes the specified action. The action will be executed asynchrounously.
+        /// </summary>
+        Task ProcessAsync(Action action, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Processes the specified action. The action will be executed asynchrounously.
+        /// </summary>
+        Task<TResult> ProcessAsync<TResult>(Func<Task<TResult>> action, CancellationToken cancellationToken = default(CancellationToken));
+#endif
         #endregion
     }
 }

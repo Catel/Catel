@@ -26,6 +26,7 @@ namespace Catel.Data
 #endif
     public class ObservableObject : IAdvancedNotifyPropertyChanging, IAdvancedNotifyPropertyChanged
     {
+        #region Events
         /// <summary>
         /// Occurs when a property of this object is changing.
         /// </summary>
@@ -41,6 +42,8 @@ namespace Catel.Data
         [field: NonSerialized]
 #endif
         public event PropertyChangedEventHandler PropertyChanged;
+        #endregion
+
 
         #region Methods
 #if NET
@@ -53,7 +56,7 @@ namespace Catel.Data
         /// <returns>System.Xml.XmlQualifiedName.</returns>
         public static System.Xml.XmlQualifiedName GetObservableObjectXmlSchema(XmlSchemaSet schemaSet)
         {
-            return Runtime.Serialization.XmlSchemaManager.GetXmlSchema(typeof (ObservableObject), schemaSet);
+            return Runtime.Serialization.XmlSchemaManager.GetXmlSchema(typeof(ObservableObject), schemaSet);
         }
 #endif
 

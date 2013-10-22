@@ -228,6 +228,7 @@
     <Compile Include="IoC\TypeRequestPathFacts.cs" />
     <Compile Include="Extensions\Memento\BatchFacts.cs" />
     <Compile Include="Extensions\Memento\OperationSetFacts.cs" />
+    <Compile Include="Logging\Configuration\LoggingConfigurationSectionFacts.cs" />
     <Compile Include="Messaging\MessageMediatorHelperFacts.cs" />
     <Compile Include="ModuleInitializer.cs" />
     <Compile Include="MVVM\Commands\ViewModelCommandManagerFacts.cs" />

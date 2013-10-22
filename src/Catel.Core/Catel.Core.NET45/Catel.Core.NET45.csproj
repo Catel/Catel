@@ -505,6 +505,15 @@
     <Compile Include="..\Catel.Core.NET40\Logging\BatchLogListenerBase.cs">
       <Link>Logging\BatchLogListenerBase.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Logging\Configuration\LoggingConfigurationSection.cs">
+      <Link>Logging\Configuration\LoggingConfigurationSection.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Logging\Configuration\LogListenerConfiguration.cs">
+      <Link>Logging\Configuration\LogListenerConfiguration.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Logging\Configuration\LogListenerConfigurationCollection.cs">
+      <Link>Logging\Configuration\LogListenerConfigurationCollection.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\ConsoleLogListener.cs">
       <Link>Logging\ConsoleLogListener.cs</Link>
     </Compile>
