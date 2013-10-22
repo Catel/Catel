@@ -36,6 +36,7 @@ Added/fixed:
 (+) CTL-184 Added Retry methods on IExceptionService to allow retrying actions
 (+) CTL-191 Create LogListeners from the application config
 (+) CTL-205 Added Async methods on IExceptionService
+(+) CTL-208 Added support for Entity Framework 6 in a new extension (Catel.Extensions.EntityFramework6)
 (*) CTL-125 TypeFactory selects wrong constructor when there is more than 1 option. It now tries parameters which 
     accept Object or DynamicObject the latest. Also introduced the InjectionConstructorAttribute so the right constructor
     can be decorated so it is always selected first by Catel

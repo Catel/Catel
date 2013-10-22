@@ -18,7 +18,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\..\output\debug\NET40\Catel.Extensions.EntityFramework5\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET;NET40</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET;NET40;EF5</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\..\..\output\debug\NET40\Catel.Extensions.EntityFramework5\Catel.Extensions.EntityFramework5.xml</DocumentationFile>
@@ -28,7 +28,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\..\output\release\NET40\Catel.Extensions.EntityFramework5\</OutputPath>
-    <DefineConstants>TRACE;NET;NET40</DefineConstants>
+    <DefineConstants>TRACE;NET;NET40;EF5</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

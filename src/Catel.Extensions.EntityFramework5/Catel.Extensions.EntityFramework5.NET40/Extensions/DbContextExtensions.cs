@@ -7,16 +7,26 @@
 namespace Catel.Data
 {
     using System;
-    using System.Data;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     using System.Data.Metadata.Edm;
-    using System.Data.Objects;
     using System.Linq;
     using System.Text.RegularExpressions;
 
     using Caching;
     using Reflection;
+
+#if EF5
+    using ObjectContext = System.Data.Objects.ObjectContext;
+    using DataSpace = System.Data.Metadata.Edm.DataSpace;
+    using EntityKey = System.Data.EntityKey;
+    using EntityKeyMember = System.Data.EntityKeyMember;
+#else
+    using ObjectContext = System.Data.Entity.Core.Objects.ObjectContext;
+    using DataSpace = System.Data.Entity.Core.Metadata.Edm.DataSpace;
+    using EntityKey = System.Data.Entity.Core.EntityKey;
+    using EntityKeyMember = System.Data.Entity.Core.EntityKeyMember;
+#endif
 
     /// <summary>
     /// Extensions to the <see cref="DbContext"/> class.

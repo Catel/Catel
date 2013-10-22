@@ -10,11 +10,16 @@ namespace Catel.Data
     using System.Data;
     using System.Data.Common;
     using System.Data.Entity;
-    using System.Data.Objects;
     using System.Globalization;
     using IoC;
     using Logging;
     using Repositories;
+
+#if EF5
+    using SaveOptions = System.Data.Objects.SaveOptions;
+#else
+    using SaveOptions = System.Data.Entity.Core.Objects.SaveOptions;
+#endif
 
     /// <summary>
     /// Implementation of the unit of work pattern for entity framework.

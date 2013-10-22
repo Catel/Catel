@@ -9,9 +9,14 @@ namespace Catel.Data
     using System;
     using System.Data;
     using System.Data.Entity;
-    using System.Data.Objects;
     using IoC;
     using Repositories;
+
+#if EF5
+    using SaveOptions = System.Data.Objects.SaveOptions;
+#else
+    using SaveOptions = System.Data.Entity.Core.Objects.SaveOptions;
+#endif
 
     /// <summary>
     /// Interface defining a unit of work.

@@ -717,9 +717,9 @@
     <Compile Include="Windows\Interactivity\Behavior.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Catel.Core\Catel.Core.WIN81\Catel.Core.WIN81.csproj">
+    <ProjectReference Include="..\..\Catel.Core\Catel.Core.WIN80\Catel.Core.WIN80.csproj">
       <Project>{b9ae0468-56bb-4afc-8533-8a493fddf8da}</Project>
-      <Name>Catel.Core.WIN81</Name>
+      <Name>Catel.Core.WIN80</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
