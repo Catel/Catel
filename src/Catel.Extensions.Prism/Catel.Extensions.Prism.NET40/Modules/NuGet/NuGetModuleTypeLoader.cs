@@ -132,22 +132,24 @@ namespace Catel.Modules
                 {
                     NuGetBasedModuleCatalog moduleCatalog = _moduleCatalogs[i++];
                     IPackageRepository repository = moduleCatalog.GetPackageRepository();
-
-                    IPackage package;
-                    if (repository.TryFindPackage(packageName.Id, packageName.Version, out package))
+                    if (repository != null)
                     {
-                        /*
-                        TODO: Convert name.Identifier to a simplified framework identifier to be compare with moduleCatalog.FrameworkNameIdentifier 
-                        IEnumerable<FrameworkName> supportedFrameworks = package.GetSupportedFrameworks();
-                        if (supportedFrameworks == null || supportedFrameworks.Any(name => name.Identifier.Equals(moduleCatalog.FrameworkNameIdentifier)))
+                        IPackage package;
+                        if (repository.TryFindPackage(packageName.Id, packageName.Version, out package))
                         {
-                            Log.Warning("The package may have no support for framework '{0}'", moduleCatalog.FrameworkNameIdentifier);
-                            canLoad = true;
-                        }*/
-                        _installPackageRequests.Add(moduleInfo, new InstallPackageRequest(repository, package, moduleCatalog));
+                            /*
+                            TODO: Convert name.Identifier to a simplified framework identifier to be compare with moduleCatalog.FrameworkNameIdentifier 
+                            IEnumerable<FrameworkName> supportedFrameworks = package.GetSupportedFrameworks();
+                            if (supportedFrameworks == null || supportedFrameworks.Any(name => name.Identifier.Equals(moduleCatalog.FrameworkNameIdentifier)))
+                            {
+                                Log.Warning("The package may have no support for framework '{0}'", moduleCatalog.FrameworkNameIdentifier);
+                                canLoad = true;
+                            }*/
+                            _installPackageRequests.Add(moduleInfo, new InstallPackageRequest(moduleCatalog, package));
 
-                        // TODO: Remove this line when the code above will be fixed
-                        canLoad = true;
+                            // TODO: Remove this line when the code above will be fixed
+                            canLoad = true;
+                        }                        
                     }
                 }
             }

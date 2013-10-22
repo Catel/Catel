@@ -6,9 +6,11 @@
 
 namespace Catel.Modules.Extensions
 {
+    using System;
     using System.Linq;
 
     using Catel.Caching;
+    using Catel.Logging;
 
     using Microsoft.Practices.Prism.Modularity;
 
@@ -23,7 +25,12 @@ namespace Catel.Modules.Extensions
         /// <summary>
         /// The package name cache storage.
         /// </summary>
-        private static readonly CacheStorage<ModuleInfo, PackageName> PackageNameCacheStorage = new CacheStorage<ModuleInfo, PackageName>();
+        private static readonly CacheStorage<ModuleInfo, PackageName> PackageNameCacheStorage = new CacheStorage<ModuleInfo, PackageName>(storeNullValues: true);
+
+        /// <summary>
+        /// The log.
+        /// </summary>
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         #endregion
 
         #region Methods
@@ -43,20 +50,33 @@ namespace Catel.Modules.Extensions
 
             return PackageNameCacheStorage.GetFromCacheOrFetch(moduleInfo, () =>
                 {
-                    string packageId = string.Empty;
+                    string packageId;
                     string packageVersion = string.Empty;
                     string @ref = moduleInfo.Ref;
                     if (@ref.Contains(','))
                     {
-                        string[] strings = @ref.Split(',');
-                        packageId = strings[0].Trim();
-                        packageVersion = strings[1].Trim();
+                        var indexOf = @ref.IndexOf(',');
+                        packageId = @ref.Substring(0, indexOf).Trim();
+                        packageVersion = @ref.Substring(indexOf + 1).Trim();
+                    }
+                    else
+                    {
+                        packageId = @ref.Trim();
                     }
 
                     PackageName packageName = null;
                     if (!string.IsNullOrEmpty(packageId))
                     {
-                        packageName = new PackageName(packageId, new SemanticVersion(packageVersion));
+                        try
+                        {
+                            Log.Debug("Initializing package name from Id:'{0}' and Version:'{1}'", packageId, packageVersion);
+
+                            packageName = new PackageName(packageId, string.IsNullOrEmpty(packageVersion) ? null : new SemanticVersion(packageVersion));
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Error(e);
+                        }
                     }
 
                     return packageName;

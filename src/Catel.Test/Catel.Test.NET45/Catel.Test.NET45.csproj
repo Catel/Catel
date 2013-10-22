@@ -83,6 +83,10 @@
     <Reference Include="Ninject">
       <HintPath>..\..\..\lib\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
     </Reference>
+    <Reference Include="NuGet.Core, Version=2.7.40808.167, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\NuGet.Core.2.7.0\lib\net40-Client\NuGet.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Obsolete, Version=2.3.0.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Obsolete.Fody.2.3.0\Lib\NET35\Obsolete.dll</HintPath>
@@ -393,6 +397,12 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Extensions\Prism\BootstrapperBaseTests.cs">
       <Link>Extensions\Prism\BootstrapperBaseTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\Prism\Modules\Extensions\ModuleInfoExtensions_Facts.cs">
+      <Link>Extensions\Prism\Modules\Extensions\ModuleInfoExtensions_Facts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\Prism\Modules\Extensions\NuGetBasedModuleCatalogExtensions_Facts.cs">
+      <Link>Extensions\Prism\Modules\Extensions\NuGetBasedModuleCatalogExtensions_Facts.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Extensions\Prism\ServiceLocatorAdapterTests.cs">
       <Link>Extensions\Prism\ServiceLocatorAdapterTests.cs</Link>

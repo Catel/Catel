@@ -12,7 +12,8 @@ namespace Catel.Test.Extensions.Prism
 
     using Microsoft.Practices.Prism.Modularity;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using ModuleCatalog = Modules.ModuleCatalog;
+
+    using ModuleCatalog = Catel.Modules.ModuleCatalog;
 
     /// <summary>
     /// The composite module catalog tests.

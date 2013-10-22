@@ -6,7 +6,10 @@
 
 namespace Catel.Modules.Extensions
 {
+    using System;
+
     using Catel.Caching;
+    using Catel.Logging;
 
     using NuGet;
 
@@ -19,7 +22,12 @@ namespace Catel.Modules.Extensions
         /// <summary>
         /// The package repository cache.
         /// </summary>
-        private static readonly CacheStorage<string, IPackageRepository> PackageRepositoryCache = new CacheStorage<string, IPackageRepository>();
+        private static readonly CacheStorage<string, IPackageRepository> PackageRepositoryCache = new CacheStorage<string, IPackageRepository>(storeNullValues: true);
+        
+        /// <summary>
+        /// The log.
+        /// </summary>
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         #endregion
 
         #region Methods
@@ -37,7 +45,24 @@ namespace Catel.Modules.Extensions
         {
             Argument.IsNotNull(() => moduleCatalog);
 
-            return PackageRepositoryCache.GetFromCacheOrFetch(moduleCatalog.PackageSource, () => PackageRepositoryFactory.Default.CreateRepository(moduleCatalog.PackageSource));
+            return PackageRepositoryCache.GetFromCacheOrFetch(moduleCatalog.PackageSource, () =>
+                {
+                    IPackageRepository packageRepository = null;
+                    try
+                    {
+                        Log.Debug("Creating package repository with source '{0}'", moduleCatalog.PackageSource);
+   
+                        packageRepository = PackageRepositoryFactory.Default.CreateRepository(moduleCatalog.PackageSource);
+
+                        Log.Debug("Created package repository with source '{0}'", moduleCatalog.PackageSource);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error(e);
+                    }
+
+                    return packageRepository;
+                });
         }
         #endregion
     }
