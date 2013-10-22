@@ -8,6 +8,9 @@ namespace Catel.Modules
 {
     using System.Diagnostics;
     using System.IO;
+
+    using Catel.Modules.Extensions;
+
     using NuGet;
 
     /// <summary>
@@ -26,21 +29,17 @@ namespace Catel.Modules
         /// <summary>
         /// Initializes a new instance of the <see cref="InstallPackageRequest" /> class.
         /// </summary>
-        /// <param name="packageRepository">The package repository.</param>
-        /// <param name="package">The package.</param>
         /// <param name="moduleCatalog">The module catalog.</param>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="packageRepository" /> is <c>null</c>.</exception>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="package" /> is <c>null</c>.</exception>
+        /// <param name="package">The package.</param>
         /// <exception cref="System.ArgumentNullException">The <paramref name="moduleCatalog" /> is <c>null</c>.</exception>
-        public InstallPackageRequest(IPackageRepository packageRepository, IPackage package, NuGetBasedModuleCatalog moduleCatalog)
+        /// <exception cref="System.ArgumentNullException">The <paramref name="package" /> is <c>null</c>.</exception>
+        public InstallPackageRequest(NuGetBasedModuleCatalog moduleCatalog, IPackage package)
         {
-            Argument.IsNotNull(() => packageRepository);
             Argument.IsNotNull(() => moduleCatalog);
             Argument.IsNotNull(() => package);
-         
-            PackageRepository = packageRepository;
-            Package = package;
+
             _moduleCatalog = moduleCatalog;
+            Package = package;
         }
         #endregion
 
@@ -104,7 +103,13 @@ namespace Catel.Modules
         /// <summary>
         /// Gets the package repository.
         /// </summary>
-        public IPackageRepository PackageRepository { get; private set; }
+        public IPackageRepository PackageRepository
+        {
+            get
+            {
+                return _moduleCatalog.GetPackageRepository();
+            }
+        }
         #endregion
     }
 }
