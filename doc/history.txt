@@ -49,6 +49,7 @@ Added/fixed:
 (*) CTL-207 Improve performance on ModelBase instantiation
 (x) CTL-133 Start and Update the PleasewaitWindow in an Workerthread throws exception
 (x) CTL-203 The Load Method of Catel.Data.ModelBase will call the constructor of the deserialized class two times
+(x) CTL-212 PropertyDataManager throws first chance exceptions for generic types
 
 Roadmap:
 ========
