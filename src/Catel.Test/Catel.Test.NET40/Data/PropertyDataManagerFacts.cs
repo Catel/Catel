@@ -248,6 +248,45 @@
             }
         }
 
+        [TestClass]
+        public class SupportsGenericClasses
+        {
+            public class GenericClass<T> : ModelBase
+            {
+                /// <summary>
+                /// Gets or sets the property value.
+                /// </summary>
+                public string FirstName
+                {
+                    get { return GetValue<string>(FirstNameProperty); }
+                    set { SetValue(FirstNameProperty, value); }
+                }
+
+                /// <summary>
+                /// Register the FirstName property so it is known in the class.
+                /// </summary>
+                public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), null);
+            }
+
+            [TestMethod]
+            public void ReturnsNoPropertiesForOpenGenericTypes()
+            {
+                var propertyDataManager = new PropertyDataManager();
+                var properties = propertyDataManager.GetProperties(typeof(GenericClass<>));
+
+                Assert.AreEqual(0, properties.Count);
+            }
+
+            [TestMethod]
+            public void ReturnsPropertiesForClosedGenericTypes()
+            {
+                var propertyDataManager = new PropertyDataManager();
+                var properties = propertyDataManager.GetProperties(typeof(GenericClass<int>));
+
+                Assert.AreNotEqual(0, properties.Count);
+            }
+        }
+
         #region Helper methods
         /// <summary>
         /// Registers the property with the property data manager. This is a shortcut method so the PropertyData doesn't have
@@ -259,7 +298,7 @@
         /// <param name="defaultValue">The default value.</param>
         private static void RegisterProperty<T>(PropertyDataManager propertyDataManager, string name, T defaultValue)
         {
-            propertyDataManager.RegisterProperty(typeof(PropertyDataManagerFacts), name, 
+            propertyDataManager.RegisterProperty(typeof(PropertyDataManagerFacts), name,
                 new PropertyData(name, typeof(T), defaultValue, false, null, false, false, false, false, false));
         }
         #endregion

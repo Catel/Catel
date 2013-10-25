@@ -206,6 +206,23 @@ namespace Catel.Reflection
         }
 
         /// <summary>
+        /// Determines whether the specified type contains generic parameters.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns><c>true</c> if the specified type contains generic parameters; otherwise, <c>false</c>.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        public static bool ContainsGenericParametersEx(this Type type)
+        {
+            Argument.IsNotNull("type", type);
+
+#if NETFX_CORE
+            return type.GetTypeInfo().ContainsGenericParameters;
+#else
+            return type.ContainsGenericParameters;
+#endif
+        }
+
+        /// <summary>
         /// The get assembly ex.
         /// </summary>
         /// <param name="type">The type.</param>

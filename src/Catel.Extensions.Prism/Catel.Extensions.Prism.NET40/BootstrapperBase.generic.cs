@@ -28,6 +28,15 @@ namespace Catel
 #endif
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="BootstrapperBase{TShell}" /> class.
+        /// </summary>
+        /// <param name="serviceLocator">The service locator.</param>
+        protected BootstrapperBase(IServiceLocator serviceLocator = null)
+            : base(serviceLocator)
+        {
+        }
+
+        /// <summary>
         /// Creates the shell or main window of the application.
         /// </summary>
         /// <returns>
@@ -92,6 +101,15 @@ namespace Catel
 #endif
         where TModuleCatalog : class, IModuleCatalog, new()
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BootstrapperBase{TShell, TModuleCatalog}" /> class.
+        /// </summary>
+        /// <param name="serviceLocator">The service locator.</param>
+        protected BootstrapperBase(IServiceLocator serviceLocator = null)
+            : base(serviceLocator)
+        {
+        }
+
         /// <summary>
         /// Creates the <see cref="T:Microsoft.Practices.Prism.Modularity.IModuleCatalog"/> used by Prism.
         /// </summary>

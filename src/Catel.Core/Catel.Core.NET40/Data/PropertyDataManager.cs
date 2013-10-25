@@ -178,6 +178,12 @@ namespace Catel.Data
         /// <exception cref="InvalidOperationException">One ore more fields are not declared correctly.</exception>
         private IEnumerable<PropertyData> FindFields(Type type)
         {
+            // CTL-212: Generic types are not supported for FieldInfo.GetValue
+            if (type.ContainsGenericParametersEx())
+            {
+                return new PropertyData[] { };
+            }
+
             // Fields - safety checks for non-static fields
             var nonStaticFields = (from field in type.GetFieldsEx(BindingFlagsHelper.GetFinalBindingFlags(true, false, true))
                                    where field.FieldType == typeof(PropertyData)
