@@ -93,12 +93,12 @@
 
         public override void Execute()
         {
-            var package = this.Package;
-            var packageManager = new PackageManager(this.PackageRepository, this.OutputDirectory);
+            var package = Package;
+            var packageManager = new PackageManager(PackageRepository, OutputDirectory);
 
             Log.Debug("Installing package '{0}' with version '{1}'", package.Id, package.Version);
 
-            packageManager.InstallPackage(package, this.IgnoreDependencies, this.AllowPrereleaseVersions);
+            packageManager.InstallPackage(package, IgnoreDependencies, AllowPrereleaseVersions);
         }
         #endregion
     }
