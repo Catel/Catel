@@ -4,14 +4,19 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+
 namespace Catel.Modules
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
+    using System.Runtime.Versioning;
 
     using Catel.Caching;
+    using Catel.Logging;
     using Catel.Modules.Extensions;
 
     using Microsoft.Practices.Prism.Modularity;
@@ -28,19 +33,34 @@ namespace Catel.Modules
         /// The relative Url Pattern
         /// </summary>
         public const string RelativeUrlPattern = "{0}/{1}/lib/{2}/{3}";
+
+        /// <summary>
+        /// The log.
+        /// </summary>
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// The framework identifier conversion map.
+        /// </summary>
+        private static readonly Dictionary<string, string> FrameworkIdentifierConversionMap = new Dictionary<string, string> { { ".NETFramework,Version=v4.0", "NET40" }, { ".NETFramework,Version=v4.5", "NET45" } };
+
+        /// <summary>
+        /// The package repository cache.
+        /// </summary>
+        private static readonly CacheStorage<string, IPackageRepository> PackageRepositoryCache = new CacheStorage<string, IPackageRepository>(storeNullValues: true);
+
         #endregion
 
         #region Fields
-
         /// <summary>
         /// Assembly ref cache storage
         /// </summary>
-        private CacheStorage<ModuleInfo, string> _assemblyRefCacheStorage = new CacheStorage<ModuleInfo, string>(storeNullValues: true);
+        private readonly CacheStorage<ModuleInfo, string> _assemblyRefCacheStorage = new CacheStorage<ModuleInfo, string>(storeNullValues: true);
 
         /// <summary>
         /// Module info cache storage.
         /// </summary>
-        private CacheStorage<string, ModuleInfo> _moduleInfoCacheStoreCacheStorage = new CacheStorage<string, ModuleInfo>(storeNullValues: true);
+        private readonly CacheStorage<string, ModuleInfo> _moduleInfoCacheStoreCacheStorage = new CacheStorage<string, ModuleInfo>(storeNullValues: true);
         #endregion
 
         #region Constructors
@@ -86,12 +106,12 @@ namespace Catel.Modules
         public bool IgnoreDependencies { get; set; }
 
         /// <summary>
-        /// Indicates whether the module catalog can download prerelease versions. 
+        /// Indicates whether the module catalog can download prerelease versions.
         /// </summary>
         public bool AllowPrereleaseVersions { get; set; }
 
         /// <summary>
-        /// Gets the full path to the output output directory. 
+        /// Gets the full path to the output output directory.
         /// </summary>
         public string OutputDirectoryFullPath
         {
@@ -113,10 +133,7 @@ namespace Catel.Modules
         /// </summary>
         private string BaseUrl
         {
-            get
-            {
-                return "file://" + OutputDirectoryFullPath.Replace("\\", "/");
-            }
+            get { return "file://" + OutputDirectoryFullPath.Replace("\\", "/"); }
         }
         #endregion
 
@@ -126,7 +143,7 @@ namespace Catel.Modules
         /// </summary>
         /// <param name="moduleInfo">The module info</param>
         /// <returns><c>true</c> if the module is installed otherwise <c>false</c>.</returns>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="moduleInfo"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="moduleInfo" /> is <c>null</c>.</exception>
         public bool IsModuleAssemblyInstalled(ModuleInfo moduleInfo)
         {
             Argument.IsNotNull(() => moduleInfo);
@@ -139,18 +156,18 @@ namespace Catel.Modules
         /// </summary>
         /// <param name="moduleInfo">The module info</param>
         /// <returns>The module assembly ref</returns>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="moduleInfo"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="moduleInfo" /> is <c>null</c>.</exception>
         public string GetModuleAssemblyRef(ModuleInfo moduleInfo)
         {
             // ReSharper disable once ImplicitlyCapturedClosure
             Argument.IsNotNull(() => moduleInfo);
 
             return _assemblyRefCacheStorage.GetFromCacheOrFetch(moduleInfo, () =>
-                {
-                    var packageName = moduleInfo.GetPackageName();
-                    string directoryName = packageName.ToString().Replace(' ', '.');
-                    return string.Format(CultureInfo.InvariantCulture, RelativeUrlPattern, BaseUrl, directoryName, FrameworkNameIdentifier, moduleInfo.GetAssemblyName());
-                });
+            {
+                PackageName packageName = moduleInfo.GetPackageName();
+                string directoryName = packageName.ToString().Replace(' ', '.');
+                return string.Format(CultureInfo.InvariantCulture, RelativeUrlPattern, BaseUrl, directoryName, FrameworkNameIdentifier, moduleInfo.GetAssemblyName());
+            });
         }
 
         /// <summary>
@@ -159,14 +176,88 @@ namespace Catel.Modules
         /// <param name="moduleInfo">The module info</param>
         /// <param name="version">The version</param>
         /// <returns>The module assembly ref</returns>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="moduleInfo"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="moduleInfo" /> is <c>null</c>.</exception>
         public string GetModuleAssemblyRef(ModuleInfo moduleInfo, SemanticVersion version)
         {
             // ReSharper disable once ImplicitlyCapturedClosure
             Argument.IsNotNull(() => moduleInfo);
 
-            var key = string.Format(CultureInfo.InvariantCulture, "ModuleName:{0}; ModuleType:{1}; Ref:{2}; Version:{3}", moduleInfo.ModuleName, moduleInfo.ModuleType, moduleInfo.Ref, version);
+            string key = string.Format(CultureInfo.InvariantCulture, "ModuleName:{0}; ModuleType:{1}; Ref:{2}; Version:{3}", moduleInfo.ModuleName, moduleInfo.ModuleType, moduleInfo.Ref, version);
             return GetModuleAssemblyRef(_moduleInfoCacheStoreCacheStorage.GetFromCacheOrFetch(key, () => new ModuleInfo(moduleInfo.ModuleName, moduleInfo.ModuleType) { Ref = string.Format("{0}, {1}", moduleInfo.GetPackageName().Id, version), DependsOn = moduleInfo.DependsOn }));
+        }
+
+        /// <summary>
+        /// Tries to create and install package request from the <paramref name="moduleInfo"/>.
+        /// </summary>
+        /// <param name="moduleInfo">
+        /// The module info.
+        /// </param>
+        /// <param name="installPackageRequest">
+        /// The install package request.
+        /// </param>
+        /// <returns>
+        /// <c>true</c> whether the install package request is created, otherwise <c>false</c>
+        /// </returns>
+        public bool TryCreateInstallPackageRequest(ModuleInfo moduleInfo, out InstallPackageRequest installPackageRequest)
+        {
+            installPackageRequest = null;
+            PackageName packageName = moduleInfo.GetPackageName();
+            if (packageName.Version != null && IsModuleAssemblyInstalled(moduleInfo))
+            {
+                Log.Debug("Creating local install package request for '{0}'.", packageName.Name);
+
+                installPackageRequest = new InstallPackageRequest(GetModuleAssemblyRef(moduleInfo));
+            }
+            else
+            {
+                IPackageRepository repository = GetPackageRepository();
+                if (repository != null)
+                {
+                    Log.Debug("Looking for package '{0}' with version '{1}' on the repository '{2}'", packageName.Id, packageName.Version, PackageSource);
+
+                    IPackage package;
+                    if (repository.TryFindPackage(packageName.Id, packageName.Version, out package))
+                    {
+                        IEnumerable<FrameworkName> supportedFrameworks = package.GetSupportedFrameworks();
+                        if (supportedFrameworks != null && supportedFrameworks.Any(name => FrameworkIdentifierConversionMap.ContainsKey(name.FullName) && FrameworkIdentifierConversionMap[name.FullName].Equals(FrameworkNameIdentifier)))
+                        {
+                            Log.Debug("Creating remote install package request for '{0}' from '{1}'", package.GetFullName(), PackageSource);
+                            
+                            installPackageRequest = new RemoteInstallPackageRequest(this, package, GetModuleAssemblyRef(moduleInfo, package.Version));
+                        }
+                    }
+                }
+            }
+
+            return installPackageRequest != null;
+        }
+
+        /// <summary>
+        /// Gets the package repository.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IPackageRepository" />.
+        /// </returns>
+        public IPackageRepository GetPackageRepository()
+        {
+            return PackageRepositoryCache.GetFromCacheOrFetch(PackageSource, () =>
+            {
+                IPackageRepository packageRepository = null;
+                try
+                {
+                    Log.Debug("Creating package repository with source '{0}'", PackageSource);
+
+                    packageRepository = PackageRepositoryFactory.Default.CreateRepository(PackageSource);
+
+                    Log.Debug("Created package repository with source '{0}'", PackageSource);
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
+
+                return packageRepository;
+            });
         }
         #endregion
     }

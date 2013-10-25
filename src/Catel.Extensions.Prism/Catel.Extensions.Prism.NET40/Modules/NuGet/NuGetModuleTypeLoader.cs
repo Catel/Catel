@@ -9,18 +9,12 @@ namespace Catel.Modules
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Globalization;
-    using System.IO;
     using System.Linq;
-    using System.Text.RegularExpressions;
 
     using Catel.Logging;
     using Catel.Modules.Extensions;
 
     using Microsoft.Practices.Prism.Modularity;
-    using Microsoft.Win32;
-
-    using NuGet;
 
     /// <summary>
     /// The NuGet module type loader.
@@ -29,13 +23,6 @@ namespace Catel.Modules
     {
         #region Constants
        
-        /// <summary>
-        /// The framework identifier conversion map.
-        /// </summary>
-        private static readonly Dictionary<string, string> FrameworkIdentifierConversionMap = new Dictionary<string, string> { { ".NETFramework,Version=v4.0", "NET40" }, { ".NETFramework,Version=v4.5", "NET45" } };
-
-     
-
         /// <summary>
         /// The log.
         /// </summary>
@@ -140,35 +127,13 @@ namespace Catel.Modules
                 {
                     NuGetBasedModuleCatalog moduleCatalog = _moduleCatalogs[i++];
 
-                    if (packageName.Version != null && moduleCatalog.IsModuleAssemblyInstalled(moduleInfo))
+                    InstallPackageRequest installPackageRequest;
+                    if (moduleCatalog.TryCreateInstallPackageRequest(moduleInfo, out installPackageRequest))
                     {
-                        Log.Debug("Creating install package request for '{0}' that is actually installed.", packageName.Name);
+                        Log.Debug("Queuing install package request");
 
                         canLoad = true;
-
-                        _installPackageRequest.Add(moduleInfo, new InstallPackageRequest(moduleCatalog.GetModuleAssemblyRef(moduleInfo)));
-                    } 
-                    else
-                    {
-                        IPackageRepository repository = moduleCatalog.GetPackageRepository();
-                        if (repository != null)
-                        {
-                            Log.Debug("Looking for package '{0}' with version '{1}' on the repository '{2}'", packageName.Id, packageName.Version, moduleCatalog.PackageSource);
-
-                            IPackage package;
-                            if (repository.TryFindPackage(packageName.Id, packageName.Version, out package))
-                            {
-                                var supportedFrameworks = package.GetSupportedFrameworks();
-                                if (supportedFrameworks != null && supportedFrameworks.Any(name => FrameworkIdentifierConversionMap.ContainsKey(name.FullName) && FrameworkIdentifierConversionMap[name.FullName].Equals(moduleCatalog.FrameworkNameIdentifier)))
-                                {
-                                    Log.Debug("Creating install package request for '{0}' from '{1}'", package.GetFullName(), moduleCatalog.PackageSource);
-
-                                    canLoad = true;
-
-                                    _installPackageRequest.Add(moduleInfo, new RemoteInstallPackageRequest(moduleCatalog, package, moduleCatalog.GetModuleAssemblyRef(moduleInfo, package.Version)));
-                                }
-                            }
-                        }     
+                      _installPackageRequest.Add(moduleInfo, installPackageRequest);
                     }
                 }
             }

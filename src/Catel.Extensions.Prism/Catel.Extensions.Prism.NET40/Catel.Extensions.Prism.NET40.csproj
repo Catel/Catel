@@ -101,7 +101,6 @@
     <Compile Include="Modules\NuGet\InstallPackageRequest.cs" />
     <Compile Include="Modules\Extensions\ModuleInfoExtensions.cs" />
     <Compile Include="Modules\ModuleManager\ModuleManager.cs" />
-    <Compile Include="Modules\Extensions\NuGetBasedModuleCatalogExtensions.cs" />
     <Compile Include="Modules\NuGet\NuGetModuleTypeLoader.cs" />
     <Compile Include="Modules\NuGetBasedModuleCatalog.cs" />
     <Compile Include="Modules\NuGet\RemoteInstallPackageRequest.cs" />

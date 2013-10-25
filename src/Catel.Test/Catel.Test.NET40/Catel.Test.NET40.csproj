@@ -206,7 +206,7 @@
     <Compile Include="Extensions\Prism\CompositeModuleCatalogFacts.cs" />
     <Compile Include="Extensions\Prism\LogExtensionsTests.cs" />
     <Compile Include="Extensions\Prism\Modules\Extensions\ModuleInfoExtensions_Facts.cs" />
-    <Compile Include="Extensions\Prism\Modules\Extensions\NuGetBasedModuleCatalogExtensions_Facts.cs" />
+    <Compile Include="Extensions\Prism\Modules\NuGetBasedModuleCatalog_Facts.cs" />
     <Compile Include="Extensions\Prism\ServiceLocatorAdapterTests.cs" />
     <Compile Include="Extensions\Prism\UIVisualizerServiceExtensionsTests.cs" />
     <Compile Include="GlobalInitialization.cs" />

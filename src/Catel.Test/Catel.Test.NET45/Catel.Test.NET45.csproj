@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -401,8 +401,8 @@
     <Compile Include="..\Catel.Test.NET40\Extensions\Prism\Modules\Extensions\ModuleInfoExtensions_Facts.cs">
       <Link>Extensions\Prism\Modules\Extensions\ModuleInfoExtensions_Facts.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Test.NET40\Extensions\Prism\Modules\Extensions\NuGetBasedModuleCatalogExtensions_Facts.cs">
-      <Link>Extensions\Prism\Modules\Extensions\NuGetBasedModuleCatalogExtensions_Facts.cs</Link>
+    <Compile Include="..\Catel.Test.NET40\Extensions\Prism\Modules\NuGetBasedModuleCatalog_Facts.cs">
+      <Link>Extensions\Prism\Modules\NuGetBasedModuleCatalog_Facts.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Extensions\Prism\ServiceLocatorAdapterTests.cs">
       <Link>Extensions\Prism\ServiceLocatorAdapterTests.cs</Link>
