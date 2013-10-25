@@ -164,6 +164,9 @@
     <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\NuGet\NuGetModuleTypeLoader.cs">
       <Link>Modules\NuGet\NuGetModuleTypeLoader.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\NuGet\RemoteInstallPackageRequest.cs">
+      <Link>Modules\NuGet\RemoteInstallPackageRequest.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\SafeDirectoryModuleCatalog.cs">
       <Link>Modules\SafeDirectoryModuleCatalog.cs</Link>
     </Compile>

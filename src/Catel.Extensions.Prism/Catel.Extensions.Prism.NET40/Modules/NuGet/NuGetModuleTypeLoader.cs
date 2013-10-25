@@ -9,6 +9,8 @@ namespace Catel.Modules
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Globalization;
+    using System.IO;
     using System.Linq;
     using System.Text.RegularExpressions;
 
@@ -16,6 +18,7 @@ namespace Catel.Modules
     using Catel.Modules.Extensions;
 
     using Microsoft.Practices.Prism.Modularity;
+    using Microsoft.Win32;
 
     using NuGet;
 
@@ -25,20 +28,13 @@ namespace Catel.Modules
     public sealed class NuGetModuleTypeLoader : IModuleTypeLoader
     {
         #region Constants
-        /// <summary>
-        /// The type name pattern.
-        /// </summary>
-        private const string TypeNamePattern = "[^,]+,([^,]+).*";
-
-        /// <summary>
-        /// Module type must be specified using qualified name pattern error message
-        /// </summary>
-        private const string ModuleTypeMustBeSpecifiedUsingQualifiedNamePatternErrorMessage = "The module type must be specified using a qualified name pattern";
-
+       
         /// <summary>
         /// The framework identifier conversion map.
         /// </summary>
         private static readonly Dictionary<string, string> FrameworkIdentifierConversionMap = new Dictionary<string, string> { { ".NETFramework,Version=v4.0", "NET40" }, { ".NETFramework,Version=v4.5", "NET45" } };
+
+     
 
         /// <summary>
         /// The log.
@@ -50,7 +46,7 @@ namespace Catel.Modules
         /// <summary>
         /// The install package requests.
         /// </summary>
-        private readonly Dictionary<ModuleInfo, InstallPackageRequest> _installPackageRequests = new Dictionary<ModuleInfo, InstallPackageRequest>();
+        private readonly Dictionary<ModuleInfo, InstallPackageRequest> _installPackageRequest = new Dictionary<ModuleInfo, InstallPackageRequest>();
 
         /// <summary>
         /// The module catalogs.
@@ -112,7 +108,7 @@ namespace Catel.Modules
         /// The event argument.
         /// </param>
         /// <remarks>
-        /// The current implementation doesn't support this.
+        /// The current implementation doesn't support 
         /// </remarks>
         private void OnModuleDownloadProgressChanged(ModuleDownloadProgressChangedEventArgs e)
         {
@@ -123,12 +119,14 @@ namespace Catel.Modules
         #endregion
 
         #region IModuleTypeLoader Members
+        
         /// <summary>
-        /// The can load module type.
+        /// Can load module type.
         /// </summary>
         /// <param name="moduleInfo">The module Info.</param>
         /// <returns>The <see cref="bool" />.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="moduleInfo" /> is <c>null</c>.</exception>
+        /// <exception cref="System.InvalidOperationException">The <see cref="ModuleInfo.ModuleType"/> property of <paramref name="moduleInfo"/> parameter doesn't speciefied usign qualified name pattern.</exception>
         public bool CanLoadModuleType(ModuleInfo moduleInfo)
         {
             Argument.IsNotNull(() => moduleInfo);
@@ -141,23 +139,36 @@ namespace Catel.Modules
                 while (!canLoad && i < _moduleCatalogs.Count)
                 {
                     NuGetBasedModuleCatalog moduleCatalog = _moduleCatalogs[i++];
-                    IPackageRepository repository = moduleCatalog.GetPackageRepository();
-                    if (repository != null)
+
+                    if (packageName.Version != null && moduleCatalog.IsModuleAssemblyInstalled(moduleInfo))
                     {
-                        Log.Debug("Looking for package '{0}' with version '{1}' on repository '{2}'", packageName.Id, packageName.Version, moduleCatalog.PackageSource);
+                        Log.Debug("Creating install package request for '{0}' that is actually installed.", packageName.Name);
 
-                        IPackage package;
-                        if (repository.TryFindPackage(packageName.Id, packageName.Version, out package))
+                        canLoad = true;
+
+                        _installPackageRequest.Add(moduleInfo, new InstallPackageRequest(moduleCatalog.GetModuleAssemblyRef(moduleInfo)));
+                    } 
+                    else
+                    {
+                        IPackageRepository repository = moduleCatalog.GetPackageRepository();
+                        if (repository != null)
                         {
-                            var supportedFrameworks = package.GetSupportedFrameworks();
-                            if (supportedFrameworks != null && supportedFrameworks.Any(name => FrameworkIdentifierConversionMap.ContainsKey(name.FullName) && FrameworkIdentifierConversionMap[name.FullName].Equals(moduleCatalog.FrameworkNameIdentifier)))
-                            {
-                                Log.Debug("Creating install package request for '{0}' from '{1}'", package.GetFullName(), moduleCatalog.PackageSource);
+                            Log.Debug("Looking for package '{0}' with version '{1}' on the repository '{2}'", packageName.Id, packageName.Version, moduleCatalog.PackageSource);
 
-                                canLoad = true;
-                                _installPackageRequests.Add(moduleInfo, new InstallPackageRequest(moduleCatalog, package));
+                            IPackage package;
+                            if (repository.TryFindPackage(packageName.Id, packageName.Version, out package))
+                            {
+                                var supportedFrameworks = package.GetSupportedFrameworks();
+                                if (supportedFrameworks != null && supportedFrameworks.Any(name => FrameworkIdentifierConversionMap.ContainsKey(name.FullName) && FrameworkIdentifierConversionMap[name.FullName].Equals(moduleCatalog.FrameworkNameIdentifier)))
+                                {
+                                    Log.Debug("Creating install package request for '{0}' from '{1}'", package.GetFullName(), moduleCatalog.PackageSource);
+
+                                    canLoad = true;
+
+                                    _installPackageRequest.Add(moduleInfo, new RemoteInstallPackageRequest(moduleCatalog, package, moduleCatalog.GetModuleAssemblyRef(moduleInfo, package.Version)));
+                                }
                             }
-                        }                        
+                        }     
                     }
                 }
             }
@@ -179,30 +190,13 @@ namespace Catel.Modules
             // ReSharper disable once ImplicitlyCapturedClosure
             Argument.IsNotNull(() => moduleInfo);
 
-            if (_installPackageRequests.ContainsKey(moduleInfo))
+            if (_installPackageRequest.ContainsKey(moduleInfo))
             {
-                InstallPackageRequest installPackageRequest = _installPackageRequests[moduleInfo];
-
-                string url = "file://" + installPackageRequest.OutputDirectory.Replace("\\", "/");
-
-                var packageManager = new PackageManager(installPackageRequest.PackageRepository, installPackageRequest.OutputDirectory);
-                packageManager.InstallPackage(installPackageRequest.Package, installPackageRequest.IgnoreDependencies, installPackageRequest.AllowPrereleaseVersions);
-
-                Match typeNameMatch = Regex.Match(moduleInfo.ModuleType, TypeNamePattern);
-                if (!typeNameMatch.Success)
-                {
-                    Log.Error(ModuleTypeMustBeSpecifiedUsingQualifiedNamePatternErrorMessage);
-
-                    throw new InvalidOperationException(ModuleTypeMustBeSpecifiedUsingQualifiedNamePatternErrorMessage);
-                }
-
-                string assemblyFileName = typeNameMatch.Groups[1].Value.Trim() + ".dll";
-                string directoryName = installPackageRequest.Package.GetFullName().Replace(' ', '.');
+                InstallPackageRequest installPackageRequest = _installPackageRequest[moduleInfo];
+                installPackageRequest.Execute();
 
                 var fileModuleTypeLoader = new FileModuleTypeLoader();
-                string assemblyFileRef = string.Format("{0}/{1}/lib/{2}/{3}", url, directoryName, installPackageRequest.FrameworkNameIdentifier, assemblyFileName);
-                var fileModuleInfo = new ModuleInfo(moduleInfo.ModuleName, moduleInfo.ModuleType) { Ref = assemblyFileRef, InitializationMode = moduleInfo.InitializationMode, DependsOn = moduleInfo.DependsOn };
-
+                var fileModuleInfo = new ModuleInfo(moduleInfo.ModuleName, moduleInfo.ModuleType) { Ref = installPackageRequest.AssemblyFileRef, InitializationMode = moduleInfo.InitializationMode, DependsOn = moduleInfo.DependsOn };
                 fileModuleTypeLoader.LoadModuleCompleted += (sender, args) =>
                     {
                         if (args.Error != null)
@@ -213,6 +207,8 @@ namespace Catel.Modules
                         moduleInfo.State = args.ModuleInfo.State;
                         OnLoadModuleCompleted(new LoadModuleCompletedEventArgs(moduleInfo, args.Error));
                     };
+
+                Log.Debug("Loading file module assembly '{0}'", fileModuleInfo.Ref);
 
                 fileModuleTypeLoader.LoadModuleType(fileModuleInfo);
             }

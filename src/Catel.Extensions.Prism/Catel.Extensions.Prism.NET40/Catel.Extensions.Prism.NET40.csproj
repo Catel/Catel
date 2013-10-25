@@ -104,6 +104,7 @@
     <Compile Include="Modules\Extensions\NuGetBasedModuleCatalogExtensions.cs" />
     <Compile Include="Modules\NuGet\NuGetModuleTypeLoader.cs" />
     <Compile Include="Modules\NuGetBasedModuleCatalog.cs" />
+    <Compile Include="Modules\NuGet\RemoteInstallPackageRequest.cs" />
     <Compile Include="Modules\SafeDirectoryModuleCatalog.cs" />
     <Compile Include="Tasks\BootstrapperTaskFactory.cs" />
     <Compile Include="Tasks\Interfaces\IBootstrapperTaskFactory.cs" />
