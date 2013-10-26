@@ -158,18 +158,13 @@ namespace Catel.Modules
         {
             get
             {
-                foreach (var moduleInfo in base.Modules)
-                {
-                    yield return moduleInfo;
-                }
-
+                var moduleInfos = base.Modules.ToList();
                 if (!string.IsNullOrWhiteSpace(PackagedModuleIdFilterExpression))
                 {
-                    foreach (var moduleInfo in PackagedModules)
-                    {
-                        yield return moduleInfo;
-                    }
+                    moduleInfos.AddRange(PackagedModules);
                 }
+                
+                return moduleInfos;
             }
         }
 
