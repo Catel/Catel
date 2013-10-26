@@ -280,7 +280,7 @@ namespace Catel.Modules
                     yield return moduleInfo;
                 }
                 
-                if (!string.IsNullOrEmpty(PackagedModuleIdPattern))
+                if (!string.IsNullOrEmpty(PackagedModuleIdFilterExpression))
                 {
                     var moduleInfos = new Dictionary<string, ModuleInfo>();
                     foreach (ModuleInfo moduleInfo in PackagedModules())
@@ -318,7 +318,8 @@ namespace Catel.Modules
         private IEnumerable<ModuleInfo> PackagedModules()
         {
             var packageRepository = GetPackageRepository();
-            var packages = packageRepository.GetPackages().Where(package => Regex.IsMatch(package.Id, PackagedModuleIdPattern));
+            var packages = packageRepository.GetPackages().Where(package => package.Id.Contains(PackagedModuleIdFilterExpression));
+            
             foreach (var package in packages)
             {
                 var moduleInfoFile = package.GetFiles().FirstOrDefault(file => file.Path.EndsWith("ModuleInfo.xml"));
@@ -362,7 +363,7 @@ namespace Catel.Modules
         /// <summary>
         /// The package id pattern
         /// </summary>
-        public string PackagedModuleIdPattern { get; set; }
+        public string PackagedModuleIdFilterExpression { get; set; }
         #endregion
     }
 }
