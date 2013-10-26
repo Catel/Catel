@@ -19,7 +19,7 @@ namespace Catel.Modules
         public InstallPackageRequest(string assemblyFileRef)
         {
             Argument.IsNotNullOrWhitespace(() => assemblyFileRef);
-         
+
             AssemblyFileRef = assemblyFileRef;
         }
         #endregion

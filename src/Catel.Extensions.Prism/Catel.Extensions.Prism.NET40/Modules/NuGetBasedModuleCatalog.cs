@@ -13,13 +13,20 @@ namespace Catel.Modules
     using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
     using System.Runtime.Versioning;
+    using System.Text.RegularExpressions;
+    using System.Windows.Input;
+    using System.Xml;
+    using System.Xml.Linq;
+    using System.Xml.XPath;
 
     using Catel.Caching;
     using Catel.Logging;
     using Catel.Modules.Extensions;
 
     using Microsoft.Practices.Prism.Modularity;
+    using Microsoft.Win32;
 
     using NuGet;
 
@@ -52,6 +59,7 @@ namespace Catel.Modules
         #endregion
 
         #region Fields
+
         /// <summary>
         /// Assembly ref cache storage
         /// </summary>
@@ -163,11 +171,11 @@ namespace Catel.Modules
             Argument.IsNotNull(() => moduleInfo);
 
             return _assemblyRefCacheStorage.GetFromCacheOrFetch(moduleInfo, () =>
-            {
-                PackageName packageName = moduleInfo.GetPackageName();
-                string directoryName = packageName.ToString().Replace(' ', '.');
-                return string.Format(CultureInfo.InvariantCulture, RelativeUrlPattern, BaseUrl, directoryName, FrameworkNameIdentifier, moduleInfo.GetAssemblyName());
-            });
+                    {
+                        PackageName packageName = moduleInfo.GetPackageName();
+                        string directoryName = packageName.ToString().Replace(' ', '.');
+                        return string.Format(CultureInfo.InvariantCulture, RelativeUrlPattern, BaseUrl, directoryName, FrameworkNameIdentifier, moduleInfo.GetAssemblyName());
+                    });
         }
 
         /// <summary>
@@ -182,7 +190,7 @@ namespace Catel.Modules
             // ReSharper disable once ImplicitlyCapturedClosure
             Argument.IsNotNull(() => moduleInfo);
 
-            string key = string.Format(CultureInfo.InvariantCulture, "ModuleName:{0}; ModuleType:{1}; Ref:{2}; Version:{3}", moduleInfo.ModuleName, moduleInfo.ModuleType, moduleInfo.Ref, version);
+            var key = string.Format(CultureInfo.InvariantCulture, "ModuleName:{0}; ModuleType:{1}; Ref:{2}; Version:{3}", moduleInfo.ModuleName, moduleInfo.ModuleType, moduleInfo.Ref, version);
             return GetModuleAssemblyRef(_moduleInfoCacheStoreCacheStorage.GetFromCacheOrFetch(key, () => new ModuleInfo(moduleInfo.ModuleName, moduleInfo.ModuleType) { Ref = string.Format("{0}, {1}", moduleInfo.GetPackageName().Id, version), DependsOn = moduleInfo.DependsOn }));
         }
 
@@ -248,7 +256,7 @@ namespace Catel.Modules
                     Log.Debug("Creating package repository with source '{0}'", PackageSource);
 
                     packageRepository = PackageRepositoryFactory.Default.CreateRepository(PackageSource);
-
+                    
                     Log.Debug("Created package repository with source '{0}'", PackageSource);
                 }
                 catch (Exception e)
@@ -259,6 +267,102 @@ namespace Catel.Modules
                 return packageRepository;
             });
         }
+     
+        /// <summary>
+        /// Enumerates the available modules.
+        /// </summary>
+        public override IEnumerable<ModuleInfo> Modules
+        {
+            get
+            {
+                foreach (var moduleInfo in base.Modules)
+                {
+                    yield return moduleInfo;
+                }
+                
+                if (!string.IsNullOrEmpty(PackagedModuleIdPattern))
+                {
+                    var moduleInfos = new Dictionary<string, ModuleInfo>();
+                    foreach (ModuleInfo moduleInfo in PackagedModules())
+                    {
+                        var moduleInfoVersion = moduleInfo.GetPackageName().Version;
+                        if (moduleInfos.ContainsKey(moduleInfo.ModuleName))
+                        {
+                            var storedModuleInfo = moduleInfos[moduleInfo.ModuleName];
+                            var storedModuleInfoVersion = storedModuleInfo.GetPackageName().Version;
+                            if (storedModuleInfoVersion < moduleInfoVersion && (string.IsNullOrWhiteSpace(moduleInfoVersion.SpecialVersion) || AllowPrereleaseVersions))
+                            {
+                                moduleInfos[moduleInfo.ModuleName] = moduleInfo;
+                            }
+                        }
+                        else if (string.IsNullOrWhiteSpace(moduleInfoVersion.SpecialVersion) || AllowPrereleaseVersions)
+                        {
+                            moduleInfos[moduleInfo.ModuleName] = moduleInfo;
+                        }
+                    }
+
+                    foreach (var moduleInfo in moduleInfos)
+                    {
+                        yield return moduleInfo.Value;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the packaged modules from the repository.
+        /// </summary>
+        /// <returns>
+        /// The packaged modules
+        /// </returns>
+        private IEnumerable<ModuleInfo> PackagedModules()
+        {
+            var packageRepository = GetPackageRepository();
+            var packages = packageRepository.GetPackages().Where(package => Regex.IsMatch(package.Id, PackagedModuleIdPattern));
+            foreach (var package in packages)
+            {
+                var moduleInfoFile = package.GetFiles().FirstOrDefault(file => file.Path.EndsWith("ModuleInfo.xml"));
+                if (moduleInfoFile != null)
+                {
+                    string moduleType = string.Empty;
+                    string moduleName = string.Empty;
+                    try
+                    {
+                        var xDocument = XDocument.Load(new XmlTextReader(moduleInfoFile.GetStream()));
+                        if (xDocument.Root != null)
+                        {
+                            var xElement = xDocument.Root.Element(XName.Get("ModuleName"));
+                            if (xElement != null)
+                            {
+                                moduleName = xElement.Value;
+                            }
+
+                            var element = xDocument.Root.Element(XName.Get("ModuleType"));
+                            if (element != null)
+                            {
+                                moduleType = element.Value;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error(e);
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(moduleName) && !string.IsNullOrWhiteSpace(moduleType))
+                    {
+                        var @ref = string.Format("{0}, {1}", package.Id, package.Version);
+                        var key = string.Format(CultureInfo.InvariantCulture, "ModuleName:{0}; ModuleType:{1}; Ref:{2}; Version:{3}", moduleName, moduleType, @ref, package.Version);
+                        yield return _moduleInfoCacheStoreCacheStorage.GetFromCacheOrFetch(key, () => new ModuleInfo(moduleName, moduleType) { Ref = @ref, InitializationMode = InitializationMode.OnDemand });
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// The package id pattern
+        /// </summary>
+        public string PackagedModuleIdPattern { get; set; }
         #endregion
     }
 }

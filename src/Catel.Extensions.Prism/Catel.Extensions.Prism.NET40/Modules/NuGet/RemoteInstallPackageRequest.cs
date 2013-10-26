@@ -1,8 +1,7 @@
 ﻿namespace Catel.Modules
 {
     using Catel.Logging;
-    using Catel.Modules.Extensions;
-
+ 
     using NuGet;
 
     /// <summary>
