@@ -109,6 +109,9 @@
   </PropertyGroup>
   <ItemGroup>
     <!--A reference to the entire .Net Framework and Windows SDK are automatically included-->
+    <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0">
+      <Name>Behaviors SDK %28XAML%29</Name>
+    </SDKReference>
     <SDKReference Include="MSTestFramework, Version=11.0" />
     <SDKReference Include="TestPlatform, Version=11.0" />
   </ItemGroup>

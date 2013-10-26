@@ -717,12 +717,6 @@
     <Compile Include="Windows\Interactivity\Behavior.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Catel.Core\Catel.Core.WIN80\Catel.Core.WIN80.csproj">
-      <Project>{b9ae0468-56bb-4afc-8533-8a493fddf8da}</Project>
-      <Name>Catel.Core.WIN80</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Windows\Markup\" />
   </ItemGroup>
   <ItemGroup>
@@ -772,6 +766,12 @@
     <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0">
       <Name>Behaviors SDK %28XAML%29</Name>
     </SDKReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Catel.Core\Catel.Core.WIN81\Catel.Core.WIN81.csproj">
+      <Project>{c022232f-d54e-4c23-9f16-360f9812a53e}</Project>
+      <Name>Catel.Core.WIN81</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
