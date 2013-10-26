@@ -11,6 +11,7 @@ namespace Catel.Modules
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
+    using System.IO.Packaging;
     using System.Linq;
     using System.Runtime.Versioning;
     using System.Xml;
@@ -66,7 +67,7 @@ namespace Catel.Modules
         /// <summary>
         /// Packaged module search cache storage.
         /// </summary>
-        private readonly CacheStorage<string, IEnumerable<ModuleInfo>> _packagedModulesFilteredSearchCacheStorage = new CacheStorage<string, IEnumerable<ModuleInfo>>(() => ExpirationPolicy.Duration(TimeSpan.FromMinutes(1)), true);
+        private readonly CacheStorage<string, IEnumerable<ModuleInfo>> _packagedModulesFilteredSearchCacheStorage = new CacheStorage<string, IEnumerable<ModuleInfo>>(() => ExpirationPolicy.Duration(TimeSpan.FromMinutes(2)), true);
 
         private string packagedModuleIdFilterExpression;
         #endregion
@@ -176,7 +177,7 @@ namespace Catel.Modules
         {
             get
             {
-                return _packagedModulesFilteredSearchCacheStorage.GetFromCacheOrFetch(PackagedModuleIdFilterExpression, GetLatestVersionOfPackagedModules);
+                return _packagedModulesFilteredSearchCacheStorage.GetFromCacheOrFetch(PackagedModuleIdFilterExpression, GetPackagedModules);
             }
         }
 
@@ -326,30 +327,6 @@ namespace Catel.Modules
         /// <summary>
         /// Gets the available latest version of packaged modules removing.
         /// </summary>
-        private IEnumerable<ModuleInfo> GetLatestVersionOfPackagedModules()
-        {
-            var moduleInfos = new Dictionary<string, ModuleInfo>();
-            foreach (ModuleInfo moduleInfo in GetPackagedModules())
-            {
-                var moduleInfoVersion = moduleInfo.GetPackageName().Version;
-                if (moduleInfos.ContainsKey(moduleInfo.ModuleName))
-                {
-                    var storedModuleInfo = moduleInfos[moduleInfo.ModuleName];
-                    var storedModuleInfoVersion = storedModuleInfo.GetPackageName().Version;
-                    if (storedModuleInfoVersion < moduleInfoVersion && (string.IsNullOrWhiteSpace(moduleInfoVersion.SpecialVersion) || AllowPrereleaseVersions))
-                    {
-                        moduleInfos[moduleInfo.ModuleName] = moduleInfo;
-                    }
-                }
-                else if (string.IsNullOrWhiteSpace(moduleInfoVersion.SpecialVersion) || AllowPrereleaseVersions)
-                {
-                    moduleInfos[moduleInfo.ModuleName] = moduleInfo;
-                }
-            }
-
-            return moduleInfos.Select(moduleInfo => moduleInfo.Value);
-        }
-
         /// <summary>
         /// Gets the packaged modules from the repository.
         /// </summary>
@@ -359,8 +336,7 @@ namespace Catel.Modules
         private IEnumerable<ModuleInfo> GetPackagedModules()
         {
             var packageRepository = GetPackageRepository();
-            var packages = packageRepository.GetPackages().Where(package => package.Id.Contains(PackagedModuleIdFilterExpression));
-
+            var packages = packageRepository.GetPackages().Where(package => package.Id.Contains(PackagedModuleIdFilterExpression)).GroupBy(package => package.Id).Select(packageGroup => packageGroup.ToList().OrderByDescending(package => package.Version).FirstOrDefault()).Where(package => package != null);
             foreach (var package in packages)
             {
                 var moduleInfoFile = package.GetFiles().FirstOrDefault(file => file.Path.EndsWith("ModuleInfo.xml"));
