@@ -69,7 +69,10 @@ namespace Catel.Modules
         /// </summary>
         private readonly CacheStorage<string, IEnumerable<ModuleInfo>> _packagedModulesFilteredSearchCacheStorage = new CacheStorage<string, IEnumerable<ModuleInfo>>(() => ExpirationPolicy.Duration(TimeSpan.FromMinutes(2)), true);
 
-        private string packagedModuleIdFilterExpression;
+        /// <summary>
+        /// The packaged module id filter expression.
+        /// </summary>
+        private string _packagedModuleIdFilterExpression;
         #endregion
 
         #region Constructors
@@ -188,14 +191,14 @@ namespace Catel.Modules
         {
             get
             {
-                return packagedModuleIdFilterExpression;
+                return _packagedModuleIdFilterExpression;
             }
 
             set
             {
                 if (!string.IsNullOrEmpty(value))
                 {
-                    packagedModuleIdFilterExpression = value.Trim();
+                    _packagedModuleIdFilterExpression = value.Trim();
                 }
             }
         }
@@ -333,6 +336,7 @@ namespace Catel.Modules
         /// </returns>
         private IEnumerable<ModuleInfo> GetPackagedModules()
         {
+            var moduleInfos = new List<ModuleInfo>();
             var packageRepository = GetPackageRepository();
             var packages = packageRepository.GetPackages().Where(package => package.Id.Contains(PackagedModuleIdFilterExpression)).ToList().GroupBy(package => package.Id).Select(packageGroup => packageGroup.ToList().OrderByDescending(package => package.Version).FirstOrDefault()).Where(package => package != null);
             foreach (var package in packages)
@@ -359,20 +363,22 @@ namespace Catel.Modules
                                 moduleType = moduleTypeElement.Value;
                             }
                         }
+
+                        if (!string.IsNullOrWhiteSpace(moduleName) && !string.IsNullOrWhiteSpace(moduleType))
+                        {
+                            var @ref = string.Format("{0}, {1}", package.Id, package.Version);
+                            var key = string.Format(CultureInfo.InvariantCulture, "ModuleName:{0}; ModuleType:{1}; Ref:{2}; Version:{3}", moduleName, moduleType, @ref, package.Version);
+                            moduleInfos.Add(_moduleInfoCacheStoreCacheStorage.GetFromCacheOrFetch(key, () => new ModuleInfo(moduleName, moduleType) { Ref = @ref, InitializationMode = InitializationMode.OnDemand }));
+                        }
                     }
                     catch (Exception e)
                     {
                         Log.Error(e);
                     }
-
-                    if (!string.IsNullOrWhiteSpace(moduleName) && !string.IsNullOrWhiteSpace(moduleType))
-                    {
-                        var @ref = string.Format("{0}, {1}", package.Id, package.Version);
-                        var key = string.Format(CultureInfo.InvariantCulture, "ModuleName:{0}; ModuleType:{1}; Ref:{2}; Version:{3}", moduleName, moduleType, @ref, package.Version);
-                        yield return _moduleInfoCacheStoreCacheStorage.GetFromCacheOrFetch(key, () => new ModuleInfo(moduleName, moduleType) { Ref = @ref, InitializationMode = InitializationMode.OnDemand });
-                    }
                 }
             }
+
+            return moduleInfos;
         }
         #endregion
     }
