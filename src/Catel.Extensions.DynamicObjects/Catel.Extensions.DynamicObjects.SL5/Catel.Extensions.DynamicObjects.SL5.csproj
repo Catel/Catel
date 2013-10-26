@@ -17,7 +17,7 @@
     <SilverlightApplication>false</SilverlightApplication>
     <ValidateXaml>true</ValidateXaml>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
-    <FodyPath>..\..\..\lib\Fody.1.15.0.0</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.17.4.0</FodyPath>
   </PropertyGroup>
   <!-- This property group is only here to support building this project using the 
        MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 

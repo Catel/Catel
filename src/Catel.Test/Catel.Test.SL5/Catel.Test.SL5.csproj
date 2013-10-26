@@ -31,7 +31,7 @@
     <LinkedServerProject />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.15.0.0</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.17.4.0</FodyPath>
   </PropertyGroup>
   <!--
   //
@@ -86,9 +86,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Castle.Windsor.3.2.1\lib\sl5\Castle.Windsor.dll</HintPath>
     </Reference>
-    <Reference Include="FluentValidation, Version=4.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="FluentValidation, Version=5.0.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\FluentValidation.4.0.0.1\lib\portable-win+net40+sl50+wp80\FluentValidation.dll</HintPath>
+      <HintPath>..\..\..\lib\FluentValidation.5.0.0.1\lib\portable-win+net40+sl50+wp80\FluentValidation.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Practices.Prism">
@@ -106,9 +106,9 @@
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight">
       <HintPath>$(MSBuildExtensionsPath)\..\Microsoft SDKs\Silverlight\v4.0\Toolkit\Apr10\Testing\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll</HintPath>
     </Reference>
-    <Reference Include="Moq.Silverlight, Version=4.1.1308.2321, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+    <Reference Include="Moq.Silverlight, Version=4.1.1309.1617, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Moq.4.1.1308.2321\lib\sl4\Moq.Silverlight.dll</HintPath>
+      <HintPath>..\..\..\lib\Moq.4.1.1309.1617\lib\sl4\Moq.Silverlight.dll</HintPath>
     </Reference>
     <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

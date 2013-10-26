@@ -18,7 +18,7 @@
     <PackageCertificateThumbprint>CD0C58B0274B7F50B519AC0643F7A9E3F4A8CB42</PackageCertificateThumbprint>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.15.0.0</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.17.4.0</FodyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
