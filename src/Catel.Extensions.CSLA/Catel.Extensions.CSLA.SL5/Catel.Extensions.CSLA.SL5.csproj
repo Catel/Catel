@@ -53,13 +53,13 @@
     <DocumentationFile>..\..\..\output\release\SL5\Catel.Extensions.CSLA\Catel.Extensions.CSLA.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Csla, Version=4.5.30.0, Culture=neutral, PublicKeyToken=93be5fdc093e4c30, processorArchitecture=MSIL">
+    <Reference Include="Csla, Version=4.5.40.0, Culture=neutral, PublicKeyToken=93be5fdc093e4c30, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\CSLA-Core.4.5.30\lib\sl50\Csla.dll</HintPath>
+      <HintPath>..\..\..\lib\CSLA-Core.4.5.40\lib\sl50\Csla.dll</HintPath>
     </Reference>
-    <Reference Include="Csla.Xaml, Version=4.5.30.0, Culture=neutral, PublicKeyToken=93be5fdc093e4c30, processorArchitecture=MSIL">
+    <Reference Include="Csla.Xaml, Version=4.5.40.0, Culture=neutral, PublicKeyToken=93be5fdc093e4c30, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\CSLA-Silverlight.4.5.30\lib\sl50\Csla.Xaml.dll</HintPath>
+      <HintPath>..\..\..\lib\CSLA-Silverlight.4.5.40\lib\sl50\Csla.Xaml.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks">
       <HintPath>..\..\..\lib\Microsoft.Bcl.Async.1.0.16\lib\sl4\Microsoft.Threading.Tasks.dll</HintPath>
