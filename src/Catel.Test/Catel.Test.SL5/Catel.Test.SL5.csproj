@@ -86,9 +86,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Castle.Windsor.3.2.1\lib\sl5\Castle.Windsor.dll</HintPath>
     </Reference>
-    <Reference Include="FluentValidation, Version=4.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="FluentValidation, Version=5.0.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\FluentValidation.4.0.0.1\lib\portable-win+net40+sl50+wp80\FluentValidation.dll</HintPath>
+      <HintPath>..\..\..\lib\FluentValidation.5.0.0.1\lib\portable-win+net40+sl50+wp80\FluentValidation.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Practices.Prism">

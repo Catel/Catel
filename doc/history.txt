@@ -47,6 +47,7 @@ Added/fixed:
 (*) CTL-203 Marked most ModelBase.Load methods as obsolete. Now only 3 methods are recommend to simplify the 
     serialization of models
 (*) CTL-207 Improve performance on ModelBase instantiation
+(*) CTL-213 Updated FluentValidation to v5
 (x) CTL-133 Start and Update the PleasewaitWindow in an Workerthread throws exception
 (x) CTL-203 The Load Method of Catel.Data.ModelBase will call the constructor of the deserialized class two times
 (x) CTL-212 PropertyDataManager throws first chance exceptions for generic types
