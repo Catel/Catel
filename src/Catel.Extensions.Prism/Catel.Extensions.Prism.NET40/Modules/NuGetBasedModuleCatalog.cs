@@ -312,8 +312,6 @@ namespace Catel.Modules
                         Log.Debug("Creating package repository with source '{0}'", PackageSource);
 
                         packageRepository = PackageRepositoryFactory.Default.CreateRepository(PackageSource);
-
-                        Log.Debug("Created package repository with source '{0}'", PackageSource);
                     }
                     catch (Exception e)
                     {
@@ -336,7 +334,7 @@ namespace Catel.Modules
         private IEnumerable<ModuleInfo> GetPackagedModules()
         {
             var packageRepository = GetPackageRepository();
-            var packages = packageRepository.GetPackages().Where(package => package.Id.Contains(PackagedModuleIdFilterExpression)).GroupBy(package => package.Id).Select(packageGroup => packageGroup.ToList().OrderByDescending(package => package.Version).FirstOrDefault()).Where(package => package != null);
+            var packages = packageRepository.GetPackages().Where(package => package.Id.Contains(PackagedModuleIdFilterExpression)).ToList().GroupBy(package => package.Id).Select(packageGroup => packageGroup.ToList().OrderByDescending(package => package.Version).FirstOrDefault()).Where(package => package != null);
             foreach (var package in packages)
             {
                 var moduleInfoFile = package.GetFiles().FirstOrDefault(file => file.Path.EndsWith("ModuleInfo.xml"));
