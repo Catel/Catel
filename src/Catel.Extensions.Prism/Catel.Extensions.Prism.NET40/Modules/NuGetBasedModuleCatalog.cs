@@ -4,7 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-
 namespace Catel.Modules
 {
     using System;
@@ -13,20 +12,16 @@ namespace Catel.Modules
     using System.Globalization;
     using System.IO;
     using System.Linq;
-    using System.Reflection;
     using System.Runtime.Versioning;
-    using System.Text.RegularExpressions;
-    using System.Windows.Input;
     using System.Xml;
     using System.Xml.Linq;
-    using System.Xml.XPath;
 
     using Catel.Caching;
+    using Catel.Caching.Policies;
     using Catel.Logging;
     using Catel.Modules.Extensions;
 
     using Microsoft.Practices.Prism.Modularity;
-    using Microsoft.Win32;
 
     using NuGet;
 
@@ -55,11 +50,9 @@ namespace Catel.Modules
         /// The package repository cache.
         /// </summary>
         private static readonly CacheStorage<string, IPackageRepository> PackageRepositoryCache = new CacheStorage<string, IPackageRepository>(storeNullValues: true);
-
         #endregion
 
         #region Fields
-
         /// <summary>
         /// Assembly ref cache storage
         /// </summary>
@@ -69,6 +62,13 @@ namespace Catel.Modules
         /// Module info cache storage.
         /// </summary>
         private readonly CacheStorage<string, ModuleInfo> _moduleInfoCacheStoreCacheStorage = new CacheStorage<string, ModuleInfo>(storeNullValues: true);
+
+        /// <summary>
+        /// Packaged module search cache storage.
+        /// </summary>
+        private readonly CacheStorage<string, IEnumerable<ModuleInfo>> _packagedModulesFilteredSearchCacheStorage = new CacheStorage<string, IEnumerable<ModuleInfo>>(() => ExpirationPolicy.Duration(TimeSpan.FromMinutes(1)), true);
+
+        private string packagedModuleIdFilterExpression;
         #endregion
 
         #region Constructors
@@ -141,7 +141,62 @@ namespace Catel.Modules
         /// </summary>
         private string BaseUrl
         {
-            get { return "file://" + OutputDirectoryFullPath.Replace("\\", "/"); }
+            get
+            {
+                return "file://" + OutputDirectoryFullPath.Replace("\\", "/");
+            }
+        }
+
+        /// <summary>
+        /// Enumerates the available modules.
+        /// </summary>
+        public override IEnumerable<ModuleInfo> Modules
+        {
+            get
+            {
+                foreach (var moduleInfo in base.Modules)
+                {
+                    yield return moduleInfo;
+                }
+
+                if (!string.IsNullOrWhiteSpace(PackagedModuleIdFilterExpression))
+                {
+                    foreach (var moduleInfo in PackagedModules)
+                    {
+                        yield return moduleInfo;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Enumerates the available packaged modules.
+        /// </summary>
+        private IEnumerable<ModuleInfo> PackagedModules
+        {
+            get
+            {
+                return _packagedModulesFilteredSearchCacheStorage.GetFromCacheOrFetch(PackagedModuleIdFilterExpression, GetLatestVersionOfPackagedModules);
+            }
+        }
+
+        /// <summary>
+        /// The package module id filter expression.
+        /// </summary>
+        public string PackagedModuleIdFilterExpression
+        {
+            get
+            {
+                return packagedModuleIdFilterExpression;
+            }
+
+            set
+            {
+                if (!string.IsNullOrEmpty(value))
+                {
+                    packagedModuleIdFilterExpression = value.Trim();
+                }
+            }
         }
         #endregion
 
@@ -171,11 +226,11 @@ namespace Catel.Modules
             Argument.IsNotNull(() => moduleInfo);
 
             return _assemblyRefCacheStorage.GetFromCacheOrFetch(moduleInfo, () =>
-                    {
-                        PackageName packageName = moduleInfo.GetPackageName();
-                        string directoryName = packageName.ToString().Replace(' ', '.');
-                        return string.Format(CultureInfo.InvariantCulture, RelativeUrlPattern, BaseUrl, directoryName, FrameworkNameIdentifier, moduleInfo.GetAssemblyName());
-                    });
+                {
+                    PackageName packageName = moduleInfo.GetPackageName();
+                    string directoryName = packageName.ToString().Replace(' ', '.');
+                    return string.Format(CultureInfo.InvariantCulture, RelativeUrlPattern, BaseUrl, directoryName, FrameworkNameIdentifier, moduleInfo.GetAssemblyName());
+                });
         }
 
         /// <summary>
@@ -230,7 +285,7 @@ namespace Catel.Modules
                         if (supportedFrameworks != null && supportedFrameworks.Any(name => FrameworkIdentifierConversionMap.ContainsKey(name.FullName) && FrameworkIdentifierConversionMap[name.FullName].Equals(FrameworkNameIdentifier)))
                         {
                             Log.Debug("Creating remote install package request for '{0}' from '{1}'", package.GetFullName(), PackageSource);
-                            
+
                             installPackageRequest = new RemoteInstallPackageRequest(this, package, GetModuleAssemblyRef(moduleInfo, package.Version));
                         }
                     }
@@ -249,64 +304,50 @@ namespace Catel.Modules
         public IPackageRepository GetPackageRepository()
         {
             return PackageRepositoryCache.GetFromCacheOrFetch(PackageSource, () =>
-            {
-                IPackageRepository packageRepository = null;
-                try
                 {
-                    Log.Debug("Creating package repository with source '{0}'", PackageSource);
+                    IPackageRepository packageRepository = null;
+                    try
+                    {
+                        Log.Debug("Creating package repository with source '{0}'", PackageSource);
 
-                    packageRepository = PackageRepositoryFactory.Default.CreateRepository(PackageSource);
-                    
-                    Log.Debug("Created package repository with source '{0}'", PackageSource);
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
-                }
+                        packageRepository = PackageRepositoryFactory.Default.CreateRepository(PackageSource);
 
-                return packageRepository;
-            });
+                        Log.Debug("Created package repository with source '{0}'", PackageSource);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error(e);
+                    }
+
+                    return packageRepository;
+                });
         }
-     
-        /// <summary>
-        /// Enumerates the available modules.
-        /// </summary>
-        public override IEnumerable<ModuleInfo> Modules
-        {
-            get
-            {
-                foreach (var moduleInfo in base.Modules)
-                {
-                    yield return moduleInfo;
-                }
-                
-                if (!string.IsNullOrEmpty(PackagedModuleIdFilterExpression))
-                {
-                    var moduleInfos = new Dictionary<string, ModuleInfo>();
-                    foreach (ModuleInfo moduleInfo in PackagedModules())
-                    {
-                        var moduleInfoVersion = moduleInfo.GetPackageName().Version;
-                        if (moduleInfos.ContainsKey(moduleInfo.ModuleName))
-                        {
-                            var storedModuleInfo = moduleInfos[moduleInfo.ModuleName];
-                            var storedModuleInfoVersion = storedModuleInfo.GetPackageName().Version;
-                            if (storedModuleInfoVersion < moduleInfoVersion && (string.IsNullOrWhiteSpace(moduleInfoVersion.SpecialVersion) || AllowPrereleaseVersions))
-                            {
-                                moduleInfos[moduleInfo.ModuleName] = moduleInfo;
-                            }
-                        }
-                        else if (string.IsNullOrWhiteSpace(moduleInfoVersion.SpecialVersion) || AllowPrereleaseVersions)
-                        {
-                            moduleInfos[moduleInfo.ModuleName] = moduleInfo;
-                        }
-                    }
 
-                    foreach (var moduleInfo in moduleInfos)
+        /// <summary>
+        /// Gets the available latest version of packaged modules removing.
+        /// </summary>
+        private IEnumerable<ModuleInfo> GetLatestVersionOfPackagedModules()
+        {
+            var moduleInfos = new Dictionary<string, ModuleInfo>();
+            foreach (ModuleInfo moduleInfo in GetPackagedModules())
+            {
+                var moduleInfoVersion = moduleInfo.GetPackageName().Version;
+                if (moduleInfos.ContainsKey(moduleInfo.ModuleName))
+                {
+                    var storedModuleInfo = moduleInfos[moduleInfo.ModuleName];
+                    var storedModuleInfoVersion = storedModuleInfo.GetPackageName().Version;
+                    if (storedModuleInfoVersion < moduleInfoVersion && (string.IsNullOrWhiteSpace(moduleInfoVersion.SpecialVersion) || AllowPrereleaseVersions))
                     {
-                        yield return moduleInfo.Value;
+                        moduleInfos[moduleInfo.ModuleName] = moduleInfo;
                     }
+                }
+                else if (string.IsNullOrWhiteSpace(moduleInfoVersion.SpecialVersion) || AllowPrereleaseVersions)
+                {
+                    moduleInfos[moduleInfo.ModuleName] = moduleInfo;
                 }
             }
+
+            return moduleInfos.Select(moduleInfo => moduleInfo.Value);
         }
 
         /// <summary>
@@ -315,11 +356,11 @@ namespace Catel.Modules
         /// <returns>
         /// The packaged modules
         /// </returns>
-        private IEnumerable<ModuleInfo> PackagedModules()
+        private IEnumerable<ModuleInfo> GetPackagedModules()
         {
             var packageRepository = GetPackageRepository();
             var packages = packageRepository.GetPackages().Where(package => package.Id.Contains(PackagedModuleIdFilterExpression));
-            
+
             foreach (var package in packages)
             {
                 var moduleInfoFile = package.GetFiles().FirstOrDefault(file => file.Path.EndsWith("ModuleInfo.xml"));
@@ -332,16 +373,16 @@ namespace Catel.Modules
                         var xDocument = XDocument.Load(new XmlTextReader(moduleInfoFile.GetStream()));
                         if (xDocument.Root != null)
                         {
-                            var xElement = xDocument.Root.Element(XName.Get("ModuleName"));
-                            if (xElement != null)
+                            var moduleNameElement = xDocument.Root.Element(XName.Get("ModuleName"));
+                            if (moduleNameElement != null)
                             {
-                                moduleName = xElement.Value;
+                                moduleName = moduleNameElement.Value;
                             }
 
-                            var element = xDocument.Root.Element(XName.Get("ModuleType"));
-                            if (element != null)
+                            var moduleTypeElement = xDocument.Root.Element(XName.Get("ModuleType"));
+                            if (moduleTypeElement != null)
                             {
-                                moduleType = element.Value;
+                                moduleType = moduleTypeElement.Value;
                             }
                         }
                     }
@@ -359,11 +400,6 @@ namespace Catel.Modules
                 }
             }
         }
-
-        /// <summary>
-        /// The package id pattern
-        /// </summary>
-        public string PackagedModuleIdFilterExpression { get; set; }
         #endregion
     }
 }
