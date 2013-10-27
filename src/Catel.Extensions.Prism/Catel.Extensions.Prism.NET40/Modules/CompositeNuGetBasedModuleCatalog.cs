@@ -22,13 +22,14 @@ namespace Catel.Modules
     /// </summary>
     public class CompositeNuGetBasedModuleCatalog : CompositeModuleCatalog<INuGetBasedModuleCatalog>, INuGetBasedModuleCatalog
     {
+        #region Constants
         /// <summary>
         /// The Log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        #endregion
 
-        #region Properties
-      
+        #region INuGetBasedModuleCatalog Members
         /// <summary>
         /// Gets the modules.
         /// </summary>
@@ -36,14 +37,14 @@ namespace Catel.Modules
         {
             get
             {
-                this.SynchronizeRequiredModuleCatalogs();
+                SynchronizeRequiredModuleCatalogsProperties();
 
                 var moduleInfos = base.Modules.ToList();
 
                 var rawModuleInfos = new List<ModuleInfo>();
                 foreach (INuGetBasedModuleCatalog moduleCatalog in ModuleCatalogs)
                 {
-                    rawModuleInfos.AddRange(moduleCatalog.Modules);   
+                    rawModuleInfos.AddRange(moduleCatalog.Modules);
                 }
 
                 moduleInfos.AddRange(rawModuleInfos.GroupBy(info => info.GetPackageName().Id).Select(grouping => grouping.OrderByDescending(info => info.GetPackageName().Version).FirstOrDefault()).Where(firstOrDefault => firstOrDefault != null));
@@ -52,27 +53,6 @@ namespace Catel.Modules
             }
         }
 
-        /// <summary>
-        /// Synchronize module catalogs
-        /// </summary>
-        private void SynchronizeRequiredModuleCatalogs()
-        {
-            Log.Debug("Synchronizing module catalogs");
-
-            var firstModuleCatalog = ModuleCatalogs.FirstOrDefault();
-            for (int i = 1; i < ModuleCatalogs.Count; i++)
-            {
-                var currentModuleCatalog = ModuleCatalogs[i];
-                // ReSharper disable once PossibleNullReferenceException
-                currentModuleCatalog.AllowPrereleaseVersions = firstModuleCatalog.AllowPrereleaseVersions;
-                currentModuleCatalog.IgnoreDependencies = firstModuleCatalog.IgnoreDependencies;
-                currentModuleCatalog.OutputDirectory = firstModuleCatalog.OutputDirectory;
-                currentModuleCatalog.PackagedModuleIdFilterExpression = firstModuleCatalog.PackagedModuleIdFilterExpression;
-            }
-        }
-        #endregion
-
-        #region INuGetBasedModuleCatalog Members
         /// <summary>
         /// Tries to create and install package request from the <paramref name="moduleInfo"/>.
         /// </summary>
@@ -93,7 +73,6 @@ namespace Catel.Modules
             installPackageRequest = null;
             var moduleCatalogs = ModuleCatalogs;
 
-
             int i = 0;
             while (installPackageRequest == null && i < moduleCatalogs.Count)
             {
@@ -107,21 +86,7 @@ namespace Catel.Modules
         /// <summary>
         /// Gets or sets the packaged module id filter expression.
         /// </summary>
-        public string PackagedModuleIdFilterExpression
-        {
-            get
-            {
-                var moduleCatalog = ModuleCatalogs.FirstOrDefault();
-                return moduleCatalog != null ? moduleCatalog.PackagedModuleIdFilterExpression : string.Empty;
-            }
-            set
-            {
-                foreach (var moduleCatalog in ModuleCatalogs)
-                {
-                    moduleCatalog.PackagedModuleIdFilterExpression = value;
-                }
-            }
-        }
+        public string PackagedModuleIdFilterExpression { get; set; }
 
         /// <summary>
         /// Indicates whether the module catalog can download prerelease versions.
@@ -173,20 +138,7 @@ namespace Catel.Modules
         /// <summary>
         ///    Gets or sets the output directory.
         /// </summary>
-        public string OutputDirectory
-        {
-            get
-            {
-                return ModuleCatalogs.Select(catalog => catalog.OutputDirectory).FirstOrDefault();
-            }
-            set
-            {
-                foreach (INuGetBasedModuleCatalog moduleCatalog in ModuleCatalogs)
-                {
-                    moduleCatalog.OutputDirectory = value;
-                }
-            }
-        }
+        public string OutputDirectory { get; set; }
 
         /// <summary>
         ///     Gets the package repository.
@@ -200,6 +152,22 @@ namespace Catel.Modules
             }
 
             return compositePackageRepository;
+        }
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// Synchronize module catalogs
+        /// </summary>
+        private void SynchronizeRequiredModuleCatalogsProperties()
+        {
+            Log.Debug("Synchronizing required module catalogs properties");
+
+            foreach (INuGetBasedModuleCatalog moduleCatalog in ModuleCatalogs)
+            {
+                moduleCatalog.OutputDirectory = OutputDirectory;
+                moduleCatalog.PackagedModuleIdFilterExpression = PackagedModuleIdFilterExpression;
+            }
         }
         #endregion
     }
