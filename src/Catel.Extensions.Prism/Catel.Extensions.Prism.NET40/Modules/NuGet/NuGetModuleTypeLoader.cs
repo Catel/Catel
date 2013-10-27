@@ -13,6 +13,7 @@ namespace Catel.Modules
 
     using Catel.Logging;
     using Catel.Modules.Extensions;
+    using Catel.Modules.Interfaces;
 
     using Microsoft.Practices.Prism.Modularity;
 
@@ -38,7 +39,7 @@ namespace Catel.Modules
         /// <summary>
         /// The module catalogs.
         /// </summary>
-        private readonly ReadOnlyCollection<NuGetBasedModuleCatalog> _moduleCatalogs;
+        private readonly ReadOnlyCollection<INuGetBasedModuleCatalog> _moduleCatalogs;
         #endregion
 
         #region Constructors
@@ -52,15 +53,15 @@ namespace Catel.Modules
         {
             Argument.IsNotNull(() => moduleCatalog);
 
-            if (moduleCatalog is NuGetBasedModuleCatalog)
+            if (moduleCatalog is INuGetBasedModuleCatalog)
             {
-                _moduleCatalogs = new List<NuGetBasedModuleCatalog> { moduleCatalog as NuGetBasedModuleCatalog }.AsReadOnly();
+                _moduleCatalogs = new List<INuGetBasedModuleCatalog> { moduleCatalog as INuGetBasedModuleCatalog }.AsReadOnly();
             }
 
             if (moduleCatalog is CompositeModuleCatalog)
             {
                 var compositeModuleCatalog = moduleCatalog as CompositeModuleCatalog;
-                _moduleCatalogs = compositeModuleCatalog.QueryItems.ToList().OfType<NuGetBasedModuleCatalog>().ToList().AsReadOnly();
+                _moduleCatalogs = compositeModuleCatalog.QueryItems.ToList().OfType<INuGetBasedModuleCatalog>().ToList().AsReadOnly();
             }
         }
         #endregion
@@ -125,7 +126,7 @@ namespace Catel.Modules
                 int i = 0;
                 while (!canLoad && i < _moduleCatalogs.Count)
                 {
-                    NuGetBasedModuleCatalog moduleCatalog = _moduleCatalogs[i++];
+                    INuGetBasedModuleCatalog moduleCatalog = _moduleCatalogs[i++];
 
                     InstallPackageRequest installPackageRequest;
                     if (moduleCatalog.TryCreateInstallPackageRequest(moduleInfo, out installPackageRequest))

@@ -125,8 +125,17 @@
     <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\CompositeModuleCatalog.cs">
       <Link>Modules\CompositeModuleCatalog.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\CompositeNuGetBasedModuleCatalog.cs">
+      <Link>Modules\CompositeNuGetBasedModuleCatalog.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\CompositePackageRepository.cs">
+      <Link>Modules\CompositePackageRepository.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\Extensions\ModuleInfoExtensions.cs">
       <Link>Modules\Extensions\ModuleInfoExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\Interfaces\INuGetBasedModuleCatalog.cs">
+      <Link>Modules\Interfaces\INuGetBasedModuleCatalog.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\ModuleCatalog.cs">
       <Link>Modules\ModuleCatalog.cs</Link>

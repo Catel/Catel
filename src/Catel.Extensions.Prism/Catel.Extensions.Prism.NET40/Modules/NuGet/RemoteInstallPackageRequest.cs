@@ -1,7 +1,8 @@
 ﻿namespace Catel.Modules
 {
     using Catel.Logging;
- 
+    using Catel.Modules.Interfaces;
+
     using NuGet;
 
     /// <summary>
@@ -17,7 +18,7 @@
         /// <summary>
         /// The module catalog.
         /// </summary>
-        private readonly NuGetBasedModuleCatalog _moduleCatalog;
+        private readonly INuGetBasedModuleCatalog _moduleCatalog;
         #endregion
 
         #region Constructors
@@ -29,7 +30,7 @@
         /// <param name="assemblyFileRef"></param>
         /// <exception cref="System.ArgumentNullException">The <paramref name="moduleCatalog" /> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="package" /> is <c>null</c>.</exception>
-        public RemoteInstallPackageRequest(NuGetBasedModuleCatalog moduleCatalog, IPackage package, string assemblyFileRef) : base(assemblyFileRef)
+        public RemoteInstallPackageRequest(INuGetBasedModuleCatalog moduleCatalog, IPackage package, string assemblyFileRef) : base(assemblyFileRef)
         {
             Argument.IsNotNull(() => moduleCatalog);
             Argument.IsNotNull(() => package);

@@ -99,6 +99,9 @@
     <Compile Include="Extensions\IRegionManagerExtensions.cs" />
     <Compile Include="Extensions\IUIVisualizerServiceExtensions.cs" />
     <Compile Include="Extensions\ISplashScreenServiceExtensions.cs" />
+    <Compile Include="Modules\CompositeNuGetBasedModuleCatalog.cs" />
+    <Compile Include="Modules\CompositePackageRepository.cs" />
+    <Compile Include="Modules\Interfaces\INuGetBasedModuleCatalog.cs" />
     <Compile Include="Modules\NuGet\InstallPackageRequest.cs" />
     <Compile Include="Modules\Extensions\ModuleInfoExtensions.cs" />
     <Compile Include="Modules\ModuleManager\ModuleManager.cs" />

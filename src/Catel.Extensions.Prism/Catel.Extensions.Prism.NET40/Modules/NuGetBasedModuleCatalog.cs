@@ -11,7 +11,6 @@ namespace Catel.Modules
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
-    using System.IO.Packaging;
     using System.Linq;
     using System.Runtime.Versioning;
     using System.Xml;
@@ -21,15 +20,17 @@ namespace Catel.Modules
     using Catel.Caching.Policies;
     using Catel.Logging;
     using Catel.Modules.Extensions;
+    using Catel.Modules.Interfaces;
 
     using Microsoft.Practices.Prism.Modularity;
 
     using NuGet;
 
+
     /// <summary>
     /// The nuget based module catelog.
     /// </summary>
-    public sealed class NuGetBasedModuleCatalog : ModuleCatalog
+    public sealed class NuGetBasedModuleCatalog : ModuleCatalog, INuGetBasedModuleCatalog
     {
         #region Constants
         /// <summary>
@@ -206,7 +207,7 @@ namespace Catel.Modules
         /// <param name="moduleInfo">The module info</param>
         /// <returns><c>true</c> if the module is installed otherwise <c>false</c>.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="moduleInfo" /> is <c>null</c>.</exception>
-        public bool IsModuleAssemblyInstalled(ModuleInfo moduleInfo)
+        private bool IsModuleAssemblyInstalled(ModuleInfo moduleInfo)
         {
             Argument.IsNotNull(() => moduleInfo);
 
@@ -219,7 +220,7 @@ namespace Catel.Modules
         /// <param name="moduleInfo">The module info</param>
         /// <returns>The module assembly ref</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="moduleInfo" /> is <c>null</c>.</exception>
-        public string GetModuleAssemblyRef(ModuleInfo moduleInfo)
+        private string GetModuleAssemblyRef(ModuleInfo moduleInfo)
         {
             // ReSharper disable once ImplicitlyCapturedClosure
             Argument.IsNotNull(() => moduleInfo);
@@ -239,7 +240,7 @@ namespace Catel.Modules
         /// <param name="version">The version</param>
         /// <returns>The module assembly ref</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="moduleInfo" /> is <c>null</c>.</exception>
-        public string GetModuleAssemblyRef(ModuleInfo moduleInfo, SemanticVersion version)
+        private string GetModuleAssemblyRef(ModuleInfo moduleInfo, SemanticVersion version)
         {
             // ReSharper disable once ImplicitlyCapturedClosure
             Argument.IsNotNull(() => moduleInfo);
