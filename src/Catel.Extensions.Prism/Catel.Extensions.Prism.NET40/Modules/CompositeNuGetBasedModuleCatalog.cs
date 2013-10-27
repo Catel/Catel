@@ -36,7 +36,7 @@ namespace Catel.Modules
         {
             get
             {
-                SynchronizeRequiredModuleCatalogsProperties();
+                this.SynchronizeRequiredModuleCatalogs();
 
                 var moduleInfos = base.Modules.ToList();
 
@@ -55,7 +55,7 @@ namespace Catel.Modules
         /// <summary>
         /// Synchronize module catalogs
         /// </summary>
-        private void SynchronizeRequiredModuleCatalogsProperties()
+        private void SynchronizeRequiredModuleCatalogs()
         {
             Log.Debug("Synchronizing module catalogs");
 
@@ -64,6 +64,8 @@ namespace Catel.Modules
             {
                 var currentModuleCatalog = ModuleCatalogs[i];
                 // ReSharper disable once PossibleNullReferenceException
+                currentModuleCatalog.AllowPrereleaseVersions = firstModuleCatalog.AllowPrereleaseVersions;
+                currentModuleCatalog.IgnoreDependencies = firstModuleCatalog.IgnoreDependencies;
                 currentModuleCatalog.OutputDirectory = firstModuleCatalog.OutputDirectory;
                 currentModuleCatalog.PackagedModuleIdFilterExpression = firstModuleCatalog.PackagedModuleIdFilterExpression;
             }
