@@ -12,6 +12,7 @@ namespace Catel.Modules
     using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Linq.Expressions;
     using System.Runtime.Versioning;
     using System.Text.RegularExpressions;
 
@@ -79,9 +80,15 @@ namespace Catel.Modules
         private readonly CacheStorage<string, IEnumerable<ModuleInfo>> _packagedModulesFilteredSearchCacheStorage = new CacheStorage<string, IEnumerable<ModuleInfo>>(() => ExpirationPolicy.Duration(TimeSpan.FromMinutes(2)), true);
 
         /// <summary>
-        /// The packaged module id filter expression.
+        /// The nuget based module catalog parent child behavior
         /// </summary>
-        private string _packagedModuleIdFilterExpression = string.Empty;
+        private readonly NuGetBasedModuleCatalogParentChildBehavior _behavior;
+
+        /// <summary>
+        ///  NuGet like framework name identifier string, for instance <c>NET40</c> or <c>NET45</c>.
+        /// </summary>
+        private string _frameworkNameIdentifier;
+
         #endregion
 
         #region Constructors
@@ -90,15 +97,12 @@ namespace Catel.Modules
         /// </summary>
         public NuGetBasedModuleCatalog()
         {
+            _behavior = new NuGetBasedModuleCatalogParentChildBehavior(this);
             PackageSource = "https://nuget.org/api/v2/";
-            OutputDirectory = "packages";
-            AllowPrereleaseVersions = false;
-            IgnoreDependencies = true;
-
 #if NET40
-            FrameworkNameIdentifier = "NET40";
+            _frameworkNameIdentifier = "NET40";
 #else 
-            FrameworkNameIdentifier = "NET45";
+            _frameworkNameIdentifier = "NET45";
 #endif
         }
         #endregion
@@ -108,17 +112,6 @@ namespace Catel.Modules
         /// Gets or sets the package source.
         /// </summary>
         public string PackageSource
-        {
-            get;
-            set;
-        }
-
-        // TODO: throw an exception if a value is not compatible with the target platform. 
-        /// <summary>
-        ///  Gets or sets the output directory.
-        /// </summary>
-        /// <remarks>NuGet like framework name identifier string, for instance <c>NET35</c>, <c>NET40</c>, <c>NET45</c>, <c>SL4</c> and so on</remarks>
-        public string FrameworkNameIdentifier
         {
             get;
             set;
@@ -142,13 +135,23 @@ namespace Catel.Modules
         #endregion
 
         #region INuGetBasedModuleCatalog Members
+
+        /// <summary>
+        /// Gets or sets the parent nuget based catalog.
+        /// </summary>
+        public INuGetBasedModuleCatalog Parent
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         ///  Gets or sets the output directory.
         /// </summary>
         public string OutputDirectory
         {
-            get;
-            set;
+            get { return _behavior.OutputDirectory; }
+            set { _behavior.OutputDirectory = value; }
         }
 
         /// <summary>
@@ -156,8 +159,17 @@ namespace Catel.Modules
         /// </summary>
         public bool IgnoreDependencies
         {
-            get;
-            set;
+            get { return _behavior.IgnoreDependencies; }
+            set { _behavior.IgnoreDependencies = value; }
+        }
+
+        /// <summary>
+        /// The package module id filter expression.
+        /// </summary>
+        public string PackagedModuleIdFilterExpression
+        {
+            get { return _behavior.PackagedModuleIdFilterExpression; }
+            set { _behavior.PackagedModuleIdFilterExpression = value; }
         }
 
         /// <summary>
@@ -165,9 +177,10 @@ namespace Catel.Modules
         /// </summary>
         public bool AllowPrereleaseVersions
         {
-            get;
-            set;
+            get { return _behavior.AllowPrereleaseVersions; }
+            set { _behavior.AllowPrereleaseVersions = value; }
         }
+
 
         /// <summary>
         /// Gets the full path to the output output directory.
@@ -195,28 +208,10 @@ namespace Catel.Modules
             get
             {
                 var moduleInfos = base.Modules.ToList();
+
                 moduleInfos.AddRange(PackagedModules);
+                
                 return moduleInfos;
-            }
-        }
-
-        /// <summary>
-        /// The package module id filter expression.
-        /// </summary>
-        public string PackagedModuleIdFilterExpression
-        {
-            get { return _packagedModuleIdFilterExpression; }
-
-            set
-            {
-                if (value == null)
-                {
-                    _packagedModuleIdFilterExpression = string.Empty;
-                } 
-                else if (!string.IsNullOrEmpty(value))
-                {
-                    _packagedModuleIdFilterExpression = value.Trim();
-                }
             }
         }
 
@@ -253,7 +248,7 @@ namespace Catel.Modules
                     if (repository.TryFindPackage(packageName.Id, packageName.Version, out package))
                     {
                         IEnumerable<FrameworkName> supportedFrameworks = package.GetSupportedFrameworks();
-                        if (supportedFrameworks != null && supportedFrameworks.Any(name => FrameworkIdentifierConversionMap.ContainsKey(name.FullName) && FrameworkIdentifierConversionMap[name.FullName].Equals(FrameworkNameIdentifier)))
+                        if (supportedFrameworks != null && supportedFrameworks.Any(name => FrameworkIdentifierConversionMap.ContainsKey(name.FullName) && FrameworkIdentifierConversionMap[name.FullName].Equals(_frameworkNameIdentifier)))
                         {
                             Log.Debug("Creating remote install package request for '{0}' from '{1}'", package.GetFullName(), PackageSource);
 
@@ -322,7 +317,7 @@ namespace Catel.Modules
                 {
                     PackageName packageName = moduleInfo.GetPackageName();
                     string directoryName = packageName.ToString().Replace(' ', '.');
-                    return string.Format(CultureInfo.InvariantCulture, RelativeUrlPattern, BaseUrl, directoryName, FrameworkNameIdentifier, moduleInfo.GetAssemblyName());
+                    return string.Format(CultureInfo.InvariantCulture, RelativeUrlPattern, BaseUrl, directoryName, _frameworkNameIdentifier, moduleInfo.GetAssemblyName());
                 });
         }
 
@@ -354,9 +349,22 @@ namespace Catel.Modules
         private IEnumerable<ModuleInfo> GetPackagedModules()
         {
             var moduleInfos = new List<ModuleInfo>();
-            var packageRepository = GetPackageRepository();
 
-            var packages = packageRepository.GetPackages().Where(package => (string.IsNullOrWhiteSpace(PackagedModuleIdFilterExpression) || package.Id.Contains(PackagedModuleIdFilterExpression)) && !string.IsNullOrWhiteSpace(package.Description) && package.Description.StartsWith("ModuleName") && package.Description.Contains("ModuleType")).ToList().GroupBy(package => package.Id).Select(packageGroup => packageGroup.ToList().OrderByDescending(package => package.Version).FirstOrDefault()).Where(package => package != null);
+            IPackageRepository packageRepository = GetPackageRepository();
+            IQueryable<IPackage> queryablePackages = packageRepository.GetPackages();
+           
+            Expression<Func<IPackage, bool>> filterExpression;
+            if (!string.IsNullOrWhiteSpace(PackagedModuleIdFilterExpression))
+            {
+                filterExpression = package => (package.Id.Contains(PackagedModuleIdFilterExpression) && package.Description != null && package.Description.StartsWith("ModuleName") && package.Description.Contains("ModuleType"));
+            }
+            else
+            {
+                filterExpression = package => (package.Description != null && package.Description.StartsWith("ModuleName") && package.Description.Contains("ModuleType"));
+            }
+
+            IEnumerable<IPackage> packages = queryablePackages.Where(filterExpression).ToList().GroupBy(package => package.Id).Select(packageGroup => packageGroup.ToList().OrderByDescending(package => package.Version).FirstOrDefault()).Where(package => package != null);
+
             foreach (var package in packages)
             {
                 var match = ModuleDescriptorRegex.Match(package.Description);

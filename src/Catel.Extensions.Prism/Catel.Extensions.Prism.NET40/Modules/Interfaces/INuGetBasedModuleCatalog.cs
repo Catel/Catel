@@ -57,6 +57,11 @@ namespace Catel.Modules.Interfaces
         string OutputDirectory { get; set; }
 
         /// <summary>
+        /// Gets or sets the parent nuget based module catalog.
+        /// </summary>
+        INuGetBasedModuleCatalog Parent { get; set; }
+
+        /// <summary>
         /// Gets the package repository.
         /// </summary>
         /// <returns>

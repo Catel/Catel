@@ -27,6 +27,11 @@ namespace Catel.Modules
         /// The Log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// The default parent child behavior.
+        /// </summary>
+        private readonly NuGetBasedModuleCatalogParentChildBehavior _behavior;
         #endregion
 
         #region Constructors
@@ -35,11 +40,9 @@ namespace Catel.Modules
         /// </summary>
         public CompositeNuGetBasedModuleCatalog()
         {
-            OutputDirectory = "packages";
-            PackagedModuleIdFilterExpression = string.Empty;
-            AllowPrereleaseVersions = false;
-            IgnoreDependencies = true;
+            _behavior = new NuGetBasedModuleCatalogParentChildBehavior(this);
         }
+
         #endregion
 
         #region INuGetBasedModuleCatalog Members
@@ -50,13 +53,12 @@ namespace Catel.Modules
         {
             get
             {
-                SynchronizeRequiredModuleCatalogsProperties();
-
                 var moduleInfos = base.Modules.ToList();
-
+                
                 var rawModuleInfos = new List<ModuleInfo>();
                 foreach (INuGetBasedModuleCatalog moduleCatalog in ModuleCatalogs)
                 {
+                    EnsureParentChildRelationship(moduleCatalog);
                     rawModuleInfos.AddRange(moduleCatalog.Modules);
                 }
 
@@ -64,6 +66,59 @@ namespace Catel.Modules
 
                 return moduleInfos;
             }
+        }
+
+        /// <summary>
+        ///  Gets or sets the output directory.
+        /// </summary>
+        public string OutputDirectory
+        {
+            get { return _behavior.OutputDirectory; }
+            set { _behavior.OutputDirectory = value; }
+        }
+
+        /// <summary>
+        /// Indicates whether the module catalog ignore the dependencies or not.
+        /// </summary>
+        public bool IgnoreDependencies
+        {
+            get { return _behavior.IgnoreDependencies; }
+            set { _behavior.IgnoreDependencies = value; }
+        }
+
+        /// <summary>
+        /// The package module id filter expression.
+        /// </summary>
+        public string PackagedModuleIdFilterExpression
+        {
+            get { return _behavior.PackagedModuleIdFilterExpression; }
+            set { _behavior.PackagedModuleIdFilterExpression = value; }
+        }
+
+        /// <summary>
+        /// Indicates whether the module catalog can download prerelease versions.
+        /// </summary>
+        public bool AllowPrereleaseVersions
+        {
+            get { return _behavior.AllowPrereleaseVersions; }
+            set { _behavior.AllowPrereleaseVersions = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the parent nuget based catalog.
+        /// </summary>
+        public INuGetBasedModuleCatalog Parent
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets the output directory full path.
+        /// </summary>
+        public string OutputDirectoryFullPath
+        {
+            get { return ModuleCatalogs.Select(catalog => catalog.OutputDirectoryFullPath).FirstOrDefault(); }
         }
 
         /// <summary>
@@ -90,66 +145,11 @@ namespace Catel.Modules
             while (installPackageRequest == null && i < moduleCatalogs.Count)
             {
                 var moduleCatalog = moduleCatalogs[i++];
+                EnsureParentChildRelationship(moduleCatalog);
                 moduleCatalog.TryCreateInstallPackageRequest(moduleInfo, out installPackageRequest);
             }
 
             return installPackageRequest != null;
-        }
-
-        /// <summary>
-        /// Gets or sets the packaged module id filter expression.
-        /// </summary>
-        public string PackagedModuleIdFilterExpression
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Indicates whether the module catalog can download prerelease versions.
-        /// </summary>
-        public bool AllowPrereleaseVersions
-        {
-            get { return ModuleCatalogs.Any(catalog => catalog.AllowPrereleaseVersions); }
-            set
-            {
-                foreach (INuGetBasedModuleCatalog moduleCatalog in ModuleCatalogs)
-                {
-                    moduleCatalog.AllowPrereleaseVersions = value;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Indicates whether the module catalog ignore the dependencies or not.
-        /// </summary>
-        public bool IgnoreDependencies
-        {
-            get { return ModuleCatalogs.All(catalog => catalog.IgnoreDependencies); }
-            set
-            {
-                foreach (INuGetBasedModuleCatalog moduleCatalog in ModuleCatalogs)
-                {
-                    moduleCatalog.IgnoreDependencies = value;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets the output directory full path.
-        /// </summary>
-        public string OutputDirectoryFullPath
-        {
-            get { return ModuleCatalogs.Select(catalog => catalog.OutputDirectoryFullPath).FirstOrDefault(); }
-        }
-
-        /// <summary>
-        ///    Gets or sets the output directory.
-        /// </summary>
-        public string OutputDirectory
-        {
-            get;
-            set;
         }
 
         /// <summary>
@@ -160,6 +160,7 @@ namespace Catel.Modules
             var compositePackageRepository = new CompositePackageRepository();
             foreach (var moduleCatalog in ModuleCatalogs)
             {
+                EnsureParentChildRelationship(moduleCatalog);
                 compositePackageRepository.Add(moduleCatalog.GetPackageRepository());
             }
 
@@ -169,17 +170,14 @@ namespace Catel.Modules
 
         #region Methods
         /// <summary>
-        /// Synchronize module catalogs
+        /// Ensure parent child relationship
         /// </summary>
-        private void SynchronizeRequiredModuleCatalogsProperties()
+        /// <param name="catalog"></param>
+        private void EnsureParentChildRelationship(INuGetBasedModuleCatalog catalog)
         {
-            Log.Debug("Synchronizing required module catalogs properties");
+            Log.Debug("Ensuring parent child relationship");
 
-            foreach (INuGetBasedModuleCatalog moduleCatalog in ModuleCatalogs)
-            {
-                moduleCatalog.OutputDirectory = OutputDirectory;
-                moduleCatalog.PackagedModuleIdFilterExpression = PackagedModuleIdFilterExpression;
-            }
+            catalog.Parent = this;
         }
         #endregion
     }

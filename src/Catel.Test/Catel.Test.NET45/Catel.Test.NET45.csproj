@@ -401,6 +401,9 @@
     <Compile Include="..\Catel.Test.NET40\Extensions\Prism\Modules\Extensions\ModuleInfoExtensions_Facts.cs">
       <Link>Extensions\Prism\Modules\Extensions\ModuleInfoExtensions_Facts.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\Prism\Modules\NuGetBasedModuleCatalogParentChildBehavior_Facts.cs">
+      <Link>Extensions\Prism\Modules\NuGetBasedModuleCatalogParentChildBehavior_Facts.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\Extensions\Prism\Modules\NuGetBasedModuleCatalog_Facts.cs">
       <Link>Extensions\Prism\Modules\NuGetBasedModuleCatalog_Facts.cs</Link>
     </Compile>
