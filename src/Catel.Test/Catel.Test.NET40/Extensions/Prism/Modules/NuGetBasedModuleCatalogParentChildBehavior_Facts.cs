@@ -29,7 +29,7 @@ namespace Catel.Test.Extensions.Prism.Modules
                 var mock = new Mock<INuGetBasedModuleCatalog>();
                 var parent = new Mock<INuGetBasedModuleCatalog>();
                 parent.SetupGet(catalog => catalog.AllowPrereleaseVersions).Returns(true);
-                parent.SetupGet(catalog => catalog.Parent).Returns(parent.Object);
+                mock.SetupGet(catalog => catalog.Parent).Returns(parent.Object);
                 var nuGetBasedModuleCatalogParentChildBehavior = new NuGetBasedModuleCatalogParentChildBehavior(mock.Object) { AllowPrereleaseVersions = false };
                 Assert.IsTrue(nuGetBasedModuleCatalogParentChildBehavior.AllowPrereleaseVersions);
             }
@@ -78,7 +78,7 @@ namespace Catel.Test.Extensions.Prism.Modules
                 var mock = new Mock<INuGetBasedModuleCatalog>();
                 var parent = new Mock<INuGetBasedModuleCatalog>();
                 parent.SetupGet(catalog => catalog.IgnoreDependencies).Returns(false);
-                parent.SetupGet(catalog => catalog.Parent).Returns(parent.Object);
+                mock.SetupGet(catalog => catalog.Parent).Returns(parent.Object);
                 var nuGetBasedModuleCatalogParentChildBehavior = new NuGetBasedModuleCatalogParentChildBehavior(mock.Object) { IgnoreDependencies = true };
                 Assert.IsFalse(nuGetBasedModuleCatalogParentChildBehavior.IgnoreDependencies);
             }
