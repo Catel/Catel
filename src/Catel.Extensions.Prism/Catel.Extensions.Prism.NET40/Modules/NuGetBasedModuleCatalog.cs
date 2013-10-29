@@ -356,7 +356,7 @@ namespace Catel.Modules
             var moduleInfos = new List<ModuleInfo>();
             var packageRepository = GetPackageRepository();
 
-            var packages = packageRepository.GetPackages().Where(package => ((!string.IsNullOrWhiteSpace(PackagedModuleIdFilterExpression) && package.Id.Contains(PackagedModuleIdFilterExpression)) || string.IsNullOrWhiteSpace(PackagedModuleIdFilterExpression)) && !string.IsNullOrWhiteSpace(package.Description) && package.Description.StartsWith("ModuleName") && package.Description.Contains("ModuleType")).ToList().GroupBy(package => package.Id).Select(packageGroup => packageGroup.ToList().OrderByDescending(package => package.Version).FirstOrDefault()).Where(package => package != null);
+            var packages = packageRepository.GetPackages().Where(package => (string.IsNullOrWhiteSpace(PackagedModuleIdFilterExpression) || package.Id.Contains(PackagedModuleIdFilterExpression)) && !string.IsNullOrWhiteSpace(package.Description) && package.Description.StartsWith("ModuleName") && package.Description.Contains("ModuleType")).ToList().GroupBy(package => package.Id).Select(packageGroup => packageGroup.ToList().OrderByDescending(package => package.Version).FirstOrDefault()).Where(package => package != null);
             foreach (var package in packages)
             {
                 var match = ModuleDescriptorRegex.Match(package.Description);
