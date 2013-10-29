@@ -145,7 +145,7 @@ namespace Catel.Test.Extensions.Prism.Modules
                 var mock = new Mock<INuGetBasedModuleCatalog>();
                 mock.SetupGet(catalog => catalog.Parent).Returns((INuGetBasedModuleCatalog)null);
                 var nuGetBasedModuleCatalogParentChildBehavior = new NuGetBasedModuleCatalogParentChildBehavior(mock.Object) { PackagedModuleIdFilterExpression = "My.Modules" };
-                Assert.AreEqual("My.Modules", nuGetBasedModuleCatalogParentChildBehavior.OutputDirectory);
+                Assert.AreEqual("My.Modules", nuGetBasedModuleCatalogParentChildBehavior.PackagedModuleIdFilterExpression);
             }
             #endregion
         }
