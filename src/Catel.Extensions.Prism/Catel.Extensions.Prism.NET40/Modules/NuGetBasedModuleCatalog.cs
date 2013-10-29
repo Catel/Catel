@@ -86,7 +86,7 @@ namespace Catel.Modules
 
         #region Constructors
         /// <summary>
-        /// The nuget based module catalog.
+        /// The nuget based module catalog constructor.
         /// </summary>
         public NuGetBasedModuleCatalog()
         {
@@ -356,7 +356,7 @@ namespace Catel.Modules
             var moduleInfos = new List<ModuleInfo>();
             var packageRepository = GetPackageRepository();
 
-            var packages = packageRepository.GetPackages().Where(package => ((!string.IsNullOrWhiteSpace(this.PackagedModuleIdFilterExpression) && package.Id.Contains(this.PackagedModuleIdFilterExpression)) || string.IsNullOrWhiteSpace(this.PackagedModuleIdFilterExpression)) && !string.IsNullOrWhiteSpace(package.Description) && package.Description.StartsWith("ModuleName") && package.Description.Contains("ModuleType")).ToList().GroupBy(package => package.Id).Select(packageGroup => packageGroup.ToList().OrderByDescending(package => package.Version).FirstOrDefault()).Where(package => package != null);
+            var packages = packageRepository.GetPackages().Where(package => ((!string.IsNullOrWhiteSpace(PackagedModuleIdFilterExpression) && package.Id.Contains(PackagedModuleIdFilterExpression)) || string.IsNullOrWhiteSpace(PackagedModuleIdFilterExpression)) && !string.IsNullOrWhiteSpace(package.Description) && package.Description.StartsWith("ModuleName") && package.Description.Contains("ModuleType")).ToList().GroupBy(package => package.Id).Select(packageGroup => packageGroup.ToList().OrderByDescending(package => package.Version).FirstOrDefault()).Where(package => package != null);
             foreach (var package in packages)
             {
                 var match = ModuleDescriptorRegex.Match(package.Description);
@@ -366,7 +366,7 @@ namespace Catel.Modules
                     var moduleType = match.Groups[2].Value.Trim();
                     if (!string.IsNullOrWhiteSpace(moduleName) && !string.IsNullOrWhiteSpace(moduleType))
                     {
-                        var @ref = string.Format("{0}, {1}", package.Id, package.Version);
+                        var @ref = string.Format(CultureInfo.InvariantCulture, "{0}, {1}", package.Id, package.Version);
                         var key = string.Format(CultureInfo.InvariantCulture, "ModuleName:{0}; ModuleType:{1}; Ref:{2}; Version:{3}", moduleName, moduleType, @ref, package.Version);
 
                         moduleInfos.Add(_moduleInfoCacheStoreCacheStorage.GetFromCacheOrFetch(key, () => new ModuleInfo(moduleName, moduleType) { Ref = @ref, InitializationMode = InitializationMode.OnDemand }));

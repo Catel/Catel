@@ -29,6 +29,19 @@ namespace Catel.Modules
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         #endregion
 
+        #region Constructors
+        /// <summary>
+        /// The CompositeNuGetBasedModuleCatalog constructor. 
+        /// </summary>
+        public CompositeNuGetBasedModuleCatalog()
+        {
+            OutputDirectory = "packages";
+            PackagedModuleIdFilterExpression = string.Empty;
+            AllowPrereleaseVersions = false;
+            IgnoreDependencies = true;
+        }
+        #endregion
+
         #region INuGetBasedModuleCatalog Members
         /// <summary>
         /// Gets the modules.
@@ -86,17 +99,18 @@ namespace Catel.Modules
         /// <summary>
         /// Gets or sets the packaged module id filter expression.
         /// </summary>
-        public string PackagedModuleIdFilterExpression { get; set; }
+        public string PackagedModuleIdFilterExpression
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Indicates whether the module catalog can download prerelease versions.
         /// </summary>
         public bool AllowPrereleaseVersions
         {
-            get
-            {
-                return ModuleCatalogs.Any(catalog => catalog.AllowPrereleaseVersions);
-            }
+            get { return ModuleCatalogs.Any(catalog => catalog.AllowPrereleaseVersions); }
             set
             {
                 foreach (INuGetBasedModuleCatalog moduleCatalog in ModuleCatalogs)
@@ -111,10 +125,7 @@ namespace Catel.Modules
         /// </summary>
         public bool IgnoreDependencies
         {
-            get
-            {
-                return ModuleCatalogs.All(catalog => catalog.IgnoreDependencies);
-            }
+            get { return ModuleCatalogs.All(catalog => catalog.IgnoreDependencies); }
             set
             {
                 foreach (INuGetBasedModuleCatalog moduleCatalog in ModuleCatalogs)
@@ -129,16 +140,17 @@ namespace Catel.Modules
         /// </summary>
         public string OutputDirectoryFullPath
         {
-            get
-            {
-                return ModuleCatalogs.Select(catalog => catalog.OutputDirectoryFullPath).FirstOrDefault();
-            }
+            get { return ModuleCatalogs.Select(catalog => catalog.OutputDirectoryFullPath).FirstOrDefault(); }
         }
 
         /// <summary>
         ///    Gets or sets the output directory.
         /// </summary>
-        public string OutputDirectory { get; set; }
+        public string OutputDirectory
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         ///     Gets the package repository.
