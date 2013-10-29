@@ -94,5 +94,61 @@ namespace Catel.Test.Extensions.Prism.Modules
             #endregion
         }
         #endregion
+
+        #region Nested type: The_OutputDirectory_Property
+        [TestClass]
+        public class The_OutputDirectory_Property
+        {
+            #region Methods
+            [TestMethod]
+            public void Returns_The_Parent_Value()
+            {
+                var mock = new Mock<INuGetBasedModuleCatalog>();
+                var parent = new Mock<INuGetBasedModuleCatalog>();
+                parent.SetupGet(catalog => catalog.OutputDirectory).Returns("packages");
+                mock.SetupGet(catalog => catalog.Parent).Returns(parent.Object);
+                var nuGetBasedModuleCatalogParentChildBehavior = new NuGetBasedModuleCatalogParentChildBehavior(mock.Object) { OutputDirectory = @"c:\tmp" };
+                Assert.AreEqual("packages", nuGetBasedModuleCatalogParentChildBehavior.OutputDirectory);
+            }
+
+            [TestMethod]
+            public void Returns_Its_Own_Value()
+            {
+                var mock = new Mock<INuGetBasedModuleCatalog>();
+                mock.SetupGet(catalog => catalog.Parent).Returns((INuGetBasedModuleCatalog)null);
+                var nuGetBasedModuleCatalogParentChildBehavior = new NuGetBasedModuleCatalogParentChildBehavior(mock.Object) { OutputDirectory = @"c:\tmp" };
+                Assert.AreEqual(@"c:\tmp", nuGetBasedModuleCatalogParentChildBehavior.OutputDirectory);
+            }
+            #endregion
+        }
+        #endregion
+
+        #region Nested type: The_PackagedModuleIdFilterExpression_Property
+        [TestClass]
+        public class The_PackagedModuleIdFilterExpression_Property
+        {
+            #region Methods
+            [TestMethod]
+            public void Returns_The_Parent_Value()
+            {
+                var mock = new Mock<INuGetBasedModuleCatalog>();
+                var parent = new Mock<INuGetBasedModuleCatalog>();
+                parent.SetupGet(catalog => catalog.PackagedModuleIdFilterExpression).Returns("Orchestra.Modules");
+                mock.SetupGet(catalog => catalog.Parent).Returns(parent.Object);
+                var nuGetBasedModuleCatalogParentChildBehavior = new NuGetBasedModuleCatalogParentChildBehavior(mock.Object) { PackagedModuleIdFilterExpression = "My.Modules" };
+                Assert.AreEqual("Orchestra.Modules", nuGetBasedModuleCatalogParentChildBehavior.PackagedModuleIdFilterExpression);
+            }
+
+            [TestMethod]
+            public void Returns_Its_Own_Value()
+            {
+                var mock = new Mock<INuGetBasedModuleCatalog>();
+                mock.SetupGet(catalog => catalog.Parent).Returns((INuGetBasedModuleCatalog)null);
+                var nuGetBasedModuleCatalogParentChildBehavior = new NuGetBasedModuleCatalogParentChildBehavior(mock.Object) { PackagedModuleIdFilterExpression = "My.Modules" };
+                Assert.AreEqual("My.Modules", nuGetBasedModuleCatalogParentChildBehavior.OutputDirectory);
+            }
+            #endregion
+        }
+        #endregion
     }
 }
