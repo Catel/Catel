@@ -64,33 +64,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ProjectTemplates\CSharp\Silverlight\Catel.Silverlight.Application.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="ProjectTemplates\CSharp\Windows Phone\Catel.WP8.Application.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="ProjectTemplates\CSharp\Windows Store\Catel.WindowsStore.Application.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
     <Content Include="ProjectTemplates\CSharp\Windows\Catel.WPF.Application.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="ProjectTemplates\VisualBasic\Silverlight\Catel.Silverlight.Application.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="ProjectTemplates\VisualBasic\Windows Phone\Catel.WP8.Application.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="ProjectTemplates\VisualBasic\Windows\Catel.WPF.Application.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  <IncludeInVSIX>true</IncludeInVSIX>
+      <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
@@ -119,7 +95,14 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ProjectTemplates\CSharp\Silverlight\" />
+    <Folder Include="ProjectTemplates\CSharp\Windows Phone\" />
+    <Folder Include="ProjectTemplates\CSharp\Windows Store\" />
+    <Folder Include="ProjectTemplates\VisualBasic\Silverlight\" />
+    <Folder Include="ProjectTemplates\VisualBasic\Windows Phone\" />
+    <Folder Include="ProjectTemplates\VisualBasic\Windows\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

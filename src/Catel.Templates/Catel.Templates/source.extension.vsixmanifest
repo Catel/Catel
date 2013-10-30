@@ -11,21 +11,20 @@
     <Tags>catel;mvvm;wpf;silverlight;sl;sl5;windows phone;wp;wp8;winrt;windows runtime</Tags>
   </Metadata>
   <Installation>
-    <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[10.0,)" />
-    <InstallationTarget Version="[10.0,)" Id="Microsoft.VisualStudio.VSWinExpress" />
-    <InstallationTarget Version="[10.0,)" Id="Microsoft.VisualStudio.VSWinDesktopExpress" />
+    <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[11.0,)" />
+    <InstallationTarget Version="[11.0,)" Id="Microsoft.VisualStudio.VSWinExpress" />
+    <InstallationTarget Version="[11.0,)" Id="Microsoft.VisualStudio.VSWinDesktopExpress" />
   </Installation>
   <Dependencies>
-    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.0,)" />
   </Dependencies>
   <Assets>
     <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\CSharp\Silverlight\Catel.Silverlight.Application.zip" />
-	<Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\CSharp\Windows\Catel.WPF.Application.zip" />
+    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\CSharp\Windows\Catel.WPF.Application.zip" />
     <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\CSharp\Windows Phone\Catel.WP8.Application.zip" />
-	<Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\CSharp\Windows Store\Catel.WindowsStore.Application.zip" />
+    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\CSharp\Windows Store\Catel.WindowsStore.Application.zip" />
 
     <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\VisualBasic\Silverlight\Catel.Silverlight.Application.zip" />
-	<Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\VisualBasic\Windows\Catel.WPF.Application.zip" />
+    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\VisualBasic\Windows\Catel.WPF.Application.zip" />
     <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\VisualBasic\Windows Phone\Catel.WP8.Application.zip" />
   </Assets>
 </PackageManifest>
