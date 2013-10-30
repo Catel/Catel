@@ -43,12 +43,17 @@ namespace Catel.Modules.ModuleManager.ViewModels
         private readonly IModuleManager _moduleManager;
 
         /// <summary>
-        /// 
+        /// The please wait service 
         /// </summary>
         private readonly IPleaseWaitService _pleaseWaitService;
 
         /// <summary>
-        /// 
+        /// The lock
+        /// </summary>
+        private readonly object _syncObj = new object();
+
+        /// <summary>
+        /// Indicates if any module is loading
         /// </summary>
         private bool _isLoading;
 
@@ -57,10 +62,6 @@ namespace Catel.Modules.ModuleManager.ViewModels
         /// </summary>
         private string _currentModuleName;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private IMessageService _messageService;
         #endregion
 
         #region Constructors
@@ -70,37 +71,22 @@ namespace Catel.Modules.ModuleManager.ViewModels
         /// <exception cref="System.ArgumentNullException">The <paramref name="moduleCatalog"/> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="moduleManager"/> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="pleaseWaitService"/> is <c>null</c>.</exception>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="messageService"/> is <c>null</c>.</exception>
-        public ModuleManagerViewModel(IModuleCatalog moduleCatalog, IModuleManager moduleManager, IPleaseWaitService pleaseWaitService, IMessageService messageService)
+        public ModuleManagerViewModel(IModuleCatalog moduleCatalog, IModuleManager moduleManager, IPleaseWaitService pleaseWaitService)
         {
             Argument.IsNotNull(() => moduleManager);
             Argument.IsNotNull(() => moduleCatalog);
             Argument.IsNotNull(() => pleaseWaitService);
-            Argument.IsNotNull(() => messageService);
-            
+     
             _moduleManager = moduleManager;
             _pleaseWaitService = pleaseWaitService;
-            _messageService = messageService;
-
+            
             var modules = moduleCatalog.Modules;
 
-            // TODO: Move some stuff to a converter
             var moduleTemplates = modules.Select(moduleInfo => new ModuleTemplate(moduleInfo)).OrderBy(template => template.ModuleName);
 
             Modules = new ObservableCollection<ModuleTemplate>(moduleTemplates);
             LoadModuleCommand = new Command<ModuleTemplate>(LoadModuleCommandExecute, LoadModuleCommandCanExecute);
         }
-
-        /// <summary>
-        /// Can execute the load module command.
-        /// </summary>
-        /// <param name="moduleTemplate"></param>
-        /// <returns></returns>
-        private bool LoadModuleCommandCanExecute(ModuleTemplate moduleTemplate)
-        {
-            return moduleTemplate.State == ModuleState.NotStarted;
-        }
-
         #endregion
 
         #region Properties
@@ -137,11 +123,40 @@ namespace Catel.Modules.ModuleManager.ViewModels
 
         #region Methods
         /// <summary>
+        /// Can execute the load module command.
+        /// </summary>
+        /// <param name="moduleTemplate"></param>
+        /// <returns></returns>
+        private bool LoadModuleCommandCanExecute(ModuleTemplate moduleTemplate)
+        {
+            return moduleTemplate.State == ModuleState.NotStarted;
+        }
+
+        /// <summary>
         /// Called when the view model is initialized
         /// </summary>
         protected override void Initialize()
         {
             _moduleManager.ModuleDownloadProgressChanged += ModuleManagerOnModuleDownloadProgressChanged;
+            _moduleManager.LoadModuleCompleted += ModuleManagerOnLoadModuleCompleted;
+        }
+
+        /// <summary>
+        /// Called when a module loading process is completed
+        /// </summary>
+        /// <param name="sender">The module type loade</param>
+        /// <param name="loadModuleCompletedEventArgs">The event argument</param>
+        private void ModuleManagerOnLoadModuleCompleted(object sender, LoadModuleCompletedEventArgs loadModuleCompletedEventArgs)
+        {
+            if (loadModuleCompletedEventArgs.Error == null)
+            {
+                ModuleTemplate moduleTemplate = Modules.FirstOrDefault(template => template.ModuleName == loadModuleCompletedEventArgs.ModuleInfo.ModuleName);
+                if (moduleTemplate != null)
+                {
+                    moduleTemplate.RaisePropertyChanged(() => moduleTemplate.Enabled);
+                    moduleTemplate.RaisePropertyChanged(() => moduleTemplate.State);
+                }
+            }
         }
 
         /// <summary>
@@ -150,6 +165,7 @@ namespace Catel.Modules.ModuleManager.ViewModels
         protected override void Close()
         {
             _moduleManager.ModuleDownloadProgressChanged -= ModuleManagerOnModuleDownloadProgressChanged;
+            _moduleManager.LoadModuleCompleted -= ModuleManagerOnLoadModuleCompleted;
         }
 
         /// <summary>
@@ -180,9 +196,6 @@ namespace Catel.Modules.ModuleManager.ViewModels
                 new Thread(MonitorThread).Start();
 
                 _moduleManager.LoadModule(_currentModuleName);
-
-                moduleTemplate.RaisePropertyChanged(() => moduleTemplate.Enabled);
-                moduleTemplate.RaisePropertyChanged(() => moduleTemplate.State);
             }
             catch (Exception e)
             {
@@ -196,18 +209,12 @@ namespace Catel.Modules.ModuleManager.ViewModels
         }
 
         /// <summary>
-        /// The lock
-        /// </summary>
-        private readonly object _syncObj = new object();
-
-
-        /// <summary>
         /// Monitor thread.
         /// </summary>
         /// <param name="state"></param>
         private void MonitorThread(object state)
         {
-            var cursorPerModule = new Dictionary<string, int>(); 
+            var cursorPerModule = new Dictionary<string, int>();
             string[] messages = { "Currently downloading module '{0}'", "The module '{0}' will be available soon", "Hang in there, the module '{0}' is almost here" };
             while (_isLoading)
             {

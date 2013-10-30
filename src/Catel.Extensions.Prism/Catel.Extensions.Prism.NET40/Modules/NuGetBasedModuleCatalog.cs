@@ -8,6 +8,7 @@ namespace Catel.Modules
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
@@ -40,7 +41,7 @@ namespace Catel.Modules
         /// <summary>
         /// The module descriptor pattern.
         /// </summary>
-        private const string ModuleDescriptorPattern = @"ModuleName\s*=([^;]+);\s*ModuleType\s*=(.+)";
+        private const string ModuleDescriptorPattern = @"ModuleName\s*=([^;]+);\s*ModuleType\s*=([^;]+)(;\s*DependsOn=\s*\{(\s*[^}]+)\})?";
 
         /// <summary>
         /// The log.
@@ -348,7 +349,7 @@ namespace Catel.Modules
         /// </returns>
         private IEnumerable<ModuleInfo> GetPackagedModules()
         {
-            var moduleInfos = new List<ModuleInfo>();
+        
 
             IPackageRepository packageRepository = GetPackageRepository();
             IQueryable<IPackage> queryablePackages = packageRepository.GetPackages();
@@ -363,8 +364,9 @@ namespace Catel.Modules
                 filterExpression = package => (package.Description != null && package.Description.StartsWith("ModuleName") && package.Description.Contains("ModuleType"));
             }
 
-            IEnumerable<IPackage> packages = queryablePackages.Where(filterExpression).ToList().GroupBy(package => package.Id).Select(packageGroup => packageGroup.ToList().OrderByDescending(package => package.Version).FirstOrDefault()).Where(package => package != null);
+            IEnumerable<IPackage> packages = queryablePackages.Where(filterExpression).ToList().GroupBy(package => package.Id).Select(packageGroup => packageGroup.ToList().OrderByDescending(package => package.Version).FirstOrDefault()).Where(package => package != null).ToList();
 
+            var moduleInfos = new List<ModuleInfo>();
             foreach (var package in packages)
             {
                 var match = ModuleDescriptorRegex.Match(package.Description);
@@ -376,8 +378,17 @@ namespace Catel.Modules
                     {
                         var @ref = string.Format(CultureInfo.InvariantCulture, "{0}, {1}", package.Id, package.Version);
                         var key = string.Format(CultureInfo.InvariantCulture, "ModuleName:{0}; ModuleType:{1}; Ref:{2}; Version:{3}", moduleName, moduleType, @ref, package.Version);
+                        var dependsOn = new Collection<string>();
+                        if (match.Groups.Count == 5)
+                        {
+                            string dependencies = match.Groups[4].Value.Trim();
+                            if (!string.IsNullOrWhiteSpace(dependencies))
+                            {
+                                dependsOn.AddRange(dependencies.Split(',').Select(dependency => dependency.Trim()));
+                            }
+                        }
 
-                        moduleInfos.Add(_moduleInfoCacheStoreCacheStorage.GetFromCacheOrFetch(key, () => new ModuleInfo(moduleName, moduleType) { Ref = @ref, InitializationMode = InitializationMode.OnDemand }));
+                        moduleInfos.Add(_moduleInfoCacheStoreCacheStorage.GetFromCacheOrFetch(key, () => new ModuleInfo(moduleName, moduleType) { Ref = @ref, InitializationMode = InitializationMode.OnDemand, DependsOn = dependsOn }));
                     }
                 }
             }
