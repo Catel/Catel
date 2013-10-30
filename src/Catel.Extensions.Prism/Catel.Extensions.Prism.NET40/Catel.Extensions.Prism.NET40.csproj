@@ -122,7 +122,6 @@
     <Compile Include="Modules\ModuleCatalog.cs" />
     <Compile Include="Modules\ModuleManager\Interfaces\IModuleInfoManager.cs" />
     <Compile Include="Modules\ModuleManager\Models\ModuleTemplate.cs" />
-    <Compile Include="Modules\ModuleManager\ModuleInfoManager.cs" />
     <Compile Include="Modules\ModuleManager\ViewModels\ModuleManagerViewModel.cs" />
     <Compile Include="Modules\ModuleManager\Views\ModuleManagerView.xaml.cs">
       <DependentUpon>ModuleManagerView.xaml</DependentUpon>

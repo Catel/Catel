@@ -6,64 +6,39 @@
 
 namespace Catel.Modules.ModuleManager.Models
 {
-    using System;
-    using Data;
-    using IoC;
-    using Logging;
+    using Catel.Data;
+
     using Microsoft.Practices.Prism.Modularity;
 
     /// <summary>
     /// The module template.
     /// </summary>
-    public class ModuleTemplate : ModelBase
+    public class ModuleTemplate : ObservableObject
     {
-        #region Constants
+        #region Fields
+
         /// <summary>
-        /// The log.
+        /// The module info.
         /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private readonly ModuleInfo _moduleInfo;
+        #endregion
 
-        /// <summary>Register the ModuleName property so it is known in the class.</summary>
-        public static readonly PropertyData ModuleNameProperty = RegisterProperty("ModuleName", typeof (string));
+        #region Constructors
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="moduleInfo"></param>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="moduleInfo"/> is <c>null</c>.</exception>
+        public ModuleTemplate(ModuleInfo moduleInfo)
+        {
+            Argument.IsNotNull(() => moduleInfo);
 
-        /// <summary>Register the State property so it is known in the class.</summary>
-        public static readonly PropertyData StateProperty = RegisterProperty("State", typeof (string));
+            _moduleInfo = moduleInfo;
 
-        /// <summary>Register the Enabled property so it is known in the class.</summary>
-        public static readonly PropertyData EnabledProperty = RegisterProperty("Enabled", typeof (bool), null, (sender, args) =>
-            {
-                var value = (bool) args.NewValue;
-
-                var instance = (ModuleTemplate) sender;
-
-                var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-                var moduleManager = dependencyResolver.Resolve<IModuleManager>();
-                if (moduleManager == null)
-                {
-                    return;
-                }
-
-                if (!value)
-                {
-                    return;
-                }
-
-                try
-                {
-                    var moduleName = (string) instance.GetValue(ModuleNameProperty);
-                    moduleManager.LoadModule(moduleName);
-                    instance.SetValue(StateProperty, "Active");
-                    instance.SetValue(TimeProperty, DateTime.Now.ToString("HH:mm:ss"));
-                    Log.Info(string.Format("Module '{0}' loaded successfully.", moduleName));
-                }
-                catch (Exception exception)
-                {
-                    Log.Error(exception);
-                }
-            });
-
-        /// <summary>Register the Time property so it is known in the class.</summary>
-        public static readonly PropertyData TimeProperty = RegisterProperty("Time", typeof (string));
+            RaisePropertyChanged(() => ModuleName);
+            RaisePropertyChanged(() => Enabled);
+            RaisePropertyChanged(() => State);
+        }
         #endregion
 
         #region Properties
@@ -75,8 +50,7 @@ namespace Catel.Modules.ModuleManager.Models
         /// </value>
         public string ModuleName
         {
-            get { return GetValue<string>(ModuleNameProperty); }
-            set { SetValue(ModuleNameProperty, value); }
+            get { return _moduleInfo.ModuleName; }
         }
 
         /// <summary>
@@ -85,10 +59,9 @@ namespace Catel.Modules.ModuleManager.Models
         /// <value>
         /// The state.
         /// </value>
-        public string State
+        public ModuleState State
         {
-            get { return GetValue<string>(StateProperty); }
-            set { SetValue(StateProperty, value); }
+            get { return _moduleInfo.State; }
         }
 
         /// <summary>
@@ -99,21 +72,9 @@ namespace Catel.Modules.ModuleManager.Models
         /// </value>
         public bool Enabled
         {
-            get { return GetValue<bool>(EnabledProperty); }
-            set { SetValue(EnabledProperty, value); }
+            get { return _moduleInfo.State != ModuleState.NotStarted; }
         }
 
-        /// <summary>
-        /// Gets or sets the time.
-        /// </summary>
-        /// <value>
-        /// The time.
-        /// </value>
-        public string Time
-        {
-            get { return GetValue<string>(TimeProperty); }
-            set { SetValue(TimeProperty, value); }
-        }
         #endregion
     }
 }

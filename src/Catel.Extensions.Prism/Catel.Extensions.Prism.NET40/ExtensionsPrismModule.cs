@@ -34,10 +34,6 @@ namespace Catel
             serviceLocator.RegisterTypeIfNotYetRegistered<IBootstrapperTaskFactory, BootstrapperTaskFactory>();
 
             serviceLocator.RegisterType<RegionAdapterMappings, RegionAdapterMappings>();
-
-#if NET
-            serviceLocator.RegisterTypeIfNotYetRegistered<IModuleInfoManager, ModuleInfoManager>();
-#endif
         }
         #endregion
     }

@@ -152,9 +152,6 @@
     <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\ModuleManager\Models\ModuleTemplate.cs">
       <Link>Modules\ModuleManager\Models\ModuleTemplate.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\ModuleManager\ModuleInfoManager.cs">
-      <Link>Modules\ModuleManager\ModuleInfoManager.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\ModuleManager\ModuleManager.cs">
       <Link>Modules\ModuleManager\ModuleManager.cs</Link>
     </Compile>

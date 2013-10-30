@@ -1,37 +1,20 @@
 ﻿<catel:UserControl x:Class="Catel.Modules.ModuleManager.ModuleManagerView"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:catel="http://catel.codeplex.com">
-
-    <!--  Resources  -->
-    <UserControl.Resources>
-        <catel:BooleanToOppositeBooleanConverter x:Key="booleanToOppositeBooleanConverter" />
-    </UserControl.Resources>
-
-    <!--  Content  -->
-    <DockPanel>
-        <ListView HorizontalContentAlignment="Stretch" ItemsSource="{Binding ApplicationModules}">
-            <ListView.Resources>
-                <DataTemplate x:Key="checkBoxTemplate">
-                    <Border>
-                        <CheckBox IsChecked="{Binding Enabled, Mode=TwoWay}" IsEnabled="{Binding Enabled, Mode=TwoWay, Converter={StaticResource booleanToOppositeBooleanConverter}}" />
-                    </Border>
-                </DataTemplate>
-            </ListView.Resources>
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn CellTemplate="{DynamicResource checkBoxTemplate}" Header="Enabled" />
-                    <GridViewColumn Width="120"
-                                    DisplayMemberBinding="{Binding ModuleName}"
-                                    Header="Name" />
-                    <GridViewColumn Width="100"
-                                    DisplayMemberBinding="{Binding State}"
-                                    Header="State" />
-                    <GridViewColumn Width="120"
-                                    DisplayMemberBinding="{Binding Time}"
-                                    Header="Time" />
-                </GridView>
-            </ListView.View>
-        </ListView>
-    </DockPanel>
+                   xmlns:catel="http://catel.codeplex.com" x:Name="root" > 
+    <ListView HorizontalContentAlignment="Stretch" ItemsSource="{Binding Modules}">
+        <ListView.Resources>
+            <DataTemplate x:Key="checkBoxTemplate">
+                <CheckBox IsChecked="{Binding Enabled, Mode=OneWay}" Command="{Binding DataContext.LoadModuleCommand, RelativeSource={RelativeSource FindAncestor,ListView,1}}" CommandParameter="{Binding Path=DataContext, RelativeSource={RelativeSource Self}}" />
+            </DataTemplate>
+        </ListView.Resources>
+        <ListView.View>
+            <GridView>
+                <GridViewColumn Width="100"  CellTemplate="{DynamicResource checkBoxTemplate}" Header="Enabled"  />
+                <GridViewColumn Width="300" DisplayMemberBinding="{Binding ModuleName, Mode=OneWay}" Header="Name" />
+                <GridViewColumn Width="200" DisplayMemberBinding="{Binding State, Mode=OneWay}" Header="State" />
+                <!--<GridViewColumn Width="120"  DisplayMemberBinding="{Binding Time}" Header="Time" />-->
+            </GridView>
+        </ListView.View>
+    </ListView>
 </catel:UserControl>

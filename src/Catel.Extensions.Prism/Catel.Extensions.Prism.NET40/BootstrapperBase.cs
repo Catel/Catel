@@ -427,10 +427,6 @@ namespace Catel
                 Container.RegisterTypeIfNotYetRegistered<IRegionNavigationJournal, RegionNavigationJournal>(RegistrationType.Transient);
                 Container.RegisterTypeIfNotYetRegistered<IRegionNavigationService, RegionNavigationService>(RegistrationType.Transient);
                 Container.RegisterTypeIfNotYetRegistered<IRegionNavigationContentLoader, RegionNavigationContentLoader>();
-
-#if NET
-				Container.RegisterTypeIfNotYetRegistered<IModuleInfoManager, ModuleInfoManager>();
-#endif
             }
         }
 

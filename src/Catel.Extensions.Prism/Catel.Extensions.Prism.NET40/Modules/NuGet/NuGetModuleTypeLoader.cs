@@ -158,6 +158,8 @@ namespace Catel.Modules
 
             if (_installPackageRequest.ContainsKey(moduleInfo))
             {
+                ModuleDownloadProgressChanged(this, new ModuleDownloadProgressChangedEventArgs(moduleInfo, 0, 1));
+                
                 InstallPackageRequest installPackageRequest = _installPackageRequest[moduleInfo];
                 installPackageRequest.Execute();
 
@@ -169,7 +171,9 @@ namespace Catel.Modules
                         {
                             Log.Error(args.Error);
                         }
-                 
+
+                        ModuleDownloadProgressChanged(this, new ModuleDownloadProgressChangedEventArgs(moduleInfo, 1, 1));
+
                         moduleInfo.State = args.ModuleInfo.State;
                         OnLoadModuleCompleted(new LoadModuleCompletedEventArgs(moduleInfo, args.Error));
                     };
