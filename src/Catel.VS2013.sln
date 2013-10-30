@@ -157,9 +157,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProjectTemplates", "Project
 	ProjectSection(SolutionItems) = preProject
 		..\templates\C#\ProjectTemplates\Catel.Silverlight.Application.zip = ..\templates\C#\ProjectTemplates\Catel.Silverlight.Application.zip
 		..\templates\C#\ProjectTemplates\Catel.Silverlight.NavigationApplication.zip = ..\templates\C#\ProjectTemplates\Catel.Silverlight.NavigationApplication.zip
-		..\templates\C#\ProjectTemplates\Catel.WP7.Application.zip = ..\templates\C#\ProjectTemplates\Catel.WP7.Application.zip
-		..\templates\C#\ProjectTemplates\Catel.WP7.PanoramaApplication.zip = ..\templates\C#\ProjectTemplates\Catel.WP7.PanoramaApplication.zip
-		..\templates\C#\ProjectTemplates\Catel.WP7.PivotApplication.zip = ..\templates\C#\ProjectTemplates\Catel.WP7.PivotApplication.zip
 		..\templates\C#\ProjectTemplates\Catel.WP8.Application.zip = ..\templates\C#\ProjectTemplates\Catel.WP8.Application.zip
 		..\templates\C#\ProjectTemplates\Catel.WPF.Application.zip = ..\templates\C#\ProjectTemplates\Catel.WPF.Application.zip
 		..\templates\C#\ProjectTemplates\Catel.WPF.BrowserApplication.zip = ..\templates\C#\ProjectTemplates\Catel.WPF.BrowserApplication.zip
@@ -185,12 +182,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProjectTemplates", "Project
 	ProjectSection(SolutionItems) = preProject
 		..\templates\VB.NET\ProjectTemplates\Catel.Silverlight.Application.zip = ..\templates\VB.NET\ProjectTemplates\Catel.Silverlight.Application.zip
 		..\templates\VB.NET\ProjectTemplates\Catel.Silverlight.NavigationApplication.zip = ..\templates\VB.NET\ProjectTemplates\Catel.Silverlight.NavigationApplication.zip
-		..\templates\VB.NET\ProjectTemplates\Catel.WP7.Application.zip = ..\templates\VB.NET\ProjectTemplates\Catel.WP7.Application.zip
-		..\templates\VB.NET\ProjectTemplates\Catel.WP7.PanoramaApplication.zip = ..\templates\VB.NET\ProjectTemplates\Catel.WP7.PanoramaApplication.zip
-		..\templates\VB.NET\ProjectTemplates\Catel.WP7.PivotApplication.zip = ..\templates\VB.NET\ProjectTemplates\Catel.WP7.PivotApplication.zip
 		..\templates\VB.NET\ProjectTemplates\Catel.WP8.Application.zip = ..\templates\VB.NET\ProjectTemplates\Catel.WP8.Application.zip
 		..\templates\VB.NET\ProjectTemplates\Catel.WPF.Application.zip = ..\templates\VB.NET\ProjectTemplates\Catel.WPF.Application.zip
-		..\templates\VB.NET\ProjectTemplates\Catel.WPF.BrowserApplication.zip = ..\templates\VB.NET\ProjectTemplates\Catel.WPF.BrowserApplication.zip
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Toolkit", "Toolkit", "{7D3D71F1-1B3D-4B27-8216-86FC25C8CC91}"
@@ -357,6 +350,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.EntityFramework6.NET40", "Catel.Extensions.EntityFramework6\Catel.Extensions.EntityFramework6.NET40\Catel.Extensions.EntityFramework6.NET40.csproj", "{610E738C-29E2-4DFE-ABF1-6CA5FB37F1E5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.EntityFramework6.NET45", "Catel.Extensions.EntityFramework6\Catel.Extensions.EntityFramework6.NET45\Catel.Extensions.EntityFramework6.NET45.csproj", "{63025202-610A-4F75-92E7-1C622B5AB2E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{99CE7B42-D53E-48CC-99F4-4ACE482145B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Templates", "Catel.Templates\Catel.Templates\Catel.Templates.csproj", "{CCCD0830-7839-4544-A279-AA5CC3140CA3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1094,6 +1091,16 @@ Global
 		{63025202-610A-4F75-92E7-1C622B5AB2E8}.Release|ARM.ActiveCfg = Release|Any CPU
 		{63025202-610A-4F75-92E7-1C622B5AB2E8}.Release|x64.ActiveCfg = Release|Any CPU
 		{63025202-610A-4F75-92E7-1C622B5AB2E8}.Release|x86.ActiveCfg = Release|Any CPU
+		{CCCD0830-7839-4544-A279-AA5CC3140CA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCCD0830-7839-4544-A279-AA5CC3140CA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCCD0830-7839-4544-A279-AA5CC3140CA3}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{CCCD0830-7839-4544-A279-AA5CC3140CA3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CCCD0830-7839-4544-A279-AA5CC3140CA3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CCCD0830-7839-4544-A279-AA5CC3140CA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCCD0830-7839-4544-A279-AA5CC3140CA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCCD0830-7839-4544-A279-AA5CC3140CA3}.Release|ARM.ActiveCfg = Release|Any CPU
+		{CCCD0830-7839-4544-A279-AA5CC3140CA3}.Release|x64.ActiveCfg = Release|Any CPU
+		{CCCD0830-7839-4544-A279-AA5CC3140CA3}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1117,6 +1124,7 @@ Global
 		{A753C3CE-F64F-44AE-B1D7-C40578EF059F} = {58F62039-8645-499C-B264-66048F4F0F75}
 		{B5ED1A50-E238-4C92-996A-08ED76033DF3} = {58F62039-8645-499C-B264-66048F4F0F75}
 		{376E61C4-833D-4DAB-B282-913709897142} = {58F62039-8645-499C-B264-66048F4F0F75}
+		{99CE7B42-D53E-48CC-99F4-4ACE482145B7} = {58F62039-8645-499C-B264-66048F4F0F75}
 		{0FF8A998-8E34-424B-9C36-41A111341EB0} = {0530FD4D-FB57-412E-877C-014B42413D0A}
 		{4B60DC07-ACC6-4EFA-BED6-22AA8F34DC24} = {0530FD4D-FB57-412E-877C-014B42413D0A}
 		{39402137-1859-4B82-93BD-30ADFB183F06} = {13F2B8D4-81FB-4645-AA6A-36FEB438642D}
@@ -1196,6 +1204,7 @@ Global
 		{50CF1788-5745-42EF-971D-BEB8A29E9796} = {B5ED1A50-E238-4C92-996A-08ED76033DF3}
 		{610E738C-29E2-4DFE-ABF1-6CA5FB37F1E5} = {376E61C4-833D-4DAB-B282-913709897142}
 		{63025202-610A-4F75-92E7-1C622B5AB2E8} = {376E61C4-833D-4DAB-B282-913709897142}
+		{CCCD0830-7839-4544-A279-AA5CC3140CA3} = {99CE7B42-D53E-48CC-99F4-4ACE482145B7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.2\lib\NET35
