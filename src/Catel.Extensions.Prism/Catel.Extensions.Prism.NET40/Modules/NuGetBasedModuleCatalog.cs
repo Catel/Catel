@@ -14,7 +14,6 @@ namespace Catel.Modules
     using System.IO;
     using System.Linq;
     using System.Linq.Expressions;
-    using System.Runtime.Versioning;
     using System.Text.RegularExpressions;
 
     using Catel.Caching;
@@ -48,10 +47,12 @@ namespace Catel.Modules
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        /*
         /// <summary>
         /// The framework identifier conversion map.
         /// </summary>
         private static readonly Dictionary<string, string> FrameworkIdentifierConversionMap = new Dictionary<string, string> { { ".NETFramework,Version=v4.0", "NET40" }, { ".NETFramework,Version=v4.5", "NET45" } };
+        */
 
         /// <summary>
         /// The package repository cache.
@@ -182,7 +183,6 @@ namespace Catel.Modules
             set { _behavior.AllowPrereleaseVersions = value; }
         }
 
-
         /// <summary>
         /// Gets the full path to the output output directory.
         /// </summary>
@@ -248,13 +248,15 @@ namespace Catel.Modules
                     IPackage package;
                     if (repository.TryFindPackage(packageName.Id, packageName.Version, out package))
                     {
+                        /*
                         IEnumerable<FrameworkName> supportedFrameworks = package.GetSupportedFrameworks();
                         if (supportedFrameworks != null && supportedFrameworks.Any(name => FrameworkIdentifierConversionMap.ContainsKey(name.FullName) && FrameworkIdentifierConversionMap[name.FullName].Equals(_frameworkNameIdentifier)))
                         {
                             Log.Debug("Creating remote install package request for '{0}' from '{1}'", package.GetFullName(), PackageSource);
-
-                            installPackageRequest = new RemoteInstallPackageRequest(this, package, GetModuleAssemblyRef(moduleInfo, package.Version));
                         }
+                        */
+
+                        installPackageRequest = new RemoteInstallPackageRequest(this, package, GetModuleAssemblyRef(moduleInfo, package.Version));
                     }
                 }
             }
@@ -349,8 +351,6 @@ namespace Catel.Modules
         /// </returns>
         private IEnumerable<ModuleInfo> GetPackagedModules()
         {
-        
-
             IPackageRepository packageRepository = GetPackageRepository();
             IQueryable<IPackage> queryablePackages = packageRepository.GetPackages();
            

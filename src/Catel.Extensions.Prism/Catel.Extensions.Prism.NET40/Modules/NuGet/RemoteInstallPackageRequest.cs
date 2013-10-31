@@ -95,9 +95,6 @@
         {
             var package = Package;
             var packageManager = new PackageManager(PackageRepository, OutputDirectory);
-
-            Log.Debug("Installing package '{0}' with version '{1}'", package.Id, package.Version);
-
             packageManager.InstallPackage(package, IgnoreDependencies, AllowPrereleaseVersions);
         }
         #endregion

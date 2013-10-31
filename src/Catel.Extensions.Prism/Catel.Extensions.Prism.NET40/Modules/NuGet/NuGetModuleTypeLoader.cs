@@ -167,6 +167,8 @@ namespace Catel.Modules
             // ReSharper disable once ImplicitlyCapturedClosure
             Argument.IsNotNull(() => moduleInfo);
 
+            Log.Debug("Loading module type '{0}' from package '{1}'", moduleInfo.ModuleType, moduleInfo.Ref);
+
             if (_installPackageRequest.ContainsKey(moduleInfo))
             {
                 InstallPackageRequest installPackageRequest = _installPackageRequest[moduleInfo];
@@ -193,16 +195,9 @@ namespace Catel.Modules
 
                         fileModuleTypeLoader.LoadModuleCompleted += (sender, args) =>
                         {
-                            if (args.Error != null)
-                            {
-                                Log.Error(args.Error);
-                            }
-
                             moduleInfo.State = args.ModuleInfo.State;
                             currentDispatcher.BeginInvoke(() => OnLoadModuleCompleted(new LoadModuleCompletedEventArgs(moduleInfo, args.Error)));
                         };
-
-                        Log.Debug("Loading file module assembly '{0}'", fileModuleInfo.Ref);
 
                         fileModuleTypeLoader.LoadModuleType(fileModuleInfo);
                     }).Start();
