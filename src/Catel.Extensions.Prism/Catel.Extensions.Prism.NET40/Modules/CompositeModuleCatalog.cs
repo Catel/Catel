@@ -177,7 +177,7 @@ namespace Catel.Modules
     /// ]]>
     ///  </code>
     /// </example>
-    public sealed class CompositeModuleCatalog : CompositeModuleCatalog<ModuleCatalog>
+    public sealed class CompositeModuleCatalog : CompositeModuleCatalog<IModuleCatalog>
     {
     }
 }
