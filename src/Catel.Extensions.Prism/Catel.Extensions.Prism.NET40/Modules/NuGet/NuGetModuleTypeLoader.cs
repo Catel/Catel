@@ -49,6 +49,7 @@ namespace Catel.Modules
         /// <param name="moduleCatalog">
         /// </param>
         /// <exception cref="System.ArgumentNullException">The <paramref name="moduleCatalog" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">There are no available any NuGet based module catalog.</exception>
         public NuGetModuleTypeLoader(IModuleCatalog moduleCatalog)
         {
             Argument.IsNotNull(() => moduleCatalog);
@@ -61,7 +62,13 @@ namespace Catel.Modules
             if (moduleCatalog is CompositeModuleCatalog)
             {
                 var compositeModuleCatalog = moduleCatalog as CompositeModuleCatalog;
-                _moduleCatalogs = compositeModuleCatalog.QueryItems.ToList().OfType<INuGetBasedModuleCatalog>().ToList().AsReadOnly();
+                
+                _moduleCatalogs = compositeModuleCatalog.LeafCatalogs.OfType<INuGetBasedModuleCatalog>().ToList().AsReadOnly();
+            }
+
+            if (_moduleCatalogs == null || _moduleCatalogs.Count == 0)
+            {
+                throw new InvalidOperationException("There are no available any NuGet based module catalog");
             }
         }
         #endregion

@@ -65,7 +65,7 @@ namespace Catel.Modules
                     yield return moduleCatalogItem;
                 }
 
-                foreach (IModuleCatalog moduleCatalog in _moduleCatalogs)
+                foreach (TModuleCatalog moduleCatalog in _moduleCatalogs)
                 {
                     IEnumerable<IModuleCatalogItem> moduleCatalogItems = null;
 
@@ -149,9 +149,39 @@ namespace Catel.Modules
         { 
             get
             {
-                return _moduleCatalogs.AsReadOnly();
+                return _synchronizationContext.Execute(() => _moduleCatalogs.AsReadOnly());
             } 
-        } 
+        }
+
+        /// <summary>
+        /// Enumerate the leaf catalogs.
+        /// </summary>
+        public IEnumerable<IModuleCatalog> LeafCatalogs
+        {
+            get
+            {
+                _synchronizationContext.Acquire();
+                
+                List<TModuleCatalog> moduleCatalogs = _moduleCatalogs;
+                foreach (TModuleCatalog moduleCatalog in moduleCatalogs)
+                {
+                    var compositeModuleCatalog = moduleCatalog as CompositeModuleCatalog<IModuleCatalog>;
+                    if (compositeModuleCatalog != null)
+                    {
+                        foreach (IModuleCatalog leafCatalog in compositeModuleCatalog.LeafCatalogs)
+                        {
+                            yield return leafCatalog;
+                        }           
+                    }
+                    else
+                    {
+                        yield return moduleCatalog;
+                    }
+                }
+
+                _synchronizationContext.Release();
+            }
+        }
 
         #endregion
     }
