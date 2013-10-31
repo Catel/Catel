@@ -10,10 +10,14 @@ namespace Catel.Modules
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
+    using System.Threading;
+    using System.Windows.Navigation;
+    using System.Windows.Threading;
 
     using Catel.Logging;
     using Catel.Modules.Extensions;
     using Catel.Modules.Interfaces;
+    using Catel.Windows.Threading;
 
     using Microsoft.Practices.Prism.Modularity;
 
@@ -165,29 +169,43 @@ namespace Catel.Modules
 
             if (_installPackageRequest.ContainsKey(moduleInfo))
             {
-                ModuleDownloadProgressChanged(this, new ModuleDownloadProgressChangedEventArgs(moduleInfo, 0, 1));
-                
                 InstallPackageRequest installPackageRequest = _installPackageRequest[moduleInfo];
-                installPackageRequest.Execute();
-
-                var fileModuleTypeLoader = new FileModuleTypeLoader();
-                var fileModuleInfo = new ModuleInfo(moduleInfo.ModuleName, moduleInfo.ModuleType) { Ref = installPackageRequest.AssemblyFileRef, InitializationMode = moduleInfo.InitializationMode, DependsOn = moduleInfo.DependsOn };
-                fileModuleTypeLoader.LoadModuleCompleted += (sender, args) =>
+                new Thread(() =>
                     {
-                        if (args.Error != null)
+                        Dispatcher currentDispatcher = DispatcherHelper.CurrentDispatcher;
+                        
+                        currentDispatcher.BeginInvoke(() => OnModuleDownloadProgressChanged(new ModuleDownloadProgressChangedEventArgs(moduleInfo, 0, 1)));
+                        installPackageRequest.Execute();
+
+                        var fileModuleTypeLoader = new FileModuleTypeLoader();
+                        var fileModuleInfo = new ModuleInfo(moduleInfo.ModuleName, moduleInfo.ModuleType)
+                                                 {
+                                                     Ref = installPackageRequest.AssemblyFileRef, 
+                                                     InitializationMode = moduleInfo.InitializationMode, 
+                                                     DependsOn = moduleInfo.DependsOn
+                                                 };
+
+                        fileModuleTypeLoader.ModuleDownloadProgressChanged += (sender, args) =>
+                            {
+                                moduleInfo.State = args.ModuleInfo.State;
+                                currentDispatcher.BeginInvoke(() => OnModuleDownloadProgressChanged(new ModuleDownloadProgressChangedEventArgs(moduleInfo, args.BytesReceived, args.TotalBytesToReceive)));
+                            };
+
+                        fileModuleTypeLoader.LoadModuleCompleted += (sender, args) =>
                         {
-                            Log.Error(args.Error);
-                        }
+                            if (args.Error != null)
+                            {
+                                Log.Error(args.Error);
+                            }
 
-                        ModuleDownloadProgressChanged(this, new ModuleDownloadProgressChangedEventArgs(moduleInfo, 1, 1));
+                            moduleInfo.State = args.ModuleInfo.State;
+                            currentDispatcher.BeginInvoke(() => OnLoadModuleCompleted(new LoadModuleCompletedEventArgs(moduleInfo, args.Error)));
+                        };
 
-                        moduleInfo.State = args.ModuleInfo.State;
-                        OnLoadModuleCompleted(new LoadModuleCompletedEventArgs(moduleInfo, args.Error));
-                    };
+                        Log.Debug("Loading file module assembly '{0}'", fileModuleInfo.Ref);
 
-                Log.Debug("Loading file module assembly '{0}'", fileModuleInfo.Ref);
-
-                fileModuleTypeLoader.LoadModuleType(fileModuleInfo);
+                        fileModuleTypeLoader.LoadModuleType(fileModuleInfo);
+                    }).Start();
             }
         }
         #endregion

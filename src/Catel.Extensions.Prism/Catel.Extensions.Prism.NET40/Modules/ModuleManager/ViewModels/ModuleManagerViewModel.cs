@@ -60,7 +60,7 @@ namespace Catel.Modules.ModuleManager.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        private string _currentModuleName;
+        private readonly List<string> _modules = new List<string>();
 
         #endregion
 
@@ -148,13 +148,21 @@ namespace Catel.Modules.ModuleManager.ViewModels
         /// <param name="loadModuleCompletedEventArgs">The event argument</param>
         private void ModuleManagerOnLoadModuleCompleted(object sender, LoadModuleCompletedEventArgs loadModuleCompletedEventArgs)
         {
-            if (loadModuleCompletedEventArgs.Error == null)
+            string moduleName = loadModuleCompletedEventArgs.ModuleInfo.ModuleName;
+            ModuleTemplate moduleTemplate = Modules.FirstOrDefault(template => template.ModuleName == moduleName);
+            if (moduleTemplate != null)
             {
-                ModuleTemplate moduleTemplate = Modules.FirstOrDefault(template => template.ModuleName == loadModuleCompletedEventArgs.ModuleInfo.ModuleName);
-                if (moduleTemplate != null)
+                moduleTemplate.RaisePropertyChanged(() => moduleTemplate.Enabled);
+                moduleTemplate.RaisePropertyChanged(() => moduleTemplate.State);
+            }
+          
+            lock (_syncObj)
+            {
+                _modules.Remove(moduleName);
+                if (_modules.Count == 0)
                 {
-                    moduleTemplate.RaisePropertyChanged(() => moduleTemplate.Enabled);
-                    moduleTemplate.RaisePropertyChanged(() => moduleTemplate.State);
+                    _isLoading = false;
+                    _pleaseWaitService.Hide();
                 }
             }
         }
@@ -177,7 +185,11 @@ namespace Catel.Modules.ModuleManager.ViewModels
         {
             lock (_syncObj)
             {
-                _currentModuleName = moduleDownloadProgressChangedEventArgs.ModuleInfo.ModuleName;
+                string moduleName = moduleDownloadProgressChangedEventArgs.ModuleInfo.ModuleName;
+                if (!_modules.Contains(moduleName))
+                {
+                    _modules.Add(moduleName);
+                }
             }
         }
 
@@ -187,24 +199,16 @@ namespace Catel.Modules.ModuleManager.ViewModels
         private void LoadModuleCommandExecute(ModuleTemplate moduleTemplate)
         {
             _isLoading = true;
+            _pleaseWaitService.Show(string.Format(CultureInfo.InvariantCulture, "Starting to load module '{0}'", moduleTemplate.ModuleName));
 
-            _currentModuleName = moduleTemplate.ModuleName;
-            _pleaseWaitService.Show(string.Format(CultureInfo.InvariantCulture, "Starting to load module '{0}'", _currentModuleName));
-
+            new Thread(MonitorThread).Start();
             try
             {
-                new Thread(MonitorThread).Start();
-
-                _moduleManager.LoadModule(_currentModuleName);
+                _moduleManager.LoadModule(moduleTemplate.ModuleName);
             }
             catch (Exception e)
             {
                 Log.Error(e);
-            }
-            finally
-            {
-                _isLoading = false;
-                _pleaseWaitService.Hide();
             }
         }
 
@@ -218,20 +222,26 @@ namespace Catel.Modules.ModuleManager.ViewModels
             string[] messages = { "Currently downloading module '{0}'", "The module '{0}' will be available soon", "Hang in there, the module '{0}' is almost here" };
             while (_isLoading)
             {
-                string currentModuleName;
+                string currentModuleName = string.Empty;
                 lock (_syncObj)
                 {
-                    currentModuleName = _currentModuleName;
+                    if (_modules.Count > 0)
+                    {
+                        currentModuleName = _modules.LastOrDefault();
+                    }
                 }
 
-                if (!cursorPerModule.ContainsKey(currentModuleName))
+                if (!string.IsNullOrEmpty(currentModuleName))
                 {
-                    cursorPerModule[currentModuleName] = 0;
-                }
+                    if (!cursorPerModule.ContainsKey(currentModuleName))
+                    {
+                        cursorPerModule[currentModuleName] = 0;
+                    }
 
-                if (cursorPerModule[currentModuleName] < messages.Length)
-                {
-                    _pleaseWaitService.UpdateStatus(string.Format(CultureInfo.InvariantCulture, messages[cursorPerModule[currentModuleName]++], currentModuleName));
+                    if (cursorPerModule[currentModuleName] < messages.Length)
+                    {
+                        _pleaseWaitService.UpdateStatus(string.Format(CultureInfo.InvariantCulture, messages[cursorPerModule[currentModuleName]++], currentModuleName));
+                    }      
                 }
 
                 Thread.Sleep(5000);
