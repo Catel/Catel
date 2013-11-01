@@ -61,6 +61,15 @@ namespace Catel.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unfortunately, this feature is not supported in the current platform.
+        /// </summary>
+        internal static string NotSupportedInPlatform {
+            get {
+                return ResourceManager.GetString("NotSupportedInPlatform", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unfortunately, this is not supported in Silverlight.
         /// </summary>
         internal static string NotSupportedInSilverlight {

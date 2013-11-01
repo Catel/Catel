@@ -230,10 +230,9 @@ namespace Catel.Windows.Interactivity
                 switch (FocusMoment)
                 {
                     case FocusMoment.Event:
-#if WINDOWS_PHONE
-                        throw new NotSupportedInWindowsPhone7Exception();
-#elif NETFX_CORE
-                        throw new NotSupportedInWindows8Exception();
+                        
+#if WINDOWS_PHONE || NETFX_CORE
+                        throw new NotSupportedInPlatformException("Dynamic events are not supported");
 #else
                         _dynamicEventListener.EventOccurred -= OnSourceEventOccurred;
                         _dynamicEventListener.UnsubscribeFromEvent();
@@ -259,10 +258,8 @@ namespace Catel.Windows.Interactivity
                 switch (FocusMoment)
                 {
                     case FocusMoment.Event:
-#if WINDOWS_PHONE
-                        throw new NotSupportedInWindowsPhone7Exception();
-#elif NETFX_CORE
-                        throw new NotSupportedInWindows8Exception();
+#if WINDOWS_PHONE || NETFX_CORE
+                        throw new NotSupportedInPlatformException("Dynamic events are not supported");
 #else
                         if (string.IsNullOrEmpty(EventName))
                         {

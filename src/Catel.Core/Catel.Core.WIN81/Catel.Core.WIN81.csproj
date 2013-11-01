@@ -393,6 +393,9 @@
     <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Retrying\RetryPolicy.cs">
       <Link>ExceptionHandling\Retrying\RetryPolicy.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Exceptions\NotSupportedInPlatformException.cs">
+      <Link>Exceptions\NotSupportedInPlatformException.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Exceptions\NotSupportedInSilverlightException.cs">
       <Link>Exceptions\NotSupportedInSilverlightException.cs</Link>
     </Compile>
@@ -773,6 +776,9 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Services\ServiceBase.cs">
       <Link>Services\ServiceBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\SupportedPlatforms.cs">
+      <Link>SupportedPlatforms.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Test\ExceptionTester.cs">
       <Link>Test\ExceptionTester.cs</Link>

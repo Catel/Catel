@@ -160,6 +160,7 @@
     <Compile Include="ExceptionHandling\Interfaces\IFrequency.cs" />
     <Compile Include="ExceptionHandling\Interfaces\IRetryPolicy.cs" />
     <Compile Include="ExceptionHandling\Retrying\RetryPolicy.cs" />
+    <Compile Include="Exceptions\NotSupportedInPlatformException.cs" />
     <Compile Include="Exceptions\NotSupportedInSilverlightException.cs" />
     <Compile Include="Exceptions\NotSupportedInWindowsPhone7Exception.cs" />
     <Compile Include="Exceptions\NotSupportedInWindows8Exception.cs" />
@@ -353,6 +354,7 @@
     <Compile Include="Scoping\ScopeManager.cs" />
     <Compile Include="Services\Interfaces\IService.cs" />
     <Compile Include="Services\ServiceBase.cs" />
+    <Compile Include="SupportedPlatforms.cs" />
     <Compile Include="Test\ExceptionTester.cs" />
     <Compile Include="Text\Extensions\StringBuilderExtensions.cs" />
     <Compile Include="Threading\Helpers\ThreadHelper.cs" />

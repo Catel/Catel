@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="NotSupportedInSilverlight" xml:space="preserve">
     <value>Unfortunately, this is not supported in Silverlight</value>
@@ -125,6 +125,8 @@
   </data>
   <data name="NotSupportedInWinRT" xml:space="preserve">
     <value>Unfortunately, this is not supported in WinRT</value>
-    <comment>{0} = page name</comment>
+  </data>
+  <data name="NotSupportedInPlatform" xml:space="preserve">
+    <value>Unfortunately, this feature is not supported in the current platform</value>
   </data>
 </root>
