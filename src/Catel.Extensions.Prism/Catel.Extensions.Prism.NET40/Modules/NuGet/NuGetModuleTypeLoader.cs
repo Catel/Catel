@@ -9,8 +9,10 @@ namespace Catel.Modules
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
     using System.Threading;
     using System.Windows.Navigation;
     using System.Windows.Threading;
@@ -36,11 +38,7 @@ namespace Catel.Modules
         #endregion
 
         #region Fields
-        /// <summary>
-        /// The install package requests.
-        /// </summary>
-        private readonly Dictionary<ModuleInfo, InstallPackageRequest> _installPackageRequest = new Dictionary<ModuleInfo, InstallPackageRequest>();
-
+       
         /// <summary>
         /// The module catalogs.
         /// </summary>
@@ -131,27 +129,7 @@ namespace Catel.Modules
         {
             Argument.IsNotNull(() => moduleInfo);
 
-            bool canLoad = false;
-            var packageName = moduleInfo.GetPackageName();
-            if (packageName != null)
-            {
-                int i = 0;
-                while (!canLoad && i < _moduleCatalogs.Count)
-                {
-                    INuGetBasedModuleCatalog moduleCatalog = _moduleCatalogs[i++];
-
-                    InstallPackageRequest installPackageRequest;
-                    if (moduleCatalog.TryCreateInstallPackageRequest(moduleInfo, out installPackageRequest))
-                    {
-                        Log.Debug("Queuing install package request");
-
-                        canLoad = true;
-                      _installPackageRequest.Add(moduleInfo, installPackageRequest);
-                    }
-                }
-            }
-
-            return canLoad;
+            return moduleInfo.GetPackageName() != null;
         }
 
         /// <summary>
@@ -168,15 +146,16 @@ namespace Catel.Modules
             // ReSharper disable once ImplicitlyCapturedClosure
             Argument.IsNotNull(() => moduleInfo);
 
+            Dispatcher currentDispatcher = DispatcherHelper.CurrentDispatcher;
+
             Log.Debug("Loading module type '{0}' from package '{1}'", moduleInfo.ModuleType, moduleInfo.Ref);
 
-            if (_installPackageRequest.ContainsKey(moduleInfo))
-            {
-                InstallPackageRequest installPackageRequest = _installPackageRequest[moduleInfo];
-                new Thread(() =>
+            new Thread(() =>
+                {
+                    InstallPackageRequest installPackageRequest;
+                    var packageName = moduleInfo.GetPackageName();
+                    if (packageName != null && this.TryCreateInstallPackageRequest(moduleInfo, out installPackageRequest))
                     {
-                        Dispatcher currentDispatcher = DispatcherHelper.CurrentDispatcher;
-                        
                         currentDispatcher.BeginInvoke(() => OnModuleDownloadProgressChanged(new ModuleDownloadProgressChangedEventArgs(moduleInfo, 0, 1)));
 
                         bool installed = false;
@@ -214,8 +193,34 @@ namespace Catel.Modules
 
                             fileModuleTypeLoader.LoadModuleType(fileModuleInfo);
                         }
-                    }).Start();
+                    }
+                    else
+                    {
+                        currentDispatcher.BeginInvoke(() => OnLoadModuleCompleted(new LoadModuleCompletedEventArgs(moduleInfo, new ModuleNotFoundException(moduleInfo.ModuleName, string.Format(CultureInfo.InvariantCulture, "The package '{0}' for module '{1}' was not found", moduleInfo.Ref, moduleInfo.ModuleName)))));
+                    }
+                }).Start();
+        }
+
+        /// <summary>
+        /// Tries create install package request.
+        /// </summary>
+        /// <param name="moduleInfo">
+        /// The module info
+        /// </param>
+        /// <param name="installPackageRequest">
+        /// The install package request
+        /// </param>
+        /// <returns></returns>
+        private bool TryCreateInstallPackageRequest(ModuleInfo moduleInfo, out InstallPackageRequest installPackageRequest)
+        {
+            int i = 0;
+            installPackageRequest = null;
+            while (i < _moduleCatalogs.Count && !_moduleCatalogs[i].TryCreateInstallPackageRequest(moduleInfo, out installPackageRequest))
+            {
+                i++;
             }
+
+            return installPackageRequest != null;
         }
         #endregion
     }
