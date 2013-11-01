@@ -61,7 +61,7 @@ namespace Catel.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unfortunately, this feature is not supported in the current platform.
+        ///   Looks up a localized string similar to Unfortunately this feature is not supported in the current platform.
         /// </summary>
         internal static string NotSupportedInPlatform {
             get {
@@ -70,7 +70,7 @@ namespace Catel.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unfortunately, this is not supported in Silverlight.
+        ///   Looks up a localized string similar to Unfortunately this is not supported in Silverlight.
         /// </summary>
         internal static string NotSupportedInSilverlight {
             get {
@@ -79,7 +79,7 @@ namespace Catel.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unfortunately, this is not supported in Windows Phone 7.
+        ///   Looks up a localized string similar to Unfortunately this is not supported in Windows Phone 7.
         /// </summary>
         internal static string NotSupportedInWindowsPhone7 {
             get {
@@ -88,7 +88,7 @@ namespace Catel.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unfortunately, this is not supported in WinRT.
+        ///   Looks up a localized string similar to Unfortunately this is not supported in WinRT.
         /// </summary>
         internal static string NotSupportedInWinRT {
             get {
