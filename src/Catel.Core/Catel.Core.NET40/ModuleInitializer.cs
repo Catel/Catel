@@ -6,16 +6,20 @@
 
 namespace Catel.Core
 {
+    using System;
     using Catel.Data;
+    using Catel.Reflection;
     using Catel.Runtime.Serialization;
     using ExceptionHandling;
     using IoC;
     using Messaging;
+    using Catel.Logging;
 
 #if NET
     using System.Configuration;
+    using System.Web;
     using Catel.Configuration;
-    using Catel.Logging;
+    using System.Reflection;
 #endif
 
     /// <summary>
@@ -26,24 +30,62 @@ namespace Catel.Core
     /// </remarks>
     public static class ModuleInitializer
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Initializes the module.
         /// </summary>
         public static void Initialize()
         {
 #if NET
-            var openExeConfiguration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            if (openExeConfiguration != null)
+            try
             {
-                var configurationSection = openExeConfiguration.GetSection<LoggingConfigurationSection>("logging", "catel");
-                if (configurationSection != null)
+                bool isWebContext = false;
+
+                var httpContextType = TypeHelper.GetType("System.Web.HttpContext, System.Web");
+                if (httpContextType != null)
                 {
-                    var logListeners = configurationSection.GetLogListeners();
-                    foreach (var logListener in logListeners)
+                    var currentPropertyInfo = httpContextType.GetProperty("Current", BindingFlags.Public | BindingFlags.Static);
+                    if (currentPropertyInfo != null)
                     {
-                        LogManager.AddListener(logListener);
+                        isWebContext = (currentPropertyInfo.GetValue(null, null) != null);
                     }
                 }
+
+                Configuration config = null;
+                if (isWebContext)
+                {
+                    Log.Debug("Application is living in a web context, loading web configuration");
+
+                    // All via reflection because we are support .NET 4.0 client profile, reflection equals this call:
+                    //   config = Configuration.WebConfigurationManager.OpenWebConfiguration("~");
+                    var webConfigurationManagerType = TypeHelper.GetType("System.Web.Configuration.WebConfigurationManager, System.Web");
+                    var openWebConfigurationMethodInfo = webConfigurationManagerType.GetMethodEx("OpenWebConfiguration", allowStaticMembers: true);
+                    config = (Configuration) openWebConfigurationMethodInfo.Invoke(null, null);
+                }
+                else
+                {
+                    Log.Debug("Application is living in an application context, loading application configuration");
+
+                    config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                }
+
+                if (config != null)
+                {
+                    var configurationSection = config.GetSection<LoggingConfigurationSection>("logging", "catel");
+                    if (configurationSection != null)
+                    {
+                        var logListeners = configurationSection.GetLogListeners();
+                        foreach (var logListener in logListeners)
+                        {
+                            LogManager.AddListener(logListener);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to load log listeners from the configuration file");
             }
 #endif
 
