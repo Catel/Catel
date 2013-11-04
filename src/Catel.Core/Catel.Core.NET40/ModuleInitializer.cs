@@ -42,7 +42,7 @@ namespace Catel.Core
             {
                 bool isWebContext = false;
 
-                var httpContextType = TypeHelper.GetType("System.Web.HttpContext, System.Web");
+                var httpContextType = TypeCache.GetTypeWithoutAssembly("System.Web.HttpContext");
                 if (httpContextType != null)
                 {
                     var currentPropertyInfo = httpContextType.GetProperty("Current", BindingFlags.Public | BindingFlags.Static);
@@ -59,9 +59,9 @@ namespace Catel.Core
 
                     // All via reflection because we are support .NET 4.0 client profile, reflection equals this call:
                     //   config = Configuration.WebConfigurationManager.OpenWebConfiguration("~");
-                    var webConfigurationManagerType = TypeHelper.GetType("System.Web.Configuration.WebConfigurationManager, System.Web");
-                    var openWebConfigurationMethodInfo = webConfigurationManagerType.GetMethodEx("OpenWebConfiguration", allowStaticMembers: true);
-                    config = (Configuration) openWebConfigurationMethodInfo.Invoke(null, null);
+                    var webConfigurationManagerType = TypeCache.GetTypeWithoutAssembly("System.Web.Configuration.WebConfigurationManager");
+                    var openWebConfigurationMethodInfo = webConfigurationManagerType.GetMethodEx("OpenWebConfiguration", new [] { typeof(string) }, allowStaticMembers: true);
+                    config = (Configuration) openWebConfigurationMethodInfo.Invoke(null, new []{ "~" });
                 }
                 else
                 {
