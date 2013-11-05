@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+  <Metadata>
+    <Identity Id="Catel.ItemTemplates.Silverlight.UserControl..576386c4-0318-4f95-abde-beb3b982ae90" Version="1.0" Language="en-US" Publisher="Geert van Horrik" />
+    <DisplayName>Silverlight UserControl using Catel</DisplayName>
+    <Description xml:space="preserve">Item template to create a Silverlight UserControl using Catel.</Description>
+    <MoreInfo>http://www.catelproject.com</MoreInfo>
+    <GettingStartedGuide>http://www.catelproject.com</GettingStartedGuide>
+    <Icon>Catel logo.png</Icon>
+    <PreviewImage>Catel logo.png</PreviewImage>
+  </Metadata>
+  <Installation>
+    <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[11.0,)" />
+    <InstallationTarget Version="[11.0,)" Id="Microsoft.VisualStudio.VSWinExpress" />
+    <InstallationTarget Version="[11.0,)" Id="Microsoft.VisualStudio.VSWinDesktopExpress" />
+  </Installation>
+  <Dependencies>
+  </Dependencies>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="File" Path="ItemTemplates" d:TargetPath="ItemTemplates\CSharp\Silverlight\Catel.Silverlight.UserControl.zip" />
+  </Assets>
+</PackageManifest>
