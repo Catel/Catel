@@ -375,6 +375,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.ItemTemplates.Silverl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.ItemTemplates.Silverlight.UserControl", "Catel.Templates\Catel.ItemTemplates.Silverlight.UserControl\Catel.ItemTemplates.Silverlight.UserControl.csproj", "{71318AB3-C1F1-4970-90DB-4C9DAB99B59C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.ItemTemplates.WindowsStore.BlankPage", "Catel.Templates\Catel.ItemTemplates.WindowsStore.BlankPage\Catel.ItemTemplates.WindowsStore.BlankPage.csproj", "{F4BF39E5-4BD5-4635-AABC-2608C1EDA227}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.ItemTemplates.WindowsStore.UserControl", "Catel.Templates\Catel.ItemTemplates.WindowsStore.UserControl\Catel.ItemTemplates.WindowsStore.UserControl.csproj", "{2BCE0441-D0A7-4AB0-90F9-224B3635AA6C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1201,6 +1205,26 @@ Global
 		{71318AB3-C1F1-4970-90DB-4C9DAB99B59C}.Release|ARM.ActiveCfg = Release|Any CPU
 		{71318AB3-C1F1-4970-90DB-4C9DAB99B59C}.Release|x64.ActiveCfg = Release|Any CPU
 		{71318AB3-C1F1-4970-90DB-4C9DAB99B59C}.Release|x86.ActiveCfg = Release|Any CPU
+		{F4BF39E5-4BD5-4635-AABC-2608C1EDA227}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4BF39E5-4BD5-4635-AABC-2608C1EDA227}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4BF39E5-4BD5-4635-AABC-2608C1EDA227}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{F4BF39E5-4BD5-4635-AABC-2608C1EDA227}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F4BF39E5-4BD5-4635-AABC-2608C1EDA227}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F4BF39E5-4BD5-4635-AABC-2608C1EDA227}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4BF39E5-4BD5-4635-AABC-2608C1EDA227}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4BF39E5-4BD5-4635-AABC-2608C1EDA227}.Release|ARM.ActiveCfg = Release|Any CPU
+		{F4BF39E5-4BD5-4635-AABC-2608C1EDA227}.Release|x64.ActiveCfg = Release|Any CPU
+		{F4BF39E5-4BD5-4635-AABC-2608C1EDA227}.Release|x86.ActiveCfg = Release|Any CPU
+		{2BCE0441-D0A7-4AB0-90F9-224B3635AA6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BCE0441-D0A7-4AB0-90F9-224B3635AA6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BCE0441-D0A7-4AB0-90F9-224B3635AA6C}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{2BCE0441-D0A7-4AB0-90F9-224B3635AA6C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2BCE0441-D0A7-4AB0-90F9-224B3635AA6C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2BCE0441-D0A7-4AB0-90F9-224B3635AA6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BCE0441-D0A7-4AB0-90F9-224B3635AA6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BCE0441-D0A7-4AB0-90F9-224B3635AA6C}.Release|ARM.ActiveCfg = Release|Any CPU
+		{2BCE0441-D0A7-4AB0-90F9-224B3635AA6C}.Release|x64.ActiveCfg = Release|Any CPU
+		{2BCE0441-D0A7-4AB0-90F9-224B3635AA6C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1315,6 +1339,8 @@ Global
 		{51B11D3E-CBC9-4FE6-8D23-7DAD6C4F97C1} = {6FB4AFB1-B28F-4F15-8DD7-671B187B7F61}
 		{8FD1A11B-2607-4921-B1D0-F0B1AF042917} = {6FB4AFB1-B28F-4F15-8DD7-671B187B7F61}
 		{71318AB3-C1F1-4970-90DB-4C9DAB99B59C} = {6FB4AFB1-B28F-4F15-8DD7-671B187B7F61}
+		{F4BF39E5-4BD5-4635-AABC-2608C1EDA227} = {6FB4AFB1-B28F-4F15-8DD7-671B187B7F61}
+		{2BCE0441-D0A7-4AB0-90F9-224B3635AA6C} = {6FB4AFB1-B28F-4F15-8DD7-671B187B7F61}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.2\lib\NET35
