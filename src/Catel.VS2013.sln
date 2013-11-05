@@ -353,7 +353,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.EntityFram
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{99CE7B42-D53E-48CC-99F4-4ACE482145B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Templates", "Catel.Templates\Catel.Templates\Catel.Templates.csproj", "{CCCD0830-7839-4544-A279-AA5CC3140CA3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.ProjectTemplates.WPF.Application", "Catel.Templates\Catel.ProjectTemplates.WPF.Application\Catel.ProjectTemplates.WPF.Application.csproj", "{A354CA4C-F74A-4A33-83D4-57614D47B2D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.ProjectTemplates.Silverlight.Application", "Catel.Templates\Catel.ProjectTemplates.Silverlight.Application\Catel.ProjectTemplates.Silverlight.Application.csproj", "{39EC0E86-862D-431D-BED7-0BBD9D16D0B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.ProjectTemplates.WindowsPhone.Application", "Catel.Templates\Catel.ProjectTemplates.WindowsPhone.Application\Catel.ProjectTemplates.WindowsPhone.Application.csproj", "{F04981D8-9E20-477E-A349-324472B9DCE1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.ProjectTemplates.WindowsStore.Application", "Catel.Templates\Catel.ProjectTemplates.WindowsStore.Application\Catel.ProjectTemplates.WindowsStore.Application.csproj", "{59F96097-6317-42C3-8857-A59FE9206EC0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1091,16 +1097,46 @@ Global
 		{63025202-610A-4F75-92E7-1C622B5AB2E8}.Release|ARM.ActiveCfg = Release|Any CPU
 		{63025202-610A-4F75-92E7-1C622B5AB2E8}.Release|x64.ActiveCfg = Release|Any CPU
 		{63025202-610A-4F75-92E7-1C622B5AB2E8}.Release|x86.ActiveCfg = Release|Any CPU
-		{CCCD0830-7839-4544-A279-AA5CC3140CA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CCCD0830-7839-4544-A279-AA5CC3140CA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CCCD0830-7839-4544-A279-AA5CC3140CA3}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{CCCD0830-7839-4544-A279-AA5CC3140CA3}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{CCCD0830-7839-4544-A279-AA5CC3140CA3}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{CCCD0830-7839-4544-A279-AA5CC3140CA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CCCD0830-7839-4544-A279-AA5CC3140CA3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CCCD0830-7839-4544-A279-AA5CC3140CA3}.Release|ARM.ActiveCfg = Release|Any CPU
-		{CCCD0830-7839-4544-A279-AA5CC3140CA3}.Release|x64.ActiveCfg = Release|Any CPU
-		{CCCD0830-7839-4544-A279-AA5CC3140CA3}.Release|x86.ActiveCfg = Release|Any CPU
+		{A354CA4C-F74A-4A33-83D4-57614D47B2D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A354CA4C-F74A-4A33-83D4-57614D47B2D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A354CA4C-F74A-4A33-83D4-57614D47B2D0}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{A354CA4C-F74A-4A33-83D4-57614D47B2D0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A354CA4C-F74A-4A33-83D4-57614D47B2D0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A354CA4C-F74A-4A33-83D4-57614D47B2D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A354CA4C-F74A-4A33-83D4-57614D47B2D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A354CA4C-F74A-4A33-83D4-57614D47B2D0}.Release|ARM.ActiveCfg = Release|Any CPU
+		{A354CA4C-F74A-4A33-83D4-57614D47B2D0}.Release|x64.ActiveCfg = Release|Any CPU
+		{A354CA4C-F74A-4A33-83D4-57614D47B2D0}.Release|x86.ActiveCfg = Release|Any CPU
+		{39EC0E86-862D-431D-BED7-0BBD9D16D0B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39EC0E86-862D-431D-BED7-0BBD9D16D0B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39EC0E86-862D-431D-BED7-0BBD9D16D0B0}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{39EC0E86-862D-431D-BED7-0BBD9D16D0B0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{39EC0E86-862D-431D-BED7-0BBD9D16D0B0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{39EC0E86-862D-431D-BED7-0BBD9D16D0B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39EC0E86-862D-431D-BED7-0BBD9D16D0B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39EC0E86-862D-431D-BED7-0BBD9D16D0B0}.Release|ARM.ActiveCfg = Release|Any CPU
+		{39EC0E86-862D-431D-BED7-0BBD9D16D0B0}.Release|x64.ActiveCfg = Release|Any CPU
+		{39EC0E86-862D-431D-BED7-0BBD9D16D0B0}.Release|x86.ActiveCfg = Release|Any CPU
+		{F04981D8-9E20-477E-A349-324472B9DCE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F04981D8-9E20-477E-A349-324472B9DCE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F04981D8-9E20-477E-A349-324472B9DCE1}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{F04981D8-9E20-477E-A349-324472B9DCE1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F04981D8-9E20-477E-A349-324472B9DCE1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F04981D8-9E20-477E-A349-324472B9DCE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F04981D8-9E20-477E-A349-324472B9DCE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F04981D8-9E20-477E-A349-324472B9DCE1}.Release|ARM.ActiveCfg = Release|Any CPU
+		{F04981D8-9E20-477E-A349-324472B9DCE1}.Release|x64.ActiveCfg = Release|Any CPU
+		{F04981D8-9E20-477E-A349-324472B9DCE1}.Release|x86.ActiveCfg = Release|Any CPU
+		{59F96097-6317-42C3-8857-A59FE9206EC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59F96097-6317-42C3-8857-A59FE9206EC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59F96097-6317-42C3-8857-A59FE9206EC0}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{59F96097-6317-42C3-8857-A59FE9206EC0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{59F96097-6317-42C3-8857-A59FE9206EC0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{59F96097-6317-42C3-8857-A59FE9206EC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59F96097-6317-42C3-8857-A59FE9206EC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59F96097-6317-42C3-8857-A59FE9206EC0}.Release|ARM.ActiveCfg = Release|Any CPU
+		{59F96097-6317-42C3-8857-A59FE9206EC0}.Release|x64.ActiveCfg = Release|Any CPU
+		{59F96097-6317-42C3-8857-A59FE9206EC0}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1204,7 +1240,10 @@ Global
 		{50CF1788-5745-42EF-971D-BEB8A29E9796} = {B5ED1A50-E238-4C92-996A-08ED76033DF3}
 		{610E738C-29E2-4DFE-ABF1-6CA5FB37F1E5} = {376E61C4-833D-4DAB-B282-913709897142}
 		{63025202-610A-4F75-92E7-1C622B5AB2E8} = {376E61C4-833D-4DAB-B282-913709897142}
-		{CCCD0830-7839-4544-A279-AA5CC3140CA3} = {99CE7B42-D53E-48CC-99F4-4ACE482145B7}
+		{A354CA4C-F74A-4A33-83D4-57614D47B2D0} = {99CE7B42-D53E-48CC-99F4-4ACE482145B7}
+		{39EC0E86-862D-431D-BED7-0BBD9D16D0B0} = {99CE7B42-D53E-48CC-99F4-4ACE482145B7}
+		{F04981D8-9E20-477E-A349-324472B9DCE1} = {99CE7B42-D53E-48CC-99F4-4ACE482145B7}
+		{59F96097-6317-42C3-8857-A59FE9206EC0} = {99CE7B42-D53E-48CC-99F4-4ACE482145B7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.2\lib\NET35

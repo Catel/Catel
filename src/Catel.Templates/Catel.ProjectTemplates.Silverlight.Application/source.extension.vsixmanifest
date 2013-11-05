@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+  <Metadata>
+    <Identity Id="Catel.ProjectTemplates.Silverlight.Application..c761af7b-b2d9-4beb-af0a-e54b5e470f57" Version="1.0" Language="en-US" Publisher="Geert van Horrik" />
+    <DisplayName>Silverlight application using Catel</DisplayName>
+    <Description xml:space="preserve">Project template to create an MVVM-based application for Silverlight using Catel.</Description>
+    <MoreInfo>http://www.catelproject.com</MoreInfo>
+    <GettingStartedGuide>http://www.catelproject.com</GettingStartedGuide>
+    <Icon>Catel logo.png</Icon>
+    <PreviewImage>Catel logo.png</PreviewImage>
+    <Tags>catel;mvvm;application;sl;sl4;sl5;silverlight</Tags>
+  </Metadata>
+  <Installation>
+    <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[11.0,)" />
+    <InstallationTarget Version="[11.0,)" Id="Microsoft.VisualStudio.VSWinExpress" />
+    <InstallationTarget Version="[11.0,)" Id="Microsoft.VisualStudio.VSWinDesktopExpress" />
+  </Installation>
+  <Dependencies>
+  </Dependencies>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\CSharp\Silverlight\Catel.Silverlight.Application.zip" />
+  </Assets>
+</PackageManifest>
