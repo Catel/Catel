@@ -379,6 +379,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.ItemTemplates.Windows
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.ItemTemplates.WindowsStore.UserControl", "Catel.Templates\Catel.ItemTemplates.WindowsStore.UserControl\Catel.ItemTemplates.WindowsStore.UserControl.csproj", "{2BCE0441-D0A7-4AB0-90F9-224B3635AA6C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.ItemTemplates.WindowsPhone.UserControl", "Catel.Templates\Catel.ItemTemplates.WindowsPhone.UserControl\Catel.ItemTemplates.WindowsPhone.UserControl.csproj", "{B186EC7E-A72D-4F49-B326-08E73F45476C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.ItemTemplates.WindowsPhone.PortraitPage", "Catel.Templates\Catel.ItemTemplates.WindowsPhone.PortraitPage\Catel.ItemTemplates.WindowsPhone.PortraitPage.csproj", "{90163840-5C80-4053-94EF-5AF80E0D973E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1225,6 +1229,26 @@ Global
 		{2BCE0441-D0A7-4AB0-90F9-224B3635AA6C}.Release|ARM.ActiveCfg = Release|Any CPU
 		{2BCE0441-D0A7-4AB0-90F9-224B3635AA6C}.Release|x64.ActiveCfg = Release|Any CPU
 		{2BCE0441-D0A7-4AB0-90F9-224B3635AA6C}.Release|x86.ActiveCfg = Release|Any CPU
+		{B186EC7E-A72D-4F49-B326-08E73F45476C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B186EC7E-A72D-4F49-B326-08E73F45476C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B186EC7E-A72D-4F49-B326-08E73F45476C}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{B186EC7E-A72D-4F49-B326-08E73F45476C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B186EC7E-A72D-4F49-B326-08E73F45476C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B186EC7E-A72D-4F49-B326-08E73F45476C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B186EC7E-A72D-4F49-B326-08E73F45476C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B186EC7E-A72D-4F49-B326-08E73F45476C}.Release|ARM.ActiveCfg = Release|Any CPU
+		{B186EC7E-A72D-4F49-B326-08E73F45476C}.Release|x64.ActiveCfg = Release|Any CPU
+		{B186EC7E-A72D-4F49-B326-08E73F45476C}.Release|x86.ActiveCfg = Release|Any CPU
+		{90163840-5C80-4053-94EF-5AF80E0D973E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90163840-5C80-4053-94EF-5AF80E0D973E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90163840-5C80-4053-94EF-5AF80E0D973E}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{90163840-5C80-4053-94EF-5AF80E0D973E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{90163840-5C80-4053-94EF-5AF80E0D973E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{90163840-5C80-4053-94EF-5AF80E0D973E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90163840-5C80-4053-94EF-5AF80E0D973E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90163840-5C80-4053-94EF-5AF80E0D973E}.Release|ARM.ActiveCfg = Release|Any CPU
+		{90163840-5C80-4053-94EF-5AF80E0D973E}.Release|x64.ActiveCfg = Release|Any CPU
+		{90163840-5C80-4053-94EF-5AF80E0D973E}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1341,6 +1365,8 @@ Global
 		{71318AB3-C1F1-4970-90DB-4C9DAB99B59C} = {6FB4AFB1-B28F-4F15-8DD7-671B187B7F61}
 		{F4BF39E5-4BD5-4635-AABC-2608C1EDA227} = {6FB4AFB1-B28F-4F15-8DD7-671B187B7F61}
 		{2BCE0441-D0A7-4AB0-90F9-224B3635AA6C} = {6FB4AFB1-B28F-4F15-8DD7-671B187B7F61}
+		{B186EC7E-A72D-4F49-B326-08E73F45476C} = {6FB4AFB1-B28F-4F15-8DD7-671B187B7F61}
+		{90163840-5C80-4053-94EF-5AF80E0D973E} = {6FB4AFB1-B28F-4F15-8DD7-671B187B7F61}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.2\lib\NET35
