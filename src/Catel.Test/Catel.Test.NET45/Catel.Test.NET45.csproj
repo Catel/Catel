@@ -114,6 +114,7 @@
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Extensions\Wcf.Server\" />
     <Folder Include="Logging\Extensions\" />
   </ItemGroup>
   <ItemGroup>
@@ -822,6 +823,10 @@
     <ProjectReference Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET45\Catel.Extensions.Prism.NET45.csproj">
       <Project>{1dac9a4b-2572-446a-99b8-9e86c1d9254b}</Project>
       <Name>Catel.Extensions.Prism.NET45</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Catel.Extensions.Wcf.Server\Catel.Extensions.Wcf.Server.NET45\Catel.Extensions.Wcf.Server.NET45.csproj">
+      <Project>{9d5b9051-9102-4225-b89c-be0e665e2ad3}</Project>
+      <Name>Catel.Extensions.Wcf.Server.NET45</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Catel.MVVM\Catel.MVVM.NET45\Catel.MVVM.NET45.csproj">
       <Project>{bedeb2cb-51ab-4af6-85f9-6a596b4603bb}</Project>

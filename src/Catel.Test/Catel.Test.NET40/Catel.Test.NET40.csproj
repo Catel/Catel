@@ -386,6 +386,10 @@
       <Project>{C9EAD437-56BA-45BB-A982-845AD72FE1C8}</Project>
       <Name>Catel.Extensions.Prism.NET40</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Catel.Extensions.Wcf.Server\Catel.Extensions.Wcf.Server.NET40\Catel.Extensions.Wcf.Server.NET40.csproj">
+      <Project>{bd187286-74f3-4c79-9f4c-4b0102947ea8}</Project>
+      <Name>Catel.Extensions.Wcf.Server.NET40</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Catel.MVVM\Catel.MVVM.NET40\Catel.MVVM.NET40.csproj">
       <Project>{D9112D3C-62D2-401E-8EA1-86AC28A71C22}</Project>
       <Name>Catel.MVVM.NET40</Name>
@@ -406,6 +410,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Extensions\Wcf.Server\" />
     <Folder Include="Logging\Extensions\" />
   </ItemGroup>
   <ItemGroup>
