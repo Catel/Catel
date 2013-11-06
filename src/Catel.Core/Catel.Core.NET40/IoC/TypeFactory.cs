@@ -54,9 +54,9 @@ namespace Catel.IoC
         private readonly Dictionary<ConstructorCacheKey, ConstructorInfo> _specificConstructorCacheWithAutoCompletion = new Dictionary<ConstructorCacheKey, ConstructorInfo>();
 
         /// <summary>
-        /// Cache containing all the constructors of a specific type so this doesn't have to be queried multiple times.
+        /// Cache containing all the metadata of a specific type so this doesn't have to be queried multiple times.
         /// </summary>
-        private readonly Dictionary<Type, TypeConstructorsMetadata> _typeConstructorsMetadata = new Dictionary<Type, TypeConstructorsMetadata>();
+        private readonly Dictionary<Type, TypeMetaData> _typeConstructorsMetadata = new Dictionary<Type, TypeMetaData>();
 
         /// <summary>
         /// Cache containing whether a type can be created using <c>Activator.CreateInstance</c>.
@@ -161,7 +161,7 @@ namespace Catel.IoC
 
                     Log.Debug("Creating instance of type '{0}'. No constructor found in the cache, so searching for the right one.", typeToConstruct.FullName);
 
-                    var typeConstructorsMetadata = GetConstructorsMetadata(typeToConstruct);
+                    var typeConstructorsMetadata = GetTypeMetaData(typeToConstruct);
                     var constructors = typeConstructorsMetadata.GetConstructors();
                     foreach (var constructor in constructors)
                     {
@@ -339,6 +339,26 @@ namespace Catel.IoC
             var dependencyResolverManager = DependencyResolverManager.Default;
             dependencyResolverManager.RegisterDependencyResolverForInstance(obj, _dependencyResolver);
 
+            var type = obj.GetType();
+            var typeMetaData = GetTypeMetaData(type);
+            foreach (var injectedProperty in typeMetaData.GetInjectedProperties())
+            {
+                var propertyInfo = injectedProperty.Key;
+                var injectAttribute = injectedProperty.Value;
+
+                try
+                {
+                    var dependency = _dependencyResolver.Resolve(injectAttribute.Type, injectAttribute.Tag);
+                    propertyInfo.SetValue(obj, dependency, null);
+                }
+                catch (Exception ex)
+                {
+                    string error = string.Format("Failed to set property '{0}.{1}' during property dependency injection", type.Name, propertyInfo.Name);
+                    Log.Error(ex, error);
+                    throw new InvalidOperationException(error);
+                }
+            }
+
             var objAsINeedCustomInitialization = obj as INeedCustomInitialization;
             if (objAsINeedCustomInitialization != null)
             {
@@ -379,7 +399,7 @@ namespace Catel.IoC
 
                 Log.Debug("Creating instance of type '{0}' using specific parameters. No constructor found in the cache, so searching for the right one.", typeToConstruct.FullName);
 
-                var typeConstructorsMetadata = GetConstructorsMetadata(typeToConstruct);
+                var typeConstructorsMetadata = GetTypeMetaData(typeToConstruct);
                 var constructors = typeConstructorsMetadata.GetConstructors(parameters.Count(), !autoCompleteDependencies);
 
                 foreach (var constructor in constructors)
@@ -425,12 +445,12 @@ namespace Catel.IoC
         /// Gets the constructors metadata.
         /// </summary>
         /// <param name="type">The type.</param>
-        /// <returns>The <see cref="TypeConstructorsMetadata"/>.</returns>
-        private TypeConstructorsMetadata GetConstructorsMetadata(Type type)
+        /// <returns>The <see cref="TypeMetaData"/>.</returns>
+        private TypeMetaData GetTypeMetaData(Type type)
         {
             if (!_typeConstructorsMetadata.ContainsKey(type))
             {
-                _typeConstructorsMetadata.Add(type, new TypeConstructorsMetadata(type));
+                _typeConstructorsMetadata.Add(type, new TypeMetaData(type));
             }
 
             var typeConstructorsMetadata = _typeConstructorsMetadata[type];
@@ -708,16 +728,42 @@ namespace Catel.IoC
             #endregion
         }
 
-        private class TypeConstructorsMetadata
+        private class TypeMetaData
         {
             private readonly ICacheStorage<string, List<ConstructorInfo>> _callCache = new CacheStorage<string, List<ConstructorInfo>>();
+            private Dictionary<PropertyInfo, InjectAttribute> _injectedProperties;
 
-            public TypeConstructorsMetadata(Type type)
+            public TypeMetaData(Type type)
             {
                 Type = type;
             }
 
             public Type Type { get; private set; }
+
+            public Dictionary<PropertyInfo, InjectAttribute> GetInjectedProperties()
+            {
+                if (_injectedProperties == null)
+                {
+                    _injectedProperties = new Dictionary<PropertyInfo, InjectAttribute>();
+
+                    var properties = Type.GetPropertiesEx();
+                    foreach (var property in properties)
+                    {
+                        var injectAttribute = property.GetCustomAttributeEx(typeof (InjectAttribute), false) as InjectAttribute;
+                        if (injectAttribute != null)
+                        {
+                            if (injectAttribute.Type == null)
+                            {
+                                injectAttribute.Type = property.PropertyType;
+                            }
+
+                            _injectedProperties.Add(property, injectAttribute);
+                        }
+                    }
+                }
+
+                return _injectedProperties;
+            }
 
             public List<ConstructorInfo> GetConstructors()
             {

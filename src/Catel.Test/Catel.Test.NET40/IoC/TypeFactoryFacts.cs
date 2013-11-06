@@ -273,6 +273,12 @@ namespace Catel.Test.IoC
                 public bool IsRightConstructorUsed { get; private set; }
             }
 
+            public class ClassWithPropertyInjection
+            {
+                [Inject]
+                public IUIVisualizerService UiVisualizerService { get; set; }
+            }
+
             [TestMethod]
             public void CreatesTypeUsingSimpleCustomInjectionAndAutoCompletion()
             {
@@ -315,6 +321,16 @@ namespace Catel.Test.IoC
                 var instance = typeFactory.CreateInstance<ClassWithSeveralMatchesForDependencyInjection>();
 
                 Assert.IsTrue(instance.IsRightConstructorUsed);
+            }
+
+            [TestMethod]
+            public void CreatesTypeWithPropertyInjection()
+            {
+                var typeFactory = TypeFactory.Default;
+
+                var instance = typeFactory.CreateInstance<ClassWithPropertyInjection>();
+
+                Assert.IsNotNull(instance.UiVisualizerService);
             }
         }
     }

@@ -391,6 +391,9 @@
     <Compile Include="..\Catel.Core.NET40\Helpers\UniqueIdentifierHelper.cs">
       <Link>Helpers\UniqueIdentifierHelper.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\Attributes\InjectAttribute.cs">
+      <Link>IoC\Attributes\InjectAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Attributes\InjectionConstructorAttribute.cs">
       <Link>IoC\Attributes\InjectionConstructorAttribute.cs</Link>
     </Compile>
