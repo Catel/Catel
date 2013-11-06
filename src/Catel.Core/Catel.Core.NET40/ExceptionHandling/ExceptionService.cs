@@ -317,11 +317,11 @@ namespace Catel.ExceptionHandling
             Argument.IsNotNull("action", action);
 
             var retryCount = 0;
-            var interval = TimeSpan.FromMilliseconds(1);
 
             while (true)
             {
                 Exception lastError;
+                TimeSpan interval;
                 try
                 {
                     return action();
@@ -350,6 +350,8 @@ namespace Catel.ExceptionHandling
                                 {
                                     throw;
                                 }
+
+                                return default(TResult);
                             }
                         }
                         else
@@ -358,6 +360,8 @@ namespace Catel.ExceptionHandling
                             {
                                 throw;
                             }
+
+                            return default(TResult);
                         }
                     }
                 }
