@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IRetryPolicy.cs" company="Catel development team">
+// <copyright file="IBufferPolicy.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -8,9 +8,9 @@
 namespace Catel.ExceptionHandling
 {
     /// <summary>
-    /// Represents the retry policy.
+    /// Represent the buffer policy interface in exception handling
     /// </summary>
-    public interface IRetryPolicy : IPolicy
+    public interface IBufferPolicy : IPolicy
     {
     }
 }

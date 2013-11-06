@@ -10,53 +10,34 @@ namespace Catel.ExceptionHandling
     using System;
 
     /// <summary>
-    /// Represent the frequency tolerance implementation in exception handling
+    /// Represent the buffer policy implementation in exception handling
     /// </summary>
-    public class Frequency : IFrequency
+    public class BufferPolicy : PolicyBase, IBufferPolicy
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="Frequency"/> class.
+        /// Initializes a new instance of the <see cref="BufferPolicy"/> class.
         /// </summary>
         /// <param name="numberOfTimes">The number of times.</param>
-        /// <param name="duration">The duration.</param>
+        /// <param name="interval">The interval.</param>
         /// <exception cref="ArgumentOutOfRangeException">The <paramref name="numberOfTimes"/> is out of range.</exception>
-        public Frequency(int numberOfTimes, TimeSpan duration)
+        public BufferPolicy(int numberOfTimes, TimeSpan interval)
         {
-            Argument.IsMinimal(() => numberOfTimes, 1);
+            Argument.IsMinimal("numberOfTimes", numberOfTimes, 1);
 
             NumberOfTimes = numberOfTimes;
-            Duration = duration;
+            Interval = interval;
         }
         #endregion
 
-        #region Properties
-        /// <summary>
-        /// Gets the number of times.
-        /// </summary>
-        /// <value>
-        /// The number of times.
-        /// </value>
-        public int NumberOfTimes { get; private set; }
-
-        /// <summary>
-        /// Gets the duration.
-        /// </summary>
-        /// <value>
-        /// The duration.
-        /// </value>
-        public TimeSpan Duration { get; private set; }
-        #endregion
-
         #region Methods
-
         /// <summary>
         /// The overrided ToString()
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("{0} times per {1}", NumberOfTimes, Duration);
+            return string.Format("{0} times per {1}", NumberOfTimes, Interval);
         }
         #endregion
     }

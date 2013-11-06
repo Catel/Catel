@@ -10,23 +10,23 @@ namespace Catel.ExceptionHandling
     using System;
 
     /// <summary>
-    /// The IExceptionHandler extensions.
+    /// The exception handler extensions.
     /// </summary>
     public static class ExceptionHandlerExtensions
     {
         /// <summary>
-        /// Done exception buffering using the specified policy tolerance.
+        /// Should buffer the exceptions using the specified policy tolerance.
         /// </summary>
         /// <param name="exceptionHandler">The exception handler.</param>
         /// <param name="numberOfTimes">The number of times before handling the exception.</param>
-        /// <param name="duration">The duration.</param>
+        /// <param name="interval">The interval.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="exceptionHandler" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The <paramref name="numberOfTimes"/> is out of range.</exception>
-        public static void UsingTolerance(this IExceptionHandler exceptionHandler, int numberOfTimes, TimeSpan duration)
+        public static void UsingTolerance(this IExceptionHandler exceptionHandler, int numberOfTimes, TimeSpan interval)
         {
-            Argument.IsNotNull(() => exceptionHandler);
+            Argument.IsNotNull("exceptionHandler", exceptionHandler);
 
-            exceptionHandler.AllowedFrequency = new Frequency(numberOfTimes, duration);
+            exceptionHandler.BufferPolicy = new BufferPolicy(numberOfTimes, interval);
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Catel.ExceptionHandling
         /// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="numberOfTimes"/> is larger than <c>1</c>.</exception>
         public static void OnErrorRetry(this IExceptionHandler exceptionHandler, int numberOfTimes, TimeSpan interval)
         {
-            Argument.IsNotNull(() => exceptionHandler);
+            Argument.IsNotNull("exceptionHandler", exceptionHandler);
             
             exceptionHandler.RetryPolicy = new RetryPolicy(numberOfTimes, interval);
         }
@@ -53,7 +53,7 @@ namespace Catel.ExceptionHandling
         /// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="numberOfTimes"/> is larger than <c>1</c>.</exception>
         public static void OnErrorRetryImmediately(this IExceptionHandler exceptionHandler, int numberOfTimes = int.MaxValue)
         {
-            Argument.IsNotNull(() => exceptionHandler);
+            Argument.IsNotNull("exceptionHandler", exceptionHandler);
 
             exceptionHandler.OnErrorRetry(numberOfTimes, TimeSpan.FromMilliseconds(1));
         }

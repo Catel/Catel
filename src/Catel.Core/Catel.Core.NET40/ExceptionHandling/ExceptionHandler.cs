@@ -4,6 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+
 namespace Catel.ExceptionHandling
 {
     using System;
@@ -42,12 +43,12 @@ namespace Catel.ExceptionHandling
         public Type ExceptionType { get; private set; }
 
         /// <summary>
-        /// Gets the allowed frequency.
+        /// Gets or sets the buffer policy.
         /// </summary>
         /// <value>
-        /// The allowed frequency.
+        /// The buffer policy.
         /// </value>
-        public IFrequency AllowedFrequency { get; set; }
+        public IBufferPolicy BufferPolicy { get; set; }
 
         /// <summary>
         /// Gets or sets the retry policy.

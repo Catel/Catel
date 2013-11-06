@@ -314,9 +314,6 @@
     <Compile Include="..\Catel.Core.NET40\EventHandlerExtensions.cs">
       <Link>EventHandlerExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Buffering\Frequency.cs">
-      <Link>ExceptionHandling\Buffering\Frequency.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Core.NET40\ExceptionHandling\EventArgs\BufferedEventArgs.cs">
       <Link>ExceptionHandling\EventArgs\BufferedEventArgs.cs</Link>
     </Compile>
@@ -335,20 +332,29 @@
     <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Extensions\ExceptionHandlerExtensions.cs">
       <Link>ExceptionHandling\Extensions\ExceptionHandlerExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Interfaces\IBufferPolicy.cs">
+      <Link>ExceptionHandling\Interfaces\IBufferPolicy.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Interfaces\IExceptionHandler.cs">
       <Link>ExceptionHandling\Interfaces\IExceptionHandler.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Interfaces\IExceptionService.cs">
       <Link>ExceptionHandling\Interfaces\IExceptionService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Interfaces\IFrequency.cs">
-      <Link>ExceptionHandling\Interfaces\IFrequency.cs</Link>
+    <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Interfaces\IPolicy.cs">
+      <Link>ExceptionHandling\Interfaces\IPolicy.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Interfaces\IRetryPolicy.cs">
       <Link>ExceptionHandling\Interfaces\IRetryPolicy.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Retrying\RetryPolicy.cs">
-      <Link>ExceptionHandling\Retrying\RetryPolicy.cs</Link>
+    <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Policies\BufferPolicy.cs">
+      <Link>ExceptionHandling\Policies\BufferPolicy.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Policies\PolicyBase.cs">
+      <Link>ExceptionHandling\Policies\PolicyBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Policies\RetryPolicy.cs">
+      <Link>ExceptionHandling\Policies\RetryPolicy.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Exceptions\NotSupportedInPlatformException.cs">
       <Link>Exceptions\NotSupportedInPlatformException.cs</Link>

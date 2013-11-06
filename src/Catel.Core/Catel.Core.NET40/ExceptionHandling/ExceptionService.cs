@@ -108,6 +108,7 @@ namespace Catel.ExceptionHandling
         ///   <c>true</c> if the specified exception type is registered; otherwise, <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref ref="exceptionType"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="exceptionType" /> is not of type <see cref="Exception"/>.</exception>
         public bool IsExceptionRegistered(Type exceptionType)
         {
             Argument.IsOfType("exceptionType", exceptionType, typeof(Exception));
@@ -196,7 +197,7 @@ namespace Catel.ExceptionHandling
                 {
                     if (exceptionHandler.Key.IsAssignableFromEx(exceptionType))
                     {
-                        if (exceptionHandler.Value.AllowedFrequency != null)
+                        if (exceptionHandler.Value.BufferPolicy != null)
                         {
                             if (!_exceptionCounter.ContainsKey(exceptionHandler.Key))
                             {
@@ -205,7 +206,7 @@ namespace Catel.ExceptionHandling
 
                             _exceptionCounter[exceptionHandler.Key].Enqueue(DateTime.Now);
 
-                            if (_exceptionCounter[exceptionHandler.Key].Count <= exceptionHandler.Value.AllowedFrequency.NumberOfTimes)
+                            if (_exceptionCounter[exceptionHandler.Key].Count <= exceptionHandler.Value.BufferPolicy.NumberOfTimes)
                             {
                                 OnExceptionBuffered(exception, DateTime.Now);
                                 Log.Debug("[{0}] '{1}' buffered", DateTime.Now, exceptionType.Name);
@@ -216,7 +217,7 @@ namespace Catel.ExceptionHandling
 
                             var duration = (DateTime.Now - dateTime);
 
-                            if (duration >= exceptionHandler.Value.AllowedFrequency.Duration && exceptionHandler.Value.AllowedFrequency.Duration != TimeSpan.Zero)
+                            if (duration >= exceptionHandler.Value.BufferPolicy.Interval && exceptionHandler.Value.BufferPolicy.Interval != TimeSpan.Zero)
                             {
                                 OnExceptionBuffered(exception, DateTime.Now);
                                 Log.Debug("[{0}] '{1}' buffered", DateTime.Now, exceptionType.Name);
@@ -340,7 +341,7 @@ namespace Catel.ExceptionHandling
 
                             retryCount++;
 
-                            if (retryCount <= retryPolicy.NumberOfAttempts)
+                            if (retryCount <= retryPolicy.NumberOfTimes)
                             {
                                 interval = retryPolicy.Interval;
                             }
@@ -390,7 +391,11 @@ namespace Catel.ExceptionHandling
         /// <summary>
         /// Processes the specified action. The action will be executed asynchrounously.
         /// </summary>
-        public async Task ProcessAsync(Action action, CancellationToken cancellationToken = new CancellationToken())
+        /// <param name="action">The action.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        public async Task ProcessAsync(Action action, CancellationToken cancellationToken = default(CancellationToken))
         {
             Argument.IsNotNull("action", action);
 
@@ -410,7 +415,12 @@ namespace Catel.ExceptionHandling
         /// <summary>
         /// Processes the specified action. The action will be executed asynchrounously.
         /// </summary>
-        public async Task<TResult> ProcessAsync<TResult>(Func<Task<TResult>> action, CancellationToken cancellationToken = new CancellationToken())
+        /// <typeparam name="TResult">The result type.</typeparam>
+        /// <param name="action">The action.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        public async Task<TResult> ProcessAsync<TResult>(Func<Task<TResult>> action, CancellationToken cancellationToken = default(CancellationToken))
         {
             Argument.IsNotNull("action", action);
 
