@@ -54,6 +54,7 @@ Added/fixed:
 (*) CTL-216 Created generic NotSupportedInPlatform exception with details why a specific feature might not be supported on a 
     specific platform. Also introduced Platforms.CurrentPlatform to determine which platform Catel is currently running on
 (*) CTL-218 PleaseWaitWindow now sets IsHitTestVisible to false for dimmed windows to prevent clickable buttons during period
+(*) CTL-224 Refactoring on Exception Handling to allows enhancements easier
 (x) CTL-133 Start and Update the PleasewaitWindow in an Workerthread throws exception
 (x) CTL-203 The Load Method of Catel.Data.ModelBase will call the constructor of the deserialized class two times
 (x) CTL-212 PropertyDataManager throws first chance exceptions for generic types

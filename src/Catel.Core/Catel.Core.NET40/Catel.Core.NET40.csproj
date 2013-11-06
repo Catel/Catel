@@ -154,12 +154,14 @@
     <Compile Include="ExceptionHandling\ExceptionHandler.cs" />
     <Compile Include="ExceptionHandling\ExceptionService.cs" />
     <Compile Include="ExceptionHandling\Extensions\ExceptionHandlerExtensions.cs" />
-    <Compile Include="ExceptionHandling\Buffering\Frequency.cs" />
+    <Compile Include="ExceptionHandling\Policies\BufferPolicy.cs" />
     <Compile Include="ExceptionHandling\Interfaces\IExceptionHandler.cs" />
     <Compile Include="ExceptionHandling\Interfaces\IExceptionService.cs" />
-    <Compile Include="ExceptionHandling\Interfaces\IFrequency.cs" />
+    <Compile Include="ExceptionHandling\Interfaces\IBufferPolicy.cs" />
+    <Compile Include="ExceptionHandling\Interfaces\IPolicy.cs" />
     <Compile Include="ExceptionHandling\Interfaces\IRetryPolicy.cs" />
-    <Compile Include="ExceptionHandling\Retrying\RetryPolicy.cs" />
+    <Compile Include="ExceptionHandling\Policies\PolicyBase.cs" />
+    <Compile Include="ExceptionHandling\Policies\RetryPolicy.cs" />
     <Compile Include="Exceptions\NotSupportedInPlatformException.cs" />
     <Compile Include="Exceptions\NotSupportedInSilverlightException.cs" />
     <Compile Include="Exceptions\NotSupportedInWindowsPhone7Exception.cs" />

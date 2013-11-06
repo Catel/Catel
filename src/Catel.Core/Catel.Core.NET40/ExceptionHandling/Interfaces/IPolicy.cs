@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IFrequency.cs" company="Catel development team">
+// <copyright file="IPolicy.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -10,9 +10,9 @@ namespace Catel.ExceptionHandling
     using System;
 
     /// <summary>
-    /// Represent the frequency tolerance interface in exception handling
+    /// Represent the base policy interface in exception handling
     /// </summary>
-    public interface IFrequency
+    public interface IPolicy
     {
         #region Properties
         /// <summary>
@@ -24,12 +24,12 @@ namespace Catel.ExceptionHandling
         int NumberOfTimes { get; }
 
         /// <summary>
-        /// Gets the duration.
+        /// Gets or sets the interval.
         /// </summary>
         /// <value>
-        /// The duration.
+        /// The interval.
         /// </value>
-        TimeSpan Duration { get; }
+        TimeSpan Interval { get; }
         #endregion
     }
 }

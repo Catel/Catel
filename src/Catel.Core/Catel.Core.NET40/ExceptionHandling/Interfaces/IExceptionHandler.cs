@@ -19,15 +19,15 @@ namespace Catel.ExceptionHandling
         Type ExceptionType { get; }
 
         /// <summary>
-        /// Gets the allowed frequency.
+        /// Gets or sets the buffer policy.
         /// </summary>
         /// <value>
-        /// The allowed frequency.
+        /// The buffer policy.
         /// </value>
-        IFrequency AllowedFrequency { get; set; }
+        IBufferPolicy BufferPolicy { get; set; }
 
         /// <summary>
-        /// Gets the retry policy.
+        /// Gets or sets the retry policy.
         /// </summary>
         /// <value>
         /// The retry policy.

@@ -56,6 +56,7 @@ namespace Catel.ExceptionHandling
         ///   <c>true</c> if the specified exception type is registered; otherwise, <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref ref="exceptionType"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="exceptionType" /> is not of type <see cref="Exception"/>.</exception>
         bool IsExceptionRegistered(Type exceptionType);
 
         /// <summary>
@@ -120,11 +121,20 @@ namespace Catel.ExceptionHandling
         /// <summary>
         /// Processes the specified action. The action will be executed asynchrounously.
         /// </summary>
+        /// <param name="action">The action.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         Task ProcessAsync(Action action, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Processes the specified action. The action will be executed asynchrounously.
         /// </summary>
+        /// <typeparam name="TResult">The result type.</typeparam>
+        /// <param name="action">The action.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         Task<TResult> ProcessAsync<TResult>(Func<Task<TResult>> action, CancellationToken cancellationToken = default(CancellationToken));
 #endif
         #endregion
