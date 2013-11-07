@@ -41,6 +41,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Activation" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -56,11 +59,59 @@
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Attributes\ServiceLocatorRegistrationBehaviorAttribute.cs">
+      <Link>Attributes\ServiceLocatorRegistrationBehaviorAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Attributes\ShouldUseBinarySerializationForDataContractsAttribute.cs">
+      <Link>Attributes\ShouldUseBinarySerializationForDataContractsAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Attributes\ShouldUseJsonSerializationForDataContractsAttribute.cs">
+      <Link>Attributes\ShouldUseJsonSerializationForDataContractsAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Behaviors\BinarySerializerOperationBehavior.cs">
+      <Link>Behaviors\BinarySerializerOperationBehavior.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Behaviors\ContractBehavior.cs">
+      <Link>Behaviors\ContractBehavior.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Behaviors\JsonSerializerOperationBehavior.cs">
+      <Link>Behaviors\JsonSerializerOperationBehavior.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Dispatching\InstanceProvider.cs">
+      <Link>Dispatching\InstanceProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Factories\ServiceHostFactory.cs">
+      <Link>Factories\ServiceHostFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Hosting\ServiceHost.cs">
+      <Link>Hosting\ServiceHost.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\InstanceContextExtension.cs">
+      <Link>InstanceContextExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\InstanceContextInitializer.cs">
+      <Link>InstanceContextInitializer.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\ModuleInitializer.cs">
       <Link>ModuleInitializer.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Serialization\DataType.cs">
+      <Link>Serialization\DataType.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Serialization\Helpers\BinarySerializerHelper.cs">
+      <Link>Serialization\Helpers\BinarySerializerHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Serialization\IObjectMetaData.cs">
+      <Link>Serialization\IObjectMetaData.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Serialization\ObjectMetaData.cs">
+      <Link>Serialization\ObjectMetaData.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Serialization\Serializers\BinarySerializer.cs">
+      <Link>Serialization\Serializers\BinarySerializer.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>
