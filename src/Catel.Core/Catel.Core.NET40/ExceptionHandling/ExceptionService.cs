@@ -247,7 +247,7 @@ namespace Catel.ExceptionHandling
                             if (_exceptionCounter[exceptionHandler.Key].Count <= exceptionHandler.Value.BufferPolicy.NumberOfTimes)
                             {
                                 OnExceptionBuffered(exception, DateTime.Now);
-                                Log.Debug("[{0}] '{1}' buffered", DateTime.Now, exceptionType.Name);
+                                Log.Debug("[{0}] '{1}' buffered for the '{2}' times", DateTime.Now, exceptionType.Name, _exceptionCounter[exceptionHandler.Key].Count);
                                 continue;
                             }
 
@@ -258,7 +258,7 @@ namespace Catel.ExceptionHandling
                             if (duration >= exceptionHandler.Value.BufferPolicy.Interval && exceptionHandler.Value.BufferPolicy.Interval != TimeSpan.Zero)
                             {
                                 OnExceptionBuffered(exception, DateTime.Now);
-                                Log.Debug("[{0}] '{1}' buffered", DateTime.Now, exceptionType.Name);
+                                Log.Debug("[{0}] '{1}' buffered for the '{2}' times", DateTime.Now, exceptionType.Name, _exceptionCounter[exceptionHandler.Key].Count);
                                 continue;
                             }
                             _exceptionCounter[exceptionHandler.Key].Clear();
@@ -458,7 +458,7 @@ namespace Catel.ExceptionHandling
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public async Task<TResult> ProcessAsync<TResult>(Func<Task<TResult>> action, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<TResult> ProcessAsync<TResult>(Func<TResult> action, CancellationToken cancellationToken = default(CancellationToken))
         {
             Argument.IsNotNull("action", action);
 

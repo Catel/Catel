@@ -15,6 +15,9 @@ namespace Catel.Test.ExceptionHandling
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 #else
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+#endif
+#if NET45
+    using System.Threading.Tasks;
 
 #endif
 
@@ -78,6 +81,45 @@ namespace Catel.Test.ExceptionHandling
             #endregion
         }
         #endregion
+
+#if NET45
+        #region Nested type: TheGenericProcessAsyncMethod
+        [TestClass]
+        public class TheGenericProcessAsyncMethod
+        {
+            #region Methods
+
+            [TestMethod]
+            public async Task ProceedToSucceed()
+            {
+                var exceptionService = new ExceptionService();
+                var value = string.Empty;
+
+                exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
+                value = await exceptionService.ProcessAsync(() => (1 + 1).ToString(CultureInfo.InvariantCulture));
+
+                Assert.AreEqual("2", value);
+
+                await exceptionService.ProcessAsync<string>(() => { throw new ArgumentException("achieved"); });
+
+                Assert.AreEqual("achieved", value);
+            }
+
+            [TestMethod]
+            public async Task ProceedToFail()
+            {
+                var exceptionService = new ExceptionService();
+                var value = string.Empty;
+
+                exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
+                await exceptionService.ProcessAsync<string>(() => { throw new ArgumentOutOfRangeException("achieved"); });
+
+                Assert.AreNotEqual("achieved", value);
+            }
+            #endregion
+        }
+        #endregion
+#endif
 
         #region Nested type: TheGetHandlerMethod
         [TestClass]
@@ -272,6 +314,41 @@ namespace Catel.Test.ExceptionHandling
         }
         #endregion
 
+#if NET45
+        #region Nested type: TheNonGenericProcessAsyncMethod
+        [TestClass]
+        public class TheNonGenericProcessAsyncMethod
+        {
+            #region Methods
+
+            [TestMethod]
+            public async Task ProceedToSucceed()
+            {
+                var exceptionService = new ExceptionService();
+                var value = string.Empty;
+
+                exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
+                await exceptionService.ProcessAsync(() => { throw new ArgumentException("achieved"); });
+
+                Assert.AreEqual("achieved", value);
+            }
+
+            [TestMethod]
+            public async Task ProceedToFail()
+            {
+                var exceptionService = new ExceptionService();
+                var value = string.Empty;
+
+                exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
+                await exceptionService.ProcessAsync(() => { throw new ArgumentOutOfRangeException("achieved"); });
+
+                Assert.AreNotEqual("achieved", value);
+            }
+            #endregion
+        }
+        #endregion
+#endif
+
         #region Nested type: TheOnErrorRetryImmediatelyMethod
         [TestClass]
         public class TheOnErrorRetryImmediatelyMethod
@@ -344,10 +421,7 @@ namespace Catel.Test.ExceptionHandling
                     .Register<DivideByZeroException>(exception => { })
                     .OnErrorRetryImmediately(3);
 
-                exceptionService.ProcessWithRetry(() =>
-                {
-
-                });
+                exceptionService.ProcessWithRetry(() => { });
 
                 Assert.AreEqual(0, attemptsCount);
             }
@@ -370,10 +444,7 @@ namespace Catel.Test.ExceptionHandling
                 Assert.AreEqual(0, attemptsCount);
                 Assert.AreEqual(2, result);
             }
-
             #endregion
-
-            
         }
         #endregion
 
@@ -381,6 +452,7 @@ namespace Catel.Test.ExceptionHandling
         [TestClass]
         public class TheOnErrorRetryMethod
         {
+            #region Methods
             [TestMethod]
             public void ShouldRetryWithDelay()
             {
@@ -394,11 +466,9 @@ namespace Catel.Test.ExceptionHandling
                     .Register<DivideByZeroException>(exception => { })
                     .OnErrorRetry(2, interval);
 
-                exceptionService.ProcessWithRetry(() =>
-                {
-                    throw new DivideByZeroException();
-                });
+                exceptionService.ProcessWithRetry(() => { throw new DivideByZeroException(); });
             }
+            #endregion
         }
         #endregion
 
@@ -507,9 +577,15 @@ namespace Catel.Test.ExceptionHandling
             [TestMethod]
             public void ChecksIfTheBufferedEventRegistrationWorks()
             {
+                var buffercount = 0;
+
                 var exceptionService = new ExceptionService();
 
-                exceptionService.ExceptionBuffered += (sender, args) => Assert.IsInstanceOfType(args.BufferedException, typeof (DivideByZeroException));
+                exceptionService.ExceptionBuffered += (sender, args) =>
+                {
+                    Assert.IsInstanceOfType(args.BufferedException, typeof (DivideByZeroException));
+                    buffercount++;
+                };
 
                 exceptionService.Register<DivideByZeroException>(exception => { })
                     .UsingTolerance(9, TimeSpan.FromSeconds(10.0));
@@ -525,6 +601,7 @@ namespace Catel.Test.ExceptionHandling
 
                 Assert.IsTrue(exceptionHandledAt10Th);
                 Assert.AreEqual(10, index);
+                Assert.AreEqual(9, buffercount);
             }
             #endregion
         }
