@@ -355,7 +355,7 @@ namespace Catel.ExceptionHandling
         {
             Argument.IsNotNull("action", action);
 
-            var retryCount = 0;
+            var retryCount = 1;
 
             while (true)
             {

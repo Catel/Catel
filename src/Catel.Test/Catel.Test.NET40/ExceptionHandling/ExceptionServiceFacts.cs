@@ -278,19 +278,102 @@ namespace Catel.Test.ExceptionHandling
         {
             #region Methods
             [TestMethod]
-            public void ShouldRetryOnce()
+            public void ChecksIfRetryActionEventRegistrationWorks()
             {
+                const int attemptsCount = 1;
+
                 var exceptionService = new ExceptionService();
 
-                exceptionService.RetryingAction += (sender, args) => Assert.AreEqual(1, args.CurrentRetryCount);
+                exceptionService.RetryingAction += (sender, args) => Assert.AreEqual(attemptsCount, args.CurrentRetryCount);
 
                 exceptionService
                     .Register<DivideByZeroException>(exception => { })
-                    .OnErrorRetryImmediately(1);
+                    .OnErrorRetryImmediately(attemptsCount);
 
                 exceptionService.ProcessWithRetry(() => { throw new DivideByZeroException(); });
             }
+
+            [TestMethod]
+            public void ShouldRetryTwice()
+            {
+                var attemptsCount = 0;
+
+                var exceptionService = new ExceptionService();
+
+                exceptionService
+                    .Register<DivideByZeroException>(exception => { })
+                    .OnErrorRetryImmediately(2);
+
+                exceptionService.ProcessWithRetry(() =>
+                {
+                    attemptsCount++;
+                    throw new DivideByZeroException();
+                });
+
+                Assert.AreEqual(2, attemptsCount);
+            }
+
+            [TestMethod]
+            public void ShouldNotRetryWhenAnotherExceptionTypeIsThrown()
+            {
+                var exceptionService = new ExceptionService();
+
+                exceptionService
+                    .Register<DivideByZeroException>(exception => { })
+                    .OnErrorRetryImmediately(3);
+
+                var attemptsCount = 0;
+
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => exceptionService.ProcessWithRetry(() =>
+                {
+                    attemptsCount++;
+                    throw new ArgumentException();
+                }));
+            }
+
+            [TestMethod]
+            public void ShouldNotRetryWhenNotAnyExceptionIsThrown()
+            {
+                var attemptsCount = 0;
+
+                var exceptionService = new ExceptionService();
+
+                exceptionService.RetryingAction += (sender, args) => attemptsCount++;
+
+                exceptionService
+                    .Register<DivideByZeroException>(exception => { })
+                    .OnErrorRetryImmediately(3);
+
+                exceptionService.ProcessWithRetry(() =>
+                {
+
+                });
+
+                Assert.AreEqual(0, attemptsCount);
+            }
+
+            [TestMethod]
+            public void ShouldNotRetryAndReturnsResult()
+            {
+                var attemptsCount = 0;
+
+                var exceptionService = new ExceptionService();
+
+                exceptionService.RetryingAction += (sender, args) => attemptsCount++;
+
+                exceptionService
+                    .Register<DivideByZeroException>(exception => { })
+                    .OnErrorRetryImmediately(3);
+
+                var result = exceptionService.ProcessWithRetry(() => 1 + 1);
+
+                Assert.AreEqual(0, attemptsCount);
+                Assert.AreEqual(2, result);
+            }
+
             #endregion
+
+            
         }
         #endregion
 
@@ -298,6 +381,24 @@ namespace Catel.Test.ExceptionHandling
         [TestClass]
         public class TheOnErrorRetryMethod
         {
+            [TestMethod]
+            public void ShouldRetryWithDelay()
+            {
+                var interval = TimeSpan.FromMilliseconds(10);
+
+                var exceptionService = new ExceptionService();
+
+                exceptionService.RetryingAction += (sender, args) => Assert.AreEqual(interval, args.Delay);
+
+                exceptionService
+                    .Register<DivideByZeroException>(exception => { })
+                    .OnErrorRetry(2, interval);
+
+                exceptionService.ProcessWithRetry(() =>
+                {
+                    throw new DivideByZeroException();
+                });
+            }
         }
         #endregion
 
@@ -386,6 +487,29 @@ namespace Catel.Test.ExceptionHandling
             public void MultipleExceptionsOfSameTypeThrownTooManyTimesProducesOnlyOneException()
             {
                 var exceptionService = new ExceptionService();
+
+                exceptionService.Register<DivideByZeroException>(exception => { })
+                    .UsingTolerance(9, TimeSpan.FromSeconds(10.0));
+
+                var index = 0;
+                var exceptionHandledAt10Th = false;
+
+                for (; index < 10; index++)
+                {
+                    ThreadHelper.Sleep(100);
+                    exceptionHandledAt10Th = exceptionService.HandleException(new DivideByZeroException());
+                }
+
+                Assert.IsTrue(exceptionHandledAt10Th);
+                Assert.AreEqual(10, index);
+            }
+
+            [TestMethod]
+            public void ChecksIfTheBufferedEventRegistrationWorks()
+            {
+                var exceptionService = new ExceptionService();
+
+                exceptionService.ExceptionBuffered += (sender, args) => Assert.IsInstanceOfType(args.BufferedException, typeof (DivideByZeroException));
 
                 exceptionService.Register<DivideByZeroException>(exception => { })
                     .UsingTolerance(9, TimeSpan.FromSeconds(10.0));
