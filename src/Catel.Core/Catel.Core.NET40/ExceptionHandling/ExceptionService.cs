@@ -120,6 +120,44 @@ namespace Catel.ExceptionHandling
         }
 
         /// <summary>
+        /// Gets the exception handler for the specified exception type.
+        /// </summary>
+        /// <param name="exceptionType">Type of the exception.</param>
+        /// <returns>
+        /// The exception handler.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">The <paramref ref="exceptionType"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="exceptionType" /> is not of type <see cref="Exception"/>.</exception>
+        public IExceptionHandler GetHandler(Type exceptionType)
+        {
+            Argument.IsOfType("exceptionType", exceptionType, typeof(Exception));
+
+            lock (_exceptionHandlers)
+            {
+                if (IsExceptionRegistered(exceptionType))
+                {
+                    return _exceptionHandlers[exceptionType];
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the exception handler for the specified exception type.
+        /// </summary>
+        /// <typeparam name="TException">The type of the exception.</typeparam>
+        /// <returns>
+        /// The exception handler.
+        /// </returns>
+        public IExceptionHandler GetHandler<TException>() where TException : Exception
+        {
+            var exceptionType = typeof(TException);
+
+            return GetHandler(exceptionType);
+        }
+
+        /// <summary>
         /// Registers a specific exception including the handler.
         /// </summary>
         /// <typeparam name="TException">The type of the exception.</typeparam>

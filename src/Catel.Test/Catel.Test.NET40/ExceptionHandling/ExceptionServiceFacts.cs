@@ -79,6 +79,72 @@ namespace Catel.Test.ExceptionHandling
         }
         #endregion
 
+        #region Nested type: TheGetHandlerMethod
+        [TestClass]
+        public class TheGetHandlerMethod
+        {
+            #region Methods
+            [TestMethod]
+            public void ReturnsArgumentNullException()
+            {
+                var exceptionService = new ExceptionService();
+
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => exceptionService.GetHandler(null));
+            }
+
+            [TestMethod]
+            public void ReturnsNullWhenNotRegistered()
+            {
+                var exceptionService = new ExceptionService();
+
+                exceptionService.Register<ArgumentNullException>(exception => { });
+
+                Assert.IsNull(exceptionService.GetHandler(typeof (Exception)));
+            }
+
+            [TestMethod]
+            public void ReturnsNullWhenNotRegisteredUsingGeneric()
+            {
+                var exceptionService = new ExceptionService();
+
+                exceptionService.Register<ArgumentNullException>(exception => { });
+
+                Assert.IsNull(exceptionService.GetHandler<Exception>());
+            }
+
+            [TestMethod]
+            public void ReturnsHandlerWhenRegistered()
+            {
+                var exceptionService = new ExceptionService();
+
+                exceptionService.Register<Exception>(exception => { });
+
+                exceptionService.Register<ArgumentNullException>(exception => { });
+
+                var handler = exceptionService.GetHandler(typeof (ArgumentNullException));
+
+                Assert.IsNotNull(handler);
+                Assert.AreEqual(typeof (ArgumentNullException), handler.ExceptionType);
+            }
+
+            [TestMethod]
+            public void ReturnsHandlerWhenRegisteredUsingGeneric()
+            {
+                var exceptionService = new ExceptionService();
+
+                exceptionService.Register<Exception>(exception => { });
+
+                exceptionService.Register<ArgumentNullException>(exception => { });
+
+                var handler = exceptionService.GetHandler<Exception>();
+
+                Assert.IsNotNull(handler);
+                Assert.AreEqual(typeof (Exception), handler.ExceptionType);
+            }
+            #endregion
+        }
+        #endregion
+
         #region Nested type: TheHandleExceptionMethod
         [TestClass]
         public class TheHandleExceptionMethod
@@ -206,31 +272,27 @@ namespace Catel.Test.ExceptionHandling
         }
         #endregion
 
-        //#region Nested type: TheOnErrorRetryImmediatelyMethod
-        //[TestClass]
-        //public class TheOnErrorRetryImmediatelyMethod
-        //{
-        //    #region Methods
-        //    [TestMethod]
-        //    public void ShouldCallBackOnRetrying()
-        //    {
-        //        var exceptionService = new ExceptionService();
+        #region Nested type: TheOnErrorRetryImmediatelyMethod
+        [TestClass]
+        public class TheOnErrorRetryImmediatelyMethod
+        {
+            #region Methods
+            [TestMethod]
+            public void ShouldRetryOnce()
+            {
+                var exceptionService = new ExceptionService();
 
-        //        var index = 0;
+                exceptionService.RetryingAction += (sender, args) => Assert.AreEqual(1, args.CurrentRetryCount);
 
-        //        exceptionService.RetryingAction += (sender, args) => index++;
+                exceptionService
+                    .Register<DivideByZeroException>(exception => { })
+                    .OnErrorRetryImmediately(1);
 
-        //        exceptionService
-        //            .Register<DivideByZeroException>(exception => { })
-        //            .OnErrorRetryImmediately(2);
-
-        //        exceptionService.ProcessWithRetry(() => { throw new DivideByZeroException(); });
-
-        //        Assert.AreEqual(2, index);
-        //    }
-        //    #endregion
-        //}
-        //#endregion
+                exceptionService.ProcessWithRetry(() => { throw new DivideByZeroException(); });
+            }
+            #endregion
+        }
+        #endregion
 
         #region Nested type: TheOnErrorRetryMethod
         [TestClass]
