@@ -172,7 +172,7 @@ namespace Catel.IoC
         /// <summary>
         /// The synchronization object.
         /// </summary>
-        private readonly object _syncObject = new object();
+        private readonly object _lockObject = new object();
 
         /// <summary>
         /// The current type request path.
@@ -312,7 +312,7 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("serviceType", serviceType);
 
-            lock (_syncObject)
+            lock (_lockObject)
             {
                 // Always check via IsTypeRegistered, allow late-time registration
                 if (!IsTypeRegistered(serviceType, tag))
@@ -342,7 +342,7 @@ namespace Catel.IoC
 
             var serviceInfo = new ServiceInfo(serviceType, tag);
 
-            lock (_syncObject)
+            lock (_lockObject)
             {
                 if (_registeredInstances.ContainsKey(serviceInfo))
                 {
@@ -430,7 +430,7 @@ namespace Catel.IoC
 
             var serviceInfo = new ServiceInfo(serviceType, tag);
 
-            lock (_syncObject)
+            lock (_lockObject)
             {
                 if (_registeredInstances.ContainsKey(serviceInfo))
                 {
@@ -497,7 +497,7 @@ namespace Catel.IoC
 
             bool isTypeRegistered = false;
 
-            lock (_syncObject)
+            lock (_lockObject)
             {
                 isTypeRegistered = IsTypeRegistered(serviceType, tag);
             }
@@ -514,7 +514,7 @@ namespace Catel.IoC
                 throw new NotSupportedException(error);
             }
 
-            lock (_syncObject)
+            lock (_lockObject)
             {
                 var serviceInfo = new ServiceInfo(serviceType, tag);
                 if (_registeredInstances.ContainsKey(serviceInfo))
@@ -538,7 +538,7 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("serviceType", serviceType);
 
-            lock (_syncObject)
+            lock (_lockObject)
             {
                 for (int i = 0; i < _registeredTypes.Keys.Count; i++)
                 {
@@ -568,7 +568,7 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("types", types);
 
-            lock (_syncObject)
+            lock (_lockObject)
             {
                 // Note: do NOT rewrite as linq because that is much slower
                 // ReSharper disable LoopCanBeConvertedToQuery
@@ -602,7 +602,7 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("types", types);
 
-            lock (_syncObject)
+            lock (_lockObject)
             {
                 // Note: do NOT rewrite as linq because that is much slower
                 var values = new List<object>();
@@ -628,7 +628,7 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("serviceType", serviceType);
 
-            lock (_syncObject)
+            lock (_lockObject)
             {
                 var serviceInfo = new ServiceInfo(serviceType, tag);
                 if (_registeredInstances.ContainsKey(serviceInfo))
@@ -647,7 +647,7 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("serviceType", serviceType);
 
-            lock (_syncObject)
+            lock (_lockObject)
             {
                 for (int i = _registeredInstances.Count - 1; i >= 0; i--)
                 {
@@ -666,7 +666,7 @@ namespace Catel.IoC
         /// <param name="tag">The tag of the registered the service. The default value is <c>null</c>.</param>
         public void RemoveAllInstances(object tag = null)
         {
-            lock (_syncObject)
+            lock (_lockObject)
             {
                 if (tag == null)
                 {
@@ -723,7 +723,7 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("externalContainer", externalContainer);
 
-            lock (_syncObject)
+            lock (_lockObject)
             {
                 var externalContainerHelper = GetContainerHelperForContainer(externalContainer);
                 if (externalContainerHelper == null)
@@ -761,7 +761,7 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("externalContainerHelper", externalContainerHelper);
 
-            lock (_syncObject)
+            lock (_lockObject)
             {
                 if (!_supportedExternalContainers.Contains(externalContainerHelper))
                 {
@@ -782,7 +782,7 @@ namespace Catel.IoC
         /// </summary>
         public void ExportInstancesToExternalContainers()
         {
-            lock (_syncObject)
+            lock (_lockObject)
             {
                 if (_externalContainers.Count == 0)
                 {
@@ -823,7 +823,7 @@ namespace Catel.IoC
         /// </summary>
         public void ExportToExternalContainers()
         {
-            lock (_syncObject)
+            lock (_lockObject)
             {
                 if (_externalContainers.Count == 0)
                 {
@@ -897,7 +897,7 @@ namespace Catel.IoC
 
             var registeredTypeInfo = new RegisteredTypeInfo(serviceType, instance.GetType(), tag, RegistrationType.Singleton, originalContainer);
 
-            lock (_syncObject)
+            lock (_lockObject)
             {
                 var serviceInfo = new ServiceInfo(serviceType, tag);
                 _registeredInstances[serviceInfo] = new RegisteredInstanceInfo(serviceType, instance, RegistrationType.Singleton, tag, originalContainer);
@@ -950,7 +950,7 @@ namespace Catel.IoC
             // Outside lock scope for event
             RegisteredTypeInfo registeredTypeInfo = null;
 
-            lock (_syncObject)
+            lock (_lockObject)
             {
                 if (!registerIfAlreadyRegistered && IsTypeRegistered(serviceType, tag))
                 {
@@ -992,7 +992,7 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("serviceType", serviceType);
 
-            lock (_syncObject)
+            lock (_lockObject)
             {
                 var typeRequestInfo = new TypeRequestInfo(serviceType);
                 if (_currentTypeRequestPath == null)
@@ -1076,7 +1076,7 @@ namespace Catel.IoC
             // Store in varaible because ResolveTypeFromKnownContainer might change the collection
             var keyValuePairs = _registeredTypes.ToList();
 
-            lock (_syncObject)
+            lock (_lockObject)
             {
                 foreach (var keyValuePair in keyValuePairs)
                 {
@@ -1114,7 +1114,7 @@ namespace Catel.IoC
                 return null;
             }
 
-            lock (_syncObject)
+            lock (_lockObject)
             {
                 foreach (var supportedExternalContainer in _supportedExternalContainers)
                 {
@@ -1150,7 +1150,7 @@ namespace Catel.IoC
         /// <param name="typeRequestInfoForTypeJustConstructed">The type request info.</param>
         private void CompleteTypeRequestPathIfRequired(TypeRequestInfo typeRequestInfoForTypeJustConstructed)
         {
-            lock (_syncObject)
+            lock (_lockObject)
             {
                 if (_currentTypeRequestPath != null)
                 {
