@@ -141,49 +141,6 @@ namespace Catel.Test.Data
             Assert.AreEqual(originalObject, clonedObject);
         }
 
-        [TestMethod]
-        public void XmlSerialization_FixedCheck()
-        {
-            const string ExpectedXmlContent = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
-                                              @"
-<IniFile graphid=" + "\"1\" xmlns:ctl=" + "\"http://catel.codeplex.com\">" + @"
-  <FileName>MyIniFile</FileName>
-  <IniEntryCollection xmlns:d1p1=" + "\"http://schemas.datacontract.org/2004/07/Catel.Test.Data\" graphid=\"2\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"" + @">
-    <d1p1:IniEntry>
-      <Group>Group 0</Group>
-      <Key>Key 0</Key>
-      <Value>Value 0</Value>
-      <IniEntryType>Public</IniEntryType>
-    </d1p1:IniEntry>
-    <d1p1:IniEntry>
-      <Group>Group 1</Group>
-      <Key>Key 1</Key>
-      <Value>Value 1</Value>
-      <IniEntryType>Private</IniEntryType>
-    </d1p1:IniEntry>
-    <d1p1:IniEntry>
-      <Group>Group 2</Group>
-      <Key>Key 2</Key>
-      <Value>Value 2</Value>
-      <IniEntryType>Public</IniEntryType>
-    </d1p1:IniEntry>
-  </IniEntryCollection>
-</IniFile>";
-
-            IniFile iniFile = ModelBaseTestHelper.CreateIniFileObject();
-            using (var memoryStream = new MemoryStream())
-            {
-                iniFile.Save(memoryStream, SerializationMode.Xml);
-
-                memoryStream.Position = 0L;
-
-                TextReader reader = new StreamReader(memoryStream);
-                string xmlContent = reader.ReadToEnd();
-
-                Assert.AreEqual(ExpectedXmlContent, xmlContent);
-            }
-        }
-
 #if NET
         [TestMethod]
         public void XmlSerializationWithPrivateMembers()
