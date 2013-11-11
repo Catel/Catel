@@ -7,8 +7,10 @@
 namespace Catel.Runtime.Serialization
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Text;
     using System.Xml;
     using System.Xml.Linq;
@@ -36,6 +38,9 @@ namespace Catel.Runtime.Serialization
         private const string GraphId = "graphid";
         private const string GraphRefId = "graphrefid";
 
+        private const string ArraySchemaUrl = "http://schemas.microsoft.com/2003/10/Serialization/Arrays";
+        private const string ArraySchemaName = "arr";
+
         /// <summary>
         /// The log.
         /// </summary>
@@ -62,7 +67,19 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull(() => dataContractSerializerFactory);
 
             _dataContractSerializerFactory = dataContractSerializerFactory;
+
+            OptimalizationMode = XmlSerializerOptimalizationMode.Performance;
         }
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets or sets the optimalization mode.
+        /// <para />
+        /// The default value is <see cref="XmlSerializerOptimalizationMode.Performance"/>.
+        /// </summary>
+        /// <value>The optimalization mode.</value>
+        public XmlSerializerOptimalizationMode OptimalizationMode { get; set; }
         #endregion
 
         #region Methods
@@ -314,7 +331,36 @@ namespace Catel.Runtime.Serialization
         protected override void AppendContextToStream(ISerializationContext<XElement> context, Stream stream)
         {
             var document = new XDocument(context.Context);
+
+            OptimizeXDocument(document);
+
             document.Save(stream);
+        }
+
+        /// <summary>
+        /// Optimizes the xml document.
+        /// </summary>
+        /// <param name="document">The document.</param>
+        protected virtual void OptimizeXDocument(XDocument document)
+        {
+            if (OptimalizationMode == XmlSerializerOptimalizationMode.Performance)
+            {
+                return;
+            }
+
+            var rootNamespaces = (from attribute in document.Root.Attributes()
+                                  where attribute.IsNamespaceDeclaration
+                                  select attribute.Value).ToList();
+
+            var obsoleteNamespaceMarkers = (from descendant in document.Root.Descendants()
+                                            from attribute in descendant.Attributes()
+                                            where attribute.IsNamespaceDeclaration && rootNamespaces.Contains(attribute.Value)
+                                            select attribute).ToList();
+
+            foreach (var obsoleteNamespaceMarker in obsoleteNamespaceMarkers)
+            {
+                obsoleteNamespaceMarker.Remove();
+            }
         }
 
         /// <summary>
@@ -476,7 +522,7 @@ namespace Catel.Runtime.Serialization
             using (var xmlWriter = XmlWriter.Create(stringBuilder, xmlWriterSettings))
             {
                 var memberTypeToSerialize = memberValue.Value != null ? memberValue.Value.GetType() : typeof(object);
-                var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, memberTypeToSerialize, elementName, memberValue.Value);
+                var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, memberTypeToSerialize, elementName, null, memberValue.Value);
 
                 if (memberValue.Value == null)
                 {
@@ -515,6 +561,11 @@ namespace Catel.Runtime.Serialization
                         if (referenceInfo != null)
                         {
                             xmlWriter.WriteAttributeString(namespacePrefix, GraphId, null, referenceInfo.Id.ToString());
+                        }
+
+                        if (memberValue.Value is IEnumerable)
+                        {
+                            xmlWriter.WriteAttributeString("xmlns", ArraySchemaName, null, ArraySchemaUrl);
                         }
 
                         if (memberTypeToSerialize != memberValue.Type)
@@ -571,6 +622,11 @@ namespace Catel.Runtime.Serialization
                         var catelNamespace = new XAttribute(catelNamespaceName, catelNamespaceUrl);
 
                         documentRoot.Add(catelNamespace);
+
+                        var arrayNamespaceName = XNamespace.Xmlns + ArraySchemaName;
+                        var arrayNamespace = new XAttribute(arrayNamespaceName, ArraySchemaUrl);
+
+                        documentRoot.Add(arrayNamespace);
                     }
                 }
             }

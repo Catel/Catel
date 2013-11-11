@@ -40,6 +40,7 @@ Added/fixed:
 (+) CTL-219 Implemented BackEntry methods for Windows Phone 8 on the NavigationService
 (+) CTL-221 Support property dependency injection
 (+) CTL-227 Added the GetHandler method on IExceptionService to allows handlers retrieving more easilly.
+(+) CTL-229 Add XmlSerializerOptimalizationMode to allow pretty xml or performance
 (*) CTL-125 TypeFactory selects wrong constructor when there is more than 1 option. It now tries parameters which 
     accept Object or DynamicObject the latest. Also introduced the InjectionConstructorAttribute so the right constructor
     can be decorated so it is always selected first by Catel
@@ -59,6 +60,7 @@ Added/fixed:
 (x) CTL-133 Start and Update the PleasewaitWindow in an Workerthread throws exception
 (x) CTL-203 The Load Method of Catel.Data.ModelBase will call the constructor of the deserialized class two times
 (x) CTL-212 PropertyDataManager throws first chance exceptions for generic types
+(x) CTL-226 Nested ICollection<IInterfce> XML serialization problem
 (x) CTL-228 Fixed possible deadlock in CatelDependencyResolver
 
 Roadmap:
