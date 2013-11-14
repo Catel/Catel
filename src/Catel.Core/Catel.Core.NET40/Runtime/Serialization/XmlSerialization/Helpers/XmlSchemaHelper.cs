@@ -134,6 +134,8 @@ namespace Catel.Runtime.Serialization
 
             if (typeof(ModelBase).IsAssignableFromEx(type))
             {
+                // TODO: Update to latest serialization engine
+
                 var typeNs = GetTypeNamespaceForSchema(type);
 
                 var propertyDataManager = new PropertyDataManager();

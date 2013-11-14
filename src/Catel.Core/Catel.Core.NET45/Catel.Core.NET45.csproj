@@ -838,6 +838,9 @@
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\XmlSchemaManager.cs">
       <Link>Runtime\Serialization\XmlSerialization\XmlSchemaManager.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\XmlSerializationContextInfo.cs">
+      <Link>Runtime\Serialization\XmlSerialization\XmlSerializationContextInfo.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\XmlSerializer.cs">
       <Link>Runtime\Serialization\XmlSerialization\XmlSerializer.cs</Link>
     </Compile>

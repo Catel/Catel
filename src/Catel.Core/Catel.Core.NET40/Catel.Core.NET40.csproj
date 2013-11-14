@@ -353,6 +353,7 @@
     <Compile Include="Runtime\Serialization\XmlSerialization\Helpers\XmlSchemaHelper.cs" />
     <Compile Include="Runtime\ReferenceEqualityComparer.cs" />
     <Compile Include="Runtime\Serialization\XmlSerialization\XmlSchemaManager.cs" />
+    <Compile Include="Runtime\Serialization\XmlSerialization\XmlSerializationContextInfo.cs" />
     <Compile Include="Runtime\Serialization\XmlSerialization\XmlSerializer.cs" />
     <Compile Include="Scoping\ScopeManager.cs" />
     <Compile Include="Services\Interfaces\IService.cs" />

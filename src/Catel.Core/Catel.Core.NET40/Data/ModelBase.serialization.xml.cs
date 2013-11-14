@@ -65,7 +65,7 @@ namespace Catel.Data
             }
 
             var serializer = SerializationFactory.GetXmlSerializer();
-            serializer.Deserialize(this, document);
+            serializer.Deserialize(this, new XmlSerializationContextInfo(document, this));
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace Catel.Data
 
             var element = new XElement(type.Name);
             var serializer = SerializationFactory.GetXmlSerializer();
-            serializer.Serialize(this, element);
+            serializer.Serialize(this, new XmlSerializationContextInfo(element, this));
 
             // The serializer gives us the full element, but we only need the actual content. According to
             // http://stackoverflow.com/questions/3793/best-way-to-get-innerxml-of-an-xelement, this method is the fastest:
