@@ -12,121 +12,136 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
     using System.IO;
     using System.Runtime.Serialization;
     using Catel.Data;
-    using Catel.Runtime.Serialization;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     public interface IParams
     {
+
     }
 
     // Setting the known types on a base class (not interface) solves the issue
     // but is not feasible as the possible derived classes are implemented by
     // plugins which are not known in advance. Is there a way to do this dynamically,
     // by making a request to the plugin manager?
-    //[KnownType(typeof(ParamsPluginA))]
-    //[KnownType(typeof(ParamsPluginB))]
     [KnownType("KnownTypes")]
     public class ParamsBase : SavableModelBase<ParamsBase>, IParams
     {
         // This method returns the array of known types.
-
-        #region Methods
-        private static Type[] KnownTypes()
+        static Type[] KnownTypes()
         {
-            return new Type[] {typeof (ParamsPluginA), typeof (ParamsPluginB)};
+            return new Type[] { typeof(PluginA.Params), typeof(PluginB.Params) };
         }
-        #endregion
     }
 
-    public class ParamsPluginA : ParamsBase
+    namespace PluginA
     {
-        #region Property: SettingA
-
-        #region Constants
-        public static readonly PropertyData SettingAProperty =
-            RegisterProperty("SettingA", typeof (String));
-        #endregion
-
-        #region Properties
-        public String SettingA
+        public class Params : ParamsBase
         {
-            get { return GetValue<String>(SettingAProperty); }
-            set { SetValue(SettingAProperty, value); }
-        }
-        #endregion
+            #region Property: SettingA
+            public String SettingA
+            {
+                get { return GetValue<String>(SettingAProperty); }
+                set { SetValue(SettingAProperty, value); }
+            }
 
-        #endregion
+            public static readonly PropertyData SettingAProperty =
+                RegisterProperty("SettingA", typeof(String));
+            #endregion
+        }
     }
 
-    public class ParamsPluginB : ParamsBase
+    namespace PluginB
     {
-        #region Property: SettingB
-
-        #region Constants
-        public static readonly PropertyData SettingBProperty =
-            RegisterProperty("SettingB", typeof (String));
-        #endregion
-
-        #region Properties
-        public String SettingB
+        public class Params : ParamsBase
         {
-            get { return GetValue<String>(SettingBProperty); }
-            set { SetValue(SettingBProperty, value); }
-        }
-        #endregion
+            #region Property: SettingB
+            public String SettingB
+            {
+                get { return GetValue<String>(SettingBProperty); }
+                set { SetValue(SettingBProperty, value); }
+            }
 
-        #endregion
+            public static readonly PropertyData SettingBProperty =
+                RegisterProperty("SettingB", typeof(String));
+            #endregion
+        }
     }
 
-    public class Container : SavableModelBase<Container>
+    public class ContainerInterfaces : SavableModelBase<ContainerInterfaces>
     {
         #region Property: Parameters
-
-        #region Constants
-        public static readonly PropertyData ParametersProperty =
-            RegisterProperty("Parameters", typeof (ObservableCollection<IParams>),
-                new ObservableCollection<IParams>());
-        #endregion
-
-        #region Properties
         public ObservableCollection<IParams> Parameters
         {
             get { return GetValue<ObservableCollection<IParams>>(ParametersProperty); }
             set { SetValue(ParametersProperty, value); }
         }
-        #endregion
 
+        public static readonly PropertyData ParametersProperty =
+            RegisterProperty("Parameters", typeof(ObservableCollection<IParams>),
+            new ObservableCollection<IParams>());
+        #endregion
+    }
+
+    public class ContainerAbstractClasses : SavableModelBase<ContainerAbstractClasses>
+    {
+        #region Property: Parameters
+        public ObservableCollection<ParamsBase> Parameters
+        {
+            get { return GetValue<ObservableCollection<ParamsBase>>(ParametersProperty); }
+            set { SetValue(ParametersProperty, value); }
+        }
+
+        public static readonly PropertyData ParametersProperty =
+            RegisterProperty("Parameters", typeof(ObservableCollection<ParamsBase>),
+            new ObservableCollection<ParamsBase>());
         #endregion
     }
 
     [TestClass]
     public class Serialization
     {
-        #region Methods
         [TestMethod]
-        public void Save()
+        public void EnumerableOfInterfacesViaKnownTypes_SameNameDifferentNamespaces_SaveLoadRoundTrip()
         {
-            var c = new Container();
+            var c = new ContainerInterfaces();
 
-            var pA = new ParamsPluginA();
+            var pA = new PluginA.Params();
             pA.SettingA = "TestA";
             c.Parameters.Add(pA);
 
-            var pB = new ParamsPluginB();
+            var pB = new PluginB.Params();
             pB.SettingB = "TestB";
             c.Parameters.Add(pB);
 
             using (var memoryStream = new MemoryStream())
             {
                 c.Save(memoryStream, SerializationMode.Xml);
-
                 memoryStream.Position = 0L;
-
-                var c2 = Container.Load(memoryStream, SerializationMode.Xml);
-
-                Assert.AreEqual(c, c2);   
+                var c2 = ContainerInterfaces.Load(memoryStream, SerializationMode.Xml);
+                Assert.AreEqual(c, c2);
             }
         }
-        #endregion
+
+        [TestMethod]
+        public void EnumerableOfAbstractClassesViaKnownTypes_SameNameDifferentNamespaces_SaveLoadRoundTrip()
+        {
+            var c = new ContainerAbstractClasses();
+
+            var pA = new PluginA.Params();
+            pA.SettingA = "TestA";
+            c.Parameters.Add(pA);
+
+            var pB = new PluginB.Params();
+            pB.SettingB = "TestB";
+            c.Parameters.Add(pB);
+
+            using (var memoryStream = new MemoryStream())
+            {
+                c.Save(memoryStream, SerializationMode.Xml);
+                memoryStream.Position = 0L;
+                var c2 = ContainerAbstractClasses.Load(memoryStream, SerializationMode.Xml);
+                Assert.AreEqual(c, c2);
+            }
+        }
     }
 }
