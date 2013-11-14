@@ -330,7 +330,8 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="System.NotImplementedException"></exception>
         protected override void AppendContextToStream(ISerializationContext<XmlSerializationContextInfo> context, Stream stream)
         {
-            var document = new XDocument(context.Context);
+            var element = context.Context.Element;
+            var document = new XDocument(element);
 
             OptimizeXDocument(document);
 
