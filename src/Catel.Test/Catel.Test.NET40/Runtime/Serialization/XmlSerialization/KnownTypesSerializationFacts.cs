@@ -29,7 +29,7 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
         // This method returns the array of known types.
         static Type[] KnownTypes()
         {
-            return new Type[] { typeof(PluginA.Params), typeof(PluginB.Params) };
+            return new [] { typeof(PluginA.Params), typeof(PluginB.Params) };
         }
     }
 
@@ -44,8 +44,7 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
                 set { SetValue(SettingAProperty, value); }
             }
 
-            public static readonly PropertyData SettingAProperty =
-                RegisterProperty("SettingA", typeof(String));
+            public static readonly PropertyData SettingAProperty = RegisterProperty("SettingA", typeof(String));
             #endregion
         }
     }
@@ -61,8 +60,7 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
                 set { SetValue(SettingBProperty, value); }
             }
 
-            public static readonly PropertyData SettingBProperty =
-                RegisterProperty("SettingB", typeof(String));
+            public static readonly PropertyData SettingBProperty = RegisterProperty("SettingB", typeof(String));
             #endregion
         }
     }
@@ -76,9 +74,7 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
             set { SetValue(ParametersProperty, value); }
         }
 
-        public static readonly PropertyData ParametersProperty =
-            RegisterProperty("Parameters", typeof(ObservableCollection<IParams>),
-            new ObservableCollection<IParams>());
+        public static readonly PropertyData ParametersProperty = RegisterProperty("Parameters", typeof(ObservableCollection<IParams>), new ObservableCollection<IParams>());
         #endregion
     }
 
@@ -91,9 +87,7 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
             set { SetValue(ParametersProperty, value); }
         }
 
-        public static readonly PropertyData ParametersProperty =
-            RegisterProperty("Parameters", typeof(ObservableCollection<ParamsBase>),
-            new ObservableCollection<ParamsBase>());
+        public static readonly PropertyData ParametersProperty = RegisterProperty("Parameters", typeof(ObservableCollection<ParamsBase>), new ObservableCollection<ParamsBase>());
         #endregion
     }
 
@@ -139,6 +133,7 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
             {
                 c.Save(memoryStream, SerializationMode.Xml);
                 memoryStream.Position = 0L;
+
                 var c2 = ContainerAbstractClasses.Load(memoryStream, SerializationMode.Xml);
                 Assert.AreEqual(c, c2);
             }

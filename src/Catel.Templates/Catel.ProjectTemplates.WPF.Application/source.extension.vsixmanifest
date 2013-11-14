@@ -6,8 +6,8 @@
     <Description xml:space="preserve">Project template to create an MVVM-based application for WPF using Catel.</Description>
     <MoreInfo>http://www.catelproject.com</MoreInfo>
     <GettingStartedGuide>http://www.catelproject.com</GettingStartedGuide>
-    <Icon>Catel logo.png</Icon>
-    <PreviewImage>Catel logo.png</PreviewImage>
+    <Icon>__TemplateIcon.ico</Icon>
+    <PreviewImage>__Catel_logo_large.png</PreviewImage>
     <Tags>catel;mvvm;application;wpf</Tags>
   </Metadata>
   <Installation>
