@@ -239,6 +239,64 @@ namespace Catel.IoC
         }
 
         /// <summary>
+        /// Registers the types using the naming convention.
+        /// </summary>
+        /// <param name="serviceLocator">The service locator.</param>
+        /// <param name="registrationType">Type of the registration.</param>
+        /// <returns></returns>
+        public static IRegistrationConventionHandler RegisterTypesUsingNamingConvention(this IServiceLocator serviceLocator, RegistrationType registrationType = RegistrationType.Singleton)
+        {
+            Argument.IsNotNull("serviceLocator", serviceLocator);
+
+            var registrationConventionHandler = TypeFactory.Default.CreateInstance<RegistrationConventionHandler>();
+
+            registrationConventionHandler.RegisterConvention<NamingRegistrationConvention>(registrationType);
+
+            registrationConventionHandler.ApplyConventions();
+
+            return registrationConventionHandler;
+        }
+
+        /// <summary>
+        /// Registers the types using the first interface convention.
+        /// </summary>
+        /// <param name="serviceLocator">The service locator.</param>
+        /// <param name="registrationType">Type of the registration.</param>
+        /// <returns></returns>
+        public static IRegistrationConventionHandler RegisterTypesUsingFirstInterfaceConvention(this IServiceLocator serviceLocator, RegistrationType registrationType = RegistrationType.Singleton)
+        {
+            Argument.IsNotNull("serviceLocator", serviceLocator);
+
+            var registrationConventionHandler = TypeFactory.Default.CreateInstance<RegistrationConventionHandler>();
+
+            registrationConventionHandler.RegisterConvention<FirstInterfaceRegistrationConvention>(registrationType);
+
+            registrationConventionHandler.ApplyConventions();
+
+            return registrationConventionHandler;
+        }
+
+        /// <summary>
+        /// Registers the types using the specified convention.
+        /// </summary>
+        /// <typeparam name="TRegistrationConvention">The type of the registration convention.</typeparam>
+        /// <param name="serviceLocator">The service locator.</param>
+        /// <param name="registrationType">Type of the registration.</param>
+        /// <returns></returns>
+        public static IRegistrationConventionHandler RegisterTypesUsingConvention<TRegistrationConvention>(this IServiceLocator serviceLocator, RegistrationType registrationType = RegistrationType.Singleton) where TRegistrationConvention : IRegistrationConvention
+        {
+            Argument.IsNotNull("serviceLocator", serviceLocator);
+
+            var registrationConventionHandler = TypeFactory.Default.CreateInstance<RegistrationConventionHandler>();
+
+            registrationConventionHandler.RegisterConvention<TRegistrationConvention>(registrationType);
+
+            registrationConventionHandler.ApplyConventions();
+
+            return registrationConventionHandler;
+        }
+
+        /// <summary>
         /// Resolves an instance of the type registered on the service.
         /// </summary>
         /// <typeparam name="TService">The type of the service.</typeparam>

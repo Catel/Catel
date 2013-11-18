@@ -187,6 +187,11 @@
     <Compile Include="IoC\Configuration\ServiceLocatorConfiguration.cs" />
     <Compile Include="IoC\Configuration\ServiceLocatorConfigurationCollection.cs" />
     <Compile Include="IoC\CatelDependencyResolver.cs" />
+    <Compile Include="IoC\Extensions\RegistrationConventionHandlerExtensions.cs" />
+    <Compile Include="IoC\Filtering\CompositeFilter.cs" />
+    <Compile Include="IoC\Filtering\CompositePredicate.cs" />
+    <Compile Include="IoC\Interfaces\IRegistrationConventionHandler.cs" />
+    <Compile Include="IoC\RegistrationConventionHandler.cs" />
     <Compile Include="IoC\DependencyResolverManager.cs" />
     <Compile Include="IoC\EventArgs\MissingTypeEventArgs.cs" />
     <Compile Include="IoC\EventArgs\TypeRegisteredEventArgs.cs" />
@@ -206,10 +211,14 @@
     <Compile Include="IoC\Interfaces\IDependencyResolver.cs" />
     <Compile Include="IoC\Interfaces\IExternalContainerHelper.cs" />
     <Compile Include="IoC\Interfaces\INeedCustomInitialization.cs" />
+    <Compile Include="IoC\Interfaces\IRegistrationConvention.cs" />
     <Compile Include="IoC\Interfaces\IServiceLocator.cs" />
     <Compile Include="IoC\Interfaces\ITypeFactory.cs" />
     <Compile Include="IoC\Interfaces\ITypeRequestPath.cs" />
     <Compile Include="IoC\IoCConfiguration.cs" />
+    <Compile Include="IoC\RegistrationConventions\FirstInterfaceRegistrationConvention.cs" />
+    <Compile Include="IoC\RegistrationConventions\NamingRegistrationConvention.cs" />
+    <Compile Include="IoC\RegistrationConventions\RegistrationConventionBase.cs" />
     <Compile Include="IoC\RegistrationInfo.cs" />
     <Compile Include="IoC\ServiceLocator.cs" />
     <Compile Include="IoC\ServiceLocatorAutoRegistrationManager.cs" />

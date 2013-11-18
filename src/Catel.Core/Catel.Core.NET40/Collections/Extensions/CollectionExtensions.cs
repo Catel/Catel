@@ -272,6 +272,25 @@ namespace Catel.Collections
             list.RemoveAt(list.Count - 1);
         }
 
+        /// <summary>
+        /// the for each extension on <see cref="IEnumerable{TItem}"/>.
+        /// </summary>
+        /// <typeparam name="TItem">The type of the item.</typeparam>
+        /// <param name="collection">The collection.</param>
+        /// <param name="action">The action.</param>
+        public static void ForEach<TItem>(this IEnumerable<TItem> collection, Action<TItem> action)
+        {
+            if (collection == null)
+            {
+                return;
+            }
+
+            foreach (var item in collection)
+            {
+                action(item);
+            }
+        }
+
 #if NETFX_CORE
         /// <summary>
         /// Converts the dictionary to a readonly collection.
