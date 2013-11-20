@@ -344,6 +344,13 @@ namespace Catel
                     return;
                 }
 
+                // Prevent some endless while loops
+                if (runtimeBaseType == typeof (Object))
+                {
+                    // Break, no return because this should cause an exception
+                    break;
+                }
+
                 runtimeBaseType = type.GetBaseTypeEx();
             } while (runtimeBaseType != null);
 
