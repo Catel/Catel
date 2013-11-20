@@ -35,19 +35,28 @@ namespace Catel.Data
         /// </summary>
         public ModelEqualityComparer()
         {
-            CompareValues = true;
+            CompareProperties = false;
+            CompareValues = false;
             CompareCollections = false;
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether properties should be compared.
+        /// <para />
+        /// The default value is <c>false</c>.
+        /// </summary>
+        /// <value><c>true</c> if properties should be compared; otherwise, <c>false</c>.</value>
+        public bool CompareProperties { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether values should be compared as well.
         /// <para />
         /// Note that this might degrade performance on properties with large collections.
         /// <para />
-        /// The default value is <c>true</c>.
+        /// The default value is <c>false</c>.
         /// </summary>
         /// <value><c>true</c> if values should be compared; otherwise, <c>false</c>.</value>
-        protected bool CompareValues { get; set; }
+        public bool CompareValues { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether collections should be compared as well.
@@ -57,7 +66,7 @@ namespace Catel.Data
         /// The default value is <c>false</c>.
         /// </summary>
         /// <value><c>true</c> if collections should be compared; otherwise, <c>false</c>.</value>
-        protected bool CompareCollections { get; set; }
+        public bool CompareCollections { get; set; }
 
         /// <summary>
         /// When overridden in a derived class, determines whether two objects of type <see cref="ModelBase" /> are equal.
@@ -83,6 +92,11 @@ namespace Catel.Data
             var xType = x.GetType();
             var yType = y.GetType();
             if (xType != yType)
+            {
+                return false;
+            }
+
+            if (!CompareProperties)
             {
                 return false;
             }
