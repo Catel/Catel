@@ -107,6 +107,7 @@
     <Compile Include="Data\Exceptions\PropertyAlreadyRegisteredException.cs" />
     <Compile Include="Data\Exceptions\PropertyNotNullableException.cs" />
     <Compile Include="Data\Exceptions\PropertyNotRegisteredException.cs" />
+    <Compile Include="Data\Extensions\IParentExtensions.cs" />
     <Compile Include="Data\Extensions\ModelBaseExtensions.cs" />
     <Compile Include="Data\Extensions\ObservableObjectExtensions.cs" />
     <Compile Include="Data\Extensions\ValidationExtensions.cs" />

@@ -181,6 +181,9 @@
     <Compile Include="..\Catel.Core.NET40\Data\Exceptions\PropertyNotRegisteredException.cs">
       <Link>Data\Exceptions\PropertyNotRegisteredException.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Data\Extensions\IParentExtensions.cs">
+      <Link>Data\Extensions\IParentExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\Extensions\ModelBaseExtensions.cs">
       <Link>Data\Extensions\ModelBaseExtensions.cs</Link>
     </Compile>
