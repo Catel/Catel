@@ -24,6 +24,12 @@ namespace Catel.Data
     using Logging;
     using Runtime.Serialization;
 
+#if NET
+    using Runtime.Serialization.Binary;
+#endif
+
+    using Runtime.Serialization.Xml;
+
     #region Enums
     /// <summary>
     /// Enumeration containing all the available serialization modes for the <see cref="ModelBase{TModel}"/> class.

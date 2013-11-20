@@ -61,6 +61,11 @@ namespace Catel.Scoping
 
         #region Properties
         /// <summary>
+        /// Occurs when the scope reference count reaches zero.
+        /// </summary>
+        public event EventHandler<ScopeClosedEventArgs> ScopeClosed;
+
+        /// <summary>
         /// Gets the scope object.
         /// </summary>
         public T ScopeObject
@@ -132,6 +137,12 @@ namespace Catel.Scoping
                     _scopeObject = null;
 
                     _instances.Remove(_scopeName);
+
+                    var scopeClosed = ScopeClosed;
+                    if (scopeClosed != null)
+                    {
+                        scopeClosed.Invoke(this, new ScopeClosedEventArgs(ScopeObject, _scopeName));
+                    }
                 }
             }
         }

@@ -6,10 +6,8 @@
 
 namespace Catel.Test.Runtime.Serialization
 {
-    using System;
-    using System.Diagnostics;
     using Catel.Reflection;
-    using Catel.Runtime.Serialization;
+    using Catel.Runtime.Serialization.Binary;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     public class RedirectDeserializationBinderFacts

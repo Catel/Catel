@@ -8,8 +8,8 @@ namespace Catel.Test.Reflection
 {
     using System;
     using System.Reflection;
-    using Catel.Runtime.Serialization;
     using Catel.Reflection;
+    using Catel.Runtime.Serialization.Binary;
 
 #if NETFX_CORE
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;

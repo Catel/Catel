@@ -10,6 +10,7 @@ namespace Catel.Data
     using System.Xml.Linq;
     using System.Xml.Schema;
     using System.Xml.Serialization;
+    using Catel.Runtime.Serialization.Xml;
     using Logging;
     using Runtime.Serialization;
 

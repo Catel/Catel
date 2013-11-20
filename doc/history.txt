@@ -24,6 +24,8 @@ Release date:
 
 Added/fixed (BREAKING CHANGES):
 ===============================
+(*) Moved serialization for Xml and Binary to namespaces. This should only cause breaking changes if one of the
+    actual core serialization parts are modified
 (-) CTL-199 Removed support for Windows Phone 7.x
 (-) CTL-200 Removed support for Silverlight 4
 

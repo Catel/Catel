@@ -340,9 +340,8 @@
     <Compile Include="Runtime\ReferenceManager.cs" />
     <Compile Include="Runtime\Serialization\SerializerModifierBase.cs" />
     <Compile Include="Runtime\Serialization\XmlSerialization\DataContractSerializerFactory.cs" />
-    <Compile Include="Runtime\Serialization\XmlSerialization\DataContractNameResolver.cs" />
     <Compile Include="Runtime\Serialization\XmlSerialization\Interfaces\IDataContractSerializerFactory.cs" />
-    <Compile Include="Runtime\Serialization\XmlSerialization\Interfaces\IDataContractNameResolver.cs" />
+    <Compile Include="Runtime\Serialization\XmlSerialization\Interfaces\IXmlNamespaceManager.cs" />
     <Compile Include="Runtime\Serialization\XmlSerialization\Interfaces\IXmlSerializer.cs" />
     <Compile Include="Runtime\Serialization\SerializationContext.cs" />
     <Compile Include="Runtime\Serialization\SerializationFactory.cs" />
@@ -352,9 +351,12 @@
     <Compile Include="Runtime\Serialization\XmlSerialization\Helpers\XmlHelper.cs" />
     <Compile Include="Runtime\Serialization\XmlSerialization\Helpers\XmlSchemaHelper.cs" />
     <Compile Include="Runtime\ReferenceEqualityComparer.cs" />
+    <Compile Include="Runtime\Serialization\XmlSerialization\XmlNamespace.cs" />
+    <Compile Include="Runtime\Serialization\XmlSerialization\XmlNamespaceManager.cs" />
     <Compile Include="Runtime\Serialization\XmlSerialization\XmlSchemaManager.cs" />
     <Compile Include="Runtime\Serialization\XmlSerialization\XmlSerializationContextInfo.cs" />
     <Compile Include="Runtime\Serialization\XmlSerialization\XmlSerializer.cs" />
+    <Compile Include="Scoping\EventArgs\ScopeClosedEventArgs.cs" />
     <Compile Include="Scoping\ScopeManager.cs" />
     <Compile Include="Services\Interfaces\IService.cs" />
     <Compile Include="Services\ServiceBase.cs" />

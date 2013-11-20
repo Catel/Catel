@@ -768,29 +768,35 @@
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializerModifierBase.generic.cs">
       <Link>Runtime\Serialization\SerializerModifierBase.generic.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\DataContractNameResolver.cs">
-      <Link>Runtime\Serialization\XmlSerialization\DataContractNameResolver.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\DataContractSerializerFactory.cs">
       <Link>Runtime\Serialization\XmlSerialization\DataContractSerializerFactory.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\Helpers\XmlHelper.cs">
       <Link>Runtime\Serialization\XmlSerialization\Helpers\XmlHelper.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\Interfaces\IDataContractNameResolver.cs">
-      <Link>Runtime\Serialization\XmlSerialization\Interfaces\IDataContractNameResolver.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\Interfaces\IDataContractSerializerFactory.cs">
       <Link>Runtime\Serialization\XmlSerialization\Interfaces\IDataContractSerializerFactory.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\Interfaces\IXmlNamespaceManager.cs">
+      <Link>Runtime\Serialization\XmlSerialization\Interfaces\IXmlNamespaceManager.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\Interfaces\IXmlSerializer.cs">
       <Link>Runtime\Serialization\XmlSerialization\Interfaces\IXmlSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\XmlNamespace.cs">
+      <Link>Runtime\Serialization\XmlSerialization\XmlNamespace.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\XmlNamespaceManager.cs">
+      <Link>Runtime\Serialization\XmlSerialization\XmlNamespaceManager.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\XmlSerializationContextInfo.cs">
       <Link>Runtime\Serialization\XmlSerialization\XmlSerializationContextInfo.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\XmlSerializer.cs">
       <Link>Runtime\Serialization\XmlSerialization\XmlSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Scoping\EventArgs\ScopeClosedEventArgs.cs">
+      <Link>Scoping\EventArgs\ScopeClosedEventArgs.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Scoping\ScopeManager.cs">
       <Link>Scoping\ScopeManager.cs</Link>
