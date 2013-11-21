@@ -6,6 +6,11 @@
 
 namespace Catel.Runtime.Serialization
 {
+#if NET
+    using Catel.Runtime.Serialization.Binary;
+#endif
+
+    using Catel.Runtime.Serialization.Xml;
     using IoC;
 
     /// <summary>

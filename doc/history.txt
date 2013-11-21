@@ -24,6 +24,12 @@ Release date:
 
 Added/fixed (BREAKING CHANGES):
 ===============================
+(+) CTL-234 Added IModelEqualityComparer properties (CompareProperties, CompareValues, CompareCollections) which
+    are now defaulting to false. This means that it will now provide much better performance out of the box and
+    follows the microsoft standard (reference comparison only). It can be customed to check the properties to
+    reproduce the previous behavior
+(*) Moved serialization for Xml and Binary to namespaces. This should only cause breaking changes if one of the
+    actual core serialization parts are modified
 (-) CTL-199 Removed support for Windows Phone 7.x
 (-) CTL-200 Removed support for Silverlight 4
 
@@ -41,6 +47,7 @@ Added/fixed:
 (+) CTL-221 Support property dependency injection
 (+) CTL-227 Added the GetHandler method on IExceptionService to allows handlers retrieving more easilly.
 (+) CTL-229 Add XmlSerializerOptimalizationMode to allow pretty xml or performance
+(+) CTL-242 Create extension methods for IParent interface
 (*) CTL-125 TypeFactory selects wrong constructor when there is more than 1 option. It now tries parameters which 
     accept Object or DynamicObject the latest. Also introduced the InjectionConstructorAttribute so the right constructor
     can be decorated so it is always selected first by Catel

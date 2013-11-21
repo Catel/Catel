@@ -6,7 +6,10 @@
 
 namespace Catel.Test
 {
+    using Catel.Data;
+    using Catel.IoC;
     using Catel.Logging;
+    using Catel.Test.Data;
 
     /// <summary>
     /// Class that gets called as soon as the module is loaded.
@@ -24,6 +27,12 @@ namespace Catel.Test
         public static void Initialize()
         {
             LogManager.RegisterDebugListener();
+
+            // For testing purposes, enable features we disabled for CTL-234
+            var modelEqualityComparer = ServiceLocator.Default.ResolveType<IModelEqualityComparer>();
+            modelEqualityComparer.CompareProperties = true;
+            modelEqualityComparer.CompareValues = true;
+            modelEqualityComparer.CompareCollections = true;
         }
 
         #endregion

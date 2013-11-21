@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Runtime.Serialization
+namespace Catel.Runtime.Serialization.Xml
 {
     using System;
     using System.Collections;
@@ -36,20 +36,14 @@ namespace Catel.Runtime.Serialization
         /// Cache for known attributes per type.
         /// </summary>
         private readonly CacheStorage<string, Type[]> _knownTypesByAttributesCache = new CacheStorage<string, Type[]>();
-
-        private readonly IDataContractNameResolver _dataContractNameResolver;
         #endregion
 
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="DataContractSerializerFactory"/> class.
         /// </summary>
-        /// <param name="dataContractNameResolver">The data contract name resolver.</param>
-        public DataContractSerializerFactory(IDataContractNameResolver dataContractNameResolver)
+        public DataContractSerializerFactory()
         {
-            Argument.IsNotNull(() => dataContractNameResolver);
-
-            _dataContractNameResolver = dataContractNameResolver;
         }
         #endregion
 

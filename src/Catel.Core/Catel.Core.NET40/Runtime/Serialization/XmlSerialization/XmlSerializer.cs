@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Runtime.Serialization
+namespace Catel.Runtime.Serialization.Xml
 {
     using System;
     using System.Collections;
@@ -39,9 +39,6 @@ namespace Catel.Runtime.Serialization
         private const string GraphId = "graphid";
         private const string GraphRefId = "graphrefid";
 
-        private const string ArraySchemaUrl = "http://schemas.microsoft.com/2003/10/Serialization/Arrays";
-        private const string ArraySchemaName = "arr";
-
         /// <summary>
         /// The log.
         /// </summary>
@@ -51,6 +48,7 @@ namespace Catel.Runtime.Serialization
         #region Fields
         private readonly CacheStorage<Type, List<string>> _ignoredMembersCache = new CacheStorage<Type, List<string>>();
         private readonly IDataContractSerializerFactory _dataContractSerializerFactory;
+        private readonly IXmlNamespaceManager _xmlNamespaceManager;
         #endregion
 
         #region Constructors
@@ -59,14 +57,19 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="serializationManager">The serialization manager.</param>
         /// <param name="dataContractSerializerFactory">The data contract serializer factory.</param>
+        /// <param name="xmlNamespaceManager">The XML namespace manager.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationManager" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="dataContractSerializerFactory" /> is <c>null</c>.</exception>
-        public XmlSerializer(ISerializationManager serializationManager, IDataContractSerializerFactory dataContractSerializerFactory)
+        /// <exception cref="ArgumentNullException">The <paramref name="xmlNamespaceManager" /> is <c>null</c>.</exception>
+        public XmlSerializer(ISerializationManager serializationManager, IDataContractSerializerFactory dataContractSerializerFactory,
+            IXmlNamespaceManager xmlNamespaceManager)
             : base(serializationManager)
         {
-            Argument.IsNotNull(() => dataContractSerializerFactory);
+            Argument.IsNotNull("dataContractSerializerFactory", dataContractSerializerFactory);
+            Argument.IsNotNull("xmlNamespaceManager", xmlNamespaceManager);
 
             _dataContractSerializerFactory = dataContractSerializerFactory;
+            _xmlNamespaceManager = xmlNamespaceManager;
 
             OptimalizationMode = XmlSerializerOptimalizationMode.Performance;
         }
@@ -144,7 +147,7 @@ namespace Catel.Runtime.Serialization
                 {
                     xmlName = propertyDataManager.MapPropertyNameToXmlElementName(type, memberName);
                 }
-                
+
                 _dataContractSerializerFactory.GetDataContractSerializer(type, memberRepresentedType, xmlName);
             }
             catch (Exception ex)
@@ -519,16 +522,17 @@ namespace Catel.Runtime.Serialization
             var namespacePrefix = GetNamespacePrefix();
             var stringBuilder = new StringBuilder();
             var xmlWriterSettings = new XmlWriterSettings();
+            XmlNamespace xmlNamespace = null;
 
             xmlWriterSettings.OmitXmlDeclaration = true;
             xmlWriterSettings.CheckCharacters = false;
             xmlWriterSettings.ConformanceLevel = ConformanceLevel.Fragment;
+            xmlWriterSettings.NamespaceHandling = NamespaceHandling.OmitDuplicates;
 
             using (var xmlWriter = XmlWriter.Create(stringBuilder, xmlWriterSettings))
             {
                 var memberTypeToSerialize = memberValue.Value != null ? memberValue.Value.GetType() : typeof(object);
                 var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, memberTypeToSerialize, elementName, null, memberValue.Value);
-                //var serializer = contextInfo.GetDataContractSerializer();
 
                 if (memberValue.Value == null)
                 {
@@ -562,16 +566,21 @@ namespace Catel.Runtime.Serialization
 
                     if (serializeElement)
                     {
+                        //var xmlSerializer = new System.Xml.Serialization.XmlSerializer(memberTypeToSerialize, namespacePrefix);
+                        //xmlSerializer.S
+                        //xmlSerializer.Serialize(xmlWriter, memberValue.Value);
+
                         serializer.WriteStartObject(xmlWriter, memberValue.Value);
+
+                        xmlNamespace = _xmlNamespaceManager.GetNamespace(memberTypeToSerialize, namespacePrefix);
+                        if (xmlNamespace != null)
+                        {
+                            xmlWriter.WriteAttributeString("xmlns", xmlNamespace.Prefix, null, xmlNamespace.Uri);
+                        }
 
                         if (referenceInfo != null)
                         {
                             xmlWriter.WriteAttributeString(namespacePrefix, GraphId, null, referenceInfo.Id.ToString());
-                        }
-
-                        if (memberValue.Value is IEnumerable)
-                        {
-                            xmlWriter.WriteAttributeString("xmlns", ArraySchemaName, null, ArraySchemaUrl);
                         }
 
                         if (memberTypeToSerialize != memberValue.Type)
@@ -587,7 +596,7 @@ namespace Catel.Runtime.Serialization
                 }
             }
 
-            EnsureNamespaceInXmlDocument(element);
+            EnsureNamespaceInXmlDocument(element, xmlNamespace);
 
             var childContent = stringBuilder.ToString();
             var childElement = XElement.Parse(childContent);
@@ -612,7 +621,8 @@ namespace Catel.Runtime.Serialization
         /// Ensures the catel namespace in the xml document.
         /// </summary>
         /// <param name="element">The element.</param>
-        private void EnsureNamespaceInXmlDocument(XElement element)
+        /// <param name="xmlNamespace">The XML namespace. Can be <c>null</c>.</param>
+        private void EnsureNamespaceInXmlDocument(XElement element, XmlNamespace xmlNamespace)
         {
             var catelNamespaceUrl = GetNamespaceUrl();
             string ns1 = element.GetPrefixOfNamespace(catelNamespaceUrl);
@@ -629,10 +639,13 @@ namespace Catel.Runtime.Serialization
 
                         documentRoot.Add(catelNamespace);
 
-                        var arrayNamespaceName = XNamespace.Xmlns + ArraySchemaName;
-                        var arrayNamespace = new XAttribute(arrayNamespaceName, ArraySchemaUrl);
+                        if (xmlNamespace != null)
+                        {
+                            var dynamicNamespaceName = XNamespace.Xmlns + xmlNamespace.Prefix;
+                            var dynamicNamespace = new XAttribute(dynamicNamespaceName, xmlNamespace.Uri);
 
-                        documentRoot.Add(arrayNamespace);
+                            documentRoot.Add(dynamicNamespace);
+                        }
                     }
                 }
             }

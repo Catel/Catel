@@ -56,7 +56,7 @@ namespace Catel.Data
         /// <returns>System.Xml.XmlQualifiedName.</returns>
         public static System.Xml.XmlQualifiedName GetObservableObjectXmlSchema(XmlSchemaSet schemaSet)
         {
-            return Runtime.Serialization.XmlSchemaManager.GetXmlSchema(typeof(ObservableObject), schemaSet);
+            return Runtime.Serialization.Xml.XmlSchemaManager.GetXmlSchema(typeof(ObservableObject), schemaSet);
         }
 #endif
 

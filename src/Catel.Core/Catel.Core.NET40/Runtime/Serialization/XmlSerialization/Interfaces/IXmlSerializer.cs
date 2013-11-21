@@ -4,10 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Runtime.Serialization
+namespace Catel.Runtime.Serialization.Xml
 {
-    using System.Xml.Linq;
-
     /// <summary>
     /// Possible xml serializer optimalization modes
     /// </summary>

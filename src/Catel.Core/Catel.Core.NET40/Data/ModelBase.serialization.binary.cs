@@ -10,6 +10,7 @@ namespace Catel.Data
     using System.Runtime.Serialization;
     using System.Security;
     using Catel.Runtime;
+    using Catel.Runtime.Serialization.Binary;
     using Catel.Scoping;
     using Runtime.Serialization;
 

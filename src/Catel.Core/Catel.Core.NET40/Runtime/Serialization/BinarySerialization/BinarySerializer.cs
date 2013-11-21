@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Runtime.Serialization
+namespace Catel.Runtime.Serialization.Binary
 {
     using System;
     using System.Collections.Generic;
