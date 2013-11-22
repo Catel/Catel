@@ -70,6 +70,7 @@ Added/fixed:
 (x) CTL-226 Nested ICollection<IInterfce> XML serialization problem
 (x) CTL-228 Fixed possible deadlock in CatelDependencyResolver
 (x) CTL-240 WP8: "This operation is not supported for a relative URI" on GoBack to the main page
+(x) CTL-241 WP8: after the first creation, ViewModels are created twice for each call
 (x) CTL-245 Fixed issue where deprecated classes were still decorated with the XmlSchemaProviderAttribute which caused WCF
     to fail and generate a proxy when using "reuse types in all assemblies"
 
