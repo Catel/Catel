@@ -1,8 +1,13 @@
-﻿namespace Catel.Modules
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="RemoteInstallPackageRequest.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+
+namespace Catel.Modules
 {
     using Catel.Logging;
-    using Catel.Modules.Interfaces;
-
     using NuGet;
 
     /// <summary>
@@ -10,10 +15,13 @@
     /// </summary>
     internal class RemoteInstallPackageRequest : InstallPackageRequest
     {
+        #region Constants
         /// <summary>
         /// The Log
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Fields
         /// <summary>
         /// The module catalog.
@@ -38,7 +46,6 @@
             _moduleCatalog = moduleCatalog;
             Package = package;
         }
-
         #endregion
 
         #region Properties
@@ -47,10 +54,7 @@
         /// </summary>
         public bool AllowPrereleaseVersions
         {
-            get
-            {
-                return _moduleCatalog.AllowPrereleaseVersions;
-            }
+            get { return _moduleCatalog.AllowPrereleaseVersions; }
         }
 
         /// <summary>
@@ -58,10 +62,7 @@
         /// </summary>
         public bool IgnoreDependencies
         {
-            get
-            {
-                return _moduleCatalog.IgnoreDependencies;
-            }
+            get { return _moduleCatalog.IgnoreDependencies; }
         }
 
         /// <summary>
@@ -69,10 +70,7 @@
         /// </summary>
         public string OutputDirectory
         {
-            get
-            {
-                return _moduleCatalog.OutputDirectoryFullPath;
-            }
+            get { return _moduleCatalog.OutputDirectoryFullPath; }
         }
 
         /// <summary>
@@ -85,12 +83,11 @@
         /// </summary>
         public IPackageRepository PackageRepository
         {
-            get
-            {
-                return _moduleCatalog.GetPackageRepository();
-            }
+            get { return _moduleCatalog.GetPackageRepository(); }
         }
+        #endregion
 
+        #region Methods
         public override void Execute()
         {
             var package = Package;

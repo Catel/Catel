@@ -18,8 +18,6 @@ namespace Catel.Modules
     using System.Windows.Threading;
 
     using Catel.Logging;
-    using Catel.Modules.Extensions;
-    using Catel.Modules.Interfaces;
     using Catel.Windows.Threading;
 
     using Microsoft.Practices.Prism.Modularity;

@@ -180,6 +180,7 @@
     <Compile Include="Helpers\StringToObjectHelper.cs" />
     <Compile Include="Helpers\TagHelper.cs" />
     <Compile Include="Helpers\UniqueIdentifierHelper.cs" />
+    <Compile Include="Helpers\UrlHelper.cs" />
     <Compile Include="IoC\Attributes\InjectAttribute.cs" />
     <Compile Include="IoC\Attributes\InjectionConstructorAttribute.cs" />
     <Compile Include="IoC\Attributes\ServiceLocatorRegistrationAttribute.cs" />

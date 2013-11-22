@@ -9,7 +9,6 @@ namespace Catel.Test.Extensions.Prism.Modules
     using System;
 
     using Catel.Modules;
-    using Catel.Modules.Interfaces;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 

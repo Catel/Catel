@@ -6,8 +6,6 @@
 
 namespace Catel.Modules
 {
-    using Catel.Modules.Interfaces;
-
     /// <summary>
     /// 
     /// </summary>

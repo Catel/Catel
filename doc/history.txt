@@ -69,6 +69,7 @@ Added/fixed:
 (x) CTL-212 PropertyDataManager throws first chance exceptions for generic types
 (x) CTL-226 Nested ICollection<IInterfce> XML serialization problem
 (x) CTL-228 Fixed possible deadlock in CatelDependencyResolver
+(x) CTL-240 WP8: "This operation is not supported for a relative URI" on GoBack to the main page
 
 Roadmap:
 ========

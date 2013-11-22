@@ -393,6 +393,9 @@
     <Compile Include="..\Catel.Test.NET40\Helpers\TimeMeasureHelper.cs">
       <Link>Helpers\TimeMeasureHelper.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\Helpers\UrlHelperFacts.cs">
+      <Link>Helpers\UrlHelperFacts.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\Helpers\WindowHelper.cs">
       <Link>Helpers\WindowHelper.cs</Link>
     </Compile>
@@ -636,6 +639,9 @@
     <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\TestModels\TestModel.cs">
       <Link>Runtime\Serialization\TestModels\TestModel.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\XmlSerialization\KnownTypesSerializationFacts.cs">
+      <Link>Runtime\Serialization\XmlSerialization\KnownTypesSerializationFacts.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\XmlSerialization\XmlSerializationFacts.cs">
       <Link>Runtime\Serialization\XmlSerialization\XmlSerializationFacts.cs</Link>
     </Compile>
@@ -733,6 +739,7 @@
     <None Include="Properties\AppManifest.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Extensions\Prism\Modules\Extensions\" />
     <Folder Include="Logging\Extensions\" />
     <Folder Include="Runtime\Serialization\Attributes\" />
   </ItemGroup>

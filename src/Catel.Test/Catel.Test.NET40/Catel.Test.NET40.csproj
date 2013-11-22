@@ -233,6 +233,7 @@
     <Compile Include="Messaging\MessageMediatorHelperFacts.cs" />
     <Compile Include="ModuleInitializer.cs" />
     <Compile Include="MVVM\Commands\ViewModelCommandManagerFacts.cs" />
+    <Compile Include="Helpers\UrlHelperFacts.cs" />
     <Compile Include="MVVM\Services\SplashScreenServiceTest.cs" />
     <Compile Include="MVVM\ViewModels\Extensions\ViewModelExtensionsFacts.cs" />
     <Compile Include="Reflection\AttributeHelperFacts.cs" />

@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Modules.Interfaces
+namespace Catel.Modules
 {
     using Microsoft.Practices.Prism.Modularity;
 

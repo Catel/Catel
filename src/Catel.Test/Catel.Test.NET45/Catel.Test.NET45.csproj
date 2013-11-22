@@ -447,6 +447,9 @@
     <Compile Include="..\Catel.Test.NET40\Helpers\TimeMeasureHelper.cs">
       <Link>Helpers\TimeMeasureHelper.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\Helpers\UrlHelperFacts.cs">
+      <Link>Helpers\UrlHelperFacts.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\Helpers\WindowHelper.cs">
       <Link>Helpers\WindowHelper.cs</Link>
     </Compile>
@@ -500,6 +503,9 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\IO\PathTest.cs">
       <Link>IO\PathTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Logging\Configuration\LoggingConfigurationSectionFacts.cs">
+      <Link>Logging\Configuration\LoggingConfigurationSectionFacts.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Logging\EventArgs\LogMessageEventArgsTest.cs">
       <Link>Logging\EventArgs\LogMessageEventArgsTest.cs</Link>
@@ -707,6 +713,9 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\TestModels\TestModel.cs">
       <Link>Runtime\Serialization\TestModels\TestModel.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\XmlSerialization\KnownTypesSerializationFacts.cs">
+      <Link>Runtime\Serialization\XmlSerialization\KnownTypesSerializationFacts.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\XmlSerialization\XmlSerializationFacts.cs">
       <Link>Runtime\Serialization\XmlSerialization\XmlSerializationFacts.cs</Link>
