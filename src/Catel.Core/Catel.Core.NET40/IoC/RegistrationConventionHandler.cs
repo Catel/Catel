@@ -28,7 +28,7 @@ namespace Catel.IoC
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
-        /// The _assemblies
+        /// The assemblies
         /// </summary>
         private readonly IList<Assembly> _assemblies;
 
@@ -38,12 +38,12 @@ namespace Catel.IoC
         private readonly IList<IRegistrationConvention> _registeredConventions = new List<IRegistrationConvention>();
 
         /// <summary>
-        /// The _service locator
+        /// The service locator
         /// </summary>
         private readonly IServiceLocator _serviceLocator;
 
         /// <summary>
-        /// The _type factory
+        /// The type factory
         /// </summary>
         private readonly ITypeFactory _typeFactory;
 
@@ -183,7 +183,10 @@ namespace Catel.IoC
 
             lock (_assemblies)
             {
-                _assemblies.Add(assembly);
+                if (!_assemblies.Contains(assembly))
+                {
+                    _assemblies.Add(assembly);
+                }
             }
         }
         #endregion

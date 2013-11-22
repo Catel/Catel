@@ -9,6 +9,7 @@ namespace Catel.IoC
 {
     using System;
     using System.Reflection;
+    using Reflection;
 
     /// <summary>
     /// Extensions of <see cref="IRegistrationConventionHandler"/>.
@@ -81,7 +82,7 @@ namespace Catel.IoC
         /// <param name="registrationConventionHandler">The registration convention handler.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="registrationConventionHandler" /> is <c>null</c>.</exception>
-        public static IRegistrationConventionHandler ExcludeAllTypesOfNamespaceContaining<T>(this IRegistrationConventionHandler registrationConventionHandler)
+        public static IRegistrationConventionHandler ExcludeAllTypesOfNamespaceContaining<T>(this IRegistrationConventionHandler registrationConventionHandler) where T : class 
         {
             Argument.IsNotNull("registrationConventionHandler", registrationConventionHandler);
 
@@ -111,22 +112,6 @@ namespace Catel.IoC
             return registrationConventionHandler;
         }
 
-
-        /// <summary>
-        /// Shoulds the get internal types.
-        /// </summary>
-        /// <param name="registrationConventionHandler">The registration convention handler.</param>
-        /// <returns></returns>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="registrationConventionHandler"/> is <c>null</c>.</exception>
-        public static IRegistrationConventionHandler ShouldGetInternalTypes(this IRegistrationConventionHandler registrationConventionHandler)
-        {
-            Argument.IsNotNull("registrationConventionHandler", registrationConventionHandler);
-
-            registrationConventionHandler.ApplyConventions();
-
-            return registrationConventionHandler;
-        }
-
         /// <summary>
         /// Excludes the type.
         /// </summary>
@@ -134,10 +119,28 @@ namespace Catel.IoC
         /// <param name="registrationConventionHandler">The registration convention handler.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="registrationConventionHandler"/> is <c>null</c>.</exception>
-        public static IRegistrationConventionHandler ExcludeType<T>(this IRegistrationConventionHandler registrationConventionHandler)
+        public static IRegistrationConventionHandler ExcludeType<T>(this IRegistrationConventionHandler registrationConventionHandler) where T : class 
         {
             Argument.IsNotNull("registrationConventionHandler", registrationConventionHandler);
             registrationConventionHandler.ExcludeTypes(type => type == typeof (T));
+
+            registrationConventionHandler.ApplyConventions();
+
+            return registrationConventionHandler;
+        }
+
+        /// <summary>
+        /// Excludes the assembly.
+        /// </summary>
+        /// <typeparam name="TAssembly">The type of the assembly.</typeparam>
+        /// <param name="registrationConventionHandler">The registration convention handler.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="registrationConventionHandler"/> is <c>null</c>.</exception>
+        public static IRegistrationConventionHandler ExcludeAssembly<TAssembly>(this IRegistrationConventionHandler registrationConventionHandler) where TAssembly : Assembly
+        {
+            Argument.IsNotNull("registrationConventionHandler", registrationConventionHandler);
+
+            registrationConventionHandler.ExcludeAssemblies(assembly => ObjectHelper.AreEqual(assembly.GetType(), typeof(TAssembly)));
 
             registrationConventionHandler.ApplyConventions();
 

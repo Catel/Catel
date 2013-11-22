@@ -239,6 +239,27 @@ namespace Catel.IoC
         }
 
         /// <summary>
+        /// Registers the types using all conventions.
+        /// </summary>
+        /// <param name="serviceLocator">The service locator.</param>
+        /// <param name="registrationType">Type of the registration.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
+        public static IRegistrationConventionHandler RegisterTypesUsingAllConventions(this IServiceLocator serviceLocator, RegistrationType registrationType = RegistrationType.Singleton)
+        {
+            Argument.IsNotNull("serviceLocator", serviceLocator);
+
+            var registrationConventionHandler = new RegistrationConventionHandler(serviceLocator, TypeFactory.Default);
+
+            registrationConventionHandler.RegisterConvention<NamingRegistrationConvention>(registrationType);
+            registrationConventionHandler.RegisterConvention<FirstInterfaceRegistrationConvention>(registrationType);
+
+            registrationConventionHandler.ApplyConventions();
+
+            return registrationConventionHandler;
+        }
+
+        /// <summary>
         /// Registers the types using the default naming convention.
         /// </summary>
         /// <param name="serviceLocator">The service locator.</param>
@@ -267,7 +288,7 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("serviceLocator", serviceLocator);
 
-            var registrationConventionHandler = TypeFactory.Default.CreateInstance<RegistrationConventionHandler>();
+            var registrationConventionHandler = new RegistrationConventionHandler(serviceLocator, TypeFactory.Default);
 
             registrationConventionHandler.RegisterConvention<FirstInterfaceRegistrationConvention>(registrationType);
 
@@ -287,7 +308,7 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("serviceLocator", serviceLocator);
 
-            var registrationConventionHandler = TypeFactory.Default.CreateInstance<RegistrationConventionHandler>();
+            var registrationConventionHandler = new RegistrationConventionHandler(serviceLocator, TypeFactory.Default);
 
             registrationConventionHandler.RegisterConvention<TRegistrationConvention>(registrationType);
 
