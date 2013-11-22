@@ -1799,7 +1799,6 @@ namespace Catel.Data
     /// <typeparam name="TModel">Type that the class should hold (same as the defined type).</typeparam>
 #if NET
     [Serializable]
-    [System.Xml.Serialization.XmlSchemaProvider("GetGenericModelBaseXmlSchema")]
 #endif
     [ObsoleteEx(Message = "Generic class is no longer being used, use the non-generic base instead", TreatAsErrorFromVersion = "3.4", RemoveInVersion = "4.0", Replacement = "ModelBase")]
     public abstract class ModelBase<TModel> : ModelBase
@@ -1843,18 +1842,6 @@ namespace Catel.Data
         public static PropertyData RegisterProperty<TValue>(Expression<Func<TModel, TValue>> propertyExpression, TValue defaultValue = default(TValue), Action<TModel, AdvancedPropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true)
         {
             return RegisterProperty<TModel, TValue>(propertyExpression, defaultValue, propertyChangedEventHandler, includeInSerialization, includeInBackup);
-        }
-
-        /// <summary>
-        /// Gets XML schema for this class.
-        /// <para />
-        /// Implemented to support WCF serialization for all types deriving from this type.
-        /// </summary>
-        /// <param name="schemaSet">The schema set.</param>
-        /// <returns>System.Xml.XmlQualifiedName.</returns>
-        public static System.Xml.XmlQualifiedName GetGenericModelBaseXmlSchema(System.Xml.Schema.XmlSchemaSet schemaSet)
-        {
-            return XmlSchemaManager.GetXmlSchema(typeof(ModelBase<TModel>), schemaSet);
         }
 #endif
 

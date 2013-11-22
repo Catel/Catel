@@ -16,20 +16,6 @@ namespace Catel.Data
 
     public partial class ModelBase
     {
-#if NET
-        /// <summary>
-        /// Gets XML schema for this class.
-        /// <para />
-        /// Implemented to support WCF serialization for all types deriving from this type.
-        /// </summary>
-        /// <param name="schemaSet">The schema set.</param>
-        /// <returns>System.Xml.XmlQualifiedName.</returns>
-        public static XmlQualifiedName GetModelBaseXmlSchema(XmlSchemaSet schemaSet)
-        {
-            return XmlSchemaManager.GetXmlSchema(typeof(ModelBase), schemaSet);
-        }
-#endif
-
         /// <summary>
         /// This method is reserved and should not be used. When implementing the IXmlSerializable interface, you should return null (Nothing in Visual Basic) from this method, and instead, if specifying a custom schema is required, apply the <see cref="T:System.Xml.Serialization.XmlSchemaProviderAttribute"/> to the class.
         /// </summary>
