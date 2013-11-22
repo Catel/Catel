@@ -139,6 +139,7 @@
     <Compile Include="Data\PropertyBag.cs" />
     <Compile Include="Data\PropertyData.cs" />
     <Compile Include="Data\PropertyDataManager.cs" />
+    <Compile Include="Data\CatelTypeInfo.cs" />
     <Compile Include="Data\PropertyValue.cs" />
     <Compile Include="Data\SavableDataObjectBase.cs" />
     <Compile Include="Data\SavableModelBase.cs" />

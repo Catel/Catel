@@ -164,6 +164,7 @@
     <Compile Include="Data\PropertyBagFacts.cs" />
     <Compile Include="Data\PropertyDataManagerFacts.cs" />
     <Compile Include="Data\PropertyDataFacts.cs" />
+    <Compile Include="Data\CatelTypeInfoFacts.cs" />
     <Compile Include="Data\SavableModelBaseTest.cs" />
     <Compile Include="Data\TestClasses\ComplexSerializationHierarchy.cs" />
     <Compile Include="Data\ValidationContextFacts.cs" />

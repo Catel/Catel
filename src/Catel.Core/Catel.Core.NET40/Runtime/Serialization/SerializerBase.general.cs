@@ -68,7 +68,7 @@ namespace Catel.Runtime.Serialization
             var membersToIgnoreHashSet = new HashSet<string>(membersToIgnore);
 
             var modelType = model.GetType();
-            var catelProperties = PropertyDataManager.Default.GetProperties(modelType);
+            var catelTypeInfo = PropertyDataManager.Default.GetCatelTypeInfo(modelType);
 
             var catelPropertyNames = SerializationManager.GetCatelPropertyNames(modelType);
             var fieldsToSerialize = SerializationManager.GetFieldsToSerialize(modelType);
@@ -118,7 +118,7 @@ namespace Catel.Runtime.Serialization
 
                     if (catelPropertyNames.Contains(propertyToSerialize))
                     {
-                        var propertyData = catelProperties[propertyToSerialize];
+                        var propertyData =  catelTypeInfo.GetPropertyData(propertyToSerialize);
                         var actualPropertyValue = model.GetValueFast(propertyToSerialize);
                         var propertyValue = new MemberValue(SerializationMemberGroup.CatelProperty, modelType, propertyData.Type, propertyData.Name, actualPropertyValue);
 

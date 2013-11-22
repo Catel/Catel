@@ -48,6 +48,8 @@ Added/fixed:
 (+) CTL-227 Added the GetHandler method on IExceptionService to allows handlers retrieving more easilly.
 (+) CTL-229 Add XmlSerializerOptimalizationMode to allow pretty xml or performance
 (+) CTL-242 Create extension methods for IParent interface
+(+) CTL-246 Added CatelTypeInfo (replaces PropertyDataManager.GetCatelProperties()) so more information can be 
+    retrieved about Catel types than just the properties
 (*) CTL-125 TypeFactory selects wrong constructor when there is more than 1 option. It now tries parameters which 
     accept Object or DynamicObject the latest. Also introduced the InjectionConstructorAttribute so the right constructor
     can be decorated so it is always selected first by Catel

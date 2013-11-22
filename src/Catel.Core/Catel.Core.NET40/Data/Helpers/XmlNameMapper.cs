@@ -157,7 +157,8 @@ namespace Catel.Data
                 _xmlNameToPropertyNameMappings.Add(type, new Dictionary<string, string>());
                 _xmlPropertyNameToXmlNameMappings.Add(type, new Dictionary<string, string>());
 
-                foreach (var propertyData in _propertyDataManager.GetProperties(type))
+                var catelTypeInfo = _propertyDataManager.GetCatelTypeInfo(type);
+                foreach (var propertyData in catelTypeInfo.GetCatelProperties())
                 {
                     var propertyInfo = type.GetPropertyEx(propertyData.Key, BindingFlagsHelper.GetFinalBindingFlags(true, false));
                     if (propertyInfo == null)

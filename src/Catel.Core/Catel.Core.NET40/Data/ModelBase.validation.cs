@@ -439,7 +439,7 @@ namespace Catel.Data
             }
 
 #if !WINDOWS_PHONE && !NETFX_CORE && !PCL && !NET35
-            Type type = GetType();
+            var type = GetType();
 
             try
             {
@@ -461,7 +461,7 @@ namespace Catel.Data
                             _propertyValuesFailedForValidation[type].Add(propertyName);
                             return false;
                         }
-#elif SILVERLIGHT
+#else
                         // Checking via reflection is faster than catching the exception
                         if (!Reflection.PropertyHelper.IsPublicProperty(this, propertyName))
                         {
@@ -474,7 +474,7 @@ namespace Catel.Data
                     }
                     else
                     {
-                        _propertyValuesAtLeastOnceValidated[type].Add(propertyName);    
+                        _propertyValuesAtLeastOnceValidated[type].Add(propertyName);
                     }
 
                     if (!_dataAnnotationsValidationContext.ContainsKey(propertyName))
@@ -712,7 +712,8 @@ namespace Catel.Data
             if (force && validateDataAnnotations)
             {
                 // In forced mode, validate all registered properties for annotations
-                foreach (var propertyData in PropertyDataManager.GetProperties(GetType()))
+                var catelTypeInfo = PropertyDataManager.GetCatelTypeInfo(GetType());
+                foreach (var propertyData in catelTypeInfo.GetCatelProperties())
                 {
                     var propertyValue = GetValue(propertyData.Value);
                     ValidatePropertyUsingAnnotations(propertyData.Key, propertyValue);

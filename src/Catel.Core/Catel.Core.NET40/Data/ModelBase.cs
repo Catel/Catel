@@ -616,7 +616,8 @@ namespace Catel.Data
         /// </summary>
         private void FinishInitializationAfterConstructionOrDeserialization()
         {
-            foreach (var propertyData in PropertyDataManager.GetProperties(GetType()))
+            var catelTypeInfo = PropertyDataManager.GetCatelTypeInfo(GetType());
+            foreach (var propertyData in catelTypeInfo.GetCatelProperties())
             {
                 if (propertyData.Value.SetParent)
                 {
@@ -1025,8 +1026,8 @@ namespace Catel.Data
                 objAsModelBase.IsDirty = false;
                 handledReferences.Add(objAsModelBase);
 
-                var properties = PropertyDataManager.GetProperties(obj.GetType());
-                foreach (var property in properties)
+                var catelTypeInfo = PropertyDataManager.GetCatelTypeInfo(obj.GetType());
+                foreach (var property in catelTypeInfo.GetCatelProperties())
                 {
                     object value = objAsModelBase.GetValue(property.Value);
 
@@ -1360,10 +1361,10 @@ namespace Catel.Data
         {
             var type = GetType();
 
-            var registeredPropertyData = PropertyDataManager.RegisterProperties(type);
-
-            foreach (var propertyData in registeredPropertyData)
+            var catelTypeInfo = PropertyDataManager.RegisterProperties(type);
+            foreach (var propertyDataKeyValuePair in catelTypeInfo.GetCatelProperties())
             {
+                var propertyData = propertyDataKeyValuePair.Value;
                 if (!propertyData.IsSerializable)
                 {
                     object[] allowNonSerializableMembersAttributes = type.GetCustomAttributesEx(typeof(AllowNonSerializableMembersAttribute), true);
@@ -1596,7 +1597,8 @@ namespace Catel.Data
         /// </remarks>
         internal void RaisePropertyChangedForAllRegisteredProperties()
         {
-            foreach (var propertyData in PropertyDataManager.GetProperties(GetType()))
+            var catelTypeInfo = PropertyDataManager.GetCatelTypeInfo(GetType());
+            foreach (var propertyData in catelTypeInfo.GetCatelProperties())
             {
                 if (!IsModelBaseProperty(propertyData.Key))
                 {

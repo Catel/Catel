@@ -139,7 +139,8 @@ namespace Catel.Runtime.Serialization.Xml
                 var typeNs = GetTypeNamespaceForSchema(type);
 
                 var propertyDataManager = new PropertyDataManager();
-                var properties = (from propertyDefinition in propertyDataManager.GetProperties(type)
+                var catelTypeInfo = propertyDataManager.GetCatelTypeInfo(type);
+                var properties = (from propertyDefinition in catelTypeInfo.GetCatelProperties()
                                   where propertyDefinition.Value.IncludeInSerialization
                                   orderby propertyDefinition.Value.Name
                                   select propertyDefinition);
