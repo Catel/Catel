@@ -239,16 +239,16 @@ namespace Catel.IoC
         }
 
         /// <summary>
-        /// Registers the types using the naming convention.
+        /// Registers the types using the default naming convention.
         /// </summary>
         /// <param name="serviceLocator">The service locator.</param>
         /// <param name="registrationType">Type of the registration.</param>
         /// <returns></returns>
-        public static IRegistrationConventionHandler RegisterTypesUsingNamingConvention(this IServiceLocator serviceLocator, RegistrationType registrationType = RegistrationType.Singleton)
+        public static IRegistrationConventionHandler RegisterTypesUsingDefaultNamingConvention(this IServiceLocator serviceLocator, RegistrationType registrationType = RegistrationType.Singleton)
         {
             Argument.IsNotNull("serviceLocator", serviceLocator);
 
-            var registrationConventionHandler = TypeFactory.Default.CreateInstance<RegistrationConventionHandler>();
+            var registrationConventionHandler = new RegistrationConventionHandler(serviceLocator, TypeFactory.Default);
 
             registrationConventionHandler.RegisterConvention<NamingRegistrationConvention>(registrationType);
 

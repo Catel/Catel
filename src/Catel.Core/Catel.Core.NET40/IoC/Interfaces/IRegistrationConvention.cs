@@ -11,7 +11,7 @@ namespace Catel.IoC
     using System.Collections.Generic;
 
     /// <summary>
-    /// 
+    /// The registration convention interface.
     /// </summary>
     public interface IRegistrationConvention
     {

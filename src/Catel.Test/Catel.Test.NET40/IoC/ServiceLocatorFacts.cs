@@ -1044,6 +1044,40 @@
         }
 
         [TestClass]
+        public class TheAutoRegisterTypesViaConventions
+        {
+            public interface IFooService
+            {
+            }
+
+            public interface IFooService2
+            {
+            }
+
+            public class FooService : IFooService
+            {
+            }
+
+            public class FooService2 : IFooService2
+            {
+            }
+
+            public class NonFooService
+            {
+            }
+
+            [TestMethod]
+            public void RegistersWithDefaultNamingConvention()
+            {
+                var serviceLocator = new ServiceLocator();
+
+                serviceLocator.RegisterTypesUsingDefaultNamingConvention();
+
+                Assert.IsTrue(serviceLocator.IsTypeRegistered<IFooService>());
+            }
+        }
+
+        [TestClass]
         public class TheResolveTypesMethod
         {
             public interface IFooService

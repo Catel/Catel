@@ -11,13 +11,21 @@ namespace Catel.IoC
     using System.Collections.Generic;
     using System.Linq;
     using Collections;
+    using Logging;
     using Reflection;
 
     /// <summary>
-    /// 
+    /// The first interface convention based on <see cref="RegistrationConventionBase"/>
     /// </summary>
     public class FirstInterfaceRegistrationConvention : RegistrationConventionBase
     {
+        #region Fields
+        /// <summary>
+        /// The log.
+        /// </summary>
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="FirstInterfaceRegistrationConvention"/> class.

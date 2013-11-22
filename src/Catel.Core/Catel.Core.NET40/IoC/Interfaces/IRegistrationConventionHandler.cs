@@ -8,16 +8,15 @@
 namespace Catel.IoC
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
+    using System.Reflection;
 
     /// <summary>
-    /// 
+    /// The registration convention handler.
     /// </summary>
     public interface IRegistrationConventionHandler
     {
         #region Properties
-
         /// <summary>
         /// Gets the registration conventions.
         /// </summary>
@@ -27,16 +26,23 @@ namespace Catel.IoC
         IEnumerable<IRegistrationConvention> RegistrationConventions { get; }
 
         /// <summary>
-        /// Gets the filter.
+        /// Gets the type filter.
         /// </summary>
         /// <value>
-        /// The filter.
+        /// The type filter.
         /// </value>
-        CompositeFilter<Type> Filter { get; }
+        CompositeFilter<Type> TypeFilter { get; }
+
+        /// <summary>
+        /// Gets the assembly filter.
+        /// </summary>
+        /// <value>
+        /// The assembly filter.
+        /// </value>
+        CompositeFilter<Assembly> AssemblyFilter { get; }
         #endregion
 
         #region Methods
-
         /// <summary>
         /// Registers the convention.
         /// </summary>
@@ -48,6 +54,13 @@ namespace Catel.IoC
         /// Applies the registe conventions.
         /// </summary>
         void ApplyConventions();
+
+        /// <summary>
+        /// Adds the assembly to scan.
+        /// </summary>
+        /// <param name="assembly">The assembly.</param>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="assembly"/> is <c>null</c>.</exception>
+        void AddAssemblyToScan(Assembly assembly);
         #endregion
     }
 }

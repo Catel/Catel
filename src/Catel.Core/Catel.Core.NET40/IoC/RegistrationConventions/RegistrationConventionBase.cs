@@ -9,9 +9,10 @@ namespace Catel.IoC
 {
     using System;
     using System.Collections.Generic;
+    using Logging;
 
     /// <summary>
-    /// 
+    /// The <see cref="IRegistrationConvention"/> base implementation.
     /// </summary>
     public class RegistrationConventionBase : IRegistrationConvention
     {

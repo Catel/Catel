@@ -11,13 +11,21 @@ namespace Catel.IoC
     using System.Collections.Generic;
     using System.Linq;
     using Collections;
+    using Logging;
     using Reflection;
 
     /// <summary>
-    /// 
+    /// The naming convention based on <see cref="RegistrationConventionBase"/>
     /// </summary>
     public class NamingRegistrationConvention : RegistrationConventionBase
     {
+        #region Fields
+        /// <summary>
+        /// The log.
+        /// </summary>
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="NamingRegistrationConvention"/> class.
@@ -40,34 +48,25 @@ namespace Catel.IoC
             Argument.IsNotNull("typesToRegister", typesToRegister);
 
             var typesToHandle = typesToRegister as Type[] ?? typesToRegister.ToArray();
-            typesToHandle.ForEach(type =>
+            var interfaceTypes = typesToHandle.Select(type =>
             {
-                if (type.IsInterfaceEx())
+                if (type.IsInterfaceEx() && type.Name.StartsWith("I"))
                 {
-                    var interfaceType = type;
-                    var implementationTypeName = interfaceType.Name.Replace("I", "").Trim();
+                    var implementationType = typesToHandle.FirstOrDefault(row => TagHelper.AreTagsEqual(row.Name, type.Name.Replace("I", "").Trim()) && row.IsClassEx() && type.IsAssignableFrom(row));
 
-                    var implementationType =
-                        typesToHandle.FirstOrDefault(typeToHandle => TagHelper.AreTagsEqual(typeToHandle.Name, implementationTypeName));
-
-                    if (implementationType != null && interfaceType.IsAssignableFrom(implementationType))
+                    if (implementationType != null)
                     {
-                        Container.RegisterType(interfaceType, implementationType, registrationType: RegistrationType);
+                        return new {InterfaceType = type, ImplementationType = implementationType};
                     }
                 }
-                else
-                {
-                    var implementationType = type;
-                    var interfaceTypeName = string.Format("I{0}", implementationType.Name);
+                return null;
+            }).Where(type => type != null);
 
-                    var interfaceType =
-                        typesToHandle.FirstOrDefault(row => TagHelper.AreTagsEqual(row.Name, interfaceTypeName));
+            interfaceTypes.ForEach(type =>
+            {
+                Log.Debug("Applying '{0}' on '{1}'", GetType().Name, type.InterfaceType);
 
-                    if (interfaceType != null && interfaceType.IsAssignableFrom(implementationType))
-                    {
-                        Container.RegisterType(interfaceType, implementationType, registrationType: RegistrationType);
-                    }
-                }
+                Container.RegisterType(type.InterfaceType, type.ImplementationType, registrationType: RegistrationType);
             });
         }
         #endregion

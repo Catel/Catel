@@ -10,31 +10,44 @@ namespace Catel.IoC
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
     using Collections;
     using Logging;
     using Reflection;
 
     /// <summary>
-    /// 
+    /// Represents the <see cref="IRegistrationConventionHandler"/> implementation.
     /// </summary>
     public class RegistrationConventionHandler : IRegistrationConventionHandler
     {
-        private readonly IServiceLocator _serviceLocator;
-        private readonly ITypeFactory _typeFactory;
+        #region Fields
 
-        #region Constants
         /// <summary>
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        #endregion
 
-        #region Fields
+        /// <summary>
+        /// The _assemblies
+        /// </summary>
+        private readonly IList<Assembly> _assemblies;
+
         /// <summary>
         /// The registered conventions
         /// </summary>
         private readonly IList<IRegistrationConvention> _registeredConventions = new List<IRegistrationConvention>();
 
+        /// <summary>
+        /// The _service locator
+        /// </summary>
+        private readonly IServiceLocator _serviceLocator;
+
+        /// <summary>
+        /// The _type factory
+        /// </summary>
+        private readonly ITypeFactory _typeFactory;
+
+        private IList<Type> _retrievedTypes;
         #endregion
 
         #region Constructors
@@ -50,7 +63,33 @@ namespace Catel.IoC
 
             _serviceLocator = serviceLocator;
             _typeFactory = typeFactory;
-            Filter = new CompositeFilter<Type>();
+            TypeFilter = new CompositeFilter<Type>();
+            AssemblyFilter = new CompositeFilter<Assembly>();
+
+            _assemblies = AssemblyHelper.GetLoadedAssemblies();
+
+            AssemblyFilter.Excludes += assembly =>
+            {
+                var assemblyName = assembly.GetType().Name;
+                return !string.IsNullOrWhiteSpace(assemblyName) &&
+                       (
+#if !DEBUG
+                    assemblyName.StartsWith("Catel") ||
+#endif
+                           assemblyName.StartsWith("System") ||
+                           assemblyName.StartsWith("WindowsBase")
+                           );
+            };
+
+            TypeFilter.Excludes += type => !string.IsNullOrWhiteSpace(type.Namespace) &&
+                                           (
+#if !DEBUG
+                type.Namespace.StartsWith("Catel") || 
+#endif
+                                               type.Namespace.StartsWith("System") ||
+                                               type.Namespace.StartsWith("Microsoft") ||
+                                               type.Namespace.StartsWith("Nuget")
+                                               );
         }
         #endregion
 
@@ -67,18 +106,27 @@ namespace Catel.IoC
             {
                 lock (_registeredConventions)
                 {
+                    Log.Debug("Retrieving all registered registration conventions.");
                     return _registeredConventions;
                 }
             }
         }
 
         /// <summary>
-        /// Gets the filter.
+        /// Gets the type filter.
         /// </summary>
         /// <value>
-        /// The filter.
+        /// The type filter.
         /// </value>
-        public CompositeFilter<Type> Filter { get; private set; }
+        public CompositeFilter<Type> TypeFilter { get; private set; }
+
+        /// <summary>
+        /// Gets the assembly filter.
+        /// </summary>
+        /// <value>
+        /// The assembly filter.
+        /// </value>
+        public CompositeFilter<Assembly> AssemblyFilter { get; private set; }
 
         /// <summary>
         /// Registers the convention.
@@ -86,6 +134,13 @@ namespace Catel.IoC
         public void RegisterConvention<TRegistrationConvention>(RegistrationType registrationType = RegistrationType.Singleton) where TRegistrationConvention : IRegistrationConvention
         {
             var registrationConvention = _typeFactory.CreateInstanceWithParameters<TRegistrationConvention>(_serviceLocator, registrationType);
+
+            if (_registeredConventions.Contains(registrationConvention))
+            {
+                return;
+            }
+
+            Log.Debug("Registering '{0}' on cached conventions", typeof (TRegistrationConvention).Name);
 
             _registeredConventions.Add(registrationConvention);
         }
@@ -102,9 +157,33 @@ namespace Catel.IoC
                     return;
                 }
 
-                var types = TypeCache.GetTypes().Where(type => Filter.Matches(type));
+                var types = _assemblies.Where(assembly => AssemblyFilter.Matches(assembly)).SelectMany(TypeCache.GetTypesOfAssembly).Where(type => TypeFilter.Matches(type));
 
-                _registeredConventions.ForEach(convention => convention.Process(types));
+                _retrievedTypes = new List<Type>(types);
+
+                _registeredConventions.ForEach(convention =>
+                {
+                    if (_retrievedTypes != null && _retrievedTypes.Any())
+                    {
+                        convention.Process(_retrievedTypes);
+                    }
+                });
+            }
+        }
+
+        /// <summary>
+        /// Adds the assembly to scan.
+        /// </summary>
+        /// <param name="assembly">The assembly.</param>
+        /// <exception cref="System.NotImplementedException"></exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="assembly" /> is <c>null</c>.</exception>
+        public void AddAssemblyToScan(Assembly assembly)
+        {
+            Argument.IsNotNull("assembly", assembly);
+
+            lock (_assemblies)
+            {
+                _assemblies.Add(assembly);
             }
         }
         #endregion
