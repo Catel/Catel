@@ -47,6 +47,7 @@ Added/fixed:
 (+) CTL-221 Support property dependency injection
 (+) CTL-227 Added the GetHandler method on IExceptionService to allows handlers retrieving more easilly.
 (+) CTL-229 Add XmlSerializerOptimalizationMode to allow pretty xml or performance
+(+) CTL-235 Added option to allow global enabling / disabling (overriding) of log events on all listeners
 (+) CTL-242 Create extension methods for IParent interface
 (+) CTL-246 Added CatelTypeInfo (replaces PropertyDataManager.GetCatelProperties()) so more information can be 
     retrieved about Catel types than just the properties
