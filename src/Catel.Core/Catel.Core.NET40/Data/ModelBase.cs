@@ -589,6 +589,16 @@ namespace Catel.Data
             Mode = SerializationMode.Xml;
 #endif
 
+            var type = GetType();
+
+#if !WINDOWS_PHONE && !NETFX_CORE && !PCL && !NET35
+            if (!_propertyValuesFailedForValidation.ContainsKey(type))
+            {
+                _propertyValuesFailedForValidation.Add(type, new List<string>());
+                _propertyValuesAtLeastOnceValidated.Add(type, new List<string>());
+            }
+#endif
+
             InitializeProperties();
 
             InitializeCustomProperties();
@@ -1671,8 +1681,8 @@ namespace Catel.Data
                         if (!DisablePropertyChangeNotifications)
                         {
                             // Explicitly call base because we have overridden the behavior
-                                var eventArgs = new AdvancedPropertyChangedEventArgs(sender, this, e.PropertyName);
-                                base.RaisePropertyChanged(this, eventArgs);
+                            var eventArgs = new AdvancedPropertyChangedEventArgs(sender, this, e.PropertyName);
+                            base.RaisePropertyChanged(this, eventArgs);
                         }
                     }
 
