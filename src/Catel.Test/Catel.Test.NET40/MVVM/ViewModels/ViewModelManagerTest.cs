@@ -263,6 +263,14 @@ namespace Catel.Test.MVVM.ViewModels
 
                 Assert.AreEqual(firstvm, foundvm);
             }
+
+            [TestMethod]
+            public void ShouldFailsDueToANonIViewModelType()
+            {
+                var viewModelManager = new ViewModelManager();
+
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => viewModelManager.GetFirstOrDefaultInstance(typeof(Type)));
+            }
         }
 
         [TestClass]
