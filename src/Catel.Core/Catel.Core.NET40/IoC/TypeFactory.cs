@@ -336,8 +336,14 @@ namespace Catel.IoC
                 return;
             }
 
+            string objectType = ObjectToStringHelper.ToTypeString(obj);
+
+            Log.Debug("Initializing type '{0}' after construction", objectType);
+
             var dependencyResolverManager = DependencyResolverManager.Default;
             dependencyResolverManager.RegisterDependencyResolverForInstance(obj, _dependencyResolver);
+
+            Log.Debug("Injecting properties into type '{0}' after construction", objectType);
 
             var type = obj.GetType();
             var typeMetaData = GetTypeMetaData(type);
