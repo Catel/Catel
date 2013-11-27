@@ -59,7 +59,7 @@ namespace Catel.MVVM.Views
         /// </summary>
         /// <param name="viewType">Type of the view.</param>
         /// <returns>The <see cref="IViewModel"/> or <c>null</c> if the view model is not registered.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewType"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentException">The <paramref name="viewType"/> is not of type <see cref="IView"/>.</exception>
         IView GetFirstOrDefaultInstance(Type viewType);
         #endregion
     }
