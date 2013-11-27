@@ -613,17 +613,10 @@ namespace Catel.Reflection
                 return true;
             }
 
-#if NETFX_CORE
             if (type.IsAssignableFromEx(instanceType))
             {
                 return true;
             }
-#else
-            if (type.IsAssignableFrom(instanceType))
-            {
-                return true;
-            }
-#endif
 
             bool castable = (from method in type.GetMethodsEx(BindingFlags.Public | BindingFlags.Static)
                              where method.ReturnType == instanceType &&
