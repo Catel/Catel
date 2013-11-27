@@ -636,9 +636,13 @@ namespace Catel.IoC
                     finalParameters.Add(ctorParameterValue);
                 }
 
+                var finalParametersArray = finalParameters.ToArray();
+
                 Log.Debug("Calling constructor.Invoke with the right parameters");
 
-                var instance = constructor.Invoke(finalParameters.ToArray());
+                var instance = constructor.Invoke(finalParametersArray);
+
+                Log.Debug("Called constructor.Invoke with the right parameters");
 
                 InitializeAfterConstruction(instance);
 
