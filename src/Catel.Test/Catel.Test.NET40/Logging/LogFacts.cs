@@ -18,6 +18,18 @@ namespace Catel.Test.Logging
 
     public class LogFacts
     {
+        #region Test classes
+        public class ExceptionWithoutStringConstructor : Exception
+        {
+        }
+        #endregion
+
+#if WINDOWS_PHONE
+        private const string ArgumentNullExceptionText = "[ArgumentNullException] System.ArgumentNullException: Value can not be null.";
+#else
+        private const string ArgumentNullExceptionText = "[ArgumentNullException] System.ArgumentNullException: Value cannot be null.";
+#endif
+
         [TestClass]
         public class TheIndentMethod
         {
@@ -25,7 +37,7 @@ namespace Catel.Test.Logging
             public void IncreasesIndentLevel()
             {
                 LogManager.RegisterDebugListener();
-                var log = new Log(typeof(int));
+                var log = new Log(typeof (int));
 
                 Assert.AreEqual(0, log.IndentLevel);
 
@@ -38,7 +50,7 @@ namespace Catel.Test.Logging
             public void WritesMessagesWithIndent()
             {
                 LogManager.RegisterDebugListener();
-                var log = new Log(typeof(int));
+                var log = new Log(typeof (int));
 
                 LogMessageEventArgs eventArgs = null;
                 log.LogMessage += (sender, e) => eventArgs = e;
@@ -60,7 +72,7 @@ namespace Catel.Test.Logging
             public void DecreasesIndentLevel()
             {
                 LogManager.RegisterDebugListener();
-                var log = new Log(typeof(int)) { IndentLevel = 2 };
+                var log = new Log(typeof (int)) {IndentLevel = 2};
 
                 Assert.AreEqual(2, log.IndentLevel);
 
@@ -73,7 +85,7 @@ namespace Catel.Test.Logging
             public void WriteMessagesWithUnIndent()
             {
                 LogManager.RegisterDebugListener();
-                var log = new Log(typeof(int));
+                var log = new Log(typeof (int));
 
                 LogMessageEventArgs eventArgs = null;
                 log.LogMessage += (sender, e) => eventArgs = e;
@@ -97,7 +109,7 @@ namespace Catel.Test.Logging
             public void DefaultsToZero()
             {
                 LogManager.RegisterDebugListener();
-                var log = new Log(typeof(int));
+                var log = new Log(typeof (int));
 
                 Assert.AreEqual(0, log.IndentLevel);
             }
@@ -106,7 +118,7 @@ namespace Catel.Test.Logging
             public void SetsPositiveValue()
             {
                 LogManager.RegisterDebugListener();
-                var log = new Log(typeof(int)) { IndentSize = 5 };
+                var log = new Log(typeof (int)) {IndentSize = 5};
 
                 Assert.AreEqual(5, log.IndentSize);
             }
@@ -115,7 +127,7 @@ namespace Catel.Test.Logging
             public void ThrowsArgumentOutOfRangeForNegativeValue()
             {
                 LogManager.RegisterDebugListener();
-                var log = new Log(typeof(int));
+                var log = new Log(typeof (int));
 
                 // TODO: IndentLevel should be settable
                 ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => log.IndentLevel = -1);
@@ -129,7 +141,7 @@ namespace Catel.Test.Logging
             public void DefaultsToTwo()
             {
                 LogManager.RegisterDebugListener();
-                var log = new Log(typeof(int));
+                var log = new Log(typeof (int));
 
                 Assert.AreEqual(2, log.IndentSize);
             }
@@ -138,7 +150,7 @@ namespace Catel.Test.Logging
             public void SetsPositiveValue()
             {
                 LogManager.RegisterDebugListener();
-                var log = new Log(typeof(int)) { IndentSize = 5 };
+                var log = new Log(typeof (int)) {IndentSize = 5};
 
                 Assert.AreEqual(5, log.IndentSize);
             }
@@ -147,700 +159,732 @@ namespace Catel.Test.Logging
             public void ThrowsArgumentOutOfRangeForNegativeValue()
             {
                 LogManager.RegisterDebugListener();
-                var log = new Log(typeof(int));
+                var log = new Log(typeof (int));
 
                 // TODO: IndentSize should be settable
                 ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => log.IndentSize = -1);
             }
         }
-    }
 
-    [TestClass]
-    public class LogTest
-    {
-        #region Test classes
-        public class ExceptionWithoutStringConstructor : Exception
+        [TestClass]
+        public class TheConstructor
         {
-        }
-        #endregion
+            [TestMethod]
+            public void ThrowsArgumentNullExceptionForNullType()
+            {
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new Log(null));
+            }
 
-#if WINDOWS_PHONE
-        private const string ArgumentNullExceptionText = "[ArgumentNullException] System.ArgumentNullException: Value can not be null.";
-#else
-        private const string ArgumentNullExceptionText = "[ArgumentNullException] System.ArgumentNullException: Value cannot be null.";
-#endif
+            [TestMethod]
+            public void CreatesLogForType()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
 
-        [TestMethod]
-        public void Constructor_Null()
-        {
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new Log(null));
+                Assert.AreEqual(typeof (int), log.TargetType);
+            }
         }
 
-        [TestMethod]
-        public void Constructor_Valid()
+        [TestClass]
+        public class TheDebugMethod
         {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
+            [TestMethod]
+            public void CorrectlyLogsMessageWithBraces()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof(int));
 
-            Assert.AreEqual(typeof(int), log.TargetType);
+                log.Debug("This is a string with { and sometimes and ending }");
+            }
+
+            [TestMethod]
+            public void Debug_Message_Null()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                log.Debug((string) null);
+            }
+
+            [TestMethod]
+            public void Debug_Message()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                LogMessageEventArgs eventArgs = null;
+                log.LogMessage += (sender, e) => eventArgs = e;
+
+                log.Debug("log message");
+
+                Assert.IsNotNull(eventArgs);
+                Assert.AreEqual(log, eventArgs.Log);
+                Assert.AreEqual(LogEvent.Debug, eventArgs.LogEvent);
+                Assert.AreEqual("[System.Int32] log message", eventArgs.Message);
+            }
+
+            [TestMethod]
+            public void Debug_MessageFormat_Null()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                log.Debug((string) null, null);
+            }
+
+            [TestMethod]
+            public void Debug_MessageFormat()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                LogMessageEventArgs eventArgs = null;
+                log.LogMessage += (sender, e) => eventArgs = e;
+
+                log.Debug("log message {0}", 1);
+
+                Assert.IsNotNull(eventArgs);
+                Assert.AreEqual(log, eventArgs.Log);
+                Assert.AreEqual(LogEvent.Debug, eventArgs.LogEvent);
+                Assert.AreEqual("[System.Int32] log message 1", eventArgs.Message);
+            }
+
+            [TestMethod]
+            public void Debug_Exception_Null()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Debug((Exception) null));
+            }
+
+            [TestMethod]
+            public void Debug_Exception()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                LogMessageEventArgs eventArgs = null;
+                log.LogMessage += (sender, e) => eventArgs = e;
+
+                var exception = new ArgumentNullException("log test");
+                log.Debug(exception);
+
+                Assert.IsNotNull(eventArgs);
+                Assert.AreEqual(log, eventArgs.Log);
+                Assert.AreEqual(LogEvent.Debug, eventArgs.LogEvent);
+                Assert.AreEqual(string.Format("[System.Int32] {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+            }
+
+            [TestMethod]
+            public void Debug_ExceptionWithMessage_ExceptionNull()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Debug(null, string.Empty));
+            }
+
+            [TestMethod]
+            public void Debug_ExceptionWithMessage_MessageNull()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                var exception = new ArgumentNullException("log test");
+
+                log.Debug(exception, null);
+            }
+
+            [TestMethod]
+            public void Debug_ExceptionWithMessage()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                LogMessageEventArgs eventArgs = null;
+                log.LogMessage += (sender, e) => eventArgs = e;
+
+                var exception = new ArgumentNullException("log test");
+                log.Debug(exception, "additional message");
+
+                Assert.IsNotNull(eventArgs);
+                Assert.AreEqual(log, eventArgs.Log);
+                Assert.AreEqual(LogEvent.Debug, eventArgs.LogEvent);
+                Assert.AreEqual(string.Format("[System.Int32] additional message | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+            }
+
+            [TestMethod]
+            public void Debug_ExceptionWithMessageFormat_ExceptionNull()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Debug(null, "additional message", 1));
+            }
+
+            [TestMethod]
+            public void Debug_ExceptionWithMessageFormat_MessageFormatNull()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                var exception = new ArgumentNullException("log test");
+
+                log.Debug(exception, null, 1);
+            }
+
+            [TestMethod]
+            public void Debug_ExceptionWithMessageFormat()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                LogMessageEventArgs eventArgs = null;
+                log.LogMessage += (sender, e) => eventArgs = e;
+
+                var exception = new ArgumentNullException("log test");
+                log.Debug(exception, "additional message {0}", 1);
+
+                Assert.IsNotNull(eventArgs);
+                Assert.AreEqual(log, eventArgs.Log);
+                Assert.AreEqual(LogEvent.Debug, eventArgs.LogEvent);
+                Assert.AreEqual(string.Format("[System.Int32] additional message 1 | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+            }
         }
 
-        #region Debug
-        [TestMethod]
-        public void Debug_Message_Null()
+        [TestClass]
+        public class TheInfoMethod
         {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
+            [TestMethod]
+            public void CorrectlyLogsMessageWithBraces()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof(int));
 
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Debug((string)null));
+                log.Info("This is a string with { and sometimes and ending }");
+            }
+
+            [TestMethod]
+            public void Info_Message_Null()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                log.Info((string) null);
+            }
+
+            [TestMethod]
+            public void Info_Message()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                LogMessageEventArgs eventArgs = null;
+                log.LogMessage += (sender, e) => eventArgs = e;
+
+                log.Info("log message");
+
+                Assert.IsNotNull(eventArgs);
+                Assert.AreEqual(log, eventArgs.Log);
+                Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
+                Assert.AreEqual("[System.Int32] log message", eventArgs.Message);
+            }
+
+            [TestMethod]
+            public void Info_MessageFormat_Null()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                log.Info((string) null, null);
+            }
+
+            [TestMethod]
+            public void Info_MessageFormat()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                LogMessageEventArgs eventArgs = null;
+                log.LogMessage += (sender, e) => eventArgs = e;
+
+                log.Info("log message {0}", 1);
+
+                Assert.IsNotNull(eventArgs);
+                Assert.AreEqual(log, eventArgs.Log);
+                Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
+                Assert.AreEqual("[System.Int32] log message 1", eventArgs.Message);
+            }
+
+            [TestMethod]
+            public void Info_Exception_Null()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Info((Exception) null));
+            }
+
+            [TestMethod]
+            public void Info_Exception()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                LogMessageEventArgs eventArgs = null;
+                log.LogMessage += (sender, e) => eventArgs = e;
+
+                var exception = new ArgumentNullException("log test");
+                log.Info(exception);
+
+                Assert.IsNotNull(eventArgs);
+                Assert.AreEqual(log, eventArgs.Log);
+                Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
+                Assert.AreEqual(string.Format("[System.Int32] {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+            }
+
+            [TestMethod]
+            public void Info_ExceptionWithMessage_ExceptionNull()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Info(null, string.Empty));
+            }
+
+            [TestMethod]
+            public void Info_ExceptionWithMessage_MessageNull()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                var exception = new ArgumentNullException("log test");
+
+                log.Info(exception, null);
+            }
+
+            [TestMethod]
+            public void Info_ExceptionWithMessage()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                LogMessageEventArgs eventArgs = null;
+                log.LogMessage += (sender, e) => eventArgs = e;
+
+                var exception = new ArgumentNullException("log test");
+                log.Info(exception, "additional message");
+
+                Assert.IsNotNull(eventArgs);
+                Assert.AreEqual(log, eventArgs.Log);
+                Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
+                Assert.AreEqual(string.Format("[System.Int32] additional message | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+            }
+
+            [TestMethod]
+            public void Info_ExceptionWithMessageFormat_ExceptionNull()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Info(null, "additional message", 1));
+            }
+
+            [TestMethod]
+            public void Info_ExceptionWithMessageFormat_MessageFormatNull()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                var exception = new ArgumentNullException("log test");
+
+                log.Info(exception, null, 1);
+            }
+
+            [TestMethod]
+            public void Info_ExceptionWithMessageFormat()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                LogMessageEventArgs eventArgs = null;
+                log.LogMessage += (sender, e) => eventArgs = e;
+
+                var exception = new ArgumentNullException("log test");
+                log.Info(exception, "additional message {0}", 1);
+
+                Assert.IsNotNull(eventArgs);
+                Assert.AreEqual(log, eventArgs.Log);
+                Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
+                Assert.AreEqual(string.Format("[System.Int32] additional message 1 | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+            }
         }
 
-        [TestMethod]
-        public void Debug_Message()
+        [TestClass]
+        public class TheWarningMethod
         {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
+            [TestMethod]
+            public void CorrectlyLogsMessageWithBraces()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof(int));
 
-            LogMessageEventArgs eventArgs = null;
-            log.LogMessage += (sender, e) => eventArgs = e;
+                log.Warning("This is a string with { and sometimes and ending }");
+            }
 
-            log.Debug("log message");
+            [TestMethod]
+            public void Warning_Message_Null()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
 
-            Assert.IsNotNull(eventArgs);
-            Assert.AreEqual(log, eventArgs.Log);
-            Assert.AreEqual(LogEvent.Debug, eventArgs.LogEvent);
-            Assert.AreEqual("[System.Int32] log message", eventArgs.Message);
+                log.Warning((string) null);
+            }
+
+            [TestMethod]
+            public void Warning_Message()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                LogMessageEventArgs eventArgs = null;
+                log.LogMessage += (sender, e) => eventArgs = e;
+
+                log.Warning("log message");
+
+                Assert.IsNotNull(eventArgs);
+                Assert.AreEqual(log, eventArgs.Log);
+                Assert.AreEqual(LogEvent.Warning, eventArgs.LogEvent);
+                Assert.AreEqual("[System.Int32] log message", eventArgs.Message);
+            }
+
+            [TestMethod]
+            public void Warning_MessageFormat_Null()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                log.Warning((string) null, null);
+            }
+
+            [TestMethod]
+            public void Warning_MessageFormat()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                LogMessageEventArgs eventArgs = null;
+                log.LogMessage += (sender, e) => eventArgs = e;
+
+                log.Warning("log message {0}", 1);
+
+                Assert.IsNotNull(eventArgs);
+                Assert.AreEqual(log, eventArgs.Log);
+                Assert.AreEqual(LogEvent.Warning, eventArgs.LogEvent);
+                Assert.AreEqual("[System.Int32] log message 1", eventArgs.Message);
+            }
+
+            [TestMethod]
+            public void Warning_Exception_Null()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Warning((Exception) null));
+            }
+
+            [TestMethod]
+            public void Warning_Exception()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                LogMessageEventArgs eventArgs = null;
+                log.LogMessage += (sender, e) => eventArgs = e;
+
+                var exception = new ArgumentNullException("log test");
+                log.Warning(exception);
+
+                Assert.IsNotNull(eventArgs);
+                Assert.AreEqual(log, eventArgs.Log);
+                Assert.AreEqual(LogEvent.Warning, eventArgs.LogEvent);
+                Assert.AreEqual(string.Format("[System.Int32] {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+            }
+
+            [TestMethod]
+            public void Warning_ExceptionWithMessage_ExceptionNull()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Warning(null, string.Empty));
+            }
+
+            [TestMethod]
+            public void Warning_ExceptionWithMessage_MessageNull()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                var exception = new ArgumentNullException("log test");
+
+                log.Warning(exception, null);
+            }
+
+            [TestMethod]
+            public void Warning_ExceptionWithMessage()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                LogMessageEventArgs eventArgs = null;
+                log.LogMessage += (sender, e) => eventArgs = e;
+
+                var exception = new ArgumentNullException("log test");
+                log.Warning(exception, "additional message");
+
+                Assert.IsNotNull(eventArgs);
+                Assert.AreEqual(log, eventArgs.Log);
+                Assert.AreEqual(LogEvent.Warning, eventArgs.LogEvent);
+                Assert.AreEqual(string.Format("[System.Int32] additional message | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+            }
+
+            [TestMethod]
+            public void Warning_ExceptionWithMessageFormat_ExceptionNull()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Warning(null, "additional message", 1));
+            }
+
+            [TestMethod]
+            public void Warning_ExceptionWithMessageFormat_MessageFormatNull()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                var exception = new ArgumentNullException("log test");
+
+                log.Warning(exception, null, 1);
+            }
+
+            [TestMethod]
+            public void Warning_ExceptionWithMessageFormat()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                LogMessageEventArgs eventArgs = null;
+                log.LogMessage += (sender, e) => eventArgs = e;
+
+                var exception = new ArgumentNullException("log test");
+                log.Warning(exception, "additional message {0}", 1);
+
+                Assert.IsNotNull(eventArgs);
+                Assert.AreEqual(log, eventArgs.Log);
+                Assert.AreEqual(LogEvent.Warning, eventArgs.LogEvent);
+                Assert.AreEqual(string.Format("[System.Int32] additional message 1 | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+            }
         }
 
-        [TestMethod]
-        public void Debug_MessageFormat_Null()
+        [TestClass]
+        public class TheErrorMethod
         {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
+            [TestMethod]
+            public void CorrectlyLogsMessageWithBraces()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof(int));
 
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Debug((string)null, null));
+                log.Error("This is a string with { and sometimes and ending }");
+            }
+
+            [TestMethod]
+            public void Error_Message_Null()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                log.Error((string) null);
+            }
+
+            [TestMethod]
+            public void Error_Message()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                LogMessageEventArgs eventArgs = null;
+                log.LogMessage += (sender, e) => eventArgs = e;
+
+                log.Error("log message");
+
+                Assert.IsNotNull(eventArgs);
+                Assert.AreEqual(log, eventArgs.Log);
+                Assert.AreEqual(LogEvent.Error, eventArgs.LogEvent);
+                Assert.AreEqual("[System.Int32] log message", eventArgs.Message);
+            }
+
+            [TestMethod]
+            public void Error_MessageFormat_Null()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                log.Error((string) null, null);
+            }
+
+            [TestMethod]
+            public void Error_MessageFormat()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                LogMessageEventArgs eventArgs = null;
+                log.LogMessage += (sender, e) => eventArgs = e;
+
+                log.Error("log message {0}", 1);
+
+                Assert.IsNotNull(eventArgs);
+                Assert.AreEqual(log, eventArgs.Log);
+                Assert.AreEqual(LogEvent.Error, eventArgs.LogEvent);
+                Assert.AreEqual("[System.Int32] log message 1", eventArgs.Message);
+            }
+
+            [TestMethod]
+            public void Error_Exception_Null()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Error((Exception) null));
+            }
+
+            [TestMethod]
+            public void Error_Exception()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                LogMessageEventArgs eventArgs = null;
+                log.LogMessage += (sender, e) => eventArgs = e;
+
+                var exception = new ArgumentNullException("log test");
+                log.Error(exception);
+
+                Assert.IsNotNull(eventArgs);
+                Assert.AreEqual(log, eventArgs.Log);
+                Assert.AreEqual(LogEvent.Error, eventArgs.LogEvent);
+                Assert.AreEqual(string.Format("[System.Int32] {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+            }
+
+            [TestMethod]
+            public void Error_ExceptionWithMessage_ExceptionNull()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Error(null, string.Empty));
+            }
+
+            [TestMethod]
+            public void Error_ExceptionWithMessage_MessageNull()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                var exception = new ArgumentNullException("log test");
+
+                log.Error(exception, null);
+            }
+
+            [TestMethod]
+            public void Error_ExceptionWithMessage()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                LogMessageEventArgs eventArgs = null;
+                log.LogMessage += (sender, e) => eventArgs = e;
+
+                var exception = new ArgumentNullException("log test");
+                log.Error(exception, "additional message");
+
+                Assert.IsNotNull(eventArgs);
+                Assert.AreEqual(log, eventArgs.Log);
+                Assert.AreEqual(LogEvent.Error, eventArgs.LogEvent);
+                Assert.AreEqual(string.Format("[System.Int32] additional message | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+            }
+
+            [TestMethod]
+            public void Error_ExceptionWithMessageFormat_ExceptionNull()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Error(null, "additional message", 1));
+            }
+
+            [TestMethod]
+            public void Error_ExceptionWithMessageFormat_MessageFormatNull()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                var exception = new ArgumentNullException("log test");
+
+                log.Error(exception, null, 1);
+            }
+
+            [TestMethod]
+            public void Error_ExceptionWithMessageFormat()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                LogMessageEventArgs eventArgs = null;
+                log.LogMessage += (sender, e) => eventArgs = e;
+
+                var exception = new ArgumentNullException("log test");
+                log.Error(exception, "additional message {0}", 1);
+
+                Assert.IsNotNull(eventArgs);
+                Assert.AreEqual(log, eventArgs.Log);
+                Assert.AreEqual(LogEvent.Error, eventArgs.LogEvent);
+                Assert.AreEqual(string.Format("[System.Int32] additional message 1 | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+            }
+
+            [TestMethod]
+            public void ErrorAndThrowException_NullInput()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                log.ErrorAndThrowException<InvalidOperationException>(null);
+            }
+
+            [TestMethod]
+            public void ErrorAndThrowException_ExceptionWithoutMessageConstructor()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => log.ErrorAndThrowException<ExceptionWithoutStringConstructor>("exception test"));
+            }
+
+            [TestMethod]
+            public void ErrorAndThrowException_ExceptionWithMessageConstructor()
+            {
+                LogManager.RegisterDebugListener();
+                var log = new Log(typeof (int));
+
+                // Several tests to make sure we are not testing the NotSupportedException of the class itself
+                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => log.ErrorAndThrowException<InvalidOperationException>("exception test"));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.ErrorAndThrowException<ArgumentNullException>("exception test"));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => log.ErrorAndThrowException<ArgumentException>("exception test"));
+            }
         }
-
-        [TestMethod]
-        public void Debug_MessageFormat()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            LogMessageEventArgs eventArgs = null;
-            log.LogMessage += (sender, e) => eventArgs = e;
-
-            log.Debug("log message {0}", 1);
-
-            Assert.IsNotNull(eventArgs);
-            Assert.AreEqual(log, eventArgs.Log);
-            Assert.AreEqual(LogEvent.Debug, eventArgs.LogEvent);
-            Assert.AreEqual("[System.Int32] log message 1", eventArgs.Message);
-        }
-
-        [TestMethod]
-        public void Debug_Exception_Null()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Debug((Exception)null));
-        }
-
-        [TestMethod]
-        public void Debug_Exception()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            LogMessageEventArgs eventArgs = null;
-            log.LogMessage += (sender, e) => eventArgs = e;
-
-            var exception = new ArgumentNullException("log test");
-            log.Debug(exception);
-
-            Assert.IsNotNull(eventArgs);
-            Assert.AreEqual(log, eventArgs.Log);
-            Assert.AreEqual(LogEvent.Debug, eventArgs.LogEvent);
-            Assert.AreEqual(string.Format("[System.Int32] {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
-        }
-
-        [TestMethod]
-        public void Debug_ExceptionWithMessage_ExceptionNull()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Debug(null, string.Empty));
-        }
-
-        [TestMethod]
-        public void Debug_ExceptionWithMessage_MessageNull()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            var exception = new ArgumentNullException("log test");
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Debug(exception, null));
-        }
-
-        [TestMethod]
-        public void Debug_ExceptionWithMessage()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            LogMessageEventArgs eventArgs = null;
-            log.LogMessage += (sender, e) => eventArgs = e;
-
-            var exception = new ArgumentNullException("log test");
-            log.Debug(exception, "additional message");
-
-            Assert.IsNotNull(eventArgs);
-            Assert.AreEqual(log, eventArgs.Log);
-            Assert.AreEqual(LogEvent.Debug, eventArgs.LogEvent);
-            Assert.AreEqual(string.Format("[System.Int32] additional message | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
-        }
-
-        [TestMethod]
-        public void Debug_ExceptionWithMessageFormat_ExceptionNull()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Debug(null, "additional message", 1));
-        }
-
-        [TestMethod]
-        public void Debug_ExceptionWithMessageFormat_MessageFormatNull()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            var exception = new ArgumentNullException("log test");
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Debug(exception, null, 1));
-        }
-
-        [TestMethod]
-        public void Debug_ExceptionWithMessageFormat()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            LogMessageEventArgs eventArgs = null;
-            log.LogMessage += (sender, e) => eventArgs = e;
-
-            var exception = new ArgumentNullException("log test");
-            log.Debug(exception, "additional message {0}", 1);
-
-            Assert.IsNotNull(eventArgs);
-            Assert.AreEqual(log, eventArgs.Log);
-            Assert.AreEqual(LogEvent.Debug, eventArgs.LogEvent);
-            Assert.AreEqual(string.Format("[System.Int32] additional message 1 | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
-        }
-        #endregion
-
-        #region Info
-        [TestMethod]
-        public void Info_Message_Null()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Info((string)null));
-        }
-
-        [TestMethod]
-        public void Info_Message()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            LogMessageEventArgs eventArgs = null;
-            log.LogMessage += (sender, e) => eventArgs = e;
-
-            log.Info("log message");
-
-            Assert.IsNotNull(eventArgs);
-            Assert.AreEqual(log, eventArgs.Log);
-            Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
-            Assert.AreEqual("[System.Int32] log message", eventArgs.Message);
-        }
-
-        [TestMethod]
-        public void Info_MessageFormat_Null()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Info((string)null, null));
-        }
-
-        [TestMethod]
-        public void Info_MessageFormat()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            LogMessageEventArgs eventArgs = null;
-            log.LogMessage += (sender, e) => eventArgs = e;
-
-            log.Info("log message {0}", 1);
-
-            Assert.IsNotNull(eventArgs);
-            Assert.AreEqual(log, eventArgs.Log);
-            Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
-            Assert.AreEqual("[System.Int32] log message 1", eventArgs.Message);
-        }
-
-        [TestMethod]
-        public void Info_Exception_Null()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Info((Exception)null));
-        }
-
-        [TestMethod]
-        public void Info_Exception()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            LogMessageEventArgs eventArgs = null;
-            log.LogMessage += (sender, e) => eventArgs = e;
-
-            var exception = new ArgumentNullException("log test");
-            log.Info(exception);
-
-            Assert.IsNotNull(eventArgs);
-            Assert.AreEqual(log, eventArgs.Log);
-            Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
-            Assert.AreEqual(string.Format("[System.Int32] {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
-        }
-
-        [TestMethod]
-        public void Info_ExceptionWithMessage_ExceptionNull()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Info(null, string.Empty));
-        }
-
-        [TestMethod]
-        public void Info_ExceptionWithMessage_MessageNull()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            var exception = new ArgumentNullException("log test");
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Info(exception, null));
-        }
-
-        [TestMethod]
-        public void Info_ExceptionWithMessage()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            LogMessageEventArgs eventArgs = null;
-            log.LogMessage += (sender, e) => eventArgs = e;
-
-            var exception = new ArgumentNullException("log test");
-            log.Info(exception, "additional message");
-
-            Assert.IsNotNull(eventArgs);
-            Assert.AreEqual(log, eventArgs.Log);
-            Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
-            Assert.AreEqual(string.Format("[System.Int32] additional message | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
-        }
-
-        [TestMethod]
-        public void Info_ExceptionWithMessageFormat_ExceptionNull()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Info(null, "additional message", 1));
-        }
-
-        [TestMethod]
-        public void Info_ExceptionWithMessageFormat_MessageFormatNull()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            var exception = new ArgumentNullException("log test");
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Info(exception, null, 1));
-        }
-
-        [TestMethod]
-        public void Info_ExceptionWithMessageFormat()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            LogMessageEventArgs eventArgs = null;
-            log.LogMessage += (sender, e) => eventArgs = e;
-
-            var exception = new ArgumentNullException("log test");
-            log.Info(exception, "additional message {0}", 1);
-
-            Assert.IsNotNull(eventArgs);
-            Assert.AreEqual(log, eventArgs.Log);
-            Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
-            Assert.AreEqual(string.Format("[System.Int32] additional message 1 | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
-        }
-        #endregion
-
-        #region Warning
-        [TestMethod]
-        public void Warning_Message_Null()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Warning((string)null));
-        }
-
-        [TestMethod]
-        public void Warning_Message()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            LogMessageEventArgs eventArgs = null;
-            log.LogMessage += (sender, e) => eventArgs = e;
-
-            log.Warning("log message");
-
-            Assert.IsNotNull(eventArgs);
-            Assert.AreEqual(log, eventArgs.Log);
-            Assert.AreEqual(LogEvent.Warning, eventArgs.LogEvent);
-            Assert.AreEqual("[System.Int32] log message", eventArgs.Message);
-        }
-
-        [TestMethod]
-        public void Warning_MessageFormat_Null()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Warning((string)null, null));
-        }
-
-        [TestMethod]
-        public void Warning_MessageFormat()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            LogMessageEventArgs eventArgs = null;
-            log.LogMessage += (sender, e) => eventArgs = e;
-
-            log.Warning("log message {0}", 1);
-
-            Assert.IsNotNull(eventArgs);
-            Assert.AreEqual(log, eventArgs.Log);
-            Assert.AreEqual(LogEvent.Warning, eventArgs.LogEvent);
-            Assert.AreEqual("[System.Int32] log message 1", eventArgs.Message);
-        }
-
-        [TestMethod]
-        public void Warning_Exception_Null()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Warning((Exception)null));
-        }
-
-        [TestMethod]
-        public void Warning_Exception()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            LogMessageEventArgs eventArgs = null;
-            log.LogMessage += (sender, e) => eventArgs = e;
-
-            var exception = new ArgumentNullException("log test");
-            log.Warning(exception);
-
-            Assert.IsNotNull(eventArgs);
-            Assert.AreEqual(log, eventArgs.Log);
-            Assert.AreEqual(LogEvent.Warning, eventArgs.LogEvent);
-            Assert.AreEqual(string.Format("[System.Int32] {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
-        }
-
-        [TestMethod]
-        public void Warning_ExceptionWithMessage_ExceptionNull()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Warning(null, string.Empty));
-        }
-
-        [TestMethod]
-        public void Warning_ExceptionWithMessage_MessageNull()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            var exception = new ArgumentNullException("log test");
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Warning(exception, null));
-        }
-
-        [TestMethod]
-        public void Warning_ExceptionWithMessage()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            LogMessageEventArgs eventArgs = null;
-            log.LogMessage += (sender, e) => eventArgs = e;
-
-            var exception = new ArgumentNullException("log test");
-            log.Warning(exception, "additional message");
-
-            Assert.IsNotNull(eventArgs);
-            Assert.AreEqual(log, eventArgs.Log);
-            Assert.AreEqual(LogEvent.Warning, eventArgs.LogEvent);
-            Assert.AreEqual(string.Format("[System.Int32] additional message | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
-        }
-
-        [TestMethod]
-        public void Warning_ExceptionWithMessageFormat_ExceptionNull()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Warning(null, "additional message", 1));
-        }
-
-        [TestMethod]
-        public void Warning_ExceptionWithMessageFormat_MessageFormatNull()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            var exception = new ArgumentNullException("log test");
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Warning(exception, null, 1));
-        }
-
-        [TestMethod]
-        public void Warning_ExceptionWithMessageFormat()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            LogMessageEventArgs eventArgs = null;
-            log.LogMessage += (sender, e) => eventArgs = e;
-
-            var exception = new ArgumentNullException("log test");
-            log.Warning(exception, "additional message {0}", 1);
-
-            Assert.IsNotNull(eventArgs);
-            Assert.AreEqual(log, eventArgs.Log);
-            Assert.AreEqual(LogEvent.Warning, eventArgs.LogEvent);
-            Assert.AreEqual(string.Format("[System.Int32] additional message 1 | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
-        }
-        #endregion
-
-        #region Error
-        [TestMethod]
-        public void Error_Message_Null()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Error((string)null));
-        }
-
-        [TestMethod]
-        public void Error_Message()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            LogMessageEventArgs eventArgs = null;
-            log.LogMessage += (sender, e) => eventArgs = e;
-
-            log.Error("log message");
-
-            Assert.IsNotNull(eventArgs);
-            Assert.AreEqual(log, eventArgs.Log);
-            Assert.AreEqual(LogEvent.Error, eventArgs.LogEvent);
-            Assert.AreEqual("[System.Int32] log message", eventArgs.Message);
-        }
-
-        [TestMethod]
-        public void Error_MessageFormat_Null()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Error((string)null, null));
-        }
-
-        [TestMethod]
-        public void Error_MessageFormat()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            LogMessageEventArgs eventArgs = null;
-            log.LogMessage += (sender, e) => eventArgs = e;
-
-            log.Error("log message {0}", 1);
-
-            Assert.IsNotNull(eventArgs);
-            Assert.AreEqual(log, eventArgs.Log);
-            Assert.AreEqual(LogEvent.Error, eventArgs.LogEvent);
-            Assert.AreEqual("[System.Int32] log message 1", eventArgs.Message);
-        }
-
-        [TestMethod]
-        public void Error_Exception_Null()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Error((Exception)null));
-        }
-
-        [TestMethod]
-        public void Error_Exception()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            LogMessageEventArgs eventArgs = null;
-            log.LogMessage += (sender, e) => eventArgs = e;
-
-            var exception = new ArgumentNullException("log test");
-            log.Error(exception);
-
-            Assert.IsNotNull(eventArgs);
-            Assert.AreEqual(log, eventArgs.Log);
-            Assert.AreEqual(LogEvent.Error, eventArgs.LogEvent);
-            Assert.AreEqual(string.Format("[System.Int32] {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
-        }
-
-        [TestMethod]
-        public void Error_ExceptionWithMessage_ExceptionNull()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Error(null, string.Empty));
-        }
-
-        [TestMethod]
-        public void Error_ExceptionWithMessage_MessageNull()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            var exception = new ArgumentNullException("log test");
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Error(exception, null));
-        }
-
-        [TestMethod]
-        public void Error_ExceptionWithMessage()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            LogMessageEventArgs eventArgs = null;
-            log.LogMessage += (sender, e) => eventArgs = e;
-
-            var exception = new ArgumentNullException("log test");
-            log.Error(exception, "additional message");
-
-            Assert.IsNotNull(eventArgs);
-            Assert.AreEqual(log, eventArgs.Log);
-            Assert.AreEqual(LogEvent.Error, eventArgs.LogEvent);
-            Assert.AreEqual(string.Format("[System.Int32] additional message | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
-        }
-
-        [TestMethod]
-        public void Error_ExceptionWithMessageFormat_ExceptionNull()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Error(null, "additional message", 1));
-        }
-
-        [TestMethod]
-        public void Error_ExceptionWithMessageFormat_MessageFormatNull()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            var exception = new ArgumentNullException("log test");
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Error(exception, null, 1));
-        }
-
-        [TestMethod]
-        public void Error_ExceptionWithMessageFormat()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            LogMessageEventArgs eventArgs = null;
-            log.LogMessage += (sender, e) => eventArgs = e;
-
-            var exception = new ArgumentNullException("log test");
-            log.Error(exception, "additional message {0}", 1);
-
-            Assert.IsNotNull(eventArgs);
-            Assert.AreEqual(log, eventArgs.Log);
-            Assert.AreEqual(LogEvent.Error, eventArgs.LogEvent);
-            Assert.AreEqual(string.Format("[System.Int32] additional message 1 | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
-        }
-
-        [TestMethod]
-        public void ErrorAndThrowException_NullInput()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.ErrorAndThrowException<InvalidOperationException>(null));
-        }
-
-        [TestMethod]
-        public void ErrorAndThrowException_ExceptionWithoutMessageConstructor()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => log.ErrorAndThrowException<ExceptionWithoutStringConstructor>("exception test"));
-        }
-
-        [TestMethod]
-        public void ErrorAndThrowException_ExceptionWithMessageConstructor()
-        {
-            LogManager.RegisterDebugListener();
-            var log = new Log(typeof(int));
-
-            // Several tests to make sure we are not testing the NotSupportedException of the class itself
-            ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => log.ErrorAndThrowException<InvalidOperationException>("exception test"));
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.ErrorAndThrowException<ArgumentNullException>("exception test"));
-            ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => log.ErrorAndThrowException<ArgumentException>("exception test"));
-        }
-        #endregion
     }
 }

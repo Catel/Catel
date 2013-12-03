@@ -78,6 +78,7 @@ Added/fixed:
 (x) CTL-241 WP8: after the first creation, ViewModels are created twice for each call
 (x) CTL-245 Fixed issue where deprecated classes were still decorated with the XmlSchemaProviderAttribute which caused WCF
     to fail and generate a proxy when using "reuse types in all assemblies"
+(x) CTL-254 Log with { and } in literal string caused errors
 
 Roadmap:
 ========

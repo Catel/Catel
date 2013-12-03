@@ -642,7 +642,7 @@ namespace Catel.IoC
 
                 var instance = constructor.Invoke(finalParametersArray);
 
-                Log.Debug("Called constructor.Invoke with the right parameters");
+                //Log.Debug("Called constructor.Invoke with the right parameters");
 
                 InitializeAfterConstruction(instance);
 
