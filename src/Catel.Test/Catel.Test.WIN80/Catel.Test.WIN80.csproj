@@ -368,9 +368,6 @@
     <Compile Include="..\Catel.Test.NET40\MVVM\Services\ViewModelServiceBaseTest.cs">
       <Link>MVVM\Services\ViewModelServiceBaseTest.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Test.NET40\MVVM\ViewModels\Attributes\ExposeAttributeFacts.cs">
-      <Link>MVVM\ViewModels\Attributes\ExposeAttributeFacts.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Test.NET40\MVVM\ViewModels\Attributes\InterestedInAttributeFacts.cs">
       <Link>MVVM\ViewModels\Attributes\InterestedInAttributeFacts.cs</Link>
     </Compile>
@@ -385,9 +382,6 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\MVVM\ViewModels\ManagedViewModelTest.cs">
       <Link>MVVM\ViewModels\ManagedViewModelTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\MVVM\ViewModels\TestClasses\ExposingViewModel.cs">
-      <Link>MVVM\ViewModels\TestClasses\ExposingViewModel.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\MVVM\ViewModels\TestClasses\InterestedViewModel.cs">
       <Link>MVVM\ViewModels\TestClasses\InterestedViewModel.cs</Link>
