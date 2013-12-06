@@ -15,6 +15,7 @@ namespace Catel
     /// this is because the .NET Framework (or actually Silverlight) does not allow the code to handle 
     /// that specific feature.
     /// </summary>
+    [ObsoleteEx(Message = "No longer supported", Replacement = "NotSupportedInPlatformException", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
     public class NotSupportedInSilverlightException : Exception
     {
         #region Constructors
@@ -24,7 +25,7 @@ namespace Catel
         /// <param name="reasonFormat">The reason format.</param>
         /// <param name="args">The formatting arguments.</param>
         public NotSupportedInSilverlightException(string reasonFormat = "", params object[] args)
-            : base(ResourceHelper.GetString(typeof(NotSupportedInSilverlightException), "Catel.Properties.Exceptions", "NotSupportedInSilverlight"))
+            : base(ResourceHelper.GetString(typeof(NotSupportedInSilverlightException), "Exceptions", "NotSupportedInSilverlight"))
         {
             Reason = string.Format(reasonFormat, args);
         }

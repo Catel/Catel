@@ -87,7 +87,8 @@ namespace Catel.Data
             {
                 using (var stream = new MemoryStream())
                 {
-                    var propertiesToIgnore = (from propertyData in PropertyDataManager.GetProperties(_object.GetType())
+                    var catelTypeInfo = PropertyDataManager.GetCatelTypeInfo(_object.GetType());
+                    var propertiesToIgnore = (from propertyData in catelTypeInfo.GetCatelProperties()
                                               where !propertyData.Value.IncludeInBackup
                                               select propertyData.Value.Name).ToArray();
 
@@ -250,7 +251,7 @@ namespace Catel.Data
 
             if (eventArgs.Cancel)
             {
-                Log.Info("IEditableObject.CancelEDit is canceled by the event args");
+                Log.Info("IEditableObject.CancelEdit is canceled by the event args");
                 return;
             }
 

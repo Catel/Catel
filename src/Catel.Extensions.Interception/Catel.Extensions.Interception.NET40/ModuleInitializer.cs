@@ -21,8 +21,7 @@ namespace Catel.Extensions.Interception
         public static void Initialize()
         {
             var serviceLocator = ServiceLocator.Default;
-
-            serviceLocator.RegisterType<IProxyFactory, ProxyFactory>();
+            ExtensionsInterceptionModule.RegisterServices(serviceLocator);
         }
         #endregion
     }

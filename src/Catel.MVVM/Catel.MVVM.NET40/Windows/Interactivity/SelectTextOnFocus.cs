@@ -8,8 +8,16 @@ namespace Catel.Windows.Interactivity
 {
     using System;
     using System.Windows;
+    
+#if NETFX_CORE
+    using global::Windows.UI.Xaml;
+    using global::Windows.UI.Xaml.Controls;
+    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
+#else
     using System.Windows.Controls;
     using System.Windows.Interactivity;
+    using UIEventArgs = System.EventArgs;
+#endif
 
     /// <summary>
     /// Selects all the text when the <see cref="TextBox"/> is focused.
@@ -21,7 +29,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnAssociatedObjectLoaded(object sender, EventArgs e)
+        protected override void OnAssociatedObjectLoaded(object sender, UIEventArgs e)
         {
             AssociatedObject.GotFocus += OnGotFocus;
 
@@ -37,7 +45,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnAssociatedObjectUnloaded(object sender, EventArgs e)
+        protected override void OnAssociatedObjectUnloaded(object sender, UIEventArgs e)
         {
             AssociatedObject.GotFocus -= OnGotFocus;
 
@@ -52,7 +60,7 @@ namespace Catel.Windows.Interactivity
         /// Called when the <c>UIElement.OnGotFocus</c> event occurs.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void OnGotFocus(object sender, RoutedEventArgs e)
         {
             SelectAllText();

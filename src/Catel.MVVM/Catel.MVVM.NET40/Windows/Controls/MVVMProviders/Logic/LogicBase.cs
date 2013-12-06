@@ -68,17 +68,17 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// <summary>
         /// The view model factory.
         /// </summary>
-        private static readonly IViewModelFactory _viewModelFactory = ServiceLocator.Default.ResolveType<IViewModelFactory>();
+        private static readonly IViewModelFactory _viewModelFactory;
 
         /// <summary>
         /// The view manager.
         /// </summary>
-        private static readonly IViewManager _viewManager = ServiceLocator.Default.ResolveType<IViewManager>();
+        private static readonly IViewManager _viewManager;
 
         /// <summary>
         /// The dependency property selector.
         /// </summary>
-        private static readonly IDependencyPropertySelector _dependencyPropertySelector = ServiceLocator.Default.ResolveTypeAndReturnNullIfNotRegistered<IDependencyPropertySelector>();
+        private static readonly IDependencyPropertySelector _dependencyPropertySelector;
 
         /// <summary>
         /// A list of dependency properties to subscribe to per type.
@@ -108,8 +108,14 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// </summary>
         static LogicBase()
         {
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+
+            _viewModelFactory = dependencyResolver.Resolve<IViewModelFactory>();
+            _viewManager = dependencyResolver.Resolve<IViewManager>();
+            _dependencyPropertySelector = dependencyResolver.Resolve<IDependencyPropertySelector>();
+
 #if !NET
-            _frameworkElementLoadedManager = ServiceLocator.Default.ResolveType<IFrameworkElementLoadedManager>();
+            _frameworkElementLoadedManager = dependencyResolver.Resolve<IFrameworkElementLoadedManager>();
 #endif
         }
 

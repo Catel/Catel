@@ -284,6 +284,8 @@ namespace Catel.Windows
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
+
+                    element.IsHitTestVisible = true;
                 }
 
                 _dimmedElements.Clear();
@@ -316,6 +318,8 @@ namespace Catel.Windows
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
+
+                    element.IsHitTestVisible = false;
 
                     if (!_dimmedElements.Contains(element))
                     {

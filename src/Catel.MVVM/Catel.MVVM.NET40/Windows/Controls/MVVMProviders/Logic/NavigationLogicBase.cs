@@ -45,14 +45,6 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-#if NETFX_CORE
-        private Frame _rootFrame;
-#elif WINDOWS_PHONE
-        private PhoneApplicationFrame _rootFrame;
-#elif SILVERLIGHT
-        private Frame _rootFrame;
-#endif
-
         private bool _hasNavigatedButNotNavigatedAway;
         private bool _navigationServiceInitialized;
         private bool _navigationComplete;
@@ -109,6 +101,26 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             get { return (T)TargetControl; }
         }
 
+#if NETFX_CORE
+        /// <summary>
+        /// Gets the root frame.
+        /// </summary>
+        /// <value>The root frame.</value>
+        protected Frame RootFrame { get; private set; }
+#elif WINDOWS_PHONE
+        /// <summary>
+        /// Gets the root frame.
+        /// </summary>
+        /// <value>The root frame.</value>
+        protected PhoneApplicationFrame RootFrame { get; private set; }
+#elif SILVERLIGHT
+        /// <summary>
+        /// Gets the root frame.
+        /// </summary>
+        /// <value>The root frame.</value>
+        protected Frame RootFrame { get; private set; }
+#endif
+
         /// <summary>
         /// Gets or sets a value indicating whether navigating away from the page should save the view model.
         /// <para />
@@ -156,7 +168,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// <param name="e">The <see cref="NavigatingCancelEventArgs"/> instance containing the event data.</param>
         /// <remarks>
         /// This method is public due to the fact that weak events are used. Otherwise, the navigation completed events
-        /// could not be handled (because we unsubscribed from the _rootFrame) when navigating away to prevent memory
+        /// could not be handled (because we unsubscribed from the RootFrame) when navigating away to prevent memory
         /// leaks.
         /// <para />
         /// Please, do not call this method yourself, otherwise you can seriously ruin your apps.
@@ -168,10 +180,15 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 return;
             }
 
+            if (!CanHandleNavigationAdvanced())
+            {
+                return;
+            }
+
             _hasNavigatedButNotNavigatedAway = false;
 
 #if WINDOWS_PHONE
-            var uriWithoutParameters = GetUriWithoutParameters(_rootFrame.CurrentSource);
+            var uriWithoutParameters = GetUriWithoutParameters(RootFrame.CurrentSource);
             if (string.CompareOrdinal(uriWithoutParameters, _url) != 0)
             {
                 return;
@@ -194,15 +211,16 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 HasHandledSaveAndCancelLogic = true;
 
 #if NETFX_CORE
-                _rootFrame.Navigating -= OnNavigatingEvent;
-                _rootFrame.Navigated -= OnNavigatedEvent;
+                RootFrame.Navigating -= OnNavigatingEvent;
+                RootFrame.Navigated -= OnNavigatedEvent;
 #elif WINDOWS_PHONE
-                //_rootFrame.BackKeyPress -= OnBackKeyPress;
-                //_rootFrame.Navigating -= OnNavigatingEvent;
-                //_rootFrame.Navigated -= OnNavigatedEvent;
+                // No need because we are using weak events for phone
+                //RootFrame.BackKeyPress -= OnBackKeyPress;
+                //RootFrame.Navigating -= OnNavigatingEvent;
+                //RootFrame.Navigated -= OnNavigatedEvent;
 #elif SILVERLIGHT
-                _rootFrame.Navigating -= OnNavigatingEvent;
-                _rootFrame.Navigated -= OnNavigatedEvent;
+                RootFrame.Navigating -= OnNavigatingEvent;
+                RootFrame.Navigated -= OnNavigatedEvent;
 #else
                 Application.Current.Navigating -= OnNavigatingEvent;
                 Application.Current.Navigated -= OnNavigatedEvent;
@@ -227,7 +245,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// <param name="e">The <see cref="NavigationEventArgs"/> instance containing the event data.</param>
         /// <remarks>
         /// This method is public due to the fact that weak events are used. Otherwise, the navigation completed events
-        /// could not be handled (because we unsubscribed from the _rootFrame) when navigating away to prevent memory
+        /// could not be handled (because we unsubscribed from the RootFrame) when navigating away to prevent memory
         /// leaks.
         /// <para />
         /// Please, do not call this method yourself, otherwise you can seriously ruin your apps.
@@ -235,6 +253,11 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         public void OnNavigatedEvent(object sender, NavigationEventArgs e)
         {
             if (!CanHandleNavigation)
+            {
+                return;
+            }
+
+            if (!CanHandleNavigationAdvanced())
             {
                 return;
             }
@@ -293,7 +316,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         private void HandleNavigated(object navigationContext)
         {
 #if WINDOWS_PHONE
-            string uriWithoutParameters = GetUriWithoutParameters(_rootFrame.CurrentSource);
+            string uriWithoutParameters = GetUriWithoutParameters(RootFrame.CurrentSource);
 
             if (string.IsNullOrEmpty(_url))
             {
@@ -327,42 +350,34 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             }
 
 #if NETFX_CORE
-            _rootFrame = Window.Current.Content as Frame ?? ((Page)TargetControl).Frame;
-            if (_rootFrame == null)
+            RootFrame = Window.Current.Content as Frame ?? ((Page)TargetControl).Frame;
+            if (RootFrame == null)
             {
                 return;
             }
 
-            //this.SubscribeToWeakGenericEvent<NavigatingCancelEventArgs>(_rootFrame, "Navigating", OnNavigatingEvent);
-            //this.SubscribeToWeakGenericEvent<NavigationEventArgs>(_rootFrame, "Navigated", OnNavigatedEvent);
-            _rootFrame.Navigating += OnNavigatingEvent;
-            _rootFrame.Navigated += OnNavigatedEvent;
+            RootFrame.Navigating += OnNavigatingEvent;
+            RootFrame.Navigated += OnNavigatedEvent;
 #elif WINDOWS_PHONE
-            _rootFrame = Application.Current.RootVisual.FindVisualDescendant(e => e is PhoneApplicationFrame) as PhoneApplicationFrame;
-            if (_rootFrame == null)
+            RootFrame = Application.Current.RootVisual.FindVisualDescendant(e => e is PhoneApplicationFrame) as PhoneApplicationFrame;
+            if (RootFrame == null)
             {
                 return;
             }
 
-            //this.SubscribeToWeakGenericEvent<CancelEventArgs>(_rootFrame, "BackKeyPress", OnBackKeyPress);
-            this.SubscribeToWeakGenericEvent<NavigatingCancelEventArgs>(_rootFrame, "Navigating", OnNavigatingEvent);
-            this.SubscribeToWeakGenericEvent<NavigationEventArgs>(_rootFrame, "Navigated", OnNavigatedEvent);
-            //_rootFrame.Navigating += OnNavigatingEvent;
-            //_rootFrame.Navigated += OnNavigatedEvent;
+            //this.SubscribeToWeakGenericEvent<CancelEventArgs>(RootFrame, "BackKeyPress", OnBackKeyPress);
+            this.SubscribeToWeakGenericEvent<NavigatingCancelEventArgs>(RootFrame, "Navigating", OnNavigatingEvent);
+            this.SubscribeToWeakGenericEvent<NavigationEventArgs>(RootFrame, "Navigated", OnNavigatedEvent);
 #elif SILVERLIGHT
-            _rootFrame = Application.Current.RootVisual.FindVisualDescendant(e => e is Frame) as Frame;
-            if (_rootFrame == null)
+            RootFrame = Application.Current.RootVisual.FindVisualDescendant(e => e is Frame) as Frame;
+            if (RootFrame == null)
             {
                 return;
             }
 
-            //this.SubscribeToWeakGenericEvent<NavigatingCancelEventArgs>(_rootFrame, "Navigating", OnNavigatingEvent);
-            //this.SubscribeToWeakGenericEvent<NavigationEventArgs>(_rootFrame, "Navigated", OnNavigatedEvent);
-            _rootFrame.Navigating += OnNavigatingEvent;
-            _rootFrame.Navigated += OnNavigatedEvent;
+            RootFrame.Navigating += OnNavigatingEvent;
+            RootFrame.Navigated += OnNavigatedEvent;
 #else
-            //this.SubscribeToWeakGenericEvent<NavigatingCancelEventArgs>(Application.Current, "Navigating", OnNavigatingEvent);
-            //this.SubscribeToWeakGenericEvent<NavigationEventArgs>(Application.Current, "Navigated", OnNavigatedEvent);
             Application.Current.Navigating += OnNavigatingEvent;
             Application.Current.Navigated += OnNavigatedEvent;
 #endif
@@ -373,6 +388,18 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             {
                 HandleNavigated(null);
             }
+        }
+
+        /// <summary>
+        /// Determines whether this instance can handle the current navigation event.
+        /// <para />
+        /// This method should only be implemented by deriving types if the <see cref="CanHandleNavigation"/>
+        /// is not sufficient.
+        /// </summary>
+        /// <returns><c>true</c> if this instance can handle the navigation event; otherwise, <c>false</c>.</returns>
+        protected virtual bool CanHandleNavigationAdvanced()
+        {
+            return true;
         }
 
         /// <summary>

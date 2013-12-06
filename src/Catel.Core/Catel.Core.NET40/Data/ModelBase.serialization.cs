@@ -42,9 +42,6 @@ namespace Catel.Data
     using System.IO.IsolatedStorage;
 #endif
 
-#if NET
-    [System.Xml.Serialization.XmlSchemaProvider("GetModelBaseXmlSchema")]
-#endif
     public partial class ModelBase
     {
         #region Events
@@ -58,6 +55,8 @@ namespace Catel.Data
         #endregion
 
         #region Loading
+
+        #region OBSOLETE
 #if NET
         /// <summary>
         /// Loads the object from a file using binary formatting.
@@ -72,7 +71,8 @@ namespace Catel.Data
         /// When enableRedirects is enabled, loading will take more time. Only set
         /// the parameter to <c>true</c> when the deserialization without redirects fails.
         /// </remarks>
-        public static T Load<T>(string fileName, bool enableRedirects = false)
+        [ObsoleteEx(Message = "Serialization will be simplified", Replacement = "Load<T>(Stream, SerializationMode) or Load(Type, Stream, SerializationMode)", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
+        public static T Load<T>(string fileName, bool enableRedirects)
             where T : class
         {
             return Load<T>(fileName, SerializationMode.Binary, enableRedirects);
@@ -91,7 +91,8 @@ namespace Catel.Data
         /// When enableRedirects is enabled, loading will take more time. Only set
         /// the parameter to <c>true</c> when the deserialization without redirects fails.
         /// </remarks>
-        public static T Load<T>(IRandomAccessStream fileStream, bool enableRedirects = false)
+        [ObsoleteEx(Message = "Serialization will be simplified", Replacement = "Load<T>(Stream, SerializationMode) or Load(Type, Stream, SerializationMode)", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
+        public static T Load<T>(IRandomAccessStream fileStream, bool enableRedirects)
             where T : class
         {
             return Load<T>(fileStream, SerializationMode.Xml, enableRedirects);
@@ -112,7 +113,8 @@ namespace Catel.Data
         /// When enableRedirects is enabled, loading will take more time. Only set
         /// the parameter to <c>true</c> when the deserialization without redirects fails.
         /// </remarks>
-        public static T Load<T>(IsolatedStorageFileStream fileStream, bool enableRedirects = false)
+        [ObsoleteEx(Message = "Serialization will be simplified", Replacement = "Load<T>(Stream, SerializationMode) or Load(Type, Stream, SerializationMode)", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
+        public static T Load<T>(IsolatedStorageFileStream fileStream, bool enableRedirects)
             where T : class
         {
             return Load<T>(fileStream, SerializationMode.Xml, enableRedirects);
@@ -134,7 +136,8 @@ namespace Catel.Data
         /// When enableRedirects is enabled, loading will take more time. Only set
         /// the parameter to <c>true</c> when the deserialization without redirects fails.
         /// </remarks>
-        public static T Load<T>(string fileName, SerializationMode mode, bool enableRedirects = false)
+        [ObsoleteEx(Message = "Serialization will be simplified", Replacement = "Load<T>(Stream, SerializationMode) or Load(Type, Stream, SerializationMode)", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
+        public static T Load<T>(string fileName, SerializationMode mode, bool enableRedirects)
             where T : class
         {
             using (Stream stream = new FileStream(fileName, FileMode.Open))
@@ -157,7 +160,8 @@ namespace Catel.Data
         /// When enableRedirects is enabled, loading will take more time. Only set
         /// the parameter to <c>true</c> when the deserialization without redirects fails.
         /// </remarks>
-        public static T Load<T>(IRandomAccessStream fileStream, SerializationMode mode, bool enableRedirects = false)
+        [ObsoleteEx(Message = "Serialization will be simplified", Replacement = "Load<T>(Stream, SerializationMode) or Load(Type, Stream, SerializationMode)", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
+        public static T Load<T>(IRandomAccessStream fileStream, SerializationMode mode, bool enableRedirects)
             where T : class
         {
             return Load<T>((Stream)fileStream, mode, enableRedirects);
@@ -179,36 +183,13 @@ namespace Catel.Data
         /// When enableRedirects is enabled, loading will take more time. Only set
         /// the parameter to <c>true</c> when the deserialization without redirects fails.
         /// </remarks>
-        public static T Load<T>(IsolatedStorageFileStream fileStream, SerializationMode mode, bool enableRedirects = false)
+        [ObsoleteEx(Message = "Serialization will be simplified", Replacement = "Load<T>(Stream, SerializationMode) or Load(Type, Stream, SerializationMode)", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
+        public static T Load<T>(IsolatedStorageFileStream fileStream, SerializationMode mode, bool enableRedirects)
             where T : class
         {
             return Load<T>((Stream)fileStream, mode, enableRedirects);
         }
 #endif
-
-        /// <summary>
-        /// Loads the object from an XmlDocument object.
-        /// </summary>
-        /// <typeparam name="T">Type of the object that should be loaded.</typeparam>
-        /// <param name="xmlDocument">The XML document.</param>
-        /// <returns>
-        /// Deserialized instance of the object. If the deserialization fails, <c>null</c> is returned.
-        /// </returns>
-        public static T Load<T>(XDocument xmlDocument)
-            where T : class
-        {
-            using (var memoryStream = new MemoryStream())
-            {
-                using (XmlWriter writer = XmlWriter.Create(memoryStream))
-                {
-                    xmlDocument.Save(writer);
-                }
-
-                memoryStream.Position = 0L;
-
-                return Load<T>(memoryStream, SerializationMode.Xml, false);
-            }
-        }
 
         /// <summary>
         /// Loads the object from a stream.
@@ -223,6 +204,7 @@ namespace Catel.Data
         /// When enableRedirects is enabled, loading will take more time. Only set
         /// the parameter to <c>true</c> when the deserialization without redirects fails.
         /// </remarks>
+        [ObsoleteEx(Message = "Serialization will be simplified", Replacement = "Load<T>(Stream, SerializationMode) or Load(Type, Stream, SerializationMode)", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
         public static T Load<T>(byte[] bytes, bool enableRedirects = false)
             where T : class
         {
@@ -253,6 +235,7 @@ namespace Catel.Data
         /// When enableRedirects is enabled, loading will take more time. Only set
         /// the parameter to <c>true</c> when the deserialization without redirects fails.
         /// </remarks>
+        [ObsoleteEx(Message = "Serialization will be simplified", Replacement = "Load<T>(Stream, SerializationMode) or Load(Type, Stream, SerializationMode)", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
         public static T Load<T>(Stream stream, bool enableRedirects = false)
             where T : class
         {
@@ -268,8 +251,84 @@ namespace Catel.Data
         /// </summary>
         /// <typeparam name="T">Type of the object that should be loaded.</typeparam>
         /// <param name="stream">Stream that contains the serialized data of this object.</param>
-        /// <param name="mode"><see cref="SerializationMode"/> to use.</param>
+        /// <param name="mode"><see cref="SerializationMode" /> to use.</param>
         /// <param name="enableRedirects">if set to <c>true</c>, redirects will be enabled.</param>
+        /// <returns>Deserialized instance of the object. If the deserialization fails, <c>null</c> is returned.</returns>
+        /// <remarks>When enableRedirects is enabled, loading will take more time. Only set
+        /// the parameter to <c>true</c> when the deserialization without redirects fails.</remarks>
+        [ObsoleteEx(Message = "Serialization will be simplified", Replacement = "Load<T>(Stream, SerializationMode) or Load(Type, Stream, SerializationMode)", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
+        public static T Load<T>(Stream stream, SerializationMode mode, bool enableRedirects)
+            where T : class
+        {
+            return (T)Load(typeof (T), stream, mode, enableRedirects);
+        }
+
+        /// <summary>
+        /// Loads the object from a stream using a specific formatting.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="stream">Stream that contains the serialized data of this object.</param>
+        /// <param name="mode"><see cref="SerializationMode" /> to use.</param>
+        /// <param name="enableRedirects">if set to <c>true</c>, redirects will be enabled.</param>
+        /// <returns>Deserialized instance of the object. If the deserialization fails, <c>null</c> is returned.</returns>
+        /// <remarks>When enableRedirects is enabled, loading will take more time. Only set
+        /// the parameter to <c>true</c> when the deserialization without redirects fails.</remarks>
+        [ObsoleteEx(Message = "Serialization will be simplified", Replacement = "Load<T>(Stream, SerializationMode) or Load(Type, Stream, SerializationMode)", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
+        public static IModel Load(Type type, Stream stream, SerializationMode mode, bool enableRedirects)
+        {
+            return Load(type, stream, mode);
+        }
+        #endregion
+
+        /// <summary>
+        /// Loads the object from an XmlDocument object.
+        /// </summary>
+        /// <typeparam name="T">Type of the object that should be loaded.</typeparam>
+        /// <param name="xmlDocument">The XML document.</param>
+        /// <returns>
+        /// Deserialized instance of the object. If the deserialization fails, <c>null</c> is returned.
+        /// </returns>
+        public static T Load<T>(XDocument xmlDocument)
+            where T : class
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                using (var writer = XmlWriter.Create(memoryStream))
+                {
+                    xmlDocument.Save(writer);
+                }
+
+                memoryStream.Position = 0L;
+
+                return Load<T>(memoryStream, SerializationMode.Xml);
+            }
+        }
+
+#if NET
+        /// <summary>
+        /// Loads the object from a file using a specific formatting.
+        /// </summary>
+        /// <typeparam name="T">Type of the object that should be loaded.</typeparam>
+        /// <param name="fileName">Filename of the file that contains the serialized data of this object.</param>
+        /// <param name="mode"><see cref="SerializationMode" /> to use.</param>
+        /// <returns>Deserialized instance of the object. If the deserialization fails, <c>null</c> is returned.</returns>
+        /// <remarks>When enableRedirects is enabled, loading will take more time. Only set
+        /// the parameter to <c>true</c> when the deserialization without redirects fails.</remarks>
+        public static T Load<T>(string fileName, SerializationMode mode)
+            where T : class
+        {
+            using (Stream stream = new FileStream(fileName, FileMode.Open))
+            {
+                return Load<T>(stream, mode);
+            }
+        }
+#elif NETFX_CORE
+        /// <summary>
+        /// Loads the object from a file using a specific formatting.
+        /// </summary>
+        /// <typeparam name="T">Type of the object that should be loaded.</typeparam>
+        /// <param name="fileStream">File stream of the file that contains the serialized data of this object.</param>
+        /// <param name="mode"><see cref="SerializationMode"/> to use.</param>
         /// <returns>
         /// Deserialized instance of the object. If the deserialization fails, <c>null</c> is returned.
         /// </returns>
@@ -277,12 +336,67 @@ namespace Catel.Data
         /// When enableRedirects is enabled, loading will take more time. Only set
         /// the parameter to <c>true</c> when the deserialization without redirects fails.
         /// </remarks>
-        public static T Load<T>(Stream stream, SerializationMode mode, bool enableRedirects = false)
+        [ObsoleteEx(Message = "Serialization will be simplified", Replacement = "Load<T>(Stream, SerializationMode) or Load(Type, Stream, SerializationMode)", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
+        public static T Load<T>(IRandomAccessStream fileStream, SerializationMode mode)
             where T : class
         {
+            return Load<T>((Stream)fileStream, mode);
+        }
+#elif PCL
+        // Not supported in Portable Class Library
+#else
+        /// <summary>
+        /// Loads the object from a file using a specific formatting.
+        /// </summary>
+        /// <typeparam name="T">Type of the object that should be loaded.</typeparam>
+        /// <param name="fileStream">File stream of the file that contains the serialized data of this object.</param>
+        /// <param name="mode"><see cref="SerializationMode"/> to use.</param>
+        /// <returns>
+        /// Deserialized instance of the object. If the deserialization fails, <c>null</c> is returned.
+        /// </returns>
+        /// <remarks>
+        /// When enableRedirects is enabled, loading will take more time. Only set
+        /// the parameter to <c>true</c> when the deserialization without redirects fails.
+        /// </remarks>
+        [ObsoleteEx(Message = "Serialization will be simplified", Replacement = "Load<T>(Stream, SerializationMode) or Load(Type, Stream, SerializationMode)", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
+        public static T Load<T>(IsolatedStorageFileStream fileStream, SerializationMode mode)
+            where T : class
+        {
+            return Load<T>((Stream)fileStream, mode);
+        }
+#endif
+
+        /// <summary>
+        /// Loads the object from a stream using a specific formatting.
+        /// </summary>
+        /// <typeparam name="T">Type of the object that should be loaded.</typeparam>
+        /// <param name="stream">Stream that contains the serialized data of this object.</param>
+        /// <param name="mode"><see cref="SerializationMode" /> to use.</param>
+        /// <returns>Deserialized instance of the object. If the deserialization fails, <c>null</c> is returned.</returns>
+        /// <remarks>When enableRedirects is enabled, loading will take more time. Only set
+        /// the parameter to <c>true</c> when the deserialization without redirects fails.</remarks>
+        public static T Load<T>(Stream stream, SerializationMode mode)
+            where T : class
+        {
+            return (T)Load(typeof(T), stream, mode);
+        }
+
+        /// <summary>
+        /// Loads the object from a stream using a specific formatting.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="stream">Stream that contains the serialized data of this object.</param>
+        /// <param name="mode"><see cref="SerializationMode" /> to use.</param>
+        /// <returns>Deserialized instance of the object. If the deserialization fails, <c>null</c> is returned.</returns>
+        /// <remarks>When enableRedirects is enabled, loading will take more time. Only set
+        /// the parameter to <c>true</c> when the deserialization without redirects fails.</remarks>
+        public static IModel Load(Type type, Stream stream, SerializationMode mode)
+        {
+            Argument.IsNotNull("type", type);
+
             object result = null;
 
-            Log.Debug("Loading object '{0}' as '{1}'", typeof(T).Name, mode);
+            Log.Debug("Loading object '{0}' as '{1}'", type.Name, mode);
 
             switch (mode)
             {
@@ -291,7 +405,7 @@ namespace Catel.Data
                     try
                     {
                         var binarySerializer = SerializationFactory.GetBinarySerializer();
-                        result = binarySerializer.Deserialize(typeof (T), stream);
+                        result = binarySerializer.Deserialize(type, stream);
                     }
                     catch (Exception ex)
                     {
@@ -305,7 +419,7 @@ namespace Catel.Data
                     try
                     {
                         var xmlSerializer = SerializationFactory.GetXmlSerializer();
-                        result = xmlSerializer.Deserialize(typeof(T), stream);
+                        result = xmlSerializer.Deserialize(type, stream);
                     }
                     catch (Exception ex)
                     {
@@ -322,7 +436,7 @@ namespace Catel.Data
                 resultAsModelBase.Mode = mode;
             }
 
-            return (T)result;
+            return result as IModel;
         }
         #endregion
 

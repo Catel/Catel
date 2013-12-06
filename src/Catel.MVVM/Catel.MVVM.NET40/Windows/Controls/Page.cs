@@ -46,12 +46,22 @@ namespace Catel.Windows.Controls
         #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private static readonly IViewModelLocator _viewModelLocator = ServiceLocator.Default.ResolveType<IViewModelLocator>();
+        private static readonly IViewModelLocator _viewModelLocator;
 
         private readonly NavigationPageLogic _logic;
         #endregion
 
         #region Constructors
+        /// <summary>
+        /// Initializes static members of the <see cref="Page"/> class.
+        /// </summary>
+        static Page()
+        {
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+
+            _viewModelLocator = dependencyResolver.Resolve<IViewModelLocator>();
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Page"/> class.
         /// </summary>

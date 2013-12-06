@@ -127,7 +127,7 @@ namespace Catel.Windows
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private static readonly IViewModelLocator _viewModelLocator = ServiceLocator.Default.ResolveType<IViewModelLocator>();
+        private static readonly IViewModelLocator _viewModelLocator;
 
         private bool _isWrapped;
 
@@ -150,7 +150,9 @@ namespace Catel.Windows
         /// </summary>
         static DataWindow()
         {
-            ServiceLocator.Default.RegisterTypeIfNotYetRegistered<IViewModelLocator, ViewModelLocator>();
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+
+            _viewModelLocator = dependencyResolver.Resolve<IViewModelLocator>();
         }
 
         /// <summary>
@@ -304,6 +306,7 @@ namespace Catel.Windows
             }
 
             CanClose = true;
+            CanCloseUsingEscape = true;
 
             Loaded += (sender, e) => Initialize();
             Closing += OnDataWindowClosing;
@@ -352,6 +355,12 @@ namespace Catel.Windows
         /// </summary>
         /// <value><c>true</c> if this instance can close; otherwise, <c>false</c>.</value>
         protected bool CanClose { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance can close using escape.
+        /// </summary>
+        /// <value><c>true</c> if this instance can close using escape; otherwise, <c>false</c>.</value>
+        public bool CanCloseUsingEscape { get; set; }
 
         /// <summary>
         /// Gets the commands that are currently available on the data window.
@@ -706,7 +715,7 @@ namespace Catel.Windows
                 // Else let it go, it's a custom button
             }
 
-            if (e.Key == Key.Escape)
+            if (e.Key == Key.Escape && CanCloseUsingEscape)
             {
                 if (_defaultCancelCommand != null)
                 {

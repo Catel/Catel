@@ -24,9 +24,7 @@ namespace Catel.Extensions.EntityFramework5
         public static void Initialize()
         {
             var serviceLocator = ServiceLocator.Default;
-
-            serviceLocator.RegisterTypeIfNotYetRegistered<IConnectionStringManager, ConnectionStringManager>();
-            serviceLocator.RegisterTypeIfNotYetRegistered<IContextFactory, ContextFactory>();
+            ExtensionsEntityFramework5Module.RegisterServices(serviceLocator);
         }
         #endregion
     }

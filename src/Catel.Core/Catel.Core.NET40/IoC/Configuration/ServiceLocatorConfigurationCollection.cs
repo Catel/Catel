@@ -6,10 +6,11 @@
 
 namespace Catel.IoC
 {
+    using System;
     using System.Configuration;
 
     /// <summary>
-    /// The IoC configuration collection
+    /// The IoC configuration collection.
     /// </summary>
     public sealed class ServiceLocatorConfigurationCollection : ConfigurationElementCollection
     {
@@ -72,7 +73,7 @@ namespace Catel.IoC
         /// </returns>
         protected override bool IsElementName(string elementName)
         {
-            return elementName == ItemElementName;
+            return string.Equals(elementName, ItemElementName, StringComparison.Ordinal);
         }
         
         #endregion

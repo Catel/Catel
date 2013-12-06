@@ -71,17 +71,21 @@ namespace Catel.Data
         /// <param name="lastModified">The last modified date/time.</param>
         public ValidationContext(IEnumerable<IFieldValidationResult> fieldValidationResults, IEnumerable<IBusinessRuleValidationResult> businessRuleValidationResults, DateTime lastModified)
         {
+            bool fieldValidationsIsNull = true;
             if (fieldValidationResults != null)
             {
+                fieldValidationsIsNull = false;
                 _fieldValidations.AddRange(fieldValidationResults);
             }
 
+            bool businessRuleValidationsIsNull = true;
             if (businessRuleValidationResults != null)
             {
+                businessRuleValidationsIsNull = false;
                 _businessRuleValidations.AddRange(businessRuleValidationResults);
             }
 
-            UpdateLastModificationStamp(lastModified);
+            UpdateLastModificationStamp(lastModified, fieldValidationsIsNull && businessRuleValidationsIsNull);
         }
         #endregion
 
@@ -843,15 +847,22 @@ namespace Catel.Data
             }
         }
 
-        private void UpdateLastModificationStamp(DateTime dateTime)
+        private void UpdateLastModificationStamp(DateTime dateTime, bool resetLastModifiedTicksToZero = false)
         {
             LastModified = dateTime;
 
+            if (resetLastModifiedTicksToZero)
+            {
+                LastModifiedTicks = 0;
+            }
+            else
+            {
 #if NET
-            LastModifiedTicks = _stopWatch.ElapsedTicks;
+                LastModifiedTicks = _stopWatch.ElapsedTicks;
 #else
-            LastModifiedTicks = dateTime.Ticks;
-#endif
+                LastModifiedTicks = dateTime.Ticks;
+#endif                
+            }
         }
         #endregion
     }

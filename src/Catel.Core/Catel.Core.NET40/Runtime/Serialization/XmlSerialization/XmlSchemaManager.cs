@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Runtime.Serialization
+namespace Catel.Runtime.Serialization.Xml
 {
     using System;
     using System.Xml;

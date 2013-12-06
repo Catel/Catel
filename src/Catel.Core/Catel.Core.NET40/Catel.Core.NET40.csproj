@@ -15,7 +15,7 @@
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.15.0.0</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.18.0.0</FodyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,9 +44,8 @@
     <None Include="ClassDiagrams\ServiceLocator.cd" />
     <None Include="Fody.targets" />
     <None Include="packages.config" />
-    <Reference Include="Obsolete, Version=2.3.0.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Obsolete.Fody.2.3.0\Lib\NET35\Obsolete.dll</HintPath>
+    <Reference Include="Obsolete">
+      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.0.0\Lib\NET35\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="PresentationFramework" />
@@ -92,6 +91,7 @@
     <Compile Include="ComponentModel\INotifyDataErrorInfo.cs" />
     <Compile Include="ComponentModel\INotifyDataWarningInfo.cs" />
     <Compile Include="Argument.expression.cs" />
+    <Compile Include="CoreModule.cs" />
     <Compile Include="Data\Attributes\AllowNonSerializableMembersAttribute.cs" />
     <Compile Include="Data\Attributes\ValidateModelAttribute.cs" />
     <Compile Include="Data\AttributeValidatorProvider.cs" />
@@ -106,6 +106,7 @@
     <Compile Include="Data\Exceptions\PropertyAlreadyRegisteredException.cs" />
     <Compile Include="Data\Exceptions\PropertyNotNullableException.cs" />
     <Compile Include="Data\Exceptions\PropertyNotRegisteredException.cs" />
+    <Compile Include="Data\Extensions\IParentExtensions.cs" />
     <Compile Include="Data\Extensions\ModelBaseExtensions.cs" />
     <Compile Include="Data\Extensions\ObservableObjectExtensions.cs" />
     <Compile Include="Data\Extensions\ValidationExtensions.cs" />
@@ -137,6 +138,7 @@
     <Compile Include="Data\PropertyBag.cs" />
     <Compile Include="Data\PropertyData.cs" />
     <Compile Include="Data\PropertyDataManager.cs" />
+    <Compile Include="Data\CatelTypeInfo.cs" />
     <Compile Include="Data\PropertyValue.cs" />
     <Compile Include="Data\SavableDataObjectBase.cs" />
     <Compile Include="Data\SavableModelBase.cs" />
@@ -148,13 +150,20 @@
     <Compile Include="DynamicEventListener.cs" />
     <Compile Include="Enum.cs" />
     <Compile Include="EventHandlerExtensions.cs" />
+    <Compile Include="ExceptionHandling\EventArgs\BufferedEventArgs.cs" />
+    <Compile Include="ExceptionHandling\EventArgs\RetryingEventArgs.cs" />
     <Compile Include="ExceptionHandling\ExceptionHandler.cs" />
     <Compile Include="ExceptionHandling\ExceptionService.cs" />
     <Compile Include="ExceptionHandling\Extensions\ExceptionHandlerExtensions.cs" />
-    <Compile Include="ExceptionHandling\Frequency.cs" />
+    <Compile Include="ExceptionHandling\Policies\BufferPolicy.cs" />
     <Compile Include="ExceptionHandling\Interfaces\IExceptionHandler.cs" />
     <Compile Include="ExceptionHandling\Interfaces\IExceptionService.cs" />
-    <Compile Include="ExceptionHandling\Interfaces\IFrequency.cs" />
+    <Compile Include="ExceptionHandling\Interfaces\IBufferPolicy.cs" />
+    <Compile Include="ExceptionHandling\Interfaces\IPolicy.cs" />
+    <Compile Include="ExceptionHandling\Interfaces\IRetryPolicy.cs" />
+    <Compile Include="ExceptionHandling\Policies\PolicyBase.cs" />
+    <Compile Include="ExceptionHandling\Policies\RetryPolicy.cs" />
+    <Compile Include="Exceptions\NotSupportedInPlatformException.cs" />
     <Compile Include="Exceptions\NotSupportedInSilverlightException.cs" />
     <Compile Include="Exceptions\NotSupportedInWindowsPhone7Exception.cs" />
     <Compile Include="Exceptions\NotSupportedInWindows8Exception.cs" />
@@ -171,6 +180,9 @@
     <Compile Include="Helpers\StringToObjectHelper.cs" />
     <Compile Include="Helpers\TagHelper.cs" />
     <Compile Include="Helpers\UniqueIdentifierHelper.cs" />
+    <Compile Include="Helpers\UrlHelper.cs" />
+    <Compile Include="IoC\Attributes\InjectAttribute.cs" />
+    <Compile Include="IoC\Attributes\InjectionConstructorAttribute.cs" />
     <Compile Include="IoC\Attributes\ServiceLocatorRegistrationAttribute.cs" />
     <Compile Include="IoC\Configuration\\IoCConfigurationSection.cs" />
     <Compile Include="IoC\Configuration\Registration.cs" />
@@ -210,6 +222,9 @@
     <Compile Include="IO\Path.cs" />
     <Compile Include="Linq\ExpressionUtil.cs" />
     <Compile Include="Logging\BatchLogListenerBase.cs" />
+    <Compile Include="Logging\Configuration\LoggingConfigurationSection.cs" />
+    <Compile Include="Logging\Configuration\LogListenerConfigurationCollection.cs" />
+    <Compile Include="Logging\Configuration\LogListenerConfiguration.cs" />
     <Compile Include="Logging\ConsoleLogListener.cs" />
     <Compile Include="Logging\DebugLogListener.cs" />
     <Compile Include="Logging\EventArgs\LogMessageEventArgs.cs" />
@@ -327,9 +342,8 @@
     <Compile Include="Runtime\ReferenceManager.cs" />
     <Compile Include="Runtime\Serialization\SerializerModifierBase.cs" />
     <Compile Include="Runtime\Serialization\XmlSerialization\DataContractSerializerFactory.cs" />
-    <Compile Include="Runtime\Serialization\XmlSerialization\DataContractNameResolver.cs" />
     <Compile Include="Runtime\Serialization\XmlSerialization\Interfaces\IDataContractSerializerFactory.cs" />
-    <Compile Include="Runtime\Serialization\XmlSerialization\Interfaces\IDataContractNameResolver.cs" />
+    <Compile Include="Runtime\Serialization\XmlSerialization\Interfaces\IXmlNamespaceManager.cs" />
     <Compile Include="Runtime\Serialization\XmlSerialization\Interfaces\IXmlSerializer.cs" />
     <Compile Include="Runtime\Serialization\SerializationContext.cs" />
     <Compile Include="Runtime\Serialization\SerializationFactory.cs" />
@@ -339,11 +353,16 @@
     <Compile Include="Runtime\Serialization\XmlSerialization\Helpers\XmlHelper.cs" />
     <Compile Include="Runtime\Serialization\XmlSerialization\Helpers\XmlSchemaHelper.cs" />
     <Compile Include="Runtime\ReferenceEqualityComparer.cs" />
+    <Compile Include="Runtime\Serialization\XmlSerialization\XmlNamespace.cs" />
+    <Compile Include="Runtime\Serialization\XmlSerialization\XmlNamespaceManager.cs" />
     <Compile Include="Runtime\Serialization\XmlSerialization\XmlSchemaManager.cs" />
+    <Compile Include="Runtime\Serialization\XmlSerialization\XmlSerializationContextInfo.cs" />
     <Compile Include="Runtime\Serialization\XmlSerialization\XmlSerializer.cs" />
+    <Compile Include="Scoping\EventArgs\ScopeClosedEventArgs.cs" />
     <Compile Include="Scoping\ScopeManager.cs" />
     <Compile Include="Services\Interfaces\IService.cs" />
     <Compile Include="Services\ServiceBase.cs" />
+    <Compile Include="SupportedPlatforms.cs" />
     <Compile Include="Test\ExceptionTester.cs" />
     <Compile Include="Text\Extensions\StringBuilderExtensions.cs" />
     <Compile Include="Threading\Helpers\ThreadHelper.cs" />
@@ -395,6 +414,7 @@
       <LastGenOutput>Resources.zh-CHS.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets. -->

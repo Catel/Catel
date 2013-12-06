@@ -59,12 +59,22 @@ namespace Catel.Windows.Controls
         #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private static readonly IViewModelLocator ViewModelLocator = ServiceLocator.Default.ResolveType<IViewModelLocator>();
+        private static readonly IViewModelLocator ViewModelLocator;
 
         private readonly UserControlLogic _logic;
         #endregion
 
         #region Constructors
+        /// <summary>
+        /// Initializes static members of the <see cref="UserControl"/> class.
+        /// </summary>
+        static UserControl()
+        {
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+
+            ViewModelLocator = dependencyResolver.Resolve<IViewModelLocator>();
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UserControl"/> class.
         /// </summary>

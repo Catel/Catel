@@ -153,14 +153,12 @@ namespace Catel.MVVM.Views
         /// <returns>
         /// The <see cref="IViewModel" /> or <c>null</c> if the view model is not registered.
         /// </returns>
+        /// <exception cref="System.ArgumentException">The <paramref name="viewType"/> is not of type <see cref="IView"/>.</exception>
         public IView GetFirstOrDefaultInstance(Type viewType)
         {
-            Argument.IsNotNull("viewType", viewType);
+            Argument.IsOfType("viewType", viewType, typeof (IView));
 
-            lock (_syncObj)
-            {
-                return ActiveViews.FirstOrDefault(view => ObjectHelper.AreEqual(view.GetType(), viewType));
-            }
+            return ActiveViews.FirstOrDefault(view => ObjectHelper.AreEqual(view.GetType(), viewType));
         }
         #endregion
 

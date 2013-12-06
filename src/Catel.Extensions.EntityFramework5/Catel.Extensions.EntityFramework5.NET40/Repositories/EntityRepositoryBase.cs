@@ -12,6 +12,12 @@ namespace Catel.Data.Repositories
     using System.Linq;
     using System.Linq.Expressions;
 
+#if EF5
+    using EntityKey = System.Data.EntityKey;
+#else
+    using EntityKey = System.Data.Entity.Core.EntityKey;
+#endif
+
     /// <summary>
     /// Base class for entity repositories.
     /// </summary>

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+  <Metadata>
+    <Identity Id="Catel.ItemTemplates.WPF.DataWindow..ec0f239b-dde2-4e47-9c7d-635451b95a6a" Version="1.0" Language="en-US" Publisher="Geert van Horrik" />
+    <DisplayName>WPF DataWindow using Catel</DisplayName>
+    <Description xml:space="preserve">Item template to create a WPF DataWindow using Catel.</Description>
+    <MoreInfo>http://www.catelproject.com</MoreInfo>
+    <GettingStartedGuide>http://www.catelproject.com</GettingStartedGuide>
+    <Icon>__TemplateIcon.ico</Icon>
+    <PreviewImage>__Catel_logo_large.png</PreviewImage>
+  </Metadata>
+  <Installation>
+    <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[11.0,)" />
+    <InstallationTarget Version="[11.0,)" Id="Microsoft.VisualStudio.VSWinExpress" />
+    <InstallationTarget Version="[11.0,)" Id="Microsoft.VisualStudio.VSWinDesktopExpress" />
+  </Installation>
+  <Dependencies>
+  </Dependencies>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="File" Path="ItemTemplates" d:TargetPath="ItemTemplates\CSharp\WPF\Catel.WPF.DataWindow.zip" />
+  </Assets>
+</PackageManifest>

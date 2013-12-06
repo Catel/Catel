@@ -7,12 +7,6 @@
 namespace Catel.Extensions.Prism
 {
     using IoC;
-    using Microsoft.Practices.Prism.Regions;
-    using Tasks;
-
-#if NET
-    using Modules.ModuleManager;
-#endif
 
     /// <summary>
     /// Class that gets called as soon as the module is loaded.
@@ -28,14 +22,7 @@ namespace Catel.Extensions.Prism
         public static void Initialize()
         {
             var serviceLocator = ServiceLocator.Default;
-
-            serviceLocator.RegisterTypeIfNotYetRegistered<IBootstrapperTaskFactory, BootstrapperTaskFactory>();
-
-            serviceLocator.RegisterType<RegionAdapterMappings, RegionAdapterMappings>();
-
-#if NET
-            serviceLocator.RegisterTypeIfNotYetRegistered<IModuleInfoManager, ModuleInfoManager>();
-#endif
+            ExtensionsPrismModule.RegisterServices(serviceLocator);
         }
     }
 }

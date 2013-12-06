@@ -18,7 +18,7 @@
     <ValidateXaml>true</ValidateXaml>
     <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
-    <FodyPath>..\..\..\lib\Fody.1.15.0.0</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.18.0.0</FodyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -84,6 +84,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\ModuleInitializer.cs">
       <Link>ModuleInitializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVMModule.cs">
+      <Link>MVVMModule.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Auditing\AuditingManager.cs">
       <Link>MVVM\Auditing\AuditingManager.cs</Link>
@@ -258,6 +261,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ISplashScreenService.cs">
       <Link>MVVM\Services\Interfaces\ISplashScreenService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IStartUpInfoProvider.cs">
+      <Link>MVVM\Services\Interfaces\IStartUpInfoProvider.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IUIVisualizerService.cs">
       <Link>MVVM\Services\Interfaces\IUIVisualizerService.cs</Link>
@@ -631,11 +637,17 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Helpers\AutoDisposeHelper.cs">
       <Link>Windows\Helpers\AutoDisposeHelper.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Helpers\CommandLineHelper.cs">
+      <Link>Windows\Helpers\CommandLineHelper.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Helpers\EffectsHelper.cs">
       <Link>Windows\Helpers\EffectsHelper.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Helpers\ResourceHelper.cs">
       <Link>Windows\Helpers\ResourceHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Input\Helpers\KeyboardHelper.cs">
+      <Link>Windows\Input\Helpers\KeyboardHelper.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\Authentication.cs">
       <Link>Windows\Interactivity\Authentication.cs</Link>
@@ -658,9 +670,6 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\DelayBindingUpdate.cs">
       <Link>Windows\Interactivity\DelayBindingUpdate.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\DoubleClickToCommand.cs">
-      <Link>Windows\Interactivity\DoubleClickToCommand.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\EventToCommand.cs">
       <Link>Windows\Interactivity\EventToCommand.cs</Link>
     </Compile>
@@ -672,9 +681,6 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\KeyPressToCommand.cs">
       <Link>Windows\Interactivity\KeyPressToCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\MouseInfo.cs">
-      <Link>Windows\Interactivity\MouseInfo.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\NumericTextBox.cs">
       <Link>Windows\Interactivity\NumericTextBox.cs</Link>
@@ -709,105 +715,63 @@
     <Compile Include="..\Catel.MVVM.NET45\MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs">
       <Link>MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\Controls\ValidationResult.cs">
+    <Compile Include="..\Catel.MVVM.SL5\Windows\Controls\ValidationResult.cs">
       <Link>Windows\Controls\ValidationResult.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\Controls\ValidationRule.cs">
+    <Compile Include="..\Catel.MVVM.SL5\Windows\Controls\ValidationRule.cs">
       <Link>Windows\Controls\ValidationRule.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\EventArgs\FrameworkElementLoadedEventArgs.cs">
+    <Compile Include="..\Catel.MVVM.SL5\Windows\EventArgs\FrameworkElementLoadedEventArgs.cs">
       <Link>Windows\EventArgs\FrameworkElementLoadedEventArgs.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\FrameworkElementLoadedManager.cs">
+    <Compile Include="..\Catel.MVVM.SL5\Windows\FrameworkElementLoadedManager.cs">
       <Link>Windows\FrameworkElementLoadedManager.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\Helpers\DataContextChangedHelper.cs">
+    <Compile Include="..\Catel.MVVM.SL5\Windows\Helpers\DataContextChangedHelper.cs">
       <Link>Windows\Helpers\DataContextChangedHelper.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\Helpers\LogicalTreeHelper.cs">
+    <Compile Include="..\Catel.MVVM.SL5\Windows\Helpers\LogicalTreeHelper.cs">
       <Link>Windows\Helpers\LogicalTreeHelper.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\Helpers\SetterValueBindingHelper.cs">
+    <Compile Include="..\Catel.MVVM.SL5\Windows\Helpers\SetterValueBindingHelper.cs">
       <Link>Windows\Helpers\SetterValueBindingHelper.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\Interfaces\IFrameworkElementLoadedManager.cs">
+    <Compile Include="..\Catel.MVVM.SL5\Windows\Interfaces\IFrameworkElementLoadedManager.cs">
       <Link>Windows\Interfaces\IFrameworkElementLoadedManager.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\PopupBehavior\Popup.cs">
+    <Compile Include="..\Catel.MVVM.SL5\Windows\PopupBehavior\Popup.cs">
       <Link>Windows\PopupBehavior\Popup.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\PopupBehavior\PopupOrientation.cs">
+    <Compile Include="..\Catel.MVVM.SL5\Windows\PopupBehavior\PopupOrientation.cs">
       <Link>Windows\PopupBehavior\PopupOrientation.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\PopupBehavior\PopupOrientationCollection.cs">
+    <Compile Include="..\Catel.MVVM.SL5\Windows\PopupBehavior\PopupOrientationCollection.cs">
       <Link>Windows\PopupBehavior\PopupOrientationCollection.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\WeakFrameworkElementInfo.cs">
+    <Compile Include="..\Catel.MVVM.SL5\Windows\WeakFrameworkElementInfo.cs">
       <Link>Windows\WeakFrameworkElementInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.WP7\MVVM\Commands\Helpers\BindingListener.cs">
-      <Link>MVVM\Commands\Helpers\BindingListener.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.WP7\MVVM\Services\AccelerometerService.cs">
-      <Link>MVVM\Services\AccelerometerService.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.WP7\MVVM\Services\AccelerometerValue.cs">
-      <Link>MVVM\Services\AccelerometerValue.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.WP7\MVVM\Services\CameraService.cs">
-      <Link>MVVM\Services\CameraService.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.WP7\MVVM\Services\CameraServiceBase.cs">
-      <Link>MVVM\Services\CameraServiceBase.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.WP7\MVVM\Services\Location.cs">
-      <Link>MVVM\Services\Location.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.WP7\MVVM\Services\LocationService.cs">
-      <Link>MVVM\Services\LocationService.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.WP7\MVVM\Services\PleaseWaitService.cs">
-      <Link>MVVM\Services\PleaseWaitService.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.WP7\MVVM\Services\SensorServiceBase.cs">
-      <Link>MVVM\Services\SensorServiceBase.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.WP7\MVVM\Services\Test\AccelerometerService.cs">
-      <Link>MVVM\Services\Test\AccelerometerService.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.WP7\MVVM\Services\Test\CameraService.cs">
-      <Link>MVVM\Services\Test\CameraService.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.WP7\MVVM\Services\Test\LocationService.cs">
-      <Link>MVVM\Services\Test\LocationService.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.WP7\MVVM\Services\Test\NavigationService.cs">
-      <Link>MVVM\Services\Test\NavigationService.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.WP7\MVVM\Services\Test\SensorServiceBase.cs">
-      <Link>MVVM\Services\Test\SensorServiceBase.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.WP7\MVVM\Services\VibrateService.cs">
-      <Link>MVVM\Services\VibrateService.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.WP7\MVVM\ViewModels\ViewModelBase.tombstoning.cs">
-      <Link>MVVM\ViewModels\ViewModelBase.tombstoning.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.WP7\Phone\Controls\Interfaces\IPhoneApplicationPage.cs">
-      <Link>Phone\Controls\Interfaces\IPhoneApplicationPage.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.WP7\Phone\Controls\PhoneApplicationPage.cs">
-      <Link>Phone\Controls\PhoneApplicationPage.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.WP7\Phone\Controls\PhoneApplicationPage.generic.cs">
-      <Link>Phone\Controls\PhoneApplicationPage.generic.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.WP7\Windows\Controls\MVVMProviders\Logic\PhoneApplicationPageLogic.cs">
-      <Link>Windows\Controls\MVVMProviders\Logic\PhoneApplicationPageLogic.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.WP7\Windows\Controls\MVVMProviders\PhoneApplicationPageBehavior.cs">
-      <Link>Windows\Controls\MVVMProviders\PhoneApplicationPageBehavior.cs</Link>
-    </Compile>
+    <Compile Include="MVVM\Commands\Helpers\BindingListener.cs" />
+    <Compile Include="MVVM\Services\AccelerometerService.cs" />
+    <Compile Include="MVVM\Services\AccelerometerValue.cs" />
+    <Compile Include="MVVM\Services\CameraService.cs" />
+    <Compile Include="MVVM\Services\CameraServiceBase.cs" />
+    <Compile Include="MVVM\Services\Location.cs" />
+    <Compile Include="MVVM\Services\LocationService.cs" />
+    <Compile Include="MVVM\Services\PleaseWaitService.cs" />
+    <Compile Include="MVVM\Services\SensorServiceBase.cs" />
+    <Compile Include="MVVM\Services\Test\AccelerometerService.cs" />
+    <Compile Include="MVVM\Services\Test\CameraService.cs" />
+    <Compile Include="MVVM\Services\Test\LocationService.cs" />
+    <Compile Include="MVVM\Services\Test\NavigationService.cs" />
+    <Compile Include="MVVM\Services\Test\SensorServiceBase.cs" />
+    <Compile Include="MVVM\Services\VibrateService.cs" />
+    <Compile Include="MVVM\ViewModels\ViewModelBase.tombstoning.cs" />
+    <Compile Include="Phone\Controls\Interfaces\IPhoneApplicationPage.cs" />
+    <Compile Include="Phone\Controls\PhoneApplicationPage.cs" />
+    <Compile Include="Phone\Controls\PhoneApplicationPage.generic.cs" />
+    <Compile Include="Windows\Controls\MVVMProviders\Logic\PhoneApplicationPageLogic.cs" />
+    <Compile Include="Windows\Controls\MVVMProviders\PhoneApplicationPageBehavior.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Exceptions.resx">
@@ -872,9 +836,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Obsolete, Version=2.3.0.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Obsolete.Fody.2.3.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
+    <Reference Include="Obsolete">
+      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.0.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System.Windows.Interactivity, Version=3.9.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">

@@ -3,6 +3,8 @@
 //   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+
+
 namespace Catel.Data
 {
     using System;
@@ -11,7 +13,7 @@ namespace Catel.Data
     using System.Collections.Specialized;
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
-    using Logging;
+    using Catel.Logging;
 
     /// <summary>
     /// Available event change types.
@@ -36,17 +38,21 @@ namespace Catel.Data
     /// </summary>
     public class ChangeNotificationWrapper
     {
+        #region Constants
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        #endregion
 
-        private readonly WeakReference _weakReference;
-        private readonly ConditionalWeakTable<object, IWeakEventListener> _weakPropertyChangedListenersTable = new ConditionalWeakTable<object, IWeakEventListener>();
-        private readonly List<IWeakEventListener> _weakPropertyChangedListeners = new List<IWeakEventListener>();
-
-        private readonly ConditionalWeakTable<object, IWeakEventListener> _weakCollectionChangedListenersTable = new ConditionalWeakTable<object, IWeakEventListener>();
-        private readonly List<IWeakEventListener> _weakCollectionChangedListeners = new List<IWeakEventListener>();
-
+        #region Fields
         private readonly object _lockObject = new object();
 
+        private readonly WeakReference _weakReference;
+        private List<IWeakEventListener> _weakCollectionChangedListeners;
+        private ConditionalWeakTable<object, IWeakEventListener> _weakCollectionChangedListenersTable;
+        private List<IWeakEventListener> _weakPropertyChangedListeners;
+        private ConditionalWeakTable<object, IWeakEventListener> _weakPropertyChangedListenersTable;
+        #endregion
+
+        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ChangeNotificationWrapper"/> class.
         /// </summary>
@@ -74,7 +80,9 @@ namespace Catel.Data
 
             SubscribeNotifyChangedEvents(value, false);
         }
+        #endregion
 
+        #region Properties
         /// <summary>
         /// Gets a value indicating whether <see cref="INotifyPropertyChanged"/> is supported by the target object.
         /// </summary>
@@ -95,21 +103,35 @@ namespace Catel.Data
         {
             get { return _weakReference.IsAlive; }
         }
+        #endregion
 
+        #region Methods
         /// <summary>
-        /// Occurs when the <see cref="PropertyChanged"/> event occurs on the target object.
+        /// Determines whether creating a <see cref="ChangeNotificationWrapper"/> is useful for the specified object.
+        /// <para />
+        /// An object is considered usable when it implements either <see cref="INotifyPropertyChanged"/> or <see cref="INotifyCollectionChanged"/>.
         /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
+        /// <param name="obj">The object to check.</param>
+        /// <returns><c>true</c> if it is useful to create a <see cref="ChangeNotificationWrapper"/>; otherwise, <c>false</c>.</returns>
+        public static bool IsUsefulForObject(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
 
-        /// <summary>
-        /// Occurs when the <see cref="PropertyChanged"/> event occurs in the collection when the target object is a collection.
-        /// </summary>
-        public event PropertyChangedEventHandler CollectionItemPropertyChanged;
+            if (obj is INotifyPropertyChanged)
+            {
+                return true;
+            }
 
-        /// <summary>
-        /// Occurs when the <see cref="CollectionChanged"/> event occurs on the target object.
-        /// </summary>
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
+            if (obj is INotifyCollectionChanged)
+            {
+                return true;
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// Called when the target object raises the <see cref="INotifyPropertyChanged.PropertyChanged"/> event.
@@ -174,19 +196,25 @@ namespace Catel.Data
         {
             lock (_lockObject)
             {
-                foreach (var weakListener in _weakPropertyChangedListeners)
+                if (_weakPropertyChangedListeners != null)
                 {
-                    weakListener.Detach();
+                    foreach (var weakListener in _weakPropertyChangedListeners)
+                    {
+                        weakListener.Detach();
+                    }
+
+                    _weakPropertyChangedListeners.Clear();
                 }
 
-                _weakPropertyChangedListeners.Clear();
-
-                foreach (var weakListener in _weakCollectionChangedListeners)
+                if (_weakCollectionChangedListeners != null)
                 {
-                    weakListener.Detach();
-                }
+                    foreach (var weakListener in _weakCollectionChangedListeners)
+                    {
+                        weakListener.Detach();
+                    }
 
-                _weakCollectionChangedListeners.Clear();
+                    _weakCollectionChangedListeners.Clear();
+                }
             }
         }
 
@@ -212,7 +240,7 @@ namespace Catel.Data
                 {
                     UnsubscribeNotifyChangedEvent(collectionChangedValue, EventChangeType.Collection);
 
-                    foreach (var child in (IEnumerable)value)
+                    foreach (var child in (IEnumerable) value)
                     {
                         UnsubscribeNotifyChangedEvents(child);
                     }
@@ -234,7 +262,7 @@ namespace Catel.Data
                 {
                     SubscribeNotifyChangedEvent(collectionChangedValue, EventChangeType.Collection, isCollectionItem);
 
-                    foreach (var child in (IEnumerable)value)
+                    foreach (var child in (IEnumerable) value)
                     {
                         SubscribeNotifyChangedEvents(child, true);
                     }
@@ -270,11 +298,31 @@ namespace Catel.Data
             switch (eventChangeType)
             {
                 case EventChangeType.Property:
+                    if (_weakPropertyChangedListenersTable == null)
+                    {
+                        _weakPropertyChangedListenersTable = new ConditionalWeakTable<object, IWeakEventListener>();
+                    }
+
+                    if (_weakPropertyChangedListeners == null)
+                    {
+                        _weakPropertyChangedListeners = new List<IWeakEventListener>();
+                    }
+
                     eventsTable = _weakPropertyChangedListenersTable;
                     eventsList = _weakPropertyChangedListeners;
                     break;
 
                 case EventChangeType.Collection:
+                    if (_weakCollectionChangedListenersTable == null)
+                    {
+                        _weakCollectionChangedListenersTable = new ConditionalWeakTable<object, IWeakEventListener>();
+                    }
+
+                    if (_weakCollectionChangedListeners == null)
+                    {
+                        _weakCollectionChangedListeners = new List<IWeakEventListener>();
+                    }
+
                     eventsTable = _weakCollectionChangedListenersTable;
                     eventsList = _weakCollectionChangedListeners;
                     break;
@@ -359,5 +407,21 @@ namespace Catel.Data
                 }
             }
         }
+        #endregion
+
+        /// <summary>
+        /// Occurs when the <see cref="PropertyChanged"/> event occurs on the target object.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Occurs when the <see cref="PropertyChanged"/> event occurs in the collection when the target object is a collection.
+        /// </summary>
+        public event PropertyChangedEventHandler CollectionItemPropertyChanged;
+
+        /// <summary>
+        /// Occurs when the <see cref="CollectionChanged"/> event occurs on the target object.
+        /// </summary>
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
     }
 }

@@ -16,7 +16,7 @@
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.13.12</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.18.0.0</FodyPath>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
   </PropertyGroup>
@@ -134,6 +134,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\ModuleInitializer.cs">
       <Link>ModuleInitializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVMModule.cs">
+      <Link>MVVMModule.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Auditing\AuditingManager.cs">
       <Link>MVVM\Auditing\AuditingManager.cs</Link>
@@ -639,6 +642,39 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Helpers\CommandLineHelper.cs">
       <Link>Windows\Helpers\CommandLineHelper.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Input\Helpers\KeyboardHelper.cs">
+      <Link>Windows\Input\Helpers\KeyboardHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\Authentication.cs">
+      <Link>Windows\Interactivity\Authentication.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\BehaviorBase.cs">
+      <Link>Windows\Interactivity\BehaviorBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\CommandBehaviorBase.cs">
+      <Link>Windows\Interactivity\CommandBehaviorBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\DelayBindingUpdate.cs">
+      <Link>Windows\Interactivity\DelayBindingUpdate.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\Focus.cs">
+      <Link>Windows\Interactivity\Focus.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\KeyPressToCommand.cs">
+      <Link>Windows\Interactivity\KeyPressToCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\SelectTextOnFocus.cs">
+      <Link>Windows\Interactivity\SelectTextOnFocus.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\UpdateBindingBehaviorBase.cs">
+      <Link>Windows\Interactivity\UpdateBindingBehaviorBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\UpdateBindingOnPasswordChanged.cs">
+      <Link>Windows\Interactivity\UpdateBindingOnPasswordChanged.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\UpdateBindingOnTextChanged.cs">
+      <Link>Windows\Interactivity\UpdateBindingOnTextChanged.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interfaces\IDependencyPropertySelector.cs">
       <Link>Windows\Interfaces\IDependencyPropertySelector.cs</Link>
     </Compile>
@@ -651,42 +687,34 @@
     <Compile Include="..\Catel.MVVM.NET45\MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs">
       <Link>MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\Controls\ValidationResult.cs">
+    <Compile Include="..\Catel.MVVM.SL5\Windows\Controls\ValidationResult.cs">
       <Link>Windows\Controls\ValidationResult.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\Controls\ValidationRule.cs">
+    <Compile Include="..\Catel.MVVM.SL5\Windows\Controls\ValidationRule.cs">
       <Link>Windows\Controls\ValidationRule.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\EventArgs\FrameworkElementLoadedEventArgs.cs">
+    <Compile Include="..\Catel.MVVM.SL5\Windows\EventArgs\FrameworkElementLoadedEventArgs.cs">
       <Link>Windows\EventArgs\FrameworkElementLoadedEventArgs.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\FrameworkElementLoadedManager.cs">
+    <Compile Include="..\Catel.MVVM.SL5\Windows\FrameworkElementLoadedManager.cs">
       <Link>Windows\FrameworkElementLoadedManager.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\Helpers\DataContextChangedHelper.cs">
+    <Compile Include="..\Catel.MVVM.SL5\Windows\Helpers\DataContextChangedHelper.cs">
       <Link>Windows\Helpers\DataContextChangedHelper.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\Helpers\LogicalTreeHelper.cs">
+    <Compile Include="..\Catel.MVVM.SL5\Windows\Helpers\LogicalTreeHelper.cs">
       <Link>Windows\Helpers\LogicalTreeHelper.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\Helpers\SetterValueBindingHelper.cs">
-      <Link>Windows\Helpers\SetterValueBindingHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\Interfaces\IFrameworkElementLoadedManager.cs">
+    <Compile Include="..\Catel.MVVM.SL5\Windows\Interfaces\IFrameworkElementLoadedManager.cs">
       <Link>Windows\Interfaces\IFrameworkElementLoadedManager.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\WeakFrameworkElementInfo.cs">
+    <Compile Include="..\Catel.MVVM.SL5\Windows\WeakFrameworkElementInfo.cs">
       <Link>Windows\WeakFrameworkElementInfo.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.WIN80\MVVM\Services\PleaseWaitService.cs">
       <Link>MVVM\Services\PleaseWaitService.cs</Link>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Catel.Core\Catel.Core.WIN81\Catel.Core.WIN81.csproj">
-      <Project>{b9ae0468-56bb-4afc-8533-8a493fddf8da}</Project>
-      <Name>Catel.Core.WIN81</Name>
-    </ProjectReference>
+    <Compile Include="Windows\Interactivity\Behavior.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Windows\Markup\" />
@@ -729,8 +757,19 @@
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
+    <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0">
+      <Name>Behaviors SDK %28XAML%29</Name>
+    </SDKReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Catel.Core\Catel.Core.WIN81\Catel.Core.WIN81.csproj">
+      <Project>{c022232f-d54e-4c23-9f16-360f9812a53e}</Project>
+      <Name>Catel.Core.WIN81</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="Obsolete">
-      <HintPath>..\..\..\lib\Obsolete.Fody.2.3.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
+      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.0.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>

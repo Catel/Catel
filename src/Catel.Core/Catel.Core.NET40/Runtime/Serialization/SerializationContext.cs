@@ -7,7 +7,6 @@
 namespace Catel.Runtime.Serialization
 {
     using System;
-    using System.Threading;
     using Catel.Scoping;
     using Data;
 

@@ -2,4 +2,9 @@
 <Weavers>
   <Obsolete />
   <ModuleInit />
+  <Costura>
+    <IncludeAssemblies>
+      NuGet.Core
+    </IncludeAssemblies>
+  </Costura>
 </Weavers>

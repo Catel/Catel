@@ -6,13 +6,25 @@
 
 namespace Catel.Windows.Interactivity
 {
-    using System;
+    
+#if NETFX_CORE
+    using global::Windows.UI.Core;
+    using global::Windows.UI.Xaml;
+    using global::Windows.UI.Xaml.Controls;
+    using Key = global::Windows.System.VirtualKey;
+    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
+#else
     using System.Windows.Controls;
-    using System.Collections.Generic;
-    using System.Windows;
     using System.Windows.Data;
     using System.Windows.Input;
+    using UIEventArgs = System.EventArgs;
+#endif
+
+    using System;
+    using System.Collections.Generic;
+    using System.Windows;
     using Catel.Logging;
+    using Catel.Windows.Input;
 
     /// <summary>
     /// Behavior to only allow numeric input on a <see cref="TextBox"/>.
@@ -31,13 +43,23 @@ namespace Catel.Windows.Interactivity
         private static readonly List<Key> AllowedKeys = new List<Key>
         {
             Key.Back,
-            Key.CapsLock,                                                                
+
+#if NETFX_CORE
+            Key.CapitalLock,
+#else
+            Key.CapsLock,                                                              
+#endif
+            
 #if SILVERLIGHT                                                                
             //Key.Ctrl
+#elif NETFX_CORE
+            Key.LeftControl,
+            Key.RightControl,
+            Key.Control,
 #else
             Key.LeftCtrl,
             Key.RightCtrl,
-#endif                                                                
+#endif                                        
             Key.Down,
             Key.End,
             Key.Enter,
@@ -246,7 +268,7 @@ namespace Catel.Windows.Interactivity
         {
             bool isDigit;
 
-            bool isShiftKey = (Keyboard.Modifiers & ModifierKeys.Shift) != 0;
+            bool isShiftKey = KeyboardHelper.AreKeyboardModifiersPressed(ModifierKeys.Shift);
 
             if (key >= Key.D0 && key <= Key.D9 && !isShiftKey)
             {
@@ -282,23 +304,36 @@ namespace Catel.Windows.Interactivity
             {
                 keyValue = PeriodCharacter;
             }
+#elif NETFX_CORE
+            if (e.VirtualKey == Key.Subtract)
+            {
+                keyValue = MinusCharacter;
+            }
+            //else if (e.VirtualKey == Key.)
+            //{
+            //    keyValue = CommaCharacter;
+            //}
+            //else if (e.VirtualKey == Key.Pe)
+            //{
+            //    keyValue = PeriodCharacter;
+            //}
 #else
             if (e.PlatformKeyCode == 190 || e.PlatformKeyCode == 110)
             {
                 keyValue = PeriodCharacter;
             }
-            else if(e.PlatformKeyCode == 188)
-            {                 
+            else if (e.PlatformKeyCode == 188)
+            {
                 keyValue = CommaCharacter;
             }
-            else if(e.PlatformKeyCode == 189)
-            {                 
+            else if (e.PlatformKeyCode == 189)
+            {
                 keyValue = MinusCharacter;
             }
             else
             {
                 keyValue = e.Key.ToString().Replace("D", "").Replace("NumPad", "");
-            }  
+            }
 #endif
 
             return keyValue;

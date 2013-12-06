@@ -4,24 +4,27 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Runtime.Serialization
+namespace Catel.Runtime.Serialization.Xml
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Text;
     using System.Xml;
     using System.Xml.Linq;
     using System.Xml.Serialization;
     using Catel.Caching;
     using Catel.Data;
+    using Catel.IoC;
     using Catel.Logging;
     using Catel.Reflection;
 
     /// <summary>
     /// The xml serializer to serialize the <see cref="ModelBase"/> and derived classes.
     /// </summary>
-    public class XmlSerializer : SerializerBase<XElement>, IXmlSerializer
+    public class XmlSerializer : SerializerBase<XmlSerializationContextInfo>, IXmlSerializer
     {
         #region Enums
         private enum MemberType
@@ -43,9 +46,9 @@ namespace Catel.Runtime.Serialization
         #endregion
 
         #region Fields
-        private readonly IDataContractSerializerFactory _dataContractSerializerFactory;
-
         private readonly CacheStorage<Type, List<string>> _ignoredMembersCache = new CacheStorage<Type, List<string>>();
+        private readonly IDataContractSerializerFactory _dataContractSerializerFactory;
+        private readonly IXmlNamespaceManager _xmlNamespaceManager;
         #endregion
 
         #region Constructors
@@ -54,15 +57,32 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="serializationManager">The serialization manager.</param>
         /// <param name="dataContractSerializerFactory">The data contract serializer factory.</param>
+        /// <param name="xmlNamespaceManager">The XML namespace manager.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationManager" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="dataContractSerializerFactory" /> is <c>null</c>.</exception>
-        public XmlSerializer(ISerializationManager serializationManager, IDataContractSerializerFactory dataContractSerializerFactory)
+        /// <exception cref="ArgumentNullException">The <paramref name="xmlNamespaceManager" /> is <c>null</c>.</exception>
+        public XmlSerializer(ISerializationManager serializationManager, IDataContractSerializerFactory dataContractSerializerFactory,
+            IXmlNamespaceManager xmlNamespaceManager)
             : base(serializationManager)
         {
-            Argument.IsNotNull(() => dataContractSerializerFactory);
+            Argument.IsNotNull("dataContractSerializerFactory", dataContractSerializerFactory);
+            Argument.IsNotNull("xmlNamespaceManager", xmlNamespaceManager);
 
             _dataContractSerializerFactory = dataContractSerializerFactory;
+            _xmlNamespaceManager = xmlNamespaceManager;
+
+            OptimalizationMode = XmlSerializerOptimalizationMode.Performance;
         }
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets or sets the optimalization mode.
+        /// <para />
+        /// The default value is <see cref="XmlSerializerOptimalizationMode.Performance"/>.
+        /// </summary>
+        /// <value>The optimalization mode.</value>
+        public XmlSerializerOptimalizationMode OptimalizationMode { get; set; }
         #endregion
 
         #region Methods
@@ -140,7 +160,7 @@ namespace Catel.Runtime.Serialization
         /// Called before the serializer starts serializing an object.
         /// </summary>
         /// <param name="context">The context.</param>
-        protected override void BeforeSerialization(ISerializationContext<XElement> context)
+        protected override void BeforeSerialization(ISerializationContext<XmlSerializationContextInfo> context)
         {
             base.BeforeSerialization(context);
 
@@ -157,11 +177,11 @@ namespace Catel.Runtime.Serialization
         /// Called before the serializer starts deserializing an object.
         /// </summary>
         /// <param name="context">The context.</param>
-        protected override void BeforeDeserialization(ISerializationContext<XElement> context)
+        protected override void BeforeDeserialization(ISerializationContext<XmlSerializationContextInfo> context)
         {
             base.BeforeDeserialization(context);
 
-            var element = context.Context;
+            var element = context.Context.Element;
 
             var graphIdAttribute = element.Attribute(GraphId);
             if (graphIdAttribute != null)
@@ -185,10 +205,10 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="memberValue">The member value.</param>
-        protected override void SerializeMember(ISerializationContext<XElement> context, MemberValue memberValue)
+        protected override void SerializeMember(ISerializationContext<XmlSerializationContextInfo> context, MemberValue memberValue)
         {
             var modelType = context.ModelType;
-            var element = context.Context;
+            var element = context.Context.Element;
 
             var propertyDataManager = PropertyDataManager.Default;
             if (propertyDataManager.IsPropertyNameMappedToXmlAttribute(modelType, memberValue.Name))
@@ -220,10 +240,10 @@ namespace Catel.Runtime.Serialization
         /// <param name="context">The context.</param>
         /// <param name="memberValue">The member value.</param>
         /// <returns>The <see cref="SerializationObject"/> representing the deserialized value or result.</returns>
-        protected override SerializationObject DeserializeMember(ISerializationContext<XElement> context, MemberValue memberValue)
+        protected override SerializationObject DeserializeMember(ISerializationContext<XmlSerializationContextInfo> context, MemberValue memberValue)
         {
             var modelType = context.ModelType;
-            var element = context.Context;
+            var element = context.Context.Element;
 
             try
             {
@@ -311,10 +331,40 @@ namespace Catel.Runtime.Serialization
         /// <param name="context">The context.</param>
         /// <param name="stream">The stream.</param>
         /// <exception cref="System.NotImplementedException"></exception>
-        protected override void AppendContextToStream(ISerializationContext<XElement> context, Stream stream)
+        protected override void AppendContextToStream(ISerializationContext<XmlSerializationContextInfo> context, Stream stream)
         {
-            var document = new XDocument(context.Context);
+            var element = context.Context.Element;
+            var document = new XDocument(element);
+
+            OptimizeXDocument(document);
+
             document.Save(stream);
+        }
+
+        /// <summary>
+        /// Optimizes the xml document.
+        /// </summary>
+        /// <param name="document">The document.</param>
+        protected virtual void OptimizeXDocument(XDocument document)
+        {
+            if (OptimalizationMode == XmlSerializerOptimalizationMode.Performance)
+            {
+                return;
+            }
+
+            var rootNamespaces = (from attribute in document.Root.Attributes()
+                                  where attribute.IsNamespaceDeclaration
+                                  select attribute.Value).ToList();
+
+            var obsoleteNamespaceMarkers = (from descendant in document.Root.Descendants()
+                                            from attribute in descendant.Attributes()
+                                            where attribute.IsNamespaceDeclaration && rootNamespaces.Contains(attribute.Value)
+                                            select attribute).ToList();
+
+            foreach (var obsoleteNamespaceMarker in obsoleteNamespaceMarkers)
+            {
+                obsoleteNamespaceMarker.Remove();
+            }
         }
 
         /// <summary>
@@ -324,7 +374,7 @@ namespace Catel.Runtime.Serialization
         /// <param name="stream">The stream.</param>
         /// <param name="contextMode">The context mode.</param>
         /// <returns>The serialization context.</returns>
-        protected override ISerializationContext<XElement> GetContext(ModelBase model, Stream stream, SerializationContextMode contextMode)
+        protected override ISerializationContext<XmlSerializationContextInfo> GetContext(ModelBase model, Stream stream, SerializationContextMode contextMode)
         {
             XDocument document = null;
 
@@ -347,7 +397,8 @@ namespace Catel.Runtime.Serialization
                 document = new XDocument(new XElement(rootName));
             }
 
-            var context = new SerializationContext<XElement>(model, document.Root, contextMode);
+            var contextInfo = new XmlSerializationContextInfo(document.Root, model);
+            var context = new SerializationContext<XmlSerializationContextInfo>(model, contextInfo, contextMode);
 
             if (isNewDocument)
             {
@@ -382,7 +433,7 @@ namespace Catel.Runtime.Serialization
         /// <param name="modelType">Type of the model.</param>
         /// <returns>Object or <c>null</c>.</returns>
         /// <remarks>Note that this method can cause exceptions. The caller will handle them.</remarks>
-        private object GetObjectFromXmlElement(ISerializationContext context, XElement element, MemberValue memberValue, Type modelType)
+        private object GetObjectFromXmlElement(ISerializationContext<XmlSerializationContextInfo> context, XElement element, MemberValue memberValue, Type modelType)
         {
             object value = null;
             string xmlName = element.Name.LocalName;
@@ -431,6 +482,8 @@ namespace Catel.Runtime.Serialization
                 }
             }
 
+            //var xmlSerializationContextInfo = context.Context;
+            //var serializer = xmlSerializationContextInfo.GetDataContractSerializer();
             var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, propertyTypeToDeserialize, xmlName);
 
             using (var xmlReader = element.CreateReader())
@@ -463,20 +516,23 @@ namespace Catel.Runtime.Serialization
         /// <param name="elementName">Name of the element.</param>
         /// <param name="memberValue">The member value.</param>
         /// <param name="modelType">Type of the model.</param>
-        private void WriteXmlElement(ISerializationContext context, XElement element, string elementName, MemberValue memberValue, Type modelType)
+        private void WriteXmlElement(ISerializationContext<XmlSerializationContextInfo> context, XElement element, string elementName, MemberValue memberValue, Type modelType)
         {
+            var contextInfo = context.Context;
             var namespacePrefix = GetNamespacePrefix();
             var stringBuilder = new StringBuilder();
             var xmlWriterSettings = new XmlWriterSettings();
+            XmlNamespace xmlNamespace = null;
 
             xmlWriterSettings.OmitXmlDeclaration = true;
             xmlWriterSettings.CheckCharacters = false;
             xmlWriterSettings.ConformanceLevel = ConformanceLevel.Fragment;
+            xmlWriterSettings.NamespaceHandling = NamespaceHandling.OmitDuplicates;
 
             using (var xmlWriter = XmlWriter.Create(stringBuilder, xmlWriterSettings))
             {
                 var memberTypeToSerialize = memberValue.Value != null ? memberValue.Value.GetType() : typeof(object);
-                var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, memberTypeToSerialize, elementName, memberValue.Value);
+                var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, memberTypeToSerialize, elementName, null, memberValue.Value);
 
                 if (memberValue.Value == null)
                 {
@@ -510,7 +566,17 @@ namespace Catel.Runtime.Serialization
 
                     if (serializeElement)
                     {
+                        //var xmlSerializer = new System.Xml.Serialization.XmlSerializer(memberTypeToSerialize, namespacePrefix);
+                        //xmlSerializer.S
+                        //xmlSerializer.Serialize(xmlWriter, memberValue.Value);
+
                         serializer.WriteStartObject(xmlWriter, memberValue.Value);
+
+                        xmlNamespace = _xmlNamespaceManager.GetNamespace(memberTypeToSerialize, namespacePrefix);
+                        if (xmlNamespace != null)
+                        {
+                            xmlWriter.WriteAttributeString("xmlns", xmlNamespace.Prefix, null, xmlNamespace.Uri);
+                        }
 
                         if (referenceInfo != null)
                         {
@@ -530,7 +596,7 @@ namespace Catel.Runtime.Serialization
                 }
             }
 
-            EnsureNamespaceInXmlDocument(element);
+            EnsureNamespaceInXmlDocument(element, xmlNamespace);
 
             var childContent = stringBuilder.ToString();
             var childElement = XElement.Parse(childContent);
@@ -555,7 +621,8 @@ namespace Catel.Runtime.Serialization
         /// Ensures the catel namespace in the xml document.
         /// </summary>
         /// <param name="element">The element.</param>
-        private void EnsureNamespaceInXmlDocument(XElement element)
+        /// <param name="xmlNamespace">The XML namespace. Can be <c>null</c>.</param>
+        private void EnsureNamespaceInXmlDocument(XElement element, XmlNamespace xmlNamespace)
         {
             var catelNamespaceUrl = GetNamespaceUrl();
             string ns1 = element.GetPrefixOfNamespace(catelNamespaceUrl);
@@ -571,6 +638,14 @@ namespace Catel.Runtime.Serialization
                         var catelNamespace = new XAttribute(catelNamespaceName, catelNamespaceUrl);
 
                         documentRoot.Add(catelNamespace);
+
+                        if (xmlNamespace != null)
+                        {
+                            var dynamicNamespaceName = XNamespace.Xmlns + xmlNamespace.Prefix;
+                            var dynamicNamespace = new XAttribute(dynamicNamespaceName, xmlNamespace.Uri);
+
+                            documentRoot.Add(dynamicNamespace);
+                        }
                     }
                 }
             }

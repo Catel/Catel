@@ -24,6 +24,12 @@ namespace Catel.Data
     using Logging;
     using Runtime.Serialization;
 
+#if NET
+    using Runtime.Serialization.Binary;
+#endif
+
+    using Runtime.Serialization.Xml;
+
     #region Enums
     /// <summary>
     /// Enumeration containing all the available serialization modes for the <see cref="ModelBase{TModel}"/> class.
@@ -58,7 +64,7 @@ namespace Catel.Data
         /// </summary>
         internal static readonly Type InternalSerializationType = typeof(List<PropertyValue>);
         #endregion
-        
+
         #region Fields
         /// <summary>
         /// The log.
@@ -68,13 +74,21 @@ namespace Catel.Data
 #endif
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+#if NET
+        /// <summary>
+        /// The empty streaming context.
+        /// </summary>
+        [field: NonSerialized]
+        private static readonly StreamingContext EmptyStreamingContext = new StreamingContext();
+#endif
+
         /// <summary>
         /// Dictionary of initialized types.
         /// </summary>
 #if NET
         [field: NonSerialized]
 #endif
-        private static readonly Dictionary<Type, bool> _initializedTypes = new Dictionary<Type, bool>();
+        private static readonly HashSet<Type> _initializedTypes = new HashSet<Type>();
 
         /// <summary>
         /// Lock object for the <see cref="_initializedTypes"/> field.
@@ -177,7 +191,7 @@ namespace Catel.Data
         // ReSharper disable PublicConstructorInAbstractClass
         public ModelBase()
             // ReSharper restore PublicConstructorInAbstractClass
-            : this(null, new StreamingContext())
+            : this(null, EmptyStreamingContext)
         {
             // Do not write anything in this constructor. Use the Initialize method or the
             // OnInitializing or OnInitialized methods instead.
@@ -287,6 +301,14 @@ namespace Catel.Data
 #endif
         [XmlIgnore]
         internal static bool DisablePropertyChangeNotifications { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether event subscriptions of child values should be disabled.
+        /// <para />
+        /// The default value is <c>false</c>.
+        /// </summary>
+        /// <value><c>true</c> if event subscriptions of child values should be disabled; otherwise, <c>false</c>.</value>
+        protected bool DisableEventSubscriptionsOfChildValues { get; set; }
 
         /// <summary>
         /// Gets the property data manager that manages the properties of this object.
@@ -567,6 +589,16 @@ namespace Catel.Data
             Mode = SerializationMode.Xml;
 #endif
 
+            var type = GetType();
+
+#if !WINDOWS_PHONE && !NETFX_CORE && !PCL && !NET35
+            if (!_propertyValuesFailedForValidation.ContainsKey(type))
+            {
+                _propertyValuesFailedForValidation.Add(type, new List<string>());
+                _propertyValuesAtLeastOnceValidated.Add(type, new List<string>());
+            }
+#endif
+
             InitializeProperties();
 
             InitializeCustomProperties();
@@ -594,7 +626,8 @@ namespace Catel.Data
         /// </summary>
         private void FinishInitializationAfterConstructionOrDeserialization()
         {
-            foreach (var propertyData in PropertyDataManager.GetProperties(GetType()))
+            var catelTypeInfo = PropertyDataManager.GetCatelTypeInfo(GetType());
+            foreach (var propertyData in catelTypeInfo.GetCatelProperties())
             {
                 if (propertyData.Value.SetParent)
                 {
@@ -730,7 +763,6 @@ namespace Catel.Data
                 if (notifyOnChange && (AlwaysInvokeNotifyChanged || !areOldAndNewValuesEqual) && !LeanAndMeanModel)
                 {
                     var propertyChangingEventArgs = new AdvancedPropertyChangingEventArgs(property.Name);
-
                     RaisePropertyChanging(this, propertyChangingEventArgs);
 
                     if (propertyChangingEventArgs.Cancel)
@@ -1004,8 +1036,8 @@ namespace Catel.Data
                 objAsModelBase.IsDirty = false;
                 handledReferences.Add(objAsModelBase);
 
-                var properties = PropertyDataManager.GetProperties(obj.GetType());
-                foreach (var property in properties)
+                var catelTypeInfo = PropertyDataManager.GetCatelTypeInfo(obj.GetType());
+                foreach (var property in catelTypeInfo.GetCatelProperties())
                 {
                     object value = objAsModelBase.GetValue(property.Value);
 
@@ -1032,6 +1064,11 @@ namespace Catel.Data
         /// <param name="propertyValue">The property value.</param>
         private void HandleObjectEventsSubscription(string propertyName, object propertyValue)
         {
+            if (DisableEventSubscriptionsOfChildValues)
+            {
+                return;
+            }
+
 #if !WP7
             lock (_propertyValuesLock)
             {
@@ -1047,7 +1084,7 @@ namespace Catel.Data
                     }
                 }
 
-                if (ObjectHelper.IsNull(propertyValue))
+                if (!ChangeNotificationWrapper.IsUsefulForObject(propertyValue))
                 {
                     _propertyValueChangeNotificationWrappers[propertyName] = null;
                 }
@@ -1126,7 +1163,7 @@ namespace Catel.Data
         /// <returns><see cref="PropertyData" /> containing the property information.</returns>
         /// <exception cref="System.ArgumentException">The member type of the body of the <paramref name="propertyExpression" /> of should be <c>MemberTypes.Property</c>.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="propertyExpression" /> is <c>null</c>.</exception>
-        public static PropertyData RegisterProperty<TModel, TValue>(Expression<Func<TModel, TValue>> propertyExpression, TValue defaultValue, 
+        public static PropertyData RegisterProperty<TModel, TValue>(Expression<Func<TModel, TValue>> propertyExpression, TValue defaultValue,
             Action<TModel, AdvancedPropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true,
             bool includeInBackup = true, bool setParent = true)
         {
@@ -1168,7 +1205,7 @@ namespace Catel.Data
         /// <exception cref="System.ArgumentException">The member type of the body of the <paramref name="propertyExpression" /> of should be <c>MemberTypes.Property</c>.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="propertyExpression" /> is <c>null</c>.</exception>
         public static PropertyData RegisterProperty<TModel, TValue>(Expression<Func<TModel, TValue>> propertyExpression, Func<TValue> createDefaultValue = null,
-            Action<TModel, AdvancedPropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, 
+            Action<TModel, AdvancedPropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true,
             bool includeInBackup = true, bool setParent = true)
         {
             Argument.IsNotNull("propertyExpression", propertyExpression);
@@ -1334,10 +1371,10 @@ namespace Catel.Data
         {
             var type = GetType();
 
-            var registeredPropertyData = PropertyDataManager.RegisterProperties(type);
-
-            foreach (var propertyData in registeredPropertyData)
+            var catelTypeInfo = PropertyDataManager.RegisterProperties(type);
+            foreach (var propertyDataKeyValuePair in catelTypeInfo.GetCatelProperties())
             {
+                var propertyData = propertyDataKeyValuePair.Value;
                 if (!propertyData.IsSerializable)
                 {
                     object[] allowNonSerializableMembersAttributes = type.GetCustomAttributesEx(typeof(AllowNonSerializableMembersAttribute), true);
@@ -1354,10 +1391,8 @@ namespace Catel.Data
 
             lock (_initializedTypesLock)
             {
-                if (!_initializedTypes.ContainsKey(type))
-                {
-                    _initializedTypes.Add(type, true);
-                }
+                // No need to check if already existing
+                _initializedTypes.Add(type);
             }
         }
 
@@ -1403,8 +1438,6 @@ namespace Catel.Data
         /// <exception cref="PropertyAlreadyRegisteredException">The property is already registered.</exception>
         private void InitializeProperty(PropertyData property, bool lateRegistration = false, bool isCalculatedProperty = false)
         {
-            Argument.IsNotNull("property", property);
-
             InitializeProperty(property.Name, property.Type, property.GetDefaultValue(), property.SetParent, property.PropertyChangedEventHandler,
                 property.IsSerializable, property.IncludeInSerialization, property.IncludeInBackup, property.IsModelBaseProperty, lateRegistration, isCalculatedProperty);
         }
@@ -1428,8 +1461,6 @@ namespace Catel.Data
         private void InitializeProperty(string name, Type type, object defaultValue, bool setParent, EventHandler<AdvancedPropertyChangedEventArgs> propertyChangedEventHandler,
             bool isSerializable, bool includeInSerialization, bool includeInBackup, bool isModelBaseProperty, bool lateRegistration, bool isCalculatedProperty)
         {
-            Argument.IsNotNullOrWhitespace("name", name);
-
             var objectType = GetType();
             if ((defaultValue == null) && !TypeHelper.IsTypeNullable(type))
             {
@@ -1438,7 +1469,7 @@ namespace Catel.Data
 
             lock (_initializedTypesLock)
             {
-                if (!_initializedTypes.ContainsKey(objectType) || !_initializedTypes[objectType] || lateRegistration)
+                if (!_initializedTypes.Contains(objectType) || lateRegistration)
                 {
                     if (!IsPropertyRegistered(name))
                     {
@@ -1576,7 +1607,8 @@ namespace Catel.Data
         /// </remarks>
         internal void RaisePropertyChangedForAllRegisteredProperties()
         {
-            foreach (var propertyData in PropertyDataManager.GetProperties(GetType()))
+            var catelTypeInfo = PropertyDataManager.GetCatelTypeInfo(GetType());
+            foreach (var propertyData in catelTypeInfo.GetCatelProperties())
             {
                 if (!IsModelBaseProperty(propertyData.Key))
                 {
@@ -1663,9 +1695,10 @@ namespace Catel.Data
                 if (ReferenceEquals(this, sender))
                 {
                     AdvancedPropertyChangedEventArgs eventArgs;
-                    if (e is AdvancedPropertyChangedEventArgs)
+                    var advancedEventArgs = e as AdvancedPropertyChangedEventArgs;
+                    if (advancedEventArgs != null)
                     {
-                        eventArgs = new AdvancedPropertyChangedEventArgs(this, (AdvancedPropertyChangedEventArgs)e);
+                        eventArgs = new AdvancedPropertyChangedEventArgs(this, advancedEventArgs);
                     }
                     else
                     {
@@ -1760,7 +1793,7 @@ namespace Catel.Data
 
                     object clone = serializer.Deserialize(GetType(), stream);
                     return clone;
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -1778,7 +1811,6 @@ namespace Catel.Data
     /// <typeparam name="TModel">Type that the class should hold (same as the defined type).</typeparam>
 #if NET
     [Serializable]
-    [System.Xml.Serialization.XmlSchemaProvider("GetGenericModelBaseXmlSchema")]
 #endif
     [ObsoleteEx(Message = "Generic class is no longer being used, use the non-generic base instead", TreatAsErrorFromVersion = "3.4", RemoveInVersion = "4.0", Replacement = "ModelBase")]
     public abstract class ModelBase<TModel> : ModelBase
@@ -1810,48 +1842,18 @@ namespace Catel.Data
         /// <summary>
         /// Registers a property that will be automatically handled by this object.
         /// </summary>
-        /// <typeparam name="TValue">
-        /// The value type.
-        /// </typeparam>
-        /// <param name="propertyExpression">
-        /// The property expression.
-        /// </param>
-        /// <param name="defaultValue">
-        /// Default value of the property.
-        /// </param>
-        /// <param name="propertyChangedEventHandler">
-        /// The property changed event handler.
-        /// </param>
-        /// <param name="includeInSerialization">
-        /// if set to <c>true</c>, the property should be included in the serialization.
-        /// </param>
-        /// <param name="includeInBackup">
-        /// if set to <c>true</c>, the property should be included in the backup when handling IEditableObject.
-        /// </param>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="propertyExpression"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="System.ArgumentException">
-        /// The member type of the body of the <paramref name="propertyExpression"/> of should be <see cref="MemberTypes.Property"/>.
-        /// </exception>
-        /// <returns>
-        /// <see cref="PropertyData"/> containing the property information.
-        /// </returns>
+        /// <typeparam name="TValue">The value type.</typeparam>
+        /// <param name="propertyExpression">The property expression.</param>
+        /// <param name="defaultValue">Default value of the property.</param>
+        /// <param name="propertyChangedEventHandler">The property changed event handler.</param>
+        /// <param name="includeInSerialization">if set to <c>true</c>, the property should be included in the serialization.</param>
+        /// <param name="includeInBackup">if set to <c>true</c>, the property should be included in the backup when handling IEditableObject.</param>
+        /// <returns><see cref="PropertyData" /> containing the property information.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="propertyExpression" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentException">The member type of the body of the <paramref name="propertyExpression" /> of should be <see cref="MemberTypes.Property" />.</exception>
         public static PropertyData RegisterProperty<TValue>(Expression<Func<TModel, TValue>> propertyExpression, TValue defaultValue = default(TValue), Action<TModel, AdvancedPropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true)
         {
             return RegisterProperty<TModel, TValue>(propertyExpression, defaultValue, propertyChangedEventHandler, includeInSerialization, includeInBackup);
-        }
-
-        /// <summary>
-        /// Gets XML schema for this class.
-        /// <para />
-        /// Implemented to support WCF serialization for all types deriving from this type.
-        /// </summary>
-        /// <param name="schemaSet">The schema set.</param>
-        /// <returns>System.Xml.XmlQualifiedName.</returns>
-        public static System.Xml.XmlQualifiedName GetGenericModelBaseXmlSchema(System.Xml.Schema.XmlSchemaSet schemaSet)
-        {
-            return XmlSchemaManager.GetXmlSchema(typeof(ModelBase<TModel>), schemaSet);
         }
 #endif
 

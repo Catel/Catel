@@ -50,6 +50,15 @@ namespace Catel.Reflection
         /// </summary>
         private static Dictionary<string, string> _typesWithoutAssemblyLowerCase;
 
+#if NET
+        /// <summary>
+        /// The list of loaded assemblies which do not required additional initialization again.
+        /// <para />
+        /// This is required because the AppDomain.AssemblyLoad might be called several times for the same AppDomain
+        /// </summary>
+        private static HashSet<string> _loadedAssemblies = new HashSet<string>();  
+#endif
+
         /// <summary>
         /// The lock object.
         /// </summary>
@@ -88,15 +97,26 @@ namespace Catel.Reflection
                 return;
             }
 
-            InitializeTypes(false, assembly);
-
-            var handler = AssemblyLoaded;
-            if (handler != null)
+            lock (_lockObject)
             {
-                var types = GetTypesOfAssembly(assembly);
-                var eventArgs = new AssemblyLoadedEventArgs(assembly, types);
+                var assemblyName = assembly.FullName;
+                if (_loadedAssemblies.Contains(assemblyName))
+                {
+                    return;
+                }
 
-                handler(null, eventArgs);
+                InitializeTypes(false, assembly);
+
+                var handler = AssemblyLoaded;
+                if (handler != null)
+                {
+                    var types = GetTypesOfAssembly(assembly);
+                    var eventArgs = new AssemblyLoadedEventArgs(assembly, types);
+
+                    handler(null, eventArgs);
+                }
+
+                _loadedAssemblies.Add(assemblyName);
             }
         }
 #endif

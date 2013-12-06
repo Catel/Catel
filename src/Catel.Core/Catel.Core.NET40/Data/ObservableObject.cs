@@ -20,12 +20,12 @@ namespace Catel.Data
     /// </summary>
 #if NET
     [Serializable]
-    [System.Xml.Serialization.XmlSchemaProvider("GetObservableObjectXmlSchema")]
 #else
     [DataContract]
 #endif
     public class ObservableObject : IAdvancedNotifyPropertyChanging, IAdvancedNotifyPropertyChanged
     {
+        #region Events
         /// <summary>
         /// Occurs when a property of this object is changing.
         /// </summary>
@@ -41,22 +41,10 @@ namespace Catel.Data
         [field: NonSerialized]
 #endif
         public event PropertyChangedEventHandler PropertyChanged;
+        #endregion
+
 
         #region Methods
-#if NET
-        /// <summary>
-        /// Gets XML schema for this class.
-        /// <para />
-        /// Implemented to support WCF serialization for all types deriving from this type.
-        /// </summary>
-        /// <param name="schemaSet">The schema set.</param>
-        /// <returns>System.Xml.XmlQualifiedName.</returns>
-        public static System.Xml.XmlQualifiedName GetObservableObjectXmlSchema(XmlSchemaSet schemaSet)
-        {
-            return Runtime.Serialization.XmlSchemaManager.GetXmlSchema(typeof (ObservableObject), schemaSet);
-        }
-#endif
-
         /// <summary>
         /// Raises the <see cref="PropertyChanging"/> event.
         /// </summary>

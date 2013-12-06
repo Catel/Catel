@@ -306,6 +306,19 @@
             <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Logging\Configuration</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
       </Rules>
     </d1p1:RootProject>
     <d1p1:RootProject>
@@ -821,7 +834,6 @@
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
-            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
             <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
@@ -983,6 +995,54 @@
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
             <d1p1:ProjectType>WIN81</d1p1:ProjectType>
             <d1p1:ProjectType>PCL</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Interactivity\MouseInfo.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Interactivity\DoubleClickToCommand.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Interactivity\NumericTextBox.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>MVVM\Services\StartUpInfoProvider.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Windows\Interactivity\CommandEventTriggerBase.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
       </Rules>
@@ -1460,7 +1520,7 @@
       </Rules>
     </d1p1:RootProject>
     <d1p1:RootProject>
-      <Name>Catel.MVVM.SL4</Name>
+      <Name>Catel.MVVM.SL5</Name>
       <Rules xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
         <d1p1:Rule>
           <Name>MVVM\Services\PleaseWaitService.cs</Name>
@@ -1812,10 +1872,75 @@
             <d1p1:ProjectType>PCL</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Logging\Configuration</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Extensions\Wcf.Server</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Extensions\Prism\Modules\Extensions\ModuleInfoExtensions_Facts.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Extensions\Prism\Modules\NuGetBasedModuleCatalog_Facts.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
+        <d1p1:Rule>
+          <Name>Extensions\Prism\Modules\NuGetBasedModuleCatalogParentChildBehavior_Facts.cs</Name>
+          <Type>DoNotAdd</Type>
+          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <d1p1:ProjectType>SL4</d1p1:ProjectType>
+            <d1p1:ProjectType>SL5</d1p1:ProjectType>
+            <d1p1:ProjectType>WP7</d1p1:ProjectType>
+            <d1p1:ProjectType>WP8</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN80</d1p1:ProjectType>
+            <d1p1:ProjectType>WIN81</d1p1:ProjectType>
+            <d1p1:ProjectType>PCL</d1p1:ProjectType>
+          </ProjectTypes>
+        </d1p1:Rule>
       </Rules>
     </d1p1:RootProject>
     <d1p1:RootProject>
-      <Name>Catel.Extensions.Controls.SL4</Name>
+      <Name>Catel.Extensions.Controls.SL5</Name>
       <Rules xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
         <d1p1:Rule>
           <Name>Themes</Name>
@@ -1842,7 +1967,7 @@
       </Rules>
     </d1p1:RootProject>
     <d1p1:RootProject>
-      <Name>Catel.Core.SL4</Name>
+      <Name>Catel.Core.SL5</Name>
       <Rules xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
         <d1p1:Rule>
           <Name>ComponentModel\EventArgs\PropertyChangingEventArgs.cs</Name>
@@ -1883,18 +2008,6 @@
             <d1p1:ProjectType>WIN80</d1p1:ProjectType>
             <d1p1:ProjectType>WIN81</d1p1:ProjectType>
             <d1p1:ProjectType>PCL</d1p1:ProjectType>
-          </ProjectTypes>
-        </d1p1:Rule>
-      </Rules>
-    </d1p1:RootProject>
-    <d1p1:RootProject>
-      <Name>Catel.Core.WP7</Name>
-      <Rules xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-        <d1p1:Rule>
-          <Name>Collections\HashSet.cs</Name>
-          <Type>DoNotAdd</Type>
-          <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <d1p1:ProjectType>WP8</d1p1:ProjectType>
           </ProjectTypes>
         </d1p1:Rule>
       </Rules>

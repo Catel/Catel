@@ -6,6 +6,11 @@
 
 namespace Catel.Runtime.Serialization
 {
+#if NET
+    using Catel.Runtime.Serialization.Binary;
+#endif
+
+    using Catel.Runtime.Serialization.Xml;
     using IoC;
 
     /// <summary>
@@ -21,7 +26,8 @@ namespace Catel.Runtime.Serialization
         /// <returns>The registered <see cref="IBinarySerializer"/>.</returns>
         public static IBinarySerializer GetBinarySerializer()
         {
-            return ServiceLocator.Default.ResolveType<IBinarySerializer>();
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+            return dependencyResolver.Resolve<IBinarySerializer>();
         }
 #endif
 
@@ -31,7 +37,8 @@ namespace Catel.Runtime.Serialization
         /// <returns>The registered <see cref="IXmlSerializer"/>.</returns>
         public static IXmlSerializer GetXmlSerializer()
         {
-            return ServiceLocator.Default.ResolveType<IXmlSerializer>();
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+            return dependencyResolver.Resolve<IXmlSerializer>();
         }
     }
 }

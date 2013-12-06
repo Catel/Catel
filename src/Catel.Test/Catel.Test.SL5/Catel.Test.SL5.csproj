@@ -31,7 +31,7 @@
     <LinkedServerProject />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.15.0.0</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.18.0.0</FodyPath>
   </PropertyGroup>
   <!--
   //
@@ -80,15 +80,15 @@
   <ItemGroup>
     <Reference Include="Castle.Core, Version=3.2.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Castle.Core.3.2.0\lib\sl5\Castle.Core.dll</HintPath>
+      <HintPath>..\..\packages\Castle.Core.3.2.2\lib\sl5\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Windsor, Version=3.2.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Castle.Windsor.3.2.1\lib\sl5\Castle.Windsor.dll</HintPath>
     </Reference>
-    <Reference Include="FluentValidation, Version=4.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="FluentValidation, Version=5.0.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\FluentValidation.4.0.0.1\lib\portable-win+net40+sl50+wp80\FluentValidation.dll</HintPath>
+      <HintPath>..\..\..\lib\FluentValidation.5.0.0.1\lib\portable-win+net40+sl50+wp80\FluentValidation.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Practices.Prism">
@@ -106,17 +106,16 @@
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight">
       <HintPath>$(MSBuildExtensionsPath)\..\Microsoft SDKs\Silverlight\v4.0\Toolkit\Apr10\Testing\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll</HintPath>
     </Reference>
-    <Reference Include="Moq.Silverlight, Version=4.1.1308.2321, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+    <Reference Include="Moq.Silverlight, Version=4.1.1309.1617, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Moq.4.1.1308.2321\lib\sl4\Moq.Silverlight.dll</HintPath>
+      <HintPath>..\..\..\lib\Moq.4.1.1309.1617\lib\sl4\Moq.Silverlight.dll</HintPath>
     </Reference>
     <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Ninject.3.0.1.10\lib\sl5\Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="Obsolete, Version=2.3.0.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Obsolete.Fody.2.3.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
+    <Reference Include="Obsolete">
+      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.0.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System.ComponentModel.Composition, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -176,6 +175,9 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\ComponentModel\PropertyChangedEventArgsExtensionsFacts.cs">
       <Link>ComponentModel\PropertyChangedEventArgsExtensionsFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Data\CatelTypeInfoFacts.cs">
+      <Link>Data\CatelTypeInfoFacts.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Data\ChangeNotificationWrapperFacts.cs">
       <Link>Data\ChangeNotificationWrapperFacts.cs</Link>
@@ -392,6 +394,9 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Helpers\TimeMeasureHelper.cs">
       <Link>Helpers\TimeMeasureHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Helpers\UrlHelperFacts.cs">
+      <Link>Helpers\UrlHelperFacts.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Helpers\WindowHelper.cs">
       <Link>Helpers\WindowHelper.cs</Link>
@@ -636,6 +641,9 @@
     <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\TestModels\TestModel.cs">
       <Link>Runtime\Serialization\TestModels\TestModel.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\XmlSerialization\KnownTypesSerializationFacts.cs">
+      <Link>Runtime\Serialization\XmlSerialization\KnownTypesSerializationFacts.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\Runtime\Serialization\XmlSerialization\XmlSerializationFacts.cs">
       <Link>Runtime\Serialization\XmlSerialization\XmlSerializationFacts.cs</Link>
     </Compile>
@@ -711,15 +719,12 @@
     <Compile Include="..\Catel.Test.NET40\Windows\Helpers\ResourceHelperFacts.cs">
       <Link>Windows\Helpers\ResourceHelperFacts.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Test.SL4\Helpers\ViewModels\IncreaseQuotaViewModel.cs">
-      <Link>Helpers\ViewModels\IncreaseQuotaViewModel.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.SL4\Helpers\Views\IncreaseQuotaWindow.xaml.cs">
-      <Link>Helpers\Views\IncreaseQuotaWindow.xaml.cs</Link>
-      <DependentUpon>IncreaseQuotaWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\ViewModels\IncreaseQuotaViewModel.cs" />
+    <Compile Include="Helpers\Views\IncreaseQuotaWindow.xaml.cs">
+      <DependentUpon>IncreaseQuotaWindow.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -736,6 +741,7 @@
     <None Include="Properties\AppManifest.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Extensions\Prism\Modules\Extensions\" />
     <Folder Include="Logging\Extensions\" />
     <Folder Include="Runtime\Serialization\Attributes\" />
   </ItemGroup>
@@ -774,14 +780,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="..\Catel.Test.SL4\Helpers\Views\IncreaseQuotaWindow.xaml">
-      <Link>Helpers\Views\IncreaseQuotaWindow.xaml</Link>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Helpers\Views\IncreaseQuotaWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <Import Condition="$(SilverlightVersion)=='v3.0'" Project="$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SilverlightToolkit\Tools\v3.0)Microsoft.Silverlight.Toolkit.Build.targets" />

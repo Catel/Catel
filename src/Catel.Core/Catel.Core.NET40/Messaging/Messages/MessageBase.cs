@@ -36,19 +36,19 @@ namespace Catel.Messaging
         /// </summary>
         static MessageBase()
         {
-            var serviceLocator = ServiceLocator.Default;
+            var serviceLocator = IoCConfiguration.DefaultServiceLocator;
             if (!serviceLocator.IsTypeRegistered<IMessageMediator>())
             {
-                serviceLocator.RegisterInstance<IMessageMediator>(MessageMediator.Default);
+                serviceLocator.RegisterInstance(MessageMediator.Default);
             }
 
-            _mediator = ServiceLocator.Default.ResolveType<IMessageMediator>();
+            _mediator = serviceLocator.ResolveType<IMessageMediator>();
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// <para/>
-        /// Neccesary for two reasons:
+        /// Necessary for two reasons:
         /// <list type="number">
         /// 		<item><description>Create an instance of the Message class via the TMessage type parameter used by the With() method.</description></item>
         /// 		<item><description>Allow derived classes to be defined using an empty class body with the implicit default constructor.</description></item>

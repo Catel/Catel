@@ -19,7 +19,7 @@
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.15.0.0</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.18.0.0</FodyPath>
   </PropertyGroup>
   <!-- This property group is only here to support building this project using the 
        MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
@@ -54,9 +54,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
-    <Reference Include="Obsolete, Version=2.3.0.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Obsolete.Fody.2.3.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
+    <Reference Include="Obsolete">
+      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.0.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations, Version=5.0.5.0, Culture=neutral, PublicKeyToken=ddd0da4d3e678217, processorArchitecture=MSIL" />
@@ -88,6 +87,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\ModuleInitializer.cs">
       <Link>ModuleInitializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVMModule.cs">
+      <Link>MVVMModule.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs">
       <Link>MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs</Link>
@@ -196,6 +198,12 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\DependencyPropertySelector.cs">
       <Link>Windows\DependencyPropertySelector.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Helpers\CommandLineHelper.cs">
+      <Link>Windows\Helpers\CommandLineHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Input\Helpers\KeyboardHelper.cs">
+      <Link>Windows\Input\Helpers\KeyboardHelper.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interfaces\IDependencyPropertySelector.cs">
       <Link>Windows\Interfaces\IDependencyPropertySelector.cs</Link>
@@ -791,67 +799,19 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Threading\Helpers\Dispatcherhelper.cs">
       <Link>Windows\Threading\Helpers\Dispatcherhelper.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\MVVM\Services\PleaseWaitService.cs">
-      <Link>MVVM\Services\PleaseWaitService.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\Controls\ValidationResult.cs">
-      <Link>Windows\Controls\ValidationResult.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\Controls\ValidationRule.cs">
-      <Link>Windows\Controls\ValidationRule.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\EventArgs\FrameworkElementLoadedEventArgs.cs">
-      <Link>Windows\EventArgs\FrameworkElementLoadedEventArgs.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\FrameworkElementLoadedManager.cs">
-      <Link>Windows\FrameworkElementLoadedManager.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\Helpers\DataContextChangedHelper.cs">
-      <Link>Windows\Helpers\DataContextChangedHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\Helpers\LogicalTreeHelper.cs">
-      <Link>Windows\Helpers\LogicalTreeHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\Helpers\SetterValueBindingHelper.cs">
-      <Link>Windows\Helpers\SetterValueBindingHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\Interfaces\IFrameworkElementLoadedManager.cs">
-      <Link>Windows\Interfaces\IFrameworkElementLoadedManager.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\PopupBehavior\Popup.cs">
-      <Link>Windows\PopupBehavior\Popup.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\PopupBehavior\PopupOrientation.cs">
-      <Link>Windows\PopupBehavior\PopupOrientation.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\PopupBehavior\PopupOrientationCollection.cs">
-      <Link>Windows\PopupBehavior\PopupOrientationCollection.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.SL4\Windows\WeakFrameworkElementInfo.cs">
-      <Link>Windows\WeakFrameworkElementInfo.cs</Link>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="..\Catel.MVVM.SL4\Themes\BusyIndicator.generic.xaml">
-      <Link>Themes\BusyIndicator.generic.xaml</Link>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="..\Catel.MVVM.SL4\Themes\DataWindow.generic.xaml">
-      <Link>Themes\DataWindow.generic.xaml</Link>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="..\Catel.MVVM.SL4\Themes\Generic.xaml">
-      <Link>Themes\Generic.xaml</Link>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="..\Catel.MVVM.SL4\Themes\InfoBarMessageControl.generic.xaml">
-      <Link>Themes\InfoBarMessageControl.generic.xaml</Link>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
+    <Compile Include="MVVM\Services\PleaseWaitService.cs" />
+    <Compile Include="Windows\Controls\ValidationResult.cs" />
+    <Compile Include="Windows\Controls\ValidationRule.cs" />
+    <Compile Include="Windows\EventArgs\FrameworkElementLoadedEventArgs.cs" />
+    <Compile Include="Windows\FrameworkElementLoadedManager.cs" />
+    <Compile Include="Windows\Helpers\DataContextChangedHelper.cs" />
+    <Compile Include="Windows\Helpers\LogicalTreeHelper.cs" />
+    <Compile Include="Windows\Helpers\SetterValueBindingHelper.cs" />
+    <Compile Include="Windows\Interfaces\IFrameworkElementLoadedManager.cs" />
+    <Compile Include="Windows\PopupBehavior\Popup.cs" />
+    <Compile Include="Windows\PopupBehavior\PopupOrientation.cs" />
+    <Compile Include="Windows\PopupBehavior\PopupOrientationCollection.cs" />
+    <Compile Include="Windows\WeakFrameworkElementInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Catel.Core\Catel.Core.SL5\Catel.Core.SL5.csproj">
@@ -927,6 +887,24 @@
     <Resource Include="..\Catel.MVVM.NET40\Resources\Images\Warning.png">
       <Link>Resources\Images\Warning.png</Link>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Themes\BusyIndicator.generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\DataWindow.generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\InfoBarMessageControl.generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>

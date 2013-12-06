@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Runtime.Serialization
+namespace Catel.Runtime.Serialization.Xml
 {
     using System;
     using System.Linq;
@@ -34,7 +34,8 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNullOrWhitespace("elementName", elementName);
             Argument.IsNotNull("objectType", objectType);
 
-            var dataContractSerializerFactory = ServiceLocator.Default.ResolveType<IDataContractSerializerFactory>();
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+            var dataContractSerializerFactory = dependencyResolver.Resolve<IDataContractSerializerFactory>();
             var dataContractSerializer = dataContractSerializerFactory.GetDataContractSerializer(typeof(object), objectType, elementName);
 
             var document = new XDocument();
@@ -61,7 +62,8 @@ namespace Catel.Runtime.Serialization
 
             string xmlName = element.Name.LocalName;
 
-            var dataContractSerializerFactory = ServiceLocator.Default.ResolveType<IDataContractSerializerFactory>();
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+            var dataContractSerializerFactory = dependencyResolver.Resolve<IDataContractSerializerFactory>();
             var dataContractSerializer = dataContractSerializerFactory.GetDataContractSerializer(typeof(object), objectType, xmlName);
 
             var attribute = element.Attribute(XName.Get("type", "http://catel.codeplex.com"));

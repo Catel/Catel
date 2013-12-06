@@ -141,49 +141,6 @@ namespace Catel.Test.Data
             Assert.AreEqual(originalObject, clonedObject);
         }
 
-        [TestMethod]
-        public void XmlSerialization_FixedCheck()
-        {
-            const string ExpectedXmlContent = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
-                                              @"
-<IniFile graphid=" + "\"1\" xmlns:ctl=" + "\"http://catel.codeplex.com\">" + @"
-  <FileName>MyIniFile</FileName>
-  <IniEntryCollection xmlns:d1p1=" + "\"http://schemas.datacontract.org/2004/07/Catel.Test.Data\" graphid=\"2\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"" + @">
-    <d1p1:IniEntry>
-      <Group>Group 0</Group>
-      <Key>Key 0</Key>
-      <Value>Value 0</Value>
-      <IniEntryType>Public</IniEntryType>
-    </d1p1:IniEntry>
-    <d1p1:IniEntry>
-      <Group>Group 1</Group>
-      <Key>Key 1</Key>
-      <Value>Value 1</Value>
-      <IniEntryType>Private</IniEntryType>
-    </d1p1:IniEntry>
-    <d1p1:IniEntry>
-      <Group>Group 2</Group>
-      <Key>Key 2</Key>
-      <Value>Value 2</Value>
-      <IniEntryType>Public</IniEntryType>
-    </d1p1:IniEntry>
-  </IniEntryCollection>
-</IniFile>";
-
-            IniFile iniFile = ModelBaseTestHelper.CreateIniFileObject();
-            using (var memoryStream = new MemoryStream())
-            {
-                iniFile.Save(memoryStream, SerializationMode.Xml);
-
-                memoryStream.Position = 0L;
-
-                TextReader reader = new StreamReader(memoryStream);
-                string xmlContent = reader.ReadToEnd();
-
-                Assert.AreEqual(ExpectedXmlContent, xmlContent);
-            }
-        }
-
 #if NET
         [TestMethod]
         public void XmlSerializationWithPrivateMembers()
@@ -209,19 +166,10 @@ namespace Catel.Test.Data
         #region Generic Loads
 #if NET
         [TestMethod]
-        public void Load_FileName_EnableRedirects()
-        {
-            var originalObject = ModelBaseTestHelper.CreateIniFileObject();
-            var loadedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Binary, true);
-
-            Assert.AreEqual(originalObject, loadedObject);
-        }
-
-        [TestMethod]
         public void Load_FileName_SerializationMode_Binary()
         {
             var originalObject = ModelBaseTestHelper.CreateIniFileObject();
-            var loadedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Binary, false);
+            var loadedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Binary);
 
             Assert.AreEqual(originalObject, loadedObject);
         }
@@ -231,87 +179,9 @@ namespace Catel.Test.Data
         public void Load_FileName_SerializationMode_Xml()
         {
             var originalObject = ModelBaseTestHelper.CreateIniFileObject();
-            var loadedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Xml, false);
+            var loadedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Xml);
 
             Assert.AreEqual(originalObject, loadedObject);
-        }
-
-        [TestMethod]
-        public void Load_FileName_SerializationMode_Xml_EnableRedirects()
-        {
-            var originalObject = ModelBaseTestHelper.CreateIniFileObject();
-            var loadedObject = SerializationTestHelper.SerializeAndDeserializeObject(originalObject, SerializationMode.Xml, true);
-
-            Assert.AreEqual(originalObject, loadedObject);
-        }
-
-        [TestMethod]
-        public void Load_XDocument()
-        {
-            using (var memoryStream = new MemoryStream())
-            {
-                var originalObject = ModelBaseTestHelper.CreateIniFileObject();
-                originalObject.Save(memoryStream, SerializationMode.Xml);
-
-                memoryStream.Position = 0L;
-
-                XDocument document = XDocument.Load(memoryStream);
-                var loadedObject = IniFile.Load(document);
-
-                Assert.AreEqual(originalObject, loadedObject);
-            }
-        }
-
-        [TestMethod]
-        public void Load_Bytes()
-        {
-            var originalObject = ModelBaseTestHelper.CreateIniFileObject();
-            byte[] originalBytes = originalObject.Bytes;
-
-            var loadedObject = IniFile.Load(originalBytes);
-
-            Assert.AreEqual(originalObject, loadedObject);
-        }
-
-        [TestMethod]
-        public void Load_Bytes_EnableRedirects()
-        {
-            var originalObject = ModelBaseTestHelper.CreateIniFileObject();
-            byte[] originalBytes = originalObject.Bytes;
-
-            var loadedObject = IniFile.Load(originalBytes, true);
-
-            Assert.AreEqual(originalObject, loadedObject);
-        }
-
-        [TestMethod]
-        public void Load_Stream()
-        {
-            using (var memoryStream = new MemoryStream())
-            {
-                var originalObject = ModelBaseTestHelper.CreateIniFileObject();
-                originalObject.Save(memoryStream);
-
-                memoryStream.Position = 0L;
-                var loadedObject = IniFile.Load(memoryStream);
-
-                Assert.AreEqual(originalObject, loadedObject);
-            }
-        }
-
-        [TestMethod]
-        public void Load_Stream_EnableRedirects()
-        {
-            using (var memoryStream = new MemoryStream())
-            {
-                var originalObject = ModelBaseTestHelper.CreateIniFileObject();
-                originalObject.Save(memoryStream);
-
-                memoryStream.Position = 0L;
-                var loadedObject = IniFile.Load(memoryStream, true);
-
-                Assert.AreEqual(originalObject, loadedObject);
-            }
         }
 
 #if NET
@@ -341,38 +211,6 @@ namespace Catel.Test.Data
 
                 memoryStream.Position = 0L;
                 var loadedObject = IniFile.Load(memoryStream, SerializationMode.Xml);
-
-                Assert.AreEqual(originalObject, loadedObject);
-            }
-        }
-
-#if NET
-        [TestMethod]
-        public void Load_Stream_SerializationMode_Binary_EnableRedirects()
-        {
-            using (var memoryStream = new MemoryStream())
-            {
-                var originalObject = ModelBaseTestHelper.CreateIniFileObject();
-                originalObject.Save(memoryStream, SerializationMode.Binary);
-
-                memoryStream.Position = 0L;
-                var loadedObject = IniFile.Load(memoryStream, SerializationMode.Binary, true);
-
-                Assert.AreEqual(originalObject, loadedObject);
-            }
-        }
-#endif
-
-        [TestMethod]
-        public void Load_Stream_SerializationMode_Xml_EnableRedirects()
-        {
-            using (var memoryStream = new MemoryStream())
-            {
-                var originalObject = ModelBaseTestHelper.CreateIniFileObject();
-                originalObject.Save(memoryStream, SerializationMode.Xml);
-
-                memoryStream.Position = 0L;
-                var loadedObject = IniFile.Load(memoryStream, SerializationMode.Xml, true);
 
                 Assert.AreEqual(originalObject, loadedObject);
             }

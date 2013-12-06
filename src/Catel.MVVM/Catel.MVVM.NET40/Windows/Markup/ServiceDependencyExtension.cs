@@ -63,7 +63,8 @@ namespace Catel.Windows.Markup
                 return null;
             }
 
-            return ServiceLocator.Default.ResolveType(Type, Tag);
+            var dependencyResolver = this.GetDependencyResolver();
+            return dependencyResolver.Resolve(Type, Tag);
         }
         #endregion
     }

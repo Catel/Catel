@@ -18,9 +18,8 @@ namespace Catel.Test.Data
         /// <typeparam name="T"></typeparam>
         /// <param name="testObject">The test object.</param>
         /// <param name="mode">The mode.</param>
-        /// <param name="enableRedirects">if set to <c>true</c>, redirects are enabled for binary serialization</param>
         /// <returns>The deserialized object.</returns>
-        public static T SerializeAndDeserializeObject<T>(T testObject, SerializationMode mode, bool enableRedirects = false)
+        public static T SerializeAndDeserializeObject<T>(T testObject, SerializationMode mode)
             where T : SavableModelBase<T>
         {
             using (var memoryStream = new MemoryStream())
@@ -29,7 +28,7 @@ namespace Catel.Test.Data
 
                 memoryStream.Position = 0L;
 
-                return SavableModelBase<T>.Load(memoryStream, mode, enableRedirects);
+                return ModelBase.Load<T>(memoryStream, mode);
             }
         }
     }

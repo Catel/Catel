@@ -10,25 +10,12 @@ namespace Catel.Data
     using System.Xml.Linq;
     using System.Xml.Schema;
     using System.Xml.Serialization;
+    using Catel.Runtime.Serialization.Xml;
     using Logging;
     using Runtime.Serialization;
 
     public partial class ModelBase
     {
-#if NET
-        /// <summary>
-        /// Gets XML schema for this class.
-        /// <para />
-        /// Implemented to support WCF serialization for all types deriving from this type.
-        /// </summary>
-        /// <param name="schemaSet">The schema set.</param>
-        /// <returns>System.Xml.XmlQualifiedName.</returns>
-        public static XmlQualifiedName GetModelBaseXmlSchema(XmlSchemaSet schemaSet)
-        {
-            return XmlSchemaManager.GetXmlSchema(typeof(ModelBase), schemaSet);
-        }
-#endif
-
         /// <summary>
         /// This method is reserved and should not be used. When implementing the IXmlSerializable interface, you should return null (Nothing in Visual Basic) from this method, and instead, if specifying a custom schema is required, apply the <see cref="T:System.Xml.Serialization.XmlSchemaProviderAttribute"/> to the class.
         /// </summary>
@@ -65,7 +52,7 @@ namespace Catel.Data
             }
 
             var serializer = SerializationFactory.GetXmlSerializer();
-            serializer.Deserialize(this, document);
+            serializer.Deserialize(this, new XmlSerializationContextInfo(document, this));
         }
 
         /// <summary>
@@ -78,7 +65,7 @@ namespace Catel.Data
 
             var element = new XElement(type.Name);
             var serializer = SerializationFactory.GetXmlSerializer();
-            serializer.Serialize(this, element);
+            serializer.Serialize(this, new XmlSerializationContextInfo(element, this));
 
             // The serializer gives us the full element, but we only need the actual content. According to
             // http://stackoverflow.com/questions/3793/best-way-to-get-innerxml-of-an-xelement, this method is the fastest:

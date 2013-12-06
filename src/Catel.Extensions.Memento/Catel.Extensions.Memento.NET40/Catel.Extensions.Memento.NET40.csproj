@@ -11,7 +11,7 @@
     <AssemblyName>Catel.Extensions.Memento</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <FodyPath>..\..\..\lib\Fody.1.15.0.0</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.18.0.0</FodyPath>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -36,7 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Obsolete">
-      <HintPath>..\..\..\lib\Obsolete.Fody.2.3.0\Lib\NET35\Obsolete.dll</HintPath>
+      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.0.0\Lib\NET35\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -56,6 +56,7 @@
     <Compile Include="Batch.cs" />
     <Compile Include="CollectionChangeUndo.cs" />
     <Compile Include="CollectionObserver.cs" />
+    <Compile Include="ExtensionsMementoModule.cs" />
     <Compile Include="Interfaces\IMementoBatch.cs" />
     <Compile Include="Interfaces\IMementoService.cs" />
     <Compile Include="Interfaces\IMementoSupport.cs" />

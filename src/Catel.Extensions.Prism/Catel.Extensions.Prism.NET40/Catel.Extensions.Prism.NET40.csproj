@@ -15,7 +15,7 @@
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.15.0.0</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.18.0.0</FodyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -51,9 +51,15 @@
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\..\lib\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
-    <Reference Include="Obsolete, Version=2.3.0.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Web.XmlTransform">
+      <HintPath>..\..\..\lib\Microsoft.Web.Xdt.1.0.0\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
+    </Reference>
+    <Reference Include="NuGet.Core, Version=1.6.30117.9648, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Obsolete.Fody.2.3.0\Lib\NET35\Obsolete.dll</HintPath>
+      <HintPath>..\..\..\lib\NuGet.Core.2.7.2\lib\net40-Client\NuGet.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Obsolete">
+      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.0.0\Lib\NET35\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="PresentationCore" />
@@ -66,9 +72,12 @@
     </Reference>
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
     <None Include="Fody.targets" />
-    <None Include="FodyWeavers.xml" />
+    <None Include="FodyWeavers.xml">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Catel.Core\Catel.Core.NET40\Catel.Core.NET40.csproj">
@@ -85,11 +94,22 @@
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="BootstrapperBase.generic.cs" />
+    <Compile Include="ExtensionsPrismModule.cs" />
     <Compile Include="Extensions\DependencyObjectExtensions.cs" />
     <Compile Include="Extensions\ILogExtensions.cs" />
     <Compile Include="Extensions\IRegionManagerExtensions.cs" />
     <Compile Include="Extensions\IUIVisualizerServiceExtensions.cs" />
     <Compile Include="Extensions\ISplashScreenServiceExtensions.cs" />
+    <Compile Include="Modules\CompositeNuGetBasedModuleCatalog.cs" />
+    <Compile Include="Modules\CompositePackageRepository.cs" />
+    <Compile Include="Modules\Interfaces\INuGetBasedModuleCatalog.cs" />
+    <Compile Include="Modules\NuGetBasedModuleCatalogParentChildBehavior.cs" />
+    <Compile Include="Modules\NuGet\InstallPackageRequest.cs" />
+    <Compile Include="Modules\Extensions\ModuleInfoExtensions.cs" />
+    <Compile Include="Modules\ModuleManager\ModuleManager.cs" />
+    <Compile Include="Modules\NuGet\NuGetModuleTypeLoader.cs" />
+    <Compile Include="Modules\NuGetBasedModuleCatalog.cs" />
+    <Compile Include="Modules\NuGet\RemoteInstallPackageRequest.cs" />
     <Compile Include="Modules\SafeDirectoryModuleCatalog.cs" />
     <Compile Include="Tasks\BootstrapperTaskFactory.cs" />
     <Compile Include="Tasks\Interfaces\IBootstrapperTaskFactory.cs" />
@@ -103,7 +123,6 @@
     <Compile Include="Modules\ModuleCatalog.cs" />
     <Compile Include="Modules\ModuleManager\Interfaces\IModuleInfoManager.cs" />
     <Compile Include="Modules\ModuleManager\Models\ModuleTemplate.cs" />
-    <Compile Include="Modules\ModuleManager\ModuleInfoManager.cs" />
     <Compile Include="Modules\ModuleManager\ViewModels\ModuleManagerViewModel.cs" />
     <Compile Include="Modules\ModuleManager\Views\ModuleManagerView.xaml.cs">
       <DependentUpon>ModuleManagerView.xaml</DependentUpon>
@@ -123,7 +142,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets. -->

@@ -15,6 +15,7 @@ namespace Catel
     /// this is because the .NET Framework (or actually Windows Phone 7) does not allow the code to handle 
     /// that specific feature.
     /// </summary>
+    [ObsoleteEx(Message = "No longer supported", Replacement = "NotSupportedInPlatformException", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
     public class NotSupportedInWindowsPhone7Exception : Exception
     {
         #region Constructors

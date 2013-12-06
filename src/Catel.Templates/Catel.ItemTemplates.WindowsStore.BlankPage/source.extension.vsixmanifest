@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+  <Metadata>
+    <Identity Id="Catel.ItemTemplates.WindowsStore.BlankPage..1fc72413-ce68-4998-8735-9b0ca363acf0" Version="1.0" Language="en-US" Publisher="Geert van Horrik" />
+    <DisplayName>Windows Store Page using Catel</DisplayName>
+    <Description xml:space="preserve">Item template to create a blank Windows Store Page using Catel.</Description>
+    <MoreInfo>http://www.catelproject.com</MoreInfo>
+    <GettingStartedGuide>http://www.catelproject.com</GettingStartedGuide>
+    <Icon>__TemplateIcon.ico</Icon>
+    <PreviewImage>__Catel_logo_large.png</PreviewImage>
+  </Metadata>
+  <Installation>
+    <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[11.0,)" />
+    <InstallationTarget Version="[11.0,)" Id="Microsoft.VisualStudio.VSWinExpress" />
+    <InstallationTarget Version="[11.0,)" Id="Microsoft.VisualStudio.VSWinDesktopExpress" />
+  </Installation>
+  <Dependencies>
+  </Dependencies>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="File" Path="ItemTemplates" d:TargetPath="ItemTemplates\CSharp\Windows Store\Catel.WindowsStore.BlankPage.zip" />
+  </Assets>
+</PackageManifest>

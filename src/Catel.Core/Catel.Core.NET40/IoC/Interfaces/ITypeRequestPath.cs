@@ -45,5 +45,16 @@ namespace Catel.IoC
         /// </summary>
         /// <value>The type count.</value>
         int TypeCount { get; }
+
+        /// <summary>
+        /// Gets the name.
+        /// </summary>
+        /// <value>The name.</value>
+        string Name { get; }
+
+        /// <summary>
+        /// Throws the <see cref="CircularDependencyException"/> if the <see cref="TypeRequestPath.IsValid"/> is <c>false</c>.
+        /// </summary>
+        void ThrowsExceptionIfInvalid();
     }
 }

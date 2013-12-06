@@ -11,14 +11,14 @@
     <AssemblyName>Catel.Extensions.EntityFramework5</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <FodyPath>..\..\..\lib\Fody.1.15.0.0</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.18.0.0</FodyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\..\output\debug\NET45\Catel.Extensions.EntityFramework5\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET;NET45</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET;NET45;EF5</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -28,7 +28,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\..\output\release\NET45\Catel.Extensions.EntityFramework5\</OutputPath>
-    <DefineConstants>TRACE;NET;NET45</DefineConstants>
+    <DefineConstants>TRACE;NET;NET45;EF5</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -40,9 +40,8 @@
     <Reference Include="EntityFramework">
       <HintPath>..\..\..\lib\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="Obsolete, Version=2.3.0.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Obsolete.Fody.2.3.0\Lib\NET35\Obsolete.dll</HintPath>
+    <Reference Include="Obsolete">
+      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.0.0\Lib\NET35\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -107,6 +106,9 @@
     </Compile>
     <Compile Include="..\Catel.Extensions.EntityFramework5.NET40\Data\UnitOfWork.generic.cs">
       <Link>Data\UnitOfWork.generic.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.EntityFramework5.NET40\ExtensionsEntityFramework5Module.cs">
+      <Link>ExtensionsEntityFramework5Module.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Extensions.EntityFramework5.NET40\Extensions\DbContextExtensions.cs">
       <Link>Extensions\DbContextExtensions.cs</Link>

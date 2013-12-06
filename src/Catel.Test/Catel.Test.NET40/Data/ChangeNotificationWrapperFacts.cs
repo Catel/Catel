@@ -90,6 +90,28 @@ namespace Catel.Test.Data
         }
 
         [TestClass]
+        public class TheIsUsefulForObjectMethod
+        {
+            [TestMethod]
+            public void ReturnsFalseForNullObject()
+            {
+                Assert.IsFalse(ChangeNotificationWrapper.IsUsefulForObject(null));
+            }
+
+            [TestMethod]
+            public void ReturnsFalseForObjectNotImplementingINotifyPropertyChanged()
+            {
+                Assert.IsFalse(ChangeNotificationWrapper.IsUsefulForObject(15));
+            }
+
+            [TestMethod]
+            public void ReturnsTrueForObjectImplementingINotifyPropertyChanged()
+            {
+                Assert.IsTrue(ChangeNotificationWrapper.IsUsefulForObject(new TestModel()));
+            }
+        }
+
+        [TestClass]
         public class TheUnsubscribeFromAllEventsMethod
         {
             [TestMethod]

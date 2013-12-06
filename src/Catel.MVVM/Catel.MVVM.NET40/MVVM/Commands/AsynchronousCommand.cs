@@ -24,9 +24,18 @@ namespace Catel.MVVM
     /// <typeparam name="TCanExecuteParameter">The type of the can execute parameter.</typeparam>
     public class AsynchronousCommand<TExecuteParameter, TCanExecuteParameter> : Command<TExecuteParameter, TCanExecuteParameter>
     {
-        private static readonly IDispatcherService _dispatcherService = ServiceLocator.Default.ResolveType<IDispatcherService>();
+        private static readonly IDispatcherService _dispatcherService;
 
         #region Constructors
+        /// <summary>
+        /// Initializes static members of the <see cref="AsynchronousCommand{TExecuteParameter, TCanExecuteParameter}"/> class.
+        /// </summary>
+        static AsynchronousCommand()
+        {
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+            _dispatcherService = dependencyResolver.Resolve<IDispatcherService>();
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AsynchronousCommand{TCanExecuteParameter,TExecuteParameter}"/> class.
         /// </summary>

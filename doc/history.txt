@@ -15,6 +15,82 @@ Documentation:   http://www.catelproject.com/support/documentation
 **********************************************************
 
 ==================
+Version 3.8
+==================
+
+Release date:
+=============
+2013/12/06
+
+Added/fixed (BREAKING CHANGES):
+===============================
+(+) CTL-234 Added IModelEqualityComparer properties (CompareProperties, CompareValues, CompareCollections) which
+    are now defaulting to false. This means that it will now provide much better performance out of the box and
+    follows the Microsoft standard (reference comparison only). It can be customized to check the properties to
+    reproduce the previous behavior
+(*) Moved serialization for Xml and Binary to namespaces. This should only cause breaking changes if one of the
+    actual core serialization parts are modified
+(-) CTL-199 Removed support for Windows Phone 7.x
+(-) CTL-200 Removed support for Silverlight 4
+
+Added/fixed:
+============
+(+) CTL-142 Added support for WIN81
+(+) CTL-157 Provide an option to prevent close with Escape for datawindows
+(+) CTL-161 Allow registration and resolving of generic types, this means that one can now register an open
+    generic type like IDictionary<,> and resolve it as IDictionary<string, int>
+(+) CTL-184 Added Retry methods on IExceptionService to allow retrying actions
+(+) CTL-191 Create LogListeners from the application config
+(+) CTL-205 Added Async methods on IExceptionService
+(+) CTL-208 Added support for Entity Framework 6 in a new extension (Catel.Extensions.EntityFramework6)
+(+) CTL-219 Implemented BackEntry methods for Windows Phone 8 on the NavigationService
+(+) CTL-221 Support property dependency injection
+(+) CTL-227 Added the GetHandler method on IExceptionService to allows handlers retrieving more easilly.
+(+) CTL-229 Add XmlSerializerOptimalizationMode to allow pretty xml or performance
+(+) CTL-235 Added option to allow global enabling / disabling (overriding) of log events on all listeners
+(+) CTL-242 Create extension methods for IParent interface
+(+) CTL-246 Added CatelTypeInfo (replaces PropertyDataManager.GetCatelProperties()) so more information can be 
+    retrieved about Catel types than just the properties
+(+) CTL-246 Attribute validation on non-catel properties will be validated now as well as long as the validation
+    is called with the forced parameter set to true
+(*) CTL-125 TypeFactory selects wrong constructor when there is more than 1 option. It now tries parameters which 
+    accept Object or DynamicObject the latest. Also introduced the InjectionConstructorAttribute so the right constructor
+    can be decorated so it is always selected first by Catel
+(*) CTL-155 Replace usages of IServiceLocator by IDependencyResolver
+(*) CTL-196 Argument class methods are now decorated with DebuggerNonUserCode in addition to DebuggerStepThrough 
+    to provide a better callstack during exceptions at runtime
+(*) CTL-202 Small improvements in ModelEqualityComparer to improve performance on large collections
+(*) CTL-203 Marked most ModelBase.Load methods as obsolete. Now only 3 methods are recommend to simplify the 
+    serialization of models
+(*) CTL-207 Improve performance on ModelBase instantiation
+(*) CTL-213 Updated FluentValidation to v5
+(*) CTL-214 Updated CSLA.NET to v4.5.40
+(*) CTL-216 Created generic NotSupportedInPlatform exception with details why a specific feature might not be supported on a 
+    specific platform. Also introduced Platforms.CurrentPlatform to determine which platform Catel is currently running on
+(*) CTL-218 PleaseWaitWindow now sets IsHitTestVisible to false for dimmed windows to prevent clickable buttons during period
+(*) CTL-224 Refactoring on Exception Handling to allows enhancements easier
+(x) CTL-133 Start and Update the PleasewaitWindow in an Workerthread throws exception
+(x) CTL-203 The Load Method of Catel.Data.ModelBase will call the constructor of the deserialized class two times
+(x) CTL-212 PropertyDataManager throws first chance exceptions for generic types
+(x) CTL-226 Nested ICollection<IInterfce> XML serialization problem
+(x) CTL-228 Fixed possible deadlock in CatelDependencyResolver
+(x) CTL-240 WP8: "This operation is not supported for a relative URI" on GoBack to the main page
+(x) CTL-241 WP8: after the first creation, ViewModels are created twice for each call
+(x) CTL-245 Fixed issue where deprecated classes were still decorated with the XmlSchemaProviderAttribute which caused WCF
+    to fail and generate a proxy when using "reuse types in all assemblies"
+(x) CTL-254 Log with { and } in literal string caused errors
+
+Roadmap:
+========
+See http://www.catelproject.com/support/issue-tracker
+
+Known issues:
+=============
+See http://www.catelproject.com/support/issue-tracker
+
+**********************************************************
+
+==================
 Version 3.7
 ==================
 

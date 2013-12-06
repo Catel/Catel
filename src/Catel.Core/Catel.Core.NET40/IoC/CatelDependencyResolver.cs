@@ -21,8 +21,6 @@ namespace Catel.IoC
 
         private readonly IServiceLocator _serviceLocator;
 
-        private readonly object _lockObject = new object();
-
         /// <summary>
         /// Initializes a new instance of the <see cref="CatelDependencyResolver" /> class.
         /// </summary>
@@ -66,10 +64,7 @@ namespace Catel.IoC
                 return true;
             }
 
-            lock (_lockObject)
-            {
-                return _serviceLocator.AreAllTypesRegistered(types);
-            }
+            return _serviceLocator.AreAllTypesRegistered(types);
         }
 
         /// <summary>
@@ -82,16 +77,13 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("type", type);
 
-            lock (_lockObject)
+            if (!_serviceLocator.IsTypeRegistered(type, tag))
             {
-                if (!_serviceLocator.IsTypeRegistered(type, tag))
-                {
-                    Log.Debug("Failed to resolve type '{0}', returning null", type.GetSafeFullName());
-                    return null;
-                }
-
-                return _serviceLocator.ResolveType(type, tag);
+                Log.Debug("Failed to resolve type '{0}', returning null", type.GetSafeFullName());
+                return null;
             }
+
+            return _serviceLocator.ResolveType(type, tag);
         }
 
         /// <summary>
@@ -109,18 +101,15 @@ namespace Catel.IoC
                 return new object[] { };
             }
 
-            lock (_lockObject)
+            int typeCount = types.Length;
+            var resolvedTypes = new object[typeCount];
+
+            for (int i = 0; i < typeCount; i++)
             {
-                int typeCount = types.Length;
-                var resolvedTypes = new object[typeCount];
-
-                for (int i = 0; i < typeCount; i++)
-                {
-                    resolvedTypes[i] = Resolve(types[i], tag);
-                }
-
-                return resolvedTypes;
+                resolvedTypes[i] = Resolve(types[i], tag);
             }
+
+            return resolvedTypes;
         }
     }
 }

@@ -7,6 +7,7 @@
 namespace Catel.Modules
 {
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
 
     using Catel.Logging;
 
@@ -33,7 +34,7 @@ namespace Catel.Modules
     /// ]]>
     ///  </code>
     /// </example>
-    public sealed class CompositeModuleCatalog : ModuleCatalog
+    public class CompositeModuleCatalog<TModuleCatalog> : ModuleCatalog where TModuleCatalog : IModuleCatalog
     {
         #region Fields
 
@@ -45,7 +46,7 @@ namespace Catel.Modules
         /// <summary>
         /// The module catalog list.
         /// </summary>
-        private readonly List<IModuleCatalog> _moduleCatalogs = new List<IModuleCatalog>();
+        private readonly List<TModuleCatalog> _moduleCatalogs = new List<TModuleCatalog>();
 
         #endregion
 
@@ -64,9 +65,9 @@ namespace Catel.Modules
                     yield return moduleCatalogItem;
                 }
 
-                foreach (IModuleCatalog moduleCatalog in _moduleCatalogs)
+                foreach (TModuleCatalog moduleCatalog in _moduleCatalogs)
                 {
-                	IEnumerable<IModuleCatalogItem> moduleCatalogItems = null;
+                    IEnumerable<IModuleCatalogItem> moduleCatalogItems = null;
 
                     if (moduleCatalog is ModuleCatalog)
                     {
@@ -77,13 +78,13 @@ namespace Catel.Modules
                         moduleCatalogItems = (moduleCatalog as Microsoft.Practices.Prism.Modularity.ModuleCatalog).Items;
                     }
 
-					if (moduleCatalogItems != null)
-					{
-	                    foreach (IModuleCatalogItem moduleCatalogItem in moduleCatalogItems)
-	                    {
-	                        yield return moduleCatalogItem;    
-	                    }
-					}
+                    if (moduleCatalogItems != null)
+                    {
+                        foreach (IModuleCatalogItem moduleCatalogItem in moduleCatalogItems)
+                        {
+                            yield return moduleCatalogItem;    
+                        }
+                    }
                 }
             }
         }
@@ -117,7 +118,7 @@ namespace Catel.Modules
                         }
                     }
                 });
-			
+
             base.Initialize();
         }
 
@@ -130,7 +131,7 @@ namespace Catel.Modules
         /// <exception cref="System.ArgumentNullException">
         /// The <paramref name="moduleCatalog"/> is <c>null</c>.
         /// </exception>
-        public void Add(IModuleCatalog moduleCatalog)
+        public void Add(TModuleCatalog moduleCatalog)
         {
             Argument.IsNotNull("moduleCatalog", moduleCatalog);
             
@@ -141,6 +142,72 @@ namespace Catel.Modules
             EnsureCatalogValidated();
         }
 
+        /// <summary>
+        /// The module catalogs.
+        /// </summary>
+        protected ReadOnlyCollection<TModuleCatalog> ModuleCatalogs 
+        { 
+            get
+            {
+                return _synchronizationContext.Execute(() => _moduleCatalogs.AsReadOnly());
+            } 
+        }
+
+        /// <summary>
+        /// Enumerate the leaf catalogs.
+        /// </summary>
+        public IEnumerable<IModuleCatalog> LeafCatalogs
+        {
+            get
+            {
+                _synchronizationContext.Acquire();
+                
+                List<TModuleCatalog> moduleCatalogs = _moduleCatalogs;
+                foreach (TModuleCatalog moduleCatalog in moduleCatalogs)
+                {
+                    var compositeModuleCatalog = moduleCatalog as CompositeModuleCatalog<IModuleCatalog>;
+                    if (compositeModuleCatalog != null)
+                    {
+                        foreach (IModuleCatalog leafCatalog in compositeModuleCatalog.LeafCatalogs)
+                        {
+                            yield return leafCatalog;
+                        }           
+                    }
+                    else
+                    {
+                        yield return moduleCatalog;
+                    }
+                }
+
+                _synchronizationContext.Release();
+            }
+        }
+
         #endregion
+    }
+
+    /// <summary>
+    /// Allows the combination of serveral module catalogs into a single module catalog.
+    /// </summary>
+    /// <remarks>
+    /// This class can be used to aggregate serveral <see cref="IModuleCatalog"/> instances and deal with them as one. 
+    /// Dependency between cross catalog modules is allowed. 
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// <![CDATA[
+    /// public class Bootstrapper : BootstrapperBase<Shell, CompositeModuleCatalog>
+    /// {
+    /// 	protected override void ConfigureModuleCatalog()
+    /// 	{
+    ///			ModuleCatalog.Add(new DirectoryModuleCatalog { ModulePath = @".\" + ModuleBase.ModulesDirectory});
+    ///			ModuleCatalog.Add(new ConfigurationModuleCatalog());
+    /// 	}
+    /// }
+    /// ]]>
+    ///  </code>
+    /// </example>
+    public sealed class CompositeModuleCatalog : CompositeModuleCatalog<IModuleCatalog>
+    {
     }
 }

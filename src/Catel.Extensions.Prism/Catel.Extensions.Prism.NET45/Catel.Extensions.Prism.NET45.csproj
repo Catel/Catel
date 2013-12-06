@@ -13,7 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.15.0.0</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.18.0.0</FodyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -49,9 +49,15 @@
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\..\lib\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
-    <Reference Include="Obsolete, Version=2.3.0.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Web.XmlTransform">
+      <HintPath>..\..\..\lib\Microsoft.Web.Xdt.1.0.0\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
+    </Reference>
+    <Reference Include="NuGet.Core, Version=1.6.30117.9648, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Obsolete.Fody.2.3.0\Lib\NET35\Obsolete.dll</HintPath>
+      <HintPath>..\..\..\lib\NuGet.Core.2.7.2\lib\net40-Client\NuGet.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Obsolete">
+      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.0.0\Lib\NET35\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="PresentationCore" />
@@ -85,6 +91,9 @@
     <Compile Include="..\Catel.Extensions.Prism.NET40\BootstrapperBase.generic.cs">
       <Link>BootstrapperBase.generic.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\ExtensionsPrismModule.cs">
+      <Link>ExtensionsPrismModule.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Extensions.Prism.NET40\Extensions\DependencyObjectExtensions.cs">
       <Link>Extensions\DependencyObjectExtensions.cs</Link>
     </Compile>
@@ -115,6 +124,18 @@
     <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\CompositeModuleCatalog.cs">
       <Link>Modules\CompositeModuleCatalog.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\CompositeNuGetBasedModuleCatalog.cs">
+      <Link>Modules\CompositeNuGetBasedModuleCatalog.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\CompositePackageRepository.cs">
+      <Link>Modules\CompositePackageRepository.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\Extensions\ModuleInfoExtensions.cs">
+      <Link>Modules\Extensions\ModuleInfoExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\Interfaces\INuGetBasedModuleCatalog.cs">
+      <Link>Modules\Interfaces\INuGetBasedModuleCatalog.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\ModuleCatalog.cs">
       <Link>Modules\ModuleCatalog.cs</Link>
     </Compile>
@@ -130,11 +151,26 @@
     <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\ModuleManager\Models\ModuleTemplate.cs">
       <Link>Modules\ModuleManager\Models\ModuleTemplate.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\ModuleManager\ModuleInfoManager.cs">
-      <Link>Modules\ModuleManager\ModuleInfoManager.cs</Link>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\ModuleManager\ModuleManager.cs">
+      <Link>Modules\ModuleManager\ModuleManager.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\ModuleManager\ViewModels\ModuleManagerViewModel.cs">
       <Link>Modules\ModuleManager\ViewModels\ModuleManagerViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\NuGetBasedModuleCatalog.cs">
+      <Link>Modules\NuGetBasedModuleCatalog.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\NuGetBasedModuleCatalogParentChildBehavior.cs">
+      <Link>Modules\NuGetBasedModuleCatalogParentChildBehavior.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\NuGet\InstallPackageRequest.cs">
+      <Link>Modules\NuGet\InstallPackageRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\NuGet\NuGetModuleTypeLoader.cs">
+      <Link>Modules\NuGet\NuGetModuleTypeLoader.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\NuGet\RemoteInstallPackageRequest.cs">
+      <Link>Modules\NuGet\RemoteInstallPackageRequest.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\SafeDirectoryModuleCatalog.cs">
       <Link>Modules\SafeDirectoryModuleCatalog.cs</Link>

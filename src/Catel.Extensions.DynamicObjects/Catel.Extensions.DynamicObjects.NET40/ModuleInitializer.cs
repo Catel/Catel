@@ -7,6 +7,8 @@
 
 namespace Catel.Extensions.DynamicObjects
 {
+    using Catel.IoC;
+
     /// <summary>
     /// Used by the ModuleInit. All code inside the Initialize method is ran as soon as the assembly is loaded.
     /// </summary>
@@ -18,6 +20,8 @@ namespace Catel.Extensions.DynamicObjects
         /// </summary>
         public static void Initialize()
         {
+            var serviceLocator = ServiceLocator.Default;
+            ExtensionsDynamicObjectsModule.RegisterServices(serviceLocator);
         }
         #endregion
     }

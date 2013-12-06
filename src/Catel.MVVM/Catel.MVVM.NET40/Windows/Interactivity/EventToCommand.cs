@@ -7,8 +7,16 @@
 namespace Catel.Windows.Interactivity
 {
     using System;
+
+#if NETFX_CORE
+    using global::Windows.UI.Xaml;
+    using global::Windows.UI.Xaml.Controls;
+    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
+#else
     using System.Windows;
     using System.Windows.Interactivity;
+    using UIEventArgs = System.EventArgs;
+#endif
 
 #if SILVERLIGHT
     using System.Windows.Controls;

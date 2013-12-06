@@ -161,7 +161,11 @@ namespace Catel.Runtime.Serialization
 
             using (var context = GetContext(modelType, stream, SerializationContextMode.Deserialization))
             {
-                return Deserialize(modelType, context.Context);
+                var model = context.Model;
+
+                Deserialize(model, context.Context);
+
+                return model;
             }
         }
 
@@ -196,7 +200,7 @@ namespace Catel.Runtime.Serialization
 
             using (var context = GetContext(modelType, stream, SerializationContextMode.Deserialization))
             {
-                return DeserializeMembers(modelType, context.Context);
+                return DeserializeMembers(context);
             }
         }
 

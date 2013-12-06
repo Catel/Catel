@@ -55,19 +55,19 @@ namespace Catel.Data
             _label = label;
             _contextLogName = GetContextLogName(databaseNameOrConnectionStringName, label);
 
-            var serviceLocator = ServiceLocator.Default;
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
 
             // Option to override or late-bind connection string
             if (string.IsNullOrEmpty(databaseNameOrConnectionStringName))
             {
-                if (serviceLocator.IsTypeRegistered<IConnectionStringManager>())
+                var connectionStringManager = dependencyResolver.Resolve<IConnectionStringManager>();
+                if (connectionStringManager != null)
                 {
-                    var connectionStringManager = serviceLocator.ResolveType<IConnectionStringManager>();
                     databaseNameOrConnectionStringName = connectionStringManager.GetConnectionString(typeof(TContext), databaseNameOrConnectionStringName, label);
                 }
             }
 
-            var contextFactory = serviceLocator.ResolveType<IContextFactory>();
+            var contextFactory = dependencyResolver.Resolve<IContextFactory>();
             _context = contextFactory.CreateContext<TContext>(databaseNameOrConnectionStringName, label, model, context);
 
             Initialize(_context);
@@ -215,7 +215,7 @@ namespace Catel.Data
         protected static string GetContextLogName(string databaseNameOrConnectionStringName, string label)
         {
             var contextLabel = GetContextName(databaseNameOrConnectionStringName, label);
-            return string.Format("Context '{0}' with context label '{1}'", typeof (TContext).FullName, contextLabel);
+            return string.Format("Context '{0}' with context label '{1}'", typeof(TContext).FullName, contextLabel);
         }
         #endregion
     }

@@ -7,9 +7,18 @@
 namespace Catel.Windows.Interactivity
 {
     using System;
+    using Data;
+    
+#if NETFX_CORE
+    using global::Windows.UI.Xaml;
+    using global::Windows.UI.Xaml.Controls;
+    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
+#else
     using System.Windows;
     using System.Windows.Controls;
-    using Data;
+    using System.Windows.Interactivity;
+    using UIEventArgs = System.EventArgs;
+#endif
 
     /// <summary>
     /// Behavior base for all behaviors that should update a binding.

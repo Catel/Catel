@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Runtime.Serialization
+namespace Catel.Runtime.Serialization.Binary
 {
     /// <summary>
     /// Interface for the binary serializer.

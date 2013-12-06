@@ -14,6 +14,7 @@ namespace Catel.Windows
     using Catel.Logging;
     using Catel.MVVM.Properties;
     using Catel.MVVM.Services;
+    using Catel.Windows.Threading;
 
     /// <summary>
     /// PleaseWait window Helper class.
@@ -93,64 +94,55 @@ namespace Catel.Windows
         /// The minimum show time in milliseconds.
         /// </value>
         public static int MinimumShowTime { get; set; }
+
+        /// <summary>
+        /// Gets the dispatcher.
+        /// </summary>
+        /// <value>The dispatcher.</value>
+        private static Dispatcher Dispatcher { get { return DispatcherHelper.CurrentDispatcher; } }
         #endregion
 
         #region Methods
         /// <summary>
         /// Shows the please wait window with the specified status text.
         /// </summary>
-        /// <param name="status">
-        /// The status.
-        /// </param>
-        /// <remarks>
-        /// When this method is used, the <see cref="Hide"/> method must be called to hide the window again.
-        /// </remarks>
+        /// <param name="status">The status.</param>
+        /// <remarks>When this method is used, the <see cref="Hide" /> method must be called to hide the window again.</remarks>
         public static void Show(string status = "")
         {
             UpdateStatus(status);
 
-            Instance.ShowWindow(-1);
+            Dispatcher.Invoke(() => Instance.ShowWindow(-1));
         }
 
         /// <summary>
         /// Shows the specified status.
         /// </summary>
-        /// <param name="statusFormat">
-        /// The status format.
-        /// </param>
-        /// <param name="currentItem">
-        /// The current item.
-        /// </param>
-        /// <param name="totalItems">
-        /// The total items.
-        /// </param>
+        /// <param name="statusFormat">The status format.</param>
+        /// <param name="currentItem">The current item.</param>
+        /// <param name="totalItems">The total items.</param>
         public static void Show(string statusFormat, int currentItem, int totalItems)
         {
-            UpdateStatus(statusFormat, currentItem, totalItems);
+            Dispatcher.Invoke(() => UpdateStatus(statusFormat, currentItem, totalItems));
         }
 
         /// <summary>
         /// Shows the please wait window with the default status text and executes the work delegate (in a background thread). When the work
         /// is finished, the please wait window will be automatically closed. This method will also subscribe to the
-        /// <see cref="BackgroundWorker.RunWorkerCompleted"/> event.
+        /// <see cref="BackgroundWorker.RunWorkerCompleted" /> event.
         /// </summary>
-        /// <param name="workDelegate">
-        /// The work delegate.
-        /// </param>
-        /// <param name="runWorkerCompletedDelegate">
-        /// The run worker completed delegate.
-        /// </param>
-        /// <param name="status">
-        /// The status.
-        /// </param>
-        /// <param name="windowWidth">
-        /// Width of the window.
-        /// </param>
+        /// <param name="workDelegate">The work delegate.</param>
+        /// <param name="runWorkerCompletedDelegate">The run worker completed delegate.</param>
+        /// <param name="status">The status.</param>
+        /// <param name="windowWidth">Width of the window.</param>
         public static void Show(PleaseWaitWorkDelegate workDelegate, RunWorkerCompletedEventHandler runWorkerCompletedDelegate = null, string status = "", double windowWidth = double.NaN)
         {
-            UpdateStatus(status, windowWidth);
+            Dispatcher.Invoke(() =>
+            {
+                UpdateStatus(status, windowWidth);
 
-            Instance.ShowWindow(-1);
+                Instance.ShowWindow(-1);
+            });
 
             if (workDelegate != null)
             {
@@ -179,15 +171,13 @@ namespace Catel.Windows
                 runWorkerCompletedDelegate(null, null);
             }
 
-            Hide();
+            Dispatcher.Invoke(() => Hide());
         }
 
         /// <summary>
         /// Updates the status.
         /// </summary>
-        /// <param name="status">
-        /// The status.
-        /// </param>
+        /// <param name="status">The status.</param>
         public static void UpdateStatus(string status)
         {
             if (string.IsNullOrEmpty(status))
@@ -195,48 +185,41 @@ namespace Catel.Windows
                 status = Resources.PleaseWait;
             }
 
-            Instance.UpdateStatusText(status, double.NaN);
+            Dispatcher.Invoke(() => Instance.UpdateStatusText(status, double.NaN));
         }
 
         /// <summary>
         /// Updates the status text.
         /// </summary>
-        /// <param name="status">
-        /// The status.
-        /// </param>
-        /// <param name="width">
-        /// The width.
-        /// </param>
+        /// <param name="status">The status.</param>
+        /// <param name="width">The width.</param>
         public static void UpdateStatus(string status, double width)
         {
-            Instance.UpdateStatusText(status, width);
+            Dispatcher.Invoke(() => Instance.UpdateStatusText(status, width));
         }
 
         /// <summary>
         /// Updates the status text.
         /// </summary>
-        /// <param name="statusFormat">
-        /// The status format.
-        /// </param>
-        /// <param name="currentItem">
-        /// The current item.
-        /// </param>
-        /// <param name="totalItems">
-        /// The total items.
-        /// </param>
+        /// <param name="statusFormat">The status format.</param>
+        /// <param name="currentItem">The current item.</param>
+        /// <param name="totalItems">The total items.</param>
         public static void UpdateStatus(string statusFormat, int currentItem, int totalItems)
         {
-            if (currentItem > totalItems)
+            Dispatcher.Invoke(() =>
             {
-                Instance.HideWindow();
-                return;
-            }
+                if (currentItem > totalItems)
+                {
+                    Instance.HideWindow();
+                    return;
+                }
 
-            UpdateStatus(string.Format(statusFormat, currentItem, totalItems));
+                UpdateStatus(string.Format(statusFormat, currentItem, totalItems));
 
-            int percentage = (100 / totalItems) * currentItem;
+                int percentage = (100/totalItems)*currentItem;
 
-            Instance.ShowWindow(percentage);
+                Instance.ShowWindow(percentage);
+            });
         }
 
         /// <summary>
@@ -244,18 +227,14 @@ namespace Catel.Windows
         /// </summary>
         public static void Hide()
         {
-            Instance.HideWindow();
+            Dispatcher.Invoke(() => Instance.HideWindow());
         }
 
         /// <summary>
         /// Updates the status text.
         /// </summary>
-        /// <param name="text">
-        /// The text.
-        /// </param>
-        /// <param name="windowWidth">
-        /// Width of the window.
-        /// </param>
+        /// <param name="text">The text.</param>
+        /// <param name="windowWidth">Width of the window.</param>
         private void UpdateStatusText(string text, double windowWidth)
         {
             _currentStatusText = text;
@@ -266,15 +245,12 @@ namespace Catel.Windows
                 return;
             }
 
-            if (!PleaseWaitWindow.Dispatcher.CheckAccess())
+            Dispatcher.Invoke(() =>
             {
-                PleaseWaitWindow.Dispatcher.Invoke(new UpdateStatusTextDelegate(UpdateStatusText), new object[] { text, windowWidth });
-                return;
-            }
-
-            PleaseWaitWindow.Text = _currentStatusText;
-            PleaseWaitWindow.MinWidth = double.IsNaN(_currentWindowWidth) ? 0d : _currentWindowWidth;
-            PleaseWaitWindow.UpdateLayout();
+                PleaseWaitWindow.Text = _currentStatusText;
+                PleaseWaitWindow.MinWidth = double.IsNaN(_currentWindowWidth) ? 0d : _currentWindowWidth;
+                PleaseWaitWindow.UpdateLayout();                
+            });
         }
 
         /// <summary>
@@ -288,7 +264,6 @@ namespace Catel.Windows
             bool isIndeterminate = (percentage == -1);
 
             var pleaseWaitWindow = PleaseWaitWindow;
-
             if (pleaseWaitWindow != null)
             {
                 pleaseWaitWindow.IsIndeterminate = isIndeterminate;
@@ -297,7 +272,7 @@ namespace Catel.Windows
             }
 
             pleaseWaitWindow = new PleaseWaitWindow();
-            Window activeWindow = Application.Current.GetActiveWindow();
+            var activeWindow = Application.Current.GetActiveWindow();
 
             // When the application has no a WPF window then the active window could be the pleaseWaitWindow, so
             if (!pleaseWaitWindow.Equals(activeWindow))
@@ -356,21 +331,18 @@ namespace Catel.Windows
                 return;
             }
 
-            if (!pleaseWaitWindow.Dispatcher.CheckAccess())
+            Dispatcher.Invoke(() =>
             {
-                pleaseWaitWindow.Dispatcher.Invoke((HideWindowDelegate)HideWindow, new object[] { });
-                return;
-            }
+                Log.Debug("Hiding please wait window");
 
-            Log.Debug("Hiding please wait window");
+                // Hide the window, this will start the animation to undimm the parent and then the please wait window
+                // will close itself
+                pleaseWaitWindow.Hide();
+                PleaseWaitWindow = null;
 
-            // Hide the window, this will start the animation to undimm the parent and then the please wait window
-            // will close itself
-            pleaseWaitWindow.Hide();
-            PleaseWaitWindow = null;
-
-            _currentStatusText = Resources.PleaseWait;
-            _currentWindowWidth = 0d;
+                _currentStatusText = Resources.PleaseWait;
+                _currentWindowWidth = 0d;
+            });
         }
         #endregion
 

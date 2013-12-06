@@ -6,6 +6,8 @@
 
 namespace Catel.Extensions.Data
 {
+    using Catel.IoC;
+
     /// <summary>
     /// Class that gets called as soon as the module is loaded.
     /// </summary>
@@ -19,6 +21,8 @@ namespace Catel.Extensions.Data
         /// </summary>
         public static void Initialize()
         {
+            var serviceLocator = ServiceLocator.Default;
+            ExtensionsDataModule.RegisterServices(serviceLocator);
         }
     }
 }

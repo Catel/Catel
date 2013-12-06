@@ -17,7 +17,7 @@
     <WarningLevel>4</WarningLevel>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.15.0.0</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.18.0.0</FodyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,9 +44,8 @@
     <None Include="ClassDiagrams\ViewModelBase.cd" />
     <None Include="Fody.targets" />
     <None Include="packages.config" />
-    <Reference Include="Obsolete, Version=2.3.0.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Obsolete.Fody.2.3.0\Lib\NET35\Obsolete.dll</HintPath>
+    <Reference Include="Obsolete">
+      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.0.0\Lib\NET35\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -86,6 +85,7 @@
     <Compile Include="Collections\FastObservableCollection.cs" />
     <Compile Include="Data\DispatcherObservableObject.cs" />
     <Compile Include="Environment.cs" />
+    <Compile Include="MVVMModule.cs" />
     <Compile Include="Extensions\NavigationEventArgsExtensions.cs" />
     <Compile Include="ModuleInitializer.cs" />
     <Compile Include="MVVM\Auditing\AuditingManager.cs" />
@@ -274,6 +274,7 @@
     <Compile Include="Windows\Data\Converters\StringToTypeConverter.cs" />
     <Compile Include="Windows\DependencyPropertySelector.cs" />
     <Compile Include="Windows\Helpers\CommandLineHelper.cs" />
+    <Compile Include="Windows\Input\Helpers\KeyboardHelper.cs" />
     <Compile Include="Windows\Threading\Extensions\DispatcherExtensions.cs" />
     <Compile Include="Windows\Interfaces\IDependencyPropertySelector.cs" />
     <Compile Include="Windows\Controls\MVVMProviders\Logic\EventArgs\DetermineViewModelInstanceEventArgs.cs" />

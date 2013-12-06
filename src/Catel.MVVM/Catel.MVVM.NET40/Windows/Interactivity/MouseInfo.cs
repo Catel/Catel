@@ -7,7 +7,14 @@
 namespace Catel.Windows.Interactivity
 {
     using System;
+
+#if NETFX_CORE
+    using global::Windows.UI.Xaml;
+    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
+#else
     using System.Windows;
+    using UIEventArgs = System.EventArgs;
+#endif
 
     /// <summary>
     /// Trigger that enables a property to bind the several mouse events for the associated object.
@@ -37,7 +44,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnAssociatedObjectLoaded(object sender, EventArgs e)
+        protected override void OnAssociatedObjectLoaded(object sender, UIEventArgs e)
         {
             AssociatedObject.MouseEnter += OnMouseEnter;
             AssociatedObject.MouseLeave += OnMouseLeave;
@@ -48,7 +55,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnAssociatedObjectUnloaded(object sender, EventArgs e)
+        protected override void OnAssociatedObjectUnloaded(object sender, UIEventArgs e)
         {
             AssociatedObject.MouseEnter -= OnMouseEnter;
             AssociatedObject.MouseLeave -= OnMouseLeave;

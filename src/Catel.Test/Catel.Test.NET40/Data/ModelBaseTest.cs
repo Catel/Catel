@@ -146,7 +146,7 @@
             Assert.AreEqual(parent, ((IParent)child).Parent);
         }
 
-#if !NETFX_CORE
+#if NET
         /// <summary>
         /// Tests the parent and child relations after deserialization.
         /// </summary>
@@ -160,10 +160,8 @@
 
             var file = _filesHelper.GetTempFile();
             parent.Save(file);
-#if SILVERLIGHT
-            file.Position = 0L;
-#endif
-            var loadedParent = SavableModelBase<Parent>.Load(file);
+
+            var loadedParent = ModelBase.Load<Parent>(file, SerializationMode.Binary);
 
             Assert.AreEqual(parent, ((IParent)loadedParent.Children[0]).Parent);
         }
@@ -187,7 +185,7 @@
 
                 memoryStream.Position = 0L;
 
-                loadedParent = SavableModelBase<Parent>.Load(memoryStream, SerializationMode.Xml);
+                loadedParent = ModelBase.Load<Parent>(memoryStream, SerializationMode.Xml);
             }
 
             Assert.AreEqual(parent, ((IParent)loadedParent.Children[0]).Parent);
@@ -489,12 +487,15 @@
 
             obj.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
                                     {
-                                        isInvoked = true;
-
-                                        if (string.Compare(e.PropertyName, "Value") != 0)
+                                        if (!isInvoked)
                                         {
-                                            Assert.Fail("Wrong PropertyChanged property name");
+                                            if (string.Compare(e.PropertyName, "Value") != 0)
+                                            {
+                                                Assert.Fail("Wrong PropertyChanged property name");
+                                            }
                                         }
+
+                                        isInvoked = true;
                                     };
 
             obj.Value = "MyNewValue";
@@ -514,12 +515,15 @@
 
             obj.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
             {
-                isInvoked = true;
-
-                if (string.Compare(e.PropertyName, "Value") != 0)
+                if (!isInvoked)
                 {
-                    Assert.Fail("Wrong PropertyChanged property name");
+                    if (string.Compare(e.PropertyName, "Value") != 0)
+                    {
+                        Assert.Fail("Wrong PropertyChanged property name");
+                    }
                 }
+
+                isInvoked = true;
             };
 
             obj.RaisePropertyChanged((() => obj.Value));
@@ -539,12 +543,15 @@
 
             obj.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
             {
-                isInvoked = true;
-
-                if (string.Compare(e.PropertyName, "Value") != 0)
+                if (!isInvoked)
                 {
-                    Assert.Fail("Wrong PropertyChanged property name");
+                    if (string.Compare(e.PropertyName, "Value") != 0)
+                    {
+                        Assert.Fail("Wrong PropertyChanged property name");
+                    }
                 }
+
+                isInvoked = true;
             };
 
             obj.RaisePropertyChanged("Value");

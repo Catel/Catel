@@ -62,7 +62,7 @@ namespace Catel.MVVM.Services
             }
             catch (Exception)
             {
-                throw new NotSupportedInSilverlightException("Unfortunately, the default MessageBox class of Silverlight does not support '{0}'", button);
+                throw new NotSupportedInPlatformException("MessageBox class does not support MessageButton '{0}'", button);
             }
 		}
 		#endregion

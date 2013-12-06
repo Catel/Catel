@@ -9,12 +9,19 @@ namespace Catel.Windows.Interactivity
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Logging;
+
+#if NETFX_CORE
+    using global::Windows.UI.Xaml;
+    using TimerTickEventArgs = System.Object;
+#else
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
     using System.Windows.Media;
     using System.Windows.Threading;
-    using Logging;
+    using TimerTickEventArgs = System.EventArgs;
+#endif
 
     /// <summary>
     /// This behavior allows any element that supports a double click to command for every element
@@ -211,7 +218,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnTimerTick(object sender, EventArgs e)
+        private void OnTimerTick(object sender, TimerTickEventArgs e)
         {
             _timer.Stop();
         }

@@ -6,9 +6,21 @@
 
 namespace Catel.Windows.Interactivity
 {
+    
+#if NETFX_CORE
+    using global::Windows.UI.Core;
+    using global::Windows.UI.Xaml;
+    using global::Windows.UI.Xaml.Input;
+    using Key = global::Windows.System.VirtualKey;
+    using KeyEventArgs = global::Windows.UI.Xaml.Input.KeyRoutedEventArgs;
+    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
+#else
     using System.Windows;
     using System.Windows.Input;
     using System.Windows.Interactivity;
+    using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+    using UIEventArgs = System.EventArgs;
+#endif
 
     /// <summary>
     /// Behavior that converts a key press on a specific UI element to a command.
@@ -38,7 +50,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnAssociatedObjectLoaded(object sender, System.EventArgs e)
+        protected override void OnAssociatedObjectLoaded(object sender, UIEventArgs e)
         {
             base.OnAssociatedObjectLoaded(sender, e);
 
@@ -50,7 +62,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnAssociatedObjectUnloaded(object sender, System.EventArgs e)
+        protected override void OnAssociatedObjectUnloaded(object sender, UIEventArgs e)
         {
             AssociatedObject.KeyUp -= OnKeyUp;
 

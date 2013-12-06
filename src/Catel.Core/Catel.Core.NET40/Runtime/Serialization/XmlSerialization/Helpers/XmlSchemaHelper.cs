@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Runtime.Serialization
+namespace Catel.Runtime.Serialization.Xml
 {
     using System;
     using System.Collections;
@@ -134,10 +134,13 @@ namespace Catel.Runtime.Serialization
 
             if (typeof(ModelBase).IsAssignableFromEx(type))
             {
+                // TODO: Update to latest serialization engine
+
                 var typeNs = GetTypeNamespaceForSchema(type);
 
                 var propertyDataManager = new PropertyDataManager();
-                var properties = (from propertyDefinition in propertyDataManager.GetProperties(type)
+                var catelTypeInfo = propertyDataManager.GetCatelTypeInfo(type);
+                var properties = (from propertyDefinition in catelTypeInfo.GetCatelProperties()
                                   where propertyDefinition.Value.IncludeInSerialization
                                   orderby propertyDefinition.Value.Name
                                   select propertyDefinition);

@@ -18,6 +18,57 @@ namespace Catel.Data
     public class ModelEqualityComparer : EqualityComparer<ModelBase>, IModelEqualityComparer
     {
         /// <summary>
+        /// The property data manager.
+        /// </summary>
+        private static readonly PropertyDataManager PropertyDataManager;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ModelEqualityComparer" /> class.
+        /// </summary>
+        static ModelEqualityComparer()
+        {
+            PropertyDataManager = PropertyDataManager.Default;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ModelEqualityComparer"/> class.
+        /// </summary>
+        public ModelEqualityComparer()
+        {
+            CompareProperties = false;
+            CompareValues = false;
+            CompareCollections = false;
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether properties should be compared.
+        /// <para />
+        /// The default value is <c>false</c>.
+        /// </summary>
+        /// <value><c>true</c> if properties should be compared; otherwise, <c>false</c>.</value>
+        public bool CompareProperties { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether values should be compared as well.
+        /// <para />
+        /// Note that this might degrade performance on properties with large collections.
+        /// <para />
+        /// The default value is <c>false</c>.
+        /// </summary>
+        /// <value><c>true</c> if values should be compared; otherwise, <c>false</c>.</value>
+        public bool CompareValues { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether collections should be compared as well.
+        /// <para />
+        /// Note that this might degrade performance on properties with large collections.
+        /// <para />
+        /// The default value is <c>false</c>.
+        /// </summary>
+        /// <value><c>true</c> if collections should be compared; otherwise, <c>false</c>.</value>
+        public bool CompareCollections { get; set; }
+
+        /// <summary>
         /// When overridden in a derived class, determines whether two objects of type <see cref="ModelBase" /> are equal.
         /// </summary>
         /// <param name="x">The first object to compare.</param>
@@ -45,23 +96,21 @@ namespace Catel.Data
                 return false;
             }
 
-            var propertyDataManager = PropertyDataManager.Default;
+            if (!CompareProperties)
+            {
+                return false;
+            }
 
             lock (x._propertyValuesLock)
             {
                 foreach (var propertyValue in x._propertyBag.GetAllProperties())
                 {
-                    var propertyData = propertyDataManager.GetPropertyData(xType, propertyValue.Key);
+                    var propertyData = PropertyDataManager.GetPropertyData(xType, propertyValue.Key);
 
                     // Only check if this is not an internal data object base property
                     if (!propertyData.IsModelBaseProperty)
                     {
                         object valueA = propertyValue.Value;
-                        if (!y.IsPropertyRegistered(propertyValue.Key))
-                        {
-                            return false;
-                        }
-
                         object valueB = y.GetValue(propertyValue.Key);
 
                         if (!ReferenceEquals(valueA, valueB))
@@ -76,17 +125,23 @@ namespace Catel.Data
                             if ((valueAAsIEnumerable != null) && !(valueA is string))
                             {
                                 // Yes, loop all sub items and check them
-                                if (!CollectionHelper.IsEqualTo(valueAAsIEnumerable, (IEnumerable)valueB))
+                                if (CompareCollections)
                                 {
-                                    return false;
+                                    if (!CollectionHelper.IsEqualTo(valueAAsIEnumerable, (IEnumerable)valueB))
+                                    {
+                                        return false;
+                                    }
                                 }
                             }
                             else
                             {
                                 // No, check objects via equals method
-                                if (!valueA.Equals(valueB))
+                                if (CompareValues)
                                 {
-                                    return false;
+                                    if (!valueA.Equals(valueB))
+                                    {
+                                        return false;
+                                    }
                                 }
                             }
                         }

@@ -1,6 +1,7 @@
 ﻿namespace Catel.Test.IoC
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
 
@@ -159,9 +160,56 @@
         }
 
         [TestClass]
+        public class TheGenericTypesSupport
+        {
+            [TestMethod]
+            public void CorrectlyResolvesClosedGenericTypeWithSingleInnerType()
+            {
+                var serviceLocator = new ServiceLocator();
+
+                serviceLocator.RegisterType(typeof(IList<int>), typeof(List<int>));
+
+                var resolvedObject = serviceLocator.ResolveType<IList<int>>();
+                Assert.IsTrue(resolvedObject is List<int>);
+            }
+
+            [TestMethod]
+            public void CorrectlyResolvesOpenGenericTypeWithSingleInnerType()
+            {
+                var serviceLocator = new ServiceLocator();
+
+                serviceLocator.RegisterType(typeof(IList<>), typeof(List<>));
+
+                var resolvedObject = serviceLocator.ResolveType<IList<int>>();
+                Assert.IsTrue(resolvedObject is List<int>);
+            }
+
+            [TestMethod]
+            public void CorrectlyResolvesClosedGenericTypeWithMultipleInnerTypes()
+            {
+                var serviceLocator = new ServiceLocator();
+
+                serviceLocator.RegisterType(typeof(IDictionary<string, int>), typeof(Dictionary<string, int>));
+
+                var resolvedObject = serviceLocator.ResolveType<IDictionary<string, int>>();
+                Assert.IsTrue(resolvedObject is Dictionary<string, int>);
+            }
+
+            [TestMethod]
+            public void CorrectlyResolvesOpenGenericTypeWithMultipleInnerTypes()
+            {
+                var serviceLocator = new ServiceLocator();
+
+                serviceLocator.RegisterType(typeof(IDictionary<,>), typeof(Dictionary<,>));
+
+                var resolvedObject = serviceLocator.ResolveType<IDictionary<string, int>>();
+                Assert.IsTrue(resolvedObject is Dictionary<string, int>);
+            }
+        }
+
+        [TestClass]
         public class TheIsTypeRegisteredAsSingletonMethod
         {
-
             [TestMethod]
             public void TheIsTypeRegisteredAsSingleton_Generic()
             {
@@ -942,7 +990,7 @@
             {
             }
 
-            [ServiceLocatorRegistration(typeof(IFooService2), RegistrationType.Transient)]
+            [ServiceLocatorRegistration(typeof(IFooService2), ServiceLocatorRegistrationMode.Transient)]
             public class FooService2 : IFooService2
             {
             }
@@ -1002,12 +1050,12 @@
             {
             }
 
-            [ServiceLocatorRegistration(typeof(IFooService), RegistrationType.Singleton, "FooService1")]
+            [ServiceLocatorRegistration(typeof(IFooService), ServiceLocatorRegistrationMode.SingletonInstantiateWhenRequired, "FooService1")]
             public class FooService1 : IFooService
             {
             }
 
-            [ServiceLocatorRegistration(typeof(IFooService), RegistrationType.Transient, "FooService2")]
+            [ServiceLocatorRegistration(typeof(IFooService), ServiceLocatorRegistrationMode.Transient, "FooService2")]
             public class FooService2 : IFooService
             {
             }
@@ -1103,12 +1151,12 @@
             {
             }
 
-            [ServiceLocatorRegistration(typeof(IFooService), RegistrationType.Singleton, "FooService1")]
+            [ServiceLocatorRegistration(typeof(IFooService), ServiceLocatorRegistrationMode.SingletonInstantiateWhenRequired, "FooService1")]
             public class FooService1 : IFooService
             {
             }
 
-            [ServiceLocatorRegistration(typeof(IFooService), RegistrationType.Singleton, "FooService2")]
+            [ServiceLocatorRegistration(typeof(IFooService), ServiceLocatorRegistrationMode.SingletonInstantiateWhenRequired, "FooService2")]
             public class FooService2 : IFooService
             {
             }
@@ -1140,12 +1188,12 @@
             {
             }
 
-            [ServiceLocatorRegistration(typeof(IFooService), RegistrationType.Singleton, "FooService1")]
+            [ServiceLocatorRegistration(typeof(IFooService), ServiceLocatorRegistrationMode.SingletonInstantiateWhenRequired, "FooService1")]
             public class FooService1 : IFooService
             {
             }
 
-            [ServiceLocatorRegistration(typeof(IFooService), RegistrationType.Singleton, "FooService2")]
+            [ServiceLocatorRegistration(typeof(IFooService), ServiceLocatorRegistrationMode.SingletonInstantiateWhenRequired, "FooService2")]
             public class FooService2 : IFooService
             {
             }

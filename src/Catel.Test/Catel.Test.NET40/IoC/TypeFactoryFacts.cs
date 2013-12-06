@@ -8,7 +8,9 @@ namespace Catel.Test.IoC
 {
     using System;
     using Catel.IoC;
+    using Catel.Messaging;
     using Catel.MVVM.Services;
+    using Catel.Test.MVVM.ViewModels.TestClasses;
     using Data;
 
 #if NETFX_CORE
@@ -233,10 +235,55 @@ namespace Catel.Test.IoC
         [TestClass]
         public class TheCreateInstanceWithAutoCompletionMethod
         {
+            public class Person
+            {
+                public string FirstName { get; set; }
+                public string LastName { get; set; }
+            }
+
+            public class ClassWithDynamicConstructor
+            {
+                public ClassWithDynamicConstructor(dynamic person)
+                {
+                    IsDynamicConstructorCalled = true;
+                }
+
+                public ClassWithDynamicConstructor(Person person)
+                {
+                    IsTypedConstructorCalled = true;
+                }
+
+                public bool IsDynamicConstructorCalled { get; private set; }
+
+                public bool IsTypedConstructorCalled { get; private set; }
+            }
+
+            public class ClassWithSeveralMatchesForDependencyInjection
+            {
+                public ClassWithSeveralMatchesForDependencyInjection(IUIVisualizerService uiVisualizerService, IMessageService messageService)
+                {
+                }
+
+                [InjectionConstructor]
+                public ClassWithSeveralMatchesForDependencyInjection(IMessageMediator messageMediator, IMessageService messageService)
+                {
+                    IsRightConstructorUsed = true;
+                }
+
+                public bool IsRightConstructorUsed { get; private set; }
+            }
+
+            public class ClassWithPropertyInjection
+            {
+                [Inject]
+                public IUIVisualizerService UiVisualizerService { get; set; }
+            }
+
             [TestMethod]
             public void CreatesTypeUsingSimpleCustomInjectionAndAutoCompletion()
             {
-                var instance = TypeFactory.Default.CreateInstanceWithParametersAndAutoCompletion<AdvancedDependencyInjectionTestClass>(42);
+                var typeFactory = TypeFactory.Default;
+                var instance = typeFactory.CreateInstanceWithParametersAndAutoCompletion<AdvancedDependencyInjectionTestClass>(42);
 
                 Assert.IsNotNull(instance);
                 Assert.AreEqual(42, instance.IntValue);
@@ -245,12 +292,45 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void CreatesTypeUsingComplexCustomInjectionAndAutoCompletion()
             {
-                var instance = TypeFactory.Default.CreateInstanceWithParametersAndAutoCompletion<AdvancedDependencyInjectionTestClass>("string", 42, 42L);
+                var typeFactory = TypeFactory.Default;
+                var instance = typeFactory.CreateInstanceWithParametersAndAutoCompletion<AdvancedDependencyInjectionTestClass>("string", 42, 42L);
 
                 Assert.IsNotNull(instance);
                 Assert.AreEqual("string", instance.StringValue);
                 Assert.AreEqual(42, instance.IntValue);
                 Assert.AreEqual(42L, instance.LongValue);
+            }
+
+            [TestMethod]
+            public void CreatesTypeWhenDynamicConstructorIsAvailable()
+            {
+                var typeFactory = TypeFactory.Default;
+
+                var person = new Person {FirstName = "John", LastName = "Doe"};
+                var instance = typeFactory.CreateInstanceWithParametersAndAutoCompletion<ClassWithDynamicConstructor>(person);
+
+                Assert.IsFalse(instance.IsDynamicConstructorCalled);
+                Assert.IsTrue(instance.IsTypedConstructorCalled);
+            }
+
+            [TestMethod]
+            public void CreatesTypeWithInjectionConstructorAttribute()
+            {
+                var typeFactory = TypeFactory.Default;
+
+                var instance = typeFactory.CreateInstance<ClassWithSeveralMatchesForDependencyInjection>();
+
+                Assert.IsTrue(instance.IsRightConstructorUsed);
+            }
+
+            [TestMethod]
+            public void CreatesTypeWithPropertyInjection()
+            {
+                var typeFactory = TypeFactory.Default;
+
+                var instance = typeFactory.CreateInstance<ClassWithPropertyInjection>();
+
+                Assert.IsNotNull(instance.UiVisualizerService);
             }
         }
     }

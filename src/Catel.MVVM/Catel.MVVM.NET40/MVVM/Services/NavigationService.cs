@@ -195,8 +195,8 @@ namespace Catel.MVVM.Services
                 mainWindow.Close();
             }
 #else
-            Log.Error("Closing an application is not possible in Windows Phone 7");
-            throw new NotSupportedException("Closing an application is not possible in Windows Phone and WinRT");
+            Log.Error("Closing an application is not possible in '{0}'", Platforms.CurrentPlatform);
+            throw new NotSupportedInPlatformException("Closing an application is not possible");
 #endif
 
 #pragma warning disable 162
@@ -246,7 +246,7 @@ namespace Catel.MVVM.Services
 #if NETFX_CORE
             var type = Reflection.TypeCache.GetType(uri);
             RootFrame.Navigate(type, parameters);
-#elif SILVERLIGHT
+#elif SILVERLIGHT || WINDOWS_PHONE
             string finalUri = string.Format("{0}{1}", uri, ToQueryString(parameters));
             Navigate(new Uri(finalUri, UriKind.RelativeOrAbsolute));
 #else
@@ -283,11 +283,13 @@ namespace Catel.MVVM.Services
             {
                 if (!_registeredUris.ContainsKey(viewModelTypeName))
                 {
+                    var dependencyResolver = this.GetDependencyResolver();
+
 #if NETFX_CORE
-                    var viewLocator = ServiceLocator.Default.ResolveType<IViewLocator>();
+                    var viewLocator = dependencyResolver.Resolve<IViewLocator>();
                     var url = viewLocator.ResolveView(viewModelType).AssemblyQualifiedName;
 #else
-                    var urlLocator = ServiceLocator.Default.ResolveType<IUrlLocator>();
+                    var urlLocator = dependencyResolver.Resolve<IUrlLocator>();
                     var url = urlLocator.ResolveUrl(viewModelType);
 #endif
 
@@ -308,9 +310,9 @@ namespace Catel.MVVM.Services
             Argument.IsNotNull("uri", uri);
 
 #if NETFX_CORE
-            var error = string.Format("Direct navigations to urls is not supported in WinRT, cannot navigate to '{0}'. Use Navigate(type) instead.", uri.ToString());
+            var error = string.Format("Direct navigations to urls is not supported in '{0}', cannot navigate to '{1}'. Use Navigate(type) instead.", Platforms.CurrentPlatform, uri.ToString());
             Log.Error(error);
-            throw new InvalidOperationException(error);
+            throw new NotSupportedInPlatformException(error);
 #else
             RootFrame.Navigate(uri);
 #endif
@@ -399,6 +401,8 @@ namespace Catel.MVVM.Services
         {
 #if NETFX_CORE
             throw new NotImplementedException();
+#elif WINDOWS_PHONE
+            return RootFrame.BackStack.Count();
 #elif SILVERLIGHT
             throw new NotImplementedException();
 #else
@@ -413,6 +417,8 @@ namespace Catel.MVVM.Services
         {
 #if NETFX_CORE
             throw new NotImplementedException();
+#elif WINDOWS_PHONE
+            RootFrame.RemoveBackEntry();
 #elif SILVERLIGHT
             throw new NotImplementedException();
 #else
@@ -427,6 +433,10 @@ namespace Catel.MVVM.Services
         {
 #if NETFX_CORE
             throw new NotImplementedException();
+#elif WINDOWS_PHONE
+            while (RootFrame.RemoveBackEntry() != null)
+            {
+            }
 #elif SILVERLIGHT
             throw new NotImplementedException();
 #else

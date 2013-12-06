@@ -109,7 +109,8 @@ namespace Catel.Runtime.Serialization
                 var properties = new List<string>();
 
                 var propertyDataManager = PropertyDataManager.Default;
-                var catelProperties = propertyDataManager.GetProperties(type);
+                var catelTypeInfo = propertyDataManager.GetCatelTypeInfo(type);
+                var catelProperties = catelTypeInfo.GetCatelProperties();
                 var catelPropertyNames = catelProperties.Keys.ToList();
                 foreach (var modelProperty in catelProperties)
                 {
@@ -171,7 +172,8 @@ namespace Catel.Runtime.Serialization
             return _catelPropertyNamesCache.GetFromCacheOrFetch(type, () =>
             {
                 var propertyDataManager = PropertyDataManager.Default;
-                var properties = (from property in propertyDataManager.GetProperties(type)
+                var catelTypeInfo = propertyDataManager.GetCatelTypeInfo(type);
+                var properties = (from property in catelTypeInfo.GetCatelProperties()
                                   where !property.Value.IsModelBaseProperty
                                   select property.Key).ToList();
 
@@ -194,7 +196,8 @@ namespace Catel.Runtime.Serialization
                 var dictionary = new Dictionary<string, MemberMetadata>();
 
                 var propertyDataManager = PropertyDataManager.Default;
-                var properties = (from property in propertyDataManager.GetProperties(type)
+                var catelTypeInfo = propertyDataManager.GetCatelTypeInfo(type);
+                var properties = (from property in catelTypeInfo.GetCatelProperties()
                                   where !property.Value.IsModelBaseProperty
                                   select property.Value).ToList();
 

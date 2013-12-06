@@ -25,6 +25,7 @@ namespace Catel.MVVM
     ///   </example>
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
+    [ObsoleteEx(Replacement = "Moved to Catel.Fody. For more information, see https://catelproject.atlassian.net/browse/CTL-137", TreatAsErrorFromVersion = "3.9", RemoveInVersion = "4.0")]
     public class ExposeAttribute : Attribute
     {
         /// <summary>

@@ -26,7 +26,7 @@ namespace Catel.Collections
     public class FastObservableCollection<T> : ObservableCollection<T>
     {
         #region Constants
-        private static readonly IDispatcherService _dispatcherService = ServiceLocator.Default.ResolveType<IDispatcherService>();
+        private static readonly IDispatcherService _dispatcherService;
         #endregion
 
         #region Fields
@@ -34,6 +34,15 @@ namespace Catel.Collections
         #endregion
 
         #region Constructors
+        /// <summary>
+        /// Initializes static members of the <see cref="FastObservableCollection{T}"/> class.
+        /// </summary>
+        static FastObservableCollection()
+        {
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+            _dispatcherService = dependencyResolver.Resolve<IDispatcherService>();
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FastObservableCollection{T}" /> class.
         /// </summary>

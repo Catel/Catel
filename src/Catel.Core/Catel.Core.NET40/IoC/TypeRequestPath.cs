@@ -27,25 +27,29 @@ namespace Catel.IoC
         private bool _isValid = true;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TypeRequestPath"/> class.
+        /// Initializes a new instance of the <see cref="TypeRequestPath" /> class.
         /// </summary>
         /// <param name="typeRequestInfo">The type request info.</param>
         /// <param name="ignoreValueTypes">If set to <c>true</c>, this type path will ignore value types.</param>
+        /// <param name="name">The name, can be <c>null</c>.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="typeRequestInfo" /> is <c>null</c>.</exception>
-        public TypeRequestPath(TypeRequestInfo typeRequestInfo, bool ignoreValueTypes = true)
-            : this(new [] { typeRequestInfo }, ignoreValueTypes) { }
+        public TypeRequestPath(TypeRequestInfo typeRequestInfo, bool ignoreValueTypes = true, string name = null)
+            : this(new [] { typeRequestInfo }, ignoreValueTypes, name) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeRequestPath" /> class.
         /// </summary>
         /// <param name="typeRequestInfos">The type requests already in the path.</param>
         /// <param name="ignoreValueTypes">If set to <c>true</c>, this type path will ignore value types.</param>
+        /// <param name="name">The name, can be <c>null</c>.</param>
         /// <exception cref="ArgumentException">The <paramref name="typeRequestInfos" /> is <c>null</c> or an empty array.</exception>
-        public TypeRequestPath(TypeRequestInfo[] typeRequestInfos, bool ignoreValueTypes = true)
+        public TypeRequestPath(TypeRequestInfo[] typeRequestInfos, bool ignoreValueTypes = true, string name = null)
         {
             Argument.IsNotNullOrEmptyArray("typeRequestInfos", typeRequestInfos);
 
             IgnoreValueTypes = ignoreValueTypes;
+            IgnoreDuplicateRequestsDirectlyAfterEachother = true;
+            Name = name;
 
             foreach (var typeRequestInfo in typeRequestInfos)
             {
@@ -54,10 +58,24 @@ namespace Catel.IoC
         }
 
         /// <summary>
+        /// Gets the name.
+        /// </summary>
+        /// <value>The name.</value>
+        public string Name { get; private set; }
+
+        /// <summary>
         /// Gets a value indicating whether value types should be ignored in the path.
         /// </summary>
         /// <value><c>true</c> if value types should be ignored; otherwise, <c>false</c>.</value>
         public bool IgnoreValueTypes { get; private set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether duplicate requests directly after each other should be ignored.
+        /// <para />
+        /// The default value is <c>true</c>.
+        /// </summary>
+        /// <value><c>true</c> if duplicate requests directly after each other should be ignored; otherwise, <c>false</c>.</value>
+        public bool IgnoreDuplicateRequestsDirectlyAfterEachother { get; set; }
 
         /// <summary>
         /// Gets the number of types in the type path.
@@ -209,6 +227,19 @@ namespace Catel.IoC
         }
 
         /// <summary>
+        /// Throws the <see cref="CircularDependencyException"/> if the <see cref="IsValid"/> is <c>false</c>.
+        /// </summary>
+        public void ThrowsExceptionIfInvalid()
+        {
+            if (!IsValid)
+            {
+                string error = string.Format("Found a circular dependency while resolving '{0}', it is used by '{1}'", FirstType, _typePath[_typePath.Count - 2]);
+                Log.Error(error);
+                throw new CircularDependencyException(this, string.Format("{0}. For more information, view the enclosed TypeRequestPath", error));
+            }
+        }
+
+        /// <summary>
         /// Adds the type to the type path.
         /// </summary>
         /// <param name="typeRequestInfo">The type request info.</param>
@@ -229,7 +260,7 @@ namespace Catel.IoC
             }
 
             var lastTypeRequest = _typePath.LastOrDefault();
-            if (lastTypeRequest == typeRequestInfo)
+            if ((lastTypeRequest == typeRequestInfo) && IgnoreDuplicateRequestsDirectlyAfterEachother)
             {
                 Log.Debug("Requesting type {0} twice after eachother, ignoring second request", typeRequestInfo);
                 return;
@@ -241,12 +272,7 @@ namespace Catel.IoC
 
             if (throwExceptionForDuplicateTypes)
             {
-                if (alreadyContainsType)
-                {
-                    string error = string.Format("Found a circular dependency while resolving '{0}', it is used by '{1}'", FirstType, _typePath[_typePath.Count - 2]);
-                    Log.Error(error);
-                    throw new CircularDependencyException(this, string.Format("{0}. For more information, view the enclosed TypeRequestPath", error));
-                }
+                ThrowsExceptionIfInvalid();
             }
         }
     }

@@ -4,16 +4,9 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Catel.IoC;
 namespace Catel.MVVM
 {
-    using Catel.MVVM.Views;
-
-    using IoC;
-
-#if !NET
-    using Catel.Windows;
-#endif
-
     /// <summary>
     /// Class that gets called as soon as the module is loaded.
     /// </summary>
@@ -28,15 +21,7 @@ namespace Catel.MVVM
         public static void Initialize()
         {
             var serviceLocator = ServiceLocator.Default;
-
-#if !NET
-            serviceLocator.RegisterTypeIfNotYetRegistered<IFrameworkElementLoadedManager, FrameworkElementLoadedManager>();
-#endif
-
-            serviceLocator.RegisterTypeIfNotYetRegistered<IViewManager, ViewManager>();
-            serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelManager, ViewModelManager>();
-
-            ViewModelServiceHelper.RegisterDefaultViewModelServices(serviceLocator);
+            MVVMModule.RegisterServices(serviceLocator);
         }
     }
 }

@@ -206,6 +206,23 @@ namespace Catel.Reflection
         }
 
         /// <summary>
+        /// Determines whether the specified type contains generic parameters.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns><c>true</c> if the specified type contains generic parameters; otherwise, <c>false</c>.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        public static bool ContainsGenericParametersEx(this Type type)
+        {
+            Argument.IsNotNull("type", type);
+
+#if NETFX_CORE
+            return type.GetTypeInfo().ContainsGenericParameters;
+#else
+            return type.ContainsGenericParameters;
+#endif
+        }
+
+        /// <summary>
         /// The get assembly ex.
         /// </summary>
         /// <param name="type">The type.</param>
@@ -515,11 +532,6 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-            if (!IsGenericTypeEx(type))
-            {
-                throw new NotSupportedException(string.Format("The type '{0}' is not generic, cannot get generic arguments", type.FullName));
-            }
-
 #if NETFX_CORE
             return type.GetTypeInfo().GenericTypeArguments;
 #else
@@ -601,17 +613,10 @@ namespace Catel.Reflection
                 return true;
             }
 
-#if NETFX_CORE
             if (type.IsAssignableFromEx(instanceType))
             {
                 return true;
             }
-#else
-            if (type.IsAssignableFrom(instanceType))
-            {
-                return true;
-            }
-#endif
 
             bool castable = (from method in type.GetMethodsEx(BindingFlags.Public | BindingFlags.Static)
                              where method.ReturnType == instanceType &&

@@ -6,10 +6,21 @@
 
 namespace Catel.Windows.Interactivity
 {
+#if NETFX_CORE
+    using Catel.Windows.Threading;
+    using global::Windows.UI.Xaml;
+    using global::Windows.UI.Xaml.Controls;
+    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
+    using TimerTickEventArgs = System.Object;
+#else
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Interactivity;
     using System.Windows.Threading;
+    using UIEventArgs = System.EventArgs;
+    using TimerTickEventArgs = System.EventArgs;
+#endif
+
     using System;
     using System.ComponentModel;
     using Logging;
@@ -57,7 +68,7 @@ namespace Catel.Windows.Interactivity
         
         private bool _isFocusAlreadySet;
 
-#if !WINDOWS_PHONE
+#if !WINDOWS_PHONE && !NETFX_CORE
         private DynamicEventListener _dynamicEventListener;
 #endif
         #endregion
@@ -177,7 +188,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnAssociatedObjectLoaded(object sender, System.EventArgs e)
+        protected override void OnAssociatedObjectLoaded(object sender, UIEventArgs e)
         {
             if (!_isFocusAlreadySet && (FocusMoment == FocusMoment.Loaded))
             {
@@ -219,8 +230,9 @@ namespace Catel.Windows.Interactivity
                 switch (FocusMoment)
                 {
                     case FocusMoment.Event:
-#if WINDOWS_PHONE
-                        throw new NotSupportedInWindowsPhone7Exception();
+                        
+#if WINDOWS_PHONE || NETFX_CORE
+                        throw new NotSupportedInPlatformException("Dynamic events are not supported");
 #else
                         _dynamicEventListener.EventOccurred -= OnSourceEventOccurred;
                         _dynamicEventListener.UnsubscribeFromEvent();
@@ -246,8 +258,8 @@ namespace Catel.Windows.Interactivity
                 switch (FocusMoment)
                 {
                     case FocusMoment.Event:
-#if WINDOWS_PHONE
-                        throw new NotSupportedInWindowsPhone7Exception();
+#if WINDOWS_PHONE || NETFX_CORE
+                        throw new NotSupportedInPlatformException("Dynamic events are not supported");
 #else
                         if (string.IsNullOrEmpty(EventName))
                         {
@@ -308,7 +320,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Called when the <see cref="DispatcherTimer.Tick" /> event occurs on the timer.
         /// </summary>
-        private void OnTimerTick(object sender, EventArgs e)
+        private void OnTimerTick(object sender, TimerTickEventArgs e)
         {
             _isFocusAlreadySet = true;
 
@@ -331,7 +343,11 @@ namespace Catel.Windows.Interactivity
             System.Windows.Browser.HtmlPage.Plugin.Focus();
 #endif
 
+#if NETFX_CORE
+            if (AssociatedObject.Focus(FocusState.Programmatic))
+#else
             if (AssociatedObject.Focus())
+#endif
             {
                 Log.Debug("Focused '{0}'", AssociatedObject.GetType().Name);
 

@@ -84,7 +84,7 @@ namespace Catel.Logging
             {
                 lock (_logListeners)
                 {
-                    IsDebugEnabled = false;
+                    IsDebugEnabled =  false;
                     IsInfoEnabled = false;
                     IsWarningEnabled = false;
                     IsErrorEnabled = false;
@@ -110,6 +110,27 @@ namespace Catel.Logging
                         {
                             IsErrorEnabled = true;
                         }
+                    }
+
+                    // Allow overriding via LogManager
+                    if (LogManager.IsDebugEnabled.HasValue)
+                    {
+                        IsDebugEnabled = LogManager.IsDebugEnabled.Value;
+                    }
+
+                    if (LogManager.IsInfoEnabled.HasValue)
+                    {
+                        IsInfoEnabled = LogManager.IsInfoEnabled.Value;
+                    }
+
+                    if (LogManager.IsWarningEnabled.HasValue)
+                    {
+                        IsWarningEnabled = LogManager.IsWarningEnabled.Value;
+                    }
+
+                    if (LogManager.IsErrorEnabled.HasValue)
+                    {
+                        IsErrorEnabled = LogManager.IsErrorEnabled.Value;
                     }
                 }
             }
@@ -158,6 +179,11 @@ namespace Catel.Logging
         /// Logging of the class. Must be declared after the log listeners and loggers.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        private static bool? _isDebugEnabled;
+        private static bool? _isInfoEnabled;
+        private static bool? _isWarningEnabled;
+        private static bool? _isErrorEnabled;
         #endregion
 
         #region Constructors
@@ -170,6 +196,76 @@ namespace Catel.Logging
             AppDomain.CurrentDomain.DomainUnload += (sender, e) => FlushAll();
             AppDomain.CurrentDomain.UnhandledException += (sender, e) => FlushAll();
 #endif
+        }
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets a value indicating whether the global IsDebugEnabled should be overriden.
+        /// <para />
+        /// Note that this value will override all settings of each listener globally. If this value is
+        /// set to <c>null</c>, nothing will be overriden.
+        /// </summary>
+        /// <value><c>true</c> if debug logging must be enabled for all log listeners; otherwise, <c>false</c>.</value>
+        public static bool? IsDebugEnabled
+        {
+            get { return _isDebugEnabled; }
+            set
+            {
+                _isDebugEnabled = value;
+                LogInfo.UpdateLogInfo();
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the global IsInfoEnabled should be overriden.
+        /// <para />
+        /// Note that this value will override all settings of each listener globally. If this value is
+        /// set to <c>null</c>, nothing will be overriden.
+        /// </summary>
+        /// <value><c>true</c> if info logging must be enabled for all log listeners; otherwise, <c>false</c>.</value>
+        public static bool? IsInfoEnabled
+        {
+            get { return _isInfoEnabled; }
+            set
+            {
+                _isInfoEnabled = value;
+                LogInfo.UpdateLogInfo();
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the global IsWarningEnabled should be overriden.
+        /// <para />
+        /// Note that this value will override all settings of each listener globally. If this value is
+        /// set to <c>null</c>, nothing will be overriden.
+        /// </summary>
+        /// <value><c>true</c> if warning logging must be enabled for all log listeners; otherwise, <c>false</c>.</value>
+        public static bool? IsWarningEnabled
+        {
+            get { return _isWarningEnabled; }
+            set
+            {
+                _isWarningEnabled = value;
+                LogInfo.UpdateLogInfo();
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the global IsErrorEnabled should be overriden.
+        /// <para />
+        /// Note that this value will override all settings of each listener globally. If this value is
+        /// set to <c>null</c>, nothing will be overriden.
+        /// </summary>
+        /// <value><c>true</c> if error logging must be enabled for all log listeners; otherwise, <c>false</c>.</value>
+        public static bool? IsErrorEnabled
+        {
+            get { return _isErrorEnabled; }
+            set
+            {
+                _isErrorEnabled = value;
+                LogInfo.UpdateLogInfo();
+            }
         }
         #endregion
 
@@ -203,6 +299,7 @@ namespace Catel.Logging
         /// This method does not ignore Catel logging.
         /// </summary>
         /// <returns>The newly created or existing <see cref="DebugLogListener"/>.</returns>
+        [ObsoleteEx(Replacement = "AddDebugListener", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
         public static ILogListener RegisterDebugListener()
         {
             return RegisterDebugListener(false);
@@ -216,7 +313,21 @@ namespace Catel.Logging
         /// is returned.
         /// </summary>
         /// <returns>The newly created or existing <see cref="DebugLogListener"/>.</returns>
+        [ObsoleteEx(Replacement = "AddDebugListener", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
         public static ILogListener RegisterDebugListener(bool ignoreCatelLogging)
+        {
+            return AddDebugListener(ignoreCatelLogging);
+        }
+
+        /// <summary>
+        /// Registers the default debug listener. Starting with Catel 2.4, the debug listener is no longer
+        /// attached for performance reasons. To register the debug listener, call this method.
+        /// <para />
+        /// When an instance of the <see cref="DebugLogListener"/> is already registered, the existing instance
+        /// is returned.
+        /// </summary>
+        /// <returns>The newly created or existing <see cref="DebugLogListener"/>.</returns>
+        public static ILogListener AddDebugListener(bool ignoreCatelLogging = false)
         {
             var debugLogListener = (from logListener in _logListeners
                                     where logListener is DebugLogListener
@@ -367,8 +478,18 @@ namespace Catel.Logging
         {
             LogMessage.SafeInvoke(sender, e);
 
+            if (!LogInfo.IsLogEventEnabled(e.LogEvent))
+            {
+                return;
+            }
+
             lock (_logListeners)
             {
+                if (_logListeners.Count == 0)
+                {
+                    return;
+                }
+
                 foreach (var listener in _logListeners)
                 {
                     if (IsListenerInterested(listener, e.LogEvent))

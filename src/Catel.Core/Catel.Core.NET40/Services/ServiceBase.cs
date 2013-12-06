@@ -39,7 +39,8 @@ namespace Catel.Services
         [ObsoleteEx(Message = "GetService is no longer recommended. It is better to inject all dependencies (which the TypeFactory fully supports)", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
         protected TService GetService<TService>(object tag = null)
         {
-            return (TService)ServiceLocator.Default.ResolveType(typeof(TService), tag);
+            var dependencyResolver = this.GetDependencyResolver();
+            return (TService)dependencyResolver.Resolve(typeof(TService), tag);
         }
 		#endregion
 	}
