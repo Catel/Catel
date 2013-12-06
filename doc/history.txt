@@ -20,13 +20,13 @@ Version 3.8
 
 Release date:
 =============
-2013/xx/xx
+2013/12/06
 
 Added/fixed (BREAKING CHANGES):
 ===============================
 (+) CTL-234 Added IModelEqualityComparer properties (CompareProperties, CompareValues, CompareCollections) which
     are now defaulting to false. This means that it will now provide much better performance out of the box and
-    follows the microsoft standard (reference comparison only). It can be customed to check the properties to
+    follows the Microsoft standard (reference comparison only). It can be customized to check the properties to
     reproduce the previous behavior
 (*) Moved serialization for Xml and Binary to namespaces. This should only cause breaking changes if one of the
     actual core serialization parts are modified

@@ -17,6 +17,15 @@ Final release steps:
 6)   Release version in jira
 7)   Update docs on confluence (create copy of LATEST space)
      See https://confluence.atlassian.com/display/CONFKB/Copy+or+Rename+a+Space+in+Confluence
+	 
+	 Search & replace the following items:
+	 
+	 [CTL] => [NEWSPACE]
+	 CDATA[CTL] => CDATA[NEWSPACE]
+	 <spaceKey>CTL</spaceKey> => <spaceKey>NEWSPACE</spaceKey>
+	 display/CTL/ => display/NEWSPACE/
+	 display%2FCTL%2F => display%2FNEWSPACE%2F
+	 
 
 8)   Share via Twitter
 9)   Share via LinkedIn
