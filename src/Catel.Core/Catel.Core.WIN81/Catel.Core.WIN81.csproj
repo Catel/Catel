@@ -16,7 +16,7 @@
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.17.4.0</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.18.0.0</FodyPath>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
   </PropertyGroup>
@@ -203,6 +203,9 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\AttributeValidatorProvider.cs">
       <Link>Data\AttributeValidatorProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Data\CatelTypeInfo.cs">
+      <Link>Data\CatelTypeInfo.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\ChangeNotificationWrapper.cs">
       <Link>Data\ChangeNotificationWrapper.cs</Link>
@@ -449,6 +452,9 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Helpers\UniqueIdentifierHelper.cs">
       <Link>Helpers\UniqueIdentifierHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Helpers\UrlHelper.cs">
+      <Link>Helpers\UrlHelper.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Attributes\InjectAttribute.cs">
       <Link>IoC\Attributes\InjectAttribute.cs</Link>
@@ -904,11 +910,10 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Obsolete">
-      <HintPath>..\..\..\lib\Obsolete.Fody.2.3.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
+      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.0.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

@@ -15,7 +15,7 @@
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.17.4.0</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.18.0.0</FodyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,9 +44,8 @@
     <None Include="ClassDiagrams\ServiceLocator.cd" />
     <None Include="Fody.targets" />
     <None Include="packages.config" />
-    <Reference Include="Obsolete, Version=2.3.0.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Obsolete.Fody.2.3.0\Lib\NET35\Obsolete.dll</HintPath>
+    <Reference Include="Obsolete">
+      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.0.0\Lib\NET35\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="PresentationFramework" />
@@ -139,6 +138,7 @@
     <Compile Include="Data\PropertyBag.cs" />
     <Compile Include="Data\PropertyData.cs" />
     <Compile Include="Data\PropertyDataManager.cs" />
+    <Compile Include="Data\CatelTypeInfo.cs" />
     <Compile Include="Data\PropertyValue.cs" />
     <Compile Include="Data\SavableDataObjectBase.cs" />
     <Compile Include="Data\SavableModelBase.cs" />
@@ -180,6 +180,7 @@
     <Compile Include="Helpers\StringToObjectHelper.cs" />
     <Compile Include="Helpers\TagHelper.cs" />
     <Compile Include="Helpers\UniqueIdentifierHelper.cs" />
+    <Compile Include="Helpers\UrlHelper.cs" />
     <Compile Include="IoC\Attributes\InjectAttribute.cs" />
     <Compile Include="IoC\Attributes\InjectionConstructorAttribute.cs" />
     <Compile Include="IoC\Attributes\ServiceLocatorRegistrationAttribute.cs" />

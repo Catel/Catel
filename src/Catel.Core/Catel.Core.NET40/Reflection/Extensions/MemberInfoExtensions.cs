@@ -10,12 +10,16 @@ namespace Catel.Reflection
     using System.Linq;
     using System.Reflection;
     using System.Text;
+    using Catel.Caching;
 
     /// <summary>
     /// Member info extensions.
     /// </summary>
     public static class MemberInfoExtensions
     {
+        private static readonly ICacheStorage<ConstructorInfo, string> _constructorSignatureCache = new CacheStorage<ConstructorInfo, string>();
+        private static readonly ICacheStorage<MethodInfo, string> _methodSignatureCache = new CacheStorage<MethodInfo, string>(); 
+
         #region Methods
         /// <summary>
         /// Gets the signature of a method.
@@ -27,15 +31,18 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("constructorInfo", constructorInfo);
 
-            var stringBuilder = new StringBuilder();
+            return _constructorSignatureCache.GetFromCacheOrFetch(constructorInfo, () =>
+            {
+                var stringBuilder = new StringBuilder();
 
-            stringBuilder.Append(GetMethodBaseSignaturePrefix(constructorInfo));
-            stringBuilder.Append("ctor(");
-            var param = constructorInfo.GetParameters().Select(p => String.Format("{0} {1}", p.ParameterType.Name, p.Name)).ToArray();
-            stringBuilder.Append(String.Join(", ", param));
-            stringBuilder.Append(")");
+                stringBuilder.Append(GetMethodBaseSignaturePrefix(constructorInfo));
+                stringBuilder.Append("ctor(");
+                var param = constructorInfo.GetParameters().Select(p => String.Format("{0} {1}", p.ParameterType.Name, p.Name)).ToArray();
+                stringBuilder.Append(String.Join(", ", param));
+                stringBuilder.Append(")");
 
-            return stringBuilder.ToString();
+                return stringBuilder.ToString();
+            });
         }
 
         /// <summary>
@@ -48,17 +55,20 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("methodInfo", methodInfo);
 
-            var stringBuilder = new StringBuilder();
+            return _methodSignatureCache.GetFromCacheOrFetch(methodInfo, () =>
+            {
+                var stringBuilder = new StringBuilder();
 
-            stringBuilder.Append(GetMethodBaseSignaturePrefix(methodInfo));
-            stringBuilder.Append(methodInfo.ReturnType.Name + " ");
+                stringBuilder.Append(GetMethodBaseSignaturePrefix(methodInfo));
+                stringBuilder.Append(methodInfo.ReturnType.Name + " ");
 
-            stringBuilder.Append(methodInfo.Name + "(");
-            var param = methodInfo.GetParameters().Select(p => String.Format("{0} {1}", p.ParameterType.Name, p.Name)).ToArray();
-            stringBuilder.Append(String.Join(", ", param));
-            stringBuilder.Append(")");
+                stringBuilder.Append(methodInfo.Name + "(");
+                var param = methodInfo.GetParameters().Select(p => String.Format("{0} {1}", p.ParameterType.Name, p.Name)).ToArray();
+                stringBuilder.Append(String.Join(", ", param));
+                stringBuilder.Append(")");
 
-            return stringBuilder.ToString();
+                return stringBuilder.ToString();
+            });
         }
 
         private static string GetMethodBaseSignaturePrefix(MethodBase methodBase)

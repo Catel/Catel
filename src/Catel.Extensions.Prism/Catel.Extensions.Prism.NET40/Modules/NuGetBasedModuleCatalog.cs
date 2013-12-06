@@ -19,8 +19,6 @@ namespace Catel.Modules
     using Catel.Caching;
     using Catel.Caching.Policies;
     using Catel.Logging;
-    using Catel.Modules.Extensions;
-    using Catel.Modules.Interfaces;
 
     using Microsoft.Practices.Prism.Modularity;
 

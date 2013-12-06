@@ -188,7 +188,7 @@ Root: HKLM; SubKey: SOFTWARE\Microsoft\Microsoft SDKs\WindowsPhone\v8.0\Assembly
 ;Root: HKLM; SubKey: SOFTWARE\Microsoft\Microsoft SDKs\Silverlight for WindowsPhone\v4.0\AssemblyFoldersEx\Catel (WinRT); ValueType: string; ValueData: {app}\Libraries\WinRT; Flags: UninsDeleteKey
 
 [Icons]
-Name: "{group}\Go to Catel homepage"; Filename: http://www.catelproject.com;
+Name: "{group}\Go to Catel website"; Filename: http://www.catelproject.com;
 Name: "{group}\Documentation (online)"; Filename: http://www.catelproject.com/support/documentation;
 ;Name: "{group}\Documentation (offline)"; Filename: {app}\doc\catel.chm; 
 Name: "{group}\Uninstall Catel"; Filename: {app}\unins000.exe; WorkingDir: {app}; IconFilename: {app}\resources\catel.ico; 

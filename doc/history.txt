@@ -20,13 +20,13 @@ Version 3.8
 
 Release date:
 =============
-2013/xx/xx
+2013/12/06
 
 Added/fixed (BREAKING CHANGES):
 ===============================
 (+) CTL-234 Added IModelEqualityComparer properties (CompareProperties, CompareValues, CompareCollections) which
     are now defaulting to false. This means that it will now provide much better performance out of the box and
-    follows the microsoft standard (reference comparison only). It can be customed to check the properties to
+    follows the Microsoft standard (reference comparison only). It can be customized to check the properties to
     reproduce the previous behavior
 (*) Moved serialization for Xml and Binary to namespaces. This should only cause breaking changes if one of the
     actual core serialization parts are modified
@@ -47,7 +47,12 @@ Added/fixed:
 (+) CTL-221 Support property dependency injection
 (+) CTL-227 Added the GetHandler method on IExceptionService to allows handlers retrieving more easilly.
 (+) CTL-229 Add XmlSerializerOptimalizationMode to allow pretty xml or performance
+(+) CTL-235 Added option to allow global enabling / disabling (overriding) of log events on all listeners
 (+) CTL-242 Create extension methods for IParent interface
+(+) CTL-246 Added CatelTypeInfo (replaces PropertyDataManager.GetCatelProperties()) so more information can be 
+    retrieved about Catel types than just the properties
+(+) CTL-246 Attribute validation on non-catel properties will be validated now as well as long as the validation
+    is called with the forced parameter set to true
 (*) CTL-125 TypeFactory selects wrong constructor when there is more than 1 option. It now tries parameters which 
     accept Object or DynamicObject the latest. Also introduced the InjectionConstructorAttribute so the right constructor
     can be decorated so it is always selected first by Catel
@@ -69,6 +74,11 @@ Added/fixed:
 (x) CTL-212 PropertyDataManager throws first chance exceptions for generic types
 (x) CTL-226 Nested ICollection<IInterfce> XML serialization problem
 (x) CTL-228 Fixed possible deadlock in CatelDependencyResolver
+(x) CTL-240 WP8: "This operation is not supported for a relative URI" on GoBack to the main page
+(x) CTL-241 WP8: after the first creation, ViewModels are created twice for each call
+(x) CTL-245 Fixed issue where deprecated classes were still decorated with the XmlSchemaProviderAttribute which caused WCF
+    to fail and generate a proxy when using "reuse types in all assemblies"
+(x) CTL-254 Log with { and } in literal string caused errors
 
 Roadmap:
 ========

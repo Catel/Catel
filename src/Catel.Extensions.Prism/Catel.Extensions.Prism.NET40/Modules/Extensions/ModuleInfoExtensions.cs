@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Modules.Extensions
+namespace Catel.Modules
 {
     using System;
     using System.Linq;

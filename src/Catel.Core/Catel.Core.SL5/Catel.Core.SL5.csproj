@@ -19,7 +19,7 @@
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.17.4.0</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.18.0.0</FodyPath>
   </PropertyGroup>
   <!-- This property group is only here to support building this project using the 
        MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
@@ -54,9 +54,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
-    <Reference Include="Obsolete, Version=2.3.0.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Obsolete.Fody.2.3.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
+    <Reference Include="Obsolete">
+      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.0.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations, Version=5.0.5.0, Culture=neutral, PublicKeyToken=ddd0da4d3e678217, processorArchitecture=MSIL" />
@@ -157,6 +156,9 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\AttributeValidatorProvider.cs">
       <Link>Data\AttributeValidatorProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Data\CatelTypeInfo.cs">
+      <Link>Data\CatelTypeInfo.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\ChangeNotificationWrapper.cs">
       <Link>Data\ChangeNotificationWrapper.cs</Link>
@@ -406,6 +408,9 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Helpers\UniqueIdentifierHelper.cs">
       <Link>Helpers\UniqueIdentifierHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Helpers\UrlHelper.cs">
+      <Link>Helpers\UrlHelper.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Attributes\InjectAttribute.cs">
       <Link>IoC\Attributes\InjectAttribute.cs</Link>

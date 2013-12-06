@@ -10,8 +10,7 @@ namespace Catel.Modules
     using System.Linq;
 
     using Catel.Logging;
-    using Catel.Modules.Extensions;
-    using Catel.Modules.Interfaces;
+    using Catel.Modules;
 
     using Microsoft.Practices.Prism.Modularity;
 

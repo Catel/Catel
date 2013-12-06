@@ -1,4 +1,11 @@
-﻿namespace Catel.Test.Data
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="PropertyDataManagerFacts.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+
+namespace Catel.Test.Data
 {
     using System;
     using System.Linq;
@@ -10,108 +17,111 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 #endif
 
-
     public class PropertyDataManagerFacts
     {
+        #region Nested type: SupportsGenericClasses
         [TestClass]
-        public class TheGetPropertiesMethod
+        public class SupportsGenericClasses
         {
+            #region Methods
+            [TestMethod]
+            public void ReturnsNoPropertiesForOpenGenericTypes()
+            {
+                var propertyDataManager = new PropertyDataManager();
+                var catelTypeInfo = propertyDataManager.GetCatelTypeInfo(typeof (GenericClass<>));
+
+                Assert.AreEqual(0, catelTypeInfo.GetCatelProperties().Count);
+            }
+
+            [TestMethod]
+            public void ReturnsPropertiesForClosedGenericTypes()
+            {
+                var propertyDataManager = new PropertyDataManager();
+                var catelTypeInfo = propertyDataManager.GetCatelTypeInfo(typeof(GenericClass<int>));
+
+                Assert.AreNotEqual(0, catelTypeInfo.GetCatelProperties().Count);
+            }
+            #endregion
+
+            #region Nested type: GenericClass
+            public class GenericClass<T> : ModelBase
+            {
+                #region Constants
+                /// <summary>
+                /// Register the FirstName property so it is known in the class.
+                /// </summary>
+                public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof (string), null);
+                #endregion
+
+                #region Properties
+                /// <summary>
+                /// Gets or sets the property value.
+                /// </summary>
+                public string FirstName
+                {
+                    get { return GetValue<string>(FirstNameProperty); }
+                    set { SetValue(FirstNameProperty, value); }
+                }
+                #endregion
+            }
+            #endregion
+        }
+        #endregion
+
+        #region Helper methods
+        /// <summary>
+        /// Registers the property with the property data manager. This is a shortcut method so the PropertyData doesn't have
+        /// to be declared every time.
+        /// </summary>
+        /// <typeparam name="T">Type of the property.</typeparam>
+        /// <param name="propertyDataManager">The property data manager.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="defaultValue">The default value.</param>
+        private static void RegisterProperty<T>(PropertyDataManager propertyDataManager, string name, T defaultValue)
+        {
+            propertyDataManager.RegisterProperty(typeof (PropertyDataManagerFacts), name,
+                new PropertyData(name, typeof (T), defaultValue, false, null, false, false, false, false, false));
+        }
+        #endregion
+
+        #region Nested type: TheGetPropertiesMethod
+        [TestClass]
+        public class TheGetCatelTypeInfoMethod
+        {
+            #region Methods
             [TestMethod]
             public void ThrowsArgumentNullExceptionForNullType()
             {
-                PropertyDataManager propertyDataManager = new PropertyDataManager();
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => propertyDataManager.GetProperties(null));
+                var propertyDataManager = new PropertyDataManager();
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => propertyDataManager.GetCatelTypeInfo(null));
             }
 
             [TestMethod]
             public void ReturnsRightPropertiesByType()
             {
-                PropertyDataManager propertyDataManager = new PropertyDataManager();
+                var propertyDataManager = new PropertyDataManager();
 
                 RegisterProperty(propertyDataManager, "stringProperty", "defaultValue");
                 RegisterProperty(propertyDataManager, "objectProperty", new object());
                 RegisterProperty(propertyDataManager, "intProperty", 1);
 
-                var registeredProperties = propertyDataManager.GetProperties(typeof(PropertyDataManagerFacts));
-                var keys = registeredProperties.Keys.ToArray();
-                Assert.AreEqual(3, registeredProperties.Count);
+                var catelTypeInfo = propertyDataManager.GetCatelTypeInfo(typeof (PropertyDataManagerFacts));
+                var properties = catelTypeInfo.GetCatelProperties();
+                var keys = properties.Keys.ToArray();
+                Assert.AreEqual(3, properties.Count);
                 Assert.AreEqual("stringProperty", keys[0]);
                 Assert.AreEqual("objectProperty", keys[1]);
                 Assert.AreEqual("intProperty", keys[2]);
             }
+            #endregion
         }
+        #endregion
 
-        [TestClass]
-        public class TheRegisterPropertyMethod
-        {
-            [TestMethod]
-            public void SuccessfullyRegistersProperty()
-            {
-                PropertyDataManager propertyDataManager = new PropertyDataManager();
-
-                RegisterProperty(propertyDataManager, "stringProperty", "defaultValue");
-
-                var registeredProperties = propertyDataManager.GetProperties(typeof(PropertyDataManagerFacts));
-                Assert.AreEqual(1, registeredProperties.Count);
-                Assert.AreEqual("defaultValue", registeredProperties["stringProperty"].GetDefaultValue());
-            }
-
-            [TestMethod]
-            public void ThrowsPropertyAlreadyRegisteredExceptionForDoubleRegistration()
-            {
-                PropertyDataManager propertyDataManager = new PropertyDataManager();
-
-                RegisterProperty(propertyDataManager, "stringProperty", "defaultValue");
-                ExceptionTester.CallMethodAndExpectException<PropertyAlreadyRegisteredException>(() => RegisterProperty(propertyDataManager, "stringProperty", "defaultValue"));
-            }
-        }
-
-        [TestClass]
-        public class TheIsPropertyRegisteredMethod
-        {
-            [TestMethod]
-            public void ThrowsArgumentNullExceptionForNullType()
-            {
-                PropertyDataManager propertyDataManager = new PropertyDataManager();
-
-                RegisterProperty(propertyDataManager, "stringProperty", "defaultValue");
-
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => propertyDataManager.IsPropertyRegistered(null, "stringProperty"));
-            }
-
-            [TestMethod]
-            public void ThrowsArgumentExceptionForNullAndEmptyName()
-            {
-                PropertyDataManager propertyDataManager = new PropertyDataManager();
-
-                RegisterProperty(propertyDataManager, "stringProperty", "defaultValue");
-
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => propertyDataManager.IsPropertyRegistered(typeof(PropertyDataManagerFacts), null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => propertyDataManager.IsPropertyRegistered(typeof(PropertyDataManagerFacts), string.Empty));
-            }
-
-            [TestMethod]
-            public void ReturnsTrueForRegisteredProperty()
-            {
-                PropertyDataManager propertyDataManager = new PropertyDataManager();
-
-                RegisterProperty(propertyDataManager, "stringProperty", "defaultValue");
-
-                Assert.IsTrue(propertyDataManager.IsPropertyRegistered(typeof(PropertyDataManagerFacts), "stringProperty"));
-            }
-
-            [TestMethod]
-            public void ReturnsFalseForUnregisteredProperty()
-            {
-                PropertyDataManager propertyDataManager = new PropertyDataManager();
-
-                Assert.IsFalse(propertyDataManager.IsPropertyRegistered(typeof(PropertyDataManagerFacts), "stringProperty"));
-            }
-        }
-
+        #region Nested type: TheGetPropertyDataMethod
         [TestClass]
         public class TheGetPropertyDataMethod
         {
+            #region Methods
             [TestMethod]
             public void ThrowsArgumentNullExceptionForNullType()
             {
@@ -129,8 +139,8 @@
 
                 RegisterProperty(propertyDataManager, "stringProperty", "defaultValue");
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => propertyDataManager.GetPropertyData(typeof(PropertyDataManagerFacts), null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => propertyDataManager.GetPropertyData(typeof(PropertyDataManagerFacts), string.Empty));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => propertyDataManager.GetPropertyData(typeof (PropertyDataManagerFacts), null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => propertyDataManager.GetPropertyData(typeof (PropertyDataManagerFacts), string.Empty));
             }
 
             [TestMethod]
@@ -138,7 +148,7 @@
             {
                 PropertyDataManager propertyDataManager = new PropertyDataManager();
 
-                ExceptionTester.CallMethodAndExpectException<PropertyNotRegisteredException>(() => propertyDataManager.GetPropertyData(typeof(PropertyDataManagerFacts), "stringProperty"));
+                ExceptionTester.CallMethodAndExpectException<PropertyNotRegisteredException>(() => propertyDataManager.GetPropertyData(typeof (PropertyDataManagerFacts), "stringProperty"));
             }
 
             [TestMethod]
@@ -148,62 +158,66 @@
 
                 RegisterProperty(propertyDataManager, "stringProperty", "defaultValue");
 
-                var propertyData = propertyDataManager.GetPropertyData(typeof(PropertyDataManagerFacts), "stringProperty");
+                var propertyData = propertyDataManager.GetPropertyData(typeof (PropertyDataManagerFacts), "stringProperty");
                 Assert.IsNotNull(propertyData);
                 Assert.AreEqual("stringProperty", propertyData.Name);
             }
+            #endregion
         }
+        #endregion
 
+        #region Nested type: TheIsPropertyRegisteredMethod
         [TestClass]
-        public class TheMapXmlElementNameToPropertyNameMethod
+        public class TheIsPropertyRegisteredMethod
         {
+            #region Methods
             [TestMethod]
             public void ThrowsArgumentNullExceptionForNullType()
             {
-                var propertyDataManager = new PropertyDataManager();
+                PropertyDataManager propertyDataManager = new PropertyDataManager();
 
                 RegisterProperty(propertyDataManager, "stringProperty", "defaultValue");
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => propertyDataManager.MapXmlElementNameToPropertyName(null, "stringProperty"));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => propertyDataManager.IsPropertyRegistered(null, "stringProperty"));
             }
 
             [TestMethod]
             public void ThrowsArgumentExceptionForNullAndEmptyName()
             {
-                var propertyDataManager = new PropertyDataManager();
+                PropertyDataManager propertyDataManager = new PropertyDataManager();
 
                 RegisterProperty(propertyDataManager, "stringProperty", "defaultValue");
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => propertyDataManager.MapXmlElementNameToPropertyName(typeof(PropertyDataManagerFacts), null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => propertyDataManager.MapXmlElementNameToPropertyName(typeof(PropertyDataManagerFacts), string.Empty));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => propertyDataManager.IsPropertyRegistered(typeof (PropertyDataManagerFacts), null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => propertyDataManager.IsPropertyRegistered(typeof (PropertyDataManagerFacts), string.Empty));
             }
 
             [TestMethod]
-            public void ReturnsRightPropertyNameWithoutMappings()
+            public void ReturnsTrueForRegisteredProperty()
             {
-                // Required to have properties registered
-                var objectWithXmlMappings = new ObjectWithXmlMappings();
-                objectWithXmlMappings.ToString();
+                PropertyDataManager propertyDataManager = new PropertyDataManager();
 
-                string propertyName = ObjectWithXmlMappings.PropertyDataManager.MapXmlElementNameToPropertyName(typeof(ObjectWithXmlMappings), "PropertyWithoutMapping");
-                Assert.AreEqual("PropertyWithoutMapping", propertyName);
+                RegisterProperty(propertyDataManager, "stringProperty", "defaultValue");
+
+                Assert.IsTrue(propertyDataManager.IsPropertyRegistered(typeof (PropertyDataManagerFacts), "stringProperty"));
             }
 
             [TestMethod]
-            public void ReturnsRightPropertyNameWithMappings()
+            public void ReturnsFalseForUnregisteredProperty()
             {
-                // Required to have properties registered
-                var objectWithXmlMappings = new ObjectWithXmlMappings();
-                objectWithXmlMappings.ToString();
+                PropertyDataManager propertyDataManager = new PropertyDataManager();
 
-                string propertyName = ObjectWithXmlMappings.PropertyDataManager.MapXmlElementNameToPropertyName(typeof(ObjectWithXmlMappings), "MappedXmlProperty");
-                Assert.AreEqual("PropertyWithMapping", propertyName);
+                Assert.IsFalse(propertyDataManager.IsPropertyRegistered(typeof (PropertyDataManagerFacts), "stringProperty"));
             }
+            #endregion
         }
+        #endregion
 
+        #region Nested type: TheMapPropertyNameToXmlElementNameMethod
         [TestClass]
         public class TheMapPropertyNameToXmlElementNameMethod
         {
+            #region Methods
             [TestMethod]
             public void ThrowsArgumentNullExceptionForNullType()
             {
@@ -221,8 +235,8 @@
 
                 RegisterProperty(propertyDataManager, "stringProperty", "defaultValue");
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => propertyDataManager.MapPropertyNameToXmlElementName(typeof(PropertyDataManagerFacts), null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => propertyDataManager.MapPropertyNameToXmlElementName(typeof(PropertyDataManagerFacts), string.Empty));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => propertyDataManager.MapPropertyNameToXmlElementName(typeof (PropertyDataManagerFacts), null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => propertyDataManager.MapPropertyNameToXmlElementName(typeof (PropertyDataManagerFacts), string.Empty));
             }
 
             [TestMethod]
@@ -232,7 +246,7 @@
                 var objectWithXmlMappings = new ObjectWithXmlMappings();
                 objectWithXmlMappings.ToString();
 
-                string xmlName = ObjectWithXmlMappings.PropertyDataManager.MapPropertyNameToXmlElementName(typeof(ObjectWithXmlMappings), "PropertyWithoutMapping");
+                string xmlName = ObjectWithXmlMappings.PropertyDataManager.MapPropertyNameToXmlElementName(typeof (ObjectWithXmlMappings), "PropertyWithoutMapping");
                 Assert.AreEqual("PropertyWithoutMapping", xmlName);
             }
 
@@ -243,63 +257,90 @@
                 var objectWithXmlMappings = new ObjectWithXmlMappings();
                 objectWithXmlMappings.ToString();
 
-                string xmlName = ObjectWithXmlMappings.PropertyDataManager.MapPropertyNameToXmlElementName(typeof(ObjectWithXmlMappings), "PropertyWithMapping");
+                string xmlName = ObjectWithXmlMappings.PropertyDataManager.MapPropertyNameToXmlElementName(typeof (ObjectWithXmlMappings), "PropertyWithMapping");
                 Assert.AreEqual("MappedXmlProperty", xmlName);
             }
+            #endregion
         }
+        #endregion
 
+        #region Nested type: TheMapXmlElementNameToPropertyNameMethod
         [TestClass]
-        public class SupportsGenericClasses
+        public class TheMapXmlElementNameToPropertyNameMethod
         {
-            public class GenericClass<T> : ModelBase
+            #region Methods
+            [TestMethod]
+            public void ThrowsArgumentNullExceptionForNullType()
             {
-                /// <summary>
-                /// Gets or sets the property value.
-                /// </summary>
-                public string FirstName
-                {
-                    get { return GetValue<string>(FirstNameProperty); }
-                    set { SetValue(FirstNameProperty, value); }
-                }
+                var propertyDataManager = new PropertyDataManager();
 
-                /// <summary>
-                /// Register the FirstName property so it is known in the class.
-                /// </summary>
-                public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), null);
+                RegisterProperty(propertyDataManager, "stringProperty", "defaultValue");
+
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => propertyDataManager.MapXmlElementNameToPropertyName(null, "stringProperty"));
             }
 
             [TestMethod]
-            public void ReturnsNoPropertiesForOpenGenericTypes()
+            public void ThrowsArgumentExceptionForNullAndEmptyName()
             {
                 var propertyDataManager = new PropertyDataManager();
-                var properties = propertyDataManager.GetProperties(typeof(GenericClass<>));
 
-                Assert.AreEqual(0, properties.Count);
+                RegisterProperty(propertyDataManager, "stringProperty", "defaultValue");
+
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => propertyDataManager.MapXmlElementNameToPropertyName(typeof (PropertyDataManagerFacts), null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => propertyDataManager.MapXmlElementNameToPropertyName(typeof (PropertyDataManagerFacts), string.Empty));
             }
 
             [TestMethod]
-            public void ReturnsPropertiesForClosedGenericTypes()
+            public void ReturnsRightPropertyNameWithoutMappings()
             {
-                var propertyDataManager = new PropertyDataManager();
-                var properties = propertyDataManager.GetProperties(typeof(GenericClass<int>));
+                // Required to have properties registered
+                var objectWithXmlMappings = new ObjectWithXmlMappings();
+                objectWithXmlMappings.ToString();
 
-                Assert.AreNotEqual(0, properties.Count);
+                string propertyName = ObjectWithXmlMappings.PropertyDataManager.MapXmlElementNameToPropertyName(typeof (ObjectWithXmlMappings), "PropertyWithoutMapping");
+                Assert.AreEqual("PropertyWithoutMapping", propertyName);
             }
+
+            [TestMethod]
+            public void ReturnsRightPropertyNameWithMappings()
+            {
+                // Required to have properties registered
+                var objectWithXmlMappings = new ObjectWithXmlMappings();
+                objectWithXmlMappings.ToString();
+
+                string propertyName = ObjectWithXmlMappings.PropertyDataManager.MapXmlElementNameToPropertyName(typeof (ObjectWithXmlMappings), "MappedXmlProperty");
+                Assert.AreEqual("PropertyWithMapping", propertyName);
+            }
+            #endregion
         }
+        #endregion
 
-        #region Helper methods
-        /// <summary>
-        /// Registers the property with the property data manager. This is a shortcut method so the PropertyData doesn't have
-        /// to be declared every time.
-        /// </summary>
-        /// <typeparam name="T">Type of the property.</typeparam>
-        /// <param name="propertyDataManager">The property data manager.</param>
-        /// <param name="name">The name.</param>
-        /// <param name="defaultValue">The default value.</param>
-        private static void RegisterProperty<T>(PropertyDataManager propertyDataManager, string name, T defaultValue)
+        #region Nested type: TheRegisterPropertyMethod
+        [TestClass]
+        public class TheRegisterPropertyMethod
         {
-            propertyDataManager.RegisterProperty(typeof(PropertyDataManagerFacts), name,
-                new PropertyData(name, typeof(T), defaultValue, false, null, false, false, false, false, false));
+            #region Methods
+            [TestMethod]
+            public void SuccessfullyRegistersProperty()
+            {
+                var propertyDataManager = new PropertyDataManager();
+
+                RegisterProperty(propertyDataManager, "stringProperty", "defaultValue");
+
+                var catelTypeInfo = propertyDataManager.GetCatelTypeInfo(typeof (PropertyDataManagerFacts));
+                Assert.AreEqual(1, catelTypeInfo.GetCatelProperties().Count);
+                Assert.AreEqual("defaultValue", catelTypeInfo.GetPropertyData("stringProperty").GetDefaultValue());
+            }
+
+            [TestMethod]
+            public void ThrowsPropertyAlreadyRegisteredExceptionForDoubleRegistration()
+            {
+                var propertyDataManager = new PropertyDataManager();
+
+                RegisterProperty(propertyDataManager, "stringProperty", "defaultValue");
+                ExceptionTester.CallMethodAndExpectException<PropertyAlreadyRegisteredException>(() => RegisterProperty(propertyDataManager, "stringProperty", "defaultValue"));
+            }
+            #endregion
         }
         #endregion
     }

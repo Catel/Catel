@@ -8,11 +8,8 @@ namespace Catel.Data
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
     using System.Xml.Serialization;
     using Logging;
-    using Reflection;
 
     /// <summary>
     /// Property data manager.
@@ -28,7 +25,7 @@ namespace Catel.Data
         /// <summary>
         /// Dictionary containing all the properties per type.
         /// </summary>
-        private readonly Dictionary<Type, Dictionary<string, PropertyData>> _propertyData = new Dictionary<Type, Dictionary<string, PropertyData>>();
+        private readonly Dictionary<Type, CatelTypeInfo> _propertyData = new Dictionary<Type, CatelTypeInfo>();
 
         /// <summary>
         /// Lock object for the <see cref="_propertyData"/> field.
@@ -71,7 +68,19 @@ namespace Catel.Data
         /// <param name="type">The type for which the properties to return.</param>
         /// <returns>Dictionary with the properties.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        public Dictionary<string, PropertyData> GetProperties(Type type)
+        [ObsoleteEx(Replacement = "Use GetPropertyDataTypeInfo instead", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
+        public CatelTypeInfo GetProperties(Type type)
+        {
+            return GetCatelTypeInfo(type);
+        }
+
+        /// <summary>
+        /// Gets the property data type information.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>The <see cref="CatelTypeInfo"/> representing the specified type.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
+        public CatelTypeInfo GetCatelTypeInfo(Type type)
         {
             Argument.IsNotNull("type", type);
 
@@ -93,10 +102,10 @@ namespace Catel.Data
         /// whether it has already registered the properties once.
         /// </summary>
         /// <param name="type">The type to register the properties for.</param>
-        /// <returns>The list of properties found on the type.</returns>
+        /// <returns>The property data type info.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The properties are not declared correctly.</exception>
-        public IEnumerable<PropertyData> RegisterProperties(Type type)
+        public CatelTypeInfo RegisterProperties(Type type)
         {
             Argument.IsNotNull("type", type);
 
@@ -104,128 +113,13 @@ namespace Catel.Data
             {
                 if (_propertyData.ContainsKey(type))
                 {
-                    return _propertyData[type].Values;
+                    return _propertyData[type];
                 }
 
-                var registeredPropertyData = new List<PropertyData>();
-
-                registeredPropertyData.AddRange(FindFields(type));
-                registeredPropertyData.AddRange(FindProperties(type));
-
-                _propertyData[type] = registeredPropertyData.ToDictionary(registeredProperty => registeredProperty.Name);
-
-                return registeredPropertyData;
+                var catelTypeInfo = new CatelTypeInfo(type);
+                _propertyData[type] = catelTypeInfo;
+                return catelTypeInfo;
             }
-        }
-
-        /// <summary>
-        /// Finds the properties that represent a <see cref="PropertyData"/>.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        /// <returns>The list of <see cref="PropertyData"/> elements found as properties.</returns>
-        /// <exception cref="InvalidOperationException">One ore more properties are not declared correctly.</exception>
-        private static IEnumerable<PropertyData> FindProperties(Type type)
-        {
-            // Properties - safety checks for non-static properties
-            var nonStaticProperties = (from property in type.GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(true, false, true))
-                                       where property.PropertyType == typeof(PropertyData)
-                                       select property).ToList();
-            foreach (var nonStaticProperty in nonStaticProperties)
-            {
-                string error = string.Format("The property '{0}' of type 'PropertyData' declared as instance, but they can only be used as static", nonStaticProperty.Name);
-
-                Log.Error(error);
-                throw new InvalidOperationException(error);
-            }
-
-            // Properties - safety checks for non-public fields
-            var nonPublicProperties = (from property in type.GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(true, true, true))
-                                       where property.PropertyType == typeof(PropertyData) && !property.CanRead
-                                       select property).ToList();
-            foreach (var nonPublicProperty in nonPublicProperties)
-            {
-                string error = string.Format("The property '{0}' of type 'PropertyData' declared as non-public, but they can only be used as public", nonPublicProperty.Name);
-
-                Log.Error(error);
-                throw new InvalidOperationException(error);
-            }
-
-            // Properties - actual addition
-            var foundProperties = new List<PropertyData>();
-
-            var properties = new List<PropertyInfo>();
-            properties.AddRange(type.GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(true, true, false)));
-            foreach (var property in properties)
-            {
-                if (property.PropertyType == typeof(PropertyData))
-                {
-                    var propertyValue = property.GetValue(null, null) as PropertyData;
-                    if (propertyValue != null)
-                    {
-                        foundProperties.Add(propertyValue);
-                    }
-                }
-            }
-
-            return foundProperties;
-        }
-
-        /// <summary>
-        /// Finds the fields that represent a <see cref="PropertyData"/>.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        /// <returns>The list of <see cref="PropertyData"/> elements found as fields.</returns>
-        /// <exception cref="InvalidOperationException">One ore more fields are not declared correctly.</exception>
-        private IEnumerable<PropertyData> FindFields(Type type)
-        {
-            // CTL-212: Generic types are not supported for FieldInfo.GetValue
-            if (type.ContainsGenericParametersEx())
-            {
-                return new PropertyData[] { };
-            }
-
-            // Fields - safety checks for non-static fields
-            var nonStaticFields = (from field in type.GetFieldsEx(BindingFlagsHelper.GetFinalBindingFlags(true, false, true))
-                                   where field.FieldType == typeof(PropertyData)
-                                   select field).ToList();
-            foreach (var nonStaticField in nonStaticFields)
-            {
-                string error = string.Format("The field '{0}' of type 'PropertyData' declared as instance, but they can only be used as static", nonStaticField.Name);
-
-                Log.Error(error);
-                throw new InvalidOperationException(error);
-            }
-
-            // Fields - safety checks for non-public fields
-            var nonPublicFields = (from field in type.GetFieldsEx(BindingFlagsHelper.GetFinalBindingFlags(true, true, true))
-                                   where field.FieldType == typeof(PropertyData) && !field.IsPublic
-                                   select field).ToList();
-            foreach (var nonPublicField in nonPublicFields)
-            {
-                string error = string.Format("The field '{0}' of type 'PropertyData' declared as non-public, but they can only be used as public", nonPublicField.Name);
-
-                Log.Error(error);
-                throw new InvalidOperationException(error);
-            }
-
-            // Fields - actual addition
-            var foundFields = new List<PropertyData>();
-
-            var fields = new List<FieldInfo>();
-            fields.AddRange(type.GetFieldsEx(BindingFlagsHelper.GetFinalBindingFlags(true, true, false)));
-            foreach (var field in fields)
-            {
-                if (field.FieldType == typeof(PropertyData))
-                {
-                    var propertyValue = (field.IsStatic ? field.GetValue(null) : field.GetValue(this)) as PropertyData;
-                    if (propertyValue != null)
-                    {
-                        foundFields.Add(propertyValue);
-                    }
-                }
-            }
-
-            return foundFields;
         }
 
         /// <summary>
@@ -248,16 +142,10 @@ namespace Catel.Data
             {
                 if (!_propertyData.ContainsKey(type))
                 {
-                    _propertyData.Add(type, new Dictionary<string, PropertyData>());
+                    _propertyData.Add(type, new CatelTypeInfo(type));
                 }
 
-                var propertyDataItem = _propertyData[type];
-                if (propertyDataItem.ContainsKey(name))
-                {
-                    throw new PropertyAlreadyRegisteredException(name, type);
-                }
-
-                propertyDataItem.Add(name, propertyData);
+                _propertyData[type].RegisterProperty(name, propertyData);
             }
         }
 
@@ -280,7 +168,7 @@ namespace Catel.Data
             {
                 if (_propertyData.ContainsKey(type))
                 {
-                    return _propertyData[type].ContainsKey(name);
+                    return _propertyData[type].IsPropertyRegistered(name);
                 }
 
                 return false;
@@ -308,7 +196,7 @@ namespace Catel.Data
 
             lock (_propertyDataLock)
             {
-                return _propertyData[type][name];
+                return _propertyData[type].GetPropertyData(name);
             }
         }
 

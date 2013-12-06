@@ -1073,7 +1073,7 @@ namespace Catel.IoC
         /// </summary>
         private void CreateInstanceOfAllRegisteredTypes()
         {
-            // Store in varaible because ResolveTypeFromKnownContainer might change the collection
+            // Store in variable because ResolveTypeFromKnownContainer might change the collection
             var keyValuePairs = _registeredTypes.ToList();
 
             lock (_lockObject)

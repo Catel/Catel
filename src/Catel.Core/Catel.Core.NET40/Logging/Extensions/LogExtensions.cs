@@ -6,7 +6,6 @@
 
 namespace Catel.Logging
 {
-    using Logging;
     using System;
 
     /// <summary>
@@ -20,8 +19,6 @@ namespace Catel.Logging
         /// <param name="log">The log.</param>
         /// <param name="messageFormat">The message format.</param>
         /// <param name="args">The formatting arguments.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="log" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="messageFormat" /> is <c>null</c>.</exception>
         public static void Debug(this ILog log, string messageFormat, params object[] args)
         {
             Write(log, LogEvent.Debug, messageFormat, args);
@@ -32,7 +29,6 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="log">The log.</param>
         /// <param name="exception">The exception.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="log" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
         public static void Debug(this ILog log, Exception exception)
         {
@@ -46,9 +42,7 @@ namespace Catel.Logging
         /// <param name="exception">The exception.</param>
         /// <param name="messageFormat">The message format.</param>
         /// <param name="args">The formatting arguments.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="log" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="messageFormat" /> is <c>null</c>.</exception>
         public static void Debug(this ILog log, Exception exception, string messageFormat, params object[] args)
         {
             Write(log, LogEvent.Debug, exception, messageFormat, args);
@@ -60,8 +54,6 @@ namespace Catel.Logging
         /// <param name="log">The log.</param>
         /// <param name="messageFormat">The message format.</param>
         /// <param name="args">The formatting arguments.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="log" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="messageFormat" /> is <c>null</c>.</exception>
         public static void Info(this ILog log, string messageFormat, params object[] args)
         {
             Write(log, LogEvent.Info, messageFormat, args);
@@ -72,7 +64,6 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="log">The log.</param>
         /// <param name="exception">The exception.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="log" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
         public static void Info(this ILog log, Exception exception)
         {
@@ -86,9 +77,7 @@ namespace Catel.Logging
         /// <param name="exception">The exception.</param>
         /// <param name="messageFormat">The message format.</param>
         /// <param name="args">The formatting arguments.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="log" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="messageFormat" /> is <c>null</c>.</exception>
         public static void Info(this ILog log, Exception exception, string messageFormat, params object[] args)
         {
             Write(log, LogEvent.Info, exception, messageFormat, args);
@@ -100,8 +89,6 @@ namespace Catel.Logging
         /// <param name="log">The log.</param>
         /// <param name="messageFormat">The message format.</param>
         /// <param name="args">The formatting arguments.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="log" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="messageFormat" /> is <c>null</c>.</exception>
         public static void Warning(this ILog log, string messageFormat, params object[] args)
         {
             Write(log, LogEvent.Warning, messageFormat, args);
@@ -112,7 +99,6 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="log">The log.</param>
         /// <param name="exception">The exception.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="log" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
         public static void Warning(this ILog log, Exception exception)
         {
@@ -126,9 +112,7 @@ namespace Catel.Logging
         /// <param name="exception">The exception.</param>
         /// <param name="messageFormat">The message format.</param>
         /// <param name="args">The formatting arguments.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="log" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="messageFormat" /> is <c>null</c>.</exception>
         public static void Warning(this ILog log, Exception exception, string messageFormat, params object[] args)
         {
             Write(log, LogEvent.Warning, exception, messageFormat, args);
@@ -140,8 +124,6 @@ namespace Catel.Logging
         /// <param name="log">The log.</param>
         /// <param name="messageFormat">The message format.</param>
         /// <param name="args">The formatting arguments.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="log" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="messageFormat" /> is <c>null</c>.</exception>
         public static void Error(this ILog log, string messageFormat, params object[] args)
         {
             Write(log, LogEvent.Error, messageFormat, args);
@@ -152,7 +134,6 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="log">The log.</param>
         /// <param name="exception">The exception.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="log" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
         public static void Error(this ILog log, Exception exception)
         {
@@ -166,9 +147,7 @@ namespace Catel.Logging
         /// <param name="exception">The exception.</param>
         /// <param name="messageFormat">The message format.</param>
         /// <param name="args">The formatting arguments.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="log" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="messageFormat" /> is <c>null</c>.</exception>
         public static void Error(this ILog log, Exception exception, string messageFormat, params object[] args)
         {
             Write(log, LogEvent.Error, exception, messageFormat, args);
@@ -181,8 +160,6 @@ namespace Catel.Logging
         /// <param name="logEvent">The log event.</param>
         /// <param name="messageFormat">The message format.</param>
         /// <param name="args">The formatting arguments.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="log" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="messageFormat" /> is <c>null</c>.</exception>
         public static void Write(this ILog log, LogEvent logEvent, string messageFormat, params object[] args)
         {
             if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
@@ -190,10 +167,23 @@ namespace Catel.Logging
                 return;
             }
 
-            Argument.IsNotNull("log", log);
-            Argument.IsNotNull("messageFormat", messageFormat);
+            if (log == null)
+            {
+                return;
+            }
 
-            log.WriteWithData(string.Format(messageFormat, args), null, logEvent);
+            if (messageFormat == null)
+            {
+                return;
+            }
+
+            string message = messageFormat;
+            if (args != null && args.Length > 0)
+            {
+                message = string.Format(message, args);
+            }
+
+            log.WriteWithData(message, null, logEvent);
         }
 
         /// <summary>
@@ -204,9 +194,7 @@ namespace Catel.Logging
         /// <param name="exception">The exception.</param>
         /// <param name="messageFormat">The message format.</param>
         /// <param name="args">The formatting arguments.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="log" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="exception" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="messageFormat" /> is <c>null</c>.</exception>
         public static void Write(this ILog log, LogEvent logEvent, Exception exception, string messageFormat, params object[] args)
         {
             if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
@@ -214,11 +202,25 @@ namespace Catel.Logging
                 return;
             }
 
-            Argument.IsNotNull("log", log);
             Argument.IsNotNull("exception", exception);
-            Argument.IsNotNull("messageFormat", messageFormat);
 
-            log.WriteWithData(exception, string.Format(messageFormat, args), null, logEvent);
+            if (log == null)
+            {
+                return;
+            }
+
+            if (messageFormat == null)
+            {
+                return;
+            }
+
+            string message = messageFormat;
+            if (args != null && args.Length > 0)
+            {
+                message = string.Format(message, args);
+            }
+
+            log.WriteWithData(exception, message, null, logEvent);
         }
 
         /// <summary>
@@ -244,10 +246,21 @@ namespace Catel.Logging
         public static void ErrorAndThrowException<TException>(this ILog log, string messageFormat, params object[] args)
             where TException : Exception
         {
-            Argument.IsNotNull("log", log);
-            Argument.IsNotNull("messageFormat", messageFormat);
+            if (log == null)
+            {
+                return;
+            }
 
-            var message = string.Format(messageFormat, args);
+            if (messageFormat == null)
+            {
+                return;
+            }
+
+            string message = messageFormat;
+            if (args != null && args.Length > 0)
+            {
+                message = string.Format(message, args);
+            }
 
             log.ErrorWithData(message);
 

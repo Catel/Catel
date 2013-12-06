@@ -7,8 +7,7 @@
 namespace Catel.Test.Extensions.Prism.Modules.Extensions
 {
     using System;
-
-    using Catel.Modules.Extensions;
+    using Catel.Modules;
 
     using Microsoft.Practices.Prism.Modularity;
     using Microsoft.VisualStudio.TestTools.UnitTesting;

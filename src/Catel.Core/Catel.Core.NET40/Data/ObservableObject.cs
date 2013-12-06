@@ -20,7 +20,6 @@ namespace Catel.Data
     /// </summary>
 #if NET
     [Serializable]
-    [System.Xml.Serialization.XmlSchemaProvider("GetObservableObjectXmlSchema")]
 #else
     [DataContract]
 #endif
@@ -46,20 +45,6 @@ namespace Catel.Data
 
 
         #region Methods
-#if NET
-        /// <summary>
-        /// Gets XML schema for this class.
-        /// <para />
-        /// Implemented to support WCF serialization for all types deriving from this type.
-        /// </summary>
-        /// <param name="schemaSet">The schema set.</param>
-        /// <returns>System.Xml.XmlQualifiedName.</returns>
-        public static System.Xml.XmlQualifiedName GetObservableObjectXmlSchema(XmlSchemaSet schemaSet)
-        {
-            return Runtime.Serialization.Xml.XmlSchemaManager.GetXmlSchema(typeof(ObservableObject), schemaSet);
-        }
-#endif
-
         /// <summary>
         /// Raises the <see cref="PropertyChanging"/> event.
         /// </summary>

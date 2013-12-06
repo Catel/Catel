@@ -12,7 +12,12 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
     using System.IO;
     using System.Runtime.Serialization;
     using Catel.Data;
+
+#if NETFX_CORE
+    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+#else
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+#endif
 
     public interface IParams
     {

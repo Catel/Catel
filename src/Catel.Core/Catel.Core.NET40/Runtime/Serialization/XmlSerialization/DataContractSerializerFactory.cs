@@ -276,7 +276,8 @@ namespace Catel.Runtime.Serialization.Xml
             var isModelBase = (type == typeof(ModelBase)) || typeof(ModelBase).IsAssignableFromEx(type);
             if (isModelBase)
             {
-                var modelBaseProperties = PropertyDataManager.Default.GetProperties(type);
+                var catelTypeInfo = PropertyDataManager.Default.GetCatelTypeInfo(type);
+                var modelBaseProperties = catelTypeInfo.GetCatelProperties();
                 foreach (var modelBaseProperty in modelBaseProperties)
                 {
                     var propertyType = modelBaseProperty.Value.Type;

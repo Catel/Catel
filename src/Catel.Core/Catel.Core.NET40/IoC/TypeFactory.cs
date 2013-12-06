@@ -336,8 +336,14 @@ namespace Catel.IoC
                 return;
             }
 
+            string objectType = ObjectToStringHelper.ToTypeString(obj);
+
+            Log.Debug("Initializing type '{0}' after construction", objectType);
+
             var dependencyResolverManager = DependencyResolverManager.Default;
             dependencyResolverManager.RegisterDependencyResolverForInstance(obj, _dependencyResolver);
+
+            Log.Debug("Injecting properties into type '{0}' after construction", objectType);
 
             var type = obj.GetType();
             var typeMetaData = GetTypeMetaData(type);
@@ -397,7 +403,7 @@ namespace Catel.IoC
                     constructorCache.Remove(constructorCacheKey);
                 }
 
-                Log.Debug("Creating instance of type '{0}' using specific parameters. No constructor found in the cache, so searching for the right one.", typeToConstruct.FullName);
+                Log.Debug("Creating instance of type '{0}' using specific parameters. No constructor found in the cache, so searching for the right one", typeToConstruct.FullName);
 
                 var typeConstructorsMetadata = GetTypeMetaData(typeToConstruct);
                 var constructors = typeConstructorsMetadata.GetConstructors(parameters.Count(), !autoCompleteDependencies);
@@ -410,6 +416,8 @@ namespace Catel.IoC
                         continue;
                     }
 
+                    Log.Debug("Using constructor '{0}' to construct type '{1}'", constructor.GetSignature(), typeToConstruct.FullName);
+
                     var instanceCreatedWithInjection = TryCreateWithConstructorInjectionWithParameters(typeToConstruct, constructor, parameters);
                     if (instanceCreatedWithInjection != null)
                     {
@@ -420,7 +428,7 @@ namespace Catel.IoC
                     }
                 }
 
-                Log.Debug("No constructor could be used, cannot construct type '{0}' with the specified parameters.", typeToConstruct.FullName);
+                Log.Debug("No constructor could be used, cannot construct type '{0}' with the specified parameters", typeToConstruct.FullName);
 
                 return null;
             }
@@ -448,13 +456,16 @@ namespace Catel.IoC
         /// <returns>The <see cref="TypeMetaData"/>.</returns>
         private TypeMetaData GetTypeMetaData(Type type)
         {
-            if (!_typeConstructorsMetadata.ContainsKey(type))
+            lock (_lockObject)
             {
-                _typeConstructorsMetadata.Add(type, new TypeMetaData(type));
-            }
+                if (!_typeConstructorsMetadata.ContainsKey(type))
+                {
+                    _typeConstructorsMetadata.Add(type, new TypeMetaData(type));
+                }
 
-            var typeConstructorsMetadata = _typeConstructorsMetadata[type];
-            return typeConstructorsMetadata;
+                var typeConstructorsMetadata = _typeConstructorsMetadata[type];
+                return typeConstructorsMetadata;
+            }
         }
 
         /// <summary>
@@ -466,6 +477,8 @@ namespace Catel.IoC
         /// <returns><c>true</c> if this instance [can constructor be used] the specified constructor; otherwise, <c>false</c>.</returns>
         private bool CanConstructorBeUsed(ConstructorInfo constructor, bool autoCompleteDependencies, params object[] parameters)
         {
+            Log.Debug("Checking if constructor '{0}' can be used", constructor.GetSignature());
+
             bool validConstructor = true;
             if (parameters.Length > 0)
             {
@@ -477,6 +490,9 @@ namespace Catel.IoC
 
                     if (!IsValidParameterValue(ctorParameterType, parameters[i]))
                     {
+                        Log.Debug("Constructor is not valid because value '{0}' cannot be used for parameter '{0}'",
+                            ObjectToStringHelper.ToString(parameters[i]), ctorParameter.Name);
+
                         validConstructor = false;
                         break;
                     }
@@ -489,8 +505,13 @@ namespace Catel.IoC
                         // check if all the additional parameters are registered in the service locator
                         for (int j = parameters.Length; j < ctorParameters.Length; j++)
                         {
-                            if (!_dependencyResolver.CanResolve(ctorParameters[j].ParameterType))
+                            var parameterToResolve = ctorParameters[j];
+                            var parameterTypeToResolve = parameterToResolve.ParameterType;
+
+                            if (!_dependencyResolver.CanResolve(parameterTypeToResolve))
                             {
+                                Log.Debug("Constructor is not valid because parameter '{0}' cannot be resolved from the dependency resolver", parameterToResolve.Name);
+
                                 validConstructor = false;
                                 break;
                             }
@@ -498,6 +519,8 @@ namespace Catel.IoC
                     }
                 }
             }
+
+            Log.Debug("The constructor is valid and can be used");
 
             return validConstructor;
         }
@@ -613,7 +636,13 @@ namespace Catel.IoC
                     finalParameters.Add(ctorParameterValue);
                 }
 
-                var instance = constructor.Invoke(finalParameters.ToArray());
+                var finalParametersArray = finalParameters.ToArray();
+
+                Log.Debug("Calling constructor.Invoke with the right parameters");
+
+                var instance = constructor.Invoke(finalParametersArray);
+
+                //Log.Debug("Called constructor.Invoke with the right parameters");
 
                 InitializeAfterConstruction(instance);
 
@@ -732,6 +761,7 @@ namespace Catel.IoC
         {
             private readonly ICacheStorage<string, List<ConstructorInfo>> _callCache = new CacheStorage<string, List<ConstructorInfo>>();
             private Dictionary<PropertyInfo, InjectAttribute> _injectedProperties;
+            private readonly object _lockObject = new object();
 
             public TypeMetaData(Type type)
             {
@@ -742,22 +772,25 @@ namespace Catel.IoC
 
             public Dictionary<PropertyInfo, InjectAttribute> GetInjectedProperties()
             {
-                if (_injectedProperties == null)
+                lock (_lockObject)
                 {
-                    _injectedProperties = new Dictionary<PropertyInfo, InjectAttribute>();
-
-                    var properties = Type.GetPropertiesEx();
-                    foreach (var property in properties)
+                    if (_injectedProperties == null)
                     {
-                        var injectAttribute = property.GetCustomAttributeEx(typeof (InjectAttribute), false) as InjectAttribute;
-                        if (injectAttribute != null)
-                        {
-                            if (injectAttribute.Type == null)
-                            {
-                                injectAttribute.Type = property.PropertyType;
-                            }
+                        _injectedProperties = new Dictionary<PropertyInfo, InjectAttribute>();
 
-                            _injectedProperties.Add(property, injectAttribute);
+                        var properties = Type.GetPropertiesEx();
+                        foreach (var property in properties)
+                        {
+                            var injectAttribute = property.GetCustomAttributeEx(typeof (InjectAttribute), false) as InjectAttribute;
+                            if (injectAttribute != null)
+                            {
+                                if (injectAttribute.Type == null)
+                                {
+                                    injectAttribute.Type = property.PropertyType;
+                                }
+
+                                _injectedProperties.Add(property, injectAttribute);
+                            }
                         }
                     }
                 }

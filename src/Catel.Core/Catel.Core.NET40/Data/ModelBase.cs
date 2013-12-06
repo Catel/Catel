@@ -589,6 +589,16 @@ namespace Catel.Data
             Mode = SerializationMode.Xml;
 #endif
 
+            var type = GetType();
+
+#if !WINDOWS_PHONE && !NETFX_CORE && !PCL && !NET35
+            if (!_propertyValuesFailedForValidation.ContainsKey(type))
+            {
+                _propertyValuesFailedForValidation.Add(type, new List<string>());
+                _propertyValuesAtLeastOnceValidated.Add(type, new List<string>());
+            }
+#endif
+
             InitializeProperties();
 
             InitializeCustomProperties();
@@ -616,7 +626,8 @@ namespace Catel.Data
         /// </summary>
         private void FinishInitializationAfterConstructionOrDeserialization()
         {
-            foreach (var propertyData in PropertyDataManager.GetProperties(GetType()))
+            var catelTypeInfo = PropertyDataManager.GetCatelTypeInfo(GetType());
+            foreach (var propertyData in catelTypeInfo.GetCatelProperties())
             {
                 if (propertyData.Value.SetParent)
                 {
@@ -1025,8 +1036,8 @@ namespace Catel.Data
                 objAsModelBase.IsDirty = false;
                 handledReferences.Add(objAsModelBase);
 
-                var properties = PropertyDataManager.GetProperties(obj.GetType());
-                foreach (var property in properties)
+                var catelTypeInfo = PropertyDataManager.GetCatelTypeInfo(obj.GetType());
+                foreach (var property in catelTypeInfo.GetCatelProperties())
                 {
                     object value = objAsModelBase.GetValue(property.Value);
 
@@ -1360,10 +1371,10 @@ namespace Catel.Data
         {
             var type = GetType();
 
-            var registeredPropertyData = PropertyDataManager.RegisterProperties(type);
-
-            foreach (var propertyData in registeredPropertyData)
+            var catelTypeInfo = PropertyDataManager.RegisterProperties(type);
+            foreach (var propertyDataKeyValuePair in catelTypeInfo.GetCatelProperties())
             {
+                var propertyData = propertyDataKeyValuePair.Value;
                 if (!propertyData.IsSerializable)
                 {
                     object[] allowNonSerializableMembersAttributes = type.GetCustomAttributesEx(typeof(AllowNonSerializableMembersAttribute), true);
@@ -1596,7 +1607,8 @@ namespace Catel.Data
         /// </remarks>
         internal void RaisePropertyChangedForAllRegisteredProperties()
         {
-            foreach (var propertyData in PropertyDataManager.GetProperties(GetType()))
+            var catelTypeInfo = PropertyDataManager.GetCatelTypeInfo(GetType());
+            foreach (var propertyData in catelTypeInfo.GetCatelProperties())
             {
                 if (!IsModelBaseProperty(propertyData.Key))
                 {
@@ -1669,8 +1681,8 @@ namespace Catel.Data
                         if (!DisablePropertyChangeNotifications)
                         {
                             // Explicitly call base because we have overridden the behavior
-                                var eventArgs = new AdvancedPropertyChangedEventArgs(sender, this, e.PropertyName);
-                                base.RaisePropertyChanged(this, eventArgs);
+                            var eventArgs = new AdvancedPropertyChangedEventArgs(sender, this, e.PropertyName);
+                            base.RaisePropertyChanged(this, eventArgs);
                         }
                     }
 
@@ -1799,7 +1811,6 @@ namespace Catel.Data
     /// <typeparam name="TModel">Type that the class should hold (same as the defined type).</typeparam>
 #if NET
     [Serializable]
-    [System.Xml.Serialization.XmlSchemaProvider("GetGenericModelBaseXmlSchema")]
 #endif
     [ObsoleteEx(Message = "Generic class is no longer being used, use the non-generic base instead", TreatAsErrorFromVersion = "3.4", RemoveInVersion = "4.0", Replacement = "ModelBase")]
     public abstract class ModelBase<TModel> : ModelBase
@@ -1843,18 +1854,6 @@ namespace Catel.Data
         public static PropertyData RegisterProperty<TValue>(Expression<Func<TModel, TValue>> propertyExpression, TValue defaultValue = default(TValue), Action<TModel, AdvancedPropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true)
         {
             return RegisterProperty<TModel, TValue>(propertyExpression, defaultValue, propertyChangedEventHandler, includeInSerialization, includeInBackup);
-        }
-
-        /// <summary>
-        /// Gets XML schema for this class.
-        /// <para />
-        /// Implemented to support WCF serialization for all types deriving from this type.
-        /// </summary>
-        /// <param name="schemaSet">The schema set.</param>
-        /// <returns>System.Xml.XmlQualifiedName.</returns>
-        public static System.Xml.XmlQualifiedName GetGenericModelBaseXmlSchema(System.Xml.Schema.XmlSchemaSet schemaSet)
-        {
-            return XmlSchemaManager.GetXmlSchema(typeof(ModelBase<TModel>), schemaSet);
         }
 #endif
 

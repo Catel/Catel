@@ -636,5 +636,36 @@ namespace Catel.Test.Data
                 Assert.IsTrue(model.HasErrors);
             }
         }
+
+#if NET
+        // Test case for https://catelproject.atlassian.net/browse/CTL-246
+        [TestClass]
+        public class ValidationOfNonCatelProperties
+        {
+            public class ModelWithCalculatedPropertiesValidation : ModelBase
+            {
+                [Range(1, 10)]
+                public int Weight
+                {
+                    get { return 2 * 6; }
+                }
+            }
+
+            [TestMethod]
+            public void CorrectlyValidatesNonCatelProperties()
+            {
+                var model = new ModelWithCalculatedPropertiesValidation();
+                model.Validate(true);
+
+                Assert.IsTrue(model.HasErrors);
+
+                var validationContext = model.ValidationContext;
+                var errors = validationContext.GetErrors();
+
+                Assert.AreEqual(1, errors.Count);
+                Assert.AreEqual("Weight", ((FieldValidationResult)errors[0]).PropertyName);
+            }
+        }
+#endif
     }
 }

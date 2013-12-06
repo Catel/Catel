@@ -42,9 +42,6 @@ namespace Catel.Data
     using System.IO.IsolatedStorage;
 #endif
 
-#if NET
-    [System.Xml.Serialization.XmlSchemaProvider("GetModelBaseXmlSchema")]
-#endif
     public partial class ModelBase
     {
         #region Events

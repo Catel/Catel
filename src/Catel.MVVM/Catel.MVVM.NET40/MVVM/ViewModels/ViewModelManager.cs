@@ -289,12 +289,12 @@ namespace Catel.MVVM
         /// <returns>
         /// The <see cref="IViewModel"/> or <c>null</c> if the view model is not registered.
         /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentException">The <paramref name="viewModelType"/> is not of type <see cref="IViewModel"/>.</exception>
         public IViewModel GetFirstOrDefaultInstance(Type viewModelType)
         {
-            Argument.IsNotNull("viewModeType", viewModelType);
+            Argument.IsOfType("viewModelType", viewModelType, typeof (IViewModel));
 
-            return ActiveViewModels.FirstOrDefault(row => ObjectHelper.AreEqual(row.GetType(), viewModelType));
+            return ActiveViewModels.FirstOrDefault(viewModel => ObjectHelper.AreEqual(viewModel.GetType(), viewModelType));
         }
 
         /// <summary>

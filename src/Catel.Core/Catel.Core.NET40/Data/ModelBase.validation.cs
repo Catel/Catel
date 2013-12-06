@@ -116,7 +116,7 @@ namespace Catel.Data
 #endif
         private static readonly Dictionary<Type, List<string>> _propertyValuesAtLeastOnceValidated = new Dictionary<Type, List<string>>();
 
-            /// <summary>
+        /// <summary>
         /// A dictionary containing the annotation (attribute) validation results of properties of this class.
         /// </summary>
 #if NET
@@ -439,16 +439,10 @@ namespace Catel.Data
             }
 
 #if !WINDOWS_PHONE && !NETFX_CORE && !PCL && !NET35
-            Type type = GetType();
+            var type = GetType();
 
             try
             {
-                if (!_propertyValuesFailedForValidation.ContainsKey(type))
-                {
-                    _propertyValuesFailedForValidation.Add(type, new List<string>());
-                    _propertyValuesAtLeastOnceValidated.Add(type, new List<string>());
-                }
-
                 if (!_propertyValuesFailedForValidation[type].Contains(propertyName))
                 {
                     if (!_propertyValuesAtLeastOnceValidated[type].Contains(propertyName))
@@ -461,7 +455,7 @@ namespace Catel.Data
                             _propertyValuesFailedForValidation[type].Add(propertyName);
                             return false;
                         }
-#elif SILVERLIGHT
+#else
                         // Checking via reflection is faster than catching the exception
                         if (!Reflection.PropertyHelper.IsPublicProperty(this, propertyName))
                         {
@@ -474,7 +468,7 @@ namespace Catel.Data
                     }
                     else
                     {
-                        _propertyValuesAtLeastOnceValidated[type].Add(propertyName);    
+                        _propertyValuesAtLeastOnceValidated[type].Add(propertyName);
                     }
 
                     if (!_dataAnnotationsValidationContext.ContainsKey(propertyName))
@@ -711,12 +705,39 @@ namespace Catel.Data
 
             if (force && validateDataAnnotations)
             {
+                var type = GetType();
+
                 // In forced mode, validate all registered properties for annotations
-                foreach (var propertyData in PropertyDataManager.GetProperties(GetType()))
+                var catelTypeInfo = PropertyDataManager.GetCatelTypeInfo(type);
+                foreach (var propertyData in catelTypeInfo.GetCatelProperties())
                 {
                     var propertyValue = GetValue(propertyData.Value);
                     ValidatePropertyUsingAnnotations(propertyData.Key, propertyValue);
                 }
+
+#if !WINDOWS_PHONE && !NETFX_CORE && !PCL && !NET35
+                // Validate non-catel properties as well for attribute validation
+                foreach (var propertyInfo in catelTypeInfo.GetNonCatelProperties())
+                {
+                    // TODO: Should we check for annotations attributes?
+                    var failedPropertyValidations = _propertyValuesFailedForValidation[type];
+                    if (failedPropertyValidations.Contains(propertyInfo.Key))
+                    {
+                        continue;
+                    }
+
+                    try
+                    {
+                        var propertyValue =  propertyInfo.Value.GetValue(this, null);
+                        ValidatePropertyUsingAnnotations(propertyInfo.Key, propertyValue);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Warning(ex, "Failed to validate property '{0}.{1}', adding it to the ignore list", type.Name, propertyInfo.Key);
+                        failedPropertyValidations.Add(propertyInfo.Key);
+                    }
+                }
+#endif
             }
 
             if (!IsValidated || force)

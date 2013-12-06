@@ -148,6 +148,20 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         }
 
         /// <summary>
+        /// Determines whether this instance can handle the current navigation event.
+        /// <para />
+        /// This method should only be implemented by deriving types if the <see cref="CanHandleNavigation"/>
+        /// is not sufficient.
+        /// </summary>
+        /// <returns><c>true</c> if this instance can handle the navigation event; otherwise, <c>false</c>.</returns>
+        protected override bool CanHandleNavigationAdvanced()
+        {
+            var content = RootFrame.Content;
+
+            return ReferenceEquals(content, TargetPage);
+        }
+
+        /// <summary>
         /// Called when the target control is loaded.
         /// </summary>
         /// <param name="sender">The sender.</param>

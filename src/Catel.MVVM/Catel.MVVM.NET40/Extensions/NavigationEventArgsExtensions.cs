@@ -89,7 +89,7 @@ namespace Catel
 #if NETFX_CORE
             string uriString = e.SourcePageType.FullName;
 #else
-            string uriString = GetSafeUriString(e.Uri);
+            string uriString = UrlHelper.GetSafeUriString(e.Uri);
 #endif
 
             return uriString;
@@ -108,25 +108,10 @@ namespace Catel
 #if NETFX_CORE
             string uriString = e.SourcePageType.FullName;
 #else
-            string uriString = GetSafeUriString(e.Uri);
+            string uriString = UrlHelper.GetSafeUriString(e.Uri);
 #endif
 
             return uriString;
-        }
-
-        private static string GetSafeUriString(Uri uri)
-        {
-            Argument.IsNotNull("uri", uri);
-
-            return IsAbsoluteUrl(uri.ToString()) ? uri.AbsoluteUri : uri.OriginalString;
-        }
-
-        private static bool IsAbsoluteUrl(string url)
-        {
-            Argument.IsNotNull("url", url);
-
-            Uri result;
-            return Uri.TryCreate(url, UriKind.Absolute, out result);
         }
     }
 }

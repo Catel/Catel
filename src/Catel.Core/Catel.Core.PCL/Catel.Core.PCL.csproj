@@ -14,7 +14,7 @@
     <TargetFrameworkProfile>Profile158</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <FodyPath>..\..\..\lib\Fody.1.17.4.0</FodyPath>
+    <FodyPath>..\..\..\lib\Fody.1.18.0.0</FodyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -125,6 +125,9 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\AttributeValidatorProvider.cs">
       <Link>Data\AttributeValidatorProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Data\CatelTypeInfo.cs">
+      <Link>Data\CatelTypeInfo.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\ChangeNotificationWrapper.cs">
       <Link>Data\ChangeNotificationWrapper.cs</Link>
@@ -371,6 +374,9 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Helpers\UniqueIdentifierHelper.cs">
       <Link>Helpers\UniqueIdentifierHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Helpers\UrlHelper.cs">
+      <Link>Helpers\UrlHelper.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Attributes\InjectAttribute.cs">
       <Link>IoC\Attributes\InjectAttribute.cs</Link>
@@ -803,7 +809,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Obsolete">
-      <HintPath>..\..\..\lib\Obsolete.Fody.2.3.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
+      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.0.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
