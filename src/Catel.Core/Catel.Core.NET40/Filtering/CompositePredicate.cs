@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.IoC
+namespace Catel
 {
     using System;
     using System.Collections.Generic;

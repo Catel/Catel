@@ -47,6 +47,9 @@ namespace Catel.IoC
         /// </summary>
         private readonly ITypeFactory _typeFactory;
 
+        /// <summary>
+        /// The retrieved types
+        /// </summary>
         private IList<Type> _retrievedTypes;
         #endregion
 
@@ -175,7 +178,6 @@ namespace Catel.IoC
         /// Adds the assembly to scan.
         /// </summary>
         /// <param name="assembly">The assembly.</param>
-        /// <exception cref="System.NotImplementedException"></exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="assembly" /> is <c>null</c>.</exception>
         public void AddAssemblyToScan(Assembly assembly)
         {
