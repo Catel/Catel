@@ -24,26 +24,26 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\output\debug\WP8\Catel.Extensions.Data\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;WP8</DefineConstants>
+    <OutputPath>..\..\..\output\debug\WP80\Catel.Extensions.Data\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;WP80</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>..\..\..\output\debug\WP8\Catel.Extensions.Data\Catel.Extensions.Data.XML</DocumentationFile>
+    <DocumentationFile>..\..\..\output\debug\WP80\Catel.Extensions.Data\Catel.Extensions.Data.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\output\release\WP8\Catel.Extensions.Data\</OutputPath>
-    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE;WP8</DefineConstants>
+    <OutputPath>..\..\..\output\release\WP80\Catel.Extensions.Data\</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE;WP80</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>..\..\..\output\release\WP8\Catel.Extensions.Data\Catel.Extensions.Data.XML</DocumentationFile>
+    <DocumentationFile>..\..\..\output\release\WP80\Catel.Extensions.Data\Catel.Extensions.Data.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -90,9 +90,9 @@
   <ItemGroup>
     <None Include="Fody.targets" />
     <None Include="packages.config" />
-    <ProjectReference Include="..\..\Catel.Core\Catel.Core.WP8\Catel.Core.WP8.csproj">
+    <ProjectReference Include="..\..\Catel.Core\Catel.Core.WP80\Catel.Core.WP80.csproj">
       <Project>{222A55F1-A032-4FAF-92C1-C51A2F7D2725}</Project>
-      <Name>Catel.Core.WP8</Name>
+      <Name>Catel.Core.WP80</Name>
     </ProjectReference>
     <None Include="FodyWeavers.xml" />
   </ItemGroup>

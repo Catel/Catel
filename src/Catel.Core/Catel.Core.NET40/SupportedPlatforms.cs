@@ -42,7 +42,7 @@ namespace Catel
             return SupportedPlatforms.Silverlight5;
 #elif WP7
             throw new System.NotSupportedException("WP7 is not supported");
-#elif WP8
+#elif WP80
             return SupportedPlatforms.WindowsPhone80;
 #elif WIN80
             return SupportedPlatforms.Windows80;

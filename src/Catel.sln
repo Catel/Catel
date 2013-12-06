@@ -250,24 +250,24 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.CSLA.NET45
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.CSLA.SL5", "Catel.Extensions.CSLA\Catel.Extensions.CSLA.SL5\Catel.Extensions.CSLA.SL5.csproj", "{3DC0543B-B1DD-4F5E-9384-652A339FE7CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Core.WP8", "Catel.Core\Catel.Core.WP8\Catel.Core.WP8.csproj", "{222A55F1-A032-4FAF-92C1-C51A2F7D2725}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Core.WP80", "Catel.Core\Catel.Core.WP80\Catel.Core.WP80.csproj", "{222A55F1-A032-4FAF-92C1-C51A2F7D2725}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.MVVM.WP8", "Catel.MVVM\Catel.MVVM.WP8\Catel.MVVM.WP8.csproj", "{5168ABF4-2DCB-496B-8F76-DB9B716ACC4A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.MVVM.WP80", "Catel.MVVM\Catel.MVVM.WP80\Catel.MVVM.WP80.csproj", "{5168ABF4-2DCB-496B-8F76-DB9B716ACC4A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WP8", "WP8", "{F63BBBF1-FC19-4F0A-81D7-2C4C27A1768A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WP80", "WP80", "{F63BBBF1-FC19-4F0A-81D7-2C4C27A1768A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interactivity", "Interactivity", "{B5C5A548-D22B-4BF2-8E10-19F67DF5D0AD}"
 	ProjectSection(SolutionItems) = preProject
-		..\lib\WP8\Interactivity\System.Windows.Interactivity.dll = ..\lib\WP8\Interactivity\System.Windows.Interactivity.dll
+		..\lib\WP80\Interactivity\System.Windows.Interactivity.dll = ..\lib\WP80\Interactivity\System.Windows.Interactivity.dll
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Silverlight testing", "Silverlight testing", "{F80CC0BE-3DA4-4889-A905-A0BE751C31E7}"
 	ProjectSection(SolutionItems) = preProject
-		..\lib\WP8\Silverlight testing\Microsoft.Silverlight.Testing.dll = ..\lib\WP8\Silverlight testing\Microsoft.Silverlight.Testing.dll
-		..\lib\WP8\Silverlight testing\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll = ..\lib\WP8\Silverlight testing\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll
+		..\lib\WP80\Silverlight testing\Microsoft.Silverlight.Testing.dll = ..\lib\WP80\Silverlight testing\Microsoft.Silverlight.Testing.dll
+		..\lib\WP80\Silverlight testing\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll = ..\lib\WP80\Silverlight testing\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Controls.WP8", "Catel.Extensions.Controls\Catel.Extensions.Controls.WP8\Catel.Extensions.Controls.WP8.csproj", "{C6ABBF91-35B6-44AA-B769-A6A16228484D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Controls.WP80", "Catel.Extensions.Controls\Catel.Extensions.Controls.WP80\Catel.Extensions.Controls.WP80.csproj", "{C6ABBF91-35B6-44AA-B769-A6A16228484D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Extensions.Data", "Catel.Extensions.Data", "{41BA68F9-3422-4FB0-B6DE-7097A22565E5}"
 EndProject
@@ -279,7 +279,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Data.SL5",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Data.WIN80", "Catel.Extensions.Data\Catel.Extensions.Data.WIN80\Catel.Extensions.Data.WIN80.csproj", "{87DB1DEF-5033-4EDF-947D-CC890E5B84B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Data.WP8", "Catel.Extensions.Data\Catel.Extensions.Data.WP8\Catel.Extensions.Data.WP8.csproj", "{7C9B8FC8-7C8C-4448-95E6-50B0EE23B261}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Data.WP80", "Catel.Extensions.Data\Catel.Extensions.Data.WP80\Catel.Extensions.Data.WP80.csproj", "{7C9B8FC8-7C8C-4448-95E6-50B0EE23B261}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{4C1D672F-892E-4AC7-84EA-FE5BE2046000}"
 	ProjectSection(SolutionItems) = preProject
