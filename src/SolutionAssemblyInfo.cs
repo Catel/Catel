@@ -53,9 +53,9 @@ using System.Runtime.CompilerServices;
 #elif SL5
 [assembly: AssemblyConfiguration("Silverlight 5, Debug")]
 #elif WP7
-[assembly: AssemblyConfiguration("Windows Phone 7, Debug")]
+[assembly: AssemblyConfiguration("Windows Phone 7.x, Debug")]
 #elif WP8
-[assembly: AssemblyConfiguration("Windows Phone 8, Debug")]
+[assembly: AssemblyConfiguration("Windows Phone 8.0, Debug")]
 #elif WIN80
 [assembly: AssemblyConfiguration("Windows 8.0, Debug")]
 #elif WIN81
@@ -79,9 +79,9 @@ using System.Runtime.CompilerServices;
 #elif SL5
 [assembly: AssemblyConfiguration("Silverlight 5, Release")]
 #elif WP7
-[assembly: AssemblyConfiguration("Windows Phone 7, Release")]
+[assembly: AssemblyConfiguration("Windows Phone 7.x, Release")]
 #elif WP8
-[assembly: AssemblyConfiguration("Windows Phone 8, Release")]
+[assembly: AssemblyConfiguration("Windows Phone 8.0, Release")]
 #elif WIN80
 [assembly: AssemblyConfiguration("Windows 8.0, Release")]
 #elif WIN81

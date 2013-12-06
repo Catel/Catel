@@ -29,7 +29,7 @@ Final release steps:
 
 8)   Share via Twitter
 9)   Share via LinkedIn
-
+10)  Send newsletter
 
 Post release steps:
 ===================
@@ -39,4 +39,3 @@ Post release steps:
      * History.txt
      * SolutionAssemblyInfo.cs
 2)  Update version numbers in the Catel project in Continua CI
-3)  Update the filters in JIRA
