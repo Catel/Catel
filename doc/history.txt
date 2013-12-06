@@ -28,7 +28,7 @@ xxx
 
 Added/fixed:
 ============
-xxx
+(*) CTL-261 Replace all instances of RegisterDebugListener with AddDebugListener
 
 Roadmap:
 ========

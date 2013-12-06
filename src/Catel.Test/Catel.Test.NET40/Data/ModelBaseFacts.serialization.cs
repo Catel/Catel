@@ -432,7 +432,7 @@ namespace Catel.Test.Data
             [TestMethod]
             public void SupportsNestedHierarchySerialization()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
 
                 var root = new Group()
                 {

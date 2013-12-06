@@ -26,7 +26,7 @@ namespace Catel.Test
         /// </summary>
         public static void Initialize()
         {
-            LogManager.RegisterDebugListener();
+            LogManager.AddDebugListener();
 
             // For testing purposes, enable features we disabled for CTL-234
             var modelEqualityComparer = ServiceLocator.Default.ResolveType<IModelEqualityComparer>();
