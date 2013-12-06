@@ -536,6 +536,87 @@
         }
 
         [TestClass]
+        public class TheRemoveTypeMethod
+        {
+            [TestMethod]
+            public void RemoveType_ThrowsArgumentNullExceptionIfServiceTypeIsNull()
+            {
+                var serviceLocator = new ServiceLocator();
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serviceLocator.RemoveType(null, "TestClass1"));
+            }
+
+            [TestMethod]
+            public void RemoveType_NoTag()
+            {
+                var serviceLocator = new ServiceLocator();
+                serviceLocator.RegisterType<ITestInterface, TestClass1>();
+
+                Assert.IsTrue(serviceLocator.IsTypeRegistered<ITestInterface>());
+
+                serviceLocator.RemoveType(typeof(ITestInterface));
+
+                Assert.IsFalse(serviceLocator.IsTypeRegistered<ITestInterface>());
+            }
+
+            [TestMethod]
+            public void RemovesOnlyTheTaggedTypeAndInstances()
+            {
+                var serviceLocator = new ServiceLocator();
+                serviceLocator.RegisterType(typeof(ITestInterface), typeof(TestClass1), "1");
+                serviceLocator.RegisterType(typeof(ITestInterface), typeof(TestClass1), "2");
+
+                var ref1 = serviceLocator.ResolveType(typeof(ITestInterface), "2");
+
+                serviceLocator.RemoveType(typeof(ITestInterface),"1");
+
+                var ref2 = serviceLocator.ResolveType(typeof(ITestInterface), "2");
+
+                ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => serviceLocator.ResolveType(typeof(ITestInterface), "1"));
+                Assert.IsTrue(serviceLocator.IsTypeRegistered(typeof(ITestInterface),"2"));
+                Assert.IsTrue(object.ReferenceEquals(ref1,ref2));
+               
+            }
+        }
+
+        [TestClass]
+        public class TheRemoveAllTypesMethod
+        {
+
+            [TestMethod]
+            public void RemoveAllTypes_ThrowsArgumentNullExceptionIfServiceTypeIsNull()
+            {
+                var serviceLocator = new ServiceLocator();
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serviceLocator.RemoveAllTypes(null));
+            }
+
+            [TestMethod]
+            public void RemoveAllTypes_Simple()
+            {
+                var serviceLocator = new ServiceLocator();
+                serviceLocator.RegisterType<ITestInterface, TestClass1>();
+
+                Assert.IsTrue(serviceLocator.IsTypeRegistered<ITestInterface>());   
+
+                serviceLocator.RemoveAllTypes(typeof(ITestInterface));
+
+                Assert.IsFalse(serviceLocator.IsTypeRegistered<ITestInterface>());
+            }
+            
+            [TestMethod]
+            public void RemoveAllTypes_Tags()
+            {
+                var serviceLocator = new ServiceLocator();
+                serviceLocator.RegisterType(typeof(ITestInterface), typeof(TestClass1), "1");
+                serviceLocator.RegisterType(typeof(ITestInterface), typeof(TestClass1), "2");
+
+                serviceLocator.RemoveAllTypes(typeof(ITestInterface));
+
+                ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => serviceLocator.ResolveType(typeof(ITestInterface), "1"));
+                ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => serviceLocator.ResolveType(typeof(ITestInterface), "2"));
+            }
+        }
+
+        [TestClass]
         public class TheResolveTypeMethod
         {
             public class DependencyInjectionTestClass
@@ -572,7 +653,7 @@
             }
 
             [TestMethod]
-            public void ResoleType_Of_Non_Registered_Non_Abstract_Class_Without_Registration()
+            public void ResolveType_Of_Non_Registered_Non_Abstract_Class_Without_Registration()
             {
                 var serviceLocator = new ServiceLocator();
                 var dependencyInjectionTestClass = serviceLocator.ResolveType<DependencyInjectionTestClass>();
@@ -581,7 +662,7 @@
             }
 
             [TestMethod]
-            public void ResoleType_Of_Non_Registered_Non_Abstract_Class_Without_Registration_CanResolveNonAbstractTypesWithoutRegistration_In_False()
+            public void ResolveType_Of_Non_Registered_Non_Abstract_Class_Without_Registration_CanResolveNonAbstractTypesWithoutRegistration_In_False()
             {
                 var serviceLocator = new ServiceLocator();
                 serviceLocator.CanResolveNonAbstractTypesWithoutRegistration = false;
@@ -589,7 +670,7 @@
             }
 
             [TestMethod]
-            public void ResoleType_Generic_TransientLifestyle()
+            public void ResolveType_Generic_TransientLifestyle()
             {
                 var serviceLocator = new ServiceLocator();
                 serviceLocator.RegisterType<ITestInterface, TestClass1>(registrationType: RegistrationType.Transient);
@@ -605,7 +686,7 @@
             }
 
             [TestMethod]
-            public void ResoleType_Generic_SingletonLifestyle()
+            public void ResolveType_Generic_SingletonLifestyle()
             {
                 var serviceLocator = new ServiceLocator();
                 serviceLocator.RegisterType<ITestInterface, TestClass1>();

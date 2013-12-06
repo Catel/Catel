@@ -489,7 +489,7 @@ namespace Catel.IoC
         /// <param name="tag">The tag to register the service with. The default value is <c>null</c>.</param>
         /// <returns>An instance of the type registered on the service.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">The type is not found in any container.</exception>
+        /// <exception cref="NotSupportedException">The type is not found in any container.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
         public object ResolveType(Type serviceType, object tag = null)
         {
@@ -681,6 +681,50 @@ namespace Catel.IoC
                         {
                             _registeredInstances.Remove(serviceInfo);
                         }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Removes the registered type with the specific tag.
+        /// </summary>
+        /// <param name="serviceType">The type of the service.</param>
+        /// <param name="tag">The tag of the registered the service. The default value is <c>null</c>.</param>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
+        public void RemoveType(Type serviceType, object tag = null)
+        {
+            Argument.IsNotNull("serviceType", serviceType);
+
+            lock (_lockObject)
+            {
+                RemoveInstance(serviceType, tag);
+                var serviceInfo = new ServiceInfo(serviceType, tag);
+                if (_registeredTypes.ContainsKey(serviceInfo))
+                {
+                    _registeredTypes.Remove(serviceInfo);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Removes all registered types of a certain service type.
+        /// </summary>
+        /// <param name="serviceType">The type of the service.</param>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
+        public void RemoveAllTypes(Type serviceType)
+        {
+            Argument.IsNotNull("serviceType", serviceType);
+
+            lock (_lockObject)
+            {
+                RemoveAllInstances(serviceType);
+                for (int i = _registeredTypes.Count - 1; i >= 0; i--)
+                {
+                    ServiceInfo serviceInfo = _registeredTypes.Keys.ElementAt(i);
+                    if (serviceInfo.Type == serviceType)
+                    {
+                        _registeredTypes.Remove(serviceInfo);
                     }
                 }
             }
