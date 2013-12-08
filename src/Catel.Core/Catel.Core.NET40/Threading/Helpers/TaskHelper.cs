@@ -33,15 +33,8 @@ namespace Catel.Threading
             var list = actions.ToList();
 
 #if !SILVERLIGHT
-            var tasks = new List<Task>();
-            for (int i = 0; i < list.Count; i++)
-            {
-                var task = new Task(list[i]);
-                tasks.Add(task);
-                task.Start();
-            }
+            Parallel.Invoke(actions);
 
-            Task.WaitAll(tasks.ToArray());
 #else
             var handles = new ManualResetEvent[list.Count];
             for (int i = 0; i < list.Count; i++)
