@@ -355,7 +355,9 @@ namespace Catel.Runtime.Serialization.Xml
                 return true;
             }
 
-            return serializerTypeInfo.ContainsKnownType(type) || serializerTypeInfo.IsTypeAlreadyHandled(type);
+            return serializerTypeInfo.ContainsKnownType(type) || 
+                   serializerTypeInfo.IsTypeAlreadyHandled(type) || 
+                   serializerTypeInfo.IsCollectionAlreadyHandled(type);
         }
 
         /// <summary>
