@@ -28,8 +28,8 @@ xxx
 
 Added/fixed:
 ============
-(*) CTL-261 Replace all instances of RegisterDebugListener with AddDebugListener
 (+) CTL-204 Catel.IoC.IServiceLocator should contains some methord to remove registered type
+(*) CTL-261 Replace all instances of RegisterDebugListener with AddDebugListener
 (*) CTL-264 Reset FileServiceBase.ValidateNames default value to true
 
 Roadmap:

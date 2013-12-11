@@ -84,7 +84,7 @@ namespace Catel.MVVM.Services
         /// <summary>
         /// Gets or sets a value indicating whether the dialog accepts only valid Win32 file names.
         /// </summary>
-        /// <value><c>true</c> if warnings will be shown when an invalid file name is provided; otherwise, <c>false</c>. The default is <c>false</c>.</value>
+        /// <value><c>true</c> if warnings will be shown when an invalid file name is provided; otherwise, <c>false</c>. The default is <c>true</c>.</value>
         public bool ValidateNames { get; set; }
 
         /// <summary>
