@@ -28,7 +28,7 @@ namespace Catel.MVVM.Services
             CheckFileExists = false;
             CheckPathExists = true;
             FilterIndex = 1;
-            ValidateNames = false;
+            ValidateNames = true;
 #endif
         }
 
