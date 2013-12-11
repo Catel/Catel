@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
-
+    using Catel.Caching;
     using Catel.IoC;
     using Catel.Logging;
     using Catel.MVVM;
@@ -130,6 +130,74 @@
             //}
         }
 #endif
+
+        [TestClass]
+        public class TheDeadLockPrevention
+        {
+            // Note that this class contains very bad code practices, but this way we try to mimic a deadlock
+
+            private static IServiceLocator _serviceLocator;
+
+            public interface IInterfaceA
+            {
+            }
+
+            public interface IInterfaceB
+            {
+            }
+
+            public interface IInterfaceC
+            {
+            }
+
+            public class ClassA : IInterfaceA
+            {
+                private readonly ICacheStorage<string, string> _cache = new CacheStorage<string, string>();
+
+                public ClassA()
+                {
+                    SomeMethodResolvingTypes();
+                }
+
+                private string SomeMethodResolvingTypes()
+                {
+                    return _cache.GetFromCacheOrFetch("key", () =>
+                    {
+                        var classB = new ClassB();
+                        return "done!";
+                    });
+                }
+            }
+
+            public class ClassB : IInterfaceB
+            {
+                public ClassB()
+                {
+                    var classB = _serviceLocator.ResolveType<IInterfaceC>();
+                }
+            }
+
+            public class ClassC : IInterfaceC
+            {
+                public ClassC()
+                {
+                }
+            }
+
+            [TestMethod]
+            public void DeadlockIsNotCausedByMultipleInheritedResolving()
+            {
+                _serviceLocator = new ServiceLocator();
+
+                var serviceLocator = _serviceLocator;
+                var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+                serviceLocator.RegisterType<IInterfaceB, ClassB>();
+                serviceLocator.RegisterType<IInterfaceC, ClassC>();
+
+                var classA = typeFactory.CreateInstance<ClassA>();
+                serviceLocator.RegisterInstance<IInterfaceA>(classA);
+            }
+        }
 
         [TestClass]
         public class TheTagSupportFunctionality
