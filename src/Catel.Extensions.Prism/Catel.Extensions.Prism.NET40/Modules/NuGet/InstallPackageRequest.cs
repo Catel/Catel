@@ -7,7 +7,7 @@
 namespace Catel.Modules
 {
     /// <summary>
-    /// The install package request
+    /// The install package request.
     /// </summary>
     public class InstallPackageRequest
     {
@@ -15,7 +15,8 @@ namespace Catel.Modules
         /// <summary>
         /// Initializes a new instance of the <see cref="InstallPackageRequest" /> class.
         /// </summary>
-        /// <exception cref="System.ArgumentException">The <paramref name="assemblyFileRef"/> is <c>null</c> or whitespace.</exception>
+        /// <param name="assemblyFileRef">The assembly file reference.</param>
+        /// <exception cref="System.ArgumentException">The <paramref name="assemblyFileRef" /> is <c>null</c> or whitespace.</exception>
         public InstallPackageRequest(string assemblyFileRef)
         {
             Argument.IsNotNullOrWhitespace(() => assemblyFileRef);
@@ -26,17 +27,18 @@ namespace Catel.Modules
 
         #region Properties
         /// <summary>
-        /// Tge assembly file ref
+        /// Tge assembly file reference.
         /// </summary>
+        /// <value>The assembly file reference.</value>
         public string AssemblyFileRef { get; private set; }
         #endregion
 
         /// <summary>
-        /// Execute the package
+        /// Execute the package.
         /// </summary>
         public virtual void Execute()
         {
-            // Do nothing.
+            // Do nothing
         }
     }
 }
