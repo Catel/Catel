@@ -15,7 +15,7 @@ Documentation:   http://www.catelproject.com/support/documentation
 **********************************************************
 
 ==================
-Version 3.9
+Version 3.9.0
 ==================
 
 Release date:
@@ -31,6 +31,28 @@ Added/fixed:
 (+) CTL-204 Catel.IoC.IServiceLocator should contains some methord to remove registered type
 (*) CTL-261 Replace all instances of RegisterDebugListener with AddDebugListener
 (*) CTL-264 Reset FileServiceBase.ValidateNames default value to true
+
+Roadmap:
+========
+See http://www.catelproject.com/support/issue-tracker
+
+Known issues:
+=============
+See http://www.catelproject.com/support/issue-tracker
+
+**********************************************************
+
+==================
+Version 3.8.1
+==================
+
+Release date:
+=============
+2013/12/11
+
+Added/fixed:
+============
+(x) CTL-265 Prism Extension throws exception for non-existing NuGet catalogs
 
 Roadmap:
 ========
