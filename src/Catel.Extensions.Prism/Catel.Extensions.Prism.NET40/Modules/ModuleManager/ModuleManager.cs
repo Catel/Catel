@@ -1,17 +1,16 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModuleManager.cs" company="">
-//   
+// <copyright file="ModuleManager.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
-// <summary>
-//   The module manager.
-// </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 
 namespace Catel.Modules.ModuleManager
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
-
+    using Catel.Logging;
     using Microsoft.Practices.Prism.Logging;
     using Microsoft.Practices.Prism.Modularity;
 
@@ -20,32 +19,22 @@ namespace Catel.Modules.ModuleManager
     /// </summary>
     public sealed class ModuleManager : Microsoft.Practices.Prism.Modularity.ModuleManager
     {
-        #region Constructors and Destructors
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="ModuleManager"/> class.
+        /// Initializes a new instance of the <see cref="ModuleManager" /> class.
         /// </summary>
-        /// <param name="moduleInitializer">
-        /// The module initializer.
-        /// </param>
-        /// <param name="moduleCatalog">
-        /// The module catalog.
-        /// </param>
-        /// <param name="loggerFacade">
-        /// The logger facade.
-        /// </param>
-        public ModuleManager(
-            IModuleInitializer moduleInitializer, 
-            IModuleCatalog moduleCatalog, 
-            ILoggerFacade loggerFacade)
+        /// <param name="moduleInitializer">The module initializer.</param>
+        /// <param name="moduleCatalog">The module catalog.</param>
+        /// <param name="loggerFacade">The logger facade.</param>
+        public ModuleManager(IModuleInitializer moduleInitializer, IModuleCatalog moduleCatalog, ILoggerFacade loggerFacade)
             : base(moduleInitializer, moduleCatalog, loggerFacade)
         {
         }
-
         #endregion
 
-        #region Public Properties
-
+        #region Properties
         /// <summary>
         /// Gets or sets the module type loaders.
         /// </summary>
@@ -53,21 +42,27 @@ namespace Catel.Modules.ModuleManager
         {
             get
             {
-                List<IModuleTypeLoader> moduleTypeLoaders = base.ModuleTypeLoaders.ToList();
-                if (moduleTypeLoaders.All(loader => loader.GetType() != typeof(NuGetModuleTypeLoader)))
+                var moduleTypeLoaders = base.ModuleTypeLoaders.ToList();
+                if (moduleTypeLoaders.All(loader => loader.GetType() != typeof (NuGetModuleTypeLoader)))
                 {
-                    moduleTypeLoaders.Add(new NuGetModuleTypeLoader(ModuleCatalog));
+                    try
+                    {
+                        var nuGetModuleTypeLoader = new NuGetModuleTypeLoader(ModuleCatalog);
+                        moduleTypeLoaders.Add(nuGetModuleTypeLoader);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, "Failed to create the NuGetModuleTypeLoader");
+                    }
                 }
 
                 return moduleTypeLoaders;
             }
-
             set
             {
                 base.ModuleTypeLoaders = value;
             }
         }
-
         #endregion
     }
 }

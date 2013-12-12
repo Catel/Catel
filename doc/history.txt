@@ -15,6 +15,28 @@ Documentation:   http://www.catelproject.com/support/documentation
 **********************************************************
 
 ==================
+Version 3.8.1
+==================
+
+Release date:
+=============
+2013/12/11
+
+Added/fixed:
+============
+(x) CTL-265 Prism Extension throws exception for non-existing NuGet catalogs
+
+Roadmap:
+========
+See http://www.catelproject.com/support/issue-tracker
+
+Known issues:
+=============
+See http://www.catelproject.com/support/issue-tracker
+
+**********************************************************
+
+==================
 Version 3.8
 ==================
 
