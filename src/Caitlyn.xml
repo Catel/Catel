@@ -200,7 +200,7 @@
           </ProjectTypes>
         </d1p1:Rule>
         <d1p1:Rule>
-          <Name>Configuration</Name>
+          <Name>Configuration\Extensions</Name>
           <Type>DoNotAdd</Type>
           <ProjectTypes xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <d1p1:ProjectType>SL4</d1p1:ProjectType>

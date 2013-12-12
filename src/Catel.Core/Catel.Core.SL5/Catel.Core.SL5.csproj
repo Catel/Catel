@@ -145,6 +145,15 @@
     <Compile Include="..\Catel.Core.NET40\ComponentModel\INotifyDataWarningInfo.cs">
       <Link>ComponentModel\INotifyDataWarningInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Configuration\ConfigurationService.cs">
+      <Link>Configuration\ConfigurationService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Configuration\EventArgs\ConfigurationChangedEventArgs.cs">
+      <Link>Configuration\EventArgs\ConfigurationChangedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Configuration\Interfaces\IConfigurationService.cs">
+      <Link>Configuration\Interfaces\IConfigurationService.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\CoreModule.cs">
       <Link>CoreModule.cs</Link>
     </Compile>
@@ -932,6 +941,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="FodyWeavers.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Configuration\Extensions\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>

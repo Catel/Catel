@@ -80,6 +80,8 @@
     <Compile Include="Collections\Extensions\DictionaryExtensions.cs" />
     <Compile Include="Collections\Helpers\CollectionHelper.cs" />
     <Compile Include="ComponentModel\Extensions\PropertyChangedEventArgsExtensions.cs" />
+    <Compile Include="Configuration\ConfigurationService.cs" />
+    <Compile Include="Configuration\EventArgs\ConfigurationChangedEventArgs.cs" />
     <Compile Include="Configuration\Extensions\ConfigurationExtensions.cs" />
     <Compile Include="ComponentModel\EventArgs\BeginEditEventArgs.cs" />
     <Compile Include="ComponentModel\EventArgs\CancelEditEventArgs.cs" />
@@ -91,6 +93,7 @@
     <Compile Include="ComponentModel\INotifyDataErrorInfo.cs" />
     <Compile Include="ComponentModel\INotifyDataWarningInfo.cs" />
     <Compile Include="Argument.expression.cs" />
+    <Compile Include="Configuration\Interfaces\IConfigurationService.cs" />
     <Compile Include="CoreModule.cs" />
     <Compile Include="Data\Attributes\AllowNonSerializableMembersAttribute.cs" />
     <Compile Include="Data\Attributes\ValidateModelAttribute.cs" />
