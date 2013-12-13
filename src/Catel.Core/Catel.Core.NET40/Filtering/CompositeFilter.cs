@@ -8,9 +8,9 @@
 namespace Catel
 {
     /// <summary>
-    /// 
+    /// Composite filter.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">Type of the filter.</typeparam>
     public class CompositeFilter<T>
     {
         #region Constructors
@@ -28,29 +28,26 @@ namespace Catel
         /// <summary>
         /// Gets the includes.
         /// </summary>
-        /// <value>
-        /// The includes.
-        /// </value>
+        /// <value>The includes.</value>
         public CompositePredicate<T> Includes { get; internal set; }
 
         /// <summary>
         /// Gets or sets the excludes.
         /// </summary>
-        /// <value>
-        /// The excludes.
-        /// </value>
-        public CompositePredicate<T> Excludes { get; set; }
+        /// <value>The excludes.</value>
+        public CompositePredicate<T> Excludes { get; internal set; }
         #endregion
 
         #region Methods
         /// <summary>
-        /// Matcheses the specified target.
+        /// Checks whether the target matches any of the <see cref="Includes"/> and does
+        /// not match any of the <see cref="Excludes"/>.
         /// </summary>
         /// <param name="target">The target.</param>
-        /// <returns></returns>
+        /// <returns><c>true</c> if the match is a successful hit, <c>false</c> otherwise.</returns>
         public bool Matches(T target)
         {
-            return Includes.MatchesAny(target) && Excludes.DoesNotMatcheAny(target);
+            return Includes.MatchesAny(target) && Excludes.DoesNotMatchAny(target);
         }
         #endregion
     }

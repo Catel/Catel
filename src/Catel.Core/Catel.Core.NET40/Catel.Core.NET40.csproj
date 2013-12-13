@@ -168,6 +168,8 @@
     <Compile Include="Exceptions\NotSupportedInWindowsPhone7Exception.cs" />
     <Compile Include="Exceptions\NotSupportedInWindows8Exception.cs" />
     <Compile Include="ExceptionHandling\Extensions\ExceptionExtensions.cs" />
+    <Compile Include="Filtering\CompositeFilter.cs" />
+    <Compile Include="Filtering\CompositePredicate.cs" />
     <Compile Include="Fluent\Interfaces\IFluent.cs" />
     <Compile Include="Generics\NullOp.cs" />
     <Compile Include="Generics\Operator.cs" />
@@ -189,9 +191,10 @@
     <Compile Include="IoC\Configuration\ServiceLocatorConfiguration.cs" />
     <Compile Include="IoC\Configuration\ServiceLocatorConfigurationCollection.cs" />
     <Compile Include="IoC\CatelDependencyResolver.cs" />
+    <Compile Include="IoC\Conventions\FirstInterfaceRegistrationConvention.cs" />
+    <Compile Include="IoC\Conventions\NamingRegistrationConvention.cs" />
+    <Compile Include="IoC\Conventions\RegistrationConventionBase.cs" />
     <Compile Include="IoC\Extensions\RegistrationConventionHandlerExtensions.cs" />
-    <Compile Include="IoC\Filtering\CompositeFilter.cs" />
-    <Compile Include="IoC\Filtering\CompositePredicate.cs" />
     <Compile Include="IoC\Interfaces\IRegistrationConventionHandler.cs" />
     <Compile Include="IoC\RegistrationConventionHandler.cs" />
     <Compile Include="IoC\DependencyResolverManager.cs" />
@@ -218,9 +221,6 @@
     <Compile Include="IoC\Interfaces\ITypeFactory.cs" />
     <Compile Include="IoC\Interfaces\ITypeRequestPath.cs" />
     <Compile Include="IoC\IoCConfiguration.cs" />
-    <Compile Include="IoC\RegistrationConventions\FirstInterfaceRegistrationConvention.cs" />
-    <Compile Include="IoC\RegistrationConventions\NamingRegistrationConvention.cs" />
-    <Compile Include="IoC\RegistrationConventions\RegistrationConventionBase.cs" />
     <Compile Include="IoC\RegistrationInfo.cs" />
     <Compile Include="IoC\ServiceLocator.cs" />
     <Compile Include="IoC\ServiceLocatorAutoRegistrationManager.cs" />

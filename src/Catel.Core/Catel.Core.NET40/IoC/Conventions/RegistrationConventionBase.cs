@@ -13,7 +13,7 @@ namespace Catel.IoC
     /// <summary>
     /// The <see cref="IRegistrationConvention"/> base implementation.
     /// </summary>
-    public class RegistrationConventionBase : IRegistrationConvention
+    public abstract class RegistrationConventionBase : IRegistrationConvention
     {
         #region Constructors
         /// <summary>
@@ -32,9 +32,7 @@ namespace Catel.IoC
         /// <summary>
         /// Gets the container.
         /// </summary>
-        /// <value>
-        /// The container.
-        /// </value>
+        /// <value>The container.</value>
         public IServiceLocator Container { get; protected set; }
         #endregion
 
@@ -42,18 +40,14 @@ namespace Catel.IoC
         /// <summary>
         /// Gets or sets the type of the registration.
         /// </summary>
-        /// <value>
-        /// The type of the registration.
-        /// </value>
+        /// <value>The type of the registration.</value>
         public RegistrationType RegistrationType { get; protected set; }
 
         /// <summary>
         /// Processes the specified types to register.
         /// </summary>
         /// <param name="typesToRegister">The types to register.</param>
-        public virtual void Process(IEnumerable<Type> typesToRegister)
-        {
-        }
+        public abstract void Process(IEnumerable<Type> typesToRegister);
         #endregion
     }
 }

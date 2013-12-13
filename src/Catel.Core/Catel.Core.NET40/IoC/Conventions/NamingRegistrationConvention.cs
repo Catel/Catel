@@ -15,7 +15,7 @@ namespace Catel.IoC
     using Reflection;
 
     /// <summary>
-    /// The naming convention based on <see cref="RegistrationConventionBase"/>
+    /// The naming convention based on <see cref="RegistrationConventionBase"/>.
     /// </summary>
     public class NamingRegistrationConvention : RegistrationConventionBase
     {
@@ -28,11 +28,12 @@ namespace Catel.IoC
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="NamingRegistrationConvention"/> class.
+        /// Initializes a new instance of the <see cref="NamingRegistrationConvention" /> class.
         /// </summary>
-        /// <param name="serviceLocator"></param>
-        /// <param name="registrationType"></param>
-        public NamingRegistrationConvention(IServiceLocator serviceLocator, RegistrationType registrationType = RegistrationType.Singleton) : base(serviceLocator, registrationType)
+        /// <param name="serviceLocator">The service locator.</param>
+        /// <param name="registrationType">Type of the registration.</param>
+        public NamingRegistrationConvention(IServiceLocator serviceLocator, RegistrationType registrationType = RegistrationType.Singleton) 
+            : base(serviceLocator, registrationType)
         {
         }
         #endregion
@@ -52,13 +53,14 @@ namespace Catel.IoC
             {
                 if (type.IsInterfaceEx() && type.Name.StartsWith("I"))
                 {
-                    var implementationType = typesToHandle.FirstOrDefault(row => TagHelper.AreTagsEqual(row.Name, type.Name.Replace("I", "").Trim()) && row.IsClassEx() && type.IsAssignableFrom(row));
+                    var implementationType = typesToHandle.FirstOrDefault(row => TagHelper.AreTagsEqual(row.Name, type.Name.Replace("I", string.Empty).Trim()) && row.IsClassEx() && type.IsAssignableFromEx(row));
 
                     if (implementationType != null)
                     {
                         return new {InterfaceType = type, ImplementationType = implementationType};
                     }
                 }
+
                 return null;
             }).Where(type => type != null);
 

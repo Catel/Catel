@@ -118,23 +118,20 @@ namespace Catel.IoC
         /// <summary>
         /// Gets the type filter.
         /// </summary>
-        /// <value>
-        /// The type filter.
-        /// </value>
+        /// <value>The type filter.</value>
         public CompositeFilter<Type> TypeFilter { get; private set; }
 
         /// <summary>
         /// Gets the assembly filter.
         /// </summary>
-        /// <value>
-        /// The assembly filter.
-        /// </value>
+        /// <value>The assembly filter.</value>
         public CompositeFilter<Assembly> AssemblyFilter { get; private set; }
 
         /// <summary>
         /// Registers the convention.
         /// </summary>
-        public void RegisterConvention<TRegistrationConvention>(RegistrationType registrationType = RegistrationType.Singleton) where TRegistrationConvention : IRegistrationConvention
+        public void RegisterConvention<TRegistrationConvention>(RegistrationType registrationType = RegistrationType.Singleton) 
+            where TRegistrationConvention : IRegistrationConvention
         {
             var registrationConvention = _typeFactory.CreateInstanceWithParameters<TRegistrationConvention>(_serviceLocator, registrationType);
 

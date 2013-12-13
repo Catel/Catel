@@ -15,7 +15,7 @@ namespace Catel.IoC
     using Reflection;
 
     /// <summary>
-    /// The first interface convention based on <see cref="RegistrationConventionBase"/>
+    /// The first interface convention based on <see cref="RegistrationConventionBase"/>.
     /// </summary>
     public class FirstInterfaceRegistrationConvention : RegistrationConventionBase
     {

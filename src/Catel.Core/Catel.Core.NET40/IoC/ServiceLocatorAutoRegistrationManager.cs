@@ -91,7 +91,8 @@ namespace Catel.IoC
 
         #region Properties
         /// <summary>
-        /// Gets or sets a value indicating whether this service locators will ignore incorrect usage of <see cref="ServiceLocatorRegistrationAttribute"/> and do not throw <see cref="InvalidOperationException"/>.
+        /// Gets or sets a value indicating whether this service locators will ignore incorrect usage of <see cref="ServiceLocatorRegistrationAttribute"/> 
+        /// and do not throw <see cref="InvalidOperationException"/>.
         /// </summary>
         /// <remarks>
         /// By default, this value is <c>true</c>.
@@ -115,6 +116,7 @@ namespace Catel.IoC
                 if (_autoRegisterTypesViaAttributes != value)
                 {
                     _autoRegisterTypesViaAttributes = value;
+
                     if (_autoRegisterTypesViaAttributes)
                     {
                         if (!_hasInspectedTypesAtLeastOnce)
