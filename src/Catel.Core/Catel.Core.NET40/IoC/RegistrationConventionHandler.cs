@@ -20,13 +20,14 @@ namespace Catel.IoC
     /// </summary>
     public class RegistrationConventionHandler : IRegistrationConventionHandler
     {
-        #region Fields
-
+        #region Constants
         /// <summary>
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        #endregion
 
+        #region Fields
         /// <summary>
         /// The assemblies
         /// </summary>
@@ -73,25 +74,32 @@ namespace Catel.IoC
 
             AssemblyFilter.Excludes += assembly =>
             {
-                var assemblyName = assembly.GetType().Name;
+                var assemblyName = assembly.FullName;
                 return !string.IsNullOrWhiteSpace(assemblyName) &&
                        (
 #if !DEBUG
-                    assemblyName.StartsWith("Catel") ||
+                           assemblyName.StartsWith("Catel") ||
 #endif
                            assemblyName.StartsWith("System") ||
-                           assemblyName.StartsWith("WindowsBase")
+                           assemblyName.StartsWith("WindowsBase") ||
+                           assemblyName.StartsWith("Microsoft") ||
+                           assemblyName.StartsWith("Presentation") ||
+                           assemblyName.StartsWith("NuGet") ||
+                           assemblyName.StartsWith("EntityFramework") ||
+                           assemblyName.StartsWith("FluentValidation") ||
+                           assemblyName.StartsWith("mscorlib") ||
+                           assemblyName.StartsWith("UIAutomationProvider") ||
+                           assemblyName.StartsWith("Anonymously") ||
+                           assemblyName.StartsWith("SMDiagnostics")
                            );
             };
 
             TypeFilter.Excludes += type => !string.IsNullOrWhiteSpace(type.Namespace) &&
                                            (
 #if !DEBUG
-                type.Namespace.StartsWith("Catel") || 
+                                               type.Namespace.StartsWith("Catel") || 
 #endif
-                                               type.Namespace.StartsWith("System") ||
-                                               type.Namespace.StartsWith("Microsoft") ||
-                                               type.Namespace.StartsWith("Nuget")
+                                               type.Name.StartsWith("<")
                                                );
         }
         #endregion
@@ -130,7 +138,7 @@ namespace Catel.IoC
         /// <summary>
         /// Registers the convention.
         /// </summary>
-        public void RegisterConvention<TRegistrationConvention>(RegistrationType registrationType = RegistrationType.Singleton) 
+        public void RegisterConvention<TRegistrationConvention>(RegistrationType registrationType = RegistrationType.Singleton)
             where TRegistrationConvention : IRegistrationConvention
         {
             var registrationConvention = _typeFactory.CreateInstanceWithParameters<TRegistrationConvention>(_serviceLocator, registrationType);
@@ -157,7 +165,9 @@ namespace Catel.IoC
                     return;
                 }
 
-                var types = _assemblies.Where(assembly => AssemblyFilter.Matches(assembly)).SelectMany(TypeCache.GetTypesOfAssembly).Where(type => TypeFilter.Matches(type));
+                var filterAssemblies = _assemblies.Where(assembly => AssemblyFilter.Matches(assembly));
+
+                var types = filterAssemblies.SelectMany(TypeCache.GetTypesOfAssembly).Where(type => TypeFilter.Matches(type));
 
                 _retrievedTypes = new List<Type>(types);
 
