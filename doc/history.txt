@@ -28,7 +28,8 @@ xxx
 
 Added/fixed:
 ============
-(+) CTL-204 Catel.IoC.IServiceLocator should contains some methord to remove registered type
+(+) CTL-204 Catel.IoC.IServiceLocator should contains some method to remove registered type
+(+) CTL-266 Added ConfigurationService to get and set configuration values
 (*) CTL-261 Replace all instances of RegisterDebugListener with AddDebugListener
 (*) CTL-264 Reset FileServiceBase.ValidateNames default value to true
 (x) CTL-268 EF 6 extension does not register types automatically

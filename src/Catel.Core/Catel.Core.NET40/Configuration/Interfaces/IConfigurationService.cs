@@ -25,9 +25,10 @@ namespace Catel.Configuration
         /// </summary>
         /// <typeparam name="T">The type of the value to retrieve.</typeparam>
         /// <param name="key">The key.</param>
+        /// <param name="defaultValue">The default value. Will be returned if the value cannot be found.</param>
         /// <returns>The configuration value.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="key"/> is <c>null</c> or whitespace.</exception>
-        T GetValue<T>(string key);
+        /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
+        T GetValue<T>(string key, T defaultValue = default(T));
 
         /// <summary>
         /// Sets the configuration value.

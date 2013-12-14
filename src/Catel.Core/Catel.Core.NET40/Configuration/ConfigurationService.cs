@@ -9,6 +9,17 @@ namespace Catel.Configuration
 {
     using System;
 
+#if PCL
+    // Not supported
+#elif NETFX_CORE
+    using Windows.Storage;
+#elif WINDOWS_PHONE || SILVERLIGHT
+    using System.IO.IsolatedStorage;
+#else
+    using System.Configuration;
+    using System.Linq;
+#endif
+
     /// <summary>
     /// Configuration service implementation that allows customization how configuration values
     /// are being used inside an application.
@@ -30,14 +41,20 @@ namespace Catel.Configuration
         /// </summary>
         /// <typeparam name="T">The type of the value to retrieve.</typeparam>
         /// <param name="key">The key.</param>
+        /// <param name="defaultValue">The default value. Will be returned if the value cannot be found.</param>
         /// <returns>The configuration value.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="key"/> is <c>null</c> or whitespace.</exception>
-        public T GetValue<T>(string key)
+        /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
+        public T GetValue<T>(string key, T defaultValue = default(T))
         {
             Argument.IsNotNullOrWhitespace("key", key);
 
+            if (!ValueExists(key))
+            {
+                return defaultValue;
+            }
+
             var value = GetValueFromStore(key);
-            return (T)StringToObjectHelper.ToRightType(typeof (T), value);
+            return (T)StringToObjectHelper.ToRightType(typeof(T), value);
         }
 
         /// <summary>
@@ -61,14 +78,43 @@ namespace Catel.Configuration
         }
 
         /// <summary>
+        /// Determines whether the specified key value exists in the configuration.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns><c>true</c> if the value exists, <c>false</c> otherwise.</returns>
+        protected virtual bool ValueExists(string key)
+        {
+#if PCL
+            throw new NotSupportedInPlatformException();
+#elif NETFX_CORE
+            var settings = ApplicationData.Current.LocalSettings;
+            return settings.Values.ContainsKey(key);
+#elif WINDOWS_PHONE || SILVERLIGHT
+            var settings = IsolatedStorageSettings.ApplicationSettings;
+            return settings.Contains(key);
+#else
+            return ConfigurationManager.AppSettings.AllKeys.Contains(key);
+#endif
+        }
+
+        /// <summary>
         /// Gets the value from the store.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns>The value.</returns>
         protected virtual string GetValueFromStore(string key)
         {
-            // TODO: Implement
-            return null;
+#if PCL
+            throw new NotSupportedInPlatformException();
+#elif NETFX_CORE
+            var settings = ApplicationData.Current.LocalSettings;
+            return (string)settings.Values[key];
+#elif WINDOWS_PHONE || SILVERLIGHT
+            var settings = IsolatedStorageSettings.ApplicationSettings;
+            return (string)settings[key];
+#else
+            return ConfigurationManager.AppSettings[key];
+#endif
         }
 
         /// <summary>
@@ -78,7 +124,18 @@ namespace Catel.Configuration
         /// <param name="value">The value.</param>
         protected virtual void SetValueToStore(string key, string value)
         {
-            // TODO: Implement
+#if PCL
+            throw new NotSupportedInPlatformException();
+#elif NETFX_CORE
+            var settings = ApplicationData.Current.LocalSettings;
+            settings.Values[key] = value;
+#elif WINDOWS_PHONE || SILVERLIGHT
+            var settings = IsolatedStorageSettings.ApplicationSettings;
+            settings[key] = value;
+            settings.Save();
+#else
+            ConfigurationManager.AppSettings[key] = value;
+#endif
         }
         #endregion
     }
