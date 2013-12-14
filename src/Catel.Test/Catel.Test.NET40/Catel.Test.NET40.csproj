@@ -229,6 +229,9 @@
     <Compile Include="IoC\DependencyResolverManagerFacts.cs" />
     <Compile Include="IoC\Exceptions\CircularDependencyExceptionFacts.cs" />
     <Compile Include="IoC\Extensions\ObjectExtensionsFacts.cs" />
+    <Compile Include="IoC\ServiceLocatorFacts.features.cs" />
+    <Compile Include="IoC\ServiceLocatorRegistrationFacts.cs" />
+    <Compile Include="IoC\ServiceLocatorRegistrationGroupFacts.cs" />
     <Compile Include="IoC\TypeFactoryFacts.cs" />
     <Compile Include="IoC\TypeRequestInfoFacts.cs" />
     <Compile Include="IoC\TypeRequestPathFacts.cs" />

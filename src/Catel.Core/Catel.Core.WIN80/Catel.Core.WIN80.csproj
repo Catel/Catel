@@ -479,6 +479,9 @@
     <Compile Include="..\Catel.Core.NET40\IoC\EventArgs\MissingTypeEventArgs.cs">
       <Link>IoC\EventArgs\MissingTypeEventArgs.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\EventArgs\TypeInstantiatedEventArgs.cs">
+      <Link>IoC\EventArgs\TypeInstantiatedEventArgs.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\EventArgs\TypeRegisteredEventArgs.cs">
       <Link>IoC\EventArgs\TypeRegisteredEventArgs.cs</Link>
     </Compile>
@@ -538,6 +541,12 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\ServiceLocatorAutoRegistrationManager.cs">
       <Link>IoC\ServiceLocatorAutoRegistrationManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\ServiceLocatorRegistration.cs">
+      <Link>IoC\ServiceLocatorRegistration.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\ServiceLocatorRegistrationGroup.cs">
+      <Link>IoC\ServiceLocatorRegistrationGroup.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\TypeFactory.cs">
       <Link>IoC\TypeFactory.cs</Link>
@@ -889,9 +898,7 @@
       <Private>False</Private>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Configuration\Extensions\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>
   </PropertyGroup>

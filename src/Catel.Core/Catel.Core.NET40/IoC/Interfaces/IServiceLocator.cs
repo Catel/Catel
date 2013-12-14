@@ -112,6 +112,11 @@ namespace Catel.IoC
         /// Occurs when a type is registered in the service locator.
         /// </summary>
         event EventHandler<TypeRegisteredEventArgs> TypeRegistered;
+
+        /// <summary>
+        /// Occurs when a type is instantiated in the service locator.
+        /// </summary>
+        event EventHandler<TypeInstantiatedEventArgs> TypeInstantiated;
         #endregion
 
         #region Methods

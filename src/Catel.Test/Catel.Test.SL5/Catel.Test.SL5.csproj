@@ -176,6 +176,9 @@
     <Compile Include="..\Catel.Test.NET40\ComponentModel\PropertyChangedEventArgsExtensionsFacts.cs">
       <Link>ComponentModel\PropertyChangedEventArgsExtensionsFacts.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\Configuration\ConfigurationServiceFacts.cs">
+      <Link>Configuration\ConfigurationServiceFacts.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\Data\CatelTypeInfoFacts.cs">
       <Link>Data\CatelTypeInfoFacts.cs</Link>
     </Compile>
@@ -433,6 +436,15 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\IoC\ServiceLocatorFacts.cs">
       <Link>IoC\ServiceLocatorFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\IoC\ServiceLocatorFacts.features.cs">
+      <Link>IoC\ServiceLocatorFacts.features.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\IoC\ServiceLocatorRegistrationFacts.cs">
+      <Link>IoC\ServiceLocatorRegistrationFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\IoC\ServiceLocatorRegistrationGroupFacts.cs">
+      <Link>IoC\ServiceLocatorRegistrationGroupFacts.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\IoC\TestClasses.cs">
       <Link>IoC\TestClasses.cs</Link>

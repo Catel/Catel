@@ -1,4 +1,11 @@
-﻿namespace Catel.Test.IoC
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ServiceLocatorFacts.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+
+namespace Catel.Test.IoC
 {
     using System;
     using System.Collections.Generic;
@@ -6,13 +13,9 @@
     using System.Linq;
     using Catel.Caching;
     using Catel.IoC;
-    using Catel.Logging;
     using Catel.MVVM;
     using Catel.MVVM.Services;
-    using Catel.Reflection;
-    using Catel.Test.Logging;
-
-    using Data;
+    using Catel.Test.Data;
 
 #if !NETFX_CORE
     using Castle.Windsor;
@@ -24,14 +27,16 @@
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 #else
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 #endif
 
-    public class ServiceLocatorFacts
+    public partial class ServiceLocatorFacts
     {
 #if !NETFX_CORE
         [TestClass]
         public class ExternalContainersLifestyleSynchronizationTest
         {
+            #region Methods
             [TestMethod]
             public void ResolvesInstancesOfTypeRegisteredWithSingletonParameterToFalseFromUnityContainer()
             {
@@ -72,7 +77,6 @@
                 Assert.AreSame(windsorContainer.Resolve<ITestInterface>(), windsorContainer.Resolve<ITestInterface>());
             }
 
-
             [TestMethod]
             public void ResolvesInstancesOfTypeRegisteredWithSingletonParameterToFalseFromNinjectContainer()
             {
@@ -92,6 +96,7 @@
                 serviceLocator.RegisterType<ITestInterface, TestClass1>();
                 Assert.AreSame(standardKernel.Get<ITestInterface>(), standardKernel.Get<ITestInterface>());
             }
+            #endregion
 
             //[TestMethod]
             //public void AllowsReRegistrationAndSynchronizationOfExternalContainers()
@@ -136,54 +141,11 @@
         {
             // Note that this class contains very bad code practices, but this way we try to mimic a deadlock
 
+            #region Constants
             private static IServiceLocator _serviceLocator;
+            #endregion
 
-            public interface IInterfaceA
-            {
-            }
-
-            public interface IInterfaceB
-            {
-            }
-
-            public interface IInterfaceC
-            {
-            }
-
-            public class ClassA : IInterfaceA
-            {
-                private readonly ICacheStorage<string, string> _cache = new CacheStorage<string, string>();
-
-                public ClassA()
-                {
-                    SomeMethodResolvingTypes();
-                }
-
-                private string SomeMethodResolvingTypes()
-                {
-                    return _cache.GetFromCacheOrFetch("key", () =>
-                    {
-                        var classB = new ClassB();
-                        return "done!";
-                    });
-                }
-            }
-
-            public class ClassB : IInterfaceB
-            {
-                public ClassB()
-                {
-                    var classB = _serviceLocator.ResolveType<IInterfaceC>();
-                }
-            }
-
-            public class ClassC : IInterfaceC
-            {
-                public ClassC()
-                {
-                }
-            }
-
+            #region Methods
             [TestMethod]
             public void DeadlockIsNotCausedByMultipleInheritedResolving()
             {
@@ -197,11 +159,81 @@
                 var classA = typeFactory.CreateInstance<ClassA>();
                 serviceLocator.RegisterInstance<IInterfaceA>(classA);
             }
+            #endregion
+
+            #region Nested type: ClassA
+            public class ClassA : IInterfaceA
+            {
+                #region Fields
+                private readonly ICacheStorage<string, string> _cache = new CacheStorage<string, string>();
+                #endregion
+
+                #region Constructors
+                public ClassA()
+                {
+                    SomeMethodResolvingTypes();
+                }
+                #endregion
+
+                #region Methods
+                private string SomeMethodResolvingTypes()
+                {
+                    return _cache.GetFromCacheOrFetch("key", () =>
+                    {
+                        var classB = new ClassB();
+                        return "done!";
+                    });
+                }
+                #endregion
+            }
+            #endregion
+
+            #region Nested type: ClassB
+            public class ClassB : IInterfaceB
+            {
+                #region Constructors
+                public ClassB()
+                {
+                    var classB = _serviceLocator.ResolveType<IInterfaceC>();
+                }
+                #endregion
+            }
+            #endregion
+
+            #region Nested type: ClassC
+            public class ClassC : IInterfaceC
+            {
+                #region Constructors
+                public ClassC()
+                {
+                }
+                #endregion
+            }
+            #endregion
+
+            #region Nested type: IInterfaceA
+            public interface IInterfaceA
+            {
+            }
+            #endregion
+
+            #region Nested type: IInterfaceB
+            public interface IInterfaceB
+            {
+            }
+            #endregion
+
+            #region Nested type: IInterfaceC
+            public interface IInterfaceC
+            {
+            }
+            #endregion
         }
 
         [TestClass]
         public class TheTagSupportFunctionality
         {
+            #region Methods
             [TestMethod]
             public void AllowsTheSameInterfaceDefinedTwiceWithDifferentTags()
             {
@@ -225,11 +257,13 @@
                 var firstService = serviceLocator.ResolveType(typeof(ITestInterface), "1");
                 Assert.AreEqual(typeof(TestClass2), firstService.GetType());
             }
+            #endregion
         }
 
         [TestClass]
         public class TheGenericTypesSupport
         {
+            #region Methods
             [TestMethod]
             public void CorrectlyResolvesClosedGenericTypeWithSingleInnerType()
             {
@@ -273,11 +307,13 @@
                 var resolvedObject = serviceLocator.ResolveType<IDictionary<string, int>>();
                 Assert.IsTrue(resolvedObject is Dictionary<string, int>);
             }
+            #endregion
         }
 
         [TestClass]
         public class TheIsTypeRegisteredAsSingletonMethod
         {
+            #region Methods
             [TestMethod]
             public void TheIsTypeRegisteredAsSingleton_Generic()
             {
@@ -306,10 +342,10 @@
             {
                 var serviceLocator = new ServiceLocator();
                 serviceLocator.MissingType += (sender, args) =>
-                    {
-                        args.ImplementingType = typeof(TestClass1);
-                        args.RegistrationType = RegistrationType.Transient;
-                    };
+                {
+                    args.ImplementingType = typeof(TestClass1);
+                    args.RegistrationType = RegistrationType.Transient;
+                };
                 Assert.IsFalse(serviceLocator.IsTypeRegisteredAsSingleton(typeof(ITestInterface)));
             }
 
@@ -326,6 +362,7 @@
 
                 Assert.IsTrue(serviceLocator.IsTypeRegisteredAsSingleton(typeof(ITestInterface)));
             }
+            #endregion
         }
 
         [TestClass]
@@ -359,14 +396,10 @@
             public void IsTypeRegistered_UnregisteredTypeRegisteredInstanceViaMissingType()
             {
                 var serviceLocator = new ServiceLocator();
-                serviceLocator.MissingType += (sender, args) =>
-                    {
-                        args.ImplementingInstance = new TestClass1();
-                    };
+                serviceLocator.MissingType += (sender, args) => { args.ImplementingInstance = new TestClass1(); };
 
                 Assert.IsTrue(serviceLocator.IsTypeRegistered(typeof(ITestInterface)));
             }
-
 
             [TestMethod]
             public void IsTypeRegistered_RegisteredAsInstanceInServiceLocator()
@@ -413,6 +446,7 @@
         [TestClass]
         public class TheRegisterInstanceMethod
         {
+            #region Methods
             [TestMethod]
             public void RegisterInstance_Generic()
             {
@@ -478,11 +512,13 @@
                 Assert.AreEqual(typeof(TestClass2), eventArgs.ServiceImplementationType);
                 Assert.AreEqual(RegistrationType.Singleton, eventArgs.RegistrationType);
             }
+            #endregion
         }
 
         [TestClass]
         public class TheRegisterTypeMethod
         {
+            #region Methods
             [TestMethod]
             public void ThrowsInvalidOperationExceptionForInterfaceAsImplementation()
             {
@@ -601,11 +637,13 @@
                 Assert.AreEqual(typeof(TestClass2), eventArgs.ServiceImplementationType);
                 Assert.AreEqual(RegistrationType.Transient, eventArgs.RegistrationType);
             }
+            #endregion
         }
 
         [TestClass]
         public class TheRemoveTypeMethod
         {
+            #region Methods
             [TestMethod]
             public void RemoveType_ThrowsArgumentNullExceptionIfServiceTypeIsNull()
             {
@@ -635,21 +673,21 @@
 
                 var ref1 = serviceLocator.ResolveType(typeof(ITestInterface), "2");
 
-                serviceLocator.RemoveType(typeof(ITestInterface),"1");
+                serviceLocator.RemoveType(typeof(ITestInterface), "1");
 
                 var ref2 = serviceLocator.ResolveType(typeof(ITestInterface), "2");
 
                 ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => serviceLocator.ResolveType(typeof(ITestInterface), "1"));
-                Assert.IsTrue(serviceLocator.IsTypeRegistered(typeof(ITestInterface),"2"));
-                Assert.IsTrue(object.ReferenceEquals(ref1,ref2));
-               
+                Assert.IsTrue(serviceLocator.IsTypeRegistered(typeof(ITestInterface), "2"));
+                Assert.IsTrue(object.ReferenceEquals(ref1, ref2));
             }
+            #endregion
         }
 
         [TestClass]
         public class TheRemoveAllTypesMethod
         {
-
+            #region Methods
             [TestMethod]
             public void RemoveAllTypes_ThrowsArgumentNullExceptionIfServiceTypeIsNull()
             {
@@ -663,13 +701,13 @@
                 var serviceLocator = new ServiceLocator();
                 serviceLocator.RegisterType<ITestInterface, TestClass1>();
 
-                Assert.IsTrue(serviceLocator.IsTypeRegistered<ITestInterface>());   
+                Assert.IsTrue(serviceLocator.IsTypeRegistered<ITestInterface>());
 
                 serviceLocator.RemoveAllTypes(typeof(ITestInterface));
 
                 Assert.IsFalse(serviceLocator.IsTypeRegistered<ITestInterface>());
             }
-            
+
             [TestMethod]
             public void RemoveAllTypes_Tags()
             {
@@ -682,6 +720,7 @@
                 ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => serviceLocator.ResolveType(typeof(ITestInterface), "1"));
                 ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => serviceLocator.ResolveType(typeof(ITestInterface), "2"));
             }
+            #endregion
         }
 
         [TestClass]
@@ -689,6 +728,7 @@
         {
             public class DependencyInjectionTestClass
             {
+                #region Constructors
                 public DependencyInjectionTestClass()
                 {
                     UsedDefaultConstructor = true;
@@ -710,7 +750,9 @@
                 {
                     StringValue = stringValue;
                 }
+                #endregion
 
+                #region Properties
                 public bool UsedDefaultConstructor { get; private set; }
 
                 public IniEntry IniEntry { get; private set; }
@@ -718,6 +760,7 @@
                 public int IntValue { get; private set; }
 
                 public string StringValue { get; private set; }
+                #endregion
             }
 
             [TestMethod]
@@ -778,7 +821,6 @@
                 Assert.IsTrue(serviceLocator.IsTypeRegistered<ITestInterface>());
                 Assert.IsInstanceOfType(serviceLocator.ResolveType<ITestInterface>(), typeof(TestClass1));
             }
-
 
             [TestMethod]
             public void ResolveType_InterfaceTypeNull()
@@ -897,6 +939,21 @@
                 Assert.AreEqual(42, instance.IntValue);
                 Assert.AreEqual("hi there", instance.StringValue);
             }
+
+            [TestMethod]
+            public void InvokesTypeInstantiatedEventForInstantiatedTypes()
+            {
+                var serviceLocator = new ServiceLocator();
+                serviceLocator.RegisterType<DependencyInjectionTestClass, DependencyInjectionTestClass>();
+
+                var invoked = false;
+
+                serviceLocator.TypeInstantiated += (sender, e) => invoked = true;
+
+                var instance = serviceLocator.ResolveType<DependencyInjectionTestClass>();
+
+                Assert.IsTrue(invoked);
+            }
         }
 
         [TestClass]
@@ -957,18 +1014,21 @@
         [TestClass]
         public class TheRegisterExternalContainerHelperMethod
         {
+            #region Methods
             [TestMethod]
             public void RegisterExternalContainerHelper_Null()
             {
                 var serviceLocator = new ServiceLocator();
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serviceLocator.RegisterExternalContainerHelper(null));
             }
+            #endregion
         }
 
 #if !NETFX_CORE
         [TestClass]
         public class TheAutomaticSynchronizationProperty
         {
+            #region Methods
             [TestMethod]
             public void AutomaticSynchronization_RegisterExternalContainer()
             {
@@ -1044,11 +1104,13 @@
 
                 Assert.AreEqual(ns1, ns2);
             }
+            #endregion
         }
 
         [TestClass]
         public class TheExportInstancesToExternalContainersMethod
         {
+            #region Methods
             [TestMethod]
             public void ExportInstancesToExternalContainers_ExternalContainerAlreadyHasInstanceRegistered()
             {
@@ -1091,11 +1153,13 @@
                 Assert.IsTrue(ninjectContainer.GetBindings(typeof(ITestInterface)).Any());
                 Assert.IsTrue(serviceLocator.IsTypeRegistered<ITestInterface>());
             }
+            #endregion
         }
 
         [TestClass]
         public class TheExportToExternalContainersMethod
         {
+            #region Methods
             [TestMethod]
             public void ExportsBothInstancesAndTypes()
             {
@@ -1120,35 +1184,14 @@
                 Assert.IsTrue(ninjectContainer.GetBindings(typeof(ITestInterface)).Any());
                 Assert.IsTrue(serviceLocator.IsTypeRegistered<ITestInterface>());
             }
+            #endregion
         }
 #endif
 
         [TestClass]
         public class TheAutoRegisterTypesViaAttributes
         {
-            public interface IFooService
-            {
-            }
-
-            public interface IFooService2
-            {
-            }
-
-            [ServiceLocatorRegistration(typeof(IFooService))]
-            public class FooService : IFooService
-            {
-            }
-
-            [ServiceLocatorRegistration(typeof(IFooService2), ServiceLocatorRegistrationMode.Transient)]
-            public class FooService2 : IFooService2
-            {
-            }
-
-            [ServiceLocatorRegistration(typeof(IFooService))]
-            public class NonFooService
-            {
-            }
-
+            #region Methods
             [TestMethod]
             public void RegistersTheImplementationTypesAsInterfaceTypesIfIsSetToTrue()
             {
@@ -1190,25 +1233,46 @@
                 Assert.IsFalse(serviceLocator.IsTypeRegistered<IFooService>());
                 Assert.IsFalse(serviceLocator.IsTypeRegistered<IFooService2>());
             }
+            #endregion
+
+            #region Nested type: FooService
+            [ServiceLocatorRegistration(typeof(IFooService))]
+            public class FooService : IFooService
+            {
+            }
+            #endregion
+
+            #region Nested type: FooService2
+            [ServiceLocatorRegistration(typeof(IFooService2), ServiceLocatorRegistrationMode.Transient)]
+            public class FooService2 : IFooService2
+            {
+            }
+            #endregion
+
+            #region Nested type: IFooService
+            public interface IFooService
+            {
+            }
+            #endregion
+
+            #region Nested type: IFooService2
+            public interface IFooService2
+            {
+            }
+            #endregion
+
+            #region Nested type: NonFooService
+            [ServiceLocatorRegistration(typeof(IFooService))]
+            public class NonFooService
+            {
+            }
+            #endregion
         }
 
         [TestClass]
         public class TheResolveTypesMethod
         {
-            public interface IFooService
-            {
-            }
-
-            [ServiceLocatorRegistration(typeof(IFooService), ServiceLocatorRegistrationMode.SingletonInstantiateWhenRequired, "FooService1")]
-            public class FooService1 : IFooService
-            {
-            }
-
-            [ServiceLocatorRegistration(typeof(IFooService), ServiceLocatorRegistrationMode.Transient, "FooService2")]
-            public class FooService2 : IFooService
-            {
-            }
-
+            #region Methods
             [TestMethod]
             public void ReturnsAllAvaliableInstances()
             {
@@ -1216,11 +1280,33 @@
                 serviceLocator.RegisterInstance(typeof(IFooService), new FooService2(), "FooService3");
                 Assert.AreEqual(3, serviceLocator.ResolveTypes<IFooService>().Count());
             }
+            #endregion
+
+            #region Nested type: FooService1
+            [ServiceLocatorRegistration(typeof(IFooService), ServiceLocatorRegistrationMode.SingletonInstantiateWhenRequired, "FooService1")]
+            public class FooService1 : IFooService
+            {
+            }
+            #endregion
+
+            #region Nested type: FooService2
+            [ServiceLocatorRegistration(typeof(IFooService), ServiceLocatorRegistrationMode.Transient, "FooService2")]
+            public class FooService2 : IFooService
+            {
+            }
+            #endregion
+
+            #region Nested type: IFooService
+            public interface IFooService
+            {
+            }
+            #endregion
         }
 
         [TestClass]
         public class TheAreAllTypesRegisteredMethod
         {
+            #region Methods
             [TestMethod]
             public void ThrowsArgumentExceptionForNullOrEmptyTypeArray()
             {
@@ -1251,11 +1337,13 @@
 
                 Assert.IsTrue(serviceLocator.AreAllTypesRegistered(typeof(object), typeof(ITestInterface1), typeof(ITestInterface2)));
             }
+            #endregion
         }
 
         [TestClass]
         public class TheResolveAllTypesMethod
         {
+            #region Methods
             [TestMethod]
             public void ThrowsArgumentExceptionForNullOrEmptyTypeArray()
             {
@@ -1291,25 +1379,13 @@
                 Assert.AreEqual(typeof(TestClass1), resolvedTypes[1].GetType());
                 Assert.AreEqual(typeof(TestClass2), resolvedTypes[2].GetType());
             }
+            #endregion
         }
 
         [TestClass]
         public class TheRemoveInstanceMethod
         {
-            public interface IFooService
-            {
-            }
-
-            [ServiceLocatorRegistration(typeof(IFooService), ServiceLocatorRegistrationMode.SingletonInstantiateWhenRequired, "FooService1")]
-            public class FooService1 : IFooService
-            {
-            }
-
-            [ServiceLocatorRegistration(typeof(IFooService), ServiceLocatorRegistrationMode.SingletonInstantiateWhenRequired, "FooService2")]
-            public class FooService2 : IFooService
-            {
-            }
-
+            #region Methods
             [TestMethod]
             public void ThrowsArgumentNullExceptionIfServiceTypeIsNull()
             {
@@ -1328,40 +1404,39 @@
 
                 Assert.AreNotEqual(instance1, instance2);
             }
+            #endregion
+
+            #region Nested type: FooService1
+            [ServiceLocatorRegistration(typeof(IFooService), ServiceLocatorRegistrationMode.SingletonInstantiateWhenRequired, "FooService1")]
+            public class FooService1 : IFooService
+            {
+            }
+            #endregion
+
+            #region Nested type: FooService2
+            [ServiceLocatorRegistration(typeof(IFooService), ServiceLocatorRegistrationMode.SingletonInstantiateWhenRequired, "FooService2")]
+            public class FooService2 : IFooService
+            {
+            }
+            #endregion
+
+            #region Nested type: IFooService
+            public interface IFooService
+            {
+            }
+            #endregion
         }
 
         [TestClass]
         public class TheRemoveAllInstancesMethods
         {
-            public interface IFooService
-            {
-            }
-
-            [ServiceLocatorRegistration(typeof(IFooService), ServiceLocatorRegistrationMode.SingletonInstantiateWhenRequired, "FooService1")]
-            public class FooService1 : IFooService
-            {
-            }
-
-            [ServiceLocatorRegistration(typeof(IFooService), ServiceLocatorRegistrationMode.SingletonInstantiateWhenRequired, "FooService2")]
-            public class FooService2 : IFooService
-            {
-            }
-
-            public interface IFoo2Service
-            {
-            }
-
-            public class Foo2Service : IFoo2Service
-            {
-            }
-
+            #region Methods
             [TestMethod]
             public void ThrowsArgumentNullExceptionIfServiceTypeIsNull()
             {
                 var serviceLocator = new ServiceLocator();
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serviceLocator.RemoveAllInstances((Type)null));
             }
-
 
             [TestMethod]
             public void RemovesAllInstanceOfAType()
@@ -1410,6 +1485,39 @@
                 Assert.AreNotEqual(instance2, serviceLocator.ResolveType(typeof(IFooService), "FooService2"));
                 Assert.AreNotEqual(instance3, serviceLocator.ResolveType(typeof(IFoo2Service), "FooService2"));
             }
+            #endregion
+
+            #region Nested type: Foo2Service
+            public class Foo2Service : IFoo2Service
+            {
+            }
+            #endregion
+
+            #region Nested type: FooService1
+            [ServiceLocatorRegistration(typeof(IFooService), ServiceLocatorRegistrationMode.SingletonInstantiateWhenRequired, "FooService1")]
+            public class FooService1 : IFooService
+            {
+            }
+            #endregion
+
+            #region Nested type: FooService2
+            [ServiceLocatorRegistration(typeof(IFooService), ServiceLocatorRegistrationMode.SingletonInstantiateWhenRequired, "FooService2")]
+            public class FooService2 : IFooService
+            {
+            }
+            #endregion
+
+            #region Nested type: IFoo2Service
+            public interface IFoo2Service
+            {
+            }
+            #endregion
+
+            #region Nested type: IFooService
+            public interface IFooService
+            {
+            }
+            #endregion
         }
     }
 }
