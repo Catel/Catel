@@ -494,6 +494,12 @@
     <Compile Include="..\Catel.Test.NET40\MVVM\Auditing\TestViewModel.cs">
       <Link>MVVM\Auditing\TestViewModel.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Commands\CommandManagerFacts.cs">
+      <Link>MVVM\Commands\CommandManagerFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Commands\CompositeCommandFacts.cs">
+      <Link>MVVM\Commands\CompositeCommandFacts.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\MVVM\Commands\ViewModelCommandManagerFacts.cs">
       <Link>MVVM\Commands\ViewModelCommandManagerFacts.cs</Link>
     </Compile>

@@ -91,11 +91,23 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVMModule.cs">
       <Link>MVVMModule.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\CommandManager.cs">
+      <Link>MVVM\Commands\CommandManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\CompositeCommand.cs">
+      <Link>MVVM\Commands\CompositeCommand.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs">
       <Link>MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ICatelTaskCommand.cs">
       <Link>MVVM\Commands\Interfaces\ICatelTaskCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ICommandManager.cs">
+      <Link>MVVM\Commands\Interfaces\ICommandManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ICompositeCommand.cs">
+      <Link>MVVM\Commands\Interfaces\ICompositeCommand.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ITaskProgressReport.cs">
       <Link>MVVM\Commands\Interfaces\ITaskProgressReport.cs</Link>

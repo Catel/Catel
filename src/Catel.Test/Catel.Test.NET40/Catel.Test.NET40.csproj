@@ -240,6 +240,8 @@
     <Compile Include="Logging\Configuration\LoggingConfigurationSectionFacts.cs" />
     <Compile Include="Messaging\MessageMediatorHelperFacts.cs" />
     <Compile Include="ModuleInitializer.cs" />
+    <Compile Include="MVVM\Commands\CommandManagerFacts.cs" />
+    <Compile Include="MVVM\Commands\CompositeCommandFacts.cs" />
     <Compile Include="MVVM\Commands\ViewModelCommandManagerFacts.cs" />
     <Compile Include="Helpers\UrlHelperFacts.cs" />
     <Compile Include="MVVM\Services\SplashScreenServiceTest.cs" />

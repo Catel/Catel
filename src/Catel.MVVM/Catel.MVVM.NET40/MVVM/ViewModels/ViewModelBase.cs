@@ -631,6 +631,15 @@ namespace Catel.MVVM
 
         #region Methods
         /// <summary>
+        /// Converts the object to a string.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public override string ToString()
+        {
+            return string.Format("{0} (ID = {1})", GetType().FullName, UniqueIdentifier);
+        }
+
+        /// <summary>
         /// Called when the throttling timer ticks.
         /// </summary>
         private void OnThrottlingTimerTick()

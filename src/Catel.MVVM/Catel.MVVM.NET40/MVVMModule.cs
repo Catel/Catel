@@ -36,6 +36,7 @@ namespace Catel
             serviceLocator.RegisterTypeIfNotYetRegistered<IFrameworkElementLoadedManager, FrameworkElementLoadedManager>();
 #endif
 
+            serviceLocator.RegisterTypeIfNotYetRegistered<ICommandManager, CommandManager>();
             serviceLocator.RegisterTypeIfNotYetRegistered<IViewManager, ViewManager>();
             serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelManager, ViewModelManager>();
 

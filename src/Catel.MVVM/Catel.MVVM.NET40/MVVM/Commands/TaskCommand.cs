@@ -24,6 +24,8 @@ namespace Catel.MVVM
         where TProgress : ITaskProgressReport
     {
         #region Fields
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         private readonly Action<TProgress> _reportProgress;
 
         private readonly Func<TExecuteParameter, CancellationToken, IProgress<TProgress>, Task> _execute;
