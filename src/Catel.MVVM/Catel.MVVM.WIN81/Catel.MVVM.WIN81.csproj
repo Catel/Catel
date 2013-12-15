@@ -657,6 +657,9 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Input\Helpers\KeyboardHelper.cs">
       <Link>Windows\Input\Helpers\KeyboardHelper.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Input\InputGesture.cs">
+      <Link>Windows\Input\InputGesture.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\Authentication.cs">
       <Link>Windows\Interactivity\Authentication.cs</Link>
     </Compile>

@@ -344,6 +344,9 @@
     <Compile Include="..\Catel.Test.NET40\MVVM\Commands\CompositeCommandFacts.cs">
       <Link>MVVM\Commands\CompositeCommandFacts.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Commands\CompositeCommandViewModel.cs">
+      <Link>MVVM\Commands\CompositeCommandViewModel.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\MVVM\Commands\ViewModelCommandManagerFacts.cs">
       <Link>MVVM\Commands\ViewModelCommandManagerFacts.cs</Link>
     </Compile>
@@ -568,6 +571,9 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Windows\Helpers\ResourceHelperFacts.cs">
       <Link>Windows\Helpers\ResourceHelperFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Windows\Input\InputGestureFacts.cs">
+      <Link>Windows\Input\InputGestureFacts.cs</Link>
     </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>

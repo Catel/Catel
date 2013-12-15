@@ -9,7 +9,6 @@ namespace Catel.Test.MVVM
 {
     using System;
     using Catel.MVVM;
-    using ViewModels.TestClasses;
 
 #if NETFX_CORE
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
@@ -19,48 +18,6 @@ namespace Catel.Test.MVVM
 
     public class CompositeCommandFacts
     {
-        public class CompositeCommandViewModel : ViewModelBase
-        {
-            public CompositeCommandViewModel()
-            {
-                TestCommand1 = new Command(OnTestCommand1Execute, OnTestCommand1CanExecute);
-                TestCommand2 = new Command(OnTestCommand2Execute, OnTestCommand2CanExecute);
-
-                AllowTestCommand1Execution = true;
-                AllowTestCommand2Execution = true;
-            }
-
-            public bool AllowTestCommand1Execution { get; private set; }
-            public bool AllowTestCommand2Execution { get; private set; }
-
-            public bool IsTestCommand1Executed { get; private set; }
-            public bool IsTestCommand2Executed { get; private set; }
-
-            public Command TestCommand1 { get; private set; }
-
-            private bool OnTestCommand1CanExecute()
-            {
-                return AllowTestCommand1Execution;
-            }
-
-            private void OnTestCommand1Execute()
-            {
-                IsTestCommand1Executed = true;
-            }
-
-            public Command TestCommand2 { get; private set; }
-
-            private bool OnTestCommand2CanExecute()
-            {
-                return AllowTestCommand2Execution;
-            }
-
-            private void OnTestCommand2Execute()
-            {
-                IsTestCommand2Executed = true;
-            }
-        }
-
         [TestClass]
         public class TheRegisterCommandMethod
         {

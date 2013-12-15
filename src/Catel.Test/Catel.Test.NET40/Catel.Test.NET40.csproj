@@ -242,6 +242,7 @@
     <Compile Include="ModuleInitializer.cs" />
     <Compile Include="MVVM\Commands\CommandManagerFacts.cs" />
     <Compile Include="MVVM\Commands\CompositeCommandFacts.cs" />
+    <Compile Include="MVVM\Commands\CompositeCommandViewModel.cs" />
     <Compile Include="MVVM\Commands\ViewModelCommandManagerFacts.cs" />
     <Compile Include="Helpers\UrlHelperFacts.cs" />
     <Compile Include="MVVM\Services\SplashScreenServiceTest.cs" />
@@ -358,6 +359,7 @@
     <Compile Include="Windows\Data\Converters\ShortDateFormattingConverterTest.cs" />
     <Compile Include="Windows\Helpers\CommandLineHelperFacts.cs" />
     <Compile Include="Windows\Helpers\ResourceHelperFacts.cs" />
+    <Compile Include="Windows\Input\InputGestureFacts.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Catel.Core\Catel.Core.NET40\Catel.Core.NET40.csproj">
