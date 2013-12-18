@@ -35,6 +35,7 @@ Added/fixed:
 (*) CTL-261 Replace all instances of RegisterDebugListener with AddDebugListener
 (*) CTL-264 Reset FileServiceBase.ValidateNames default value to true
 (x) CTL-268 EF 6 extension does not register types automatically
+(x) CTL-278 Validation throws exception on modelbase properties (should improve performance on validating models)
 
 Roadmap:
 ========

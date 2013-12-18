@@ -596,6 +596,21 @@ namespace Catel.Data
             {
                 _propertyValuesFailedForValidation.Add(type, new List<string>());
                 _propertyValuesAtLeastOnceValidated.Add(type, new List<string>());
+
+                // Ignore modelbase properties
+                _propertyValuesFailedForValidation[type].Add("EqualityComparer");
+                _propertyValuesFailedForValidation[type].Add("LeanAndMeanModel");
+                _propertyValuesFailedForValidation[type].Add("DisableEventSubscriptionsOfChildValues");
+                _propertyValuesFailedForValidation[type].Add("IsInitializing");
+                _propertyValuesFailedForValidation[type].Add("IsInitialized");
+                _propertyValuesFailedForValidation[type].Add("ContainsNonSerializableMembers");
+                _propertyValuesFailedForValidation[type].Add("AlwaysInvokeNotifyChanged");
+                _propertyValuesFailedForValidation[type].Add("HandlePropertyAndCollectionChanges");
+                _propertyValuesFailedForValidation[type].Add("AutomaticallyValidateOnPropertyChanged");
+                _propertyValuesFailedForValidation[type].Add("DeserializationSucceeded");
+                _propertyValuesFailedForValidation[type].Add("IsValidating");
+                _propertyValuesFailedForValidation[type].Add("SuspendValidation");
+                _propertyValuesFailedForValidation[type].Add("HideValidationResults");
             }
 #endif
 
@@ -1377,7 +1392,7 @@ namespace Catel.Data
                 var propertyData = propertyDataKeyValuePair.Value;
                 if (!propertyData.IsSerializable)
                 {
-                    object[] allowNonSerializableMembersAttributes = type.GetCustomAttributesEx(typeof(AllowNonSerializableMembersAttribute), true);
+                    var allowNonSerializableMembersAttributes = type.GetCustomAttributesEx(typeof(AllowNonSerializableMembersAttribute), true);
                     if (allowNonSerializableMembersAttributes.Length == 0)
                     {
                         throw new InvalidPropertyException(propertyData.Name);
@@ -1476,6 +1491,14 @@ namespace Catel.Data
                         var propertyData = new PropertyData(name, type, defaultValue, setParent, propertyChangedEventHandler,
                             isSerializable, includeInSerialization, includeInBackup, isModelBaseProperty, isCalculatedProperty);
                         PropertyDataManager.RegisterProperty(objectType, name, propertyData);
+
+#if !WINDOWS_PHONE && !NETFX_CORE && !PCL && !NET35
+                        // Skip validation for modelbase properties
+                        if (propertyData.IsModelBaseProperty)
+                        {
+                            _propertyValuesFailedForValidation[type].Add(propertyData.Name);
+                        }
+#endif
                     }
                 }
             }
