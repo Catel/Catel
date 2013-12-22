@@ -306,24 +306,6 @@
         }
         #endregion
 
-#if NET
-        #region Allow non serializable members tests
-        [TestMethod]
-        public void ObjectWithoutAllowNonSerializableAttribute()
-        {
-            // "object should crash because it contains a non-serializable value, but is not decorated with the AllowNonSerializableMembersAttribute"
-            ExceptionTester.CallMethodAndExpectException<InvalidPropertyException>(() => new ObjectWithNonSerializableMembers());
-        }
-
-        [TestMethod]
-        public void ObjectWithAllowNonSerializableAttribute()
-        {
-            var obj = new ObjectWithNonSerializableMembersDecoratedWithAllowNonSerializableMembersAttribute();
-            obj.ToString();
-        }
-        #endregion
-#endif
-
         #region IClonable tests
         /// <summary>
         /// Tests the deep-clone functionality for 1 level deep.

@@ -373,18 +373,6 @@ namespace Catel.Data
         private bool IsDeserialized { get; set; }
 
         /// <summary>
-        /// Gets a value indicating whether this instance contains non-serializable members.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance contains non-serializable members; otherwise, <c>false</c>.
-        /// </value>
-#if NET || SILVERLIGHT
-        [Browsable(false)]
-#endif
-        [XmlIgnore]
-        protected bool ContainsNonSerializableMembers { get; private set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether this object should always invoke the <see cref="ObservableObject.PropertyChanged"/> event,
         /// even when the actual value of a property has not changed.
         /// <para />
@@ -1390,16 +1378,6 @@ namespace Catel.Data
             foreach (var propertyDataKeyValuePair in catelTypeInfo.GetCatelProperties())
             {
                 var propertyData = propertyDataKeyValuePair.Value;
-                if (!propertyData.IsSerializable)
-                {
-                    var allowNonSerializableMembersAttributes = type.GetCustomAttributesEx(typeof(AllowNonSerializableMembersAttribute), true);
-                    if (allowNonSerializableMembersAttributes.Length == 0)
-                    {
-                        throw new InvalidPropertyException(propertyData.Name);
-                    }
-
-                    ContainsNonSerializableMembers = true;
-                }
 
                 InitializeProperty(propertyData);
             }

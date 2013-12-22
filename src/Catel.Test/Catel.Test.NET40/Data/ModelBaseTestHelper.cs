@@ -1356,24 +1356,6 @@ namespace Catel.Test.Data
     }
 #endif
 
-    [AllowNonSerializableMembers]
-    public class ObjectWithNonSerializableMembersDecoratedWithAllowNonSerializableMembersAttribute : ModelBase
-    {
-        /// <summary>
-        ///   Gets or sets a non-serializable value.
-        /// </summary>
-        public NonSerializableClass NonSerializableValue
-        {
-            get { return GetValue<NonSerializableClass>(NonSerializableValueProperty); }
-            set { SetValue(NonSerializableValueProperty, value); }
-        }
-
-        /// <summary>
-        ///   Register the NonSerializableValue property so it is known in the class.
-        /// </summary>
-        public static readonly PropertyData NonSerializableValueProperty = RegisterProperty("NonSerializableValue", typeof(NonSerializableClass), null);
-    }
-
 #if NET
     [Serializable]
 #endif

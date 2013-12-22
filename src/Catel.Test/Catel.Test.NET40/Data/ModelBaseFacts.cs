@@ -92,7 +92,6 @@ namespace Catel.Test.Data
             public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), string.Empty);
         }
 
-        [AllowNonSerializableMembers]
         public class TestModel : ModelBase
         {
             public TestModel()

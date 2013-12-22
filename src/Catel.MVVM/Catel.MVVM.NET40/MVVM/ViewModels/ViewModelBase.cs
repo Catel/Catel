@@ -66,7 +66,6 @@ namespace Catel.MVVM
     /// </summary>
     /// <remarks>This view model base does not add any services. The technique specific implementation should take care of that
     /// (such as WPF, Silverlight, etc).</remarks>
-    [AllowNonSerializableMembers]
     public abstract partial class ViewModelBase : ModelBase, IViewModel, INotifyableViewModel, IRelationalViewModel
     {
         /// <summary>
