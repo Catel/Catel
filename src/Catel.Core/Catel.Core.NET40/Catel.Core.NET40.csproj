@@ -96,6 +96,7 @@
     <Compile Include="Configuration\Interfaces\IConfigurationService.cs" />
     <Compile Include="CoreModule.cs" />
     <Compile Include="Data\Attributes\AllowNonSerializableMembersAttribute.cs" />
+    <Compile Include="Data\Attributes\ExcludeFromValidationAttribute.cs" />
     <Compile Include="Data\Attributes\ValidateModelAttribute.cs" />
     <Compile Include="Data\AttributeValidatorProvider.cs" />
     <Compile Include="Data\ChangeNotificationWrapper.cs" />

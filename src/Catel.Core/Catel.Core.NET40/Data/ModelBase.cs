@@ -580,25 +580,25 @@ namespace Catel.Data
             var type = GetType();
 
 #if !WINDOWS_PHONE && !NETFX_CORE && !PCL && !NET35
-            if (!_propertyValuesFailedForValidation.ContainsKey(type))
+            if (!_propertyValuesIgnoredOrFailedForValidation.ContainsKey(type))
             {
-                _propertyValuesFailedForValidation.Add(type, new List<string>());
+                _propertyValuesIgnoredOrFailedForValidation.Add(type, new List<string>());
                 _propertyValuesAtLeastOnceValidated.Add(type, new List<string>());
 
                 // Ignore modelbase properties
-                _propertyValuesFailedForValidation[type].Add("EqualityComparer");
-                _propertyValuesFailedForValidation[type].Add("LeanAndMeanModel");
-                _propertyValuesFailedForValidation[type].Add("DisableEventSubscriptionsOfChildValues");
-                _propertyValuesFailedForValidation[type].Add("IsInitializing");
-                _propertyValuesFailedForValidation[type].Add("IsInitialized");
-                _propertyValuesFailedForValidation[type].Add("ContainsNonSerializableMembers");
-                _propertyValuesFailedForValidation[type].Add("AlwaysInvokeNotifyChanged");
-                _propertyValuesFailedForValidation[type].Add("HandlePropertyAndCollectionChanges");
-                _propertyValuesFailedForValidation[type].Add("AutomaticallyValidateOnPropertyChanged");
-                _propertyValuesFailedForValidation[type].Add("DeserializationSucceeded");
-                _propertyValuesFailedForValidation[type].Add("IsValidating");
-                _propertyValuesFailedForValidation[type].Add("SuspendValidation");
-                _propertyValuesFailedForValidation[type].Add("HideValidationResults");
+                _propertyValuesIgnoredOrFailedForValidation[type].Add("EqualityComparer");
+                _propertyValuesIgnoredOrFailedForValidation[type].Add("LeanAndMeanModel");
+                _propertyValuesIgnoredOrFailedForValidation[type].Add("DisableEventSubscriptionsOfChildValues");
+                _propertyValuesIgnoredOrFailedForValidation[type].Add("IsInitializing");
+                _propertyValuesIgnoredOrFailedForValidation[type].Add("IsInitialized");
+                _propertyValuesIgnoredOrFailedForValidation[type].Add("ContainsNonSerializableMembers");
+                _propertyValuesIgnoredOrFailedForValidation[type].Add("AlwaysInvokeNotifyChanged");
+                _propertyValuesIgnoredOrFailedForValidation[type].Add("HandlePropertyAndCollectionChanges");
+                _propertyValuesIgnoredOrFailedForValidation[type].Add("AutomaticallyValidateOnPropertyChanged");
+                _propertyValuesIgnoredOrFailedForValidation[type].Add("DeserializationSucceeded");
+                _propertyValuesIgnoredOrFailedForValidation[type].Add("IsValidating");
+                _propertyValuesIgnoredOrFailedForValidation[type].Add("SuspendValidation");
+                _propertyValuesIgnoredOrFailedForValidation[type].Add("HideValidationResults");
             }
 #endif
 
@@ -1474,7 +1474,7 @@ namespace Catel.Data
                         // Skip validation for modelbase properties
                         if (propertyData.IsModelBaseProperty)
                         {
-                            _propertyValuesFailedForValidation[type].Add(propertyData.Name);
+                            _propertyValuesIgnoredOrFailedForValidation[type].Add(propertyData.Name);
                         }
 #endif
                     }

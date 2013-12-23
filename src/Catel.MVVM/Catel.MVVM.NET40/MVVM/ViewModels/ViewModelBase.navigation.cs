@@ -8,6 +8,7 @@ namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
+    using Catel.Data;
 
     public partial class ViewModelBase
     {
@@ -31,6 +32,7 @@ namespace Catel.MVVM
         /// Note that the navigation contexts is first available in the <see cref="OnNavigationCompleted"/> method, 
         /// not in the constructor.
         /// </remarks>
+        [ExcludeFromValidation]
 #if WINDOWS_PHONE
         protected Dictionary<string, string> NavigationContext { get { return _navigationContext; } }
 #else

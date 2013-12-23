@@ -461,24 +461,28 @@ namespace Catel.MVVM
         /// Gets the unique identifier of the view model.
         /// </summary>
         /// <value>The unique identifier.</value>
+        [ExcludeFromValidation]
         public int UniqueIdentifier { get; private set; }
 
         /// <summary>
         /// Gets the view model construction time, which is used to get unique instances of view models.
         /// </summary>
         /// <value>The view model construction time.</value>
+        [ExcludeFromValidation]
         public DateTime ViewModelConstructionTime { get; private set; }
 
         /// <summary>
         /// Gets the parent view model.
         /// </summary>
         /// <value>The parent view model.</value>
+        [ExcludeFromValidation]
         public IViewModel ParentViewModel { get; private set; }
 
         /// <summary>
         /// Gets the <see cref="ViewModelCommandManager"/> of this view model.
         /// </summary>
         /// <value>The <see cref="ViewModelCommandManager"/>.</value>
+        [ExcludeFromValidation]
         protected IViewModelCommandManager ViewModelCommandManager { get; private set; }
 
         /// <summary>
@@ -490,6 +494,7 @@ namespace Catel.MVVM
         /// <value>
         /// <c>true</c> if the commands should automatically be invalidated on a property change; otherwise, <c>false</c>.
         /// </value>
+        [ExcludeFromValidation]
         protected bool InvalidateCommandsOnPropertyChanged { get; set; }
 
         /// <summary>
@@ -498,11 +503,13 @@ namespace Catel.MVVM
         /// <value>
         /// <c>true</c> if models that implement <see cref="IEditableObject"/> are supported correctly; otherwise, <c>false</c>.
         /// </value>
+        [ExcludeFromValidation]
         private bool SupportIEditableObject { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is currently saving.
         /// </summary>
+        [ExcludeFromValidation]
         protected bool IsSaving { get; private set; }
 
         /// <summary>
@@ -511,6 +518,7 @@ namespace Catel.MVVM
         /// <para />
         /// The default value is <c>false</c>.
         /// </summary>
+        [ExcludeFromValidation]
         protected bool DispatchPropertyChangedEvent { get; set; }
 
         /// <summary>
@@ -520,6 +528,7 @@ namespace Catel.MVVM
         /// reduce the number of updates the view has to do based on the properties.
         /// </summary>
         /// <value>The throttling rate.</value>
+        [ExcludeFromValidation]
         protected TimeSpan ThrottlingRate
         {
             get
@@ -558,12 +567,14 @@ namespace Catel.MVVM
         /// will have no effect.
         /// </summary>
         /// <value><c>true</c> if the view model is closed; otherwise, <c>false</c>.</value>
+        [ExcludeFromValidation]
         public bool IsClosed { get; private set; }
 
         /// <summary>
         /// Gets the title of the view model.
         /// </summary>
         /// <value>The title.</value>
+        [ExcludeFromValidation]
         public virtual string Title
         {
             get
@@ -584,6 +595,7 @@ namespace Catel.MVVM
         /// <value>
         /// <c>true</c> if this instance has errors; otherwise, <c>false</c>.
         /// </value>
+        [ExcludeFromValidation]
         public new bool HasErrors
         {
             get { return base.HasErrors || _childViewModelsHaveErrors; }
@@ -595,6 +607,7 @@ namespace Catel.MVVM
         /// <value>
         /// <c>true</c> if this instance has a dirty model; otherwise, <c>false</c>.
         /// </value>
+        [ExcludeFromValidation]
         public virtual bool HasDirtyModel
         {
             get
@@ -619,12 +632,14 @@ namespace Catel.MVVM
         /// </summary>
         /// <value>The service locator.</value>
         [ObsoleteEx(Message = "ServiceLocator is no longer recommended to retrieve the types, use the DependencyResolver instead", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
+        [ExcludeFromValidation]
         protected IServiceLocator ServiceLocator { get; private set; }
 
         /// <summary>
         /// Gets the dependency resolver.
         /// </summary>
         /// <value>The dependency resolver.</value>
+        [ExcludeFromValidation]
         protected IDependencyResolver DependencyResolver { get; private set; }
         #endregion
 
