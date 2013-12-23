@@ -163,15 +163,14 @@ namespace Catel.IoC
         /// </summary>
         /// <param name="serviceType">The type of the service.</param>
         /// <param name="serviceImplementationType">The type of the implementation.</param>
-        /// <param name="registrationType">The registration type. The default value is <see cref="RegistrationType.Singleton"/>.</param>
-        /// <param name="registerIfAlreadyRegistered">If set to <c>true</c>, an older type registration is overwritten by this new one.</param>
         /// <param name="tag">The tag to register the service with. The default value is <c>null</c>.</param>
-        /// <remarks>
-        /// Note that the actual implementation lays in the hands of the IoC technique being used.
-        /// </remarks>
-        /// <exception cref="ArgumentNullException">If <paramref name="serviceType"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="serviceImplementationType"/> is <c>null</c>.</exception>
-        void RegisterType(Type serviceType, Type serviceImplementationType, object tag = null, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true);
+        /// <param name="registrationType">The registration type. The default value is <see cref="RegistrationType.Singleton" />.</param>
+        /// <param name="registerIfAlreadyRegistered">If set to <c>true</c>, an older type registration is overwritten by this new one.</param>
+        /// <param name="createServiceFunc">The create service function.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="serviceType" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="serviceImplementationType" /> is <c>null</c>.</exception>
+        /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
+        void RegisterType(Type serviceType, Type serviceImplementationType, object tag = null, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true, Func<object> createServiceFunc = null);
 
         /// <summary>
         /// Resolves an instance of the type registered on the service.

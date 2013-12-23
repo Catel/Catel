@@ -16,15 +16,18 @@ namespace Catel.IoC
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="ServiceLocatorRegistration"/> class.
+        /// Initializes a new instance of the <see cref="ServiceLocatorRegistration" /> class.
         /// </summary>
         /// <param name="declaringType">Type of the declaring.</param>
         /// <param name="implementingType">Type of the implementing.</param>
         /// <param name="tag">The tag.</param>
         /// <param name="registrationType">Type of the registration.</param>
         /// <param name="originalContainer">The original container.</param>
-        public ServiceLocatorRegistration(Type declaringType, Type implementingType, object tag, RegistrationType registrationType, object originalContainer)
+        /// <param name="createServiceFunc">The create service function.</param>
+        public ServiceLocatorRegistration(Type declaringType, Type implementingType, object tag, RegistrationType registrationType, 
+            object originalContainer, Func<ServiceLocatorRegistration, object> createServiceFunc)
         {
+            CreateServiceFunc = createServiceFunc;
             DeclaringType = declaringType;
             DeclaringTypeName = declaringType.AssemblyQualifiedName;
 
@@ -38,6 +41,12 @@ namespace Catel.IoC
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets the create service function.
+        /// </summary>
+        /// <value>The create service function.</value>
+        public Func<ServiceLocatorRegistration, object> CreateServiceFunc { get; private set; }
+
         /// <summary>
         /// Gets the declaring type.
         /// </summary>

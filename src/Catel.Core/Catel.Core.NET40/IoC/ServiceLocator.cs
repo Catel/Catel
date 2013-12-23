@@ -24,10 +24,11 @@ namespace Catel.IoC
         private class RegisteredInstanceInfo : ServiceLocatorRegistration
         {
             #region Constructors
-            public RegisteredInstanceInfo(Type declaringType, object implementingInstance, RegistrationType registrationType, object tag, object originalContainer)
-                : base(declaringType, implementingInstance.GetType(), tag, registrationType, originalContainer)
+            public RegisteredInstanceInfo(ServiceLocatorRegistration registration, object instance)
+                : base(registration.DeclaringType, registration.ImplementingType, registration.Tag, registration.RegistrationType,
+                registration.OriginalContainer, registration.CreateServiceFunc)
             {
-                ImplementingInstance = implementingInstance;
+                ImplementingInstance = instance;
             }
             #endregion
 
@@ -326,7 +327,7 @@ namespace Catel.IoC
                     if (registrationInfo != null)
                     {
                         // Now we know the container, register it as typeof(object), we will re-register as soon as the actual type is known
-                        _registeredTypes[serviceInfo] = new ServiceLocatorRegistration(serviceType, typeof(object), tag, registrationInfo.RegistrationType, externalContainerKeyValuePair.Value);
+                        _registeredTypes[serviceInfo] = new ServiceLocatorRegistration(serviceType, typeof(object), tag, registrationInfo.RegistrationType, externalContainerKeyValuePair.Value, CreateServiceInstance);
                         return true;
                     }
                 }
@@ -375,7 +376,7 @@ namespace Catel.IoC
                 {
                     Log.Debug("Late registering type '{0}' to type '{1}' via MissingTypeEventArgs.ImplementingType", serviceType.FullName, eventArgs.ImplementingType.FullName);
 
-                    RegisterType(serviceType, eventArgs.ImplementingType, eventArgs.Tag, eventArgs.RegistrationType, true, this);
+                    RegisterType(serviceType, eventArgs.ImplementingType, eventArgs.Tag, eventArgs.RegistrationType, true, this, null);
                     return true;
                 }
             }
@@ -439,16 +440,16 @@ namespace Catel.IoC
         /// <param name="serviceType">The type of the service.</param>
         /// <param name="serviceImplementationType">The type of the implementation.</param>
         /// <param name="tag">The tag to register the service with. The default value is <c>null</c>.</param>
-        /// <param name="registrationType">The registration type. The default value is <see cref="RegistrationType.Singleton"/>.</param>
+        /// <param name="registrationType">The registration type. The default value is <see cref="RegistrationType.Singleton" />.</param>
         /// <param name="registerIfAlreadyRegistered">If set to <c>true</c>, an older type registration is overwritten by this new one.</param>
-        /// <remarks>
-        /// Note that the actual implementation lays in the hands of the IoC technique being used.
-        /// </remarks>
-        /// <exception cref="ArgumentNullException">If <paramref name="serviceType"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="serviceImplementationType"/> is <c>null</c>.</exception>
-        public void RegisterType(Type serviceType, Type serviceImplementationType, object tag = null, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true)
+        /// <param name="createServiceFunc">The create service function.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="serviceType" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="serviceImplementationType" /> is <c>null</c>.</exception>
+        /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
+        public void RegisterType(Type serviceType, Type serviceImplementationType, object tag = null, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true, Func<object> createServiceFunc = null)
         {
-            RegisterType(serviceType, serviceImplementationType, tag, registrationType, registerIfAlreadyRegistered, this);
+            RegisterType(serviceType, serviceImplementationType, tag, registrationType, registerIfAlreadyRegistered, 
+                this, createServiceFunc);
         }
 
         /// <summary>
@@ -913,12 +914,13 @@ namespace Catel.IoC
                 originalContainer = this;
             }
 
-            var registeredTypeInfo = new ServiceLocatorRegistration(serviceType, instance.GetType(), tag, RegistrationType.Singleton, originalContainer);
+            var registeredTypeInfo = new ServiceLocatorRegistration(serviceType, instance.GetType(), tag, RegistrationType.Singleton, 
+                originalContainer, x => instance);
 
             lock (_lockObject)
             {
                 var serviceInfo = new ServiceInfo(serviceType, tag);
-                _registeredInstances[serviceInfo] = new RegisteredInstanceInfo(serviceType, instance, RegistrationType.Singleton, tag, originalContainer);
+                _registeredInstances[serviceInfo] = new RegisteredInstanceInfo(registeredTypeInfo, instance);
                 _registeredTypes[serviceInfo] = registeredTypeInfo;
 
                 if (AutomaticallyKeepContainersSynchronized)
@@ -941,9 +943,11 @@ namespace Catel.IoC
         /// <param name="registrationType">The registration type.</param>
         /// <param name="registerIfAlreadyRegistered">if set to <c>true</c>, an older type registration is overwritten by this new one.</param>
         /// <param name="originalContainer">The original container where the type was found in.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="serviceImplementationType"/> is <c>null</c>.</exception>
-        internal void RegisterType(Type serviceType, Type serviceImplementationType, object tag, RegistrationType registrationType, bool registerIfAlreadyRegistered, object originalContainer)
+        /// <param name="createServiceFunc">The create service function.</param>
+        /// <exception cref="System.InvalidOperationException"></exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="serviceType" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="serviceImplementationType" /> is <c>null</c>.</exception>
+        internal void RegisterType(Type serviceType, Type serviceImplementationType, object tag, RegistrationType registrationType, bool registerIfAlreadyRegistered, object originalContainer, Func<object> createServiceFunc)
         {
             Argument.IsNotNull("serviceType", serviceType);
             Argument.IsNotNull("implementingType", serviceImplementationType);
@@ -984,7 +988,8 @@ namespace Catel.IoC
 
                 Log.Debug("Registering type '{0}' to type '{1}'", serviceType.FullName, serviceImplementationType.FullName);
 
-                registeredTypeInfo = new ServiceLocatorRegistration(serviceType, serviceImplementationType, tag, registrationType, originalContainer);
+                registeredTypeInfo = new ServiceLocatorRegistration(serviceType, serviceImplementationType, tag, registrationType, 
+                    originalContainer, x => (createServiceFunc != null) ? createServiceFunc() : CreateServiceInstance(x));
                 _registeredTypes[serviceInfo] = registeredTypeInfo;
 
                 if (AutomaticallyKeepContainersSynchronized)
