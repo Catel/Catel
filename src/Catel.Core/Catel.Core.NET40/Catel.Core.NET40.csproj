@@ -211,6 +211,7 @@
     <Compile Include="IoC\Helpers\WindsorHelper.cs" />
     <Compile Include="IoC\Interfaces\IDependencyResolverManager.cs" />
     <Compile Include="IoC\Interfaces\IDependencyResolver.cs" />
+    <Compile Include="IoC\LateBoundImplementation.cs" />
     <Compile Include="IoC\Interfaces\IExternalContainerHelper.cs" />
     <Compile Include="IoC\Interfaces\INeedCustomInitialization.cs" />
     <Compile Include="IoC\Interfaces\IServiceLocator.cs" />

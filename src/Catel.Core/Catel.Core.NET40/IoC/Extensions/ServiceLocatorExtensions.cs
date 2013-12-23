@@ -219,7 +219,7 @@ namespace Catel.IoC
         }
 
         /// <summary>
-        /// Registers an implementation of an service.
+        /// Registers an implementation of a service.
         /// </summary>
         /// <typeparam name="TService">The type of the service.</typeparam>
         /// <typeparam name="TServiceImplementation">The type of the implementation.</typeparam>
@@ -236,6 +236,25 @@ namespace Catel.IoC
             Argument.IsNotNull("serviceLocator", serviceLocator);
 
             serviceLocator.RegisterType(typeof(TService), typeof(TServiceImplementation), null, registrationType, registerIfAlreadyRegistered);
+        }
+
+        /// <summary>
+        /// Registers an implementation of ea service using a create type callback
+        /// </summary>
+        /// <typeparam name="TService">The type of the service.</typeparam>
+        /// <param name="serviceLocator">The service locator.</param>
+        /// <param name="createServiceFunc">The create service function.</param>
+        /// <param name="registrationType">The registration type. The default value is <see cref="RegistrationType.Singleton" />.</param>
+        /// <param name="registerIfAlreadyRegistered">If set to <c>true</c>, an older type registration is overwritten by this new one.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="createServiceFunc" /> is <c>null</c>.</exception>
+        /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
+        public static void RegisterType<TService>(this IServiceLocator serviceLocator, Func<ServiceLocatorRegistration, TService> createServiceFunc, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true)
+        {
+            Argument.IsNotNull("serviceLocator", serviceLocator);
+            Argument.IsNotNull("createServiceFunc", createServiceFunc);
+
+            serviceLocator.RegisterType(typeof(TService), x => createServiceFunc(x), null, registrationType, registerIfAlreadyRegistered);
         }
 
         /// <summary>

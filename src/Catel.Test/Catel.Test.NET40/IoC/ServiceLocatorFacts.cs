@@ -539,14 +539,14 @@ namespace Catel.Test.IoC
             public void RegisterType_InterfaceTypeNull()
             {
                 var serviceLocator = new ServiceLocator();
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serviceLocator.RegisterType(null, typeof(TestClass1), null, RegistrationType.Singleton, true, null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serviceLocator.RegisterType((Type)null, typeof(TestClass1), null, RegistrationType.Singleton, true));
             }
 
             [TestMethod]
             public void RegisterType_ImplementingTypeNull()
             {
                 var serviceLocator = new ServiceLocator();
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serviceLocator.RegisterType(typeof(ITestInterface), null, null, RegistrationType.Singleton, true, null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serviceLocator.RegisterType(typeof(ITestInterface), (Type)null, null, RegistrationType.Singleton, true));
             }
 
             [TestMethod]
@@ -636,6 +636,31 @@ namespace Catel.Test.IoC
                 Assert.AreEqual(typeof(ITestInterface), eventArgs.ServiceType);
                 Assert.AreEqual(typeof(TestClass2), eventArgs.ServiceImplementationType);
                 Assert.AreEqual(RegistrationType.Transient, eventArgs.RegistrationType);
+            }
+
+            [TestMethod]
+            public void RegistersLateBoundImplementationUsingCallback()
+            {
+                var serviceLocator = new ServiceLocator();
+
+                serviceLocator.RegisterType<ITestInterface>(x => new TestClass2());
+
+                var resolvedClass = serviceLocator.ResolveType<ITestInterface>();
+
+                Assert.AreEqual(typeof(TestClass2), resolvedClass.GetType());
+            }
+
+            [TestMethod]
+            public void RegistersLateBoundImplementationUsingLateBoundImplementationType()
+            {
+                var serviceLocator = new ServiceLocator();
+
+                serviceLocator.RegisterType<ITestInterface>(x => new TestClass2());
+
+                var registeredTypeInfo = serviceLocator.GetRegistrationInfo(typeof (ITestInterface));
+
+                Assert.IsTrue(registeredTypeInfo.IsLateBoundRegistration);
+                Assert.AreEqual(typeof(LateBoundImplementation), registeredTypeInfo.ImplementingType);
             }
             #endregion
         }
