@@ -817,66 +817,6 @@
         }
         #endregion
 
-#if NET
-        [TestMethod]
-        public void ExposeAttribute_NoModelExposed()
-        {
-            ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => new ExposingViewModelWithNoModelDefined());
-        }
-
-        [TestMethod]
-        public void ExposeAttribute_ExposedPropertyDoesNotExistOnModel()
-        {
-            ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => new ExposingViewModelWithInvalidProperty());
-        }
-
-        [TestMethod]
-        public void ExposeAttribute_ExposedPropertyAlreadyExistsOnViewModel()
-        {
-            var vm = new ExposingViewModelWithExistingProperty();
-
-            // The FirstName property is manually registered on the VM. Let's check if
-            // the ExposeAttribute implicitly sets the ViewModelToModelAttribute for this
-            // property
-            vm.FirstName = "test";
-
-            Assert.AreEqual(vm.FirstName, vm.Person.FirstName);
-        }
-
-        [TestMethod]
-        public void ExposeAttribute_ReadOnlyPropertyOnModelDefinedAsNotReadOnly()
-        {
-            ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => new ExposingViewModelWithInvalidReadonlyMapping());
-        }
-
-        [TestMethod]
-        public void ExposeAttribute_CheckIfPropertiesAreRegistered()
-        {
-            var vm = new ExposingViewModel() as IModel;
-
-            Assert.IsNotNull(vm.GetPropertyType("FirstName"));
-            Assert.IsNotNull(vm.GetPropertyType("MiddleName"));
-            Assert.IsNotNull(vm.GetPropertyType("LastName"));
-        }
-
-        [TestMethod]
-        public void ExposeAttribute_Validation()
-        {
-            var vm = new ExposingViewModel();
-
-            var vmAsDataErrorInfo = (IDataErrorInfo)vm;
-
-            Assert.AreNotEqual(string.Empty, vmAsDataErrorInfo["FirstName"]);
-            Assert.AreNotEqual(string.Empty, vmAsDataErrorInfo["LastName"]);
-
-            vm.Person.FirstName = "john";
-            vm.Person.LastName = "doe";
-
-            Assert.AreEqual(string.Empty, vmAsDataErrorInfo["FirstName"]);
-            Assert.AreEqual(string.Empty, vmAsDataErrorInfo["LastName"]);
-        }
-#endif
-
         [TestMethod]
         public void CancelAfterCloseProtection()
         {

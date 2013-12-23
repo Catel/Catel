@@ -8,6 +8,7 @@
 namespace Catel
 {
     using System;
+    using Catel.Configuration;
     using Catel.Data;
     using Catel.ExceptionHandling;
     using Catel.IoC;
@@ -49,6 +50,7 @@ namespace Catel
             serviceLocator.RegisterType<ISerializationManager, SerializationManager>();
 
             serviceLocator.RegisterType<IModelEqualityComparer, ModelEqualityComparer>();
+            serviceLocator.RegisterType<IConfigurationService, ConfigurationService>();
         }
     }
 }

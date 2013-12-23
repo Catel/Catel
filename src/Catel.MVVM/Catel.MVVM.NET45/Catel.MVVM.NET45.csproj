@@ -119,6 +119,12 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Command.cs">
       <Link>MVVM\Commands\Command.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\CommandManager.cs">
+      <Link>MVVM\Commands\CommandManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\CompositeCommand.cs">
+      <Link>MVVM\Commands\CompositeCommand.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\EventArgs\CommandCanceledEventArgs.cs">
       <Link>MVVM\Commands\EventArgs\CommandCanceledEventArgs.cs</Link>
     </Compile>
@@ -139,6 +145,12 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ICatelTaskCommand.cs">
       <Link>MVVM\Commands\Interfaces\ICatelTaskCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ICommandManager.cs">
+      <Link>MVVM\Commands\Interfaces\ICommandManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ICompositeCommand.cs">
+      <Link>MVVM\Commands\Interfaces\ICompositeCommand.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ITaskProgressReport.cs">
       <Link>MVVM\Commands\Interfaces\ITaskProgressReport.cs</Link>
@@ -764,6 +776,9 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Input\Helpers\KeyboardHelper.cs">
       <Link>Windows\Input\Helpers\KeyboardHelper.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Input\InputGesture.cs">
+      <Link>Windows\Input\InputGesture.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\Authentication.cs">
       <Link>Windows\Interactivity\Authentication.cs</Link>
     </Compile>
@@ -853,6 +868,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interfaces\IDependencyPropertySelector.cs">
       <Link>Windows\Interfaces\IDependencyPropertySelector.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Markup\CommandManagerBinding.cs">
+      <Link>Windows\Markup\CommandManagerBinding.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Markup\ServiceDependencyExtension.cs">
       <Link>Windows\Markup\ServiceDependencyExtension.cs</Link>

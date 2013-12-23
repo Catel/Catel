@@ -32,7 +32,9 @@ namespace Catel.Threading
 
             var list = actions.ToList();
 
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !PCL
+            Parallel.Invoke(actions);
+#elif PCL
             var tasks = new List<Task>();
             for (int i = 0; i < list.Count; i++)
             {

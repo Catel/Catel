@@ -28,7 +28,9 @@ namespace Catel
 
         private static SupportedPlatforms DeterminePlatform()
         {
-#if NET35
+#if PCL
+            return SupportedPlatforms.PCL;
+#elif NET35
             throw new System.NotSupportedException("NET35 is not supported");
 #elif NET40
             return SupportedPlatforms.NET40;
@@ -42,7 +44,7 @@ namespace Catel
             return SupportedPlatforms.Silverlight5;
 #elif WP7
             throw new System.NotSupportedException("WP7 is not supported");
-#elif WP8
+#elif WP80
             return SupportedPlatforms.WindowsPhone80;
 #elif WIN80
             return SupportedPlatforms.Windows80;
@@ -92,6 +94,11 @@ namespace Catel
         /// <summary>
         /// Windows Runtime 8.1.
         /// </summary>
-        Windows81
+        Windows81,
+
+        /// <summary>
+        /// The portable class libraries (PCL).
+        /// </summary>
+        PCL
     }
 }

@@ -954,7 +954,7 @@ namespace Catel.Reflection
 #endif
 
 #else
-#if WP8
+#if WP80
 			return type.GetTypeInfo().GetMethod(name, bindingFlags, null, types, null);
 #elif PCL
             return type.GetTypeInfo().GetMethod(name, types);

@@ -24,7 +24,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("del", del);
 
-#if NETFX_CORE || WP8 || NET45
+#if NETFX_CORE || WP80 || NET45
             return del.GetMethodInfo();
 #else
             return del.Method;

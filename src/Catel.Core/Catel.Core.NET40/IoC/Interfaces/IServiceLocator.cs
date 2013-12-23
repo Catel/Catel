@@ -112,6 +112,11 @@ namespace Catel.IoC
         /// Occurs when a type is registered in the service locator.
         /// </summary>
         event EventHandler<TypeRegisteredEventArgs> TypeRegistered;
+
+        /// <summary>
+        /// Occurs when a type is instantiated in the service locator.
+        /// </summary>
+        event EventHandler<TypeInstantiatedEventArgs> TypeInstantiated;
         #endregion
 
         #region Methods
@@ -174,6 +179,8 @@ namespace Catel.IoC
         /// <param name="serviceType">The type of the service.</param>
         /// <param name="tag">The tag to register the service with. The default value is <c>null</c>.</param>
         /// <returns>An instance of the type registered on the service.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="serviceType" /> is <c>null</c>.</exception>
+        /// <exception cref="NotSupportedException">The type is not found in any container.</exception>
         /// <remarks>
         /// Note that the actual implementation lays in the hands of the IoC technique being used.
         /// </remarks>
@@ -300,5 +307,20 @@ namespace Catel.IoC
         /// <returns>The resolved types in the same order as the types.</returns>
         /// <exception cref="ArgumentException">The <paramref name="types"/> is <c>null</c> or an empty array.</exception>
         object[] ResolveAllTypes(params Type[] types);
+
+        /// <summary>
+        /// Removes the registered type with the specific tag.
+        /// </summary>
+        /// <param name="serviceType">The type of the service.</param>
+        /// <param name="tag">The tag of the registered the service. The default value is <c>null</c>.</param>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
+        void RemoveType(Type serviceType, object tag = null);
+
+        /// <summary>
+        /// Removes all registered types of a certain service type.
+        /// </summary>
+        /// <param name="serviceType">The type of the service.</param>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
+        void RemoveAllTypes(Type serviceType);
     }
 }

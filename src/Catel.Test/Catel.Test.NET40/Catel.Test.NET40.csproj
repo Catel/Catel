@@ -144,6 +144,7 @@
     <Compile Include="Collections\FastObservableCollectionFacts.cs" />
     <Compile Include="ArgumentFacts.expression.cs" />
     <Compile Include="ComponentModel\PropertyChangedEventArgsExtensionsFacts.cs" />
+    <Compile Include="Configuration\ConfigurationServiceFacts.cs" />
     <Compile Include="Data\ChangeNotificationWrapperFacts.cs" />
     <Compile Include="Data\CompositeValidatorProviderFacts.cs" />
     <Compile Include="Data\CompositeValidatorFacts.cs" />
@@ -228,6 +229,9 @@
     <Compile Include="IoC\DependencyResolverManagerFacts.cs" />
     <Compile Include="IoC\Exceptions\CircularDependencyExceptionFacts.cs" />
     <Compile Include="IoC\Extensions\ObjectExtensionsFacts.cs" />
+    <Compile Include="IoC\ServiceLocatorFacts.features.cs" />
+    <Compile Include="IoC\ServiceLocatorRegistrationFacts.cs" />
+    <Compile Include="IoC\ServiceLocatorRegistrationGroupFacts.cs" />
     <Compile Include="IoC\TypeFactoryFacts.cs" />
     <Compile Include="IoC\TypeRequestInfoFacts.cs" />
     <Compile Include="IoC\TypeRequestPathFacts.cs" />
@@ -236,6 +240,9 @@
     <Compile Include="Logging\Configuration\LoggingConfigurationSectionFacts.cs" />
     <Compile Include="Messaging\MessageMediatorHelperFacts.cs" />
     <Compile Include="ModuleInitializer.cs" />
+    <Compile Include="MVVM\Commands\CommandManagerFacts.cs" />
+    <Compile Include="MVVM\Commands\CompositeCommandFacts.cs" />
+    <Compile Include="MVVM\Commands\CompositeCommandViewModel.cs" />
     <Compile Include="MVVM\Commands\ViewModelCommandManagerFacts.cs" />
     <Compile Include="Helpers\UrlHelperFacts.cs" />
     <Compile Include="MVVM\Services\SplashScreenServiceTest.cs" />
@@ -296,12 +303,10 @@
     <Compile Include="MVVM\Views\Helpers\ViewToViewModelMappingHelperTest.cs" />
     <Compile Include="MVVM\Views\ViewToViewModelMappingTest.cs" />
     <Compile Include="MVVM\ViewModels\ViewModelFactoryFacts.cs" />
-    <Compile Include="MVVM\ViewModels\Attributes\ExposeAttributeFacts.cs" />
     <Compile Include="MVVM\ViewModels\Attributes\InterestedInAttributeFacts.cs" />
     <Compile Include="MVVM\ViewModels\Attributes\ModelAttributeFacts.cs" />
     <Compile Include="MVVM\ViewModels\Attributes\ViewModelToModelAttributeFacts.cs" />
     <Compile Include="MVVM\ViewModels\ManagedViewModelTest.cs" />
-    <Compile Include="MVVM\ViewModels\TestClasses\ExposingViewModel.cs" />
     <Compile Include="MVVM\ViewModels\TestClasses\InterestedViewModel.cs" />
     <Compile Include="MVVM\ViewModels\TestClasses\InterestingViewModel.cs" />
     <Compile Include="MVVM\ViewModels\TestClasses\Person.cs" />
@@ -354,6 +359,7 @@
     <Compile Include="Windows\Data\Converters\ShortDateFormattingConverterTest.cs" />
     <Compile Include="Windows\Helpers\CommandLineHelperFacts.cs" />
     <Compile Include="Windows\Helpers\ResourceHelperFacts.cs" />
+    <Compile Include="Windows\Input\InputGestureFacts.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Catel.Core\Catel.Core.NET40\Catel.Core.NET40.csproj">

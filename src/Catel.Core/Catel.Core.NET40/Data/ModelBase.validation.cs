@@ -14,7 +14,6 @@ namespace Catel.Data
     using System.Linq.Expressions;
     using System.Text;
     using System.Xml.Serialization;
-
     using Catel.IoC;
 
     using Logging;
@@ -79,7 +78,7 @@ namespace Catel.Data
         private readonly object _validationLock = new object();
 
         /// <summary>
-        /// The internal validation context, which can contain in-between validaftion info.
+        /// The internal validation context, which can contain in-between validation info.
         /// </summary>
 #if NET
         [field: NonSerialized]
@@ -99,6 +98,11 @@ namespace Catel.Data
 
 #if !WINDOWS_PHONE && !NETFX_CORE && !PCL && !NET35
 
+#if NET
+        [field: NonSerialized]
+#endif
+        private bool _firstAnnotationValidation = true;
+
         /// <summary>
         /// The property names that failed to validate and should be skipped next time for NET 4.0 
         /// attribute validation.
@@ -106,7 +110,7 @@ namespace Catel.Data
 #if NET
         [field: NonSerialized]
 #endif
-        private static readonly Dictionary<Type, List<string>> _propertyValuesFailedForValidation = new Dictionary<Type, List<string>>();
+        private static readonly Dictionary<Type, List<string>> _propertyValuesIgnoredOrFailedForValidation = new Dictionary<Type, List<string>>();
 
         /// <summary>
         /// A dictionary per type containing the properties at least once validated before. This is to speed up the first validation sequence.
@@ -443,7 +447,7 @@ namespace Catel.Data
 
             try
             {
-                if (!_propertyValuesFailedForValidation[type].Contains(propertyName))
+                if (!_propertyValuesIgnoredOrFailedForValidation[type].Contains(propertyName))
                 {
                     if (!_propertyValuesAtLeastOnceValidated[type].Contains(propertyName))
                     {
@@ -452,7 +456,7 @@ namespace Catel.Data
                         {
                             Log.Debug("Property '{0}' cannot be found via reflection, ignoring this property for type '{1}'", propertyName, type.FullName);
 
-                            _propertyValuesFailedForValidation[type].Add(propertyName);
+                            _propertyValuesIgnoredOrFailedForValidation[type].Add(propertyName);
                             return false;
                         }
 #else
@@ -461,7 +465,7 @@ namespace Catel.Data
                         {
                             Log.Debug("Property '{0}' is not a public property, cannot validate non-public properties in silverlight", propertyName);
 
-                            _propertyValuesFailedForValidation[type].Add(propertyName);
+                            _propertyValuesIgnoredOrFailedForValidation[type].Add(propertyName);
                             return false;
                         }
 #endif
@@ -492,7 +496,7 @@ namespace Catel.Data
             }
             catch (Exception ex)
             {
-                _propertyValuesFailedForValidation[type].Add(propertyName);
+                _propertyValuesIgnoredOrFailedForValidation[type].Add(propertyName);
 
                 Log.Warning(ex, "Failed to validate property '{0}' via Validator (property does not exists?)", propertyName);
             }
@@ -719,24 +723,35 @@ namespace Catel.Data
                 // Validate non-catel properties as well for attribute validation
                 foreach (var propertyInfo in catelTypeInfo.GetNonCatelProperties())
                 {
+                    var ignoredOrFailedPropertyValidations = _propertyValuesIgnoredOrFailedForValidation[type];
+
+                    if (_firstAnnotationValidation)
+                    {
+                        if (AttributeHelper.IsDecoratedWithAttribute<ExcludeFromValidationAttribute>(propertyInfo.Value))
+                        {
+                            ignoredOrFailedPropertyValidations.Add(propertyInfo.Key);
+                        }
+                    }
+
                     // TODO: Should we check for annotations attributes?
-                    var failedPropertyValidations = _propertyValuesFailedForValidation[type];
-                    if (failedPropertyValidations.Contains(propertyInfo.Key))
+                    if (ignoredOrFailedPropertyValidations.Contains(propertyInfo.Key))
                     {
                         continue;
                     }
 
                     try
                     {
-                        var propertyValue =  propertyInfo.Value.GetValue(this, null);
+                        var propertyValue = propertyInfo.Value.GetValue(this, null);
                         ValidatePropertyUsingAnnotations(propertyInfo.Key, propertyValue);
                     }
                     catch (Exception ex)
                     {
                         Log.Warning(ex, "Failed to validate property '{0}.{1}', adding it to the ignore list", type.Name, propertyInfo.Key);
-                        failedPropertyValidations.Add(propertyInfo.Key);
+                        ignoredOrFailedPropertyValidations.Add(propertyInfo.Key);
                     }
                 }
+
+                _firstAnnotationValidation = false;
 #endif
             }
 

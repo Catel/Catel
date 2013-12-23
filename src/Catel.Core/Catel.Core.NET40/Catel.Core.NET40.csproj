@@ -80,6 +80,8 @@
     <Compile Include="Collections\Extensions\DictionaryExtensions.cs" />
     <Compile Include="Collections\Helpers\CollectionHelper.cs" />
     <Compile Include="ComponentModel\Extensions\PropertyChangedEventArgsExtensions.cs" />
+    <Compile Include="Configuration\ConfigurationService.cs" />
+    <Compile Include="Configuration\EventArgs\ConfigurationChangedEventArgs.cs" />
     <Compile Include="Configuration\Extensions\ConfigurationExtensions.cs" />
     <Compile Include="ComponentModel\EventArgs\BeginEditEventArgs.cs" />
     <Compile Include="ComponentModel\EventArgs\CancelEditEventArgs.cs" />
@@ -91,8 +93,10 @@
     <Compile Include="ComponentModel\INotifyDataErrorInfo.cs" />
     <Compile Include="ComponentModel\INotifyDataWarningInfo.cs" />
     <Compile Include="Argument.expression.cs" />
+    <Compile Include="Configuration\Interfaces\IConfigurationService.cs" />
     <Compile Include="CoreModule.cs" />
     <Compile Include="Data\Attributes\AllowNonSerializableMembersAttribute.cs" />
+    <Compile Include="Data\Attributes\ExcludeFromValidationAttribute.cs" />
     <Compile Include="Data\Attributes\ValidateModelAttribute.cs" />
     <Compile Include="Data\AttributeValidatorProvider.cs" />
     <Compile Include="Data\ChangeNotificationWrapper.cs" />
@@ -191,6 +195,7 @@
     <Compile Include="IoC\CatelDependencyResolver.cs" />
     <Compile Include="IoC\DependencyResolverManager.cs" />
     <Compile Include="IoC\EventArgs\MissingTypeEventArgs.cs" />
+    <Compile Include="IoC\EventArgs\TypeInstantiatedEventArgs.cs" />
     <Compile Include="IoC\EventArgs\TypeRegisteredEventArgs.cs" />
     <Compile Include="IoC\Exceptions\ExternalContainerNotSupportedException.cs" />
     <Compile Include="IoC\Exceptions\CircularDependencyException.cs" />
@@ -215,6 +220,8 @@
     <Compile Include="IoC\RegistrationInfo.cs" />
     <Compile Include="IoC\ServiceLocator.cs" />
     <Compile Include="IoC\ServiceLocatorAutoRegistrationManager.cs" />
+    <Compile Include="IoC\ServiceLocatorRegistration.cs" />
+    <Compile Include="IoC\ServiceLocatorRegistrationGroup.cs" />
     <Compile Include="IoC\TypeFactory.cs" />
     <Compile Include="IoC\TypeRequestInfo.cs" />
     <Compile Include="IoC\TypeRequestPath.cs" />

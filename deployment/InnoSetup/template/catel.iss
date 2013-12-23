@@ -183,7 +183,7 @@ Root: HKLM; SubKey: SOFTWARE\Microsoft\Microsoft SDKs\Silverlight\v4.0\AssemblyF
 Root: HKLM; SubKey: SOFTWARE\Microsoft\Microsoft SDKs\Silverlight\v5.0\AssemblyFoldersEx\Catel; ValueType: string; ValueData: {app}\Libraries\SL5; Flags: UninsDeleteKey
 
 Root: HKLM; SubKey: SOFTWARE\Microsoft\Microsoft SDKs\Silverlight for WindowsPhone\v4.0\AssemblyFoldersEx\Catel (WP7); ValueType: string; ValueData: {app}\Libraries\WP7; Flags: UninsDeleteKey
-Root: HKLM; SubKey: SOFTWARE\Microsoft\Microsoft SDKs\WindowsPhone\v8.0\AssemblyFoldersEx\Catel (WP8); ValueType: string; ValueData: {app}\Libraries\WP8; Flags: UninsDeleteKey
+Root: HKLM; SubKey: SOFTWARE\Microsoft\Microsoft SDKs\WindowsPhone\v8.0\AssemblyFoldersEx\Catel (WP80); ValueType: string; ValueData: {app}\Libraries\WP80; Flags: UninsDeleteKey
 
 ;Root: HKLM; SubKey: SOFTWARE\Microsoft\Microsoft SDKs\Silverlight for WindowsPhone\v4.0\AssemblyFoldersEx\Catel (WinRT); ValueType: string; ValueData: {app}\Libraries\WinRT; Flags: UninsDeleteKey
 

@@ -25,24 +25,24 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\output\debug\WP8\Catel.Extensions.Controls\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;WP8</DefineConstants>
+    <OutputPath>..\..\..\output\debug\WP80\Catel.Extensions.Controls\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;WP80</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\..\output\debug\WP8\Catel.Extensions.Controls\Catel.Extensions.Controls.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\output\debug\WP80\Catel.Extensions.Controls\Catel.Extensions.Controls.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\output\release\WP8\Catel.Extensions.Controls\</OutputPath>
-    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE;WP8</DefineConstants>
+    <OutputPath>..\..\..\output\release\WP80\Catel.Extensions.Controls\</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE;WP80</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\..\output\release\WP8\Catel.Extensions.Controls\Catel.Extensions.Controls.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\output\release\WP80\Catel.Extensions.Controls\Catel.Extensions.Controls.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <None Include="Fody.targets" />
@@ -62,56 +62,56 @@
     <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Exceptions.WP8.Designer.cs">
-      <Link>Properties\Exceptions.WP8.Designer.cs</Link>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Exceptions.WP80.Designer.cs">
+      <Link>Properties\Exceptions.WP80.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Exceptions.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.de.WP8.Designer.cs">
-      <Link>Properties\Resources.de.WP8.Designer.cs</Link>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.de.WP80.Designer.cs">
+      <Link>Properties\Resources.de.WP80.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.de.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.es.WP8.Designer.cs">
-      <Link>Properties\Resources.es.WP8.Designer.cs</Link>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.es.WP80.Designer.cs">
+      <Link>Properties\Resources.es.WP80.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.es.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.fr.WP8.Designer.cs">
-      <Link>Properties\Resources.fr.WP8.Designer.cs</Link>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.fr.WP80.Designer.cs">
+      <Link>Properties\Resources.fr.WP80.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.fr.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.it.WP8.Designer.cs">
-      <Link>Properties\Resources.it.WP8.Designer.cs</Link>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.it.WP80.Designer.cs">
+      <Link>Properties\Resources.it.WP80.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.it.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.nl.WP8.Designer.cs">
-      <Link>Properties\Resources.nl.WP8.Designer.cs</Link>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.nl.WP80.Designer.cs">
+      <Link>Properties\Resources.nl.WP80.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.nl.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.tr.WP8.Designer.cs">
-      <Link>Properties\Resources.tr.WP8.Designer.cs</Link>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.tr.WP80.Designer.cs">
+      <Link>Properties\Resources.tr.WP80.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.tr.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.WP8.Designer.cs">
-      <Link>Properties\Resources.WP8.Designer.cs</Link>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.WP80.Designer.cs">
+      <Link>Properties\Resources.WP80.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.zh-CHS.WP8.Designer.cs">
-      <Link>Properties\Resources.zh-CHS.WP8.Designer.cs</Link>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.zh-CHS.WP80.Designer.cs">
+      <Link>Properties\Resources.zh-CHS.WP80.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.zh-CHS.resx</DependentUpon>
@@ -137,13 +137,13 @@
     <Folder Include="Windows\Media\Imaging\Extensions\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Catel.Core\Catel.Core.WP8\Catel.Core.WP8.csproj">
+    <ProjectReference Include="..\..\Catel.Core\Catel.Core.WP80\Catel.Core.WP80.csproj">
       <Project>{222A55F1-A032-4FAF-92C1-C51A2F7D2725}</Project>
-      <Name>Catel.Core.WP8</Name>
+      <Name>Catel.Core.WP80</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Catel.MVVM\Catel.MVVM.WP8\Catel.MVVM.WP8.csproj">
+    <ProjectReference Include="..\..\Catel.MVVM\Catel.MVVM.WP80\Catel.MVVM.WP80.csproj">
       <Project>{5168ABF4-2DCB-496B-8F76-DB9B716ACC4A}</Project>
-      <Name>Catel.MVVM.WP8</Name>
+      <Name>Catel.MVVM.WP80</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -161,55 +161,55 @@
     <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Exceptions.resx">
       <Link>Properties\Exceptions.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Exceptions.WP8.Designer.cs</LastGenOutput>
+      <LastGenOutput>Exceptions.WP80.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.de.resx">
       <Link>Properties\Resources.de.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.de.WP8.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.de.WP80.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.es.resx">
       <Link>Properties\Resources.es.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.es.WP8.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.es.WP80.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.fr.resx">
       <Link>Properties\Resources.fr.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.fr.WP8.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.fr.WP80.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.it.resx">
       <Link>Properties\Resources.it.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.it.WP8.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.it.WP80.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.nl.resx">
       <Link>Properties\Resources.nl.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.nl.WP8.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.nl.WP80.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.resx">
       <Link>Properties\Resources.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.WP8.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.WP80.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.tr.resx">
       <Link>Properties\Resources.tr.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.tr.WP8.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.tr.WP80.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.zh-CHS.resx">
       <Link>Properties\Resources.zh-CHS.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.zh-CHS.WP8.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.zh-CHS.WP80.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>

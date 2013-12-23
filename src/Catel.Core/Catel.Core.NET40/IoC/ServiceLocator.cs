@@ -8,6 +8,7 @@ namespace Catel.IoC
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
     using Catel.Scoping;
     using Logging;
@@ -19,9 +20,8 @@ namespace Catel.IoC
     public class ServiceLocator : IServiceLocator
     {
         #region Classes
-
         #region Nested type: RegisteredInstanceInfo
-        private class RegisteredInstanceInfo : RegisteredTypeInfo
+        private class RegisteredInstanceInfo : ServiceLocatorRegistration
         {
             #region Constructors
             public RegisteredInstanceInfo(Type declaringType, object implementingInstance, RegistrationType registrationType, object tag, object originalContainer)
@@ -33,46 +33,6 @@ namespace Catel.IoC
 
             #region Properties
             public object ImplementingInstance { get; private set; }
-            #endregion
-        }
-        #endregion
-
-        #region Nested type: RegisteredTypeInfo
-        private class RegisteredTypeInfo
-        {
-            #region Constructors
-            public RegisteredTypeInfo(Type declaringType, Type implementingType, object tag, RegistrationType registrationType, object originalContainer)
-            {
-                Argument.IsNotNull("declaringType", declaringType);
-                Argument.IsNotNull("implementingType", implementingType);
-                Argument.IsNotNull("originalContainer", originalContainer);
-
-                DeclaringType = declaringType;
-                DeclaringTypeName = declaringType.AssemblyQualifiedName;
-
-                ImplementingType = implementingType;
-                ImplementingTypeName = implementingType.AssemblyQualifiedName;
-
-                Tag = tag;
-                RegistrationType = registrationType;
-                OriginalContainer = originalContainer;
-            }
-            #endregion
-
-            #region Properties
-            public Type DeclaringType { get; private set; }
-
-            public string DeclaringTypeName { get; private set; }
-
-            public Type ImplementingType { get; private set; }
-
-            public string ImplementingTypeName { get; private set; }
-
-            public RegistrationType RegistrationType { get; private set; }
-
-            public object Tag { get; private set; }
-
-            public object OriginalContainer { get; private set; }
             #endregion
         }
         #endregion
@@ -157,7 +117,7 @@ namespace Catel.IoC
         /// <summary>
         /// A list of registered types including the types to instantiate.
         /// </summary>
-        private readonly Dictionary<ServiceInfo, RegisteredTypeInfo> _registeredTypes = new Dictionary<ServiceInfo, RegisteredTypeInfo>();
+        private readonly Dictionary<ServiceInfo, ServiceLocatorRegistration> _registeredTypes = new Dictionary<ServiceInfo, ServiceLocatorRegistration>();
 
         /// <summary>
         /// The _supported external containers.
@@ -202,6 +162,12 @@ namespace Catel.IoC
             AutomaticallyKeepContainersSynchronized = true;
             SupportDependencyInjection = true;
             CanResolveNonAbstractTypesWithoutRegistration = true;
+
+            // Register default implementations
+            // TODO: Enable for CTL-272 
+            //RegisterType(typeof(ICollection<>), typeof(Collection<>));
+            //RegisterType(typeof(IEnumerable<>), typeof(List<>));
+            //RegisterType(typeof(IList<>), typeof(List<>));
 
 #if !NETFX_CORE && !PCL
 #if !WINDOWS_PHONE
@@ -360,7 +326,7 @@ namespace Catel.IoC
                     if (registrationInfo != null)
                     {
                         // Now we know the container, register it as typeof(object), we will re-register as soon as the actual type is known
-                        _registeredTypes[serviceInfo] = new RegisteredTypeInfo(serviceType, typeof(object), tag, registrationInfo.RegistrationType, externalContainerKeyValuePair.Value);
+                        _registeredTypes[serviceInfo] = new ServiceLocatorRegistration(serviceType, typeof(object), tag, registrationInfo.RegistrationType, externalContainerKeyValuePair.Value);
                         return true;
                     }
                 }
@@ -389,6 +355,9 @@ namespace Catel.IoC
                         }
                     }
                 }
+
+                // CTL-271 Support generic lists (array specific type)
+                // TODO: Can register, 
 
                 // Last resort
                 var eventArgs = new MissingTypeEventArgs(serviceType);
@@ -489,7 +458,7 @@ namespace Catel.IoC
         /// <param name="tag">The tag to register the service with. The default value is <c>null</c>.</param>
         /// <returns>An instance of the type registered on the service.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">The type is not found in any container.</exception>
+        /// <exception cref="NotSupportedException">The type is not found in any container.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
         public object ResolveType(Type serviceType, object tag = null)
         {
@@ -687,6 +656,50 @@ namespace Catel.IoC
         }
 
         /// <summary>
+        /// Removes the registered type with the specific tag.
+        /// </summary>
+        /// <param name="serviceType">The type of the service.</param>
+        /// <param name="tag">The tag of the registered the service. The default value is <c>null</c>.</param>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
+        public void RemoveType(Type serviceType, object tag = null)
+        {
+            Argument.IsNotNull("serviceType", serviceType);
+
+            lock (_lockObject)
+            {
+                RemoveInstance(serviceType, tag);
+                var serviceInfo = new ServiceInfo(serviceType, tag);
+                if (_registeredTypes.ContainsKey(serviceInfo))
+                {
+                    _registeredTypes.Remove(serviceInfo);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Removes all registered types of a certain service type.
+        /// </summary>
+        /// <param name="serviceType">The type of the service.</param>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
+        public void RemoveAllTypes(Type serviceType)
+        {
+            Argument.IsNotNull("serviceType", serviceType);
+
+            lock (_lockObject)
+            {
+                RemoveAllInstances(serviceType);
+                for (int i = _registeredTypes.Count - 1; i >= 0; i--)
+                {
+                    ServiceInfo serviceInfo = _registeredTypes.Keys.ElementAt(i);
+                    if (serviceInfo.Type == serviceType)
+                    {
+                        _registeredTypes.Remove(serviceInfo);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Determines whether the specified <paramref name="externalContainer">external container</paramref> is supported
         /// by this <see cref="IServiceLocator" />.
         /// </summary>
@@ -871,6 +884,11 @@ namespace Catel.IoC
         /// Occurs when a type is registered in the service locator.
         /// </summary>
         public event EventHandler<TypeRegisteredEventArgs> TypeRegistered;
+
+        /// <summary>
+        /// Occurs when a type is instantiated in the service locator.
+        /// </summary>
+        public event EventHandler<TypeInstantiatedEventArgs> TypeInstantiated;
         #endregion
 
         #region Methods
@@ -895,7 +913,7 @@ namespace Catel.IoC
                 originalContainer = this;
             }
 
-            var registeredTypeInfo = new RegisteredTypeInfo(serviceType, instance.GetType(), tag, RegistrationType.Singleton, originalContainer);
+            var registeredTypeInfo = new ServiceLocatorRegistration(serviceType, instance.GetType(), tag, RegistrationType.Singleton, originalContainer);
 
             lock (_lockObject)
             {
@@ -948,7 +966,7 @@ namespace Catel.IoC
             */
 
             // Outside lock scope for event
-            RegisteredTypeInfo registeredTypeInfo = null;
+            ServiceLocatorRegistration registeredTypeInfo = null;
 
             lock (_lockObject)
             {
@@ -966,7 +984,7 @@ namespace Catel.IoC
 
                 Log.Debug("Registering type '{0}' to type '{1}'", serviceType.FullName, serviceImplementationType.FullName);
 
-                registeredTypeInfo = new RegisteredTypeInfo(serviceType, serviceImplementationType, tag, registrationType, originalContainer);
+                registeredTypeInfo = new ServiceLocatorRegistration(serviceType, serviceImplementationType, tag, registrationType, originalContainer);
                 _registeredTypes[serviceInfo] = registeredTypeInfo;
 
                 if (AutomaticallyKeepContainersSynchronized)
@@ -1019,7 +1037,7 @@ namespace Catel.IoC
                 var registeredTypeInfo = _registeredTypes[serviceInfo];
                 if (ObjectHelper.AreEqual(registeredTypeInfo.OriginalContainer, this))
                 {
-                    object instance = CreateServiceInstance(registeredTypeInfo.ImplementingType);
+                    object instance = CreateServiceInstance(registeredTypeInfo);
                     if (instance != null)
                     {
                         if (IsTypeRegisteredAsSingleton(serviceType, tag))
@@ -1131,16 +1149,32 @@ namespace Catel.IoC
         /// <summary>
         /// Creates the service instance.
         /// </summary>
-        /// <param name="serviceType">Type of the service to instantiate.</param>
+        /// <param name="registration">The registration.</param>
         /// <returns>The service instance.</returns>
-        private object CreateServiceInstance(Type serviceType)
+        private object CreateServiceInstance(ServiceLocatorRegistration registration)
         {
+            object instance;
+
             if (SupportDependencyInjection)
             {
-                return _typeFactory.CreateInstance(serviceType);
+                instance = _typeFactory.CreateInstance(registration.ImplementingType);
+            }
+            else
+            {
+                instance = _typeFactory.CreateInstanceUsingActivator(registration.ImplementingType);
             }
 
-            return _typeFactory.CreateInstanceUsingActivator(serviceType);
+            if (instance != null)
+            {
+                var handler = TypeInstantiated;
+                if (handler != null)
+                {
+                    handler(this, new TypeInstantiatedEventArgs(registration.DeclaringType, registration.ImplementingType,
+                        registration.Tag, registration.RegistrationType));
+                }
+            }
+
+            return instance;
         }
 
         /// <summary>

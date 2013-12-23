@@ -49,7 +49,7 @@ namespace Catel.Windows
 		/// Handles the AutoDisposeProperties call.
 		/// </summary>
 		/// <param name="sender">The sender.</param>
-		/// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
+		/// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
 		private static void UnloadedWrapper(object sender, RoutedEventArgs e)
 		{
 			AutoDisposeProperties(sender);

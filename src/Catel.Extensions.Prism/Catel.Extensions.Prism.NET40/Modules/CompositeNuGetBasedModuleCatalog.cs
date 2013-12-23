@@ -10,7 +10,6 @@ namespace Catel.Modules
     using System.Linq;
 
     using Catel.Logging;
-    using Catel.Modules;
 
     using Microsoft.Practices.Prism.Modularity;
 
@@ -106,11 +105,8 @@ namespace Catel.Modules
         /// <summary>
         /// Gets or sets the parent nuget based catalog.
         /// </summary>
-        public INuGetBasedModuleCatalog Parent
-        {
-            get;
-            set;
-        }
+        /// <value>The parent.</value>
+        public INuGetBasedModuleCatalog Parent { get; set; }
 
         /// <summary>
         /// Gets the output directory full path.
@@ -121,18 +117,12 @@ namespace Catel.Modules
         }
 
         /// <summary>
-        /// Tries to create and install package request from the <paramref name="moduleInfo"/>.
+        /// Tries to create and install package request from the <paramref name="moduleInfo" />.
         /// </summary>
-        /// <param name="moduleInfo">
-        /// The module info.
-        /// </param>
-        /// <param name="installPackageRequest">
-        /// The install package request.
-        /// </param>
-        /// <returns>
-        /// <c>true</c> whether the install package request is created, otherwise <c>false</c>
-        /// </returns>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="moduleInfo"/> is <c>null</c>.</exception>
+        /// <param name="moduleInfo">The module info.</param>
+        /// <param name="installPackageRequest">The install package request.</param>
+        /// <returns><c>true</c> whether the install package request is created, otherwise <c>false</c></returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="moduleInfo" /> is <c>null</c>.</exception>
         public bool TryCreateInstallPackageRequest(ModuleInfo moduleInfo, out InstallPackageRequest installPackageRequest)
         {
             Argument.IsNotNull(() => moduleInfo);
@@ -152,8 +142,9 @@ namespace Catel.Modules
         }
 
         /// <summary>
-        ///     Gets the package repository.
+        /// Gets the package repository.
         /// </summary>
+        /// <returns>The <see cref="IPackageRepository" />.</returns>
         public IPackageRepository GetPackageRepository()
         {
             var compositePackageRepository = new CompositePackageRepository();
@@ -171,7 +162,7 @@ namespace Catel.Modules
         /// <summary>
         /// Ensure parent child relationship
         /// </summary>
-        /// <param name="catalog"></param>
+        /// <param name="catalog">The catalog.</param>
         private void EnsureParentChildRelationship(INuGetBasedModuleCatalog catalog)
         {
             Log.Debug("Ensuring parent child relationship");
