@@ -435,21 +435,40 @@ namespace Catel.IoC
         }
 
         /// <summary>
-        /// Registers an implementation of an service, but only if the type is not yet registered.
+        /// Registers an implementation of a service, but only if the type is not yet registered.
         /// </summary>
         /// <param name="serviceType">The type of the service.</param>
         /// <param name="serviceImplementationType">The type of the implementation.</param>
         /// <param name="tag">The tag to register the service with. The default value is <c>null</c>.</param>
         /// <param name="registrationType">The registration type. The default value is <see cref="RegistrationType.Singleton" />.</param>
         /// <param name="registerIfAlreadyRegistered">If set to <c>true</c>, an older type registration is overwritten by this new one.</param>
-        /// <param name="createServiceFunc">The create service function.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="serviceType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="serviceImplementationType" /> is <c>null</c>.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
-        public void RegisterType(Type serviceType, Type serviceImplementationType, object tag = null, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true, Func<object> createServiceFunc = null)
+        public void RegisterType(Type serviceType, Type serviceImplementationType, object tag = null, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true)
         {
+            Argument.IsNotNull("serviceImplementationType", serviceImplementationType);
+
             RegisterType(serviceType, serviceImplementationType, tag, registrationType, registerIfAlreadyRegistered, 
-                this, createServiceFunc);
+                this, null);
+        }
+
+        /// <summary>
+        /// Registers an implementation of a service using a create type callback, but only if the type is not yet registered.
+        /// </summary>
+        /// <param name="serviceType">The type of the service.</param>
+        /// <param name="createServiceFunc">The create service function.</param>
+        /// <param name="tag">The tag to register the service with. The default value is <c>null</c>.</param>
+        /// <param name="registrationType">The registration type. The default value is <see cref="RegistrationType.Singleton" />.</param>
+        /// <param name="registerIfAlreadyRegistered">If set to <c>true</c>, an older type registration is overwritten by this new one.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="serviceType" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="createServiceFunc" /> is <c>null</c>.</exception>
+        /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
+        public void RegisterType(Type serviceType, Func<ServiceLocatorRegistration, object> createServiceFunc, object tag = null, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true)
+        {
+            Argument.IsNotNull("createServiceFunc", createServiceFunc);
+
+            RegisterType(serviceType, null, tag, registrationType, registerIfAlreadyRegistered, this, createServiceFunc);
         }
 
         /// <summary>
@@ -946,11 +965,15 @@ namespace Catel.IoC
         /// <param name="createServiceFunc">The create service function.</param>
         /// <exception cref="System.InvalidOperationException"></exception>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="serviceImplementationType" /> is <c>null</c>.</exception>
-        internal void RegisterType(Type serviceType, Type serviceImplementationType, object tag, RegistrationType registrationType, bool registerIfAlreadyRegistered, object originalContainer, Func<object> createServiceFunc)
+        private void RegisterType(Type serviceType, Type serviceImplementationType, object tag, RegistrationType registrationType, bool registerIfAlreadyRegistered, object originalContainer, Func<ServiceLocatorRegistration, object> createServiceFunc)
         {
             Argument.IsNotNull("serviceType", serviceType);
-            Argument.IsNotNull("implementingType", serviceImplementationType);
+
+            if (serviceImplementationType == null)
+            {
+                // Dynamic late-bound type
+                serviceImplementationType = typeof(LateBoundImplementation);
+            }
 
             if (serviceImplementationType.IsInterfaceEx())
             {
@@ -989,7 +1012,7 @@ namespace Catel.IoC
                 Log.Debug("Registering type '{0}' to type '{1}'", serviceType.FullName, serviceImplementationType.FullName);
 
                 registeredTypeInfo = new ServiceLocatorRegistration(serviceType, serviceImplementationType, tag, registrationType, 
-                    originalContainer, x => (createServiceFunc != null) ? createServiceFunc() : CreateServiceInstance(x));
+                    originalContainer, x => (createServiceFunc != null) ? createServiceFunc(x) : CreateServiceInstance(x));
                 _registeredTypes[serviceInfo] = registeredTypeInfo;
 
                 if (AutomaticallyKeepContainersSynchronized)
@@ -1042,7 +1065,7 @@ namespace Catel.IoC
                 var registeredTypeInfo = _registeredTypes[serviceInfo];
                 if (ObjectHelper.AreEqual(registeredTypeInfo.OriginalContainer, this))
                 {
-                    object instance = CreateServiceInstance(registeredTypeInfo);
+                    object instance = registeredTypeInfo.CreateServiceFunc(registeredTypeInfo);
                     if (instance != null)
                     {
                         if (IsTypeRegisteredAsSingleton(serviceType, tag))

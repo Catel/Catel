@@ -27,6 +27,8 @@ namespace Catel.IoC
         public ServiceLocatorRegistration(Type declaringType, Type implementingType, object tag, RegistrationType registrationType, 
             object originalContainer, Func<ServiceLocatorRegistration, object> createServiceFunc)
         {
+            Argument.IsNotNull("createServiceFunc", createServiceFunc);
+
             CreateServiceFunc = createServiceFunc;
             DeclaringType = declaringType;
             DeclaringTypeName = declaringType.AssemblyQualifiedName;

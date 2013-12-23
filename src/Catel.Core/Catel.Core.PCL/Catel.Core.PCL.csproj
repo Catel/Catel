@@ -462,6 +462,9 @@
     <Compile Include="..\Catel.Core.NET40\IoC\IoCConfiguration.cs">
       <Link>IoC\IoCConfiguration.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\LateBoundImplementation.cs">
+      <Link>IoC\LateBoundImplementation.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\RegistrationInfo.cs">
       <Link>IoC\RegistrationInfo.cs</Link>
     </Compile>

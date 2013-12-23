@@ -28,6 +28,7 @@ xxx
 
 Added/fixed:
 ============
+(+) CTL-24 ServiceLocator can now register types with a callback so types can be created using a function callback
 (+) CTL-204 Catel.IoC.IServiceLocator should contains some method to remove registered type
 (+) CTL-262 Created CommandManager to support application-wide commands using MVVM
 (+) CTL-266 Added ConfigurationService to get and set configuration values
