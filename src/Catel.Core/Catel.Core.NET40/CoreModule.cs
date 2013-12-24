@@ -36,6 +36,9 @@ namespace Catel
 
             serviceLocator.RegisterInstance<IExceptionService>(ExceptionService.Default);
             serviceLocator.RegisterInstance<IMessageMediator>(MessageMediator.Default);
+#if !DEBUG
+            serviceLocator.RegisterInstance<IRegistrationConventionHandler>(RegistrationConventionHandler.Default);
+#endif
 
             serviceLocator.RegisterTypeIfNotYetRegistered<IValidatorProvider, AttributeValidatorProvider>();
 

@@ -249,12 +249,8 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("serviceLocator", serviceLocator);
 
-            var registrationConventionHandler = new RegistrationConventionHandler(serviceLocator, TypeFactory.Default);
-
-            registrationConventionHandler.RegisterConvention<NamingRegistrationConvention>(registrationType);
-            registrationConventionHandler.RegisterConvention<FirstInterfaceRegistrationConvention>(registrationType);
-
-            registrationConventionHandler.ApplyConventions();
+            RegisterTypesUsingConvention<NamingRegistrationConvention>(serviceLocator, registrationType);
+            var registrationConventionHandler = RegisterTypesUsingConvention<FirstInterfaceRegistrationConvention>(serviceLocator, registrationType);
 
             return registrationConventionHandler;
         }
@@ -269,11 +265,7 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("serviceLocator", serviceLocator);
 
-            var registrationConventionHandler = new RegistrationConventionHandler(serviceLocator, TypeFactory.Default);
-
-            registrationConventionHandler.RegisterConvention<NamingRegistrationConvention>(registrationType);
-
-            registrationConventionHandler.ApplyConventions();
+            var registrationConventionHandler = RegisterTypesUsingConvention<NamingRegistrationConvention>(serviceLocator, registrationType);
 
             return registrationConventionHandler;
         }
@@ -288,11 +280,7 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("serviceLocator", serviceLocator);
 
-            var registrationConventionHandler = new RegistrationConventionHandler(serviceLocator, TypeFactory.Default);
-
-            registrationConventionHandler.RegisterConvention<FirstInterfaceRegistrationConvention>(registrationType);
-
-            registrationConventionHandler.ApplyConventions();
+            var registrationConventionHandler = RegisterTypesUsingConvention<FirstInterfaceRegistrationConvention>(serviceLocator, registrationType);
 
             return registrationConventionHandler;
         }
@@ -308,11 +296,16 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("serviceLocator", serviceLocator);
 
-            var registrationConventionHandler = new RegistrationConventionHandler(serviceLocator, TypeFactory.Default);
+#if DEBUG
+            if (!serviceLocator.IsTypeRegistered(typeof(IRegistrationConventionHandler)))
+            {
+                serviceLocator.RegisterInstance<IRegistrationConventionHandler>(new RegistrationConventionHandler(serviceLocator));
+            }
+#endif
+
+            var registrationConventionHandler = serviceLocator.ResolveType<IRegistrationConventionHandler>();
 
             registrationConventionHandler.RegisterConvention<TRegistrationConvention>(registrationType);
-
-            registrationConventionHandler.ApplyConventions();
 
             return registrationConventionHandler;
         }

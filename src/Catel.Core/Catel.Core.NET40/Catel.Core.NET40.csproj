@@ -170,6 +170,7 @@
     <Compile Include="ExceptionHandling\Extensions\ExceptionExtensions.cs" />
     <Compile Include="Filtering\CompositeFilter.cs" />
     <Compile Include="Filtering\CompositePredicate.cs" />
+    <Compile Include="Filtering\Interfaces\ICompositeFilter.cs" />
     <Compile Include="Fluent\Interfaces\IFluent.cs" />
     <Compile Include="Generics\NullOp.cs" />
     <Compile Include="Generics\Operator.cs" />

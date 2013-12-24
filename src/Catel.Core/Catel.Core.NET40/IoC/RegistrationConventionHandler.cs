@@ -25,6 +25,11 @@ namespace Catel.IoC
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// The static instance of the registration convention handler.
+        /// </summary>
+        private static readonly IRegistrationConventionHandler _default = new RegistrationConventionHandler();
         #endregion
 
         #region Fields
@@ -58,15 +63,10 @@ namespace Catel.IoC
         /// <summary>
         /// Initializes a new instance of the <see cref="RegistrationConventionHandler" /> class.
         /// </summary>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="typeFactory"/> is <c>null</c>.</exception>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="serviceLocator"/> is <c>null</c>.</exception>
-        public RegistrationConventionHandler(IServiceLocator serviceLocator, ITypeFactory typeFactory)
+        public RegistrationConventionHandler(IServiceLocator serviceLocator = null, ITypeFactory typeFactory = null)
         {
-            Argument.IsNotNull("serviceLocator", serviceLocator);
-            Argument.IsNotNull("typeFactory", typeFactory);
-
-            _serviceLocator = serviceLocator;
-            _typeFactory = typeFactory;
+            _serviceLocator = serviceLocator ?? this.GetServiceLocator();
+            _typeFactory = typeFactory ?? this.GetTypeFactory();
             TypeFilter = new CompositeFilter<Type>();
             AssemblyFilter = new CompositeFilter<Assembly>();
 
@@ -94,6 +94,8 @@ namespace Catel.IoC
                            );
             };
 
+            TypeFilter.Excludes += type => !type.IsInterfaceEx() && !type.GetParentTypes().Any(parentType => parentType.IsInterfaceEx());
+
             TypeFilter.Excludes += type => !string.IsNullOrWhiteSpace(type.Namespace) &&
                                            (
 #if !DEBUG
@@ -101,6 +103,17 @@ namespace Catel.IoC
 #endif
                                                type.Name.StartsWith("<")
                                                );
+        }
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets the default instance of the registration convention handler.
+        /// </summary>
+        /// <value>The default instance.</value>
+        public static IRegistrationConventionHandler Default
+        {
+            get { return _default; }
         }
         #endregion
 
@@ -127,13 +140,13 @@ namespace Catel.IoC
         /// Gets the type filter.
         /// </summary>
         /// <value>The type filter.</value>
-        public CompositeFilter<Type> TypeFilter { get; private set; }
+        public ICompositeFilter<Type> TypeFilter { get; private set; }
 
         /// <summary>
         /// Gets the assembly filter.
         /// </summary>
         /// <value>The assembly filter.</value>
-        public CompositeFilter<Assembly> AssemblyFilter { get; private set; }
+        public ICompositeFilter<Assembly> AssemblyFilter { get; private set; }
 
         /// <summary>
         /// Registers the convention.
@@ -151,6 +164,8 @@ namespace Catel.IoC
             Log.Debug("Registering '{0}' on cached conventions", typeof (TRegistrationConvention).Name);
 
             _registeredConventions.Add(registrationConvention);
+
+            ApplyConventions();
         }
 
         /// <summary>
@@ -192,10 +207,14 @@ namespace Catel.IoC
 
             lock (_assemblies)
             {
-                if (!_assemblies.Contains(assembly))
+                if (_assemblies.Contains(assembly))
                 {
-                    _assemblies.Add(assembly);
+                    return;
                 }
+
+                _assemblies.Add(assembly);
+
+                ApplyConventions();
             }
         }
         #endregion

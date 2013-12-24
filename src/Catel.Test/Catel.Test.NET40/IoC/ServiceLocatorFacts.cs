@@ -1075,6 +1075,18 @@
 
                 Assert.IsTrue(serviceLocator.IsTypeRegistered<IFooService>());
             }
+
+            [TestMethod]
+            public void ShouldExcludeSpecifiedType()
+            {
+                var serviceLocator = new ServiceLocator();
+
+                serviceLocator.RegisterTypesUsingDefaultNamingConvention()
+                              .ExcludeType<FooService2>();
+
+                Assert.IsTrue(serviceLocator.IsTypeRegistered<IFooService>());
+                Assert.IsFalse(serviceLocator.IsTypeRegistered<IFooService2>());
+            }
         }
 
         [TestClass]

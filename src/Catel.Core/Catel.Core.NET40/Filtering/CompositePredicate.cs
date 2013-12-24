@@ -15,13 +15,13 @@ namespace Catel
     /// Composite predicate.
     /// </summary>
     /// <typeparam name="T">The predicates.</typeparam>
-    public class CompositePredicate<T>
+    public class CompositePredicate<T> where T : class 
     {
         #region Fields
         private readonly List<Predicate<T>> _filters = new List<Predicate<T>>();
-        private Predicate<T> _matchesAll = x => true;
-        private Predicate<T> _matchesAny = x => true;
-        private Predicate<T> _matchesNone = x => false;
+        private Predicate<T> _matchesAll = candidate => true;
+        private Predicate<T> _matchesAny = candidate => true;
+        private Predicate<T> _matchesNone = candidate => false;
         #endregion
 
         #region Methods
@@ -34,9 +34,9 @@ namespace Catel
         {
             Argument.IsNotNull("filter", filter);
 
-            _matchesAll = x => _filters.All(predicate => predicate(x));
-            _matchesAny = x => _filters.Any(predicate => predicate(x));
-            _matchesNone = x => !MatchesAny(x);
+            _matchesAll = candidate => _filters.All(predicate => predicate(candidate));
+            _matchesAny = candidate => _filters.Any(predicate => predicate(candidate));
+            _matchesNone = candidate => !MatchesAny(candidate);
 
             _filters.Add(filter);
         }
@@ -46,8 +46,11 @@ namespace Catel
         /// </summary>
         /// <param name="target">The target.</param>
         /// <returns><c>true</c> if the target matches all of the filters, <c>false</c> otherwise.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="target"/> is <c>null</c>.</exception>
         public bool MatchesAll(T target)
         {
+            Argument.IsNotNull("target", target);
+
             return _matchesAll(target);
         }
 
@@ -56,8 +59,11 @@ namespace Catel
         /// </summary>
         /// <param name="target">The target.</param>
         /// <returns><c>true</c> if the target matches any of the filters, <c>false</c> otherwise.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="target"/> is <c>null</c>.</exception>
         public bool MatchesAny(T target)
         {
+            Argument.IsNotNull("target", target);
+
             return _matchesAny(target);
         }
 
@@ -66,8 +72,11 @@ namespace Catel
         /// </summary>
         /// <param name="target">The target.</param>
         /// <returns><c>true</c> if the target matches none of the filters, <c>false</c> otherwise.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="target"/> is <c>null</c>.</exception>
         public bool MatchesNone(T target)
         {
+            Argument.IsNotNull("target", target);
+
             return _matchesNone(target);
         }
 
@@ -76,11 +85,13 @@ namespace Catel
         /// </summary>
         /// <param name="target">The target.</param>
         /// <returns><c>true</c> if the target does not match any of the filters, <c>false</c> otherwise.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="target"/> is <c>null</c>.</exception>
         public bool DoesNotMatchAny(T target)
         {
-            return _filters.Count == 0 || !MatchesAny(target);
+            Argument.IsNotNull("target", target);
+
+            return !_filters.Any() || !MatchesAny(target);
         }
-        #endregion
 
         /// <summary>
         /// +s the specified invokes.
@@ -88,10 +99,16 @@ namespace Catel
         /// <param name="invokes">The invokes.</param>
         /// <param name="filter">The filter.</param>
         /// <returns></returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="invokes"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="filter"/> is <c>null</c>.</exception>
         public static CompositePredicate<T> operator +(CompositePredicate<T> invokes, Predicate<T> filter)
         {
+            Argument.IsNotNull("invokes", invokes);
+            Argument.IsNotNull("filter", filter);
+
             invokes.Add(filter);
             return invokes;
         }
+        #endregion
     }
 }

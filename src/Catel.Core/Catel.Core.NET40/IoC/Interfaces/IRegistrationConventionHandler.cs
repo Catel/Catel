@@ -31,7 +31,7 @@ namespace Catel.IoC
         /// <value>
         /// The type filter.
         /// </value>
-        CompositeFilter<Type> TypeFilter { get; }
+        ICompositeFilter<Type> TypeFilter { get; }
 
         /// <summary>
         /// Gets the assembly filter.
@@ -39,7 +39,7 @@ namespace Catel.IoC
         /// <value>
         /// The assembly filter.
         /// </value>
-        CompositeFilter<Assembly> AssemblyFilter { get; }
+        ICompositeFilter<Assembly> AssemblyFilter { get; }
         #endregion
 
         #region Methods
