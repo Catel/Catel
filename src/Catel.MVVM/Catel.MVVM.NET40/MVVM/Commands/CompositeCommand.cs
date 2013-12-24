@@ -61,23 +61,19 @@ namespace Catel.MVVM
 
         private bool CanExecuteCompositeCommand()
         {
-			bool res = false;
-			
             lock (_lock)
             {
-				res = _commandInfo.Count > 0;
-                if (res)
+                if (_commandInfo.Count > 0)
                 {
                     foreach (var commandInfo in _commandInfo)
                     {
-                        res &= commandInfo.Command.CanExecute();
-                        if(res)
-                            break;
+                        if (commandInfo.Command.CanExecute())
+                            return true;
                     }
                 }
             }
 
-            return res;
+            return false;
         }
 
         /// <summary>
