@@ -554,11 +554,13 @@ namespace Catel.Runtime.Serialization.Xml
                         {
                             Log.Debug("Existing reference detected for element type '{0}' with id '{1}', only storing id", memberTypeToSerialize.GetSafeFullName(), referenceInfo.Id);
 
-                            serializer.WriteStartObject(xmlWriter, memberValue.Value);
+                            //serializer.WriteStartObject(xmlWriter, memberValue.Value);
+                            xmlWriter.WriteStartElement(elementName);
 
                             xmlWriter.WriteAttributeString(namespacePrefix, GraphRefId, null, referenceInfo.Id.ToString());
 
-                            serializer.WriteEndObject(xmlWriter);
+                            //serializer.WriteEndObject(xmlWriter);
+                            xmlWriter.WriteEndElement();
 
                             serializeElement = false;
                         }
@@ -567,10 +569,9 @@ namespace Catel.Runtime.Serialization.Xml
                     if (serializeElement)
                     {
                         //var xmlSerializer = new System.Xml.Serialization.XmlSerializer(memberTypeToSerialize, namespacePrefix);
-                        //xmlSerializer.S
                         //xmlSerializer.Serialize(xmlWriter, memberValue.Value);
 
-                        serializer.WriteStartObject(xmlWriter, memberValue.Value);
+                        xmlWriter.WriteStartElement(elementName);
 
                         xmlNamespace = _xmlNamespaceManager.GetNamespace(memberTypeToSerialize, namespacePrefix);
                         if (xmlNamespace != null)
@@ -591,7 +592,7 @@ namespace Catel.Runtime.Serialization.Xml
 
                         serializer.WriteObjectContent(xmlWriter, memberValue.Value);
 
-                        serializer.WriteEndObject(xmlWriter);
+                        xmlWriter.WriteEndElement();
                     }
                 }
             }
