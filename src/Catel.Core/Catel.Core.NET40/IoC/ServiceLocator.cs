@@ -921,7 +921,7 @@ namespace Catel.IoC
         /// <param name="originalContainer">The original container where the instance was found in.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="instance"/> is <c>null</c>.</exception>
-        internal void RegisterInstance(Type serviceType, object instance, object tag, object originalContainer)
+        private void RegisterInstance(Type serviceType, object instance, object tag, object originalContainer)
         {
             Argument.IsNotNull("serviceType", serviceType);
             Argument.IsNotNull("instance", instance);
@@ -939,8 +939,18 @@ namespace Catel.IoC
             lock (_lockObject)
             {
                 var serviceInfo = new ServiceInfo(serviceType, tag);
+
+                if (_registeredTypes.ContainsKey(serviceInfo))
+                {
+                    // Re-use previous subscription
+                    registeredTypeInfo = _registeredTypes[serviceInfo];
+                }
+                else
+                {
+                    _registeredTypes[serviceInfo] = registeredTypeInfo;
+                }
+
                 _registeredInstances[serviceInfo] = new RegisteredInstanceInfo(registeredTypeInfo, instance);
-                _registeredTypes[serviceInfo] = registeredTypeInfo;
 
                 if (AutomaticallyKeepContainersSynchronized)
                 {
