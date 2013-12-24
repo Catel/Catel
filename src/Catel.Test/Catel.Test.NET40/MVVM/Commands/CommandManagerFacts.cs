@@ -30,6 +30,31 @@ namespace Catel.Test.MVVM
             }
 
             [TestMethod]
+            public void ThrowsArgumentNullExceptionForNullInstanceNullCommandName()
+            {
+                var commandManager = new CommandManager();
+
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.AddCommand(null, null));
+            }
+
+            [TestMethod]
+            public void ThrowsArgumentNullExceptionForNullInstanceWhitespaceCommandName()
+            {
+                var commandManager = new CommandManager();
+
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.AddCommand(null, " "));
+            }
+
+            [TestMethod]
+            public void ThrowsArgumentNullExceptionForInstanceWhitespaceCommandName()
+            {
+                var commandManager = new CommandManager();
+                var command = new CompositeCommand();
+
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.AddCommand(command, " "));
+            }
+
+            [TestMethod]
             public void ThrowsArgumentNullExceptionForWhitespaceCommandName()
             {
                 var commandManager = new CommandManager();
@@ -48,7 +73,48 @@ namespace Catel.Test.MVVM
             }
 
             [TestMethod]
+            public void ThrowsInvalidOperationExceptionOnAddForAlreadyCreatedCommand()
+            {
+                var commandManager = new CommandManager();
+
+                commandManager.CreateCommand("MyCommand");
+
+                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => commandManager.AddCommand(new CompositeCommand(), "MyCommand"));
+            }
+
+            [TestMethod]
+            public void ThrowsInvalidOperationExceptionOnAddForAlreadyAddedCommand()
+            {
+                var commandManager = new CommandManager();
+
+                commandManager.AddCommand(new CompositeCommand(), "MyCommand");
+
+                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => commandManager.AddCommand(new CompositeCommand(), "MyCommand"));
+            }
+
+            [TestMethod]
+            public void ThrowsInvalidOperationExceptionOnAddForAlreadyAddedCommandInstance()
+            {
+                var commandManager = new CommandManager();
+
+                var cmd = new CompositeCommand();
+                commandManager.AddCommand(cmd, "MyCommand");
+
+                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => commandManager.AddCommand(cmd, "MyCommand2"));
+            }
+            
+            [TestMethod]
             public void CorrectlyCreatesTheCommand()
+            {
+                var commandManager = new CommandManager();
+
+                commandManager.CreateCommand("MyCommand");
+
+                Assert.IsTrue(commandManager.IsCommandCreated("MyCommand"));
+            }
+
+            [TestMethod]
+            public void CorrectlyAddTheCommand()
             {
                 var commandManager = new CommandManager();
 
@@ -83,6 +149,16 @@ namespace Catel.Test.MVVM
                 var commandManager = new CommandManager();
 
                 commandManager.CreateCommand("MyCommand");
+
+                Assert.IsTrue(commandManager.IsCommandCreated("MyCommand"));
+            }
+
+            [TestMethod]
+            public void ReturnsTrueForAddedCommand()
+            {
+                var commandManager = new CommandManager();
+
+                commandManager.AddCommand(new CompositeCommand(), "MyCommand");
 
                 Assert.IsTrue(commandManager.IsCommandCreated("MyCommand"));
             }
@@ -132,6 +208,17 @@ namespace Catel.Test.MVVM
 
                 Assert.IsNotNull(commandManager.GetCommand("MyCommand"));
             }
+
+            [TestMethod]
+            public void ReturnsCommandForAddedCommand()
+            {
+                var commandManager = new CommandManager();
+
+                var cmd = new CompositeCommand();
+                commandManager.AddCommand(cmd, "MyCommand");
+
+                Assert.IsTrue(cmd == commandManager.GetCommand("MyCommand"));
+            }
         }
 
         [TestClass]
@@ -168,6 +255,22 @@ namespace Catel.Test.MVVM
             }
 
             [TestMethod]
+            public void ExecutesOutsideRegisteredCommands()
+            {
+                var vm = new CompositeCommandViewModel();
+                var commandManager = new CommandManager();
+
+                var cmd = new CompositeCommand();
+
+                commandManager.AddCommand(cmd, "MyCommand");
+                commandManager.RegisterCommand("MyCommand", vm.TestCommand1);
+
+                cmd.Execute();
+
+                Assert.IsTrue(vm.IsTestCommand1Executed);
+            }
+
+            [TestMethod]
             public void DoesNotExecuteUnregisteredCommands()
             {
                 var vm = new CompositeCommandViewModel();
@@ -195,7 +298,7 @@ namespace Catel.Test.MVVM
                 var vm = new CompositeCommandViewModel();
                 var commandManager = new CommandManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.RegisterCommand(null, vm.TestCommand1));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.RegisterCommand((String)null, vm.TestCommand1));
             }
 
             [TestMethod]

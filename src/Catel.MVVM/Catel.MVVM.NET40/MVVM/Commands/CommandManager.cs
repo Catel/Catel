@@ -80,6 +80,42 @@ namespace Catel.MVVM
                 _commandGestures.Add(commandName, inputGesture);
             }
         }
+
+        /// <summary>
+        /// Creates the command inside the command manager.
+        /// </summary>
+        /// <param name="command">Command instance</param>
+        /// <param name="commandName">Name of the command.</param>
+        /// <param name="inputGesture">The input gesture.</param>
+        /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="InvalidOperationException">The specified command is already created using the <see cref="ICommandManager.CreateCommand"/> method.</exception>
+        public void AddCommand(ICompositeCommand command, string commandName, InputGesture inputGesture = null)
+        {
+            Argument.IsNotNull("command", command);
+            Argument.IsNotNullOrWhitespace("commandName", commandName);
+
+            lock (_lockObject)
+            {
+                Log.Debug("Adding command '{0}' with input gesture '{1}'", commandName, ObjectToStringHelper.ToString(inputGesture));
+
+                if (_commands.ContainsKey(commandName))
+                {
+                    string error = string.Format("Command '{0}' is already created using the CreateCommand or AddCommand method", commandName);
+                    Log.Error(error);
+                    throw new InvalidOperationException(error);
+                }
+
+                if (_commands.ContainsValue(command))
+                {
+                    string error = string.Format("Command '{0}' is already added using the AddCommand method", commandName);
+                    Log.Error(error);
+                    throw new InvalidOperationException(error);
+                }
+
+                _commands.Add(commandName, command);
+                _commandGestures.Add(commandName, inputGesture);
+            }
+        }
 #else
         /// <summary>
         /// Creates the command inside the command manager.
@@ -103,6 +139,41 @@ namespace Catel.MVVM
                 }
 
                 _commands.Add(commandName, new CompositeCommand());
+            }
+        }
+
+         /// <summary>
+        /// Creates the command inside the command manager.
+        /// </summary>
+        /// <param name="command">Command instance</param>
+        /// <param name="commandName">Name of the command.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="InvalidOperationException">The specified command is already created using the <see cref="CommandManager.CreateCommand"/> method.</exception>
+        void AddCommand(ICompositeCommand command, string commandName);
+        {
+            Argument.IsNotNull("command", command);
+            Argument.IsNotNullOrWhitespace("commandName", commandName);
+
+            lock (_lockObject)
+            {
+                Log.Debug("Creating command '{0}'", commandName);
+
+                if (_commands.ContainsKey(commandName))
+                {
+                    string error = string.Format("Command '{0}' is already created using the CreateCommand method", commandName);
+                    Log.Error(error);
+                    throw new InvalidOperationException(error);
+                }
+
+                if (_commands.ContainsValue(command))
+                {
+                    string error = string.Format("Command '{0}' is already added using the AddCommand method", commandName);
+                    Log.Error(error);
+                    throw new InvalidOperationException(error);
+                }
+
+                _commands.Add(commandName, command);
             }
         }
 #endif
@@ -143,7 +214,7 @@ namespace Catel.MVVM
                 return _commands.ContainsKey(commandName);
             }
         }
-
+        
         /// <summary>
         /// Executes the command.
         /// </summary>
@@ -201,6 +272,35 @@ namespace Catel.MVVM
         /// <summary>
         /// Registers a command with the specified
         /// </summary>
+        /// <param name="compositeCommand">Composite Command.</param>
+        /// <param name="command">The command.</param>
+        /// <param name="viewModel">The view model.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="compositeCommand"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CommandManager.CreateCommand"/> method.</exception>
+        public void RegisterCommand(ICompositeCommand compositeCommand, ICatelCommand command, IViewModel viewModel = null)
+        {
+            Argument.IsNotNull("compositeCommand", compositeCommand);
+            Argument.IsNotNull("command", command);
+
+            lock (_lockObject)
+            {
+                Log.Debug("Registering command to '{0}'", ObjectToStringHelper.ToString(compositeCommand));
+
+                if (!_commands.ContainsValue(compositeCommand))
+                {
+                    string error = string.Format("Command '{0}' is not yet created using the AddCommand method", ObjectToStringHelper.ToString(compositeCommand));
+                    Log.Error(error);
+                    throw new InvalidOperationException(error);
+                }
+
+                compositeCommand.RegisterCommand(command, viewModel);
+            }
+        }
+
+        /// <summary>
+        /// Unregisters a command
+        /// </summary>
         /// <param name="commandName">Name of the command.</param>
         /// <param name="command">The command.</param>
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
@@ -223,6 +323,34 @@ namespace Catel.MVVM
                 }
 
                 _commands[commandName].UnregisterCommand(command);
+            }
+        }
+
+        /// <summary>
+        /// Unregisters a command
+        /// </summary>
+        /// <param name="compositeCommand">Instance of the composite command.</param>
+        /// <param name="command">The command.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="compositeCommand"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CommandManager.CreateCommand"/> method.</exception>
+        public void UnregisterCommand(ICompositeCommand compositeCommand, ICatelCommand command)
+        {
+            Argument.IsNotNull("compositeCommand", compositeCommand);
+            Argument.IsNotNull("command", command);
+
+            lock (_lockObject)
+            {
+                Log.Debug("Unregistering command from '{0}'", ObjectToStringHelper.ToString(compositeCommand));
+
+                if (!_commands.ContainsValue(compositeCommand))
+                {
+                    string error = string.Format("Command '{0}' is not yet created using the CreateCommand method", ObjectToStringHelper.ToString(compositeCommand));
+                    Log.Error(error);
+                    throw new InvalidOperationException(error);
+                }
+
+                compositeCommand.UnregisterCommand(command);
             }
         }
 
