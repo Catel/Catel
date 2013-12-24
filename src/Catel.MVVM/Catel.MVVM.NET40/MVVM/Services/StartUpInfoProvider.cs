@@ -6,12 +6,6 @@
 
 namespace Catel.MVVM.Services
 {
-#if NET
-    using System.Diagnostics;
-
-    using Catel.Windows;
-
-#endif
 #if SILVERLIGHT
     using System.Collections.Generic;
 
@@ -37,11 +31,26 @@ namespace Catel.MVVM.Services
         /// </summary>
         public string[] Arguments
         {
-            get { return _arguments ?? (_arguments = CommandLineHelper.Parse(Process.GetCurrentProcess().StartInfo.Arguments)); }
+            get
+            {
+        	    if (_arguments == null)
+        	    {
+        	        var commandLine = System.Environment.GetCommandLineArgs();
+
+                    _arguments = new string[commandLine.Length - 1];
+
+                    if (_arguments.Length > 0)
+        	        {
+                        System.Array.Copy(commandLine, 1, _arguments, 0, _arguments.Length);
+        	        }
+        	    }
+        	
+                return _arguments;
+            }
         }
 #endif
 
-#if SILVERLIGHT
+#if SL4 || SL5
         /// <summary>
         /// Gets the silverlight application initialization parameters.
         /// </summary>
