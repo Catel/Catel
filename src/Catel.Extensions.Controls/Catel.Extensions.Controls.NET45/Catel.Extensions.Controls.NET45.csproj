@@ -145,11 +145,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.tr.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.zh-CHS.NET45.Designer.cs">
-      <Link>Properties\Resources.zh-CHS.NET45.Designer.cs</Link>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.zh-Hans.NET45.Designer.cs">
+      <Link>Properties\Resources.zh-Hans.NET45.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.zh-CHS.resx</DependentUpon>
+      <DependentUpon>Resources.zh-Hans.resx</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\AnimatedGif.cs">
       <Link>Windows\Controls\AnimatedGif.cs</Link>
@@ -460,10 +460,10 @@
       <LastGenOutput>Resources.tr.NET45.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.zh-CHS.resx">
-      <Link>Properties\Resources.zh-CHS.resx</Link>
+    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.zh-Hans.resx">
+      <Link>Properties\Resources.zh-Hans.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.zh-CHS.NET45.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.zh-Hans.NET45.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>

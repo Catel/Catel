@@ -193,11 +193,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.tr.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.zh-CHS6.Designer.cs">
-      <Link>Properties\Resources.zh-CHS6.Designer.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.zh-Hans.SL5.Designer.cs">
+      <Link>Properties\Resources.zh-Hans.SL5.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.zh-CHS.resx</DependentUpon>
+      <DependentUpon>Resources.zh-Hans.resx</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\StringToTypeConverter.cs">
       <Link>Windows\Data\Converters\StringToTypeConverter.cs</Link>
@@ -886,10 +886,10 @@
       <LastGenOutput>Resources.tr.SL5.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.zh-CHS.resx">
-      <Link>Properties\Resources.zh-CHS.resx</Link>
+    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.zh-Hans.resx">
+      <Link>Properties\Resources.zh-Hans.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.zh-CHS6.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.zh-Hans.SL5.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>

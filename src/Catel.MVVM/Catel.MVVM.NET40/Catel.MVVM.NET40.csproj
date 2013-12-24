@@ -265,10 +265,10 @@
     <Compile Include="Properties\Resources.tr.Designer.Designer.cs">
       <DependentUpon>Resources.tr.Designer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Properties\Resources.zh-CHS.Designer.cs">
+    <Compile Include="Properties\Resources.zh-Hans.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.zh-CHS.resx</DependentUpon>
+      <DependentUpon>Resources.zh-Hans.resx</DependentUpon>
     </Compile>
     <Compile Include="Windows\Controls\InfoBarMessageControl\InfoBarMessageControl.cs" />
     <Compile Include="Windows\Controls\InfoBarMessageControl\InfoBarMessageControlVisibilityConverter.cs" />
@@ -455,9 +455,9 @@
       <LastGenOutput>Resources.tr.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.zh-CHS.resx">
+    <EmbeddedResource Include="Properties\Resources.zh-Hans.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.zh-CHS.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.zh-Hans.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>

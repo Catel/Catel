@@ -126,10 +126,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.tr.resx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\Resources.zh-CHS.Designer.cs">
+    <Compile Include="Properties\Resources.zh-Hans.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.zh-CHS.resx</DependentUpon>
+      <DependentUpon>Resources.zh-Hans.resx</DependentUpon>
     </Compile>
     <Compile Include="Windows\Controls\AnimatedGif.cs" />
     <Compile Include="Windows\Controls\DropDownButton.cs" />
@@ -306,9 +306,9 @@
       <LastGenOutput>Resources.tr.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.zh-CHS.resx">
+    <EmbeddedResource Include="Properties\Resources.zh-Hans.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.zh-CHS.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.zh-Hans.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>

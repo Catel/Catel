@@ -545,11 +545,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.tr.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.zh-CHS2.Designer.cs">
-      <Link>Properties\Resources.zh-CHS2.Designer.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.zh-Hans.NET45.Designer.cs">
+      <Link>Properties\Resources.zh-Hans.NET45.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.zh-CHS.resx</DependentUpon>
+      <DependentUpon>Resources.zh-Hans.resx</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\InfoBarMessageControl\InfoBarMessageControl.cs">
       <Link>Windows\Controls\InfoBarMessageControl\InfoBarMessageControl.cs</Link>
@@ -980,10 +980,10 @@
       <LastGenOutput>Resources.tr.NET45.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.zh-CHS.resx">
-      <Link>Properties\Resources.zh-CHS.resx</Link>
+    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.zh-Hans.resx">
+      <Link>Properties\Resources.zh-Hans.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.zh-CHS2.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.zh-Hans.NET45.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>

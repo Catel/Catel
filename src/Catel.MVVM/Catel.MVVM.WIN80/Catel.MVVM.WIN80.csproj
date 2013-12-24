@@ -717,7 +717,7 @@
     <PRIResource Include="Strings\nl\Resources.resw" />
     <PRIResource Include="Strings\en-US\Resources.resw" />
     <PRIResource Include="Strings\tr\Resources.resw" />
-    <PRIResource Include="Strings\zh-CHS\Resources.resw" />
+    <PRIResource Include="Strings\zh-Hans\Resources.resw" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FodyWeavers.xml" />

@@ -762,8 +762,8 @@
     <PRIResource Include="..\Catel.MVVM.WIN80\Strings\tr\Resources.resw">
       <Link>Strings\tr\Resources.resw</Link>
     </PRIResource>
-    <PRIResource Include="..\Catel.MVVM.WIN80\Strings\zh-CHS\Resources.resw">
-      <Link>Strings\zh-CHS\Resources.resw</Link>
+    <PRIResource Include="..\Catel.MVVM.WIN80\Strings\zh-Hans\Resources.resw">
+      <Link>Strings\zh-Hans\Resources.resw</Link>
     </PRIResource>
     <None Include="Fody.targets" />
     <None Include="packages.config" />

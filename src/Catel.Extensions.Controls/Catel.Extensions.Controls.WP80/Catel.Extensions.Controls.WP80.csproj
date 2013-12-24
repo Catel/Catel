@@ -110,11 +110,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.zh-CHS.WP80.Designer.cs">
-      <Link>Properties\Resources.zh-CHS.WP80.Designer.cs</Link>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.zh-Hans.WP80.Designer.cs">
+      <Link>Properties\Resources.zh-Hans.WP80.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.zh-CHS.resx</DependentUpon>
+      <DependentUpon>Resources.zh-Hans.resx</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\StackGrid\EmptyCell.cs">
       <Link>Windows\Controls\StackGrid\EmptyCell.cs</Link>
@@ -206,10 +206,10 @@
       <LastGenOutput>Resources.tr.WP80.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.zh-CHS.resx">
-      <Link>Properties\Resources.zh-CHS.resx</Link>
+    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.zh-Hans.resx">
+      <Link>Properties\Resources.zh-Hans.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.zh-CHS.WP80.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.zh-Hans.WP80.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>

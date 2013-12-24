@@ -627,11 +627,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\Properties\Resources.zh-CHS.Designer.cs">
-      <Link>Properties\Resources.zh-CHS.Designer.cs</Link>
+    <Compile Include="..\Catel.Core.NET40\Properties\Resources.zh-Hans.WP80.Designer.cs">
+      <Link>Properties\Resources.zh-Hans.WP80.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.zh-CHS.resx</DependentUpon>
+      <DependentUpon>Resources.zh-Hans.resx</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Reflection\EventArgs\AssemblyLoadedEventArgs.cs">
       <Link>Reflection\EventArgs\AssemblyLoadedEventArgs.cs</Link>
@@ -921,10 +921,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.tr.WP80.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.Core.NET40\Properties\Resources.zh-CHS.resx">
-      <Link>Properties\Resources.zh-CHS.resx</Link>
+    <EmbeddedResource Include="..\Catel.Core.NET40\Properties\Resources.zh-Hans.resx">
+      <Link>Properties\Resources.zh-Hans.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.zh-CHS.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.zh-Hans.WP80.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
