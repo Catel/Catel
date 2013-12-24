@@ -360,7 +360,8 @@ namespace Catel.Test.Caching
 
                 for (int i = 0; i < 5; i++)
                 {
-                    var value = cache.GetFromCacheOrFetch("key", () => i, expiration: new TimeSpan(0, 0, 1));
+                    int innerI = i;
+                    var value = cache.GetFromCacheOrFetch("key", () => innerI, expiration: new TimeSpan(0, 0, 1));
 
                     Assert.AreEqual(i, value);
 
