@@ -15,6 +15,33 @@ Documentation:   http://www.catelproject.com/support/documentation
 **********************************************************
 
 ==================
+Version 3.9
+==================
+
+Release date:
+=============
+2014/xx/xx
+
+Added/fixed (BREAKING CHANGES):
+===============================
+xxx
+
+Added/fixed:
+============
+(*) CTL-261 Replace all instances of RegisterDebugListener with AddDebugListener
+(+) CTL-204 Catel.IoC.IServiceLocator should contains some methord to remove registered type
+
+Roadmap:
+========
+See http://www.catelproject.com/support/issue-tracker
+
+Known issues:
+=============
+See http://www.catelproject.com/support/issue-tracker
+
+**********************************************************
+
+==================
 Version 3.8
 ==================
 

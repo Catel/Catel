@@ -296,12 +296,10 @@
     <Compile Include="MVVM\Views\Helpers\ViewToViewModelMappingHelperTest.cs" />
     <Compile Include="MVVM\Views\ViewToViewModelMappingTest.cs" />
     <Compile Include="MVVM\ViewModels\ViewModelFactoryFacts.cs" />
-    <Compile Include="MVVM\ViewModels\Attributes\ExposeAttributeFacts.cs" />
     <Compile Include="MVVM\ViewModels\Attributes\InterestedInAttributeFacts.cs" />
     <Compile Include="MVVM\ViewModels\Attributes\ModelAttributeFacts.cs" />
     <Compile Include="MVVM\ViewModels\Attributes\ViewModelToModelAttributeFacts.cs" />
     <Compile Include="MVVM\ViewModels\ManagedViewModelTest.cs" />
-    <Compile Include="MVVM\ViewModels\TestClasses\ExposingViewModel.cs" />
     <Compile Include="MVVM\ViewModels\TestClasses\InterestedViewModel.cs" />
     <Compile Include="MVVM\ViewModels\TestClasses\InterestingViewModel.cs" />
     <Compile Include="MVVM\ViewModels\TestClasses\Person.cs" />

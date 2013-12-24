@@ -35,8 +35,8 @@ using System.Runtime.CompilerServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("3.8")]
-[assembly: AssemblyInformationalVersion("3.8, Nightly, Released on 2013-09-01 11:53")]
+[assembly: AssemblyVersion("3.9")]
+[assembly: AssemblyInformationalVersion("3.9, Nightly, Released on 2013-09-01 11:53")]
 
 #if DEBUG
 
@@ -53,9 +53,9 @@ using System.Runtime.CompilerServices;
 #elif SL5
 [assembly: AssemblyConfiguration("Silverlight 5, Debug")]
 #elif WP7
-[assembly: AssemblyConfiguration("Windows Phone 7, Debug")]
-#elif WP8
-[assembly: AssemblyConfiguration("Windows Phone 8, Debug")]
+[assembly: AssemblyConfiguration("Windows Phone 7.x, Debug")]
+#elif WP80
+[assembly: AssemblyConfiguration("Windows Phone 8.0, Debug")]
 #elif WIN80
 [assembly: AssemblyConfiguration("Windows 8.0, Debug")]
 #elif WIN81
@@ -79,9 +79,9 @@ using System.Runtime.CompilerServices;
 #elif SL5
 [assembly: AssemblyConfiguration("Silverlight 5, Release")]
 #elif WP7
-[assembly: AssemblyConfiguration("Windows Phone 7, Release")]
-#elif WP8
-[assembly: AssemblyConfiguration("Windows Phone 8, Release")]
+[assembly: AssemblyConfiguration("Windows Phone 7.x, Release")]
+#elif WP80
+[assembly: AssemblyConfiguration("Windows Phone 8.0, Release")]
 #elif WIN80
 [assembly: AssemblyConfiguration("Windows 8.0, Release")]
 #elif WIN81

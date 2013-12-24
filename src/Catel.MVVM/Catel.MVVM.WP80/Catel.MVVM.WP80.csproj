@@ -24,39 +24,39 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\output\debug\WP8\Catel.MVVM\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;WP8</DefineConstants>
+    <OutputPath>..\..\..\output\debug\WP80\Catel.MVVM\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;WP80</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>..\..\..\output\debug\WP8\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>
+    <DocumentationFile>..\..\..\output\debug\WP80\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\output\release\WP8\Catel.MVVM\</OutputPath>
-    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE;WP8</DefineConstants>
+    <OutputPath>..\..\..\output\release\WP80\Catel.MVVM\</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE;WP80</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>..\..\..\output\release\WP8\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>
+    <DocumentationFile>..\..\..\output\release\WP80\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;WP8</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;WP80</DefineConstants>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>..\..\..\output\debug\WP8\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>
-    <OutputPath>..\..\..\output\debug\WP8\Catel.MVVM\</OutputPath>
+    <DocumentationFile>..\..\..\output\debug\WP80\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>
+    <OutputPath>..\..\..\output\debug\WP80\Catel.MVVM\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE;WP8</DefineConstants>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE;WP80</DefineConstants>
     <Optimize>true</Optimize>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>..\..\..\output\release\WP8\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>
-    <OutputPath>..\..\..\output\release\WP8\Catel.MVVM\</OutputPath>
+    <DocumentationFile>..\..\..\output\release\WP80\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>
+    <OutputPath>..\..\..\output\release\WP80\Catel.MVVM\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\Catel.MVVM.NET40\ClassDiagrams\ViewModelBase.cd">
@@ -430,50 +430,50 @@
     <Compile Include="..\Catel.MVVM.NET40\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Properties\Exceptions.WP8.Designer.cs">
-      <Link>Properties\Exceptions.WP8.Designer.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Properties\Exceptions.WP80.Designer.cs">
+      <Link>Properties\Exceptions.WP80.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Exceptions.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.de.WP8.Designer.cs">
-      <Link>Properties\Resources.de.WP8.Designer.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.de.WP80.Designer.cs">
+      <Link>Properties\Resources.de.WP80.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.de.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.es.WP8.Designer.cs">
-      <Link>Properties\Resources.es.WP8.Designer.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.es.WP80.Designer.cs">
+      <Link>Properties\Resources.es.WP80.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.es.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.fr.WP8.Designer.cs">
-      <Link>Properties\Resources.fr.WP8.Designer.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.fr.WP80.Designer.cs">
+      <Link>Properties\Resources.fr.WP80.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.fr.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.it.WP8.Designer.cs">
-      <Link>Properties\Resources.it.WP8.Designer.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.it.WP80.Designer.cs">
+      <Link>Properties\Resources.it.WP80.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.it.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.nl.WP8.Designer.cs">
-      <Link>Properties\Resources.nl.WP8.Designer.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.nl.WP80.Designer.cs">
+      <Link>Properties\Resources.nl.WP80.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.nl.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.tr.WP8.Designer.cs">
-      <Link>Properties\Resources.tr.WP8.Designer.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.tr.WP80.Designer.cs">
+      <Link>Properties\Resources.tr.WP80.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.tr.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.WP8.Designer.cs">
-      <Link>Properties\Resources.WP8.Designer.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.WP80.Designer.cs">
+      <Link>Properties\Resources.WP80.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
@@ -777,49 +777,49 @@
     <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Exceptions.resx">
       <Link>Properties\Exceptions.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Exceptions.WP8.Designer.cs</LastGenOutput>
+      <LastGenOutput>Exceptions.WP80.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.de.resx">
       <Link>Properties\Resources.de.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.de.WP8.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.de.WP80.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.es.resx">
       <Link>Properties\Resources.es.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.es.WP8.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.es.WP80.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.fr.resx">
       <Link>Properties\Resources.fr.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.fr.WP8.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.fr.WP80.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.it.resx">
       <Link>Properties\Resources.it.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.it.WP8.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.it.WP80.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.nl.resx">
       <Link>Properties\Resources.nl.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.nl.WP8.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.nl.WP80.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.resx">
       <Link>Properties\Resources.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.WP8.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.WP80.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.tr.resx">
       <Link>Properties\Resources.tr.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.tr.WP8.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.tr.WP80.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.zh-CHS.resx">
@@ -830,9 +830,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Catel.Core\Catel.Core.WP8\Catel.Core.WP8.csproj">
+    <ProjectReference Include="..\..\Catel.Core\Catel.Core.WP80\Catel.Core.WP80.csproj">
       <Project>{222A55F1-A032-4FAF-92C1-C51A2F7D2725}</Project>
-      <Name>Catel.Core.WP8</Name>
+      <Name>Catel.Core.WP80</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
