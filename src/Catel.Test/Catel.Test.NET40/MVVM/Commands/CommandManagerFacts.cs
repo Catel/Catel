@@ -34,7 +34,7 @@ namespace Catel.Test.MVVM
             {
                 var commandManager = new CommandManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.AddCommand(null, null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.AddCommand(null));
             }
 
             [TestMethod]
@@ -42,7 +42,7 @@ namespace Catel.Test.MVVM
             {
                 var commandManager = new CommandManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.AddCommand(null, " "));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.AddCommand(" "));
             }
 
             [TestMethod]
@@ -51,7 +51,7 @@ namespace Catel.Test.MVVM
                 var commandManager = new CommandManager();
                 var command = new CompositeCommand();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.AddCommand(command, " "));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.AddCommand(" ", null, command));
             }
 
             [TestMethod]
@@ -79,7 +79,7 @@ namespace Catel.Test.MVVM
 
                 commandManager.CreateCommand("MyCommand");
 
-                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => commandManager.AddCommand(new CompositeCommand(), "MyCommand"));
+                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => commandManager.AddCommand("MyCommand", null, new CompositeCommand()));
             }
 
             [TestMethod]
@@ -87,9 +87,9 @@ namespace Catel.Test.MVVM
             {
                 var commandManager = new CommandManager();
 
-                commandManager.AddCommand(new CompositeCommand(), "MyCommand");
+                commandManager.AddCommand("MyCommand", null, new CompositeCommand());
 
-                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => commandManager.AddCommand(new CompositeCommand(), "MyCommand"));
+                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => commandManager.AddCommand("MyCommand", null, new CompositeCommand()));
             }
 
             [TestMethod]
@@ -98,9 +98,9 @@ namespace Catel.Test.MVVM
                 var commandManager = new CommandManager();
 
                 var cmd = new CompositeCommand();
-                commandManager.AddCommand(cmd, "MyCommand");
+                commandManager.AddCommand("MyCommand", null, cmd);
 
-                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => commandManager.AddCommand(cmd, "MyCommand2"));
+                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => commandManager.AddCommand("MyCommand2", null, cmd));
             }
             
             [TestMethod]
@@ -158,7 +158,7 @@ namespace Catel.Test.MVVM
             {
                 var commandManager = new CommandManager();
 
-                commandManager.AddCommand(new CompositeCommand(), "MyCommand");
+                commandManager.AddCommand("MyCommand", null , new CompositeCommand());
 
                 Assert.IsTrue(commandManager.IsCommandCreated("MyCommand"));
             }
@@ -215,7 +215,7 @@ namespace Catel.Test.MVVM
                 var commandManager = new CommandManager();
 
                 var cmd = new CompositeCommand();
-                commandManager.AddCommand(cmd, "MyCommand");
+                commandManager.AddCommand("MyCommand", null, cmd);
 
                 Assert.IsTrue(cmd == commandManager.GetCommand("MyCommand"));
             }
@@ -262,7 +262,7 @@ namespace Catel.Test.MVVM
 
                 var cmd = new CompositeCommand();
 
-                commandManager.AddCommand(cmd, "MyCommand");
+                commandManager.AddCommand("MyCommand", null, cmd);
                 commandManager.RegisterCommand("MyCommand", vm.TestCommand1);
 
                 cmd.Execute();
