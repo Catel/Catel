@@ -109,6 +109,7 @@ namespace Catel.MVVM
                 _commandGestures.Add(commandName, inputGesture);
             }
         }
+
 #else
         /// <summary>
         /// Creates the command inside the command manager.
@@ -119,20 +120,8 @@ namespace Catel.MVVM
         public void CreateCommand(string commandName)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
-
-            lock (_lockObject)
-            {
-                Log.Debug("Creating command '{0}'", commandName);
-
-                if (_commands.ContainsKey(commandName))
-                {
-                    string error = string.Format("Command '{0}' is already created using the CreateCommand method", commandName);
-                    Log.Error(error);
-                    throw new InvalidOperationException(error);
-                }
-
-                _commands.Add(commandName, new CompositeCommand());
-            }
+                
+            AddCommandInternal(commandName, new CompositeCommand());
         }
 
          /// <summary>
@@ -143,18 +132,25 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="InvalidOperationException">The specified command is already created using the <see cref="CommandManager.CreateCommand"/> method.</exception>
-        void AddCommand(ICompositeCommand command, string commandName);
+        void AddCommand(string commandName, ICompositeCommand command);
         {
             Argument.IsNotNull("command", command);
             Argument.IsNotNullOrWhitespace("commandName", commandName);
 
+            AddCommandInternal(commandName, command);
+        }
+
+        private void AddCommandInternal(string commandName, ICompositeCommand command)
+        {
+            Argument.IsNotNullOrWhitespace("commandName", commandName);
+
             lock (_lockObject)
             {
-                Log.Debug("Creating command '{0}'", commandName);
+                Log.Debug("Adding command '{0}' with input gesture '{1}'", commandName, ObjectToStringHelper.ToString(inputGesture));
 
                 if (_commands.ContainsKey(commandName))
                 {
-                    string error = string.Format("Command '{0}' is already created using the CreateCommand method", commandName);
+                    string error = string.Format("Command '{0}' is already created using the CreateCommand or AddCommand method", commandName);
                     Log.Error(error);
                     throw new InvalidOperationException(error);
                 }
@@ -167,6 +163,7 @@ namespace Catel.MVVM
                 }
 
                 _commands.Add(commandName, command);
+                _commandGestures.Add(commandName, inputGesture);
             }
         }
 #endif
