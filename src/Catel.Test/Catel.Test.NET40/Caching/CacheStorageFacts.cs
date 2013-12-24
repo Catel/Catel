@@ -334,7 +334,7 @@ namespace Catel.Test.Caching
 
 				Assert.IsTrue(cache.Contains("1"));
 
-				ThreadHelper.Sleep(1500);
+				ThreadHelper.Sleep(2000);
 
 				Assert.IsFalse(cache.Contains("1"));
 			}
