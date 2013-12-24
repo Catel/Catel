@@ -360,12 +360,12 @@ namespace Catel.Test.Caching
 
                 for (int i = 0; i < 5; i++)
                 {
+                    ThreadHelper.Sleep(2000);
+
                     int innerI = i;
-                    var value = cache.GetFromCacheOrFetch("key", () => innerI, expiration: new TimeSpan(0, 0, 1));
+                    var value = cache.GetFromCacheOrFetch("key", () => innerI, expiration: TimeSpan.FromMilliseconds(500));
 
                     Assert.AreEqual(i, value);
-
-                    ThreadHelper.Sleep(2000);
                 }
             }
         }
