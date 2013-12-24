@@ -186,13 +186,12 @@ namespace Catel.IoC
 
                 _retrievedTypes = new List<Type>(types);
 
-                _registeredConventions.ForEach(convention =>
+                if (!_retrievedTypes.Any())
                 {
-                    if (_retrievedTypes != null && _retrievedTypes.Any())
-                    {
-                        convention.Process(_retrievedTypes);
-                    }
-                });
+                    return;
+                }
+
+                _registeredConventions.ForEach(convention => convention.Process(_retrievedTypes));
             }
         }
 

@@ -53,6 +53,11 @@ namespace Catel.IoC
             {
                 if (type.IsInterfaceEx())
                 {
+                    if (Container.IsTypeRegistered(type))
+                    {
+                        Container.RemoveType(type);
+                    }
+
                     var interfaceType = type;
                     var implementationTypes = typesToHandle.Where(t => t.IsAssignableFromEx(interfaceType) && !t.IsInterfaceEx());
 
@@ -77,10 +82,17 @@ namespace Catel.IoC
                     var implementationType = type;
                     var firstInterface = implementationType.GetInterfacesEx().FirstOrDefault();
 
-                    if (firstInterface != null)
+                    if (firstInterface == null)
                     {
-                        Container.RegisterType(firstInterface, implementationType, registrationType: RegistrationType);
+                        return;
                     }
+
+                    if (Container.IsTypeRegistered(firstInterface))
+                    {
+                        Container.RemoveType(firstInterface);
+                    }
+
+                    Container.RegisterType(firstInterface, implementationType, registrationType: RegistrationType);
                 }
             });
         }
