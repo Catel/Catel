@@ -456,21 +456,6 @@
     <Compile Include="..\Catel.Core.NET40\IoC\Helpers\DependencyInjectionHelper.cs">
       <Link>IoC\Helpers\DependencyInjectionHelper.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\IoC\Helpers\ExternalContainerHelperBase.cs">
-      <Link>IoC\Helpers\ExternalContainerHelperBase.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\IoC\Helpers\MefHelper.cs">
-      <Link>IoC\Helpers\MefHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\IoC\Helpers\NinjectHelper.cs">
-      <Link>IoC\Helpers\NinjectHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\IoC\Helpers\UnityHelper.cs">
-      <Link>IoC\Helpers\UnityHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\IoC\Helpers\WindsorHelper.cs">
-      <Link>IoC\Helpers\WindsorHelper.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Interfaces\IDependencyResolver.cs">
       <Link>IoC\Interfaces\IDependencyResolver.cs</Link>
     </Compile>

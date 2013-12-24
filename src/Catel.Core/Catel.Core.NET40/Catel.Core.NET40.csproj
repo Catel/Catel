@@ -204,11 +204,6 @@
     <Compile Include="IoC\Extensions\ServiceLocatorExtensions.cs" />
     <Compile Include="IoC\Extensions\TypeFactoryExtensions.cs" />
     <Compile Include="IoC\Helpers\DependencyInjectionHelper.cs" />
-    <Compile Include="IoC\Helpers\ExternalContainerHelperBase.cs" />
-    <Compile Include="IoC\Helpers\MefHelper.cs" />
-    <Compile Include="IoC\Helpers\NinjectHelper.cs" />
-    <Compile Include="IoC\Helpers\UnityHelper.cs" />
-    <Compile Include="IoC\Helpers\WindsorHelper.cs" />
     <Compile Include="IoC\Interfaces\IDependencyResolverManager.cs" />
     <Compile Include="IoC\Interfaces\IDependencyResolver.cs" />
     <Compile Include="IoC\LateBoundImplementation.cs" />

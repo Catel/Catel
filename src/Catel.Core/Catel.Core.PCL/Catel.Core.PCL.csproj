@@ -435,9 +435,6 @@
     <Compile Include="..\Catel.Core.NET40\IoC\Helpers\DependencyInjectionHelper.cs">
       <Link>IoC\Helpers\DependencyInjectionHelper.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\IoC\Helpers\ExternalContainerHelperBase.cs">
-      <Link>IoC\Helpers\ExternalContainerHelperBase.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Interfaces\IDependencyResolver.cs">
       <Link>IoC\Interfaces\IDependencyResolver.cs</Link>
     </Compile>
