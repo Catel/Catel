@@ -132,7 +132,7 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="InvalidOperationException">The specified command is already created using the <see cref="CommandManager.CreateCommand"/> method.</exception>
-        void AddCommand(string commandName, ICompositeCommand command);
+        void AddCommand(string commandName, ICompositeCommand command)
         {
             Argument.IsNotNull("command", command);
             Argument.IsNotNullOrWhitespace("commandName", commandName);
