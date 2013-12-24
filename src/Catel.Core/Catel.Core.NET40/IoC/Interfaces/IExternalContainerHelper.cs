@@ -11,6 +11,7 @@ namespace Catel.IoC
     /// <summary>
     /// Interface defining the least functionality of an external IoC container.
     /// </summary>
+    [ObsoleteEx(Message = "External container support will be removed in 4.0, see https://catelproject.atlassian.net/browse/CTL-273", TreatAsErrorFromVersion = "3.9", RemoveInVersion = "4.0")]
     public interface IExternalContainerHelper
     {
         /// <summary>

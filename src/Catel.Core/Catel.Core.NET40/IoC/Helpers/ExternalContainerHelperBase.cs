@@ -13,6 +13,7 @@ namespace Catel.IoC
     /// Base class for all external container helpers that takes away the care to retrieve
     /// types from the right assemblies and implements caching at one place.
     /// </summary>
+    [ObsoleteEx(Message = "External container support will be removed in 4.0, see https://catelproject.atlassian.net/browse/CTL-273", TreatAsErrorFromVersion = "3.9", RemoveInVersion = "4.0")]
     public abstract class ExternalContainerHelperBase : IExternalContainerHelper
     {
         #region Constructors

@@ -24,7 +24,8 @@ Release date:
 
 Added/fixed (BREAKING CHANGES):
 ===============================
-xxx
+(-) CTL-273 Removed external container registration and synchronization support for the ServiceLocator. The reason
+    for this is complex maintenance, bad performance (all done via reflection) and there are now better alternatives
 
 Added/fixed:
 ============

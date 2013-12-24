@@ -674,7 +674,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="IoC\Helpers\" />
     <Folder Include="Logging\Extensions\" />
     <Folder Include="Runtime\Serialization\Attributes\" />
   </ItemGroup>

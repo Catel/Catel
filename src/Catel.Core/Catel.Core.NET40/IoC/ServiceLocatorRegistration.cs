@@ -22,10 +22,8 @@ namespace Catel.IoC
         /// <param name="implementingType">Type of the implementing.</param>
         /// <param name="tag">The tag.</param>
         /// <param name="registrationType">Type of the registration.</param>
-        /// <param name="originalContainer">The original container.</param>
         /// <param name="createServiceFunc">The create service function.</param>
-        public ServiceLocatorRegistration(Type declaringType, Type implementingType, object tag, RegistrationType registrationType, 
-            object originalContainer, Func<ServiceLocatorRegistration, object> createServiceFunc)
+        public ServiceLocatorRegistration(Type declaringType, Type implementingType, object tag, RegistrationType registrationType, Func<ServiceLocatorRegistration, object> createServiceFunc)
         {
             Argument.IsNotNull("createServiceFunc", createServiceFunc);
 
@@ -38,7 +36,6 @@ namespace Catel.IoC
 
             Tag = tag;
             RegistrationType = registrationType;
-            OriginalContainer = originalContainer;
         }
         #endregion
 
@@ -91,12 +88,6 @@ namespace Catel.IoC
         /// </summary>
         /// <value>The tag.</value>
         public object Tag { get; private set; }
-
-        /// <summary>
-        /// Gets the original container.
-        /// </summary>
-        /// <value>The original container.</value>
-        public object OriginalContainer { get; private set; }
         #endregion
     }
 }

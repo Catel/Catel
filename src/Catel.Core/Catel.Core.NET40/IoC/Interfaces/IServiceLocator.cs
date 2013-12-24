@@ -56,6 +56,7 @@ namespace Catel.IoC
         /// <value>
         /// <c>true</c> if the service locator should keep all containers synchronized; otherwise, <c>false</c>.
         /// </value>
+        [ObsoleteEx(Message = "External container support will be removed in 4.0, see https://catelproject.atlassian.net/browse/CTL-273", TreatAsErrorFromVersion = "3.9", RemoveInVersion = "4.0")]
         bool AutomaticallyKeepContainersSynchronized { get; set; }
 
         /// <summary>
@@ -241,6 +242,7 @@ namespace Catel.IoC
         /// </returns>
         /// <exception cref="ArgumentNullException">If <paramref name="externalContainer"/> is <c>null</c>.</exception>
         /// <exception cref="ExternalContainerNotSupportedException">If the <paramref name="externalContainer"/> is not supported.</exception>
+        [ObsoleteEx(Message = "External container support will be removed in 4.0, see https://catelproject.atlassian.net/browse/CTL-273", TreatAsErrorFromVersion = "3.9", RemoveInVersion = "4.0")]
         bool IsExternalContainerSupported(object externalContainer);
 
         /// <summary>
@@ -257,6 +259,7 @@ namespace Catel.IoC
         /// </summary>
         /// <exception cref="ArgumentNullException">If <paramref name="externalContainer"/> is <c>null</c>.</exception>
         /// <exception cref="ExternalContainerNotSupportedException">If the <paramref name="externalContainer"/> is not supported.</exception>
+        [ObsoleteEx(Message = "External container support will be removed in 4.0, see https://catelproject.atlassian.net/browse/CTL-273", TreatAsErrorFromVersion = "3.9", RemoveInVersion = "4.0")]
         void RegisterExternalContainer(object externalContainer);
 
         /// <summary>
@@ -266,6 +269,7 @@ namespace Catel.IoC
         /// </summary>
         /// <param name="externalContainerHelper">The external container helper.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="externalContainerHelper"/> is <c>null</c>.</exception>
+        [ObsoleteEx(Message = "External container support will be removed in 4.0, see https://catelproject.atlassian.net/browse/CTL-273", TreatAsErrorFromVersion = "3.9", RemoveInVersion = "4.0")]
         void RegisterExternalContainerHelper(IExternalContainerHelper externalContainerHelper);
 
         /// <summary>
@@ -276,6 +280,7 @@ namespace Catel.IoC
         /// external container.
         /// </summary>
         ///// <exception cref="InvalidOperationException">The external containers contain a different instance than the service locator.</exception>
+        [ObsoleteEx(Message = "External container support will be removed in 4.0, see https://catelproject.atlassian.net/browse/CTL-273", TreatAsErrorFromVersion = "3.9", RemoveInVersion = "4.0")]
         void ExportInstancesToExternalContainers();
 
         /// <summary>
@@ -286,6 +291,7 @@ namespace Catel.IoC
         /// external container.
         /// </summary>
         ///// <exception cref="InvalidOperationException">The external containers contain a different instance than the service locator.</exception>
+        [ObsoleteEx(Message = "External container support will be removed in 4.0, see https://catelproject.atlassian.net/browse/CTL-273", TreatAsErrorFromVersion = "3.9", RemoveInVersion = "4.0")]
         void ExportToExternalContainers();
         #endregion
 

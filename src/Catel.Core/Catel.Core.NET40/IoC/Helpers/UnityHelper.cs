@@ -15,6 +15,7 @@ namespace Catel.IoC
     /// <summary>
     /// Helper class for Unity IoC containers.
     /// </summary>
+    [ObsoleteEx(Message = "External container support will be removed in 4.0, see https://catelproject.atlassian.net/browse/CTL-273", TreatAsErrorFromVersion = "3.9", RemoveInVersion = "4.0")]
     internal class UnityHelper : ExternalContainerHelperBase
     {
         /// <summary>
