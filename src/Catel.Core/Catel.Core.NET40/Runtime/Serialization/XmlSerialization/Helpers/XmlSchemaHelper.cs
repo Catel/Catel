@@ -8,12 +8,14 @@ namespace Catel.Runtime.Serialization.Xml
 {
     using System;
     using System.Collections;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
     using System.Xml;
     using System.Xml.Linq;
     using System.Xml.Schema;
     using System.Xml.Serialization;
+    using Catel.IoC;
     using Data;
     using Logging;
     using Reflection;
@@ -53,8 +55,11 @@ namespace Catel.Runtime.Serialization.Xml
         {
             Argument.IsNotNull("schemaSet", schemaSet);
 
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+            var serializationManager = dependencyResolver.Resolve<ISerializationManager>();
+
             string typeNs = GetTypeNamespaceForSchema(type);
-            var schema = GetOrCreateSchema(typeNs, schemaSet);
+            var schema = GetOrCreateSchema(typeNs, schemaSet, serializationManager);
 
             // Check if it already exists
             string typeName = GetTypeNameForSchema(type);
@@ -66,7 +71,7 @@ namespace Catel.Runtime.Serialization.Xml
                 return new XmlQualifiedName(existingType.Name, typeNs);
             }
 
-            var typeSchema = CreateSchemaComplexType(type, schema, schemaSet, generateFlatSchema);
+            var typeSchema = CreateSchemaComplexType(type, schema, schemaSet, serializationManager, generateFlatSchema);
 
             var root = new XmlSchemaElement();
             root.Name = string.Format("{0}", typeSchema.Name);
@@ -78,19 +83,15 @@ namespace Catel.Runtime.Serialization.Xml
         }
 
         /// <summary>
-        /// Adds the type to schema set by reading the <see cref="XmlSchemaProviderAttribute"/> or by 
+        /// Adds the type to schema set by reading the <see cref="XmlSchemaProviderAttribute" /> or by
         /// using the known schema sets information.
         /// </summary>
         /// <param name="type">The type.</param>
         /// <param name="schemaSet">The schema set.</param>
+        /// <param name="serializationManager">The serialization manager.</param>
         /// <returns>The xml qualified name.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="schemaSet"/> is <c>null</c>.</exception>
-        private static XmlQualifiedName AddTypeToSchemaSet(Type type, XmlSchemaSet schemaSet)
+        private static XmlQualifiedName AddTypeToSchemaSet(Type type, XmlSchemaSet schemaSet, ISerializationManager serializationManager)
         {
-            Argument.IsNotNull("type", type);
-            Argument.IsNotNull("schemaSet", schemaSet);
-
             var attribute = (from x in type.GetCustomAttributesEx(typeof(XmlSchemaProviderAttribute), false)
                              select x as XmlSchemaProviderAttribute).FirstOrDefault();
             if (attribute == null)
@@ -120,11 +121,9 @@ namespace Catel.Runtime.Serialization.Xml
         /// <param name="type">The type.</param>
         /// <param name="schema">The schema.</param>
         /// <param name="schemaSet">The schema set.</param>
+        /// <param name="serializationManager">The serialization manager.</param>
         /// <returns>Sequence containing all properties.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="schema"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="schemaSet"/> is <c>null</c>.</exception>
-        private static XmlSchemaSequence GetPropertiesSequence(Type type, XmlSchema schema, XmlSchemaSet schemaSet)
+        private static XmlSchemaSequence GetPropertiesSequence(Type type, XmlSchema schema, XmlSchemaSet schemaSet, ISerializationManager serializationManager)
         {
             Argument.IsNotNull("type", type);
             Argument.IsNotNull("schema", schema);
@@ -134,40 +133,49 @@ namespace Catel.Runtime.Serialization.Xml
 
             if (typeof(ModelBase).IsAssignableFromEx(type))
             {
-                // TODO: Update to latest serialization engine
-
                 var typeNs = GetTypeNamespaceForSchema(type);
 
-                var propertyDataManager = new PropertyDataManager();
-                var catelTypeInfo = propertyDataManager.GetCatelTypeInfo(type);
-                var properties = (from propertyDefinition in catelTypeInfo.GetCatelProperties()
-                                  where propertyDefinition.Value.IncludeInSerialization
-                                  orderby propertyDefinition.Value.Name
-                                  select propertyDefinition);
-                foreach (var property in properties)
+                var members = new List<MemberInfo>();
+                members.AddRange(from field in serializationManager.GetFieldsToSerialize(type)
+                                 select type.GetFieldEx(field));
+                members.AddRange(from property in serializationManager.GetPropertiesToSerialize(type)
+                                 select type.GetPropertyEx(property));
+
+                foreach (var member in members)
                 {
-                    var propertyDefinition = property.Value;
-
                     var propertySchemaElement = new XmlSchemaElement();
-                    propertySchemaElement.Name = propertyDefinition.Name;
+                    propertySchemaElement.Name = member.Name;
 
-                    if (propertyDefinition.Type.ImplementsInterfaceEx(typeof(IEnumerable)) && propertyDefinition.Type != typeof(string))
+                    var memberType = typeof(object);
+                    var fieldInfo = member as FieldInfo;
+                    if (fieldInfo != null)
                     {
-                        propertySchemaElement.SchemaTypeName = new XmlQualifiedName(string.Format("{0}", propertyDefinition.Name), typeNs);
+                        memberType = fieldInfo.FieldType;
+                    }
+
+                    var propertyInfo = member as PropertyInfo;
+                    if (propertyInfo != null)
+                    {
+                        memberType = propertyInfo.PropertyType;
+                    }
+
+                    if (memberType.ImplementsInterfaceEx(typeof(IEnumerable)) && memberType != typeof(string))
+                    {
+                        propertySchemaElement.SchemaTypeName = new XmlQualifiedName(string.Format("{0}", member.Name), typeNs);
 
                         var collectionPropertyType = new XmlSchemaComplexType();
-                        collectionPropertyType.Name = string.Format("{0}", propertyDefinition.Name);
+                        collectionPropertyType.Name = string.Format("{0}", member.Name);
                         schema.Items.Add(collectionPropertyType);
 
-                        foreach (var genericArgument in propertyDefinition.Type.GetGenericArguments())
+                        foreach (var genericArgument in memberType.GetGenericArguments())
                         {
-                            AddTypeToSchemaSet(genericArgument, schemaSet);
+                            AddTypeToSchemaSet(genericArgument, schemaSet, serializationManager);
                         }
                     }
                     else
                     {
-                        propertySchemaElement.SchemaTypeName = AddTypeToSchemaSet(propertyDefinition.Type, schemaSet);
-                        propertySchemaElement.IsNillable = IsNullableType(propertyDefinition.Type);
+                        propertySchemaElement.SchemaTypeName = AddTypeToSchemaSet(memberType, schemaSet, serializationManager);
+                        propertySchemaElement.IsNillable = IsNullableType(memberType);
                         propertySchemaElement.MinOccurs = 0;
                     }
 
@@ -182,21 +190,16 @@ namespace Catel.Runtime.Serialization.Xml
         /// Creates the an xml schema for a complex type. This method automatically takes care of
         /// any base classes that must be added.
         /// <para />
-        /// This method already adds the <see cref="XmlSchemaComplexType"/> to the <see cref="XmlSchemaSet"/>.
+        /// This method already adds the <see cref="XmlSchemaComplexType" /> to the <see cref="XmlSchemaSet" />.
         /// </summary>
         /// <param name="type">The type to create the complex schema for.</param>
         /// <param name="schema">The schema.</param>
         /// <param name="schemaSet">The schema set.</param>
+        /// <param name="serializationManager">The serialization manager.</param>
         /// <param name="generateFlatSchema">A value indicating whether the schema should be generated as flat schema.</param>
         /// <returns>The complex schema for the specified type.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="schema"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="schemaSet"/> is <c>null</c>.</exception>
-        private static XmlSchemaComplexType CreateSchemaComplexType(Type type, XmlSchema schema, XmlSchemaSet schemaSet, bool generateFlatSchema)
+        private static XmlSchemaComplexType CreateSchemaComplexType(Type type, XmlSchema schema, XmlSchemaSet schemaSet, ISerializationManager serializationManager, bool generateFlatSchema)
         {
-            Argument.IsNotNull("type", type);
-            Argument.IsNotNull("schemaSet", schema);
-
             // Determine name, which is complex in generic types
             string typeName = GetTypeNameForSchema(type);
 
@@ -208,7 +211,7 @@ namespace Catel.Runtime.Serialization.Xml
 
             schema.Items.Add(modelBaseType);
 
-            var propertiesSequence = GetPropertiesSequence(type, schema, schemaSet);
+            var propertiesSequence = GetPropertiesSequence(type, schema, schemaSet, serializationManager);
 
             // If flat, don't generate base classes, just the type itself
             if (generateFlatSchema)
@@ -237,7 +240,7 @@ namespace Catel.Runtime.Serialization.Xml
 
                 foreach (var genericArgument in type.GetGenericArgumentsEx())
                 {
-                    var genericArgumentQualifiedName = AddTypeToSchemaSet(genericArgument, schemaSet);
+                    var genericArgumentQualifiedName = AddTypeToSchemaSet(genericArgument, schemaSet, serializationManager);
                     var genericArgumentElement = new XElement("GenericParameter");
                     genericArgumentElement.Add(new XAttribute("Name", genericArgumentQualifiedName.Name));
                     genericArgumentElement.Add(new XAttribute("Namespace", genericArgumentQualifiedName.Namespace));
@@ -250,7 +253,7 @@ namespace Catel.Runtime.Serialization.Xml
                 annotation.Items.Add(appInfo);
             }
 
-            var baseTypeQualifiedName = AddTypeToSchemaSet(type.BaseType, schemaSet);
+            var baseTypeQualifiedName = AddTypeToSchemaSet(type.BaseType, schemaSet, serializationManager);
             if (baseTypeQualifiedName != null)
             {
                 // <xs:extensions base="address">
@@ -276,14 +279,10 @@ namespace Catel.Runtime.Serialization.Xml
         /// </summary>
         /// <param name="xmlns">The xml namespace.</param>
         /// <param name="schemaSet">The schema set.</param>
+        /// <param name="serializationManager">The serialization manager.</param>
         /// <returns>The xml schema to use.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="xmlns"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="schemaSet"/> is <c>null</c>.</exception>
-        private static XmlSchema GetOrCreateSchema(string xmlns, XmlSchemaSet schemaSet)
+        private static XmlSchema GetOrCreateSchema(string xmlns, XmlSchemaSet schemaSet, ISerializationManager serializationManager)
         {
-            Argument.IsNotNullOrWhitespace("xmlns", xmlns);
-            Argument.IsNotNull("schemaSet", schemaSet);
-
             var schemas = schemaSet.Schemas(xmlns);
 
             foreach (XmlSchema schema in schemas)
@@ -305,11 +304,8 @@ namespace Catel.Runtime.Serialization.Xml
         /// </summary>
         /// <param name="type">The type to determine the name for.</param>
         /// <returns>The name.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         private static string GetTypeNameForSchema(Type type)
         {
-            Argument.IsNotNull("type", type);
-
             string typeName = type.Name;
 
             if (type.IsGenericType)
@@ -327,11 +323,8 @@ namespace Catel.Runtime.Serialization.Xml
         /// </summary>
         /// <param name="type">The type to determine the namespace for.</param>
         /// <returns>The namespace.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         private static string GetTypeNamespaceForSchema(Type type)
         {
-            Argument.IsNotNull("type", type);
-
             return string.Format("{0}{1}", DefaultNs, type.Namespace);
         }
 
