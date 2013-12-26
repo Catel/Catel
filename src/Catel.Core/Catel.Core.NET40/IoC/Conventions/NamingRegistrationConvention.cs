@@ -53,11 +53,6 @@ namespace Catel.IoC
             {
                 if (type.IsInterfaceEx() && type.Name.StartsWith("I"))
                 {
-                    if (Container.IsTypeRegistered(type))
-                    {
-                        Container.RemoveType(type);
-                    }
-
                     var implementationType = typesToHandle.FirstOrDefault(row => TagHelper.AreTagsEqual(row.Name, type.Name.Replace("I", string.Empty).Trim()) && row.IsClassEx() && type.IsAssignableFromEx(row));
 
                     if (implementationType != null)

@@ -95,14 +95,6 @@ namespace Catel.IoC
             };
 
             TypeFilter.Excludes += type => !type.IsInterfaceEx() && !type.GetParentTypes().Any(parentType => parentType.IsInterfaceEx());
-
-            TypeFilter.Excludes += type => !string.IsNullOrWhiteSpace(type.Namespace) &&
-                                           (
-#if !DEBUG
-                                               type.Namespace.StartsWith("Catel") || 
-#endif
-                                               type.Name.StartsWith("<")
-                                               );
         }
         #endregion
 
@@ -180,11 +172,22 @@ namespace Catel.IoC
                     return;
                 }
 
-                var filterAssemblies = _assemblies.Where(assembly => AssemblyFilter.Matches(assembly));
+                var types = _assemblies.Where(assembly => AssemblyFilter.Matches(assembly)).SelectMany(TypeCache.GetTypesOfAssembly).Where(type => !string.IsNullOrWhiteSpace(type.Namespace)
+                                                                                                                                                   && !type.Name.StartsWith("<")
+#if !DEBUG
+                                                                                                                                                   || !type.Namespace.StartsWith("Catel") 
+#endif
+                    );
 
-                var types = filterAssemblies.SelectMany(TypeCache.GetTypesOfAssembly).Where(type => TypeFilter.Matches(type));
+                var enumerable = types as Type[] ?? types.ToArray();
 
-                _retrievedTypes = new List<Type>(types);
+                enumerable.ForEach(RemoveIfAlreadyRegistered);
+
+                var typesToHandle = enumerable.Where(type => TypeFilter.Matches(type));
+
+                _retrievedTypes = new List<Type>(typesToHandle);
+
+                _retrievedTypes.ForEach(RemoveIfAlreadyRegistered);
 
                 if (!_retrievedTypes.Any())
                 {
@@ -214,6 +217,23 @@ namespace Catel.IoC
                 _assemblies.Add(assembly);
 
                 ApplyConventions();
+            }
+        }
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// Removes the specified type in the container if already registered.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        protected void RemoveIfAlreadyRegistered(Type type)
+        {
+            Argument.IsNotNull("type", type);
+
+            if (_serviceLocator.IsTypeRegistered(type) && !type.IsAssignableFromEx(typeof (IServiceLocator)) && !type.IsAssignableFromEx(typeof (ITypeFactory)) && !type.IsAssignableFromEx(typeof (IDependencyResolver)) && !type.IsAssignableFromEx(typeof (IRegistrationConventionHandler)))
+            {
+                _serviceLocator.RemoveType(type);
             }
         }
         #endregion

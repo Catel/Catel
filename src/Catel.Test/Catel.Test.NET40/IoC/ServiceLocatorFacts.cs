@@ -1158,7 +1158,43 @@
             }
 
             [TestMethod]
-            public void ShouldExcludeSpecifiedType()
+            public void ShouldExcludeAllTypesOfNamespaceContainingSpecifiedInterfaceType()
+            {
+                var serviceLocator = new ServiceLocator();
+
+                serviceLocator.RegisterTypesUsingDefaultNamingConvention()
+                              .ExcludeAllTypesOfNamespaceContaining<IFooService>();
+
+                Assert.IsFalse(serviceLocator.IsTypeRegistered<IFooService>());
+                Assert.IsFalse(serviceLocator.IsTypeRegistered<IFooService2>());
+            }
+
+            [TestMethod]
+            public void ShouldExcludeAllTypesOfNamespaceContainingSpecifiedClassType()
+            {
+                var serviceLocator = new ServiceLocator();
+
+                serviceLocator.RegisterTypesUsingDefaultNamingConvention()
+                              .ExcludeAllTypesOfNamespaceContaining<FooService>();
+
+                Assert.IsFalse(serviceLocator.IsTypeRegistered<IFooService>());
+                Assert.IsFalse(serviceLocator.IsTypeRegistered<IFooService2>());
+            }
+
+            [TestMethod]
+            public void ShouldExcludeSpecifiedInterfaceType()
+            {
+                var serviceLocator = new ServiceLocator();
+
+                serviceLocator.RegisterTypesUsingDefaultNamingConvention()
+                              .ExcludeType<IFooService2>();
+
+                Assert.IsTrue(serviceLocator.IsTypeRegistered<IFooService>());
+                Assert.IsFalse(serviceLocator.IsTypeRegistered<IFooService2>());
+            }
+
+            [TestMethod]
+            public void ShouldExcludeSpecifiedClassType()
             {
                 var serviceLocator = new ServiceLocator();
 
