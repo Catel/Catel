@@ -276,7 +276,7 @@ namespace Catel.IoC
         /// <param name="serviceLocator">The service locator.</param>
         /// <param name="registrationType">Type of the registration.</param>
         /// <returns></returns>
-        public static IRegistrationConventionHandler RegisterTypesUsingFirstInterfaceConvention(this IServiceLocator serviceLocator, RegistrationType registrationType = RegistrationType.Singleton)
+        public static IRegistrationConventionHandler RegisterTypesUsingDefaultFirstInterfaceConvention(this IServiceLocator serviceLocator, RegistrationType registrationType = RegistrationType.Singleton)
         {
             Argument.IsNotNull("serviceLocator", serviceLocator);
 

@@ -187,8 +187,6 @@ namespace Catel.IoC
 
                 _retrievedTypes = new List<Type>(typesToHandle);
 
-                _retrievedTypes.ForEach(RemoveIfAlreadyRegistered);
-
                 if (!_retrievedTypes.Any())
                 {
                     return;

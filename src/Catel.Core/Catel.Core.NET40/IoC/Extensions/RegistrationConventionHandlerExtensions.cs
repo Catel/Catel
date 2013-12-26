@@ -124,6 +124,20 @@ namespace Catel.IoC
             return registrationConventionHandler;
         }
 
+        /// <typeparam name="T"></typeparam>
+        /// <param name="registrationConventionHandler">The registration convention handler.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="registrationConventionHandler"/> is <c>null</c>.</exception>
+        public static IRegistrationConventionHandler IncludeType<T>(this IRegistrationConventionHandler registrationConventionHandler)
+            where T : class
+        {
+            Argument.IsNotNull("registrationConventionHandler", registrationConventionHandler);
+
+            registrationConventionHandler.IncludeTypesWhere(type => ObjectHelper.AreEqual(type, typeof(T)));
+
+            return registrationConventionHandler;
+        }
+
         /// <summary>
         /// Excludes the assembly.
         /// </summary>
@@ -148,7 +162,7 @@ namespace Catel.IoC
         /// <param name="include">The predicate to use for matching.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="registrationConventionHandler" /> is <c>null</c>.</exception>
-        public static IRegistrationConventionHandler IncludeAllTypesWhere(this IRegistrationConventionHandler registrationConventionHandler, Predicate<Type> include)
+        public static IRegistrationConventionHandler IncludeTypesWhere(this IRegistrationConventionHandler registrationConventionHandler, Predicate<Type> include)
         {
             Argument.IsNotNull("registrationConventionHandler", registrationConventionHandler);
 
