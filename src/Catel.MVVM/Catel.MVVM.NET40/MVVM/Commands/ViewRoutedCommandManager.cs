@@ -18,8 +18,8 @@ namespace Catel.MVVM.Commands
             {
                 System.Windows.Input.CommandManager.AddCanExecuteHandler(uiElement, CanExecuteHandler);
                 System.Windows.Input.CommandManager.AddExecutedHandler(uiElement, ExecutedHandler);
-                System.Windows.Input.CommandManager.AddPreviewCanExecuteHandler(uiElement, PreviewCanExecuteHandler);
-                System.Windows.Input.CommandManager.AddPreviewExecutedHandler(uiElement, PreviewExecutedHandler);
+                //System.Windows.Input.CommandManager.AddPreviewCanExecuteHandler(uiElement, PreviewCanExecuteHandler);
+                //System.Windows.Input.CommandManager.AddPreviewExecutedHandler(uiElement, PreviewExecutedHandler);
             }
         }
         private void CanExecuteHandler(object sender, CanExecuteRoutedEventArgs e)
@@ -38,31 +38,31 @@ namespace Catel.MVVM.Commands
 
             if (command != null)
             {
-                //e.Handled = true;
+                e.Handled = true;
                 command.Execute(e);
             }
         }
 
-        private void PreviewCanExecuteHandler(object sender, CanExecuteRoutedEventArgs e)
-        {
-            //var command = GetCommandBindingFromRoutedCommand(sender, e.Command);
+        //private void PreviewCanExecuteHandler(object sender, CanExecuteRoutedEventArgs e)
+        //{
+        //    var command = GetCommandBindingFromRoutedCommand(sender, e.Command);
 
-            //if (command != null)
-            //{
-            //    e.CanExecute = e.Handled = command.CanExecute(e);
-            //}
-        }
+        //    if (command != null)
+        //    {
+        //        e.CanExecute = e.Handled = command.CanExecute(e);
+        //    }
+        //}
 
-        private void PreviewExecutedHandler(object sender, ExecutedRoutedEventArgs e)
-        {
-            //var command = GetCommandBindingFromRoutedCommand(sender, e.Command);
+        //private void PreviewExecutedHandler(object sender, ExecutedRoutedEventArgs e)
+        //{
+        //    var command = GetCommandBindingFromRoutedCommand(sender, e.Command);
 
-            //if (command != null)
-            //{
-            //    e.Handled = true;
-            //    command.Execute(e);
-            //}
-        }
+        //    if (command != null)
+        //    {
+        //        e.Handled = true;
+        //        command.Execute(e);
+        //    }
+        //}
 
         private ICommand GetCommandBindingFromRoutedCommand(object sender, ICommand command)
         {
@@ -97,8 +97,8 @@ namespace Catel.MVVM.Commands
             {
                 System.Windows.Input.CommandManager.RemoveCanExecuteHandler(uiElement, CanExecuteHandler);
                 System.Windows.Input.CommandManager.RemoveExecutedHandler(uiElement, ExecutedHandler);
-                System.Windows.Input.CommandManager.RemovePreviewCanExecuteHandler(uiElement, PreviewCanExecuteHandler);
-                System.Windows.Input.CommandManager.RemovePreviewExecutedHandler(uiElement, PreviewExecutedHandler);
+                //System.Windows.Input.CommandManager.RemovePreviewCanExecuteHandler(uiElement, PreviewCanExecuteHandler);
+                //System.Windows.Input.CommandManager.RemovePreviewExecutedHandler(uiElement, PreviewExecutedHandler);
             }
         }
     }
