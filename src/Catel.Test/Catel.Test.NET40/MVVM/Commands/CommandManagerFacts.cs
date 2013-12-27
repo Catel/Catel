@@ -26,7 +26,7 @@ namespace Catel.Test.MVVM
             {
                 var commandManager = new CommandManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.CreateCommand(null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.AddCommand(null));
             }
 
             [TestMethod]
@@ -59,7 +59,7 @@ namespace Catel.Test.MVVM
             {
                 var commandManager = new CommandManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.CreateCommand(" "));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.AddCommand(" "));
             }
 
             [TestMethod]
@@ -67,9 +67,9 @@ namespace Catel.Test.MVVM
             {
                 var commandManager = new CommandManager();
 
-                commandManager.CreateCommand("MyCommand");
+                commandManager.AddCommand("MyCommand");
 
-                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => commandManager.CreateCommand("MyCommand"));
+                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => commandManager.AddCommand("MyCommand"));
             }
 
             [TestMethod]
@@ -77,7 +77,7 @@ namespace Catel.Test.MVVM
             {
                 var commandManager = new CommandManager();
 
-                commandManager.CreateCommand("MyCommand");
+                commandManager.AddCommand("MyCommand");
 
                 ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => commandManager.AddCommand("MyCommand", null, new CompositeCommand()));
             }
@@ -108,7 +108,7 @@ namespace Catel.Test.MVVM
             {
                 var commandManager = new CommandManager();
 
-                commandManager.CreateCommand("MyCommand");
+                commandManager.AddCommand("MyCommand");
 
                 Assert.IsTrue(commandManager.IsCommandCreated("MyCommand"));
             }
@@ -118,7 +118,7 @@ namespace Catel.Test.MVVM
             {
                 var commandManager = new CommandManager();
 
-                commandManager.CreateCommand("MyCommand");
+                commandManager.AddCommand("MyCommand");
 
                 Assert.IsTrue(commandManager.IsCommandCreated("MyCommand"));
             }
@@ -148,7 +148,7 @@ namespace Catel.Test.MVVM
             {
                 var commandManager = new CommandManager();
 
-                commandManager.CreateCommand("MyCommand");
+                commandManager.AddCommand("MyCommand");
 
                 Assert.IsTrue(commandManager.IsCommandCreated("MyCommand"));
             }
@@ -204,7 +204,7 @@ namespace Catel.Test.MVVM
             {
                 var commandManager = new CommandManager();
 
-                commandManager.CreateCommand("MyCommand");
+                commandManager.AddCommand("MyCommand");
 
                 Assert.IsNotNull(commandManager.GetCommand("MyCommand"));
             }
@@ -246,7 +246,7 @@ namespace Catel.Test.MVVM
                 var vm = new CompositeCommandViewModel();
                 var commandManager = new CommandManager();
 
-                commandManager.CreateCommand("MyCommand");
+                commandManager.AddCommand("MyCommand");
                 commandManager.RegisterCommand("MyCommand", vm.TestCommand1);
 
                 commandManager.ExecuteCommand("MyCommand");
@@ -276,7 +276,7 @@ namespace Catel.Test.MVVM
                 var vm = new CompositeCommandViewModel();
                 var commandManager = new CommandManager();
 
-                commandManager.CreateCommand("MyCommand");
+                commandManager.AddCommand("MyCommand");
                 commandManager.RegisterCommand("MyCommand", vm.TestCommand1);
 
                 Assert.IsTrue(commandManager.IsCommandCreated("MyCommand"));

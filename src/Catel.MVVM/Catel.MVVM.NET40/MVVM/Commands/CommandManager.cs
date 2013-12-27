@@ -54,34 +54,36 @@ namespace Catel.MVVM
         }
 
 #if !WINDOWS_PHONE
+       
         /// <summary>
-        /// Creates the command inside the command manager.
-        /// </summary>
-        /// <param name="commandName">Name of the command.</param>
-        /// <param name="inputGesture">The input gesture.</param>
-        /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="InvalidOperationException">The specified command is already created using the <see cref="CreateCommand"/> method.</exception>
-        public void CreateCommand(string commandName, InputGesture inputGesture = null)
-        {
-            Argument.IsNotNullOrWhitespace("commandName", commandName);
-
-            AddCommandInternal(commandName, inputGesture, new CompositeCommand());
-        }
-
-        /// <summary>
-        /// Creates the command inside the command manager.
+        /// Add the command to the command manager.
         /// </summary>
         /// <param name="commandName">Name of the command.</param>
         /// <param name="inputGesture">The input gesture.</param>
         /// <param name="command">Command instance</param>
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="InvalidOperationException">The specified command is already created using the <see cref="ICommandManager.CreateCommand"/> method.</exception>
+        /// <exception cref="InvalidOperationException">The specified command is already created using the <see cref="AddCommand"/> method.</exception>
         public void AddCommand(string commandName, InputGesture inputGesture = null, ICompositeCommand command = null)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
 
             AddCommandInternal(commandName, inputGesture, command);
         }
+#else
+        /// <summary>
+        /// Add the command to the command manager.
+        /// </summary>
+        /// <param name="command">Command instance</param>
+        /// <param name="commandName">Name of the command.</param>
+        /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="InvalidOperationException">The specified command is already created using the <see cref="AddCommand"/> method.</exception>
+        public void AddCommand(string commandName, ICompositeCommand command = null)
+        {
+            Argument.IsNotNullOrWhitespace("commandName", commandName);
+
+            AddCommandInternal(commandName, null, command);
+        }
+#endif
 
         private void AddCommandInternal(string commandName, InputGesture inputGesture, ICompositeCommand command)
         {
@@ -106,67 +108,10 @@ namespace Catel.MVVM
                 }
 
                 _commands.Add(commandName, command);
-                _commandGestures.Add(commandName, inputGesture);
+                if (inputGesture != null)
+                    _commandGestures.Add(commandName, inputGesture);
             }
         }
-
-#else
-        /// <summary>
-        /// Creates the command inside the command manager.
-        /// </summary>
-        /// <param name="commandName">Name of the command.</param>
-        /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="InvalidOperationException">The specified command is already created using the <see cref="CreateCommand"/> method.</exception>
-        public void CreateCommand(string commandName)
-        {
-            Argument.IsNotNullOrWhitespace("commandName", commandName);
-                
-            AddCommandInternal(commandName, new CompositeCommand());
-        }
-
-         /// <summary>
-        /// Creates the command inside the command manager.
-        /// </summary>
-        /// <param name="command">Command instance</param>
-        /// <param name="commandName">Name of the command.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="InvalidOperationException">The specified command is already created using the <see cref="CommandManager.CreateCommand"/> method.</exception>
-        void AddCommand(string commandName, ICompositeCommand command)
-        {
-            Argument.IsNotNull("command", command);
-            Argument.IsNotNullOrWhitespace("commandName", commandName);
-
-            AddCommandInternal(commandName, command);
-        }
-
-        private void AddCommandInternal(string commandName, ICompositeCommand command)
-        {
-            Argument.IsNotNullOrWhitespace("commandName", commandName);
-
-            lock (_lockObject)
-            {
-                Log.Debug("Adding command '{0}' with input gesture '{1}'", commandName, ObjectToStringHelper.ToString(inputGesture));
-
-                if (_commands.ContainsKey(commandName))
-                {
-                    string error = string.Format("Command '{0}' is already created using the CreateCommand or AddCommand method", commandName);
-                    Log.Error(error);
-                    throw new InvalidOperationException(error);
-                }
-
-                if (_commands.ContainsValue(command))
-                {
-                    string error = string.Format("Command '{0}' is already added using the AddCommand method", commandName);
-                    Log.Error(error);
-                    throw new InvalidOperationException(error);
-                }
-
-                _commands.Add(commandName, command);
-                _commandGestures.Add(commandName, inputGesture);
-            }
-        }
-#endif
 
         /// <summary>
         /// Gets the command created with the command name.
@@ -210,7 +155,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="commandName">Name of the command.</param>
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CreateCommand"/> method.</exception>
+        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="AddCommand"/> method.</exception>
         public void ExecuteCommand(string commandName)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
@@ -238,7 +183,7 @@ namespace Catel.MVVM
         /// <param name="viewModel">The view model.</param>
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CreateCommand"/> method.</exception>
+        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="AddCommand"/> method.</exception>
         public void RegisterCommand(string commandName, ICatelCommand command, IViewModel viewModel = null)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
@@ -267,7 +212,7 @@ namespace Catel.MVVM
         /// <param name="viewModel">The view model.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="compositeCommand"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CommandManager.CreateCommand"/> method.</exception>
+        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="AddCommand"/> method.</exception>
         public void RegisterCommand(ICompositeCommand compositeCommand, ICatelCommand command, IViewModel viewModel = null)
         {
             Argument.IsNotNull("compositeCommand", compositeCommand);
@@ -295,7 +240,7 @@ namespace Catel.MVVM
         /// <param name="command">The command.</param>
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CreateCommand"/> method.</exception>
+        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="AddCommand"/> method.</exception>
         public void UnregisterCommand(string commandName, ICatelCommand command)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
@@ -323,7 +268,7 @@ namespace Catel.MVVM
         /// <param name="command">The command.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="compositeCommand"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CommandManager.CreateCommand"/> method.</exception>
+        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="AddCommand"/> method.</exception>
         public void UnregisterCommand(ICompositeCommand compositeCommand, ICatelCommand command)
         {
             Argument.IsNotNull("compositeCommand", compositeCommand);
