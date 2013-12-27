@@ -21,22 +21,25 @@ namespace Catel.MVVM
     public interface ICommandManager
     {
 #if !WINDOWS_PHONE
+       
         /// <summary>
-        /// Creates the command inside the command manager.
+        /// Add the command to the command manager.
         /// </summary>
         /// <param name="commandName">Name of the command.</param>
         /// <param name="inputGesture">The input gesture.</param>
+        /// <param name="command">Command instance</param>
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="InvalidOperationException">The specified command is already created using the <see cref="CreateCommand"/> method.</exception>
-        void CreateCommand(string commandName, InputGesture inputGesture = null);
+        /// <exception cref="InvalidOperationException">The specified command is already created using the <see cref="AddCommand"/> method.</exception>
+        void AddCommand(string commandName, InputGesture inputGesture = null, ICompositeCommand command = null);
 #else
         /// <summary>
-        /// Creates the command inside the command manager.
+        /// Add the command to the command manager.
         /// </summary>
+        /// <param name="command">Command instance</param>
         /// <param name="commandName">Name of the command.</param>
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="InvalidOperationException">The specified command is already created using the <see cref="CommandManager.CreateCommand"/> method.</exception>
-        void CreateCommand(string commandName);
+        /// <exception cref="InvalidOperationException">The specified command is already created using the <see cref="AddCommand"/> method.</exception>
+        void AddCommand(string commandName, ICompositeCommand command = null);
 #endif
 
         /// <summary>
@@ -55,25 +58,46 @@ namespace Catel.MVVM
         /// <param name="viewModel">The view model.</param>
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CommandManager.CreateCommand"/> method.</exception>
+        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="ICommandManager.AddCommand"/> method.</exception>
         void RegisterCommand(string commandName, ICatelCommand command, IViewModel viewModel = null);
 
         /// <summary>
         /// Registers a command with the specified
         /// </summary>
+        /// <param name="compositeCommand">Composite Command.</param>
+        /// <param name="command">The command.</param>
+        /// <param name="viewModel">The view model.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="compositeCommand"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CommandManager.AddCommand"/> method.</exception>
+        void RegisterCommand(ICompositeCommand compositeCommand, ICatelCommand command, IViewModel viewModel = null);
+
+        /// <summary>
+        /// Unregisters a command with the specified
+        /// </summary>
         /// <param name="commandName">Name of the command.</param>
         /// <param name="command">The command.</param>
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CommandManager.CreateCommand"/> method.</exception>
+        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CommandManager.AddCommand"/> method.</exception>
         void UnregisterCommand(string commandName, ICatelCommand command);
+
+        /// <summary>
+        /// Unregisters a command with the specified
+        /// </summary>
+        /// <param name="compositeCommand">Instance of the composite command.</param>
+        /// <param name="command">The command.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="compositeCommand"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CommandManager.AddCommand"/> method.</exception>
+        void UnregisterCommand(ICompositeCommand compositeCommand, ICatelCommand command);
 
         /// <summary>
         /// Executes the command.
         /// </summary>
         /// <param name="commandName">Name of the command.</param>
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CommandManager.CreateCommand"/> method.</exception>
+        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CommandManager.AddCommand"/> method.</exception>
         void ExecuteCommand(string commandName);
 
         /// <summary>

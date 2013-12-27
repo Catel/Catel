@@ -33,13 +33,40 @@ namespace Catel.Test.MVVM
             public void RegistersCommandForExecution()
             {
                 var vm = new CompositeCommandViewModel();
-                var compositeCommand = new CompositeCommand(); 
+                var compositeCommand = new CompositeCommand();
 
                 compositeCommand.RegisterCommand(vm.TestCommand1, vm);
 
                 compositeCommand.Execute();
 
                 Assert.IsTrue(vm.IsTestCommand1Executed);
+            }
+
+            [TestMethod]
+            public void RegistersCommandCanExecution()
+            {
+                var vm = new CompositeCommandViewModel();
+                var compositeCommand = new CompositeCommand();
+
+                Assert.IsFalse(compositeCommand.CanExecute());
+
+                compositeCommand.RegisterCommand(vm.TestCommand1, vm);
+
+                vm.AllowTestCommand1Execution = false;
+                Assert.IsFalse(compositeCommand.CanExecute());
+
+                vm.AllowTestCommand1Execution = true;
+                Assert.IsTrue(compositeCommand.CanExecute());
+
+                compositeCommand.RegisterCommand(vm.TestCommand2, vm);
+
+                vm.AllowTestCommand1Execution = false;
+                vm.AllowTestCommand2Execution = false;
+                Assert.IsFalse(compositeCommand.CanExecute());
+
+                vm.AllowTestCommand1Execution = false;
+                vm.AllowTestCommand2Execution = true;
+                Assert.IsTrue(compositeCommand.CanExecute());
             }
         }
 

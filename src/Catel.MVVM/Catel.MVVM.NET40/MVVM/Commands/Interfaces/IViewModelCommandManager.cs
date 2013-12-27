@@ -20,5 +20,24 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="force">If <c>true</c>, the commands are re-initialized. The default value is <c>false</c>.</param>
         void InvalidateCommands(bool force = false);
+
+        /// <summary>
+        /// Add command binding for routed command
+        /// </summary>
+        /// <exception cref="ArgumentNullException">The <paramref name="routedCommand"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="commandToExecute"/> is <c>null</c>.</exception>
+        void AddCommandBinding(ICommand routedCommand, ICommand commandToExecute);
+
+        /// <summary>
+        /// Remove command binding for routed command
+        /// </summary>
+        /// <exception cref="ArgumentNullException">The <paramref name="routedCommand"/> is <c>null</c>.</exception>
+        void RemoveCommandBinding(ICommand routedCommand);
+
+        /// <summary>
+        /// Remove command binding for routed command
+        /// </summary>
+        /// <exception cref="ArgumentNullException">The <paramref name="routedCommand"/> is <c>null</c>.</exception>
+        ICommand GetCommandForRoutedCommand(ICommand routedCommand);
     }
 }

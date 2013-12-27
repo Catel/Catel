@@ -101,6 +101,8 @@
     <Compile Include="MVVM\Commands\EventArgs\CommandExecutedEventArgs.cs" />
     <Compile Include="MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs" />
     <Compile Include="MVVM\Commands\Helpers\CommandHelper.cs" />
+    <Compile Include="MVVM\Commands\Interfaces\IViewRoutedCommandManager.cs" />
+    <Compile Include="MVVM\Commands\ViewRoutedCommandManager.cs" />
     <Compile Include="Windows\Input\InputGesture.cs" />
     <Compile Include="MVVM\Commands\Interfaces\ICompositeCommand.cs" />
     <Compile Include="MVVM\Commands\Interfaces\IAuthenticationProvider.cs" />

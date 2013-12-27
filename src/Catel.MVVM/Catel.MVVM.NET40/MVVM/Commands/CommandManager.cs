@@ -54,58 +54,64 @@ namespace Catel.MVVM
         }
 
 #if !WINDOWS_PHONE
+       
         /// <summary>
-        /// Creates the command inside the command manager.
+        /// Add the command to the command manager.
         /// </summary>
         /// <param name="commandName">Name of the command.</param>
         /// <param name="inputGesture">The input gesture.</param>
+        /// <param name="command">Command instance</param>
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="InvalidOperationException">The specified command is already created using the <see cref="CreateCommand"/> method.</exception>
-        public void CreateCommand(string commandName, InputGesture inputGesture = null)
+        /// <exception cref="InvalidOperationException">The specified command is already created using the <see cref="AddCommand"/> method.</exception>
+        public void AddCommand(string commandName, InputGesture inputGesture = null, ICompositeCommand command = null)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
 
-            lock (_lockObject)
-            {
-                Log.Debug("Creating command '{0}' with input gesture '{1}'", commandName, ObjectToStringHelper.ToString(inputGesture));
-
-                if (_commands.ContainsKey(commandName))
-                {
-                    string error = string.Format("Command '{0}' is already created using the CreateCommand method", commandName);
-                    Log.Error(error);
-                    throw new InvalidOperationException(error);
-                }
-
-                _commands.Add(commandName, new CompositeCommand());
-                _commandGestures.Add(commandName, inputGesture);
-            }
+            AddCommandInternal(commandName, inputGesture, command);
         }
 #else
         /// <summary>
-        /// Creates the command inside the command manager.
+        /// Add the command to the command manager.
         /// </summary>
+        /// <param name="command">Command instance</param>
         /// <param name="commandName">Name of the command.</param>
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="InvalidOperationException">The specified command is already created using the <see cref="CreateCommand"/> method.</exception>
-        public void CreateCommand(string commandName)
+        /// <exception cref="InvalidOperationException">The specified command is already created using the <see cref="AddCommand"/> method.</exception>
+        public void AddCommand(string commandName, ICompositeCommand command = null)
+        {
+            Argument.IsNotNullOrWhitespace("commandName", commandName);
+
+            AddCommandInternal(commandName, null, command);
+        }
+#endif
+
+        private void AddCommandInternal(string commandName, InputGesture inputGesture, ICompositeCommand command)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
 
             lock (_lockObject)
             {
-                Log.Debug("Creating command '{0}'", commandName);
+                Log.Debug("Adding command '{0}' with input gesture '{1}'", commandName, ObjectToStringHelper.ToString(inputGesture));
 
                 if (_commands.ContainsKey(commandName))
                 {
-                    string error = string.Format("Command '{0}' is already created using the CreateCommand method", commandName);
+                    string error = string.Format("Command '{0}' is already created using the CreateCommand or AddCommand method", commandName);
                     Log.Error(error);
                     throw new InvalidOperationException(error);
                 }
 
-                _commands.Add(commandName, new CompositeCommand());
+                if (_commands.ContainsValue(command))
+                {
+                    string error = string.Format("Command '{0}' is already added using the AddCommand method", commandName);
+                    Log.Error(error);
+                    throw new InvalidOperationException(error);
+                }
+
+                _commands.Add(commandName, command);
+                if (inputGesture != null)
+                    _commandGestures.Add(commandName, inputGesture);
             }
         }
-#endif
 
         /// <summary>
         /// Gets the command created with the command name.
@@ -143,13 +149,13 @@ namespace Catel.MVVM
                 return _commands.ContainsKey(commandName);
             }
         }
-
+        
         /// <summary>
         /// Executes the command.
         /// </summary>
         /// <param name="commandName">Name of the command.</param>
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CreateCommand"/> method.</exception>
+        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="AddCommand"/> method.</exception>
         public void ExecuteCommand(string commandName)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
@@ -177,7 +183,7 @@ namespace Catel.MVVM
         /// <param name="viewModel">The view model.</param>
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CreateCommand"/> method.</exception>
+        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="AddCommand"/> method.</exception>
         public void RegisterCommand(string commandName, ICatelCommand command, IViewModel viewModel = null)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
@@ -201,11 +207,40 @@ namespace Catel.MVVM
         /// <summary>
         /// Registers a command with the specified
         /// </summary>
+        /// <param name="compositeCommand">Composite Command.</param>
+        /// <param name="command">The command.</param>
+        /// <param name="viewModel">The view model.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="compositeCommand"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="AddCommand"/> method.</exception>
+        public void RegisterCommand(ICompositeCommand compositeCommand, ICatelCommand command, IViewModel viewModel = null)
+        {
+            Argument.IsNotNull("compositeCommand", compositeCommand);
+            Argument.IsNotNull("command", command);
+
+            lock (_lockObject)
+            {
+                Log.Debug("Registering command to '{0}'", ObjectToStringHelper.ToString(compositeCommand));
+
+                if (!_commands.ContainsValue(compositeCommand))
+                {
+                    string error = string.Format("Command '{0}' is not yet created using the AddCommand method", ObjectToStringHelper.ToString(compositeCommand));
+                    Log.Error(error);
+                    throw new InvalidOperationException(error);
+                }
+
+                compositeCommand.RegisterCommand(command, viewModel);
+            }
+        }
+
+        /// <summary>
+        /// Unregisters a command
+        /// </summary>
         /// <param name="commandName">Name of the command.</param>
         /// <param name="command">The command.</param>
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CreateCommand"/> method.</exception>
+        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="AddCommand"/> method.</exception>
         public void UnregisterCommand(string commandName, ICatelCommand command)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
@@ -223,6 +258,34 @@ namespace Catel.MVVM
                 }
 
                 _commands[commandName].UnregisterCommand(command);
+            }
+        }
+
+        /// <summary>
+        /// Unregisters a command
+        /// </summary>
+        /// <param name="compositeCommand">Instance of the composite command.</param>
+        /// <param name="command">The command.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="compositeCommand"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="AddCommand"/> method.</exception>
+        public void UnregisterCommand(ICompositeCommand compositeCommand, ICatelCommand command)
+        {
+            Argument.IsNotNull("compositeCommand", compositeCommand);
+            Argument.IsNotNull("command", command);
+
+            lock (_lockObject)
+            {
+                Log.Debug("Unregistering command from '{0}'", ObjectToStringHelper.ToString(compositeCommand));
+
+                if (!_commands.ContainsValue(compositeCommand))
+                {
+                    string error = string.Format("Command '{0}' is not yet created using the CreateCommand method", ObjectToStringHelper.ToString(compositeCommand));
+                    Log.Error(error);
+                    throw new InvalidOperationException(error);
+                }
+
+                compositeCommand.UnregisterCommand(command);
             }
         }
 

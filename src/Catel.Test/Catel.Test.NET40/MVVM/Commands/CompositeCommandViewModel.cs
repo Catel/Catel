@@ -23,8 +23,8 @@ namespace Catel.Test.MVVM
         #endregion
 
         #region Properties
-        public bool AllowTestCommand1Execution { get; private set; }
-        public bool AllowTestCommand2Execution { get; private set; }
+        public bool AllowTestCommand1Execution { get; set; }
+        public bool AllowTestCommand2Execution { get; set; }
 
         public bool IsTestCommand1Executed { get; private set; }
         public bool IsTestCommand2Executed { get; private set; }

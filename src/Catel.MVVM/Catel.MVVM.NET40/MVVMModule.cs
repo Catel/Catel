@@ -12,6 +12,8 @@ namespace Catel
     using Catel.MVVM.Views;
 
     using IoC;
+    using MVVM.Commands;
+    using MVVM.Views.Interfaces;
 
 #if !NET
     using Catel.Windows;
@@ -39,6 +41,7 @@ namespace Catel
             serviceLocator.RegisterTypeIfNotYetRegistered<ICommandManager, CommandManager>();
             serviceLocator.RegisterTypeIfNotYetRegistered<IViewManager, ViewManager>();
             serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelManager, ViewModelManager>();
+            serviceLocator.RegisterTypeIfNotYetRegistered<IViewRoutedCommandManager, ViewRoutedCommandManager>();
 
             ViewModelServiceHelper.RegisterDefaultViewModelServices(serviceLocator);
         }

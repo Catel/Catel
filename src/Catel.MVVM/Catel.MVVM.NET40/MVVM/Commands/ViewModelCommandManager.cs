@@ -9,6 +9,7 @@ namespace Catel.MVVM
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Management.Instrumentation;
     using System.Reflection;
     using System.Windows.Input;
     using Logging;
@@ -51,6 +52,11 @@ namespace Catel.MVVM
         /// the command is registered with.
         /// </remarks>
         private readonly Dictionary<ICommand, string> _commands = new Dictionary<ICommand, string>();
+
+        /// <summary>
+        /// A list of Routed Commands that bind to the view model command.
+        /// </summary>
+        private readonly Dictionary<ICommand, ICommand> _commandBindings = new Dictionary<ICommand, ICommand>();
 
         /// <summary>
         /// The view model.
@@ -219,6 +225,55 @@ namespace Catel.MVVM
                         commandAsICatelCommand.RaiseCanExecuteChanged();
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Add command binding for routed command
+        /// </summary>
+        /// <exception cref="ArgumentNullException">The <paramref name="routedCommand"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="commandToExecute"/> is <c>null</c>.</exception>
+        public void AddCommandBinding(ICommand routedCommand, ICommand commandToExecute)
+        {
+            Argument.IsNotNull("routedCommand", routedCommand);
+            Argument.IsNotNull("commandToExecute", commandToExecute);
+
+            lock (_lock)
+            {
+                if (!_commands.ContainsKey(commandToExecute))
+                {
+                    throw new InstanceNotFoundException("commandToExecute is not registed in this view model");
+                }
+
+                _commandBindings.Add(routedCommand, commandToExecute);
+            }
+        }
+
+        /// <summary>
+        /// Remove command binding for routed command
+        /// </summary>
+        /// <exception cref="ArgumentNullException">The <paramref name="routedCommand"/> is <c>null</c>.</exception>
+        public void RemoveCommandBinding(ICommand routedCommand)
+        {
+            Argument.IsNotNull("routedCommand", routedCommand);
+
+            lock (_lock)
+            {
+                _commandBindings.Remove(routedCommand);
+            }
+        }
+
+        /// <summary>
+        /// Remove command binding for routed command
+        /// </summary>
+        /// <exception cref="ArgumentNullException">The <paramref name="routedCommand"/> is <c>null</c>.</exception>
+        public ICommand GetCommandForRoutedCommand(ICommand routedCommand)
+        {
+            Argument.IsNotNull("routedCommand", routedCommand);
+
+            lock (_lock)
+            {
+                return _commandBindings[routedCommand];
             }
         }
 

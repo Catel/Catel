@@ -24,6 +24,12 @@ namespace Catel.MVVM
         bool HasErrors { get; }
 
         /// <summary>
+        /// Gets the <see cref="ViewModelCommandManager"/> of this view model.
+        /// </summary>
+        /// <value>The <see cref="ViewModelCommandManager"/>.</value>
+        IViewModelCommandManager ViewModelCommandManager { get; }
+
+        /// <summary>
         /// Gets a value indicating whether this instance has warnings.
         /// </summary>
         /// <value>

@@ -33,6 +33,7 @@ namespace Catel.MVVM
         {
             InitializeActions(null, ExecuteCompositeCommand, null, CanExecuteCompositeCommand);
         }
+
         #endregion
 
         #region Methods
@@ -62,8 +63,17 @@ namespace Catel.MVVM
         {
             lock (_lock)
             {
-                return _commandInfo.Count > 0;
+                if (_commandInfo.Count > 0)
+                {
+                    foreach (var commandInfo in _commandInfo)
+                    {
+                        if (commandInfo.Command.CanExecute())
+                            return true;
+                    }
+                }
             }
+
+            return false;
         }
 
         /// <summary>

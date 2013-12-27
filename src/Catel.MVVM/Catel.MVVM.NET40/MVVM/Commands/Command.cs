@@ -201,7 +201,7 @@ namespace Catel.MVVM
         /// </returns>
         public bool CanExecute(object parameter)
         {
-            if (!(parameter is TExecuteParameter))
+            if (!(parameter is TCanExecuteParameter))
             {
                 parameter = default(TCanExecuteParameter);
             }

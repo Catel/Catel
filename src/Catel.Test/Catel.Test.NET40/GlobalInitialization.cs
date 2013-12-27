@@ -26,6 +26,7 @@ namespace Catel.Test
         {
             //System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
 
+            return;
 #if NET
             using (var dbContext = new EntityFramework5.DbContextTest.TestDbContextContainer())
             {
