@@ -19,6 +19,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
     using Logging;
     using MVVM;
     using MVVM.Views;
+    using MVVM.Views.Interfaces;
     using Reflection;
     using Windows.Threading;
 
@@ -76,6 +77,11 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         private static readonly IViewManager _viewManager;
 
         /// <summary>
+        /// The view manager.
+        /// </summary>
+        private static readonly IViewRoutedCommandManager _viewRoutedCommandManager;
+
+        /// <summary>
         /// The dependency property selector.
         /// </summary>
         private static readonly IDependencyPropertySelector _dependencyPropertySelector;
@@ -112,6 +118,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 
             _viewModelFactory = dependencyResolver.Resolve<IViewModelFactory>();
             _viewManager = dependencyResolver.Resolve<IViewManager>();
+            _viewRoutedCommandManager = dependencyResolver.Resolve<IViewRoutedCommandManager>();
             _dependencyPropertySelector = dependencyResolver.Resolve<IDependencyPropertySelector>();
 
 #if !NET
@@ -482,6 +489,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             else
             {
                 _viewManager.RegisterView(view);
+                _viewRoutedCommandManager.RegisterView(view);
             }
 
             IsTargetControlLoaded = true;
@@ -578,6 +586,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             else
             {
                 _viewManager.UnregisterView(view);
+                _viewRoutedCommandManager.UnregisterView(view);
             }
 
             IsTargetControlLoaded = false;
