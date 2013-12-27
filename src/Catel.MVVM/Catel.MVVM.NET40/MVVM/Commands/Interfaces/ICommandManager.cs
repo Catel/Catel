@@ -26,17 +26,19 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="commandName">Name of the command.</param>
         /// <param name="inputGesture">The input gesture.</param>
+        /// <param name="compositeCommand">The composite command. If <c>null</c>, this will default to a new instance of <see cref="CompositeCommand"/>.</param>
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="InvalidOperationException">The specified command is already created using the <see cref="CreateCommand"/> method.</exception>
-        void CreateCommand(string commandName, InputGesture inputGesture = null);
+        void CreateCommand(string commandName, InputGesture inputGesture = null, ICompositeCommand compositeCommand = null);
 #else
         /// <summary>
         /// Creates the command inside the command manager.
         /// </summary>
         /// <param name="commandName">Name of the command.</param>
+        /// <param name="compositeCommand">The composite command. If <c>null</c>, this will default to a new instance of <see cref="CompositeCommand"/>.</param>
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="InvalidOperationException">The specified command is already created using the <see cref="CommandManager.CreateCommand"/> method.</exception>
-        void CreateCommand(string commandName);
+        void CreateCommand(string commandName, ICompositeCommand compositeCommand = null);
 #endif
 
         /// <summary>
