@@ -32,5 +32,13 @@ namespace Catel.MVVM
         /// <param name="command">The command.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
         void UnregisterCommand(ICatelCommand command);
+
+        /// <summary>
+        /// Gets or sets whether this command should check the can execute of all commands to determine can execute for composite command.
+        /// <para />
+        /// The default value is <c>false</c> which means the composite command can be executed if it contains 1 or more commands.
+        /// </summary>
+        /// <value>The check can execute of all commands to determine can execute for composite command.</value>
+        bool CheckCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand { get; set; }
     }
 }

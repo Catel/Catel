@@ -35,6 +35,16 @@ namespace Catel.MVVM
         }
         #endregion
 
+        #region Properties
+        /// <summary>
+        /// Gets or sets whether this command should check the can execute of all commands to determine can execute for composite command.
+        /// <para />
+        /// The default value is <c>false</c> which means the composite command can be executed if it contains 1 or more commands.
+        /// </summary>
+        /// <value>The check can execute of all commands to determine can execute for composite command.</value>
+        public bool CheckCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand { get; set; }
+        #endregion
+
         #region Methods
         private void ExecuteCompositeCommand()
         {
@@ -62,6 +72,19 @@ namespace Catel.MVVM
         {
             lock (_lock)
             {
+                if (CheckCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand)
+                {
+                    foreach (var command in _commandInfo)
+                    {
+                        if (!command.Command.CanExecute())
+                        {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+
                 return _commandInfo.Count > 0;
             }
         }
