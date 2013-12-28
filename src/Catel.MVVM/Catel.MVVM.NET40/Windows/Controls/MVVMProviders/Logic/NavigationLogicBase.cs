@@ -158,7 +158,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             Application.Current.Navigated -= OnNavigatedEvent;
 #endif
 
-            ViewModel = null;
+            //ViewModel = null;
         }
 
         /// <summary>
@@ -199,13 +199,22 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 
             if (!e.Cancel && !HasHandledSaveAndCancelLogic)
             {
+                bool? result = null;
+
                 if (NavigatingAwaySavesViewModel)
                 {
-                    SaveAndCloseViewModel();
+                    result = SaveViewModel();
+                    //SaveAndCloseViewModel();
                 }
                 else
                 {
-                    CancelAndCloseViewModel();
+                    result = CancelViewModel();
+                    //CancelAndCloseViewModel();
+                }
+
+                if (e.NavigationMode == NavigationMode.Back)
+                {
+                    CloseViewModel(result);
                 }
 
                 HasHandledSaveAndCancelLogic = true;
