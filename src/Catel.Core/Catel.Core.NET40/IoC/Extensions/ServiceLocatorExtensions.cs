@@ -13,7 +13,7 @@ namespace Catel.IoC
     /// <summary>
     /// Extension methods for the <see cref="IServiceLocator"/> interface.
     /// </summary>
-    public static class ServiceLocatorExtensions
+    public static partial class ServiceLocatorExtensions
     {
         /// <summary>
         /// The log.

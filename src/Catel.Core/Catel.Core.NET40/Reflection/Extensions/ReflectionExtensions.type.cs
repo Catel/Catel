@@ -129,6 +129,34 @@ namespace Catel.Reflection
             };
 
         /// <summary>
+        /// Gets the parent types.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns></returns>
+        public static IEnumerable<Type> GetParentTypes(this Type type)
+        {
+            // is there any base type?
+            if ((type == null) || (type.GetBaseTypeEx() == null))
+            {
+                yield break;
+            }
+
+            // return all implemented or inherited interfaces
+            foreach (var i in type.GetInterfacesEx())
+            {
+                yield return i;
+            }
+
+            // return all inherited types
+            var currentBaseType = type.GetBaseTypeEx();
+            while (currentBaseType != null)
+            {
+                yield return currentBaseType;
+                currentBaseType = currentBaseType.GetBaseTypeEx();
+            }
+        }
+
+        /// <summary>
         /// Gets the full name of the type in a safe way. This means it checks for null first.
         /// </summary>
         /// <param name="type">The type.</param>

@@ -926,6 +926,197 @@ namespace Catel.Test.IoC
         }
 
         [TestClass]
+        public class TheAutoRegisterTypesViaConventions
+        {
+            public interface IFooService
+            {
+            }
+
+            public interface IFooService2
+            {
+            }
+
+            public class FooService : IFooService
+            {
+            }
+
+            public class FooService2 : IFooService2
+            {
+            }
+
+            public class FooService3 : IFooService, IFooService2
+            {
+            }
+
+            public class NonFooService
+            {
+            }
+
+            [TestMethod]
+            public void RegistersWithDefaultNamingConvention()
+            {
+                var serviceLocator = new ServiceLocator();
+                serviceLocator.RegisterType<IRegistrationConventionHandler, RegistrationConventionHandler>();
+
+                serviceLocator.RegisterTypesUsingDefaultNamingConvention();
+
+                Assert.IsTrue(serviceLocator.IsTypeRegistered<IFooService>());
+            }
+
+            [TestMethod]
+            public void RegistersWithDefaultFirstInterfaceConvention()
+            {
+                var serviceLocator = new ServiceLocator();
+                serviceLocator.RegisterType<IRegistrationConventionHandler, RegistrationConventionHandler>();
+
+                serviceLocator.RegisterTypesUsingDefaultFirstInterfaceConvention();
+
+                Assert.IsTrue(serviceLocator.IsTypeRegistered<IFooService>());
+
+                var services = serviceLocator.ResolveTypes<IFooService>();
+
+                Assert.IsNotNull(services.OfType<FooService3>());
+            }
+
+            [TestMethod]
+            public void ShouldExcludeAllTypesOfNamespaceContainingSpecifiedInterfaceType()
+            {
+                var serviceLocator = new ServiceLocator();
+
+                serviceLocator.RegisterTypesUsingDefaultNamingConvention()
+                              .ExcludeAllTypesOfNamespaceContaining<IFooService>();
+
+                Assert.IsFalse(serviceLocator.IsTypeRegistered<IFooService>());
+                Assert.IsFalse(serviceLocator.IsTypeRegistered<IFooService2>());
+            }
+
+            [TestMethod]
+            public void ShouldExcludeAllTypesOfNamespaceContainingSpecifiedClassType()
+            {
+                var serviceLocator = new ServiceLocator();
+
+                serviceLocator.RegisterTypesUsingDefaultNamingConvention()
+                              .ExcludeAllTypesOfNamespaceContaining<FooService>();
+
+                Assert.IsFalse(serviceLocator.IsTypeRegistered<IFooService>());
+                Assert.IsFalse(serviceLocator.IsTypeRegistered<IFooService2>());
+            }
+
+            [TestMethod]
+            public void ShouldExcludeAllTypesOfTheSpecifiedNamespace()
+            {
+                var serviceLocator = new ServiceLocator();
+
+                serviceLocator.RegisterTypesUsingDefaultNamingConvention()
+                              .ExcludeAllTypesOfNamespace("Catel.Test.IoC");
+
+                Assert.IsFalse(serviceLocator.IsTypeRegistered<IFooService>());
+                Assert.IsFalse(serviceLocator.IsTypeRegistered<IFooService2>());
+            }
+
+            [TestMethod]
+            public void ShouldExcludeSpecifiedInterfaceType()
+            {
+                var serviceLocator = new ServiceLocator();
+
+                serviceLocator.RegisterTypesUsingDefaultNamingConvention()
+                              .ExcludeType<IFooService2>();
+
+                Assert.IsTrue(serviceLocator.IsTypeRegistered<IFooService>());
+                Assert.IsFalse(serviceLocator.IsTypeRegistered<IFooService2>());
+            }
+
+            [TestMethod]
+            public void ShouldExcludeSpecifiedClassType()
+            {
+                var serviceLocator = new ServiceLocator();
+
+                serviceLocator.RegisterTypesUsingDefaultNamingConvention()
+                              .ExcludeType<FooService2>();
+
+                Assert.IsTrue(serviceLocator.IsTypeRegistered<IFooService>());
+                Assert.IsFalse(serviceLocator.IsTypeRegistered<IFooService2>());
+            }
+
+            [TestMethod]
+            public void ShouldExcludeTypeUsingSpecifiedPredicate()
+            {
+                var serviceLocator = new ServiceLocator();
+
+                serviceLocator.RegisterTypesUsingDefaultNamingConvention()
+                              .ExcludeTypesWhere(type => type == typeof(IFooService2));
+
+                Assert.IsTrue(serviceLocator.IsTypeRegistered<IFooService>());
+                Assert.IsFalse(serviceLocator.IsTypeRegistered<IFooService2>());
+            }
+
+            [TestMethod]
+            public void ShouldIncludeSpecifiedInterfaceType()
+            {
+                var serviceLocator = new ServiceLocator();
+
+                serviceLocator.RegisterTypesUsingDefaultNamingConvention()
+                              .IncludeType<IFooService2>()
+                              .IncludeType<FooService2>();
+
+                Assert.IsFalse(serviceLocator.IsTypeRegistered<IFooService>());
+                Assert.IsTrue(serviceLocator.IsTypeRegistered<IFooService2>());
+            }
+
+            [TestMethod]
+            public void ShouldIncludeSpecifiedClassType()
+            {
+                var serviceLocator = new ServiceLocator();
+
+                serviceLocator.RegisterTypesUsingDefaultNamingConvention()
+                              .IncludeType<IFooService2>()
+                              .IncludeType<FooService2>();
+
+                Assert.IsFalse(serviceLocator.IsTypeRegistered<IFooService>());
+                Assert.IsTrue(serviceLocator.IsTypeRegistered<IFooService2>());
+            }
+
+            [TestMethod]
+            public void ShouldIncludeTypeUsingSpecifiedPredicate()
+            {
+                var serviceLocator = new ServiceLocator();
+
+                serviceLocator.RegisterTypesUsingDefaultNamingConvention()
+                              .IncludeTypesWhere(type => type == typeof(IFooService2))
+                              .IncludeType<FooService2>();
+
+                Assert.IsFalse(serviceLocator.IsTypeRegistered<IFooService>());
+                Assert.IsTrue(serviceLocator.IsTypeRegistered<IFooService2>());
+            }
+
+            [TestMethod]
+            public void ShouldIncludeAllTypesOfTheSpecifiedNamespace()
+            {
+                var serviceLocator = new ServiceLocator();
+
+                serviceLocator.RegisterTypesUsingDefaultNamingConvention()
+                              .IncludeAllTypesOfNamespace("Catel.Test.IoC");
+
+                Assert.IsTrue(serviceLocator.IsTypeRegistered<IFooService>());
+                Assert.IsTrue(serviceLocator.IsTypeRegistered<IFooService2>());
+                Assert.IsFalse(serviceLocator.IsTypeRegistered<Services.IService>());
+            }
+
+            [TestMethod]
+            public void ShouldIncludeAllTypesOfNamespaceContaining()
+            {
+                var serviceLocator = new ServiceLocator();
+
+                serviceLocator.RegisterTypesUsingDefaultNamingConvention()
+                              .IncludeAllTypesOfNamespaceContaining<IFooService>();
+
+                Assert.IsTrue(serviceLocator.IsTypeRegistered<IFooService>());
+                Assert.IsTrue(serviceLocator.IsTypeRegistered<IFooService2>());
+                Assert.IsFalse(serviceLocator.IsTypeRegistered<Services.IService>());
+            }
+        }
+
+        [TestClass]
         public class TheResolveTypesMethod
         {
             #region Methods

@@ -351,6 +351,15 @@
     <Compile Include="..\Catel.Core.NET40\Exceptions\NotSupportedInWindowsPhone7Exception.cs">
       <Link>Exceptions\NotSupportedInWindowsPhone7Exception.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Filtering\CompositeFilter.cs">
+      <Link>Filtering\CompositeFilter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Filtering\CompositePredicate.cs">
+      <Link>Filtering\CompositePredicate.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Filtering\Interfaces\ICompositeFilter.cs">
+      <Link>Filtering\Interfaces\ICompositeFilter.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Fluent\Interfaces\IFluent.cs">
       <Link>Fluent\Interfaces\IFluent.cs</Link>
     </Compile>
@@ -402,6 +411,15 @@
     <Compile Include="..\Catel.Core.NET40\IoC\CatelDependencyResolver.cs">
       <Link>IoC\CatelDependencyResolver.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\Conventions\FirstInterfaceRegistrationConvention.cs">
+      <Link>IoC\Conventions\FirstInterfaceRegistrationConvention.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\Conventions\NamingRegistrationConvention.cs">
+      <Link>IoC\Conventions\NamingRegistrationConvention.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\Conventions\RegistrationConventionBase.cs">
+      <Link>IoC\Conventions\RegistrationConventionBase.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\DependencyResolverManager.cs">
       <Link>IoC\DependencyResolverManager.cs</Link>
     </Compile>
@@ -426,6 +444,12 @@
     <Compile Include="..\Catel.Core.NET40\IoC\Extensions\ObjectExtensions.cs">
       <Link>IoC\Extensions\ObjectExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\Extensions\RegistrationConventionHandlerExtensions.cs">
+      <Link>IoC\Extensions\RegistrationConventionHandlerExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\Extensions\ServiceLocatorExtensions.conventions.cs">
+      <Link>IoC\Extensions\ServiceLocatorExtensions.conventions.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Extensions\ServiceLocatorExtensions.cs">
       <Link>IoC\Extensions\ServiceLocatorExtensions.cs</Link>
     </Compile>
@@ -447,6 +471,12 @@
     <Compile Include="..\Catel.Core.NET40\IoC\Interfaces\INeedCustomInitialization.cs">
       <Link>IoC\Interfaces\INeedCustomInitialization.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\Interfaces\IRegistrationConvention.cs">
+      <Link>IoC\Interfaces\IRegistrationConvention.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\Interfaces\IRegistrationConventionHandler.cs">
+      <Link>IoC\Interfaces\IRegistrationConventionHandler.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Interfaces\IServiceLocator.cs">
       <Link>IoC\Interfaces\IServiceLocator.cs</Link>
     </Compile>
@@ -458,6 +488,9 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\IoCConfiguration.cs">
       <Link>IoC\IoCConfiguration.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\RegistrationConventionHandler.cs">
+      <Link>IoC\RegistrationConventionHandler.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\LateBoundImplementation.cs">
       <Link>IoC\LateBoundImplementation.cs</Link>
