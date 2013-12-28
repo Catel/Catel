@@ -32,6 +32,12 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
     using UIEventArgs = System.EventArgs;
 #endif
 
+#if SILVERLIGHT
+    using NavigationContextType = System.Collections.Generic.Dictionary<string, string>;
+#else
+    using NavigationContextType = System.Collections.Generic.Dictionary<string, object>;
+#endif
+
     /// <summary>
     /// Base class for pages or controls containing navigation logic.
     /// </summary>
@@ -48,6 +54,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         private bool _hasNavigatedButNotNavigatedAway;
         private bool _navigationServiceInitialized;
         private bool _navigationComplete;
+        private bool _hasSetNavigationContextOnce;
 
 #if WINDOWS_PHONE
         /// <summary>
@@ -446,11 +453,20 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             var viewModelAsViewModelBase = ViewModel as ViewModelBase;
             if (viewModelAsViewModelBase != null)
             {
+                NavigationContextType finalNavigationContext = null;
+
+                if (!_hasSetNavigationContextOnce)
+                {
 #if SILVERLIGHT
-                viewModelAsViewModelBase.UpdateNavigationContext(ConvertNavigationContextToDictionary(navigationContext as NavigationContext));
+                    finalNavigationContext = ConvertNavigationContextToDictionary(navigationContext as NavigationContext);
 #else
-                viewModelAsViewModelBase.UpdateNavigationContext(navigationContext as Dictionary<string, object>);
+                    finalNavigationContext = navigationContext as NavigationContextType;
 #endif
+
+                    _hasSetNavigationContextOnce = true;
+                }
+
+                viewModelAsViewModelBase.UpdateNavigationContext(finalNavigationContext);
             }
 
             _navigationComplete = true;

@@ -7,17 +7,18 @@
 namespace Catel.MVVM
 {
     using System;
-    using System.Collections.Generic;
     using Catel.Data;
+
+#if SILVERLIGHT
+    using NavigationContextType = System.Collections.Generic.Dictionary<string, string>;
+#else
+    using NavigationContextType = System.Collections.Generic.Dictionary<string, object>;
+#endif
 
     public partial class ViewModelBase
     {
         #region Fields
-#if WINDOWS_PHONE
-        private readonly Dictionary<string, string> _navigationContext = new Dictionary<string, string>();
-#else
-        private readonly Dictionary<string, object> _navigationContext = new Dictionary<string, object>();
-#endif
+        private readonly NavigationContextType _navigationContext = new NavigationContextType();
         #endregion
 
         #region Constructors
@@ -33,15 +34,7 @@ namespace Catel.MVVM
         /// not in the constructor.
         /// </remarks>
         [ExcludeFromValidation]
-#if WINDOWS_PHONE
-        protected Dictionary<string, string> NavigationContext { get { return _navigationContext; } }
-#else
-        protected Dictionary<string, object> NavigationContext { get { return _navigationContext; } }
-#endif
-
-#if WINDOWS_PHONE
-
-#endif
+        protected NavigationContextType NavigationContext { get { return _navigationContext; } }
         #endregion
 
         #region Events
@@ -66,21 +59,15 @@ namespace Catel.MVVM
         /// to match it to the values of the <paramref name="navigationContext"/>.
         /// </summary>
         /// <param name="navigationContext">The navigation context.</param>
-#if SILVERLIGHT
-        public void UpdateNavigationContext(Dictionary<string, string> navigationContext)
-#else
-        public void UpdateNavigationContext(Dictionary<string, object> navigationContext)
-#endif
+        public void UpdateNavigationContext(NavigationContextType navigationContext)
         {
             lock (_navigationContext)
             {
-                _navigationContext.Clear();
-
                 if (navigationContext != null)
                 {
                     foreach (string key in navigationContext.Keys)
                     {
-                        _navigationContext.Add(key, navigationContext[key]);
+                        _navigationContext[key] = navigationContext[key];
                     }
                 }
 
