@@ -148,6 +148,14 @@ namespace Catel.ExceptionHandling
         Task ProcessAsync(Action action, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
+        /// Processes the specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        Task ProcessAsync(Func<Task> action);
+
+        /// <summary>
         /// Processes the specified action. The action will be executed asynchrounously.
         /// </summary>
         /// <typeparam name="TResult">The result type.</typeparam>
@@ -156,6 +164,15 @@ namespace Catel.ExceptionHandling
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         Task<TResult> ProcessAsync<TResult>(Func<TResult> action, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Processes the specified action.
+        /// </summary>
+        /// <typeparam name="TResult">The result type.</typeparam>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        Task<TResult> ProcessAsync<TResult>(Func<Task<TResult>> action);
 #endif
         #endregion
     }

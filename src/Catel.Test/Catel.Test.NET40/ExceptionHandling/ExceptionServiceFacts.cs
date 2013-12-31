@@ -90,7 +90,7 @@ namespace Catel.Test.ExceptionHandling
             #region Methods
 
             [TestMethod]
-            public async Task ProceedToSucceed()
+            public async Task ProceedActionToSucceed()
             {
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;
@@ -106,13 +106,47 @@ namespace Catel.Test.ExceptionHandling
             }
 
             [TestMethod]
-            public async Task ProceedToFail()
+            public async Task ProceedTaskToSucceed()
+            {
+                var exceptionService = new ExceptionService();
+                var value = string.Empty;
+
+                exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
+#pragma warning disable 1998
+                value = await exceptionService.ProcessAsync(async () => (1 + 1).ToString(CultureInfo.InvariantCulture));
+#pragma warning restore 1998
+
+                Assert.AreEqual("2", value);
+
+#pragma warning disable 1998
+                await exceptionService.ProcessAsync<string>(async () => { throw new ArgumentException("achieved"); });
+#pragma warning restore 1998
+
+                Assert.AreEqual("achieved", value);
+            }
+
+            [TestMethod]
+            public async Task ProceedActionToFail()
             {
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;
 
                 exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
                 await exceptionService.ProcessAsync<string>(() => { throw new ArgumentOutOfRangeException("achieved"); });
+
+                Assert.AreNotEqual("achieved", value);
+            }
+
+            [TestMethod]
+            public async Task ProceedTaskToFail()
+            {
+                var exceptionService = new ExceptionService();
+                var value = string.Empty;
+
+                exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
+#pragma warning disable 1998
+                await exceptionService.ProcessAsync<string>( async () => { throw new ArgumentOutOfRangeException("achieved"); });
+#pragma warning restore 1998
 
                 Assert.AreNotEqual("achieved", value);
             }
@@ -322,7 +356,7 @@ namespace Catel.Test.ExceptionHandling
             #region Methods
 
             [TestMethod]
-            public async Task ProceedToSucceed()
+            public async Task ProceedActionToSucceed()
             {
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;
@@ -334,13 +368,42 @@ namespace Catel.Test.ExceptionHandling
             }
 
             [TestMethod]
-            public async Task ProceedToFail()
+            public async Task ProceedTaskToSucceed()
+            {
+                var exceptionService = new ExceptionService();
+                var value = string.Empty;
+
+                exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
+
+#pragma warning disable 1998
+                await exceptionService.ProcessAsync(async () => { throw new ArgumentException("achieved"); });
+#pragma warning restore 1998
+
+                Assert.AreEqual("achieved", value);
+            }
+
+            [TestMethod]
+            public async Task ProceedActionToFail()
             {
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;
 
                 exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
                 await exceptionService.ProcessAsync(() => { throw new ArgumentOutOfRangeException("achieved"); });
+
+                Assert.AreNotEqual("achieved", value);
+            }
+
+            [TestMethod]
+            public async Task ProceedTaskToFail()
+            {
+                var exceptionService = new ExceptionService();
+                var value = string.Empty;
+
+                exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
+#pragma warning disable 1998
+                await exceptionService.ProcessAsync(async () => { throw new ArgumentOutOfRangeException("achieved"); });
+#pragma warning restore 1998
 
                 Assert.AreNotEqual("achieved", value);
             }

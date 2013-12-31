@@ -451,6 +451,29 @@ namespace Catel.ExceptionHandling
         }
 
         /// <summary>
+        /// Processes the specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        public async Task ProcessAsync(Func<Task> action)
+        {
+            Argument.IsNotNull("action", action);
+
+            try
+            {
+                await action();
+            }
+            catch (Exception exception)
+            {
+                if (!HandleException(exception))
+                {
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>
         /// Processes the specified action. The action will be executed asynchrounously.
         /// </summary>
         /// <typeparam name="TResult">The result type.</typeparam>
@@ -465,6 +488,32 @@ namespace Catel.ExceptionHandling
             try
             {
                 return await Task.Run(action, cancellationToken);
+            }
+            catch (Exception exception)
+            {
+                if (!HandleException(exception))
+                {
+                    throw;
+                }
+            }
+
+            return default(TResult);
+        }
+
+        /// <summary>
+        /// Processes the specified action.
+        /// </summary>
+        /// <typeparam name="TResult">The result type.</typeparam>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        public async Task<TResult> ProcessAsync<TResult>(Func<Task<TResult>> action)
+        {
+            Argument.IsNotNull("action", action);
+
+            try
+            {
+                return await action();
             }
             catch (Exception exception)
             {

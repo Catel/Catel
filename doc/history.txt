@@ -37,6 +37,7 @@ Added/fixed:
 (+) CTL-276 Add CompositeCommand to group several commands together
 (+) CTL-283 Added ExcludeFromSerialization attribute to prevent annotation validation on properties where
     it should not be called on
+(+) CTL-288 Added additionnal ProcessAsync methods on IExceptionService
 (*) CTL-211 Renamed resource files of simple chinese from zh-CHS to zh-Hans
 (*) CTL-230 XmlSchemaHelper now supports the new serialization engine introduced in Catel 3.7
 (*) CTL-261 Replace all instances of RegisterDebugListener with AddDebugListener
