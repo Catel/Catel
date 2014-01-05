@@ -26,9 +26,9 @@ namespace Catel.Test
         {
                 var serviceLocator = ServiceLocator.Default;
 
-                serviceLocator.RegisterType<IDbContextCustomerRepository, DbContextCustomerRepository>(RegistrationType.Transient);
-                serviceLocator.RegisterType<IDbContextOrderRepository, DbContextOrderRepository>(RegistrationType.Transient);
-                serviceLocator.RegisterType<IDbContextProductRepository, DbContextProductRepository>(RegistrationType.Transient);
+                serviceLocator.RegisterType<IDbContextCustomerRepository, DbContextCustomerRepository>(registrationType: RegistrationType.Transient);
+                serviceLocator.RegisterType<IDbContextOrderRepository, DbContextOrderRepository>(registrationType: RegistrationType.Transient);
+                serviceLocator.RegisterType<IDbContextProductRepository, DbContextProductRepository>(registrationType: RegistrationType.Transient);
         }
 
         #endregion
