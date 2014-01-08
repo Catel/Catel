@@ -182,7 +182,7 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("serviceLocator", serviceLocator);
 
-            serviceLocator.RegisterType<TService, TServiceImplementation>(tag, registrationType, false);
+            serviceLocator.RegisterTypeWithTag<TService, TServiceImplementation>(tag, registrationType, false);
         }
 
         /// <summary>
@@ -211,15 +211,44 @@ namespace Catel.IoC
         /// </summary>
         /// <typeparam name="TServiceImplementation">The type of the service definition and implementation.</typeparam>
         /// <param name="serviceLocator">The service locator.</param>
-        /// <param name="tag">The tag to register the service with. The default value is <c>null</c>.</param>
         /// <param name="registrationType">The registration type. The default value is <see cref="RegistrationType.Singleton" />.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
-        public static void RegisterType<TServiceImplementation>(this IServiceLocator serviceLocator, object tag = null, RegistrationType registrationType = RegistrationType.Singleton)
+        public static void RegisterType<TServiceImplementation>(this IServiceLocator serviceLocator, RegistrationType registrationType = RegistrationType.Singleton)
+        {
+            RegisterTypeWithTag<TServiceImplementation>(serviceLocator, null, registrationType);
+        }
+
+        /// <summary>
+        /// Registers a service where the implementation type is the same as the registered type.
+        /// </summary>
+        /// <typeparam name="TServiceImplementation">The type of the service definition and implementation.</typeparam>
+        /// <param name="serviceLocator">The service locator.</param>
+        /// <param name="tag">The tag.</param>
+        /// <param name="registrationType">The registration type. The default value is <see cref="RegistrationType.Singleton" />.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
+        /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
+        public static void RegisterTypeWithTag<TServiceImplementation>(this IServiceLocator serviceLocator, object tag = null, RegistrationType registrationType = RegistrationType.Singleton)
         {
             Argument.IsNotNull("serviceLocator", serviceLocator);
 
             serviceLocator.RegisterType(typeof(TServiceImplementation), typeof(TServiceImplementation), tag, registrationType);
+        }
+
+        /// <summary>
+        /// Registers an implementation of a service.
+        /// </summary>
+        /// <typeparam name="TService">The type of the service.</typeparam>
+        /// <typeparam name="TServiceImplementation">The type of the implementation.</typeparam>
+        /// <param name="serviceLocator">The service locator.</param>
+        /// <param name="registrationType">The registration type. The default value is <see cref="RegistrationType.Singleton" />.</param>
+        /// <param name="registerIfAlreadyRegistered">If set to <c>true</c>, an older type registration is overwritten by this new one.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
+        /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
+        public static void RegisterType<TService, TServiceImplementation>(this IServiceLocator serviceLocator, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true)
+            where TServiceImplementation : TService
+        {
+            RegisterTypeWithTag<TService, TServiceImplementation>(serviceLocator, null, registrationType, registerIfAlreadyRegistered);
         }
 
         /// <summary>
@@ -233,12 +262,28 @@ namespace Catel.IoC
         /// <param name="registerIfAlreadyRegistered">If set to <c>true</c>, an older type registration is overwritten by this new one.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
-        public static void RegisterType<TService, TServiceImplementation>(this IServiceLocator serviceLocator, object tag = null, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true)
+        public static void RegisterTypeWithTag<TService, TServiceImplementation>(this IServiceLocator serviceLocator, object tag = null, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true)
             where TServiceImplementation : TService
         {
             Argument.IsNotNull("serviceLocator", serviceLocator);
 
             serviceLocator.RegisterType(typeof(TService), typeof(TServiceImplementation), tag, registrationType, registerIfAlreadyRegistered);
+        }
+
+        /// <summary>
+        /// Registers an implementation of ea service using a create type callback
+        /// </summary>
+        /// <typeparam name="TService">The type of the service.</typeparam>
+        /// <param name="serviceLocator">The service locator.</param>
+        /// <param name="createServiceFunc">The create service function.</param>
+        /// <param name="registrationType">The registration type. The default value is <see cref="RegistrationType.Singleton" />.</param>
+        /// <param name="registerIfAlreadyRegistered">If set to <c>true</c>, an older type registration is overwritten by this new one.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="createServiceFunc" /> is <c>null</c>.</exception>
+        /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
+        public static void RegisterType<TService>(this IServiceLocator serviceLocator, Func<ServiceLocatorRegistration, TService> createServiceFunc, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true)
+        {
+            RegisterTypeWithTag(serviceLocator, createServiceFunc, null, registrationType, registerIfAlreadyRegistered);
         }
 
         /// <summary>
@@ -253,7 +298,7 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="createServiceFunc" /> is <c>null</c>.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
-        public static void RegisterType<TService>(this IServiceLocator serviceLocator, Func<ServiceLocatorRegistration, TService> createServiceFunc, object tag = null, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true)
+        public static void RegisterTypeWithTag<TService>(this IServiceLocator serviceLocator, Func<ServiceLocatorRegistration, TService> createServiceFunc, object tag = null, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true)
         {
             Argument.IsNotNull("serviceLocator", serviceLocator);
             Argument.IsNotNull("createServiceFunc", createServiceFunc);
