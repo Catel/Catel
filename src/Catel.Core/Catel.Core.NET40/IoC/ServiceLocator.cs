@@ -9,6 +9,7 @@ namespace Catel.IoC
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Diagnostics;
     using System.Linq;
     using Catel.Scoping;
     using Logging;
@@ -38,6 +39,7 @@ namespace Catel.IoC
         #endregion
 
         #region Nested type: ServiceInfo
+        [DebuggerDisplay("{Type} ({Tag})")]
         private class ServiceInfo
         {
             private int _hash;
@@ -468,7 +470,7 @@ namespace Catel.IoC
                     return _typeFactory.CreateInstance(serviceType);
                 }
 
-                var error = string.Format("The type '{0}' is not registered, not even in an external container", serviceType.FullName);
+                var error = string.Format("The type '{0}' is not registered", serviceType.FullName);
                 Log.Error(error);
                 throw new NotSupportedException(error);
             }

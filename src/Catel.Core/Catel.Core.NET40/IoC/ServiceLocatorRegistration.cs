@@ -8,10 +8,12 @@
 namespace Catel.IoC
 {
     using System;
+    using System.Diagnostics;
 
     /// <summary>
     /// Contains all information about the registration of an entry in the <see cref="ServiceLocator"/>.
     /// </summary>
+    [DebuggerDisplay("{DeclaringType} => {ImplementingType} ({RegistrationType})")]
     public class ServiceLocatorRegistration
     {
         #region Constructors
