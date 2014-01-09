@@ -146,7 +146,7 @@ namespace Catel.IoC
                     if (_constructorCache.ContainsKey(constructorCacheKey))
                     {
                         var cachedConstructor = _constructorCache[constructorCacheKey];
-                        var instanceCreatedWithInjection = TryCreateWithConstructorInjection(typeToConstruct, cachedConstructor);
+                        var instanceCreatedWithInjection = TryCreateWithConstructorInjection(typeToConstruct, cachedConstructor, false);
                         if (instanceCreatedWithInjection != null)
                         {
                             CompleteTypeRequestPathIfRequired(typeRequestInfo);
@@ -163,9 +163,11 @@ namespace Catel.IoC
 
                     var typeConstructorsMetadata = GetTypeMetaData(typeToConstruct);
                     var constructors = typeConstructorsMetadata.GetConstructors();
-                    foreach (var constructor in constructors)
+                    for (int i = 0; i < constructors.Count; i++)
                     {
-                        var instanceCreatedWithInjection = TryCreateWithConstructorInjection(typeToConstruct, constructor);
+                        var constructor = constructors[i];
+
+                        var instanceCreatedWithInjection = TryCreateWithConstructorInjection(typeToConstruct, constructor, i < constructors.Count - 1);
                         if (instanceCreatedWithInjection != null)
                         {
                             CompleteTypeRequestPathIfRequired(typeRequestInfo);
@@ -571,8 +573,9 @@ namespace Catel.IoC
         /// </summary>
         /// <param name="typeToConstruct">Type of the service.</param>
         /// <param name="constructorInfo">The constructor info.</param>
+        /// <param name="hasMoreConstructorsLeft">if set to <c>true</c>, this is not the last constructor.</param>
         /// <returns>The instantiated service or <c>null</c> if the instantiation fails.</returns>
-        private object TryCreateWithConstructorInjection(Type typeToConstruct, ConstructorInfo constructorInfo)
+        private object TryCreateWithConstructorInjection(Type typeToConstruct, ConstructorInfo constructorInfo, bool hasMoreConstructorsLeft)
         {
             var parametersList = new List<Type>();
             foreach (var parameterInfo in constructorInfo.GetParameters())
@@ -593,10 +596,12 @@ namespace Catel.IoC
 
                 return TryCreateWithConstructorInjectionWithParameters(typeToConstruct, constructorInfo, parameters);
             }
-            catch (CircularDependencyException ex)
+            catch (CircularDependencyException)
             {
-                // Only handle CircularDependencyExceptions we throw ourselves
-                if (string.Equals(TypeRequestPathName, ex.TypePath.Name, StringComparison.Ordinal))
+                // Only handle CircularDependencyExceptions we throw ourselves because we support generic types such as 
+                // Dictionary<TKey, TValue> which has a constructor with IDictionary<TKey, TValue>
+                if (!hasMoreConstructorsLeft)
+                //if (string.Equals(TypeRequestPathName, ex.TypePath.Name, StringComparison.Ordinal))
                 {
                     throw;
                 }

@@ -50,6 +50,7 @@ Added/fixed:
 (x) CTL-268 EF 6 extension does not register types automatically
 (x) CTL-275 Fixed implementation of StartUpInfoProvider Arguments property
 (x) CTL-278 Validation throws exception on modelbase properties (should improve performance on validating models)
+(x) CTL-294 ServiceLocator does not throw CircularDependencyException for some cases
 (-) CTL-282 Removed AllowNonSerializedMembers attribute because it is no longer required because
     of the new serialization engine introduced in Catel 3.7
 

@@ -1366,5 +1366,43 @@ namespace Catel.Test.IoC
             }
             #endregion
         }
+
+        [TestClass]
+        public class TheResolveTypeWithCircularDependenciesBehavior
+        {
+            public class InterfaceA
+            {
+            }
+
+            public class ClassA : InterfaceA
+            {
+                public ClassA(InterfaceB b)
+                {
+                    Argument.IsNotNull(() => b);
+                }
+            }
+
+            public class InterfaceB
+            {
+            }
+
+            public class ClassB : InterfaceB
+            {
+                public ClassB(InterfaceA a)
+                {
+                    Argument.IsNotNull(() => a);
+                }
+            }
+
+            [TestMethod]
+            public void ThrowsCircularDependencyException()
+            {
+                var serviceLocator = new ServiceLocator();
+                serviceLocator.RegisterType<InterfaceA, ClassA>();
+                serviceLocator.RegisterType<InterfaceB, ClassB>();
+
+                ExceptionTester.CallMethodAndExpectException<CircularDependencyException>(() => serviceLocator.ResolveType<InterfaceA>());
+            }
+        }
     }
 }
