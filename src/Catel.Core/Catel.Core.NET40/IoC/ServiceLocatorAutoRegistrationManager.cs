@@ -175,7 +175,7 @@ namespace Catel.IoC
                                 {
                                     case ServiceLocatorRegistrationMode.Transient:
                                     case ServiceLocatorRegistrationMode.SingletonInstantiateWhenRequired:
-                                        _serviceLocator.RegisterTypeIfNotYetRegistered(attribute.InterfaceType, type, attribute.Tag, attribute.RegistrationType);
+                                        _serviceLocator.RegisterTypeIfNotYetRegisteredWithTag(attribute.InterfaceType, type, attribute.Tag, attribute.RegistrationType);
                                         break;
 
                                     case ServiceLocatorRegistrationMode.SingletonInstantiateImmediately:
