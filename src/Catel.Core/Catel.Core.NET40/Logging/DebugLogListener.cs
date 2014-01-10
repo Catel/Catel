@@ -77,7 +77,6 @@ namespace Catel.Logging
 #if NETFX_CORE
             System.Diagnostics.Debug.WriteLine(consoleMessage);
 #elif WINDOWS_PHONE
-            // TODO: find out how to log in on windows phone
             System.Diagnostics.Debug.WriteLine(consoleMessage);
 #elif SL4 || SL5
             if (InitializeConsole())

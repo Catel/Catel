@@ -20,8 +20,6 @@ namespace Catel.MVVM.Services
         /// <exception cref="ArgumentNullException">The <paramref name="newLocation"/> is <c>null</c>.</exception>
         public LocationChangedEventArgs(ILocation newLocation)
         {
-            Argument.IsNotNull("newLocation", newLocation);
-
             Location = newLocation;
         }
 

@@ -118,12 +118,15 @@ namespace Catel.MVVM.Services.Test
         /// <summary>
         /// Starts the location service so it's retrieving data.
         /// </summary>
-        public void Start()
+        /// <returns><c>true</c> if the service started successfully; otherwise <c>false</c>.</returns>
+        public bool Start()
         {
             if (ExpectedLocations.Count > 0)
             {
                 ProceedToNextLocation();
             }
+
+            return true;
         }
 
         /// <summary>

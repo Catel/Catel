@@ -46,6 +46,7 @@ Added/fixed:
 (*) CTL-285 Windows Phone navigation will now keep view models tight to their page instantiations and will only
     actively close a view model when the back button is used
 (*) CTL-286 NavigationContext will now only be updated on the initial navigation for a view model
+(*) CTL-295 Improved LocationService for Windows Phone 8
 (x) CTL-232 XmlSerialization of complex types (interface collections of interfaces with each element of diff. class)
 (x) CTL-268 EF 6 extension does not register types automatically
 (x) CTL-275 Fixed implementation of StartUpInfoProvider Arguments property

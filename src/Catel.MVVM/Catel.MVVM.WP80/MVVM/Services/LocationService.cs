@@ -9,6 +9,7 @@ namespace Catel.MVVM.Services
     using System;
     using System.ComponentModel;
     using System.Device.Location;
+    using Catel.Logging;
 
     /// <summary>
     /// Service that supports retrieving the current location.
@@ -16,9 +17,9 @@ namespace Catel.MVVM.Services
     public class LocationService : ViewModelServiceBase, ILocationService
     {
         #region Fields
-        private readonly GeoCoordinateWatcher _geoCoordinateWatcher = new GeoCoordinateWatcher();
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private bool _hasLocation;
+        private readonly GeoCoordinateWatcher _geoCoordinateWatcher;
         #endregion
 
         #region Constructors
@@ -27,13 +28,11 @@ namespace Catel.MVVM.Services
         /// </summary>
         public LocationService()
         {
+            _geoCoordinateWatcher = new GeoCoordinateWatcher(GeoPositionAccuracy.High);
+            _geoCoordinateWatcher.MovementThreshold = 0;
+
             _geoCoordinateWatcher.PositionChanged += OnGeoCoordinateWatcherPositionChanged;
             _geoCoordinateWatcher.StatusChanged += OnGeoCoordinateWatcherStatusChanged;
-
-            if (_geoCoordinateWatcher.Status == GeoPositionStatus.Ready)
-            {
-                _hasLocation = true;
-            }
         }
         #endregion
 
@@ -76,24 +75,9 @@ namespace Catel.MVVM.Services
         /// <param name="e">The <see cref="System.Device.Location.GeoPositionStatusChangedEventArgs"/> instance containing the event data.</param>
         private void OnGeoCoordinateWatcherStatusChanged(object sender, GeoPositionStatusChangedEventArgs e)
         {
-            switch (e.Status)
-            {
-                case GeoPositionStatus.Disabled:
-                case GeoPositionStatus.Initializing:
-                case GeoPositionStatus.NoData:
-                    _hasLocation = false;
-                    OnLocationChanged();
-                    break;
+            Log.Info("Changed status to '{0}'", e.Status);
 
-                case GeoPositionStatus.Ready:
-                    if (!_hasLocation)
-                    {
-                        _hasLocation = true;
-                        OnLocationChanged();
-                    }
-
-                    break;
-            }   
+            OnLocationChanged();
         }
 
         /// <summary>
@@ -106,7 +90,8 @@ namespace Catel.MVVM.Services
                 return;
             }
 
-            var value = new LocationChangedEventArgs(GetCurrentLocation());
+            var currentLocation = GetCurrentLocation();
+            var value = new LocationChangedEventArgs(currentLocation);
 
             // Must be thread-safe, dispatch
             if (Dispatcher != null)
@@ -128,13 +113,8 @@ namespace Catel.MVVM.Services
         /// </returns>
         public ILocation GetCurrentLocation()
         {
-            ILocation currentLocation = null;
-
-            if (_hasLocation)
-            {
-                var currentCoordinate = _geoCoordinateWatcher.Position;
-                currentLocation = new Location(currentCoordinate.Location);
-            }
+            var currentCoordinate = _geoCoordinateWatcher.Position;
+            var currentLocation = new Location(currentCoordinate.Location);
 
             return currentLocation;
         }
@@ -142,9 +122,23 @@ namespace Catel.MVVM.Services
         /// <summary>
         /// Starts the location service so it's retrieving data.
         /// </summary>
-        public void Start()
+        /// <returns><c>true</c> if the service started successfully; otherwise <c>false</c>.</returns>
+        public bool Start()
         {
-            _geoCoordinateWatcher.TryStart(false, new TimeSpan(0, 0, 5));
+            Log.Info("Starting LocationService");
+
+            var result = _geoCoordinateWatcher.TryStart(false, new TimeSpan(0, 0, 5));
+
+            if (result)
+            {
+                Log.Info("Started LocationService");
+            }
+            else
+            {
+                Log.Info("Failed to start LocationService");
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -152,7 +146,11 @@ namespace Catel.MVVM.Services
         /// </summary>
         public void Stop()
         {
+            Log.Info("Stopping LocationService");
+
             _geoCoordinateWatcher.Stop();
+
+            Log.Info("Stopped LocationService");
         }
         #endregion
     }
