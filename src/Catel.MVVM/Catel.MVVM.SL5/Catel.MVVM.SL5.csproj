@@ -199,6 +199,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.zh-Hans.resx</DependentUpon>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\CollectionToCountConverter.cs">
+      <Link>Windows\Data\Converters\CollectionToCountConverter.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\StringToTypeConverter.cs">
       <Link>Windows\Data\Converters\StringToTypeConverter.cs</Link>
     </Compile>
