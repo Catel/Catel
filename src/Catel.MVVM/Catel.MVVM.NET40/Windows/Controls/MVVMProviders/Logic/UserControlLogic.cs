@@ -364,7 +364,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 
             if (CloseViewModelOnUnloaded)
             {
-                CloseAndDiposeViewModel(true);
+                CloseAndDisposeViewModel(true);
             }
             else
             {
@@ -428,7 +428,10 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 ClearWarningsAndErrorsForObject(oldDataContext);
             }
 
-            UpdateDataContextToUseViewModel(dataContext);
+            if (!IsUnloading)
+            {
+                UpdateDataContextToUseViewModel(dataContext);
+            }
         }
 
         /// <summary>
@@ -495,6 +498,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 
                 _parentViewModel.Saving += OnParentViewModelSaving;
                 _parentViewModel.Canceling += OnParentViewModelCanceling;
+                _parentViewModel.Closing += OnParentViewModelClosing;
 
                 Log.Debug("Subscribed to parent view model '{0}'", parentViewModel.GetType());
             }
@@ -511,6 +515,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 
                 _parentViewModel.Saving -= OnParentViewModelSaving;
                 _parentViewModel.Canceling -= OnParentViewModelCanceling;
+                _parentViewModel.Closing -= OnParentViewModelClosing;
 
                 _parentViewModel = null;
 
@@ -577,7 +582,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 {
                     if (ViewModel != null)
                     {
-                        CloseAndDiposeViewModel(false);
+                        CloseAndDisposeViewModel(false);
                     }
 
                     ViewModel = ConstructViewModelUsingArgumentOrDefaultConstructor(newDataContext);
@@ -587,7 +592,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             {
                 if (ViewModel != null)
                 {
-                    CloseAndDiposeViewModel(false);
+                    CloseAndDisposeViewModel(false);
                 }
 
                 // We closed our previous view-model, but it might be possible to construct a new view-model
@@ -597,21 +602,26 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         }
 
         /// <summary>
-        /// Closes and diposes the current view model.
+        /// Closes and disposes the current view model.
         /// </summary>
-        private void CloseAndDiposeViewModel(bool? result)
+        /// <param name="result"><c>true</c> if the view model should be saved; <c>false</c> if the view model should be canceled; <c>null</c> if it should only be closed.</param>
+        private void CloseAndDisposeViewModel(bool? result)
         {
             if (ViewModel != null)
             {
-                if (result ?? false)
+                if (result.HasValue)
                 {
-                    ViewModel.SaveAndCloseViewModel();
-                }
-                else
-                {
-                    ViewModel.CancelAndCloseViewModel();
+                    if (result.Value)
+                    {
+                        ViewModel.SaveViewModel();
+                    }
+                    else
+                    {
+                        ViewModel.CancelViewModel();
+                    }
                 }
 
+                ViewModel.CloseViewModel(result);
                 ViewModel = null;
             }
         }
@@ -702,6 +712,25 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 {
                     e.Cancel = !ViewModel.SaveViewModel();
                 }
+            }
+        }
+
+        /// <summary>
+        /// Called when Closing event of the parent ViewModel.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void OnParentViewModelClosing(object sender, EventArgs e)
+        {
+            if (ViewModel != null)
+            {
+                if (ReferenceEquals(sender, ViewModel))
+                {
+                    Log.Warning("Parent view model '{0}' is exactly the same instance as the current view model, ignore Closing event", sender.GetType().FullName);
+                    return;
+                }
+
+                CloseAndDisposeViewModel(null);
             }
         }
 

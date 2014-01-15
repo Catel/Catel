@@ -315,6 +315,18 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// </remarks>
         /// <value><c>true</c> if this instance can control be loaded; otherwise, <c>false</c>.</value>
         protected virtual bool CanControlBeLoaded { get { return true; } }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is loading.
+        /// </summary>
+        /// <value><c>true</c> if this instance is loading; otherwise, <c>false</c>.</value>
+        protected bool IsLoading { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is unloading.
+        /// </summary>
+        /// <value><c>true</c> if this instance is unloading; otherwise, <c>false</c>.</value>
+        protected bool IsUnloading { get; private set; }
         #endregion
 
         #region Events
@@ -474,6 +486,8 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 
             Log.Debug("Target control '{0}' is loaded", TargetControl.GetType().Name);
 
+            IsLoading = true;
+
             var view = TargetControl as IView;
             if (view == null)
             {
@@ -528,6 +542,8 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                     _isFirstValidationAfterLoaded = true;
                 }
             });
+
+            IsLoading = false;
         }
 
         /// <summary>
@@ -564,6 +580,8 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 return;
             }
 
+            IsUnloading = true;
+
 //#if !NET
 //            _isFirstLayoutUpdatedAfterUnloadedEvent = true;
 //#endif
@@ -590,6 +608,8 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             {
                 ViewToViewModelMappingHelper.UninitializeViewToViewModelMappings(targetControlAsIViewModelContainer);
             }
+
+            IsUnloading = false;
         }
 
         /// <summary>
@@ -611,7 +631,6 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             Log.Debug("DataContext of TargetControl '{0}' has changed to '{1}'", TargetControl.GetType().Name, ObjectToStringHelper.ToTypeString(TargetControl.DataContext));
 
             var dataContext = TargetControl.DataContext;
-
             if (dataContext == null)
             {
                 return;

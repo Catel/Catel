@@ -52,6 +52,8 @@ Added/fixed:
 (x) CTL-275 Fixed implementation of StartUpInfoProvider Arguments property
 (x) CTL-278 Validation throws exception on modelbase properties (should improve performance on validating models)
 (x) CTL-294 ServiceLocator does not throw CircularDependencyException for some cases
+(x) CTL-298 Nested view models with default constructor behave incorrectly. Now the child views are correctly closed
+    as part of closing a nested hierarchy inside a DataWindow
 (-) CTL-282 Removed AllowNonSerializedMembers attribute because it is no longer required because
     of the new serialization engine introduced in Catel 3.7
 

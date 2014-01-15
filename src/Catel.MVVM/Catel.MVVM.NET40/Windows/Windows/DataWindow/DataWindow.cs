@@ -979,11 +979,9 @@ namespace Catel.Windows
         }
 
         /// <summary>
-        /// Called when a property on the current view model has changed.
+        /// Raises the can <see cref="ICommand.CanExecuteChanged"/> for all commands.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
-        private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected void RaiseCanExecuteChangedForAllCommands()
         {
             foreach (ICommand command in Commands)
             {
@@ -993,6 +991,16 @@ namespace Catel.Windows
                     commandAsICatelCommand.RaiseCanExecuteChanged();
                 }
             }
+        }
+
+        /// <summary>
+        /// Called when a property on the current view model has changed.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
+        private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            RaiseCanExecuteChangedForAllCommands();
 
             OnViewModelPropertyChanged(e);
         }
