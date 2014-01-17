@@ -786,6 +786,12 @@
     <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\ShortDateFormattingConverterTest.cs">
       <Link>Windows\Data\Converters\ShortDateFormattingConverterTest.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\TextToLowerCaseConverterFacts.cs">
+      <Link>Windows\Data\Converters\TextToLowerCaseConverterFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\TextToUpperCaseConverterFacts.cs">
+      <Link>Windows\Data\Converters\TextToUpperCaseConverterFacts.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\Windows\Helpers\CommandLineHelperFacts.cs">
       <Link>Windows\Helpers\CommandLineHelperFacts.cs</Link>
     </Compile>

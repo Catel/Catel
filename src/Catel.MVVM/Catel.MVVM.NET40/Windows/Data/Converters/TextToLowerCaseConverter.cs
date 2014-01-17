@@ -8,6 +8,7 @@
 namespace Catel.Windows.Data.Converters
 {
     using System;
+    using System.Globalization;
 
     /// <summary>
     /// Converts string values to lower case.
@@ -29,7 +30,7 @@ namespace Catel.Windows.Data.Converters
 #if NETFX_CORE
                 return stringValue.ToLower();
 #else
-                return stringValue.ToLower(CurrentCulture);
+                return stringValue.ToLower(CurrentCulture ?? CultureInfo.CurrentCulture);
 #endif
             }
 

@@ -334,6 +334,8 @@
     <Compile Include="Windows\Data\Converters\GetFirstValidationErrorConverterTest.cs" />
     <Compile Include="Windows\Data\Converters\IsSelectedConverterTest.cs" />
     <Compile Include="Windows\Data\Converters\IsSelectedValueConverterTest.cs" />
+    <Compile Include="Windows\Data\Converters\TextToUpperCaseConverterFacts.cs" />
+    <Compile Include="Windows\Data\Converters\TextToLowerCaseConverterFacts.cs" />
     <Compile Include="Windows\Data\Converters\MethodToValueConverterTest.cs" />
     <Compile Include="Windows\Data\Converters\MultiplyConverterTest.cs" />
     <Compile Include="Windows\Data\Converters\ReferenceToBooleanConverterTest.cs" />

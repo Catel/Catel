@@ -8,6 +8,7 @@
 namespace Catel.Windows.Data.Converters
 {
     using System;
+    using System.Globalization;
 
     /// <summary>
     /// Converts string values to upper case.
@@ -30,7 +31,7 @@ namespace Catel.Windows.Data.Converters
 #if NETFX_CORE
                 return stringValue.ToUpper();
 #else
-                return stringValue.ToUpper(CurrentCulture);
+                return stringValue.ToUpper(CurrentCulture ?? CultureInfo.CurrentCulture);
 #endif
             }
 
