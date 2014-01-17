@@ -408,13 +408,17 @@ namespace Catel.Data
                     case EventChangeType.Collection:
                         weakListener = this.SubscribeToWeakCollectionChangedEvent(value, OnObjectCollectionChanged);
 
-                        var collectionItems = new List<WeakReference>();
-                        foreach (var item in (ICollection)value)
+                        var collection = value as ICollection;
+                        if (collection != null)
                         {
-                            collectionItems.Add(new WeakReference(item));
-                        }
+                            var collectionItems = new List<WeakReference>();
+                            foreach (var item in collection)
+                            {
+                                collectionItems.Add(new WeakReference(item));
+                            }
 
-                        _collectionItems.Add(value, collectionItems);
+                            _collectionItems.Add(value, collectionItems);
+                        }
                         break;
 
                     default:
