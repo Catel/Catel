@@ -39,6 +39,7 @@ Added/fixed:
     it should not be called on
 (+) CTL-288 Added additional ProcessAsync methods on IExceptionService
 (+) CTL-292 Added ServiceLocator extension methods for registrations with tags and RemoveType
+(+) CTL-300 Added ChangeNotificationWrapper methods to unsubscribe and subscribe collections items manually
 (*) CTL-211 Renamed resource files of simple chinese from zh-CHS to zh-Hans
 (*) CTL-230 XmlSchemaHelper now supports the new serialization engine introduced in Catel 3.7
 (*) CTL-261 Replace all instances of RegisterDebugListener with AddDebugListener
@@ -54,6 +55,7 @@ Added/fixed:
 (x) CTL-294 ServiceLocator does not throw CircularDependencyException for some cases
 (x) CTL-298 Nested view models with default constructor behave incorrectly. Now the child views are correctly closed
     as part of closing a nested hierarchy inside a DataWindow
+(x) CTL-299 ChangeNotificationWrapper does not handle NotifyCollectionChangedAction.Reset correctly
 (-) CTL-282 Removed AllowNonSerializedMembers attribute because it is no longer required because
     of the new serialization engine introduced in Catel 3.7
 

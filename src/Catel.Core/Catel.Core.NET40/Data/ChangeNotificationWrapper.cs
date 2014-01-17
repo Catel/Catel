@@ -13,7 +13,9 @@ namespace Catel.Data
     using System.Collections.Specialized;
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
+    using System.Windows;
     using Catel.Logging;
+    using IWeakEventListener = Catel.IWeakEventListener;
 
     /// <summary>
     /// Available event change types.
@@ -50,6 +52,8 @@ namespace Catel.Data
         private ConditionalWeakTable<object, IWeakEventListener> _weakCollectionChangedListenersTable;
         private List<IWeakEventListener> _weakPropertyChangedListeners;
         private ConditionalWeakTable<object, IWeakEventListener> _weakPropertyChangedListenersTable;
+
+        private readonly List<WeakReference> _collectionItems = new List<WeakReference>();
         #endregion
 
         #region Constructors
@@ -164,6 +168,30 @@ namespace Catel.Data
                 }
             }
 
+            // Reset requires our own logic
+            if (e.Action == NotifyCollectionChangedAction.Reset)
+            {
+                lock (_lockObject)
+                {
+                    foreach (var item in _collectionItems)
+                    {
+                        if (item.IsAlive)
+                        {
+                            var actualItem = item.Target;
+                            UnsubscribeNotifyChangedEvents(actualItem);
+                        }
+                    }
+
+                    _collectionItems.Clear();
+
+                    var collection = (ICollection) sender;
+                    foreach (var item in collection)
+                    {
+                        SubscribeNotifyChangedEvents(item, true);
+                    }
+                }
+            }
+
             if (e.NewItems != null)
             {
                 foreach (var item in e.NewItems)
@@ -225,7 +253,7 @@ namespace Catel.Data
         /// <remarks>
         /// No need to check for weak events, they are unsubscribed automatically.
         /// </remarks>
-        private void UnsubscribeNotifyChangedEvents(object value)
+        public void UnsubscribeNotifyChangedEvents(object value)
         {
             if (value != null)
             {
@@ -245,6 +273,12 @@ namespace Catel.Data
                         UnsubscribeNotifyChangedEvents(child);
                     }
                 }
+
+                // Unfortunately, we cannot remove, but it's weak anyway (no Equals method on weak reference)
+                //if (SupportsNotifyCollectionChanged)
+                //{
+                //    _collectionItems.Remove(new WeakReference(value));
+                //}
             }
         }
 
@@ -253,7 +287,7 @@ namespace Catel.Data
         /// </summary>
         /// <param name="value">The object to subscribe to.</param>
         /// <param name="isCollectionItem">If set to <c>true</c>, this is a collection item which should use <see cref="OnObjectCollectionItemPropertyChanged"/>.</param>
-        private void SubscribeNotifyChangedEvents(object value, bool isCollectionItem)
+        public void SubscribeNotifyChangedEvents(object value, bool isCollectionItem)
         {
             if (value != null)
             {
@@ -281,6 +315,11 @@ namespace Catel.Data
                     {
                         Log.Warning(ex, "Failed to subscribe to PropertyChanged event, the event is probably not public");
                     }
+                }
+
+                if (isCollectionItem)
+                {
+                    _collectionItems.Add(new WeakReference(value));
                 }
             }
         }

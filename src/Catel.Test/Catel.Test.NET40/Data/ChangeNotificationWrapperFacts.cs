@@ -236,6 +236,33 @@ namespace Catel.Test.Data
 
                 Assert.IsTrue(collectionItemPropertyChanged);
             }
+
+            [TestMethod]
+            public void HandlesCollectionResetsCorrectly()
+            {
+                var collection = new ObservableCollection<TestModel>();
+                TestModel model = null;
+
+                for (int i = 0; i < 10; i++)
+                {
+                    var randomModel = new TestModel();
+                    collection.Add(randomModel);
+                }
+
+                model = collection[0];
+
+                var wrapper = new ChangeNotificationWrapper(collection);
+
+                bool collectionItemPropertyChanged = false;
+
+                wrapper.CollectionItemPropertyChanged += (sender, e) => collectionItemPropertyChanged = true;
+
+                collection.Clear();
+                
+                model.FirstName = "Geert";
+
+                Assert.IsFalse(collectionItemPropertyChanged);
+            }
         }
 
         [TestClass]
