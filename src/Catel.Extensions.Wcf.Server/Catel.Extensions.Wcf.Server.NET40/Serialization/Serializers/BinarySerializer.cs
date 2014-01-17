@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-//  <copyright file="BinarySerializer.cs" Company = "HSE Development Team.">
-//    Copyright (c) 2008 - 2013 HSE Enterprise. All rights reserved.
+//  <copyright file="BinarySerializer.cs" Company = "Catel development team">
+//    Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 //  </copyright> 
 // --------------------------------------------------------------------------------------------------------------------
 
