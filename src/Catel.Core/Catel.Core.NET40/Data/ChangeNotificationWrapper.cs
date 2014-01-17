@@ -53,7 +53,7 @@ namespace Catel.Data
         private List<IWeakEventListener> _weakPropertyChangedListeners;
         private ConditionalWeakTable<object, IWeakEventListener> _weakPropertyChangedListenersTable;
 
-        private readonly List<WeakReference> _collectionItems = new List<WeakReference>();
+        private ConditionalWeakTable<object, List<WeakReference>> _collectionItems;
         #endregion
 
         #region Constructors
@@ -171,25 +171,7 @@ namespace Catel.Data
             // Reset requires our own logic
             if (e.Action == NotifyCollectionChangedAction.Reset)
             {
-                lock (_lockObject)
-                {
-                    foreach (var item in _collectionItems)
-                    {
-                        if (item.IsAlive)
-                        {
-                            var actualItem = item.Target;
-                            UnsubscribeNotifyChangedEvents(actualItem);
-                        }
-                    }
-
-                    _collectionItems.Clear();
-
-                    var collection = (ICollection) sender;
-                    foreach (var item in collection)
-                    {
-                        SubscribeNotifyChangedEvents(item, true);
-                    }
-                }
+                UpdateCollectionSubscriptions((ICollection)sender);
             }
 
             if (e.NewItems != null)
@@ -247,6 +229,40 @@ namespace Catel.Data
         }
 
         /// <summary>
+        /// Updates all the collection subscriptions.
+        /// <para />
+        /// This method is internally used when a notifiable collection raises the <see cref="NotifyCollectionChangedAction.Reset"/> event.
+        /// </summary>
+        public void UpdateCollectionSubscriptions(ICollection collection)
+        {
+            if (collection != null)
+            {
+                lock (_lockObject)
+                {
+                    List<WeakReference> collectionItems;
+                    if (_collectionItems.TryGetValue(collection, out collectionItems))
+                    {
+                        foreach (var item in collectionItems)
+                        {
+                            if (item.IsAlive)
+                            {
+                                var actualItem = item.Target;
+                                UnsubscribeNotifyChangedEvents(actualItem);
+                            }
+                        }
+
+                        collectionItems.Clear();
+
+                        foreach (var item in collection)
+                        {
+                            SubscribeNotifyChangedEvents(item, true);
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Unsubscribes from the notify changed events.
         /// </summary>
         /// <param name="value">The object to unsubscribe from.</param>
@@ -268,17 +284,11 @@ namespace Catel.Data
                 {
                     UnsubscribeNotifyChangedEvent(collectionChangedValue, EventChangeType.Collection);
 
-                    foreach (var child in (IEnumerable) value)
+                    foreach (var child in (IEnumerable)value)
                     {
                         UnsubscribeNotifyChangedEvents(child);
                     }
                 }
-
-                // Unfortunately, we cannot remove, but it's weak anyway (no Equals method on weak reference)
-                //if (SupportsNotifyCollectionChanged)
-                //{
-                //    _collectionItems.Remove(new WeakReference(value));
-                //}
             }
         }
 
@@ -296,7 +306,7 @@ namespace Catel.Data
                 {
                     SubscribeNotifyChangedEvent(collectionChangedValue, EventChangeType.Collection, isCollectionItem);
 
-                    foreach (var child in (IEnumerable) value)
+                    foreach (var child in (IEnumerable)value)
                     {
                         SubscribeNotifyChangedEvents(child, true);
                     }
@@ -316,11 +326,6 @@ namespace Catel.Data
                         Log.Warning(ex, "Failed to subscribe to PropertyChanged event, the event is probably not public");
                     }
                 }
-
-                if (isCollectionItem)
-                {
-                    _collectionItems.Add(new WeakReference(value));
-                }
             }
         }
 
@@ -331,47 +336,52 @@ namespace Catel.Data
                 return;
             }
 
-            ConditionalWeakTable<object, IWeakEventListener> eventsTable;
-            List<IWeakEventListener> eventsList;
-
-            switch (eventChangeType)
-            {
-                case EventChangeType.Property:
-                    if (_weakPropertyChangedListenersTable == null)
-                    {
-                        _weakPropertyChangedListenersTable = new ConditionalWeakTable<object, IWeakEventListener>();
-                    }
-
-                    if (_weakPropertyChangedListeners == null)
-                    {
-                        _weakPropertyChangedListeners = new List<IWeakEventListener>();
-                    }
-
-                    eventsTable = _weakPropertyChangedListenersTable;
-                    eventsList = _weakPropertyChangedListeners;
-                    break;
-
-                case EventChangeType.Collection:
-                    if (_weakCollectionChangedListenersTable == null)
-                    {
-                        _weakCollectionChangedListenersTable = new ConditionalWeakTable<object, IWeakEventListener>();
-                    }
-
-                    if (_weakCollectionChangedListeners == null)
-                    {
-                        _weakCollectionChangedListeners = new List<IWeakEventListener>();
-                    }
-
-                    eventsTable = _weakCollectionChangedListenersTable;
-                    eventsList = _weakCollectionChangedListeners;
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException("eventChangeType");
-            }
-
             lock (_lockObject)
             {
+                ConditionalWeakTable<object, IWeakEventListener> eventsTable;
+                List<IWeakEventListener> eventsList;
+
+                switch (eventChangeType)
+                {
+                    case EventChangeType.Property:
+                        if (_weakPropertyChangedListenersTable == null)
+                        {
+                            _weakPropertyChangedListenersTable = new ConditionalWeakTable<object, IWeakEventListener>();
+                        }
+
+                        if (_weakPropertyChangedListeners == null)
+                        {
+                            _weakPropertyChangedListeners = new List<IWeakEventListener>();
+                        }
+
+                        eventsTable = _weakPropertyChangedListenersTable;
+                        eventsList = _weakPropertyChangedListeners;
+                        break;
+
+                    case EventChangeType.Collection:
+                        if (_weakCollectionChangedListenersTable == null)
+                        {
+                            _weakCollectionChangedListenersTable = new ConditionalWeakTable<object, IWeakEventListener>();
+                        }
+
+                        if (_weakCollectionChangedListeners == null)
+                        {
+                            _weakCollectionChangedListeners = new List<IWeakEventListener>();
+                        }
+
+                        if (_collectionItems == null)
+                        {
+                            _collectionItems = new ConditionalWeakTable<object, List<WeakReference>>();
+                        }
+
+                        eventsTable = _weakCollectionChangedListenersTable;
+                        eventsList = _weakCollectionChangedListeners;
+                        break;
+
+                    default:
+                        throw new ArgumentOutOfRangeException("eventChangeType");
+                }
+
                 IWeakEventListener oldSubscription;
                 if (eventsTable.TryGetValue(value, out oldSubscription))
                 {
@@ -397,6 +407,14 @@ namespace Catel.Data
 
                     case EventChangeType.Collection:
                         weakListener = this.SubscribeToWeakCollectionChangedEvent(value, OnObjectCollectionChanged);
+
+                        var collectionItems = new List<WeakReference>();
+                        foreach (var item in (ICollection)value)
+                        {
+                            collectionItems.Add(new WeakReference(item));
+                        }
+
+                        _collectionItems.Add(value, collectionItems);
                         break;
 
                     default:
@@ -415,27 +433,27 @@ namespace Catel.Data
                 return;
             }
 
-            ConditionalWeakTable<object, IWeakEventListener> eventsTable;
-            List<IWeakEventListener> eventsList;
-
-            switch (eventChangeType)
-            {
-                case EventChangeType.Property:
-                    eventsTable = _weakPropertyChangedListenersTable;
-                    eventsList = _weakPropertyChangedListeners;
-                    break;
-
-                case EventChangeType.Collection:
-                    eventsTable = _weakCollectionChangedListenersTable;
-                    eventsList = _weakCollectionChangedListeners;
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException("eventChangeType");
-            }
-
             lock (_lockObject)
             {
+                ConditionalWeakTable<object, IWeakEventListener> eventsTable;
+                List<IWeakEventListener> eventsList;
+
+                switch (eventChangeType)
+                {
+                    case EventChangeType.Property:
+                        eventsTable = _weakPropertyChangedListenersTable;
+                        eventsList = _weakPropertyChangedListeners;
+                        break;
+
+                    case EventChangeType.Collection:
+                        eventsTable = _weakCollectionChangedListenersTable;
+                        eventsList = _weakCollectionChangedListeners;
+                        break;
+
+                    default:
+                        throw new ArgumentOutOfRangeException("eventChangeType");
+                }
+
                 IWeakEventListener oldSubscription;
                 if (eventsTable.TryGetValue(value, out oldSubscription))
                 {
@@ -443,6 +461,16 @@ namespace Catel.Data
 
                     eventsList.Remove(oldSubscription);
                     eventsTable.Remove(value);
+                }
+
+                if (value is ICollection)
+                {
+                    List<WeakReference> collectionItems;
+                    if (_collectionItems.TryGetValue(value, out collectionItems))
+                    {
+                        collectionItems.Clear();
+                        _collectionItems.Remove(value);
+                    }
                 }
             }
         }
