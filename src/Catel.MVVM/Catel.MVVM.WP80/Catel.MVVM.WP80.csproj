@@ -619,6 +619,12 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\StringToTypeConverter.cs">
       <Link>Windows\Data\Converters\StringToTypeConverter.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\TextToLowerCaseConverter.cs">
+      <Link>Windows\Data\Converters\TextToLowerCaseConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\TextToUpperCaseConverter.cs">
+      <Link>Windows\Data\Converters\TextToUpperCaseConverter.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\ValueConverterBase.cs">
       <Link>Windows\Data\Converters\ValueConverterBase.cs</Link>
     </Compile>

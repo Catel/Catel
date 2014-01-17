@@ -40,6 +40,7 @@ Added/fixed:
 (+) CTL-288 Added additional ProcessAsync methods on IExceptionService
 (+) CTL-292 Added ServiceLocator extension methods for registrations with tags and RemoveType
 (+) CTL-300 Added ChangeNotificationWrapper methods to unsubscribe and subscribe collections items manually
+(+) CTL-302 Added TextToUpperCaseConverter and TextToLowerCaseConverter converters
 (*) CTL-211 Renamed resource files of simple chinese from zh-CHS to zh-Hans
 (*) CTL-230 XmlSchemaHelper now supports the new serialization engine introduced in Catel 3.7
 (*) CTL-261 Replace all instances of RegisterDebugListener with AddDebugListener

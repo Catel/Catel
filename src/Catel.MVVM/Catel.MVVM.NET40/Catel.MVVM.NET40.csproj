@@ -102,6 +102,8 @@
     <Compile Include="MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs" />
     <Compile Include="MVVM\Commands\Helpers\CommandHelper.cs" />
     <Compile Include="Windows\Data\Converters\CollectionToCountConverter.cs" />
+    <Compile Include="Windows\Data\Converters\TextToLowerCaseConverter.cs" />
+    <Compile Include="Windows\Data\Converters\TextToUpperCaseConverter.cs" />
     <Compile Include="Windows\Input\InputGesture.cs" />
     <Compile Include="MVVM\Commands\Interfaces\ICompositeCommand.cs" />
     <Compile Include="MVVM\Commands\Interfaces\IAuthenticationProvider.cs" />
