@@ -6,12 +6,13 @@
 
 namespace Catel.Phone.Controls
 {
+    using Catel.Windows.Controls;
     using MVVM;
 
     /// <summary>
     /// Interface defining functionality for the <see cref="PhoneApplicationPage"/>.
     /// </summary>
-    public interface IPhoneApplicationPage : IViewModelContainer
+    public interface IPhoneApplicationPage : IView
     {
         /// <summary>
         /// Gets or sets a value indicating whether navigating away from the page should save the view model.
