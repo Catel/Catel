@@ -29,6 +29,7 @@ Added/fixed (BREAKING CHANGES):
 
 Added/fixed:
 ============
+(+) CTL-10 Added multilingual support with LanguageService and LanguageBinding (for XAML)
 (+) CTL-24 ServiceLocator can now register types with a callback so types can be created using a function callback
 (+) CTL-45 ServiceLocator can now register types using conventions
 (+) CTL-204 Catel.IoC.IServiceLocator should contains some method to remove registered type
