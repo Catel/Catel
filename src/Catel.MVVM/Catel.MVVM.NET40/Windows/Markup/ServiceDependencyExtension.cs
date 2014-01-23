@@ -7,8 +7,11 @@
 namespace Catel.Windows.Markup
 {
     using System;
-    using System.Windows.Markup;
     using IoC;
+
+#if !NETFX_CORE
+    using System.Windows.Markup;
+#endif
 
     /// <summary>
     /// Service dependency extension to allow service access in xaml for services with properties.

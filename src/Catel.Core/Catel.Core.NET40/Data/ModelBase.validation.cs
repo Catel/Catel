@@ -1099,7 +1099,7 @@ namespace Catel.Data
             }
 
             var messageBuilder = new StringBuilder();
-            messageBuilder.AppendLine(ResourceHelper.GetString(typeof(ModelBase), "Resources", "WarningsFound"), userFriendlyObjectName);
+            messageBuilder.AppendLine(ResourceHelper.GetString("WarningsFound"), userFriendlyObjectName);
             messageBuilder.Append(GetListMessages(ValidationContext, ValidationResultType.Warning));
 
             return messageBuilder.ToString();
@@ -1183,7 +1183,7 @@ namespace Catel.Data
             }
 
             var messageBuilder = new StringBuilder();
-            messageBuilder.AppendLine(ResourceHelper.GetString(typeof(ModelBase), "Resources", "ErrorsFound"), userFriendlyObjectName);
+            messageBuilder.AppendLine(ResourceHelper.GetString("ErrorsFound"), userFriendlyObjectName);
             messageBuilder.Append(GetListMessages(ValidationContext, ValidationResultType.Error));
 
             return messageBuilder.ToString();

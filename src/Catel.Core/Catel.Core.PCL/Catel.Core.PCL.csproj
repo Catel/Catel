@@ -594,6 +594,12 @@
     <Compile Include="..\Catel.Core.NET40\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Properties\Resources.zh-Hans.Designer.cs">
+      <Link>Properties\Resources.zh-Hans.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.zh-Hans.resx</DependentUpon>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Reflection\EventArgs\AssemblyLoadedEventArgs.cs">
       <Link>Reflection\EventArgs\AssemblyLoadedEventArgs.cs</Link>
     </Compile>
@@ -774,8 +780,23 @@
     <Compile Include="..\Catel.Core.NET40\Scoping\ScopeManager.cs">
       <Link>Scoping\ScopeManager.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Services\Interfaces\ILanguageService.cs">
+      <Link>Services\Interfaces\ILanguageService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Services\Interfaces\ILanguageSource.cs">
+      <Link>Services\Interfaces\ILanguageSource.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Services\Interfaces\IService.cs">
       <Link>Services\Interfaces\IService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Services\LanguageService.cs">
+      <Link>Services\LanguageService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Services\Models\LanguageResourceKey.cs">
+      <Link>Services\Models\LanguageResourceKey.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Services\Models\LanguageResourceSource.cs">
+      <Link>Services\Models\LanguageResourceSource.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Services\ServiceBase.cs">
       <Link>Services\ServiceBase.cs</Link>
@@ -867,7 +888,13 @@
       <Private>False</Private>
     </Reference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="..\Catel.Core.NET40\Properties\Resources.zh-Hans.resx">
+      <Link>Properties\Resources.zh-Hans.resx</Link>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.zh-Hans.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

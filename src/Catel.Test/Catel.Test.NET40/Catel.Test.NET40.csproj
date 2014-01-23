@@ -316,6 +316,7 @@
     <Compile Include="Runtime\Serialization\XmlSerialization\KnownTypesSerializationFacts.cs" />
     <Compile Include="Runtime\Serialization\XmlSerialization\XmlSerializationFacts.cs" />
     <Compile Include="Scoping\ScopeManagerFacts.cs" />
+    <Compile Include="Services\LanguageServiceFacts.cs" />
     <Compile Include="Text\StringBuilderExtensionFacts.cs" />
     <Compile Include="Threading\SynchronizationContextFacts.cs" />
     <Compile Include="Threading\TaskHelperFacts.cs" />

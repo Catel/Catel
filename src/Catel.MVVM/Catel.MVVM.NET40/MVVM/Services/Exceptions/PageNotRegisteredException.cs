@@ -18,7 +18,7 @@ namespace Catel.MVVM.Services
         /// </summary>
         /// <param name="name">The name of the page.</param>
         public PageNotRegisteredException(string name)
-            : base(string.Format(ResourceHelper.GetString(typeof(PageNotRegisteredException), "Exceptions", "PageNotRegistered"), name))
+            : base(string.Format(ResourceHelper.GetString("PageNotRegistered"), name))
         {
             Name = name;
         }

@@ -73,11 +73,11 @@ namespace Catel.Windows.Data.Converters
                     return (typedValue) ? "x" : string.Empty;
 
                 case BooleanToTextConverterMode.YesNo:
-                    return (typedValue) ? Catel.ResourceHelper.GetString(typeof(BooleanToTextConverter), "Resources", "Yes") : Catel.ResourceHelper.GetString(typeof(BooleanToTextConverter), "Resources", "No");
+                    return (typedValue) ? Catel.ResourceHelper.GetString("Yes") : Catel.ResourceHelper.GetString("No");
 
                 default:
                     // Some strange way, this method fails (all known modes must be handled), so return "failed"
-                    return Catel.ResourceHelper.GetString(typeof(BooleanToTextConverter), "Resources", "Failed");
+                    return Catel.ResourceHelper.GetString("Failed");
             }
         }
 

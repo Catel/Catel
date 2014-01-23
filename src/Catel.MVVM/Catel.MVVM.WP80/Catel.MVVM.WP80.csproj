@@ -727,6 +727,15 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interfaces\IDependencyPropertySelector.cs">
       <Link>Windows\Interfaces\IDependencyPropertySelector.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Markup\CommandManagerBinding.cs">
+      <Link>Windows\Markup\CommandManagerBinding.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Markup\LanguageBinding.cs">
+      <Link>Windows\Markup\LanguageBinding.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Markup\ServiceDependencyExtension.cs">
+      <Link>Windows\Markup\ServiceDependencyExtension.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Threading\Extensions\DispatcherExtensions.cs">
       <Link>Windows\Threading\Extensions\DispatcherExtensions.cs</Link>
     </Compile>
@@ -793,6 +802,7 @@
     <Compile Include="Phone\Controls\PhoneApplicationPage.generic.cs" />
     <Compile Include="Windows\Controls\MVVMProviders\Logic\PhoneApplicationPageLogic.cs" />
     <Compile Include="Windows\Controls\MVVMProviders\PhoneApplicationPageBehavior.cs" />
+    <Compile Include="Windows\Markup\MarkupExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Exceptions.resx">
@@ -865,9 +875,7 @@
       <SpecificVersion>False</SpecificVersion>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Windows\Markup\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="..\Catel.MVVM.NET40\Resources\Images\Error.png">
       <Link>Resources\Images\Error.png</Link>

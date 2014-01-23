@@ -66,7 +66,7 @@ namespace Catel.MVVM.Views
 
             if (!(viewModelContainer is DependencyObject))
             {
-                throw new ArgumentException(ResourceHelper.GetString(typeof(ViewToViewModelMappingHelper), "Exceptions", "ViewModelContainerMustBeOfTypeDependencyObject"), "ViewModelContainer");
+                throw new ArgumentException(ResourceHelper.GetString("ViewModelContainerMustBeOfTypeDependencyObject"), "ViewModelContainer");
             }
 
             ViewModelContainer = viewModelContainer;

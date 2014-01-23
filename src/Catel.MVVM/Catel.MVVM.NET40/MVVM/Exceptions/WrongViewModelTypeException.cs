@@ -19,7 +19,7 @@ namespace Catel.MVVM
         /// <param name="actualType">The actual type.</param>
         /// <param name="expectedType">The expected type.</param>
         public WrongViewModelTypeException(Type actualType, Type expectedType)
-            : base(string.Format(ResourceHelper.GetString(typeof(WrongViewModelTypeException), "Exceptions", "WrongViewModelType"), expectedType, actualType))
+            : base(string.Format(ResourceHelper.GetString("WrongViewModelType"), expectedType, actualType))
         {
             ActualType = actualType;
             ExpectedType = expectedType;

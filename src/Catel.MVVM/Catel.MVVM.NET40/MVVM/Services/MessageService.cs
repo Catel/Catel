@@ -100,7 +100,7 @@ namespace Catel.MVVM.Services
         {
             if (string.IsNullOrEmpty(caption))
             {
-                caption = Catel.ResourceHelper.GetString(typeof(MessageService), "Resources", "ErrorTitle");
+                caption = Catel.ResourceHelper.GetString("ErrorTitle");
             }
 
             const MessageButton button = MessageButton.OK;
@@ -131,7 +131,7 @@ namespace Catel.MVVM.Services
         {
             if (string.IsNullOrEmpty(caption))
             {
-                caption = Catel.ResourceHelper.GetString(typeof(MessageService), "Resources", "WarningTitle");
+                caption = Catel.ResourceHelper.GetString("WarningTitle");
             }
 
             const MessageButton button = MessageButton.OK;
@@ -162,7 +162,7 @@ namespace Catel.MVVM.Services
         {
             if (string.IsNullOrEmpty(caption))
             {
-                caption = Catel.ResourceHelper.GetString(typeof(MessageService), "Resources", "InfoTitle");
+                caption = Catel.ResourceHelper.GetString("InfoTitle");
             }
 
             const MessageButton button = MessageButton.OK;

@@ -161,7 +161,7 @@ namespace Catel.MVVM
             {
                 Log.Error(ex, "Failed to configure IoC container");
 
-                throw new Exception(Catel.ResourceHelper.GetString(typeof(ViewModelServiceHelper), "Exceptions", "FailedToConfigureIoCContainer"), ex);
+                throw new Exception(Catel.ResourceHelper.GetString("FailedToConfigureIoCContainer"), ex);
             }            
         }
     }

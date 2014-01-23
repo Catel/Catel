@@ -740,9 +740,7 @@
     </Compile>
     <Compile Include="Windows\Interactivity\Behavior.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Windows\Markup\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="..\Catel.MVVM.NET40\ClassDiagrams\ViewModelBase.cd">
       <Link>ClassDiagrams\ViewModelBase.cd</Link>

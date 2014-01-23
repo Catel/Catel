@@ -30,7 +30,7 @@ namespace Catel.Windows.Data.Converters
         {
             if (notVisibleVisibility == Visibility.Visible)
             {
-                throw new ArgumentException(Catel.ResourceHelper.GetString(typeof(VisibilityConverterBase), "Exceptions", "VisibilityIsNotAllowedForConverter"), "notVisibleVisibility");
+                throw new ArgumentException(Catel.ResourceHelper.GetString("VisibilityIsNotAllowedForConverter"), "notVisibleVisibility");
             }
 
             NotVisibleVisibility = notVisibleVisibility;

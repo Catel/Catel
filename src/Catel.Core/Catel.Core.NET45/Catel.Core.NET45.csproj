@@ -903,8 +903,23 @@
     <Compile Include="..\Catel.Core.NET40\Scoping\ScopeManager.cs">
       <Link>Scoping\ScopeManager.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Services\Interfaces\ILanguageService.cs">
+      <Link>Services\Interfaces\ILanguageService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Services\Interfaces\ILanguageSource.cs">
+      <Link>Services\Interfaces\ILanguageSource.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Services\Interfaces\IService.cs">
       <Link>Services\Interfaces\IService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Services\LanguageService.cs">
+      <Link>Services\LanguageService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Services\Models\LanguageResourceKey.cs">
+      <Link>Services\Models\LanguageResourceKey.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Services\Models\LanguageResourceSource.cs">
+      <Link>Services\Models\LanguageResourceSource.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Services\ServiceBase.cs">
       <Link>Services\ServiceBase.cs</Link>

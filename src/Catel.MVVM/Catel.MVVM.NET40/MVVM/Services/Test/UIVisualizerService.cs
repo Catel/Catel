@@ -141,7 +141,7 @@ namespace Catel.MVVM.Services.Test
         {
             if (ExpectedShowResults.Count == 0)
             {
-                throw new Exception(ResourceHelper.GetString(typeof(UIVisualizerService), "Exceptions", "NoExpectedResultsInQueueForUnitTest"));
+                throw new Exception(ResourceHelper.GetString("NoExpectedResultsInQueueForUnitTest"));
             }
 
             return ExpectedShowResults.Dequeue().Invoke();
@@ -177,7 +177,7 @@ namespace Catel.MVVM.Services.Test
         {
             if (ExpectedShowDialogResults.Count == 0)
             {
-                throw new Exception(ResourceHelper.GetString(typeof(UIVisualizerService), "Exceptions", "NoExpectedResultsInQueueForUnitTest"));
+                throw new Exception(ResourceHelper.GetString("NoExpectedResultsInQueueForUnitTest"));
             }
 
             return ExpectedShowDialogResults.Dequeue().Invoke();

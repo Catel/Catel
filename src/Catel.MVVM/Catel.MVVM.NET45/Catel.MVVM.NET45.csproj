@@ -881,6 +881,9 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Markup\CommandManagerBinding.cs">
       <Link>Windows\Markup\CommandManagerBinding.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Markup\LanguageBinding.cs">
+      <Link>Windows\Markup\LanguageBinding.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Markup\ServiceDependencyExtension.cs">
       <Link>Windows\Markup\ServiceDependencyExtension.cs</Link>
     </Compile>

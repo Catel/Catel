@@ -136,7 +136,7 @@ namespace Catel.MVVM.Services.Test
         {
             if (ExpectedResults.Count == 0)
             {
-                throw new Exception(ResourceHelper.GetString(typeof(SaveFileService), "Exceptions", "NoExpectedResultsInQueueForUnitTest"));
+                throw new Exception(ResourceHelper.GetString("NoExpectedResultsInQueueForUnitTest"));
             }
 
             return ExpectedResults.Dequeue().Invoke();

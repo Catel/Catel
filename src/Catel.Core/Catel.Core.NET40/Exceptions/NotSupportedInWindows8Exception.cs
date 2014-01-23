@@ -25,7 +25,7 @@ namespace Catel
         /// <param name="reasonFormat">The reason format.</param>
         /// <param name="args">The formatting arguments.</param>
         public NotSupportedInWindows8Exception(string reasonFormat = "", params object[] args)
-            : base(ResourceHelper.GetString(typeof(NotSupportedInWindows8Exception), "Exceptions", "NotSupportedInWindows8"))
+            : base(ResourceHelper.GetString("NotSupportedInWindows8"))
         {
             Reason = string.Format(reasonFormat, args);
         }

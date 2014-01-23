@@ -32,15 +32,6 @@ namespace Catel.Reflection
                 return typeof(object);
             }
 
-
-//#if NETFX_CORE
-//            var type = typeof(object);
-//#else
-//            var stackTrace = StackTraceHelper.GetStackTrace();
-//            var stackFrame = stackTrace.GetFrame(2);
-//            var type = stackFrame.GetMethod().DeclaringType;
-//#endif
-
 #if NET
             var frame = new StackFrame(2, false);
             var type = frame.GetMethod().DeclaringType;

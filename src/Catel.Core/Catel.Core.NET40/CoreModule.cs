@@ -14,6 +14,7 @@ namespace Catel
     using Catel.IoC;
     using Catel.Messaging;
     using Catel.Runtime.Serialization;
+    using Catel.Services;
 
 #if NET
     using Catel.Runtime.Serialization.Binary;
@@ -35,6 +36,7 @@ namespace Catel
         {
             Argument.IsNotNull(() => serviceLocator);
 
+            serviceLocator.RegisterType<ILanguageService, LanguageService>();
             serviceLocator.RegisterInstance<IExceptionService>(ExceptionService.Default);
             serviceLocator.RegisterInstance<IMessageMediator>(MessageMediator.Default);
 

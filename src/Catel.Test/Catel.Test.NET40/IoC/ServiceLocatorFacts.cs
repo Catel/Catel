@@ -1099,7 +1099,7 @@ namespace Catel.Test.IoC
 
                 Assert.IsTrue(serviceLocator.IsTypeRegistered<IFooService>());
                 Assert.IsTrue(serviceLocator.IsTypeRegistered<IFooService2>());
-                Assert.IsFalse(serviceLocator.IsTypeRegistered<Services.IService>());
+                Assert.IsFalse(serviceLocator.IsTypeRegistered<IService>());
             }
 
             [TestMethod]
@@ -1112,7 +1112,7 @@ namespace Catel.Test.IoC
 
                 Assert.IsTrue(serviceLocator.IsTypeRegistered<IFooService>());
                 Assert.IsTrue(serviceLocator.IsTypeRegistered<IFooService2>());
-                Assert.IsFalse(serviceLocator.IsTypeRegistered<Services.IService>());
+                Assert.IsFalse(serviceLocator.IsTypeRegistered<IService>());
             }
         }
 

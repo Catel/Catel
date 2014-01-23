@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CommandManagerBinding.cs" company="Catel development team">
+// <copyright file="LanguageBinding.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -8,48 +8,51 @@
 namespace Catel.Windows.Markup
 {
     using System;
-    using Catel.MVVM;
-    using IoC;
+    using Catel.IoC;
+    using Catel.Services;
 
 #if !NETFX_CORE
-    using System.Windows.Data;
     using System.Windows.Markup;
 #endif
 
     /// <summary>
-    /// Binds commands to the command manager.
+    /// Binding that uses the <see cref="ILanguageService" /> to retrieve the binding values.
     /// </summary>
-    public class CommandManagerBinding : MarkupExtension
+    public class LanguageBinding : MarkupExtension
     {
-        private readonly ICommandManager _commandManager;
+        private readonly ILanguageService _languageService;
 
+        #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="CommandManagerBinding"/> class.
+        /// Initializes a new instance of the <see cref="LanguageBinding"/> class.
         /// </summary>
-        public CommandManagerBinding()
+        public LanguageBinding()
         {
             var dependencyResolver = this.GetDependencyResolver();
-            _commandManager = dependencyResolver.Resolve<ICommandManager>();
+            _languageService = dependencyResolver.Resolve<ILanguageService>();
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CommandManagerBinding"/> class.
+        /// Initializes a new instance of the <see cref="LanguageBinding" /> class.
         /// </summary>
-        /// <param name="commandName">Name of the command.</param>
-        public CommandManagerBinding(string commandName)
+        /// <param name="resourceName">Name of the resource.</param>
+        public LanguageBinding(string resourceName)
             : this()
         {
-            CommandName = commandName;
+            ResourceName = resourceName;
         }
+        #endregion
 
+        #region Properties
         /// <summary>
-        /// Gets or sets the name of the command.
+        /// Gets or sets the resource name.
         /// </summary>
-        /// <value>The name of the command.</value>
+        /// <value>The resource name.</value>
 #if NET
-        [ConstructorArgument("type")]
+        [ConstructorArgument("resourceName")]
 #endif
-        public string CommandName { get; set; }
+        public string ResourceName { get; set; }
+        #endregion
 
         /// <summary>
         /// When implemented in a derived class, returns an object that is provided as the value of the target property for this markup extension.
@@ -58,18 +61,19 @@ namespace Catel.Windows.Markup
         /// <returns>The object value to set on the property where the extension is applied.</returns>
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
-            if (_commandManager == null)
+            if (_languageService == null)
             {
                 return null;
             }
 
-            if (string.IsNullOrWhiteSpace(CommandName))
+
+            if (string.IsNullOrWhiteSpace(ResourceName))
             {
                 return null;
             }
 
-            var command = _commandManager.GetCommand(CommandName);
-            return command;
+            var resource = _languageService.GetString(ResourceName);
+            return resource;
         }
     }
 }

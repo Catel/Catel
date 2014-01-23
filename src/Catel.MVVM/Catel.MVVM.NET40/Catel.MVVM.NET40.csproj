@@ -284,6 +284,7 @@
     <Compile Include="Windows\Helpers\CommandLineHelper.cs" />
     <Compile Include="Windows\Input\Helpers\KeyboardHelper.cs" />
     <Compile Include="Windows\Markup\CommandManagerBinding.cs" />
+    <Compile Include="Windows\Markup\LanguageBinding.cs" />
     <Compile Include="Windows\Threading\Extensions\DispatcherExtensions.cs" />
     <Compile Include="Windows\Interfaces\IDependencyPropertySelector.cs" />
     <Compile Include="Windows\Controls\MVVMProviders\Logic\EventArgs\DetermineViewModelInstanceEventArgs.cs" />

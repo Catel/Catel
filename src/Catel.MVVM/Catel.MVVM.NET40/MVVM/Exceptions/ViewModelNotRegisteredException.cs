@@ -18,7 +18,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="viewModelType">Type of the view model.</param>
         public ViewModelNotRegisteredException(Type viewModelType)
-            : base(string.Format(ResourceHelper.GetString(typeof(ViewModelNotRegisteredException), "Exceptions", "ViewModelNotRegistered"), viewModelType.Name))
+            : base(string.Format(ResourceHelper.GetString("ViewModelNotRegistered"), viewModelType.Name))
         {
             ViewModelType = viewModelType;
         }

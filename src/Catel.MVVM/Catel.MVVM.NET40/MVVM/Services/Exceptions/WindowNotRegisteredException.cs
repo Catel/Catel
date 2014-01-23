@@ -18,7 +18,7 @@ namespace Catel.MVVM.Services
         /// </summary>
         /// <param name="name">The name of the window.</param>
         public WindowNotRegisteredException(string name)
-            : base(string.Format(ResourceHelper.GetString(typeof(WindowNotRegisteredException), "Exceptions", "WindowNotRegistered"), name))
+            : base(string.Format(ResourceHelper.GetString("WindowNotRegistered"), name))
         {
             Name = name;
         }
