@@ -263,7 +263,11 @@ namespace Catel.Windows
         {
             if (!dimm)
             {
-                Action action = () => { UpdateLayout(); Close(); };
+                Action action = () =>
+                {
+                    UpdateLayout(); 
+                    Close();
+                };
 
                 foreach (var element in _dimmedElements)
                 {
