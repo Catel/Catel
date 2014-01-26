@@ -58,6 +58,7 @@ Added/fixed:
 (x) CTL-298 Nested view models with default constructor behave incorrectly. Now the child views are correctly closed
     as part of closing a nested hierarchy inside a DataWindow
 (x) CTL-299 ChangeNotificationWrapper does not handle NotifyCollectionChangedAction.Reset correctly
+(x) CTL-311 MessageMediator issues when removing subscription
 (-) CTL-282 Removed AllowNonSerializedMembers attribute because it is no longer required because
     of the new serialization engine introduced in Catel 3.7
 
