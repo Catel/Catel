@@ -100,7 +100,12 @@ namespace Catel.Runtime.Serialization.Xml
                 string prefix = preferredPrefix;
                 string uri = string.Format("{0}{1}", NamespaceUriPrefix, typeNamespace);
 
-                if (typeof (IEnumerable).IsAssignableFromEx(type))
+                if (type.IsValueTypeEx() || type == typeof (string))
+                {
+                    return null;
+                }
+
+                if (type != typeof(string) && typeof (IEnumerable).IsAssignableFromEx(type))
                 {
                     prefix = ArraySchemaName;
                     uri = ArraySchemaUrl;
@@ -124,8 +129,6 @@ namespace Catel.Runtime.Serialization.Xml
 
                 return xmlNamespace;
             }
-
         }
-
     }
 }
