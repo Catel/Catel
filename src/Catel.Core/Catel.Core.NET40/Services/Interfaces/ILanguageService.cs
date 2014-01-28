@@ -53,5 +53,10 @@ namespace Catel.Services
         /// <exception cref="ArgumentException">The <paramref name="resourceName" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="cultureInfo" /> is <c>null</c>.</exception>
         string GetString(string resourceName, CultureInfo cultureInfo);
+
+        /// <summary>
+        /// Preloads the language sources to provide optimal performance.
+        /// </summary>
+        void PreloadLanguageSources();
     }
 }

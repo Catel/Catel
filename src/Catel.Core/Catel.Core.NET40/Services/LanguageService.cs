@@ -19,9 +19,9 @@ namespace Catel.Services
     using Catel.Services.Models;
 
 #if NETFX_CORE
-    using Windows.ApplicationModel.Resources;
+    using ResourceManager = Windows.ApplicationModel.Resources.ResourceLoader;
 #else
-    using System.Resources;
+    using ResourceManager = System.Resources.ResourceManager;
 #endif
 
     /// <summary>
@@ -33,6 +33,7 @@ namespace Catel.Services
 
         private readonly List<ILanguageSource> _languageSources = new List<ILanguageSource>();
 
+        private readonly ICacheStorage<string, ResourceManager> _resourceFileCache = new CacheStorage<string, ResourceManager>(storeNullValues: true);
         private readonly ICacheStorage<LanguageResourceKey, string> _stringCache = new CacheStorage<LanguageResourceKey, string>();
 
         /// <summary>
@@ -66,6 +67,21 @@ namespace Catel.Services
         /// <value>The preferred culture.</value>
         public CultureInfo PreferredCulture { get; set; }
         #endregion
+
+        /// <summary>
+        /// Preloads the language sources to provide optimal performance.
+        /// </summary>
+        public virtual void PreloadLanguageSources()
+        {
+            Log.Debug("Preloading language sources");
+
+            foreach (var languageSource in _languageSources)
+            {
+                GetResourceManager(languageSource.GetSource());
+            }
+
+            Log.Debug("Preloaded language sources");
+        }
 
         /// <summary>
         /// Registers the language source.
@@ -144,31 +160,52 @@ namespace Catel.Services
         protected virtual string GetString(ILanguageSource languageSource, string resourceName, CultureInfo cultureInfo)
         {
             var source = languageSource.GetSource();
-
-#if NETFX_CORE && !WIN81
-            var resourceLoader = new ResourceLoader(source);
-#elif WIN81
-            var resourceLoader = ResourceLoader.GetForCurrentView(source);
-#else
-            var splittedString = source.Split(new [] {','}, StringSplitOptions.RemoveEmptyEntries);
-
-            var assemblyName = splittedString[1].Trim();
-            var containingAssemblyName = string.Format("{0},", assemblyName);
-            var assembly = AssemblyHelper.GetLoadedAssemblies().FirstOrDefault(x => x.FullName.Contains(containingAssemblyName));
-            if (assembly == null)
-            {
-                return null;
-            }
-
-            string resourceFile = splittedString[0];
-            var resourceLoader = new ResourceManager(resourceFile, assembly);
-#endif
+            var resourceLoader = GetResourceManager(source);
 
 #if NETFX_CORE
             return resourceLoader.GetString(resourceName);
 #else
             return resourceLoader.GetString(resourceName, cultureInfo);
 #endif
+        }
+
+        /// <summary>
+        /// Gets the resource manager.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        private ResourceManager GetResourceManager(string source)
+        {
+            return _resourceFileCache.GetFromCacheOrFetch(source, () =>
+            {
+                try
+                {
+#if NETFX_CORE && !WIN81
+                    var resourceLoader = new ResourceManager(source);
+#elif WIN81
+                    var resourceLoader = ResourceManager.GetForCurrentView(source);
+#else
+                    var splittedString = source.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    var assemblyName = splittedString[1].Trim();
+                    var containingAssemblyName = string.Format("{0},", assemblyName);
+                    var assembly = AssemblyHelper.GetLoadedAssemblies().FirstOrDefault(x => x.FullName.Contains(containingAssemblyName));
+                    if (assembly == null)
+                    {
+                        return null;
+                    }
+
+                    string resourceFile = splittedString[0];
+                    var resourceLoader = new ResourceManager(resourceFile, assembly);
+#endif
+
+                    return resourceLoader;
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning(ex, "Failed to get the resource manager for source '{0}'", source);
+                    return null;
+                }
+            });
         }
     }
 }
