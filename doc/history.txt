@@ -61,6 +61,7 @@ Added/fixed:
 (x) CTL-308 Serialization now omits the the default namespace for value types and strings which allows WCF
     services to use encryption
 (x) CTL-311 MessageMediator issues when removing subscription
+(x) CTL-317 MVC DependencyResolver does not support dynamic new pages
 (-) CTL-282 Removed AllowNonSerializedMembers attribute because it is no longer required because
     of the new serialization engine introduced in Catel 3.7
 

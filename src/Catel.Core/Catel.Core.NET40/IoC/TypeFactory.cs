@@ -95,6 +95,9 @@ namespace Catel.IoC
             {
                 serviceLocator.TypeRegistered += OnServiceLocatorTypeRegistered;
             }
+
+            // Note: this will cause memory leaks (TypeCache will keep this class alive), but it's an acceptable "loss"
+            TypeCache.AssemblyLoaded += OnAssemblyLoaded;
         }
         #endregion
 
@@ -711,6 +714,16 @@ namespace Catel.IoC
         /// <param name="sender">The sender.</param>
         /// <param name="eventArgs">The <see cref="TypeRegisteredEventArgs" /> instance containing the event data.</param>
         private void OnServiceLocatorTypeRegistered(object sender, TypeRegisteredEventArgs eventArgs)
+        {
+            ClearCache();
+        }
+
+        /// <summary>
+        /// Called when the <see cref="TypeCache.AssemblyLoaded"/> event occurs.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="AssemblyLoadedEventArgs"/> instance containing the event data.</param>
+        private void OnAssemblyLoaded(object sender, AssemblyLoadedEventArgs e)
         {
             ClearCache();
         }
