@@ -134,7 +134,7 @@ namespace Catel.IoC
         /// <summary>
         /// The type factory.
         /// </summary>
-        private readonly ITypeFactory _typeFactory;
+        private ITypeFactory _typeFactory;
         #endregion
 
         #region Constructors
@@ -146,8 +146,6 @@ namespace Catel.IoC
             // Must be registered first, already resolved by TypeFactory
             RegisterInstance(typeof(IServiceLocator), this);
 
-            var dependencyResolver = new CatelDependencyResolver(this);
-            _typeFactory = new TypeFactory(dependencyResolver);
             _autoRegistrationManager = new ServiceLocatorAutoRegistrationManager(this);
 
             IgnoreRuntimeIncorrectUsageOfRegisterAttribute = true;
@@ -160,9 +158,6 @@ namespace Catel.IoC
             //RegisterType(typeof(ICollection<>), typeof(Collection<>));
             //RegisterType(typeof(IEnumerable<>), typeof(List<>));
             //RegisterType(typeof(IList<>), typeof(List<>));
-
-            RegisterInstance(typeof(ITypeFactory), _typeFactory);
-            RegisterInstance(typeof(IDependencyResolver), dependencyResolver);
         }
         #endregion
 
@@ -186,6 +181,23 @@ namespace Catel.IoC
             get
             {
                 return IoCConfiguration.DefaultServiceLocator;
+            }
+        }
+
+        /// <summary>
+        /// Gets the type factory.
+        /// </summary>
+        /// <value>The type factory.</value>
+        private ITypeFactory TypeFactory
+        {
+            get
+            {
+                if (_typeFactory == null)
+                {
+                    _typeFactory = (ITypeFactory)ResolveType(typeof (ITypeFactory));
+                }
+
+                return _typeFactory;
             }
         }
         #endregion
@@ -467,7 +479,7 @@ namespace Catel.IoC
             {
                 if (CanResolveNonAbstractTypesWithoutRegistration && serviceType.IsClassEx() && !serviceType.IsAbstractEx())
                 {
-                    return _typeFactory.CreateInstance(serviceType);
+                    return TypeFactory.CreateInstance(serviceType);
                 }
 
                 var error = string.Format("The type '{0}' is not registered", serviceType.FullName);
@@ -1002,11 +1014,11 @@ namespace Catel.IoC
 
             if (SupportDependencyInjection)
             {
-                instance = _typeFactory.CreateInstance(registration.ImplementingType);
+                instance = TypeFactory.CreateInstance(registration.ImplementingType);
             }
             else
             {
-                instance = _typeFactory.CreateInstanceUsingActivator(registration.ImplementingType);
+                instance = TypeFactory.CreateInstanceUsingActivator(registration.ImplementingType);
             }
 
             if (instance != null)

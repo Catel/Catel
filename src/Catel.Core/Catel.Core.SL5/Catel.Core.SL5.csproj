@@ -418,6 +418,9 @@
     <Compile Include="..\Catel.Core.NET40\Helpers\ObjectToStringHelper.cs">
       <Link>Helpers\ObjectToStringHelper.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Helpers\ParallelHelper.cs">
+      <Link>Helpers\ParallelHelper.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Helpers\ResourceHelper.cs">
       <Link>Helpers\ResourceHelper.cs</Link>
     </Compile>
@@ -522,6 +525,9 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\IoCConfiguration.cs">
       <Link>IoC\IoCConfiguration.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\IoCFactory.cs">
+      <Link>IoC\IoCFactory.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\RegistrationConventionHandler.cs">
       <Link>IoC\RegistrationConventionHandler.cs</Link>

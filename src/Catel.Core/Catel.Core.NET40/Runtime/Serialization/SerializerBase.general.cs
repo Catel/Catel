@@ -161,65 +161,14 @@ namespace Catel.Runtime.Serialization
 
             var allTypes = new List<Type>(types);
 
-            var wrampupGroup = new List<List<Type>>();
-            if (typesPerThread > 0)
+            ParallelHelper.ExecuteInParallel(allTypes, type =>
             {
-                var typeCount = allTypes.Count;
-                for (int i = 0; i < typeCount; i = i + typesPerThread)
-                {
-                    int itemsToSkip = i;
-                    int itemsToTake = typesPerThread;
-                    if (itemsToTake >= typeCount)
-                    {
-                        itemsToTake = typeCount - i;
-                    }
+                // General warmup
+                SerializationManager.Warmup(type);
 
-                    wrampupGroup.Add(allTypes.Skip(itemsToSkip).Take(itemsToTake).ToList());
-                }
-            }
-            else
-            {
-                wrampupGroup.Add(new List<Type>(allTypes));
-            }
-
-            if (wrampupGroup.Count == 1)
-            {
-                WarmupGroup(wrampupGroup[0]);
-            }
-            else
-            {
-                var actions = new List<Action>();
-                foreach (var initializationGroup in wrampupGroup)
-                {
-                    List<Type> @group = initializationGroup;
-                    actions.Add(() => WarmupGroup(@group));
-                }
-
-                TaskHelper.RunAndWait(actions.ToArray());
-            }
-        }
-
-        /// <summary>
-        /// Warms up the group.
-        /// </summary>
-        /// <param name="types">The types.</param>
-        private void WarmupGroup(IEnumerable<Type> types)
-        {
-            foreach (var type in types)
-            {
-                try
-                {
-                    // General warmup
-                    SerializationManager.Warmup(type);
-
-                    // Specific (customized) warmup
-                    Warmup(type);
-                }
-                catch (Exception ex)
-                {
-                    Log.Warning(ex, "An error occurred while warming up the XmlSerializer for type '{0}'", type.GetSafeFullName());
-                }
-            }
+                // Specific (customized) warmup
+                Warmup(type);
+            }, typesPerThread, "warmup serializer for types");
         }
 
         /// <summary>

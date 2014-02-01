@@ -38,7 +38,7 @@ namespace Catel.Test.IoC.Configuration
             var serviceLocatorConfiguration = configurationSection.DefaultServiceLocatorConfiguration;
             Assert.IsNotNull(serviceLocatorConfiguration);
 
-            var serviceLocator = new ServiceLocator();
+            var serviceLocator = IoCFactory.CreateServiceLocator();
             serviceLocatorConfiguration.Configure(serviceLocator);
 
             Assert.AreEqual(serviceLocatorConfiguration.SupportDependencyInjection, serviceLocator.SupportDependencyInjection);
@@ -60,7 +60,7 @@ namespace Catel.Test.IoC.Configuration
             var serviceLocatorConfiguration = configurationSection.GetServiceLocatorConfiguration("test");
             Assert.IsNotNull(serviceLocatorConfiguration);
 
-            var serviceLocator = new ServiceLocator();
+            var serviceLocator = IoCFactory.CreateServiceLocator();
             serviceLocatorConfiguration.Configure(serviceLocator);
 
             Assert.AreEqual(serviceLocatorConfiguration.SupportDependencyInjection, serviceLocator.SupportDependencyInjection);

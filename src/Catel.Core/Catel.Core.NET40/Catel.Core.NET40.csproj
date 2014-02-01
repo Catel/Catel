@@ -183,6 +183,7 @@
     <Compile Include="Helpers\HashHelper.cs" />
     <Compile Include="Helpers\ObjectHelper.cs" />
     <Compile Include="Helpers\ObjectToStringHelper.cs" />
+    <Compile Include="Helpers\ParallelHelper.cs" />
     <Compile Include="Helpers\ResourceHelper.cs" />
     <Compile Include="Helpers\StringToObjectHelper.cs" />
     <Compile Include="Helpers\TagHelper.cs" />
@@ -202,6 +203,7 @@
     <Compile Include="IoC\Extensions\RegistrationConventionHandlerExtensions.cs" />
     <Compile Include="IoC\Extensions\ServiceLocatorExtensions.conventions.cs" />
     <Compile Include="IoC\Interfaces\IRegistrationConventionHandler.cs" />
+    <Compile Include="IoC\IoCFactory.cs" />
     <Compile Include="IoC\RegistrationConventionHandler.cs" />
     <Compile Include="IoC\DependencyResolverManager.cs" />
     <Compile Include="IoC\EventArgs\MissingTypeEventArgs.cs" />

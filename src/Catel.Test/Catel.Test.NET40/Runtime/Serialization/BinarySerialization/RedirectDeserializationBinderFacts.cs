@@ -46,9 +46,21 @@ namespace Catel.Test.Runtime.Serialization
             }
 
             [TestMethod]
+            public void PerformanceTestWithMultithreadedInitialization2500TypesPerThread()
+            {
+                PerformanceTest(2500);
+            }
+
+            [TestMethod]
             public void PerformanceTestWithMultithreadedInitialization5000TypesPerThread()
             {
                 PerformanceTest(5000);
+            }
+
+            [TestMethod]
+            public void PerformanceTestWithMultithreadedInitialization10000TypesPerThread()
+            {
+                PerformanceTest(10000);
             }
 
             private void PerformanceTest(int typesPerThread)

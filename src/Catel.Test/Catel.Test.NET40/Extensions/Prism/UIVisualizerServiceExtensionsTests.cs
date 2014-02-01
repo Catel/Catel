@@ -200,7 +200,7 @@ namespace Catel.Test.Extensions.Prism
                 var dispatcherServiceMock = new Mock<IDispatcherService>();
                 dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>())).Callback((Action action) => action.Invoke());
 
-                //_serviceLocator = new ServiceLocator();
+                //_serviceLocator = IoCFactory.CreateServiceLocator();
                 _serviceLocator = ServiceLocator.Default;
                 _serviceLocator.RegisterInstance<IDispatcherService>(dispatcherServiceMock.Object);
 
@@ -215,7 +215,7 @@ namespace Catel.Test.Extensions.Prism
             //[TestMethod]
             //public void ThrowsNotSupportedExceptionIfTheRegionManagerIsNotAvaliable()
             //{
-            //    var serviceLocator = new ServiceLocator();
+            //    var serviceLocator = IoCFactory.CreateServiceLocator();
             //    serviceLocator.RegisterType<IViewLocator, ViewLocator>();
             //    serviceLocator.RegisterType<IViewModelLocator, ViewModelLocator>();
             //    serviceLocator.RegisterType<IUIVisualizerService, UIVisualizerService>();
@@ -636,7 +636,7 @@ namespace Catel.Test.Extensions.Prism
             [Asynchronous]
             public void TheOpenedActionIsCalledWhenViewManagerHaveRegisteredAViewForTheViewModel()
             {
-                 var serviceLocator = new ServiceLocator();
+                 var serviceLocator = IoCFactory.CreateServiceLocator();
                 var fooViewModel = new FooViewModel(serviceLocator);
 
                 var dispatcherServiceMock = new Mock<IDispatcherService>();
@@ -662,7 +662,7 @@ namespace Catel.Test.Extensions.Prism
             [Asynchronous]
             public void TheOpenedActionIsCalledEvenWhenThereNoViewsAvailablesInTheExpectedTimeForTheCurrentViewModelButUnlockingTheInspectionThread()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 var fooViewModel = new FooViewModel(serviceLocator);
 
                 var dispatcherServiceMock = new Mock<IDispatcherService>();

@@ -61,7 +61,7 @@ namespace Catel.Test.IoC
             //[TestMethod]
             //public void Array()
             //{
-            //    var serviceLocator = new ServiceLocator();
+            //    var serviceLocator = IoCFactory.CreateServiceLocator();
 
             //    PrepareContainer(serviceLocator);
 
@@ -71,7 +71,7 @@ namespace Catel.Test.IoC
             //[TestMethod]
             //public void List()
             //{
-            //    var serviceLocator = new ServiceLocator();
+            //    var serviceLocator = IoCFactory.CreateServiceLocator();
 
             //    PrepareContainer(serviceLocator);
 
@@ -81,7 +81,7 @@ namespace Catel.Test.IoC
             //[TestMethod]
             //public void Collection()
             //{
-            //    var serviceLocator = new ServiceLocator();
+            //    var serviceLocator = IoCFactory.CreateServiceLocator();
 
             //    PrepareContainer(serviceLocator);
 
@@ -91,7 +91,7 @@ namespace Catel.Test.IoC
             //[TestMethod]
             //public void Enumerable()
             //{
-            //    var serviceLocator = new ServiceLocator();
+            //    var serviceLocator = IoCFactory.CreateServiceLocator();
 
             //    PrepareContainer(serviceLocator);
 
@@ -101,7 +101,7 @@ namespace Catel.Test.IoC
             //[TestMethod]
             //public void IReadOnlyCollection()
             //{
-            //    var serviceLocator = new ServiceLocator();
+            //    var serviceLocator = IoCFactory.CreateServiceLocator();
             //
             //    AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<IReadOnlyCollection<IService>>>(serviceLocator);
             //}
@@ -109,7 +109,7 @@ namespace Catel.Test.IoC
             //[TestMethod]
             //public void IReadOnlyList()
             //{
-            //    var serviceLocator = new ServiceLocator();
+            //    var serviceLocator = IoCFactory.CreateServiceLocator();
             //
             //    AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<IReadOnlyList<IService>>>(serviceLocator);
             //}

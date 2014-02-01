@@ -47,7 +47,7 @@ namespace Catel.Runtime.Serialization.Binary
         /// </summary>
         /// <param name="typesPerThread">The number of types per thread to initialize. If <c>-1</c>, the types will be initialized in a single thread.</param>
         /// <remarks>This constructor searches for attributes in a specific application domain.</remarks>
-        public RedirectDeserializationBinder(int typesPerThread = 1000)
+        public RedirectDeserializationBinder(int typesPerThread = 2500)
         {
             _typesPerThread = typesPerThread;
 
@@ -62,61 +62,14 @@ namespace Catel.Runtime.Serialization.Binary
         /// </summary>
         private void Initialize()
         {
-            Log.Debug("Initializing redirect deserialization binder");
-
             var allTypes = new List<Type>(TypeCache.GetTypes());
-
-            var initializationGroups = new List<List<Type>>();
-            if (_typesPerThread > 0)
-            {
-                var typeCount = allTypes.Count;
-                for (int i = 0; i < typeCount; i = i + _typesPerThread)
-                {
-                    int itemsToSkip = i;
-                    int itemsToTake = _typesPerThread;
-                    if (itemsToTake >= typeCount)
-                    {
-                        itemsToTake = typeCount - i;
-                    }
-
-                    initializationGroups.Add(allTypes.Skip(itemsToSkip).Take(itemsToTake).ToList());
-                }
-            }
-            else
-            {
-                initializationGroups.Add(new List<Type>(allTypes));
-            }
-
-            if (initializationGroups.Count == 1)
-            {
-                InitializeTypeGroup(initializationGroups[0]);
-            }
-            else
-            {
-                var actions = new List<Action>();
-                foreach (var initializationGroup in initializationGroups)
-                {
-                    List<Type> @group = initializationGroup;
-                    actions.Add(() => InitializeTypeGroup(@group));
-                }
-
-                TaskHelper.RunAndWait(actions.ToArray());
-            }
-
-            Log.Debug("Initialized redirect deserialization binder");
-        }
-
-        private void InitializeTypeGroup(List<Type> types)
-        {
-            Log.Debug("Initializing {0} types", types.Count);
-
             var attributeType = typeof(RedirectTypeAttribute);
 
-            foreach (var type in types)
+            ParallelHelper.ExecuteInParallel(allTypes, type =>
             {
                 if (!IsTypeBinarySerializable(type))
                 {
-                    continue;
+                    return;
                 }
 
                 var typeRedirectAttributes = (RedirectTypeAttribute[])type.GetCustomAttributes(attributeType, true);
@@ -145,7 +98,7 @@ namespace Catel.Runtime.Serialization.Binary
                         InitializeAttributes(member, memberRedirectAttributes);
                     }
                 }
-            }
+            }, _typesPerThread, "Initialize redirect deserialization binder");
         }
 
         private bool IsTypeBinarySerializable(Type type)

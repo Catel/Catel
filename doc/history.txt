@@ -30,6 +30,9 @@ Added/fixed (BREAKING CHANGES):
     to be unloaded when the DataContextChanged event occurs (before a view is actually unloaded). This is a breaking 
     change for users that have implemented a custom base class for views. To fix the issue, implement the required 
     events on the views as explained at https://catelproject.atlassian.net/wiki/display/CTL/Using+a+custom+control
+(*) CTL-313 Improved IoCConfiguration so it is easier to replace specific IoC components in Catel. This is a breaking
+    change for users that manually instantiate the ServiceLocator or that have customized any component. For more
+    information, visit https://catelproject.atlassian.net/wiki/display/CTL/Replacing+the+default+components
 (-) CTL-273 Removed external container registration and synchronization support for the ServiceLocator. The reason
     for this is complex maintenance, bad performance (all done via reflection) and there are now better alternatives
 
@@ -49,6 +52,7 @@ Added/fixed:
 (+) CTL-292 Added ServiceLocator extension methods for registrations with tags and RemoveType
 (+) CTL-300 Added ChangeNotificationWrapper methods to unsubscribe and subscribe collections items manually
 (+) CTL-302 Added TextToUpperCaseConverter and TextToLowerCaseConverter converters
+(+) CTL-319 Added ParallelHelper to invoke actions on very large sets of items with a customizable batch size
 (*) CTL-211 Renamed resource files of simple chinese from zh-CHS to zh-Hans
 (*) CTL-230 XmlSchemaHelper now supports the new serialization engine introduced in Catel 3.7
 (*) CTL-261 Replace all instances of RegisterDebugListener with AddDebugListener

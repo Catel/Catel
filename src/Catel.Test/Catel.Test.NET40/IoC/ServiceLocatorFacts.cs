@@ -39,7 +39,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void DeadlockIsNotCausedByMultipleInheritedResolving()
             {
-                _serviceLocator = new ServiceLocator();
+                _serviceLocator = IoCFactory.CreateServiceLocator();
 
                 var serviceLocator = _serviceLocator;
                 var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
@@ -127,7 +127,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void AllowsTheSameInterfaceDefinedTwiceWithDifferentTags()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType(typeof(ITestInterface), typeof(TestClass1), "1");
                 serviceLocator.RegisterType(typeof(ITestInterface), typeof(TestClass1), "2");
 
@@ -139,7 +139,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void OverridesRegistrationWithSameTag()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType(typeof(ITestInterface), typeof(TestClass1), "1");
                 serviceLocator.RegisterType(typeof(ITestInterface), typeof(TestClass1), "2");
                 serviceLocator.RegisterType(typeof(ITestInterface), typeof(TestClass2), "1");
@@ -157,7 +157,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void CorrectlyResolvesClosedGenericTypeWithSingleInnerType()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 serviceLocator.RegisterType(typeof(IList<int>), typeof(List<int>));
 
@@ -168,7 +168,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void CorrectlyResolvesOpenGenericTypeWithSingleInnerType()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 serviceLocator.RegisterType(typeof(IList<>), typeof(List<>));
 
@@ -179,7 +179,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void CorrectlyResolvesClosedGenericTypeWithMultipleInnerTypes()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 serviceLocator.RegisterType(typeof(IDictionary<string, int>), typeof(Dictionary<string, int>));
 
@@ -190,7 +190,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void CorrectlyResolvesOpenGenericTypeWithMultipleInnerTypes()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 serviceLocator.RegisterType(typeof(IDictionary<,>), typeof(Dictionary<,>));
 
@@ -207,7 +207,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void TheIsTypeRegisteredAsSingleton_Generic()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType<ITestInterface, TestClass1>();
                 Assert.IsTrue(serviceLocator.IsTypeRegisteredAsSingleton<ITestInterface>());
             }
@@ -215,7 +215,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void TheIsTypeRegisteredAsSingleton_NonSingleton()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType<ITestInterface, TestClass1>(registrationType: RegistrationType.Transient);
                 Assert.IsFalse(serviceLocator.IsTypeRegisteredAsSingleton(typeof(ITestInterface)));
             }
@@ -223,14 +223,14 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void TheIsTypeRegisteredAsSingleton_UnRegisteredType()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 Assert.IsFalse(serviceLocator.IsTypeRegisteredAsSingleton(typeof(ITestInterface)));
             }
 
             [TestMethod]
             public void TheIsTypeRegisteredAsSingleton_RegisteredTypeViaMissingTypeEvent()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.MissingType += (sender, args) =>
                 {
                     args.ImplementingType = typeof(TestClass1);
@@ -242,7 +242,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void TheIsTypeRegisteredAsSingleton_RegisteredInstanceViaMissingTypeEvent()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.MissingType += (sender, args) =>
                 {
                     args.ImplementingInstance = new TestClass1();
@@ -261,7 +261,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void IsTypeRegistered_Generic()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType<ITestInterface, TestClass1>();
 
                 Assert.IsTrue(serviceLocator.IsTypeRegistered<ITestInterface>());
@@ -270,14 +270,14 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void IsTypeRegistered_Null()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serviceLocator.IsTypeRegistered(null));
             }
 
             [TestMethod]
             public void IsTypeRegistered_UnregisteredType()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 Assert.IsFalse(serviceLocator.IsTypeRegistered(typeof(ITestInterface)));
             }
@@ -285,7 +285,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void IsTypeRegistered_UnregisteredTypeRegisteredInstanceViaMissingType()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.MissingType += (sender, args) => { args.ImplementingInstance = new TestClass1(); };
 
                 Assert.IsTrue(serviceLocator.IsTypeRegistered(typeof(ITestInterface)));
@@ -294,7 +294,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void IsTypeRegistered_RegisteredAsInstanceInServiceLocator()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterInstance<ITestInterface>(new TestClass1());
 
                 Assert.IsTrue(serviceLocator.IsTypeRegistered(typeof(ITestInterface)));
@@ -303,7 +303,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void IsTypeRegistered_RegisteredAsTypeInServiceLocator()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType<ITestInterface, TestClass1>();
 
                 Assert.IsTrue(serviceLocator.IsTypeRegistered(typeof(ITestInterface)));
@@ -312,7 +312,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void IsTypeRegistered_UnregisteredTypeRegisteredViaMissingTypeEvent()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 Assert.IsFalse(serviceLocator.IsTypeRegistered(typeof(ITestInterface)));
 
                 serviceLocator.MissingType += (sender, e) => e.ImplementingType = typeof(TestClass1);
@@ -327,7 +327,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void RegisterInstance_Generic()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterInstance<ITestInterface>(new TestClass1 { Name = "My Instance" });
 
                 Assert.IsTrue(serviceLocator.IsTypeRegistered<ITestInterface>());
@@ -339,7 +339,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void RegisterInstance_InterfaceTypeNull()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(
                     () => serviceLocator.RegisterInstance(null, new TestClass1 { Name = "My Instance" }, null));
             }
@@ -347,7 +347,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void RegisterInstance_InstanceNull()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(
                     () => serviceLocator.RegisterInstance(typeof(ITestInterface), null, null));
             }
@@ -355,7 +355,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void RegisterInstance_Valid()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterInstance<ITestInterface>(new TestClass1 { Name = "My Instance" });
 
                 Assert.IsTrue(serviceLocator.IsTypeRegistered<ITestInterface>());
@@ -367,7 +367,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ThrowsArgumentExceptionForWrongServiceType()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 var serviceType = typeof(IViewModelLocator);
                 var serviceInstance = new ViewLocator();
 
@@ -377,7 +377,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void InvokesTypeRegisteredEvent()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 TypeRegisteredEventArgs eventArgs = null;
 
@@ -399,14 +399,14 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ThrowsInvalidOperationExceptionForInterfaceAsImplementation()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => serviceLocator.RegisterType<ITestInterface, ITestInterface>());
             }
 
             [TestMethod]
             public void RegisterType_Generic()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType<ITestInterface, TestClass1>();
 
                 Assert.IsTrue(serviceLocator.IsTypeRegistered<ITestInterface>());
@@ -415,21 +415,21 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void RegisterType_InterfaceTypeNull()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serviceLocator.RegisterType((Type)null, typeof(TestClass1), null, RegistrationType.Singleton, true));
             }
 
             [TestMethod]
             public void RegisterType_ImplementingTypeNull()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serviceLocator.RegisterType(typeof(ITestInterface), (Type)null, null, RegistrationType.Singleton, true));
             }
 
             [TestMethod]
             public void RegisterType_Valid()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType<ITestInterface, TestClass1>();
 
                 Assert.IsTrue(serviceLocator.IsTypeRegistered<ITestInterface>());
@@ -438,7 +438,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void RegisterType_DoubleRegistration()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType<ITestInterface, TestClass1>();
 
                 Assert.IsTrue(serviceLocator.IsTypeRegistered<ITestInterface>());
@@ -452,7 +452,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void RegisterType_DoubleRegistration_ToChangeInstantiationStyle()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType<ITestInterface, TestClass1>();
                 var testInterfaceRef1 = serviceLocator.ResolveType<ITestInterface>();
                 var testInterfaceRef2 = serviceLocator.ResolveType<ITestInterface>();
@@ -467,7 +467,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void RegisterType_DoubleRegistration_ToChangeInstantiationStyle_And_Type()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType<ITestInterface, TestClass1>();
                 var testInterfaceRef1 = serviceLocator.ResolveType<ITestInterface>();
                 var testInterfaceRef2 = serviceLocator.ResolveType<ITestInterface>();
@@ -502,7 +502,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void InvokesTypeRegisteredEvent()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 TypeRegisteredEventArgs eventArgs = null;
 
@@ -518,7 +518,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void RegistersLateBoundImplementationUsingCallback()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 serviceLocator.RegisterType<ITestInterface>(x => new TestClass2());
 
@@ -530,11 +530,11 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void RegistersLateBoundImplementationUsingLateBoundImplementationType()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 serviceLocator.RegisterType<ITestInterface>(x => new TestClass2());
 
-                var registeredTypeInfo = serviceLocator.GetRegistrationInfo(typeof (ITestInterface));
+                var registeredTypeInfo = serviceLocator.GetRegistrationInfo(typeof(ITestInterface));
 
                 Assert.IsTrue(registeredTypeInfo.IsLateBoundRegistration);
                 Assert.AreEqual(typeof(LateBoundImplementation), registeredTypeInfo.ImplementingType);
@@ -549,14 +549,14 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void RemoveType_ThrowsArgumentNullExceptionIfServiceTypeIsNull()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serviceLocator.RemoveType(null, "TestClass1"));
             }
 
             [TestMethod]
             public void RemoveType_NoTag()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType<ITestInterface, TestClass1>();
 
                 Assert.IsTrue(serviceLocator.IsTypeRegistered<ITestInterface>());
@@ -569,7 +569,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void RemovesOnlyTheTaggedTypeAndInstances()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType(typeof(ITestInterface), typeof(TestClass1), "1");
                 serviceLocator.RegisterType(typeof(ITestInterface), typeof(TestClass1), "2");
 
@@ -593,14 +593,14 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void RemoveAllTypes_ThrowsArgumentNullExceptionIfServiceTypeIsNull()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serviceLocator.RemoveAllTypes(null));
             }
 
             [TestMethod]
             public void RemoveAllTypes_Simple()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType<ITestInterface, TestClass1>();
 
                 Assert.IsTrue(serviceLocator.IsTypeRegistered<ITestInterface>());
@@ -613,7 +613,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void RemoveAllTypes_Tags()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType(typeof(ITestInterface), typeof(TestClass1), "1");
                 serviceLocator.RegisterType(typeof(ITestInterface), typeof(TestClass1), "2");
 
@@ -668,7 +668,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ResolveType_Of_Non_Registered_Non_Abstract_Class_Without_Registration()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 var dependencyInjectionTestClass = serviceLocator.ResolveType<DependencyInjectionTestClass>();
                 Assert.IsNotNull(dependencyInjectionTestClass);
                 Assert.IsFalse(serviceLocator.IsTypeRegistered(typeof(DependencyInjectionTestClass)));
@@ -677,7 +677,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ResolveType_Of_Non_Registered_Non_Abstract_Class_Without_Registration_CanResolveNonAbstractTypesWithoutRegistration_In_False()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.CanResolveNonAbstractTypesWithoutRegistration = false;
                 ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => serviceLocator.ResolveType(typeof(DependencyInjectionTestClass)));
             }
@@ -685,7 +685,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ResolveType_Generic_TransientLifestyle()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType<ITestInterface, TestClass1>(registrationType: RegistrationType.Transient);
                 Assert.IsTrue(serviceLocator.IsTypeRegistered<ITestInterface>());
 
@@ -701,7 +701,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ResolveType_Generic_SingletonLifestyle()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType<ITestInterface, TestClass1>();
                 Assert.IsTrue(serviceLocator.IsTypeRegistered<ITestInterface>());
 
@@ -717,7 +717,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ResolveType_Generic()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType<ITestInterface, TestClass1>();
 
                 Assert.IsTrue(serviceLocator.IsTypeRegistered<ITestInterface>());
@@ -727,14 +727,14 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ResolveType_InterfaceTypeNull()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serviceLocator.ResolveType(null));
             }
 
             [TestMethod]
             public void ResolveType_UnregisteredType()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 Assert.IsFalse(serviceLocator.IsTypeRegistered<ITestInterface>());
                 ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => serviceLocator.ResolveType(typeof(ITestInterface)));
@@ -743,7 +743,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ResolveType_RegisteredAsInstanceInServiceLocator()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterInstance<ITestInterface>(new TestClass2 { Name = "instance test" });
 
                 var instance = serviceLocator.ResolveType<ITestInterface>();
@@ -759,7 +759,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ResolveType_RegisteredAsTypeInServiceLocator()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType<ITestInterface, TestClass1>();
 
                 var instance = serviceLocator.ResolveType<ITestInterface>();
@@ -769,7 +769,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ResolvesTypeUsingDependencyInjectionFallBackToDefaultConstructor()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType<DependencyInjectionTestClass, DependencyInjectionTestClass>();
 
                 var instance = serviceLocator.ResolveType<DependencyInjectionTestClass>();
@@ -780,7 +780,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ResolvesTypeUsingDependencyInjectionFallBackToFirstConstructor()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType<DependencyInjectionTestClass, DependencyInjectionTestClass>();
                 var iniEntry = new IniEntry { Group = "group", Key = "key", Value = "value" };
                 serviceLocator.RegisterInstance(iniEntry);
@@ -796,7 +796,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ResolvesTypeUsingDependencyInjectionFallBackToSecondConstructor()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType<DependencyInjectionTestClass, DependencyInjectionTestClass>();
                 var iniEntry = new IniEntry { Group = "group", Key = "key", Value = "value" };
                 serviceLocator.RegisterInstance(iniEntry);
@@ -813,7 +813,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ResolvesTypeUsingDependencyInjectionUsesConstructorWithMostParametersFirst()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType<DependencyInjectionTestClass, DependencyInjectionTestClass>();
                 var iniEntry = new IniEntry { Group = "group", Key = "key", Value = "value" };
                 serviceLocator.RegisterInstance(iniEntry);
@@ -831,7 +831,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void InvokesTypeInstantiatedEventForInstantiatedTypes()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType<DependencyInjectionTestClass, DependencyInjectionTestClass>();
 
                 var invoked = false;
@@ -851,7 +851,8 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void RegistersTheImplementationTypesAsInterfaceTypesIfIsSetToTrue()
             {
-                var serviceLocator = new ServiceLocator { AutoRegisterTypesViaAttributes = true };
+                var serviceLocator = IoCFactory.CreateServiceLocator();
+                serviceLocator.AutoRegisterTypesViaAttributes = true;
 
                 Assert.IsTrue(serviceLocator.IsTypeRegistered<IFooService>());
                 Assert.IsTrue(serviceLocator.IsTypeRegisteredAsSingleton<IFooService>());
@@ -869,7 +870,9 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ThrowsInvalidOperationExceptionIfIgnoreRuntimeIncorrectUsageOfRegisterAttributePropertyIsSetToFalseAndSetBackToFalse()
             {
-                var serviceLocator = new ServiceLocator { IgnoreRuntimeIncorrectUsageOfRegisterAttribute = false };
+                var serviceLocator = IoCFactory.CreateServiceLocator();
+                serviceLocator.IgnoreRuntimeIncorrectUsageOfRegisterAttribute = false;
+
                 ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => serviceLocator.AutoRegisterTypesViaAttributes = true);
                 Assert.IsFalse(serviceLocator.AutoRegisterTypesViaAttributes);
             }
@@ -877,7 +880,9 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void DoesNotRegisterTheImplementationTypesAsTheInterfaceTypesIfIsSetToFalse()
             {
-                var serviceLocator = new ServiceLocator { AutoRegisterTypesViaAttributes = false };
+                var serviceLocator = IoCFactory.CreateServiceLocator();
+                serviceLocator.AutoRegisterTypesViaAttributes = false;
+
                 Assert.IsFalse(serviceLocator.IsTypeRegistered<IFooService>());
                 Assert.IsFalse(serviceLocator.IsTypeRegistered<IFooService2>());
             }
@@ -885,7 +890,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void DoesNotRegisterTheImplementationTypesAsTheInterfaceTypesByDefault()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 Assert.IsFalse(serviceLocator.IsTypeRegistered<IFooService>());
                 Assert.IsFalse(serviceLocator.IsTypeRegistered<IFooService2>());
             }
@@ -955,7 +960,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void RegistersWithDefaultNamingConvention()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType<IRegistrationConventionHandler, RegistrationConventionHandler>();
 
                 serviceLocator.RegisterTypesUsingDefaultNamingConvention();
@@ -966,7 +971,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void RegistersWithDefaultFirstInterfaceConvention()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType<IRegistrationConventionHandler, RegistrationConventionHandler>();
 
                 serviceLocator.RegisterTypesUsingDefaultFirstInterfaceConvention();
@@ -981,7 +986,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ShouldExcludeAllTypesOfNamespaceContainingSpecifiedInterfaceType()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 serviceLocator.RegisterTypesUsingDefaultNamingConvention()
                               .ExcludeAllTypesOfNamespaceContaining<IFooService>();
@@ -993,7 +998,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ShouldExcludeAllTypesOfNamespaceContainingSpecifiedClassType()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 serviceLocator.RegisterTypesUsingDefaultNamingConvention()
                               .ExcludeAllTypesOfNamespaceContaining<FooService>();
@@ -1005,7 +1010,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ShouldExcludeAllTypesOfTheSpecifiedNamespace()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 serviceLocator.RegisterTypesUsingDefaultNamingConvention()
                               .ExcludeAllTypesOfNamespace("Catel.Test.IoC");
@@ -1017,7 +1022,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ShouldExcludeSpecifiedInterfaceType()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 serviceLocator.RegisterTypesUsingDefaultNamingConvention()
                               .ExcludeType<IFooService2>();
@@ -1029,7 +1034,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ShouldExcludeSpecifiedClassType()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 serviceLocator.RegisterTypesUsingDefaultNamingConvention()
                               .ExcludeType<FooService2>();
@@ -1041,7 +1046,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ShouldExcludeTypeUsingSpecifiedPredicate()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 serviceLocator.RegisterTypesUsingDefaultNamingConvention()
                               .ExcludeTypesWhere(type => type == typeof(IFooService2));
@@ -1053,7 +1058,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ShouldIncludeSpecifiedInterfaceType()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 serviceLocator.RegisterTypesUsingDefaultNamingConvention()
                               .IncludeType<IFooService2>()
@@ -1066,7 +1071,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ShouldIncludeSpecifiedClassType()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 serviceLocator.RegisterTypesUsingDefaultNamingConvention()
                               .IncludeType<IFooService2>()
@@ -1079,7 +1084,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ShouldIncludeTypeUsingSpecifiedPredicate()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 serviceLocator.RegisterTypesUsingDefaultNamingConvention()
                               .IncludeTypesWhere(type => type == typeof(IFooService2))
@@ -1092,7 +1097,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ShouldIncludeAllTypesOfTheSpecifiedNamespace()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 serviceLocator.RegisterTypesUsingDefaultNamingConvention()
                               .IncludeAllTypesOfNamespace("Catel.Test.IoC");
@@ -1105,7 +1110,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ShouldIncludeAllTypesOfNamespaceContaining()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 serviceLocator.RegisterTypesUsingDefaultNamingConvention()
                               .IncludeAllTypesOfNamespaceContaining<IFooService>();
@@ -1123,8 +1128,11 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ReturnsAllAvaliableInstances()
             {
-                var serviceLocator = new ServiceLocator { AutoRegisterTypesViaAttributes = true };
+                var serviceLocator = IoCFactory.CreateServiceLocator();
+                serviceLocator.AutoRegisterTypesViaAttributes = true;
+
                 serviceLocator.RegisterInstance(typeof(IFooService), new FooService2(), "FooService3");
+
                 Assert.AreEqual(3, serviceLocator.ResolveTypes<IFooService>().Count());
             }
             #endregion
@@ -1157,7 +1165,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ThrowsArgumentExceptionForNullOrEmptyTypeArray()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => serviceLocator.AreAllTypesRegistered(null));
             }
@@ -1165,7 +1173,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ReturnsFalseWhenAtLeastOneTypeIsNotRegistered()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 serviceLocator.RegisterType<object>();
                 serviceLocator.RegisterType<ITestInterface1, TestClass1>();
@@ -1176,7 +1184,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ReturnsTrueWhenAllTypesAreRegistered()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 serviceLocator.RegisterType<object>();
                 serviceLocator.RegisterType<ITestInterface1, TestClass1>();
@@ -1194,7 +1202,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ThrowsArgumentExceptionForNullOrEmptyTypeArray()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => serviceLocator.ResolveAllTypes(null));
             }
@@ -1202,7 +1210,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ThrowsNotSupportedExceptionWhenAtLeastOneTypeIsNotRegistered()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 serviceLocator.RegisterType<object>();
                 serviceLocator.RegisterType<ITestInterface1, TestClass1>();
@@ -1213,7 +1221,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ReturnsAllTypesWhenAllAreRegistered()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 serviceLocator.RegisterInstance(new object());
                 serviceLocator.RegisterType<ITestInterface1, TestClass1>();
@@ -1236,14 +1244,15 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ThrowsArgumentNullExceptionIfServiceTypeIsNull()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serviceLocator.RemoveInstance(null, "FooService1"));
             }
 
             [TestMethod]
             public void RemovesTheInstance()
             {
-                var serviceLocator = new ServiceLocator { AutoRegisterTypesViaAttributes = true };
+                var serviceLocator = IoCFactory.CreateServiceLocator();
+                serviceLocator.AutoRegisterTypesViaAttributes = true;
 
                 var instance1 = serviceLocator.ResolveType(typeof(IFooService), "FooService1");
                 serviceLocator.RemoveInstance(typeof(IFooService), "FooService1");
@@ -1281,14 +1290,15 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ThrowsArgumentNullExceptionIfServiceTypeIsNull()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serviceLocator.RemoveAllInstances((Type)null));
             }
 
             [TestMethod]
             public void RemovesAllInstanceOfAType()
             {
-                var serviceLocator = new ServiceLocator { AutoRegisterTypesViaAttributes = true };
+                var serviceLocator = IoCFactory.CreateServiceLocator();
+                serviceLocator.AutoRegisterTypesViaAttributes = true;
 
                 var instance1 = serviceLocator.ResolveType(typeof(IFooService), "FooService1");
                 var instance2 = serviceLocator.ResolveType(typeof(IFooService), "FooService2");
@@ -1302,7 +1312,9 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void RemovesOnlyTheTaggedInstances()
             {
-                var serviceLocator = new ServiceLocator { AutoRegisterTypesViaAttributes = true };
+                var serviceLocator = IoCFactory.CreateServiceLocator();
+                serviceLocator.AutoRegisterTypesViaAttributes = true;
+
                 serviceLocator.RegisterType(typeof(IFoo2Service), typeof(Foo2Service), "FooService2");
 
                 var instance1 = serviceLocator.ResolveType(typeof(IFooService), "FooService1");
@@ -1319,7 +1331,9 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void RemovesAllInstances()
             {
-                var serviceLocator = new ServiceLocator { AutoRegisterTypesViaAttributes = true };
+                var serviceLocator = IoCFactory.CreateServiceLocator();
+                serviceLocator.AutoRegisterTypesViaAttributes = true;
+
                 serviceLocator.RegisterType(typeof(IFoo2Service), typeof(Foo2Service), "FooService2");
 
                 var instance1 = serviceLocator.ResolveType(typeof(IFooService), "FooService1");
@@ -1397,7 +1411,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ThrowsCircularDependencyException()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType<InterfaceA, ClassA>();
                 serviceLocator.RegisterType<InterfaceB, ClassB>();
 

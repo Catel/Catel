@@ -60,8 +60,7 @@ namespace Catel.Test.Data
                         compositeValidator.BeforeValidation(null, null, null);
 
                         alterEvent.Set();
-                        ThreadHelper.Sleep(3000);
-
+                        ThreadHelper.Sleep(1000);
 
                         compositeValidator.AfterValidation(null, null, null);
                         syncEvents[0].Set();

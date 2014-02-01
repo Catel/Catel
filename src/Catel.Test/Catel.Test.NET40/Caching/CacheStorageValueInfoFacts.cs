@@ -60,7 +60,7 @@ namespace Catel.Test.Caching
             [TestMethod]
             public void ReturnsFalseWhileTheValueIsReadAndSlidingPolicyIsUsed()
             {
-                var valueInfo = new CacheStorageValueInfo<int>(0, new SlidingExpirationPolicy(new TimeSpan(0, 0, 2)));
+                var valueInfo = new CacheStorageValueInfo<int>(0, new SlidingExpirationPolicy(new TimeSpan(0, 0, 1)));
                 DateTime startTime = DateTime.Now;
                 do
                 {
@@ -75,9 +75,9 @@ namespace Catel.Test.Caching
             [TestMethod]
             public void ReturnsTrueWhenTheValueIsNotReadAndSlidingPolicyIsUsed()
             {
-                var valueInfo = new CacheStorageValueInfo<int>(0, new SlidingExpirationPolicy(new TimeSpan(0, 0, 2)));
+                var valueInfo = new CacheStorageValueInfo<int>(0, new SlidingExpirationPolicy(new TimeSpan(0, 0, 1)));
 
-                ThreadHelper.Sleep(2500);
+                ThreadHelper.Sleep(1500);
 
                 Assert.IsTrue(valueInfo.IsExpired);
             }
@@ -85,9 +85,9 @@ namespace Catel.Test.Caching
             [TestMethod]
             public void ReturnsTrueWhenTimeSpanIsNotZeroAndValueIsExpired()
             {
-                var valueInfo = new CacheStorageValueInfo<int>(0, new TimeSpan(0, 0, 2));
+                var valueInfo = new CacheStorageValueInfo<int>(0, new TimeSpan(0, 0, 1));
 
-                ThreadHelper.Sleep(2500);
+                ThreadHelper.Sleep(1500);
 
                 Assert.IsTrue(valueInfo.IsExpired);
             }

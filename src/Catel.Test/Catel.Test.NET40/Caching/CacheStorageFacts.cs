@@ -84,7 +84,7 @@ namespace Catel.Test.Caching
                         break;
                     }
 
-                    ThreadHelper.Sleep(1000);
+                    ThreadHelper.Sleep(500);
                 }
             }
         }
@@ -334,7 +334,7 @@ namespace Catel.Test.Caching
 
 				Assert.IsTrue(cache.Contains("1"));
 
-				ThreadHelper.Sleep(2000);
+                ThreadHelper.Sleep(2000);
 
 				Assert.IsFalse(cache.Contains("1"));
 			}
@@ -342,13 +342,13 @@ namespace Catel.Test.Caching
             [TestMethod]
             public void AutomaticallyRemovesExpiredItemsOfACacheStorageWithDefaultExpirationPolicyInitializationCode()
             {
-                var cache = new CacheStorage<string, int>(() => ExpirationPolicy.Duration(TimeSpan.FromSeconds(2)));
+                var cache = new CacheStorage<string, int>(() => ExpirationPolicy.Duration(TimeSpan.FromMilliseconds(500)));
 
                 cache.Add("1", 1);
 
                 Assert.IsTrue(cache.Contains("1"));
 
-                ThreadHelper.Sleep(3000);
+                ThreadHelper.Sleep(2000);
 
                 Assert.IsFalse(cache.Contains("1"));
             }

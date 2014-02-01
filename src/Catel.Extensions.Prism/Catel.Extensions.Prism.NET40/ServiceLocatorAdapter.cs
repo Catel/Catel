@@ -51,7 +51,6 @@ namespace Catel
         {
             _serviceLocator = serviceLocator ?? IoC.ServiceLocator.Default;
         }
-
         #endregion
 
         #region Methods

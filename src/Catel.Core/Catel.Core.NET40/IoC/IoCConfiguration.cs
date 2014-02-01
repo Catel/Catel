@@ -7,39 +7,110 @@
 
 namespace Catel.IoC
 {
+    using Catel.Logging;
+
     /// <summary>
     /// Contains configurations for the IoC implementation in Catel.
     /// </summary>
     public static class IoCConfiguration
     {
-        /// <summary>
-        /// Initializes static members of the <see cref="IoCConfiguration"/> class.
-        /// </summary>
-        static IoCConfiguration()
-        {
-            var serviceLocator = new ServiceLocator();
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly object _lockObject = new object();
 
-            DefaultServiceLocator = serviceLocator;
-            DefaultDependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
-            DefaultTypeFactory = serviceLocator.ResolveType<ITypeFactory>();
-        }
+        private static IServiceLocator _defaultServiceLocator;
+        private static IDependencyResolver _defaultDependencyResolver;
+        private static ITypeFactory _defaultTypeFactory;
 
         /// <summary>
         /// Gets or sets the default service locator.
         /// </summary>
         /// <value>The default service locator.</value>
-        public static IServiceLocator DefaultServiceLocator { get; set; }
+        public static IServiceLocator DefaultServiceLocator
+        {
+            get
+            {
+                lock (_lockObject)
+                {
+                    if (_defaultServiceLocator == null)
+                    {
+                        UpdateDefaultComponents();
+                    }
+
+                    return _defaultServiceLocator;
+                }
+            }
+            private set
+            {
+                _defaultServiceLocator = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the default dependency resolver.
         /// </summary>
         /// <value>The default dependency resolver.</value>
-        public static IDependencyResolver DefaultDependencyResolver { get; set; }
+        public static IDependencyResolver DefaultDependencyResolver
+        {
+            get
+            {
+                lock (_lockObject)
+                {
+                    if (_defaultDependencyResolver == null)
+                    {
+                        UpdateDefaultComponents();
+                    }
+
+                    return _defaultDependencyResolver;
+                }
+            }
+            private set
+            {
+                _defaultDependencyResolver = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the default type factory.
         /// </summary>
         /// <value>The default type factory.</value>
-        public static ITypeFactory DefaultTypeFactory { get; set; }
+        public static ITypeFactory DefaultTypeFactory
+        {
+            get
+            {
+                lock (_lockObject)
+                {
+                    if (_defaultTypeFactory == null)
+                    {
+                        UpdateDefaultComponents();
+                    }
+
+                    return _defaultTypeFactory;
+                }
+            }
+            private set
+            {
+                _defaultTypeFactory = value;
+            }
+        }
+
+        /// <summary>
+        /// Updates the default components.
+        /// <para />
+        /// This method should be called when any of the factory methods has been changed.
+        /// </summary>
+        /// <exception cref="System.Exception">The method fails to create the <see cref="IServiceLocator"/> using the factory.</exception>
+        public static void UpdateDefaultComponents()
+        {
+            Log.Info("Updating default components");
+
+            var serviceLocator = IoCFactory.CreateServiceLocator();
+
+            lock (_lockObject)
+            {
+                DefaultServiceLocator = serviceLocator;
+                DefaultDependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+                DefaultTypeFactory = serviceLocator.ResolveType<ITypeFactory>();
+            }
+        }
     }
 }
