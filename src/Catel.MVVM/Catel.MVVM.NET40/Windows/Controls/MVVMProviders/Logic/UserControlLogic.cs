@@ -413,6 +413,13 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 }
             }
 
+            // Fix for CTL-307: DataContextChanged is invoked before Unloaded because Parent is set to null
+            var targetControlParent = TargetControl.Parent;
+            if (targetControlParent == null)
+            {
+                return;
+            }
+
             base.OnTargetControlDataContextChanged(sender, e);
 
             var oldDataContext = e.OldValue;
