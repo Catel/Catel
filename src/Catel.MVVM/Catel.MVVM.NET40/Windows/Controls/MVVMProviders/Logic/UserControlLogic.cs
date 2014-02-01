@@ -462,6 +462,8 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             if (_parentViewModelContainer != null)
             {
                 _parentViewModelContainer.ViewModelChanged += OnParentViewModelContainerViewModelChanged;
+                _parentViewModelContainer.ViewLoading += OnParentViewModelContainerLoading;
+                _parentViewModelContainer.ViewUnloading += OnParentViewModelContainerUnloading;
 
                 SubscribeToParentViewModel(_parentViewModelContainer.ViewModel);
             }
@@ -479,6 +481,8 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 UnsubscribeFromParentViewModel();
 
                 _parentViewModelContainer.ViewModelChanged -= OnParentViewModelContainerViewModelChanged;
+                _parentViewModelContainer.ViewLoading -= OnParentViewModelContainerLoading;
+                _parentViewModelContainer.ViewUnloading -= OnParentViewModelContainerUnloading;
 
                 _parentViewModelContainer = null;
             }
@@ -653,6 +657,29 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             }
         }
 
+        private void OnParentViewModelContainerUnloading(object sender, EventArgs e)
+        {
+            if (!IgnoreNullDataContext)
+            {
+                Log.Debug("Parent IViewModelContainer.Unloading event fired, now ignoring null DataContext");
+
+                IgnoreNullDataContext = true;
+            }
+
+            // We are about to be unloaded as well
+            InvokeViewLoadEvent(ViewLoadStateEvent.Unloading);
+        }
+
+        private void OnParentViewModelContainerLoading(object sender, EventArgs e)
+        {
+            if (IgnoreNullDataContext)
+            {
+                Log.Debug("Parent IViewModelContainer.Loading event fired, no longer ignoring null DataContext");
+
+                IgnoreNullDataContext = false;
+            }
+        }
+
         /// <summary>
         /// Handles the Canceling event of the parent ViewModel.
         /// </summary>
@@ -729,6 +756,10 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                     Log.Warning("Parent view model '{0}' is exactly the same instance as the current view model, ignore Closing event", sender.GetType().FullName);
                     return;
                 }
+
+                Log.Debug("Parent ViewModel is closing, ignoring null DataContext");
+
+                IgnoreNullDataContext = true;
 
                 CloseAndDisposeViewModel(null);
             }
