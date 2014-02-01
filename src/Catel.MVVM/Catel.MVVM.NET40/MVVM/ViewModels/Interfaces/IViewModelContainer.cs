@@ -29,5 +29,25 @@ namespace Catel.MVVM
         /// Occurs when a property on the <see cref="ViewModel"/> has changed.
         /// </summary>
         event EventHandler<PropertyChangedEventArgs> ViewModelPropertyChanged;
+
+        /// <summary>
+        /// Occurs when the view model container is loading.
+        /// </summary>
+        event EventHandler<EventArgs> ViewLoading;
+
+        /// <summary>
+        /// Occurs when the view model container is loaded.
+        /// </summary>
+        event EventHandler<EventArgs> ViewLoaded;
+
+        /// <summary>
+        /// Occurs when the view model container starts unloading.
+        /// </summary>
+        event EventHandler<EventArgs> ViewUnloading;
+
+        /// <summary>
+        /// Occurs when the view model container is unloaded.
+        /// </summary>
+        event EventHandler<EventArgs> ViewUnloaded;
     }
 }

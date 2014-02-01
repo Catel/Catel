@@ -25,7 +25,8 @@ namespace Catel
         /// <param name="regionName">Name of the region.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="regionManager"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="regionName"/> is <c>null</c>.</exception>
-        public static void RegisterViewWithRegion<TView>(this IRegionManager regionManager, string regionName) where TView : UserControl
+        public static void RegisterViewWithRegion<TView>(this IRegionManager regionManager, string regionName) 
+            where TView : UserControl
         {
             Argument.IsNotNull("regionManager", regionManager);
             Argument.IsNotNullOrWhitespace("regionName", regionName);

@@ -134,6 +134,26 @@ namespace Catel.Windows.Controls.MVVMProviders
         public event EventHandler<DependencyPropertyValueChangedEventArgs> TargetControlPropertyChanged;
 
         /// <summary>
+        /// Occurs when the view model container is loading.
+        /// </summary>
+        public event EventHandler<EventArgs> ViewLoading;
+
+        /// <summary>
+        /// Occurs when the view model container is loaded.
+        /// </summary>
+        public event EventHandler<EventArgs> ViewLoaded;
+
+        /// <summary>
+        /// Occurs when the view model container starts unloading.
+        /// </summary>
+        public event EventHandler<EventArgs> ViewUnloading;
+
+        /// <summary>
+        /// Occurs when the view model container is unloaded.
+        /// </summary>
+        public event EventHandler<EventArgs> ViewUnloaded;
+
+        /// <summary>
         /// Gets a value indicating whether the target control is loaded.
         /// </summary>
         /// <value><c>true</c> if this instance is loaded; otherwise, <c>false</c>.</value>
@@ -183,6 +203,11 @@ namespace Catel.Windows.Controls.MVVMProviders
             Logic.ViewModelChanged += OnLogicViewModelChanged;
             Logic.ViewModelPropertyChanged += OnLogicViewModelPropertyChanged;
             Logic.TargetControlPropertyChanged += OnLogicTargetControlPropertyChanged;
+
+            Logic.ViewLoading += OnViewLoading;
+            Logic.ViewLoaded += OnViewLoaded;
+            Logic.ViewUnloading += OnViewUnloading;
+            Logic.ViewUnloaded += OnViewUnloaded;
         }
 
         /// <summary>
@@ -195,6 +220,11 @@ namespace Catel.Windows.Controls.MVVMProviders
             Logic.ViewModelChanged -= OnLogicViewModelChanged;
             Logic.ViewModelPropertyChanged -= OnLogicViewModelPropertyChanged;
             Logic.TargetControlPropertyChanged -= OnLogicTargetControlPropertyChanged;
+
+            Logic.ViewLoading -= OnViewLoading;
+            Logic.ViewLoaded -= OnViewLoaded;
+            Logic.ViewUnloading -= OnViewUnloading;
+            Logic.ViewUnloaded -= OnViewUnloaded;
 
             ClearValue(ViewModelTypeProperty);
         }
@@ -247,6 +277,26 @@ namespace Catel.Windows.Controls.MVVMProviders
         private void OnLogicTargetControlPropertyChanged(object sender, DependencyPropertyValueChangedEventArgs e)
         {
             TargetControlPropertyChanged.SafeInvoke(this, e);
+        }
+
+        private void OnViewLoading(object sender, EventArgs e)
+        {
+            ViewLoading.SafeInvoke(this);
+        }
+
+        private void OnViewLoaded(object sender, EventArgs e)
+        {
+            ViewLoaded.SafeInvoke(this);
+        }
+
+        private void OnViewUnloading(object sender, EventArgs e)
+        {
+            ViewUnloading.SafeInvoke(this);
+        }
+
+        private void OnViewUnloaded(object sender, EventArgs e)
+        {
+            ViewUnloaded.SafeInvoke(this);
         }
         #endregion
     }
