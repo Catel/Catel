@@ -24,8 +24,15 @@ Release date:
 
 Added/fixed (BREAKING CHANGES):
 ===============================
+(+) CTL-307 Added IViewModelContainer events for view load states (Loading, Loaded, Unloading, Unloaded). Catel now 
+    correctly handles large nested trees which are correctly unloaded and no dummy view models are being created any 
+    longer for sub views which are not yet (but about to be) unloaded. Catel is now aware that a view model is about 
+    to be unloaded when the DataContextChanged event occurs (before a view is actually unloaded). This is a breaking 
+    change for users that have implemented a custom base class for views. To fix the issue, implement the required 
+    events on the views as explained at https://catelproject.atlassian.net/wiki/display/CTL/Using+a+custom+control
 (-) CTL-273 Removed external container registration and synchronization support for the ServiceLocator. The reason
     for this is complex maintenance, bad performance (all done via reflection) and there are now better alternatives
+
 
 Added/fixed:
 ============
