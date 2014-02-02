@@ -7,22 +7,19 @@
 
 namespace Catel
 {
-    using System;
     using Catel.IoC;
     using Catel.Memento;
 
     /// <summary>
     /// Extensions.Memento module which allows the registration of default services in the service locator.
     /// </summary>
-    public static class ExtensionsMementoModule
+    public class ExtensionsMementoModule : IServiceLocatorInitializer
     {
-        #region Methods
         /// <summary>
-        /// Registers the services in the specified <see cref="IServiceLocator" />.
+        /// Initializes the specified service locator.
         /// </summary>
         /// <param name="serviceLocator">The service locator.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator"/> is <c>null</c>.</exception>
-        public static void RegisterServices(IServiceLocator serviceLocator)
+        public void Initialize(IServiceLocator serviceLocator)
         {
             Argument.IsNotNull(() => serviceLocator);
 
@@ -31,6 +28,5 @@ namespace Catel
                 serviceLocator.RegisterInstance(MementoService.Default);
             }
         }
-        #endregion
     }
 }

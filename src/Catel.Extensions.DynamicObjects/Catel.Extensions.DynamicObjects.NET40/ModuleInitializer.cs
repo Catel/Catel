@@ -21,7 +21,8 @@ namespace Catel.Extensions.DynamicObjects
         public static void Initialize()
         {
             var serviceLocator = ServiceLocator.Default;
-            ExtensionsDynamicObjectsModule.RegisterServices(serviceLocator);
+            var module = new ExtensionsDynamicObjectsModule();
+            module.Initialize(serviceLocator);
         }
         #endregion
     }

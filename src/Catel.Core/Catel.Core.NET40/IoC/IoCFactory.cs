@@ -8,7 +8,10 @@
 namespace Catel.IoC
 {
     using System;
+    using System.Collections.Generic;
+    using Catel.Caching;
     using Catel.Logging;
+    using Catel.Reflection;
 
     /// <summary>
     /// Factory responsible for creating IoC components.
@@ -23,6 +26,8 @@ namespace Catel.IoC
         private static Func<IServiceLocator> _createServiceLocatorFunc;
         private static Func<IServiceLocator, IDependencyResolver> _createDependencyResolverFunc;
         private static Func<IDependencyResolver, ITypeFactory> _createTypeFactoryFunc;
+
+        private static List<Type> _serviceLocatorInitializers = new List<Type>(); 
         #endregion
 
         #region Constructors
@@ -34,6 +39,8 @@ namespace Catel.IoC
             CreateServiceLocatorFunc = () => new ServiceLocator();
             CreateDependencyResolverFunc = serviceLocator => new CatelDependencyResolver(serviceLocator);
             CreateTypeFactoryFunc = dependencyResolver => new TypeFactory(dependencyResolver);
+
+            TypeCache.AssemblyLoaded += OnAssemblyLoaded;
         }
         #endregion
 
@@ -113,10 +120,24 @@ namespace Catel.IoC
 
         #region Methods
         /// <summary>
+        /// Called when an assembly gets loaded.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="AssemblyLoadedEventArgs"/> instance containing the event data.</param>
+        private static void OnAssemblyLoaded(object sender, AssemblyLoadedEventArgs e)
+        {
+            lock (_lockObject)
+            {
+                _serviceLocatorInitializers = null;
+            }
+        }
+
+        /// <summary>
         /// Creates a service locator with all the customized components.
         /// </summary>
-        /// <returns>The newly created <see cref="IServiceLocator"/>.</returns>
-        public static IServiceLocator CreateServiceLocator()
+        /// <param name="initializeServiceLocator">if set to <c>true</c>, the <see cref="IServiceLocator"/> will be initialized using the <see cref="IServiceLocatorInitializer"/> interface.</param>
+        /// <returns>The newly created <see cref="IServiceLocator" />.</returns>
+        public static IServiceLocator CreateServiceLocator(bool initializeServiceLocator = true)
         {
             lock (_lockObject)
             {
@@ -146,6 +167,28 @@ namespace Catel.IoC
 
                 serviceLocator.RegisterInstance(typeof (IDependencyResolver), dependencyResolver);
                 serviceLocator.RegisterInstance(typeof (ITypeFactory), typeFactory);
+
+                if (initializeServiceLocator)
+                {
+                    if (_serviceLocatorInitializers == null)
+                    {
+                        _serviceLocatorInitializers = new List<Type>(TypeCache.GetTypes(x => !x.IsInterfaceEx() & x.ImplementsInterfaceEx<IServiceLocatorInitializer>()));
+                    }
+
+                    foreach (var serviceLocatorInitializer in _serviceLocatorInitializers)
+                    {
+                        try
+                        {
+                            var initializer = (IServiceLocatorInitializer)Activator.CreateInstance(serviceLocatorInitializer);
+                            initializer.Initialize(serviceLocator);
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error(ex, "Failed to initialize service locator using initializer '{0}'", serviceLocatorInitializer.GetSafeFullName());
+                            throw;
+                        }
+                    }
+                }
 
                 return serviceLocator;
             }

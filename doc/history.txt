@@ -36,7 +36,6 @@ Added/fixed (BREAKING CHANGES):
 (-) CTL-273 Removed external container registration and synchronization support for the ServiceLocator. The reason
     for this is complex maintenance, bad performance (all done via reflection) and there are now better alternatives
 
-
 Added/fixed:
 ============
 (+) CTL-10 Added multilingual support with LanguageService and LanguageBinding (for XAML)
@@ -61,6 +60,8 @@ Added/fixed:
     actively close a view model when the back button is used
 (*) CTL-286 NavigationContext will now only be updated on the initial navigation for a view model
 (*) CTL-295 Improved LocationService for Windows Phone 8
+(*) CTL-320 All initialization modules in Catel now implement the IServiceLocatorInitializer interface. This allows
+    developers to create IServiceLocator initializers which will automatically be called when creating a service locator
 (x) CTL-232 XmlSerialization of complex types (interface collections of interfaces with each element of diff. class)
 (x) CTL-268 EF 6 extension does not register types automatically
 (x) CTL-275 Fixed implementation of StartUpInfoProvider Arguments property

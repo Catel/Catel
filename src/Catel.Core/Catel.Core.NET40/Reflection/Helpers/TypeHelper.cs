@@ -566,6 +566,34 @@ namespace Catel.Reflection
         }
 
         /// <summary>
+        /// Determines whether the specified type is a basic type. A basic type is one that can be wholly expressed
+        /// as an XML attribute. All primitive data types and <see cref="String"/> and <see cref="DateTime"/> are basic types.
+        /// </summary>
+        /// <param name="type">The type to check.</param>
+        /// <returns><c>true</c> if the specified type is a basic type; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
+        public static bool IsBasicType(Type type)
+        {
+            Argument.IsNotNull("type", type);
+
+            if (type == typeof(string) || type.IsPrimitiveEx() || type.IsEnumEx() || type == typeof(DateTime) || type == typeof(decimal) || type == typeof(Guid))
+            {
+                return true;
+            }
+
+            if (IsTypeNullable(type))
+            {
+                var underlyingNullableType = Nullable.GetUnderlyingType(type);
+                if (underlyingNullableType != null)
+                {
+                    return IsBasicType(type);
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
         ///   Checks whether the 2 specified objects are equal. This method is better, simple because it also checks boxing so
         ///   2 integers with the same values that are boxed are equal.
         /// </summary>

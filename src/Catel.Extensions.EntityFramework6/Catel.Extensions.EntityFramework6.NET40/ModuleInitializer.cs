@@ -20,7 +20,8 @@ namespace Catel.Extensions.EntityFramework5
         public static void Initialize()
         {
             var serviceLocator = ServiceLocator.Default;
-            ExtensionsEntityFramework6Module.RegisterServices(serviceLocator);
+            var module = new ExtensionsEntityFramework6Module();
+            module.Initialize(serviceLocator);
         }
     }
 }

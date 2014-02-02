@@ -22,7 +22,8 @@ namespace Catel.Extensions.FluentValidation
         public static void Initialize()
         {
             var serviceLocator = ServiceLocator.Default;
-            ExtensionsFluentValidationModule.RegisterServices(serviceLocator);
+            var module = new ExtensionsFluentValidationModule();
+            module.Initialize(serviceLocator);
         }
     }
 }

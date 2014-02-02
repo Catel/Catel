@@ -22,7 +22,8 @@ namespace Catel.Extensions.Data
         public static void Initialize()
         {
             var serviceLocator = ServiceLocator.Default;
-            ExtensionsDataModule.RegisterServices(serviceLocator);
+            var module = new ExtensionsDataModule();
+            module.Initialize(serviceLocator);
         }
     }
 }

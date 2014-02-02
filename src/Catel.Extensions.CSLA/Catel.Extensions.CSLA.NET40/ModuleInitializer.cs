@@ -22,7 +22,8 @@ namespace Catel.Extensions.CSLA
         public static void Initialize()
         {
             var serviceLocator = ServiceLocator.Default;
-            ExtensionsCSLAModule.RegisterServices(serviceLocator);
+            var module = new ExtensionsCSLAModule();
+            module.Initialize(serviceLocator);
         }
     }
 }

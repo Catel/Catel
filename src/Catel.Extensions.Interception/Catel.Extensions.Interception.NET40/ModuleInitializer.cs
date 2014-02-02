@@ -21,7 +21,8 @@ namespace Catel.Extensions.Interception
         public static void Initialize()
         {
             var serviceLocator = ServiceLocator.Default;
-            ExtensionsInterceptionModule.RegisterServices(serviceLocator);
+            var module = new ExtensionsInterceptionModule();
+            module.Initialize(serviceLocator);
         }
         #endregion
     }

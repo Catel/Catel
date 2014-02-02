@@ -22,7 +22,8 @@ namespace Catel.Mvc
         public static void Initialize()
         {
             var serviceLocator = ServiceLocator.Default;
-            MvcModule.RegisterServices(serviceLocator);
+            var module = new MvcModule();
+            module.Initialize(serviceLocator);
         }
     }
 }

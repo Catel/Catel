@@ -22,7 +22,8 @@ namespace Catel.Extensions.Prism
         public static void Initialize()
         {
             var serviceLocator = ServiceLocator.Default;
-            ExtensionsPrismModule.RegisterServices(serviceLocator);
+            var module = new ExtensionsPrismModule();
+            module.Initialize(serviceLocator);
         }
     }
 }

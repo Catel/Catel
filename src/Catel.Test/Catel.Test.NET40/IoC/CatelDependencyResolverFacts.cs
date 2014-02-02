@@ -46,7 +46,7 @@ namespace Catel.Test.IoC
                 var serviceLocator = IoCFactory.CreateServiceLocator();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
 
-                Assert.IsFalse(dependencyResolver.CanResolve(typeof(IMessageService)));
+                Assert.IsFalse(dependencyResolver.CanResolve(typeof(ITestInterface)));
             }
 
             [TestMethod]
@@ -88,7 +88,7 @@ namespace Catel.Test.IoC
                 serviceLocator.RegisterType<IMessageService, MessageService>();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
 
-                var typesToResolve = new[] { typeof(IMessageService), typeof(INavigationService), typeof(ITypeFactory) };
+                var typesToResolve = new[] { typeof(ITestInterface), typeof(INavigationService), typeof(ITypeFactory) };
 
                 Assert.IsFalse(dependencyResolver.CanResolveAll(typesToResolve));
             }
@@ -124,7 +124,7 @@ namespace Catel.Test.IoC
                 var serviceLocator = IoCFactory.CreateServiceLocator();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
 
-                Assert.IsNull(dependencyResolver.Resolve(typeof(IMessageService)));
+                Assert.IsNull(dependencyResolver.Resolve(typeof(ITestInterface)));
             }
 
             [TestMethod]
@@ -167,7 +167,7 @@ namespace Catel.Test.IoC
                 serviceLocator.RegisterType<IMessageService, MessageService>();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
 
-                var typesToResolve = new[] { typeof(IMessageService), typeof(INavigationService), typeof(ITypeFactory) };
+                var typesToResolve = new[] { typeof(IMessageService), typeof(ITestInterface), typeof(ITypeFactory) };
                 var resolvedTypes = dependencyResolver.ResolveAll(typesToResolve);
 
                 Assert.IsNotNull(resolvedTypes[0] as IMessageService);

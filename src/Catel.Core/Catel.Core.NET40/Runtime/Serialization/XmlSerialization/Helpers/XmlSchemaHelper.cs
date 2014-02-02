@@ -32,14 +32,16 @@ namespace Catel.Runtime.Serialization.Xml
         public static ILog Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
-        /// The default catel xml namespace.
-        /// </summary>
-        public const string DefaultNs = "http://schemas.datacontract.org/2004/07/";
-
-        /// <summary>
         /// Default xml schema.
         /// </summary>
         public const string Xmlns = "http://www.w3.org/2001/XMLSchema";
+        #endregion
+
+        #region Properties
+        private static IXmlNamespaceManager XmlNamespaceManager
+        {
+            get { return IoCConfiguration.DefaultDependencyResolver.Resolve<IXmlNamespaceManager>(); }
+        }
         #endregion
 
         #region Methods
@@ -96,7 +98,7 @@ namespace Catel.Runtime.Serialization.Xml
                              select x as XmlSchemaProviderAttribute).FirstOrDefault();
             if (attribute == null)
             {
-                if (IsBasicType(type))
+                if (TypeHelper.IsBasicType(type))
                 {
                     return new XmlQualifiedName(type.Name.ToLower(), Xmlns);
                 }
@@ -175,7 +177,7 @@ namespace Catel.Runtime.Serialization.Xml
                     else
                     {
                         propertySchemaElement.SchemaTypeName = AddTypeToSchemaSet(memberType, schemaSet, serializationManager);
-                        propertySchemaElement.IsNillable = IsNullableType(memberType);
+                        propertySchemaElement.IsNillable = TypeHelper.IsTypeNullable(memberType);
                         propertySchemaElement.MinOccurs = 0;
                     }
 
@@ -325,87 +327,11 @@ namespace Catel.Runtime.Serialization.Xml
         /// <returns>The namespace.</returns>
         private static string GetTypeNamespaceForSchema(Type type)
         {
-            return string.Format("{0}{1}", DefaultNs, type.Namespace);
-        }
+            var xmlNamespaceManager = XmlNamespaceManager;
+            var xmlNamespace = xmlNamespaceManager.GetNamespace(type, "ctl");
 
-        /// <summary>
-        /// Determines whether the specified type is a basic type. A basic type is one that can be wholly expressed
-        /// as an XML attribute. All primitive data types and <see cref="String"/> and <see cref="DateTime"/> are basic types.
-        /// </summary>
-        /// <param name="type">The type to check.</param>
-        /// <returns><c>true</c> if the specified type is a basic type; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        public static bool IsBasicType(Type type)
-        {
-            Argument.IsNotNull("type", type);
-
-            if (type == typeof(string) || type.IsPrimitive || type.IsEnum || type == typeof(DateTime) || type == typeof(decimal) || type == typeof(Guid))
-            {
-                return true;
-            }
-
-            Type nullableValueType;
-            if (IsNullable(type, out nullableValueType))
-            {
-                return IsBasicType(nullableValueType);
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Determines whether the specified type is a nullable type.
-        /// </summary>
-        /// <param name="type">The type to check.</param>
-        /// <returns><c>true</c> if the specified type is a nullable; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        public static bool IsNullableType(Type type)
-        {
-            Argument.IsNotNull("type", type);
-
-            if (!IsBasicType(type))
-            {
-                return true;
-            }
-
-            var typeToCheck = type;
-            if (!IsNullable(type, out typeToCheck))
-            {
-                typeToCheck = type;
-            }
-
-            if (typeToCheck == typeof(string))
-            {
-                return true;
-            }
-
-            if (typeToCheck == typeof(Guid))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Determines whether the specified type is nullable.
-        /// </summary>
-        /// <param name="type">The type to check.</param>
-        /// <param name="valueType">The value type of the corresponding nullable type.</param>
-        /// <returns><c>true</c> if the specified type is nullable; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="valueType"/> is <c>null</c>.</exception>
-        public static bool IsNullable(Type type, out Type valueType)
-        {
-            Argument.IsNotNull("type", type);
-
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
-            {
-                valueType = type.GetGenericArguments()[0];
-                return true;
-            }
-
-            valueType = null;
-            return false;
+            return string.Format("{0}{1}", xmlNamespace.Prefix, xmlNamespace.Uri);
+            //return string.Format("{0}{1}", DefaultNs, type.Namespace);
         }
         #endregion
     }

@@ -21,7 +21,8 @@ namespace Catel.MVVM
         public static void Initialize()
         {
             var serviceLocator = ServiceLocator.Default;
-            MVVMModule.RegisterServices(serviceLocator);
+            var module = new MVVMModule();
+            module.Initialize(serviceLocator);
         }
     }
 }

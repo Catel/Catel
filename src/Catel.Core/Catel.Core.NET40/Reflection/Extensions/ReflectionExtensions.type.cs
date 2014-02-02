@@ -479,6 +479,20 @@ namespace Catel.Reflection
         /// <summary>
         /// Returns whether the specified type implements the specified interface.
         /// </summary>
+        /// <typeparam name="TInterface">The type of the t interface.</typeparam>
+        /// <param name="type">The type.</param>
+        /// <returns><c>true</c> if the type implements the interface; otherwise <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        public static bool ImplementsInterfaceEx<TInterface>(this Type type)
+        {
+            Argument.IsNotNull("type", type);
+
+            return ImplementsInterfaceEx(type, typeof (TInterface));
+        }
+
+        /// <summary>
+        /// Returns whether the specified type implements the specified interface.
+        /// </summary>
         /// <param name="type">The type.</param>
         /// <param name="interfaceType">Type of the interface.</param>
         /// <returns><c>true</c> if the type implements the interface; otherwise <c>false</c>.</returns>
@@ -490,6 +504,23 @@ namespace Catel.Reflection
             Argument.IsNotNull("interfaceType", interfaceType);
 
             return IsAssignableFromEx(interfaceType, type);
+        }
+
+        /// <summary>
+        /// Returns whether the specified type is a primitive type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>The primitive type specification.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        public static bool IsPrimitiveEx(this Type type)
+        {
+            Argument.IsNotNull("type", type);
+
+#if NETFX_CORE
+            return type.GetTypeInfo().IsPrimitive;
+#else
+            return type.IsPrimitive;
+#endif
         }
 
         /// <summary>

@@ -90,7 +90,8 @@ namespace Catel.Core
 #endif
 
             var serviceLocator = ServiceLocator.Default;
-            CoreModule.RegisterServices(serviceLocator);
+            var module = new CoreModule();
+            module.Initialize(serviceLocator);
         }
     }
 }

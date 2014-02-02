@@ -483,6 +483,9 @@
     <Compile Include="..\Catel.Core.NET40\IoC\Interfaces\IServiceLocator.cs">
       <Link>IoC\Interfaces\IServiceLocator.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\Interfaces\IServiceLocatorInitializer.cs">
+      <Link>IoC\Interfaces\IServiceLocatorInitializer.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Interfaces\ITypeFactory.cs">
       <Link>IoC\Interfaces\ITypeFactory.cs</Link>
     </Compile>

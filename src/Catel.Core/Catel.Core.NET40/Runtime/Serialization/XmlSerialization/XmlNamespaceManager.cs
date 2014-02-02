@@ -25,6 +25,7 @@ namespace Catel.Runtime.Serialization.Xml
         private const string ArraySchemaUrl = "http://schemas.microsoft.com/2003/10/Serialization/Arrays";
         private const string ArraySchemaName = "arr";
         private const string NamespaceUriPrefix = "http://schemas.datacontract.org/2004/07/";
+
         private readonly Dictionary<string, XmlScopeNamespaceInfo> _scopeInfo = new Dictionary<string, XmlScopeNamespaceInfo>();
 
         /// <summary>
@@ -100,7 +101,7 @@ namespace Catel.Runtime.Serialization.Xml
                 string prefix = preferredPrefix;
                 string uri = string.Format("{0}{1}", NamespaceUriPrefix, typeNamespace);
 
-                if (type.IsValueTypeEx() || type == typeof (string))
+                if (TypeHelper.IsBasicType(type))
                 {
                     return null;
                 }
