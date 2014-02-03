@@ -595,9 +595,19 @@ namespace Catel.IoC
 
             try
             {
-                var parameters = _dependencyResolver.ResolveAll(parametersArray);
+                var parameters = new List<object>();
+                for (int i = 0; i < parametersArray.Length; i++)
+                {
+                    var ctorParameterValue = _dependencyResolver.Resolve(parametersArray[i]);
+                    if (ctorParameterValue == null)
+                    {
+                        return null;
+                    }
 
-                return TryCreateWithConstructorInjectionWithParameters(typeToConstruct, constructorInfo, parameters);
+                    parameters.Add(ctorParameterValue);
+                }
+
+                return TryCreateWithConstructorInjectionWithParameters(typeToConstruct, constructorInfo, parameters.ToArray());
             }
             catch (CircularDependencyException)
             {
@@ -641,6 +651,11 @@ namespace Catel.IoC
                 for (int i = parameters.Length; i < ctorParameters.Length; i++)
                 {
                     var ctorParameterValue = _dependencyResolver.Resolve(ctorParameters[i].ParameterType);
+                    if (ctorParameterValue == null)
+                    {
+                        return null;
+                    }
+
                     finalParameters.Add(ctorParameterValue);
                 }
 
