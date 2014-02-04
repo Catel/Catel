@@ -14,7 +14,7 @@ namespace Catel.Test.Data
     using System.Xml.Serialization;
     using Catel.Data;
     using Catel.Logging;
-
+    using Newtonsoft.Json;
 #if NET
     using System;
     using System.ComponentModel;
@@ -464,6 +464,68 @@ namespace Catel.Test.Data
                 var deserializedObject = SerializationTestHelper.SerializeAndDeserializeObject(complexHierarchy, SerializationMode.Xml);
 
                 Assert.IsTrue(complexHierarchy == deserializedObject);
+            }
+        }
+
+        [TestClass]
+        public class TheJsonSerialization
+        {
+#if NET
+            [Serializable]
+#endif
+            [JsonObject(MemberSerialization.OptIn)]
+            public class JsonExampleModel : ModelBase
+            {
+                /// <summary>
+                /// Initializes a new object from scratch.
+                /// </summary>
+                public JsonExampleModel()
+                {
+                }
+
+#if NET
+                /// <summary>
+                /// Initializes a new object based on <see cref="SerializationInfo"/>.
+                /// </summary>
+                /// <param name="info"><see cref="SerializationInfo"/> that contains the information.</param>
+                /// <param name="context"><see cref="StreamingContext"/>.</param>
+                protected JsonExampleModel(SerializationInfo info, StreamingContext context)
+                    : base(info, context)
+                {
+                }
+#endif
+                #region Properties
+                /// <summary>
+                /// Gets or sets the property value.
+                /// </summary>
+                [JsonProperty("name")]
+                public string Name
+                {
+                    get { return GetValue<string>(NameProperty); }
+                    set { SetValue(NameProperty, value); }
+                }
+
+                /// <summary>
+                /// Register the Place property so it is known in the class.
+                /// </summary>
+                public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+                #endregion
+            }
+
+            [TestMethod]
+            public void CanSerializeToJson()
+            {
+                
+            }
+
+            [TestMethod]
+            public void CanDeserializeFromJson()
+            {
+                const string json = "{ \"name\": \"Geert\" }";
+
+                var obj = JsonConvert.DeserializeObject<JsonExampleModel>(json);
+
+                Assert.AreEqual("Geert", obj.Name);
             }
         }
 
