@@ -273,7 +273,7 @@ namespace Catel.Collections
         }
 
         /// <summary>
-        /// the for each extension on <see cref="IEnumerable{TItem}"/>.
+        /// The for each extension on <see cref="IEnumerable{TItem}"/>.
         /// </summary>
         /// <typeparam name="TItem">The type of the item.</typeparam>
         /// <param name="collection">The collection.</param>
