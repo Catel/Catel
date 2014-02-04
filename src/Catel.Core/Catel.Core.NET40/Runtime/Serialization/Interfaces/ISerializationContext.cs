@@ -43,6 +43,12 @@ namespace Catel.Runtime.Serialization
         Type ModelType { get; }
 
         /// <summary>
+        /// Gets the depth of the current element being processed.
+        /// </summary>
+        /// <value>The depth.</value>
+        int Depth { get; }
+
+        /// <summary>
         /// Gets the context mode.
         /// </summary>
         /// <value>The context mode.</value>
