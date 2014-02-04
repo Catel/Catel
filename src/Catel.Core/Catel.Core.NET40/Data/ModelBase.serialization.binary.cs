@@ -95,6 +95,12 @@ namespace Catel.Data
         {
             IsDeserializedDataAvailable = true;
 
+            if (_serializationInfo == null)
+            {
+                // Probably a custom serializer which will populate us in a different way
+                return;
+            }
+
             var binarySerializer = SerializationFactory.GetBinarySerializer();
             var binarySerializationContext = new BinarySerializationContextInfo(_serializationInfo);
 
