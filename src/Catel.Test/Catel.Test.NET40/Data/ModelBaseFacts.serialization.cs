@@ -474,6 +474,49 @@ namespace Catel.Test.Data
             [Serializable]
 #endif
             [JsonObject(MemberSerialization.OptIn)]
+            public class JsonInnerModel : ModelBase
+            {
+                /// <summary>
+                /// Initializes a new object from scratch.
+                /// </summary>
+                public JsonInnerModel()
+                {
+                }
+
+#if NET
+                /// <summary>
+                /// Initializes a new object based on <see cref="SerializationInfo"/>.
+                /// </summary>
+                /// <param name="info"><see cref="SerializationInfo"/> that contains the information.</param>
+                /// <param name="context"><see cref="StreamingContext"/>.</param>
+                protected JsonInnerModel(SerializationInfo info, StreamingContext context)
+                    : base(info, context)
+                {
+                }
+#endif
+
+                #region Properties
+                /// <summary>
+                /// Gets or sets the property value.
+                /// </summary>
+                [JsonProperty("name")]
+                public string Name
+                {
+                    get { return GetValue<string>(NameProperty); }
+                    set { SetValue(NameProperty, value); }
+                }
+
+                /// <summary>
+                /// Register the Place property so it is known in the class.
+                /// </summary>
+                public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+                #endregion
+            }
+
+#if NET
+            [Serializable]
+#endif
+            [JsonObject(MemberSerialization.OptIn)]
             public class JsonExampleModel : ModelBase
             {
                 /// <summary>
@@ -509,13 +552,37 @@ namespace Catel.Test.Data
                 /// Register the Place property so it is known in the class.
                 /// </summary>
                 public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+
+                /// <summary>
+                /// Gets or sets the modules.
+                /// </summary>
+                [JsonProperty("modules")]
+                public ObservableCollection<JsonInnerModel> Modules
+                {
+                    get { return GetValue<ObservableCollection<JsonInnerModel>>(ModulesProperty); }
+                    set { SetValue(ModulesProperty, value); }
+                }
+
+                /// <summary>
+                /// Register the Modules property so it is known in the class.
+                /// </summary>
+                public static readonly PropertyData ModulesProperty = RegisterProperty("Modules", typeof(ObservableCollection<JsonInnerModel>), () => new ObservableCollection<JsonInnerModel>());
                 #endregion
             }
 
             [TestMethod]
             public void CanSerializeToJson()
             {
-                
+                var model = new JsonExampleModel();
+                model.Name = "Geert";
+                for (int i = 0; i < 3; i++)
+                {
+                    model.Modules.Add(new JsonInnerModel { Name = "Name " + (i + 1) });
+                }
+
+                var json = JsonConvert.SerializeObject(model);
+
+                Assert.AreEqual("{\"name\":\"Geert\",\"modules\":[{\"name\":\"Name 1\"},{\"name\":\"Name 2\"},{\"name\":\"Name 3\"}]}", json);
             }
 
             [TestMethod]
@@ -523,9 +590,9 @@ namespace Catel.Test.Data
             {
                 const string json = "{ \"name\": \"Geert\" }";
 
-                var obj = JsonConvert.DeserializeObject<JsonExampleModel>(json);
+                var model = JsonConvert.DeserializeObject<JsonExampleModel>(json);
 
-                Assert.AreEqual("Geert", obj.Name);
+                Assert.AreEqual("Geert", model.Name);
             }
         }
 
