@@ -20,7 +20,7 @@ Version 3.9.0
 
 Release date:
 =============
-2014/xx/xx
+2014/02/05
 
 Added/fixed (BREAKING CHANGES):
 ===============================
