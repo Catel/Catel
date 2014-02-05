@@ -295,36 +295,6 @@ namespace Catel.Logging
         /// <para />
         /// When an instance of the <see cref="DebugLogListener"/> is already registered, the existing instance
         /// is returned.
-        /// <para />
-        /// This method does not ignore Catel logging.
-        /// </summary>
-        /// <returns>The newly created or existing <see cref="DebugLogListener"/>.</returns>
-        [ObsoleteEx(Replacement = "AddDebugListener", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
-        public static ILogListener RegisterDebugListener()
-        {
-            return RegisterDebugListener(false);
-        }
-
-        /// <summary>
-        /// Registers the default debug listener. Starting with Catel 2.4, the debug listener is no longer
-        /// attached for performance reasons. To register the debug listener, call this method.
-        /// <para />
-        /// When an instance of the <see cref="DebugLogListener"/> is already registered, the existing instance
-        /// is returned.
-        /// </summary>
-        /// <returns>The newly created or existing <see cref="DebugLogListener"/>.</returns>
-        [ObsoleteEx(Replacement = "AddDebugListener", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
-        public static ILogListener RegisterDebugListener(bool ignoreCatelLogging)
-        {
-            return AddDebugListener(ignoreCatelLogging);
-        }
-
-        /// <summary>
-        /// Registers the default debug listener. Starting with Catel 2.4, the debug listener is no longer
-        /// attached for performance reasons. To register the debug listener, call this method.
-        /// <para />
-        /// When an instance of the <see cref="DebugLogListener"/> is already registered, the existing instance
-        /// is returned.
         /// </summary>
         /// <returns>The newly created or existing <see cref="DebugLogListener"/>.</returns>
         public static ILogListener AddDebugListener(bool ignoreCatelLogging = false)

@@ -37,23 +37,6 @@ namespace Catel.IoC
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="ServiceLocatorRegistrationAttribute" /> class.
-        /// </summary>
-        /// <param name="interfaceType">The type.</param>
-        /// <param name="registrationType">The registration type.</param>
-        /// <param name="tag">The tag.</param>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="interfaceType" /> is <c>null</c>.</exception>
-        [ObsoleteEx(Message = "Use ServiceLocatorRegistrationMode instead when using this attribute", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
-        public ServiceLocatorRegistrationAttribute(Type interfaceType, RegistrationType registrationType, object tag = null)
-        {
-            Argument.IsNotNull("InterfaceType", interfaceType);
-
-            InterfaceType = interfaceType;
-            RegistrationType = registrationType;
-            Tag = tag;
-        }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="ServiceLocatorRegistrationAttribute"/> class.
         /// </summary>
         /// <param name="interfaceType">Type of the interface.</param>

@@ -66,7 +66,6 @@
     </Compile>
     <Compile Include="Argument.cs" />
     <Compile Include="Attributes\CoverageExcludeAttribute.cs" />
-    <Compile Include="Caching\CacheFactory.cs" />
     <Compile Include="Caching\CacheStorage.cs" />
     <Compile Include="Caching\CacheStorageValueInfo.cs" />
     <Compile Include="Caching\Interfaces\ICacheStorage.cs" />
@@ -95,14 +94,12 @@
     <Compile Include="Argument.expression.cs" />
     <Compile Include="Configuration\Interfaces\IConfigurationService.cs" />
     <Compile Include="CoreModule.cs" />
-    <Compile Include="Data\Attributes\AllowNonSerializableMembersAttribute.cs" />
     <Compile Include="Data\Attributes\ExcludeFromValidationAttribute.cs" />
     <Compile Include="Data\Attributes\ValidateModelAttribute.cs" />
     <Compile Include="Data\AttributeValidatorProvider.cs" />
     <Compile Include="Data\ChangeNotificationWrapper.cs" />
     <Compile Include="Data\CompositeValidator.cs" />
     <Compile Include="Data\CompositeValidatorProvider.cs" />
-    <Compile Include="Data\DataObjectBase.cs" />
     <Compile Include="Data\EventArgs\AdvancedPropertyChangedEventArgs.cs" />
     <Compile Include="Data\EventArgs\AdvancedPropertyChangingEventArgs.cs" />
     <Compile Include="Data\Exceptions\InvalidPropertyException.cs" />
@@ -120,10 +117,8 @@
     <Compile Include="Data\Interfaces\IModelEqualityComparer.cs" />
     <Compile Include="Data\Interfaces\IAdvancedNotifyPropertyChanged.cs" />
     <Compile Include="Data\Interfaces\IAdvancedNotifyPropertyChanging.cs" />
-    <Compile Include="Data\Interfaces\IDataObjectBase.cs" />
     <Compile Include="Data\Interfaces\IModel.cs" />
     <Compile Include="Data\Interfaces\IParent.cs" />
-    <Compile Include="Data\Interfaces\ISavableDataObjectBase.cs" />
     <Compile Include="Data\Interfaces\ISavableModel.cs" />
     <Compile Include="Data\Interfaces\IValidationContext.cs" />
     <Compile Include="Data\Interfaces\IValidationResult.cs" />
@@ -144,7 +139,6 @@
     <Compile Include="Data\PropertyDataManager.cs" />
     <Compile Include="Data\CatelTypeInfo.cs" />
     <Compile Include="Data\PropertyValue.cs" />
-    <Compile Include="Data\SavableDataObjectBase.cs" />
     <Compile Include="Data\SavableModelBase.cs" />
     <Compile Include="Data\ValidationContext.cs" />
     <Compile Include="Data\ValidationResult.cs" />
@@ -168,9 +162,6 @@
     <Compile Include="ExceptionHandling\Policies\PolicyBase.cs" />
     <Compile Include="ExceptionHandling\Policies\RetryPolicy.cs" />
     <Compile Include="Exceptions\NotSupportedInPlatformException.cs" />
-    <Compile Include="Exceptions\NotSupportedInSilverlightException.cs" />
-    <Compile Include="Exceptions\NotSupportedInWindowsPhone7Exception.cs" />
-    <Compile Include="Exceptions\NotSupportedInWindows8Exception.cs" />
     <Compile Include="ExceptionHandling\Extensions\ExceptionExtensions.cs" />
     <Compile Include="Filtering\CompositeFilter.cs" />
     <Compile Include="Filtering\CompositePredicate.cs" />
@@ -216,11 +207,9 @@
     <Compile Include="IoC\Extensions\ObjectExtensions.cs" />
     <Compile Include="IoC\Extensions\ServiceLocatorExtensions.cs" />
     <Compile Include="IoC\Extensions\TypeFactoryExtensions.cs" />
-    <Compile Include="IoC\Helpers\DependencyInjectionHelper.cs" />
     <Compile Include="IoC\Interfaces\IDependencyResolverManager.cs" />
     <Compile Include="IoC\Interfaces\IDependencyResolver.cs" />
     <Compile Include="IoC\LateBoundImplementation.cs" />
-    <Compile Include="IoC\Interfaces\IExternalContainerHelper.cs" />
     <Compile Include="IoC\Interfaces\INeedCustomInitialization.cs" />
     <Compile Include="IoC\Interfaces\IRegistrationConvention.cs" />
     <Compile Include="IoC\Interfaces\IServiceLocator.cs" />

@@ -25,7 +25,6 @@ namespace Catel.Windows.Controls
     using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
 #else
     using System.Windows.Controls;
-    using IDataObject = Catel.Data.IDataObject;
     using UIEventArgs = System.EventArgs;
 #endif
 

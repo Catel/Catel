@@ -14,7 +14,7 @@ namespace Catel.MVVM.Tasks
     /// The task base.
     /// </summary>
     /// <remarks>
-    /// This class inherits from <see cref="DataObjectBase" /> in use it as model as part of the wizard view models.
+    /// This class inherits from <see cref="ModelBase" /> in use it as model as part of the wizard view models.
     /// </remarks>
     public abstract class TaskBase : ModelBase, ITask
     {

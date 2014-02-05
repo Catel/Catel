@@ -198,15 +198,6 @@ namespace Catel.MVVM
 #endif
         private readonly Dictionary<string, ViewModelToModelMapping> _viewModelToModelMap = new Dictionary<string, ViewModelToModelMapping>();
 
-#if NET
-        /// <summary>
-        /// The cached property descriptors. If the property is empty, the property descriptors are yet to be built. Otherwise
-        /// this list can be used to return the cached property descriptors.
-        /// </summary>
-        [field: NonSerialized]
-        private PropertyDescriptorCollection _propertyDescriptors;
-#endif
-
         /// <summary>
         /// The backing field for the title property.
         /// </summary>
@@ -354,28 +345,12 @@ namespace Catel.MVVM
 
             _ignoreMultipleModelsWarning = ignoreMultipleModelsWarning;
 
-            if (serviceLocator != null)
+            if (serviceLocator == null)
             {
-                Log.Debug("Using a custom instance of the IServiceLocator");
-
-                ServiceLocator = serviceLocator;
-            }
-            else
-            {
-                Log.Debug("Using the default instance of the IServiceLocator");
-
-                // We always need an IoC provider
-                ServiceLocator = IoCConfiguration.DefaultServiceLocator;
+                serviceLocator = ServiceLocator.Default;
             }
 
-            DependencyResolver = ServiceLocator.ResolveType<IDependencyResolver>();
-
-            Log.Debug("Registering view model services");
-
-            RegisterViewModelServices(ServiceLocator);
-
-            Log.Debug("Registered view model services");
-
+            DependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
             _dispatcherService = DependencyResolver.Resolve<IDispatcherService>();
 
             // In silverlight, automatically invalidate commands when property changes
@@ -628,14 +603,6 @@ namespace Catel.MVVM
         }
 
         /// <summary>
-        /// Gets the service locator that provides all the implementations for interfaces required by the view-model.
-        /// </summary>
-        /// <value>The service locator.</value>
-        [ObsoleteEx(Message = "ServiceLocator is no longer recommended to retrieve the types, use the DependencyResolver instead", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
-        [ExcludeFromValidation]
-        protected IServiceLocator ServiceLocator { get; private set; }
-
-        /// <summary>
         /// Gets the dependency resolver.
         /// </summary>
         /// <value>The dependency resolver.</value>
@@ -693,27 +660,6 @@ namespace Catel.MVVM
             _modelObjectsInfo.AddRange(metaData.Models);
             _viewModelToModelMap.AddRange(metaData.Mappings);
             _validationSummaries.AddRange(metaData.Validations);
-
-#if NET
-            var viewModelProperties = _viewModelPropertiesByType[viewModelType];
-            _propertyDescriptors = new PropertyDescriptorCollection(null);
-            foreach (ViewModelPropertyDescriptor propertyDescriptor in metaData.PropertyDescriptors)
-            {
-                // Since this is a dynamically exposed property, it must be registered
-                var propertyName = propertyDescriptor.Name;
-                if (!IsPropertyRegistered(propertyName))
-                {
-                    // Make sure that this is not a view model property itself
-                    if (!viewModelProperties.Contains(propertyName))
-                    {
-                        var propertyData = RegisterProperty(propertyName, propertyDescriptor.PropertyType);
-                        InitializePropertyAfterConstruction(propertyData);
-                    }
-                }
-
-                _propertyDescriptors.Add(ViewModelPropertyDescriptorFactory.CreatePropertyDescriptor(this, propertyDescriptor));
-            }
-#endif
         }
 
         /// <summary>
@@ -724,7 +670,6 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="viewModelType">Type of the view model.</param>
         /// <returns>ViewModelMetadata.</returns>
-        /// <exception cref="InvalidOperationException">The ExposeAttribute can only be used on a property that is also decorated with the ModelAttribute.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType" /> is <c>null</c>.</exception>
         private static ViewModelMetadata InitializeViewModelMetaData(Type viewModelType)
         {
@@ -735,19 +680,6 @@ namespace Catel.MVVM
 
             var properties = new List<PropertyInfo>();
             properties.AddRange(viewModelType.GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(true, false, true)));
-
-#if NET
-            var propertyDescriptors = new List<ViewModelPropertyDescriptor>();
-
-            // All already registered properties
-            var existingProperties = viewModelType.GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(true, false));
-            foreach (var existingProperty in existingProperties)
-            {
-                var attributes = existingProperty.GetCustomAttributesEx(true);
-                var propertyDescriptor = ViewModelPropertyDescriptorFactory.CreatePropertyDescriptor(null, existingProperty.Name, existingProperty.PropertyType, attributes);
-                propertyDescriptors.Add(propertyDescriptor);
-            }
-#endif
 
             var modelObjectsInfo = new Dictionary<string, ModelInfo>();
             var viewModelToModelMap = new Dictionary<string, ViewModelToModelMapping>();
@@ -780,52 +712,6 @@ namespace Catel.MVVM
                 }
                 #endregion
 
-                #region Expose attributes
-#if NET
-                var exposeAttributes = propertyInfo.GetCustomAttributesEx(typeof(ExposeAttribute), true);
-                if (exposeAttributes.Length > 0)
-                {
-                    if (!modelObjectsInfo.ContainsKey(propertyInfo.Name))
-                    {
-                        Log.Error("The ExposeAttribute can only be used on a property that is also decorated with the ModelAttribute");
-                        throw new InvalidOperationException("The ExposeAttribute can only be used on a property that is also decorated with the ModelAttribute");
-                    }
-
-                    foreach (ExposeAttribute exposeAttribute in exposeAttributes)
-                    {
-                        // Manual mapping, treat the same as a ViewModelToModelAttribute
-                        if (!viewModelToModelMap.ContainsKey(exposeAttribute.PropertyName))
-                        {
-                            viewModelToModelMap.Add(exposeAttribute.PropertyName, new ViewModelToModelMapping(exposeAttribute.PropertyName, propertyInfo.Name, exposeAttribute.PropertyNameOnModel, exposeAttribute.Mode));
-                        }
-
-                        var modelPropertyInfo = propertyInfo.PropertyType.GetPropertyEx(exposeAttribute.PropertyNameOnModel);
-                        if (modelPropertyInfo == null)
-                        {
-                            string error = string.Format("The property '{0}' is not available on model '{1}' so cannot be mapped",
-                                exposeAttribute.PropertyNameOnModel, propertyInfo.PropertyType.Name);
-
-                            Log.Error(error);
-                            throw new InvalidOperationException(error);
-                        }
-
-                        if ((modelPropertyInfo.GetSetMethod() == null) && (exposeAttribute.Mode != ViewModelToModelMode.OneWay))
-                        {
-                            string error = string.Format("The property '{0}' is read-only on model '{1}', but the mode is not OneWay",
-                                exposeAttribute.PropertyNameOnModel, propertyInfo.PropertyType.Name);
-
-                            Log.Error(error);
-                            throw new InvalidOperationException(error);
-                        }
-
-                        var attributes = modelPropertyInfo.GetCustomAttributesEx(true);
-                        var propertyDescriptor = ViewModelPropertyDescriptorFactory.CreatePropertyDescriptor(null, exposeAttribute.PropertyName, modelPropertyInfo.PropertyType, attributes);
-                        propertyDescriptors.Add(propertyDescriptor);
-                    }
-                }
-#endif
-                #endregion
-
                 #region ValidationToViewModel attributes
                 var validationToViewModelAttribute = propertyInfo.GetCustomAttributeEx(typeof(ValidationToViewModelAttribute), true) as ValidationToViewModelAttribute;
                 if (validationToViewModelAttribute != null)
@@ -844,11 +730,7 @@ namespace Catel.MVVM
                 #endregion
             }
 
-#if NET
-            _metaData.Add(viewModelType, new ViewModelMetadata(viewModelType, modelObjectsInfo, viewModelToModelMap, validationSummaries, propertyDescriptors));
-#else
             _metaData.Add(viewModelType, new ViewModelMetadata(viewModelType, modelObjectsInfo, viewModelToModelMap, validationSummaries));
-#endif
 
             return _metaData[viewModelType];
         }
@@ -1572,18 +1454,6 @@ namespace Catel.MVVM
         #endregion
 
         #region Services
-        /// <summary>
-        /// Gets the service of the specified type.
-        /// </summary>
-        /// <typeparam name="T">Type of the service.</typeparam>
-        /// <param name="tag">The tag.</param>
-        /// <returns>Service object or <c>null</c> if the service is not found.</returns>
-        [ObsoleteEx(Message = "GetService is no longer recommended. It is better to inject all dependencies (which the TypeFactory fully supports)", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
-        public T GetService<T>(object tag = null)
-        {
-            return (T)DependencyResolver.Resolve(typeof(T), tag);
-        }
-
         /// <summary>
         /// Registers the default view model services.
         /// </summary>

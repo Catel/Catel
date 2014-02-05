@@ -129,9 +129,6 @@
     <Compile Include="..\Catel.Core.NET40\Attributes\CoverageExcludeAttribute.cs">
       <Link>Attributes\CoverageExcludeAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\Caching\CacheFactory.cs">
-      <Link>Caching\CacheFactory.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Core.NET40\Caching\CacheStorage.cs">
       <Link>Caching\CacheStorage.cs</Link>
     </Compile>
@@ -204,9 +201,6 @@
     <Compile Include="..\Catel.Core.NET40\CoreModule.cs">
       <Link>CoreModule.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\Data\Attributes\AllowNonSerializableMembersAttribute.cs">
-      <Link>Data\Attributes\AllowNonSerializableMembersAttribute.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\Attributes\ExcludeFromValidationAttribute.cs">
       <Link>Data\Attributes\ExcludeFromValidationAttribute.cs</Link>
     </Compile>
@@ -227,9 +221,6 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\CompositeValidatorProvider.cs">
       <Link>Data\CompositeValidatorProvider.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\Data\DataObjectBase.cs">
-      <Link>Data\DataObjectBase.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\EventArgs\AdvancedPropertyChangedEventArgs.cs">
       <Link>Data\EventArgs\AdvancedPropertyChangedEventArgs.cs</Link>
@@ -279,9 +270,6 @@
     <Compile Include="..\Catel.Core.NET40\Data\Interfaces\IAdvancedNotifyPropertyChanging.cs">
       <Link>Data\Interfaces\IAdvancedNotifyPropertyChanging.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\Data\Interfaces\IDataObjectBase.cs">
-      <Link>Data\Interfaces\IDataObjectBase.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\Interfaces\IModel.cs">
       <Link>Data\Interfaces\IModel.cs</Link>
     </Compile>
@@ -290,9 +278,6 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\Interfaces\IParent.cs">
       <Link>Data\Interfaces\IParent.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\Data\Interfaces\ISavableDataObjectBase.cs">
-      <Link>Data\Interfaces\ISavableDataObjectBase.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\Interfaces\ISavableModel.cs">
       <Link>Data\Interfaces\ISavableModel.cs</Link>
@@ -347,9 +332,6 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\PropertyValue.cs">
       <Link>Data\PropertyValue.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\Data\SavableDataObjectBase.cs">
-      <Link>Data\SavableDataObjectBase.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\SavableModelBase.cs">
       <Link>Data\SavableModelBase.cs</Link>
@@ -419,15 +401,6 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Exceptions\NotSupportedInPlatformException.cs">
       <Link>Exceptions\NotSupportedInPlatformException.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\Exceptions\NotSupportedInSilverlightException.cs">
-      <Link>Exceptions\NotSupportedInSilverlightException.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\Exceptions\NotSupportedInWindowsPhone7Exception.cs">
-      <Link>Exceptions\NotSupportedInWindowsPhone7Exception.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\Exceptions\NotSupportedInWindows8Exception.cs">
-      <Link>Exceptions\NotSupportedInWindows8Exception.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Filtering\CompositeFilter.cs">
       <Link>Filtering\CompositeFilter.cs</Link>
@@ -537,17 +510,11 @@
     <Compile Include="..\Catel.Core.NET40\IoC\Extensions\TypeFactoryExtensions.cs">
       <Link>IoC\Extensions\TypeFactoryExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\IoC\Helpers\DependencyInjectionHelper.cs">
-      <Link>IoC\Helpers\DependencyInjectionHelper.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Interfaces\IDependencyResolver.cs">
       <Link>IoC\Interfaces\IDependencyResolver.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Interfaces\IDependencyResolverManager.cs">
       <Link>IoC\Interfaces\IDependencyResolverManager.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\IoC\Interfaces\IExternalContainerHelper.cs">
-      <Link>IoC\Interfaces\IExternalContainerHelper.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Interfaces\INeedCustomInitialization.cs">
       <Link>IoC\Interfaces\INeedCustomInitialization.cs</Link>

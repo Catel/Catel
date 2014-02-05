@@ -10,7 +10,7 @@ namespace Catel.Data
     using System.Globalization;
 
     /// <summary>
-    /// Exception when a property is used by the <see cref="ModelBase{TModel}"/> class that is
+    /// Exception when a property is used by the <see cref="ModelBase"/> class that is
     /// not registered by the object.
     /// </summary>
     public class PropertyNotRegisteredException : Exception

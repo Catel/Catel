@@ -27,7 +27,7 @@ namespace Catel.Data
 #endif
 
     /// <summary>
-    /// Abstract class that makes the <see cref="ModelBase{TModelBase}"/> serializable.
+    /// Abstract class that makes the <see cref="ModelBase"/> serializable.
     /// </summary>
     /// <typeparam name="T">Type that the class should hold (same as the defined type).</typeparam>
 #if NET
@@ -98,7 +98,7 @@ namespace Catel.Data
 
                 memoryStream.Position = 0L;
 
-                using (XmlReader xmlReader = XmlReader.Create(memoryStream))
+                using (var xmlReader = XmlReader.Create(memoryStream))
                 {
                     return XDocument.Load(xmlReader);
                 }
@@ -214,183 +214,7 @@ namespace Catel.Data
         #endregion
 
         #region Loading
-        #region OBSOLETE
-#if NET
-        /// <summary>
-        /// Loads the object from a file using binary formatting.
-        /// </summary>
-        /// <param name="fileName">Filename of the file that contains the serialized data of this object.</param>
-        /// <param name="enableRedirects">if set to <c>true</c>, redirects will be enabled.</param>
-        /// <returns>Deserialized instance of the object. If the deserialization fails, <c>null</c> is returned.</returns>
-        /// <remarks>
-        /// When enableRedirects is enabled, loading will take more time. Only set
-        /// the parameter to <c>true</c> when the deserialization without redirects fails.
-        /// </remarks>
-        [ObsoleteEx(Message = "Serialization will be simplified", Replacement = "Load<T>(Stream, SerializationMode) or Load(Type, Stream, SerializationMode)", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
-        public static T Load(string fileName, bool enableRedirects = false)
-        {
-            return Load<T>(fileName, enableRedirects);
-        }
-#elif NETFX_CORE
-        /// <summary>
-        /// Loads the object from a file using binary formatting.
-        /// </summary>
-        /// <param name="fileStream">File stream of the file that contains the serialized data of this object.</param>
-        /// <param name="enableRedirects">if set to <c>true</c>, redirects will be enabled.</param>
-        /// <returns>Deserialized instance of the object. If the deserialization fails, <c>null</c> is returned.</returns>
-        /// <remarks>
-        /// When enableRedirects is enabled, loading will take more time. Only set
-        /// the parameter to <c>true</c> when the deserialization without redirects fails.
-        /// </remarks>
-        [ObsoleteEx(Message = "Serialization will be simplified", Replacement = "Load<T>(Stream, SerializationMode) or Load(Type, Stream, SerializationMode)", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
-        public static T Load(IRandomAccessStream fileStream, bool enableRedirects = false)
-        {
-            return Load<T>(fileStream, enableRedirects);
-        }
-#elif PCL
-        // Not supported in Portable Class Library
-#else
-        /// <summary>
-        /// Loads the object from a file using binary formatting.
-        /// </summary>
-        /// <param name="fileStream">File stream of the file that contains the serialized data of this object.</param>
-        /// <param name="enableRedirects">if set to <c>true</c>, redirects will be enabled.</param>
-        /// <returns>Deserialized instance of the object. If the deserialization fails, <c>null</c> is returned.</returns>
-        /// <remarks>
-        /// When enableRedirects is enabled, loading will take more time. Only set
-        /// the parameter to <c>true</c> when the deserialization without redirects fails.
-        /// </remarks>
-        [ObsoleteEx(Message = "Serialization will be simplified", Replacement = "Load<T>(Stream, SerializationMode) or Load(Type, Stream, SerializationMode)", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
-        public static T Load(IsolatedStorageFileStream fileStream, bool enableRedirects = false)
-        {
-            return Load<T>(fileStream, enableRedirects);
-        }
-#endif
-
-#if NET
-        /// <summary>
-        /// Loads the object from a file using a specific formatting.
-        /// </summary>
-        /// <param name="fileName">Filename of the file that contains the serialized data of this object.</param>
-        /// <param name="mode"><see cref="SerializationMode"/> to use.</param>
-        /// <param name="enableRedirects">if set to <c>true</c>, redirects will be enabled.</param>
-        /// <returns>Deserialized instance of the object. If the deserialization fails, <c>null</c> is returned.</returns>
-        /// <remarks>
-        /// When enableRedirects is enabled, loading will take more time. Only set
-        /// the parameter to <c>true</c> when the deserialization without redirects fails.
-        /// </remarks>
-        [ObsoleteEx(Message = "Serialization will be simplified", Replacement = "Load<T>(Stream, SerializationMode) or Load(Type, Stream, SerializationMode)", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
-        public static T Load(string fileName, SerializationMode mode, bool enableRedirects)
-        {
-            return Load<T>(fileName, mode, enableRedirects);
-        }
-#elif NETFX_CORE
-        /// <summary>
-        /// Loads the object from a file using a specific formatting.
-        /// </summary>
-        /// <param name="fileStream">File stream of the file that contains the serialized data of this object.</param>
-        /// <param name="mode"><see cref="SerializationMode"/> to use.</param>
-        /// <param name="enableRedirects">if set to <c>true</c>, redirects will be enabled.</param>
-        /// <returns>Deserialized instance of the object. If the deserialization fails, <c>null</c> is returned.</returns>
-        /// <remarks>
-        /// When enableRedirects is enabled, loading will take more time. Only set
-        /// the parameter to <c>true</c> when the deserialization without redirects fails.
-        /// </remarks>
-        [ObsoleteEx(Message = "Serialization will be simplified", Replacement = "Load<T>(Stream, SerializationMode) or Load(Type, Stream, SerializationMode)", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
-        public static T Load(IRandomAccessStream fileStream, SerializationMode mode, bool enableRedirects)
-        {
-            return Load<T>(fileStream, mode, enableRedirects);
-        }
-#elif PCL
-        // Not supported in Portable Class Library
-#else
-        /// <summary>
-        /// Loads the object from a file using a specific formatting.
-        /// </summary>
-        /// <param name="fileStream">File stream of the file that contains the serialized data of this object.</param>
-        /// <param name="mode"><see cref="SerializationMode"/> to use.</param>
-        /// <param name="enableRedirects">if set to <c>true</c>, redirects will be enabled.</param>
-        /// <returns>Deserialized instance of the object. If the deserialization fails, <c>null</c> is returned.</returns>
-        /// <remarks>
-        /// When enableRedirects is enabled, loading will take more time. Only set
-        /// the parameter to <c>true</c> when the deserialization without redirects fails.
-        /// </remarks>
-        [ObsoleteEx(Message = "Serialization will be simplified", Replacement = "Load<T>(Stream, SerializationMode) or Load(Type, Stream, SerializationMode)", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
-        public static T Load(IsolatedStorageFileStream fileStream, SerializationMode mode, bool enableRedirects)
-        {
-            return Load<T>(fileStream, mode, enableRedirects);
-        }
-#endif
-
-        /// <summary>
-        /// Loads the object from a stream.
-        /// </summary>
-        /// <param name="bytes">The byte array.</param>
-        /// <param name="enableRedirects">if set to <c>true</c>, redirects will be enabled.</param>
-        /// <returns>
-        /// Deserialized instance of the object. If the deserialization fails, <c>null</c> is returned.
-        /// </returns>
-        /// <remarks>
-        /// When enableRedirects is enabled, loading will take more time. Only set
-        /// the parameter to <c>true</c> when the deserialization without redirects fails.
-        /// </remarks>
-        [ObsoleteEx(Message = "Serialization will be simplified", Replacement = "Load<T>(Stream, SerializationMode) or Load(Type, Stream, SerializationMode)", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
-        public static T Load(byte[] bytes, bool enableRedirects = false)
-        {
-            return Load<T>(bytes, enableRedirects);
-        }
-
-        /// <summary>
-        /// Loads the specified stream.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <param name="enableRedirects">if set to <c>true</c>, redirects will be enabled.</param>
-        /// <returns>Deserialized instance of the object. If the deserialization fails, <c>null</c> is returned.</returns>
-        /// <remarks>
-        /// When enableRedirects is enabled, loading will take more time. Only set
-        /// the parameter to <c>true</c> when the deserialization without redirects fails.
-        /// </remarks>
-        [ObsoleteEx(Message = "Serialization will be simplified", Replacement = "Load<T>(Stream, SerializationMode) or Load(Type, Stream, SerializationMode)", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
-        public static T Load(Stream stream, bool enableRedirects = false)
-        {
-            return Load<T>(stream, enableRedirects);
-        }
-
-        /// <summary>
-        /// Loads the object from a stream using a specific formatting.
-        /// </summary>
-        /// <param name="stream">Stream that contains the serialized data of this object.</param>
-        /// <param name="mode"><see cref="SerializationMode"/> to use.</param> 
-        /// <param name="enableRedirects">if set to <c>true</c>, redirects will be enabled.</param>
-        /// <returns>Deserialized instance of the object. If the deserialization fails, <c>null</c> is returned.</returns>
-        /// <remarks>
-        /// When enableRedirects is enabled, loading will take more time. Only set
-        /// the parameter to <c>true</c> when the deserialization without redirects fails.
-        /// </remarks>
-        [ObsoleteEx(Message = "Serialization will be simplified", Replacement = "Load<T>(Stream, SerializationMode) or Load(Type, Stream, SerializationMode)", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
-        public static T Load(Stream stream, SerializationMode mode, bool enableRedirects)
-        {
-            return Load<T>(stream, mode, enableRedirects);
-        }
-        #endregion
-
-
-#if NET
-        /// <summary>
-        /// Loads the object from a file using a specific formatting.
-        /// </summary>
-        /// <param name="fileName">Filename of the file that contains the serialized data of this object.</param>
-        /// <param name="mode"><see cref="SerializationMode"/> to use.</param>
-        /// <returns>Deserialized instance of the object. If the deserialization fails, <c>null</c> is returned.</returns>
-        /// <remarks>
-        /// When enableRedirects is enabled, loading will take more time. Only set
-        /// the parameter to <c>true</c> when the deserialization without redirects fails.
-        /// </remarks>
-        public static T Load(string fileName, SerializationMode mode)
-        {
-            return Load<T>(fileName, mode);
-        }
-#elif NETFX_CORE
+#if NETFX_CORE
         /// <summary>
         /// Loads the object from a file using a specific formatting.
         /// </summary>
@@ -403,11 +227,11 @@ namespace Catel.Data
         /// </remarks>
         public static T Load(IRandomAccessStream fileStream, SerializationMode mode)
         {
-            return Load<T>(fileStream, mode);
+            return Load<T>((Stream)fileStream, mode);
         }
 #elif PCL
         // Not supported in Portable Class Library
-#else
+#elif SILVERLIGHT
         /// <summary>
         /// Loads the object from a file using a specific formatting.
         /// </summary>

@@ -158,12 +158,16 @@
 
             Assert.AreEqual(((IParent)child).Parent, parent);
 
-            var file = _filesHelper.GetTempFile();
-            parent.Save(file);
+            using (var memoryStream = new MemoryStream())
+            {
+                parent.Save(memoryStream, SerializationMode.Binary);
 
-            var loadedParent = ModelBase.Load<Parent>(file, SerializationMode.Binary);
+                memoryStream.Position = 0L;
 
-            Assert.AreEqual(parent, ((IParent)loadedParent.Children[0]).Parent);
+                var loadedParent = ModelBase.Load<Parent>(memoryStream, SerializationMode.Binary);
+
+                Assert.AreEqual(parent, ((IParent)loadedParent.Children[0]).Parent);
+            }
         }
 #endif
 
@@ -798,7 +802,7 @@
         }
         #endregion
 
-        #region Non magic string property registration overload 
+        #region Non magic string property registration overload
 #if !NETFX_CORE
         [TestMethod]
         public void PropertiesAreActuallyRegistered()
@@ -814,32 +818,32 @@
         public void PropertiesAreActuallyRegisteredWithDefaultValues()
         {
             var instance = new ClassWithPropertiesRegisteredByNonMagicStringOverload();
-            Assert.AreEqual(ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyWithSpecifiedDefaultValueProperty.GetDefaultValue<string>(), instance.StringPropertyWithSpecifiedDefaultValue); 
+            Assert.AreEqual(ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyWithSpecifiedDefaultValueProperty.GetDefaultValue<string>(), instance.StringPropertyWithSpecifiedDefaultValue);
             Assert.AreEqual(ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyProperty.GetDefaultValue<string>(), instance.StringProperty);
             Assert.AreEqual(ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyWithPropertyChangeNoticationProperty.GetDefaultValue<int>(), instance.IntPropertyWithPropertyChangeNotication);
-            Assert.AreEqual(ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyExcludedFromSerializationAndBackupProperty.GetDefaultValue<int>(), instance.IntPropertyExcludedFromSerializationAndBackup); 
-        }       
-        
+            Assert.AreEqual(ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyExcludedFromSerializationAndBackupProperty.GetDefaultValue<int>(), instance.IntPropertyExcludedFromSerializationAndBackup);
+        }
+
         [TestMethod]
         public void PropertiesAreActuallyRegisteredWithTheSpecifiedConfigurationForSerializationAndBackup()
         {
-            Assert.AreEqual(true, ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyWithSpecifiedDefaultValueProperty.IncludeInSerialization); 
+            Assert.AreEqual(true, ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyWithSpecifiedDefaultValueProperty.IncludeInSerialization);
             Assert.AreEqual(true, ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyProperty.IncludeInSerialization);
             Assert.AreEqual(true, ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyWithPropertyChangeNoticationProperty.IncludeInSerialization);
-            
+
             Assert.AreEqual(true, ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyWithSpecifiedDefaultValueProperty.IncludeInBackup);
             Assert.AreEqual(true, ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyProperty.IncludeInBackup);
             Assert.AreEqual(true, ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyWithPropertyChangeNoticationProperty.IncludeInBackup);
 
-            Assert.AreEqual(false, ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyExcludedFromSerializationAndBackupProperty.IncludeInSerialization); 
-            Assert.AreEqual(false, ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyExcludedFromSerializationAndBackupProperty.IncludeInBackup); 
+            Assert.AreEqual(false, ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyExcludedFromSerializationAndBackupProperty.IncludeInSerialization);
+            Assert.AreEqual(false, ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyExcludedFromSerializationAndBackupProperty.IncludeInBackup);
         }
 
         [TestMethod]
         public void PropertiesAreRegisteredWithPropertyChangeNotification()
         {
             Assert.IsNotNull(ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyWithPropertyChangeNoticationProperty.PropertyChangedEventHandler);
-            
+
             var random = new Random();
             int maxPropertyChanges = random.Next(0, 15);
             var instance = new ClassWithPropertiesRegisteredByNonMagicStringOverload();
@@ -897,7 +901,7 @@
             Assert.IsTrue(model.IsPropertyRegistered("ReferenceTypeWithDefaultValue"));
         }
 #endif
-        #endregion 
+        #endregion
 
         /// <summary>
         /// Saves the object to memory stream so the <see cref="IModel.IsDirty"/> property is set to false.

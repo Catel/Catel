@@ -35,7 +35,6 @@ Post release steps:
 ===================
 
 1)  Update the following version numbers:
-     * Version numbers in final builder
      * History.txt
      * SolutionAssemblyInfo.cs
 2)  Update version numbers in the Catel project in Continua CI

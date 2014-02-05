@@ -63,18 +63,6 @@ namespace Catel.Data
 
         #region Methods
         /// <summary>
-        /// Gets the properties of a specific type.
-        /// </summary>
-        /// <param name="type">The type for which the properties to return.</param>
-        /// <returns>Dictionary with the properties.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        [ObsoleteEx(Replacement = "Use GetPropertyDataTypeInfo instead", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
-        public CatelTypeInfo GetProperties(Type type)
-        {
-            return GetCatelTypeInfo(type);
-        }
-
-        /// <summary>
         /// Gets the property data type information.
         /// </summary>
         /// <param name="type">The type.</param>

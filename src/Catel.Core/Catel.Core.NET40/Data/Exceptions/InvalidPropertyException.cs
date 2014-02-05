@@ -10,7 +10,7 @@ namespace Catel.Data
     using System.Globalization;
 
     /// <summary>
-    /// Exception is When an invalid property is added to the <see cref="ModelBase{TModel}"/> class.
+    /// Exception is When an invalid property is added to the <see cref="ModelBase"/> class.
     /// </summary>
     public class InvalidPropertyException : Exception
     {

@@ -61,7 +61,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="state">The target state which can be used to store values.</param>
         /// <remarks>
-        /// This method is implemented so the <see cref="PhoneApplicationPage{TViewModel}"/> can call this method.
+        /// This method is implemented so the <see cref="PhoneApplicationPage"/> can call this method.
         /// </remarks>
         internal void PrepareForTombstoneStateInternal(IDictionary<string, object> state)
         {
@@ -84,7 +84,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="state">The source state to recover values from.</param>
         /// <remarks>
-        /// This method is implemented so the <see cref="PhoneApplicationPage{TViewModel}"/> can call this method.
+        /// This method is implemented so the <see cref="PhoneApplicationPage"/> can call this method.
         /// </remarks>
         internal void RecoverFromTombstoneStateInternal(IDictionary<string, object> state)
         {

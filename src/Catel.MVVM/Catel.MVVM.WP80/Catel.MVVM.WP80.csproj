@@ -331,9 +331,6 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Tasks\TaskBase.cs">
       <Link>MVVM\Tasks\TaskBase.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Attributes\ExposeAttribute.cs">
-      <Link>MVVM\ViewModels\Attributes\ExposeAttribute.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Attributes\InterestedInAttribute.cs">
       <Link>MVVM\ViewModels\Attributes\InterestedInAttribute.cs</Link>
     </Compile>
@@ -540,9 +537,6 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\UserControl.cs">
       <Link>Windows\Controls\UserControl.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\UserControl.generic.cs">
-      <Link>Windows\Controls\UserControl.generic.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Data\BindingEvaluator.cs">
       <Link>Windows\Data\BindingEvaluator.cs</Link>
@@ -799,7 +793,6 @@
     <Compile Include="MVVM\ViewModels\ViewModelBase.tombstoning.cs" />
     <Compile Include="Phone\Controls\Interfaces\IPhoneApplicationPage.cs" />
     <Compile Include="Phone\Controls\PhoneApplicationPage.cs" />
-    <Compile Include="Phone\Controls\PhoneApplicationPage.generic.cs" />
     <Compile Include="Windows\Controls\MVVMProviders\Logic\PhoneApplicationPageLogic.cs" />
     <Compile Include="Windows\Controls\MVVMProviders\PhoneApplicationPageBehavior.cs" />
     <Compile Include="Windows\Markup\MarkupExtension.cs" />

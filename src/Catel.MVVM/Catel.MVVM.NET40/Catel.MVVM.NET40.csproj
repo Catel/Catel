@@ -185,7 +185,6 @@
     <Compile Include="MVVM\Tasks\Interfaces\ITask.cs" />
     <Compile Include="MVVM\Tasks\Interfaces\ITaskProgressTracker.cs" />
     <Compile Include="MVVM\Tasks\TaskBase.cs" />
-    <Compile Include="MVVM\ViewModels\Attributes\ExposeAttribute.cs" />
     <Compile Include="MVVM\ViewModels\Attributes\InterestedInAttribute.cs" />
     <Compile Include="MVVM\ViewModels\Attributes\ModelAttribute.cs" />
     <Compile Include="MVVM\ViewModels\Attributes\ValidationToViewModelAttribute.cs" />
@@ -209,14 +208,11 @@
     <Compile Include="MVVM\ViewModels\NavigationViewModelBase.cs" />
     <Compile Include="MVVM\ViewModels\ProgressNotifyableViewModel.cs" />
     <Compile Include="MVVM\ViewModels\ViewModelBase.cs" />
-    <Compile Include="MVVM\ViewModels\ViewModelBase.customtypedescriptor.cs" />
     <Compile Include="MVVM\ViewModels\ViewModelBase.navigation.cs" />
     <Compile Include="MVVM\ViewModels\ViewModelBase.validation.cs" />
     <Compile Include="MVVM\ViewModels\ViewModelFactory.cs" />
     <Compile Include="MVVM\ViewModels\ViewModelManager.cs" />
     <Compile Include="MVVM\ViewModels\ViewModelMetadata.cs" />
-    <Compile Include="MVVM\ViewModels\ViewModelPropertyDescriptor.cs" />
-    <Compile Include="MVVM\ViewModels\ViewModelPropertyDescriptorFactory.cs" />
     <Compile Include="MVVM\ViewModels\ViewModelToModelMapping.cs" />
     <Compile Include="MVVM\Views\Attributes\ViewToViewModelAttribute.cs" />
     <Compile Include="MVVM\Views\Helpers\ViewToViewModelMappingHelper.cs" />
@@ -300,9 +296,7 @@
     <Compile Include="Windows\Controls\MVVMProviders\UserControlBehavior.cs" />
     <Compile Include="Windows\Controls\MVVMProviders\WindowBehavior.cs" />
     <Compile Include="Windows\Controls\Page.cs" />
-    <Compile Include="Windows\Controls\Page.generic.cs" />
     <Compile Include="Windows\Controls\UserControl.cs" />
-    <Compile Include="Windows\Controls\UserControl.generic.cs" />
     <Compile Include="Windows\Controls\VisualWrapper.cs" />
     <Compile Include="Windows\Controls\WarningAndErrorValidator.cs" />
     <Compile Include="Windows\Data\BindingEvaluator.cs" />
@@ -384,7 +378,6 @@
     <Compile Include="Windows\Markup\ServiceDependencyExtension.cs" />
     <Compile Include="Windows\Threading\Helpers\Dispatcherhelper.cs" />
     <Compile Include="Windows\Windows\DataWindow\DataWindow.cs" />
-    <Compile Include="Windows\Windows\DataWindow\DataWindow.generic.cs" />
     <Compile Include="Windows\Windows\DataWindow\DataWindowButton.cs" />
     <Compile Include="Windows\Windows\Interfaces\IDataWindow.cs" />
     <Compile Include="Windows\Windows\LoaderAnimation.xaml.cs">

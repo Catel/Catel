@@ -149,7 +149,6 @@ namespace Catel.IoC
             _autoRegistrationManager = new ServiceLocatorAutoRegistrationManager(this);
 
             IgnoreRuntimeIncorrectUsageOfRegisterAttribute = true;
-            AutomaticallyKeepContainersSynchronized = true;
             SupportDependencyInjection = true;
             CanResolveNonAbstractTypesWithoutRegistration = true;
 
@@ -162,16 +161,6 @@ namespace Catel.IoC
         #endregion
 
         #region Properties
-        /// <summary>
-        /// Gets the instance of the default service locator. This property serves as as singleton.
-        /// </summary>
-        /// <value>The instance.</value>
-        [ObsoleteEx(Replacement = "ServiceLocator.Default", TreatAsErrorFromVersion = "3.5", RemoveInVersion = "4.0")]
-        public static IServiceLocator Instance
-        {
-            get { return Default; }
-        }
-
         /// <summary>
         /// Gets or sets the instance of the default service locator. This property serves as as singleton.
         /// </summary>
@@ -203,20 +192,6 @@ namespace Catel.IoC
         #endregion
 
         #region IServiceLocator Members
-        /// <summary>
-        /// Gets or sets a value indicating whether the service locator should keep the external containers
-        /// in sync with the current <see cref="ServiceLocator"/>.
-        /// <para />
-        /// This means that after every change inside the container, this class will automatically invoke the <see cref="ExportToExternalContainers"/> method.
-        /// <para />
-        /// By default, this value is <c>true</c>.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the service locator should keep all containers synchronized; otherwise, <c>false</c>.
-        /// </value>
-        [ObsoleteEx(Message = "External container support will be removed in 4.0, see https://catelproject.atlassian.net/browse/CTL-273", TreatAsErrorFromVersion = "3.9", RemoveInVersion = "4.0")]
-        public bool AutomaticallyKeepContainersSynchronized { get; set; }
-
         /// <summary>
         /// Gets or sets a value indicating whether the service locator can resolve non abstract types without registration.
         /// </summary>
@@ -702,86 +677,6 @@ namespace Catel.IoC
                 }
             }
         }
-
-        /// <summary>
-        /// Determines whether the specified <paramref name="externalContainer">external container</paramref> is supported
-        /// by this <see cref="IServiceLocator" />.
-        /// </summary>
-        /// <param name="externalContainer">The external container.</param>
-        /// <returns><c>true</c> if the external container type is supported; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="externalContainer" /> is <c>null</c>.</exception>
-        /// <exception cref="ExternalContainerNotSupportedException">If the <paramref name="externalContainer" /> is not supported.</exception>
-        [ObsoleteEx(Message = "External container support will be removed in 4.0, see https://catelproject.atlassian.net/browse/CTL-273", TreatAsErrorFromVersion = "3.9", RemoveInVersion = "4.0")]
-        public bool IsExternalContainerSupported(object externalContainer)
-        {
-            throw new NotSupportedException("No longer supported");
-        }
-
-        /// <summary>
-        /// Registers an external container. This can be an external IoC container such
-        /// as a Unity container.
-        /// <para>
-        /// </para>
-        /// Registering an external container in the service locator is very useful in case types are
-        /// already registered in another container (in case of Prism, for example).
-        /// <para>
-        /// </para>
-        /// The <see cref="IServiceLocator" /> will use the external container to resolve unregistered types.
-        /// <para>
-        /// </para>
-        /// Use the <see cref="IsExternalContainerSupported" /> to check whether an external container is registered
-        /// before registering it (otherwise this method will thrown an exception).
-        /// </summary>
-        /// <param name="externalContainer">The external container.</param>
-        /// <exception cref="ExternalContainerNotSupportedException">If the <paramref name="externalContainer" /> is not supported.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="externalContainer" /> is <c>null</c>.</exception>
-        [ObsoleteEx(Message = "External container support will be removed in 4.0, see https://catelproject.atlassian.net/browse/CTL-273", TreatAsErrorFromVersion = "3.9", RemoveInVersion = "4.0")]
-        public void RegisterExternalContainer(object externalContainer)
-        {
-            throw new NotSupportedException("No longer supported");
-        }
-
-        /// <summary>
-        /// Registers an implementation of the <see cref="IExternalContainerHelper" /> class.
-        /// <para>
-        /// </para>
-        /// This method can be used to add support for new external IoC containers.
-        /// </summary>
-        /// <param name="externalContainerHelper">The external container helper.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="externalContainerHelper" /> is <c>null</c>.</exception>
-        [ObsoleteEx(Message = "External container support will be removed in 4.0, see https://catelproject.atlassian.net/browse/CTL-273", TreatAsErrorFromVersion = "3.9", RemoveInVersion = "4.0")]
-        public void RegisterExternalContainerHelper(IExternalContainerHelper externalContainerHelper)
-        {
-            throw new NotSupportedException("No longer supported");
-        }
-
-        /// <summary>
-        /// Exports all the current instances of the services to the external containers. This means that
-        /// non-instantiated services will not be exported.
-        /// <para>
-        /// </para>
-        /// This method will only export services if the services are not already registered with the
-        /// external container.
-        /// </summary>
-        [ObsoleteEx(Message = "External container support will be removed in 4.0, see https://catelproject.atlassian.net/browse/CTL-273", TreatAsErrorFromVersion = "3.9", RemoveInVersion = "4.0")]
-        public void ExportInstancesToExternalContainers()
-        {
-            throw new NotSupportedException("No longer supported");
-        }
-
-        /// <summary>
-        /// Exports all services to external containers. If a service is not yet instantiated, the instance
-        /// will be registered with the external container. Otherwise, the type will be registered.
-        /// <para>
-        /// </para>
-        /// This method will only export services if the services are not already registered with the
-        /// external container.
-        /// </summary>
-        [ObsoleteEx(Message = "External container support will be removed in 4.0, see https://catelproject.atlassian.net/browse/CTL-273", TreatAsErrorFromVersion = "3.9", RemoveInVersion = "4.0")]
-        public void ExportToExternalContainers()
-        {
-            throw new NotSupportedException("No longer supported");
-        }
         #endregion
 
         #region Events
@@ -962,44 +857,6 @@ namespace Catel.IoC
                 CompleteTypeRequestPathIfRequired(typeRequestInfo);
 
                 return instance;
-            }
-        }
-
-        /// <summary>
-        /// Creates an instance of all registered types. This method is required in case an <see cref="IExternalContainerHelper"/>
-        /// does not support the registration of types without instantiating them.
-        /// <para>
-        /// </para>
-        /// This method only creates instances of types that are not yet instantiated.
-        /// </summary>
-        private void CreateInstanceOfAllRegisteredTypes()
-        {
-            // Store in variable because ResolveTypeFromKnownContainer might change the collection
-            var keyValuePairs = _registeredTypes.ToList();
-
-            lock (_lockObject)
-            {
-                foreach (var keyValuePair in keyValuePairs)
-                {
-                    var key = keyValuePair.Key;
-                    var value = keyValuePair.Value;
-
-                    var serviceInfo = new ServiceInfo(value.DeclaringType, key.Tag);
-                    if (_typesCurrentlyBeingExported.Contains(serviceInfo))
-                    {
-                        continue;
-                    }
-
-                    if (!_registeredInstances.ContainsKey(serviceInfo) && IsTypeRegisteredAsSingleton(value.DeclaringType))
-                    {
-                        _typesCurrentlyBeingExported.Add(serviceInfo);
-
-                        // Resolving automatically creates an instance
-                        ResolveTypeFromKnownContainer(value.DeclaringType, key.Tag);
-
-                        _typesCurrentlyBeingExported.Remove(serviceInfo);
-                    }
-                }
             }
         }
 

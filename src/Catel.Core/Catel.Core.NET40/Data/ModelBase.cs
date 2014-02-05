@@ -32,7 +32,7 @@ namespace Catel.Data
 
     #region Enums
     /// <summary>
-    /// Enumeration containing all the available serialization modes for the <see cref="ModelBase{TModel}"/> class.
+    /// Enumeration containing all the available serialization modes for the <see cref="ModelBase"/> class.
     /// </summary>
     public enum SerializationMode
     {
@@ -1804,68 +1804,5 @@ namespace Catel.Data
             }
         }
         #endregion
-    }
-
-    /// <summary>
-    /// Abstract class that serves as a base class for serializable objects.
-    /// </summary>
-    /// <typeparam name="TModel">Type that the class should hold (same as the defined type).</typeparam>
-#if NET
-    [Serializable]
-#endif
-    [ObsoleteEx(Message = "Generic class is no longer being used, use the non-generic base instead", TreatAsErrorFromVersion = "3.4", RemoveInVersion = "4.0", Replacement = "ModelBase")]
-    public abstract class ModelBase<TModel> : ModelBase
-        where TModel : class
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ModelBase{TModel}"/> class.
-        /// </summary>
-        protected ModelBase()
-        {
-        }
-
-#if NET
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ModelBase{TModel}"/> class.
-        /// </summary>
-        /// <para />
-        /// Only constructor for the ModelBase.
-        /// <param name="info">SerializationInfo object, null if this is the first time construction.</param>
-        /// <param name="context">StreamingContext object, simple pass a default new StreamingContext() if this is the first time construction.</param>
-        /// <remarks>
-        /// Call this method, even when constructing the object for the first time (thus not deserializing).
-        /// </remarks>
-        protected ModelBase(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-
-        /// <summary>
-        /// Registers a property that will be automatically handled by this object.
-        /// </summary>
-        /// <typeparam name="TValue">The value type.</typeparam>
-        /// <param name="propertyExpression">The property expression.</param>
-        /// <param name="defaultValue">Default value of the property.</param>
-        /// <param name="propertyChangedEventHandler">The property changed event handler.</param>
-        /// <param name="includeInSerialization">if set to <c>true</c>, the property should be included in the serialization.</param>
-        /// <param name="includeInBackup">if set to <c>true</c>, the property should be included in the backup when handling IEditableObject.</param>
-        /// <returns><see cref="PropertyData" /> containing the property information.</returns>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="propertyExpression" /> is <c>null</c>.</exception>
-        /// <exception cref="System.ArgumentException">The member type of the body of the <paramref name="propertyExpression" /> of should be <see cref="MemberTypes.Property" />.</exception>
-        public static PropertyData RegisterProperty<TValue>(Expression<Func<TModel, TValue>> propertyExpression, TValue defaultValue = default(TValue), Action<TModel, AdvancedPropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true)
-        {
-            return RegisterProperty<TModel, TValue>(propertyExpression, defaultValue, propertyChangedEventHandler, includeInSerialization, includeInBackup);
-        }
-#endif
-
-        /// <summary>
-        /// Checks whether this object equals another object of the same type.
-        /// </summary>
-        /// <param name="other">The other object.</param>
-        /// <returns><c>true</c> if the objects are equal; otherwise <c>false</c></returns>
-        public bool Equals(TModel other)
-        {
-            return Equals((object)other);
-        }
     }
 }

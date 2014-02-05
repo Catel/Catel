@@ -938,23 +938,6 @@ namespace Catel.Windows
         /// </remarks>
         protected virtual void OnInternalGridChanged() { }
 
-#if NET
-        /// <summary>
-        /// Enables the window offset as it was used before Catel 1.3. To support the maximized state,
-        /// the default is removed.
-        /// <para />
-        /// If you want to have an offset for non-maximized windows, either call this method or set the
-        /// <c>MaxWidth</c> and <c>MaxHeight</c> properties.
-        /// </summary>
-        /// <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
-        [ObsoleteEx(TreatAsErrorFromVersion = "3.5", RemoveInVersion = "4.0")]
-        protected void EnableWindowOffset(EventArgs e)
-        {
-            MaxWidth = SystemParameters.PrimaryScreenWidth - Offset;
-            MaxHeight = SystemParameters.PrimaryScreenHeight - Offset;
-        }
-#endif
-
         /// <summary>
         /// Handles the Closing event of the DataWindow control.
         /// </summary>
@@ -1098,24 +1081,8 @@ namespace Catel.Windows
         /// <summary>
         /// Called when the <see cref="DataWindow"/> is loaded.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        [ObsoleteEx(Replacement = "OnLoaded(e)", TreatAsErrorFromVersion = "3.0", RemoveInVersion = "4.0")]
-        protected virtual void OnLoaded(object sender, EventArgs e) { }
-
-        /// <summary>
-        /// Called when the <see cref="DataWindow"/> is loaded.
-        /// </summary>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         protected virtual void OnLoaded(EventArgs e) { }
-
-        /// <summary>
-        /// Called when the <see cref="DataWindow"/> is unloaded.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        [ObsoleteEx(Replacement = "OnUnloaded(e)", TreatAsErrorFromVersion = "3.0", RemoveInVersion = "4.0")]
-        protected virtual void OnUnloaded(object sender, EventArgs e) { }
 
         /// <summary>
         /// Called when the <see cref="DataWindow"/> is unloaded.

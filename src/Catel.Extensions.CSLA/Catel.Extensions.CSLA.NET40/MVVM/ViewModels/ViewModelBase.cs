@@ -56,22 +56,11 @@ namespace Catel.MVVM.CSLA
             _viewModelCommandManager.AddHandler((viewModel, propertyName, command, commandParameter) =>
                 _catelCommandExecuted.SafeInvoke(this, new CommandExecutedEventArgs((ICatelCommand)command, commandParameter, propertyName)));
 
-            ServiceLocator = IoCConfiguration.DefaultServiceLocator;
-            DependencyResolver = ServiceLocator.ResolveType<IDependencyResolver>();
-            RegisterViewModelServices(ServiceLocator);
-
             ViewModelManager.RegisterViewModelInstance(this);
         }
         #endregion
 
         #region Properties
-        /// <summary>
-        /// Gets the service locator that provides all the implementations for interfaces required by the view-model.
-        /// </summary>
-        /// <value>The service locator.</value>
-        [ObsoleteEx(Message = "ServiceLocator is no longer recommended to retrieve the types, use the DependencyResolver instead", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
-        protected IServiceLocator ServiceLocator { get; private set; }
-
         /// <summary>
         /// Gets the dependency resolver.
         /// </summary>
@@ -284,7 +273,8 @@ namespace Catel.MVVM.CSLA
                 message.Append("Whoops, something went wrong...");
             }
 
-            var messageService = GetService<Services.IMessageService>();
+            var dependencyResolver = this.GetDependencyResolver();
+            var messageService = dependencyResolver.Resolve<Services.IMessageService>();
             messageService.ShowError(message.ToString());
 
             base.OnError(error);
@@ -464,42 +454,17 @@ namespace Catel.MVVM.CSLA
 
         /// <summary>
         /// Initializes the view model. Normally the initialization is done in the constructor, but sometimes this must be delayed
-        ///             to a state where the associated UI element (user control, window, ...) is actually loaded.
-        /// <para/>
-        ///             This method is called as soon as the associated UI element is loaded.
+        /// to a state where the associated UI element (user control, window, ...) is actually loaded.
+        /// <para />
+        /// This method is called as soon as the associated UI element is loaded.
         /// </summary>
-        /// <remarks>
-        /// It's not recommended to implement the initialization of properties in this method. The initialization of properties
-        ///             should be done in the constructor. This method should be used to start the retrieval of data from a web service or something
-        ///             similar.
-        /// <para/>
-        ///             During unit tests, it is recommended to manually call this method because there is no external container calling this method.
-        /// </remarks>
+        /// <remarks>It's not recommended to implement the initialization of properties in this method. The initialization of properties
+        /// should be done in the constructor. This method should be used to start the retrieval of data from a web service or something
+        /// similar.
+        /// <para />
+        /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.</remarks>
         protected virtual void Initialize()
         {
-        }
-
-        /// <summary>
-        /// Gets the service of the specified type. Keep in mind that injected services always take precedence
-        /// over services registered in the <see cref="ServiceLocator"/>.
-        /// </summary>
-        /// <param name="serviceType">Type of the service.</param>
-        /// <returns>Service object or <c>null</c> if the service is not found.</returns>
-        [ObsoleteEx(Message = "GetService is no longer recommended. It is better to inject all dependencies (which the TypeFactory fully supports)", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
-        public object GetService(Type serviceType)
-        {
-            return DependencyResolver.Resolve(serviceType);
-        }
-
-        /// <summary>
-        /// Gets the service of the specified type.
-        /// </summary>
-        /// <typeparam name="T">Type of the service.</typeparam>
-        /// <returns>Service object or <c>null</c> if the service is not found.</returns>
-        [ObsoleteEx(Message = "GetService is no longer recommended. It is better to inject all dependencies (which the TypeFactory fully supports)", TreatAsErrorFromVersion = "3.8", RemoveInVersion = "4.0")]
-        public T GetService<T>()
-        {
-            return (T)GetService(typeof(T));
         }
 
         /// <summary>

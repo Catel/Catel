@@ -15,7 +15,7 @@ namespace Catel.Data
 #endif
 
     /// <summary>
-    /// ISavableDataObjectBase that defines the additional methods to save a <see cref="IDataObject"/> object.
+    /// ISavableDataObjectBase that defines the additional methods to save a <see cref="IModel"/> object.
     /// </summary>
     public interface ISavableModel : IModel
     {

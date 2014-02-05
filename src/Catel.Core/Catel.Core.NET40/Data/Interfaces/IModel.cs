@@ -15,7 +15,7 @@ namespace Catel.Data
 #endif
 
     /// <summary>
-    /// IModelBase that the <see cref="ModelBase{TModel}"/> must implement to easily pass objects to methods as non-generic.
+    /// IModelBase that the <see cref="ModelBase"/> must implement to easily pass objects to methods as non-generic.
     /// </summary>
     /// <remarks>
     /// This interface defines all the non-generic interfaces that the <see cref="ModelBase"/> class implements.

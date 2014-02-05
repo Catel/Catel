@@ -247,9 +247,6 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Windows\DataWindow\DataWindow.cs">
       <Link>Windows\Windows\DataWindow\DataWindow.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Windows\DataWindow\DataWindow.generic.cs">
-      <Link>Windows\Windows\DataWindow\DataWindow.generic.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Windows\DataWindow\DataWindowButton.cs">
       <Link>Windows\Windows\DataWindow\DataWindowButton.cs</Link>
     </Compile>
@@ -487,9 +484,6 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Tasks\TaskBase.cs">
       <Link>MVVM\Tasks\TaskBase.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Attributes\ExposeAttribute.cs">
-      <Link>MVVM\ViewModels\Attributes\ExposeAttribute.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\Attributes\InterestedInAttribute.cs">
       <Link>MVVM\ViewModels\Attributes\InterestedInAttribute.cs</Link>
     </Compile>
@@ -649,14 +643,8 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\Page.cs">
       <Link>Windows\Controls\Page.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\Page.generic.cs">
-      <Link>Windows\Controls\Page.generic.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\UserControl.cs">
       <Link>Windows\Controls\UserControl.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\UserControl.generic.cs">
-      <Link>Windows\Controls\UserControl.generic.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\WarningAndErrorValidator.cs">
       <Link>Windows\Controls\WarningAndErrorValidator.cs</Link>

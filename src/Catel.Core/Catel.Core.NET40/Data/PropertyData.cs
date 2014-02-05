@@ -10,7 +10,7 @@ namespace Catel.Data
     using System.Xml.Serialization;
 
     /// <summary>
-    /// Object that contains all the property data that is used by the <see cref="ModelBase{TModel}"/> class.
+    /// Object that contains all the property data that is used by the <see cref="ModelBase"/> class.
     /// </summary>
     public class PropertyData
     {

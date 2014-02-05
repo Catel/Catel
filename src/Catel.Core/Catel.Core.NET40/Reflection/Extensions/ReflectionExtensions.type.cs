@@ -14,52 +14,12 @@ namespace Catel.Reflection
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-    using Caching;
-    using Catel.Logging;
 
     /// <summary>
     /// Reflection extension class.
     /// </summary>
     public static partial class ReflectionExtensions
     {
-        #region Obsolete
-        /// <summary>
-        /// Gets the property info for a specific property of a specific type.
-        /// </summary>
-        /// <param name="type">
-        /// The type to reflect.
-        /// </param>
-        /// <param name="propertyName">
-        /// Name of the property.
-        /// </param>
-        /// <returns>
-        /// <see cref="PropertyInfo"/> of the property or <c>null</c> if the property is not found.
-        /// </returns>
-        [ObsoleteEx(Replacement = "TypeExtensions.GetProperty", TreatAsErrorFromVersion = "3.2", RemoveInVersion = "4.0")]
-        public static PropertyInfo GetPropertyCached(this Type type, string propertyName)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Gets the method for a specific type.
-        /// </summary>
-        /// <param name="type">
-        /// The type that contains the member.
-        /// </param>
-        /// <param name="methodName">
-        /// Name of the method.
-        /// </param>
-        /// <returns>
-        /// <see cref="MethodInfo"/> of the method or <c>null</c> if the method is not found.
-        /// </returns>
-        [ObsoleteEx(Replacement = "TypeExtensions.GetMethod", TreatAsErrorFromVersion = "3.2", RemoveInVersion = "4.0")]
-        public static MethodInfo GetMethodCached(this Type type, string methodName)
-        {
-            throw new NotImplementedException();
-        }
-        #endregion
-
 #if ENABLE_CACHE
         /// <summary>
         /// The _constructors cache.

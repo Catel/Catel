@@ -53,99 +53,6 @@ namespace Catel.Reflection
         }
         #endregion
 
-        #region Obsolete members
-        /// <summary>
-        /// Obsolete.
-        /// </summary>
-        /// <param name="typeName"></param>
-        /// <param name="assemblyName"></param>
-        /// <param name="ignoreCase"></param>
-        /// <returns></returns>
-        [ObsoleteEx(TreatAsErrorFromVersion = "3.4", RemoveInVersion = "4.0", Replacement = "TypeCache.[MethodName]")]
-        public static Type GetTypeWithAssembly(string typeName, string assemblyName, bool ignoreCase = false)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Obsolete.
-        /// </summary>
-        /// <param name="typeNameWithoutAssembly"></param>
-        /// <param name="ignoreCase"></param>
-        /// <returns></returns>
-        [ObsoleteEx(TreatAsErrorFromVersion = "3.4", RemoveInVersion = "4.0", Replacement = "TypeCache.[MethodName]")]
-        public static Type GetTypeWithoutAssembly(string typeNameWithoutAssembly, bool ignoreCase = false)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Obsolete.
-        /// </summary>
-        /// <param name="typeNameWithAssembly"></param>
-        /// <param name="ignoreCase"></param>
-        /// <returns></returns>
-        [ObsoleteEx(TreatAsErrorFromVersion = "3.4", RemoveInVersion = "4.0", Replacement = "TypeCache.[MethodName]")]
-        public static Type GetType(string typeNameWithAssembly, bool ignoreCase = false)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Obsolete.
-        /// </summary>
-        /// <param name="assembly"></param>
-        /// <returns></returns>
-        [ObsoleteEx(TreatAsErrorFromVersion = "3.4", RemoveInVersion = "4.0", Replacement = "TypeCache.[MethodName]")]
-        public static Type[] GetTypesOfAssembly(System.Reflection.Assembly assembly)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Obsolete.
-        /// </summary>
-        /// <returns></returns>
-        [ObsoleteEx(TreatAsErrorFromVersion = "3.4", RemoveInVersion = "4.0", Replacement = "TypeCache.[MethodName]")]
-        public static Type[] GetTypes()
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Obsolete.
-        /// </summary>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
-        [ObsoleteEx(TreatAsErrorFromVersion = "3.4", RemoveInVersion = "4.0", Replacement = "TypeCache.[MethodName]")]
-        public static Type[] GetTypes(Func<Type, bool> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Obsolete.
-        /// </summary>
-        /// <param name="forceFullInitialization"></param>
-        /// <param name="assemblyName"></param>
-        [ObsoleteEx(TreatAsErrorFromVersion = "3.4", RemoveInVersion = "4.0", Replacement = "TypeCache.[MethodName]")]
-        public static void InitializeTypes(bool forceFullInitialization, string assemblyName)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Obsolete.
-        /// </summary>
-        /// <param name="forceFullInitialization"></param>
-        /// <param name="assembly"></param>
-        [ObsoleteEx(TreatAsErrorFromVersion = "3.4", RemoveInVersion = "4.0", Replacement = "TypeCache.[MethodName]")]
-        public static void InitializeTypes(bool forceFullInitialization, System.Reflection.Assembly assembly = null)
-        {
-            throw new NotImplementedException();
-        }
-        #endregion
-
         #region Methods
         /// <summary>
         /// Gets the typed instance based on the specified instance.
@@ -591,34 +498,6 @@ namespace Catel.Reflection
             }
 
             return false;
-        }
-
-        /// <summary>
-        ///   Checks whether the 2 specified objects are equal. This method is better, simple because it also checks boxing so
-        ///   2 integers with the same values that are boxed are equal.
-        /// </summary>
-        /// <param name = "object1">The first object.</param>
-        /// <param name = "object2">The second object.</param>
-        /// <returns><c>true</c> if the objects are equal; otherwise <c>false</c>.</returns>
-        [ObsoleteEx(Replacement = "ObjectHelper.AreEqual", RemoveInVersion = "4.0", TreatAsErrorFromVersion = "3.2")]
-        public static bool AreObjectsEqual(object object1, object object2)
-        {
-            if ((object1 == null) && (object2 == null))
-            {
-                return true;
-            }
-
-            if ((object1 == null) || (object2 == null))
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(object1, object2))
-            {
-                return true;
-            }
-
-            return object1.Equals(object2);
         }
         #endregion
 

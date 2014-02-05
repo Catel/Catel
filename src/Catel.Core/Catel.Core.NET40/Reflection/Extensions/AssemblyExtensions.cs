@@ -121,17 +121,6 @@ namespace Catel.Reflection
         }
 
         /// <summary>
-        /// Gets the path of a specific assembly.
-        /// </summary>
-        /// <param name="assembly">The assembly.</param>
-        /// <returns>The path of the assembly.</returns>
-        [ObsoleteEx(Replacement = "GetDirectory", TreatAsErrorFromVersion = "3.4", RemoveInVersion = "4.0")]
-        public static string Path(this Assembly assembly)
-        {
-            return GetDirectory(assembly);
-        }
-
-        /// <summary>
         /// Gets the directory of a specific assembly.
         /// </summary>
         /// <param name="assembly">The assembly.</param>
@@ -145,7 +134,7 @@ namespace Catel.Reflection
             string location = assembly.Location;
             return location.Substring(0, location.LastIndexOf('\\'));
 #else
-            throw new NotSupportedInSilverlightException("Directories are protected");
+            throw new NotSupportedInPlatformException("Directories are protected");
 #endif
         }
 
