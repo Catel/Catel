@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CatelDependencyResolverFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -34,7 +34,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ThrowsArgumentNullExceptionForNullType()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => dependencyResolver.CanResolve(null));
@@ -43,16 +43,16 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ReturnsFalseForNonRegisteredType()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
 
-                Assert.IsFalse(dependencyResolver.CanResolve(typeof(IMessageService)));
+                Assert.IsFalse(dependencyResolver.CanResolve(typeof(ITestInterface)));
             }
 
             [TestMethod]
             public void ReturnsTrueForRegisteredType()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType<IMessageService, MessageService>();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
 
@@ -66,7 +66,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ThrowsArgumentExceptionForNullTypes()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => dependencyResolver.CanResolveAll(null));
@@ -75,7 +75,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ReturnsTrueForEmptyArray()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
 
                 Assert.IsTrue(dependencyResolver.CanResolveAll(new Type[] { }));
@@ -84,11 +84,11 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ReturnsFalseWhenNotAllTypesCanBeResolved()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType<IMessageService, MessageService>();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
 
-                var typesToResolve = new[] { typeof(IMessageService), typeof(INavigationService), typeof(ITypeFactory) };
+                var typesToResolve = new[] { typeof(ITestInterface), typeof(INavigationService), typeof(ITypeFactory) };
 
                 Assert.IsFalse(dependencyResolver.CanResolveAll(typesToResolve));
             }
@@ -96,7 +96,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ReturnsTrueWhenAllTypesCanBeResolved()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType<IMessageService, MessageService>();
                 serviceLocator.RegisterType<INavigationService, NavigationService>();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
@@ -112,7 +112,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ThrowsArgumentNullExceptionForNullType()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => dependencyResolver.Resolve(null));
@@ -121,16 +121,16 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ReturnsNullForNonRegisteredType()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
 
-                Assert.IsNull(dependencyResolver.Resolve(typeof(IMessageService)));
+                Assert.IsNull(dependencyResolver.Resolve(typeof(ITestInterface)));
             }
 
             [TestMethod]
             public void ReturnsInstanceForRegisteredType()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType<IMessageService, MessageService>();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
 
@@ -144,7 +144,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ThrowsArgumentExceptionForNullTypes()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => dependencyResolver.ResolveAll(null));
@@ -153,7 +153,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ReturnsEmptyArrayForEmptyArray()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
 
                 var resolvedObjects = dependencyResolver.ResolveAll(new Type[] {});
@@ -163,11 +163,11 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ReturnsArrayWithNullValuesForNonRegisteredTypes()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType<IMessageService, MessageService>();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
 
-                var typesToResolve = new[] { typeof(IMessageService), typeof(INavigationService), typeof(ITypeFactory) };
+                var typesToResolve = new[] { typeof(IMessageService), typeof(ITestInterface), typeof(ITypeFactory) };
                 var resolvedTypes = dependencyResolver.ResolveAll(typesToResolve);
 
                 Assert.IsNotNull(resolvedTypes[0] as IMessageService);
@@ -178,7 +178,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ReturnsArrayWithAllValuesForRegisteredTypes()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType<IMessageService, MessageService>();
                 serviceLocator.RegisterType<INavigationService, NavigationService>();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();

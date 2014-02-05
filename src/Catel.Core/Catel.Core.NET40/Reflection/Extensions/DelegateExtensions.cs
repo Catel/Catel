@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DelegateExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -24,7 +24,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("del", del);
 
-#if NETFX_CORE || WP8 || NET45
+#if NETFX_CORE || WP80 || NET45
             return del.GetMethodInfo();
 #else
             return del.Method;

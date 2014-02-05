@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ModelBase.serialization.binary.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -94,6 +94,12 @@ namespace Catel.Data
         private void OnDeserialized(StreamingContext context)
         {
             IsDeserializedDataAvailable = true;
+
+            if (_serializationInfo == null)
+            {
+                // Probably a custom serializer which will populate us in a different way
+                return;
+            }
 
             var binarySerializer = SerializationFactory.GetBinarySerializer();
             var binarySerializationContext = new BinarySerializationContextInfo(_serializationInfo);

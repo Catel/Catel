@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ViewModelServiceHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -161,7 +161,7 @@ namespace Catel.MVVM
             {
                 Log.Error(ex, "Failed to configure IoC container");
 
-                throw new Exception(Catel.ResourceHelper.GetString(typeof(ViewModelServiceHelper), "Exceptions", "FailedToConfigureIoCContainer"), ex);
+                throw new Exception(Catel.ResourceHelper.GetString("FailedToConfigureIoCContainer"), ex);
             }            
         }
     }

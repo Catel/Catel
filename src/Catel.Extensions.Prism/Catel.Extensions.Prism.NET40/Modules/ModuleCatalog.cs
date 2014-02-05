@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ModuleCatalog.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -81,13 +81,11 @@ namespace Catel.Modules
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ModuleCatalog"/> class while providing an 
-        /// initial list of <see cref="ModuleInfo"/>s.
+        /// Initializes a new instance of the <see cref="ModuleCatalog" /> class while providing an
+        /// initial list of <see cref="ModuleInfo" />s.
         /// </summary>
-        /// <param name="modules">
-        /// The initial list of modules.
-        /// </param>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="modules"/> is <c>null</c>.</exception>
+        /// <param name="modules">The initial list of modules.</param>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="modules" /> is <c>null</c>.</exception>
         public ModuleCatalog(IEnumerable<ModuleInfo> modules)
             : this()
         {
@@ -101,8 +99,8 @@ namespace Catel.Modules
 
         #region Properties
         /// <summary>
-        /// Gets the items in the <see cref="ModuleCatalog"/>. This property is mainly used to add <see cref="ModuleInfoGroup"/>s or 
-        /// <see cref="ModuleInfo"/>s through XAML. 
+        /// Gets the items in the <see cref="ModuleCatalog" />. This property is mainly used to add <see cref="ModuleInfoGroup" />s or
+        /// <see cref="ModuleInfo" />s through XAML.
         /// </summary>
         /// <value>The items in the catalog.</value>
         public Collection<IModuleCatalogItem> Items
@@ -156,17 +154,11 @@ namespace Catel.Modules
         }
 
         /// <summary>
-        /// Return the list of <see cref="ModuleInfo"/>s that <paramref name="moduleInfo"/> depends on.
+        /// Return the list of <see cref="ModuleInfo" />s that <paramref name="moduleInfo" /> depends on.
         /// </summary>
-        /// <remarks>
-        /// If  the <see cref="ModuleCatalog"/> was not yet validated, this method will call <see cref="Validate"/>.
-        /// </remarks>
-        /// <param name="moduleInfo">
-        /// The <see cref="ModuleInfo"/> to get the 
-        /// </param>
-        /// <returns>
-        /// An enumeration of <see cref="ModuleInfo"/> that <paramref name="moduleInfo"/> depends on.
-        /// </returns>
+        /// <param name="moduleInfo">The <see cref="ModuleInfo" /> to get the</param>
+        /// <returns>An enumeration of <see cref="ModuleInfo" /> that <paramref name="moduleInfo" /> depends on.</returns>
+        /// <remarks>If  the <see cref="ModuleCatalog" /> was not yet validated, this method will call <see cref="Validate" />.</remarks>
         public virtual IEnumerable<ModuleInfo> GetDependentModules(ModuleInfo moduleInfo)
         {
             EnsureCatalogValidated();
@@ -175,17 +167,13 @@ namespace Catel.Modules
         }
 
         /// <summary>
-        /// Returns a list of <see cref="ModuleInfo"/>s that contain both the <see cref="ModuleInfo"/>s in 
-        /// <paramref name="modules"/>, but also all the modules they depend on. 
+        /// Returns a list of <see cref="ModuleInfo" />s that contain both the <see cref="ModuleInfo" />s in
+        /// <paramref name="modules" />, but also all the modules they depend on.
         /// </summary>
-        /// <param name="modules">
-        /// The modules to get the dependencies for.
-        /// </param>
-        /// <returns>
-        /// A list of <see cref="ModuleInfo"/> that contains both all <see cref="ModuleInfo"/>s in <paramref name="modules"/>
-        /// but also all the <see cref="ModuleInfo"/> they depend on.
-        /// </returns>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="modules"/> is <c>null</c>.</exception>
+        /// <param name="modules">The modules to get the dependencies for.</param>
+        /// <returns>A list of <see cref="ModuleInfo" /> that contains both all <see cref="ModuleInfo" />s in <paramref name="modules" />
+        /// but also all the <see cref="ModuleInfo" /> they depend on.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="modules" /> is <c>null</c>.</exception>
         public virtual IEnumerable<ModuleInfo> CompleteListWithDependencies(IEnumerable<ModuleInfo> modules)
         {
             Argument.IsNotNull("modules", modules);
@@ -215,12 +203,11 @@ namespace Catel.Modules
         }
 
         /// <summary>
-        /// Adds a <see cref="ModuleInfo"/> to the <see cref="ModuleCatalog"/>.
+        /// Adds a <see cref="ModuleInfo" /> to the <see cref="ModuleCatalog" />.
         /// </summary>
-        /// <param name="moduleInfo">
-        /// The <see cref="ModuleInfo"/> to add.
-        /// </param>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="moduleInfo"/> is <c>null</c>.</exception>
+        /// <param name="moduleInfo">The <see cref="ModuleInfo" /> to add.</param>
+        /// <returns>The <see cref="T:Microsoft.Practices.Prism.Modularity.ModuleCatalog" /> for easily adding multiple modules.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="moduleInfo" /> is <c>null</c>.</exception>
         public virtual void AddModule(ModuleInfo moduleInfo)
         {
             Argument.IsNotNull("moduleInfo", moduleInfo);
@@ -250,15 +237,11 @@ namespace Catel.Modules
 
         #region Methods
         /// <summary>
-        /// Creates a <see cref="ModuleCatalog"/> from XAML.
+        /// Creates a <see cref="ModuleCatalog" /> from XAML.
         /// </summary>
-        /// <param name="xamlStream">
-        /// <see cref="Stream"/> that contains the XAML declaration of the catalog.
-        /// </param>
-        /// <returns>
-        /// An instance of <see cref="ModuleCatalog"/> built from the XAML.
-        /// </returns>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="xamlStream"/> is <c>null</c>.</exception>
+        /// <param name="xamlStream"><see cref="Stream" /> that contains the XAML declaration of the catalog.</param>
+        /// <returns>An instance of <see cref="ModuleCatalog" /> built from the XAML.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="xamlStream" /> is <c>null</c>.</exception>
         public static ModuleCatalog CreateFromXaml(Stream xamlStream)
         {
             Argument.IsNotNull("xamlStream", xamlStream);
@@ -289,16 +272,13 @@ namespace Catel.Modules
         }
 
         /// <summary>
-        /// Creates a <see cref="ModuleCatalog"/> from a XAML included as an Application Resource.
+        /// Creates a <see cref="ModuleCatalog" /> from a XAML included as an Application Resource.
         /// </summary>
-        /// <param name="builderResourceUri">
-        /// Relative <see cref="Uri"/> that identifies the XAML included as an Application Resource.
-        /// </param>
-        /// <returns>
-        /// An instance of <see cref="ModuleCatalog"/> build from the XAML.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="builderResourceUri"/> is <c>null</c>.</exception>
-        /// <exception cref="NotSupportedException">The <paramref name="builderResourceUri"/> points to an url, which must be downloaded asynchronously.</exception>
+        /// <param name="builderResourceUri">Relative <see cref="Uri" /> that identifies the XAML included as an Application Resource.</param>
+        /// <returns>An instance of <see cref="ModuleCatalog" /> build from the XAML.</returns>
+        /// <exception cref="System.NotSupportedException"></exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="builderResourceUri" /> is <c>null</c>.</exception>
+        /// <exception cref="NotSupportedException">The <paramref name="builderResourceUri" /> points to an url, which must be downloaded asynchronously.</exception>
         public static ModuleCatalog CreateFromXaml(Uri builderResourceUri)
         {
             Argument.IsNotNull("builderResourceUri", builderResourceUri);
@@ -345,38 +325,24 @@ namespace Catel.Modules
         }
 
         /// <summary>
-        /// Adds a groupless <see cref="ModuleInfo"/> to the catalog.
+        /// Adds a groupless <see cref="ModuleInfo" /> to the catalog.
         /// </summary>
-        /// <param name="moduleType">
-        /// <see cref="Type"/> of the module to be added.
-        /// </param>
-        /// <param name="dependsOn">
-        /// Collection of module names (<see cref="ModuleInfo.ModuleName"/>) of the modules on which the module to be added logically depends on.
-        /// </param>
-        /// <returns>
-        /// The same <see cref="ModuleCatalog"/> instance with the added module.
-        /// </returns>
+        /// <param name="moduleType"><see cref="Type" /> of the module to be added.</param>
+        /// <param name="dependsOn">Collection of module names (<see cref="ModuleInfo.ModuleName" />) of the modules on which the module to be added logically depends on.</param>
+        /// <returns>The same <see cref="ModuleCatalog" /> instance with the added module.</returns>
         public ModuleCatalog AddModule(Type moduleType, params string[] dependsOn)
         {
             return AddModule(moduleType, InitializationMode.WhenAvailable, dependsOn);
         }
 
         /// <summary>
-        /// Adds a groupless <see cref="ModuleInfo"/> to the catalog.
+        /// Adds a groupless <see cref="ModuleInfo" /> to the catalog.
         /// </summary>
-        /// <param name="moduleType">
-        /// <see cref="Type"/> of the module to be added.
-        /// </param>
-        /// <param name="initializationMode">
-        /// Stage on which the module to be added will be initialized.
-        /// </param>
-        /// <param name="dependsOn">
-        /// Collection of module names (<see cref="ModuleInfo.ModuleName"/>) of the modules on which the module to be added logically depends on.
-        /// </param>
-        /// <returns>
-        /// The same <see cref="ModuleCatalog"/> instance with the added module.
-        /// </returns>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="moduleType"/> is <c>null</c>.</exception>
+        /// <param name="moduleType"><see cref="Type" /> of the module to be added.</param>
+        /// <param name="initializationMode">Stage on which the module to be added will be initialized.</param>
+        /// <param name="dependsOn">Collection of module names (<see cref="ModuleInfo.ModuleName" />) of the modules on which the module to be added logically depends on.</param>
+        /// <returns>The same <see cref="ModuleCatalog" /> instance with the added module.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="moduleType" /> is <c>null</c>.</exception>
         public ModuleCatalog AddModule(Type moduleType, InitializationMode initializationMode, params string[] dependsOn)
         {
             Argument.IsNotNull("moduleType", moduleType);
@@ -385,71 +351,41 @@ namespace Catel.Modules
         }
 
         /// <summary>
-        /// Adds a groupless <see cref="ModuleInfo"/> to the catalog.
+        /// Adds a groupless <see cref="ModuleInfo" /> to the catalog.
         /// </summary>
-        /// <param name="moduleName">
-        /// Name of the module to be added.
-        /// </param>
-        /// <param name="moduleType">
-        /// <see cref="Type"/> of the module to be added.
-        /// </param>
-        /// <param name="dependsOn">
-        /// Collection of module names (<see cref="ModuleInfo.ModuleName"/>) of the modules on which the module to be added logically depends on.
-        /// </param>
-        /// <returns>
-        /// The same <see cref="ModuleCatalog"/> instance with the added module.
-        /// </returns>
+        /// <param name="moduleName">Name of the module to be added.</param>
+        /// <param name="moduleType"><see cref="Type" /> of the module to be added.</param>
+        /// <param name="dependsOn">Collection of module names (<see cref="ModuleInfo.ModuleName" />) of the modules on which the module to be added logically depends on.</param>
+        /// <returns>The same <see cref="ModuleCatalog" /> instance with the added module.</returns>
         public ModuleCatalog AddModule(string moduleName, string moduleType, params string[] dependsOn)
         {
             return AddModule(moduleName, moduleType, InitializationMode.WhenAvailable, dependsOn);
         }
 
         /// <summary>
-        /// Adds a groupless <see cref="ModuleInfo"/> to the catalog.
+        /// Adds a groupless <see cref="ModuleInfo" /> to the catalog.
         /// </summary>
-        /// <param name="moduleName">
-        /// Name of the module to be added.
-        /// </param>
-        /// <param name="moduleType">
-        /// <see cref="Type"/> of the module to be added.
-        /// </param>
-        /// <param name="initializationMode">
-        /// Stage on which the module to be added will be initialized.
-        /// </param>
-        /// <param name="dependsOn">
-        /// Collection of module names (<see cref="ModuleInfo.ModuleName"/>) of the modules on which the module to be added logically depends on.
-        /// </param>
-        /// <returns>
-        /// The same <see cref="ModuleCatalog"/> instance with the added module.
-        /// </returns>
+        /// <param name="moduleName">Name of the module to be added.</param>
+        /// <param name="moduleType"><see cref="Type" /> of the module to be added.</param>
+        /// <param name="initializationMode">Stage on which the module to be added will be initialized.</param>
+        /// <param name="dependsOn">Collection of module names (<see cref="ModuleInfo.ModuleName" />) of the modules on which the module to be added logically depends on.</param>
+        /// <returns>The same <see cref="ModuleCatalog" /> instance with the added module.</returns>
         public ModuleCatalog AddModule(string moduleName, string moduleType, InitializationMode initializationMode, params string[] dependsOn)
         {
             return AddModule(moduleName, moduleType, null, initializationMode, dependsOn);
         }
 
         /// <summary>
-        /// Adds a groupless <see cref="ModuleInfo"/> to the catalog.
+        /// Adds a groupless <see cref="ModuleInfo" /> to the catalog.
         /// </summary>
-        /// <param name="moduleName">
-        /// Name of the module to be added.
-        /// </param>
-        /// <param name="moduleType">
-        /// <see cref="Type"/> of the module to be added.
-        /// </param>
-        /// <param name="refValue">
-        /// Reference to the location of the module to be added assembly.
-        /// </param>
-        /// <param name="initializationMode">
-        /// Stage on which the module to be added will be initialized.
-        /// </param>
-        /// <param name="dependsOn">
-        /// Collection of module names (<see cref="ModuleInfo.ModuleName"/>) of the modules on which the module to be added logically depends on.
-        /// </param>
-        /// <returns>
-        /// The same <see cref="ModuleCatalog"/> instance with the added module.
-        /// </returns>
-        /// <exception cref="System.ArgumentException">The <paramref name="moduleName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="System.ArgumentException">The <paramref name="moduleType"/> is <c>null</c> or whitespace.</exception>
+        /// <param name="moduleName">Name of the module to be added.</param>
+        /// <param name="moduleType"><see cref="Type" /> of the module to be added.</param>
+        /// <param name="refValue">Reference to the location of the module to be added assembly.</param>
+        /// <param name="initializationMode">Stage on which the module to be added will be initialized.</param>
+        /// <param name="dependsOn">Collection of module names (<see cref="ModuleInfo.ModuleName" />) of the modules on which the module to be added logically depends on.</param>
+        /// <returns>The same <see cref="ModuleCatalog" /> instance with the added module.</returns>
+        /// <exception cref="System.ArgumentException">The <paramref name="moduleName" /> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="System.ArgumentException">The <paramref name="moduleType" /> is <c>null</c> or whitespace.</exception>
         public ModuleCatalog AddModule(string moduleName, string moduleType, string refValue, InitializationMode initializationMode, params string[] dependsOn)
         {
             Argument.IsNotNullOrWhitespace("moduleName", moduleName);
@@ -465,21 +401,13 @@ namespace Catel.Modules
         }
 
         /// <summary>
-        /// Creates and adds a <see cref="ModuleInfoGroup"/> to the catalog.
+        /// Creates and adds a <see cref="ModuleInfoGroup" /> to the catalog.
         /// </summary>
-        /// <param name="initializationMode">
-        /// Stage on which the module group to be added will be initialized.
-        /// </param>
-        /// <param name="refValue">
-        /// Reference to the location of the module group to be added.
-        /// </param>
-        /// <param name="moduleInfos">
-        /// Collection of <see cref="ModuleInfo"/> included in the group.
-        /// </param>
-        /// <returns>
-        /// <see cref="ModuleCatalog"/> with the added module group.
-        /// </returns>
-        /// <exception cref="System.ArgumentException">The <paramref name="moduleInfos"/> is <c>null</c> or an empty array.</exception>
+        /// <param name="initializationMode">Stage on which the module group to be added will be initialized.</param>
+        /// <param name="refValue">Reference to the location of the module group to be added.</param>
+        /// <param name="moduleInfos">Collection of <see cref="ModuleInfo" /> included in the group.</param>
+        /// <returns><see cref="ModuleCatalog" /> with the added module group.</returns>
+        /// <exception cref="System.ArgumentException">The <paramref name="moduleInfos" /> is <c>null</c> or an empty array.</exception>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Infos")]
         public virtual ModuleCatalog AddGroup(InitializationMode initializationMode, string refValue, params ModuleInfo[] moduleInfos)
         {
@@ -500,15 +428,11 @@ namespace Catel.Modules
         }
 
         /// <summary>
-        /// Checks for cyclic dependencies, by calling the dependencysolver. 
+        /// Checks for cyclic dependencies, by calling the dependencysolver.
         /// </summary>
-        /// <param name="modules">
-        /// the.
-        /// </param>
-        /// <returns>
-        /// The System.String[].
-        /// </returns>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="modules"/> is <c>null</c>.</exception>
+        /// <param name="modules">the.</param>
+        /// <returns>The System.String[].</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="modules" /> is <c>null</c>.</exception>
         protected static string[] SolveDependencies(IEnumerable<ModuleInfo> modules)
         {
             Argument.IsNotNull("modules", modules);
@@ -537,20 +461,14 @@ namespace Catel.Modules
         }
 
         /// <summary>
-        /// Ensures that all the dependencies within <paramref name="modules"/> refer to <see cref="ModuleInfo"/>s
+        /// Ensures that all the dependencies within <paramref name="modules" /> refer to <see cref="ModuleInfo" />s
         /// within that list.
         /// </summary>
-        /// <param name="modules">
-        /// The modules to validate modules for.
-        /// </param>
-        /// <exception cref="ModularityException">
-        /// Throws if a <see cref="ModuleInfo"/> in <paramref name="modules"/> depends on a module that's 
-        /// not in <paramref name="modules"/>.
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// Throws if <paramref name="modules"/> is <see langword="null"/>.
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="modules"/> is <c>null</c>.</exception>
+        /// <param name="modules">The modules to validate modules for.</param>
+        /// <exception cref="ModularityException">Throws if a <see cref="ModuleInfo" /> in <paramref name="modules" /> depends on a module that's
+        /// not in <paramref name="modules" />.</exception>
+        /// <exception cref="System.ArgumentNullException">Throws if <paramref name="modules" /> is <see langword="null" />.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="modules" /> is <c>null</c>.</exception>
         protected static void ValidateDependencies(IEnumerable<ModuleInfo> modules)
         {
             Argument.IsNotNull("modules", modules);
@@ -579,11 +497,11 @@ namespace Catel.Modules
         }
 
         /// <summary>
-        /// Gets a <see cref="ModuleInfo"/> by a module name.
+        /// Gets a <see cref="ModuleInfo" /> by a module name.
         /// </summary>
         /// <param name="moduleName">Name of the module.</param>
-        /// <returns>The <see cref="ModuleInfo"/> or <c>null</c> if the module could not be found.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="moduleName"/> is <c>null</c> or whitespace.</exception>
+        /// <returns>The <see cref="ModuleInfo" /> or <c>null</c> if the module could not be found.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="moduleName" /> is <c>null</c> or whitespace.</exception>
         protected ModuleInfo GetModuleInfoByName(string moduleName)
         {
             Argument.IsNotNullOrWhitespace("moduleName", moduleName);
@@ -594,26 +512,20 @@ namespace Catel.Modules
         }
 
         /// <summary>
-        /// Sorts a list of <see cref="ModuleInfo"/>s. This method is called by <see cref="CompleteListWithDependencies"/>
-        /// to return a sorted list. 
+        /// Sorts a list of <see cref="ModuleInfo" />s. This method is called by <see cref="CompleteListWithDependencies" />
+        /// to return a sorted list.
         /// </summary>
-        /// <param name="modules">
-        /// The <see cref="ModuleInfo"/>s to sort.
-        /// </param>
-        /// <returns>
-        /// Sorted list of <see cref="ModuleInfo"/>s
-        /// </returns>
+        /// <param name="modules">The <see cref="ModuleInfo" />s to sort.</param>
+        /// <returns>Sorted list of <see cref="ModuleInfo" />s</returns>
         protected virtual IEnumerable<ModuleInfo> Sort(IEnumerable<ModuleInfo> modules)
         {
             return SolveDependencies(modules).Select(moduleName => modules.First(m => m.ModuleName == moduleName));
         }
 
         /// <summary>
-        /// Makes sure all modules have an Unique name. 
+        /// Makes sure all modules have an Unique name.
         /// </summary>
-        /// <exception cref="DuplicateModuleException">
-        /// Thrown if the names of one or more modules are not unique. 
-        /// </exception>
+        /// <exception cref="DuplicateModuleException">Thrown if the names of one or more modules are not unique.</exception>
         protected virtual void ValidateUniqueModules()
         {
             Log.Debug("Validating uniquely usage of module names");
@@ -682,14 +594,10 @@ namespace Catel.Modules
         }
 
         /// <summary>
-        /// Returns the <see cref="ModuleInfo"/> on which the received module dependens on.
+        /// Returns the <see cref="ModuleInfo" /> on which the received module dependens on.
         /// </summary>
-        /// <param name="moduleInfo">
-        /// Module whose dependant modules are requested.
-        /// </param>
-        /// <returns>
-        /// Collection of <see cref="ModuleInfo"/> dependants of <paramref name="moduleInfo"/>.
-        /// </returns>
+        /// <param name="moduleInfo">Module whose dependant modules are requested.</param>
+        /// <returns>Collection of <see cref="ModuleInfo" /> dependants of <paramref name="moduleInfo" />.</returns>
         protected virtual IEnumerable<ModuleInfo> GetDependentModulesInner(ModuleInfo moduleInfo)
         {
             return _synchronizationContext.Execute(() => Modules.Where(dependantModule => moduleInfo.DependsOn.Contains(dependantModule.ModuleName)));
@@ -709,12 +617,8 @@ namespace Catel.Modules
         /// <summary>
         /// The items collection changed.
         /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The event args.
-        /// </param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The event args.</param>
         private void ItemsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (Validated)
@@ -741,12 +645,8 @@ namespace Catel.Modules
             /// <summary>
             /// The insert item.
             /// </summary>
-            /// <param name="index">
-            /// The index.
-            /// </param>
-            /// <param name="item">
-            /// The item.
-            /// </param>
+            /// <param name="index">The index.</param>
+            /// <param name="item">The item.</param>
             protected override void InsertItem(int index, IModuleCatalogItem item)
             {
                 OnBeginCollectionChanged(EventArgs.Empty);
@@ -759,9 +659,7 @@ namespace Catel.Modules
             /// <summary>
             /// The on notify collection changed.
             /// </summary>
-            /// <param name="eventArgs">
-            /// The event args.
-            /// </param>
+            /// <param name="eventArgs">The event args.</param>
             private void OnNotifyCollectionChanged(NotifyCollectionChangedEventArgs eventArgs)
             {
                 if (CollectionChanged != null)
@@ -773,9 +671,7 @@ namespace Catel.Modules
             /// <summary>
             /// The on begin collection changed.
             /// </summary>
-            /// <param name="e">
-            /// The event arg.
-            /// </param>
+            /// <param name="e">The event arg.</param>
             private void OnBeginCollectionChanged(EventArgs e)
             {
                 EventHandler handler = BeginCollectionChanged;
@@ -788,9 +684,7 @@ namespace Catel.Modules
             /// <summary>
             /// The on end collection changed.
             /// </summary>
-            /// <param name="e">
-            /// The event arg.
-            /// </param>
+            /// <param name="e">The event arg.</param>
             private void OnEndCollectionChanged(EventArgs e)
             {
                 EventHandler handler = EndCollectionChanged;
@@ -801,14 +695,10 @@ namespace Catel.Modules
             }
 
             /// <summary>
-            /// Removes the element at the specified index of the <see cref="T:System.Collections.ObjectModel.Collection`1"/>.
+            /// Removes the element at the specified index of the <see cref="T:System.Collections.ObjectModel.Collection`1" />.
             /// </summary>
-            /// <param name="index">
-            /// The zero-based index of the element to remove.
-            /// </param>
-            /// <exception cref="T:System.ArgumentOutOfRangeException">
-            /// <paramref name="index"/> is less than zero.-or-<paramref name="index"/> is equal to or greater than <see cref="P:System.Collections.ObjectModel.Collection`1.Count"/>.
-            /// </exception>
+            /// <param name="index">The zero-based index of the element to remove.</param>
+            /// <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index" /> is less than zero.-or-<paramref name="index" /> is equal to or greater than <see cref="P:System.Collections.ObjectModel.Collection`1.Count" />.</exception>
             protected override void RemoveItem(int index)
             {
                 OnBeginCollectionChanged(EventArgs.Empty);

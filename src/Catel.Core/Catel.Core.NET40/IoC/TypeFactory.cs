@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="TypeFactory.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -95,6 +95,9 @@ namespace Catel.IoC
             {
                 serviceLocator.TypeRegistered += OnServiceLocatorTypeRegistered;
             }
+
+            // Note: this will cause memory leaks (TypeCache will keep this class alive), but it's an acceptable "loss"
+            TypeCache.AssemblyLoaded += OnAssemblyLoaded;
         }
         #endregion
 
@@ -146,7 +149,7 @@ namespace Catel.IoC
                     if (_constructorCache.ContainsKey(constructorCacheKey))
                     {
                         var cachedConstructor = _constructorCache[constructorCacheKey];
-                        var instanceCreatedWithInjection = TryCreateWithConstructorInjection(typeToConstruct, cachedConstructor);
+                        var instanceCreatedWithInjection = TryCreateWithConstructorInjection(typeToConstruct, cachedConstructor, false);
                         if (instanceCreatedWithInjection != null)
                         {
                             CompleteTypeRequestPathIfRequired(typeRequestInfo);
@@ -163,9 +166,11 @@ namespace Catel.IoC
 
                     var typeConstructorsMetadata = GetTypeMetaData(typeToConstruct);
                     var constructors = typeConstructorsMetadata.GetConstructors();
-                    foreach (var constructor in constructors)
+                    for (int i = 0; i < constructors.Count; i++)
                     {
-                        var instanceCreatedWithInjection = TryCreateWithConstructorInjection(typeToConstruct, constructor);
+                        var constructor = constructors[i];
+
+                        var instanceCreatedWithInjection = TryCreateWithConstructorInjection(typeToConstruct, constructor, i < constructors.Count - 1);
                         if (instanceCreatedWithInjection != null)
                         {
                             CompleteTypeRequestPathIfRequired(typeRequestInfo);
@@ -571,8 +576,9 @@ namespace Catel.IoC
         /// </summary>
         /// <param name="typeToConstruct">Type of the service.</param>
         /// <param name="constructorInfo">The constructor info.</param>
+        /// <param name="hasMoreConstructorsLeft">if set to <c>true</c>, this is not the last constructor.</param>
         /// <returns>The instantiated service or <c>null</c> if the instantiation fails.</returns>
-        private object TryCreateWithConstructorInjection(Type typeToConstruct, ConstructorInfo constructorInfo)
+        private object TryCreateWithConstructorInjection(Type typeToConstruct, ConstructorInfo constructorInfo, bool hasMoreConstructorsLeft)
         {
             var parametersList = new List<Type>();
             foreach (var parameterInfo in constructorInfo.GetParameters())
@@ -589,14 +595,26 @@ namespace Catel.IoC
 
             try
             {
-                var parameters = _dependencyResolver.ResolveAll(parametersArray);
+                var parameters = new List<object>();
+                for (int i = 0; i < parametersArray.Length; i++)
+                {
+                    var ctorParameterValue = _dependencyResolver.Resolve(parametersArray[i]);
+                    if (ctorParameterValue == null)
+                    {
+                        return null;
+                    }
 
-                return TryCreateWithConstructorInjectionWithParameters(typeToConstruct, constructorInfo, parameters);
+                    parameters.Add(ctorParameterValue);
+                }
+
+                return TryCreateWithConstructorInjectionWithParameters(typeToConstruct, constructorInfo, parameters.ToArray());
             }
-            catch (CircularDependencyException ex)
+            catch (CircularDependencyException)
             {
-                // Only handle CircularDependencyExceptions we throw ourselves
-                if (string.Equals(TypeRequestPathName, ex.TypePath.Name, StringComparison.Ordinal))
+                // Only handle CircularDependencyExceptions we throw ourselves because we support generic types such as 
+                // Dictionary<TKey, TValue> which has a constructor with IDictionary<TKey, TValue>
+                if (!hasMoreConstructorsLeft)
+                //if (string.Equals(TypeRequestPathName, ex.TypePath.Name, StringComparison.Ordinal))
                 {
                     throw;
                 }
@@ -633,6 +651,11 @@ namespace Catel.IoC
                 for (int i = parameters.Length; i < ctorParameters.Length; i++)
                 {
                     var ctorParameterValue = _dependencyResolver.Resolve(ctorParameters[i].ParameterType);
+                    if (ctorParameterValue == null)
+                    {
+                        return null;
+                    }
+
                     finalParameters.Add(ctorParameterValue);
                 }
 
@@ -706,6 +729,16 @@ namespace Catel.IoC
         /// <param name="sender">The sender.</param>
         /// <param name="eventArgs">The <see cref="TypeRegisteredEventArgs" /> instance containing the event data.</param>
         private void OnServiceLocatorTypeRegistered(object sender, TypeRegisteredEventArgs eventArgs)
+        {
+            ClearCache();
+        }
+
+        /// <summary>
+        /// Called when the <see cref="TypeCache.AssemblyLoaded"/> event occurs.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="AssemblyLoadedEventArgs"/> instance containing the event data.</param>
+        private void OnAssemblyLoaded(object sender, AssemblyLoadedEventArgs e)
         {
             ClearCache();
         }

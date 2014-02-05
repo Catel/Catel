@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CollectionExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -270,6 +270,25 @@ namespace Catel.Collections
             }
 
             list.RemoveAt(list.Count - 1);
+        }
+
+        /// <summary>
+        /// The for each extension on <see cref="IEnumerable{TItem}"/>.
+        /// </summary>
+        /// <typeparam name="TItem">The type of the item.</typeparam>
+        /// <param name="collection">The collection.</param>
+        /// <param name="action">The action.</param>
+        public static void ForEach<TItem>(this IEnumerable<TItem> collection, Action<TItem> action)
+        {
+            if (collection == null)
+            {
+                return;
+            }
+
+            foreach (var item in collection)
+            {
+                action(item);
+            }
         }
 
 #if NETFX_CORE

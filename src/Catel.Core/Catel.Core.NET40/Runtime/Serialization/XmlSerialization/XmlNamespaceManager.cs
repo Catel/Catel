@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="XmlNamespaceManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -25,6 +25,7 @@ namespace Catel.Runtime.Serialization.Xml
         private const string ArraySchemaUrl = "http://schemas.microsoft.com/2003/10/Serialization/Arrays";
         private const string ArraySchemaName = "arr";
         private const string NamespaceUriPrefix = "http://schemas.datacontract.org/2004/07/";
+
         private readonly Dictionary<string, XmlScopeNamespaceInfo> _scopeInfo = new Dictionary<string, XmlScopeNamespaceInfo>();
 
         /// <summary>
@@ -100,7 +101,12 @@ namespace Catel.Runtime.Serialization.Xml
                 string prefix = preferredPrefix;
                 string uri = string.Format("{0}{1}", NamespaceUriPrefix, typeNamespace);
 
-                if (typeof (IEnumerable).IsAssignableFromEx(type))
+                if (TypeHelper.IsBasicType(type))
+                {
+                    return null;
+                }
+
+                if (type != typeof(string) && typeof (IEnumerable).IsAssignableFromEx(type))
                 {
                     prefix = ArraySchemaName;
                     uri = ArraySchemaUrl;
@@ -124,8 +130,6 @@ namespace Catel.Runtime.Serialization.Xml
 
                 return xmlNamespace;
             }
-
         }
-
     }
 }

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ModelBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -373,18 +373,6 @@ namespace Catel.Data
         private bool IsDeserialized { get; set; }
 
         /// <summary>
-        /// Gets a value indicating whether this instance contains non-serializable members.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance contains non-serializable members; otherwise, <c>false</c>.
-        /// </value>
-#if NET || SILVERLIGHT
-        [Browsable(false)]
-#endif
-        [XmlIgnore]
-        protected bool ContainsNonSerializableMembers { get; private set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether this object should always invoke the <see cref="ObservableObject.PropertyChanged"/> event,
         /// even when the actual value of a property has not changed.
         /// <para />
@@ -592,10 +580,25 @@ namespace Catel.Data
             var type = GetType();
 
 #if !WINDOWS_PHONE && !NETFX_CORE && !PCL && !NET35
-            if (!_propertyValuesFailedForValidation.ContainsKey(type))
+            if (!_propertyValuesIgnoredOrFailedForValidation.ContainsKey(type))
             {
-                _propertyValuesFailedForValidation.Add(type, new List<string>());
+                _propertyValuesIgnoredOrFailedForValidation.Add(type, new List<string>());
                 _propertyValuesAtLeastOnceValidated.Add(type, new List<string>());
+
+                // Ignore modelbase properties
+                _propertyValuesIgnoredOrFailedForValidation[type].Add("EqualityComparer");
+                _propertyValuesIgnoredOrFailedForValidation[type].Add("LeanAndMeanModel");
+                _propertyValuesIgnoredOrFailedForValidation[type].Add("DisableEventSubscriptionsOfChildValues");
+                _propertyValuesIgnoredOrFailedForValidation[type].Add("IsInitializing");
+                _propertyValuesIgnoredOrFailedForValidation[type].Add("IsInitialized");
+                _propertyValuesIgnoredOrFailedForValidation[type].Add("ContainsNonSerializableMembers");
+                _propertyValuesIgnoredOrFailedForValidation[type].Add("AlwaysInvokeNotifyChanged");
+                _propertyValuesIgnoredOrFailedForValidation[type].Add("HandlePropertyAndCollectionChanges");
+                _propertyValuesIgnoredOrFailedForValidation[type].Add("AutomaticallyValidateOnPropertyChanged");
+                _propertyValuesIgnoredOrFailedForValidation[type].Add("DeserializationSucceeded");
+                _propertyValuesIgnoredOrFailedForValidation[type].Add("IsValidating");
+                _propertyValuesIgnoredOrFailedForValidation[type].Add("SuspendValidation");
+                _propertyValuesIgnoredOrFailedForValidation[type].Add("HideValidationResults");
             }
 #endif
 
@@ -1375,16 +1378,6 @@ namespace Catel.Data
             foreach (var propertyDataKeyValuePair in catelTypeInfo.GetCatelProperties())
             {
                 var propertyData = propertyDataKeyValuePair.Value;
-                if (!propertyData.IsSerializable)
-                {
-                    object[] allowNonSerializableMembersAttributes = type.GetCustomAttributesEx(typeof(AllowNonSerializableMembersAttribute), true);
-                    if (allowNonSerializableMembersAttributes.Length == 0)
-                    {
-                        throw new InvalidPropertyException(propertyData.Name);
-                    }
-
-                    ContainsNonSerializableMembers = true;
-                }
 
                 InitializeProperty(propertyData);
             }
@@ -1476,6 +1469,14 @@ namespace Catel.Data
                         var propertyData = new PropertyData(name, type, defaultValue, setParent, propertyChangedEventHandler,
                             isSerializable, includeInSerialization, includeInBackup, isModelBaseProperty, isCalculatedProperty);
                         PropertyDataManager.RegisterProperty(objectType, name, propertyData);
+
+#if !WINDOWS_PHONE && !NETFX_CORE && !PCL && !NET35
+                        // Skip validation for modelbase properties
+                        if (propertyData.IsModelBaseProperty)
+                        {
+                            _propertyValuesIgnoredOrFailedForValidation[type].Add(propertyData.Name);
+                        }
+#endif
                     }
                 }
             }

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="RegistrationInfo.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -50,6 +50,13 @@ namespace Catel.IoC
         /// </summary>
         /// <value>The registration type.</value>
         public RegistrationType RegistrationType { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether this is a late-bound registration, meaning that the type can only
+        /// be determined after the type is created by a callback.
+        /// </summary>
+        /// <value><c>true</c> if this instance is late bound registration; otherwise, <c>false</c>.</value>
+        public bool IsLateBoundRegistration { get { return ImplementingType == typeof (LateBoundImplementation); } }
 
         /// <summary>
         /// Gets or sets a value indicating whether there is already an instance of this type instantiated when registered as <see cref="IoC.RegistrationType.Singleton"/>.

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ProcessService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -89,7 +89,7 @@ namespace Catel.MVVM.Services.Test
 
             if (ExpectedResults.Count == 0)
             {
-                throw new Exception(ResourceHelper.GetString(typeof(ProcessService), "Exceptions", "NoExpectedResultsInQueueForUnitTest"));
+                throw new Exception(ResourceHelper.GetString("NoExpectedResultsInQueueForUnitTest"));
             }
 
             var result = ExpectedResults.Dequeue();

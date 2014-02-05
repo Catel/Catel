@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="BootstrapperBaseTests.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 namespace Catel.Test.Extensions.Prism
@@ -64,7 +64,7 @@ namespace Catel.Test.Extensions.Prism
     //    {
     //        if (fooBootstrapper == null)
     //        {
-    //            serviceLocator = new ServiceLocator();
+    //            serviceLocator = IoCFactory.CreateServiceLocator();
     //            fooBootstrapper = new FooBootstrapper(serviceLocator);
     //            fooBootstrapper.Run();
     //        }
@@ -375,7 +375,7 @@ namespace Catel.Test.Extensions.Prism
     //        [TestMethod]
     //        public void RegistersAModuleWhenModuleManagerNotifiesIts100PercentOfLoadProgress()
     //        {
-    //            var serviceLocator = new ServiceLocator();
+    //            var serviceLocator = IoCFactory.CreateServiceLocator();
     //            var moduleManagerMock = new Mock<IModuleManager>();
     //            moduleManagerMock.Setup(manager => manager.Run()).Raises(manager => manager.ModuleDownloadProgressChanged += null, new ModuleDownloadProgressChangedEventArgs(new ModuleInfo("FooModule", typeof(FooModule).FullName), 100, 100));
     //            serviceLocator.RegisterInstance<IModuleManager>(moduleManagerMock.Object);
@@ -389,7 +389,7 @@ namespace Catel.Test.Extensions.Prism
     //        [TestMethod]
     //        public void DoesNotRegisterAModuleIfModuleManagerDoesNotNotifyThe100PercentOfLoadProgress()
     //        {
-    //            var serviceLocator = new ServiceLocator();
+    //            var serviceLocator = IoCFactory.CreateServiceLocator();
     //            var moduleManagerMock = new Mock<IModuleManager>();
     //            moduleManagerMock.Setup(manager => manager.Run()).Raises(manager => manager.ModuleDownloadProgressChanged += null, new ModuleDownloadProgressChangedEventArgs(new ModuleInfo("FooModule", typeof(FooModule).FullName), 100, 50));
     //            serviceLocator.RegisterInstance<IModuleManager>(moduleManagerMock.Object);
@@ -603,7 +603,7 @@ namespace Catel.Test.Extensions.Prism
     //        public void RegistersTheBootTasksAndCallsCommitAsync()
     //        {
     //            var splashScreenServiceMock = new Mock<ISplashScreenService>();
-    //            var serviceLocator = new ServiceLocator();
+    //            var serviceLocator = IoCFactory.CreateServiceLocator();
     //            serviceLocator.RegisterInstance<ISplashScreenService>(splashScreenServiceMock.Object);
     //            new FooBootstrapper(serviceLocator).RunWithSplashScreen<ProgressNotifyableViewModel>();
     //            splashScreenServiceMock.Verify(service => service.Enqueue(It.IsAny<ITask>()), Times.AtLeast(12));

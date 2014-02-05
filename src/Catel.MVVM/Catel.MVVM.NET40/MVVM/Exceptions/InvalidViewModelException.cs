@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="InvalidViewModelException.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -17,7 +17,7 @@ namespace Catel.MVVM
         /// Initializes a new instance of the <see cref="InvalidViewModelException"/> class.
         /// </summary>
         public InvalidViewModelException()
-            : base(ResourceHelper.GetString(typeof(InvalidViewModelException), "Exceptions", "InvalidViewModel"))
+            : base(ResourceHelper.GetString("InvalidViewModel"))
         {
         }
     }

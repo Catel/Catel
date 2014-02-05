@@ -1,12 +1,19 @@
-﻿using System;
-using System.ServiceModel;
-using System.ServiceModel.Channels;
-using System.ServiceModel.Dispatcher;
-using Catel.IoC;
-using Catel.Logging;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="InstanceProvider.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
 
 namespace Catel.ServiceModel.Dispatching
 {
+    using System;
+    using System.ServiceModel;
+    using System.ServiceModel.Channels;
+    using System.ServiceModel.Dispatcher;
+    using Catel.IoC;
+    using Catel.Logging;
+
     /// <summary>
     /// 
     /// </summary>
@@ -14,24 +21,22 @@ namespace Catel.ServiceModel.Dispatching
     {
         #region Fields
         /// <summary>
-        /// The log
-        /// </summary>
-        private readonly ILog _log = LogManager.GetCurrentClassLogger();
-
-        /// <summary>
         /// The contract type
         /// </summary>
         private readonly Type _contractType;
 
         /// <summary>
+        /// The log
+        /// </summary>
+        private readonly ILog _log = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// The service locator
         /// </summary>
         private readonly IServiceLocator _serviceLocator;
-
         #endregion
 
         #region Constructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="InstanceProvider" /> class.
         /// </summary>
@@ -50,13 +55,11 @@ namespace Catel.ServiceModel.Dispatching
             _contractType = contractType;
 
             _log.Debug("Register the contract type '{0}' for service type '{1}'", _contractType.Name, serviceType.Name);
-            _serviceLocator.RegisterTypeIfNotYetRegistered(_contractType, serviceType, tag, registrationType);
+            _serviceLocator.RegisterTypeIfNotYetRegisteredWithTag(_contractType, serviceType, tag, registrationType);
         }
-
         #endregion
 
-        #region Methods
-
+        #region IInstanceProvider Members
         /// <summary>
         /// Returns a service object given the specified <see cref="T:System.ServiceModel.InstanceContext" /> object.
         /// </summary>
@@ -76,7 +79,7 @@ namespace Catel.ServiceModel.Dispatching
             {
                 return null;
             }
-                
+
             var childContainer = instanceContextExtension.GetChildContainer(_serviceLocator);
 
             _log.Debug("Resolving the contract type '{0}'", _contractType.Name);
@@ -116,7 +119,6 @@ namespace Catel.ServiceModel.Dispatching
             _log.Debug("Releasing the child container");
             instanceContextExtension.DisposeChildContainer();
         }
-
         #endregion
     }
 }

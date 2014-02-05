@@ -1,14 +1,17 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ServiceDependencyExtension.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace Catel.Windows.Markup
 {
     using System;
-    using System.Windows.Markup;
     using IoC;
+
+#if !NETFX_CORE
+    using System.Windows.Markup;
+#endif
 
     /// <summary>
     /// Service dependency extension to allow service access in xaml for services with properties.

@@ -145,11 +145,23 @@
     <Compile Include="..\Catel.Core.NET40\ComponentModel\INotifyDataWarningInfo.cs">
       <Link>ComponentModel\INotifyDataWarningInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Configuration\ConfigurationService.cs">
+      <Link>Configuration\ConfigurationService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Configuration\EventArgs\ConfigurationChangedEventArgs.cs">
+      <Link>Configuration\EventArgs\ConfigurationChangedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Configuration\Interfaces\IConfigurationService.cs">
+      <Link>Configuration\Interfaces\IConfigurationService.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\CoreModule.cs">
       <Link>CoreModule.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\Attributes\AllowNonSerializableMembersAttribute.cs">
       <Link>Data\Attributes\AllowNonSerializableMembersAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Data\Attributes\ExcludeFromValidationAttribute.cs">
+      <Link>Data\Attributes\ExcludeFromValidationAttribute.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\Attributes\ValidateModelAttribute.cs">
       <Link>Data\Attributes\ValidateModelAttribute.cs</Link>
@@ -373,6 +385,15 @@
     <Compile Include="..\Catel.Core.NET40\Exceptions\NotSupportedInWindows8Exception.cs">
       <Link>Exceptions\NotSupportedInWindows8Exception.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Filtering\CompositeFilter.cs">
+      <Link>Filtering\CompositeFilter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Filtering\CompositePredicate.cs">
+      <Link>Filtering\CompositePredicate.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Filtering\Interfaces\ICompositeFilter.cs">
+      <Link>Filtering\Interfaces\ICompositeFilter.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Fluent\Interfaces\IFluent.cs">
       <Link>Fluent\Interfaces\IFluent.cs</Link>
     </Compile>
@@ -396,6 +417,9 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Helpers\ObjectToStringHelper.cs">
       <Link>Helpers\ObjectToStringHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Helpers\ParallelHelper.cs">
+      <Link>Helpers\ParallelHelper.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Helpers\ResourceHelper.cs">
       <Link>Helpers\ResourceHelper.cs</Link>
@@ -424,11 +448,23 @@
     <Compile Include="..\Catel.Core.NET40\IoC\CatelDependencyResolver.cs">
       <Link>IoC\CatelDependencyResolver.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\Conventions\FirstInterfaceRegistrationConvention.cs">
+      <Link>IoC\Conventions\FirstInterfaceRegistrationConvention.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\Conventions\NamingRegistrationConvention.cs">
+      <Link>IoC\Conventions\NamingRegistrationConvention.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\Conventions\RegistrationConventionBase.cs">
+      <Link>IoC\Conventions\RegistrationConventionBase.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\DependencyResolverManager.cs">
       <Link>IoC\DependencyResolverManager.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\EventArgs\MissingTypeEventArgs.cs">
       <Link>IoC\EventArgs\MissingTypeEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\EventArgs\TypeInstantiatedEventArgs.cs">
+      <Link>IoC\EventArgs\TypeInstantiatedEventArgs.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\EventArgs\TypeRegisteredEventArgs.cs">
       <Link>IoC\EventArgs\TypeRegisteredEventArgs.cs</Link>
@@ -445,6 +481,12 @@
     <Compile Include="..\Catel.Core.NET40\IoC\Extensions\ObjectExtensions.cs">
       <Link>IoC\Extensions\ObjectExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\Extensions\RegistrationConventionHandlerExtensions.cs">
+      <Link>IoC\Extensions\RegistrationConventionHandlerExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\Extensions\ServiceLocatorExtensions.conventions.cs">
+      <Link>IoC\Extensions\ServiceLocatorExtensions.conventions.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Extensions\ServiceLocatorExtensions.cs">
       <Link>IoC\Extensions\ServiceLocatorExtensions.cs</Link>
     </Compile>
@@ -453,21 +495,6 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Helpers\DependencyInjectionHelper.cs">
       <Link>IoC\Helpers\DependencyInjectionHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\IoC\Helpers\ExternalContainerHelperBase.cs">
-      <Link>IoC\Helpers\ExternalContainerHelperBase.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\IoC\Helpers\MefHelper.cs">
-      <Link>IoC\Helpers\MefHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\IoC\Helpers\NinjectHelper.cs">
-      <Link>IoC\Helpers\NinjectHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\IoC\Helpers\UnityHelper.cs">
-      <Link>IoC\Helpers\UnityHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\IoC\Helpers\WindsorHelper.cs">
-      <Link>IoC\Helpers\WindsorHelper.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Interfaces\IDependencyResolver.cs">
       <Link>IoC\Interfaces\IDependencyResolver.cs</Link>
@@ -481,8 +508,17 @@
     <Compile Include="..\Catel.Core.NET40\IoC\Interfaces\INeedCustomInitialization.cs">
       <Link>IoC\Interfaces\INeedCustomInitialization.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\Interfaces\IRegistrationConvention.cs">
+      <Link>IoC\Interfaces\IRegistrationConvention.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\Interfaces\IRegistrationConventionHandler.cs">
+      <Link>IoC\Interfaces\IRegistrationConventionHandler.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Interfaces\IServiceLocator.cs">
       <Link>IoC\Interfaces\IServiceLocator.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\Interfaces\IServiceLocatorInitializer.cs">
+      <Link>IoC\Interfaces\IServiceLocatorInitializer.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Interfaces\ITypeFactory.cs">
       <Link>IoC\Interfaces\ITypeFactory.cs</Link>
@@ -493,6 +529,15 @@
     <Compile Include="..\Catel.Core.NET40\IoC\IoCConfiguration.cs">
       <Link>IoC\IoCConfiguration.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\IoCFactory.cs">
+      <Link>IoC\IoCFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\RegistrationConventionHandler.cs">
+      <Link>IoC\RegistrationConventionHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\LateBoundImplementation.cs">
+      <Link>IoC\LateBoundImplementation.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\RegistrationInfo.cs">
       <Link>IoC\RegistrationInfo.cs</Link>
     </Compile>
@@ -501,6 +546,12 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\ServiceLocatorAutoRegistrationManager.cs">
       <Link>IoC\ServiceLocatorAutoRegistrationManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\ServiceLocatorRegistration.cs">
+      <Link>IoC\ServiceLocatorRegistration.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\ServiceLocatorRegistrationGroup.cs">
+      <Link>IoC\ServiceLocatorRegistrationGroup.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\TypeFactory.cs">
       <Link>IoC\TypeFactory.cs</Link>
@@ -634,11 +685,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.tr.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\Properties\Resources.zh-CHS.Designer.cs">
-      <Link>Properties\Resources.zh-CHS.Designer.cs</Link>
+    <Compile Include="..\Catel.Core.NET40\Properties\Resources.zh-Hans.SL5.Designer.cs">
+      <Link>Properties\Resources.zh-Hans.SL5.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.zh-CHS.resx</DependentUpon>
+      <DependentUpon>Resources.zh-Hans.resx</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Reflection\EventArgs\AssemblyLoadedEventArgs.cs">
       <Link>Reflection\EventArgs\AssemblyLoadedEventArgs.cs</Link>
@@ -823,8 +874,23 @@
     <Compile Include="..\Catel.Core.NET40\Scoping\ScopeManager.cs">
       <Link>Scoping\ScopeManager.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Services\Interfaces\ILanguageService.cs">
+      <Link>Services\Interfaces\ILanguageService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Services\Interfaces\ILanguageSource.cs">
+      <Link>Services\Interfaces\ILanguageSource.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Services\Interfaces\IService.cs">
       <Link>Services\Interfaces\IService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Services\LanguageService.cs">
+      <Link>Services\LanguageService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Services\Models\LanguageResourceKey.cs">
+      <Link>Services\Models\LanguageResourceKey.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Services\Models\LanguageResourceSource.cs">
+      <Link>Services\Models\LanguageResourceSource.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Services\ServiceBase.cs">
       <Link>Services\ServiceBase.cs</Link>
@@ -924,15 +990,16 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.tr.SL5.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.Core.NET40\Properties\Resources.zh-CHS.resx">
-      <Link>Properties\Resources.zh-CHS.resx</Link>
+    <EmbeddedResource Include="..\Catel.Core.NET40\Properties\Resources.zh-Hans.resx">
+      <Link>Properties\Resources.zh-Hans.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.zh-CHS.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.zh-Hans.SL5.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>

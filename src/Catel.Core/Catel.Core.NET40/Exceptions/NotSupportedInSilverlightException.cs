@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="NotSupportedInSilverlightException.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -25,7 +25,7 @@ namespace Catel
         /// <param name="reasonFormat">The reason format.</param>
         /// <param name="args">The formatting arguments.</param>
         public NotSupportedInSilverlightException(string reasonFormat = "", params object[] args)
-            : base(ResourceHelper.GetString(typeof(NotSupportedInSilverlightException), "Exceptions", "NotSupportedInSilverlight"))
+            : base(ResourceHelper.GetString("NotSupportedInSilverlight"))
         {
             Reason = string.Format(reasonFormat, args);
         }

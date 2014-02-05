@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="NotSupportedInPlatformException.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -25,7 +25,7 @@ namespace Catel
         /// <param name="featureFormat">The feature format.</param>
         /// <param name="args">The formatting arguments.</param>
         public NotSupportedInPlatformException(string featureFormat = "", params object[] args)
-            : base(ResourceHelper.GetString(typeof(NotSupportedInPlatformException), "Exceptions", "NotSupportedInPlatform"))
+            : base(ResourceHelper.GetString("NotSupportedInPlatform"))
         {
             Reason = string.Format(featureFormat, args);
             Platform = Platforms.CurrentPlatform;

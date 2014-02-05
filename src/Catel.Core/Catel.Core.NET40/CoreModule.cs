@@ -1,18 +1,19 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CoreModule.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 
 namespace Catel
 {
-    using System;
+    using Catel.Configuration;
     using Catel.Data;
     using Catel.ExceptionHandling;
     using Catel.IoC;
     using Catel.Messaging;
     using Catel.Runtime.Serialization;
+    using Catel.Services;
 
 #if NET
     using Catel.Runtime.Serialization.Binary;
@@ -23,21 +24,22 @@ namespace Catel
     /// <summary>
     /// Core module which allows the registration of default services in the service locator.
     /// </summary>
-    public static class CoreModule
+    public class CoreModule : IServiceLocatorInitializer
     {
         /// <summary>
-        /// Registers the services in the specified <see cref="IServiceLocator" />.
+        /// Initializes the specified service locator.
         /// </summary>
         /// <param name="serviceLocator">The service locator.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator"/> is <c>null</c>.</exception>
-        public static void RegisterServices(IServiceLocator serviceLocator)
+        public void Initialize(IServiceLocator serviceLocator)
         {
             Argument.IsNotNull(() => serviceLocator);
 
+            serviceLocator.RegisterType<ILanguageService, LanguageService>();
             serviceLocator.RegisterInstance<IExceptionService>(ExceptionService.Default);
             serviceLocator.RegisterInstance<IMessageMediator>(MessageMediator.Default);
 
-            serviceLocator.RegisterTypeIfNotYetRegistered<IValidatorProvider, AttributeValidatorProvider>();
+            serviceLocator.RegisterType<IValidatorProvider, AttributeValidatorProvider>();
+            serviceLocator.RegisterType<IRegistrationConventionHandler, RegistrationConventionHandler>();
 
 #if NET
             serviceLocator.RegisterType<IBinarySerializer, BinarySerializer>();
@@ -49,6 +51,7 @@ namespace Catel
             serviceLocator.RegisterType<ISerializationManager, SerializationManager>();
 
             serviceLocator.RegisterType<IModelEqualityComparer, ModelEqualityComparer>();
+            serviceLocator.RegisterType<IConfigurationService, ConfigurationService>();
         }
     }
 }

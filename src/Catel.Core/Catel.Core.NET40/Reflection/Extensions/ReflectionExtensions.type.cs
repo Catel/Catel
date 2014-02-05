@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ReflectionExtensions.type.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -127,6 +127,34 @@ namespace Catel.Reflection
                 {typeof (ushort), new List<Type> {typeof (byte), typeof (char)}},
                 {typeof (short), new List<Type> {typeof (byte)}}
             };
+
+        /// <summary>
+        /// Gets the parent types.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns></returns>
+        public static IEnumerable<Type> GetParentTypes(this Type type)
+        {
+            // is there any base type?
+            if ((type == null) || (type.GetBaseTypeEx() == null))
+            {
+                yield break;
+            }
+
+            // return all implemented or inherited interfaces
+            foreach (var i in type.GetInterfacesEx())
+            {
+                yield return i;
+            }
+
+            // return all inherited types
+            var currentBaseType = type.GetBaseTypeEx();
+            while (currentBaseType != null)
+            {
+                yield return currentBaseType;
+                currentBaseType = currentBaseType.GetBaseTypeEx();
+            }
+        }
 
         /// <summary>
         /// Gets the full name of the type in a safe way. This means it checks for null first.
@@ -451,6 +479,20 @@ namespace Catel.Reflection
         /// <summary>
         /// Returns whether the specified type implements the specified interface.
         /// </summary>
+        /// <typeparam name="TInterface">The type of the t interface.</typeparam>
+        /// <param name="type">The type.</param>
+        /// <returns><c>true</c> if the type implements the interface; otherwise <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        public static bool ImplementsInterfaceEx<TInterface>(this Type type)
+        {
+            Argument.IsNotNull("type", type);
+
+            return ImplementsInterfaceEx(type, typeof (TInterface));
+        }
+
+        /// <summary>
+        /// Returns whether the specified type implements the specified interface.
+        /// </summary>
         /// <param name="type">The type.</param>
         /// <param name="interfaceType">Type of the interface.</param>
         /// <returns><c>true</c> if the type implements the interface; otherwise <c>false</c>.</returns>
@@ -462,6 +504,23 @@ namespace Catel.Reflection
             Argument.IsNotNull("interfaceType", interfaceType);
 
             return IsAssignableFromEx(interfaceType, type);
+        }
+
+        /// <summary>
+        /// Returns whether the specified type is a primitive type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>The primitive type specification.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        public static bool IsPrimitiveEx(this Type type)
+        {
+            Argument.IsNotNull("type", type);
+
+#if NETFX_CORE
+            return type.GetTypeInfo().IsPrimitive;
+#else
+            return type.IsPrimitive;
+#endif
         }
 
         /// <summary>
@@ -954,7 +1013,7 @@ namespace Catel.Reflection
 #endif
 
 #else
-#if WP8
+#if WP80
 			return type.GetTypeInfo().GetMethod(name, bindingFlags, null, types, null);
 #elif PCL
             return type.GetTypeInfo().GetMethod(name, types);

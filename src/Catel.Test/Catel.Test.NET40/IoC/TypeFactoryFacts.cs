@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="TypeFactoryFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -113,7 +113,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ResolvesTypeUsingDependencyInjectionFallBackToDefaultConstructor()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
 
                 var instance = typeFactory.CreateInstance<DependencyInjectionTestClass>();
@@ -124,7 +124,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ResolvesTypeUsingDependencyInjectionFallBackToFirstConstructor()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
 
                 var iniEntry = new IniEntry { Group = "group", Key = "key", Value = "value" };
@@ -141,7 +141,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ResolvesTypeUsingDependencyInjectionFallBackToSecondConstructor()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
 
                 var iniEntry = new IniEntry { Group = "group", Key = "key", Value = "value" };
@@ -159,7 +159,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ResolvesTypeUsingDependencyInjectionUsesConstructorWithMostParametersFirst()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
 
                 var iniEntry = new IniEntry { Group = "group", Key = "key", Value = "value" };
@@ -178,7 +178,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void CallsCustomInitializationWhenNeeded()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
 
                 var instance = typeFactory.CreateInstance<DependencyInjectionTestClass>();
@@ -188,7 +188,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void AutomaticallyRegistersDependencyResolverInDependencyResolverManager()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
                 var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
 
@@ -217,7 +217,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ThrowsCircularDependencyExceptionForInvalidTypeRequestPath()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
 
                 serviceLocator.RegisterType<X>();

@@ -95,6 +95,9 @@
     <Compile Include="..\Catel.Test.NET40\ComponentModel\PropertyChangedEventArgsExtensionsFacts.cs">
       <Link>ComponentModel\PropertyChangedEventArgsExtensionsFacts.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\Configuration\ConfigurationServiceFacts.cs">
+      <Link>Configuration\ConfigurationServiceFacts.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\Data\CatelTypeInfoFacts.cs">
       <Link>Data\CatelTypeInfoFacts.cs</Link>
     </Compile>
@@ -278,6 +281,15 @@
     <Compile Include="..\Catel.Test.NET40\IoC\ServiceLocatorFacts.cs">
       <Link>IoC\ServiceLocatorFacts.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\IoC\ServiceLocatorFacts.features.cs">
+      <Link>IoC\ServiceLocatorFacts.features.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\IoC\ServiceLocatorRegistrationFacts.cs">
+      <Link>IoC\ServiceLocatorRegistrationFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\IoC\ServiceLocatorRegistrationGroupFacts.cs">
+      <Link>IoC\ServiceLocatorRegistrationGroupFacts.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\IoC\TestClasses.cs">
       <Link>IoC\TestClasses.cs</Link>
     </Compile>
@@ -326,6 +338,15 @@
     <Compile Include="..\Catel.Test.NET40\MVVM\Auditing\TestViewModel.cs">
       <Link>MVVM\Auditing\TestViewModel.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Commands\CommandManagerFacts.cs">
+      <Link>MVVM\Commands\CommandManagerFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Commands\CompositeCommandFacts.cs">
+      <Link>MVVM\Commands\CompositeCommandFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Commands\CompositeCommandViewModel.cs">
+      <Link>MVVM\Commands\CompositeCommandViewModel.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\MVVM\Commands\ViewModelCommandManagerFacts.cs">
       <Link>MVVM\Commands\ViewModelCommandManagerFacts.cs</Link>
     </Compile>
@@ -368,9 +389,6 @@
     <Compile Include="..\Catel.Test.NET40\MVVM\Services\ViewModelServiceBaseTest.cs">
       <Link>MVVM\Services\ViewModelServiceBaseTest.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Test.NET40\MVVM\ViewModels\Attributes\ExposeAttributeFacts.cs">
-      <Link>MVVM\ViewModels\Attributes\ExposeAttributeFacts.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Test.NET40\MVVM\ViewModels\Attributes\InterestedInAttributeFacts.cs">
       <Link>MVVM\ViewModels\Attributes\InterestedInAttributeFacts.cs</Link>
     </Compile>
@@ -385,9 +403,6 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\MVVM\ViewModels\ManagedViewModelTest.cs">
       <Link>MVVM\ViewModels\ManagedViewModelTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\MVVM\ViewModels\TestClasses\ExposingViewModel.cs">
-      <Link>MVVM\ViewModels\TestClasses\ExposingViewModel.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\MVVM\ViewModels\TestClasses\InterestedViewModel.cs">
       <Link>MVVM\ViewModels\TestClasses\InterestedViewModel.cs</Link>
@@ -554,8 +569,17 @@
     <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\ShortDateFormattingConverterTest.cs">
       <Link>Windows\Data\Converters\ShortDateFormattingConverterTest.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\TextToLowerCaseConverterFacts.cs">
+      <Link>Windows\Data\Converters\TextToLowerCaseConverterFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\TextToUpperCaseConverterFacts.cs">
+      <Link>Windows\Data\Converters\TextToUpperCaseConverterFacts.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\Windows\Helpers\ResourceHelperFacts.cs">
       <Link>Windows\Helpers\ResourceHelperFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Windows\Input\InputGestureFacts.cs">
+      <Link>Windows\Input\InputGestureFacts.cs</Link>
     </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -612,7 +636,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="IoC\Helpers\" />
     <Folder Include="Logging\Extensions\" />
     <Folder Include="Runtime\Serialization\Attributes\" />
   </ItemGroup>
@@ -620,6 +643,9 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\lib\Newtonsoft.Json.6.0.1\lib\netcore45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Obsolete">
       <HintPath>..\..\..\lib\Obsolete.Fody.3.0.0.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
       <Private>False</Private>

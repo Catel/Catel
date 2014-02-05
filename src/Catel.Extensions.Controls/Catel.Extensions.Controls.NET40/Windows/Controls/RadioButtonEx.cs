@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="RadioButtonEx.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // <summary>
 //   A radio button that solves the 2-way binding issue of the <see cref="System.Windows.Controls.RadioButton.IsChecked" /> property in WPF 3.5.

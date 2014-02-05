@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SerializationContext.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -17,7 +17,8 @@ namespace Catel.Runtime.Serialization
     public class SerializationContext<TContext> : ISerializationContext<TContext>
         where TContext : class
     {
-        private ScopeManager<ReferenceManager> _referenceManagerScopeManager; 
+        private ScopeManager<ReferenceManager> _referenceManagerScopeManager;
+        private int? _depth;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SerializationContext{TContext}" /> class.
@@ -54,6 +55,23 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <value>The type of the model.</value>
         public Type ModelType { get; private set; }
+
+        /// <summary>
+        /// Gets the depth of the current element being processed.
+        /// </summary>
+        /// <value>The depth.</value>
+        public int Depth
+        {
+            get
+            {
+                if (!_depth.HasValue)
+                {
+                    _depth = ReferenceManager.Count;
+                }
+
+                return _depth.Value;
+            }
+        }
 
         /// <summary>
         /// Gets the context mode.

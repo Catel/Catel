@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ModuleInitializer.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -26,7 +26,7 @@ namespace Catel.Test
         /// </summary>
         public static void Initialize()
         {
-            LogManager.RegisterDebugListener();
+            LogManager.AddDebugListener();
 
             // For testing purposes, enable features we disabled for CTL-234
             var modelEqualityComparer = ServiceLocator.Default.ResolveType<IModelEqualityComparer>();

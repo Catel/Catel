@@ -80,11 +80,7 @@
   <ItemGroup>
     <Reference Include="Castle.Core, Version=3.2.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Castle.Core.3.2.2\lib\sl5\Castle.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Windsor, Version=3.2.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Castle.Windsor.3.2.1\lib\sl5\Castle.Windsor.dll</HintPath>
+      <HintPath>..\..\..\lib\Castle.Core.3.2.2\lib\sl5\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="FluentValidation, Version=5.0.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -97,9 +93,6 @@
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\..\lib\CommonServiceLocator.1.0\lib\SL30\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.Unity.Silverlight, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\lib\Unity.2.1.505.0\lib\SL30\Microsoft.Practices.Unity.Silverlight.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Silverlight.Testing">
       <HintPath>$(MSBuildExtensionsPath)\..\Microsoft SDKs\Silverlight\v4.0\Toolkit\Apr10\Testing\Microsoft.Silverlight.Testing.dll</HintPath>
     </Reference>
@@ -110,9 +103,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Moq.4.1.1309.1617\lib\sl4\Moq.Silverlight.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Ninject.3.0.1.10\lib\sl5\Ninject.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\lib\Newtonsoft.Json.6.0.1\lib\portable-net40+sl5+wp80+win8+monotouch+monoandroid\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Obsolete">
       <HintPath>..\..\..\lib\Obsolete.Fody.3.0.0.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
@@ -175,6 +167,9 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\ComponentModel\PropertyChangedEventArgsExtensionsFacts.cs">
       <Link>ComponentModel\PropertyChangedEventArgsExtensionsFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Configuration\ConfigurationServiceFacts.cs">
+      <Link>Configuration\ConfigurationServiceFacts.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Data\CatelTypeInfoFacts.cs">
       <Link>Data\CatelTypeInfoFacts.cs</Link>
@@ -419,20 +414,17 @@
     <Compile Include="..\Catel.Test.NET40\IoC\Extensions\ObjectExtensionsFacts.cs">
       <Link>IoC\Extensions\ObjectExtensionsFacts.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Test.NET40\IoC\Helpers\MefHelperTest.cs">
-      <Link>IoC\Helpers\MefHelperTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\IoC\Helpers\NinjectHelperTest.cs">
-      <Link>IoC\Helpers\NinjectHelperTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\IoC\Helpers\UnityHelperTest.cs">
-      <Link>IoC\Helpers\UnityHelperTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\IoC\Helpers\WindsorHelperTest.cs">
-      <Link>IoC\Helpers\WindsorHelperTest.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Test.NET40\IoC\ServiceLocatorFacts.cs">
       <Link>IoC\ServiceLocatorFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\IoC\ServiceLocatorFacts.features.cs">
+      <Link>IoC\ServiceLocatorFacts.features.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\IoC\ServiceLocatorRegistrationFacts.cs">
+      <Link>IoC\ServiceLocatorRegistrationFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\IoC\ServiceLocatorRegistrationGroupFacts.cs">
+      <Link>IoC\ServiceLocatorRegistrationGroupFacts.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\IoC\TestClasses.cs">
       <Link>IoC\TestClasses.cs</Link>
@@ -482,6 +474,15 @@
     <Compile Include="..\Catel.Test.NET40\MVVM\Auditing\TestViewModel.cs">
       <Link>MVVM\Auditing\TestViewModel.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Commands\CommandManagerFacts.cs">
+      <Link>MVVM\Commands\CommandManagerFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Commands\CompositeCommandFacts.cs">
+      <Link>MVVM\Commands\CompositeCommandFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Commands\CompositeCommandViewModel.cs">
+      <Link>MVVM\Commands\CompositeCommandViewModel.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\MVVM\Commands\ViewModelCommandManagerFacts.cs">
       <Link>MVVM\Commands\ViewModelCommandManagerFacts.cs</Link>
     </Compile>
@@ -524,9 +525,6 @@
     <Compile Include="..\Catel.Test.NET40\MVVM\Services\ViewModelServiceBaseTest.cs">
       <Link>MVVM\Services\ViewModelServiceBaseTest.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Test.NET40\MVVM\ViewModels\Attributes\ExposeAttributeFacts.cs">
-      <Link>MVVM\ViewModels\Attributes\ExposeAttributeFacts.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Test.NET40\MVVM\ViewModels\Attributes\InterestedInAttributeFacts.cs">
       <Link>MVVM\ViewModels\Attributes\InterestedInAttributeFacts.cs</Link>
     </Compile>
@@ -541,9 +539,6 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\MVVM\ViewModels\ManagedViewModelTest.cs">
       <Link>MVVM\ViewModels\ManagedViewModelTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\MVVM\ViewModels\TestClasses\ExposingViewModel.cs">
-      <Link>MVVM\ViewModels\TestClasses\ExposingViewModel.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\MVVM\ViewModels\TestClasses\InterestedViewModel.cs">
       <Link>MVVM\ViewModels\TestClasses\InterestedViewModel.cs</Link>
@@ -716,8 +711,17 @@
     <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\ShortDateFormattingConverterTest.cs">
       <Link>Windows\Data\Converters\ShortDateFormattingConverterTest.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\TextToLowerCaseConverterFacts.cs">
+      <Link>Windows\Data\Converters\TextToLowerCaseConverterFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\TextToUpperCaseConverterFacts.cs">
+      <Link>Windows\Data\Converters\TextToUpperCaseConverterFacts.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\Windows\Helpers\ResourceHelperFacts.cs">
       <Link>Windows\Helpers\ResourceHelperFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Windows\Input\InputGestureFacts.cs">
+      <Link>Windows\Input\InputGestureFacts.cs</Link>
     </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>

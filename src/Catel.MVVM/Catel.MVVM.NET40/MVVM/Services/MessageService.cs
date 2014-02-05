@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="MessageService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -100,7 +100,7 @@ namespace Catel.MVVM.Services
         {
             if (string.IsNullOrEmpty(caption))
             {
-                caption = Catel.ResourceHelper.GetString(typeof(MessageService), "Resources", "ErrorTitle");
+                caption = Catel.ResourceHelper.GetString("ErrorTitle");
             }
 
             const MessageButton button = MessageButton.OK;
@@ -131,7 +131,7 @@ namespace Catel.MVVM.Services
         {
             if (string.IsNullOrEmpty(caption))
             {
-                caption = Catel.ResourceHelper.GetString(typeof(MessageService), "Resources", "WarningTitle");
+                caption = Catel.ResourceHelper.GetString("WarningTitle");
             }
 
             const MessageButton button = MessageButton.OK;
@@ -162,7 +162,7 @@ namespace Catel.MVVM.Services
         {
             if (string.IsNullOrEmpty(caption))
             {
-                caption = Catel.ResourceHelper.GetString(typeof(MessageService), "Resources", "InfoTitle");
+                caption = Catel.ResourceHelper.GetString("InfoTitle");
             }
 
             const MessageButton button = MessageButton.OK;

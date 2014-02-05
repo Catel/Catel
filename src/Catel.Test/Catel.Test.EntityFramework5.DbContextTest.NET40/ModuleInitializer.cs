@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ModuleInitializer.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -26,9 +26,9 @@ namespace Catel.Test
         {
                 var serviceLocator = ServiceLocator.Default;
 
-                serviceLocator.RegisterType<IDbContextCustomerRepository, DbContextCustomerRepository>(RegistrationType.Transient);
-                serviceLocator.RegisterType<IDbContextOrderRepository, DbContextOrderRepository>(RegistrationType.Transient);
-                serviceLocator.RegisterType<IDbContextProductRepository, DbContextProductRepository>(RegistrationType.Transient);
+                serviceLocator.RegisterType<IDbContextCustomerRepository, DbContextCustomerRepository>(registrationType: RegistrationType.Transient);
+                serviceLocator.RegisterType<IDbContextOrderRepository, DbContextOrderRepository>(registrationType: RegistrationType.Transient);
+                serviceLocator.RegisterType<IDbContextProductRepository, DbContextProductRepository>(registrationType: RegistrationType.Transient);
         }
 
         #endregion

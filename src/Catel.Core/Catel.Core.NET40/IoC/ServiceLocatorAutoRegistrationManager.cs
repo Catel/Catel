@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ServiceLocatorAutoRegistrationManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -91,7 +91,8 @@ namespace Catel.IoC
 
         #region Properties
         /// <summary>
-        /// Gets or sets a value indicating whether this service locators will ignore incorrect usage of <see cref="ServiceLocatorRegistrationAttribute"/> and do not throw <see cref="InvalidOperationException"/>.
+        /// Gets or sets a value indicating whether this service locators will ignore incorrect usage of <see cref="ServiceLocatorRegistrationAttribute"/> 
+        /// and do not throw <see cref="InvalidOperationException"/>.
         /// </summary>
         /// <remarks>
         /// By default, this value is <c>true</c>.
@@ -115,6 +116,7 @@ namespace Catel.IoC
                 if (_autoRegisterTypesViaAttributes != value)
                 {
                     _autoRegisterTypesViaAttributes = value;
+
                     if (_autoRegisterTypesViaAttributes)
                     {
                         if (!_hasInspectedTypesAtLeastOnce)
@@ -173,7 +175,7 @@ namespace Catel.IoC
                                 {
                                     case ServiceLocatorRegistrationMode.Transient:
                                     case ServiceLocatorRegistrationMode.SingletonInstantiateWhenRequired:
-                                        _serviceLocator.RegisterTypeIfNotYetRegistered(attribute.InterfaceType, type, attribute.Tag, attribute.RegistrationType);
+                                        _serviceLocator.RegisterTypeIfNotYetRegisteredWithTag(attribute.InterfaceType, type, attribute.Tag, attribute.RegistrationType);
                                         break;
 
                                     case ServiceLocatorRegistrationMode.SingletonInstantiateImmediately:

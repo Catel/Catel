@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SavableModelBaseBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -52,10 +52,6 @@ namespace Catel.Data
         /// </summary>
         protected SavableModelBase()
         {
-            if (ContainsNonSerializableMembers)
-            {
-                throw new NotSupportedException("Properties that are not serializable are not supported");
-            }
         }
 
 #if NET

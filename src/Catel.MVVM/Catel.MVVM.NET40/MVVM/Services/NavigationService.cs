@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="NavigationService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -352,7 +352,7 @@ namespace Catel.MVVM.Services
             {
                 if (_registeredUris.ContainsKey(name))
                 {
-                    throw new Exception(Catel.ResourceHelper.GetString(typeof(NavigationService), "Exceptions", "ViewModelAlreadyRegistered"));
+                    throw new Exception(Catel.ResourceHelper.GetString("ViewModelAlreadyRegistered"));
                 }
 
                 _registeredUris.Add(name, uri.ToString());

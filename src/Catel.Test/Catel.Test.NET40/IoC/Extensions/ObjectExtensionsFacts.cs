@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ObjectExtensionsFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -40,7 +40,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ReturnsTypeFactoryUsedToCreateObject()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
                 var obj = typeFactory.CreateInstance<object>();
 
@@ -72,7 +72,7 @@ namespace Catel.Test.IoC
             [TestMethod]
             public void ReturnsDependencyResolverUsedToCreateObject()
             {
-                var serviceLocator = new ServiceLocator();
+                var serviceLocator = IoCFactory.CreateServiceLocator();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
                 var typeFactory = dependencyResolver.Resolve<ITypeFactory>();
                 var obj = typeFactory.CreateInstance<object>();

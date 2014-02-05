@@ -91,11 +91,23 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVMModule.cs">
       <Link>MVVMModule.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\CommandManager.cs">
+      <Link>MVVM\Commands\CommandManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\CompositeCommand.cs">
+      <Link>MVVM\Commands\CompositeCommand.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs">
       <Link>MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ICatelTaskCommand.cs">
       <Link>MVVM\Commands\Interfaces\ICatelTaskCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ICommandManager.cs">
+      <Link>MVVM\Commands\Interfaces\ICommandManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ICompositeCommand.cs">
+      <Link>MVVM\Commands\Interfaces\ICompositeCommand.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Interfaces\ITaskProgressReport.cs">
       <Link>MVVM\Commands\Interfaces\ITaskProgressReport.cs</Link>
@@ -181,14 +193,23 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.tr.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.zh-CHS6.Designer.cs">
-      <Link>Properties\Resources.zh-CHS6.Designer.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.zh-Hans.SL5.Designer.cs">
+      <Link>Properties\Resources.zh-Hans.SL5.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.zh-CHS.resx</DependentUpon>
+      <DependentUpon>Resources.zh-Hans.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\CollectionToCountConverter.cs">
+      <Link>Windows\Data\Converters\CollectionToCountConverter.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\StringToTypeConverter.cs">
       <Link>Windows\Data\Converters\StringToTypeConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\TextToLowerCaseConverter.cs">
+      <Link>Windows\Data\Converters\TextToLowerCaseConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\TextToUpperCaseConverter.cs">
+      <Link>Windows\Data\Converters\TextToUpperCaseConverter.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\ViewModelToViewConverter.cs">
       <Link>Windows\Data\Converters\ViewModelToViewConverter.cs</Link>
@@ -205,8 +226,17 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Input\Helpers\KeyboardHelper.cs">
       <Link>Windows\Input\Helpers\KeyboardHelper.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Input\InputGesture.cs">
+      <Link>Windows\Input\InputGesture.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interfaces\IDependencyPropertySelector.cs">
       <Link>Windows\Interfaces\IDependencyPropertySelector.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Markup\CommandManagerBinding.cs">
+      <Link>Windows\Markup\CommandManagerBinding.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Markup\LanguageBinding.cs">
+      <Link>Windows\Markup\LanguageBinding.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Markup\ServiceDependencyExtension.cs">
       <Link>Windows\Markup\ServiceDependencyExtension.cs</Link>
@@ -868,10 +898,10 @@
       <LastGenOutput>Resources.tr.SL5.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.zh-CHS.resx">
-      <Link>Properties\Resources.zh-CHS.resx</Link>
+    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.zh-Hans.resx">
+      <Link>Properties\Resources.zh-Hans.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.zh-CHS6.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.zh-Hans.SL5.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>

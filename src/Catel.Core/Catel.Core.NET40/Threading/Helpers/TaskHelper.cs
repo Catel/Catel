@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="TaskHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -32,7 +32,9 @@ namespace Catel.Threading
 
             var list = actions.ToList();
 
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !PCL
+            Parallel.Invoke(actions);
+#elif PCL
             var tasks = new List<Task>();
             for (int i = 0; i < list.Count; i++)
             {

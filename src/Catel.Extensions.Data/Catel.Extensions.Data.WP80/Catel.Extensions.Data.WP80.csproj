@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7C9B8FC8-7C8C-4448-95E6-50B0EE23B261}</ProjectGuid>
+    <ProjectTypeGuids>{C089C8C0-30E0-4E22-80C0-CE093F111A43};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Catel.Data</RootNamespace>
+    <AssemblyName>Catel.Extensions.Data</AssemblyName>
+    <TargetFrameworkIdentifier>WindowsPhone</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v8.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <SilverlightApplication>false</SilverlightApplication>
+    <ValidateXaml>true</ValidateXaml>
+    <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <FodyPath>..\..\..\lib\Fody.1.18.0.0</FodyPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\output\debug\WP80\Catel.Extensions.Data\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;WP80</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>..\..\..\output\debug\WP80\Catel.Extensions.Data\Catel.Extensions.Data.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\output\release\WP80\Catel.Extensions.Data\</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE;WP80</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>..\..\..\output\release\WP80\Catel.Extensions.Data\Catel.Extensions.Data.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\x86\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\x86\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|ARM' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\ARM\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|ARM' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\ARM\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="Fody.targets" />
+    <None Include="packages.config" />
+    <ProjectReference Include="..\..\Catel.Core\Catel.Core.WP80\Catel.Core.WP80.csproj">
+      <Project>{222A55F1-A032-4FAF-92C1-C51A2F7D2725}</Project>
+      <Name>Catel.Core.WP80</Name>
+    </ProjectReference>
+    <None Include="FodyWeavers.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\SolutionAssemblyInfo.cs">
+      <Link>Properties\SolutionAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Data.NET40\Expressions\Extensions\ExpressionExtensions.cs">
+      <Link>Expressions\Extensions\ExpressionExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Data.NET40\Expressions\ParameterRebinder.cs">
+      <Link>Expressions\ParameterRebinder.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Data.NET40\ExtensionsDataModule.cs">
+      <Link>ExtensionsDataModule.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Data.NET40\ModuleInitializer.cs">
+      <Link>ModuleInitializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Data.NET40\Properties\AssemblyInfo.cs">
+      <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Data.NET40\Repositories\CachedRepositoryBase.cs">
+      <Link>Repositories\CachedRepositoryBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Data.NET40\Repositories\Interfaces\ICachedRepository.cs">
+      <Link>Repositories\Interfaces\ICachedRepository.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Data.NET40\Repositories\Interfaces\IRepository.cs">
+      <Link>Repositories\Interfaces\IRepository.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Data.NET40\Repositories\RepositoryBase.cs">
+      <Link>Repositories\RepositoryBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Data.NET40\Specifications\AndSpecification.cs">
+      <Link>Specifications\AndSpecification.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Data.NET40\Specifications\CompositeSpecification.cs">
+      <Link>Specifications\CompositeSpecification.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Data.NET40\Specifications\Interfaces\ISpecification.cs">
+      <Link>Specifications\Interfaces\ISpecification.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Data.NET40\Specifications\OrSpecification.cs">
+      <Link>Specifications\OrSpecification.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Data.NET40\Specifications\Specification.cs">
+      <Link>Specifications\Specification.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Obsolete">
+      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.0.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />
+  <ProjectExtensions />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <Import Project="$(ProjectPath)\..\..\..\..\Tools\Pepita\PepitaGet.targets" />
+  <Import Project="Fody.targets" />
+</Project>

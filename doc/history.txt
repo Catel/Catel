@@ -15,6 +15,80 @@ Documentation:   http://www.catelproject.com/support/documentation
 **********************************************************
 
 ==================
+Version 3.9.0
+==================
+
+Release date:
+=============
+2014/02/05
+
+Added/fixed (BREAKING CHANGES):
+===============================
+(+) CTL-307 Added IViewModelContainer events for view load states (Loading, Loaded, Unloading, Unloaded). Catel now 
+    correctly handles large nested trees which are correctly unloaded and no dummy view models are being created any 
+    longer for sub views which are not yet (but about to be) unloaded. Catel is now aware that a view model is about 
+    to be unloaded when the DataContextChanged event occurs (before a view is actually unloaded). This is a breaking 
+    change for users that have implemented a custom base class for views. To fix the issue, implement the required 
+    events on the views as explained at https://catelproject.atlassian.net/wiki/display/CTL/Using+a+custom+control
+(*) CTL-313 Improved IoCConfiguration so it is easier to replace specific IoC components in Catel. This is a breaking
+    change for users that manually instantiate the ServiceLocator or that have customized any component. For more
+    information, visit https://catelproject.atlassian.net/wiki/display/CTL/Replacing+the+default+components
+(-) CTL-273 Removed external container registration and synchronization support for the ServiceLocator. The reason
+    for this is complex maintenance, bad performance (all done via reflection) and there are now better alternatives
+
+Added/fixed:
+============
+(+) CTL-10 Added multilingual support with LanguageService and LanguageBinding (for XAML)
+(+) CTL-24 ServiceLocator can now register types with a callback so types can be created using a function callback
+(+) CTL-45 ServiceLocator can now register types using conventions
+(+) CTL-204 Catel.IoC.IServiceLocator should contains some method to remove registered type
+(+) CTL-262 Created CommandManager to support application-wide commands using MVVM
+(+) CTL-266 Added ConfigurationService to get and set configuration values
+(+) CTL-276 Add CompositeCommand to group several commands together
+(+) CTL-283 Added ExcludeFromSerialization attribute to prevent annotation validation on properties where
+    it should not be called on
+(+) CTL-288 Added additional ProcessAsync methods on IExceptionService
+(+) CTL-292 Added ServiceLocator extension methods for registrations with tags and RemoveType
+(+) CTL-300 Added ChangeNotificationWrapper methods to unsubscribe and subscribe collections items manually
+(+) CTL-302 Added TextToUpperCaseConverter and TextToLowerCaseConverter converters
+(+) CTL-319 Added ParallelHelper to invoke actions on very large sets of items with a customizable batch size
+(*) CTL-211 Renamed resource files of simple chinese from zh-CHS to zh-Hans
+(*) CTL-230 XmlSchemaHelper now supports the new serialization engine introduced in Catel 3.7
+(*) CTL-261 Replace all instances of RegisterDebugListener with AddDebugListener
+(*) CTL-264 Reset FileServiceBase.ValidateNames default value to true
+(*) CTL-285 Windows Phone navigation will now keep view models tight to their page instantiations and will only
+    actively close a view model when the back button is used
+(*) CTL-286 NavigationContext will now only be updated on the initial navigation for a view model
+(*) CTL-295 Improved LocationService for Windows Phone 8
+(*) CTL-320 All initialization modules in Catel now implement the IServiceLocatorInitializer interface. This allows
+    developers to create IServiceLocator initializers which will automatically be called when creating a service locator
+(x) CTL-232 XmlSerialization of complex types (interface collections of interfaces with each element of diff. class)
+(x) CTL-268 EF 6 extension does not register types automatically
+(x) CTL-275 Fixed implementation of StartUpInfoProvider Arguments property
+(x) CTL-278 Validation throws exception on modelbase properties (should improve performance on validating models)
+(x) CTL-294 ServiceLocator does not throw CircularDependencyException for some cases
+(x) CTL-298 Nested view models with default constructor behave incorrectly. Now the child views are correctly closed
+    as part of closing a nested hierarchy inside a DataWindow
+(x) CTL-299 ChangeNotificationWrapper does not handle NotifyCollectionChangedAction.Reset correctly
+(x) CTL-308 Serialization now omits the the default namespace for value types and strings which allows WCF
+    services to use encryption
+(x) CTL-311 MessageMediator issues when removing subscription
+(x) CTL-314 Catel + Json.NET model causes ArgumentNullException during deserialization from json => ModelBase
+(x) CTL-317 MVC DependencyResolver does not support dynamic new pages
+(-) CTL-282 Removed AllowNonSerializedMembers attribute because it is no longer required because
+    of the new serialization engine introduced in Catel 3.7
+
+Roadmap:
+========
+See http://www.catelproject.com/support/issue-tracker
+
+Known issues:
+=============
+See http://www.catelproject.com/support/issue-tracker
+
+**********************************************************
+
+==================
 Version 3.8.1
 ==================
 

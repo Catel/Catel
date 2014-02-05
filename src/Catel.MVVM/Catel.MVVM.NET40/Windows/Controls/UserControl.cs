@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="UserControl.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -152,6 +152,11 @@ namespace Catel.Windows.Controls
             {
                 e.ViewModelType = GetViewModelType(e.DataContext);
             };
+
+            _logic.ViewLoading += (sender, e) => ViewLoading.SafeInvoke(this);
+            _logic.ViewLoaded += (sender, e) => ViewLoaded.SafeInvoke(this);
+            _logic.ViewUnloading += (sender, e) => ViewUnloading.SafeInvoke(this);
+            _logic.ViewUnloaded += (sender, e) => ViewUnloaded.SafeInvoke(this);
 
             _logic.ViewModelClosed += OnViewModelClosed;
 
@@ -328,6 +333,26 @@ namespace Catel.Windows.Controls
         /// Occurs when a property on the <see cref="ViewModel"/> has changed.
         /// </summary>
         public event EventHandler<PropertyChangedEventArgs> ViewModelPropertyChanged;
+
+        /// <summary>
+        /// Occurs when the view model container is loading.
+        /// </summary>
+        public event EventHandler<EventArgs> ViewLoading;
+
+        /// <summary>
+        /// Occurs when the view model container is loaded.
+        /// </summary>
+        public event EventHandler<EventArgs> ViewLoaded;
+
+        /// <summary>
+        /// Occurs when the view model container starts unloading.
+        /// </summary>
+        public event EventHandler<EventArgs> ViewUnloading;
+
+        /// <summary>
+        /// Occurs when the view model container is unloaded.
+        /// </summary>
+        public event EventHandler<EventArgs> ViewUnloaded;
         #endregion
 
         #region Methods
@@ -451,3 +476,4 @@ namespace Catel.Windows.Controls
         #endregion
     }
 }
+

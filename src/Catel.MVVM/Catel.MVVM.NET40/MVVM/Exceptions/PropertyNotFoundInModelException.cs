@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PropertyNotFoundInModelException.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -21,7 +21,7 @@ namespace Catel.MVVM
 		/// <param name="modelName">Name of the model.</param>
 		/// <param name="modelPropertyName">Name of the model property.</param>
 		public PropertyNotFoundInModelException(string viewModelPropertyName, string modelName, string modelPropertyName)
-			: base(string.Format(ResourceHelper.GetString(typeof(PropertyNotFoundInModelException), "Exceptions", "PropertyNotFoundInModel"), viewModelPropertyName, modelPropertyName, modelName))
+			: base(string.Format(ResourceHelper.GetString("PropertyNotFoundInModel"), viewModelPropertyName, modelPropertyName, modelName))
 		{
 			ViewModelPropertyName = viewModelPropertyName;
 			ModelName = modelName;

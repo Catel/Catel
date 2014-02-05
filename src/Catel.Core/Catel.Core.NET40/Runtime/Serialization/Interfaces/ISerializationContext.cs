@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ISerializationContext.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -41,6 +41,12 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <value>The type of the model.</value>
         Type ModelType { get; }
+
+        /// <summary>
+        /// Gets the depth of the current element being processed.
+        /// </summary>
+        /// <value>The depth.</value>
+        int Depth { get; }
 
         /// <summary>
         /// Gets the context mode.

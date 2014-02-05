@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="StaticMemberHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -31,15 +31,6 @@ namespace Catel.Reflection
             {
                 return typeof(object);
             }
-
-
-//#if NETFX_CORE
-//            var type = typeof(object);
-//#else
-//            var stackTrace = StackTraceHelper.GetStackTrace();
-//            var stackFrame = stackTrace.GetFrame(2);
-//            var type = stackFrame.GetMethod().DeclaringType;
-//#endif
 
 #if NET
             var frame = new StackFrame(2, false);

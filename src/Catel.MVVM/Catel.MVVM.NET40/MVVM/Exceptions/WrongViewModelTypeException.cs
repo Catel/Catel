@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="WrongViewModelTypeException.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -19,7 +19,7 @@ namespace Catel.MVVM
         /// <param name="actualType">The actual type.</param>
         /// <param name="expectedType">The expected type.</param>
         public WrongViewModelTypeException(Type actualType, Type expectedType)
-            : base(string.Format(ResourceHelper.GetString(typeof(WrongViewModelTypeException), "Exceptions", "WrongViewModelType"), expectedType, actualType))
+            : base(string.Format(ResourceHelper.GetString("WrongViewModelType"), expectedType, actualType))
         {
             ActualType = actualType;
             ExpectedType = expectedType;

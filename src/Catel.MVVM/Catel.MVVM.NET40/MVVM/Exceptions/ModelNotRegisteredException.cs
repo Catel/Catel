@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ModelNotRegisteredException.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -20,7 +20,7 @@ namespace Catel.MVVM
         /// <param name="modelName">Name of the model.</param>
         /// <param name="propertyDeclaringViewModelToModelAttribute">The property declaring the view model to model attribute.</param>
         public ModelNotRegisteredException(string modelName, string propertyDeclaringViewModelToModelAttribute)
-            : base(string.Format(ResourceHelper.GetString(typeof(ModelNotRegisteredException), "Exceptions", "ModelNotRegistered"), modelName, propertyDeclaringViewModelToModelAttribute))
+            : base(string.Format(ResourceHelper.GetString("ModelNotRegistered"), modelName, propertyDeclaringViewModelToModelAttribute))
         {
             ModelName = modelName;
             PropertyDeclaringViewModelToModelAttribute = propertyDeclaringViewModelToModelAttribute;

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ViewModelBase.validation.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 namespace Catel.MVVM
@@ -38,7 +38,6 @@ namespace Catel.MVVM
         #endregion
 
         #region Properties
-
         /// <summary>
         /// Gets or sets a value indicating whether all validation should be deferred until the first call to <see cref="SaveViewModel"/>.
         /// <para />
@@ -54,6 +53,7 @@ namespace Catel.MVVM
         /// If this value is used, it must be set as first property in the view model because the validation kicks in immediately
         /// when properties change.
         /// </remarks>
+        [ExcludeFromValidation]
         protected bool DeferValidationUntilFirstSaveCall
         {
             get
@@ -79,6 +79,7 @@ namespace Catel.MVVM
         /// <value>
         /// <c>true</c> if the models should be validated on initialization; otherwise, <c>false</c>.
         /// </value>
+        [ExcludeFromValidation]
         protected bool ValidateModelsOnInitialization { get; set; }
         #endregion
 

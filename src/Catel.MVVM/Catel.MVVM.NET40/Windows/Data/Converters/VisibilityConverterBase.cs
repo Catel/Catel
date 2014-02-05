@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="VisibilityConverterBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -30,7 +30,7 @@ namespace Catel.Windows.Data.Converters
         {
             if (notVisibleVisibility == Visibility.Visible)
             {
-                throw new ArgumentException(Catel.ResourceHelper.GetString(typeof(VisibilityConverterBase), "Exceptions", "VisibilityIsNotAllowedForConverter"), "notVisibleVisibility");
+                throw new ArgumentException(Catel.ResourceHelper.GetString("VisibilityIsNotAllowedForConverter"), "notVisibleVisibility");
             }
 
             NotVisibleVisibility = notVisibleVisibility;

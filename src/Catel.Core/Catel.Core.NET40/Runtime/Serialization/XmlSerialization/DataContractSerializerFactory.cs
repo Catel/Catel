@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DataContractSerializerFactory.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -355,7 +355,9 @@ namespace Catel.Runtime.Serialization.Xml
                 return true;
             }
 
-            return serializerTypeInfo.ContainsKnownType(type) || serializerTypeInfo.IsTypeAlreadyHandled(type);
+            return serializerTypeInfo.ContainsKnownType(type) || 
+                   serializerTypeInfo.IsTypeAlreadyHandled(type) || 
+                   serializerTypeInfo.IsCollectionAlreadyHandled(type);
         }
 
         /// <summary>

@@ -36,7 +36,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void IncreasesIndentLevel()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 Assert.AreEqual(0, log.IndentLevel);
@@ -49,7 +49,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void WritesMessagesWithIndent()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 LogMessageEventArgs eventArgs = null;
@@ -71,7 +71,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void DecreasesIndentLevel()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int)) {IndentLevel = 2};
 
                 Assert.AreEqual(2, log.IndentLevel);
@@ -84,7 +84,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void WriteMessagesWithUnIndent()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 LogMessageEventArgs eventArgs = null;
@@ -108,7 +108,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void DefaultsToZero()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 Assert.AreEqual(0, log.IndentLevel);
@@ -117,7 +117,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void SetsPositiveValue()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int)) {IndentSize = 5};
 
                 Assert.AreEqual(5, log.IndentSize);
@@ -126,7 +126,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void ThrowsArgumentOutOfRangeForNegativeValue()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 // TODO: IndentLevel should be settable
@@ -140,7 +140,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void DefaultsToTwo()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 Assert.AreEqual(2, log.IndentSize);
@@ -149,7 +149,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void SetsPositiveValue()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int)) {IndentSize = 5};
 
                 Assert.AreEqual(5, log.IndentSize);
@@ -158,7 +158,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void ThrowsArgumentOutOfRangeForNegativeValue()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 // TODO: IndentSize should be settable
@@ -178,7 +178,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void CreatesLogForType()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 Assert.AreEqual(typeof (int), log.TargetType);
@@ -191,7 +191,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void CorrectlyLogsMessageWithBraces()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
                 log.Debug("This is a string with { and sometimes and ending }");
@@ -200,7 +200,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Debug_Message_Null()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 log.Debug((string) null);
@@ -209,7 +209,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Debug_Message()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 LogMessageEventArgs eventArgs = null;
@@ -226,7 +226,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Debug_MessageFormat_Null()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 log.Debug((string) null, null);
@@ -235,7 +235,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Debug_MessageFormat()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 LogMessageEventArgs eventArgs = null;
@@ -252,7 +252,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Debug_Exception_Null()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Debug((Exception) null));
@@ -261,7 +261,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Debug_Exception()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 LogMessageEventArgs eventArgs = null;
@@ -279,7 +279,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Debug_ExceptionWithMessage_ExceptionNull()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Debug(null, string.Empty));
@@ -288,7 +288,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Debug_ExceptionWithMessage_MessageNull()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 var exception = new ArgumentNullException("log test");
@@ -299,7 +299,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Debug_ExceptionWithMessage()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 LogMessageEventArgs eventArgs = null;
@@ -317,7 +317,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Debug_ExceptionWithMessageFormat_ExceptionNull()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Debug(null, "additional message", 1));
@@ -326,7 +326,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Debug_ExceptionWithMessageFormat_MessageFormatNull()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 var exception = new ArgumentNullException("log test");
@@ -337,7 +337,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Debug_ExceptionWithMessageFormat()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 LogMessageEventArgs eventArgs = null;
@@ -359,7 +359,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void CorrectlyLogsMessageWithBraces()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
                 log.Info("This is a string with { and sometimes and ending }");
@@ -368,7 +368,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Info_Message_Null()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 log.Info((string) null);
@@ -377,7 +377,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Info_Message()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 LogMessageEventArgs eventArgs = null;
@@ -394,7 +394,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Info_MessageFormat_Null()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 log.Info((string) null, null);
@@ -403,7 +403,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Info_MessageFormat()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 LogMessageEventArgs eventArgs = null;
@@ -420,7 +420,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Info_Exception_Null()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Info((Exception) null));
@@ -429,7 +429,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Info_Exception()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 LogMessageEventArgs eventArgs = null;
@@ -447,7 +447,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Info_ExceptionWithMessage_ExceptionNull()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Info(null, string.Empty));
@@ -456,7 +456,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Info_ExceptionWithMessage_MessageNull()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 var exception = new ArgumentNullException("log test");
@@ -467,7 +467,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Info_ExceptionWithMessage()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 LogMessageEventArgs eventArgs = null;
@@ -485,7 +485,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Info_ExceptionWithMessageFormat_ExceptionNull()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Info(null, "additional message", 1));
@@ -494,7 +494,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Info_ExceptionWithMessageFormat_MessageFormatNull()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 var exception = new ArgumentNullException("log test");
@@ -505,7 +505,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Info_ExceptionWithMessageFormat()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 LogMessageEventArgs eventArgs = null;
@@ -527,7 +527,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void CorrectlyLogsMessageWithBraces()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
                 log.Warning("This is a string with { and sometimes and ending }");
@@ -536,7 +536,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Warning_Message_Null()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 log.Warning((string) null);
@@ -545,7 +545,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Warning_Message()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 LogMessageEventArgs eventArgs = null;
@@ -562,7 +562,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Warning_MessageFormat_Null()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 log.Warning((string) null, null);
@@ -571,7 +571,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Warning_MessageFormat()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 LogMessageEventArgs eventArgs = null;
@@ -588,7 +588,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Warning_Exception_Null()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Warning((Exception) null));
@@ -597,7 +597,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Warning_Exception()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 LogMessageEventArgs eventArgs = null;
@@ -615,7 +615,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Warning_ExceptionWithMessage_ExceptionNull()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Warning(null, string.Empty));
@@ -624,7 +624,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Warning_ExceptionWithMessage_MessageNull()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 var exception = new ArgumentNullException("log test");
@@ -635,7 +635,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Warning_ExceptionWithMessage()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 LogMessageEventArgs eventArgs = null;
@@ -653,7 +653,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Warning_ExceptionWithMessageFormat_ExceptionNull()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Warning(null, "additional message", 1));
@@ -662,7 +662,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Warning_ExceptionWithMessageFormat_MessageFormatNull()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 var exception = new ArgumentNullException("log test");
@@ -673,7 +673,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Warning_ExceptionWithMessageFormat()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 LogMessageEventArgs eventArgs = null;
@@ -695,7 +695,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void CorrectlyLogsMessageWithBraces()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
                 log.Error("This is a string with { and sometimes and ending }");
@@ -704,7 +704,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Error_Message_Null()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 log.Error((string) null);
@@ -713,7 +713,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Error_Message()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 LogMessageEventArgs eventArgs = null;
@@ -730,7 +730,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Error_MessageFormat_Null()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 log.Error((string) null, null);
@@ -739,7 +739,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Error_MessageFormat()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 LogMessageEventArgs eventArgs = null;
@@ -756,7 +756,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Error_Exception_Null()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Error((Exception) null));
@@ -765,7 +765,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Error_Exception()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 LogMessageEventArgs eventArgs = null;
@@ -783,7 +783,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Error_ExceptionWithMessage_ExceptionNull()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Error(null, string.Empty));
@@ -792,7 +792,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Error_ExceptionWithMessage_MessageNull()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 var exception = new ArgumentNullException("log test");
@@ -803,7 +803,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Error_ExceptionWithMessage()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 LogMessageEventArgs eventArgs = null;
@@ -821,7 +821,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Error_ExceptionWithMessageFormat_ExceptionNull()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Error(null, "additional message", 1));
@@ -830,7 +830,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Error_ExceptionWithMessageFormat_MessageFormatNull()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 var exception = new ArgumentNullException("log test");
@@ -841,7 +841,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void Error_ExceptionWithMessageFormat()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 LogMessageEventArgs eventArgs = null;
@@ -859,7 +859,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void ErrorAndThrowException_NullInput()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 log.ErrorAndThrowException<InvalidOperationException>(null);
@@ -868,7 +868,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void ErrorAndThrowException_ExceptionWithoutMessageConstructor()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => log.ErrorAndThrowException<ExceptionWithoutStringConstructor>("exception test"));
@@ -877,7 +877,7 @@ namespace Catel.Test.Logging
             [TestMethod]
             public void ErrorAndThrowException_ExceptionWithMessageConstructor()
             {
-                LogManager.RegisterDebugListener();
+                LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
                 // Several tests to make sure we are not testing the NotSupportedException of the class itself

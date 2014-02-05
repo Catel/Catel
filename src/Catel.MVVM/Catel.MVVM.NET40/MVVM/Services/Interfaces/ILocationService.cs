@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ILocationService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -42,7 +42,8 @@ namespace Catel.MVVM.Services
         /// <summary>
         /// Starts the location service so it's retrieving data.
         /// </summary>
-        void Start();
+        /// <returns><c>true</c> if the service started successfully; otherwise <c>false</c>.</returns>
+        bool Start();
 
         /// <summary>
         /// Stops the location service so it's no longer retrieving data.

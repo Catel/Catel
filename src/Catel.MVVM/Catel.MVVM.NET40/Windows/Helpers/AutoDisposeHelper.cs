@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="AutoDisposeHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -49,7 +49,7 @@ namespace Catel.Windows
 		/// Handles the AutoDisposeProperties call.
 		/// </summary>
 		/// <param name="sender">The sender.</param>
-		/// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
+		/// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
 		private static void UnloadedWrapper(object sender, RoutedEventArgs e)
 		{
 			AutoDisposeProperties(sender);

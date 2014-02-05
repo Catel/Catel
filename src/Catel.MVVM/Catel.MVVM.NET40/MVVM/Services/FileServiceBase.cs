@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="FileServiceBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -28,7 +28,7 @@ namespace Catel.MVVM.Services
             CheckFileExists = false;
             CheckPathExists = true;
             FilterIndex = 1;
-            ValidateNames = false;
+            ValidateNames = true;
 #endif
         }
 
@@ -84,7 +84,7 @@ namespace Catel.MVVM.Services
         /// <summary>
         /// Gets or sets a value indicating whether the dialog accepts only valid Win32 file names.
         /// </summary>
-        /// <value><c>true</c> if warnings will be shown when an invalid file name is provided; otherwise, <c>false</c>. The default is <c>false</c>.</value>
+        /// <value><c>true</c> if warnings will be shown when an invalid file name is provided; otherwise, <c>false</c>. The default is <c>true</c>.</value>
         public bool ValidateNames { get; set; }
 
         /// <summary>

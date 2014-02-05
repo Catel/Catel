@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="NuGetModuleTypeLoader.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -10,11 +10,8 @@ namespace Catel.Modules
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Globalization;
-    using System.IO;
     using System.Linq;
-    using System.Reflection;
     using System.Threading;
-    using System.Windows.Navigation;
     using System.Windows.Threading;
 
     using Catel.Logging;
@@ -69,19 +66,21 @@ namespace Catel.Modules
 
             if (_moduleCatalogs == null || _moduleCatalogs.Count == 0)
             {
-                throw new InvalidOperationException("There are no available any NuGet based module catalog");
+                const string error = "There are no NuGet based module catalogs available";
+                Log.Error(error);
+                throw new InvalidOperationException(error);
             }
         }
         #endregion
 
         #region Public Events
         /// <summary>
-        /// The load module completed event
+        /// The load module completed event.
         /// </summary>
         public event EventHandler<LoadModuleCompletedEventArgs> LoadModuleCompleted;
 
         /// <summary>
-        /// The module download progress changed event
+        /// The module download progress changed event.
         /// </summary>
         public event EventHandler<ModuleDownloadProgressChangedEventArgs> ModuleDownloadProgressChanged;
 
@@ -89,9 +88,7 @@ namespace Catel.Modules
         /// <summary>
         /// Called when the load module is completed.
         /// </summary>
-        /// <param name="e">
-        /// The event argument.
-        /// </param>
+        /// <param name="e">The event argument.</param>
         private void OnLoadModuleCompleted(LoadModuleCompletedEventArgs e)
         {
             LoadModuleCompleted.SafeInvoke(this, e);
@@ -100,12 +97,8 @@ namespace Catel.Modules
         /// <summary>
         /// Called when the module download progress changed.
         /// </summary>
-        /// <param name="e">
-        /// The event argument.
-        /// </param>
-        /// <remarks>
-        /// The current implementation doesn't support 
-        /// </remarks>
+        /// <param name="e">The event argument.</param>
+        /// <remarks>The current implementation doesn't support</remarks>
         private void OnModuleDownloadProgressChanged(ModuleDownloadProgressChangedEventArgs e)
         {
             ModuleDownloadProgressChanged.SafeInvoke(this, e);
@@ -115,14 +108,14 @@ namespace Catel.Modules
         #endregion
 
         #region IModuleTypeLoader Members
-        
+
         /// <summary>
         /// Can load module type.
         /// </summary>
         /// <param name="moduleInfo">The module Info.</param>
         /// <returns>The <see cref="bool" />.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="moduleInfo" /> is <c>null</c>.</exception>
-        /// <exception cref="System.InvalidOperationException">The <see cref="ModuleInfo.ModuleType"/> property of <paramref name="moduleInfo"/> parameter doesn't speciefied usign qualified name pattern.</exception>
+        /// <exception cref="System.InvalidOperationException">The <see cref="ModuleInfo.ModuleType" /> property of <paramref name="moduleInfo" /> parameter doesn't speciefied usign qualified name pattern.</exception>
         public bool CanLoadModuleType(ModuleInfo moduleInfo)
         {
             Argument.IsNotNull(() => moduleInfo);
@@ -133,12 +126,8 @@ namespace Catel.Modules
         /// <summary>
         /// Load the module type.
         /// </summary>
-        /// <param name="moduleInfo">
-        /// The module Info.
-        /// </param>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="moduleInfo" /> is <c>null</c>.
-        /// </exception>
+        /// <param name="moduleInfo">The module Info.</param>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="moduleInfo" /> is <c>null</c>.</exception>
         public void LoadModuleType(ModuleInfo moduleInfo)
         {
             // ReSharper disable once ImplicitlyCapturedClosure
@@ -202,13 +191,9 @@ namespace Catel.Modules
         /// <summary>
         /// Tries create install package request.
         /// </summary>
-        /// <param name="moduleInfo">
-        /// The module info
-        /// </param>
-        /// <param name="installPackageRequest">
-        /// The install package request
-        /// </param>
-        /// <returns></returns>
+        /// <param name="moduleInfo">The module info</param>
+        /// <param name="installPackageRequest">The install package request</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         private bool TryCreateInstallPackageRequest(ModuleInfo moduleInfo, out InstallPackageRequest installPackageRequest)
         {
             int i = 0;

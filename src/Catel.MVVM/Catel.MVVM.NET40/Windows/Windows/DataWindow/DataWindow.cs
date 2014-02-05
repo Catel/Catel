@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DataWindow.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -294,6 +294,10 @@ namespace Catel.Windows
             };
 
             _logic.ViewModelClosed += OnViewModelClosed;
+            _logic.ViewLoading += (sender, e) => ViewLoading.SafeInvoke(this);
+            _logic.ViewLoaded += (sender, e) => ViewLoaded.SafeInvoke(this);
+            _logic.ViewUnloading += (sender, e) => ViewUnloading.SafeInvoke(this);
+            _logic.ViewUnloaded += (sender, e) => ViewUnloaded.SafeInvoke(this);
 
             SetBinding(TitleProperty, new Binding("Title"));
 
@@ -612,6 +616,26 @@ namespace Catel.Windows
         /// Occurs when a property on the <see cref="ViewModel"/> has changed.
         /// </summary>
         public event EventHandler<PropertyChangedEventArgs> ViewModelPropertyChanged;
+
+        /// <summary>
+        /// Occurs when the view model container is loading.
+        /// </summary>
+        public event EventHandler<EventArgs> ViewLoading;
+
+        /// <summary>
+        /// Occurs when the view model container is loaded.
+        /// </summary>
+        public event EventHandler<EventArgs> ViewLoaded;
+
+        /// <summary>
+        /// Occurs when the view model container starts unloading.
+        /// </summary>
+        public event EventHandler<EventArgs> ViewUnloading;
+
+        /// <summary>
+        /// Occurs when the view model container is unloaded.
+        /// </summary>
+        public event EventHandler<EventArgs> ViewUnloaded;
         #endregion
 
         #region Methods
@@ -979,11 +1003,9 @@ namespace Catel.Windows
         }
 
         /// <summary>
-        /// Called when a property on the current view model has changed.
+        /// Raises the can <see cref="ICommand.CanExecuteChanged"/> for all commands.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
-        private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected void RaiseCanExecuteChangedForAllCommands()
         {
             foreach (ICommand command in Commands)
             {
@@ -993,6 +1015,16 @@ namespace Catel.Windows
                     commandAsICatelCommand.RaiseCanExecuteChanged();
                 }
             }
+        }
+
+        /// <summary>
+        /// Called when a property on the current view model has changed.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
+        private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            RaiseCanExecuteChangedForAllCommands();
 
             OnViewModelPropertyChanged(e);
         }

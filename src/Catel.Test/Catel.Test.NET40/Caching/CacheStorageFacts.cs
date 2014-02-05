@@ -1,14 +1,17 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CacheStorageFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace Catel.Test.Caching
 {
     using System;
+    using System.Collections.Generic;
+    using System.Threading;
     using Catel.Caching;
     using Catel.Caching.Policies;
+    using Catel.Logging;
 
 #if NETFX_CORE
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
@@ -18,6 +21,75 @@ namespace Catel.Test.Caching
 
     public class CacheStorageFacts
     {
+#if NET
+        [TestClass]
+        public class TheThreadSafeFunctionality
+        {
+            private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+            private readonly List<Guid> _randomGuids = new List<Guid>();
+
+            public TheThreadSafeFunctionality()
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    _randomGuids.Add(Guid.NewGuid());
+                }
+            }
+
+            [TestMethod]
+            public void RunMultipleThreadsWithRandomAccessCalls()
+            {
+                var cacheStorage = new CacheStorage<Guid, int>(() => ExpirationPolicy.Duration(TimeSpan.FromMilliseconds(1)));
+
+                var threads = new List<Thread>();
+                for (int i = 0; i < 25; i++)
+                {
+                    var thread = new Thread(() =>
+                    {
+                        var random = new Random();
+
+                        for (int j = 0; j < 10000; j++)
+                        {
+                            var randomGuid = _randomGuids[random.Next(0, 9)];
+                            cacheStorage.GetFromCacheOrFetch(randomGuid, () =>
+                            {
+                                var threadId = Thread.CurrentThread.ManagedThreadId;
+                                Log.Info("Key '{0}' is now controlled by thread '{1}'", randomGuid, threadId);
+                                return threadId;
+                            });
+
+                            ThreadHelper.Sleep(1);
+                        }
+                    });
+
+                    threads.Add(thread);
+                    thread.Start();
+                }
+
+                while (true)
+                {
+                    bool anyThreadAlive = false;
+
+                    foreach (var thread in threads)
+                    {
+                        if (thread.IsAlive)
+                        {
+                            anyThreadAlive = true;
+                            break;
+                        }
+                    }
+
+                    if (!anyThreadAlive)
+                    {
+                        break;
+                    }
+
+                    ThreadHelper.Sleep(500);
+                }
+            }
+        }
+#endif
+
         [TestClass]
         public class TheIndexerProperty
         {
@@ -262,7 +334,7 @@ namespace Catel.Test.Caching
 
 				Assert.IsTrue(cache.Contains("1"));
 
-				ThreadHelper.Sleep(1500);
+                ThreadHelper.Sleep(2000);
 
 				Assert.IsFalse(cache.Contains("1"));
 			}
@@ -270,13 +342,13 @@ namespace Catel.Test.Caching
             [TestMethod]
             public void AutomaticallyRemovesExpiredItemsOfACacheStorageWithDefaultExpirationPolicyInitializationCode()
             {
-                var cache = new CacheStorage<string, int>(() => ExpirationPolicy.Duration(TimeSpan.FromSeconds(2)));
+                var cache = new CacheStorage<string, int>(() => ExpirationPolicy.Duration(TimeSpan.FromMilliseconds(500)));
 
                 cache.Add("1", 1);
 
                 Assert.IsTrue(cache.Contains("1"));
 
-                ThreadHelper.Sleep(3000);
+                ThreadHelper.Sleep(2000);
 
                 Assert.IsFalse(cache.Contains("1"));
             }
@@ -288,11 +360,12 @@ namespace Catel.Test.Caching
 
                 for (int i = 0; i < 5; i++)
                 {
-                    var value = cache.GetFromCacheOrFetch("key", () => i, expiration: new TimeSpan(0, 0, 1));
+                    ThreadHelper.Sleep(2000);
+
+                    int innerI = i;
+                    var value = cache.GetFromCacheOrFetch("key", () => innerI, expiration: TimeSpan.FromMilliseconds(500));
 
                     Assert.AreEqual(i, value);
-
-                    ThreadHelper.Sleep(2000);
                 }
             }
         }

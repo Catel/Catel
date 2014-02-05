@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CompositeValidatorTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -60,8 +60,7 @@ namespace Catel.Test.Data
                         compositeValidator.BeforeValidation(null, null, null);
 
                         alterEvent.Set();
-                        ThreadHelper.Sleep(3000);
-
+                        ThreadHelper.Sleep(1000);
 
                         compositeValidator.AfterValidation(null, null, null);
                         syncEvents[0].Set();

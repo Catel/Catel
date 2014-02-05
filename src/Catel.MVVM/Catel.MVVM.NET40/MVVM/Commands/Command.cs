@@ -1,8 +1,11 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Command.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+
+// Both Command and CompositeCommand implement ICommand
+#pragma warning disable 1956
 
 namespace Catel.MVVM
 {
@@ -10,7 +13,6 @@ namespace Catel.MVVM
     using System.Collections.Generic;
     using System.Windows.Input;
 
-    using Catel.Logging;
     using Catel.MVVM.Services;
 
     using IoC;
@@ -20,11 +22,6 @@ namespace Catel.MVVM
     /// </summary>
     public abstract class CommandBase
     {
-        /// <summary>
-        /// Log interface.
-        /// </summary>
-        protected static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         /// <summary>
         /// Authentication provider.
         /// </summary>
@@ -55,10 +52,10 @@ namespace Catel.MVVM
     public class Command<TExecuteParameter, TCanExecuteParameter> : CommandBase, ICatelCommand
     {
         #region Fields
-        private readonly Func<TCanExecuteParameter, bool> _canExecuteWithParameter;
-        private readonly Func<bool> _canExecuteWithoutParameter;
-        private readonly Action<TExecuteParameter> _executeWithParameter;
-        private readonly Action _executeWithoutParameter;
+        private Func<TCanExecuteParameter, bool> _canExecuteWithParameter;
+        private Func<bool> _canExecuteWithoutParameter;
+        private Action<TExecuteParameter> _executeWithParameter;
+        private Action _executeWithoutParameter;
 
         /// <summary>
         /// List of subscribed event handlers so the commands can be unsubscribed upon disposing.
@@ -97,10 +94,7 @@ namespace Catel.MVVM
             Func<TCanExecuteParameter, bool> canExecuteWithParameter, Func<bool> canExecuteWithoutParameter,
             object tag)
         {
-            _canExecuteWithParameter = canExecuteWithParameter;
-            _canExecuteWithoutParameter = canExecuteWithoutParameter;
-            _executeWithParameter = executeWithParameter;
-            _executeWithoutParameter = executeWithoutParameter;
+            InitializeActions(executeWithParameter, executeWithoutParameter, canExecuteWithParameter, canExecuteWithoutParameter);
 
             Tag = tag;
             AutomaticallyDispatchEvents = true;
@@ -125,7 +119,7 @@ namespace Catel.MVVM
         {
             add
             {
-                CommandManager.RequerySuggested += value;
+                System.Windows.Input.CommandManager.RequerySuggested += value;
 
                 lock (_subscribedEventHandlers)
                 {
@@ -140,7 +134,7 @@ namespace Catel.MVVM
                     _subscribedEventHandlers.Remove(value);
                 }
 
-                CommandManager.RequerySuggested -= value;
+                System.Windows.Input.CommandManager.RequerySuggested -= value;
             }
         }
 #else
@@ -173,6 +167,18 @@ namespace Catel.MVVM
 
         #region Methods
         /// <summary>
+        /// Initializes the actions.
+        /// </summary>
+        protected void InitializeActions(Action<TExecuteParameter> executeWithParameter, Action executeWithoutParameter,
+            Func<TCanExecuteParameter, bool> canExecuteWithParameter, Func<bool> canExecuteWithoutParameter)
+        {
+            _canExecuteWithParameter = canExecuteWithParameter;
+            _canExecuteWithoutParameter = canExecuteWithoutParameter;
+            _executeWithParameter = executeWithParameter;
+            _executeWithoutParameter = executeWithoutParameter;
+        }
+
+        /// <summary>
         /// Defines the method that determines whether the command can execute in its current state.
         /// </summary>
         /// <returns>
@@ -195,7 +201,7 @@ namespace Catel.MVVM
         /// </returns>
         public bool CanExecute(object parameter)
         {
-            if (!(parameter is TExecuteParameter))
+            if (!(parameter is TCanExecuteParameter))
             {
                 parameter = default(TCanExecuteParameter);
             }
@@ -252,7 +258,7 @@ namespace Catel.MVVM
         {
             if (!(parameter is TExecuteParameter))
             {
-                parameter = default(TCanExecuteParameter);
+                parameter = default(TExecuteParameter);
             }
 
             Execute((TExecuteParameter)parameter);
@@ -305,7 +311,7 @@ namespace Catel.MVVM
                     handler.SafeInvoke(this);
                 }
 
-                CommandManager.InvalidateRequerySuggested();
+                System.Windows.Input.CommandManager.InvalidateRequerySuggested();
 #else
                 CanExecuteChanged.SafeInvoke(this);
 #endif
@@ -361,7 +367,7 @@ namespace Catel.MVVM
 #if NET
                     foreach (var eventHandler in _subscribedEventHandlers)
                     {
-                        CommandManager.RequerySuggested -= eventHandler;
+                        System.Windows.Input.CommandManager.RequerySuggested -= eventHandler;
                     }
 #endif
 

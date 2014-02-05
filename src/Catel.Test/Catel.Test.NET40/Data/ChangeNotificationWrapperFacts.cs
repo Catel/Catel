@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ChangeNotificationWrapperFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 namespace Catel.Test.Data
@@ -235,6 +235,33 @@ namespace Catel.Test.Data
                 model.FirstName = "Geert";
 
                 Assert.IsTrue(collectionItemPropertyChanged);
+            }
+
+            [TestMethod]
+            public void HandlesCollectionResetsCorrectly()
+            {
+                var collection = new ObservableCollection<TestModel>();
+                TestModel model = null;
+
+                for (int i = 0; i < 10; i++)
+                {
+                    var randomModel = new TestModel();
+                    collection.Add(randomModel);
+                }
+
+                model = collection[0];
+
+                var wrapper = new ChangeNotificationWrapper(collection);
+
+                bool collectionItemPropertyChanged = false;
+
+                wrapper.CollectionItemPropertyChanged += (sender, e) => collectionItemPropertyChanged = true;
+
+                collection.Clear();
+                
+                model.FirstName = "Geert";
+
+                Assert.IsFalse(collectionItemPropertyChanged);
             }
         }
 

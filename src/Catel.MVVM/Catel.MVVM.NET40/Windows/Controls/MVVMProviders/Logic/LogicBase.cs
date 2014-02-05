@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="LogicBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -36,6 +36,32 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
     using System.Windows.Controls;
     using UIEventArgs = System.EventArgs;
 #endif
+
+    /// <summary>
+    /// Available view load state events.
+    /// </summary>
+    public enum ViewLoadStateEvent
+    {
+        /// <summary>
+        /// The view is about to be loaded.
+        /// </summary>
+        Loading,
+
+        /// <summary>
+        /// The view has just been loaded.
+        /// </summary>
+        Loaded,
+
+        /// <summary>
+        /// The view is about to be unloaded.
+        /// </summary>
+        Unloading,
+
+        /// <summary>
+        /// The view has just been unloaded.
+        /// </summary>
+        Unloaded
+    }
 
     /// <summary>
     /// The available view model behaviors.
@@ -96,6 +122,11 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// Boolean representing whether this is the first validation after the control has been loaded.
         /// </summary>
         private bool _isFirstValidationAfterLoaded = true;
+
+        /// <summary>
+        /// The last invoked view load state event.
+        /// </summary>
+        private ViewLoadStateEvent _lastInvokedViewLoadStateEvent;
 
 #if !NET
         private static readonly IFrameworkElementLoadedManager _frameworkElementLoadedManager;
@@ -294,6 +325,19 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether a <c>null</c> DataContext should be ignored and no new view
+        /// model should be created.
+        /// <para />
+        /// This property will automatically be set to <c>true</c> when a parent view model container invokes the
+        /// <see cref="IViewModelContainer.ViewUnloading"/> event. It will be set to <c>false</c> again when the parent
+        /// view model container invokes the <see cref="IViewModelContainer.ViewLoading"/>.
+        /// <para />
+        /// The default value is <c>false</c>.
+        /// </summary>
+        /// <value><c>true</c> if the <c>null</c> DataContext should be ignored; otherwise, <c>false</c>.</value>
+        protected bool IgnoreNullDataContext { get; set; }
+
+        /// <summary>
         /// Gets a value indicating whether the target control is loaded or not.
         /// </summary>
         /// <value>
@@ -315,6 +359,18 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// </remarks>
         /// <value><c>true</c> if this instance can control be loaded; otherwise, <c>false</c>.</value>
         protected virtual bool CanControlBeLoaded { get { return true; } }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is loading.
+        /// </summary>
+        /// <value><c>true</c> if this instance is loading; otherwise, <c>false</c>.</value>
+        protected bool IsLoading { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is unloading.
+        /// </summary>
+        /// <value><c>true</c> if this instance is unloading; otherwise, <c>false</c>.</value>
+        protected bool IsUnloading { get; private set; }
         #endregion
 
         #region Events
@@ -359,6 +415,26 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// Occurs when a property on the <see cref="TargetControl"/> has changed.
         /// </summary>
         public event EventHandler<DependencyPropertyValueChangedEventArgs> TargetControlPropertyChanged;
+
+        /// <summary>
+        /// Occurs when the view model container is loading.
+        /// </summary>
+        public event EventHandler<EventArgs> ViewLoading;
+
+        /// <summary>
+        /// Occurs when the view model container is loaded.
+        /// </summary>
+        public event EventHandler<EventArgs> ViewLoaded;
+
+        /// <summary>
+        /// Occurs when the view model container starts unloading.
+        /// </summary>
+        public event EventHandler<EventArgs> ViewUnloading;
+
+        /// <summary>
+        /// Occurs when the view model container is unloaded.
+        /// </summary>
+        public event EventHandler<EventArgs> ViewUnloaded;
         #endregion
 
         #region Methods
@@ -474,6 +550,10 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 
             Log.Debug("Target control '{0}' is loaded", TargetControl.GetType().Name);
 
+            InvokeViewLoadEvent(ViewLoadStateEvent.Loading);
+
+            IsLoading = true;
+
             var view = TargetControl as IView;
             if (view == null)
             {
@@ -528,6 +608,10 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                     _isFirstValidationAfterLoaded = true;
                 }
             });
+
+            IsLoading = false;
+
+            InvokeViewLoadEvent(ViewLoadStateEvent.Loaded);
         }
 
         /// <summary>
@@ -564,9 +648,13 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 return;
             }
 
-//#if !NET
-//            _isFirstLayoutUpdatedAfterUnloadedEvent = true;
-//#endif
+            InvokeViewLoadEvent(ViewLoadStateEvent.Unloading);
+
+            IsUnloading = true;
+
+            //#if !NET
+            //            _isFirstLayoutUpdatedAfterUnloadedEvent = true;
+            //#endif
 
             Log.Debug("Target control '{0}' is unloaded", TargetControl.GetType().Name);
 
@@ -590,6 +678,10 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             {
                 ViewToViewModelMappingHelper.UninitializeViewToViewModelMappings(targetControlAsIViewModelContainer);
             }
+
+            IsUnloading = false;
+
+            InvokeViewLoadEvent(ViewLoadStateEvent.Unloaded);
         }
 
         /// <summary>
@@ -611,7 +703,6 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             Log.Debug("DataContext of TargetControl '{0}' has changed to '{1}'", TargetControl.GetType().Name, ObjectToStringHelper.ToTypeString(TargetControl.DataContext));
 
             var dataContext = TargetControl.DataContext;
-
             if (dataContext == null)
             {
                 return;
@@ -832,6 +923,12 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 return ViewModel;
             }
 
+            if (IgnoreNullDataContext && (injectionObject == null))
+            {
+                Log.Info("ViewModel construction is prevented by the IgnoreNullDataContext property");
+                return null;
+            }
+
             var determineViewModelInstanceEventArgs = new DetermineViewModelInstanceEventArgs(injectionObject);
             DetermineViewModelInstance.SafeInvoke(this, determineViewModelInstanceEventArgs);
             if (determineViewModelInstanceEventArgs.ViewModel != null)
@@ -845,7 +942,6 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             if (determineViewModelInstanceEventArgs.DoNotCreateViewModel)
             {
                 Log.Info("ViewModel construction is prevented by the DetermineViewModelInstance event (DoNotCreateViewModel is set to true)");
-
                 return null;
             }
 
@@ -881,6 +977,47 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 (viewModelInstance != null) ? string.Empty : " NOT");
 
             return viewModelInstance;
+        }
+
+        /// <summary>
+        /// Invokes the specific view load event and makes sure that it isn't double invoked.
+        /// </summary>
+        /// <param name="viewLoadStateEvent">The view load state event.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException">viewLoadStateEvent</exception>
+        protected void InvokeViewLoadEvent(ViewLoadStateEvent viewLoadStateEvent)
+        {
+            if (_lastInvokedViewLoadStateEvent == viewLoadStateEvent)
+            {
+                return;
+            }
+
+            EventHandler<EventArgs> handler = null;
+
+            switch (viewLoadStateEvent)
+            {
+                case ViewLoadStateEvent.Loading:
+                    handler = ViewLoading;
+                    break;
+
+                case ViewLoadStateEvent.Loaded:
+                    handler = ViewLoaded;
+                    break;
+
+                case ViewLoadStateEvent.Unloading:
+                    handler = ViewUnloading;
+                    break;
+
+                case ViewLoadStateEvent.Unloaded:
+                    handler = ViewUnloaded;
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException("viewLoadStateEvent");
+            }
+
+            handler.SafeInvoke(this);
+
+            _lastInvokedViewLoadStateEvent = viewLoadStateEvent;
         }
         #endregion
     }

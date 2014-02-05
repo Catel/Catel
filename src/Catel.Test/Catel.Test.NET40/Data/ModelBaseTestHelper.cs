@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ModelBaseTestHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -1355,24 +1355,6 @@ namespace Catel.Test.Data
         }
     }
 #endif
-
-    [AllowNonSerializableMembers]
-    public class ObjectWithNonSerializableMembersDecoratedWithAllowNonSerializableMembersAttribute : ModelBase
-    {
-        /// <summary>
-        ///   Gets or sets a non-serializable value.
-        /// </summary>
-        public NonSerializableClass NonSerializableValue
-        {
-            get { return GetValue<NonSerializableClass>(NonSerializableValueProperty); }
-            set { SetValue(NonSerializableValueProperty, value); }
-        }
-
-        /// <summary>
-        ///   Register the NonSerializableValue property so it is known in the class.
-        /// </summary>
-        public static readonly PropertyData NonSerializableValueProperty = RegisterProperty("NonSerializableValue", typeof(NonSerializableClass), null);
-    }
 
 #if NET
     [Serializable]

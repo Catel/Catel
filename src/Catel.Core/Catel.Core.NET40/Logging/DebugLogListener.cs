@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DebugLogListener.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -77,7 +77,6 @@ namespace Catel.Logging
 #if NETFX_CORE
             System.Diagnostics.Debug.WriteLine(consoleMessage);
 #elif WINDOWS_PHONE
-            // TODO: find out how to log in on windows phone
             System.Diagnostics.Debug.WriteLine(consoleMessage);
 #elif SL4 || SL5
             if (InitializeConsole())

@@ -44,10 +44,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Castle.Core.3.2.2\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.Windsor, Version=3.2.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Castle.Windsor.3.2.1\lib\net45\Castle.Windsor.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\..\..\lib\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -68,14 +64,6 @@
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\..\lib\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.Unity, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Unity.3.0.1304.0\lib\Net45\Microsoft.Practices.Unity.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.Unity.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Unity.3.0.1304.0\lib\Net45\Microsoft.Practices.Unity.Configuration.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Web.XmlTransform, Version=1.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Microsoft.Web.Xdt.1.0.0\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
@@ -84,8 +72,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Moq.4.1.1309.1617\lib\net40\Moq.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject">
-      <HintPath>..\..\..\lib\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NuGet.Core, Version=1.6.30117.9648, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -173,6 +162,9 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\ComponentModel\PropertyChangedEventArgsExtensionsFacts.cs">
       <Link>ComponentModel\PropertyChangedEventArgsExtensionsFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Configuration\ConfigurationServiceFacts.cs">
+      <Link>Configuration\ConfigurationServiceFacts.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Data\CatelTypeInfoFacts.cs">
       <Link>Data\CatelTypeInfoFacts.cs</Link>
@@ -480,20 +472,17 @@
     <Compile Include="..\Catel.Test.NET40\IoC\Extensions\ObjectExtensionsFacts.cs">
       <Link>IoC\Extensions\ObjectExtensionsFacts.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Test.NET40\IoC\Helpers\MefHelperTest.cs">
-      <Link>IoC\Helpers\MefHelperTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\IoC\Helpers\NinjectHelperTest.cs">
-      <Link>IoC\Helpers\NinjectHelperTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\IoC\Helpers\UnityHelperTest.cs">
-      <Link>IoC\Helpers\UnityHelperTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\IoC\Helpers\WindsorHelperTest.cs">
-      <Link>IoC\Helpers\WindsorHelperTest.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Test.NET40\IoC\ServiceLocatorFacts.cs">
       <Link>IoC\ServiceLocatorFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\IoC\ServiceLocatorFacts.features.cs">
+      <Link>IoC\ServiceLocatorFacts.features.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\IoC\ServiceLocatorRegistrationFacts.cs">
+      <Link>IoC\ServiceLocatorRegistrationFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\IoC\ServiceLocatorRegistrationGroupFacts.cs">
+      <Link>IoC\ServiceLocatorRegistrationGroupFacts.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\IoC\TestClasses.cs">
       <Link>IoC\TestClasses.cs</Link>
@@ -546,6 +535,15 @@
     <Compile Include="..\Catel.Test.NET40\MVVM\Auditing\TestViewModel.cs">
       <Link>MVVM\Auditing\TestViewModel.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Commands\CommandManagerFacts.cs">
+      <Link>MVVM\Commands\CommandManagerFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Commands\CompositeCommandFacts.cs">
+      <Link>MVVM\Commands\CompositeCommandFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Commands\CompositeCommandViewModel.cs">
+      <Link>MVVM\Commands\CompositeCommandViewModel.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\MVVM\Commands\ViewModelCommandManagerFacts.cs">
       <Link>MVVM\Commands\ViewModelCommandManagerFacts.cs</Link>
     </Compile>
@@ -591,9 +589,6 @@
     <Compile Include="..\Catel.Test.NET40\MVVM\Services\ViewModelServiceBaseTest.cs">
       <Link>MVVM\Services\ViewModelServiceBaseTest.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Test.NET40\MVVM\ViewModels\Attributes\ExposeAttributeFacts.cs">
-      <Link>MVVM\ViewModels\Attributes\ExposeAttributeFacts.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Test.NET40\MVVM\ViewModels\Attributes\InterestedInAttributeFacts.cs">
       <Link>MVVM\ViewModels\Attributes\InterestedInAttributeFacts.cs</Link>
     </Compile>
@@ -608,9 +603,6 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\MVVM\ViewModels\ManagedViewModelTest.cs">
       <Link>MVVM\ViewModels\ManagedViewModelTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\MVVM\ViewModels\TestClasses\ExposingViewModel.cs">
-      <Link>MVVM\ViewModels\TestClasses\ExposingViewModel.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\MVVM\ViewModels\TestClasses\InterestedViewModel.cs">
       <Link>MVVM\ViewModels\TestClasses\InterestedViewModel.cs</Link>
@@ -798,11 +790,20 @@
     <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\ShortDateFormattingConverterTest.cs">
       <Link>Windows\Data\Converters\ShortDateFormattingConverterTest.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\TextToLowerCaseConverterFacts.cs">
+      <Link>Windows\Data\Converters\TextToLowerCaseConverterFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\TextToUpperCaseConverterFacts.cs">
+      <Link>Windows\Data\Converters\TextToUpperCaseConverterFacts.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\Windows\Helpers\CommandLineHelperFacts.cs">
       <Link>Windows\Helpers\CommandLineHelperFacts.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Windows\Helpers\ResourceHelperFacts.cs">
       <Link>Windows\Helpers\ResourceHelperFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Windows\Input\InputGestureFacts.cs">
+      <Link>Windows\Input\InputGestureFacts.cs</Link>
     </Compile>
     <Compile Include="MVVM\Commands\TaskCommandFacts.cs" />
   </ItemGroup>

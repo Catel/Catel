@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PageNotRegisteredException.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -18,7 +18,7 @@ namespace Catel.MVVM.Services
         /// </summary>
         /// <param name="name">The name of the page.</param>
         public PageNotRegisteredException(string name)
-            : base(string.Format(ResourceHelper.GetString(typeof(PageNotRegisteredException), "Exceptions", "PageNotRegistered"), name))
+            : base(string.Format(ResourceHelper.GetString("PageNotRegistered"), name))
         {
             Name = name;
         }

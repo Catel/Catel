@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ReflectionExtensions.assembly.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -11,7 +11,7 @@ namespace Catel.Reflection
     using System;
     using System.Reflection;
 
-#if NETFX_CORE || WP8 || NET45
+#if NETFX_CORE || WP80 || NET45
     using System.Linq;
 #endif
 
@@ -24,7 +24,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("assembly", assembly);
 
-#if NETFX_CORE || WP8
+#if NETFX_CORE || WP80
             return (from type in assembly.DefinedTypes
                     select type.AsType()).ToArray();
 #else
@@ -43,7 +43,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("assembly", assembly);
             Argument.IsNotNull("attributeType", attributeType);
 
-#if NETFX_CORE || WP8
+#if NETFX_CORE || WP80
             return assembly.GetCustomAttributes(attributeType).ToArray();
 #else
             return assembly.GetCustomAttributes(attributeType, true).ToAttributeArray();

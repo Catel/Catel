@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ServiceLocatorAdapterTests.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 namespace Catel.Test.Extensions.Prism
@@ -29,7 +29,7 @@ namespace Catel.Test.Extensions.Prism
         [TestMethod]
         public void GetAllInstanceJustReturnsEmptyCollectionIfTheTypeIsNonRegistered()
         {
-            var serviceLocator = new ServiceLocator();
+            var serviceLocator = IoCFactory.CreateServiceLocator();
             var serviceLocatorAdapter = new ServiceLocatorAdapter(serviceLocator);
             IFooInterface[] list = serviceLocatorAdapter.GetAllInstances<IFooInterface>().ToArray();
             Assert.AreEqual(0, list.Length);
@@ -41,7 +41,7 @@ namespace Catel.Test.Extensions.Prism
         [TestMethod]
         public void GetAllInstanceJustReturnsCollectionOfWithOnylOneResolvedInstanceIfTheTypeIsRegistered()
         {
-            var serviceLocator = new ServiceLocator();
+            var serviceLocator = IoCFactory.CreateServiceLocator();
             serviceLocator.RegisterType<IFooInterface, FooNonAbstractClass>();
             var serviceLocatorAdapter = new ServiceLocatorAdapter(serviceLocator);
             IFooInterface[] list = serviceLocatorAdapter.GetAllInstances<IFooInterface>().ToArray();
@@ -54,7 +54,7 @@ namespace Catel.Test.Extensions.Prism
         [TestMethod]
         public void GetAllInstanceJustReturnsCollectionOfWithOnylOneResolvedInstanceOfNonRegisteredNonAbstractClasses()
         {
-            var serviceLocator = new ServiceLocator();
+            var serviceLocator = IoCFactory.CreateServiceLocator();
             var serviceLocatorAdapter = new ServiceLocatorAdapter(serviceLocator);
             FooNonAbstractClass[] list = serviceLocatorAdapter.GetAllInstances<FooNonAbstractClass>().ToArray();
             Assert.AreEqual(1, list.Length);
@@ -76,7 +76,7 @@ namespace Catel.Test.Extensions.Prism
         [TestMethod]
         public void GetInstanceOfNonRegisteredAndNonAbstractClassReturnsAlwaysANewInstance()
         {
-            var adapter = new ServiceLocatorAdapter(new ServiceLocator());
+            var adapter = new ServiceLocatorAdapter(IoCFactory.CreateServiceLocator());
             var nonAbstractClassInstance1 = adapter.GetInstance<FooNonAbstractClass>();
             var nonAbstractClassInstance2 = adapter.GetInstance<FooNonAbstractClass>();
             Assert.AreNotSame(nonAbstractClassInstance1, nonAbstractClassInstance2);
@@ -85,7 +85,7 @@ namespace Catel.Test.Extensions.Prism
         [TestMethod]
         public void GetInstanceOfNonRegisteredAndNonAbstractClassReturnsAlwaysANewInstanceWithCanResolveNonAbstractTypesWithoutRegistrationInFalse()
         {
-        	var serviceLocator = new ServiceLocator();
+        	var serviceLocator = IoCFactory.CreateServiceLocator();
         	serviceLocator.CanResolveNonAbstractTypesWithoutRegistration = false;
             var adapter = new ServiceLocatorAdapter(serviceLocator);
             
@@ -100,7 +100,7 @@ namespace Catel.Test.Extensions.Prism
         [TestMethod]
         public void GetInstanceOfSingletonRegisteredNonAbstractClassAlwaysTheSameInstance()
         {
-            var serviceLocator = new ServiceLocator();
+            var serviceLocator = IoCFactory.CreateServiceLocator();
             serviceLocator.RegisterType<FooNonAbstractClass, FooNonAbstractClass>();
             var adapter = new ServiceLocatorAdapter(serviceLocator);
 
@@ -130,7 +130,7 @@ namespace Catel.Test.Extensions.Prism
         [TestMethod]
         public void GetInstanceOfAutoPopulateRegionBehaviorReturnsAlwaysANewOne()
         {
-            var serviceLocator = new ServiceLocator();
+            var serviceLocator = IoCFactory.CreateServiceLocator();
             serviceLocator.RegisterType<IRegionViewRegistry, RegionViewRegistry>();
 
             var adapter = new ServiceLocatorAdapter(serviceLocator);
@@ -148,7 +148,7 @@ namespace Catel.Test.Extensions.Prism
         [TestMethod]
         public void GetInstanceOfAutoDelayedRegionCreationBehaviorReturnsAlwaysANewOne()
         {
-            var serviceLocator = new ServiceLocator();
+            var serviceLocator = IoCFactory.CreateServiceLocator();
             serviceLocator.RegisterType<RegionAdapterMappings, RegionAdapterMappings>();
 
             var adapter = new ServiceLocatorAdapter(serviceLocator);
@@ -165,7 +165,7 @@ namespace Catel.Test.Extensions.Prism
         [TestMethod]
         public void GetInstanceOfRegionMemberLifetimeBehaviorReturnsAlwaysANewOne()
         {
-            var serviceLocator = new ServiceLocator();
+            var serviceLocator = IoCFactory.CreateServiceLocator();
             var adapter = new ServiceLocatorAdapter(serviceLocator);
 
             var behavior1 = adapter.GetInstance<RegionMemberLifetimeBehavior>();
@@ -180,7 +180,7 @@ namespace Catel.Test.Extensions.Prism
         [TestMethod]
         public void GetInstanceOfBindRegionContextToDependencyObjectBehaviorReturnsAlwaysANewOne()
         {
-            var serviceLocator = new ServiceLocator();
+            var serviceLocator = IoCFactory.CreateServiceLocator();
 
             var adapter = new ServiceLocatorAdapter(serviceLocator);
 
@@ -196,7 +196,7 @@ namespace Catel.Test.Extensions.Prism
         [TestMethod]
         public void GetInstanceOfRegionActiveAwareBehaviorReturnsAlwaysANewOne()
         {
-            var serviceLocator = new ServiceLocator();
+            var serviceLocator = IoCFactory.CreateServiceLocator();
 
             var adapter = new ServiceLocatorAdapter(serviceLocator);
 
@@ -212,7 +212,7 @@ namespace Catel.Test.Extensions.Prism
         [TestMethod]
         public void GetInstanceOfSelectorItemsSourceSyncBehaviorReturnsAlwaysANewOne()
         {
-            var serviceLocator = new ServiceLocator();
+            var serviceLocator = IoCFactory.CreateServiceLocator();
             var adapter = new ServiceLocatorAdapter(serviceLocator);
 
             var behavior1 = adapter.GetInstance<SelectorItemsSourceSyncBehavior>();
@@ -227,7 +227,7 @@ namespace Catel.Test.Extensions.Prism
         [TestMethod]
         public void GetInstanceOfSyncRegionContextWithHostBehaviorReturnsAlwaysANewOne()
         {
-            var serviceLocator = new ServiceLocator();
+            var serviceLocator = IoCFactory.CreateServiceLocator();
             var adapter = new ServiceLocatorAdapter(serviceLocator);
 
             var behavior1 = adapter.GetInstance<SyncRegionContextWithHostBehavior>();

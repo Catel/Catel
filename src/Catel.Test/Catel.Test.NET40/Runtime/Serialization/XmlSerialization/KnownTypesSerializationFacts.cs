@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="KnownTypesSerializationFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -121,27 +121,27 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
             }
         }
 
-        //[TestMethod]
-        //public void EnumerableOfAbstractClassesViaKnownTypes_SameNameDifferentNamespaces_SaveLoadRoundTrip()
-        //{
-        //    var c = new ContainerAbstractClasses();
+        [TestMethod]
+        public void EnumerableOfAbstractClassesViaKnownTypes_SameNameDifferentNamespaces_SaveLoadRoundTrip()
+        {
+            var c = new ContainerAbstractClasses();
 
-        //    var pA = new PluginA.Params();
-        //    pA.SettingA = "TestA";
-        //    c.Parameters.Add(pA);
+            var pA = new PluginA.Params();
+            pA.SettingA = "TestA";
+            c.Parameters.Add(pA);
+            
+            var pB = new PluginB.Params();
+            pB.SettingB = "TestB";
+            c.Parameters.Add(pB);
 
-        //    var pB = new PluginB.Params();
-        //    pB.SettingB = "TestB";
-        //    c.Parameters.Add(pB);
+            using (var memoryStream = new MemoryStream())
+            {
+                c.Save(memoryStream, SerializationMode.Xml);
+                memoryStream.Position = 0L;
 
-        //    using (var memoryStream = new MemoryStream())
-        //    {
-        //        c.Save(memoryStream, SerializationMode.Xml);
-        //        memoryStream.Position = 0L;
-
-        //        var c2 = ContainerAbstractClasses.Load(memoryStream, SerializationMode.Xml);
-        //        Assert.AreEqual(c, c2);
-        //    }
-        //}
+                var c2 = ContainerAbstractClasses.Load(memoryStream, SerializationMode.Xml);
+                Assert.AreEqual(c, c2);
+            }
+        }
     }
 }

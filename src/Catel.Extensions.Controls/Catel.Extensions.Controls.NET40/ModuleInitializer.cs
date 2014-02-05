@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ModuleInitializer.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -22,7 +22,8 @@ namespace Catel.Extensions.Controls
         public static void Initialize()
         {
             var serviceLocator = ServiceLocator.Default;
-            ExtensionsControlsModule.RegisterServices(serviceLocator);
+            var module = new ExtensionsControlsModule();
+            module.Initialize(serviceLocator);
         }
     }
 }

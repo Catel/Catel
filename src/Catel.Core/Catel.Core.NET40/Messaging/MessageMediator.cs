@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="MessageMediator.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -51,6 +51,8 @@ namespace Catel.Messaging
         #endregion
 
         #region Fields
+        private readonly object _lockObject = new object();
+
         /// <summary>
         /// The currently registered handlers. The key is the type of the message, then the value is a list of
         /// interested listeners.
@@ -98,7 +100,7 @@ namespace Catel.Messaging
         {
             Argument.IsNotNull("messageType", messageType);
 
-            lock (_registeredHandlers)
+            lock (_lockObject)
             {
                 if (_registeredHandlers.ContainsKey(messageType))
                 {
@@ -127,7 +129,7 @@ namespace Catel.Messaging
         {
             Argument.IsNotNull("handler", handler);
 
-            lock (_registeredHandlers)
+            lock (_lockObject)
             {
                 var messageType = typeof (TMessage);
 
@@ -175,7 +177,7 @@ namespace Catel.Messaging
         {
             Argument.IsNotNull("handler", handler);
 
-            lock (_registeredHandlers)
+            lock (_lockObject)
             {
                 var messageType = typeof (TMessage);
 
@@ -254,13 +256,14 @@ namespace Catel.Messaging
 
             int invokedHandlersCount = 0;
 
-            lock (_registeredHandlers)
+            lock (_lockObject)
             {
                 var messageType = typeof (TMessage);
 
                 if (_registeredHandlers.ContainsKey(messageType))
                 {
-                    var messageHandlers = _registeredHandlers[messageType];
+                    // CTL-311: first convert to array, then handle messages
+                    var messageHandlers = _registeredHandlers[messageType].ToArray();
                     foreach (var handler in messageHandlers)
                     {
                         if (TagHelper.AreTagsEqual(tag, handler.Tag))
@@ -306,7 +309,7 @@ namespace Catel.Messaging
         {
             Log.Debug("Cleaning up handlers");
 
-            lock (_registeredHandlers)
+            lock (_lockObject)
             {
                 foreach (var handlerKeyPair in _registeredHandlers)
                 {
@@ -344,7 +347,7 @@ namespace Catel.Messaging
         {
             Argument.IsNotNull("recipient", recipient);
 
-            lock (_registeredHandlers)
+            lock (_lockObject)
             {
                 int handlerCounter = 0;
                 var keys = _registeredHandlers.Keys.ToList();
@@ -389,7 +392,7 @@ namespace Catel.Messaging
         {
             Argument.IsNotNull("handler", handler);
 
-            lock (_registeredHandlers)
+            lock (_lockObject)
             {
                 var messageType = typeof (TMessage);
 
@@ -450,7 +453,7 @@ namespace Catel.Messaging
         /// <returns>A list of handlers.</returns>
         internal List<IWeakAction<TMessage>> GetRegisteredHandlers<TMessage>()
         {
-            lock (_registeredHandlers)
+            lock (_lockObject)
             {
                 var registeredHandlers = new List<IWeakAction<TMessage>>();
 

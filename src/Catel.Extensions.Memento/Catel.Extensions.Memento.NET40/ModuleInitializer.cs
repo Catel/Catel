@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ModuleInitializer.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -21,7 +21,8 @@ namespace Catel.Extensions.Memento
         public static void Initialize()
         {
             var serviceLocator = ServiceLocator.Default;
-            ExtensionsMementoModule.RegisterServices(serviceLocator);
+            var module = new ExtensionsMementoModule();
+            module.Initialize(serviceLocator);
         }
         #endregion
     }
