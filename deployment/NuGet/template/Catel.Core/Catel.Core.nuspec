@@ -8,12 +8,12 @@
 	
 	<description>
 	  Catel.Core library which provides the core building blocks required when developing professional applications. This
-	  package contains an IoC container, logging, argument checking, message mediators and much more!
+	  package contains IoC components, logging, argument checking, message mediators and much more!
 	</description>
 	<summary>
 	</summary>
 	
-	<tags>mvvm model modelbase logging data object wpf silverlight sl windows phone wp wp7 wp8 winrt c# ioc servicelocator typefactory messaging messenger message mediator</tags>
+	<tags>mvvm model modelbase logging data object wpf silverlight sl windows phone wp wp8 winrt c# ioc servicelocator typefactory messaging messenger message mediator</tags>
 	
 	<language>en-US</language>
 	<projectUrl>http://www.catelproject.com</projectUrl>	
