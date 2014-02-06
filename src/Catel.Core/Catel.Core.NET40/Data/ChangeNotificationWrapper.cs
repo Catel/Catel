@@ -171,7 +171,7 @@ namespace Catel.Data
             // Reset requires our own logic
             if (e.Action == NotifyCollectionChangedAction.Reset)
             {
-                UpdateCollectionSubscriptions((ICollection)sender);
+                UpdateCollectionSubscriptions((IEnumerable)sender);
             }
 
             if (e.NewItems != null)
@@ -233,7 +233,7 @@ namespace Catel.Data
         /// <para />
         /// This method is internally used when a notifiable collection raises the <see cref="NotifyCollectionChangedAction.Reset"/> event.
         /// </summary>
-        public void UpdateCollectionSubscriptions(ICollection collection)
+        public void UpdateCollectionSubscriptions(IEnumerable collection)
         {
             if (collection != null)
             {

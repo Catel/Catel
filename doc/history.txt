@@ -30,6 +30,7 @@ Added/fixed:
 ============
 (*) CTL-326 Data annotation validation will no longer be invoked for properties with non-public getters to prevent
     first chance exceptions the first time such a property is being validated
+(x) CTL-327 ListCollectionView not supported in ChangeNotificationWrapper (causes InvalidCastException)
 
 Roadmap:
 ========
