@@ -30,7 +30,7 @@ namespace Catel.Data
         private readonly object _lockObject = new object();
 
         private readonly Dictionary<string, PropertyData> _catelProperties = new Dictionary<string, PropertyData>();
-        private readonly Dictionary<string, PropertyInfo> _nonCatelProperties = new Dictionary<string, PropertyInfo>();
+        private readonly Dictionary<string, CachedPropertyInfo> _nonCatelProperties = new Dictionary<string, CachedPropertyInfo>();
         #endregion
 
         #region Constructors
@@ -78,7 +78,7 @@ namespace Catel.Data
         /// Gets the non-Catel properties.
         /// </summary>
         /// <returns>Dictionary containing the non-Catel properties.</returns>
-        public Dictionary<string, PropertyInfo> GetNonCatelProperties()
+        public Dictionary<string, CachedPropertyInfo> GetNonCatelProperties()
         {
             // TODO: Clone or not to clone? For performance reasons decided not to
             return _nonCatelProperties;
@@ -175,7 +175,7 @@ namespace Catel.Data
                 var nonCatelProperties = FindNonCatelProperties(Type);
                 foreach (var property in nonCatelProperties)
                 {
-                    _nonCatelProperties[property.Name] = property;
+                    _nonCatelProperties[property.Name] = new CachedPropertyInfo(property);
                 }
 
                 IsRegisterPropertiesCalled = true;

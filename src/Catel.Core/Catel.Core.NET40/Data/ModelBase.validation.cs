@@ -727,10 +727,17 @@ namespace Catel.Data
 
                     if (_firstAnnotationValidation)
                     {
-                        if (AttributeHelper.IsDecoratedWithAttribute<ExcludeFromValidationAttribute>(propertyInfo.Value))
+                        if (propertyInfo.Value.IsDecoratedWithAttribute(typeof (ExcludeFromValidationAttribute)))
                         {
                             ignoredOrFailedPropertyValidations.Add(propertyInfo.Key);
                         }
+                    }
+
+                    if (!propertyInfo.Value.HasPublicGetter)
+                    {
+                        // Note: non-public getter, do not validate
+                        ignoredOrFailedPropertyValidations.Add(propertyInfo.Key);
+                        continue;
                     }
 
                     // TODO: Should we check for annotations attributes?
@@ -741,7 +748,7 @@ namespace Catel.Data
 
                     try
                     {
-                        var propertyValue = propertyInfo.Value.GetValue(this, null);
+                        var propertyValue = propertyInfo.Value.PropertyInfo.GetValue(this, null);
                         ValidatePropertyUsingAnnotations(propertyInfo.Key, propertyValue);
                     }
                     catch (Exception ex)

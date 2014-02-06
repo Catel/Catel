@@ -298,6 +298,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.zh-Hans.resx</DependentUpon>
     </Compile>
+    <Compile Include="Reflection\CachedPropertyInfo.cs" />
     <Compile Include="Reflection\EventArgs\AssemblyLoadedEventArgs.cs" />
     <Compile Include="Reflection\Exceptions\CannotGetPropertyValueException.cs" />
     <Compile Include="Reflection\Exceptions\CannotSetPropertyValueException.cs" />

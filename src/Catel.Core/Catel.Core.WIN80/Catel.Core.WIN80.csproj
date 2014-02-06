@@ -644,6 +644,9 @@
     <Compile Include="..\Catel.Core.NET40\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Reflection\CachedPropertyInfo.cs">
+      <Link>Reflection\CachedPropertyInfo.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Reflection\EventArgs\AssemblyLoadedEventArgs.cs">
       <Link>Reflection\EventArgs\AssemblyLoadedEventArgs.cs</Link>
     </Compile>
