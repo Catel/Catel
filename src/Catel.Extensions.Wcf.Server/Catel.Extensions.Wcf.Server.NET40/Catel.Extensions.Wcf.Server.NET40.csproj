@@ -67,9 +67,9 @@
     <Compile Include="InstanceContextInitializer.cs" />
     <Compile Include="ModuleInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Serialization\DataType.cs" />
+    <Compile Include="DataType.cs" />
     <Compile Include="Serialization\Helpers\BinarySerializerHelper.cs" />
-    <Compile Include="Serialization\IObjectMetaData.cs" />
+    <Compile Include="Serialization\Interfaces\IObjectMetaData.cs" />
     <Compile Include="Serialization\ObjectMetaData.cs" />
     <Compile Include="Serialization\Serializers\BinarySerializer.cs" />
   </ItemGroup>

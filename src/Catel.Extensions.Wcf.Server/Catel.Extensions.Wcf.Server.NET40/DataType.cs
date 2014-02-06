@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.ServiceModel.Serialization
+namespace Catel
 {
     /// <summary>
     /// The data types enum.

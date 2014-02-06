@@ -13,6 +13,7 @@ namespace Catel.ServiceModel.Serialization
     using System.IO;
     using System.Linq;
     using System.Text;
+    using Caching;
     using IoC;
     using Reflection;
 
@@ -22,7 +23,10 @@ namespace Catel.ServiceModel.Serialization
     public class BinarySerializerHelper
     {
         #region Constants
-        private static readonly Dictionary<string, IObjectMetaData> Cache = new Dictionary<string, IObjectMetaData>();
+        /// <summary>
+        /// The cache
+        /// </summary>
+        private static readonly ICacheStorage<string, IObjectMetaData> Cache = new CacheStorage<string, IObjectMetaData>();
         #endregion
 
         #region Methods
@@ -44,7 +48,7 @@ namespace Catel.ServiceModel.Serialization
             lock (Cache)
             {
                 IObjectMetaData objectMetaData;
-                if (Cache.Keys.Contains(objectType.FullName))
+                if (Cache.Contains(objectType.FullName))
                 {
                     objectMetaData = Cache[objectType.FullName];
                 }
@@ -75,7 +79,7 @@ namespace Catel.ServiceModel.Serialization
             lock (Cache)
             {
                 IObjectMetaData objectMetaData;
-                if (Cache.Keys.Contains(objectType.FullName))
+                if (Cache.Contains(objectType.FullName))
                 {
                     objectMetaData = Cache[objectType.FullName];
                 }

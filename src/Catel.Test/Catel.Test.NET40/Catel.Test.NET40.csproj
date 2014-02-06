@@ -96,6 +96,9 @@
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Activation" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\lib\Prism.4.1.0.0\lib\NET40\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -205,6 +208,9 @@
     <Compile Include="Extensions\Prism\Modules\NuGetBasedModuleCatalog_Facts.cs" />
     <Compile Include="Extensions\Prism\ServiceLocatorAdapterTests.cs" />
     <Compile Include="Extensions\Prism\UIVisualizerServiceExtensionsTests.cs" />
+    <Compile Include="Extensions\Wcf.Server\ServiceHostFactoryFacts.cs" />
+    <Compile Include="Extensions\Wcf.Server\Services\Interfaces\ITestService.cs" />
+    <Compile Include="Extensions\Wcf.Server\Services\TestService.cs" />
     <Compile Include="GlobalInitialization.cs" />
     <Compile Include="Helpers\ConsoleHelper.cs" />
     <Compile Include="Helpers\ObjectHelperFacts.cs" />
@@ -411,7 +417,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Extensions\Wcf.Server\" />
     <Folder Include="Logging\Extensions\" />
   </ItemGroup>
   <ItemGroup>

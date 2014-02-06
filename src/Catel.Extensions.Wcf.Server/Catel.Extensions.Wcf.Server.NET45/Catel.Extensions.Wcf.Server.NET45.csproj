@@ -77,6 +77,9 @@
     <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Behaviors\JsonSerializerOperationBehavior.cs">
       <Link>Behaviors\JsonSerializerOperationBehavior.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\DataType.cs">
+      <Link>DataType.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Dispatching\InstanceProvider.cs">
       <Link>Dispatching\InstanceProvider.cs</Link>
     </Compile>
@@ -98,14 +101,11 @@
     <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Serialization\DataType.cs">
-      <Link>Serialization\DataType.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Serialization\Helpers\BinarySerializerHelper.cs">
       <Link>Serialization\Helpers\BinarySerializerHelper.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Serialization\IObjectMetaData.cs">
-      <Link>Serialization\IObjectMetaData.cs</Link>
+    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Serialization\Interfaces\IObjectMetaData.cs">
+      <Link>Serialization\Interfaces\IObjectMetaData.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Serialization\ObjectMetaData.cs">
       <Link>Serialization\ObjectMetaData.cs</Link>
