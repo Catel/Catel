@@ -221,6 +221,33 @@ namespace Catel.Windows.Controls
             set { _logic.SetValue<UserControlLogic>(x => x.SupportParentViewModelContainers = value); }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the styles and transitions from the content of the target control
+        /// should be transfered to the view model grid which is created dynamically,.
+        /// <para />
+        /// The transfer is required to enable visual state transitions on root elements (which is replaced by this logic implementation).
+        /// <para />
+        /// The default value is <c>true</c>/
+        /// </summary>
+        /// <value><c>true</c> if the styles and transitions should be transfered to the view model grid; otherwise, <c>false</c>.</value>
+        public bool TransferStylesAndTransitionsToViewModelGrid
+        {
+            get { return _logic.GetValue<UserControlLogic, bool>(x => x.TransferStylesAndTransitionsToViewModelGrid, true); }
+            set { _logic.SetValue<UserControlLogic>(x => x.TransferStylesAndTransitionsToViewModelGrid = value); }
+        }
+
+        /// <summary>
+        /// Gets or sets a value for the <see cref="TransferStylesAndTransitionsToViewModelGrid"/> property. This way, the behavior
+        /// can be changed an entire application to prevent disabling it on every control.
+        /// <para />
+        /// The default value is <c>false</c>.
+        /// </summary>
+        public static bool DefaultTransferStylesAndTransitionsToViewModelGridValue
+        {
+            get { return UserControlLogic.DefaultTransferStylesAndTransitionsToViewModelGridValue; }
+            set { UserControlLogic.DefaultTransferStylesAndTransitionsToViewModelGridValue = value; }
+        }
+
 #if NET || SL4 || SL5
         /// <summary>
         /// Gets or sets a value indicating whether to skip the search for an info bar message control. If not skipped,

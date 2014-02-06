@@ -8,6 +8,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Data;
 
     using Logging;
@@ -21,6 +22,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
     using global::Windows.UI.Xaml.Data;
 
     using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
+    using VisualStateGroup = global::Windows.UI.Xaml.VisualStateGroup;
 #else
     using Catel.Windows.Threading;
 
@@ -30,6 +32,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
     using System.Windows.Data;
 
     using UIEventArgs = System.EventArgs;
+    using VisualStateGroup = System.Object;
 #endif
 
     /// <summary>
@@ -63,6 +66,8 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// </summary>
         static UserControlLogic()
         {
+            DefaultTransferStylesAndTransitionsToViewModelGridValue = true;
+
 #if NET || SL4 || SL5
             DefaultCreateWarningAndErrorValidatorForViewModelValue = true;
 #endif
@@ -82,6 +87,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         {
             SupportParentViewModelContainers = true;
             CloseViewModelOnUnloaded = true;
+            TransferStylesAndTransitionsToViewModelGrid = DefaultTransferStylesAndTransitionsToViewModelGridValue;
 
 #if NET || SL4 || SL5
             SkipSearchingForInfoBarMessageControl = DefaultSkipSearchingForInfoBarMessageControlValue;
@@ -133,6 +139,25 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// <c>true</c> if parent view model containers are supported; otherwise, <c>false</c>.
         /// </value>
         public bool SupportParentViewModelContainers { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the styles and transitions from the content of the target control
+        /// should be transfered to the view model grid which is created dynamically,.
+        /// <para />
+        /// The transfer is required to enable visual state transitions on root elements (which is replaced by this logic implementation).
+        /// <para />
+        /// The default value is <c>true</c>/
+        /// </summary>
+        /// <value><c>true</c> if the styles and transitions should be transfered to the view model grid; otherwise, <c>false</c>.</value>
+        public bool TransferStylesAndTransitionsToViewModelGrid { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value for the <see cref="TransferStylesAndTransitionsToViewModelGrid"/> property. This way, the behavior
+        /// can be changed an entire application to prevent disabling it on every control.
+        /// <para />
+        /// The default value is <c>false</c>.
+        /// </summary>
+        public static bool DefaultTransferStylesAndTransitionsToViewModelGridValue { get; set; }
 
 #if NET || SL4 || SL5
         /// <summary>
@@ -262,8 +287,6 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                     return;
                 }
 
-                Log.Debug("Creating target control content wrapper grid that will serve as view model container.");
-
                 _viewModelGrid = new Grid();
                 _viewModelGrid.SetBinding(FrameworkElement.DataContextProperty, new Binding { Path = new PropertyPath("ViewModel"), Source = this });
 
@@ -277,11 +300,16 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 }
 #endif
 
+                if (TransferStylesAndTransitionsToViewModelGrid)
+                {
+                    TransferStylesAndTransitions(content, _viewModelGrid);
+                }
+
                 TargetControl.Content = null;
                 _viewModelGrid.Children.Add(content);
                 TargetControl.Content = _viewModelGrid;
 
-                Log.Debug("Created target control content wrapper grid for view model.");
+                Log.Debug("Created target control content wrapper grid for view model");
             });
 
             // NOTE: Beginning invoke (running async) because setting of TargetControl Content property causes memory faults
@@ -291,6 +319,51 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 #else
             update();
 #endif
+        }
+
+        /// <summary>
+        /// Transfers the styles and transitions from two framework elements.
+        /// </summary>
+        /// <param name="oldElement">The old element.</param>
+        /// <param name="newElement">The new element.</param>
+        private void TransferStylesAndTransitions(FrameworkElement oldElement, FrameworkElement newElement)
+        {
+            Log.Debug("Transferring styles and transitions");
+
+            var name = oldElement.Name;
+            var renderTransform = oldElement.RenderTransform;
+            var renderTransformOrigin = oldElement.RenderTransformOrigin;
+
+            oldElement.RenderTransform = null;
+            oldElement.Name = "__dynamicReplacement";
+
+            newElement.Name = name;
+            newElement.RenderTransform = renderTransform;
+            newElement.RenderTransformOrigin = renderTransformOrigin;
+
+            var customVisualStateManager = VisualStateManager.GetCustomVisualStateManager(oldElement);
+            if (customVisualStateManager != null)
+            {
+                VisualStateManager.SetCustomVisualStateManager(oldElement, null);
+                VisualStateManager.SetCustomVisualStateManager(newElement, customVisualStateManager);
+            }
+
+            var oldContentVisualStateGroups = VisualStateManager.GetVisualStateGroups(oldElement);
+            if (oldContentVisualStateGroups.Count > 0)
+            {
+                // Copy to temp list, then clear, then add them to new parent
+                var tempList = new List<VisualStateGroup>(oldContentVisualStateGroups.Cast<VisualStateGroup>());
+
+                oldContentVisualStateGroups.Clear();
+
+                var newContentVisualStateGroups = VisualStateManager.GetVisualStateGroups(newElement);
+                foreach (var visualStateGroup in tempList)
+                {
+                    newContentVisualStateGroups.Add(visualStateGroup);
+                }
+            }
+
+            Log.Debug("Transferred styles and transitions");
         }
 
         /// <summary>
