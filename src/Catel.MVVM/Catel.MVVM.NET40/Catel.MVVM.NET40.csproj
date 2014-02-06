@@ -41,7 +41,6 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="ClassDiagrams\ViewModelBase.cd" />
     <None Include="Fody.targets" />
     <None Include="packages.config" />
     <Reference Include="Obsolete">
@@ -340,7 +339,6 @@
     <Compile Include="Windows\Extensions\UIElementExtensions.cs" />
     <Compile Include="Windows\Extensions\VisualExtensions.cs" />
     <Compile Include="Windows\Extensions\WindowExtensions.cs" />
-    <Compile Include="Windows\Helpers\AutoDisposeHelper.cs" />
     <Compile Include="Windows\Helpers\EffectsHelper.cs" />
     <Compile Include="Windows\Helpers\PopupHelper.cs" />
     <Compile Include="Windows\Helpers\ResourceHelper.cs" />

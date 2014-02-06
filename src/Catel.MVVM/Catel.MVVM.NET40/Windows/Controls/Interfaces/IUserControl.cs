@@ -6,7 +6,6 @@
 
 namespace Catel.Windows.Controls
 {
-    using System.Windows;
     using MVVM;
 
     /// <summary>
@@ -30,7 +29,7 @@ namespace Catel.Windows.Controls
 
         /// <summary>
         /// Gets or sets a value indicating whether parent view model containers are supported. If supported,
-        /// the user control will search for a <see cref="DependencyObject"/> that implements the <see cref="IViewModelContainer"/>
+        /// the user control will search for a <c>DependencyObject</c> that implements the <see cref="IViewModelContainer"/>
         /// interface. During this search, the user control will use both the visual and logical tree.
         /// <para />
         /// If a user control does not have any parent control implementing the <see cref="IViewModelContainer"/> interface, searching

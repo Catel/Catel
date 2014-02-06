@@ -10,7 +10,7 @@ using System.Windows;
 
 #if NETFX_CORE
 using global::Windows.UI.Xaml.Markup;
-#else
+#elif !PCL
 using System.Windows.Markup;
 #endif
 

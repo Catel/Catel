@@ -949,8 +949,6 @@ namespace Catel.Windows
             {
                 DiscardChanges();
             }
-
-            AutoDisposeHelper.AutoDisposeProperties(this);
         }
 
         /// <summary>

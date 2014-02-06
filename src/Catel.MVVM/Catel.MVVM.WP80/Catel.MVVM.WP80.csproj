@@ -59,9 +59,6 @@
     <OutputPath>..\..\..\output\release\WP80\Catel.MVVM\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="..\Catel.MVVM.NET40\ClassDiagrams\ViewModelBase.cd">
-      <Link>ClassDiagrams\ViewModelBase.cd</Link>
-    </None>
     <None Include="Fody.targets" />
     <None Include="FodyWeavers.xml" />
     <None Include="packages.config" />
@@ -648,9 +645,6 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Extensions\FrameworkElementExtensions.cs">
       <Link>Windows\Extensions\FrameworkElementExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Helpers\AutoDisposeHelper.cs">
-      <Link>Windows\Helpers\AutoDisposeHelper.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Helpers\CommandLineHelper.cs">
       <Link>Windows\Helpers\CommandLineHelper.cs</Link>

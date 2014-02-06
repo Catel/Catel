@@ -2,135 +2,49 @@
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{4F616501-99C8-480A-A7BF-9E4C7050FDC9}</ProjectGuid>
+    <ProjectGuid>{23830AB2-4163-42B4-9E83-9BDFD99D1645}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Catel</RootNamespace>
     <AssemblyName>Catel.MVVM</AssemblyName>
-    <DefaultLanguage>en-US</DefaultLanguage>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile158</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <FodyPath>..\..\..\lib\Fody.1.18.0.0</FodyPath>
-    <TargetPlatformVersion>8.1</TargetPlatformVersion>
-    <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\output\debug\WIN81\Catel.MVVM\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WIN;WIN81</DefineConstants>
+    <OutputPath>..\..\..\output\debug\PCL\Catel.MVVM\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;PCL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\..\output\debug\WIN81\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DocumentationFile>..\..\..\output\debug\PCL\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\output\release\WIN81\Catel.MVVM\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE;WIN;WIN81</DefineConstants>
+    <OutputPath>..\..\..\output\release\PCL\Catel.MVVM\</OutputPath>
+    <DefineConstants>TRACE;PCL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\..\output\release\WIN81\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\ARM\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WIN;WIN81</DefineConstants>
-    <NoWarn>;2008</NoWarn>
-    <DebugType>full</DebugType>
-    <PlatformTarget>ARM</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>ExpressRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
-    <OutputPath>bin\ARM\Release\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE;WIN;WIN81</DefineConstants>
-    <Optimize>true</Optimize>
-    <NoWarn>;2008</NoWarn>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>ARM</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>ExpressRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\..\output\x64\debug\WIN81\Catel.MVVM\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WIN;WIN81</DefineConstants>
-    <NoWarn>;2008</NoWarn>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>ExpressRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
-    <DocumentationFile>..\..\..\output\x64\debug\WIN81\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE;WIN;WIN81</DefineConstants>
-    <Optimize>true</Optimize>
-    <NoWarn>;2008</NoWarn>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>ExpressRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\..\output\x86\debug\WIN81\Catel.MVVM\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WIN;WIN81</DefineConstants>
-    <NoWarn>;2008</NoWarn>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>ExpressRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
-    <DocumentationFile>..\..\..\output\x86\debug\WIN81\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE;WIN;WIN81</DefineConstants>
-    <Optimize>true</Optimize>
-    <NoWarn>;2008</NoWarn>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>ExpressRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
+    <DocumentationFile>..\..\..\output\release\PCL\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <!-- A reference to the entire .NET Framework is automatically included -->
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Collections\FastObservableCollection.cs">
       <Link>Collections\FastObservableCollection.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Data\DispatcherObservableObject.cs">
-      <Link>Data\DispatcherObservableObject.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Environment.cs">
       <Link>Environment.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Extensions\NavigationEventArgsExtensions.cs">
-      <Link>Extensions\NavigationEventArgsExtensions.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\ModuleInitializer.cs">
       <Link>ModuleInitializer.cs</Link>
@@ -170,6 +84,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\EventArgs\CommandExecutedEventArgs.cs">
       <Link>MVVM\Commands\EventArgs\CommandExecutedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs">
+      <Link>MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Helpers\CommandHelper.cs">
       <Link>MVVM\Commands\Helpers\CommandHelper.cs</Link>
@@ -318,6 +235,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ISchedulerService.cs">
       <Link>MVVM\Services\Interfaces\ISchedulerService.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ISelectDirectoryService.cs">
+      <Link>MVVM\Services\Interfaces\ISelectDirectoryService.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ISensorService.cs">
       <Link>MVVM\Services\Interfaces\ISensorService.cs</Link>
     </Compile>
@@ -333,6 +253,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IVibrateService.cs">
       <Link>MVVM\Services\Interfaces\IVibrateService.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IViewExportService.cs">
+      <Link>MVVM\Services\Interfaces\IViewExportService.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IViewModelService.cs">
       <Link>MVVM\Services\Interfaces\IViewModelService.cs</Link>
     </Compile>
@@ -345,11 +268,26 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\NavigationService.cs">
       <Link>MVVM\Services\NavigationService.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\OpenFileService.cs">
+      <Link>MVVM\Services\OpenFileService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\PleaseWaitService.cs">
+      <Link>MVVM\Services\PleaseWaitService.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\ProcessService.cs">
       <Link>MVVM\Services\ProcessService.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\SaveFileService.cs">
+      <Link>MVVM\Services\SaveFileService.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\SchedulerService.cs">
       <Link>MVVM\Services\SchedulerService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\SelectDirectoryService.cs">
+      <Link>MVVM\Services\SelectDirectoryService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\SplashScreenService.cs">
+      <Link>MVVM\Services\SplashScreenService.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\StartUpInfoProvider.cs">
       <Link>MVVM\Services\StartUpInfoProvider.cs</Link>
@@ -371,6 +309,12 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Test\UIVisualizerService.cs">
       <Link>MVVM\Services\Test\UIVisualizerService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\UIVisualizerService.cs">
+      <Link>MVVM\Services\UIVisualizerService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\ViewExportService.cs">
+      <Link>MVVM\Services\ViewExportService.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\ViewModelServiceBase.cs">
       <Link>MVVM\Services\ViewModelServiceBase.cs</Link>
@@ -528,17 +472,29 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\MVVMProviders\Logic\UserControlLogic.cs">
       <Link>Windows\Controls\MVVMProviders\Logic\UserControlLogic.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\MVVMProviders\Logic\WindowLogic.cs">
+      <Link>Windows\Controls\MVVMProviders\Logic\WindowLogic.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\MVVMProviders\MVVMBehaviorBase.cs">
+      <Link>Windows\Controls\MVVMProviders\MVVMBehaviorBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\MVVMProviders\NavigationPageBehavior.cs">
+      <Link>Windows\Controls\MVVMProviders\NavigationPageBehavior.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\MVVMProviders\UserControlBehavior.cs">
+      <Link>Windows\Controls\MVVMProviders\UserControlBehavior.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\MVVMProviders\WindowBehavior.cs">
+      <Link>Windows\Controls\MVVMProviders\WindowBehavior.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\Page.cs">
       <Link>Windows\Controls\Page.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\UserControl.cs">
       <Link>Windows\Controls\UserControl.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\WarningAndErrorValidator.cs">
-      <Link>Windows\Controls\WarningAndErrorValidator.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\BindingEvaluator.cs">
-      <Link>Windows\Data\BindingEvaluator.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\AreEqualMultiValueConverter.cs">
+      <Link>Windows\Data\Converters\AreEqualMultiValueConverter.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\BooleanToGrayscaleConverter.cs">
       <Link>Windows\Data\Converters\BooleanToGrayscaleConverter.cs</Link>
@@ -573,6 +529,9 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\FormattingConverter.cs">
       <Link>Windows\Data\Converters\FormattingConverter.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\GetFirstValidationErrorConverter.cs">
+      <Link>Windows\Data\Converters\GetFirstValidationErrorConverter.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\Helpers\ConverterHelper.cs">
       <Link>Windows\Data\Converters\Helpers\ConverterHelper.cs</Link>
     </Compile>
@@ -606,6 +565,9 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\StringToIntConverter.cs">
       <Link>Windows\Data\Converters\StringToIntConverter.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\StringToTypeConverter.cs">
+      <Link>Windows\Data\Converters\StringToTypeConverter.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\TextToLowerCaseConverter.cs">
       <Link>Windows\Data\Converters\TextToLowerCaseConverter.cs</Link>
     </Compile>
@@ -614,6 +576,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\ValueConverterBase.cs">
       <Link>Windows\Data\Converters\ValueConverterBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\ViewModelToViewConverter.cs">
+      <Link>Windows\Data\Converters\ViewModelToViewConverter.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Converters\VisibilityConverterBase.cs">
       <Link>Windows\Data\Converters\VisibilityConverterBase.cs</Link>
@@ -636,56 +601,8 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\DependencyPropertySelector.cs">
       <Link>Windows\DependencyPropertySelector.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Extensions\DependencyObjectExtensions.cs">
-      <Link>Windows\Extensions\DependencyObjectExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Extensions\FrameworkElementExtensions.cs">
-      <Link>Windows\Extensions\FrameworkElementExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Helpers\EffectsHelper.cs">
-      <Link>Windows\Helpers\EffectsHelper.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Helpers\ResourceHelper.cs">
       <Link>Windows\Helpers\ResourceHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Helpers\CommandLineHelper.cs">
-      <Link>Windows\Helpers\CommandLineHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Input\Helpers\KeyboardHelper.cs">
-      <Link>Windows\Input\Helpers\KeyboardHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Input\InputGesture.cs">
-      <Link>Windows\Input\InputGesture.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\Authentication.cs">
-      <Link>Windows\Interactivity\Authentication.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\BehaviorBase.cs">
-      <Link>Windows\Interactivity\BehaviorBase.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\CommandBehaviorBase.cs">
-      <Link>Windows\Interactivity\CommandBehaviorBase.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\DelayBindingUpdate.cs">
-      <Link>Windows\Interactivity\DelayBindingUpdate.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\Focus.cs">
-      <Link>Windows\Interactivity\Focus.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\KeyPressToCommand.cs">
-      <Link>Windows\Interactivity\KeyPressToCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\SelectTextOnFocus.cs">
-      <Link>Windows\Interactivity\SelectTextOnFocus.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\UpdateBindingBehaviorBase.cs">
-      <Link>Windows\Interactivity\UpdateBindingBehaviorBase.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\UpdateBindingOnPasswordChanged.cs">
-      <Link>Windows\Interactivity\UpdateBindingOnPasswordChanged.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\UpdateBindingOnTextChanged.cs">
-      <Link>Windows\Interactivity\UpdateBindingOnTextChanged.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interfaces\IDependencyPropertySelector.cs">
       <Link>Windows\Interfaces\IDependencyPropertySelector.cs</Link>
@@ -696,83 +613,19 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Threading\Helpers\Dispatcherhelper.cs">
       <Link>Windows\Threading\Helpers\Dispatcherhelper.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET45\MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs">
-      <Link>MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.SL5\Windows\Controls\ValidationResult.cs">
-      <Link>Windows\Controls\ValidationResult.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.SL5\Windows\Controls\ValidationRule.cs">
-      <Link>Windows\Controls\ValidationRule.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.SL5\Windows\EventArgs\FrameworkElementLoadedEventArgs.cs">
-      <Link>Windows\EventArgs\FrameworkElementLoadedEventArgs.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.SL5\Windows\FrameworkElementLoadedManager.cs">
-      <Link>Windows\FrameworkElementLoadedManager.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.SL5\Windows\Helpers\DataContextChangedHelper.cs">
-      <Link>Windows\Helpers\DataContextChangedHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.SL5\Windows\Helpers\LogicalTreeHelper.cs">
-      <Link>Windows\Helpers\LogicalTreeHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.SL5\Windows\Interfaces\IFrameworkElementLoadedManager.cs">
-      <Link>Windows\Interfaces\IFrameworkElementLoadedManager.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.SL5\Windows\WeakFrameworkElementInfo.cs">
-      <Link>Windows\WeakFrameworkElementInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.WIN80\MVVM\Services\PleaseWaitService.cs">
-      <Link>MVVM\Services\PleaseWaitService.cs</Link>
-    </Compile>
-    <Compile Include="Windows\Interactivity\Behavior.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <PRIResource Include="..\Catel.MVVM.WIN80\Strings\de\Resources.resw">
-      <Link>Strings\de\Resources.resw</Link>
-    </PRIResource>
-    <PRIResource Include="..\Catel.MVVM.WIN80\Strings\en-US\Exceptions.resw">
-      <Link>Strings\en-US\Exceptions.resw</Link>
-    </PRIResource>
-    <PRIResource Include="..\Catel.MVVM.WIN80\Strings\en-US\Resources.resw">
-      <Link>Strings\en-US\Resources.resw</Link>
-    </PRIResource>
-    <PRIResource Include="..\Catel.MVVM.WIN80\Strings\es\Resources.resw">
-      <Link>Strings\es\Resources.resw</Link>
-    </PRIResource>
-    <PRIResource Include="..\Catel.MVVM.WIN80\Strings\fr\Resources.resw">
-      <Link>Strings\fr\Resources.resw</Link>
-    </PRIResource>
-    <PRIResource Include="..\Catel.MVVM.WIN80\Strings\it\Resources.resw">
-      <Link>Strings\it\Resources.resw</Link>
-    </PRIResource>
-    <PRIResource Include="..\Catel.MVVM.WIN80\Strings\nl\Resources.resw">
-      <Link>Strings\nl\Resources.resw</Link>
-    </PRIResource>
-    <PRIResource Include="..\Catel.MVVM.WIN80\Strings\tr\Resources.resw">
-      <Link>Strings\tr\Resources.resw</Link>
-    </PRIResource>
-    <PRIResource Include="..\Catel.MVVM.WIN80\Strings\zh-Hans\Resources.resw">
-      <Link>Strings\zh-Hans\Resources.resw</Link>
-    </PRIResource>
+    <ProjectReference Include="..\..\Catel.Core\Catel.Core.PCL\Catel.Core.PCL.csproj">
+      <Project>{be468028-8dc5-4381-ba63-f01fd504c158}</Project>
+      <Name>Catel.Core.PCL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="FodyWeavers.xml" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Fody.targets" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="FodyWeavers.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0">
-      <Name>Behaviors SDK %28XAML%29</Name>
-    </SDKReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Catel.Core\Catel.Core.WIN81\Catel.Core.WIN81.csproj">
-      <Project>{c022232f-d54e-4c23-9f16-360f9812a53e}</Project>
-      <Name>Catel.Core.WIN81</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Obsolete">
@@ -780,16 +633,13 @@
       <Private>False</Private>
     </Reference>
   </ItemGroup>
-  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
-    <VisualStudioVersion>12.0</VisualStudioVersion>
-  </PropertyGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <Import Project="Fody.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets. -->
+       Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
   </Target>
-  <Import Project="$(ProjectPath)\..\..\..\..\Tools\Pepita\PepitaGet.targets" />
-  <Import Project="Fody.targets" />
+  -->
 </Project>

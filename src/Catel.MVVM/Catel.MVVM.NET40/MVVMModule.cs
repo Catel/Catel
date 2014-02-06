@@ -29,7 +29,7 @@ namespace Catel
         {
             Argument.IsNotNull(() => serviceLocator);
 
-#if !NET
+#if !NET && !PCL
             serviceLocator.RegisterTypeIfNotYetRegistered<IFrameworkElementLoadedManager, FrameworkElementLoadedManager>();
 #endif
 
