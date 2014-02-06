@@ -32,17 +32,16 @@ namespace Catel.ServiceModel.Hosting
             Argument.IsNotNull("serviceLocator", serviceLocator);
             Argument.IsNotNull("serviceType", serviceType);
 
-            ServiceLocator = serviceLocator;
             ServiceType = serviceType;
 
-            ApplyServiceBehaviors(ServiceLocator);
+            ApplyServiceBehaviors(serviceLocator);
 
-            ApplyContractBehaviors(ServiceLocator);
+            ApplyContractBehaviors(serviceLocator);
 
             foreach (var contractDescription in ImplementedContracts.Values)
             {
                 var contractBehavior =
-                    new ContractBehavior(new InstanceProvider(ServiceLocator, contractDescription.ContractType,
+                    new ContractBehavior(new InstanceProvider(serviceLocator, contractDescription.ContractType,
                         ServiceType));
 
                 contractDescription.Behaviors.Add(contractBehavior);
@@ -51,13 +50,6 @@ namespace Catel.ServiceModel.Hosting
         #endregion
 
         #region Properties
-        /// <summary>
-        ///     Gets the service locator.
-        /// </summary>
-        /// <value>
-        ///     The service locator.
-        /// </value>
-        public IServiceLocator ServiceLocator { get; private set; }
 
         /// <summary>
         ///     Gets the type of the service.
@@ -73,11 +65,8 @@ namespace Catel.ServiceModel.Hosting
         ///     Applies the contract behaviors.
         /// </summary>
         /// <param name="serviceLocator">The service locator.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator"/> is <c>null</c>.</exception>
         private void ApplyContractBehaviors(IServiceLocator serviceLocator)
         {
-            Argument.IsNotNull("serviceLocator", serviceLocator);
-
             var registeredContractBehaviors = serviceLocator.ResolveTypes<IContractBehavior>();
 
             if (registeredContractBehaviors == null)
@@ -98,11 +87,8 @@ namespace Catel.ServiceModel.Hosting
         ///     Applies the service behaviors.
         /// </summary>
         /// <param name="serviceLocator">The service locator.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator"/> is <c>null</c>.</exception>
         private void ApplyServiceBehaviors(IServiceLocator serviceLocator)
         {
-            Argument.IsNotNull("serviceLocator", serviceLocator);
-
             var registeredServiceBehaviors = serviceLocator.ResolveTypes<IServiceBehavior>();
 
             if (registeredServiceBehaviors == null)

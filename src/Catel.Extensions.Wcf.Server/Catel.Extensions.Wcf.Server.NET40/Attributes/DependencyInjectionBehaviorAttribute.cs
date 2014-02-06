@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ServiceLocatorRegistrationBehaviorAttribute.cs" company="Catel development team">
+// <copyright file="DependencyInjectionBehaviorAttribute.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -19,18 +19,19 @@ namespace Catel.ServiceModel
     using Reflection;
 
     /// <summary>
+    /// Attribute which allow dependency injection in the service implementation.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
-    public class ServiceLocatorRegistrationBehaviorAttribute : Attribute, IServiceBehavior
+    public class DependencyInjectionBehaviorAttribute : Attribute, IServiceBehavior
     {
         #region Constructors
         /// <summary>
-        ///     Initializes a new instance of the <see cref="ServiceLocatorRegistrationBehaviorAttribute" /> class.
+        ///     Initializes a new instance of the <see cref="DependencyInjectionBehaviorAttribute" /> class.
         /// </summary>
         /// <param name="contractType">Type of the contract.</param>
         /// <param name="registrationType">Type of the registration.</param>
         /// <param name="tag">The tag.</param>
-        public ServiceLocatorRegistrationBehaviorAttribute(Type contractType,
+        public DependencyInjectionBehaviorAttribute(Type contractType,
             RegistrationType registrationType = RegistrationType.Singleton, object tag = null)
         {
             Argument.IsNotNull("registrationType", registrationType);
@@ -41,11 +42,11 @@ namespace Catel.ServiceModel
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="ServiceLocatorRegistrationBehaviorAttribute" /> class.
+        ///     Initializes a new instance of the <see cref="DependencyInjectionBehaviorAttribute" /> class.
         /// </summary>
         /// <param name="registrationType">Type of the registration.</param>
         /// <param name="tag">The tag.</param>
-        public ServiceLocatorRegistrationBehaviorAttribute(RegistrationType registrationType = RegistrationType.Singleton,
+        public DependencyInjectionBehaviorAttribute(RegistrationType registrationType = RegistrationType.Singleton,
             object tag = null)
             : this(null, registrationType, tag)
         {
@@ -142,5 +143,14 @@ namespace Catel.ServiceModel
         {
         }
         #endregion
+    }
+
+    /// <summary>
+    /// Attribute which allow dependency injection in the service implementation.
+    /// </summary>
+    [ObsoleteEx(Replacement = "DependencyInjectionBehaviorAttribute", TreatAsErrorFromVersion = "4.1", RemoveInVersion = "5.0")]
+    [AttributeUsage(AttributeTargets.Class)]
+    public class ServiceLocatorRegistrationBehaviorAttribute : DependencyInjectionBehaviorAttribute
+    {
     }
 }

@@ -54,7 +54,7 @@
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Attributes\ServiceLocatorRegistrationBehaviorAttribute.cs" />
+    <Compile Include="Attributes\DependencyInjectionBehaviorAttribute.cs" />
     <Compile Include="Attributes\ShouldUseBinarySerializationForDataContractsAttribute.cs" />
     <Compile Include="Attributes\ShouldUseJsonSerializationForDataContractsAttribute.cs" />
     <Compile Include="Behaviors\BinarySerializerOperationBehavior.cs" />

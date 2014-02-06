@@ -209,6 +209,7 @@
     <Compile Include="Extensions\Prism\ServiceLocatorAdapterTests.cs" />
     <Compile Include="Extensions\Prism\UIVisualizerServiceExtensionsTests.cs" />
     <Compile Include="Extensions\Wcf.Server\ServiceHostFactoryFacts.cs" />
+    <Compile Include="Extensions\Wcf.Server\ServiceHostFacts.cs" />
     <Compile Include="Extensions\Wcf.Server\Services\Interfaces\ITestService.cs" />
     <Compile Include="Extensions\Wcf.Server\Services\TestService.cs" />
     <Compile Include="GlobalInitialization.cs" />

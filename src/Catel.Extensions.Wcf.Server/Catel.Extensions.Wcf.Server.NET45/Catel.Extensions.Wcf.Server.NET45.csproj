@@ -59,8 +59,8 @@
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Attributes\ServiceLocatorRegistrationBehaviorAttribute.cs">
-      <Link>Attributes\ServiceLocatorRegistrationBehaviorAttribute.cs</Link>
+    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Attributes\DependencyInjectionBehaviorAttribute.cs">
+      <Link>Attributes\DependencyInjectionBehaviorAttribute.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Attributes\ShouldUseBinarySerializationForDataContractsAttribute.cs">
       <Link>Attributes\ShouldUseBinarySerializationForDataContractsAttribute.cs</Link>

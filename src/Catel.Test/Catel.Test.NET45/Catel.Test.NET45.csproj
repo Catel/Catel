@@ -423,6 +423,9 @@
     <Compile Include="..\Catel.Test.NET40\Extensions\Wcf.Server\ServiceHostFactoryFacts.cs">
       <Link>Extensions\Wcf.Server\ServiceHostFactoryFacts.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\Extensions\Wcf.Server\ServiceHostFacts.cs">
+      <Link>Extensions\Wcf.Server\ServiceHostFacts.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\Extensions\Wcf.Server\Services\Interfaces\ITestService.cs">
       <Link>Extensions\Wcf.Server\Services\Interfaces\ITestService.cs</Link>
     </Compile>
