@@ -73,9 +73,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Catel.MVVM.NET40\ClassDiagrams\ViewModelBase.cd">
-      <Link>ClassDiagrams\ViewModelBase.cd</Link>
-    </None>
     <None Include="Fody.targets" />
     <None Include="packages.config" />
   </ItemGroup>
@@ -742,9 +739,6 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Extensions\WindowExtensions.cs">
       <Link>Windows\Extensions\WindowExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Helpers\AutoDisposeHelper.cs">
-      <Link>Windows\Helpers\AutoDisposeHelper.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Helpers\EffectsHelper.cs">
       <Link>Windows\Helpers\EffectsHelper.cs</Link>
