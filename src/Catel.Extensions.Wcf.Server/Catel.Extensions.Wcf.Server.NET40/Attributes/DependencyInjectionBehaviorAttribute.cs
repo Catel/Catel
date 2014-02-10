@@ -24,6 +24,13 @@ namespace Catel.ServiceModel
     [AttributeUsage(AttributeTargets.Class)]
     public class DependencyInjectionBehaviorAttribute : Attribute, IServiceBehavior
     {
+        #region Fields
+        /// <summary>
+        /// The service locator
+        /// </summary>
+        private readonly IServiceLocator _serviceLocator;
+        #endregion
+
         #region Constructors
         /// <summary>
         ///     Initializes a new instance of the <see cref="DependencyInjectionBehaviorAttribute" /> class.
@@ -34,11 +41,11 @@ namespace Catel.ServiceModel
         public DependencyInjectionBehaviorAttribute(Type contractType,
             RegistrationType registrationType = RegistrationType.Singleton, object tag = null)
         {
-            Argument.IsNotNull("registrationType", registrationType);
-
             ContractType = contractType;
             RegistrationType = registrationType;
             Tag = tag;
+
+            _serviceLocator = this.GetDependencyResolver().Resolve<IServiceLocator>();
         }
 
         /// <summary>
@@ -117,7 +124,7 @@ namespace Catel.ServiceModel
                 }
             }
 
-            IInstanceProvider instanceProvider = new InstanceProvider(ServiceLocator.Default, ContractType, ServiceType,
+            var instanceProvider = new InstanceProvider(_serviceLocator, ContractType, ServiceType,
                 Tag, RegistrationType);
 
             var dispatchRuntimes =
