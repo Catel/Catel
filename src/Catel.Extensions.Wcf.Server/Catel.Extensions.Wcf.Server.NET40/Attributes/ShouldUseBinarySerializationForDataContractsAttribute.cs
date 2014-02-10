@@ -14,7 +14,7 @@ namespace Catel.ServiceModel
     using Reflection;
 
     /// <summary>
-    /// Decore
+    /// Decore your service contract with this attribute to use binary serialization mechanism on datacontracts serialization.
     /// </summary>
     [AttributeUsage(AttributeTargets.Interface)]
     public class ShouldUseBinarySerializationForDataContractsAttribute : Attribute, IContractBehavior

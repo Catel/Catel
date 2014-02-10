@@ -45,6 +45,9 @@ namespace Catel.ServiceModel.Dispatching
         /// <param name="serviceType">Type of the service.</param>
         /// <param name="tag">The tag.</param>
         /// <param name="registrationType">Type of the registration.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="contractType"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
         public InstanceProvider(IServiceLocator serviceLocator, Type contractType, Type serviceType, object tag = null, RegistrationType registrationType = RegistrationType.Singleton)
         {
             Argument.IsNotNull("serviceLocator", serviceLocator);

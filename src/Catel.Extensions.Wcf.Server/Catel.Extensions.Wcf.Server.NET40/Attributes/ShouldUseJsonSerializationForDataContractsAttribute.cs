@@ -16,7 +16,7 @@ namespace Catel.ServiceModel
     using Reflection;
 
     /// <summary>
-    /// 
+    /// Decore your service contract with this attribute to use json serialization mechanism on datacontracts serialization.
     /// </summary>
     [AttributeUsage(AttributeTargets.Interface)]
     public class ShouldUseJsonSerializationForDataContractsAttribute : Attribute, IContractBehavior
