@@ -8,6 +8,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 {
     using System;
     using System.ComponentModel;
+    using System.Windows;
     using System.Windows.Navigation;
     using Logging;
     using MVVM;
@@ -40,7 +41,6 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 
         private bool _hasNavigatedAway = false;
         private bool _hasPressedBackButton = false;
-        private bool _hasNavigatedAwayAfterBackButtonPress = false;
         private static bool _isTombstoned;
         #endregion
 
@@ -74,6 +74,17 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         public bool BackKeyCancelsViewModel { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the view model should be closed when navigating forward.
+        /// <para />
+        /// By default, Catel will keep the view models and pages in memory to provide a back-navigation stack. Some
+        /// pages are not required to be listed in the navigation stack and can have this property set to <c>true</c>.
+        /// <para />
+        /// The default value is <c>false</c>.
+        /// </summary>
+        /// <value><c>true</c> if the view modle must be closed on forward navigation; otherwise, <c>false</c>.</value>
+        public bool CloseViewModelOnForwardNavigation { get; set; }
+
+        /// <summary>
         /// Gets a value indicating whether the control can be loaded. This is very useful in non-WPF classes where
         /// the <c>LayoutUpdated</c> is used instead of the <c>Loaded</c> event.
         /// <para />
@@ -95,7 +106,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// <value><c>true</c> if this instance can handle navigation; otherwise, <c>false</c>.</value>
         protected override bool CanHandleNavigation
         {
-            get { return !_hasNavigatedAwayAfterBackButtonPress; }
+            get { return true; }
         }
         #endregion
 
@@ -194,23 +205,14 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// <param name="e">Set e.Cancel to true to indicate that the request was handled by the application.</param>
         private void OnTargetPageBackKeyPress(object sender, CancelEventArgs e)
         {
-            if (BackKeyCancelsViewModel)
-            {
-                CancelAndCloseViewModel();
-            }
-            else
-            {
-                SaveAndCloseViewModel();
-            }
-
-            HasHandledSaveAndCancelLogic = true;
+            // Note: closing of view model will take place in OnNavigated
             _hasPressedBackButton = true;
         }
 
         /// <summary> 
         /// Tombstones the application.
         /// </summary>
-        private void TombstoneIfRequired(NavigatingCancelEventArgs e)
+        private void TombstoneIfRequired(NavigationEventArgs e)
         {
             if (_isTombstoned)
             {
@@ -218,7 +220,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             }
 
             var uriString = e.GetUriWithoutQueryInfo();
-            if (!uriString.StartsWith("app://external", StringComparison.InvariantCultureIgnoreCase))
+            if (!uriString.IsNavigationToExternal())
             {
                 return;
             }
@@ -311,31 +313,56 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         }
 
         /// <summary>
-        /// Called when the control is about to navigate.
-        /// </summary>
-        /// <param name="e">The <see cref="NavigatingCancelEventArgs" /> instance containing the event data.</param>
-        protected override void OnNavigating(NavigatingCancelEventArgs e)
-        {
-            _hasNavigatedAway = true;
-
-            if (_hasPressedBackButton)
-            {
-                _hasNavigatedAwayAfterBackButtonPress = true;
-            }
-
-            // Manual tombstoning in navigation because otherwise it will be too late to handle tombstoning
-            TombstoneIfRequired(e);
-        }
-
-        /// <summary>
-        /// Called when the control has just navigated.
+        /// Called when the control has just navigated to this page.
         /// </summary>
         /// <param name="e">The <see cref="NavigationEventArgs" /> instance containing the event data.</param>
-        protected override void OnNavigated(NavigationEventArgs e)
+        protected override void OnNavigatedToPage(NavigationEventArgs e)
         {
             RecoverFromTombstoneIfRequired();
 
             _hasNavigatedAway = false;
+
+            base.OnNavigatedToPage(e);
+        }
+
+        /// <summary>
+        /// Called when the control has just navigated away from this page.
+        /// </summary>
+        /// <param name="e">The <see cref="NavigationEventArgs"/> instance containing the event data.</param>
+        protected override void OnNavigatedAwayFromPage(NavigationEventArgs e)
+        {
+            // Manual tombstoning in navigation because otherwise it will be too late to handle tombstoning
+            TombstoneIfRequired(e);
+
+            if (e.Uri.IsNavigationToExternal())
+            {
+                // Don't handle navigation to external page, we are being deactivated (but not tombstoned)
+                return;
+            }
+
+            _hasNavigatedAway = true;
+
+            if (_hasPressedBackButton)
+            {
+                if (BackKeyCancelsViewModel)
+                {
+                    CancelAndCloseViewModel();
+                }
+                else
+                {
+                    SaveAndCloseViewModel();
+                }
+
+                HasHandledSaveAndCancelLogic = true;
+            }
+            else if (CloseViewModelOnForwardNavigation)
+            {
+                SaveAndCloseViewModel();
+
+                HasHandledSaveAndCancelLogic = true;
+            }
+
+            base.OnNavigatedAwayFromPage(e);
         }
         #endregion
     }

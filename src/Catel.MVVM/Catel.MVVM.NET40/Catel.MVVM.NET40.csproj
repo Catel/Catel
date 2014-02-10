@@ -85,7 +85,7 @@
     <Compile Include="Data\DispatcherObservableObject.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="MVVMModule.cs" />
-    <Compile Include="Extensions\NavigationEventArgsExtensions.cs" />
+    <Compile Include="Extensions\NavigationExtensions.cs" />
     <Compile Include="ModuleInitializer.cs" />
     <Compile Include="MVVM\Auditing\AuditingManager.cs" />
     <Compile Include="MVVM\Auditing\AuditorBase.cs" />

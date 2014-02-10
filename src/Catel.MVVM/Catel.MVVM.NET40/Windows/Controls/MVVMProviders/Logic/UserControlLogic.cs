@@ -66,7 +66,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// </summary>
         static UserControlLogic()
         {
-            DefaultTransferStylesAndTransitionsToViewModelGridValue = true;
+            DefaultTransferStylesAndTransitionsToViewModelGridValue = false;
 
 #if NET || SL4 || SL5
             DefaultCreateWarningAndErrorValidatorForViewModelValue = true;
@@ -146,7 +146,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// <para />
         /// The transfer is required to enable visual state transitions on root elements (which is replaced by this logic implementation).
         /// <para />
-        /// The default value is <c>true</c>/
+        /// The default value is <c>false</c>.
         /// </summary>
         /// <value><c>true</c> if the styles and transitions should be transfered to the view model grid; otherwise, <c>false</c>.</value>
         public bool TransferStylesAndTransitionsToViewModelGrid { get; set; }
@@ -410,7 +410,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             if (ViewModel == null)
             {
                 // Try to create view model based on data context
-                ViewModel = CreateViewModelByUsingDataContextOrConstructor();
+                UpdateDataContextToUseViewModel(TargetControl.DataContext);
             }
 
             if (DisableWhenNoViewModel)
@@ -733,7 +733,19 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 
             if (viewModelContainer != null)
             {
-                SubscribeToParentViewModel(viewModelContainer.ViewModel);
+                var parentVm = viewModelContainer.ViewModel;
+                if (parentVm != null)
+                {
+                    // We might be coming back from dormant state (windows phone), we won't receive DataContextChanged event
+                    IgnoreNullDataContext = false;
+
+                    if (ViewModel == null)
+                    {
+                        UpdateDataContextToUseViewModel(TargetControl.DataContext);
+                    }
+                }
+
+                SubscribeToParentViewModel(parentVm);
             }
         }
 

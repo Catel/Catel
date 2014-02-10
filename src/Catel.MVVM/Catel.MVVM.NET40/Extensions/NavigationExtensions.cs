@@ -20,6 +20,32 @@ namespace Catel
     public static class NavigationEventArgsExtensions
     {
         /// <summary>
+        /// Determines whether the specified string is a navigation to an external source.
+        /// </summary>
+        /// <param name="uri">The URI.</param>
+        /// <returns><c>true</c> if the uri is a navigation to an external source; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="uri"/> is <c>null</c>.</exception>
+        public static bool IsNavigationToExternal(this Uri uri)
+        {
+            Argument.IsNotNull("uri", uri);
+
+            return IsNavigationToExternal(uri.ToString());
+        }
+
+        /// <summary>
+        /// Determines whether the specified string is a navigation to an external source.
+        /// </summary>
+        /// <param name="uriString">The URI string.</param>
+        /// <returns><c>true</c> if the uri is a navigation to an external source; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="uriString"/> is <c>null</c> or whitespace.</exception>
+        public static bool IsNavigationToExternal(this string uriString)
+        {
+            Argument.IsNotNullOrWhitespace("uriString", uriString);
+
+            return uriString.Contains("app://external");
+        }
+
+        /// <summary>
         /// Determines whether the navigation is for the specified view.
         /// </summary>
         /// <param name="e">The <see cref="NavigatingCancelEventArgs" /> instance containing the event data.</param>

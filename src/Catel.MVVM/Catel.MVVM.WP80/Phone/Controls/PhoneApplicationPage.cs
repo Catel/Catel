@@ -177,6 +177,21 @@ namespace Catel.Phone.Controls
             get { return _logic.GetValue<PhoneApplicationPageLogic, bool>(x => x.BackKeyCancelsViewModel, true); }
             set { _logic.SetValue<PhoneApplicationPageLogic>(x => x.BackKeyCancelsViewModel = value); }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the view model should be closed when navigating forward.
+        /// <para />
+        /// By default, Catel will keep the view models and pages in memory to provide a back-navigation stack. Some
+        /// pages are not required to be listed in the navigation stack and can have this property set to <c>true</c>.
+        /// <para />
+        /// The default value is <c>false</c>.
+        /// </summary>
+        /// <value><c>true</c> if the view modle must be closed on forward navigation; otherwise, <c>false</c>.</value>
+        public bool CloseViewModelOnForwardNavigation
+        {
+            get { return _logic.GetValue<PhoneApplicationPageLogic, bool>(x => x.CloseViewModelOnForwardNavigation, true); }
+            set { _logic.SetValue<PhoneApplicationPageLogic>(x => x.CloseViewModelOnForwardNavigation = value); }
+        }
         #endregion
 
         #region Events

@@ -33,6 +33,8 @@ Added/fixed:
 (x) CTL-327 ListCollectionView not supported in ChangeNotificationWrapper (causes InvalidCastException)
 (x) CTL-329 VisualStateManager doesn't change state in WP8 in UserControl => introduced option to transfer styles and
     transitions: UserControl.TransferStylesAndTransitionsToViewModelGrid (default value is true)
+(x) CTL-330 ViewModel gets unloaded before the view is actually unloaded in Windows Phone. The view models are now
+    being closed in the Navigated event so it will be after the navigation transition has completed
 
 Roadmap:
 ========

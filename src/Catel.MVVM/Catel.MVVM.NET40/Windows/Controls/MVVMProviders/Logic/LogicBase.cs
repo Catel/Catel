@@ -22,17 +22,15 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
     using Reflection;
     using Windows.Threading;
 
-#if NET
-    using System.Windows.Threading;
-#endif
-
 #if NETFX_CORE
     using global::Windows.UI.Core;
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
+    using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
 
     using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
 #else
+    using System.Windows.Threading;
     using System.Windows.Controls;
     using UIEventArgs = System.EventArgs;
 #endif
@@ -202,6 +200,8 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 #if WIN81
             // TODO: make the same for WIN80. There is no DataContextChanged event in WIN80.
             TargetControl.DataContextChanged += (sender, args) => OnTargetControlDataContextChanged(sender, new DependencyPropertyValueChangedEventArgs("DataContext", FrameworkElement.DataContextProperty, null, args.NewValue));
+#else
+            TargetControl.SubscribeToDataContextAndInheritedDataContext(OnTargetControlDataContextChanged);
 #endif
 
             // This also subscribes to DataContextChanged, don't double subscribe
@@ -314,6 +314,18 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// </summary>
         /// <value>The target control.</value>
         protected internal FrameworkElement TargetControl { get; set; }
+
+        /// <summary>
+        /// Gets the dispatcher of the target control.
+        /// </summary>
+        /// <value>The dispatcher.</value>
+        protected internal Dispatcher Dispatcher
+        {
+            get
+            {
+                return TargetControl.Dispatcher;
+            }
+        }
 
         /// <summary>
         /// Gets the type of the target control.
@@ -738,15 +750,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 return;
             }
 
-            //Log.Debug("Property '{0}' of TargetControl '{1}' has changed", e.PropertyName, TargetControl.GetType().Name);
-
-            // Note: in WIN81 we manually subscribe to DataContextChanged event
-#if !WIN81
-            if (string.Equals(e.PropertyName, "DataContext", StringComparison.OrdinalIgnoreCase))
-            {
-                OnTargetControlDataContextChanged(sender, e);
-            }
-#endif
+            //Log.Debug("Property '{0}' of TargetControl '{1}' has changed", e.PropertyName, TargetControl.GetType().Name); 
 
             OnTargetControlPropertyChanged(sender, e);
         }

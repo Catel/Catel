@@ -16,6 +16,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
     using global::Windows.UI.Xaml;
 #elif WINDOWS_PHONE
     using Microsoft.Phone.Controls;
+    using Microsoft.Phone.Shell;
 #elif SILVERLIGHT
     using System.Windows.Controls;
 #endif
@@ -51,17 +52,10 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private bool _hasNavigatedButNotNavigatedAway;
         private bool _navigationServiceInitialized;
-        private bool _navigationComplete;
+        private bool _navigatingToViewComplete;
+        private bool _navigatingAwayFromViewCompleted;
         private bool _hasSetNavigationContextOnce;
-
-#if WINDOWS_PHONE
-        /// <summary>
-        /// The url to which this logic belongs. This way, we can distinguish the right call from the navigation service.
-        /// </summary>
-        private string _url;
-#endif
         #endregion
 
         #region Constructors
@@ -98,6 +92,12 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// </summary>
         /// <value><c>true</c> if this instance has handled save and cancel logic; otherwise, <c>false</c>.</value>
         protected bool HasHandledSaveAndCancelLogic { get; set; }
+
+        /// <summary>
+        /// Gets the last navigation mode received.
+        /// </summary>
+        /// <value>The last navigation mode.</value>
+        protected NavigationMode LastNavigationMode { get; private set; }
 
         /// <summary>
         /// Gets the target page.
@@ -182,6 +182,8 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// </remarks>
         public void OnNavigatingEvent(object sender, NavigatingCancelEventArgs e)
         {
+            LastNavigationMode = e.NavigationMode;
+
             if (!CanHandleNavigation)
             {
                 return;
@@ -192,66 +194,32 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 return;
             }
 
-            _hasNavigatedButNotNavigatedAway = false;
-
-#if WINDOWS_PHONE
-            var uriWithoutParameters = GetUriWithoutParameters(RootFrame.CurrentSource);
-            if (string.CompareOrdinal(uriWithoutParameters, _url) != 0)
+#if !NETFX_CORE
+            if (e.Uri != null && e.Uri.IsNavigationToExternal())
             {
+                Log.Debug("Navigating away from the application");
+
+                _navigatingToViewComplete = false;
+                _navigatingAwayFromViewCompleted = false;
+
+                SaveAndCloseViewModel();
+
                 return;
             }
 #endif
 
-            OnNavigating(e);
-
-            if (!e.Cancel && !HasHandledSaveAndCancelLogic)
+            if (_navigatingToViewComplete && !_navigatingAwayFromViewCompleted)
             {
-                bool? result = null;
-
-                if (NavigatingAwaySavesViewModel)
-                {
-                    result = SaveViewModel();
-                    //SaveAndCloseViewModel();
-                }
-                else
-                {
-                    result = CancelViewModel();
-                    //CancelAndCloseViewModel();
-                }
-
-                if (e.NavigationMode == NavigationMode.Back)
-                {
-                    CloseViewModel(result);
-                }
-
-                HasHandledSaveAndCancelLogic = true;
-
-#if NETFX_CORE
-                RootFrame.Navigating -= OnNavigatingEvent;
-                RootFrame.Navigated -= OnNavigatedEvent;
-#elif WINDOWS_PHONE
-                // No need because we are using weak events for phone
-                //RootFrame.BackKeyPress -= OnBackKeyPress;
-                //RootFrame.Navigating -= OnNavigatingEvent;
-                //RootFrame.Navigated -= OnNavigatedEvent;
-#elif SILVERLIGHT
-                RootFrame.Navigating -= OnNavigatingEvent;
-                RootFrame.Navigated -= OnNavigatedEvent;
-#else
-                Application.Current.Navigating -= OnNavigatingEvent;
-                Application.Current.Navigated -= OnNavigatedEvent;
-#endif
+                // We are navigating away
+                OnNavigatingAwayFromPage(e);
             }
 
-            _navigationComplete = false;
-        }
-
-        /// <summary>
-        /// Called when the control is about to navigate.
-        /// </summary>
-        /// <param name="e">The <see cref="NavigatingCancelEventArgs" /> instance containing the event data.</param>
-        protected virtual void OnNavigating(NavigatingCancelEventArgs e)
-        {
+            // Reset (if we navigate back to this page which has already been navigated to)
+            if (e.IsNavigationForView(TargetControlType))
+            {
+                _navigatingToViewComplete = false;
+                _navigatingAwayFromViewCompleted = false;
+            }
         }
 
         /// <summary>
@@ -273,33 +241,40 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 return;
             }
 
+            // If this navigation event is not meant for this page, exit
+            if (!e.IsNavigationForView(TargetControlType))
+            {
+                // We are not navigating *to* this view, but maybe we are navigating away
+                if (!_navigatingAwayFromViewCompleted)
+                {
+                    OnNavigatedAwayFromPage(e);
+                    _navigatingAwayFromViewCompleted = true;
+                    return;
+                }
+
+                return;
+            }
+
             if (!CanHandleNavigationAdvanced())
             {
                 return;
             }
 
-            // If this navigation event is not meant for this page, exit
-            if (!e.IsNavigationForView(TargetControlType))
+            if (_navigatingToViewComplete)
             {
                 return;
             }
 
             HasHandledSaveAndCancelLogic = false;
+            _navigatingToViewComplete = true;
 
-            if (_hasNavigatedButNotNavigatedAway)
-            {
-                return;
-            }
-
-            _hasNavigatedButNotNavigatedAway = true;
-
-            if (e.Uri != null && e.Uri.ToString().Contains("app://external"))
+            if (e.Uri != null && e.Uri.IsNavigationToExternal())
             {
                 Log.Debug("Navigating away from the application, ignoring navigation");
                 return;
             }
 
-            OnNavigated(e);
+            OnNavigatedToPage(e);
 
 #if NETFX_CORE
             var navigationContext = e.Parameter;
@@ -315,10 +290,68 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         }
 
         /// <summary>
-        /// Called when the control has just navigated.
+        /// Called when the control has just been navigated to the page.
         /// </summary>
         /// <param name="e">The <see cref="NavigationEventArgs" /> instance containing the event data.</param>
-        protected virtual void OnNavigated(NavigationEventArgs e)
+        protected virtual void OnNavigatedToPage(NavigationEventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// Called when the control has just been navigated away from the page.
+        /// </summary>
+        /// <param name="e">The <see cref="NavigationEventArgs"/> instance containing the event data.</param>
+        protected virtual void OnNavigatingAwayFromPage(NavigatingCancelEventArgs e)
+        {
+            bool? result = true;
+
+            if (!HasHandledSaveAndCancelLogic)
+            {
+                if (NavigatingAwaySavesViewModel)
+                {
+                    result = SaveViewModel();
+                }
+                else
+                {
+                    result = CancelViewModel();
+                }
+            }
+
+            if (!result.HasValue || !result.Value)
+            {
+                e.Cancel = true;
+            }
+
+            HasHandledSaveAndCancelLogic = true;
+
+            if (LastNavigationMode == NavigationMode.Back)
+            {
+                CloseViewModel(result);
+
+                // Only unsubscribe when navigating back
+#if NETFX_CORE
+                RootFrame.Navigating -= OnNavigatingEvent;
+                RootFrame.Navigated -= OnNavigatedEvent;
+#elif WINDOWS_PHONE
+                // No need because we are using weak events for phone
+                //RootFrame.BackKeyPress -= OnBackKeyPress;
+                //RootFrame.Navigating -= OnNavigatingEvent;
+                //RootFrame.Navigated -= OnNavigatedEvent;
+#elif SILVERLIGHT
+                RootFrame.Navigating -= OnNavigatingEvent;
+                RootFrame.Navigated -= OnNavigatedEvent;
+#else
+                Application.Current.Navigating -= OnNavigatingEvent;
+                Application.Current.Navigated -= OnNavigatedEvent;
+#endif
+            }
+        }
+
+        /// <summary>
+        /// Called when the control has just been navigated away from the page.
+        /// </summary>
+        /// <param name="e">The <see cref="NavigationEventArgs" /> instance containing the event data.</param>
+        protected virtual void OnNavigatedAwayFromPage(NavigationEventArgs e)
         {
         }
 
@@ -331,20 +364,6 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// </remarks>
         private void HandleNavigated(object navigationContext)
         {
-#if WINDOWS_PHONE
-            string uriWithoutParameters = GetUriWithoutParameters(RootFrame.CurrentSource);
-
-            if (string.IsNullOrEmpty(_url))
-            {
-                _url = uriWithoutParameters;
-            }
-
-            if (string.CompareOrdinal(uriWithoutParameters, _url) != 0)
-            {
-                return;
-            }
-#endif
-
             if (navigationContext != null)
             {
                 CompleteNavigation(navigationContext);
@@ -443,7 +462,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// <param name="navigationContext">The navigation context.</param>
         private void CompleteNavigation(object navigationContext)
         {
-            if (_navigationComplete)
+            if (_navigatingToViewComplete)
             {
                 return;
             }
@@ -469,7 +488,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 viewModelAsViewModelBase.UpdateNavigationContext(finalNavigationContext);
             }
 
-            _navigationComplete = true;
+            _navigatingToViewComplete = true;
         }
 
 #if SILVERLIGHT
