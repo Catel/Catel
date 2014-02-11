@@ -411,14 +411,7 @@ namespace Catel.ExceptionHandling
 
                 Log.Debug("Retrying action for the '{0}' times", retryCount);
 
-#if NET40
-                Delay(interval.TotalMilliseconds).Wait();
-#endif
-
-#if NET45
-                Task.Delay(interval).Wait();
-#endif
-                
+                ThreadHelper.Sleep((int)interval.TotalMilliseconds);
             }
         }
 
@@ -429,10 +422,9 @@ namespace Catel.ExceptionHandling
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-#if NET40
+#if NET40 || SL5 || PCL
         public Task ProcessAsync(Action action, CancellationToken cancellationToken = default(CancellationToken))
-#endif
-#if NET45
+#else
         public async Task ProcessAsync(Action action, CancellationToken cancellationToken = default(CancellationToken))
 #endif
         {
@@ -440,11 +432,9 @@ namespace Catel.ExceptionHandling
 
             try
             {
-#if NET40
+#if NET40 || SL5 || PCL
                 Task.Factory.StartNew(action, cancellationToken).Wait(cancellationToken);
-#endif
-
-#if NET45
+#else
                 await Task.Run(action, cancellationToken);
 #endif
             }
@@ -456,7 +446,7 @@ namespace Catel.ExceptionHandling
                 }
             }
 
-#if NET40
+#if NET40 || SL5 || PCL
             return default(Task);
 #endif
         }
@@ -467,10 +457,9 @@ namespace Catel.ExceptionHandling
         /// <param name="action">The action.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-#if NET40
+#if NET40 || SL5 || PCL
         public Task ProcessAsync(Func<Task> action)
-#endif
-#if NET45
+#else
         public async Task ProcessAsync(Func<Task> action)
 #endif
         {
@@ -478,11 +467,9 @@ namespace Catel.ExceptionHandling
 
             try
             {
-#if NET40
+#if NET40 || SL5 || PCL
                 action().Wait();
-#endif
-
-#if NET45
+#else
                 await action();
 #endif
             }
@@ -494,7 +481,7 @@ namespace Catel.ExceptionHandling
                 }
             }
 
-#if NET40
+#if NET40 || SL5 || PCL
             return default(Task);
 #endif
         }
@@ -507,10 +494,9 @@ namespace Catel.ExceptionHandling
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-#if NET40
+#if NET40 || SL5 || PCL
         public Task<TResult> ProcessAsync<TResult>(Func<TResult> action, CancellationToken cancellationToken = default(CancellationToken))
-#endif
-#if NET45
+#else
         public async Task<TResult> ProcessAsync<TResult>(Func<TResult> action, CancellationToken cancellationToken = default(CancellationToken))
 #endif
         {
@@ -518,11 +504,9 @@ namespace Catel.ExceptionHandling
 
             try
             {
-#if NET40
+#if NET40 || SL5 || PCL
                 return Task.Factory.StartNew(action, cancellationToken);
-#endif
-
-#if NET45
+#else
                 return await Task.Run(action, cancellationToken);
 #endif
             }
@@ -534,11 +518,9 @@ namespace Catel.ExceptionHandling
                 }
             }
 
-#if NET40
+#if NET40 || SL5 || PCL
             return default(Task<TResult>);
-#endif
-
-#if NET45
+#else
             return default(TResult);
 #endif
         }
@@ -550,10 +532,9 @@ namespace Catel.ExceptionHandling
         /// <param name="action">The action.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-#if NET40
+#if NET40 || SL5 || PCL
         public Task<TResult> ProcessAsync<TResult>(Func<Task<TResult>> action)
-#endif
-#if NET45
+#else
         public async Task<TResult> ProcessAsync<TResult>(Func<Task<TResult>> action)
 #endif
         {
@@ -561,11 +542,9 @@ namespace Catel.ExceptionHandling
 
             try
             {
-#if NET40
+#if NET40 || SL5 || PCL
                 return action();
-#endif
-
-#if NET45
+#else
                 return await action();
 #endif
             }
@@ -577,40 +556,15 @@ namespace Catel.ExceptionHandling
                 }
             }
 
-#if NET40
+#if NET40 || SL5 || PCL
             return default(Task<TResult>);
-#endif
-
-#if NET45
+#else
             return default(TResult);
 #endif
         }
         #endregion
 
         #region Methods
-
-#if NET40
-        /// <summary>
-        /// Delays the specified milliseconds.
-        /// </summary>
-        /// <param name="milliseconds">The milliseconds.</param>
-        /// <returns></returns>
-        /// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="milliseconds"/> is larger than <c>1</c>.</exception>
-        private static Task Delay(double milliseconds)
-        {
-            Argument.IsMinimal("milliseconds", milliseconds, 1);
-
-            var taskCompletionSource = new TaskCompletionSource<bool>();
-            var timer = new System.Timers.Timer();
-            timer.Elapsed += (obj, args) => taskCompletionSource.TrySetResult(true);
-            timer.Interval = milliseconds;
-            timer.AutoReset = false;
-            timer.Start();
-
-            return taskCompletionSource.Task;
-        }
-#endif
-
         /// <summary>
         /// Notifies the subscribers whenever a retry event occurs.
         /// </summary>

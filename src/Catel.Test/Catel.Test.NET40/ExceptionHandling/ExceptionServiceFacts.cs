@@ -85,11 +85,11 @@ namespace Catel.Test.ExceptionHandling
         {
             #region Methods
 
+         
             [TestMethod]
-#if NET40
+#if NET40 || SL5 || PCL
             public void ProceedActionToSucceed()
-#endif
-#if NET45
+#else
             public async Task ProceedActionToSucceed()
 #endif
             {
@@ -97,20 +97,18 @@ namespace Catel.Test.ExceptionHandling
                 var value = string.Empty;
 
                 exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
-#if NET40
+#if NET40 || SL5 || PCL
                 value = "2";
                 exceptionService.ProcessAsync(() => (1 + 1).ToString(CultureInfo.InvariantCulture))
                                 .ContinueWith(task => Assert.AreEqual(value, task.Result));
-#endif
-#if NET45
+#else
                 value = await exceptionService.ProcessAsync(() => (1 + 1).ToString(CultureInfo.InvariantCulture));
                 Assert.AreEqual("2", value);
 #endif
 
-#if NET40
+#if NET40 || SL5 || PCL
                 exceptionService.ProcessAsync<string>(() => { throw new ArgumentException("achieved"); });
-#endif
-#if NET45
+#else
                 await exceptionService.ProcessAsync<string>(() => { throw new ArgumentException("achieved"); });
 #endif
 
@@ -118,10 +116,9 @@ namespace Catel.Test.ExceptionHandling
             }
 
             [TestMethod]
-#if NET40
+#if NET40 || SL5 || PCL
             public void ProceedTaskToSucceed()
-#endif
-#if NET45
+#else
             public async Task ProceedTaskToSucceed()
 #endif
             {
@@ -129,20 +126,18 @@ namespace Catel.Test.ExceptionHandling
                 var value = string.Empty;
 
                 exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
-#if NET40
+#if NET40 || SL5 || PCL
                 value = "2";
                 exceptionService.ProcessAsync(() => (1 + 1).ToString(CultureInfo.InvariantCulture))
                                 .ContinueWith(task => Assert.AreEqual(value, task.Result));
-#endif
-#if NET45
+#else
                 value = await exceptionService.ProcessAsync(async () => (1 + 1).ToString(CultureInfo.InvariantCulture));
                 Assert.AreEqual("2", value);
 #endif
 
-#if NET40
+#if NET40 || SL5 || PCL
                 exceptionService.ProcessAsync<string>(() => { throw new ArgumentException("achieved"); });
-#endif
-#if NET45
+#else
                 await exceptionService.ProcessAsync<string>(async () => { throw new ArgumentException("achieved"); });
 #endif
 
@@ -150,10 +145,9 @@ namespace Catel.Test.ExceptionHandling
             }
 
             [TestMethod]
-#if NET40
+#if NET40 || SL5 || PCL
             public void ProceedActionToFail()
-#endif
-#if NET45
+#else
             public async Task ProceedActionToFail()
 #endif
             {
@@ -161,10 +155,9 @@ namespace Catel.Test.ExceptionHandling
                 var value = string.Empty;
 
                 exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
-#if NET40
+#if NET40 || SL5 || PCL
                 exceptionService.ProcessAsync<string>(() => { throw new ArgumentOutOfRangeException("achieved"); });
-#endif
-#if NET45
+#else
                 await exceptionService.ProcessAsync<string>(() => { throw new ArgumentOutOfRangeException("achieved"); });
 #endif
 
@@ -172,10 +165,9 @@ namespace Catel.Test.ExceptionHandling
             }
 
             [TestMethod]
-#if NET40
+#if NET40 || SL5 || PCL
             public void ProceedTaskToFail()
-#endif
-#if NET45
+#else
             public async Task ProceedTaskToFail()
 #endif
             {
@@ -183,10 +175,9 @@ namespace Catel.Test.ExceptionHandling
                 var value = string.Empty;
 
                 exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
-#if NET40
+#if NET40 || SL5 || PCL
                 exceptionService.ProcessAsync<string>(() => { throw new ArgumentOutOfRangeException("achieved"); });
-#endif
-#if NET45
+#else
                 await exceptionService.ProcessAsync<string>( async () => { throw new ArgumentOutOfRangeException("achieved"); });
 #endif
 
