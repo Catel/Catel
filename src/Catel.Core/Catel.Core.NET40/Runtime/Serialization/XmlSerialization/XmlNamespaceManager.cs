@@ -101,7 +101,7 @@ namespace Catel.Runtime.Serialization.Xml
                 string prefix = preferredPrefix;
                 string uri = string.Format("{0}{1}", NamespaceUriPrefix, typeNamespace);
 
-                if (TypeHelper.IsBasicType(type))
+                if (type.IsBasicType())
                 {
                     return null;
                 }

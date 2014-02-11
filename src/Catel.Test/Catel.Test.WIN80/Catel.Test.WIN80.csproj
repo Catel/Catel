@@ -470,6 +470,9 @@
     <Compile Include="..\Catel.Test.NET40\Reflection\TypeCacheFacts.cs">
       <Link>Reflection\TypeCacheFacts.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\Reflection\TypeExtensionsFacts.cs">
+      <Link>Reflection\TypeExtensionsFacts.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\Reflection\TypeHelperFacts.cs">
       <Link>Reflection\TypeHelperFacts.cs</Link>
     </Compile>

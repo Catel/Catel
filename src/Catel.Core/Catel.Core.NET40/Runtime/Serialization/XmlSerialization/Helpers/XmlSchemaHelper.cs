@@ -98,7 +98,7 @@ namespace Catel.Runtime.Serialization.Xml
                              select x as XmlSchemaProviderAttribute).FirstOrDefault();
             if (attribute == null)
             {
-                if (TypeHelper.IsBasicType(type))
+                if (type.IsBasicType())
                 {
                     return new XmlQualifiedName(type.Name.ToLower(), Xmlns);
                 }
@@ -177,7 +177,7 @@ namespace Catel.Runtime.Serialization.Xml
                     else
                     {
                         propertySchemaElement.SchemaTypeName = AddTypeToSchemaSet(memberType, schemaSet, serializationManager);
-                        propertySchemaElement.IsNillable = TypeHelper.IsTypeNullable(memberType);
+                        propertySchemaElement.IsNillable = memberType.IsNullableType();
                         propertySchemaElement.MinOccurs = 0;
                     }
 

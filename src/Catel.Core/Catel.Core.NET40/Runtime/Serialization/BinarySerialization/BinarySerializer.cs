@@ -329,7 +329,7 @@ namespace Catel.Runtime.Serialization.Binary
                     Value = memberValue.Value
                 };
 
-                if (memberValue.Value != null && TypeHelper.IsClassType(memberValue.Value.GetType()))
+                if (memberValue.Value != null && memberValue.Value.GetType().IsClassType())
                 {
                     var referenceInfo = referenceManager.GetInfo(memberValue.Value);
 

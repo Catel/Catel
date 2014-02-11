@@ -314,6 +314,7 @@
     <Compile Include="Reflection\Extensions\ReflectionExtensions.propertyinfo.cs" />
     <Compile Include="Reflection\Extensions\ReflectionExtensions.type.cs" />
     <Compile Include="Reflection\Extensions\ReflectionExtensions.typeinfo.cs" />
+    <Compile Include="Reflection\Extensions\TypeExtensions.cs" />
     <Compile Include="Reflection\Helpers\AssemblyHelper.cs" />
     <Compile Include="Reflection\Helpers\AttributeHelper.cs" />
     <Compile Include="Reflection\Helpers\BindingFlagsHelper.cs" />

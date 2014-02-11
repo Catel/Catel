@@ -36,6 +36,7 @@ Added/fixed:
     transitions: UserControl.TransferStylesAndTransitionsToViewModelGrid (default value is true)
 (x) CTL-330 ViewModel gets unloaded before the view is actually unloaded in Windows Phone. The view models are now
     being closed in the Navigated event so it will be after the navigation transition has completed
+(x) CTL-332 Fixed StackOverflow in TypeHelper.IsBasicType for Nullable<> implementations
 
 Roadmap:
 ========

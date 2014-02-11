@@ -544,7 +544,7 @@ namespace Catel.Runtime.Serialization.Xml
                 {
                     ReferenceInfo referenceInfo = null;
                     bool serializeElement = true;
-                    var isClassType = TypeHelper.IsClassType(memberTypeToSerialize);
+                    var isClassType = memberTypeToSerialize.IsClassType();
                     if (isClassType)
                     {
                         var referenceManager = context.ReferenceManager;

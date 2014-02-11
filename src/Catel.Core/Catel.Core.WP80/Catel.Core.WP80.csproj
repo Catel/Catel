@@ -693,6 +693,9 @@
     <Compile Include="..\Catel.Core.NET40\Reflection\Extensions\ReflectionExtensions.typeinfo.cs">
       <Link>Reflection\Extensions\ReflectionExtensions.typeinfo.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Reflection\Extensions\TypeExtensions.cs">
+      <Link>Reflection\Extensions\TypeExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Reflection\Helpers\AssemblyHelper.cs">
       <Link>Reflection\Helpers\AssemblyHelper.cs</Link>
     </Compile>

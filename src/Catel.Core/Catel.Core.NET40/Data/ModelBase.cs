@@ -696,7 +696,7 @@ namespace Catel.Data
         internal void SetValue(string name, object value, bool notifyOnChange, bool validateAttributes)
         {
             var property = GetPropertyData(name);
-            if ((value == null) && !TypeHelper.IsTypeNullable(property.Type))
+            if ((value == null) && !property.Type.IsNullableType())
             {
                 throw new PropertyNotNullableException(name, GetType());
             }
@@ -1455,7 +1455,7 @@ namespace Catel.Data
             bool isSerializable, bool includeInSerialization, bool includeInBackup, bool isModelBaseProperty, bool lateRegistration, bool isCalculatedProperty)
         {
             var objectType = GetType();
-            if ((defaultValue == null) && !TypeHelper.IsTypeNullable(type))
+            if ((defaultValue == null) && !type.IsNullableType())
             {
                 throw new PropertyNotNullableException(name, objectType);
             }
