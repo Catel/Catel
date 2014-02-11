@@ -31,6 +31,8 @@ Added/fixed:
 (+) CTL-333 Now NET40 also support the IExceptionService.ProcessAsync
 (*) CTL-326 Data annotation validation will no longer be invoked for properties with non-public getters to prevent
     first chance exceptions the first time such a property is being validated
+(*) CTL-334 ViewModelBase now respects SuspendValidation during saving, which means that even if there are validation 
+    errors, the view model can be saved when SuspendValidation is set to true
 (x) CTL-327 ListCollectionView not supported in ChangeNotificationWrapper (causes InvalidCastException)
 (x) CTL-329 VisualStateManager doesn't change state in WP8 in UserControl => introduced option to transfer styles and
     transitions: UserControl.TransferStylesAndTransitionsToViewModelGrid (default value is true)

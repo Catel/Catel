@@ -104,6 +104,11 @@ namespace Catel.MVVM
                 return true;
             }
 
+            if (SuspendValidation)
+            {
+                return true;
+            }
+
             Validate(force, notifyChangedPropertiesOnly);
 
             if (DeferValidationUntilFirstSaveCall)
