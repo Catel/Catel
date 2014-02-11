@@ -583,7 +583,6 @@ namespace Catel.Data
             if (!_propertyValuesIgnoredOrFailedForValidation.ContainsKey(type))
             {
                 _propertyValuesIgnoredOrFailedForValidation.Add(type, new List<string>());
-                _propertyValuesAtLeastOnceValidated.Add(type, new List<string>());
 
                 // Ignore modelbase properties
                 _propertyValuesIgnoredOrFailedForValidation[type].Add("EqualityComparer");

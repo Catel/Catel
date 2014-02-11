@@ -8,6 +8,7 @@ namespace Catel.Data
 {
     using System;
     using System.Xml.Serialization;
+    using Catel.Reflection;
 
     /// <summary>
     /// Object that contains all the property data that is used by the <see cref="ModelBase"/> class.
@@ -30,6 +31,11 @@ namespace Catel.Data
         [field: NonSerialized]
 #endif
         private readonly Func<object> _createDefaultValue;
+
+#if NET
+        [field: NonSerialized]
+#endif
+        private Lazy<CachedPropertyInfo> _propertyInfo;
         #endregion
 
         #region Constructors
@@ -88,6 +94,16 @@ namespace Catel.Data
             IsCalculatedProperty = isCalculatedProperty;
 
             _createDefaultValue = createDefaultValue;
+            _propertyInfo = new Lazy<CachedPropertyInfo>(() =>
+            {
+                var propertyInfo = Type.GetPropertyEx(name);
+                if (propertyInfo == null)
+                {
+                    return null;
+                }
+
+                return new CachedPropertyInfo(propertyInfo);
+            });
         }
         #endregion
 
@@ -96,6 +112,16 @@ namespace Catel.Data
         /// Gets the name of the property.
         /// </summary>
         public string Name { get; private set; }
+
+        /// <summary>
+        /// Gets the property information.
+        /// </summary>
+        /// <value>The property information.</value>
+        [XmlIgnore]
+        public CachedPropertyInfo PropertyInfo
+        {
+            get { return _propertyInfo.Value; }
+        }
 
         /// <summary>
         /// Gets the type of the property.

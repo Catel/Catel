@@ -96,13 +96,6 @@ namespace Catel.Data
 #endif
         private readonly List<string> _propertiesNotCheckedDuringDisabledValidation = new List<string>();
 
-#if !WINDOWS_PHONE && !NETFX_CORE && !PCL && !NET35
-
-#if NET
-        [field: NonSerialized]
-#endif
-        private bool _firstAnnotationValidation = true;
-
         /// <summary>
         /// The property names that failed to validate and should be skipped next time for NET 4.0 
         /// attribute validation.
@@ -112,13 +105,12 @@ namespace Catel.Data
 #endif
         private static readonly Dictionary<Type, List<string>> _propertyValuesIgnoredOrFailedForValidation = new Dictionary<Type, List<string>>();
 
-        /// <summary>
-        /// A dictionary per type containing the properties at least once validated before. This is to speed up the first validation sequence.
-        /// </summary>
+#if !WINDOWS_PHONE && !NETFX_CORE && !PCL && !NET35
+
 #if NET
         [field: NonSerialized]
 #endif
-        private static readonly Dictionary<Type, List<string>> _propertyValuesAtLeastOnceValidated = new Dictionary<Type, List<string>>();
+        private bool _firstAnnotationValidation = true;
 
         /// <summary>
         /// A dictionary containing the annotation (attribute) validation results of properties of this class.
@@ -449,32 +441,6 @@ namespace Catel.Data
             {
                 if (!_propertyValuesIgnoredOrFailedForValidation[type].Contains(propertyName))
                 {
-                    if (!_propertyValuesAtLeastOnceValidated[type].Contains(propertyName))
-                    {
-#if NET
-                        if (type.GetPropertyEx(propertyName) == null)
-                        {
-                            Log.Debug("Property '{0}' cannot be found via reflection, ignoring this property for type '{1}'", propertyName, type.FullName);
-
-                            _propertyValuesIgnoredOrFailedForValidation[type].Add(propertyName);
-                            return false;
-                        }
-#else
-                        // Checking via reflection is faster than catching the exception
-                        if (!Reflection.PropertyHelper.IsPublicProperty(this, propertyName))
-                        {
-                            Log.Debug("Property '{0}' is not a public property, cannot validate non-public properties in silverlight", propertyName);
-
-                            _propertyValuesIgnoredOrFailedForValidation[type].Add(propertyName);
-                            return false;
-                        }
-#endif
-                    }
-                    else
-                    {
-                        _propertyValuesAtLeastOnceValidated[type].Add(propertyName);
-                    }
-
                     if (!_dataAnnotationsValidationContext.ContainsKey(propertyName))
                     {
                         _dataAnnotationsValidationContext[propertyName] = new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null) { MemberName = propertyName };
@@ -711,10 +677,20 @@ namespace Catel.Data
             {
                 var type = GetType();
 
+                var ignoredOrFailedPropertyValidations = _propertyValuesIgnoredOrFailedForValidation[type];
+
                 // In forced mode, validate all registered properties for annotations
                 var catelTypeInfo = PropertyDataManager.GetCatelTypeInfo(type);
                 foreach (var propertyData in catelTypeInfo.GetCatelProperties())
                 {
+                    var propertyInfo = propertyData.Value.PropertyInfo;
+                    if (propertyInfo == null || !propertyInfo.HasPublicGetter)
+                    {
+                        // Note: non-public getter, do not validate
+                        ignoredOrFailedPropertyValidations.Add(propertyData.Key);
+                        continue;
+                    }
+
                     var propertyValue = GetValue(propertyData.Value);
                     ValidatePropertyUsingAnnotations(propertyData.Key, propertyValue);
                 }
@@ -723,7 +699,7 @@ namespace Catel.Data
                 // Validate non-catel properties as well for attribute validation
                 foreach (var propertyInfo in catelTypeInfo.GetNonCatelProperties())
                 {
-                    var ignoredOrFailedPropertyValidations = _propertyValuesIgnoredOrFailedForValidation[type];
+                    
 
                     if (_firstAnnotationValidation)
                     {
