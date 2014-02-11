@@ -388,10 +388,9 @@ namespace Catel.Test.ExceptionHandling
             #region Methods
 
             [TestMethod]
-#if NET40
+#if NET40 || SL5 || PCL
             public void ProceedActionToSucceed()
-#endif
-#if NET45
+#else
             public async Task ProceedActionToSucceed()
 #endif
             {
@@ -399,10 +398,9 @@ namespace Catel.Test.ExceptionHandling
                 var value = string.Empty;
 
                 exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
-#if NET40
+#if NET40 || SL5 || PCL
                 exceptionService.ProcessAsync(() => { throw new ArgumentException("achieved"); });
-#endif
-#if NET45
+#else
                 await exceptionService.ProcessAsync(() => { throw new ArgumentException("achieved"); });
 #endif
 
@@ -410,10 +408,9 @@ namespace Catel.Test.ExceptionHandling
             }
 
             [TestMethod]
-#if NET40
+#if NET40 || SL5 || PCL
             public void ProceedTaskToSucceed()
-#endif
-#if NET45
+#else
             public async Task ProceedTaskToSucceed()
 #endif
             {
@@ -421,10 +418,9 @@ namespace Catel.Test.ExceptionHandling
                 var value = string.Empty;
 
                 exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
-#if NET40
+#if NET40 || SL5 || PCL
                 exceptionService.ProcessAsync(() => { throw new ArgumentException("achieved"); });
-#endif
-#if NET45
+#else
                 await exceptionService.ProcessAsync(async () => { throw new ArgumentException("achieved"); });
 #endif
 
@@ -432,10 +428,9 @@ namespace Catel.Test.ExceptionHandling
             }
 
             [TestMethod]
-#if NET40
+#if NET40 || SL5 || PCL
             public void ProceedActionToFail()
-#endif
-#if NET45
+#else
             public async Task ProceedActionToFail()
 #endif
             {
@@ -443,10 +438,9 @@ namespace Catel.Test.ExceptionHandling
                 var value = string.Empty;
 
                 exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
-#if NET40
+#if NET40 || SL5 || PCL
                 exceptionService.ProcessAsync(() => { throw new ArgumentOutOfRangeException("achieved"); });
-#endif
-#if NET45
+#else
                 await exceptionService.ProcessAsync(() => { throw new ArgumentOutOfRangeException("achieved"); });
 #endif
 
@@ -454,10 +448,9 @@ namespace Catel.Test.ExceptionHandling
             }
 
             [TestMethod]
-#if NET40
+#if NET40 || SL5 || PCL
             public void ProceedTaskToFail()
-#endif
-#if NET45
+#else
             public async Task ProceedTaskToFail()
 #endif
             {
@@ -465,10 +458,9 @@ namespace Catel.Test.ExceptionHandling
                 var value = string.Empty;
 
                 exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
-#if NET40
+#if NET40 || SL5 || PCL
                 exceptionService.ProcessAsync(() => { throw new ArgumentOutOfRangeException("achieved"); });
-#endif
-#if NET45
+#else
                 await exceptionService.ProcessAsync(async () => { throw new ArgumentOutOfRangeException("achieved"); });
 #endif
 
