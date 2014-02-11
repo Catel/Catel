@@ -381,7 +381,6 @@ namespace Catel.Test.ExceptionHandling
         }
         #endregion
 
-#if NET45
         #region Nested type: TheNonGenericProcessAsyncMethod
         [TestClass]
         public class TheNonGenericProcessAsyncMethod
@@ -389,61 +388,95 @@ namespace Catel.Test.ExceptionHandling
             #region Methods
 
             [TestMethod]
+#if NET40
+            public void ProceedActionToSucceed()
+#endif
+#if NET45
             public async Task ProceedActionToSucceed()
+#endif
             {
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;
 
                 exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
+#if NET40
+                exceptionService.ProcessAsync(() => { throw new ArgumentException("achieved"); });
+#endif
+#if NET45
                 await exceptionService.ProcessAsync(() => { throw new ArgumentException("achieved"); });
+#endif
 
                 Assert.AreEqual("achieved", value);
             }
 
             [TestMethod]
+#if NET40
+            public void ProceedTaskToSucceed()
+#endif
+#if NET45
             public async Task ProceedTaskToSucceed()
+#endif
             {
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;
 
                 exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
-
-#pragma warning disable 1998
+#if NET40
+                exceptionService.ProcessAsync(() => { throw new ArgumentException("achieved"); });
+#endif
+#if NET45
                 await exceptionService.ProcessAsync(async () => { throw new ArgumentException("achieved"); });
-#pragma warning restore 1998
+#endif
 
                 Assert.AreEqual("achieved", value);
             }
 
             [TestMethod]
+#if NET40
+            public void ProceedActionToFail()
+#endif
+#if NET45
             public async Task ProceedActionToFail()
+#endif
             {
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;
 
                 exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
+#if NET40
+                exceptionService.ProcessAsync(() => { throw new ArgumentOutOfRangeException("achieved"); });
+#endif
+#if NET45
                 await exceptionService.ProcessAsync(() => { throw new ArgumentOutOfRangeException("achieved"); });
+#endif
 
                 Assert.AreNotEqual("achieved", value);
             }
 
             [TestMethod]
+#if NET40
+            public void ProceedTaskToFail()
+#endif
+#if NET45
             public async Task ProceedTaskToFail()
+#endif
             {
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;
 
                 exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
-#pragma warning disable 1998
+#if NET40
+                exceptionService.ProcessAsync(() => { throw new ArgumentOutOfRangeException("achieved"); });
+#endif
+#if NET45
                 await exceptionService.ProcessAsync(async () => { throw new ArgumentOutOfRangeException("achieved"); });
-#pragma warning restore 1998
+#endif
 
                 Assert.AreNotEqual("achieved", value);
             }
             #endregion
         }
         #endregion
-#endif
 
         #region Nested type: TheOnErrorRetryImmediatelyMethod
         [TestClass]
