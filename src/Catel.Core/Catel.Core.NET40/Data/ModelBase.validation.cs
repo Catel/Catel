@@ -410,8 +410,9 @@ namespace Catel.Data
 
                 foreach (string property in _propertiesNotCheckedDuringDisabledValidation)
                 {
-                    var propertyValue = GetValue(property);
-                    ValidatePropertyUsingAnnotations(property, propertyValue);
+                    var propertyData = GetPropertyData(property);
+                    var propertyValue = GetValueFast(propertyData.Name);
+                    ValidatePropertyUsingAnnotations(property, propertyValue, propertyData);
                 }
 
                 _propertiesNotCheckedDuringDisabledValidation.Clear();
@@ -423,10 +424,9 @@ namespace Catel.Data
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="value">The value to validate.</param>
-        /// <returns>
-        /// <c>true</c> if no errors using data annotations are found; otherwise <c>false</c>.
-        /// </returns>
-        private bool ValidatePropertyUsingAnnotations(string propertyName, object value)
+        /// <param name="catelPropertyData">The catel property data. Can be <c>null</c> for non-Catel properties.</param>
+        /// <returns><c>true</c> if no errors using data annotations are found; otherwise <c>false</c>.</returns>
+        private bool ValidatePropertyUsingAnnotations(string propertyName, object value, PropertyData catelPropertyData)
         {
             if (SuspendValidation)
             {
@@ -441,6 +441,37 @@ namespace Catel.Data
             {
                 if (!_propertyValuesIgnoredOrFailedForValidation[type].Contains(propertyName))
                 {
+                    if (catelPropertyData != null)
+                    {
+                        var propertyInfo = catelPropertyData.GetPropertyInfo(type);
+                        if (propertyInfo == null || !propertyInfo.HasPublicGetter)
+                        {
+                            _propertyValuesIgnoredOrFailedForValidation[type].Add(propertyName);
+                            return false;
+                        }
+                    }
+                    else
+                    {
+#if NET
+                        if (type.GetPropertyEx(propertyName) == null)
+                        {
+                            Log.Debug("Property '{0}' cannot be found via reflection, ignoring this property for type '{1}'", propertyName, type.FullName);
+
+                            _propertyValuesIgnoredOrFailedForValidation[type].Add(propertyName);
+                            return false;
+                        }
+#else
+                        // Checking via reflection is faster than catching the exception
+                        if (!Reflection.PropertyHelper.IsPublicProperty(this, propertyName))
+                        {
+                            Log.Debug("Property '{0}' is not a public property, cannot validate non-public properties in silverlight", propertyName);
+
+                            _propertyValuesIgnoredOrFailedForValidation[type].Add(propertyName);
+                            return false;
+                        }
+#endif
+                    }
+
                     if (!_dataAnnotationsValidationContext.ContainsKey(propertyName))
                     {
                         _dataAnnotationsValidationContext[propertyName] = new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null) { MemberName = propertyName };
@@ -683,7 +714,7 @@ namespace Catel.Data
                 var catelTypeInfo = PropertyDataManager.GetCatelTypeInfo(type);
                 foreach (var propertyData in catelTypeInfo.GetCatelProperties())
                 {
-                    var propertyInfo = propertyData.Value.PropertyInfo;
+                    var propertyInfo = propertyData.Value.GetPropertyInfo(type);
                     if (propertyInfo == null || !propertyInfo.HasPublicGetter)
                     {
                         // Note: non-public getter, do not validate
@@ -692,7 +723,7 @@ namespace Catel.Data
                     }
 
                     var propertyValue = GetValue(propertyData.Value);
-                    ValidatePropertyUsingAnnotations(propertyData.Key, propertyValue);
+                    ValidatePropertyUsingAnnotations(propertyData.Key, propertyValue, propertyData.Value);
                 }
 
 #if !WINDOWS_PHONE && !NETFX_CORE && !PCL && !NET35
@@ -725,7 +756,7 @@ namespace Catel.Data
                     try
                     {
                         var propertyValue = propertyInfo.Value.PropertyInfo.GetValue(this, null);
-                        ValidatePropertyUsingAnnotations(propertyInfo.Key, propertyValue);
+                        ValidatePropertyUsingAnnotations(propertyInfo.Key, propertyValue, null);
                     }
                     catch (Exception ex)
                     {

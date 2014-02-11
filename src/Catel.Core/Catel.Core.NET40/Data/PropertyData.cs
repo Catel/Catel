@@ -7,7 +7,9 @@
 namespace Catel.Data
 {
     using System;
+    using System.Reflection;
     using System.Xml.Serialization;
+    using Catel.Caching;
     using Catel.Reflection;
 
     /// <summary>
@@ -35,7 +37,7 @@ namespace Catel.Data
 #if NET
         [field: NonSerialized]
 #endif
-        private Lazy<CachedPropertyInfo> _propertyInfo;
+        private readonly ICacheStorage<Type, CachedPropertyInfo> _cachedPropertyInfo = new CacheStorage<Type, CachedPropertyInfo>(storeNullValues: true);
         #endregion
 
         #region Constructors
@@ -94,16 +96,6 @@ namespace Catel.Data
             IsCalculatedProperty = isCalculatedProperty;
 
             _createDefaultValue = createDefaultValue;
-            _propertyInfo = new Lazy<CachedPropertyInfo>(() =>
-            {
-                var propertyInfo = Type.GetPropertyEx(name);
-                if (propertyInfo == null)
-                {
-                    return null;
-                }
-
-                return new CachedPropertyInfo(propertyInfo);
-            });
         }
         #endregion
 
@@ -112,16 +104,6 @@ namespace Catel.Data
         /// Gets the name of the property.
         /// </summary>
         public string Name { get; private set; }
-
-        /// <summary>
-        /// Gets the property information.
-        /// </summary>
-        /// <value>The property information.</value>
-        [XmlIgnore]
-        public CachedPropertyInfo PropertyInfo
-        {
-            get { return _propertyInfo.Value; }
-        }
 
         /// <summary>
         /// Gets the type of the property.
@@ -218,6 +200,27 @@ namespace Catel.Data
         public TValue GetDefaultValue<TValue>()
         {
             return (DefaultValue is TValue) ? (TValue)DefaultValue : default(TValue);
+        }
+
+        /// <summary>
+        /// Gets the property information.
+        /// </summary>
+        /// <param name="containingType">Type of the containing.</param>
+        /// <returns>CachedPropertyInfo.</returns>
+        public CachedPropertyInfo GetPropertyInfo(Type containingType)
+        {
+            Argument.IsNotNull("containingType", containingType);
+
+            return _cachedPropertyInfo.GetFromCacheOrFetch(containingType, () =>
+            {
+                var propertyInfo = containingType.GetPropertyEx(Name, BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                if (propertyInfo == null)
+                {
+                    return null;
+                }
+
+                return new CachedPropertyInfo(propertyInfo);
+            });
         }
         #endregion
     }
