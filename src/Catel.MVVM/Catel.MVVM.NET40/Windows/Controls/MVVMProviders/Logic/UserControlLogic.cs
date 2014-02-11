@@ -734,17 +734,6 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             if (viewModelContainer != null)
             {
                 var parentVm = viewModelContainer.ViewModel;
-                if (parentVm != null)
-                {
-                    // We might be coming back from dormant state (windows phone), we won't receive DataContextChanged event
-                    IgnoreNullDataContext = false;
-
-                    if (ViewModel == null)
-                    {
-                        UpdateDataContextToUseViewModel(TargetControl.DataContext);
-                    }
-                }
-
                 SubscribeToParentViewModel(parentVm);
             }
         }
