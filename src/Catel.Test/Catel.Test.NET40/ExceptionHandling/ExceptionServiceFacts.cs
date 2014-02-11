@@ -11,16 +11,13 @@ namespace Catel.Test.ExceptionHandling
     using System.Globalization;
     using System.Linq;
     using Catel.ExceptionHandling;
+    using System.Threading.Tasks;
 #if NETFX_CORE
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 #else
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 #endif
-#if NET45
-    using System.Threading.Tasks;
-
-#endif
-
+    
     public class ExceptionServiceFacts
     {
         #region Nested type: TheConstructor
@@ -82,7 +79,6 @@ namespace Catel.Test.ExceptionHandling
         }
         #endregion
 
-#if NET45
         #region Nested type: TheGenericProcessAsyncMethod
         [TestClass]
         public class TheGenericProcessAsyncMethod
@@ -90,70 +86,116 @@ namespace Catel.Test.ExceptionHandling
             #region Methods
 
             [TestMethod]
+#if NET40
+            public void ProceedActionToSucceed()
+#endif
+#if NET45
             public async Task ProceedActionToSucceed()
+#endif
             {
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;
 
                 exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
+#if NET40
+                value = "2";
+                exceptionService.ProcessAsync(() => (1 + 1).ToString(CultureInfo.InvariantCulture))
+                                .ContinueWith(task => Assert.AreEqual(value, task.Result));
+#endif
+#if NET45
                 value = await exceptionService.ProcessAsync(() => (1 + 1).ToString(CultureInfo.InvariantCulture));
-
                 Assert.AreEqual("2", value);
+#endif
 
+#if NET40
+                exceptionService.ProcessAsync<string>(() => { throw new ArgumentException("achieved"); });
+#endif
+#if NET45
                 await exceptionService.ProcessAsync<string>(() => { throw new ArgumentException("achieved"); });
+#endif
 
                 Assert.AreEqual("achieved", value);
             }
 
             [TestMethod]
+#if NET40
+            public void ProceedTaskToSucceed()
+#endif
+#if NET45
             public async Task ProceedTaskToSucceed()
+#endif
             {
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;
 
                 exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
-#pragma warning disable 1998
+#if NET40
+                value = "2";
+                exceptionService.ProcessAsync(() => (1 + 1).ToString(CultureInfo.InvariantCulture))
+                                .ContinueWith(task => Assert.AreEqual(value, task.Result));
+#endif
+#if NET45
                 value = await exceptionService.ProcessAsync(async () => (1 + 1).ToString(CultureInfo.InvariantCulture));
-#pragma warning restore 1998
-
                 Assert.AreEqual("2", value);
+#endif
 
-#pragma warning disable 1998
+#if NET40
+                exceptionService.ProcessAsync<string>(() => { throw new ArgumentException("achieved"); });
+#endif
+#if NET45
                 await exceptionService.ProcessAsync<string>(async () => { throw new ArgumentException("achieved"); });
-#pragma warning restore 1998
+#endif
 
                 Assert.AreEqual("achieved", value);
             }
 
             [TestMethod]
+#if NET40
+            public void ProceedActionToFail()
+#endif
+#if NET45
             public async Task ProceedActionToFail()
+#endif
             {
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;
 
                 exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
+#if NET40
+                exceptionService.ProcessAsync<string>(() => { throw new ArgumentOutOfRangeException("achieved"); });
+#endif
+#if NET45
                 await exceptionService.ProcessAsync<string>(() => { throw new ArgumentOutOfRangeException("achieved"); });
+#endif
 
                 Assert.AreNotEqual("achieved", value);
             }
 
             [TestMethod]
+#if NET40
+            public void ProceedTaskToFail()
+#endif
+#if NET45
             public async Task ProceedTaskToFail()
+#endif
             {
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;
 
                 exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
-#pragma warning disable 1998
+#if NET40
+                exceptionService.ProcessAsync<string>(() => { throw new ArgumentOutOfRangeException("achieved"); });
+#endif
+#if NET45
                 await exceptionService.ProcessAsync<string>( async () => { throw new ArgumentOutOfRangeException("achieved"); });
-#pragma warning restore 1998
+#endif
 
                 Assert.AreNotEqual("achieved", value);
             }
             #endregion
         }
+
         #endregion
-#endif
 
         #region Nested type: TheGetHandlerMethod
         [TestClass]

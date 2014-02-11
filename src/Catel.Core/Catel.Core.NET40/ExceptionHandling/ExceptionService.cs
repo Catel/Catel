@@ -13,10 +13,7 @@ namespace Catel.ExceptionHandling
     using System.Threading.Tasks;
     using Logging;
     using Reflection;
-
-#if NET45
     using System.Threading;
-#endif
 
     /// <summary>
     /// The exception service allows the usage of the Try/Catch mechanics. This means that this service provides possibilities
@@ -425,7 +422,6 @@ namespace Catel.ExceptionHandling
             }
         }
 
-#if NET45
         /// <summary>
         /// Processes the specified action. The action will be executed asynchrounously.
         /// </summary>
@@ -433,99 +429,162 @@ namespace Catel.ExceptionHandling
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public async Task ProcessAsync(Action action, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            Argument.IsNotNull("action", action);
-
-            try
-            {
-                await Task.Run(action, cancellationToken);
-            }
-            catch (Exception exception)
-            {
-                if (!HandleException(exception))
-                {
-                    throw;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Processes the specified action.
-        /// </summary>
-        /// <param name="action">The action.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public async Task ProcessAsync(Func<Task> action)
-        {
-            Argument.IsNotNull("action", action);
-
-            try
-            {
-                await action();
-            }
-            catch (Exception exception)
-            {
-                if (!HandleException(exception))
-                {
-                    throw;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Processes the specified action. The action will be executed asynchrounously.
-        /// </summary>
-        /// <typeparam name="TResult">The result type.</typeparam>
-        /// <param name="action">The action.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public async Task<TResult> ProcessAsync<TResult>(Func<TResult> action, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            Argument.IsNotNull("action", action);
-
-            try
-            {
-                return await Task.Run(action, cancellationToken);
-            }
-            catch (Exception exception)
-            {
-                if (!HandleException(exception))
-                {
-                    throw;
-                }
-            }
-
-            return default(TResult);
-        }
-
-        /// <summary>
-        /// Processes the specified action.
-        /// </summary>
-        /// <typeparam name="TResult">The result type.</typeparam>
-        /// <param name="action">The action.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public async Task<TResult> ProcessAsync<TResult>(Func<Task<TResult>> action)
-        {
-            Argument.IsNotNull("action", action);
-
-            try
-            {
-                return await action();
-            }
-            catch (Exception exception)
-            {
-                if (!HandleException(exception))
-                {
-                    throw;
-                }
-            }
-
-            return default(TResult);
-        }
+#if NET40
+        public Task ProcessAsync(Action action, CancellationToken cancellationToken = default(CancellationToken))
 #endif
+#if NET45
+        public async Task ProcessAsync(Action action, CancellationToken cancellationToken = default(CancellationToken))
+#endif
+        {
+            Argument.IsNotNull("action", action);
+
+            try
+            {
+#if NET40
+                Task.Factory.StartNew(action, cancellationToken).Wait(cancellationToken);
+#endif
+
+#if NET45
+                await Task.Run(action, cancellationToken);
+#endif
+            }
+            catch (Exception exception)
+            {
+                if (!HandleException(exception))
+                {
+                    throw;
+                }
+            }
+
+#if NET40
+            return default(Task);
+#endif
+        }
+
+        /// <summary>
+        /// Processes the specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+#if NET40
+        public Task ProcessAsync(Func<Task> action)
+#endif
+#if NET45
+        public async Task ProcessAsync(Func<Task> action)
+#endif
+        {
+            Argument.IsNotNull("action", action);
+
+            try
+            {
+#if NET40
+                action().Wait();
+#endif
+
+#if NET45
+                await action();
+#endif
+            }
+            catch (Exception exception)
+            {
+                if (!HandleException(exception))
+                {
+                    throw;
+                }
+            }
+
+#if NET40
+            return default(Task);
+#endif
+        }
+
+        /// <summary>
+        /// Processes the specified action. The action will be executed asynchrounously.
+        /// </summary>
+        /// <typeparam name="TResult">The result type.</typeparam>
+        /// <param name="action">The action.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+#if NET40
+        public Task<TResult> ProcessAsync<TResult>(Func<TResult> action, CancellationToken cancellationToken = default(CancellationToken))
+#endif
+#if NET45
+        public async Task<TResult> ProcessAsync<TResult>(Func<TResult> action, CancellationToken cancellationToken = default(CancellationToken))
+#endif
+        {
+            Argument.IsNotNull("action", action);
+
+            try
+            {
+#if NET40
+                return Task.Factory.StartNew(action, cancellationToken);
+#endif
+
+#if NET45
+                return await Task.Run(action, cancellationToken);
+#endif
+            }
+            catch (Exception exception)
+            {
+                if (!HandleException(exception))
+                {
+                    throw;
+                }
+            }
+
+#if NET40
+            return default(Task<TResult>);
+#endif
+
+#if NET45
+            return default(TResult);
+#endif
+        }
+
+        /// <summary>
+        /// Processes the specified action.
+        /// </summary>
+        /// <typeparam name="TResult">The result type.</typeparam>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+#if NET40
+        public Task<TResult> ProcessAsync<TResult>(Func<Task<TResult>> action)
+#endif
+#if NET45
+        public async Task<TResult> ProcessAsync<TResult>(Func<Task<TResult>> action)
+#endif
+        {
+            Argument.IsNotNull("action", action);
+
+            try
+            {
+#if NET40
+                return action();
+#endif
+
+#if NET45
+                return await action();
+#endif
+            }
+            catch (Exception exception)
+            {
+                if (!HandleException(exception))
+                {
+                    throw;
+                }
+            }
+
+#if NET40
+            return default(Task<TResult>);
+#endif
+
+#if NET45
+            return default(TResult);
+#endif
+        }
         #endregion
 
         #region Methods

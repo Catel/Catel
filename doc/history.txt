@@ -28,6 +28,7 @@ xxx
 
 Added/fixed:
 ============
+(+) CTL-333 Now NET40 also support the IExceptionService.ProcessAsync
 (*) CTL-326 Data annotation validation will no longer be invoked for properties with non-public getters to prevent
     first chance exceptions the first time such a property is being validated
 (x) CTL-327 ListCollectionView not supported in ChangeNotificationWrapper (causes InvalidCastException)
