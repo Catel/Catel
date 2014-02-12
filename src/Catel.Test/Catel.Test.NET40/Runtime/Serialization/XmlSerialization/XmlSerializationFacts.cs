@@ -52,6 +52,25 @@ namespace Catel.Test.Runtime.Serialization
             }
 
             [TestMethod]
+            public void CorrectlySerializesToXmlString()
+            {
+                var testModel = new TestModel();
+
+                testModel._excludedField = "excluded";
+                testModel._includedField = "included";
+
+                testModel.ExcludedRegularProperty = "excluded";
+                testModel.IncludedRegularProperty = "included";
+
+                testModel.ExcludedCatelProperty = "excluded";
+                testModel.IncludedCatelProperty = "included";
+
+                var xml = testModel.ToXmlString();
+
+                Assert.IsFalse(xml.Contains("Excluded"));
+            }
+
+            [TestMethod]
             public void CorrectlyHandlesNullValues()
             {
                 var testModel = new TestModel();

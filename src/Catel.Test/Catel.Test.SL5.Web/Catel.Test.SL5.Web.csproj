@@ -71,8 +71,7 @@
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Catel.Test.SL5TestPage.aspx" />
-    <Content Include="Catel.Test.SL5TestPage.html" />
+    <Content Include="Default.aspx" />
     <Content Include="ClientBin\Catel.Test.SL5.xap" />
     <Content Include="Silverlight.js" />
     <Content Include="Web.config" />

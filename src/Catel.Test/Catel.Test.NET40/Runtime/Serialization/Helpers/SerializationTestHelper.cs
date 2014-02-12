@@ -8,6 +8,8 @@
 namespace Catel.Test.Runtime.Serialization
 {
     using System.IO;
+    using System.Xml;
+    using System.Xml.Linq;
     using Catel.Data;
     using Catel.Runtime.Serialization;
 
@@ -30,6 +32,44 @@ namespace Catel.Test.Runtime.Serialization
                 memoryStream.Position = 0L;
 
                 return (TModel)serializer.Deserialize(typeof (TModel), memoryStream);
+            }
+        }
+
+        public static string ToXmlString(this ModelBase model)
+        {
+            Argument.IsNotNull(() => model);
+
+            using (var memoryStream = new MemoryStream())
+            {
+                var xmlSerializer = SerializationFactory.GetXmlSerializer();
+                xmlSerializer.Serialize(model, memoryStream);
+
+                memoryStream.Position = 0L;
+                using (var xmlReader = XmlReader.Create(memoryStream))
+                {
+                    return XDocument.Load(xmlReader).ToString();
+                }
+            }
+        }
+
+        public static T FromXmlString<T>(this string xml) 
+            where T : ModelBase
+        {
+            Argument.IsNotNullOrWhitespace(() => xml);
+
+            var xmlDocument = XDocument.Parse(xml);
+
+            using (var memoryStream = new MemoryStream())
+            {
+                using (var xmlWriter = XmlWriter.Create(memoryStream))
+                {
+                    xmlDocument.Save(xmlWriter);
+                }
+
+                memoryStream.Position = 0L;
+
+                var xmlSerializer = SerializationFactory.GetXmlSerializer();
+                return (T)xmlSerializer.Deserialize(typeof(T), memoryStream);
             }
         }
 
