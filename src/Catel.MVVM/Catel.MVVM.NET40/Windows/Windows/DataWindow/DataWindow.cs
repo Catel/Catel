@@ -500,7 +500,7 @@ namespace Catel.Windows
             }
 
             ClosedByButton = true;
-            SetDialogResult(true);
+            SetDialogResultAndMakeSureWindowGetsClosed(true);
         }
 
         /// <summary>
@@ -534,7 +534,7 @@ namespace Catel.Windows
             }
 
             ClosedByButton = true;
-            if (!SetDialogResult(false))
+            if (!SetDialogResultAndMakeSureWindowGetsClosed(false))
             {
                 Close();
             }
@@ -756,7 +756,7 @@ namespace Catel.Windows
                 {
                     Log.Info("User pressed 'Escape' but no cancel command is found, setting DialogResult to false");
 
-                    if (!SetDialogResult(false))
+                    if (!SetDialogResultAndMakeSureWindowGetsClosed(false))
                     {
                         Close();
                     }
@@ -772,17 +772,18 @@ namespace Catel.Windows
         /// </summary>
         /// <param name="result">The result.</param>
         /// <returns><c>true</c> if the DialogResult is set correctly. Otherwise <c>false</c>.</returns>
-        private bool SetDialogResult(bool? result)
+        private bool SetDialogResultAndMakeSureWindowGetsClosed(bool? result)
         {
             try
             {
                 DialogResult = result;
                 return true;
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException ex)
             {
-                // Let it go, probably the main window
-                return false;
+                Log.Warning(ex, "Failed to set DialogResult, probably the main window, closing window manually");
+                Close();
+                return true;
             }
         }
 
