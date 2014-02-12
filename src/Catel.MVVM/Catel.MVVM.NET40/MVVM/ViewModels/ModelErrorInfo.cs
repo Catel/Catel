@@ -66,9 +66,11 @@ namespace Catel.MVVM
 
             _model = model;
 
-            // TODO: Find a way to read existing errors? It will need reflection to find out all properties
-            // and a call to all the properties to gather the existing errors, maybe that's too much. Let's
-            // see if users request this in the future
+            var modelAsINotifyPropertyChanged = _model as INotifyPropertyChanged;
+            if (modelAsINotifyPropertyChanged != null)
+            {
+                modelAsINotifyPropertyChanged.PropertyChanged += OnModelPropertyChanged;
+            }
 
             var modelAsINotifyDataErrorInfo = _model as INotifyDataErrorInfo;
             if (modelAsINotifyDataErrorInfo != null)
@@ -92,6 +94,31 @@ namespace Catel.MVVM
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Called when a property on the model has changed.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
+        private void OnModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(e.PropertyName))
+            {
+                return;
+            }
+
+            var dataWarningInfo = _model as IDataWarningInfo;
+            if (dataWarningInfo != null)
+            {
+                HandleFieldWarnings(e.PropertyName, new[] { dataWarningInfo[e.PropertyName] });
+            }
+
+            var dataErrorInfo = _model as IDataErrorInfo;
+            if (dataErrorInfo != null)
+            {
+                HandleFieldErrors(e.PropertyName, new [] { dataErrorInfo[e.PropertyName] });
+            }
+        }
+
         /// <summary>
         /// Called when the errors on the model have changed.
         /// </summary>
@@ -307,6 +334,12 @@ namespace Catel.MVVM
         /// </summary>
         public void CleanUp()
         {
+            var modelAsINotifyPropertyChanged = _model as INotifyPropertyChanged;
+            if (modelAsINotifyPropertyChanged != null)
+            {
+                modelAsINotifyPropertyChanged.PropertyChanged -= OnModelPropertyChanged;
+            }
+
             var modelAsINotifyDataErrorInfo = _model as INotifyDataErrorInfo;
             if (modelAsINotifyDataErrorInfo != null)
             {

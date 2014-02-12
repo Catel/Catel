@@ -1273,6 +1273,8 @@ namespace Catel.MVVM
             }
 
             OnModelPropertyChanged(sender, e);
+
+            Validate();
         }
 
         /// <summary>
