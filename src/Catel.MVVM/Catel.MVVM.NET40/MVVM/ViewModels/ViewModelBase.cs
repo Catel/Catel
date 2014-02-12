@@ -188,7 +188,7 @@ namespace Catel.MVVM
 #if NET
         [field: NonSerialized]
 #endif
-        protected static readonly ViewModelManager ViewModelManager;
+        protected static readonly IViewModelManager ViewModelManager;
 
         /// <summary>
         /// Mappings from view model properties to models and their properties.
@@ -275,10 +275,9 @@ namespace Catel.MVVM
         /// </summary>
         static ViewModelBase()
         {
-            ViewModelManager = new ViewModelManager();
-
             var serviceLocator = IoC.ServiceLocator.Default;
-            serviceLocator.RegisterInstance<IViewModelManager>(ViewModelManager);
+            serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelManager, ViewModelManager>();
+            ViewModelManager = serviceLocator.ResolveType<IViewModelManager>();
 
 #if NET
             var properties = (from property in typeof(ViewModelBase).GetPropertiesEx(false)

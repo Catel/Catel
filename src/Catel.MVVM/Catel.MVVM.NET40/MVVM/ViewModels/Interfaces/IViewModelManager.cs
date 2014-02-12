@@ -93,5 +93,39 @@ namespace Catel.MVVM
         /// <returns>The child view models.</returns>
         IEnumerable<IRelationalViewModel> GetChildViewModels(int parentUniqueIdentifier);
         #endregion
+
+        /// <summary>
+        /// Registers a view model instance with the manager. All view models must register themselves to the manager.
+        /// </summary>
+        /// <param name="viewModel">The view model to register.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
+        void RegisterViewModelInstance(IViewModel viewModel);
+
+        /// <summary>
+        /// Unregisters a view model instance from the manager. All view models must unregister themselves from the manager.
+        /// </summary>
+        /// <param name="viewModel">The view model to unregister.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
+        void UnregisterViewModelInstance(IViewModel viewModel);
+
+        /// <summary>
+        /// Adds an interested view model instance. The <see cref="IViewModel"/> class will automatically register
+        /// itself to the manager by using this method when decorated with the <see cref="InterestedInAttribute"/>.
+        /// </summary>
+        /// <param name="viewModelType">Type of the view model the <paramref name="viewModel"/> is interested in.</param>
+        /// <param name="viewModel">The view model instance.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
+        void AddInterestedViewModelInstance(Type viewModelType, IViewModel viewModel);
+
+        /// <summary>
+        /// Removes an interested view model instance. The <see cref="IViewModel"/> class will automatically unregister
+        /// itself from the manager by using this method when decorated with the <see cref="InterestedInAttribute"/>.
+        /// </summary>
+        /// <param name="viewModelType">Type of the view model the <paramref name="viewModel"/> was interested in.</param>
+        /// <param name="viewModel">The view model instance.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
+        void RemoveInterestedViewModelInstance(Type viewModelType, IViewModel viewModel);
     }
 }

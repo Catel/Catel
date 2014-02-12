@@ -363,7 +363,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="viewModel">The view model to register.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
-        internal void RegisterViewModelInstance(IViewModel viewModel)
+        public void RegisterViewModelInstance(IViewModel viewModel)
         {
             RegisterViewModelInstanceInternal(viewModel);
         }
@@ -386,7 +386,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="viewModel">The view model to unregister.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
-        internal void UnregisterViewModelInstance(IViewModel viewModel)
+        public void UnregisterViewModelInstance(IViewModel viewModel)
         {
             UnregisterViewModelInstanceInternal(viewModel);
         }
@@ -412,7 +412,7 @@ namespace Catel.MVVM
         /// <param name="viewModel">The view model instance.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
-        internal void AddInterestedViewModelInstance(Type viewModelType, IViewModel viewModel)
+        public void AddInterestedViewModelInstance(Type viewModelType, IViewModel viewModel)
         {
             AddInterestedViewModelInstanceInternal(viewModelType, viewModel);
         }
@@ -442,7 +442,7 @@ namespace Catel.MVVM
         /// <param name="viewModel">The view model instance.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
-        internal void RemoveInterestedViewModelInstance(Type viewModelType, IViewModel viewModel)
+        public void RemoveInterestedViewModelInstance(Type viewModelType, IViewModel viewModel)
         {
             RemoveInterestedViewModelInstanceInternal(viewModelType, viewModel);
         }
