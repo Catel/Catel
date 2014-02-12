@@ -125,7 +125,10 @@ namespace Catel.Logging
 
             var assemblyName = type.GetAssemblyFullNameEx();
 
-            return assemblyName.StartsWith("Catel.Core") || (assemblyName.StartsWith("Catel.MVVM") || assemblyName.StartsWith("Catel.Extensions"));
+            return assemblyName.StartsWith("Catel.Core") ||
+                assemblyName.StartsWith("Catel.Mvc") || 
+                assemblyName.StartsWith("Catel.MVVM") ||
+                assemblyName.StartsWith("Catel.Extensions");
         }
 
         /// <summary>

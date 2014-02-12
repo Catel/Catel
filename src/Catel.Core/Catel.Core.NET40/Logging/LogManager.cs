@@ -40,6 +40,15 @@ namespace Catel.Logging
             }
 
             /// <summary>
+            /// Gets a value indicating whether Catel logging should be ignored. This means that all log listeners are ignoring
+            /// Catel logging.
+            /// </summary>
+            /// <value>
+            /// <c>true</c> if Catel logging is ignored; otherwise, <c>false</c>.
+            /// </value>
+            public static bool IgnoreCatelLogging { get; private set; }
+
+            /// <summary>
             /// Gets a value indicating whether debug logging is enabled. This means that there is at least one listener 
             /// that is interested in debug logging.
             /// </summary>
@@ -84,13 +93,19 @@ namespace Catel.Logging
             {
                 lock (_logListeners)
                 {
-                    IsDebugEnabled =  false;
+                    IgnoreCatelLogging = true;
+                    IsDebugEnabled = false;
                     IsInfoEnabled = false;
                     IsWarningEnabled = false;
                     IsErrorEnabled = false;
 
                     foreach (var listener in _logListeners)
                     {
+                        if (!listener.IgnoreCatelLogging)
+                        {
+                            IgnoreCatelLogging = false;
+                        }
+
                         if (listener.IsDebugEnabled)
                         {
                             IsDebugEnabled = true;
@@ -113,6 +128,11 @@ namespace Catel.Logging
                     }
 
                     // Allow overriding via LogManager
+                    if (LogManager.IgnoreCatelLogging.HasValue)
+                    {
+                        IgnoreCatelLogging = LogManager.IgnoreCatelLogging.Value;
+                    }
+
                     if (LogManager.IsDebugEnabled.HasValue)
                     {
                         IsDebugEnabled = LogManager.IsDebugEnabled.Value;
@@ -180,6 +200,7 @@ namespace Catel.Logging
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        private static bool? _ignoreCatelLogging;
         private static bool? _isDebugEnabled;
         private static bool? _isInfoEnabled;
         private static bool? _isWarningEnabled;
@@ -200,6 +221,23 @@ namespace Catel.Logging
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets a value indicating whether the global IgnoreCatelLogging should be overriden.
+        /// <para />
+        /// Note that this value will override all settings of each listener globally. If this value is
+        /// set to <c>null</c>, nothing will be overriden.
+        /// </summary>
+        /// <value><c>true</c> if Catel logging must be ignored for all log listeners; otherwise, <c>false</c>.</value>
+        public static bool? IgnoreCatelLogging
+        {
+            get { return _ignoreCatelLogging; }
+            set
+            {
+                _ignoreCatelLogging = value;
+                LogInfo.UpdateLogInfo();
+            }
+        }
+
         /// <summary>
         /// Gets a value indicating whether the global IsDebugEnabled should be overriden.
         /// <para />
@@ -447,6 +485,11 @@ namespace Catel.Logging
         private static void OnLogMessage(object sender, LogMessageEventArgs e)
         {
             LogMessage.SafeInvoke(sender, e);
+
+            if (LogInfo.IgnoreCatelLogging && e.Log.IsCatelLogging)
+            {
+                return;
+            }
 
             if (!LogInfo.IsLogEventEnabled(e.LogEvent))
             {

@@ -12,6 +12,12 @@ namespace Catel.Logging
     public interface ILogListener
     {
         /// <summary>
+        /// Gets or sets a value indicating whether to ignore Catel logging.
+        /// </summary>
+        /// <value><c>true</c> if Catel logging should be ignored; otherwise, <c>false</c>.</value>
+        bool IgnoreCatelLogging { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether this listener is interested in debug messages.
         /// <para />
         /// This default value is <c>true</c>.
