@@ -27,10 +27,9 @@ namespace Catel.ServiceModel
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceHostFactory" /> class.
         /// </summary>
-        /// <param name="serviceLocator">The service locator.</param>
-        public ServiceHostFactory(IServiceLocator serviceLocator = null)
+        public ServiceHostFactory()
         {
-            _serviceLocator = serviceLocator ?? this.GetDependencyResolver().Resolve<IServiceLocator>();
+            _serviceLocator = this.GetDependencyResolver().Resolve<IServiceLocator>();
         }
         #endregion
 
