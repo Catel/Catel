@@ -10,6 +10,8 @@ namespace Catel.ServiceModel
     using System;
     using System.ServiceModel;
     using IoC;
+    using Logging;
+    using Reflection;
     using ServiceHost = Hosting.ServiceHost;
 
     /// <summary>
@@ -21,6 +23,11 @@ namespace Catel.ServiceModel
         /// The service locator
         /// </summary>
         private readonly IServiceLocator _serviceLocator;
+
+        /// <summary>
+        /// The log
+        /// </summary>
+        private readonly ILog _log;
         #endregion
 
         #region Constructors
@@ -29,6 +36,7 @@ namespace Catel.ServiceModel
         /// </summary>
         public ServiceHostFactory()
         {
+            _log = LogManager.GetCurrentClassLogger();
             _serviceLocator = this.GetDependencyResolver().Resolve<IServiceLocator>();
         }
         #endregion
@@ -50,10 +58,11 @@ namespace Catel.ServiceModel
             Argument.IsNotNullOrWhitespace("constructorString", constructorString);
             Argument.IsNotNullOrEmptyArray("baseAddresses", baseAddresses);
 
-            var serviceType = Type.GetType(constructorString, false);
+            var serviceType =  TypeCache.GetType(constructorString);
 
             if (serviceType == null)
             {
+                _log.Debug("Unable to get a type using the constructor string '{0}'", constructorString);
                 throw new ServiceActivationException();
             }
 
@@ -81,6 +90,7 @@ namespace Catel.ServiceModel
             Argument.IsNotNull("serviceType", serviceType);
             Argument.IsNotNullOrEmptyArray("baseAddresses", baseAddresses);
 
+            _log.Debug("Creating the service host for the service type '{0}'", serviceType);
             return new ServiceHost(_serviceLocator, serviceType, baseAddresses);
         }
         #endregion

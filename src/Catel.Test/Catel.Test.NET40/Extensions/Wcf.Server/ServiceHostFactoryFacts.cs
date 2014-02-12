@@ -69,7 +69,7 @@ namespace Catel.Test.Extensions.Wcf.Server
             }
 
             [TestMethod]
-            public void ShouldSucceedToCreateServiceHostInstanceWithValidConstructorString()
+            public void ShouldSucceedToCreateServiceHostInstanceWithAssemblyQualifiedNameOfATypeAsConstructorString()
             {
                 var serviceHostFactory = new ServiceHostFactory();
 
@@ -84,13 +84,18 @@ namespace Catel.Test.Extensions.Wcf.Server
             }
 
             [TestMethod]
-            public void ShoulFailToCreateServiceHostInstanceWithInvalidConstructorString()
+            public void ShoulFailToCreateServiceHostInstanceWithFullNameOfATypeAsConstructorString()
             {
                 var serviceHostFactory = new ServiceHostFactory();
 
-                var constructorString = typeof(TestService).FullName;
+                var sertviceType = typeof(TestService);
 
-                ExceptionTester.CallMethodAndExpectException<ServiceActivationException>(() => serviceHostFactory.CreateServiceHost(constructorString, _endpoints));
+                var constructorString = sertviceType.FullName;
+
+                var serviceHost = serviceHostFactory.CreateServiceHost(constructorString, _endpoints);
+
+                Assert.IsInstanceOfType(serviceHost, typeof(ServiceHost));
+                Assert.AreEqual(sertviceType, serviceHost.Description.ServiceType);
             }
 #endif
         }
