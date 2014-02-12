@@ -165,6 +165,11 @@ namespace Catel.Reflection
                 }
 
                 var loadedAssembly = appDomain.Load(assemblyName);
+
+                // Note: actually load a type so the assembly is loaded
+                var type = loadedAssembly.GetTypesEx().FirstOrDefault(x => !x.IsInterfaceEx());
+                Console.WriteLine(type.GetSafeFullName());
+
                 if (includeReferencedAssemblies)
                 {
                     Log.Debug("Loading referenced assemblies of assembly '{0}'", assemblyName);

@@ -35,6 +35,14 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
     using VisualStateGroup = System.Object;
 #endif
 
+#if NETFX_CORE
+    using ControlType = global::Windows.UI.Xaml.Controls.UserControl;
+#elif NET
+    using ControlType = System.Windows.Controls.ContentControl;
+#else
+    using ControlType = System.Windows.Controls.UserControl;
+#endif
+
     /// <summary>
     /// MVVM Provider behavior implementation for a user control.
     /// </summary>
@@ -82,7 +90,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// <exception cref="ArgumentNullException">The <paramref name="targetControl"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> does not implement interface <see cref="IViewModel"/>.</exception>
-        public UserControlLogic(UserControl targetControl, Type viewModelType, IViewModel viewModel = null)
+        public UserControlLogic(ControlType targetControl, Type viewModelType, IViewModel viewModel = null)
             : base(targetControl, viewModelType, viewModel)
         {
             SupportParentViewModelContainers = true;
@@ -105,9 +113,9 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// Gets the target control.
         /// </summary>
         /// <value>The target control.</value>
-        public new UserControl TargetControl
+        public new ControlType TargetControl
         {
-            get { return (UserControl)base.TargetControl; }
+            get { return (ControlType)base.TargetControl; }
         }
 
         /// <summary>
@@ -894,7 +902,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// <returns>
         /// 	<see cref="DependencyObject"/> or <c>null</c> if no parent is found that matches the predicate.
         /// </returns>
-        private static DependencyObject FindParentByPredicate(UserControl control, Predicate<object> predicate)
+        private static DependencyObject FindParentByPredicate(ControlType control, Predicate<object> predicate)
         {
             return FindParentByPredicate(control, predicate, -1);
         }
@@ -909,7 +917,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// <returns>
         /// 	<see cref="DependencyObject"/> or <c>null</c> if no parent is found that matches the predicate.
         /// </returns>
-        private static DependencyObject FindParentByPredicate(UserControl control, Predicate<object> predicate, int maxDepth)
+        private static DependencyObject FindParentByPredicate(ControlType control, Predicate<object> predicate, int maxDepth)
         {
             Argument.IsNotNull("control", control);
             Argument.IsNotNull("predicate", predicate);

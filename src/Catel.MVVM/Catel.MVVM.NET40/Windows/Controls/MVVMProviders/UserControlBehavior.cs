@@ -12,10 +12,18 @@ namespace Catel.Windows.Controls.MVVMProviders
     using Logic;
     using MVVM;
 
+#if NETFX_CORE
+    using ControlType = global::Windows.UI.Xaml.Controls.UserControl;
+#elif NET
+    using ControlType = System.Windows.Controls.ContentControl;
+#else
+    using ControlType = System.Windows.Controls.UserControl;
+#endif
+
     /// <summary>
     /// A <see cref="Behavior"/> implementation for a user control. 
     /// </summary>
-    public class UserControlBehavior : MVVMBehaviorBase<UserControl, UserControlLogic>
+    public class UserControlBehavior : MVVMBehaviorBase<ControlType, UserControlLogic>
     {
         /// <summary>
         /// Gets or sets a value indicating whether the user control should close any existing
