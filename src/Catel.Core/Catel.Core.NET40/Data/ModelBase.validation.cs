@@ -310,6 +310,14 @@ namespace Catel.Data
         }
 
         /// <summary>
+        /// Gets or sets a value for the <see cref="SuspendValidation"/> for each model.
+        /// <para />
+        /// By default, this value is <c>false</c>.
+        /// </summary>
+        /// <value><c>true</c> if the validation must be suspended by default; otherwise, <c>false</c>.</value>
+        public static bool DefaultSuspendValidationValue { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the validation for all classes deriving from <see cref="ModelBase"/> should be suspended.
         /// <para />
         /// This is a good way to improve performance for a specific operation where validation only causes overhead.

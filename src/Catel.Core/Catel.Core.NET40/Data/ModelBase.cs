@@ -567,6 +567,7 @@ namespace Catel.Data
         {
             ValidationContext = new ValidationContext();
 
+            SuspendValidation = DefaultSuspendValidationValue;
             DeserializationSucceeded = false;
             HandlePropertyAndCollectionChanges = true;
             AlwaysInvokeNotifyChanged = false;
