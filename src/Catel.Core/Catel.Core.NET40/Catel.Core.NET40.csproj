@@ -39,9 +39,6 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="ClassDiagrams\DataObjectBase.cd" />
-    <None Include="ClassDiagrams\SavableDataObjectBase.cd" />
-    <None Include="ClassDiagrams\ServiceLocator.cd" />
     <None Include="Fody.targets" />
     <None Include="packages.config" />
     <Reference Include="Obsolete">
@@ -64,6 +61,11 @@
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ApiCop\ApiCopRule.cs" />
+    <Compile Include="ApiCop\DisabledApiCop.cs" />
+    <Compile Include="ApiCop\Interfaces\IApiCopResult.cs" />
+    <Compile Include="ApiCop\Interfaces\IApiCopRule.cs" />
+    <Compile Include="ApiCop\Listeners\TextApiCopListener.cs" />
     <Compile Include="Argument.cs" />
     <Compile Include="Attributes\CoverageExcludeAttribute.cs" />
     <Compile Include="Caching\CacheStorage.cs" />
@@ -145,6 +147,11 @@
     <Compile Include="Data\ValidationSummary.cs" />
     <Compile Include="Data\ValidatorBase.cs" />
     <Compile Include="Data\ValidatorProviderBase.cs" />
+    <Compile Include="ApiCop\ApiCop.cs" />
+    <Compile Include="ApiCop\ApiCopListenerBase.cs" />
+    <Compile Include="ApiCop\ApiCopManager.cs" />
+    <Compile Include="ApiCop\Interfaces\IApiCopListener.cs" />
+    <Compile Include="ApiCop\Interfaces\IApiCop.cs" />
     <Compile Include="DynamicEventListener.cs" />
     <Compile Include="Enum.cs" />
     <Compile Include="EventHandlerExtensions.cs" />
@@ -231,11 +238,11 @@
     <Compile Include="Logging\Configuration\LoggingConfigurationSection.cs" />
     <Compile Include="Logging\Configuration\LogListenerConfigurationCollection.cs" />
     <Compile Include="Logging\Configuration\LogListenerConfiguration.cs" />
-    <Compile Include="Logging\ConsoleLogListener.cs" />
-    <Compile Include="Logging\DebugLogListener.cs" />
+    <Compile Include="Logging\Listeners\ConsoleLogListener.cs" />
+    <Compile Include="Logging\Listeners\DebugLogListener.cs" />
     <Compile Include="Logging\EventArgs\LogMessageEventArgs.cs" />
     <Compile Include="Logging\Extensions\LogExtensions.cs" />
-    <Compile Include="Logging\FileLogListener.cs" />
+    <Compile Include="Logging\Listeners\FileLogListener.cs" />
     <Compile Include="Logging\Interfaces\IBatchLogListener.cs" />
     <Compile Include="Logging\Interfaces\ILog.cs" />
     <Compile Include="Logging\Interfaces\ILogListener.cs" />

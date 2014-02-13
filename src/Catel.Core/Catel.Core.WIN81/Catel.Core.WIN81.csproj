@@ -585,12 +585,6 @@
     <Compile Include="..\Catel.Core.NET40\Logging\BatchLogListenerBase.cs">
       <Link>Logging\BatchLogListenerBase.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\Logging\ConsoleLogListener.cs">
-      <Link>Logging\ConsoleLogListener.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\Logging\DebugLogListener.cs">
-      <Link>Logging\DebugLogListener.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\EventArgs\LogMessageEventArgs.cs">
       <Link>Logging\EventArgs\LogMessageEventArgs.cs</Link>
     </Compile>
@@ -605,6 +599,12 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Interfaces\ILogListener.cs">
       <Link>Logging\Interfaces\ILogListener.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Logging\Listeners\ConsoleLogListener.cs">
+      <Link>Logging\Listeners\ConsoleLogListener.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.cs">
+      <Link>Logging\Listeners\DebugLogListener.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Log.cs">
       <Link>Logging\Log.cs</Link>
@@ -917,15 +917,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Catel.Core.NET40\ClassDiagrams\DataObjectBase.cd">
-      <Link>ClassDiagrams\DataObjectBase.cd</Link>
-    </None>
-    <None Include="..\Catel.Core.NET40\ClassDiagrams\SavableDataObjectBase.cd">
-      <Link>ClassDiagrams\SavableDataObjectBase.cd</Link>
-    </None>
-    <None Include="..\Catel.Core.NET40\ClassDiagrams\ServiceLocator.cd">
-      <Link>ClassDiagrams\ServiceLocator.cd</Link>
-    </None>
     <PRIResource Include="..\Catel.Core.WIN80\Strings\de\Resources.resw">
       <Link>Strings\de\Resources.resw</Link>
     </PRIResource>
