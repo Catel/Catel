@@ -22,13 +22,17 @@ namespace Catel.Test.Runtime.Serialization
         /// Register the ExcludedCatelProperty property so it is known in the class.
         /// </summary>
         public static readonly PropertyData ExcludedCatelPropertyProperty = RegisterProperty("ExcludedCatelProperty", typeof (string), null);
+
+        /// <summary>
+        /// Register the ExcludedProtectedCatelProperty property so it is known in the class.
+        /// </summary>
+        public static readonly PropertyData ExcludedProtectedCatelPropertyProperty = RegisterProperty("ExcludedProtectedCatelProperty", typeof(string), null);
         #endregion
 
         #region Fields
         public string _excludedField;
 
-        [IncludeInSerialization] 
-        public string _includedField;
+        [IncludeInSerialization] public string _includedField;
         #endregion
 
         #region Properties
@@ -49,6 +53,16 @@ namespace Catel.Test.Runtime.Serialization
         {
             get { return GetValue<string>(ExcludedCatelPropertyProperty); }
             set { SetValue(ExcludedCatelPropertyProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the property value.
+        /// </summary>
+        [ExcludeFromSerialization]
+        protected string ExcludedProtectedCatelProperty
+        {
+            get { return GetValue<string>(ExcludedProtectedCatelPropertyProperty); }
+            set { SetValue(ExcludedProtectedCatelPropertyProperty, value); }
         }
 
         public string ExcludedRegularProperty { get; set; }

@@ -39,6 +39,8 @@ namespace Catel.Test.Runtime.Serialization
                 testModel.ExcludedCatelProperty = "excluded";
                 testModel.IncludedCatelProperty = "included";
 
+                testModel.SetValue(TestModel.ExcludedProtectedCatelPropertyProperty, "excluded");
+
                 var clonedModel = SerializationTestHelper.SerializeAndDeserialize(testModel, SerializationFactory.GetXmlSerializer());
 
                 Assert.AreEqual(null, clonedModel._excludedField);
@@ -49,6 +51,8 @@ namespace Catel.Test.Runtime.Serialization
 
                 Assert.AreEqual(null, clonedModel.ExcludedCatelProperty);
                 Assert.AreEqual("included", clonedModel.IncludedCatelProperty);
+
+                Assert.AreEqual(null, clonedModel.GetValue(TestModel.ExcludedProtectedCatelPropertyProperty.Name));
             }
 
             [TestMethod]
