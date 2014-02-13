@@ -12,7 +12,7 @@ namespace Catel.Test
 
     public static class TimeMeasureHelper
     {
-        public static void MeasureAction(int timesToInvoke, string description, Action action, Action initializationAction = null)
+        public static double MeasureAction(int timesToInvoke, string description, Action action, Action initializationAction = null)
         {
             Argument.IsNotNullOrWhitespace(() => description);
             Argument.IsNotNull(() => action);
@@ -45,9 +45,16 @@ namespace Catel.Test
 
 #if !SILVERLIGHT
             stopwatch.Stop();
+            var averageMs = (stopwatch.Elapsed.TotalMilliseconds / timesToInvoke);
 
-            ConsoleHelper.Write("{0}: {1}ms (average)", description, (stopwatch.Elapsed.TotalMilliseconds / 5));
+            stopwatch.Stop();
+
+            ConsoleHelper.Write("{0}: {1}ms (average)", description, averageMs);
+#else
+            var averageMs = 0d;
 #endif
+
+            return averageMs;
         }
     }
 }

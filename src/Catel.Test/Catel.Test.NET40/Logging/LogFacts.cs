@@ -31,6 +31,20 @@ namespace Catel.Test.Logging
 #endif
 
         [TestClass]
+        public class ThePerformance
+        {
+            [TestMethod]
+            public void LoggingPerformance()
+            {
+                var log = LogManager.GetLogger(typeof (ThePerformance));
+
+                var averageDuration = TimeMeasureHelper.MeasureAction(10000, "Log.Write", () => log.WriteWithData("this is a test", null, LogEvent.Error));
+
+                Assert.IsTrue(averageDuration < 1d);
+            }
+        }
+
+        [TestClass]
         public class TheIndentMethod
         {
             [TestMethod]

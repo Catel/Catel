@@ -48,20 +48,6 @@ namespace Catel.Logging
 
         #region Methods
         /// <summary>
-        /// Formats the log event to a message which can be written to a log persistence storage.
-        /// </summary>
-        /// <param name="log">The log.</param>
-        /// <param name="message">The message.</param>
-        /// <param name="logEvent">The log event.</param>
-        /// <param name="extraData">The extra data.</param>
-        /// <returns>The formatted log event.</returns>
-        protected virtual string FormatLogEvent(ILog log, string message, LogEvent logEvent, object extraData)
-        {
-            string logMessage = string.Format("{0} => [{1}] {2}", DateTime.Now.ToString("hh:mm:ss:fff"), logEvent.ToString().ToUpper(), message);
-            return logMessage;
-        }
-
-        /// <summary>
         /// Called when any message is written to the log.
         /// </summary>
         /// <param name="log">The log.</param>

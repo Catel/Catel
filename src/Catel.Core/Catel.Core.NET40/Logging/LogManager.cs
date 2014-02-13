@@ -484,8 +484,6 @@ namespace Catel.Logging
         /// <exception cref="ArgumentOutOfRangeException">The <see cref="LogEvent"/> is not supported.</exception>
         private static void OnLogMessage(object sender, LogMessageEventArgs e)
         {
-            LogMessage.SafeInvoke(sender, e);
-
             if (LogInfo.IgnoreCatelLogging && e.Log.IsCatelLogging)
             {
                 return;
@@ -495,6 +493,8 @@ namespace Catel.Logging
             {
                 return;
             }
+
+            LogMessage.SafeInvoke(sender, e);
 
             lock (_logListeners)
             {

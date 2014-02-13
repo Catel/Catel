@@ -6,11 +6,28 @@
 
 namespace Catel.Logging
 {
+    using System;
+    using System.Collections.Generic;
+
     /// <summary>
     /// Abstract base class that implements the <see cref="ILogListener"/> interface.
     /// </summary>
     public abstract class LogListenerBase : ILogListener
     {
+        private static readonly Dictionary<LogEvent, string> LogEventStrings;
+
+        /// <summary>
+        /// Initializes static members of the <see cref="LogListenerBase"/> class.
+        /// </summary>
+        static LogListenerBase()
+        {
+            LogEventStrings = new Dictionary<LogEvent, string>();
+            foreach (var enumValue in Enum<LogEvent>.GetValues())
+            {
+                LogEventStrings[enumValue] = enumValue.ToString().ToUpper();
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LogListenerBase"/> class.
         /// </summary>
@@ -70,6 +87,20 @@ namespace Catel.Logging
         /// <c>true</c> if this listener is interested in error messages; otherwise, <c>false</c>.
         /// </value>
         public bool IsErrorEnabled { get; set; }
+
+        /// <summary>
+        /// Formats the log event to a message which can be written to a log persistence storage.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="logEvent">The log event.</param>
+        /// <param name="extraData">The extra data.</param>
+        /// <returns>The formatted log event.</returns>
+        protected virtual string FormatLogEvent(ILog log, string message, LogEvent logEvent, object extraData)
+        {
+            string logMessage = string.Format("{0} => [{1}] [{2}] {3}", DateTime.Now.ToString("hh:mm:ss:fff"), LogEventStrings[logEvent], log.TargetType.FullName, message);
+            return logMessage;
+        }
 
         /// <summary>
         /// Called when any message is written to the log.

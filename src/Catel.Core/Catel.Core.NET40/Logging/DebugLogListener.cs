@@ -71,8 +71,7 @@ namespace Catel.Logging
         /// <param name="extraData">The extra data.</param>
         protected override void Write(ILog log, string message, LogEvent logEvent, object extraData)
         {
-            string consoleMessage = string.Format("{0} => [{1}] {2}", DateTime.Now.ToString("hh:mm:ss:fff"),
-                logEvent.ToString().ToUpper(), message);
+            string consoleMessage = FormatLogEvent(log, message, logEvent, extraData);
 
 #if NETFX_CORE
             System.Diagnostics.Debug.WriteLine(consoleMessage);

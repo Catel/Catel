@@ -144,6 +144,11 @@ namespace Catel.Logging
                 return;
             }
 
+            if (LogManager.LogInfo.IgnoreCatelLogging && IsCatelLogging)
+            {
+                return;
+            }
+
             Argument.IsNotNull("message", message);
 
             WriteMessage(message, extraData, LogEvent.Debug);
@@ -164,6 +169,11 @@ namespace Catel.Logging
                 return;
             }
 
+            if (LogManager.LogInfo.IgnoreCatelLogging && IsCatelLogging)
+            {
+                return;
+            }
+
             Argument.IsNotNull("exception", exception);
             Argument.IsNotNull("message", message);
 
@@ -179,6 +189,11 @@ namespace Catel.Logging
         public void InfoWithData(string message, object extraData = null)
         {
             if (!LogManager.LogInfo.IsInfoEnabled)
+            {
+                return;
+            }
+
+            if (LogManager.LogInfo.IgnoreCatelLogging && IsCatelLogging)
             {
                 return;
             }
@@ -203,6 +218,11 @@ namespace Catel.Logging
                 return;
             }
 
+            if (LogManager.LogInfo.IgnoreCatelLogging && IsCatelLogging)
+            {
+                return;
+            }
+
             Argument.IsNotNull("exception", exception);
             Argument.IsNotNull("message", message);
 
@@ -218,6 +238,11 @@ namespace Catel.Logging
         public void WarningWithData(string message, object extraData = null)
         {
             if (!LogManager.LogInfo.IsWarningEnabled)
+            {
+                return;
+            }
+
+            if (LogManager.LogInfo.IgnoreCatelLogging && IsCatelLogging)
             {
                 return;
             }
@@ -242,6 +267,11 @@ namespace Catel.Logging
                 return;
             }
 
+            if (LogManager.LogInfo.IgnoreCatelLogging && IsCatelLogging)
+            {
+                return;
+            }
+
             Argument.IsNotNull("exception", exception);
             Argument.IsNotNull("message", message);
 
@@ -257,6 +287,11 @@ namespace Catel.Logging
         public void ErrorWithData(string message, object extraData = null)
         {
             if (!LogManager.LogInfo.IsErrorEnabled)
+            {
+                return;
+            }
+
+            if (LogManager.LogInfo.IgnoreCatelLogging && IsCatelLogging)
             {
                 return;
             }
@@ -281,6 +316,11 @@ namespace Catel.Logging
                 return;
             }
 
+            if (LogManager.LogInfo.IgnoreCatelLogging && IsCatelLogging)
+            {
+                return;
+            }
+
             Argument.IsNotNull("exception", exception);
             Argument.IsNotNull("message", message);
 
@@ -297,6 +337,11 @@ namespace Catel.Logging
         public void WriteWithData(string message, object extraData, LogEvent logEvent)
         {
             if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
+            {
+                return;
+            }
+
+            if (LogManager.LogInfo.IgnoreCatelLogging && IsCatelLogging)
             {
                 return;
             }
@@ -318,6 +363,11 @@ namespace Catel.Logging
         public void WriteWithData(Exception exception, string message, object extraData, LogEvent logEvent)
         {
             if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
+            {
+                return;
+            }
+
+            if (LogManager.LogInfo.IgnoreCatelLogging && IsCatelLogging)
             {
                 return;
             }
@@ -359,13 +409,10 @@ namespace Catel.Logging
         /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
         private void WriteMessage(string message, object extraData, LogEvent logEvent)
         {
-            Argument.IsNotNull("message", message);
-            Argument.IsNotNull("logEvent", logEvent);
-
             var logMessage = LogMessage;
             if (logMessage != null)
             {
-                var eventArgs = new LogMessageEventArgs(this, string.Format("[{0}] {1}{2}", TargetType.FullName, new string(' ', IndentLevel * IndentSize), message), extraData, logEvent);
+                var eventArgs = new LogMessageEventArgs(this, string.Format("{0}{1}", new string(' ', IndentLevel * IndentSize), message), extraData, logEvent);
                 logMessage(this, eventArgs);
             }
         }
