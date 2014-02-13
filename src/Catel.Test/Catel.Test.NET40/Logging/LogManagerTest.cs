@@ -84,7 +84,7 @@ namespace Catel.Test.Logging
             Assert.IsNotNull(eventArgs);
             Assert.AreEqual(log, eventArgs.Log);
             Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
-            Assert.AreEqual("[Catel.Logging.LogManager] hello there", eventArgs.Message);
+            Assert.AreEqual("hello there", eventArgs.Message);
         }
 
         [TestMethod]
