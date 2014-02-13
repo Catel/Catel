@@ -46,6 +46,8 @@ Added/fixed:
     was changed directly on the model
 (x) CTL-332 Fixed StackOverflow in TypeHelper.IsBasicType for Nullable<> implementations
 (x) CTL-338 ViewModelManager gets double instance when it is injected before any ViewModel is used
+(x) CTL-339 Serialization of protected Catel properties in non-WPF environment are being serialized even when they
+    are decorated with the ExcludeFromSerialization attribute
 
 Roadmap:
 ========

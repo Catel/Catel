@@ -8,6 +8,7 @@
 namespace Catel.Runtime.Serialization
 {
     using System;
+    using System.Diagnostics;
 
     /// <summary>
     /// Enum representing all member group.
@@ -33,6 +34,7 @@ namespace Catel.Runtime.Serialization
     /// <summary>
     /// Member value which represents the serialization info of a specific member.
     /// </summary>
+    [DebuggerDisplay("{Name} => {Value}")]
     public class MemberValue
     {
         /// <summary>

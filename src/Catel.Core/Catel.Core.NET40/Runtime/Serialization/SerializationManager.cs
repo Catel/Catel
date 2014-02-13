@@ -128,10 +128,10 @@ namespace Catel.Runtime.Serialization
                         continue;
                     }
 
-                    var propertyType = type.GetPropertyEx(modelProperty.Value.Name);
-                    if (propertyType != null)
+                    var propertyInfo = propertyData.GetPropertyInfo(type);
+                    if (propertyInfo != null)
                     {
-                        if (!AttributeHelper.IsDecoratedWithAttribute<ExcludeFromSerializationAttribute>(propertyType))
+                        if (!AttributeHelper.IsDecoratedWithAttribute<ExcludeFromSerializationAttribute>(propertyInfo.PropertyInfo))
                         {
                             properties.Add(modelProperty.Key);
                         }
