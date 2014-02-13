@@ -45,6 +45,7 @@ Added/fixed:
 (x) CTL-331 Fixed issue where validation errors in models where not cleared in the ValidationContext when the value
     was changed directly on the model
 (x) CTL-332 Fixed StackOverflow in TypeHelper.IsBasicType for Nullable<> implementations
+(x) CTL-335 Minus sign not working in Catel:NumericTextBox is NegativeAllowed="True"
 (x) CTL-338 ViewModelManager gets double instance when it is injected before any ViewModel is used
 (x) CTL-339 Serialization of protected Catel properties in non-WPF environment are being serialized even when they
     are decorated with the ExcludeFromSerialization attribute

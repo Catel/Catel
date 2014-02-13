@@ -6,7 +6,7 @@
 
 namespace Catel.Windows.Interactivity
 {
-    
+
 #if NETFX_CORE
     using global::Windows.UI.Core;
     using global::Windows.UI.Xaml;
@@ -47,7 +47,7 @@ namespace Catel.Windows.Interactivity
 #if NETFX_CORE
             Key.CapitalLock,
 #else
-            Key.CapsLock,                                                              
+            Key.CapsLock,
 #endif
             
 #if SILVERLIGHT                                                                
@@ -170,7 +170,7 @@ namespace Catel.Windows.Interactivity
         /// <param name="e">The <see cref="KeyEventArgs"/> instance containing the event data.</param>        
         private void OnAssociatedObjectKeyDown(object sender, KeyEventArgs e)
         {
-            bool handled = true;
+            bool notAllowed = true;
             string keyValue = GetKeyValue(e);
 
             System.Globalization.CultureInfo currentCi = System.Threading.Thread.CurrentThread.CurrentCulture;
@@ -178,24 +178,28 @@ namespace Catel.Windows.Interactivity
 
             if (keyValue == numberDecimalSeparator && IsDecimalAllowed)
             {
-                handled = AssociatedObject.Text.Contains(numberDecimalSeparator);
+                notAllowed = AssociatedObject.Text.Contains(numberDecimalSeparator);
             }
 #if SILVERLIGHT
             else if (keyValue == MinusCharacter && IsNegativeAllowed)
             {
-                handled = AssociatedObject.Text.Length > 0;  
+                notAllowed = AssociatedObject.Text.Length > 0;
             }
             else if (AllowedKeys.Contains(e.Key) || IsDigit(e.Key))
             {
-                handled = false;
+                notAllowed = false;
             }
 #else
+            else if (keyValue == MinusCharacter && IsNegativeAllowed)
+            {
+                notAllowed = ((TextBox)sender).CaretIndex > 0;
+            }
             else if (AllowedKeys.Contains(e.Key) || IsDigit(e.Key))
             {
-                handled = (e.Key == Key.OemMinus && ((TextBox)sender).CaretIndex > 0 && IsNegativeAllowed);
+                notAllowed = (e.Key == Key.OemMinus && ((TextBox)sender).CaretIndex > 0 && IsNegativeAllowed);
             }
 #endif
-            e.Handled = handled;
+            e.Handled = notAllowed;
         }
 
         /// <summary>
@@ -222,9 +226,9 @@ namespace Catel.Windows.Interactivity
         /// <param name="e">The <see cref="DataObjectPastingEventArgs"/> instance containing the event data.</param>
         private void OnPaste(object sender, DataObjectPastingEventArgs e)
         {
-            if (e.DataObject.GetDataPresent(typeof (string)))
+            if (e.DataObject.GetDataPresent(typeof(string)))
             {
-                var text = (string) e.DataObject.GetData(typeof (string));
+                var text = (string)e.DataObject.GetData(typeof(string));
                 if (!IsDigitsOnly(text))
                 {
                     Log.Warning("Pasted text '{0}' contains non-acceptable characters, paste is not allowed", text);
@@ -292,7 +296,7 @@ namespace Catel.Windows.Interactivity
             string keyValue = string.Empty;
 
 #if NET
-            if (e.Key == Key.OemMinus)
+            if (e.Key == Key.OemMinus || e.Key == Key.Subtract)
             {
                 keyValue = MinusCharacter;
             }
