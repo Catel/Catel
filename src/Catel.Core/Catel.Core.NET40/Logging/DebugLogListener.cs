@@ -82,6 +82,8 @@ namespace Catel.Logging
             {
                 _dispatcher.BeginInvoke(() => _console.InvokeSelf(consoleMessage));
             }
+
+            System.Diagnostics.Debug.WriteLine(consoleMessage);
 #elif NET
             switch (logEvent)
             {
