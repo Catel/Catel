@@ -12,5 +12,33 @@ namespace Catel.ApiCop
     /// </summary>
     public class TextApiCopListener : ApiCopListenerBase
     {
+        /// <summary>
+        /// Called when the listener is about to write the results.
+        /// </summary>
+        protected override void BeginWriting()
+        {
+            base.BeginWriting();
+
+            // TODO: Create text fix
+        }
+
+        /// <summary>
+        /// Writes the result to the listener target.
+        /// </summary>
+        /// <param name="result">The result.</param>
+        protected override void WriteResult(IApiCopResult result)
+        {
+            // TODO: Write result to file
+        }
+
+        /// <summary>
+        /// Called when the listener has finished writing all the results.
+        /// </summary>
+        protected override void EndWriting()
+        {
+            // TODO: Close text file
+
+            base.EndWriting();
+        }
     }
 }

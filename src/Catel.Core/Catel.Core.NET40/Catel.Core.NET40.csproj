@@ -61,12 +61,13 @@
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ApiCop\ApiCopResult.cs" />
     <Compile Include="ApiCop\ApiCopRule.cs" />
-    <Compile Include="ApiCop\DisabledApiCop.cs" />
+    <Compile Include="ApiCop\ApiCopRuleLevel.cs" />
     <Compile Include="ApiCop\Interfaces\IApiCopResult.cs" />
     <Compile Include="ApiCop\Interfaces\IApiCopRule.cs" />
     <Compile Include="ApiCop\Listeners\TextApiCopListener.cs" />
-    <Compile Include="ApiCop\Rules\ApiCopCounterRule.cs" />
+    <Compile Include="ApiCop\Rules\UnusedFeatureApiCopRule.cs" />
     <Compile Include="Argument.cs" />
     <Compile Include="Attributes\CoverageExcludeAttribute.cs" />
     <Compile Include="Caching\CacheStorage.cs" />

@@ -9,6 +9,7 @@ namespace Catel.ApiCop
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Runtime.CompilerServices;
     using Catel.Reflection;
 
@@ -22,20 +23,47 @@ namespace Catel.ApiCop
 
         private static readonly Dictionary<Type, IApiCop> _cops = new Dictionary<Type, IApiCop>();
 
-        private static readonly Lazy<bool> _isEnabled = new Lazy<bool>(EnvironmentHelper.IsProcessCurrentlyHostedByTool);
-
-        private static readonly IApiCop _disabledApiCop = new DisabledApiCop();
+        private static readonly IApiCop _dummyApiCop = new ApiCop(typeof(object));
         #endregion
+
+        /// <summary>
+        /// Initializes static members of the <see cref="ApiCopManager"/> class.
+        /// </summary>
+        static ApiCopManager()
+        {
+            IgnoredRules = new List<string>();
+
+            IsEnabled = Debugger.IsAttached;
+            if (IsEnabled)
+            {
+                // TODO: check if process 
+#if NET
+                AppDomain.CurrentDomain.DomainUnload += (sender, e) => WriteResults();
+#elif WINDOWS_PHONE
+
+#elif SILVERLIGHT
+
+#elif NETFX_CORE
+
+#endif
+
+                // TODO: Consider registering a listener by default
+
+            }
+        }
 
         #region Properties
         /// <summary>
         /// Gets a value indicating whether ApiCop is enabled.
         /// </summary>
         /// <value><c>true</c> if ApiCop is enabled; otherwise, <c>false</c>.</value>
-        public static bool IsEnabled
-        {
-            get { return _isEnabled.Value; }
-        }
+        public static bool IsEnabled { get; private set; }
+
+        /// <summary>
+        /// Gets the ignored rules.
+        /// </summary>
+        /// <value>The ignored rules.</value>
+        public static List<string> IgnoredRules { get; private set; }
         #endregion
 
         #region Methods
@@ -48,7 +76,7 @@ namespace Catel.ApiCop
         {
             if (!IsEnabled)
             {
-                return _disabledApiCop;
+                return _dummyApiCop;
             }
 
             var callingType = StaticHelper.GetCallingType();
@@ -66,7 +94,7 @@ namespace Catel.ApiCop
         {
             if (!IsEnabled)
             {
-                return _disabledApiCop;
+                return _dummyApiCop;
             }
 
             Argument.IsNotNull("type", type);
@@ -160,6 +188,31 @@ namespace Catel.ApiCop
             lock (_listeners)
             {
                 _listeners.Clear();
+            }
+        }
+
+        /// <summary>
+        /// Writes the results to all the registered listeners.
+        /// </summary>
+        public static void WriteResults()
+        {
+            lock (_listeners)
+            {
+                if (_listeners.Count == 0)
+                {
+                    return;
+                }
+
+                var results = new List<IApiCopResult>();
+                foreach (var cop in _cops)
+                {
+                    results.AddRange(cop.Value.GetResults());
+                }
+
+                foreach (var listener in _listeners)
+                {
+                    listener.WriteResults(results);
+                }
             }
         }
         #endregion

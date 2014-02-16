@@ -9,6 +9,8 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Catel.ApiCop;
+    using Catel.ApiCop.Rules;
     using Data;
 
     using Logging;
@@ -55,6 +57,11 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
+        /// The API cop.
+        /// </summary>
+        private static readonly IApiCop ApiCop = ApiCopManager.GetCurrentClassApiCop();
+
+        /// <summary>
         /// The grid that is injected into every user control to use as data context container
         /// with the view model.
         /// </summary>
@@ -74,6 +81,8 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// </summary>
         static UserControlLogic()
         {
+            ApiCop.RegisterRule(new UnusedFeatureApiCopRule("UserControlLogic.InfoBarMessageControl", "The InfoBarMessageControl is never found. This can have a negative impact on performance. Consider setting the SkipSearchingForInfoBarMessageControl or DefaultSkipSearchingForInfoBarMessageControlValue to true.", ApiCopRuleLevel.Error));
+                
             DefaultTransferStylesAndTransitionsToViewModelGridValue = false;
 
 #if NET || SL4 || SL5
@@ -395,6 +404,9 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 Log.Debug("Searching for an instance of the InfoBarMessageControl");
 
                 _infoBarMessageControl = FindParentByPredicate(TargetControl, o => o is InfoBarMessageControl) as InfoBarMessageControl;
+
+                ApiCop.UpdateRule<UnusedFeatureApiCopRule>("UserControlLogic.InfoBarMessageControl", 
+                    rule => rule.IncreaseCount(_infoBarMessageControl != null, TargetControlType.FullName));
 
                 Log.Debug("Finished searching for an instance of the InfoBarMessageControl");
 

@@ -142,6 +142,32 @@ namespace Catel.Data
                 }
             }
         }
+
+        /// <summary>
+        /// Updates the property value by retrieving it from the property bag. After invoking the update action,
+        /// the value will be written back to the property bag.
+        /// </summary>
+        /// <typeparam name="TValue">The type of the t value.</typeparam>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <param name="update">The update.</param>
+        public void UpdatePropertyValue<TValue>(string propertyName, Func<TValue, TValue> update)
+        {
+            Argument.IsNotNullOrWhitespace("propertyName", propertyName);
+            Argument.IsNotNull("update", update);
+
+            lock (_lockObject)
+            {
+                if (!_properties.ContainsKey(propertyName))
+                {
+                    return;
+                }
+
+                var value = (TValue) _properties[propertyName];
+                var updatedValue = update(value);
+
+                SetPropertyValue(propertyName, updatedValue);
+            }
+        }
         #endregion
     }
 }
