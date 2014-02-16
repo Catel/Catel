@@ -12,5 +12,22 @@ namespace Catel.ApiCop
     /// </summary>
     public interface IApiCopResult
     {
+        /// <summary>
+        /// Gets the cop.
+        /// </summary>
+        /// <value>The cop.</value>
+        IApiCop Cop { get; }
+
+        /// <summary>
+        /// Gets the rule.
+        /// </summary>
+        /// <value>The rule.</value>
+        IApiCopRule Rule { get; }
+
+        /// <summary>
+        /// Gets the tag.
+        /// </summary>
+        /// <value>The tag.</value>
+        string Tag { get; }
     }
 }

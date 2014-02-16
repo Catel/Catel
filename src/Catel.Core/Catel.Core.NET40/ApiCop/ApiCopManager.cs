@@ -206,7 +206,14 @@ namespace Catel.ApiCop
                 var results = new List<IApiCopResult>();
                 foreach (var cop in _cops)
                 {
-                    results.AddRange(cop.Value.GetResults());
+                    var copResults = cop.Value.GetResults();
+                    foreach (var copResult in copResults)
+                    {
+                        if (!IgnoredRules.Contains(copResult.Rule.Name))
+                        {
+                            results.Add(copResult);
+                        }
+                    }
                 }
 
                 foreach (var listener in _listeners)
