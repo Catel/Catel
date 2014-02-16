@@ -265,9 +265,6 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 return;
             }
 
-            HasHandledSaveAndCancelLogic = false;
-            _navigatingToViewComplete = true;
-
             if (e.Uri != null && e.Uri.IsNavigationToExternal())
             {
                 Log.Debug("Navigating away from the application, ignoring navigation");
@@ -287,6 +284,9 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 #endif
 
             HandleNavigated(navigationContext);
+
+            HasHandledSaveAndCancelLogic = false;
+            _navigatingToViewComplete = true;
         }
 
         /// <summary>
