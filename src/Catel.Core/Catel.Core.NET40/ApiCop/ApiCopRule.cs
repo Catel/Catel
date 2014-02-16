@@ -17,16 +17,34 @@ namespace Catel.ApiCop
         private readonly Func<IApiCop, IApiCopRule, object, bool> _predicate;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ApiCopRule"/> class.
+        /// Initializes a new instance of the <see cref="ApiCopRule" /> class.
         /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="description">The description.</param>
         /// <param name="predicate">The predicate.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="predicate"/> is <c>null</c>.</exception>
-        public ApiCopRule(Func<IApiCop, IApiCopRule, object, bool> predicate)
+        /// <exception cref="ArgumentNullException">The <paramref name="predicate" /> is <c>null</c>.</exception>
+        public ApiCopRule(string name, string description, Func<IApiCop, IApiCopRule, object, bool> predicate)
         {
-            Argument.IsNotNull(() => predicate);
+            Argument.IsNotNullOrWhitespace("name", name);
+            Argument.IsNotNullOrWhitespace("description", description);
+            Argument.IsNotNull("predicate", predicate);
 
+            Name = name;
+            Description = description;
             _predicate = predicate;
         }
+
+        /// <summary>
+        /// Gets the name.
+        /// </summary>
+        /// <value>The name.</value>
+        public string Name { get; private set; }
+
+        /// <summary>
+        /// Gets the description.
+        /// </summary>
+        /// <value>The description.</value>
+        public string Description { get; private  set; }
 
         /// <summary>
         /// Determines whether the specified ApiCop rule is valid.

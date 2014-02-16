@@ -66,6 +66,7 @@
     <Compile Include="ApiCop\Interfaces\IApiCopResult.cs" />
     <Compile Include="ApiCop\Interfaces\IApiCopRule.cs" />
     <Compile Include="ApiCop\Listeners\TextApiCopListener.cs" />
+    <Compile Include="ApiCop\Rules\ApiCopCounterRule.cs" />
     <Compile Include="Argument.cs" />
     <Compile Include="Attributes\CoverageExcludeAttribute.cs" />
     <Compile Include="Caching\CacheStorage.cs" />
