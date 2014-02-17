@@ -34,6 +34,8 @@ namespace Catel.ApiCop.Rules
         /// <param name="tag">The tag.</param>
         public void IncreaseCount(bool isUsed, string tag)
         {
+            Argument.IsNotNullOrWhitespace("tag", tag);
+
             lock (_lock)
             {
                 var propertyBag = GetPropertyBagForTag(tag);
@@ -66,6 +68,8 @@ namespace Catel.ApiCop.Rules
         /// <returns><c>true</c> if the specified ApiCop is valid; otherwise, <c>false</c>.</returns>
         public override bool IsValid(IApiCop apiCop, string tag)
         {
+            Argument.IsNotNullOrWhitespace("tag", tag);
+
             lock (_lock)
             {
                 var propertyBag = GetPropertyBagForTag(tag);
@@ -80,6 +84,24 @@ namespace Catel.ApiCop.Rules
 
                 return totalCount != unusedCount;
             }
+        }
+
+        /// <summary>
+        /// Gets the result as text.
+        /// </summary>
+        /// <param name="tag">The tag.</param>
+        /// <returns>The result as text.</returns>
+        public override string GetResultAsText(string tag)
+        {
+            var propertyBag = GetPropertyBagForTag(tag);
+            if (propertyBag.GetAllProperties().Count == 0)
+            {
+                return null;
+            }
+
+            return string.Format("[{0}] Feature used '{1}' of '{2}' times", tag,
+                propertyBag.GetPropertyValue<int>("UsedCount"),
+                propertyBag.GetPropertyValue<int>("TotalCount"));
         }
     }
 }

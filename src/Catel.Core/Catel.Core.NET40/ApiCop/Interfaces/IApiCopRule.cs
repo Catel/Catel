@@ -45,5 +45,12 @@ namespace Catel.ApiCop
         /// </summary>
         /// <returns>The list of tags.</returns>
         IEnumerable<string> GetTags();
+
+        /// <summary>
+        /// Gets the result as text.
+        /// </summary>
+        /// <param name="tag">The tag.</param>
+        /// <returns>The result as text.</returns>
+        string GetResultAsText(string tag);
     }
 }

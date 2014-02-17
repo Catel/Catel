@@ -63,6 +63,42 @@
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\ApiCop.cs">
+      <Link>ApiCop\ApiCop.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\ApiCopListenerBase.cs">
+      <Link>ApiCop\ApiCopListenerBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\ApiCopManager.cs">
+      <Link>ApiCop\ApiCopManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\ApiCopResult.cs">
+      <Link>ApiCop\ApiCopResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\ApiCopRule.cs">
+      <Link>ApiCop\ApiCopRule.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\ApiCopRuleLevel.cs">
+      <Link>ApiCop\ApiCopRuleLevel.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\Interfaces\IApiCop.cs">
+      <Link>ApiCop\Interfaces\IApiCop.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\Interfaces\IApiCopListener.cs">
+      <Link>ApiCop\Interfaces\IApiCopListener.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\Interfaces\IApiCopResult.cs">
+      <Link>ApiCop\Interfaces\IApiCopResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\Interfaces\IApiCopRule.cs">
+      <Link>ApiCop\Interfaces\IApiCopRule.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\Listeners\TextApiCopListener.cs">
+      <Link>ApiCop\Listeners\TextApiCopListener.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\Rules\UnusedFeatureApiCopRule.cs">
+      <Link>ApiCop\Rules\UnusedFeatureApiCopRule.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Argument.cs">
       <Link>Argument.cs</Link>
     </Compile>

@@ -88,5 +88,12 @@ namespace Catel.ApiCop
         /// <param name="tag">The tag.</param>
         /// <returns><c>true</c> if the specified ApiCop is valid; otherwise, <c>false</c>.</returns>
         public abstract bool IsValid(IApiCop apiCop, string tag);
+
+        /// <summary>
+        /// Gets the result as text.
+        /// </summary>
+        /// <param name="tag">The tag.</param>
+        /// <returns>The result as text.</returns>
+        public abstract string GetResultAsText(string tag);
     }
 }

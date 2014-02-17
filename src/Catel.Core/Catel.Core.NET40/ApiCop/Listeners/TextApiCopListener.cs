@@ -28,7 +28,10 @@ namespace Catel.ApiCop
         /// <param name="result">The result.</param>
         protected override void WriteResult(IApiCopResult result)
         {
-            // TODO: Write result to file
+            var text = string.Empty;
+
+            
+
         }
 
         /// <summary>
