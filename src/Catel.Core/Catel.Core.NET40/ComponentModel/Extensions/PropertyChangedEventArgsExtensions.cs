@@ -32,6 +32,23 @@ namespace System.ComponentModel
         }
 
         /// <summary>
+        /// Determines whether the specified instance of the <see cref="PropertyChangedEventArgs" /> represents a change notification
+        /// for the property specified by the property name.
+        /// </summary>
+        /// <param name="e">The <see cref="PropertyChangedEventArgs" /> instance containing the event data.</param>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <returns><c>true</c> if <see cref="PropertyChangedEventArgs.PropertyName"/> equals the property from the property expression; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="e" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
+        public static bool HasPropertyChanged(this PropertyChangedEventArgs e, string propertyName)
+        {
+            Argument.IsNotNull("e", e);
+            Argument.IsNotNullOrWhitespace("propertyName", propertyName);
+
+            return string.Equals(e.PropertyName, propertyName);
+        }
+
+        /// <summary>
         /// Determines whether the specified instance of the <see cref="PropertyChangedEventArgs"/> represents a change notification
         /// for the property specified by the property expression.
         /// </summary>
