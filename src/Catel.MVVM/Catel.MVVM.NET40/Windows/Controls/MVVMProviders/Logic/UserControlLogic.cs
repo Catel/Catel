@@ -74,7 +74,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// </summary>
         static UserControlLogic()
         {
-            DefaultUnloadBehaviorValue = UnloadBehavior.CancelAndCloseViewModel;
+            DefaultUnloadBehaviorValue = UnloadBehavior.SaveAndCloseViewModel;
             DefaultTransferStylesAndTransitionsToViewModelGridValue = false;
 
 #if NET || SL4 || SL5
@@ -159,7 +159,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// <summary>
         /// Gets or sets the default value for the <see cref="UnloadBehavior"/> property.
         /// <para />
-        /// The default value is <see cref="Logic.UnloadBehavior.CancelAndCloseViewModel"/>.
+        /// The default value is <see cref="Logic.UnloadBehavior.SaveAndCloseViewModel"/>.
         /// </summary>
         /// <value>The unload behavior.</value>
         public static UnloadBehavior DefaultUnloadBehaviorValue { get; set; }

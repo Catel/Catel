@@ -227,14 +227,14 @@ namespace Catel.Windows.Controls
         /// <value>The unload behavior.</value>
         public UnloadBehavior UnloadBehavior
         {
-            get { return _logic.GetValue<UserControlLogic, UnloadBehavior>(x => x.UnloadBehavior, UnloadBehavior.CancelAndCloseViewModel); }
+            get { return _logic.GetValue<UserControlLogic, UnloadBehavior>(x => x.UnloadBehavior, UnloadBehavior.SaveAndCloseViewModel); }
             set { _logic.SetValue<UserControlLogic>(x => x.UnloadBehavior = value); }
         }
 
         /// <summary>
         /// Gets or sets the default value for the <see cref="UnloadBehavior"/> property.
         /// <para />
-        /// The default value is <see cref="Catel.Windows.Controls.MVVMProviders.Logic.UnloadBehavior.CancelAndCloseViewModel"/>.
+        /// The default value is <see cref="Catel.Windows.Controls.MVVMProviders.Logic.UnloadBehavior.SaveAndCloseViewModel"/>.
         /// </summary>
         /// <value>The unload behavior.</value>
         public static UnloadBehavior DefaultUnloadBehaviorValue
