@@ -74,6 +74,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// </summary>
         static UserControlLogic()
         {
+            DefaultUnloadBehaviorValue = UnloadBehavior.CancelAndCloseViewModel;
             DefaultTransferStylesAndTransitionsToViewModelGridValue = false;
 
 #if NET || SL4 || SL5
@@ -95,6 +96,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         {
             SupportParentViewModelContainers = true;
             CloseViewModelOnUnloaded = true;
+            UnloadBehavior = DefaultUnloadBehaviorValue;
             TransferStylesAndTransitionsToViewModelGrid = DefaultTransferStylesAndTransitionsToViewModelGridValue;
 
 #if NET || SL4 || SL5
@@ -147,6 +149,20 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// <c>true</c> if parent view model containers are supported; otherwise, <c>false</c>.
         /// </value>
         public bool SupportParentViewModelContainers { get; set; }
+
+        /// <summary>
+        /// Gets or sets the unload behavior when the data context of the target control changes.
+        /// </summary>
+        /// <value>The unload behavior.</value>
+        public UnloadBehavior UnloadBehavior { get; set; }
+
+        /// <summary>
+        /// Gets or sets the default value for the <see cref="UnloadBehavior"/> property.
+        /// <para />
+        /// The default value is <see cref="Logic.UnloadBehavior.CancelAndCloseViewModel"/>.
+        /// </summary>
+        /// <value>The unload behavior.</value>
+        public static UnloadBehavior DefaultUnloadBehaviorValue { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the styles and transitions from the content of the target control
@@ -445,7 +461,8 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 
             if (CloseViewModelOnUnloaded)
             {
-                CloseAndDisposeViewModel(true);
+                bool? result = GetViewModelResultValueFromUnloadBehavior();
+                CloseAndDisposeViewModel(result);
             }
             else
             {
@@ -674,7 +691,8 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 {
                     if (ViewModel != null)
                     {
-                        CloseAndDisposeViewModel(false);
+                        bool? result = GetViewModelResultValueFromUnloadBehavior();
+                        CloseAndDisposeViewModel(result);
                     }
 
                     ViewModel = ConstructViewModelUsingArgumentOrDefaultConstructor(newDataContext);
@@ -684,13 +702,41 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             {
                 if (ViewModel != null)
                 {
-                    CloseAndDisposeViewModel(false);
+                    bool? result = GetViewModelResultValueFromUnloadBehavior();
+                    CloseAndDisposeViewModel(result);
                 }
 
                 // We closed our previous view-model, but it might be possible to construct a new view-model
                 // with an empty constructor, so try that now
                 ViewModel = ConstructViewModelUsingArgumentOrDefaultConstructor(null);
             }
+        }
+
+        /// <summary>
+        /// Gets the view model result value based on the <see cref="UnloadBehavior"/> property so it can be used for
+        /// the <see cref="CloseAndDisposeViewModel"/> method.
+        /// </summary>
+        /// <returns>The right value.</returns>
+        private bool? GetViewModelResultValueFromUnloadBehavior()
+        {
+            bool? result = null;
+
+            switch (UnloadBehavior)
+            {
+                case UnloadBehavior.CloseViewModel:
+                    result = null;
+                    break;
+
+                case UnloadBehavior.SaveAndCloseViewModel:
+                    result = true;
+                    break;
+
+                case UnloadBehavior.CancelAndCloseViewModel:
+                    result = false;
+                    break;
+            }
+
+            return result;
         }
 
         /// <summary>
