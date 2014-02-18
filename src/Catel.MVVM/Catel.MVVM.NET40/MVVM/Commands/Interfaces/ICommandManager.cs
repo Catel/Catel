@@ -50,7 +50,7 @@ namespace Catel.MVVM
         bool IsCommandCreated(string commandName);
 
         /// <summary>
-        /// Registers a command with the specified
+        /// Registers a command with the specified command name.
         /// </summary>
         /// <param name="commandName">Name of the command.</param>
         /// <param name="command">The command.</param>
@@ -61,7 +61,7 @@ namespace Catel.MVVM
         void RegisterCommand(string commandName, ICatelCommand command, IViewModel viewModel = null);
 
         /// <summary>
-        /// Registers a command with the specified
+        /// Unregisters a command with the specified command name.
         /// </summary>
         /// <param name="commandName">Name of the command.</param>
         /// <param name="command">The command.</param>
@@ -92,5 +92,25 @@ namespace Catel.MVVM
         /// </summary>
         void SubscribeToKeyboardEvents();
 #endif
+
+        /// <summary>
+        /// Registers the action with the specified command name.
+        /// </summary>
+        /// <param name="commandName">Name of the command.</param>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CommandManager.CreateCommand"/> method.</exception>
+        void RegisterAction(string commandName, Action action);
+
+        /// <summary>
+        /// Unregisters the action with the specified command name.
+        /// </summary>
+        /// <param name="commandName">Name of the command.</param>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CommandManager.CreateCommand"/> method.</exception>
+        void UnregisterAction(string commandName, Action action);
     }
 }

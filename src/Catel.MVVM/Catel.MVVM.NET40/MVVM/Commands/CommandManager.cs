@@ -172,7 +172,7 @@ namespace Catel.MVVM
         }
 
         /// <summary>
-        /// Registers a command with the specified
+        /// Registers a command with the specified command name.
         /// </summary>
         /// <param name="commandName">Name of the command.</param>
         /// <param name="command">The command.</param>
@@ -201,7 +201,35 @@ namespace Catel.MVVM
         }
 
         /// <summary>
-        /// Registers a command with the specified
+        /// Registers the action with the specified command name.
+        /// </summary>
+        /// <param name="commandName">Name of the command.</param>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CreateCommand"/> method.</exception>
+        public void RegisterAction(string commandName, Action action)
+        {
+            Argument.IsNotNullOrWhitespace("commandName", commandName);
+            Argument.IsNotNull("action", action);
+
+            lock (_lockObject)
+            {
+                Log.Debug("Registering action to '{0}'", commandName);
+
+                if (!_commands.ContainsKey(commandName))
+                {
+                    string error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    Log.Error(error);
+                    throw new InvalidOperationException(error);
+                }
+
+                _commands[commandName].RegisterAction(action);
+            }
+        }
+
+        /// <summary>
+        /// Unregisters a command with the specified command name.
         /// </summary>
         /// <param name="commandName">Name of the command.</param>
         /// <param name="command">The command.</param>
@@ -225,6 +253,34 @@ namespace Catel.MVVM
                 }
 
                 _commands[commandName].UnregisterCommand(command);
+            }
+        }
+
+        /// <summary>
+        /// Unregisters the action with the specified command name.
+        /// </summary>
+        /// <param name="commandName">Name of the command.</param>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CreateCommand"/> method.</exception>
+        public void UnregisterAction(string commandName, Action action)
+        {
+            Argument.IsNotNullOrWhitespace("commandName", commandName);
+            Argument.IsNotNull("action", action);
+
+            lock (_lockObject)
+            {
+                Log.Debug("Unregistering action from '{0}'", commandName);
+
+                if (!_commands.ContainsKey(commandName))
+                {
+                    string error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    Log.Error(error);
+                    throw new InvalidOperationException(error);
+                }
+
+                _commands[commandName].UnregisterAction(action);
             }
         }
 

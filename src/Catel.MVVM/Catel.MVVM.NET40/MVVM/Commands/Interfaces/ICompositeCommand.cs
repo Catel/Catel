@@ -27,12 +27,26 @@ namespace Catel.MVVM
         void RegisterCommand(ICatelCommand command, IViewModel viewModel = null);
 
         /// <summary>
+        /// Registers the specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        void RegisterAction(Action action);
+
+        /// <summary>
         /// Unregisters the specified command.
         /// </summary>
         /// <param name="command">The command.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
         void UnregisterCommand(ICatelCommand command);
 
+        /// <summary>
+        /// Unregisters the specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        void UnregisterAction(Action action);
+        
         /// <summary>
         /// Gets or sets whether this command should check the can execute of all commands to determine can execute for composite command.
         /// <para />
