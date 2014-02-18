@@ -11,7 +11,6 @@ namespace Catel.ApiCop
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Runtime.CompilerServices;
-    using Catel.Diagnostics;
     using Catel.Reflection;
 
     /// <summary>
@@ -25,8 +24,6 @@ namespace Catel.ApiCop
         private static readonly Dictionary<Type, IApiCop> _cops = new Dictionary<Type, IApiCop>();
 
         private static readonly IApiCop _dummyApiCop = new ApiCop(typeof(object));
-
-        private static readonly DebuggerWatcher _debuggerWatcher = new DebuggerWatcher();
         #endregion
 
         /// <summary>
@@ -37,11 +34,6 @@ namespace Catel.ApiCop
             IgnoredRules = new List<string>();
 
             IsEnabled = Debugger.IsAttached;
-            if (IsEnabled)
-            {
-                _debuggerWatcher.DebuggerDetached += OnDebuggerDetached;
-                _debuggerWatcher.Start();
-            }
         }
 
         #region Properties
@@ -213,11 +205,6 @@ namespace Catel.ApiCop
                     listener.WriteResults(results);
                 }
             }
-        }
-
-        private static void OnDebuggerDetached(object sender, EventArgs e)
-        {
-            WriteResults();
         }
         #endregion
     }

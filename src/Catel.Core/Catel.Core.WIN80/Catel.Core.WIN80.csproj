@@ -146,8 +146,14 @@
     <Compile Include="..\Catel.Core.NET40\ApiCop\Interfaces\IApiCopRule.cs">
       <Link>ApiCop\Interfaces\IApiCopRule.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\ApiCop\Listeners\TextApiCopListener.cs">
-      <Link>ApiCop\Listeners\TextApiCopListener.cs</Link>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\Listeners\ConsoleApiCopListener.cs">
+      <Link>ApiCop\Listeners\ConsoleApiCopListener.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\Listeners\TextApiCopListenerBase.cs">
+      <Link>ApiCop\Listeners\TextApiCopListenerBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\Listeners\TextFileApiCopListener.cs">
+      <Link>ApiCop\Listeners\TextFileApiCopListener.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\ApiCop\Rules\UnusedFeatureApiCopRule.cs">
       <Link>ApiCop\Rules\UnusedFeatureApiCopRule.cs</Link>
@@ -382,9 +388,6 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\ValidatorProviderBase.cs">
       <Link>Data\ValidatorProviderBase.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\Diagnostics\DebuggerWatcher.cs">
-      <Link>Diagnostics\DebuggerWatcher.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Enum.cs">
       <Link>Enum.cs</Link>

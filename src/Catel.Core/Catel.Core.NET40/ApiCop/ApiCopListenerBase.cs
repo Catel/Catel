@@ -43,47 +43,77 @@ namespace Catel.ApiCop
 
             BeginWriting();
 
-            //Dictionary<string, List<IApiCopResult>> sortedResults;
+            List<IApiCopResult> sortedResults;
 
-            //switch (Grouping)
-            //{
-            //    case ApiCopListenerGrouping.Cop:
-            //        sortedResults = (from result in results
-            //                         orderby result.Cop.TargetType.FullName
-            //                         select new KeyValuePair<string, IApiCopResult>(g.Key, g.ToList()));
-            //        break;
+            switch (Grouping)
+            {
+                case ApiCopListenerGrouping.Cop:
+                    sortedResults = (from result in results
+                                     orderby result.Cop.TargetType.FullName
+                                     select result).ToList();
+                    break;
 
-            //    case ApiCopListenerGrouping.Rule:
-            //        sortedResults = (from result in results
-            //                         orderby result.Rule.Name
-            //                         select result).ToList();
-            //        break;
+                case ApiCopListenerGrouping.Rule:
+                    sortedResults = (from result in results
+                                     orderby result.Rule.Name
+                                     select result).ToList();
+                    break;
 
-            //    case ApiCopListenerGrouping.Tag:
-            //        sortedResults = (from result in results
-            //                         orderby result.Tag
-            //                         select result).ToList();
-            //        break;
+                case ApiCopListenerGrouping.Tag:
+                    sortedResults = (from result in results
+                                     orderby result.Tag
+                                     select result).ToList();
+                    break;
 
-            //    default:
-            //        throw new ArgumentOutOfRangeException();
-            //}
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
 
-            //string previousGroupName = string.Empty;
+            WriteSummary(sortedResults);
 
-            //foreach (var result in sortedResults)
-            //{
-            //    if (!string.Equals(previousGroupName, result.))
+            string previousGroupName = string.Empty;
 
-            //    WriteResult(result);
-            //}
+            foreach (var result in sortedResults)
+            {
+                var groupName = GetGroupName(result);
+                if (!string.Equals(previousGroupName, groupName))
+                {
+                    if (!string.IsNullOrEmpty(previousGroupName))
+                    {
+                        EndWritingOfGroup(previousGroupName);
+                    }
 
-            //if (!string.IsNullOrEmpty(previousGroupName))
-            //{
-            //    EndWritingOfGroup(previousGroupName);
-            //}
+                    previousGroupName = groupName;
+                    BeginWritingOfGroup(groupName);
+                }
+
+                WriteResult(result);
+            }
+
+            if (!string.IsNullOrEmpty(previousGroupName))
+            {
+                EndWritingOfGroup(previousGroupName);
+            }
 
             EndWriting();
+        }
+
+        private string GetGroupName(IApiCopResult result)
+        {
+            switch (Grouping)
+            {
+                case ApiCopListenerGrouping.Cop:
+                    return result.Cop.TargetType.FullName;
+
+                case ApiCopListenerGrouping.Rule:
+                    return result.Rule.Name;
+
+                case ApiCopListenerGrouping.Tag:
+                    return result.Tag;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         /// <summary>
@@ -91,6 +121,15 @@ namespace Catel.ApiCop
         /// </summary>
         protected virtual void BeginWriting()
         {
+        }
+
+        /// <summary>
+        /// Writes the summary, called before any groups are written.
+        /// </summary>
+        /// <param name="results">The results.</param>
+        protected virtual void WriteSummary(IEnumerable<IApiCopResult> results)
+        {
+            
         }
 
         /// <summary>

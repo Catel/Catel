@@ -66,7 +66,9 @@
     <Compile Include="ApiCop\ApiCopRuleLevel.cs" />
     <Compile Include="ApiCop\Interfaces\IApiCopResult.cs" />
     <Compile Include="ApiCop\Interfaces\IApiCopRule.cs" />
-    <Compile Include="ApiCop\Listeners\TextApiCopListener.cs" />
+    <Compile Include="ApiCop\Listeners\ConsoleApiCopListener.cs" />
+    <Compile Include="ApiCop\Listeners\TextApiCopListenerBase.cs" />
+    <Compile Include="ApiCop\Listeners\TextFileApiCopListener.cs" />
     <Compile Include="ApiCop\Rules\UnusedFeatureApiCopRule.cs" />
     <Compile Include="Argument.cs" />
     <Compile Include="Attributes\CoverageExcludeAttribute.cs" />
@@ -154,7 +156,6 @@
     <Compile Include="ApiCop\ApiCopManager.cs" />
     <Compile Include="ApiCop\Interfaces\IApiCopListener.cs" />
     <Compile Include="ApiCop\Interfaces\IApiCop.cs" />
-    <Compile Include="Diagnostics\DebuggerWatcher.cs" />
     <Compile Include="DynamicEventListener.cs" />
     <Compile Include="Enum.cs" />
     <Compile Include="EventHandlerExtensions.cs" />
