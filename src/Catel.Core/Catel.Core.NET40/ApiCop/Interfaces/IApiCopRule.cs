@@ -27,6 +27,12 @@ namespace Catel.ApiCop
         string Description { get; }
 
         /// <summary>
+        /// Gets the URL.
+        /// </summary>
+        /// <value>The URL.</value>
+        string Url { get; }
+
+        /// <summary>
         /// Gets the level of impact this rule has.
         /// </summary>
         /// <value>The level.</value>

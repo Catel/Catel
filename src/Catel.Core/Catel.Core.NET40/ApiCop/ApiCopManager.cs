@@ -11,6 +11,7 @@ namespace Catel.ApiCop
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Runtime.CompilerServices;
+    using Catel.Diagnostics;
     using Catel.Reflection;
 
     /// <summary>
@@ -24,6 +25,8 @@ namespace Catel.ApiCop
         private static readonly Dictionary<Type, IApiCop> _cops = new Dictionary<Type, IApiCop>();
 
         private static readonly IApiCop _dummyApiCop = new ApiCop(typeof(object));
+
+        private static readonly DebuggerWatcher _debuggerWatcher = new DebuggerWatcher();
         #endregion
 
         /// <summary>
@@ -36,19 +39,8 @@ namespace Catel.ApiCop
             IsEnabled = Debugger.IsAttached;
             if (IsEnabled)
             {
-                // TODO: check if process 
-#if NET
-                AppDomain.CurrentDomain.DomainUnload += (sender, e) => WriteResults();
-#elif WINDOWS_PHONE
-
-#elif SILVERLIGHT
-
-#elif NETFX_CORE
-
-#endif
-
-                // TODO: Consider registering a listener by default
-
+                _debuggerWatcher.DebuggerDetached += OnDebuggerDetached;
+                _debuggerWatcher.Start();
             }
         }
 
@@ -167,7 +159,7 @@ namespace Catel.ApiCop
         /// </summary>
         /// <param name="listener">The listener.</param>
         /// <returns>
-        /// 	<c>true</c> if the specified listener is already registered; otherwise, <c>false</c>.
+        /// <c>true</c> if the specified listener is already registered; otherwise, <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="listener"/> is <c>null</c>.</exception>
         public static bool IsListenerRegistered(IApiCopListener listener)
@@ -221,6 +213,11 @@ namespace Catel.ApiCop
                     listener.WriteResults(results);
                 }
             }
+        }
+
+        private static void OnDebuggerDetached(object sender, EventArgs e)
+        {
+            WriteResults();
         }
         #endregion
     }

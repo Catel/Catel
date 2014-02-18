@@ -333,6 +333,9 @@
     <Compile Include="..\Catel.Core.NET40\Data\ValidatorProviderBase.cs">
       <Link>Data\ValidatorProviderBase.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Diagnostics\DebuggerWatcher.cs">
+      <Link>Diagnostics\DebuggerWatcher.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\DynamicEventListener.cs">
       <Link>DynamicEventListener.cs</Link>
     </Compile>

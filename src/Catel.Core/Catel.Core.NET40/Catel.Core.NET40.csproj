@@ -154,6 +154,7 @@
     <Compile Include="ApiCop\ApiCopManager.cs" />
     <Compile Include="ApiCop\Interfaces\IApiCopListener.cs" />
     <Compile Include="ApiCop\Interfaces\IApiCop.cs" />
+    <Compile Include="Diagnostics\DebuggerWatcher.cs" />
     <Compile Include="DynamicEventListener.cs" />
     <Compile Include="Enum.cs" />
     <Compile Include="EventHandlerExtensions.cs" />

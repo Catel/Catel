@@ -26,11 +26,13 @@ namespace Catel.ApiCop
         /// <param name="name">The name.</param>
         /// <param name="description">The description.</param>
         /// <param name="level">The level.</param>
-        protected ApiCopRule(string name, string description, ApiCopRuleLevel level)
+        /// <param name="url">The URL.</param>
+        protected ApiCopRule(string name, string description, ApiCopRuleLevel level, string url = null)
         {
             Name = name;
             Description = description;
             Level = level;
+            Url = url;
         }
 
         /// <summary>
@@ -44,6 +46,12 @@ namespace Catel.ApiCop
         /// </summary>
         /// <value>The description.</value>
         public string Description { get; private  set; }
+
+        /// <summary>
+        /// Gets the URL.
+        /// </summary>
+        /// <value>The URL.</value>
+        public string Url { get; private set; }
 
         /// <summary>
         /// Gets the level of impact this rule has.
