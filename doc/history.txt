@@ -49,6 +49,7 @@ Added/fixed:
 (x) CTL-338 ViewModelManager gets double instance when it is injected before any ViewModel is used
 (x) CTL-339 Serialization of protected Catel properties in non-WPF environment are being serialized even when they
     are decorated with the ExcludeFromSerialization attribute
+(x) CTL-351 CommandManager throws NullReferenceException on KeyDown when no KeyGesture is registered
 
 Roadmap:
 ========

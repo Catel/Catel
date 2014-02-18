@@ -302,9 +302,13 @@ namespace Catel.MVVM
             {
                 foreach (var commandGesture in _commandGestures)
                 {
-                    if (commandGesture.Value.Matches(e))
+                    var keyGesture = commandGesture.Value;
+                    if (keyGesture != null)
                     {
-                        ExecuteCommand(commandGesture.Key);
+                        if (keyGesture.Matches(e))
+                        {
+                            ExecuteCommand(commandGesture.Key);
+                        }
                     }
                 }
             }
