@@ -24,12 +24,16 @@ Release date:
 
 Added/fixed (BREAKING CHANGES):
 ===============================
-xxx
+(+) CTL-354 Introduced UserControl.UnloadBehavior to specify the behavior which will be handled when the view is
+    being unloaded or the data context changes. This defaults to SaveAndCloseViewModel. If other logic is required,
+    make sure to set the value on the UserControl
 
 Added/fixed:
 ============
 (+) CTL-333 Now NET40 also support the IExceptionService.ProcessAsync
 (+) CTL-340 Added LogManager.IgnoreCatelLogging to apply the setting to all ILogListener instances at once
+(+) CTL-352 Allow Action to be registered besides ICommand in the CommandManager
+(+) CTL-353 Add generic overloads for UIVisualizerService.Show and ShowDialog
 (*) CTL-326 Data annotation validation will no longer be invoked for properties with non-public getters to prevent
     first chance exceptions the first time such a property is being validated
 (*) CTL-334 ViewModelBase now respects SuspendValidation during saving, which means that even if there are validation 
@@ -49,6 +53,7 @@ Added/fixed:
 (x) CTL-338 ViewModelManager gets double instance when it is injected before any ViewModel is used
 (x) CTL-339 Serialization of protected Catel properties in non-WPF environment are being serialized even when they
     are decorated with the ExcludeFromSerialization attribute
+(x) CTL-351 CommandManager throws NullReferenceException on KeyDown when no KeyGesture is registered
 
 Roadmap:
 ========

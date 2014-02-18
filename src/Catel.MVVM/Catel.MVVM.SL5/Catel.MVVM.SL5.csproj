@@ -115,6 +115,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\TaskCommand.cs">
       <Link>MVVM\Commands\TaskCommand.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Extensions\IUIVisualizerServiceExtensions.cs">
+      <Link>MVVM\Services\Extensions\IUIVisualizerServiceExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\FileServiceBase.cs">
       <Link>MVVM\Services\FileServiceBase.cs</Link>
     </Compile>

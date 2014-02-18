@@ -85,9 +85,9 @@ namespace Catel.Reflection
 
             MemberExpression memberExpression;
 
-            if (propertyExpression is UnaryExpression)
+            var unaryExpression = propertyExpression as UnaryExpression;
+            if (unaryExpression != null)
             {
-                var unaryExpression = (UnaryExpression)propertyExpression;
                 memberExpression = unaryExpression.Operand as MemberExpression;
             }
             else

@@ -36,6 +36,27 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 #endif
 
     /// <summary>
+    /// Available unload behaviors.
+    /// </summary>
+    public enum UnloadBehavior
+    {
+        /// <summary>
+        /// Closes the view model.
+        /// </summary>
+        CloseViewModel,
+
+        /// <summary>
+        /// Saves and closes the view model.
+        /// </summary>
+        SaveAndCloseViewModel,
+
+        /// <summary>
+        /// Cancels and closes the view model.
+        /// </summary>
+        CancelAndCloseViewModel
+    }
+
+    /// <summary>
     /// Available view load state events.
     /// </summary>
     public enum ViewLoadStateEvent

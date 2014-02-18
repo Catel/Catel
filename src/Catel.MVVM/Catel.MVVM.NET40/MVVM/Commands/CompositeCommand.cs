@@ -23,6 +23,7 @@ namespace Catel.MVVM
 
         private readonly object _lock = new object();
         private readonly List<CommandInfo> _commandInfo = new List<CommandInfo>();
+        private readonly List<Action> _actions = new List<Action>(); 
 
         #region Constructors
         /// <summary>
@@ -63,6 +64,18 @@ namespace Catel.MVVM
                     catch (Exception ex)
                     {
                         Log.Error(ex, "Failed to execute one of the commands in the composite commands, execution will continue");
+                    }
+                }
+
+                foreach (var action in _actions)
+                {
+                    try
+                    {
+                        action();
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, "Failed to execute one of the actions in the composite commands, execution will continue");
                     }
                 }
             }
@@ -111,6 +124,23 @@ namespace Catel.MVVM
         }
 
         /// <summary>
+        /// Registers the specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        public void RegisterAction(Action action)
+        {
+            Argument.IsNotNull("action", action);
+
+            lock (_lock)
+            {
+                _actions.Add(action);
+
+                Log.Debug("Registered action in CompositeCommand");
+            }
+        }
+
+        /// <summary>
         /// Unregisters the specified command.
         /// </summary>
         /// <param name="command">The command.</param>
@@ -130,6 +160,29 @@ namespace Catel.MVVM
                         _commandInfo.RemoveAt(i);
 
                         Log.Debug("Unregistered command from CompositeCommand");
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Unregisters the specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        public void UnregisterAction(Action action)
+        {
+            Argument.IsNotNull("action", action);
+
+            lock (_lock)
+            {
+                for (int i = _actions.Count - 1; i >= 0; i--)
+                {
+                    if (ReferenceEquals(_actions[i], action))
+                    {
+                        _actions.RemoveAt(i);
+
+                        Log.Debug("Unregistered action from CompositeCommand");
                     }
                 }
             }

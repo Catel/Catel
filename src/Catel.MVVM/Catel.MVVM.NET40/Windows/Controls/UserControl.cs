@@ -222,6 +222,28 @@ namespace Catel.Windows.Controls
         }
 
         /// <summary>
+        /// Gets or sets the unload behavior when the data context of the target control changes.
+        /// </summary>
+        /// <value>The unload behavior.</value>
+        public UnloadBehavior UnloadBehavior
+        {
+            get { return _logic.GetValue<UserControlLogic, UnloadBehavior>(x => x.UnloadBehavior, UnloadBehavior.SaveAndCloseViewModel); }
+            set { _logic.SetValue<UserControlLogic>(x => x.UnloadBehavior = value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the default value for the <see cref="UnloadBehavior"/> property.
+        /// <para />
+        /// The default value is <see cref="Catel.Windows.Controls.MVVMProviders.Logic.UnloadBehavior.SaveAndCloseViewModel"/>.
+        /// </summary>
+        /// <value>The unload behavior.</value>
+        public static UnloadBehavior DefaultUnloadBehaviorValue
+        {
+            get { return UserControlLogic.DefaultUnloadBehaviorValue; }
+            set { UserControlLogic.DefaultUnloadBehaviorValue = value; }
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the styles and transitions from the content of the target control
         /// should be transfered to the view model grid which is created dynamically,.
         /// <para />
@@ -232,7 +254,7 @@ namespace Catel.Windows.Controls
         /// <value><c>true</c> if the styles and transitions should be transfered to the view model grid; otherwise, <c>false</c>.</value>
         public bool TransferStylesAndTransitionsToViewModelGrid
         {
-            get { return _logic.GetValue<UserControlLogic, bool>(x => x.TransferStylesAndTransitionsToViewModelGrid, true); }
+            get { return _logic.GetValue<UserControlLogic, bool>(x => x.TransferStylesAndTransitionsToViewModelGrid, false); }
             set { _logic.SetValue<UserControlLogic>(x => x.TransferStylesAndTransitionsToViewModelGrid = value); }
         }
 
@@ -265,7 +287,7 @@ namespace Catel.Windows.Controls
         /// </value>
         public bool SkipSearchingForInfoBarMessageControl
         {
-            get { return _logic.GetValue<UserControlLogic, bool>(x => x.SkipSearchingForInfoBarMessageControl, true); }
+            get { return _logic.GetValue<UserControlLogic, bool>(x => x.SkipSearchingForInfoBarMessageControl, false); }
             set { _logic.SetValue<UserControlLogic>(x => x.SkipSearchingForInfoBarMessageControl = value); }
         }
 
@@ -299,7 +321,7 @@ namespace Catel.Windows.Controls
         /// </value>
         public bool CreateWarningAndErrorValidatorForViewModel
         {
-            get { return _logic.GetValue<UserControlLogic, bool>(x => x.CreateWarningAndErrorValidatorForViewModel, false); }
+            get { return _logic.GetValue<UserControlLogic, bool>(x => x.CreateWarningAndErrorValidatorForViewModel, true); }
             set { _logic.SetValue<UserControlLogic>(x => x.CreateWarningAndErrorValidatorForViewModel = value); }
         }
 
