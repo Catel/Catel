@@ -81,7 +81,11 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// </summary>
         static UserControlLogic()
         {
-            ApiCop.RegisterRule(new UnusedFeatureApiCopRule("UserControlLogic.InfoBarMessageControl", "The InfoBarMessageControl is never found. This can have a negative impact on performance. Consider setting the SkipSearchingForInfoBarMessageControl or DefaultSkipSearchingForInfoBarMessageControlValue to true.", ApiCopRuleLevel.Error));
+            ApiCop.RegisterRule(new UnusedFeatureApiCopRule("UserControlLogic.InfoBarMessageControl", "The InfoBarMessageControl is not found in the visual tree. This will have a negative impact on performance. Consider setting the SkipSearchingForInfoBarMessageControl or DefaultSkipSearchingForInfoBarMessageControlValue to true.", ApiCopRuleLevel.Error,
+                "https://catelproject.atlassian.net/wiki/display/CTL/Performance+considerations"));
+
+            ApiCop.RegisterRule(new UnusedFeatureApiCopRule("UserControlLogic.CreateWarningAndErrorValidator", "The InfoBarMessageControl is not found in the visual tree. Only use this feature in combination with the InfoBarMessageControl or a customized class which uses the WarningAndErrorValidator. Consider setting the CreateWarningAndErrorValidatorForViewModel or DefaultCreateWarningAndErrorValidatorForViewModelValue to true.", ApiCopRuleLevel.Error,
+                "https://catelproject.atlassian.net/wiki/display/CTL/Performance+considerations"));
                 
 			DefaultUnloadBehaviorValue = UnloadBehavior.SaveAndCloseViewModel;
             DefaultTransferStylesAndTransitionsToViewModelGridValue = false;
@@ -422,6 +426,9 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 _infoBarMessageControl = FindParentByPredicate(TargetControl, o => o is InfoBarMessageControl) as InfoBarMessageControl;
 
                 ApiCop.UpdateRule<UnusedFeatureApiCopRule>("UserControlLogic.InfoBarMessageControl", 
+                    rule => rule.IncreaseCount(_infoBarMessageControl != null, TargetControlType.FullName));
+
+                ApiCop.UpdateRule<UnusedFeatureApiCopRule>("UserControlLogic.CreateWarningAndErrorValidator",
                     rule => rule.IncreaseCount(_infoBarMessageControl != null, TargetControlType.FullName));
 
                 Log.Debug("Finished searching for an instance of the InfoBarMessageControl");

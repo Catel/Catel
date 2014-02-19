@@ -68,8 +68,6 @@ namespace Catel.ApiCop
         {
             base.BeginWritingOfGroup(groupName);
 
-            WriteLine(string.Empty);
-            WriteLine(string.Empty);
             WriteLine("================================================================");
             WriteLine("{0}", groupName.ToUpper());
             WriteLine("================================================================");
@@ -93,6 +91,9 @@ namespace Catel.ApiCop
             WriteLine(string.Empty);
 
             WriteLine("{0}", result.Rule.GetResultAsText(result.Tag));
+            WriteLine(string.Empty);
+            WriteLine("----------------------------------------------------------------");
+            WriteLine(string.Empty);
         }
 
         /// <summary>
@@ -101,8 +102,7 @@ namespace Catel.ApiCop
         /// <param name="groupName">Name of the group.</param>
         protected override void EndWritingOfGroup(string groupName)
         {
-            WriteLine(string.Empty);
-            WriteLine("----------------------------------------------------------------");
+            // No group footer yet
 
             base.EndWritingOfGroup(groupName);
         }
@@ -116,7 +116,6 @@ namespace Catel.ApiCop
 
             var duration = _endTime - _startTime;
 
-            WriteLine(string.Empty);
             WriteLine("****************************************************************");
             WriteLine("End of ApiCop (r) results, generation took '{0}'", duration.ToString(@"hh\:mm\:ss\.fff"));
             WriteLine("****************************************************************");

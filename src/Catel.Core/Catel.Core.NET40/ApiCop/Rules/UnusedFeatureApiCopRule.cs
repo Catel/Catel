@@ -22,8 +22,9 @@ namespace Catel.ApiCop.Rules
         /// <param name="name">The name.</param>
         /// <param name="description">The description.</param>
         /// <param name="level">The level.</param>
-        public UnusedFeatureApiCopRule(string name, string description, ApiCopRuleLevel level)
-            : base(name, description, level)
+        /// <param name="url">The URL.</param>
+        public UnusedFeatureApiCopRule(string name, string description, ApiCopRuleLevel level, string url = null)
+            : base(name, description, level, url)
         {
         }
 
@@ -79,10 +80,10 @@ namespace Catel.ApiCop.Rules
                 }
 
                 var totalCount = propertyBag.GetPropertyValue<int>("TotalCount");
-                //var usedCount = propertyBag.GetPropertyValue<int>("UsedCount");
-                var unusedCount = propertyBag.GetPropertyValue<int>("UnusedCount");
+                var usedCount = propertyBag.GetPropertyValue<int>("UsedCount");
+                //var unusedCount = propertyBag.GetPropertyValue<int>("UnusedCount");
 
-                return totalCount == unusedCount;
+                return usedCount == totalCount;
             }
         }
 
@@ -99,7 +100,7 @@ namespace Catel.ApiCop.Rules
                 return null;
             }
 
-            return string.Format("[{0}] Feature used '{1}' of '{2}' times", tag,
+            return string.Format("[{0}] Feature used '{1}' of '{2}' times, consider turning it off by default", tag,
                 propertyBag.GetPropertyValue<int>("UsedCount"),
                 propertyBag.GetPropertyValue<int>("TotalCount"));
         }
