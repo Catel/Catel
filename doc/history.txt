@@ -30,6 +30,7 @@ Added/fixed (BREAKING CHANGES):
 
 Added/fixed:
 ============
+(+) CTL-323 Introduced ApiCop feature which will aid developers with hints and tips
 (+) CTL-333 Now NET40 also support the IExceptionService.ProcessAsync
 (+) CTL-340 Added LogManager.IgnoreCatelLogging to apply the setting to all ILogListener instances at once
 (+) CTL-352 Allow Action to be registered besides ICommand in the CommandManager
