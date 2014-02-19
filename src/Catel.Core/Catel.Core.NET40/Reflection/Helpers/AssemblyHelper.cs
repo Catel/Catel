@@ -127,6 +127,36 @@ namespace Catel.Reflection
 #endif
 
         /// <summary>
+        /// Gets the entry assembly.
+        /// </summary>
+        /// <returns>Assembly.</returns>
+        public static Assembly GetEntryAssembly()
+        {
+            Assembly assembly = null;
+
+            try
+            {
+#if NET
+                assembly = Assembly.GetEntryAssembly();
+#elif SILVERLIGHT
+                assembly = System.Windows.Application.Current.GetType().Assembly;
+#elif NETFX_CORE
+                assembly = global::Windows.ApplicationModel.Core.CoreApplication.MainView.GetType().GetAssemblyEx();
+#else
+                assembly = typeof(AssemblyHelper).Assembly;
+#endif
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to get assembly, returning Catel.Core as fallback");
+
+                assembly = typeof(AssemblyHelper).GetAssemblyEx();
+            }
+
+            return assembly;
+        }
+
+        /// <summary>
         /// Gets the assembly name with version which is currently available in the <see cref="AppDomain" />.
         /// </summary>
         /// <param name="assemblyNameWithoutVersion">The assembly name without version.</param>

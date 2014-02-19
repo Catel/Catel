@@ -116,6 +116,48 @@
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\ApiCop.cs">
+      <Link>ApiCop\ApiCop.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\ApiCopListenerBase.cs">
+      <Link>ApiCop\ApiCopListenerBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\ApiCopManager.cs">
+      <Link>ApiCop\ApiCopManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\ApiCopResult.cs">
+      <Link>ApiCop\ApiCopResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\ApiCopRule.cs">
+      <Link>ApiCop\ApiCopRule.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\ApiCopRuleLevel.cs">
+      <Link>ApiCop\ApiCopRuleLevel.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\Interfaces\IApiCop.cs">
+      <Link>ApiCop\Interfaces\IApiCop.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\Interfaces\IApiCopListener.cs">
+      <Link>ApiCop\Interfaces\IApiCopListener.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\Interfaces\IApiCopResult.cs">
+      <Link>ApiCop\Interfaces\IApiCopResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\Interfaces\IApiCopRule.cs">
+      <Link>ApiCop\Interfaces\IApiCopRule.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\Listeners\ConsoleApiCopListener.cs">
+      <Link>ApiCop\Listeners\ConsoleApiCopListener.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\Listeners\TextApiCopListenerBase.cs">
+      <Link>ApiCop\Listeners\TextApiCopListenerBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\Listeners\TextFileApiCopListener.cs">
+      <Link>ApiCop\Listeners\TextFileApiCopListener.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\Rules\UnusedFeatureApiCopRule.cs">
+      <Link>ApiCop\Rules\UnusedFeatureApiCopRule.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Argument.cs">
       <Link>Argument.cs</Link>
     </Compile>
@@ -581,12 +623,6 @@
     <Compile Include="..\Catel.Core.NET40\Logging\BatchLogListenerBase.cs">
       <Link>Logging\BatchLogListenerBase.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\Logging\ConsoleLogListener.cs">
-      <Link>Logging\ConsoleLogListener.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\Logging\DebugLogListener.cs">
-      <Link>Logging\DebugLogListener.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\EventArgs\LogMessageEventArgs.cs">
       <Link>Logging\EventArgs\LogMessageEventArgs.cs</Link>
     </Compile>
@@ -601,6 +637,12 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Interfaces\ILogListener.cs">
       <Link>Logging\Interfaces\ILogListener.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Logging\Listeners\ConsoleLogListener.cs">
+      <Link>Logging\Listeners\ConsoleLogListener.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.cs">
+      <Link>Logging\Listeners\DebugLogListener.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Log.cs">
       <Link>Logging\Log.cs</Link>
@@ -899,15 +941,6 @@
     <Compile Include="Threading\Timer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Catel.Core.NET40\ClassDiagrams\DataObjectBase.cd">
-      <Link>ClassDiagrams\DataObjectBase.cd</Link>
-    </None>
-    <None Include="..\Catel.Core.NET40\ClassDiagrams\SavableDataObjectBase.cd">
-      <Link>ClassDiagrams\SavableDataObjectBase.cd</Link>
-    </None>
-    <None Include="..\Catel.Core.NET40\ClassDiagrams\ServiceLocator.cd">
-      <Link>ClassDiagrams\ServiceLocator.cd</Link>
-    </None>
     <None Include="Fody.targets" />
     <None Include="packages.config" />
     <PRIResource Include="Strings\es\Resources.resw" />

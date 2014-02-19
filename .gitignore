@@ -21,6 +21,7 @@ obj
 *.ilk
 *.meta
 *.obj
+*.orig
 *.pch
 *.pdb
 *.pgc
