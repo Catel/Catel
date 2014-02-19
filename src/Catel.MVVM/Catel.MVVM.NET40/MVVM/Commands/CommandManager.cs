@@ -56,6 +56,9 @@ namespace Catel.MVVM
 #if !WINDOWS_PHONE
         /// <summary>
         /// Creates the command inside the command manager.
+        /// <para />
+        /// If the <paramref name="throwExceptionWhenCommandIsAlreadyCreated"/> is <c>false</c> and the command is already created, only
+        /// the input gesture is updated for the existing command.
         /// </summary>
         /// <param name="commandName">Name of the command.</param>
         /// <param name="inputGesture">The input gesture.</param>
@@ -82,6 +85,7 @@ namespace Catel.MVVM
                         throw new InvalidOperationException(error);
                     }
 
+                    _commandGestures[commandName] = inputGesture;
                     return;
                 }
 
