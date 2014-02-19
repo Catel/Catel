@@ -27,18 +27,22 @@ namespace Catel.MVVM
         /// <param name="commandName">Name of the command.</param>
         /// <param name="inputGesture">The input gesture.</param>
         /// <param name="compositeCommand">The composite command. If <c>null</c>, this will default to a new instance of <see cref="CompositeCommand"/>.</param>
+        /// <param name="throwExceptionWhenCommandIsAlreadyCreated">if set to <c>true</c>, this method will throw an exception when the command is already created.</param>
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="InvalidOperationException">The specified command is already created using the <see cref="CreateCommand"/> method.</exception>
-        void CreateCommand(string commandName, InputGesture inputGesture = null, ICompositeCommand compositeCommand = null);
+        void CreateCommand(string commandName, InputGesture inputGesture = null, ICompositeCommand compositeCommand = null,
+            bool throwExceptionWhenCommandIsAlreadyCreated = true);
 #else
         /// <summary>
         /// Creates the command inside the command manager.
         /// </summary>
         /// <param name="commandName">Name of the command.</param>
         /// <param name="compositeCommand">The composite command. If <c>null</c>, this will default to a new instance of <see cref="CompositeCommand"/>.</param>
+        /// <param name="throwExceptionWhenCommandIsAlreadyCreated">if set to <c>true</c>, this method will throw an exception when the command is already created.</param>
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="InvalidOperationException">The specified command is already created using the <see cref="CommandManager.CreateCommand"/> method.</exception>
-        void CreateCommand(string commandName, ICompositeCommand compositeCommand = null);
+        void CreateCommand(string commandName, ICompositeCommand compositeCommand = null,
+            bool throwExceptionWhenCommandIsAlreadyCreated = true);
 #endif
 
         /// <summary>
@@ -87,6 +91,15 @@ namespace Catel.MVVM
         ICommand GetCommand(string commandName);
 
 #if !WINDOWS_PHONE
+        /// <summary>
+        /// Updates the input gesture for the specified command.
+        /// </summary>
+        /// <param name="commandName">Name of the command.</param>
+        /// <param name="inputGesture">The new input gesture.</param>
+        /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CreateCommand"/> method.</exception>
+        void UpdateInputGesture(string commandName, InputGesture inputGesture = null);
+
         /// <summary>
         /// Subscribes to keyboard events.
         /// </summary>
