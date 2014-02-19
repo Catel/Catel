@@ -104,14 +104,14 @@ namespace Catel.Test.Windows.Data.Converters
         public void ConvertBack_Null()
         {
             var converter = new IsSelectedValueConverter();
-            Assert.AreEqual(ConverterHelper.DoNothingBindingValue, converter.ConvertBack(null, typeof (int), null, (CultureInfo)null));
+            Assert.AreEqual(ConverterHelper.UnsetValue, converter.ConvertBack(null, typeof (int), null, (CultureInfo)null));
         }
 
         [TestMethod]
         public void ConvertBack_True()
         {
             var converter = new IsSelectedValueConverter();
-            Assert.AreEqual(ConverterHelper.DoNothingBindingValue, converter.ConvertBack(true, typeof (int), null, (CultureInfo)null));
+            Assert.AreEqual(ConverterHelper.UnsetValue, converter.ConvertBack(true, typeof (int), null, (CultureInfo)null));
         }
 
         [TestMethod]
@@ -146,35 +146,35 @@ namespace Catel.Test.Windows.Data.Converters
         public void ConvertBack_False()
         {
             var converter = new IsSelectedValueConverter();
-            Assert.AreEqual(ConverterHelper.DoNothingBindingValue, converter.ConvertBack(false, typeof (int), null, (CultureInfo)null));
+            Assert.AreEqual(ConverterHelper.UnsetValue, converter.ConvertBack(false, typeof (int), null, (CultureInfo)null));
         }
 
         [TestMethod]
         public void ConvertBack_False_Parameter0AsValue()
         {
             var converter = new IsSelectedValueConverter();
-            Assert.AreEqual(ConverterHelper.DoNothingBindingValue, converter.ConvertBack(false, typeof (int), 0, (CultureInfo)null));
+            Assert.AreEqual(ConverterHelper.UnsetValue, converter.ConvertBack(false, typeof (int), 0, (CultureInfo)null));
         }
 
         [TestMethod]
         public void ConvertBack_False_Parameter0AsString()
         {
             var converter = new IsSelectedValueConverter();
-            Assert.AreEqual(ConverterHelper.DoNothingBindingValue, converter.ConvertBack(false, typeof (int), "0", (CultureInfo)null));
+            Assert.AreEqual(ConverterHelper.UnsetValue, converter.ConvertBack(false, typeof (int), "0", (CultureInfo)null));
         }
 
         [TestMethod]
         public void ConvertBack_False_Parameter1AsValue()
         {
             var converter = new IsSelectedValueConverter();
-            Assert.AreEqual(ConverterHelper.DoNothingBindingValue, converter.ConvertBack(false, typeof (int), 1, (CultureInfo)null));
+            Assert.AreEqual(ConverterHelper.UnsetValue, converter.ConvertBack(false, typeof (int), 1, (CultureInfo)null));
         }
 
         [TestMethod]
         public void ConvertBack_False_Parameter1AsString()
         {
             var converter = new IsSelectedValueConverter();
-            Assert.AreEqual(ConverterHelper.DoNothingBindingValue, converter.ConvertBack(false, typeof (int), "1", (CultureInfo)null));
+            Assert.AreEqual(ConverterHelper.UnsetValue, converter.ConvertBack(false, typeof (int), "1", (CultureInfo)null));
         }
         #endregion
     }

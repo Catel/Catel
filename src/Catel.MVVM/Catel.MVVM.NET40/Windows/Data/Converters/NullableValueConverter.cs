@@ -44,7 +44,7 @@ namespace Catel.Windows.Data.Converters
         /// <param name="parameter">An optional parameter to be used in the converter logic.</param>
         /// <returns>The value to be passed to the source object.</returns>
         /// <remarks>
-        /// By default, this method returns <see cref="ConverterHelper.UnsetBindingValue"/>. This method only has
+        /// By default, this method returns <see cref="ConverterHelper.UnsetValue"/>. This method only has
         /// to be overridden when it is actually used.
         /// </remarks>
         protected override object ConvertBack(object value, Type targetType, object parameter)

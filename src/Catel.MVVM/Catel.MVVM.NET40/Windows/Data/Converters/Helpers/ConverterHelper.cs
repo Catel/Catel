@@ -6,14 +6,11 @@
 
 namespace Catel.Windows.Data.Converters
 {
+    using System.Windows;
     using Reflection;
 
-#if NET
-    using System.Windows.Data;
-#elif NETFX_CORE
+#if NETFX_CORE
     using global::Windows.UI.Xaml;
-#else
-    using System.Windows;
 #endif
 
     /// <summary>
@@ -22,9 +19,9 @@ namespace Catel.Windows.Data.Converters
     public static class ConverterHelper
     {
         /// <summary>
-        /// The generic <c>Unset</c> value, compatible with WPF and Silverlight.
+        /// The generic <c>UnSet</c> value, compatible with WPF and Silverlight.
         /// </summary>
-        public static readonly object UnsetBindingValue = DependencyProperty.UnsetValue;
+        public static readonly object UnsetValue = DependencyProperty.UnsetValue;
 
         /// <summary>
         /// Checks whether the converted must be inverted. This checks the parameter input and checks whether

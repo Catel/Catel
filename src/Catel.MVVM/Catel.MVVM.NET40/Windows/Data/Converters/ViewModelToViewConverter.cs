@@ -44,11 +44,11 @@ namespace Catel.Windows.Data.Converters
         {
             if (Environment.IsInDesignMode || (value == null))
             {
-                return ConverterHelper.DoNothingBindingValue;
+                return ConverterHelper.UnsetValue;
             }
 
             var viewType = _viewLocator.ResolveView(value.GetType());
-            return (viewType != null) ? ViewHelper.ConstructViewWithViewModel(viewType, value) : ConverterHelper.DoNothingBindingValue;
+            return (viewType != null) ? ViewHelper.ConstructViewWithViewModel(viewType, value) : ConverterHelper.UnsetValue;
         }
     }
 }

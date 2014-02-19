@@ -60,7 +60,7 @@ namespace Catel.Windows.Controls
         /// </returns>
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return ConverterHelper.DoNothingBindingValue;
+            return ConverterHelper.UnsetValue;
         }
     }
 }

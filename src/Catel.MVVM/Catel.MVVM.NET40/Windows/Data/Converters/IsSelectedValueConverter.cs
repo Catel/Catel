@@ -60,14 +60,14 @@ namespace Catel.Windows.Data.Converters
         /// <param name="parameter">An optional parameter to be used in the converter logic.</param>
         /// <returns>The value to be passed to the source object.</returns>
         /// <remarks>
-        /// By default, this method returns <see cref="ConverterHelper.UnsetBindingValue"/>. This method only has
+        /// By default, this method returns <see cref="ConverterHelper.UnsetValue"/>. This method only has
         /// to be overridden when it is actually used.
         /// </remarks>
         protected override object ConvertBack(object value, Type targetType, object parameter)
         {
             if (!(value is bool))
             {
-                return ConverterHelper.UnsetBindingValue;
+                return ConverterHelper.UnsetValue;
             }
 
             int param;
@@ -81,7 +81,7 @@ namespace Catel.Windows.Data.Converters
             }
             else
             {
-                return ConverterHelper.UnsetBindingValue;
+                return ConverterHelper.UnsetValue;
             }
 
             if ((bool)value)
@@ -89,7 +89,7 @@ namespace Catel.Windows.Data.Converters
                 return param;
             }
 
-            return ConverterHelper.UnsetBindingValue;
+            return ConverterHelper.UnsetValue;
         }
     }
 }

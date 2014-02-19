@@ -107,7 +107,7 @@ namespace Catel.Test.Windows.Data.Converters
         public void ConvertBack()
         {
             var converter = new BooleanToTextConverter();
-            Assert.AreEqual(ConverterHelper.DoNothingBindingValue, converter.ConvertBack(null, typeof (bool), null, (CultureInfo)null));
+            Assert.AreEqual(ConverterHelper.UnsetValue, converter.ConvertBack(null, typeof (bool), null, (CultureInfo)null));
         }
         #endregion
 

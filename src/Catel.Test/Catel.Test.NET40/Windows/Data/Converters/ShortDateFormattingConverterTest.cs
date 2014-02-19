@@ -69,14 +69,14 @@ namespace Catel.Test.Windows.Data.Converters
         public void ConvertBack_Null_NoFormatting()
         {
             var converter = new ShortDateFormattingConverter();
-            Assert.AreEqual(ConverterHelper.DoNothingBindingValue, converter.ConvertBack(null, typeof (DateTime), null, new CultureInfo("nl-NL")));
+            Assert.AreEqual(ConverterHelper.UnsetValue, converter.ConvertBack(null, typeof (DateTime), null, new CultureInfo("nl-NL")));
         }
 
         [TestMethod]
         public void ConvertBack_Null_Formatting()
         {
             var converter = new ShortDateFormattingConverter();
-            Assert.AreEqual(ConverterHelper.DoNothingBindingValue, converter.ConvertBack(null, typeof (DateTime), "G", new CultureInfo("nl-NL")));
+            Assert.AreEqual(ConverterHelper.UnsetValue, converter.ConvertBack(null, typeof (DateTime), "G", new CultureInfo("nl-NL")));
         }
 
         [TestMethod]

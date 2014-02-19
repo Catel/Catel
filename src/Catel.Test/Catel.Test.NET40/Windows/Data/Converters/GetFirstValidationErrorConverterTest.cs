@@ -40,7 +40,7 @@ namespace Catel.Test.Windows.Data.Converters
         public void ConvertBack()
         {
             var converter = new GetFirstValidationErrorConverter();
-            Assert.AreEqual(ConverterHelper.DoNothingBindingValue, converter.ConvertBack(null, typeof (object), null, null));
+            Assert.AreEqual(ConverterHelper.UnsetValue, converter.ConvertBack(null, typeof (object), null, null));
         }
         #endregion
     }

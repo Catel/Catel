@@ -92,7 +92,7 @@ namespace Catel.Test.Windows.Data.Converters
         public void ConvertBack()
         {
             var converter = new FormattingConverter();
-            Assert.AreEqual(ConverterHelper.DoNothingBindingValue, converter.ConvertBack(null, typeof (object), null, (CultureInfo)null));
+            Assert.AreEqual(ConverterHelper.UnsetValue, converter.ConvertBack(null, typeof (object), null, (CultureInfo)null));
         }
         #endregion
     }
