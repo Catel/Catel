@@ -22,14 +22,9 @@ namespace Catel.Windows.Data.Converters
     public static class ConverterHelper
     {
         /// <summary>
-        /// The generic <c>DoNothing</c> value, compatible with WPF and Silverlight.
+        /// The generic <c>Unset</c> value, compatible with WPF and Silverlight.
         /// </summary>
-        public static readonly object DoNothingBindingValue =
-#if NET
-            Binding.DoNothing;
-#else
-            DependencyProperty.UnsetValue;
-#endif
+        public static readonly object UnsetBindingValue = DependencyProperty.UnsetValue;
 
         /// <summary>
         /// Checks whether the converted must be inverted. This checks the parameter input and checks whether
