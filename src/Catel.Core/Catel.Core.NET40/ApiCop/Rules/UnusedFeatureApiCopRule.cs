@@ -82,7 +82,7 @@ namespace Catel.ApiCop.Rules
                 //var usedCount = propertyBag.GetPropertyValue<int>("UsedCount");
                 var unusedCount = propertyBag.GetPropertyValue<int>("UnusedCount");
 
-                return totalCount != unusedCount;
+                return totalCount == unusedCount;
             }
         }
 
