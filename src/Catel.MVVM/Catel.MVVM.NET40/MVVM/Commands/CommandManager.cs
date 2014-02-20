@@ -343,14 +343,16 @@ namespace Catel.MVVM
                 return;
             }
 
-#if NET
+#if NET || SILVERLIGHT
             var application = System.Windows.Application.Current;
             if (application == null)
             {
                 Log.Warning("Application.Current is null, cannot subscribe to keyboard events");
                 return;
             }
+#endif
 
+#if NET
             var mainWindow = application.MainWindow;
             if (mainWindow == null)
             {
@@ -368,13 +370,6 @@ namespace Catel.MVVM
             mainWindow.KeyDown += OnKeyDown;
             _subscribedToKeyboardEvent = true;
 #elif SILVERLIGHT
-            var application = System.Windows.Application.Current;
-            if (application == null)
-            {
-                Log.Warning("Application.Current is null, cannot subscribe to keyboard events");
-                return;
-            }
-
             var rootVisual = application.RootVisual;
             if (rootVisual == null)
             {

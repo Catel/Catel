@@ -148,7 +148,7 @@ namespace Catel.Runtime.Serialization.Binary
 
                 if (_redirectAttributes.ContainsKey(attribute.OriginalType))
                 {
-                    Log.Warning("A redirect for type '{0}' is already added to '{1}'. The redirect to '{2}' will not be added.",
+                    Log.Warning("A redirect for type '{0}' is already added to '{1}'. The redirect to '{2}' will not be added",
                         attribute.OriginalType, _redirectAttributes[attribute.OriginalType].TypeToLoad, attribute.TypeToLoad);
                 }
                 else

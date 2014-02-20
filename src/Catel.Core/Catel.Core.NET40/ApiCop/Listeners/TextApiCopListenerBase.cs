@@ -10,7 +10,6 @@ namespace Catel.ApiCop
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Reflection;
     using Catel.Reflection;
 
     /// <summary>
@@ -38,6 +37,9 @@ namespace Catel.ApiCop
             WriteLine(string.Empty);
             WriteLine("ApiCop (r) results of '{0}' v{1}", assembly.Title(), assembly.Version());
             WriteLine("  recorded on {0}", DateTime.Now.ToString("yyyy-MM-dd HH:mm"));
+            WriteLine(string.Empty);
+            WriteLine("Note that this report is a generated advisory report. Please use ");
+            WriteLine("common sense when modifying the software according to this report");
             WriteLine(string.Empty);
             WriteLine("To ignore rules, call ApiCopManager.IgnoredRules.Add([rulename]);");
             WriteLine(string.Empty);

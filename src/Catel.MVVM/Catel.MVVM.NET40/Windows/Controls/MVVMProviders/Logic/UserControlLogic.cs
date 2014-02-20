@@ -428,8 +428,11 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 ApiCop.UpdateRule<UnusedFeatureApiCopRule>("UserControlLogic.InfoBarMessageControl", 
                     rule => rule.IncreaseCount(_infoBarMessageControl != null, TargetControlType.FullName));
 
-                ApiCop.UpdateRule<UnusedFeatureApiCopRule>("UserControlLogic.CreateWarningAndErrorValidator",
-                    rule => rule.IncreaseCount(_infoBarMessageControl != null, TargetControlType.FullName));
+                if (CreateWarningAndErrorValidatorForViewModel)
+                {
+                    ApiCop.UpdateRule<UnusedFeatureApiCopRule>("UserControlLogic.CreateWarningAndErrorValidator",
+                        rule => rule.IncreaseCount(_infoBarMessageControl != null, TargetControlType.FullName));
+                }
 
                 Log.Debug("Finished searching for an instance of the InfoBarMessageControl");
 
