@@ -4,9 +4,9 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.MVVM.Services.EventArgs
+namespace Catel.Test.Services.EventArgs
 {
-    using Catel.MVVM.Services;
+    using Catel.Services;
 
 #if NETFX_CORE
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;

@@ -13,7 +13,7 @@ namespace Catel.MVVM
     using System.Collections.Generic;
     using System.Windows.Input;
 
-    using Catel.MVVM.Services;
+    using Catel.Services;
 
     using IoC;
 

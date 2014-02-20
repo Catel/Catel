@@ -9,7 +9,7 @@ namespace Catel.Windows.Interactivity
     using System.Windows.Documents;
     using System.Windows.Interactivity;
     using IoC;
-    using MVVM.Services;
+    using Services;
     using System.Windows.Navigation;
 
     /// <summary>

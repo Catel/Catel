@@ -18,7 +18,7 @@ namespace Catel.Windows.Controls
     using Catel.Data;
     using Diagnostics;
     using MVVM;
-    using MVVM.Services;
+    using Services;
 
     /// <summary>
     /// TraceOutput view model.

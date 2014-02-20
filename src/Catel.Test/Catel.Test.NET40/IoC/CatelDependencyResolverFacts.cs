@@ -9,7 +9,7 @@ namespace Catel.Test.IoC
 {
     using System;
     using Catel.IoC;
-    using Catel.MVVM.Services;
+    using Catel.Services;
 #if NETFX_CORE
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 #else

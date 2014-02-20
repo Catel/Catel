@@ -13,7 +13,7 @@ namespace Catel.Windows
 
     using Catel.Logging;
     using Catel.MVVM.Properties;
-    using Catel.MVVM.Services;
+    using Catel.Services;
     using Catel.Windows.Threading;
 
     /// <summary>

@@ -17,7 +17,7 @@ namespace Catel.Modules.ModuleManager.ViewModels
     using Catel.Logging;
     using Catel.Modules.ModuleManager.Models;
     using Catel.MVVM;
-    using Catel.MVVM.Services;
+    using Catel.Services;
 
     using Microsoft.Practices.Prism.Modularity;
 

@@ -35,10 +35,10 @@ namespace Catel
         /// <summary>
         /// Converts a specific enum value from one specific enum type to another enum type by it's name.
         /// <para/>
-        /// For example, to convert <c>Catel.MVVM.Services.CameraType</c> to <c>Microsoft.Devices.CameraType</c>, use the
+        /// For example, to convert <c>Catel.Services.CameraType</c> to <c>Microsoft.Devices.CameraType</c>, use the
         /// following code:
         /// <para/>
-        /// ConvertEnum&lt;Microsoft.Devices.CameraType&gt;(Catel.MVVM.Services.CameraType.Primary);
+        /// ConvertEnum&lt;Microsoft.Devices.CameraType&gt;(Catel.Services.CameraType.Primary);
         /// </summary>
         /// <param name="inputEnumValue">The input enum value.</param>
         /// <returns>The converted enum value.</returns>

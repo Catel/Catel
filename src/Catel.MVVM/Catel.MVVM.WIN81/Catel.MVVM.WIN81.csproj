@@ -246,134 +246,134 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Locators\ViewModelLocator.cs">
       <Link>MVVM\Locators\ViewModelLocator.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\DispatcherService.cs">
-      <Link>MVVM\Services\DispatcherService.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\DispatcherService.cs">
+      <Link>Services\DispatcherService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\EventArgs\AccelerometerValueChangedEventArgs.cs">
-      <Link>MVVM\Services\EventArgs\AccelerometerValueChangedEventArgs.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\EventArgs\AccelerometerValueChangedEventArgs.cs">
+      <Link>Services\EventArgs\AccelerometerValueChangedEventArgs.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\EventArgs\ApplicationClosingEventArgs.cs">
-      <Link>MVVM\Services\EventArgs\ApplicationClosingEventArgs.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\EventArgs\ApplicationClosingEventArgs.cs">
+      <Link>Services\EventArgs\ApplicationClosingEventArgs.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\EventArgs\CameraOperationCompletedEventArgs.cs">
-      <Link>MVVM\Services\EventArgs\CameraOperationCompletedEventArgs.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\EventArgs\CameraOperationCompletedEventArgs.cs">
+      <Link>Services\EventArgs\CameraOperationCompletedEventArgs.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\EventArgs\ContentReadyEventArgs.cs">
-      <Link>MVVM\Services\EventArgs\ContentReadyEventArgs.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\EventArgs\ContentReadyEventArgs.cs">
+      <Link>Services\EventArgs\ContentReadyEventArgs.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\EventArgs\LocationChangedEventArgs.cs">
-      <Link>MVVM\Services\EventArgs\LocationChangedEventArgs.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\EventArgs\LocationChangedEventArgs.cs">
+      <Link>Services\EventArgs\LocationChangedEventArgs.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\EventArgs\UICompletedEventArgs.cs">
-      <Link>MVVM\Services\EventArgs\UICompletedEventArgs.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\EventArgs\UICompletedEventArgs.cs">
+      <Link>Services\EventArgs\UICompletedEventArgs.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Exceptions\PageNotRegisteredException.cs">
-      <Link>MVVM\Services\Exceptions\PageNotRegisteredException.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Exceptions\PageNotRegisteredException.cs">
+      <Link>Services\Exceptions\PageNotRegisteredException.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Exceptions\WindowNotRegisteredException.cs">
-      <Link>MVVM\Services\Exceptions\WindowNotRegisteredException.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Exceptions\WindowNotRegisteredException.cs">
+      <Link>Services\Exceptions\WindowNotRegisteredException.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\FileServiceBase.cs">
-      <Link>MVVM\Services\FileServiceBase.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\FileServiceBase.cs">
+      <Link>Services\FileServiceBase.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IAccelerometerService.cs">
-      <Link>MVVM\Services\Interfaces\IAccelerometerService.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\IAccelerometerService.cs">
+      <Link>Services\Interfaces\IAccelerometerService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IAccelerometerValue.cs">
-      <Link>MVVM\Services\Interfaces\IAccelerometerValue.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\IAccelerometerValue.cs">
+      <Link>Services\Interfaces\IAccelerometerValue.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ICameraService.cs">
-      <Link>MVVM\Services\Interfaces\ICameraService.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\ICameraService.cs">
+      <Link>Services\Interfaces\ICameraService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IDispatcherService.cs">
-      <Link>MVVM\Services\Interfaces\IDispatcherService.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\IDispatcherService.cs">
+      <Link>Services\Interfaces\IDispatcherService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IFileSupport.cs">
-      <Link>MVVM\Services\Interfaces\IFileSupport.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\IFileSupport.cs">
+      <Link>Services\Interfaces\IFileSupport.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ILocation.cs">
-      <Link>MVVM\Services\Interfaces\ILocation.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\ILocation.cs">
+      <Link>Services\Interfaces\ILocation.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ILocationService.cs">
-      <Link>MVVM\Services\Interfaces\ILocationService.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\ILocationService.cs">
+      <Link>Services\Interfaces\ILocationService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IMessageService.cs">
-      <Link>MVVM\Services\Interfaces\IMessageService.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\IMessageService.cs">
+      <Link>Services\Interfaces\IMessageService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\INavigationService.cs">
-      <Link>MVVM\Services\Interfaces\INavigationService.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\INavigationService.cs">
+      <Link>Services\Interfaces\INavigationService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IOpenFileService.cs">
-      <Link>MVVM\Services\Interfaces\IOpenFileService.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\IOpenFileService.cs">
+      <Link>Services\Interfaces\IOpenFileService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IPleaseWaitService.cs">
-      <Link>MVVM\Services\Interfaces\IPleaseWaitService.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\IPleaseWaitService.cs">
+      <Link>Services\Interfaces\IPleaseWaitService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IProcessService.cs">
-      <Link>MVVM\Services\Interfaces\IProcessService.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\IProcessService.cs">
+      <Link>Services\Interfaces\IProcessService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ISaveFileService.cs">
-      <Link>MVVM\Services\Interfaces\ISaveFileService.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\ISaveFileService.cs">
+      <Link>Services\Interfaces\ISaveFileService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ISchedulerService.cs">
-      <Link>MVVM\Services\Interfaces\ISchedulerService.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\ISchedulerService.cs">
+      <Link>Services\Interfaces\ISchedulerService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ISensorService.cs">
-      <Link>MVVM\Services\Interfaces\ISensorService.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\ISensorService.cs">
+      <Link>Services\Interfaces\ISensorService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\ISplashScreenService.cs">
-      <Link>MVVM\Services\Interfaces\ISplashScreenService.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\ISplashScreenService.cs">
+      <Link>Services\Interfaces\ISplashScreenService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IStartUpInfoProvider.cs">
-      <Link>MVVM\Services\Interfaces\IStartUpInfoProvider.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\IStartUpInfoProvider.cs">
+      <Link>Services\Interfaces\IStartUpInfoProvider.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IUIVisualizerService.cs">
-      <Link>MVVM\Services\Interfaces\IUIVisualizerService.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\IUIVisualizerService.cs">
+      <Link>Services\Interfaces\IUIVisualizerService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IVibrateService.cs">
-      <Link>MVVM\Services\Interfaces\IVibrateService.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\IVibrateService.cs">
+      <Link>Services\Interfaces\IVibrateService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Interfaces\IViewModelService.cs">
-      <Link>MVVM\Services\Interfaces\IViewModelService.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\IViewModelService.cs">
+      <Link>Services\Interfaces\IViewModelService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\MessageService.cs">
-      <Link>MVVM\Services\MessageService.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\MessageService.cs">
+      <Link>Services\MessageService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\NamingConvention.cs">
-      <Link>MVVM\Services\NamingConvention.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\NamingConvention.cs">
+      <Link>Services\NamingConvention.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\NavigationService.cs">
-      <Link>MVVM\Services\NavigationService.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\NavigationService.cs">
+      <Link>Services\NavigationService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\ProcessService.cs">
-      <Link>MVVM\Services\ProcessService.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\ProcessService.cs">
+      <Link>Services\ProcessService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\SchedulerService.cs">
-      <Link>MVVM\Services\SchedulerService.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\SchedulerService.cs">
+      <Link>Services\SchedulerService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\StartUpInfoProvider.cs">
-      <Link>MVVM\Services\StartUpInfoProvider.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\StartUpInfoProvider.cs">
+      <Link>Services\StartUpInfoProvider.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Test\MessageService.cs">
-      <Link>MVVM\Services\Test\MessageService.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Test\MessageService.cs">
+      <Link>Services\Test\MessageService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Test\OpenFileService.cs">
-      <Link>MVVM\Services\Test\OpenFileService.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Test\OpenFileService.cs">
+      <Link>Services\Test\OpenFileService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Test\PleaseWaitService.cs">
-      <Link>MVVM\Services\Test\PleaseWaitService.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Test\PleaseWaitService.cs">
+      <Link>Services\Test\PleaseWaitService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Test\ProcessService.cs">
-      <Link>MVVM\Services\Test\ProcessService.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Test\ProcessService.cs">
+      <Link>Services\Test\ProcessService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Test\SaveFileService.cs">
-      <Link>MVVM\Services\Test\SaveFileService.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Test\SaveFileService.cs">
+      <Link>Services\Test\SaveFileService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\Test\UIVisualizerService.cs">
-      <Link>MVVM\Services\Test\UIVisualizerService.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Test\UIVisualizerService.cs">
+      <Link>Services\Test\UIVisualizerService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Services\ViewModelServiceBase.cs">
-      <Link>MVVM\Services\ViewModelServiceBase.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\ViewModelServiceBase.cs">
+      <Link>Services\ViewModelServiceBase.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Tasks\ActionTask.cs">
       <Link>MVVM\Tasks\ActionTask.cs</Link>
@@ -723,8 +723,8 @@
     <Compile Include="..\Catel.MVVM.SL5\Windows\WeakFrameworkElementInfo.cs">
       <Link>Windows\WeakFrameworkElementInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.WIN80\MVVM\Services\PleaseWaitService.cs">
-      <Link>MVVM\Services\PleaseWaitService.cs</Link>
+    <Compile Include="..\Catel.MVVM.WIN80\Services\PleaseWaitService.cs">
+      <Link>Services\PleaseWaitService.cs</Link>
     </Compile>
     <Compile Include="Windows\Interactivity\Behavior.cs" />
   </ItemGroup>

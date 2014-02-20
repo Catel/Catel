@@ -14,7 +14,7 @@ namespace Catel.Test.IoC
     using Catel.Caching;
     using Catel.IoC;
     using Catel.MVVM;
-    using Catel.MVVM.Services;
+    using Catel.Services;
     using Catel.Test.Data;
 
 #if NETFX_CORE

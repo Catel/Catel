@@ -25,13 +25,13 @@ namespace Catel.IoC
     ///         <ioc>
     ///             <serviceLocatorConfigurations>
     ///                 <serviceLocatorConfiguration [name="default"] [supportDependencyInjection="true"]>
-    ///                     <register interfaceType="Catel.MVVM.Services.IUIVisualizerService" implementationType="Catel.MVVM.Services.UIVisualizerService" />
-    ///                     <register interfaceType="Catel.MVVM.Services.IProcessService" implementationType="Catel.MVVM.Services.ProcessService" />
+    ///                     <register interfaceType="Catel.Services.IUIVisualizerService" implementationType="Catel.Services.UIVisualizerService" />
+    ///                     <register interfaceType="Catel.Services.IProcessService" implementationType="Catel.Services.ProcessService" />
     ///                     <!-- Add more registrations here if is requiered -->
     ///                 </serviceLocatorConfiguration>
     ///                 <serviceLocatorConfiguration name="test" supportDependencyInjection="false">
-    ///                     <register interfaceType="Catel.MVVM.Services.IUIVisualizerService" implementationType="Catel.MVVM.Services.Test.UIVisualizerService" type="Transient"/>
-    ///                     <register interfaceType="Catel.MVVM.Services.IProcessService" implementationType="Catel.MVVM.Services.Test.ProcessService" />
+    ///                     <register interfaceType="Catel.Services.IUIVisualizerService" implementationType="Catel.Services.Test.UIVisualizerService" type="Transient"/>
+    ///                     <register interfaceType="Catel.Services.IProcessService" implementationType="Catel.Services.Test.ProcessService" />
     ///                     <!-- Add more registrations here if is requiered -->
     ///                 </serviceLocatorConfiguration>
     ///             </serviceLocatorConfigurations>

@@ -13,7 +13,7 @@ namespace Catel.Collections
     using System.Collections.Specialized;
     using System.ComponentModel;
     using IoC;
-    using MVVM.Services;
+    using Services;
 
     /// <summary>
     /// Fast implementation of <see cref="ObservableCollection{T}"/> where the change notifications

@@ -7,7 +7,7 @@
 namespace Catel.Data
 {
     using IoC;
-    using MVVM.Services;
+    using Services;
 
     /// <summary>
     /// Implementation of the <see cref="ObservableObject"/> class that will dispatch all change notifications

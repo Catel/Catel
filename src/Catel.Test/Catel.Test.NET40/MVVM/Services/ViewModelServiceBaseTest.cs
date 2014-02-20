@@ -4,9 +4,9 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.MVVM.Services
+namespace Catel.Test.Services
 {
-    using Catel.MVVM.Services;
+    using Catel.Services;
 
 #if NETFX_CORE
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;

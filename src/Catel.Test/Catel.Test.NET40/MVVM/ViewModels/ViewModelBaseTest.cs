@@ -8,7 +8,7 @@
     using System.ComponentModel;
     using System.Threading;
     using Catel.MVVM;
-    using Catel.MVVM.Services;
+    using Catel.Services;
     using TestClasses;
 
     using TestViewModel = TestClasses.TestViewModel;

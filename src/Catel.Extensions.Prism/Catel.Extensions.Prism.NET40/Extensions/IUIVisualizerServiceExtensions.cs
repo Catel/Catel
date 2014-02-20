@@ -20,7 +20,7 @@ namespace Catel
     using Microsoft.Practices.Prism.Regions;
 
     using MVVM;
-    using MVVM.Services;
+    using Services;
     using MVVM.Views;
 
     using Windows.Controls;

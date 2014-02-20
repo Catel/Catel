@@ -10,7 +10,7 @@ namespace Catel
     using System;
     using Catel.IoC;
     using Catel.MVVM;
-    using Catel.MVVM.Services;
+    using Catel.Services;
 
     /// <summary>
     /// The splash screen service extensions.

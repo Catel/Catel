@@ -11,7 +11,7 @@ namespace Catel.Test.Extensions.Prism
 
     //using Catel.IoC;
     //using Catel.Modules;
-    //using Catel.MVVM.Services;
+    //using Catel.Services;
     //using Catel.MVVM.Tasks;
     //using Catel.MVVM.ViewModels;
 

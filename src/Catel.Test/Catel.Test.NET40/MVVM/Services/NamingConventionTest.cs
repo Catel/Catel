@@ -4,11 +4,11 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.MVVM.Services
+namespace Catel.Test.Services
 {
     using System;
     using System.Collections.Generic;
-    using Catel.MVVM.Services;
+    using Catel.Services;
 
 #if NETFX_CORE
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;

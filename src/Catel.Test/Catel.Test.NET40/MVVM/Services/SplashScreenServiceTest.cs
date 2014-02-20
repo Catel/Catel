@@ -4,22 +4,22 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.MVVM.Services
+namespace Catel.Test.Services
 {
     //using System;
     //using System.Threading;
 
     //using Catel.IoC;
     //using Catel.MVVM;
-    //using Catel.MVVM.Services;
-    //using Catel.MVVM.Services.Test;
+    //using Catel.Services;
+    //using Catel.Services.Test;
     //using Catel.MVVM.Tasks;
 
     //using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     //using Moq;
 
-    //using UIVisualizerService = Catel.MVVM.Services.UIVisualizerService;
+    //using UIVisualizerService = Catel.Services.UIVisualizerService;
 
     ///// <summary>
     ///// The splash screen service test.
@@ -54,7 +54,7 @@ namespace Catel.Test.MVVM.Services
 
     //        ServiceLocator.Default.RegisterInstance<IPleaseWaitService>(pleaseWaitServiceMock.Object);
 
-    //        var splashScreenService = CreateSplashScreenService(new Catel.MVVM.Services.Test.MessageService());
+    //        var splashScreenService = CreateSplashScreenService(new Catel.Services.Test.MessageService());
     //        splashScreenService.Enqueue(new FooTask("Linking to satellite"));
     //        splashScreenService.Enqueue(new FooTask("Downloading original files from NASA servers"));
     //        splashScreenService.Enqueue(new FooTask("Replacing original files with fake ones"));
@@ -72,7 +72,7 @@ namespace Catel.Test.MVVM.Services
     //    [TestMethod]
     //    public void InvalidOperationExceptionIsRaisedIfThereAreNotTaskRegisteredCommiting()
     //    {
-    //        var splashScreenService = CreateSplashScreenService(new Catel.MVVM.Services.Test.MessageService());
+    //        var splashScreenService = CreateSplashScreenService(new Catel.Services.Test.MessageService());
     //        ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => splashScreenService.Commit());
     //    }
 
@@ -82,7 +82,7 @@ namespace Catel.Test.MVVM.Services
     //    [TestMethod]
     //    public void InvalidOperationExceptionIsRaisedIfThereAreNotTaskRegisteredWhenCommitingAsycn()
     //    {
-    //        var splashScreenService = CreateSplashScreenService(new Catel.MVVM.Services.Test.MessageService());
+    //        var splashScreenService = CreateSplashScreenService(new Catel.Services.Test.MessageService());
     //        ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => splashScreenService.CommitAsync());
     //    }
 
@@ -101,7 +101,7 @@ namespace Catel.Test.MVVM.Services
 
     //        ServiceLocator.Default.RegisterInstance<IPleaseWaitService>(pleaseWaitServiceMock.Object);
 
-    //        var splashScreenService = CreateSplashScreenService(new Catel.MVVM.Services.Test.MessageService());
+    //        var splashScreenService = CreateSplashScreenService(new Catel.Services.Test.MessageService());
     //        splashScreenService.Enqueue(new FooTask("Linking to satellite"));
     //        splashScreenService.Enqueue(new FooTask("Downloading original files from NASA servers"));
     //        splashScreenService.Enqueue(new FooTask("Replacing original files with fake ones"));
@@ -137,7 +137,7 @@ namespace Catel.Test.MVVM.Services
 
     //        ServiceLocator.Default.RegisterInstance<IPleaseWaitService>(pleaseWaitServiceMock.Object);
 
-    //        var splashScreenService = CreateSplashScreenService(new Catel.MVVM.Services.Test.MessageService());
+    //        var splashScreenService = CreateSplashScreenService(new Catel.Services.Test.MessageService());
     //        splashScreenService.Enqueue(new FooTask("Linking to satellite"));
     //        splashScreenService.Enqueue(new FooTask("Downloading original files from NASA servers"));
     //        splashScreenService.Enqueue(new FooTask("Replacing original files with fake ones"));
@@ -173,7 +173,7 @@ namespace Catel.Test.MVVM.Services
 
     //        ServiceLocator.Default.RegisterInstance<IPleaseWaitService>(pleaseWaitServiceMock.Object);
 
-    //        var splashScreenService = CreateSplashScreenService(new Catel.MVVM.Services.Test.MessageService());
+    //        var splashScreenService = CreateSplashScreenService(new Catel.Services.Test.MessageService());
     //        splashScreenService.Enqueue(new FooTask("Linking to satellite"));
     //        splashScreenService.Enqueue(new FooTask("Downloading original files from NASA servers"));
     //        splashScreenService.Enqueue(new FooTask("Replacing original files with fake ones"));
@@ -209,7 +209,7 @@ namespace Catel.Test.MVVM.Services
 
     //        ServiceLocator.Default.RegisterInstance<IPleaseWaitService>(pleaseWaitServiceMock.Object);
 
-    //        var splashScreenService = CreateSplashScreenService(new Catel.MVVM.Services.Test.MessageService());
+    //        var splashScreenService = CreateSplashScreenService(new Catel.Services.Test.MessageService());
     //        splashScreenService.Enqueue(new FooTask("Linking to satellite"));
     //        splashScreenService.Enqueue(new FooTask("Downloading original files from NASA servers"));
     //        splashScreenService.Enqueue(new FooTask("Replacing original files with fake ones"));

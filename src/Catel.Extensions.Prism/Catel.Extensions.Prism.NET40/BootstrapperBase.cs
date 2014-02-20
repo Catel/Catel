@@ -26,7 +26,7 @@ namespace Catel
     #endif
 
     using MVVM;
-    using MVVM.Services;
+    using Services;
     using MVVM.Tasks;
     
     using Reflection;
