@@ -22,10 +22,7 @@ namespace Catel.Test
                 initializationAction();
             }
 
-#if !SILVERLIGHT
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
-#endif
+            double totalMs = 0d;
 
             for (int i = 0; i < timesToInvoke; i++)
             {
@@ -39,20 +36,16 @@ namespace Catel.Test
 #if !SILVERLIGHT
                 innerStopwatch.Stop();
 
-                ConsoleHelper.Write("{0} => run {1} took {2} ms", description, i + 1, innerStopwatch.Elapsed.TotalMilliseconds);
+                var elapsed = innerStopwatch.Elapsed.TotalMilliseconds;
+                totalMs += elapsed;
+
+                ConsoleHelper.Write("{0} => run {1} took {2} ms", description, i + 1, elapsed);
 #endif
             }
 
-#if !SILVERLIGHT
-            stopwatch.Stop();
-            var averageMs = (stopwatch.Elapsed.TotalMilliseconds / timesToInvoke);
+            var averageMs = (totalMs / timesToInvoke);
 
-            stopwatch.Stop();
-
-            ConsoleHelper.Write("{0}: {1}ms (average)", description, averageMs);
-#else
-            var averageMs = 0d;
-#endif
+            ConsoleHelper.Write("{0}: {1}ms (average), {2}ms (total)", description, averageMs, totalMs);
 
             return averageMs;
         }
