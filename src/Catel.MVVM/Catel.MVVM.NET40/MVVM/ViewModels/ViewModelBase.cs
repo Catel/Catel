@@ -1289,16 +1289,15 @@ namespace Catel.MVVM
                 ViewModelManager.RegisterModel(this, model);
             }
 
+            _modelsDirtyFlags[modelProperty] = false;
+            _modelErrorInfo[modelProperty] = new ModelErrorInfo(model);
+            _modelErrorInfo[modelProperty].Updated += OnModelErrorInfoUpdated;
+
             var modelAsINotifyPropertyChanged = model as INotifyPropertyChanged;
             if (modelAsINotifyPropertyChanged != null)
             {
                 modelAsINotifyPropertyChanged.PropertyChanged += OnModelPropertyChangedInternal;
             }
-
-            _modelsDirtyFlags[modelProperty] = false;
-            _modelErrorInfo[modelProperty] = new ModelErrorInfo(model);
-
-            _modelErrorInfo[modelProperty].Updated += OnModelErrorInfoUpdated;
 
             if (SupportIEditableObject)
             {
@@ -1339,7 +1338,6 @@ namespace Catel.MVVM
             if (_modelErrorInfo.ContainsKey(modelProperty))
             {
                 var modelErrorInfo = _modelErrorInfo[modelProperty];
-
                 modelErrorInfo.Updated -= OnModelErrorInfoUpdated;
                 modelErrorInfo.CleanUp();
 
