@@ -23,7 +23,7 @@ namespace Catel.Test
                 initializationAction();
             }
 
-#if NET
+#if NET && !NET40
             var oldMode = GCSettings.LatencyMode;
             GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
 #endif
@@ -49,7 +49,7 @@ namespace Catel.Test
 #endif
             }
 
-#if NET
+#if NET && !NET40
             GCSettings.LatencyMode = oldMode;
 #endif
 
