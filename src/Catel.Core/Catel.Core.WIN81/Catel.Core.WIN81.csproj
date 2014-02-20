@@ -159,6 +159,9 @@
     <Compile Include="..\Catel.Core.NET40\ApiCop\Listeners\TextFileApiCopListener.cs">
       <Link>ApiCop\Listeners\TextFileApiCopListener.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\Rules\InitializationApiCopRule.cs">
+      <Link>ApiCop\Rules\InitializationApiCopRule.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\ApiCop\Rules\UnusedFeatureApiCopRule.cs">
       <Link>ApiCop\Rules\UnusedFeatureApiCopRule.cs</Link>
     </Compile>

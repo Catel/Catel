@@ -107,18 +107,35 @@ namespace Catel.Data
 
         /// <summary>
         /// Gets the property value.
+        /// <para />
+        /// If the property is not yet created, the default value will be returned.
         /// </summary>
-        /// <typeparam name="TValue">The type of the T value.</typeparam>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="propertyName">Name of the property.</param>
         /// <returns>The property value or the default value of <typeparamref name="TValue" /> if the property does not exist.</returns>
         /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
         public TValue GetPropertyValue<TValue>(string propertyName)
         {
+            return GetPropertyValue(propertyName, default(TValue));
+        }
+
+        /// <summary>
+        /// Gets the property value.
+        /// <para />
+        /// If the property is not yet created, the default value will be returned.
+        /// </summary>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <param name="defaultValue">The default value.</param>
+        /// <returns>The property value or the default value of <typeparamref name="TValue" /> if the property does not exist.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
+        public TValue GetPropertyValue<TValue>(string propertyName, TValue defaultValue)
+        {
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
 
             lock (_lockObject)
             {
-                return _properties.ContainsKey(propertyName) ? (TValue)_properties[propertyName] : default(TValue);
+                return _properties.ContainsKey(propertyName) ? (TValue)_properties[propertyName] : defaultValue;
             }
         }
 

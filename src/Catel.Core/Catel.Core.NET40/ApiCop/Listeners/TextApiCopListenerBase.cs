@@ -80,8 +80,11 @@ namespace Catel.ApiCop
         /// <param name="result">The result.</param>
         protected override void WriteResult(IApiCopResult result)
         {
-            WriteLine("Cop TargetType: {0}", result.Cop.TargetType);
+            WriteLine("Cop:  {0}", result.Cop.TargetType);
             WriteLine("Rule: {0} ({1})", result.Rule.Name, result.Rule.Level);
+            WriteLine(string.Empty);
+            WriteLine(result.Rule.Description);
+            WriteLine(string.Empty);
 
             if (!string.IsNullOrWhiteSpace(result.Rule.Url))
             {

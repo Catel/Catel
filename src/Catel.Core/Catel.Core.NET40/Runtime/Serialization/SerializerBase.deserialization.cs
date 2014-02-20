@@ -10,6 +10,7 @@ namespace Catel.Runtime.Serialization
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using Catel.ApiCop.Rules;
     using Catel.Logging;
     using Catel.Reflection;
     using Data;
@@ -228,6 +229,9 @@ namespace Catel.Runtime.Serialization
         /// <returns>The deserialized list of member values.</returns>
         protected virtual List<MemberValue> DeserializeMembers(ISerializationContext<TSerializationContext> context)
         {
+            ApiCop.UpdateRule<InitializationApiCopRule>("SerializerBase.WarmupAtStartup",
+                x => x.SetInitializationMode(InitializationMode.Lazy, GetType().GetSafeFullName()));
+
             var deserializedMemberValues = new List<MemberValue>();
 
             var serializerModifiers = SerializationManager.GetSerializerModifiers(context.ModelType).Reverse();

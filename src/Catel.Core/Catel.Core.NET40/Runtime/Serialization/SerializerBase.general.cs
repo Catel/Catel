@@ -11,6 +11,8 @@ namespace Catel.Runtime.Serialization
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using Catel.ApiCop;
+    using Catel.ApiCop.Rules;
     using Catel.Data;
     using Catel.IoC;
     using Catel.Logging;
@@ -29,9 +31,23 @@ namespace Catel.Runtime.Serialization
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// The API cop.
+        /// </summary>
+        private static readonly IApiCop ApiCop = ApiCopManager.GetCurrentClassApiCop();
         #endregion
 
         #region Constructors
+        /// <summary>
+        /// Initializes static members of the <see cref="SerializerBase{TSerializationContext}"/> class.
+        /// </summary>
+        static SerializerBase()
+        {
+            ApiCop.RegisterRule(new InitializationApiCopRule("SerializerBase.WarmupAtStartup", "It is recommended to warm up the serializers at application startup", ApiCopRuleLevel.Hint, InitializationMode.Eager,
+                "https://catelproject.atlassian.net/wiki/display/CTL/Introduction+to+serialization#Introductiontoserialization-Warmingupserialization"));
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SerializerBase{TSerializationContext}"/> class.
         /// </summary>
@@ -154,6 +170,9 @@ namespace Catel.Runtime.Serialization
         /// <param name="typesPerThread">The types per thread. If <c>-1</c>, all types will be initialized on the same thread.</param>
         public void Warmup(IEnumerable<Type> types, int typesPerThread = 1000)
         {
+            ApiCop.UpdateRule<InitializationApiCopRule>("SerializerBase.WarmupAtStartup", 
+                x => x.SetInitializationMode(InitializationMode.Eager, GetType().GetSafeFullName()));
+
             if (types == null)
             {
                 types = TypeCache.GetTypes(x => typeof(ModelBase).IsAssignableFromEx(x));
