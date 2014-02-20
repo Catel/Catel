@@ -278,7 +278,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 #elif WINDOWS_PHONE
             var navigationContext = ((PhoneApplicationPage)TargetControl).NavigationContext;
 #elif SILVERLIGHT
-            var navigationContext = e.Content;
+            var navigationContext = ((Page)e.Content).NavigationContext;
 #else
             var navigationContext = e.ExtraData;
 #endif

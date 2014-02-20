@@ -57,6 +57,7 @@ Added/fixed:
 (x) CTL-339 Serialization of protected Catel properties in non-WPF environment are being serialized even when they
     are decorated with the ExcludeFromSerialization attribute
 (x) CTL-351 CommandManager throws NullReferenceException on KeyDown when no KeyGesture is registered
+(x) CTL-357 NavigationContext is empty in Silverlight
 
 Roadmap:
 ========
