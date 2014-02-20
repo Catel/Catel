@@ -50,7 +50,7 @@ namespace Catel.Windows.Interactivity
         /// <value><c>true</c> if this instance is in design mode; otherwise, <c>false</c>.</value>
         protected bool IsInDesignMode
         {
-            get { return Catel.Environment.IsInDesignMode; }
+            get { return CatelEnvironment.IsInDesignMode; }
         }
 
         /// <summary>

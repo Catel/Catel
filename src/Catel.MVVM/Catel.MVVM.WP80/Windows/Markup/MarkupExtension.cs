@@ -10,7 +10,6 @@ namespace Catel.Windows.Markup
     using System;
     using System.ComponentModel;
     using Catel.Windows.Threading;
-    using Environment = Catel.Environment;
 
 #if NETFX_CORE
     using global::Windows.UI.Xaml;
@@ -35,7 +34,7 @@ namespace Catel.Windows.Markup
         /// </summary>
         protected MarkupExtension()
         {
-            if (Environment.IsInDesignMode)
+            if (CatelEnvironment.IsInDesignMode)
             {
                 return;
             }

@@ -27,6 +27,7 @@ Added/fixed (BREAKING CHANGES):
 (+) CTL-354 Introduced UserControl.UnloadBehavior to specify the behavior which will be handled when the view is
     being unloaded or the data context changes. This defaults to SaveAndCloseViewModel. If other logic is required,
     make sure to set the value on the UserControl
+(*) Renamed Catel.Environment class to Catel.CatelEnvironment to prevent name clashing with .NET Environment class
 
 Added/fixed:
 ============

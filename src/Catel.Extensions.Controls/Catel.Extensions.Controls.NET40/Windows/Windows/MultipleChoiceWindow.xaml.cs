@@ -76,7 +76,7 @@ namespace Catel.Windows
 		/// DependencyProperty definition as the backing store for ChoiceSpecify.
 		/// </summary>
 		public static readonly DependencyProperty ChoiceSpecifyProperty = DependencyProperty.Register("ChoiceSpecify", typeof(string),
-            typeof(MultipleChoiceWindow), new UIPropertyMetadata(Environment.DefaultMultiLingualDependencyPropertyValue, OnChoiceSpecifyChanged));
+            typeof(MultipleChoiceWindow), new UIPropertyMetadata(CatelEnvironment.DefaultMultiLingualDependencyPropertyValue, OnChoiceSpecifyChanged));
 
 		/// <summary>
 		/// Gets or sets SelectedChoice.

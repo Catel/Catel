@@ -57,7 +57,7 @@ namespace Catel.MVVM.Services
         public NavigationService()
         {
 #if NET || SL4 || SL5
-            var mainWindow = Catel.Environment.MainWindow;
+            var mainWindow = CatelEnvironment.MainWindow;
             if (mainWindow != null)
             {
                 mainWindow.Closing += (sender, e) =>
@@ -182,7 +182,7 @@ namespace Catel.MVVM.Services
 #if NET || SL4 || SL5
             _appClosedFromService = true;
 
-            var mainWindow = Catel.Environment.MainWindow;
+            var mainWindow = CatelEnvironment.MainWindow;
             if (mainWindow == null)
             {
                 const string error = "No main window found (not running SL out of browser? Cannot close application without a window.";

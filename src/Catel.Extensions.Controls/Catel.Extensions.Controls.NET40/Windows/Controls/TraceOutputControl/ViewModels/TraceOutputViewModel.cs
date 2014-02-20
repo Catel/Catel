@@ -263,13 +263,13 @@ namespace Catel.Windows.Controls
 
                     if (matches.Count > 0)
                     {
-                        rv.AppendFormat("{0}{4}{1}{4}{2}{3}", date, type, matches[0].Value, System.Environment.NewLine, columnText);
+                        rv.AppendFormat("{0}{4}{1}{4}{2}{3}", date, type, matches[0].Value, Environment.NewLine, columnText);
 
                         if (matches.Count > 1)
                         {
                             for (int idx = 1, max = matches.Count; idx < max; idx++)
                             {
-                                rv.AppendFormat("{0}{4}{1}{4}{2}{3}", datefiller, typefiller, matches[idx].Value, System.Environment.NewLine, columnText);
+                                rv.AppendFormat("{0}{4}{1}{4}{2}{3}", datefiller, typefiller, matches[idx].Value, Environment.NewLine, columnText);
                             }
                         }
                     }

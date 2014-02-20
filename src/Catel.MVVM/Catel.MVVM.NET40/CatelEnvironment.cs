@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Environment.cs" company="Catel development team">
+// <copyright file="CatelEnvironment.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -25,7 +25,7 @@ namespace Catel
     /// <summary>
     /// Class containing environment information.
     /// </summary>
-    public static class Environment
+    public static class CatelEnvironment
     {
         /// <summary>
         /// The default value for dependency properties that use a Properties.Resources value. Such values should be set in the constructor
@@ -128,7 +128,7 @@ namespace Catel
                 }
                 catch (Exception ex)
                 {
-                    Log.Warning(ex, "Failed to retrieve the applications MainWindow, returning null");
+                    Log.Warning(ex, "Failed to retrieve the application MainWindow, returning null");
                     return null;
                 }
 #endif

@@ -90,7 +90,7 @@ namespace Catel.Windows.Controls
         /// <param name="viewModel">The view model.</param>
         public UserControl(IViewModel viewModel)
         {
-            if (Catel.Environment.IsInDesignMode)
+            if (CatelEnvironment.IsInDesignMode)
             {
                 return;
             }

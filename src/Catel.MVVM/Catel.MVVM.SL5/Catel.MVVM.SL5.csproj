@@ -82,6 +82,9 @@
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\CatelEnvironment.cs">
+      <Link>CatelEnvironment.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Extensions\NavigationExtensions.cs">
       <Link>Extensions\NavigationExtensions.cs</Link>
     </Compile>
@@ -261,9 +264,6 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Data\DispatcherObservableObject.cs">
       <Link>Data\DispatcherObservableObject.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Environment.cs">
-      <Link>Environment.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Auditing\AuditingManager.cs">
       <Link>MVVM\Auditing\AuditingManager.cs</Link>

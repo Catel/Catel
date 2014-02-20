@@ -68,7 +68,7 @@ namespace Catel.Windows.Controls
         /// </summary>
         public StackGrid()
         {
-            if (Catel.Environment.IsInDesignMode)
+            if (CatelEnvironment.IsInDesignMode)
             {
                 Loaded += OnInitialized;
             }
@@ -94,7 +94,7 @@ namespace Catel.Windows.Controls
         /// </remarks>
         private void OnInitialized(object sender, UIEventArgs e)
         {
-            if (Catel.Environment.IsInDesignMode)
+            if (CatelEnvironment.IsInDesignMode)
             {
                 Loaded -= OnInitialized;
             }

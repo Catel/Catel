@@ -60,7 +60,7 @@ namespace Catel.Phone.Controls
         /// </remarks>
         public PhoneApplicationPage()
         {
-            if (Catel.Environment.IsInDesignMode)
+            if (CatelEnvironment.IsInDesignMode)
             {
                 return;
             }

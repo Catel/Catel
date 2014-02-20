@@ -50,7 +50,7 @@ namespace Catel.Windows
         /// DependencyProperty definition as the backing store for Explanation.
         /// </summary>
         public static readonly DependencyProperty ExplanationProperty = DependencyProperty.Register("Explanation",
-            typeof(string), typeof(MultiLineInputWindow), new UIPropertyMetadata(Environment.DefaultMultiLingualDependencyPropertyValue));
+            typeof(string), typeof(MultiLineInputWindow), new UIPropertyMetadata(CatelEnvironment.DefaultMultiLingualDependencyPropertyValue));
 
         /// <summary>
         /// Gets or sets Text.

@@ -105,7 +105,7 @@ namespace Catel.Windows.Controls
             Focusable = false;
 #endif
 
-            if (Catel.Environment.IsInDesignMode)
+            if (CatelEnvironment.IsInDesignMode)
             {
                 return;
             }
@@ -153,7 +153,7 @@ namespace Catel.Windows.Controls
         /// DependencyProperty definition as the backing store for Text.
         /// </summary>
         public static readonly DependencyProperty TextProperty =
-            DependencyProperty.Register("Text", typeof(string), typeof(InfoBarMessageControl), new PropertyMetadata(Catel.Environment.DefaultMultiLingualDependencyPropertyValue));
+            DependencyProperty.Register("Text", typeof(string), typeof(InfoBarMessageControl), new PropertyMetadata(CatelEnvironment.DefaultMultiLingualDependencyPropertyValue));
 
         /// <summary>
         /// Info message for the info bar.

@@ -204,7 +204,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             }
 
             // Very impoortant to exit here in design mode
-            if (Catel.Environment.IsInDesignMode)
+            if (CatelEnvironment.IsInDesignMode)
             {
                 return;
             }

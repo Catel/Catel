@@ -83,7 +83,7 @@
     </Compile>
     <Compile Include="Collections\FastObservableCollection.cs" />
     <Compile Include="Data\DispatcherObservableObject.cs" />
-    <Compile Include="Environment.cs" />
+    <Compile Include="CatelEnvironment.cs" />
     <Compile Include="MVVMModule.cs" />
     <Compile Include="Extensions\NavigationExtensions.cs" />
     <Compile Include="ModuleInitializer.cs" />

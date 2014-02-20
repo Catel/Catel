@@ -42,7 +42,7 @@ namespace Catel.MVVM.CSLA
         /// </summary>
         protected ViewModelBase()
         {
-            if (Catel.Environment.IsInDesignMode)
+            if (CatelEnvironment.IsInDesignMode)
             {
                 return;
             }

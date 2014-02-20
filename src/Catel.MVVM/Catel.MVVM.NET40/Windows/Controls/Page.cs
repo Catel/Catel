@@ -69,7 +69,7 @@ namespace Catel.Windows.Controls
         /// </remarks>
         public Page()
         {
-            if (Catel.Environment.IsInDesignMode)
+            if (CatelEnvironment.IsInDesignMode)
             {
                 return;
             }

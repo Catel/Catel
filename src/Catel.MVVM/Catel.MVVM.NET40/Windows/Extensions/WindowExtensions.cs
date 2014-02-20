@@ -120,7 +120,7 @@ namespace Catel.Windows
                 return;
             }
 
-            var mainWindow = Catel.Environment.MainWindow;
+            var mainWindow = CatelEnvironment.MainWindow;
             if (mainWindow != null)
             {
                 SetOwnerWindowByWindow(window, mainWindow, forceNewOwner, focusFirstControl);

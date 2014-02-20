@@ -805,7 +805,7 @@ namespace Catel.MVVM
                 }
             }
 
-            if (!Catel.Environment.IsInDesignMode)
+            if (!CatelEnvironment.IsInDesignMode)
             {
                 if (SupportIEditableObject)
                 {

@@ -221,7 +221,7 @@ namespace Catel.Windows
             DefaultButton = defaultButton;
             _infoBarMessageControlGenerationMode = infoBarMessageControlGenerationMode;
 
-            if (Catel.Environment.IsInDesignMode)
+            if (CatelEnvironment.IsInDesignMode)
             {
                 return;
             }
@@ -846,7 +846,7 @@ namespace Catel.Windows
         {
             base.OnContentChanged(oldContent, newContent);
 
-            if (Catel.Environment.IsInDesignMode)
+            if (CatelEnvironment.IsInDesignMode)
             {
                 return;
             }

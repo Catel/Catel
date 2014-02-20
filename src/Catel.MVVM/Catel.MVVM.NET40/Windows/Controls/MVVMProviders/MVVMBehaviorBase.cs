@@ -193,7 +193,7 @@ namespace Catel.Windows.Controls.MVVMProviders
         {
             Logic = CreateLogic();
 
-            if (Catel.Environment.IsInDesignMode)
+            if (CatelEnvironment.IsInDesignMode)
             {
                 return;
             }

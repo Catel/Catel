@@ -125,7 +125,7 @@ namespace Catel.Windows.Data
             _targetProperty = target.TargetProperty;
 
             // _targetProperty can be null when this is called in the Designer.
-            Debug.Assert(_targetProperty != null || Environment.IsInDesignMode);
+            Debug.Assert(_targetProperty != null || CatelEnvironment.IsInDesignMode);
 
             if (DataResource.BindingTarget == null && _targetProperty != null)
             {
