@@ -9,6 +9,7 @@ namespace Catel.Test
 {
     using System;
     using System.Diagnostics;
+    using System.Runtime;
 
     public static class TimeMeasureHelper
     {
@@ -21,6 +22,11 @@ namespace Catel.Test
             {
                 initializationAction();
             }
+
+#if NET
+            var oldMode = GCSettings.LatencyMode;
+            GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
+#endif
 
             double totalMs = 0d;
 
@@ -42,6 +48,10 @@ namespace Catel.Test
                 ConsoleHelper.Write("{0} => run {1} took {2} ms", description, i + 1, elapsed);
 #endif
             }
+
+#if NET
+            GCSettings.LatencyMode = oldMode;
+#endif
 
             var averageMs = (totalMs / timesToInvoke);
 
