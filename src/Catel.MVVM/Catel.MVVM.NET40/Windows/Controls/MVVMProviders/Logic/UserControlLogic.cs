@@ -84,7 +84,10 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             ApiCop.RegisterRule(new UnusedFeatureApiCopRule("UserControlLogic.InfoBarMessageControl", "The InfoBarMessageControl is not found in the visual tree. This will have a negative impact on performance. Consider setting the SkipSearchingForInfoBarMessageControl or DefaultSkipSearchingForInfoBarMessageControlValue to true.", ApiCopRuleLevel.Error,
                 "https://catelproject.atlassian.net/wiki/display/CTL/Performance+considerations"));
 
-            ApiCop.RegisterRule(new UnusedFeatureApiCopRule("UserControlLogic.CreateWarningAndErrorValidator", "The InfoBarMessageControl is not found in the visual tree. Only use this feature in combination with the InfoBarMessageControl or a customized class which uses the WarningAndErrorValidator. Consider setting the CreateWarningAndErrorValidatorForViewModel or DefaultCreateWarningAndErrorValidatorForViewModelValue to true.", ApiCopRuleLevel.Error,
+            ApiCop.RegisterRule(new UnusedFeatureApiCopRule("UserControlLogic.CreateWarningAndErrorValidator", "The InfoBarMessageControl is not found in the visual tree. Only use this feature in combination with the InfoBarMessageControl or a customized class which uses the WarningAndErrorValidator. Consider setting the CreateWarningAndErrorValidatorForViewModel or DefaultCreateWarningAndErrorValidatorForViewModelValue to false.", ApiCopRuleLevel.Error,
+                "https://catelproject.atlassian.net/wiki/display/CTL/Performance+considerations"));
+
+            ApiCop.RegisterRule(new UnusedFeatureApiCopRule("UserControlLogic.SupportParentViewModelContainers", "No parent IViewModelContainer is found in the visual tree. Only use this feature when there are parent IViewModelContainer instances. Consider setting the SupportParentViewModelContainers to false.", ApiCopRuleLevel.Error,
                 "https://catelproject.atlassian.net/wiki/display/CTL/Performance+considerations"));
                 
 			DefaultUnloadBehaviorValue = UnloadBehavior.SaveAndCloseViewModel;
@@ -585,6 +588,9 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             {
                 Log.Debug("Couldn't find parent view model container");
             }
+
+            ApiCop.UpdateRule<UnusedFeatureApiCopRule>("UserControlLogic.SupportParentViewModelContainers", 
+                    rule => rule.IncreaseCount(_parentViewModelContainer != null, TargetControlType.FullName));
 
             if (_parentViewModelContainer != null)
             {
