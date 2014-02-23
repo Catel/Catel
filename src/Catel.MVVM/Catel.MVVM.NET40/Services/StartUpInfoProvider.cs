@@ -54,7 +54,7 @@ namespace Catel.Services
         /// <summary>
         /// Gets the silverlight application initialization parameters.
         /// </summary>
-        public IDictionary<string, string> InitParms
+        public IDictionary<string, string> InitParams
         {
             get { return Application.Current.Host.InitParams; }
         }
