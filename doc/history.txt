@@ -47,6 +47,7 @@ Added/fixed:
 (*) CTL-343 Improved logging performance by 10 % by small optimalizations
 (*) CTL-356 ConverterHelper.DoNothingBindingValue now returns UnsetValue instead of DoNothing in NET40 and NET45 to make 
     sure it can use the FallbackValue
+(*) CTL-359 Improve performance on DependencyObjectExtensions.FindLogicalOrVisualAncestor
 (x) CTL-327 ListCollectionView not supported in ChangeNotificationWrapper (causes InvalidCastException)
 (x) CTL-329 VisualStateManager doesn't change state in WP8 in UserControl => introduced option to transfer styles and
     transitions: UserControl.TransferStylesAndTransitionsToViewModelGrid (default value is true)

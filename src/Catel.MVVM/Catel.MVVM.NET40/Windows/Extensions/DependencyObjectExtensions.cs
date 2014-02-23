@@ -8,7 +8,7 @@ namespace Catel.Windows
 {
     using System;
     using System.Collections.Generic;
-
+    using Catel.Logging;
 #if NETFX_CORE
     using global::Windows.UI;
     using global::Windows.UI.Xaml;
@@ -104,19 +104,6 @@ namespace Catel.Windows
             {
                 return visualAncestor;
             }
-
-#if NET
-            // If we didn't find anything, try logical parent and call this method (recursive)
-            var logicalParent = startElement.GetLogicalParent();
-            if (logicalParent != null)
-            {
-                object lastResortLogicalAncestor = FindLogicalOrVisualAncestor(logicalParent, condition);
-                if (lastResortLogicalAncestor != null)
-                {
-                    return lastResortLogicalAncestor;
-                }
-            }
-#endif
 
             // If we didn't find anything, try visual parent and call this method (recursive)
             var visualParent = startElement.GetVisualParent();
@@ -226,7 +213,14 @@ namespace Catel.Windows
         {
             Argument.IsNotNull("element", element);
 
-            return VisualTreeHelper.GetParent(element);
+            try
+            {
+                return VisualTreeHelper.GetParent(element);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         /// <summary>
