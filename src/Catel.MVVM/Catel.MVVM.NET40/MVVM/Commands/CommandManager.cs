@@ -328,7 +328,7 @@ namespace Catel.MVVM
         /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CreateCommand"/> method.</exception>
         public InputGesture GetOriginalInputGesture(string commandName)
         {
-             Argument.IsNotNullOrWhitespace("commandName", commandName);
+            Argument.IsNotNullOrWhitespace("commandName", commandName);
 
             lock (_lockObject)
             {
@@ -389,6 +389,24 @@ namespace Catel.MVVM
                 }
 
                 _commandGestures[commandName] = inputGesture;
+            }
+        }
+
+        /// <summary>
+        /// Resets the input gestures to the original input gestures with which the commands were registered.
+        /// </summary>
+        public void ResetInputGestures()
+        {
+            lock (_lockObject)
+            {
+                Log.Info("Resetting input gestures");
+
+                foreach (var command in _commands)
+                {
+                    Log.Debug("Resetting input gesture for command '{0}' to '{1}'", command.Key, _originalCommandGestures[command.Key]);
+
+                    _commandGestures[command.Key] = _originalCommandGestures[command.Key];
+                }
             }
         }
 

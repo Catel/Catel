@@ -127,6 +127,11 @@ namespace Catel.MVVM
         void UpdateInputGesture(string commandName, InputGesture inputGesture = null);
 
         /// <summary>
+        /// Resets the input gestures to the original input gestures with which the commands were registered.
+        /// </summary>
+        void ResetInputGestures();
+
+        /// <summary>
         /// Subscribes to keyboard events.
         /// </summary>
         void SubscribeToKeyboardEvents();
