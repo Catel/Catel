@@ -13,6 +13,7 @@ namespace Catel.Runtime.Serialization
     using System.Linq;
     using Catel.ApiCop;
     using Catel.ApiCop.Rules;
+    using Catel.Caching;
     using Catel.Data;
     using Catel.IoC;
     using Catel.Logging;
@@ -84,6 +85,13 @@ namespace Catel.Runtime.Serialization
             var membersToIgnoreHashSet = new HashSet<string>(membersToIgnore);
 
             var modelType = model.GetType();
+
+            //string cacheKey = modelType.GetSafeFullName();
+            //foreach (var memberToIgnore in membersToIgnore)
+            //{
+            //    cacheKey += string.Format("_{0}", memberToIgnore);
+            //}
+
             var catelTypeInfo = PropertyDataManager.Default.GetCatelTypeInfo(modelType);
 
             var catelPropertyNames = SerializationManager.GetCatelPropertyNames(modelType);

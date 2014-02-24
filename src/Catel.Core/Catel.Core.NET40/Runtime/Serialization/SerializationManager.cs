@@ -116,7 +116,7 @@ namespace Catel.Runtime.Serialization
                 {
                     var propertyData = modelProperty.Value;
 
-                    if (!propertyData.IsSerializable)
+                    if (!typeof(ModelBase).IsAssignableFromEx(propertyData.Type) && !propertyData.IsSerializable)
                     {
                         Log.Warning("Property '{0}' is not serializable, so will be excluded from the serialization", propertyData.Name);
                         continue;

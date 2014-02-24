@@ -1359,7 +1359,7 @@ namespace Catel.Data
             var isSerializable = true;
 
 #if NET
-            isSerializable = type.GetTypeInfo().IsInterface || type.GetTypeInfo().IsSerializable;
+            isSerializable = type.IsInterfaceEx() || type.IsSerializableEx();
 #endif
 
             var property = new PropertyData(name, type, createDefaultValue, setParent, propertyChangedEventHandler, isSerializable,
