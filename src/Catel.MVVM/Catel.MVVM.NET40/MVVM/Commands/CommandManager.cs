@@ -41,6 +41,7 @@ namespace Catel.MVVM
 #endif
 
         private bool _subscribedToKeyboardEvent;
+        private readonly Dictionary<string, InputGesture> _originalCommandGestures = new Dictionary<string, InputGesture>();
         private readonly Dictionary<string, InputGesture> _commandGestures = new Dictionary<string, InputGesture>();
 #endif
 
@@ -91,6 +92,7 @@ namespace Catel.MVVM
                 }
 
                 _commands.Add(commandName, compositeCommand ?? new CompositeCommand());
+                _originalCommandGestures.Add(commandName, inputGesture);
                 _commandGestures.Add(commandName, inputGesture);
             }
         }
@@ -318,6 +320,29 @@ namespace Catel.MVVM
         }
 
 #if !WINDOWS_PHONE
+        /// <summary>
+        /// Gets the original input gesture with which the command was initially created.
+        /// </summary>
+        /// <param name="commandName">Name of the command.</param>
+        /// <returns>The input gesture or <c>null</c> if there is no input gesture for the specified command.</returns>
+        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CreateCommand"/> method.</exception>
+        public InputGesture GetOriginalInputGesture(string commandName)
+        {
+             Argument.IsNotNullOrWhitespace("commandName", commandName);
+
+            lock (_lockObject)
+            {
+                if (!_commands.ContainsKey(commandName))
+                {
+                    string error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    Log.Error(error);
+                    throw new InvalidOperationException(error);
+                }
+
+                return _originalCommandGestures[commandName];
+            }
+        }
+
         /// <summary>
         /// Gets the input gesture for the specified command.
         /// </summary>

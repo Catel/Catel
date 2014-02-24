@@ -102,6 +102,14 @@ namespace Catel.MVVM
 
 #if !WINDOWS_PHONE
         /// <summary>
+        /// Gets the original input gesture with which the command was initially created.
+        /// </summary>
+        /// <param name="commandName">Name of the command.</param>
+        /// <returns>The input gesture or <c>null</c> if there is no input gesture for the specified command.</returns>
+        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CreateCommand"/> method.</exception>
+        InputGesture GetOriginalInputGesture(string commandName);
+
+        /// <summary>
         /// Gets the input gesture for the specified command.
         /// </summary>
         /// <param name="commandName">Name of the command.</param>
