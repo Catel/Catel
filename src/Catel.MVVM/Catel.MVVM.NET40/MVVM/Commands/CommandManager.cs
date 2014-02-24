@@ -9,6 +9,7 @@ namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Windows.Input;
     using Catel.Logging;
 
@@ -129,7 +130,17 @@ namespace Catel.MVVM
         }
 #endif
 
-
+        /// <summary>
+        /// Gets all the registered commands.
+        /// </summary>
+        /// <returns>The names of the commands.</returns>
+        public IEnumerable<string> GetCommands()
+        {
+            lock (_lockObject)
+            {
+                return _commands.Keys.ToList();
+            }
+        }
 
         /// <summary>
         /// Gets the command created with the command name.
@@ -307,6 +318,29 @@ namespace Catel.MVVM
         }
 
 #if !WINDOWS_PHONE
+        /// <summary>
+        /// Gets the input gesture for the specified command.
+        /// </summary>
+        /// <param name="commandName">Name of the command.</param>
+        /// <returns>The input gesture or <c>null</c> if there is no input gesture for the specified command.</returns>
+        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CreateCommand"/> method.</exception>
+        public InputGesture GetInputGesture(string commandName)
+        {
+            Argument.IsNotNullOrWhitespace("commandName", commandName);
+
+            lock (_lockObject)
+            {
+                if (!_commands.ContainsKey(commandName))
+                {
+                    string error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    Log.Error(error);
+                    throw new InvalidOperationException(error);
+                }
+
+                return _commandGestures[commandName];
+            }
+        }
+
         /// <summary>
         /// Updates the input gesture for the specified command.
         /// </summary>
