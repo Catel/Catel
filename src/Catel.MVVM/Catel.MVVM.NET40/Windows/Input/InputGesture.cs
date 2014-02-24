@@ -7,6 +7,8 @@
 
 namespace Catel.Windows.Input
 {
+    using Catel.Data;
+
 #if NETFX_CORE
     using ModifierKeys = global::Windows.System.VirtualKeyModifiers;
     using Key = global::Windows.System.VirtualKey;
@@ -20,8 +22,15 @@ namespace Catel.Windows.Input
     /// <summary>
     /// Input gesture class.
     /// </summary>
-    public class InputGesture
+    public class InputGesture : ModelBase
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InputGesture"/> class.
+        /// </summary>
+        public InputGesture()
+        {
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="InputGesture" /> class.
         /// </summary>
@@ -45,14 +54,30 @@ namespace Catel.Windows.Input
         /// <summary>
         /// Gets the key.
         /// </summary>
-        /// <value>The key.</value>
-        public Key Key { get; private set; }
+        public Key Key
+        {
+            get { return GetValue<Key>(KeyProperty); }
+            set { SetValue(KeyProperty, value); }
+        }
+
+        /// <summary>
+        /// Register the Key property so it is known in the class.
+        /// </summary>
+        public static readonly PropertyData KeyProperty = RegisterProperty("Key", typeof(Key));
 
         /// <summary>
         /// Gets the modifiers.
         /// </summary>
-        /// <value>The modifiers.</value>
-        public ModifierKeys Modifiers { get; private set; }
+        public ModifierKeys Modifiers
+        {
+            get { return GetValue<ModifierKeys>(ModifiersProperty); }
+            set { SetValue(ModifiersProperty, value); }
+        }
+
+        /// <summary>
+        /// Register the Modifiers property so it is known in the class.
+        /// </summary>
+        public static readonly PropertyData ModifiersProperty = RegisterProperty("Modifiers", typeof(ModifierKeys));
 
         /// <summary>
         /// Checks whether this input gesture matches the specified event args.

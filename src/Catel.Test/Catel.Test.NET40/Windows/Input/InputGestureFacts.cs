@@ -7,6 +7,8 @@
 
 namespace Catel.Test.Windows.Input
 {
+    using System.IO;
+    using Catel.Runtime.Serialization;
     using InputGesture = Catel.Windows.Input.InputGesture;
 
 #if NETFX_CORE
@@ -23,6 +25,28 @@ namespace Catel.Test.Windows.Input
 
     public class InputGestureFacts
     {
+        [TestClass]
+        public class TheSerializationFunctionality
+        {
+            [TestMethod]
+            public void CorrectlySerializesAndDeserializes()
+            {
+                var inputGesture = new InputGesture(Key.A, ModifierKeys.Control | ModifierKeys.Shift);
+
+                var xmlSerializer = SerializationFactory.GetXmlSerializer();
+                using (var memoryStream = new MemoryStream())
+                {
+                    xmlSerializer.Serialize(inputGesture, memoryStream);
+
+                    memoryStream.Position = 0L;
+
+                    var finalInputGesture = xmlSerializer.Deserialize(typeof (InputGesture), memoryStream);
+
+                    Assert.AreEqual(inputGesture, finalInputGesture);
+                }
+            }
+        }
+
         [TestClass]
         public class TheToStringMethod
         {
