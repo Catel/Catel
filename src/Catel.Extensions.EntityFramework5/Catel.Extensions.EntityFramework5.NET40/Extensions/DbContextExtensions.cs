@@ -21,11 +21,13 @@ namespace Catel.Data
     using DataSpace = System.Data.Metadata.Edm.DataSpace;
     using EntityKey = System.Data.EntityKey;
     using EntityKeyMember = System.Data.EntityKeyMember;
+    using EntitySet = System.Data.Metadata.Edm.EntitySet;
 #else
     using ObjectContext = System.Data.Entity.Core.Objects.ObjectContext;
     using DataSpace = System.Data.Entity.Core.Metadata.Edm.DataSpace;
     using EntityKey = System.Data.Entity.Core.EntityKey;
     using EntityKeyMember = System.Data.Entity.Core.EntityKeyMember;
+    using EntitySet = System.Data.Entity.Core.Metadata.Edm.EntitySet;
 #endif
 
     /// <summary>

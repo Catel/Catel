@@ -63,6 +63,7 @@ Added/fixed:
     are decorated with the ExcludeFromSerialization attribute
 (x) CTL-351 CommandManager throws NullReferenceException on KeyDown when no KeyGesture is registered
 (x) CTL-357 NavigationContext is empty in Silverlight
+(x) CTL-364 DbContextExtensions.GetEntitySet throws InvalidCastException in EF6
 
 Roadmap:
 ========
