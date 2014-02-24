@@ -10,6 +10,8 @@ namespace Catel.Services
     using System.IO;
     using System.Linq;
     using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Documents;
     using System.Windows.Media.Imaging;
 
     using Catel.Logging;
@@ -21,7 +23,6 @@ namespace Catel.Services
     using System.Windows.Printing;
     using System.Runtime.InteropServices;
 #else
-    using System.Windows.Controls;
     using System.Windows.Media;
 #endif
 
@@ -83,13 +84,14 @@ namespace Catel.Services
                 throw new InvalidOperationException(message);
             }
 
+            var bitmap = CreateImageFromUIElement(view, dpiX, dpiY);
+
             if (exportMode == ExportMode.Print)
             {
-                Print(view);
+                Print(bitmap);
             }
             else
             {
-                var bitmap = CreateImageFromUIElement(view, dpiX, dpiY);
 #if !SILVERLIGHT 
                 if (exportMode == ExportMode.File)
                 {
@@ -110,18 +112,21 @@ namespace Catel.Services
         /// <summary>
         /// Prints a <see cref="UIElement" />.
         /// </summary>
-        /// <param name="visual">The visual.</param>
-        private static void Print(UIElement visual)
+        /// <param name="bitmap">The bitmap.</param>
+        private static void Print(BitmapSource bitmap)
         {
+            var image = new Image();
+            image.Source = bitmap;
+
 #if SILVERLIGHT
             var printDocument = new PrintDocument();
-            printDocument.PrintPage += (s, e) => { e.PageVisual = visual; };
+            printDocument.PrintPage += (s, e) => { e.PageVisual = image; };
             printDocument.Print("Silverlight printed document");
 #else
             var printDialog = new PrintDialog();
             if ((bool)printDialog.ShowDialog())
             {
-                printDialog.PrintVisual(visual, string.Empty);
+                printDialog.PrintVisual(image, string.Empty);
             }
 #endif
         }
