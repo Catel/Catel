@@ -40,7 +40,7 @@ namespace Catel.Logging
             var assembly = AssemblyHelper.GetEntryAssembly();
             Write(log, LogEvent.Info, "Assembly:              {0}", assembly.Title());
             Write(log, LogEvent.Info, "Version:               {0}", assembly.Version());
-            Write(log, LogEvent.Info, "Informational version: {0}", assembly.InformationalVersion());
+            //Write(log, LogEvent.Info, "Informational version: {0}", assembly.InformationalVersion());
             Write(log, LogEvent.Info, string.Empty);
             Write(log, LogEvent.Info, "Company:               {0}", assembly.Company());
             Write(log, LogEvent.Info, "Copyright:             {0}", assembly.Copyright());
