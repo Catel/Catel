@@ -7,12 +7,90 @@
 namespace Catel.Logging
 {
     using System;
+    using Catel.Reflection;
 
     /// <summary>
     /// Extensions to the <see cref="ILog" /> interface.
     /// </summary>
     public static class LogExtensions
     {
+        /// <summary>
+        /// Logs the product info with version information.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        public static void LogProductInfo(this ILog log)
+        {
+            Write(log, LogEvent.Info, string.Empty);
+            Write(log, LogEvent.Info, "**************************************************************************");
+            Write(log, LogEvent.Info, string.Empty);
+            Write(log, LogEvent.Info, "PRODUCT INFO");
+            Write(log, LogEvent.Info, string.Empty);
+
+#if NETFX_CORE
+            var appPackage = Windows.ApplicationModel.Package.Current;
+            var packageId = appPackage.Id;
+
+            Write(log, LogEvent.Info, "Package full name:     {0}", packageId.FullName);
+            Write(log, LogEvent.Info, "Package name:          {0}", packageId.Name);
+            Write(log, LogEvent.Info, "Package family name:   {0}", packageId.FamilyName);
+            Write(log, LogEvent.Info, "Publisher:             {0}", packageId.Publisher);
+            Write(log, LogEvent.Info, "Publisher Id:          {0}", packageId.PublisherId);
+            Write(log, LogEvent.Info, "Version:               {0}", packageId.Version);
+#else
+            var assembly = AssemblyHelper.GetEntryAssembly();
+            Write(log, LogEvent.Info, "Assembly:              {0}", assembly.Title());
+            Write(log, LogEvent.Info, "Version:               {0}", assembly.Version());
+            Write(log, LogEvent.Info, "Informational version: {0}", assembly.InformationalVersion());
+            Write(log, LogEvent.Info, string.Empty);
+            Write(log, LogEvent.Info, "Company:               {0}", assembly.Company());
+            Write(log, LogEvent.Info, "Copyright:             {0}", assembly.Copyright());
+#endif
+            Write(log, LogEvent.Info, string.Empty);
+            Write(log, LogEvent.Info, "**************************************************************************");
+            Write(log, LogEvent.Info, string.Empty);
+        }
+
+        /// <summary>
+        /// Logs the device info.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        public static void LogDeviceInfo(this ILog log)
+        {
+            Write(log, LogEvent.Info, string.Empty);
+            Write(log, LogEvent.Info, "**************************************************************************");
+            Write(log, LogEvent.Info, string.Empty);
+            Write(log, LogEvent.Info, "DEVICE INFO");
+            Write(log, LogEvent.Info, string.Empty);
+
+#if !PCL && !NETFX_CORE
+            Write(log, LogEvent.Info, "Platform:              {0}", Environment.OSVersion.Platform);
+            Write(log, LogEvent.Info, "OS Version:            {0}", Environment.OSVersion.Version);
+#endif
+
+#if NET
+            Write(log, LogEvent.Info, "64-bit OS:             {0}", Environment.Is64BitOperatingSystem);
+            Write(log, LogEvent.Info, "64-bit process:        {0}", Environment.Is64BitProcess);
+            Write(log, LogEvent.Info, "Processor count:       {0}", Environment.ProcessorCount);
+            Write(log, LogEvent.Info, "System page size:      {0}", Environment.SystemPageSize);
+#endif
+
+#if WINDOWS_PHONE
+            Write(log, LogEvent.Info, "Device name:           {0}", Microsoft.Phone.Info.DeviceStatus.DeviceName);
+            Write(log, LogEvent.Info, "Device ID:             {0}", Windows.Phone.System.Analytics.HostInformation.PublisherHostId);
+#endif
+
+#if NETFX_CORE
+            var appPackage = Windows.ApplicationModel.Package.Current;
+            var packageId = appPackage.Id;
+
+            Write(log, LogEvent.Info, "Architecture:          {0}", packageId.Architecture);
+#endif
+
+            Write(log, LogEvent.Info, string.Empty);
+            Write(log, LogEvent.Info, "**************************************************************************");
+            Write(log, LogEvent.Info, string.Empty);
+        }
+
         /// <summary>
         /// Writes the specified message as debug message.
         /// </summary>
