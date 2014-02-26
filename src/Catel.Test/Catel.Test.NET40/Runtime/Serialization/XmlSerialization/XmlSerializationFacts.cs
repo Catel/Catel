@@ -8,6 +8,7 @@
 namespace Catel.Test.Runtime.Serialization
 {
     using System;
+    using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Linq;
     using Catel.Data;
@@ -25,6 +26,49 @@ namespace Catel.Test.Runtime.Serialization
         [TestClass]
         public class AdvancedSerializationFacts
         {
+            public abstract class AbstractBase : ModelBase
+            {
+                /// <summary>
+                /// Gets or sets the property value.
+                /// </summary>
+                public string Name
+                {
+                    get { return GetValue<string>(NameProperty); }
+                    set { SetValue(NameProperty, value); }
+                }
+
+                /// <summary>
+                /// Register the Name property so it is known in the class.
+                /// </summary>
+                public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+            }
+
+            public class DerivedClass : AbstractBase
+            {
+            }
+
+            public class ContainerClass : ModelBase
+            {
+                public ContainerClass()
+                {
+                    Items = new ObservableCollection<AbstractBase>();
+                }
+
+                /// <summary>
+                /// Gets or sets the property value.
+                /// </summary>
+                public ObservableCollection<AbstractBase> Items
+                {
+                    get { return GetValue<ObservableCollection<AbstractBase>>(ItemsProperty); }
+                    set { SetValue(ItemsProperty, value); }
+                }
+
+                /// <summary>
+                /// Register the name property so it is known in the class.
+                /// </summary>
+                public static readonly PropertyData ItemsProperty = RegisterProperty("Items", typeof(ObservableCollection<AbstractBase>), null);
+            }
+
             [TestMethod]
             public void CorrectlySerializesCustomizedModels()
             {
@@ -72,6 +116,17 @@ namespace Catel.Test.Runtime.Serialization
                 var xml = testModel.ToXmlString();
 
                 Assert.IsFalse(xml.Contains("Excluded"));
+            }
+
+            [TestMethod]
+            public void CorrectlyHandlesSerializationOfCollectionsWithAbstractClasses()
+            {
+                var collection = new ContainerClass();
+                collection.Items.Add(new DerivedClass { Name = "item 1" });
+
+                var clonedGraph = SerializationTestHelper.SerializeAndDeserialize(collection, SerializationFactory.GetXmlSerializer());
+
+                Assert.AreEqual(collection, clonedGraph);
             }
 
             [TestMethod]

@@ -175,8 +175,8 @@ namespace Catel.Runtime.Serialization.Xml
 
             Log.Debug("Getting known types for '{0}'", type.GetSafeFullName());
 
-            // If this is an interface, HOUSTON, WE HAVE A PROBLEM
-            if (type.IsInterfaceEx())
+            // If this is an interface or abstract, we need to retieve all items that might possible implement or derive
+            if (type.IsInterfaceEx() || type.IsAbstractEx())
             {
                 if (!serializerTypeInfo.IsTypeAlreadyHandled(type))
                 {

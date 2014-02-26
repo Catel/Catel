@@ -68,6 +68,7 @@ Added/fixed:
 (x) CTL-351 CommandManager throws NullReferenceException on KeyDown when no KeyGesture is registered
 (x) CTL-357 NavigationContext is empty in Silverlight
 (x) CTL-364 DbContextExtensions.GetEntitySet throws InvalidCastException in EF6
+(x) CTL-368 XmlSerializer does not correctly serialize ICollection<AbstractClass>
 
 Roadmap:
 ========
