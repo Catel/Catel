@@ -284,9 +284,9 @@ namespace Catel.Runtime.Serialization.Xml
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Swallow
+                Log.Debug(ex, "Failed to deserialize '{0}.{1}'", memberValue.ModelType.GetSafeFullName(), memberValue.Name);
             }
 
             return SerializationObject.FailedToDeserialize(modelType, memberValue.MemberGroup, memberValue.Name);
