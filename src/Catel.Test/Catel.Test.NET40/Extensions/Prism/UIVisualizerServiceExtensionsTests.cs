@@ -14,7 +14,7 @@ namespace Catel.Test.Extensions.Prism
     using Catel.IoC;
     using Catel.Logging;
     using Catel.MVVM;
-    using Catel.MVVM.Services;
+    using Catel.Services;
     using Catel.MVVM.Views;
     using Catel.Services;
     using Catel.Services.Interfaces;

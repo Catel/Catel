@@ -13,7 +13,7 @@ namespace Catel.Services
     using Catel.Caching;
     using Catel.Logging;
     using Catel.MVVM;
-    using Catel.MVVM.Services;
+    using Catel.Services;
     using Catel.MVVM.Views;
     using Catel.Services.Interfaces;
     using Catel.Windows.Controls;
