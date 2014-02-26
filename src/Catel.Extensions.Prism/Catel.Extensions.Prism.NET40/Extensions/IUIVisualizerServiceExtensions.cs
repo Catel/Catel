@@ -6,12 +6,11 @@
 namespace Catel
 {
     using System;
-    using System.Globalization;
-    using System.Linq;
     using System.Threading;
-    using System.Windows;
 
     using Caching;
+
+    using Catel.Services.Interfaces;
 
     using IoC;
 
@@ -20,39 +19,14 @@ namespace Catel
     using Microsoft.Practices.Prism.Regions;
 
     using MVVM;
-    using Services;
+    using MVVM.Services;
     using MVVM.Views;
-
-    using Windows.Controls;
 
     /// <summary>
     ///     Extension methods for the <see cref="IUIVisualizerService" />.
     /// </summary>
     public static class IUIVisualizerServiceExtensions
     {
-        #region Constants
-
-        /// <summary>
-        ///  Activation required invalid operation error message.
-        /// </summary>
-        private const string ActivationRequiredInvalidOperationErrorMessage = "The 'viewModel' must be show at least one time in a region";
-
-        /// <summary>
-        /// Reference equals invalid operation exception message.
-        /// </summary>
-        private const string ReferenceEqualsInvalidOperationExceptionMessage = "The reference of 'viewModel' and 'parentViewModel' are equals, so can't activate a view model into it self";
-
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-        /// <summary>
-        ///     The cache storage.
-        /// </summary>
-        private static readonly ICacheStorage<int, IViewInfo> ViewInfoCacheStorage = new CacheStorage<int, IViewInfo>();
-        #endregion
-
         #region Methods
         private static T ResolveTypeFromContainer<T>()
         {
@@ -72,20 +46,13 @@ namespace Catel
         /// <exception cref="NotSupportedException">If the implementation of IRegionManager is not registered in the IoC container</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="viewModel" /> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="viewModel" /> is <c>null</c>.</exception>
+        [ObsoleteEx(RemoveInVersion = "4.5", TreatAsErrorFromVersion = "4.2", Replacement = "IUICompositionService.Activate(viewModel, regionName)")]
         public static void Activate(this IUIVisualizerService @this, IViewModel viewModel, string regionName = null)
         {
             Argument.IsNotNull("@this", @this);
-            Argument.IsNotNull("viewModel", viewModel);
 
-            if (string.IsNullOrEmpty(regionName))
-            {
-                Reactivate(viewModel);
-            }
-            else
-            {
-                var regionManager = ResolveTypeFromContainer<IRegionManager>();
-                Activate(viewModel, regionName, regionManager);
-            }
+            var uiCompositionService = ResolveTypeFromContainer<IUICompositionService>();
+            uiCompositionService.Activate(viewModel, regionName);
         }
 
         /// <summary>
@@ -104,120 +71,13 @@ namespace Catel
         /// <exception cref="System.ArgumentNullException">The <paramref name="viewModel" /> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentException">The <paramref name="regionName" /> is <c>null</c> or whitespace.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="viewModel" /> is <c>null</c>.</exception>
+        [ObsoleteEx(RemoveInVersion = "4.5", TreatAsErrorFromVersion = "4.2", Replacement = "IUICompositionService.Activate(viewModel, parentViewModel, regionName)")]
         public static void Activate(this IUIVisualizerService @this, IViewModel viewModel, IViewModel parentViewModel, string regionName)
         {
             Argument.IsNotNull("@this", @this);
-            Argument.IsNotNull("viewModel", viewModel);
-            Argument.IsNotNull("parentViewModel", parentViewModel);
-            Argument.IsNotNullOrWhitespace("regionName", regionName);
 
-            if (ReferenceEquals(viewModel, parentViewModel))
-            {
-                var exception = new InvalidOperationException(ReferenceEqualsInvalidOperationExceptionMessage);
-
-                Log.Error(exception);
-
-                throw exception;
-            }
-
-            var viewManager = ResolveTypeFromContainer<IViewManager>();
-            var viewsOfParentViewModel = viewManager.GetViewsOfViewModel(parentViewModel);
-            var regionInfo = viewsOfParentViewModel.OfType<DependencyObject>().Select(dependencyObject => dependencyObject.GetRegionInfo(regionName)).FirstOrDefault(info => info != null);
-            if (regionInfo != null)
-            {
-                Activate(viewModel, regionInfo);
-
-                if (parentViewModel is IRelationalViewModel)
-                {
-                    (parentViewModel as IRelationalViewModel).RegisterChildViewModel(viewModel);
-                }
-
-                if (viewModel is IRelationalViewModel)
-                {
-                    (viewModel as IRelationalViewModel).SetParentViewModel(parentViewModel);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Activates a view into a specific <see cref="IRegion" /> via <see cref="IRegionManager" /> from a given view model.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <param name="regionInfo">The region info.</param>
-        /// <exception cref="NotSupportedException">If the implementation of <see cref="IRegionManager" /> is not registered in the IoC container.</exception>
-        private static void Activate(IViewModel viewModel, IRegionInfo regionInfo)
-        {
-            Activate(viewModel, regionInfo.RegionName, regionInfo.RegionManager);
-        }
-
-        /// <summary>
-        /// Activates a view into a specific <see cref="IRegion" /> via <see cref="IRegionManager" /> from a given view model.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <param name="regionName">The region name.</param>
-        /// <param name="regionManager">The region manager.</param>
-        /// <exception cref="NotSupportedException">If the implementation of <see cref="IRegionManager" /> is not registered in the IoC container.</exception>
-        private static void Activate(IViewModel viewModel, string regionName, IRegionManager regionManager)
-        {
-            if (regionManager != null && regionManager.Regions.ContainsRegionWithName(regionName))
-            {
-                var viewLocator = ResolveTypeFromContainer<IViewLocator>();
-                if (viewLocator != null)
-                {
-                    IViewInfo viewInfo = ViewInfoCacheStorage.GetFromCacheOrFetch(viewModel.UniqueIdentifier, () => new ViewInfo(ViewHelper.ConstructViewWithViewModel(viewLocator.ResolveView(viewModel.GetType()), viewModel), regionManager.Regions[regionName]));
-
-                    IRegion region = viewInfo.Region;
-                    FrameworkElement view = viewInfo.View;
-
-                    var dispatcherService = ResolveTypeFromContainer<IDispatcherService>();
-                    dispatcherService.Invoke(() =>
-                        {
-                            if (!region.ActiveViews.Contains(view))
-                            {
-                                if (!region.Views.Contains(view))
-                                {
-                                    region.Add(view);
-                                    viewModel.Closed += ViewModelOnClosed;
-                                }
-
-                                region.Activate(view);
-                            }
-                        });
-                }
-            }
-        }
-
-        /// <summary>
-        /// Reactivates a view from its viewmodel reference.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <exception cref="System.InvalidOperationException"></exception>
-        /// <exception cref="InvalidOperationException">If the <paramref name="viewModel" /> was no show at least one time in a <see cref="IRegion" />.</exception>
-        private static void Reactivate(IViewModel viewModel)
-        {
-            var viewInfo = ViewInfoCacheStorage[viewModel.UniqueIdentifier];
-            if (viewInfo == null)
-            {
-                throw new InvalidOperationException(ActivationRequiredInvalidOperationErrorMessage);
-            }
-
-            var view = viewInfo.View;
-            var region = viewInfo.Region;
-
-            var dispatcherService = ResolveTypeFromContainer<IDispatcherService>();
-            dispatcherService.Invoke(() => region.Activate(view));
-        }
-
-        /// <summary>
-        /// The view model on closed.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="viewModelClosedEventArgs">The view model closed event args.</param>
-        private static void ViewModelOnClosed(object sender, ViewModelClosedEventArgs viewModelClosedEventArgs)
-        {
-            var viewModel = (IViewModel)sender;
-            viewModel.Closed -= ViewModelOnClosed;
-            Deactivate(viewModel);
+            var uiCompositionService = ResolveTypeFromContainer<IUICompositionService>();
+            uiCompositionService.Activate(viewModel, parentViewModel, regionName);
         }
 
         /// <summary>
@@ -227,40 +87,13 @@ namespace Catel
         /// <param name="viewModel">The view model.</param>
         /// <exception cref="ArgumentException">If <paramref name="viewModel" /> is <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">If the <paramref name="viewModel" /> was no show at least one time in a <see cref="IRegion" />.</exception>
+        [ObsoleteEx(RemoveInVersion = "4.5", TreatAsErrorFromVersion = "4.2", Replacement = "IUICompositionService.Activate(viewModel, parentViewModel, regionName)")]
         public static void Deactivate(this IUIVisualizerService @this, IViewModel viewModel)
         {
-            Deactivate(viewModel);
-        }
+            Argument.IsNotNull("@this", @this);
 
-        /// <summary>
-        /// Deactivates the views that belongs to the <paramref name="viewModel" /> instance.
-        /// </summary>
-        /// <param name="viewModel">The view model instance.</param>
-        /// <exception cref="System.InvalidOperationException"></exception>
-        /// <exception cref="ArgumentException">If <paramref name="viewModel" /> is <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">If the <paramref name="viewModel" /> was no show at least one time in a <see cref="IRegion" />.</exception>
-        private static void Deactivate(IViewModel viewModel)
-        {
-            Argument.IsNotNull("viewModel", viewModel);
-
-            var viewInfo = ViewInfoCacheStorage[viewModel.UniqueIdentifier];
-            if (viewInfo == null)
-            {
-                throw new InvalidOperationException(ActivationRequiredInvalidOperationErrorMessage);
-            }
-
-            var view = viewInfo.View;
-            var region = viewInfo.Region;
-
-            var dispatcherService = ResolveTypeFromContainer<IDispatcherService>();
-            dispatcherService.Invoke(() =>
-                {
-                    region.Deactivate(view);
-                    if (viewModel.IsClosed)
-                    {
-                        ViewInfoCacheStorage.Remove(viewModel.UniqueIdentifier, () => region.Remove(view));
-                    }
-                });
+            var uiCompositionService = ResolveTypeFromContainer<IUICompositionService>();
+            uiCompositionService.Deactivate(viewModel);
         }
 
         /// <summary>
@@ -305,58 +138,6 @@ namespace Catel
             return result;
         }
 
-        #endregion
-
-        #region Nested type: ViewInfo
-
-        /// <summary>
-        /// The view region item.
-        /// </summary>
-        internal class ViewInfo : Tuple<FrameworkElement, IRegion>, IViewInfo
-        {
-            #region Constructors
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="ViewInfo"/> class.
-            /// </summary>
-            /// <param name="view">
-            /// The view.
-            /// </param>
-            /// <param name="region">
-            /// The region.
-            /// </param>
-            public ViewInfo(FrameworkElement view, IRegion region)
-                : base(view, region)
-            {
-            }
-
-            #endregion
-
-            #region IViewInfo Members
-
-            /// <summary>
-            /// Gets View.
-            /// </summary>
-            FrameworkElement IViewInfo.View
-            {
-                get
-                {
-                    return this.Item1;
-                }
-            }
-
-            /// <summary>
-            /// Gets Region.
-            /// </summary>
-            IRegion IViewInfo.Region
-            {
-                get
-                {
-                    return this.Item2;
-                }
-            }
-            #endregion
-        }
         #endregion
     }
 }

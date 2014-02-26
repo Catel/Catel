@@ -36,6 +36,8 @@ Added/fixed:
 (+) CTL-323 Introduced ApiCop feature which will aid developers with hints and tips
 (+) CTL-333 Now NET40 also support the IExceptionService.ProcessAsync
 (+) CTL-340 Added LogManager.IgnoreCatelLogging to apply the setting to all ILogListener instances at once
+(+) CTL-290 Added UICompositionService for Prism extensions and also marked the Activate and Deactivate methods from 
+    UIVisualizerServiceExtensions as obsolete
 (+) CTL-352 Allow Action to be registered besides ICommand in the CommandManager
 (+) CTL-353 Add generic overloads for UIVisualizerService.Show and ShowDialog
 (+) CTL-367 Add LogExtensions.LogProductInfo and LogExtensions.LogDeviceInfo

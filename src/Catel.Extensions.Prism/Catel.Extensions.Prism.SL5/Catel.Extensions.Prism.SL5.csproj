@@ -147,6 +147,12 @@
     <Compile Include="..\Catel.Extensions.Prism.NET40\ServiceLocatorAdapter.cs">
       <Link>ServiceLocatorAdapter.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Services\Interfaces\IUICompositionService.cs">
+      <Link>Services\Interfaces\IUICompositionService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\Services\UICompositionService.cs">
+      <Link>Services\UICompositionService.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Extensions.Prism.NET40\Tasks\BootstrapperTaskFactory.cs">
       <Link>Tasks\BootstrapperTaskFactory.cs</Link>
     </Compile>
