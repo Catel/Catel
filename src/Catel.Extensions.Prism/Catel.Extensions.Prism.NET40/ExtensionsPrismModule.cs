@@ -8,6 +8,9 @@
 namespace Catel
 {
     using Catel.IoC;
+    using Catel.Services;
+    using Catel.Services.Interfaces;
+
     using Microsoft.Practices.Prism.Regions;
     using Tasks;
 
@@ -31,6 +34,7 @@ namespace Catel
             serviceLocator.RegisterTypeIfNotYetRegistered<IBootstrapperTaskFactory, BootstrapperTaskFactory>();
 
             serviceLocator.RegisterType<RegionAdapterMappings, RegionAdapterMappings>();
+            serviceLocator.RegisterType<IUICompositionService, UICompositionService>();
         }
     }
 }

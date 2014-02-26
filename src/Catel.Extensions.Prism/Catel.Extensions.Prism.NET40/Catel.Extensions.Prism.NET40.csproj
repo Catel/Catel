@@ -111,6 +111,8 @@
     <Compile Include="Modules\NuGetBasedModuleCatalog.cs" />
     <Compile Include="Modules\NuGet\RemoteInstallPackageRequest.cs" />
     <Compile Include="Modules\SafeDirectoryModuleCatalog.cs" />
+    <Compile Include="Services\Interfaces\IUICompositionService.cs" />
+    <Compile Include="Services\UICompositionService.cs" />
     <Compile Include="Tasks\BootstrapperTaskFactory.cs" />
     <Compile Include="Tasks\Interfaces\IBootstrapperTaskFactory.cs" />
     <Compile Include="Interfaces\IRegionInfo.cs" />

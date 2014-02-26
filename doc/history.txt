@@ -30,6 +30,8 @@ Added/fixed:
 ============
 (+) CTL-333 Now NET40 also support the IExceptionService.ProcessAsync
 (+) CTL-340 Added LogManager.IgnoreCatelLogging to apply the setting to all ILogListener instances at once
+(+) CTL-290 Added UICompositionService for Prism extensions and also marked the Activate and Deactivate methods from 
+    UIVisualizerServiceExtensions as obsolete
 (*) CTL-326 Data annotation validation will no longer be invoked for properties with non-public getters to prevent
     first chance exceptions the first time such a property is being validated
 (*) CTL-334 ViewModelBase now respects SuspendValidation during saving, which means that even if there are validation 

@@ -12,9 +12,12 @@ namespace Catel.Test.Extensions.Prism
     using System.Linq;
     using System.Threading;
     using Catel.IoC;
+    using Catel.Logging;
     using Catel.MVVM;
     using Catel.MVVM.Services;
     using Catel.MVVM.Views;
+    using Catel.Services;
+    using Catel.Services.Interfaces;
     using Catel.Windows.Controls;
     using Microsoft.Practices.Prism.Regions;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -200,13 +203,14 @@ namespace Catel.Test.Extensions.Prism
                 var dispatcherServiceMock = new Mock<IDispatcherService>();
                 dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>())).Callback((Action action) => action.Invoke());
 
-                //_serviceLocator = IoCFactory.CreateServiceLocator();
+                //_serviceLocator = IoCFactory.CreateServiceLocator(true);
                 _serviceLocator = ServiceLocator.Default;
                 _serviceLocator.RegisterInstance<IDispatcherService>(dispatcherServiceMock.Object);
 
                 _serviceLocator.RegisterType<IViewLocator, ViewLocator>();
                 _serviceLocator.RegisterType<IViewModelLocator, ViewModelLocator>();
                 _serviceLocator.RegisterType<IUIVisualizerService, UIVisualizerService>();
+                _serviceLocator.RegisterType<IUICompositionService, UICompositionService>();
             }
 
             ///// <summary>
@@ -557,6 +561,7 @@ namespace Catel.Test.Extensions.Prism
                 _serviceLocator.RegisterType<IViewLocator, ViewLocator>();
                 _serviceLocator.RegisterType<IViewModelLocator, ViewModelLocator>();
                 _serviceLocator.RegisterType<IUIVisualizerService, UIVisualizerService>();
+                _serviceLocator.RegisterType<IUICompositionService, UICompositionService>();
             }
 
             /// <summary>
@@ -604,6 +609,7 @@ namespace Catel.Test.Extensions.Prism
             [TestMethod]
             public void ThrowsArgumentExceptionIfTheViewModelIsNull()
             {
+                _serviceLocator.RegisterInstance<IRegionManager>(_regionManagerMock.Object);
                 var uiVisualizerService = _serviceLocator.ResolveType<IUIVisualizerService>();
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => uiVisualizerService.Deactivate(null));
             }
