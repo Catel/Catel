@@ -114,8 +114,12 @@ namespace Catel.Runtime.Serialization
 
             using (var finalContext = GetContext(model, serializationContext, SerializationContextMode.Deserialization))
             {
-                var previousLeanAndMeanValue = model.LeanAndMeanModel;
-                model.LeanAndMeanModel = true;
+                bool? previousLeanAndMeanValue = null;
+                if (!ModelBase.GlobalLeanAndMeanModel)
+                {
+                    previousLeanAndMeanValue = model.LeanAndMeanModel;
+                    model.LeanAndMeanModel = true;
+                }
 
                 var serializerModifiers = SerializationManager.GetSerializerModifiers(finalContext.ModelType);
 
@@ -145,7 +149,10 @@ namespace Catel.Runtime.Serialization
 
                 model.FinishDeserialization();
 
-                model.LeanAndMeanModel = previousLeanAndMeanValue;
+                if (previousLeanAndMeanValue.HasValue)
+                {
+                    model.LeanAndMeanModel = previousLeanAndMeanValue.Value;
+                }
             }
         }
 

@@ -69,6 +69,7 @@ Added/fixed:
 (x) CTL-357 NavigationContext is empty in Silverlight
 (x) CTL-364 DbContextExtensions.GetEntitySet throws InvalidCastException in EF6
 (x) CTL-368 XmlSerializer does not correctly serialize ICollection<AbstractClass>
+(x) CTL-369 Catel should ignore resetting of LeanAndMeanModel during serialization
 
 Roadmap:
 ========
