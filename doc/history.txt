@@ -53,6 +53,7 @@ Added/fixed:
 (*) CTL-359 Improve performance on DependencyObjectExtensions.FindLogicalOrVisualAncestor
 (*) CTL-363 Serialize ModelBase in SerializationManager even when IsSerializable is false
 (*) CTL-365 Allow printing of views that are hidden without focus with ViewExportService
+(*) CTL-370 Add colors to ConsoleLogListener
 (x) CTL-327 ListCollectionView not supported in ChangeNotificationWrapper (causes InvalidCastException)
 (x) CTL-329 VisualStateManager doesn't change state in WP8 in UserControl => introduced option to transfer styles and
     transitions: UserControl.TransferStylesAndTransitionsToViewModelGrid (default value is true)
