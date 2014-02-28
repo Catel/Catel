@@ -21,7 +21,7 @@ namespace Catel.Data
     /// This interface defines all the non-generic interfaces that the <see cref="ModelBase"/> class implements.
     /// </remarks>
     public interface IModel : INotifyPropertyChanging, INotifyPropertyChanged, IParent, INotifyDataErrorInfo, INotifyDataWarningInfo
-                                        , IDataErrorInfo, IDataWarningInfo, IAdvancedEditableObject, IXmlSerializable
+                                        , IDataErrorInfo, IDataWarningInfo, IAdvancedEditableObject, IXmlSerializable, IModelEditor
 #if NET
                                         , ICloneable, ISerializable
 #endif

@@ -261,6 +261,9 @@
     <Compile Include="..\Catel.Core.NET40\Data\Interfaces\IModel.cs">
       <Link>Data\Interfaces\IModel.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Data\Interfaces\IModelEditor.cs">
+      <Link>Data\Interfaces\IModelEditor.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\Interfaces\IModelEqualityComparer.cs">
       <Link>Data\Interfaces\IModelEqualityComparer.cs</Link>
     </Compile>
@@ -293,6 +296,12 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\ModelBase.editableobject.cs">
       <Link>Data\ModelBase.editableobject.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Data\ModelBase.propertyediting.cs">
+      <Link>Data\ModelBase.propertyediting.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Data\ModelBase.propertyregistration.cs">
+      <Link>Data\ModelBase.propertyregistration.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\ModelBase.serialization.cs">
       <Link>Data\ModelBase.serialization.cs</Link>
