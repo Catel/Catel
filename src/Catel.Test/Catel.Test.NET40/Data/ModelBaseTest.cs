@@ -617,7 +617,7 @@
 
                 obj.ErrorWhenEmpty = string.Empty;
 
-                Assert.IsTrue(obj.HasErrors);
+                Assert.IsFalse(obj.HasErrors);
                 Assert.AreEqual(string.Empty, ((IDataErrorInfo)obj)["ErrorWhenEmpty"]);
 
                 obj.HideValidationResults = false;
@@ -633,7 +633,7 @@
 
                 obj.BusinessRuleErrorWhenEmpty = string.Empty;
 
-                Assert.IsTrue(obj.HasErrors);
+                Assert.IsFalse(obj.HasErrors);
                 Assert.AreEqual(string.Empty, ((IDataErrorInfo)obj).Error);
 
                 obj.HideValidationResults = false;
@@ -649,7 +649,7 @@
 
                 obj.WarningWhenEmpty = string.Empty;
 
-                Assert.IsTrue(obj.HasWarnings);
+                Assert.IsFalse(obj.HasWarnings);
                 Assert.AreEqual(string.Empty, ((IDataWarningInfo)obj)["WarningWhenEmpty"]);
 
                 obj.HideValidationResults = false;
@@ -665,7 +665,7 @@
 
                 obj.BusinessRuleWarningWhenEmpty = string.Empty;
 
-                Assert.IsTrue(obj.HasWarnings);
+                Assert.IsFalse(obj.HasWarnings);
                 Assert.AreEqual(string.Empty, ((IDataWarningInfo)obj).Warning);
 
                 obj.HideValidationResults = false;

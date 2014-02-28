@@ -1225,7 +1225,15 @@ namespace Catel.Data
         [XmlIgnore]
         public bool HasErrors
         {
-            get { return (FieldErrorCount + BusinessRuleErrorCount) > 0; }
+            get
+            {
+                if (HideValidationResults)
+                {
+                    return false;
+                }
+
+                return (FieldErrorCount + BusinessRuleErrorCount) > 0;
+            }
         }
 
         /// <summary>
@@ -1287,7 +1295,15 @@ namespace Catel.Data
         [XmlIgnore]
         public bool HasWarnings
         {
-            get { return (FieldWarningCount + BusinessRuleWarningCount) > 0; }
+            get
+            {
+                if (HideValidationResults)
+                {
+                    return false;
+                }
+
+                return (FieldWarningCount + BusinessRuleWarningCount) > 0;
+            }
         }
 
         /// <summary>
@@ -1305,6 +1321,11 @@ namespace Catel.Data
         /// <returns><see cref="IEnumerable"/> of warnings.</returns>
         IEnumerable INotifyDataWarningInfo.GetWarnings(string propertyName)
         {
+            if (HideValidationResults)
+            {
+                yield return null;
+            }
+
             if (string.IsNullOrEmpty(propertyName))
             {
                 lock (ValidationContext)
