@@ -3,18 +3,17 @@
 //   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel
+namespace Catel.MVVM.Services
 {
     using System;
     using System.Threading;
-    using Catel.IoC;
-    using Catel.MVVM;
-    using Catel.MVVM.Views;
-    using Catel.Services;
-    using Catel.Services.Interfaces;
+
+    using IoC;
+
     using Microsoft.Practices.Prism.Regions;
+
+    using MVVM;
+    using MVVM.Views;
 
     /// <summary>
     ///     Extension methods for the <see cref="IUIVisualizerService" />.
@@ -117,20 +116,21 @@ namespace Catel
             {
                 var startTime = DateTime.Now;
                 ThreadPool.QueueUserWorkItem(state =>
-                {
-                    var viewManager = ResolveTypeFromContainer<IViewManager>();
-                    while (viewManager.GetViewsOfViewModel(viewModel).Length == 0 && DateTime.Now.Subtract(startTime).TotalMilliseconds < timeOutInMilliseconds)
                     {
-                        ThreadHelper.Sleep(100);
-                    }
+                        var viewManager = ResolveTypeFromContainer<IViewManager>();
+                        while (viewManager.GetViewsOfViewModel(viewModel).Length == 0 && DateTime.Now.Subtract(startTime).TotalMilliseconds < timeOutInMilliseconds)
+                        {
+                            ThreadHelper.Sleep(100);
+                        }
 
-                    var dispatcherService = ResolveTypeFromContainer<IDispatcherService>();
-                    dispatcherService.Invoke(openedProc);
-                });
+                        var dispatcherService = ResolveTypeFromContainer<IDispatcherService>();
+                        dispatcherService.Invoke(openedProc);
+                    });
             }
 
             return result;
         }
+
         #endregion
     }
 }

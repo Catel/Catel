@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Services
+namespace Catel.MVVM.Services
 {
     using System;
     using System.Linq;
@@ -13,9 +13,7 @@ namespace Catel.Services
     using Catel.Caching;
     using Catel.Logging;
     using Catel.MVVM;
-    using Catel.Services;
     using Catel.MVVM.Views;
-    using Catel.Services.Interfaces;
     using Catel.Windows.Controls;
 
     using Microsoft.Practices.Prism.Regions;
@@ -89,10 +87,10 @@ namespace Catel.Services
             Argument.IsNotNull(() => viewLocator);
             Argument.IsNotNull(() => dispatcherService);
 
-            _regionManager = regionManager;
-            _viewManager = viewManager;
-            _viewLocator = viewLocator;
-            _dispatcherService = dispatcherService;
+            this._regionManager = regionManager;
+            this._viewManager = viewManager;
+            this._viewLocator = viewLocator;
+            this._dispatcherService = dispatcherService;
         }
         #endregion
 
@@ -128,11 +126,11 @@ namespace Catel.Services
                 throw exception;
             }
 
-            IView[] viewsOfParentViewModel = _viewManager.GetViewsOfViewModel(parentViewModel);
+            IView[] viewsOfParentViewModel = this._viewManager.GetViewsOfViewModel(parentViewModel);
             IRegionInfo regionInfo = viewsOfParentViewModel.OfType<DependencyObject>().Select(dependencyObject => dependencyObject.GetRegionInfo(regionName)).FirstOrDefault(info => info != null);
             if (regionInfo != null)
             {
-                Activate(viewModel, regionInfo);
+                this.Activate(viewModel, regionInfo);
 
                 if (parentViewModel is IRelationalViewModel)
                 {
@@ -163,11 +161,11 @@ namespace Catel.Services
 
             if (string.IsNullOrEmpty(regionName))
             {
-                Reactivate(viewModel);
+                this.Reactivate(viewModel);
             }
             else
             {
-                Activate(viewModel, regionName, _regionManager);
+                this.Activate(viewModel, regionName, this._regionManager);
             }
         }
 
@@ -190,7 +188,7 @@ namespace Catel.Services
             FrameworkElement view = viewInfo.View;
             IRegion region = viewInfo.Region;
 
-            _dispatcherService.Invoke(() =>
+            this._dispatcherService.Invoke(() =>
                 {
                     region.Deactivate(view);
                     if (viewModel.IsClosed)
@@ -213,19 +211,19 @@ namespace Catel.Services
         {
             if (regionManager != null && regionManager.Regions.ContainsRegionWithName(regionName))
             {
-                IViewInfo viewInfo = ViewInfoCacheStorage.GetFromCacheOrFetch(viewModel.UniqueIdentifier, () => new ViewInfo(ViewHelper.ConstructViewWithViewModel(_viewLocator.ResolveView(viewModel.GetType()), viewModel), regionManager.Regions[regionName]));
+                IViewInfo viewInfo = ViewInfoCacheStorage.GetFromCacheOrFetch(viewModel.UniqueIdentifier, () => new ViewInfo(ViewHelper.ConstructViewWithViewModel(this._viewLocator.ResolveView(viewModel.GetType()), viewModel), regionManager.Regions[regionName]));
 
                 IRegion region = viewInfo.Region;
                 FrameworkElement view = viewInfo.View;
 
-                _dispatcherService.Invoke(() =>
+                this._dispatcherService.Invoke(() =>
                     {
                         if (!region.ActiveViews.Contains(view))
                         {
                             if (!region.Views.Contains(view))
                             {
                                 region.Add(view);
-                                viewModel.Closed += ViewModelOnClosed;
+                                viewModel.Closed += this.ViewModelOnClosed;
                             }
 
                             region.Activate(view);
@@ -242,7 +240,7 @@ namespace Catel.Services
         /// <param name="regionInfo">The region info</param>
         private void Activate(IViewModel viewModel, IRegionInfo regionInfo)
         {
-            Activate(viewModel, regionInfo.RegionName, regionInfo.RegionManager);
+            this.Activate(viewModel, regionInfo.RegionName, regionInfo.RegionManager);
         }
 
         /// <summary>
@@ -253,8 +251,8 @@ namespace Catel.Services
         private void ViewModelOnClosed(object sender, ViewModelClosedEventArgs e)
         {
             var viewModel = (IViewModel)sender;
-            viewModel.Closed -= ViewModelOnClosed;
-            Deactivate(viewModel);
+            viewModel.Closed -= this.ViewModelOnClosed;
+            this.Deactivate(viewModel);
         }
 
         /// <summary>
@@ -274,7 +272,7 @@ namespace Catel.Services
             FrameworkElement view = viewInfo.View;
             IRegion region = viewInfo.Region;
 
-            _dispatcherService.Invoke(() => region.Activate(view));
+            this._dispatcherService.Invoke(() => region.Activate(view));
         }
         #endregion
 
@@ -308,7 +306,7 @@ namespace Catel.Services
             {
                 get
                 {
-                    return Item1;
+                    return this.Item1;
                 }
             }
 
@@ -319,7 +317,7 @@ namespace Catel.Services
             {
                 get
                 {
-                    return Item2;
+                    return this.Item2;
                 }
             }
             #endregion
