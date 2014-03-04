@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -111,11 +111,11 @@
     <Compile Include="..\Catel.Extensions.Prism.NET40\Extensions\IRegionManagerExtensions.cs">
       <Link>Extensions\IRegionManagerExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Extensions.Prism.NET40\Extensions\IUIVisualizerServiceExtensions.cs">
-      <Link>Extensions\IUIVisualizerServiceExtensions.cs</Link>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\MVVM\Services\Extensions\IUIVisualizerServiceExtensions.cs">
+      <Link>MVVM\Services\Extensions\IUIVisualizerServiceExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Extensions.Prism.NET40\Extensions\ISplashScreenServiceExtensions.cs">
-      <Link>Extensions\ISplashScreenServiceExtensions.cs</Link>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\MVVM\Services\Extensions\ISplashScreenServiceExtensions.cs">
+      <Link>MVVM\Services\Extensions\ISplashScreenServiceExtensions.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Extensions.Prism.NET40\Interfaces\IModuleTracker.cs">
       <Link>Interfaces\IModuleTracker.cs</Link>
@@ -147,11 +147,11 @@
     <Compile Include="..\Catel.Extensions.Prism.NET40\ServiceLocatorAdapter.cs">
       <Link>ServiceLocatorAdapter.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Extensions.Prism.NET40\Services\Interfaces\IUICompositionService.cs">
-      <Link>Services\Interfaces\IUICompositionService.cs</Link>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\MVVM\Services\Interfaces\IUICompositionService.cs">
+      <Link>MVVM\Services\Interfaces\IUICompositionService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Extensions.Prism.NET40\Services\UICompositionService.cs">
-      <Link>Services\UICompositionService.cs</Link>
+    <Compile Include="..\Catel.Extensions.Prism.NET40\MVVM\Services\UICompositionService.cs">
+      <Link>MVVM\Services\UICompositionService.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Extensions.Prism.NET40\Tasks\BootstrapperTaskFactory.cs">
       <Link>Tasks\BootstrapperTaskFactory.cs</Link>

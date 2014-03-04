@@ -8,8 +8,8 @@
 namespace Catel
 {
     using Catel.IoC;
+    using Catel.MVVM.Services;
     using Catel.Services;
-    using Catel.Services.Interfaces;
 
     using Microsoft.Practices.Prism.Regions;
     using Tasks;

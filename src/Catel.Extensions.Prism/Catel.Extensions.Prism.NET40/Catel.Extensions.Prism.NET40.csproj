@@ -98,8 +98,8 @@
     <Compile Include="Extensions\DependencyObjectExtensions.cs" />
     <Compile Include="Extensions\ILogExtensions.cs" />
     <Compile Include="Extensions\IRegionManagerExtensions.cs" />
-    <Compile Include="Extensions\IUIVisualizerServiceExtensions.cs" />
-    <Compile Include="Extensions\ISplashScreenServiceExtensions.cs" />
+    <Compile Include="MVVM\Services\Extensions\IUIVisualizerServiceExtensions.cs" />
+    <Compile Include="MVVM\Services\Extensions\ISplashScreenServiceExtensions.cs" />
     <Compile Include="Modules\CompositeNuGetBasedModuleCatalog.cs" />
     <Compile Include="Modules\CompositePackageRepository.cs" />
     <Compile Include="Modules\Interfaces\INuGetBasedModuleCatalog.cs" />
@@ -111,8 +111,8 @@
     <Compile Include="Modules\NuGetBasedModuleCatalog.cs" />
     <Compile Include="Modules\NuGet\RemoteInstallPackageRequest.cs" />
     <Compile Include="Modules\SafeDirectoryModuleCatalog.cs" />
-    <Compile Include="Services\Interfaces\IUICompositionService.cs" />
-    <Compile Include="Services\UICompositionService.cs" />
+    <Compile Include="MVVM\Services\Interfaces\IUICompositionService.cs" />
+    <Compile Include="MVVM\Services\UICompositionService.cs" />
     <Compile Include="Tasks\BootstrapperTaskFactory.cs" />
     <Compile Include="Tasks\Interfaces\IBootstrapperTaskFactory.cs" />
     <Compile Include="Interfaces\IRegionInfo.cs" />

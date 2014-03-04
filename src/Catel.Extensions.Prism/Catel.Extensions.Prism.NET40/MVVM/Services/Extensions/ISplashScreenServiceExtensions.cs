@@ -5,12 +5,12 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel
+namespace Catel.MVVM.Services
 {
     using System;
     using Catel.IoC;
     using Catel.MVVM;
-    using Catel.MVVM.Services;
+    using Catel.Services;
 
     /// <summary>
     /// The splash screen service extensions.
@@ -29,9 +29,9 @@ namespace Catel
         public static void CommitAsync<TViewModel>(this ISplashScreenService @this, TViewModel viewModel, string regionName, Action completedCallback = null) where TViewModel : IProgressNotifyableViewModel
         {
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-            var uiVisualizerService = dependencyResolver.Resolve<IUIVisualizerService>();
+            var uiCompositionService = dependencyResolver.Resolve<IUICompositionService>();
 
-            uiVisualizerService.Activate(viewModel, regionName);
+            uiCompositionService.Activate(viewModel, regionName);
 
             @this.CommitAsync(viewModel: viewModel, show: false, completedCallback: completedCallback);
         }
@@ -49,9 +49,9 @@ namespace Catel
             where TViewModel : IProgressNotifyableViewModel
         {
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-            var uiVisualizerService = dependencyResolver.Resolve<IUIVisualizerService>();
+            var uiCompositionService = dependencyResolver.Resolve<IUICompositionService>();
 
-            uiVisualizerService.Activate(viewModel, parentViewModel, regionName);
+            uiCompositionService.Activate(viewModel, parentViewModel, regionName);
 
             @this.CommitAsync(viewModel: viewModel, show: false, completedCallback: completedCallback);
         }

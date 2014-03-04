@@ -7,7 +7,6 @@
 namespace Catel.MVVM.Services
 {
     using System;
-    using System.Collections.Generic;
 
     /// <summary>
     /// This interface defines a UI controller which can be used to display dialogs
