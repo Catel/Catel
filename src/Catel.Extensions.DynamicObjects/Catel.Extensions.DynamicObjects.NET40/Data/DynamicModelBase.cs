@@ -31,7 +31,7 @@ namespace Catel.Data
         /// <param name="name">The name.</param>
         /// <param name="type">The type.</param>
         /// <returns>The <see cref="PropertyData"/>.</returns>
-        internal void RegisterDynamicProperty(string name, Type type)
+        internal protected void RegisterDynamicProperty(string name, Type type)
         {
             var modelType = GetType();
 

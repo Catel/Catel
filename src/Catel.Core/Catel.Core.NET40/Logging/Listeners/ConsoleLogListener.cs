@@ -49,8 +49,7 @@ namespace Catel.Logging
             string consoleMessage = FormatLogEvent(log, message, logEvent, extraData);
 
 #if NET
-
-
+            UpdateConsoleColors(logEvent);
 #endif
 
 #if NETFX_CORE || PCL

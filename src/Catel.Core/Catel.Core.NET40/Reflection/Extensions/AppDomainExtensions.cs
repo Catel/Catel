@@ -59,7 +59,6 @@ namespace Catel.Reflection
         /// <param name="appDomain">The app domain.</param>
         /// <param name="directory">The directory. If <c>null</c>, only the referenced assemblies are forced to be loaded.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="appDomain"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="directory"/> is <c>null</c> or whitespace.</exception>
         public static void PreloadAssemblies(this AppDomain appDomain, string directory = null)
         {
             Argument.IsNotNull("appDomain", appDomain);
@@ -67,20 +66,19 @@ namespace Catel.Reflection
             Log.Info("Preloading assemblies from AppDomain");
             Log.Indent();
 
+            var loadedAssemblies = new List<string>();
+
             var currentAssemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach (var assembly in currentAssemblies)
             {
-                LoadAssemblyIntoAppDomain(appDomain, assembly);
-
                 var referencedAssemblies = assembly.GetReferencedAssemblies();
                 foreach (var referencedAssembly in referencedAssemblies)
                 {
-                    LoadAssemblyIntoAppDomain(appDomain, referencedAssembly);
+                    LoadAssemblyIntoAppDomain(appDomain, referencedAssembly, true, loadedAssemblies);
                 }
             }
 
             Log.Unindent();
-            Log.Info("Preloaded assemblies from AppDomain");
 
             if (!string.IsNullOrWhiteSpace(directory))
             {
@@ -90,11 +88,10 @@ namespace Catel.Reflection
                 var files = new DirectoryInfo(directory).GetFiles("*.dll");
                 foreach (var file in files)
                 {
-                    LoadAssemblyIntoAppDomain(appDomain, file.FullName);
+                    LoadAssemblyIntoAppDomain(appDomain, file.FullName, true, loadedAssemblies);
                 }
 
                 Log.Unindent();
-                Log.Info("Preloaded assemblies from directory");
             }
         }
 
@@ -108,10 +105,23 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentException">The <paramref name="assemblyFilename" /> is <c>null</c> or whitespace.</exception>
         public static void LoadAssemblyIntoAppDomain(this AppDomain appDomain, string assemblyFilename, bool includeReferencedAssemblies = true)
         {
+            LoadAssemblyIntoAppDomain(appDomain, assemblyFilename, includeReferencedAssemblies, new List<string>());
+        }
+
+        /// <summary>
+        /// Loads the assembly into the specified <see cref="AppDomain" />.
+        /// </summary>
+        /// <param name="appDomain">The app domain.</param>
+        /// <param name="assemblyFilename">The assembly filename.</param>
+        /// <param name="includeReferencedAssemblies">if set to <c>true</c>, referenced assemblies will be included as well.</param>
+        /// <param name="alreadyLoadedAssemblies">The already loaded assemblies.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="appDomain" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="assemblyFilename" /> is <c>null</c> or whitespace.</exception>
+        private static void LoadAssemblyIntoAppDomain(this AppDomain appDomain, string assemblyFilename, bool includeReferencedAssemblies,
+            List<string> alreadyLoadedAssemblies)
+        {
             Argument.IsNotNull("appDomain", appDomain);
             Argument.IsNotNullOrWhitespace("assemblyFilename", assemblyFilename);
-
-            Log.Debug("Preloading assembly from file '{0}'", assemblyFilename);
 
             if (!File.Exists(assemblyFilename))
             {
@@ -120,7 +130,7 @@ namespace Catel.Reflection
             }
 
             var assemblyName = AssemblyName.GetAssemblyName(assemblyFilename);
-            LoadAssemblyIntoAppDomain(appDomain, assemblyName);
+            LoadAssemblyIntoAppDomain(appDomain, assemblyName, includeReferencedAssemblies, alreadyLoadedAssemblies);
         }
 
         /// <summary>
@@ -133,12 +143,22 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentNullException">The <paramref name="assembly"/> is <c>null</c>.</exception>
         public static void LoadAssemblyIntoAppDomain(this AppDomain appDomain, Assembly assembly, bool includeReferencedAssemblies = true)
         {
-            Argument.IsNotNull("appDomain", appDomain);
-            Argument.IsNotNull("assembly", assembly);
+            LoadAssemblyIntoAppDomain(appDomain, assembly.GetName(), includeReferencedAssemblies, new List<string>());
+        }
 
-            Log.Debug("Preloading assembly '{0}'", assembly.FullName);
-
-            LoadAssemblyIntoAppDomain(appDomain, assembly.GetName(), includeReferencedAssemblies);
+        /// <summary>
+        /// Loads the assembly into the specified <see cref="AppDomain" />.
+        /// </summary>
+        /// <param name="appDomain">The app domain.</param>
+        /// <param name="assembly">The assembly.</param>
+        /// <param name="includeReferencedAssemblies">if set to <c>true</c>, referenced assemblies will be included as well.</param>
+        /// <param name="alreadyLoadedAssemblies">The already loaded assemblies.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="appDomain" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="assembly" /> is <c>null</c>.</exception>
+        public static void LoadAssemblyIntoAppDomain(this AppDomain appDomain, Assembly assembly, bool includeReferencedAssemblies,
+            List<string> alreadyLoadedAssemblies)
+        {
+            LoadAssemblyIntoAppDomain(appDomain, assembly.GetName(), includeReferencedAssemblies, alreadyLoadedAssemblies);
         }
 
         /// <summary>
@@ -151,24 +171,45 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentNullException">The <paramref name="assemblyName"/> is <c>null</c>.</exception>
         public static void LoadAssemblyIntoAppDomain(this AppDomain appDomain, AssemblyName assemblyName, bool includeReferencedAssemblies = true)
         {
+            LoadAssemblyIntoAppDomain(appDomain, assemblyName, includeReferencedAssemblies, new List<string>());
+        }
+
+        /// <summary>
+        /// Loads the assembly into the specified <see cref="AppDomain" />.
+        /// </summary>
+        /// <param name="appDomain">The app domain.</param>
+        /// <param name="assemblyName">The assembly name.</param>
+        /// <param name="includeReferencedAssemblies">if set to <c>true</c>, referenced assemblies will be included as well.</param>
+        /// <param name="alreadyLoadedAssemblies">The already loaded assemblies.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="appDomain" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="assemblyName" /> is <c>null</c>.</exception>
+        private static void LoadAssemblyIntoAppDomain(this AppDomain appDomain, AssemblyName assemblyName, bool includeReferencedAssemblies,
+            List<string> alreadyLoadedAssemblies)
+        {
             Argument.IsNotNull("appDomain", appDomain);
             Argument.IsNotNull("assemblyName", assemblyName);
 
-            Log.Debug("Preloading assembly '{0}'", assemblyName);
-
             try
             {
-                if (appDomain.GetAssemblies().Any(assembly => AssemblyName.ReferenceMatchesDefinition(assemblyName, assembly.GetName())))
+                if (alreadyLoadedAssemblies.Contains(assemblyName.FullName))
                 {
-                    Log.Debug("Assembly already loaded into the AppDomain");
                     return;
                 }
+
+                if (appDomain.GetAssemblies().Any(assembly => AssemblyName.ReferenceMatchesDefinition(assemblyName, assembly.GetName())))
+                {
+                    return;
+                }
+
+                alreadyLoadedAssemblies.Add(assemblyName.FullName);
+
+                Log.Debug("Preloading assembly '{0}'", assemblyName);
 
                 var loadedAssembly = appDomain.Load(assemblyName);
 
                 // Note: actually load a type so the assembly is loaded
-                var type = loadedAssembly.GetTypesEx().FirstOrDefault(x => !x.IsInterfaceEx());
-                Console.WriteLine(type.GetSafeFullName());
+                var type = loadedAssembly.GetTypesEx().FirstOrDefault(x => x.IsClassEx() && !x.IsInterfaceEx());
+                Log.Debug("Loaded assembly, found '{0}' as first class type", type.GetSafeFullName());
 
                 if (includeReferencedAssemblies)
                 {
@@ -177,11 +218,10 @@ namespace Catel.Reflection
                     var referencedAssemblies = loadedAssembly.GetReferencedAssemblies();
                     foreach (var referencedAssembly in referencedAssemblies)
                     {
-                        LoadAssemblyIntoAppDomain(appDomain, referencedAssembly, false);
+                        LoadAssemblyIntoAppDomain(appDomain, referencedAssembly, false, alreadyLoadedAssemblies);
                     }
                 }
 
-                // Convenience call
                 TypeCache.InitializeTypes(false, loadedAssembly);
             }
             catch (Exception ex)
@@ -204,7 +244,7 @@ namespace Catel.Reflection
 
             Log.Debug("Creating instance of '{0}'", typeof(T).FullName);
 
-            return (T) appDomain.CreateInstanceAndUnwrap(typeof(T).Assembly.FullName, typeof(T).FullName);
+            return (T)appDomain.CreateInstanceAndUnwrap(typeof(T).Assembly.FullName, typeof(T).FullName);
         }
 #endif
     }
