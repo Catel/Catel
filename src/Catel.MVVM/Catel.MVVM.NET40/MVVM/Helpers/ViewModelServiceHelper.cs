@@ -8,6 +8,7 @@ namespace Catel.MVVM
 {
     using System;
 
+    using Catel.Services;
     using Catel.Windows;
 
     using IoC;

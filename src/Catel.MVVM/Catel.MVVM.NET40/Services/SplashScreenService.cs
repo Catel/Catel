@@ -11,6 +11,7 @@ namespace Catel.Services
 
     using Catel.Logging;
     using Catel.MVVM;
+    using Catel.MVVM.Services;
     using Catel.MVVM.Tasks;
 
     /// <summary>

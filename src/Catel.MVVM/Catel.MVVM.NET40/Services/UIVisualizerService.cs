@@ -10,6 +10,8 @@ namespace Catel.Services
     using System.Collections.Generic;
     using System.Windows;
     using Catel.MVVM;
+    using Catel.MVVM.Services;
+
     using Logging;
     using MVVM.Properties;
     using Reflection;

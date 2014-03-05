@@ -10,6 +10,7 @@ namespace Catel.Services.Test
     using System.Collections.Generic;
     using System.Windows;
     using Catel.MVVM;
+    using Catel.MVVM.Services;
 
     /// <summary>
     /// Test implementation of the <see cref="IUIVisualizerService"/>.

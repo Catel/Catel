@@ -7,8 +7,10 @@
 namespace Catel.MVVM
 {
     using System;
+
+    using Catel.Services;
+
     using IoC;
-    using Services;
 
 #if NETFX_CORE
     using global::Windows.System.Threading;

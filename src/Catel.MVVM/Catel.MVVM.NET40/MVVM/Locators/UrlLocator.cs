@@ -8,6 +8,9 @@ namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
+
+    using Catel.Services;
+
     using Logging;
     using Reflection;
     using Services;

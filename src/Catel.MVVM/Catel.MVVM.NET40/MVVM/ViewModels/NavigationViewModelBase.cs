@@ -7,6 +7,9 @@
 namespace Catel.MVVM
 {
     using System.ComponentModel;
+
+    using Catel.Services;
+
     using IoC;
     using Services;
 

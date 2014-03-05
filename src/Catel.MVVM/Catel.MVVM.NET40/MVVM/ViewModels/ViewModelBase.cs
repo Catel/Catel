@@ -12,6 +12,8 @@ namespace Catel.MVVM
     using System.Linq;
     using System.Reflection;
 
+    using Catel.Services;
+
     using Collections;
     using Data;
     using IoC;

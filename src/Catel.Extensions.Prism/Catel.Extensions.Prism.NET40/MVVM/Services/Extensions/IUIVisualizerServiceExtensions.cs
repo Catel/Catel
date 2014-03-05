@@ -8,6 +8,8 @@ namespace Catel.MVVM.Services
     using System;
     using System.Threading;
 
+    using Catel.Services;
+
     using IoC;
 
     using Microsoft.Practices.Prism.Regions;

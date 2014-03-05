@@ -8,6 +8,8 @@ namespace Catel.MVVM.Services
 {
     using System;
 
+    using Catel.Services;
+
     /// <summary>
     /// This interface defines a UI controller which can be used to display dialogs
     /// in either modal or modaless form from a ViewModel.
