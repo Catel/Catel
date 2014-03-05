@@ -9,7 +9,6 @@ namespace Catel.Test.IoC
     using System;
     using Catel.IoC;
     using Catel.Messaging;
-    using Catel.MVVM.Services;
     using Catel.Services;
     using Catel.Test.MVVM.ViewModels.TestClasses;
     using Data;

@@ -13,7 +13,6 @@ namespace Catel.MVVM
 
     using Logging;
     using Reflection;
-    using Services;
     using Windows;
 
     /// <summary>

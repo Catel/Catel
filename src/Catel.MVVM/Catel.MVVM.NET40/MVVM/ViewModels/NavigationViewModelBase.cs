@@ -11,7 +11,6 @@ namespace Catel.MVVM
     using Catel.Services;
 
     using IoC;
-    using Services;
 
     /// <summary>
     /// Extended base class for view models that include navigation.

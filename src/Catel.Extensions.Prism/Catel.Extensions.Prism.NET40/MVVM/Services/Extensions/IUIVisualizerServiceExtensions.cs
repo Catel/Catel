@@ -3,12 +3,11 @@
 //   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace Catel.MVVM.Services
+
+namespace Catel.Services
 {
     using System;
     using System.Threading;
-
-    using Catel.Services;
 
     using IoC;
 

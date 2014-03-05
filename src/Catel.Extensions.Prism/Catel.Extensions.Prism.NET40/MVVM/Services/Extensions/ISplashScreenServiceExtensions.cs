@@ -5,12 +5,11 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.MVVM.Services
+namespace Catel.Services
 {
     using System;
     using Catel.IoC;
     using Catel.MVVM;
-    using Catel.Services;
 
     /// <summary>
     /// The splash screen service extensions.

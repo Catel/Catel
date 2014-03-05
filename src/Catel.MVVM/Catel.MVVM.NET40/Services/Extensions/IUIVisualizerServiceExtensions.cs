@@ -10,7 +10,6 @@ namespace Catel.Services
     using System;
     using Catel.IoC;
     using Catel.MVVM;
-    using Catel.MVVM.Services;
 
     /// <summary>
     /// Extension methods for the <see cref="IUIVisualizerService"/>.

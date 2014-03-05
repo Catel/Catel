@@ -11,7 +11,6 @@ namespace Catel.MVVM
 
     using Catel.Services;
 
-    using Services;
     using Reflection;
 
     /// <summary>

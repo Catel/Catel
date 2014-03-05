@@ -13,9 +13,8 @@ namespace Catel.Test.Extensions.Prism
     using System.Threading;
     using Catel.IoC;
     using Catel.MVVM;
-    using Catel.MVVM.Services;
-    using Catel.MVVM.Views;
     using Catel.Services;
+    using Catel.MVVM.Views;
     using Catel.Windows.Controls;
     using Microsoft.Practices.Prism.Regions;
     using Microsoft.VisualStudio.TestTools.UnitTesting;

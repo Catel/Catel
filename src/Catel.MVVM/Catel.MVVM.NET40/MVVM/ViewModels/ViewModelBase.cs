@@ -21,7 +21,6 @@ namespace Catel.MVVM
     using Logging;
     using Messaging;
     using Reflection;
-    using Services;
 
 #if NETFX_CORE
     using global::Windows.UI.Xaml;

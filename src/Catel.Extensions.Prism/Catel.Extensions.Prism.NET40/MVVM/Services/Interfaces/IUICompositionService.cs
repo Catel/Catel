@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.MVVM.Services
+namespace Catel.Services
 {
     using System;
 

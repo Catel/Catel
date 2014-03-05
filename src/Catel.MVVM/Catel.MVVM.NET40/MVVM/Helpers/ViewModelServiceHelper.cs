@@ -14,7 +14,6 @@ namespace Catel.MVVM
     using IoC;
     using Logging;
     using Messaging;
-    using Services;
 
     /// <summary>
     /// Helper class that registers all default services to a <see cref="IServiceLocator"/>.

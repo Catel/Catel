@@ -4,11 +4,10 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.MVVM.Services
+namespace Catel.Services
 {
     using System;
-
-    using Catel.Services;
+    using Catel.MVVM;
 
     /// <summary>
     /// This interface defines a UI controller which can be used to display dialogs

@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.MVVM.Services
+namespace Catel.Services
 {
     using System;
     using System.Linq;
@@ -14,7 +14,6 @@ namespace Catel.MVVM.Services
     using Catel.Logging;
     using Catel.MVVM;
     using Catel.MVVM.Views;
-    using Catel.Services;
     using Catel.Windows.Controls;
 
     using Microsoft.Practices.Prism.Regions;
