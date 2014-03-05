@@ -274,7 +274,7 @@ namespace Catel.MVVM.CSLA
             }
 
             var dependencyResolver = this.GetDependencyResolver();
-            var messageService = dependencyResolver.Resolve<Services.IMessageService>();
+            var messageService = dependencyResolver.Resolve<Catel.Services.IMessageService>();
             messageService.ShowError(message.ToString());
 
             base.OnError(error);
