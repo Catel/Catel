@@ -18,7 +18,7 @@ namespace Catel.Windows.Markup
     /// <summary>
     /// Binding that uses the <see cref="ILanguageService" /> to retrieve the binding values.
     /// </summary>
-    public class LanguageBinding : MarkupExtension
+    public class LanguageBinding : UpdatableMarkupExtension
     {
         private readonly ILanguageService _languageService;
 
@@ -30,6 +30,7 @@ namespace Catel.Windows.Markup
         {
             var dependencyResolver = this.GetDependencyResolver();
             _languageService = dependencyResolver.Resolve<ILanguageService>();
+            _languageService.LanguageUpdated += OnLanguageUpdated;
         }
 
         /// <summary>
@@ -54,18 +55,21 @@ namespace Catel.Windows.Markup
         public string ResourceName { get; set; }
         #endregion
 
+        private void OnLanguageUpdated(object sender, EventArgs e)
+        {
+            UpdateValue();
+        }
+
         /// <summary>
         /// When implemented in a derived class, returns an object that is provided as the value of the target property for this markup extension.
         /// </summary>
-        /// <param name="serviceProvider">A service provider helper that can provide services for the markup extension.</param>
         /// <returns>The object value to set on the property where the extension is applied.</returns>
-        public override object ProvideValue(IServiceProvider serviceProvider)
+        protected override object ProvideDynamicValue()
         {
             if (_languageService == null)
             {
                 return null;
             }
-
 
             if (string.IsNullOrWhiteSpace(ResourceName))
             {

@@ -49,6 +49,7 @@ Added/fixed:
 (*) CTL-337 Allow UserControlLogic to be used on ContentControl in WPF
 (*) CTL-342 DebugLogListener also writes to System.Diagnostics.Debug.WriteLine for Silverlight
 (*) CTL-343 Improved logging performance by 10 % by small optimalizations
+(*) CTL-355 LanguageBindings do not refresh after changing PreferredCulture in ILanguageService
 (*) CTL-356 ConverterHelper.DoNothingBindingValue now returns UnsetValue instead of DoNothing in NET40 and NET45 to make 
     sure it can use the FallbackValue
 (*) CTL-359 Improve performance on DependencyObjectExtensions.FindLogicalOrVisualAncestor

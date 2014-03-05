@@ -247,6 +247,9 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Markup\ServiceDependencyExtension.cs">
       <Link>Windows\Markup\ServiceDependencyExtension.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Markup\UpdatableMarkupExtension.cs">
+      <Link>Windows\Markup\UpdatableMarkupExtension.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Threading\Extensions\DispatcherExtensions.cs">
       <Link>Windows\Threading\Extensions\DispatcherExtensions.cs</Link>
     </Compile>

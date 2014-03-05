@@ -36,6 +36,9 @@ namespace Catel.Services
         private readonly ICacheStorage<string, ResourceManager> _resourceFileCache = new CacheStorage<string, ResourceManager>(storeNullValues: true);
         private readonly ICacheStorage<LanguageResourceKey, string> _stringCache = new CacheStorage<LanguageResourceKey, string>();
 
+        private CultureInfo _fallbackCulture;
+        private CultureInfo _preferredCulture;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LanguageService"/> class.
         /// </summary>
@@ -59,13 +62,42 @@ namespace Catel.Services
         /// Gets or sets the fallback culture.
         /// </summary>
         /// <value>The fallback culture.</value>
-        public CultureInfo FallbackCulture { get; set; }
+        public CultureInfo FallbackCulture
+        {
+            get
+            {
+                return _fallbackCulture;
+            }
+            set
+            {
+                _fallbackCulture = value;
+                LanguageUpdated.SafeInvoke(this);
+            }
+        }
 
         /// <summary>
         /// Gets or sets the preferred culture.
         /// </summary>
         /// <value>The preferred culture.</value>
-        public CultureInfo PreferredCulture { get; set; }
+        public CultureInfo PreferredCulture
+        {
+            get
+            {
+                return _preferredCulture; 
+            }
+            set
+            {
+                _preferredCulture = value;
+                LanguageUpdated.SafeInvoke(this);
+            }
+        }
+        #endregion
+
+        #region Events
+        /// <summary>
+        /// Occurs when the <see cref="FallbackCulture"/> or <see cref="PreferredCulture"/> are updated.
+        /// </summary>
+        public event EventHandler<EventArgs> LanguageUpdated;
         #endregion
 
         /// <summary>

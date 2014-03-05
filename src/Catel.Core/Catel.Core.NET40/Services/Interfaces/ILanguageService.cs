@@ -28,6 +28,11 @@ namespace Catel.Services
         CultureInfo PreferredCulture { get; set; }
 
         /// <summary>
+        /// Occurs when the <see cref="FallbackCulture"/> or <see cref="PreferredCulture"/> are updated.
+        /// </summary>
+        event EventHandler<EventArgs> LanguageUpdated;
+        
+        /// <summary>
         /// Registers the language source.
         /// </summary>
         /// <param name="languageSource">The language source.</param>
