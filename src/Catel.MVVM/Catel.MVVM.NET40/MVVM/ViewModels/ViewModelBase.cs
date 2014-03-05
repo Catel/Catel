@@ -142,6 +142,11 @@ namespace Catel.MVVM
 #endif
         private readonly Dictionary<string, bool> _modelsDirtyFlags = new Dictionary<string, bool>();
 
+#if NET
+        [field: NonSerialized]
+#endif
+        private readonly object _modelLock = new object();
+
         /// <summary>
         /// Dictionary of available models inside the view model.
         /// </summary>
@@ -328,6 +333,11 @@ namespace Catel.MVVM
         {
             UniqueIdentifier = UniqueIdentifierHelper.GetUniqueIdentifier<ViewModelBase>();
             ViewModelConstructionTime = DateTime.Now;
+
+            if (CatelEnvironment.IsInDesignMode)
+            {
+                return;
+            }
 
             AuditingHelper.RegisterViewModel(this);
 
@@ -657,7 +667,11 @@ namespace Catel.MVVM
 
             var metaData = InitializeViewModelMetaData(viewModelType);
 
-            _modelObjectsInfo.AddRange(metaData.Models);
+            lock (_modelLock)
+            {
+                _modelObjectsInfo.AddRange(metaData.Models);
+            }
+
             _viewModelToModelMap.AddRange(metaData.Mappings);
             _validationSummaries.AddRange(metaData.Validations);
         }
@@ -798,7 +812,7 @@ namespace Catel.MVVM
 
             InitializePropertiesWithAttributes();
 
-            lock (_modelObjects)
+            lock (_modelLock)
             {
                 foreach (var modelInfo in _modelObjectsInfo)
                 {
@@ -806,32 +820,29 @@ namespace Catel.MVVM
                 }
             }
 
-            if (!CatelEnvironment.IsInDesignMode)
+            if (SupportIEditableObject)
             {
-                if (SupportIEditableObject)
+                lock (_modelLock)
                 {
-                    lock (_modelObjects)
+                    foreach (var modelKeyValuePair in _modelObjects)
                     {
-                        foreach (var modelKeyValuePair in _modelObjects)
+                        if (_modelObjectsInfo[modelKeyValuePair.Key].SupportIEditableObject)
                         {
-                            if (_modelObjectsInfo[modelKeyValuePair.Key].SupportIEditableObject)
+                            var modelKeyValuePairValueAsModelBaseBase = modelKeyValuePair.Value as ModelBase;
+                            if ((modelKeyValuePairValueAsModelBaseBase == null) || !modelKeyValuePairValueAsModelBaseBase.IsInEditSession)
                             {
-                                var modelKeyValuePairValueAsModelBaseBase = modelKeyValuePair.Value as ModelBase;
-                                if ((modelKeyValuePairValueAsModelBaseBase == null) || !modelKeyValuePairValueAsModelBaseBase.IsInEditSession)
-                                {
-                                    EditableObjectHelper.BeginEditObject(modelKeyValuePair.Value);
-                                }
+                                EditableObjectHelper.BeginEditObject(modelKeyValuePair.Value);
                             }
                         }
                     }
                 }
             }
-
+            
             ValidateViewModelToModelMappings();
 
             if (!_ignoreMultipleModelsWarning)
             {
-                lock (_modelObjects)
+                lock (_modelLock)
                 {
                     if (_modelObjects.Count > 1)
                     {
@@ -957,7 +968,10 @@ namespace Catel.MVVM
         /// <returns>Array of models.</returns>
         protected object[] GetAllModels()
         {
-            return _modelObjects.Values.ToArray();
+            lock (_modelLock)
+            {
+                return _modelObjects.Values.ToArray();
+            }
         }
 
         /// <summary>
@@ -1038,7 +1052,7 @@ namespace Catel.MVVM
                 return;
             }
 
-            lock (_modelObjects)
+            lock (_modelLock)
             {
                 if (_modelObjects.ContainsKey(e.PropertyName))
                 {
@@ -1089,7 +1103,7 @@ namespace Catel.MVVM
             {
                 if (_viewModelToModelMap.ContainsKey(e.PropertyName))
                 {
-                    lock (_modelObjects)
+                    lock (_modelLock)
                     {
                         ViewModelToModelMapping mapping = _viewModelToModelMap[e.PropertyName];
                         object model = _modelObjects[mapping.ModelProperty];
@@ -1536,7 +1550,7 @@ namespace Catel.MVVM
                 return false;
             }
 
-            lock (_modelObjects)
+            lock (_modelLock)
             {
                 foreach (KeyValuePair<string, object> modelKeyValuePair in _modelObjects)
                 {
@@ -1609,7 +1623,7 @@ namespace Catel.MVVM
 
             if (saved)
             {
-                lock (_modelObjects)
+                lock (_modelLock)
                 {
                     foreach (KeyValuePair<string, object> modelKeyValuePair in _modelObjects)
                     {

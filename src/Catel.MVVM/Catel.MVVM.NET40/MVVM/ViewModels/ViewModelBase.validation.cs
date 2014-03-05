@@ -126,7 +126,7 @@ namespace Catel.MVVM
         {
             base.OnValidating();
 
-            lock (_modelObjects)
+            lock (_modelLock)
             {
                 foreach (KeyValuePair<string, object> model in _modelObjects)
                 {
@@ -247,7 +247,7 @@ namespace Catel.MVVM
         {
             base.OnValidatingBusinessRules();
 
-            lock (_modelObjects)
+            lock (_modelLock)
             {
                 foreach (KeyValuePair<string, object> modelObject in _modelObjects)
                 {
