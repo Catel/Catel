@@ -195,9 +195,6 @@
     <Compile Include="..\Catel.Test.NET40\Data\Extensions\ObservableObjectExtensionsFacts.cs">
       <Link>Data\Extensions\ObservableObjectExtensionsFacts.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Test.NET40\Data\Helpers\SerializationTestHelper.cs">
-      <Link>Data\Helpers\SerializationTestHelper.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Test.NET40\Data\Helpers\ValidationContextHelperFacts.cs">
       <Link>Data\Helpers\ValidationContextHelperFacts.cs</Link>
     </Compile>

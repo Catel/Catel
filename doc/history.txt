@@ -40,6 +40,7 @@ Added/fixed:
     UIVisualizerServiceExtensions as obsolete
 (+) CTL-352 Allow Action to be registered besides ICommand in the CommandManager
 (+) CTL-353 Add generic overloads for UIVisualizerService.Show and ShowDialog
+(+) CTL-358 Add support for XmlRoot in serialization routine
 (+) CTL-367 Add LogExtensions.LogProductInfo and LogExtensions.LogDeviceInfo
 (+) CTL-372 IModelEditor interface which allows public SetValue / GetValue of ModelBase
 (*) CTL-326 Data annotation validation will no longer be invoked for properties with non-public getters to prevent

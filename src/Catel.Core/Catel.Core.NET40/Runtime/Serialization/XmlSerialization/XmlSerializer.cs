@@ -47,6 +47,7 @@ namespace Catel.Runtime.Serialization.Xml
 
         #region Fields
         private readonly CacheStorage<Type, List<string>> _ignoredMembersCache = new CacheStorage<Type, List<string>>();
+        private readonly CacheStorage<Type, string> _rootNameCache = new CacheStorage<Type, string>();
         private readonly IDataContractSerializerFactory _dataContractSerializerFactory;
         private readonly IXmlNamespaceManager _xmlNamespaceManager;
         #endregion
@@ -393,7 +394,21 @@ namespace Catel.Runtime.Serialization.Xml
             bool isNewDocument = document == null;
             if (isNewDocument)
             {
-                var rootName = (model != null) ? model.GetType().Name : "root";
+                var rootName = "root";
+                if (model != null)
+                {
+                    var modelType = model.GetType();
+                    rootName = _rootNameCache.GetFromCacheOrFetch(modelType, () =>
+                    {
+                        XmlRootAttribute xmlRootAttribute;
+                        if (AttributeHelper.TryGetAttribute(modelType, out xmlRootAttribute))
+                        {
+                            return xmlRootAttribute.ElementName;
+                        }
+
+                        return rootName = model.GetType().Name;
+                    });
+                }
                 document = new XDocument(new XElement(rootName));
             }
 

@@ -12,6 +12,7 @@ namespace Catel.Test.Runtime.Serialization
     using Catel.Data;
     using Catel.Reflection;
     using Catel.Runtime.Serialization;
+    using Catel.Test.Data;
 
 #if NETFX_CORE
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
@@ -21,6 +22,59 @@ namespace Catel.Test.Runtime.Serialization
 
     public class BinarySerializerFacts
     {
+        [TestClass]
+        public class BasicSerializationFacts
+        {
+            [TestMethod]
+            public void BinarySerializationLevel1()
+            {
+                var originalObject = ModelBaseTestHelper.CreateIniEntryObject();
+                var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, SerializationFactory.GetBinarySerializer());
+
+                Assert.AreEqual(originalObject, clonedObject);
+            }
+
+            [TestMethod]
+            public void BinarySerializationLevel2()
+            {
+                var originalObject = ModelBaseTestHelper.CreateIniFileObject();
+                var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, SerializationFactory.GetBinarySerializer());
+
+                Assert.AreEqual(originalObject, clonedObject);
+            }
+
+            [TestMethod]
+            public void BinarySerializationLevel3()
+            {
+                var originalObject = ModelBaseTestHelper.CreateComputerSettingsObject();
+                var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, SerializationFactory.GetBinarySerializer());
+
+                Assert.AreEqual(originalObject, clonedObject);
+            }
+
+            [TestMethod]
+            public void BinarySerializationComplexGraphWithInheritance()
+            {
+                var originalObject = ModelBaseTestHelper.CreateHierarchicalGraphWithInheritance();
+                var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, SerializationFactory.GetBinarySerializer());
+
+                Assert.AreEqual(originalObject, clonedObject);
+            }
+
+            [TestMethod]
+            public void BinarySerializationWithPrivateMembers()
+            {
+                // Create new object
+                var originalObject = new ObjectWithPrivateMembers("My private member");
+                originalObject.PublicMember = "My public member";
+
+                // Test
+                var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, SerializationFactory.GetBinarySerializer());
+
+                Assert.AreEqual(originalObject, clonedObject);
+            }
+        }
+
         [TestClass]
         public class AdvancedSerializationFacts
         {

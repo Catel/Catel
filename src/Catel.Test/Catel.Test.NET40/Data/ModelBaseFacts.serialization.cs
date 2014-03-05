@@ -99,6 +99,7 @@ namespace Catel.Test.Data
             #endregion
         }
 
+        [XmlRoot("MappedPerson")]
         public class Person : SavableModelBase<Person>
         {
             public Person()
@@ -369,103 +370,6 @@ namespace Catel.Test.Data
             #endregion
         }
         #endregion
-
-        [TestClass]
-        public class TheXmlSerialization
-        {
-            [TestMethod]
-            public void RespectsTheXmlElementAttribute()
-            {
-                var person = new Person("Geert", "van", "Horrik", 42);
-                var xmlDocument = person.ToXml();
-
-                var personElement = xmlDocument.Element("Person");
-                Assert.IsNotNull(personElement);
-
-                var firstNameElement = personElement.Element("NameFirst");
-                Assert.IsNotNull(firstNameElement);
-                Assert.AreEqual("Geert", firstNameElement.Value);
-
-                var middleNameElement = personElement.Element("NameMiddle");
-                Assert.IsNotNull(middleNameElement);
-                Assert.AreEqual("van", middleNameElement.Value);
-
-                var lastNameElement = personElement.Element("NameLast");
-                Assert.IsNotNull(lastNameElement);
-                Assert.AreEqual("Horrik", lastNameElement.Value);
-
-                var deserializedPerson = Person.Load(xmlDocument);
-                Assert.AreEqual("Geert", deserializedPerson.FirstName);
-                Assert.AreEqual("van", deserializedPerson.MiddleName);
-                Assert.AreEqual("Horrik", deserializedPerson.LastName);
-            }
-
-            [TestMethod]
-            public void RespectsTheXmlAttributeAttribute()
-            {
-                var person = new Person("Geert", "van", "Horrik", 42);
-                var xmlDocument = person.ToXml();
-
-                var personElement = xmlDocument.Element("Person");
-                Assert.IsNotNull(personElement);
-
-                var ageAttribute = personElement.Attribute("FutureAge");
-                Assert.IsNotNull(ageAttribute);
-                Assert.AreEqual("42", ageAttribute.Value);
-
-                var deserializedPerson = Person.Load(xmlDocument);
-                Assert.AreEqual(42, deserializedPerson.Age);
-            }
-
-            [TestMethod]
-            public void RespectsTheXmlIgnoreAttribute()
-            {
-                var person = new Person("Geert", "van", "Horrik", 42);
-                var xmlDocument = person.ToXml();
-
-                var personElement = xmlDocument.Element("Person");
-                Assert.IsNotNull(personElement);
-
-                Assert.IsNull(personElement.Element("FullName"));
-            }
-
-            [TestMethod]
-            public void SupportsNestedHierarchySerialization()
-            {
-                LogManager.AddDebugListener();
-
-                var root = new Group()
-                {
-                    Name = "myRoot"
-                };
-
-                var child = new Group()
-                {
-                    Name = "myChild"
-                };
-
-                root.Items = new ObservableCollection<Item>();
-                root.Items.Add(child);
-
-                var xmlDocument = root.ToXml();
-
-                var newRoot = Group.Load<Group>(xmlDocument);
-                Assert.IsNotNull(newRoot);
-                Assert.AreEqual("myRoot", newRoot.Name);
-                Assert.AreEqual(1, newRoot.Items.Count);
-                Assert.AreEqual("myChild", newRoot.Items[0].Name);
-            }
-
-            [TestMethod]
-            public void CanSerializeAndDeserializeComplexHierarchies()
-            {
-                var complexHierarchy = ComplexSerializationHierarchy.CreateComplexHierarchy();
-
-                var deserializedObject = SerializationTestHelper.SerializeAndDeserializeObject(complexHierarchy, SerializationMode.Xml);
-
-                Assert.IsTrue(complexHierarchy == deserializedObject);
-            }
-        }
 
         [TestClass]
         public class TheJsonSerialization

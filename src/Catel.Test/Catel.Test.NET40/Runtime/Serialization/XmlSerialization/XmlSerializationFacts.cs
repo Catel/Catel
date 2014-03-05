@@ -11,10 +11,13 @@ namespace Catel.Test.Runtime.Serialization
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Linq;
+    using System.Xml.Serialization;
     using Catel.Data;
+    using Catel.Logging;
     using Catel.Reflection;
     using Catel.Runtime.Serialization;
-
+    using Catel.Runtime.Serialization.Xml;
+    using Catel.Test.Data;
 #if NETFX_CORE
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 #else
@@ -23,6 +26,193 @@ namespace Catel.Test.Runtime.Serialization
 
     public class XmlSerializerFacts
     {
+        [TestClass]
+        public class BasicSerializationFacts
+        {
+            [TestMethod]
+            public void XmlSerializationLevel1()
+            {
+                var originalObject = ModelBaseTestHelper.CreateIniEntryObject();
+                var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, SerializationFactory.GetXmlSerializer());
+
+                Assert.AreEqual(originalObject, clonedObject);
+            }
+
+            [TestMethod]
+            public void XmlSerializationLevel2()
+            {
+                var originalObject = ModelBaseTestHelper.CreateIniFileObject();
+                var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, SerializationFactory.GetXmlSerializer());
+
+                Assert.AreEqual(originalObject, clonedObject);
+            }
+
+            [TestMethod]
+            public void XmlSerializationLevel3()
+            {
+                var originalObject = ModelBaseTestHelper.CreateComputerSettingsObject();
+                var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, SerializationFactory.GetXmlSerializer());
+
+                Assert.AreEqual(originalObject, clonedObject);
+            }
+
+            [TestMethod]
+            public void XmlSerializationComplexGraphWithInheritance()
+            {
+                var originalObject = ModelBaseTestHelper.CreateHierarchicalGraphWithInheritance();
+                var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, SerializationFactory.GetXmlSerializer());
+
+                Assert.AreEqual(originalObject, clonedObject);
+            }
+
+            [TestMethod]
+            public void XmlSerializationWithXmlIgnore()
+            {
+                var obj = new ObjectWithXmlMappings();
+
+                string xml = obj.ToXml().ToString();
+
+                Assert.IsFalse(xml.Contains("IgnoredProperty"));
+            }
+
+            [TestMethod]
+            public void XmlSerializationWithXmlMappings()
+            {
+                var originalObject = ModelBaseTestHelper.CreateComputerSettingsWithXmlMappingsObject();
+                var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, SerializationFactory.GetXmlSerializer());
+
+                Assert.AreEqual(originalObject, clonedObject);
+            }
+
+            [TestMethod]
+            public void XmlSerializationWithCustomTypes()
+            {
+                // Create object
+                var originalObject = new ObjectWithCustomType();
+                originalObject.FirstName = "Test";
+                originalObject.Gender = Gender.Female;
+
+                // Serialize and deserialize
+                var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, SerializationFactory.GetXmlSerializer());
+
+                Assert.AreEqual(originalObject, clonedObject);
+            }
+
+#if NET
+            [TestMethod]
+            public void XmlSerializationWithPrivateMembers()
+            {
+                var originalObject = new ObjectWithPrivateMembers("My private member");
+                originalObject.PublicMember = "My public member";
+
+                var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, SerializationFactory.GetXmlSerializer());
+
+                Assert.AreEqual(originalObject, clonedObject);
+            }
+#endif
+
+            [TestMethod]
+            public void ReadXml()
+            {
+                // Should always return null
+                var iniFile = ModelBaseTestHelper.CreateIniFileObject();
+                Assert.AreEqual(null, ((IXmlSerializable)iniFile).GetSchema());
+            }
+
+            [TestMethod]
+            public void RespectsTheXmlRootAndXmlElementAttribute()
+            {
+                var person = new ModelBaseFacts.Person("Geert", "van", "Horrik", 42);
+                var xmlDocument = person.ToXml();
+
+                var personElement = xmlDocument.Element("MappedPerson");
+                Assert.IsNotNull(personElement);
+
+                var firstNameElement = personElement.Element("NameFirst");
+                Assert.IsNotNull(firstNameElement);
+                Assert.AreEqual("Geert", firstNameElement.Value);
+
+                var middleNameElement = personElement.Element("NameMiddle");
+                Assert.IsNotNull(middleNameElement);
+                Assert.AreEqual("van", middleNameElement.Value);
+
+                var lastNameElement = personElement.Element("NameLast");
+                Assert.IsNotNull(lastNameElement);
+                Assert.AreEqual("Horrik", lastNameElement.Value);
+
+                var deserializedPerson = ModelBaseFacts.Person.Load(xmlDocument);
+                Assert.AreEqual("Geert", deserializedPerson.FirstName);
+                Assert.AreEqual("van", deserializedPerson.MiddleName);
+                Assert.AreEqual("Horrik", deserializedPerson.LastName);
+            }
+
+            [TestMethod]
+            public void RespectsTheXmlAttributeAttribute()
+            {
+                var person = new ModelBaseFacts.Person("Geert", "van", "Horrik", 42);
+                var xmlDocument = person.ToXml();
+
+                var personElement = xmlDocument.Element("MappedPerson");
+                Assert.IsNotNull(personElement);
+
+                var ageAttribute = personElement.Attribute("FutureAge");
+                Assert.IsNotNull(ageAttribute);
+                Assert.AreEqual("42", ageAttribute.Value);
+
+                var deserializedPerson = ModelBaseFacts.Person.Load(xmlDocument);
+                Assert.AreEqual(42, deserializedPerson.Age);
+            }
+
+            [TestMethod]
+            public void RespectsTheXmlIgnoreAttribute()
+            {
+                var person = new ModelBaseFacts.Person("Geert", "van", "Horrik", 42);
+                var xmlDocument = person.ToXml();
+
+                var personElement = xmlDocument.Element("MappedPerson");
+                Assert.IsNotNull(personElement);
+
+                Assert.IsNull(personElement.Element("FullName"));
+            }
+
+            [TestMethod]
+            public void SupportsNestedHierarchySerialization()
+            {
+                LogManager.AddDebugListener();
+
+                var root = new ModelBaseFacts.Group()
+                {
+                    Name = "myRoot"
+                };
+
+                var child = new ModelBaseFacts.Group()
+                {
+                    Name = "myChild"
+                };
+
+                root.Items = new ObservableCollection<ModelBaseFacts.Item>();
+                root.Items.Add(child);
+
+                var xmlDocument = root.ToXml();
+
+                var newRoot = ModelBaseFacts.Group.Load<ModelBaseFacts.Group>(xmlDocument);
+                Assert.IsNotNull(newRoot);
+                Assert.AreEqual("myRoot", newRoot.Name);
+                Assert.AreEqual(1, newRoot.Items.Count);
+                Assert.AreEqual("myChild", newRoot.Items[0].Name);
+            }
+
+            [TestMethod]
+            public void CanSerializeAndDeserializeComplexHierarchies()
+            {
+                var complexHierarchy = ComplexSerializationHierarchy.CreateComplexHierarchy();
+
+                var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(complexHierarchy, SerializationFactory.GetXmlSerializer());
+
+                Assert.IsTrue(complexHierarchy == deserializedObject);
+            }
+        }
+
         [TestClass]
         public class AdvancedSerializationFacts
         {

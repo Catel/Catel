@@ -142,7 +142,6 @@
     <Compile Include="Data\CompositeValidatorProviderFacts.cs" />
     <Compile Include="Data\CompositeValidatorFacts.cs" />
     <Compile Include="Data\Extensions\ObservableObjectExtensionsFacts.cs" />
-    <Compile Include="Data\Helpers\SerializationTestHelper.cs" />
     <Compile Include="Data\ModelBaseFacts.cs" />
     <Compile Include="Data\ModelBaseFacts.editableobject.cs" />
     <Compile Include="Data\ModelBaseFacts.serialization.cs" />
