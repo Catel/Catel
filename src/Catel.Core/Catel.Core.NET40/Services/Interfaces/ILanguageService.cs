@@ -28,6 +28,14 @@ namespace Catel.Services
         CultureInfo PreferredCulture { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the results should be cached.
+        /// <para />
+        /// The default value is <c>true</c>.
+        /// </summary>
+        /// <value><c>true</c> if the results should be cached; otherwise, <c>false</c>.</value>
+        bool CacheResults { get; set; }
+
+        /// <summary>
         /// Occurs when the <see cref="FallbackCulture"/> or <see cref="PreferredCulture"/> are updated.
         /// </summary>
         event EventHandler<EventArgs> LanguageUpdated;
@@ -63,5 +71,10 @@ namespace Catel.Services
         /// Preloads the language sources to provide optimal performance.
         /// </summary>
         void PreloadLanguageSources();
+
+        /// <summary>
+        /// Clears the language resources.
+        /// </summary>
+        void ClearLanguageResources();
     }
 }

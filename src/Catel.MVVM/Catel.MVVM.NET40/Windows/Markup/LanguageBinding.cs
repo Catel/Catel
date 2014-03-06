@@ -8,6 +8,7 @@
 namespace Catel.Windows.Markup
 {
     using System;
+    using System.Windows.Threading;
     using Catel.IoC;
     using Catel.Services;
 

@@ -9,7 +9,7 @@ namespace Catel
 {
     using Catel.MVVM;
     using Catel.MVVM.Views;
-
+    using Catel.Reflection;
     using IoC;
 
 #if !NET
@@ -38,6 +38,18 @@ namespace Catel
             serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelManager, ViewModelManager>();
 
             ViewModelServiceHelper.RegisterDefaultViewModelServices(serviceLocator);
+
+            if (CatelEnvironment.IsInDesignMode)
+            {
+                foreach (var assembly in AssemblyHelper.GetLoadedAssemblies())
+                {
+                    var attributes = assembly.GetCustomAttributesEx(typeof (DesignTimeCodeAttribute));
+                    foreach (var attribute in attributes)
+                    {
+                        // No need to do anything
+                    }
+                }
+            }
         }
     }
 }

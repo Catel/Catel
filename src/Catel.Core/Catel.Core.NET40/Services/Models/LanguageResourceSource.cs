@@ -7,9 +7,12 @@
 
 namespace Catel.Services.Models
 {
+    using System.Diagnostics;
+
     /// <summary>
     /// <see cref="ILanguageSource" /> implementation for resource files.
     /// </summary>
+    [DebuggerDisplay("{GetSource()}")]
     public class LanguageResourceSource : ILanguageSource
     {
         /// <summary>

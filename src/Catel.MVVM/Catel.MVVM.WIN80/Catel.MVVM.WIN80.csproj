@@ -116,6 +116,9 @@
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Attributes\DesignTimeCodeAttribute.cs">
+      <Link>Attributes\DesignTimeCodeAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\CatelEnvironment.cs">
       <Link>CatelEnvironment.cs</Link>
     </Compile>
@@ -124,6 +127,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Data\DispatcherObservableObject.cs">
       <Link>Data\DispatcherObservableObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\DesignTimeInitializer.cs">
+      <Link>DesignTimeInitializer.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Extensions\NavigationExtensions.cs">
       <Link>Extensions\NavigationExtensions.cs</Link>

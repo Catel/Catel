@@ -9,7 +9,9 @@ namespace Catel.Windows.Markup
 {
     using System;
     using System.Reflection;
+    using System.Threading;
     using System.Windows;
+    using System.Windows.Threading;
     using Catel.Windows.Threading;
 #if !NETFX_CORE
     using System.Windows.Data;
@@ -27,6 +29,9 @@ namespace Catel.Windows.Markup
         #region Fields
         private object _targetObject;
         private object _targetProperty;
+        #endregion
+
+        #region Constructors
         #endregion
 
         #region Properties
