@@ -10,6 +10,7 @@ namespace Catel.Caching
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Threading;
+    using Catel.Logging;
     using Policies;
 
     /// <summary>
@@ -36,7 +37,7 @@ namespace Catel.Caching
         /// The synchronization object.
         /// </summary>
         private readonly object _syncObj = new object();
-        
+
         /// <summary>
         /// The synchronization objects.
         /// </summary>
@@ -45,7 +46,12 @@ namespace Catel.Caching
         /// <summary>
         /// The timer that is being executed to invalidate the cache.
         /// </summary>
-        private readonly Timer _timer;
+        private Timer _expirationTimer;
+
+        /// <summary>
+        /// The expiration timer interval.
+        /// </summary>
+        private TimeSpan _expirationTimerInterval;
 
         /// <summary>
         /// Determines whether the cache storage can check for expired items.
@@ -57,19 +63,17 @@ namespace Catel.Caching
         /// <summary>
         /// Initializes a new instance of the <see cref="CacheStorage{TKey,TValue}" /> class.
         /// </summary>
-        /// <param name="defaultExpirationPolicyInitCode">
-        ///     The default expiration policy initialization code.
-        /// </param>
-        /// <param name="storeNullValues">
-        ///     Allow store null values on the cache.
-        /// </param>
+        /// <param name="defaultExpirationPolicyInitCode">The default expiration policy initialization code.</param>
+        /// <param name="storeNullValues">Allow store null values on the cache.</param>
         public CacheStorage(Func<ExpirationPolicy> defaultExpirationPolicyInitCode = null, bool storeNullValues = false)
         {
             _dictionary = new Dictionary<TKey, CacheStorageValueInfo<TValue>>();
             _storeNullValues = storeNullValues;
             _defaultExpirationPolicyInitCode = defaultExpirationPolicyInitCode;
 
-            _timer = new Timer(OnTimerElapsed, null, 1000, 1000);
+            _expirationTimerInterval = TimeSpan.FromSeconds(1);
+
+            UpdateTimer();
         }
         #endregion
 
@@ -101,6 +105,50 @@ namespace Catel.Caching
         }
 
         /// <summary>
+        /// Gets or sets the expiration timer interval.
+        /// <para />
+        /// The default value is <c>TimeSpan.FromSeconds(1)</c>.
+        /// </summary>
+        /// <value>The expiration timer interval.</value>
+        public TimeSpan ExpirationTimerInterval
+        {
+            get { return _expirationTimerInterval; }
+            set
+            {
+                _expirationTimerInterval = value;
+                UpdateTimer();
+            }
+        }
+
+        private void UpdateTimer()
+        {
+            lock (_syncObj)
+            {
+                if (!_checkForExpiredItems)
+                {
+                    if (_expirationTimer != null)
+                    {
+                        _expirationTimer.Dispose();
+                        _expirationTimer = null;
+                    }
+                }
+                else
+                {
+                    var timeSpan = _expirationTimerInterval;
+
+                    if (_expirationTimer == null)
+                    {
+                        _expirationTimer = new Timer(OnTimerElapsed, null, timeSpan, timeSpan);
+                    }
+                    else
+                    {
+                        _expirationTimer.Change(timeSpan, timeSpan);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Gets the value associated with the specified key
         /// </summary>
         /// <param name="key">The key of the value to get.</param>
@@ -115,7 +163,7 @@ namespace Catel.Caching
             {
                 _dictionary.TryGetValue(key, out valueInfo);
             }
-     
+
             return (valueInfo != null) ? valueInfo.Value : default(TValue);
         }
 
@@ -150,7 +198,7 @@ namespace Catel.Caching
         {
             Argument.IsNotNull("key", key);
             Argument.IsNotNull("code", code);
-            
+
             TValue value;
             lock (GetLockByKey(key))
             {
@@ -160,26 +208,34 @@ namespace Catel.Caching
                     value = code.Invoke();
                     if (!ReferenceEquals(value, null) || _storeNullValues)
                     {
-	                    if (expirationPolicy == null && _defaultExpirationPolicyInitCode != null)
-	                    {
-	                        expirationPolicy = _defaultExpirationPolicyInitCode.Invoke();
-	                    }
-	
-	                    var valueInfo = new CacheStorageValueInfo<TValue>(value, expirationPolicy);
-	                    lock (_syncObj)
-	                    {
-	                    	_dictionary[key] = valueInfo;
-	                    }
-	
-	                    if (valueInfo.CanExpire)
-	                    {
-	                        _checkForExpiredItems = true;
-	                    }
-	                }
+                        if (expirationPolicy == null && _defaultExpirationPolicyInitCode != null)
+                        {
+                            expirationPolicy = _defaultExpirationPolicyInitCode.Invoke();
+                        }
+
+                        var valueInfo = new CacheStorageValueInfo<TValue>(value, expirationPolicy);
+                        lock (_syncObj)
+                        {
+                            _dictionary[key] = valueInfo;
+                        }
+
+                        if (valueInfo.CanExpire)
+                        {
+                            _checkForExpiredItems = true;
+                        }
+
+                        if (expirationPolicy != null)
+                        {
+                            if (_expirationTimer == null)
+                            {
+                                UpdateTimer();
+                            }
+                        }
+                    }
                 }
                 else
                 {
-					value = _dictionary[key].Value;
+                    value = _dictionary[key].Value;
                 }
             }
 
@@ -267,14 +323,18 @@ namespace Catel.Caching
             lock (_syncObj)
             {
                 keysToRemove.AddRange(_dictionary.Keys);
-            }
 
-            foreach (var keyToRemove in keysToRemove)
-            {
-                lock (GetLockByKey(keyToRemove))
+                foreach (var keyToRemove in keysToRemove)
                 {
-                    _dictionary.Remove(keyToRemove);
+                    lock (GetLockByKey(keyToRemove))
+                    {
+                        _dictionary.Remove(keyToRemove);
+                    }
                 }
+
+                _checkForExpiredItems = false;
+
+                UpdateTimer();
             }
         }
 
@@ -297,10 +357,12 @@ namespace Catel.Caching
                     {
                         keysToRemove.Add(cacheItem.Key);
                     }
-
-                    if (!containsItemsThatCanExpire && valueInfo.CanExpire)
+                    else
                     {
-                        containsItemsThatCanExpire = true;
+                        if (!containsItemsThatCanExpire && valueInfo.CanExpire)
+                        {
+                            containsItemsThatCanExpire = true;
+                        }
                     }
                 }
             }
@@ -312,19 +374,22 @@ namespace Catel.Caching
                     _dictionary.Remove(keyToRemove);
                 }
             }
-   
-            _checkForExpiredItems = containsItemsThatCanExpire;
+
+            lock (_syncObj)
+            {
+                if (_checkForExpiredItems != containsItemsThatCanExpire)
+                {
+                    _checkForExpiredItems = containsItemsThatCanExpire;
+                    UpdateTimer();
+                }
+            }
         }
 
         /// <summary>
-        /// Gets the lock by key
+        /// Gets the lock by key.
         /// </summary>
-        /// <param name="key">
-        /// The key
-        /// </param>
-        /// <returns>
-        /// The lock object
-        /// </returns>
+        /// <param name="key">The key.</param>
+        /// <returns>The lock object.</returns>
         private object GetLockByKey(TKey key)
         {
             lock (_syncObj)

@@ -21,7 +21,7 @@ namespace Catel.Data
         /// <summary>
         /// The cache storage.
         /// </summary>
-        private readonly CacheStorage<Type, IValidator> _cacheStorage;
+        private readonly CacheStorage<Type, IValidator> _cacheStorage = new CacheStorage<Type, IValidator>(storeNullValues: true);
         #endregion
 
         #region Constructors
@@ -31,8 +31,6 @@ namespace Catel.Data
         /// </summary>
         protected ValidatorProviderBase()
         {
-            _cacheStorage = new CacheStorage<Type, IValidator>(storeNullValues: true);
-
             UseCache = true;
         }
 

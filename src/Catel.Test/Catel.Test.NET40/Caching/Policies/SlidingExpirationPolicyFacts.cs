@@ -91,9 +91,9 @@ namespace Catel.Test.Caching.Policies
             [TestMethod]
             public void TurnTheIsExpiredPropertyToFalse()
             {
-                var policy = new SlidingExpirationPolicy(new TimeSpan(0, 0, 1));
+                var policy = new SlidingExpirationPolicy(new TimeSpan(0, 0, 0, 0, 250));
 
-                ThreadHelper.Sleep(1500);
+                ThreadHelper.Sleep(500);
 
                 Assert.IsTrue(policy.IsExpired);
 

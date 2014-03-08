@@ -644,7 +644,7 @@ namespace Catel
         /// <summary>
         /// The event handler event arguments cache.
         /// </summary>
-        private static readonly ICacheStorage<Type, Type> _eventHandlerEventArgsCache = new CacheStorage<Type, Type>();   
+        private static readonly ICacheStorage<Type, Type> _eventHandlerEventArgsCache = new CacheStorage<Type, Type>();
 
         /// <summary>
         /// Subscribes to a weak event by using one single method. This method also takes care of automatic

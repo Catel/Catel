@@ -69,15 +69,15 @@ namespace Catel.Test.Caching
 #pragma warning restore 168
                     Assert.IsFalse(valueInfo.IsExpired);
                 }
-                while (DateTime.Now.Subtract(startTime).TotalSeconds < 10);
+                while (DateTime.Now.Subtract(startTime).TotalSeconds < 3);
             }
 
             [TestMethod]
             public void ReturnsTrueWhenTheValueIsNotReadAndSlidingPolicyIsUsed()
             {
-                var valueInfo = new CacheStorageValueInfo<int>(0, new SlidingExpirationPolicy(new TimeSpan(0, 0, 1)));
+                var valueInfo = new CacheStorageValueInfo<int>(0, new SlidingExpirationPolicy(new TimeSpan(0, 0, 0, 0, 250)));
 
-                ThreadHelper.Sleep(1500);
+                ThreadHelper.Sleep(500);
 
                 Assert.IsTrue(valueInfo.IsExpired);
             }
@@ -85,9 +85,9 @@ namespace Catel.Test.Caching
             [TestMethod]
             public void ReturnsTrueWhenTimeSpanIsNotZeroAndValueIsExpired()
             {
-                var valueInfo = new CacheStorageValueInfo<int>(0, new TimeSpan(0, 0, 1));
+                var valueInfo = new CacheStorageValueInfo<int>(0, new TimeSpan(0, 0, 0, 0, 250));
 
-                ThreadHelper.Sleep(1500);
+                ThreadHelper.Sleep(500);
 
                 Assert.IsTrue(valueInfo.IsExpired);
             }

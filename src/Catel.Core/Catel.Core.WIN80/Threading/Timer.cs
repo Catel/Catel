@@ -20,12 +20,15 @@ namespace System.Threading
     /// <summary>
     /// Timer for WinRT since WinRT only provides the DispatcherTimer which cannot be used outside the UI thread.
     /// </summary>
-    public class Timer
+    public class Timer : IDisposable
     {
         #region Fields
         private bool _isTimerRunning;
         private readonly TimerCallback _timerCallback;
         private readonly object _timerState;
+
+        private bool _isKillingTimer;
+        private bool _hasKilledTimer;
         #endregion
 
         #region Constructors
@@ -57,18 +60,24 @@ namespace System.Threading
         /// <param name="interval">The interval.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="callback" /> is <c>null</c>.</exception>
         public Timer(TimerCallback callback, object state, int dueTime, int interval)
+            : this(callback, state, TimeSpan.FromMilliseconds(dueTime), TimeSpan.FromMilliseconds(interval)) { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Timer" /> class.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <param name="state">The state.</param>
+        /// <param name="dueTime">The due time.</param>
+        /// <param name="interval">The interval.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="callback" /> is <c>null</c>.</exception>
+        public Timer(TimerCallback callback, object state, TimeSpan dueTime, TimeSpan interval)
         {
             Argument.IsNotNull("callback", callback);
 
             _timerCallback = callback;
             _timerState = state;
-            Interval = interval;
 
-            Task.Run(() =>
-            {
-                Task.Delay(dueTime);
-                Start();
-            });
+            Change(dueTime, interval);
         }
         #endregion
 
@@ -89,6 +98,38 @@ namespace System.Threading
 
         #region Methods
         /// <summary>
+        /// Changes the specified interval.
+        /// </summary>
+        /// <param name="dueTime">The due time.</param>
+        /// <param name="interval">The interval.</param>
+        public async void Change(TimeSpan dueTime, TimeSpan interval)
+        {
+            if (_isTimerRunning)
+            {
+                _isKillingTimer = true;
+
+                while (!_hasKilledTimer)
+                {
+                    await Task.Delay(10);
+                }
+
+                _isKillingTimer = false;
+                _hasKilledTimer = false;
+                
+            }
+
+            Interval = (int)interval.TotalMilliseconds;
+
+#pragma warning disable 4014
+            Task.Run(() =>
+#pragma warning restore 4014
+            {
+                Task.Delay(dueTime);
+                Start();
+            });
+        }
+
+        /// <summary>
         /// Starts the timer.
         /// </summary>
         private async void Start()
@@ -97,7 +138,15 @@ namespace System.Threading
 
             while (_isTimerRunning)
             {
+                if (_isKillingTimer)
+                {
+                    _hasKilledTimer = true;
+                    _isTimerRunning = false;
+                    break;
+                }
+
                 TimerElapsed();
+
                 await Task.Delay(Interval);
             }
         }
@@ -123,6 +172,14 @@ namespace System.Threading
             }
         }
         #endregion
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            Stop();
+        }
     }
 }
 #endif

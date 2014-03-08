@@ -39,7 +39,8 @@ namespace Catel.Test.Caching
             [TestMethod]
             public void RunMultipleThreadsWithRandomAccessCalls()
             {
-                var cacheStorage = new CacheStorage<Guid, int>(() => ExpirationPolicy.Duration(TimeSpan.FromMilliseconds(1)));
+                var cacheStorage = new CacheStorage<Guid, int>(() => ExpirationPolicy.Duration(TimeSpan.FromMilliseconds(500)));
+                cacheStorage.ExpirationTimerInterval = TimeSpan.FromMilliseconds(100);
 
                 var threads = new List<Thread>();
                 for (int i = 0; i < 25; i++)
@@ -48,7 +49,7 @@ namespace Catel.Test.Caching
                     {
                         var random = new Random();
 
-                        for (int j = 0; j < 10000; j++)
+                        for (int j = 0; j < 1000; j++)
                         {
                             var randomGuid = _randomGuids[random.Next(0, 9)];
                             cacheStorage.GetFromCacheOrFetch(randomGuid, () =>
@@ -58,7 +59,7 @@ namespace Catel.Test.Caching
                                 return threadId;
                             });
 
-                            ThreadHelper.Sleep(1);
+                            ThreadHelper.Sleep(250);
                         }
                     });
 
@@ -192,15 +193,6 @@ namespace Catel.Test.Caching
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => cache.GetFromCacheOrFetch("1", null));
             }
-            
-            /*
-			[TestMethod]
-            public void ThrowsArgumentExceptionForNullFunctionValueIfNotAllowNullValues()
-            {
-                var cache = new CacheStorage<string, object>();
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => cache.GetFromCacheOrFetch("1", () => null));
-            }
-            */
 
             [TestMethod]
             public void AddsItemToCacheAndReturnsIt()
@@ -209,7 +201,7 @@ namespace Catel.Test.Caching
 
                 var value = cache.GetFromCacheOrFetch("1", () => 1);
 
-                Assert.IsTrue(cache.Contains("1"));                
+                Assert.IsTrue(cache.Contains("1"));
                 Assert.AreEqual(1, cache["1"]);
                 Assert.AreEqual(1, value);
             }
@@ -250,8 +242,8 @@ namespace Catel.Test.Caching
                 var cache = new CacheStorage<string, int>();
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => cache.Add(null, 1));
-            }           
-            
+            }
+
             [TestMethod]
             public void ThrowsArgumentNullExceptionForNullValueIfNotAllowNullValues()
             {
@@ -326,29 +318,46 @@ namespace Catel.Test.Caching
         public class TheAutoExpireFunctionality
         {
             [TestMethod]
+            public void IsAutomaticallyEnabledWhenStartedDisabledButAddingItemWithCustomExpirationPolicy()
+            {
+                var cache = new CacheStorage<string, int>();
+                cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
+
+                cache.Add("1", 1, expiration: new TimeSpan(0, 0, 0, 0, 250));
+
+                Assert.IsTrue(cache.Contains("1"));
+
+                ThreadHelper.Sleep(500);
+
+                Assert.IsFalse(cache.Contains("1"));
+            }
+
+            [TestMethod]
             public void AutomaticallyRemovesExpiredItems()
             {
                 var cache = new CacheStorage<string, int>();
-     			
-     			cache.Add("1", 1, expiration: new TimeSpan(0, 0, 1));
+                cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
 
-				Assert.IsTrue(cache.Contains("1"));
+                cache.Add("1", 1, expiration: new TimeSpan(0, 0, 0, 0, 250));
 
-                ThreadHelper.Sleep(2000);
+                Assert.IsTrue(cache.Contains("1"));
 
-				Assert.IsFalse(cache.Contains("1"));
-			}
+                ThreadHelper.Sleep(500);
+
+                Assert.IsFalse(cache.Contains("1"));
+            }
 
             [TestMethod]
             public void AutomaticallyRemovesExpiredItemsOfACacheStorageWithDefaultExpirationPolicyInitializationCode()
             {
-                var cache = new CacheStorage<string, int>(() => ExpirationPolicy.Duration(TimeSpan.FromMilliseconds(500)));
+                var cache = new CacheStorage<string, int>(() => ExpirationPolicy.Duration(TimeSpan.FromMilliseconds(250)));
+                cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
 
                 cache.Add("1", 1);
 
                 Assert.IsTrue(cache.Contains("1"));
 
-                ThreadHelper.Sleep(2000);
+                ThreadHelper.Sleep(500);
 
                 Assert.IsFalse(cache.Contains("1"));
             }
@@ -357,13 +366,14 @@ namespace Catel.Test.Caching
             public void AddsAndExpiresSeveralItems()
             {
                 var cache = new CacheStorage<string, int>();
+                cache.ExpirationTimerInterval = TimeSpan.FromMilliseconds(250);
 
                 for (int i = 0; i < 5; i++)
                 {
-                    ThreadHelper.Sleep(2000);
+                    ThreadHelper.Sleep(500);
 
                     int innerI = i;
-                    var value = cache.GetFromCacheOrFetch("key", () => innerI, expiration: TimeSpan.FromMilliseconds(500));
+                    var value = cache.GetFromCacheOrFetch("key", () => innerI, expiration: TimeSpan.FromMilliseconds(250));
 
                     Assert.AreEqual(i, value);
                 }

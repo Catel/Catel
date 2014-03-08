@@ -13,27 +13,17 @@ namespace Catel.Caching
     /// <summary>
     /// The cache storage interface.
     /// </summary>
-    /// <typeparam name="TKey">
-    /// The key type.
-    /// </typeparam>
-    /// <typeparam name="TValue">
-    /// The value type.
-    /// </typeparam>
+    /// <typeparam name="TKey">The key type.</typeparam>
+    /// <typeparam name="TValue">The value type.</typeparam>
     public interface ICacheStorage<TKey, TValue>
     {
         #region Properties
         /// <summary>
         /// Gets the value associated with the specified key.
         /// </summary>
-        /// <param name="key">
-        /// The key.
-        /// </param>
-        /// <returns>
-        /// The value associated with the specified key, or default value for the type of the value if the key do not exists.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">
-        /// The <paramref name="key"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="key">The key.</param>
+        /// <returns>The value associated with the specified key, or default value for the type of the value if the key do not exists.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="key" /> is <c>null</c>.</exception>
         TValue this[TKey key] { get; }
 
         /// <summary>
@@ -41,6 +31,14 @@ namespace Catel.Caching
         /// </summary>
         /// <value>The keys.</value>
         IEnumerable<TKey> Keys { get; }
+
+        /// <summary>
+        /// Gets or sets the expiration timer interval.
+        /// <para />
+        /// The default value is <c>TimeSpan.FromSeconds(1)</c>.
+        /// </summary>
+        /// <value>The expiration timer interval.</value>
+        TimeSpan ExpirationTimerInterval { get; set; }
         #endregion
 
         #region Methods
