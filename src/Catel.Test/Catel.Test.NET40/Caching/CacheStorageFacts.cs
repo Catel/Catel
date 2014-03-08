@@ -40,7 +40,6 @@ namespace Catel.Test.Caching
             public void RunMultipleThreadsWithRandomAccessCalls()
             {
                 var cacheStorage = new CacheStorage<Guid, int>(() => ExpirationPolicy.Duration(TimeSpan.FromMilliseconds(500)));
-                cacheStorage.ExpirationTimerInterval = TimeSpan.FromMilliseconds(200);
 
                 var threads = new List<Thread>();
                 for (int i = 0; i < 25; i++)
@@ -59,7 +58,7 @@ namespace Catel.Test.Caching
                                 return threadId;
                             });
 
-                            ThreadHelper.Sleep(250);
+                            ThreadHelper.Sleep(10);
                         }
                     });
 
