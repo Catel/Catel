@@ -26,11 +26,12 @@ namespace Catel.Windows
         /// </returns>
         public static System.Windows.Window GetActiveWindow(this System.Windows.Application application)
         {
-            return application.Dispatcher.Invoke(new Func<System.Windows.Window>(() =>
+            if (application != null)
             {
-                return GetActiveWindowForApplication(application); 
-                
-            })) as System.Windows.Window;
+                return application.Dispatcher.Invoke(new Func<System.Windows.Window>(() => GetActiveWindowForApplication(application))) as System.Windows.Window;
+            }
+
+            return null;
         }
 
         private static System.Windows.Window GetActiveWindowForApplication(this System.Windows.Application application)
