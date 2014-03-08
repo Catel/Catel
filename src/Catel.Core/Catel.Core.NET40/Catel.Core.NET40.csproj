@@ -348,6 +348,7 @@
     <Compile Include="Runtime\Serialization\BinarySerialization\BinarySerializer.cs" />
     <Compile Include="Runtime\Serialization\BinarySerialization\RedirectDeserializationBinder.cs" />
     <Compile Include="Runtime\Serialization\BinarySerialization\Interfaces\IBinarySerializer.cs" />
+    <Compile Include="Runtime\Serialization\SerializationModelInfo.cs" />
     <Compile Include="Runtime\Serialization\SerializerModifierBase.generic.cs" />
     <Compile Include="Runtime\Serialization\EventArgs\MemberSerializationEventArgs.cs" />
     <Compile Include="Runtime\Serialization\EventArgs\SerializationEventArgs.cs" />

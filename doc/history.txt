@@ -56,6 +56,7 @@ Added/fixed:
 (*) CTL-356 ConverterHelper.DoNothingBindingValue now returns UnsetValue instead of DoNothing in NET40 and NET45 to make 
     sure it can use the FallbackValue
 (*) CTL-359 Improve performance on DependencyObjectExtensions.FindLogicalOrVisualAncestor
+(*) CTL-362 Cache result of GetSerializableMembers in SerializerBase
 (*) CTL-363 Serialize ModelBase in SerializationManager even when IsSerializable is false
 (*) CTL-365 Allow printing of views that are hidden without focus with ViewExportService
 (*) CTL-370 Add colors to ConsoleLogListener

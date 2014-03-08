@@ -833,6 +833,9 @@
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializationManager.cs">
       <Link>Runtime\Serialization\SerializationManager.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializationModelInfo.cs">
+      <Link>Runtime\Serialization\SerializationModelInfo.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\SerializationObject.cs">
       <Link>Runtime\Serialization\SerializationObject.cs</Link>
     </Compile>

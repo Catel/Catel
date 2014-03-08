@@ -720,7 +720,7 @@ namespace Catel.IoC
                 _specificConstructorCacheWithAutoCompletion.Clear();
             }
 
-            Log.Debug("Cleared type constructor cache");
+            //Log.Debug("Cleared type constructor cache");
         }
 
         /// <summary>

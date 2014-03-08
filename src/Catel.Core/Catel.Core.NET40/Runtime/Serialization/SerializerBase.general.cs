@@ -39,6 +39,10 @@ namespace Catel.Runtime.Serialization
         private static readonly IApiCop ApiCop = ApiCopManager.GetCurrentClassApiCop();
         #endregion
 
+        #region Fields
+        private readonly CacheStorage<Type, SerializationModelInfo> _serializationModelCache = new CacheStorage<Type, SerializationModelInfo>();
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes static members of the <see cref="SerializerBase{TSerializationContext}"/> class.
@@ -86,79 +90,85 @@ namespace Catel.Runtime.Serialization
 
             var modelType = model.GetType();
 
-            //string cacheKey = modelType.GetSafeFullName();
-            //foreach (var memberToIgnore in membersToIgnore)
-            //{
-            //    cacheKey += string.Format("_{0}", memberToIgnore);
-            //}
+            var modelInfo = _serializationModelCache.GetFromCacheOrFetch(modelType, () =>
+            {
+                var catelPropertyNames = SerializationManager.GetCatelPropertyNames(modelType);
+                var fieldsToSerialize = SerializationManager.GetFieldsToSerialize(modelType);
+                var propertiesToSerialize = SerializationManager.GetPropertiesToSerialize(modelType);
 
-            var catelTypeInfo = PropertyDataManager.Default.GetCatelTypeInfo(modelType);
-
-            var catelPropertyNames = SerializationManager.GetCatelPropertyNames(modelType);
-            var fieldsToSerialize = SerializationManager.GetFieldsToSerialize(modelType);
-            var propertiesToSerialize = SerializationManager.GetPropertiesToSerialize(modelType);
+                return new SerializationModelInfo(modelType, catelPropertyNames, fieldsToSerialize, propertiesToSerialize);
+            });
 
             var listToSerialize = new List<MemberValue>();
             var checkedMemberNames = new List<string>();
 
-            foreach (var fieldToSerialize in fieldsToSerialize)
+            foreach (var propertyName in modelInfo.PropertiesByName.Keys)
             {
-                checkedMemberNames.Add(fieldToSerialize);
-
-                if (membersToIgnoreHashSet.Contains(fieldToSerialize) || ShouldIgnoreMember(model, fieldToSerialize))
+                if (checkedMemberNames.Contains(propertyName))
                 {
-                    Log.Debug("Field '{0}' is being ignored for serialization", fieldToSerialize);
+                    continue;
+                }
+
+                checkedMemberNames.Add(propertyName);
+
+                if (membersToIgnoreHashSet.Contains(propertyName) || ShouldIgnoreMember(model, propertyName))
+                {
+                    Log.Debug("Property '{0}' is being ignored for serialization", propertyName);
                     continue;
                 }
 
                 try
                 {
-                    Log.Debug("Adding field '{0}' to list of objects to serialize", fieldToSerialize);
+                    Log.Debug("Adding property '{0}' to list of objects to serialize", propertyName);
 
-                    var fieldInfo = modelType.GetFieldEx(fieldToSerialize);
-                    var fieldValue = new MemberValue(SerializationMemberGroup.Field, modelType, fieldInfo.FieldType, fieldInfo.Name, fieldInfo.GetValue(model));
-
-                    listToSerialize.Add(fieldValue);
-                }
-                catch (Exception ex)
-                {
-                    Log.Warning(ex, "Failed to get value of member '{0}.{1}', skipping item during serialization", modelType.GetSafeFullName(), fieldToSerialize);
-                }
-            }
-
-            foreach (var propertyToSerialize in propertiesToSerialize)
-            {
-                checkedMemberNames.Add(propertyToSerialize);
-
-                if (membersToIgnoreHashSet.Contains(propertyToSerialize) || ShouldIgnoreMember(model, propertyToSerialize))
-                {
-                    Log.Debug("Property '{0}' is being ignored for serialization", propertyToSerialize);
-                    continue;
-                }
-
-                try
-                {
-                    Log.Debug("Adding property '{0}' to list of objects to serialize", propertyToSerialize);
-
-                    if (catelPropertyNames.Contains(propertyToSerialize))
+                    if (modelInfo.CatelPropertyNames.Contains(propertyName))
                     {
-                        var propertyData =  catelTypeInfo.GetPropertyData(propertyToSerialize);
-                        var actualPropertyValue = model.GetValueFast(propertyToSerialize);
+                        var propertyData = modelInfo.CatelPropertiesByName[propertyName];
+                        var actualPropertyValue = model.GetValueFast(propertyName);
                         var propertyValue = new MemberValue(SerializationMemberGroup.CatelProperty, modelType, propertyData.Type, propertyData.Name, actualPropertyValue);
 
                         listToSerialize.Add(propertyValue);
                     }
                     else
                     {
-                        var propertyInfo = modelType.GetPropertyEx(propertyToSerialize);
-                        var propertyValue = new MemberValue(SerializationMemberGroup.RegularProperty, modelType, propertyInfo.PropertyType, propertyInfo.Name, propertyInfo.GetValue(model, null));
+                        var propertyInfo = modelInfo.PropertiesByName[propertyName];
+                        var propertyValue = new MemberValue(SerializationMemberGroup.RegularProperty, modelType, propertyInfo.PropertyType, propertyName, propertyInfo.GetValue(model, null));
 
                         listToSerialize.Add(propertyValue);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Log.Warning(ex, "Failed to get value of member '{0}.{1}', skipping item during serialization", modelType.GetSafeFullName(), propertyToSerialize);
+                    Log.Warning(ex, "Failed to get value of member '{0}.{1}', skipping item during serialization", modelType.GetSafeFullName(), propertyName);
+                }
+            }
+
+            foreach (var field in modelInfo.Fields)
+            {
+                if (checkedMemberNames.Contains(field.Name))
+                {
+                    continue;
+                }
+
+                checkedMemberNames.Add(field.Name);
+
+                if (membersToIgnoreHashSet.Contains(field.Name) || ShouldIgnoreMember(model, field.Name))
+                {
+                    Log.Debug("Field '{0}' is being ignored for serialization", field.Name);
+                    continue;
+                }
+
+                try
+                {
+                    Log.Debug("Adding field '{0}' to list of objects to serialize", field.Name);
+
+                    var fieldValue = new MemberValue(SerializationMemberGroup.Field, modelType, field.FieldType, field.Name, field.GetValue(model));
+
+                    listToSerialize.Add(fieldValue);
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning(ex, "Failed to get value of member '{0}.{1}', skipping item during serialization", modelType.GetSafeFullName(), field.Name);
                 }
             }
 
@@ -178,7 +188,7 @@ namespace Catel.Runtime.Serialization
         /// <param name="typesPerThread">The types per thread. If <c>-1</c>, all types will be initialized on the same thread.</param>
         public void Warmup(IEnumerable<Type> types, int typesPerThread = 1000)
         {
-            ApiCop.UpdateRule<InitializationApiCopRule>("SerializerBase.WarmupAtStartup", 
+            ApiCop.UpdateRule<InitializationApiCopRule>("SerializerBase.WarmupAtStartup",
                 x => x.SetInitializationMode(InitializationMode.Eager, GetType().GetSafeFullName()));
 
             if (types == null)
@@ -305,33 +315,26 @@ namespace Catel.Runtime.Serialization
 
             var modelType = model.GetType();
 
-            var catelProperties = SerializationManager.GetCatelPropertyNames(modelType);
-            var fieldsToSerialize = SerializationManager.GetFieldsToSerialize(modelType);
-            var propertiesToSerialize = SerializationManager.GetPropertiesToSerialize(modelType);
+            var modelInfo = _serializationModelCache.GetFromCacheOrFetch(modelType, () =>
+            {
+                var catelPropertyNames = SerializationManager.GetCatelPropertyNames(modelType);
+                var fieldsToSerialize = SerializationManager.GetFieldsToSerialize(modelType);
+                var propertiesToSerialize = SerializationManager.GetPropertiesToSerialize(modelType);
+
+                return new SerializationModelInfo(modelType, catelPropertyNames, fieldsToSerialize, propertiesToSerialize);
+            });
 
             foreach (var member in members)
             {
                 try
                 {
-                    if (catelProperties.Contains(member.Name))
+                    if (modelInfo.CatelPropertyNames.Contains(member.Name))
                     {
                         model.SetValue(member.Name, member.Value);
                     }
-                    else if (fieldsToSerialize.Contains(member.Name))
+                    else if (modelInfo.PropertyNames.Contains(member.Name))
                     {
-                        var fieldInfo = modelType.GetFieldEx(member.Name);
-                        if (fieldInfo == null)
-                        {
-                            Log.Warning("Failed to set field '{0}.{1}' because the member cannot be found on the model", modelType.GetSafeFullName(), member.Name);
-                        }
-                        else
-                        {
-                            fieldInfo.SetValue(model, member.Value);
-                        }
-                    }
-                    else if (propertiesToSerialize.Contains(member.Name))
-                    {
-                        var propertyInfo = modelType.GetPropertyEx(member.Name);
+                        var propertyInfo = modelInfo.PropertiesByName[member.Name];
                         if (propertyInfo == null)
                         {
                             Log.Warning("Failed to set property '{0}.{1}' because the member cannot be found on the model", modelType.GetSafeFullName(), member.Name);
@@ -339,6 +342,18 @@ namespace Catel.Runtime.Serialization
                         else
                         {
                             propertyInfo.SetValue(model, member.Value, null);
+                        }
+                    }
+                    else if (modelInfo.FieldNames.Contains(member.Name))
+                    {
+                        var fieldInfo = modelInfo.FieldsByName[member.Name];
+                        if (fieldInfo == null)
+                        {
+                            Log.Warning("Failed to set field '{0}.{1}' because the member cannot be found on the model", modelType.GetSafeFullName(), member.Name);
+                        }
+                        else
+                        {
+                            fieldInfo.SetValue(model, member.Value);
                         }
                     }
                 }
