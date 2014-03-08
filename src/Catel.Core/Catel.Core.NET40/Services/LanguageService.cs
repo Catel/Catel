@@ -255,7 +255,7 @@ namespace Catel.Services
                         // Invert so design-time will always pick the latest version
                         loadedAssemblies.Reverse();
 
-                        var assembly = loadedAssemblies.FirstOrDefault(x => x.FullName.Contains(containingAssemblyName));
+                        var assembly = loadedAssemblies.FirstOrDefault(x => x.FullName.StartsWith(containingAssemblyName));
                         if (assembly == null)
                         {
                             return null;

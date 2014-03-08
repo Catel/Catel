@@ -77,6 +77,7 @@ Added/fixed:
 (x) CTL-368 XmlSerializer does not correctly serialize ICollection<AbstractClass>
 (x) CTL-369 Catel should ignore resetting of LeanAndMeanModel during serialization
 (x) CTL-371 HideValidationResults must also hide HasErrors and HasWarnings
+(x) CTL-381 LanguageService.GetResourceManager() method retrieves wrong assembly and therefore cannot find resource
 
 Roadmap:
 ========
