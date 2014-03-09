@@ -124,6 +124,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\TaskCommand.cs">
       <Link>MVVM\Commands\TaskCommand.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Exceptions\SplashScreenException.cs">
+      <Link>Services\Exceptions\SplashScreenException.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\Extensions\IUIVisualizerServiceExtensions.cs">
       <Link>Services\Extensions\IUIVisualizerServiceExtensions.cs</Link>
     </Compile>

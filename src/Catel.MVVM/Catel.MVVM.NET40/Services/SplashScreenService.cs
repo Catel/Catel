@@ -8,7 +8,7 @@ namespace Catel.Services
     using System;
     using System.Collections.Generic;
     using System.Threading;
-
+    using Catel.ExceptionHandling;
     using Catel.Logging;
     using Catel.MVVM;
     using Catel.MVVM.Tasks;
@@ -44,30 +44,11 @@ namespace Catel.Services
         #endregion
 
         #region Fields
-        /// <summary>
-        /// The dispatcher service.
-        /// </summary>
         private readonly IDispatcherService _dispatcherService;
-
-        /// <summary>
-        ///  The message service.
-        /// </summary>
-        private readonly IMessageService _messageService;
-        
-        /// <summary>
-        /// The view model factory. 
-        /// </summary>
         private readonly IViewModelFactory _viewModelFactory;
-
-        /// <summary>
-        /// The UI visualizer service. 
-        /// </summary>
         private readonly IUIVisualizerService _uiVisualizerService;
-
-        /// <summary>
-        /// The please wait service.
-        /// </summary>
         private readonly IPleaseWaitService _pleaseWaitService;
+        private readonly IExceptionService _exceptionService;
 
         /// <summary>
         /// The lock.
@@ -101,28 +82,28 @@ namespace Catel.Services
         /// Initializes a new instance of the <see cref="SplashScreenService" /> class.
         /// </summary>
         /// <param name="dispatcherService">The dispatcher service.</param>
-        /// <param name="messageService">The message Service.</param>
         /// <param name="viewModelFactory">The view model factory.</param>
         /// <param name="uiVisualizerService">The UI visualizer service.</param>
         /// <param name="pleaseWaitService">The please wait serivce</param>
+        /// <param name="exceptionService">The exception service.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="dispatcherService" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="messageService" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelFactory" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="uiVisualizerService" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="pleaseWaitService" /> is <c>null</c>.</exception>
-        public SplashScreenService(IDispatcherService dispatcherService, IMessageService messageService, IViewModelFactory viewModelFactory,
-            IUIVisualizerService uiVisualizerService, IPleaseWaitService pleaseWaitService)
+        /// <exception cref="ArgumentNullException">The <paramref name="exceptionService" /> is <c>null</c>.</exception>
+        public SplashScreenService(IDispatcherService dispatcherService, IViewModelFactory viewModelFactory,
+            IUIVisualizerService uiVisualizerService, IPleaseWaitService pleaseWaitService, IExceptionService exceptionService)
         {
             Argument.IsNotNull(() => dispatcherService);
-            Argument.IsNotNull(() => messageService);
             Argument.IsNotNull(() => viewModelFactory);
             Argument.IsNotNull(() => uiVisualizerService);
+            Argument.IsNotNull(() => exceptionService);
 
             _dispatcherService = dispatcherService;
-            _messageService = messageService;
             _viewModelFactory = viewModelFactory;
             _uiVisualizerService = uiVisualizerService;
             _pleaseWaitService = pleaseWaitService;
+            _exceptionService = exceptionService;
 
             CloseViewModelOnTerminated = true;
         }
@@ -286,29 +267,19 @@ namespace Catel.Services
 
                         processedTasks.Push(_tasks.Dequeue());
                     }
-                    catch (Exception e)
+                    catch (Exception ex)
                     {
-                        Log.Error(e);
+                        Log.Error(ex);
 
-                        var messageResult = MessageResult.None;
-                        _dispatcherService.Invoke(() =>
-                            {
-                                messageResult = _messageService.Show(string.Format(TaskExecutionErrorMessagePattern, task.Name), "Error", MessageButton.YesNoCancel, MessageImage.Error);
-                            });
-
-                        switch (messageResult)
+                        if (!_exceptionService.HandleException(ex))
                         {
-                            case MessageResult.Yes:
-                                progress--;
-                                break;
-                            case MessageResult.No:
-                                processedTasks.Push(_tasks.Dequeue());
-                                break;
-                            case MessageResult.Cancel:
-                                processedTasks.Push(_tasks.Dequeue());
-                                aborted = true;
-                                break;
-                        } 
+                            processedTasks.Push(_tasks.Dequeue());
+                            aborted = true;
+                        }
+                        else
+                        {
+                            processedTasks.Push(_tasks.Dequeue());
+                        }
                     }
                 }
 

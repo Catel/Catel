@@ -90,7 +90,8 @@ namespace Catel.ExceptionHandling
         /// <returns>
         ///   <c>true</c> if the exception type is registered; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsExceptionRegistered<TException>() where TException : Exception
+        public bool IsExceptionRegistered<TException>() 
+            where TException : Exception
         {
             var exceptionType = typeof(TException);
 

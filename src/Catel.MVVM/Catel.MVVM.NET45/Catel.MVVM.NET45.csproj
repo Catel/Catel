@@ -236,6 +236,9 @@
     <Compile Include="..\Catel.MVVM.NET40\Services\Exceptions\PageNotRegisteredException.cs">
       <Link>Services\Exceptions\PageNotRegisteredException.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Exceptions\SplashScreenException.cs">
+      <Link>Services\Exceptions\SplashScreenException.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\Exceptions\WindowNotRegisteredException.cs">
       <Link>Services\Exceptions\WindowNotRegisteredException.cs</Link>
     </Compile>

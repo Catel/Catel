@@ -102,6 +102,7 @@
     <Compile Include="MVVM\Commands\EventArgs\CommandExecutedEventArgs.cs" />
     <Compile Include="MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs" />
     <Compile Include="MVVM\Commands\Helpers\CommandHelper.cs" />
+    <Compile Include="Services\Exceptions\SplashScreenException.cs" />
     <Compile Include="Services\Extensions\IUIVisualizerServiceExtensions.cs" />
     <Compile Include="Windows\Data\Converters\CollectionToCountConverter.cs" />
     <Compile Include="Windows\Data\Converters\TextToLowerCaseConverter.cs" />
