@@ -54,6 +54,7 @@ Added/fixed:
 (*) CTL-343 Improved logging performance by 10 % by small optimalizations
 (*) CTL-348 CacheStorage now only enables the expiration timer when it actually contains items that can expire. The
    interval is now controllable as well, but still defaults to 1 second
+(*) CTL-350 Improved performance of TypeCache, which should noticeable improve startup time (some up to 50 %)
 (*) CTL-355 LanguageBindings do not refresh after changing PreferredCulture in ILanguageService
 (*) CTL-356 ConverterHelper.DoNothingBindingValue now returns UnsetValue instead of DoNothing in NET40 and NET45 to make 
     sure it can use the FallbackValue

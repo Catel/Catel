@@ -32,22 +32,24 @@ namespace Catel.Reflection
         /// <returns>List of types found in the <see cref="AppDomain"/>.</returns>
         /// <remarks>
         /// This class must only be used by Catel. To make sure that an application performs, make sure to use
-        /// <see cref="TypeCache.GetTypes()"/> instead.
+        /// <see cref="TypeCache.GetTypes"/> instead.
         /// </remarks>
         internal static Type[] GetTypes(this AppDomain appDomain)
         {
             Argument.IsNotNull("appDomain", appDomain);
 
-            List<Assembly> assemblies = AssemblyHelper.GetLoadedAssemblies(appDomain);
-            var types = new List<Type>();
+            return TypeCache.GetTypes();
 
-            foreach (var assembly in assemblies)
-            {
-                types.AddRange(from assemblyType in AssemblyHelper.GetAllTypesSafely(assembly)
-                               select assemblyType);
-            }
+            //List<Assembly> assemblies = AssemblyHelper.GetLoadedAssemblies(appDomain);
+            //var types = new List<Type>();
 
-            return types.ToArray();
+            //foreach (var assembly in assemblies)
+            //{
+            //    types.AddRange(from assemblyType in AssemblyHelper.GetAllTypesSafely(assembly)
+            //                   select assemblyType);
+            //}
+
+            //return types.ToArray();
         }
 
 #if NET

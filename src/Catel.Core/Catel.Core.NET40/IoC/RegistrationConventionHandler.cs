@@ -119,8 +119,6 @@ namespace Catel.IoC
             {
                 lock (_registeredConventions)
                 {
-                    Log.Debug("Retrieving all registered registration conventions");
-
                     return _registeredConventions;
                 }
             }
@@ -170,13 +168,17 @@ namespace Catel.IoC
                     return;
                 }
 
-                var types = _assemblies.Where(assembly => AssemblyFilter.Matches(assembly)).SelectMany(TypeCache.GetTypesOfAssembly).Where(type => !string.IsNullOrWhiteSpace(type.Namespace) && !type.Name.StartsWith("<"));
+                var types = new List<Type>();
 
-                var enumerable = types as Type[] ?? types.ToArray();
+                var filteredAssemblies = _assemblies.Where(assembly => AssemblyFilter.Matches(assembly));
+                foreach (var filteredAssembly in filteredAssemblies)
+                {
+                    types.AddRange(TypeCache.GetTypesOfAssembly(filteredAssembly, type => !string.IsNullOrWhiteSpace(type.Namespace) && !type.Name.StartsWith("<")));
+                }
 
-                enumerable.ForEach(RemoveIfAlreadyRegistered);
+                types.ForEach(RemoveIfAlreadyRegistered);
 
-                var typesToHandle = enumerable.Where(type => TypeFilter.Matches(type));
+                var typesToHandle = types.Where(type => TypeFilter.Matches(type));
 
                 _retrievedTypes = new List<Type>(typesToHandle);
 

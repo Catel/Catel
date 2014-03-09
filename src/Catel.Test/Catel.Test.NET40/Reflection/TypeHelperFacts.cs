@@ -498,16 +498,10 @@ namespace Catel.Test.Reflection
         {
             #region Methods
             [TestMethod]
-            public void ThrowsArgumentNullExceptionForNullPredicate()
-            {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => TypeCache.GetTypes(null));
-            }
-
-            [TestMethod]
             public void ReturnsAllTypesThatMatchThePredicate()
             {
                 var allTypes = TypeCache.GetTypes();
-                var notifyTypes = TypeCache.GetTypes(t => t is INotifyPropertyChanged);
+                var notifyTypes = TypeCache.GetTypes(t => t.ImplementsInterfaceEx<INotifyPropertyChanged>());
 
                 Assert.AreNotEqual(allTypes.Length, notifyTypes.Length);
             }

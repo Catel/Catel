@@ -51,6 +51,9 @@ ipch/
 _ReSharper*
 *.resharper.user
 
+# Catel
+CatelLogging.txt
+
 # Dotcover
 *.dotCover
 *.dotsettings.user
