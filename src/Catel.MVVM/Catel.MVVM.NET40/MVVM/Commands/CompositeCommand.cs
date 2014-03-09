@@ -9,6 +9,7 @@ namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Catel.Logging;
 
     /// <summary>
@@ -23,7 +24,7 @@ namespace Catel.MVVM
 
         private readonly object _lock = new object();
         private readonly List<CommandInfo> _commandInfo = new List<CommandInfo>();
-        private readonly List<Action> _actions = new List<Action>(); 
+        private readonly List<Action> _actions = new List<Action>();
 
         #region Constructors
         /// <summary>
@@ -51,14 +52,19 @@ namespace Catel.MVVM
         {
             lock (_lock)
             {
-                foreach (var commandInfo in _commandInfo)
+                var commands = (from commandInfo in _commandInfo
+                                select commandInfo.Command).ToList();
+
+                foreach (var command in commands)
                 {
                     try
                     {
-                        var command = commandInfo.Command;
-                        if (command.CanExecute())
+                        if (command != null)
                         {
-                            command.Execute();
+                            if (command.CanExecute())
+                            {
+                                command.Execute();
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -67,11 +73,15 @@ namespace Catel.MVVM
                     }
                 }
 
-                foreach (var action in _actions)
+                var actions = _actions.ToList();
+                foreach (var action in actions)
                 {
                     try
                     {
-                        action();
+                        if (action != null)
+                        {
+                            action();
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -87,11 +97,17 @@ namespace Catel.MVVM
             {
                 if (CheckCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand)
                 {
-                    foreach (var command in _commandInfo)
+                    var commands = (from commandInfo in _commandInfo
+                                    select commandInfo.Command).ToList();
+
+                    foreach (var command in commands)
                     {
-                        if (!command.Command.CanExecute())
+                        if (command != null)
                         {
-                            return false;
+                            if (!command.CanExecute())
+                            {
+                                return false;
+                            }
                         }
                     }
 
