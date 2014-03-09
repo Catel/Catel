@@ -64,6 +64,8 @@ Added/fixed:
 (*) CTL-365 Allow printing of views that are hidden without focus with ViewExportService
 (*) CTL-370 Add colors to ConsoleLogListener
 (*) CTL-374 SplashScreenService now uses the IExceptionService to handle exceptions so the behavior can be fully customized
+(*) CTL-382 Improved the performance of StyleHelper by adding caching and disabling the recreateStylesBasedOnTheme option by
+    default which decompiles BAML to XAML (which is expensive)
 (x) CTL-327 ListCollectionView not supported in ChangeNotificationWrapper (causes InvalidCastException)
 (x) CTL-329 VisualStateManager doesn't change state in WP8 in UserControl => introduced option to transfer styles and
     transitions: UserControl.TransferStylesAndTransitionsToViewModelGrid (default value is true)

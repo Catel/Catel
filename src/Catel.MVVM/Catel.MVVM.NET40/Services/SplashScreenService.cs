@@ -179,7 +179,7 @@ namespace Catel.Services
         /// <typeparam name="TViewModel">The view model type.</typeparam>
         /// <param name="completedCallback">The completed callback.</param>
         /// <param name="viewModel">The view model instance.</param>
-        /// <param name="show">Indicates whether the view model will be shown. If the view model is <c>null</c> then tthis argument will be ignored.</param>
+        /// <param name="show">Indicates whether the view model will be shown. If the view model is <c>null</c> then this argument will be ignored.</param>
         /// <exception cref="InvalidOperationException">If the batch is already committed and the execution is in progress or committing via async way.</exception>
         public void CommitAsync<TViewModel>(Action completedCallback = null, TViewModel viewModel = default(TViewModel), bool show = true) where TViewModel : IProgressNotifyableViewModel
         {
@@ -384,7 +384,7 @@ namespace Catel.Services
         /// Verifies the state of the service and also sets the commiting state to <c>true</c>.
         /// </summary>
         /// <param name="viewModelFunc">The view model instance.</param>
-        /// <param name="show">Indicates whether the view model will be shown. If the view model is <c>null</c> then tthis argument will be ignored.</param>
+        /// <param name="show">Indicates whether the view model will be shown. If the view model is <c>null</c> then this argument will be ignored.</param>
         /// <exception cref="System.InvalidOperationException">
         /// </exception>
         /// <exception cref="InvalidOperationException">If the batch is already committed and the execution is in progress or committing via async way.</exception>

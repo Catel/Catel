@@ -10,8 +10,10 @@ namespace Catel.Windows
     using System.Collections.Generic;
     using System.Linq;
     using System.Windows;
+    using Catel.Caching;
+    using Catel.Runtime.Serialization.Xml;
     using Logging;
-    
+    using XmlNamespaceManager = System.Xml.XmlNamespaceManager;
 #if NET
     using System.Windows.Markup;
     using System.Windows.Resources;
@@ -74,12 +76,12 @@ namespace Catel.Windows
         /// <summary>
         /// Cached decompiled XAML resource dictionaries.
         /// </summary>
-        private static readonly Dictionary<Uri, XmlDocument> _resourceDictionaryCache = new Dictionary<Uri, XmlDocument>();
+        private static readonly CacheStorage<Uri, Tuple<XmlDocument, XmlNamespaceManager>> _resourceDictionaryCache = new CacheStorage<Uri, Tuple<XmlDocument, XmlNamespaceManager>>();
 
         /// <summary>
         /// Cached types of <see cref="FrameworkElement"/> belonging to the string representation of the type.
         /// </summary>
-        private static readonly Dictionary<string, Type> _styleToFrameworkElementTypeCache = new Dictionary<string, Type>();
+        private static readonly CacheStorage<string, Type> _styleToFrameworkElementTypeCache = new CacheStorage<string, Type>();
 #endif
         #endregion
 
@@ -93,7 +95,7 @@ namespace Catel.Windows
 
         /// <summary>
         /// Gets or sets a value indicating whether style forwarding is enabled. Style forwarding can be
-        /// enabled by calling one of the <see cref="CreateStyleForwardersForDefaultStyles()"/> overloads.
+        /// enabled by calling one of the <see cref="CreateStyleForwardersForDefaultStyles(string)"/> overloads.
         /// </summary>
         /// <value>
         /// 	<c>true</c> if this instance is style forwarding enabled; otherwise, <c>false</c>.
@@ -107,21 +109,10 @@ namespace Catel.Windows
         /// to apply when WPF is hosted (for example, when loaded as plugin of a non-WPF application).
         /// </summary>
         /// <param name="applicationResourceDictionary">The application resource dictionary.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="applicationResourceDictionary"/> is <c>null</c>.</exception>
-        public static void EnsureApplicationResourcesAndCreateStyleForwarders(Uri applicationResourceDictionary)
-        {
-            EnsureApplicationResourcesAndCreateStyleForwarders(applicationResourceDictionary, DefaultKeyPrefix);
-        }
-
-        /// <summary>
-        /// Ensures that an application instance exists and the styles are applied to the application. This method is extremely useful
-        /// to apply when WPF is hosted (for example, when loaded as plugin of a non-WPF application).
-        /// </summary>
-        /// <param name="applicationResourceDictionary">The application resource dictionary.</param>
         /// <param name="defaultPrefix">The default prefix, uses to determine the styles as base for other styles.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="applicationResourceDictionary"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="defaultPrefix"/> is <c>null</c> or whitespace.</exception>
-        public static void EnsureApplicationResourcesAndCreateStyleForwarders(Uri applicationResourceDictionary, string defaultPrefix)
+        public static void EnsureApplicationResourcesAndCreateStyleForwarders(Uri applicationResourceDictionary, string defaultPrefix = DefaultKeyPrefix)
         {
             Argument.IsNotNull("applicationResourceDictionary", applicationResourceDictionary);
             Argument.IsNotNullOrWhitespace("defaultPrefix", defaultPrefix);
@@ -136,7 +127,7 @@ namespace Catel.Windows
                     CreateStyleForwardersForDefaultStyles(Application.Current.Resources, defaultPrefix);
 
                     // Create an invisible dummy window to make sure that this is the main window
-                    Window dummyMainWindow = new Window();
+                    var dummyMainWindow = new Window();
                     dummyMainWindow.Visibility = Visibility.Hidden;
                 }
                 catch (Exception ex)
@@ -154,21 +145,9 @@ namespace Catel.Windows
         /// This method will use the current application (<see cref="System.Windows.Application.Current"/> to retrieve
         /// the resources. The forwarders will be written to the same dictionary.
         /// </summary>
-        public static void CreateStyleForwardersForDefaultStyles()
-        {
-            CreateStyleForwardersForDefaultStyles(DefaultKeyPrefix);
-        }
-
-        /// <summary>
-        /// Creates style forwarders for default styles. This means that all styles found in the theme that are
-        /// name like Default[CONTROLNAME]Style (i.e. "DefaultButtonStyle") will be used as default style for the
-        /// control.
-        /// This method will use the current application (<see cref="System.Windows.Application.Current"/> to retrieve
-        /// the resources. The forwarders will be written to the same dictionary.
-        /// </summary>
         /// <param name="defaultPrefix">The default prefix, uses to determine the styles as base for other styles.</param>
         /// <exception cref="ArgumentException">The <paramref name="defaultPrefix"/> is <c>null</c> or whitespace.</exception>
-        public static void CreateStyleForwardersForDefaultStyles(string defaultPrefix)
+        public static void CreateStyleForwardersForDefaultStyles(string defaultPrefix = DefaultKeyPrefix)
         {
             CreateStyleForwardersForDefaultStyles(Application.Current.Resources, defaultPrefix);
         }
@@ -181,42 +160,12 @@ namespace Catel.Windows
         /// the source dictionary.
         /// </summary>
         /// <param name="sourceResources">Resource dictionary to read the keys from (thus that contains the default styles).</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="sourceResources"/> is <c>null</c>.</exception>
-        public static void CreateStyleForwardersForDefaultStyles(ResourceDictionary sourceResources)
-        {
-            CreateStyleForwardersForDefaultStyles(sourceResources, DefaultKeyPrefix);
-        }
-
-        /// <summary>
-        /// Creates style forwarders for default styles. This means that all styles found in the theme that are
-        /// name like Default[CONTROLNAME]Style (i.e. "DefaultButtonStyle") will be used as default style for the
-        /// control.
-        /// This method will use the passed resources, but the forwarders will be written to the same dictionary as
-        /// the source dictionary.
-        /// </summary>
-        /// <param name="sourceResources">Resource dictionary to read the keys from (thus that contains the default styles).</param>
         /// <param name="defaultPrefix">The default prefix, uses to determine the styles as base for other styles.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="sourceResources"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="defaultPrefix"/> is <c>null</c> or whitespace.</exception>
-        public static void CreateStyleForwardersForDefaultStyles(ResourceDictionary sourceResources, string defaultPrefix)
+        public static void CreateStyleForwardersForDefaultStyles(ResourceDictionary sourceResources, string defaultPrefix = DefaultKeyPrefix)
         {
             CreateStyleForwardersForDefaultStyles(sourceResources, sourceResources, defaultPrefix);
-        }
-
-        /// <summary>
-        /// Creates style forwarders for default styles. This means that all styles found in the theme that are 
-        /// name like Default[CONTROLNAME]Style (i.e. "DefaultButtonStyle") will be used as default style for the
-        /// control.
-        /// <para />
-        /// This method will use the passed resources.
-        /// </summary>
-        /// <param name="sourceResources">Resource dictionary to read the keys from (thus that contains the default styles).</param>
-        /// <param name="targetResources">Resource dictionary where the forwarders will be written to.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="sourceResources"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="targetResources"/> is <c>null</c>.</exception>
-        public static void CreateStyleForwardersForDefaultStyles(ResourceDictionary sourceResources, ResourceDictionary targetResources)
-        {
-            CreateStyleForwardersForDefaultStyles(sourceResources, targetResources, DefaultKeyPrefix);
         }
 
         /// <summary>
@@ -233,7 +182,7 @@ namespace Catel.Windows
         /// <exception cref="ArgumentNullException">The <paramref name="targetResources"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="defaultPrefix"/> is <c>null</c> or whitespace.</exception>
         public static void CreateStyleForwardersForDefaultStyles(ResourceDictionary sourceResources, ResourceDictionary targetResources,
-            string defaultPrefix)
+            string defaultPrefix = DefaultKeyPrefix)
         {
             CreateStyleForwardersForDefaultStyles(sourceResources, sourceResources, targetResources, false, defaultPrefix);
         }
@@ -248,32 +197,14 @@ namespace Catel.Windows
         /// <param name="sourceResources">Resource dictionary to read the keys from (thus that contains the default styles).</param>
         /// <param name="targetResources">Resource dictionary where the forwarders will be written to.</param>
         /// <param name="forceForwarders">if set to <c>true</c>, styles will not be completed but only forwarders are created.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="rootResourceDictionary"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="sourceResources"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="targetResources"/> is <c>null</c>.</exception>
-        public static void CreateStyleForwardersForDefaultStyles(ResourceDictionary rootResourceDictionary, ResourceDictionary sourceResources,
-            ResourceDictionary targetResources, bool forceForwarders)
-        {
-            CreateStyleForwardersForDefaultStyles(rootResourceDictionary, sourceResources, targetResources, forceForwarders, DefaultKeyPrefix);
-        }
-
-        /// <summary>
-        /// Creates style forwarders for default styles. This means that all styles found in the theme that are
-        /// name like Default[CONTROLNAME]Style (i.e. "DefaultButtonStyle") will be used as default style for the
-        /// control.
-        /// This method will use the passed resources.
-        /// </summary>
-        /// <param name="rootResourceDictionary">The root resource dictionary.</param>
-        /// <param name="sourceResources">Resource dictionary to read the keys from (thus that contains the default styles).</param>
-        /// <param name="targetResources">Resource dictionary where the forwarders will be written to.</param>
-        /// <param name="forceForwarders">if set to <c>true</c>, styles will not be completed but only forwarders are created.</param>
         /// <param name="defaultPrefix">The default prefix, uses to determine the styles as base for other styles.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="rootResourceDictionary"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="sourceResources"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="targetResources"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="defaultPrefix"/> is <c>null</c> or whitespace.</exception>
+        /// <param name="recreateStylesBasedOnTheme">if set to <c>true</c>, the styles will be recreated with BasedOn on the current theme.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="rootResourceDictionary" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="sourceResources" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="targetResources" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="defaultPrefix" /> is <c>null</c> or whitespace.</exception>
         public static void CreateStyleForwardersForDefaultStyles(ResourceDictionary rootResourceDictionary, ResourceDictionary sourceResources,
-            ResourceDictionary targetResources, bool forceForwarders, string defaultPrefix)
+            ResourceDictionary targetResources, bool forceForwarders, string defaultPrefix = DefaultKeyPrefix, bool recreateStylesBasedOnTheme = false)
         {
             Argument.IsNotNull("rootResourceDictionary", rootResourceDictionary);
             Argument.IsNotNull("sourceResources", sourceResources);
@@ -320,13 +251,12 @@ namespace Catel.Windows
                 {
                     CreateStyleForwardersForDefaultStyles(rootResourceDictionary, resourceDictionary, targetResources, forceForwarders, defaultPrefix);
                 }
-                
+
                 return;
             }
             #endregion
 
-            IEnumerable<Style> defaultStyles = FindDefaultStyles(sourceResources, defaultPrefix);
-
+            var defaultStyles = FindDefaultStyles(sourceResources, defaultPrefix);
             foreach (var defaultStyle in defaultStyles)
             {
                 try
@@ -350,7 +280,8 @@ namespace Catel.Windows
                             targetStyle.BasedOn = defaultStyle;
                             targetResources.Add(targetType, targetStyle);
 #else
-                            targetResources.Add(targetType, new Style(targetType, defaultStyle));
+                            var style = new Style(targetType, defaultStyle);
+                            targetResources.Add(targetType, style);
 #endif
                         }
                     }
@@ -362,7 +293,10 @@ namespace Catel.Windows
             }
 
 #if !SILVERLIGHT
-            RecreateDefaultStylesBasedOnTheme(rootResourceDictionary, targetResources, defaultPrefix);
+            if (recreateStylesBasedOnTheme)
+            {
+                RecreateDefaultStylesBasedOnTheme(rootResourceDictionary, targetResources, defaultPrefix);
+            }
 #endif
 
             IsStyleForwardingEnabled = true;
@@ -459,16 +393,16 @@ namespace Catel.Windows
             Argument.IsNotNull("style", style);
             Argument.IsNotNull("styleWithAdditionalInfo", styleWithAdditionalInfo);
 
-            Style newStyle = new Style(style.TargetType);
+            var newStyle = new Style(style.TargetType);
 
             #region Copy style with additional info
-            foreach (Setter setter in styleWithAdditionalInfo.Setters)
+            foreach (var setter in styleWithAdditionalInfo.Setters)
             {
                 newStyle.Setters.Add(setter);
             }
 
 #if !SILVERLIGHT
-            foreach (Trigger trigger in styleWithAdditionalInfo.Triggers)
+            foreach (var trigger in styleWithAdditionalInfo.Triggers)
             {
                 newStyle.Triggers.Add(trigger);
             }
@@ -476,10 +410,10 @@ namespace Catel.Windows
             #endregion
 
             #region Copy original style
-            foreach (Setter setter in style.Setters)
+            foreach (SetterBase setter in style.Setters)
             {
                 bool exists = (from styleSetter in newStyle.Setters
-                               where ((Setter)styleSetter).Property == setter.Property
+                               where setter is Setter && ((Setter)styleSetter).Property == ((Setter)setter).Property
                                select styleSetter).Any();
                 if (!exists)
                 {
@@ -488,7 +422,7 @@ namespace Catel.Windows
             }
 
 #if !SILVERLIGHT
-            foreach (Trigger trigger in style.Triggers)
+            foreach (var trigger in style.Triggers)
             {
                 newStyle.Triggers.Add(trigger);
             }
@@ -571,19 +505,19 @@ namespace Catel.Windows
             Argument.IsNotNull("basedOnType", basedOnType);
 
 #if SILVERLIGHT
-            Style newStyle = new Style(style.TargetType);
+            var newStyle = new Style(style.TargetType);
             newStyle.BasedOn = rootResourceDictionary[basedOnType] as Style;
 #else
-            Style newStyle = new Style(style.TargetType, rootResourceDictionary[basedOnType] as Style);
+            var newStyle = new Style(style.TargetType, rootResourceDictionary[basedOnType] as Style);
 #endif
 
-            foreach (SetterBase setter in style.Setters)
+            foreach (var setter in style.Setters)
             {
                 newStyle.Setters.Add(setter);
             }
 
 #if !SILVERLIGHT
-            foreach (TriggerBase trigger in style.Triggers)
+            foreach (var trigger in style.Triggers)
             {
                 newStyle.Triggers.Add(trigger);
             }
@@ -613,118 +547,108 @@ namespace Catel.Windows
             Argument.IsNotNull("resourceDictionaryUri", resourceDictionaryUri);
             Argument.IsNotNull("styleKey", styleKey);
 
-            if (_styleToFrameworkElementTypeCache.ContainsKey(styleKey))
+            return _styleToFrameworkElementTypeCache.GetFromCacheOrFetch(styleKey, () =>
             {
-                return _styleToFrameworkElementTypeCache[styleKey];
-            }
+                try
+                {
+                    var xmlDocInfo = GetResourceXmlDocument(resourceDictionaryUri);
+                    var doc = xmlDocInfo.Item1;
+                    var xmlNamespaceManager = xmlDocInfo.Item2;
 
-            try
+                    string xpath = string.Format("/ctl:ResourceDictionary/ctl:Style[@x:Key='{0}']/@BasedOn", styleKey);
+                    var xmlAttribute = doc.SelectSingleNode(xpath, xmlNamespaceManager) as XmlAttribute;
+                    if (xmlAttribute == null)
+                    {
+                        Log.Warning("Style '{0}' does not have the 'BasedOn' attribute defined", styleKey);
+                        return null;
+                    }
+
+                    string basedOnValue = xmlAttribute.Value;
+                    basedOnValue = basedOnValue.Replace("StaticResource", "");
+                    basedOnValue = basedOnValue.Replace("x:Type", "").Trim(new[] { ' ', '{', '}' });
+
+                    #region Create xml type mapper
+                    var xamlTypeMapper = new XamlTypeMapper(new[] { "PresentationFramework" });
+                    foreach (XmlAttribute namespaceAttribute in doc.DocumentElement.Attributes)
+                    {
+                        string xmlNamespace = namespaceAttribute.Name.Replace("xmlns", string.Empty).TrimStart(new [] { ':' });
+
+                        string value = namespaceAttribute.Value;
+                        string clrNamespace = value;
+                        string assemblyName = string.Empty;
+
+                        if (clrNamespace.StartsWith("clr-namespace:"))
+                        {
+                            // We have a hit (formatting is normally one of the 2 below):
+                            // * clr-namespace:[NAMESPACE]
+                            // * clr-namespace:[NAMESPACE];assembly=[ASSEMBLY]
+                            if (clrNamespace.Contains(";"))
+                            {
+                                clrNamespace = clrNamespace.Split(new [] { ';' })[0];
+                            }
+                            clrNamespace = clrNamespace.Replace("clr-namespace:", string.Empty);
+
+                            if (value.Contains(";"))
+                            {
+                                assemblyName = value.Split(new [] { ';' })[1].Replace("assembly:", string.Empty);
+                            }
+
+                            xamlTypeMapper.AddMappingProcessingInstruction(xmlNamespace, clrNamespace, assemblyName);
+                        }
+                    }
+                    #endregion
+
+                    string[] splittedType = basedOnValue.Split(new[] { ':' });
+                    string typeNamespace = (splittedType.Length == 2) ? splittedType[0] : "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
+                    string typeName = (splittedType.Length == 2) ? splittedType[1] : splittedType[0];
+                    var type = xamlTypeMapper.GetType(typeNamespace, typeName);
+                    if (type == null)
+                    {
+                        return null;
+                    }
+
+                    Log.Debug("Style '{0}' is based on type '{1}'", styleKey, type);
+
+                    if ((type == typeof(FrameworkElement)) || type.IsSubclassOf(typeof(FrameworkElement)))
+                    {
+                        return type;
+                    }
+
+                    return null;
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Failed to find the framework element where style '{0}' is based on", styleKey);
+                    return null;
+                }
+            });
+        }
+
+        private static Tuple<XmlDocument, XmlNamespaceManager> GetResourceXmlDocument(Uri resourceDictionaryUri)
+        {
+            return _resourceDictionaryCache.GetFromCacheOrFetch(resourceDictionaryUri, () =>
             {
-                XmlDocument doc;
+                var streamResourceInfo = Application.GetResourceStream(resourceDictionaryUri);
+                var reader = new XmlBamlReader(streamResourceInfo.Stream);
 
-                if (_resourceDictionaryCache.ContainsKey(resourceDictionaryUri))
-                {
-                    doc = _resourceDictionaryCache[resourceDictionaryUri];
-                }
-                else
-                {
-                    var streamResourceInfo = Application.GetResourceStream(resourceDictionaryUri);
-                    var reader = new XmlBamlReader(streamResourceInfo.Stream);
+                var doc = new XmlDocument();
+                doc.Load(reader);
 
-                    doc = new XmlDocument();
-                    doc.Load(reader);
-
-                    _resourceDictionaryCache.Add(resourceDictionaryUri, doc);
-                }
-
-                #region Create xml namespace manager
                 // Create namespace manager (all namespaces are required)
                 var xmlNamespaceManager = new XmlNamespaceManager(doc.NameTable);
                 foreach (XmlAttribute namespaceAttribute in doc.DocumentElement.Attributes)
                 {
                     // Clean up namespace (remove xmlns prefix)
-                    string xmlNamespace = namespaceAttribute.Name.Replace("xmlns", "").TrimStart(new char[] { ':' });
+                    string xmlNamespace = namespaceAttribute.Name.Replace("xmlns", string.Empty).TrimStart(new[] { ':' });
                     xmlNamespaceManager.AddNamespace(xmlNamespace, namespaceAttribute.Value);
                 }
 
                 // Add a dummy node
                 xmlNamespaceManager.AddNamespace("x", "http://schemas.microsoft.com/winfx/2006/xaml");
                 xmlNamespaceManager.AddNamespace("ctl", "http://schemas.microsoft.com/winfx/2006/xaml/presentation");
-                #endregion
 
-                string xpath = string.Format("/ctl:ResourceDictionary/ctl:Style[@x:Key='{0}']/@BasedOn", styleKey);
-                var xmlAttribute = doc.SelectSingleNode(xpath, xmlNamespaceManager) as XmlAttribute;
-                if (xmlAttribute == null)
-                {
-                    Log.Warning("Style '{0}' does not have the 'BasedOn' attribute defined", styleKey);
-
-                    _styleToFrameworkElementTypeCache.Add(styleKey, null);
-
-                    return null;
-                }
-
-                string basedOnValue = xmlAttribute.Value;
-                basedOnValue = basedOnValue.Replace("StaticResource", "");
-                basedOnValue = basedOnValue.Replace("x:Type", "").Trim(new[] { ' ', '{', '}' });
-
-                #region Create xml type mapper
-                var xamlTypeMapper = new XamlTypeMapper(new[] { "PresentationFramework" });
-                foreach (XmlAttribute namespaceAttribute in doc.DocumentElement.Attributes)
-                {
-                    string xmlNamespace = namespaceAttribute.Name.Replace("xmlns", "").TrimStart(new char[] { ':' });
-
-                    string value = namespaceAttribute.Value;
-                    string clrNamespace = value;
-                    string assemblyName = string.Empty;
-
-                    if (clrNamespace.StartsWith("clr-namespace:"))
-                    {
-                        // We have a hit (formatting is normally one of the 2 below):
-                        // * clr-namespace:[NAMESPACE]
-                        // * clr-namespace:[NAMESPACE];assembly=[ASSEMBLY]
-                        if (clrNamespace.Contains(";"))
-                        {
-                            clrNamespace = clrNamespace.Split(new char[] { ';' })[0];
-                        }
-                        clrNamespace = clrNamespace.Replace("clr-namespace:", "");
-
-                        if (value.Contains(";"))
-                        {
-                            assemblyName = value.Split(new char[] { ';' })[1].Replace("assembly:", "");
-                        }
-
-                        xamlTypeMapper.AddMappingProcessingInstruction(xmlNamespace, clrNamespace, assemblyName);
-                    }
-                }
-                #endregion
-
-                string[] splittedType = basedOnValue.Split(new[] { ':' });
-                string typeNamespace = (splittedType.Length == 2) ? splittedType[0] : "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
-                string typeName = (splittedType.Length == 2) ? splittedType[1] : splittedType[0];
-                var type = xamlTypeMapper.GetType(typeNamespace, typeName);
-                if (type == null)
-                {
-                    _styleToFrameworkElementTypeCache.Add(styleKey, null);
-                    return null;
-                }
-
-                Log.Debug("Style '{0}' is based on type '{1}'", styleKey, type);
-
-                if ((type == typeof(FrameworkElement)) || type.IsSubclassOf(typeof(FrameworkElement)))
-                {
-                    _styleToFrameworkElementTypeCache.Add(styleKey, type);
-                    return type;
-                }
-
-
-                _styleToFrameworkElementTypeCache.Add(styleKey, null);
-                return null;
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Failed to find the framework element where style '{0}' is based on", styleKey);
-                return null;
-            }
+                return new Tuple<XmlDocument, XmlNamespaceManager>(doc, xmlNamespaceManager);
+            });
         }
 #endif
     }
