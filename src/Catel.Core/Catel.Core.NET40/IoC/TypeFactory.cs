@@ -11,9 +11,7 @@ namespace Catel.IoC
     using System.Dynamic;
     using System.Linq;
     using System.Reflection;
-    using System.Text.RegularExpressions;
     using Catel.Caching;
-    using Catel.Collections;
     using Catel.Logging;
     using Catel.Reflection;
 
@@ -559,7 +557,13 @@ namespace Catel.IoC
                 return false;
             }
 
-            // 3: check if the types are acceptable
+            // 3.a: check if this is a COM object
+            if (parameterValueType.IsCOMObjectEx())
+            {
+                return true;
+            }
+
+            // 3.b: check if the types are acceptable
             if (!parameterType.IsInstanceOfTypeEx(parameterValue))
             {
                 return false;
