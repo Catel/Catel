@@ -341,7 +341,8 @@ namespace Catel.Runtime.Serialization.Xml
             }
 
             // Note, although resharper says this isn't possible, it might be
-            if (type.FullName == null)
+            var fullName = type.GetSafeFullName();
+            if (string.IsNullOrWhiteSpace(fullName))
             {
                 serializerTypeInfo.AddTypeAsHandled(type);
                 return true;
@@ -352,6 +353,11 @@ namespace Catel.Runtime.Serialization.Xml
             {
                 // Log.Debug("Non-generic .NET system type, can be ignored");
                 serializerTypeInfo.AddTypeAsHandled(type);
+                return true;
+            }
+
+            if (type.IsCOMObjectEx())
+            {
                 return true;
             }
 
@@ -371,6 +377,10 @@ namespace Catel.Runtime.Serialization.Xml
             Argument.IsNotNull("type", type);
 
             string typeName = type.AssemblyQualifiedName;
+            if (string.IsNullOrWhiteSpace(typeName))
+            {
+                return new Type[] { };
+            }
 
             return _knownTypesByAttributesCache.GetFromCacheOrFetch(typeName, () =>
             {

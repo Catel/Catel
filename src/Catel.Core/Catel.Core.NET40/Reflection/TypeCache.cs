@@ -530,7 +530,7 @@ namespace Catel.Reflection
                 {
                     foreach (var type in assemblyWithTypes.Value)
                     {
-                        if (ShouldIgnoreType(type))
+                        if (ShouldIgnoreType(assemblyWithTypes.Key, type))
                         {
                             continue;
                         }
@@ -565,9 +565,10 @@ namespace Catel.Reflection
         /// <summary>
         /// Determines whether the specified type must be ignored by the type cache.
         /// </summary>
+        /// <param name="assembly">The assembly.</param>
         /// <param name="type">The type to check.</param>
         /// <returns><c>true</c> if the type should be ignored, <c>false</c> otherwise.</returns>
-        private static bool ShouldIgnoreType(Type type)
+        private static bool ShouldIgnoreType(Assembly assembly, Type type)
         {
             if (type == null)
             {
@@ -578,12 +579,20 @@ namespace Catel.Reflection
 
             // Ignore useless types
             if (typeName.Contains("<PrivateImplementationDetails>") ||
-                typeName.Contains("<>f__AnonymousType") ||
+                typeName.Contains("c__DisplayClass") ||
+                typeName.Contains("d__") ||
+                typeName.Contains("f__AnonymousType") ||
+                typeName.Contains("o__") ||
                 typeName.Contains("__DynamicallyInvokableAttribute") ||
                 typeName.Contains("ProcessedByFody") ||
                 typeName.Contains("FXAssembly") ||
                 typeName.Contains("ThisAssembly") ||
-                typeName.Contains("AssemblyRef"))
+                typeName.Contains("AssemblyRef") ||
+                typeName.Contains("MS.Internal") ||
+                typeName.Contains("::") ||
+                typeName.Contains("\\*") ||
+                typeName.Contains("_extraBytes_") ||
+                typeName.Contains("CppImplementationDetails"))
             {
                 return true;
             }
