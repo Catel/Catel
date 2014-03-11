@@ -54,17 +54,17 @@
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Attributes\DependencyInjectionBehaviorAttribute.cs" />
-    <Compile Include="Attributes\ShouldUseBinarySerializationForDataContractsAttribute.cs" />
-    <Compile Include="Attributes\ShouldUseJsonSerializationForDataContractsAttribute.cs" />
-    <Compile Include="Behaviors\BinarySerializerOperationBehavior.cs" />
-    <Compile Include="Behaviors\ContractBehavior.cs" />
-    <Compile Include="Behaviors\JsonSerializerOperationBehavior.cs" />
-    <Compile Include="Dispatching\InstanceProvider.cs" />
-    <Compile Include="Factories\ServiceHostFactory.cs" />
-    <Compile Include="Hosting\ServiceHost.cs" />
-    <Compile Include="InstanceContextExtension.cs" />
-    <Compile Include="InstanceContextInitializer.cs" />
+    <Compile Include="IoC\Attributes\DependencyInjectionBehaviorAttribute.cs" />
+    <Compile Include="Serialization\Attributes\ShouldUseBinarySerializationForDataContractsAttribute.cs" />
+    <Compile Include="Serialization\Attributes\ShouldUseJsonSerializationForDataContractsAttribute.cs" />
+    <Compile Include="Serialization\BinarySerializerOperationBehavior.cs" />
+    <Compile Include="ContractBehavior.cs" />
+    <Compile Include="Serialization\JsonSerializerOperationBehavior.cs" />
+    <Compile Include="IoC\InstanceProvider.cs" />
+    <Compile Include="Activation\ServiceHostFactory.cs" />
+    <Compile Include="ServiceHost.cs" />
+    <Compile Include="Extensions\InstanceContextExtension.cs" />
+    <Compile Include="Dispatcher\InstanceContextInitializer.cs" />
     <Compile Include="ModuleInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataType.cs" />

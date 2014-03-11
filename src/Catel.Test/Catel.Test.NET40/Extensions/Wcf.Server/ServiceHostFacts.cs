@@ -11,7 +11,7 @@ namespace Catel.Test.Extensions.Wcf.Server
     using System.Linq;
     using Catel.IoC;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using ServiceModel.Hosting;
+    using ServiceModel;
     using Services;
 
     public class ServiceHostFacts
