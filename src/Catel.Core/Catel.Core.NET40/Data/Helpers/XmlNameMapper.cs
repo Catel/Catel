@@ -160,7 +160,8 @@ namespace Catel.Data
                 var catelTypeInfo = _propertyDataManager.GetCatelTypeInfo(type);
                 foreach (var propertyData in catelTypeInfo.GetCatelProperties())
                 {
-                    var propertyInfo = type.GetPropertyEx(propertyData.Key, BindingFlagsHelper.GetFinalBindingFlags(true, false));
+                    var cachedPropertyInfo = propertyData.Value.GetPropertyInfo(type);
+                    var propertyInfo = cachedPropertyInfo.PropertyInfo;
                     if (propertyInfo == null)
                     {
                         // Dynamic property, not mapped (always fixed)
@@ -215,8 +216,14 @@ namespace Catel.Data
 
             if (attribute != null)
             {
-                _xmlNameToPropertyNameMappings[type].Add(attribute.AttributeName, propertyName);
-                _xmlPropertyNameToXmlNameMappings[type].Add(propertyName, attribute.AttributeName);
+                string mappedName = attribute.AttributeName;
+                if (string.IsNullOrWhiteSpace(mappedName))
+                {
+                    mappedName = propertyName;
+                }
+
+                _xmlNameToPropertyNameMappings[type].Add(mappedName, propertyName);
+                _xmlPropertyNameToXmlNameMappings[type].Add(propertyName, mappedName);
             }
 
             return true;
@@ -243,15 +250,16 @@ namespace Catel.Data
                 return attribute != null;
             }
 
+            string mappedName = propertyName;
             if (attribute != null)
             {
-                _xmlNameToPropertyNameMappings[type].Add(attribute.ElementName, propertyName);
-                _xmlPropertyNameToXmlNameMappings[type].Add(propertyName, attribute.ElementName);
+                mappedName = attribute.ElementName;
             }
-            else
+
+            if (string.IsNullOrEmpty(mappedName))
             {
-                _xmlNameToPropertyNameMappings[type].Add(propertyName, propertyName);
-                _xmlPropertyNameToXmlNameMappings[type].Add(propertyName, propertyName);
+                _xmlNameToPropertyNameMappings[type].Add(mappedName, propertyName);
+                _xmlPropertyNameToXmlNameMappings[type].Add(propertyName, mappedName);
             }
 
             return true;
