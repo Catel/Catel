@@ -102,8 +102,10 @@
     <Compile Include="MVVM\Commands\EventArgs\CommandExecutedEventArgs.cs" />
     <Compile Include="MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs" />
     <Compile Include="MVVM\Commands\Helpers\CommandHelper.cs" />
+    <Compile Include="Services\AutoCompletionService.cs" />
     <Compile Include="Services\Exceptions\SplashScreenException.cs" />
     <Compile Include="Services\Extensions\IUIVisualizerServiceExtensions.cs" />
+    <Compile Include="Services\Interfaces\IAutoCompletionService.cs" />
     <Compile Include="Windows\Data\Converters\CollectionToCountConverter.cs" />
     <Compile Include="Windows\Data\Converters\TextToLowerCaseConverter.cs" />
     <Compile Include="Windows\Data\Converters\TextToUpperCaseConverter.cs" />
@@ -282,6 +284,7 @@
     <Compile Include="Windows\DependencyPropertySelector.cs" />
     <Compile Include="Windows\Helpers\CommandLineHelper.cs" />
     <Compile Include="Windows\Input\Helpers\KeyboardHelper.cs" />
+    <Compile Include="Windows\Interactivity\AutoCompletionBehavior.cs" />
     <Compile Include="Windows\Markup\CommandManagerBinding.cs" />
     <Compile Include="Windows\Markup\LanguageBinding.cs" />
     <Compile Include="Windows\Markup\UpdatableMarkupExtension.cs" />

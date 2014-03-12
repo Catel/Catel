@@ -212,6 +212,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Locators\ViewModelLocator.cs">
       <Link>MVVM\Locators\ViewModelLocator.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\AutoCompletionService.cs">
+      <Link>Services\AutoCompletionService.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\DispatcherService.cs">
       <Link>Services\DispatcherService.cs</Link>
     </Compile>
@@ -253,6 +256,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\IAccelerometerValue.cs">
       <Link>Services\Interfaces\IAccelerometerValue.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\IAutoCompletionService.cs">
+      <Link>Services\Interfaces\IAutoCompletionService.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\ICameraService.cs">
       <Link>Services\Interfaces\ICameraService.cs</Link>
@@ -778,6 +784,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\Authentication.cs">
       <Link>Windows\Interactivity\Authentication.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\AutoCompletionBehavior.cs">
+      <Link>Windows\Interactivity\AutoCompletionBehavior.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\BehaviorBase.cs">
       <Link>Windows\Interactivity\BehaviorBase.cs</Link>

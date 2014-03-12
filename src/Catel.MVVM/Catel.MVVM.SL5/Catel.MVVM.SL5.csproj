@@ -124,6 +124,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\TaskCommand.cs">
       <Link>MVVM\Commands\TaskCommand.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\AutoCompletionService.cs">
+      <Link>Services\AutoCompletionService.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\Exceptions\SplashScreenException.cs">
       <Link>Services\Exceptions\SplashScreenException.cs</Link>
     </Compile>
@@ -132,6 +135,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\FileServiceBase.cs">
       <Link>Services\FileServiceBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\IAutoCompletionService.cs">
+      <Link>Services\Interfaces\IAutoCompletionService.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\ISchedulerService.cs">
       <Link>Services\Interfaces\ISchedulerService.cs</Link>
@@ -243,6 +249,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Input\InputGesture.cs">
       <Link>Windows\Input\InputGesture.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\AutoCompletionBehavior.cs">
+      <Link>Windows\Interactivity\AutoCompletionBehavior.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interfaces\IDependencyPropertySelector.cs">
       <Link>Windows\Interfaces\IDependencyPropertySelector.cs</Link>
