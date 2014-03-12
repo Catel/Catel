@@ -161,12 +161,13 @@ namespace Catel.Data
                 foreach (var propertyData in catelTypeInfo.GetCatelProperties())
                 {
                     var cachedPropertyInfo = propertyData.Value.GetPropertyInfo(type);
-                    var propertyInfo = cachedPropertyInfo.PropertyInfo;
-                    if (propertyInfo == null)
+                    if (cachedPropertyInfo == null)
                     {
                         // Dynamic property, not mapped (always fixed)
                         continue;
                     }
+
+                    var propertyInfo = cachedPropertyInfo.PropertyInfo;
 
                     // 1st, check if XmlIgnore is used
                     if (AttributeHelper.IsDecoratedWithAttribute<XmlIgnoreAttribute>(propertyInfo))
