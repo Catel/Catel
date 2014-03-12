@@ -11,6 +11,7 @@ namespace Catel.Services
     using System.Collections;
     using System.Linq;
     using Catel;
+    using Catel.Data;
     using Catel.Reflection;
 
     /// <summary>
@@ -43,7 +44,7 @@ namespace Catel.Services
             Argument.IsNotNull("source", source);
 
             var propertyValues = (from x in source.Cast<object>()
-                                  select ObjectToStringHelper.ToString(PropertyHelper.GetPropertyValue(x, property))).Where(x => !string.Equals(x, "null")).Distinct().ToList();
+                                  select GetPropertyValue(x, property)).Where(x => !string.Equals(x, "null")).Distinct().ToList();
 
             var filteredValues = propertyValues;
 
@@ -59,6 +60,26 @@ namespace Catel.Services
             }).OrderBy(x => x.Count).Select(x => x.Value).Take(10);
 
             return orderedPropertyValues.OrderBy(x => x).ToArray();
+        }
+
+        private static string GetPropertyValue(object obj, string propertyName)
+        {
+            object value = null;
+
+            var modelBase = obj as ModelBase;
+            if (modelBase != null)
+            {
+                if (modelBase.IsPropertyRegistered(propertyName))
+                {
+                    value = modelBase.GetValueFast(propertyName);
+                }
+            }
+            else
+            {
+                value = PropertyHelper.GetPropertyValue(obj, propertyName);
+            }
+
+            return ObjectToStringHelper.ToString(value);
         }
         #endregion
     }
