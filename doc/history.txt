@@ -87,6 +87,7 @@ Added/fixed:
 (x) CTL-371 HideValidationResults must also hide HasErrors and HasWarnings
 (x) CTL-378 Catel PleaseWaitHelper doesn't work in WinForms application
 (x) CTL-381 LanguageService.GetResourceManager() method retrieves wrong assembly and therefore cannot find resource
+(x) CTL-384 WarningAndErrorValidator should hide ValidationAdorner
 
 Roadmap:
 ========

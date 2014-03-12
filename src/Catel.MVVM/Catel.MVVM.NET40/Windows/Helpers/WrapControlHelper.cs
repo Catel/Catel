@@ -8,7 +8,7 @@ namespace Catel.Windows
 {
     using System;
     using System.Windows;
-
+    using System.Windows.Media;
     using Controls;
     using Reflection;
 
@@ -17,65 +17,61 @@ namespace Catel.Windows
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Controls.Primitives;
     using global::Windows.UI.Xaml.Data;
-
-    using UserControl = global::Windows.UI.Xaml.Controls.UserControl;
 #else
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
     using System.Windows.Data;
-
-    using UserControl = System.Windows.Controls.UserControl;
 #endif
 
     #region Enums
     /// <summary>
-	/// Available wrap options that can be used in the <see cref="WrapControlHelper"/>.
-	/// </summary>
-	[Flags]
-	public enum WrapOptions
-	{
-		/// <summary>
-		/// Generates an inline <see cref="InfoBarMessageControl"/> around the element to wrap.
-		/// </summary>
-		GenerateInlineInfoBarMessageControl = 1,
+    /// Available wrap options that can be used in the <see cref="WrapControlHelper"/>.
+    /// </summary>
+    [Flags]
+    public enum WrapOptions
+    {
+        /// <summary>
+        /// Generates an inline <see cref="InfoBarMessageControl"/> around the element to wrap.
+        /// </summary>
+        GenerateInlineInfoBarMessageControl = 1,
 
         /// <summary>
         /// Generates an overlay <see cref="InfoBarMessageControl"/> around the element to wrap.
         /// </summary>
         GenerateOverlayInfoBarMessageControl = 2,
 
-		/// <summary>
-		/// Generates a <see cref="WarningAndErrorValidator"/> for the data context.
-		/// </summary>
-		GenerateWarningAndErrorValidatorForDataContext = 4,
+        /// <summary>
+        /// Generates a <see cref="WarningAndErrorValidator"/> for the data context.
+        /// </summary>
+        GenerateWarningAndErrorValidatorForDataContext = 4,
 
-		/// <summary>
-		/// All available options.
-		/// </summary>
+        /// <summary>
+        /// All available options.
+        /// </summary>
         All = GenerateInlineInfoBarMessageControl | GenerateWarningAndErrorValidatorForDataContext
-	}
-	#endregion
+    }
+    #endregion
 
     /// <summary>
     /// An helper to wrap controls and windows with several controls, such as the <see cref="InfoBarMessageControl"/>.
     /// </summary>
-	public static class WrapControlHelper
-	{
-		#region Constants
-		/// <summary>
-		/// The name of the internal grid. Retrieve the grid with this name to add custom controls to the inner grid.
-		/// </summary>
-		public const string InternalGridName = "_InternalGridName";
+    public static class WrapControlHelper
+    {
+        #region Constants
+        /// <summary>
+        /// The name of the internal grid. Retrieve the grid with this name to add custom controls to the inner grid.
+        /// </summary>
+        public const string InternalGridName = "_InternalGridName";
 
-		/// <summary>
-		/// The name of the wrap panel that contains the buttons.
-		/// </summary>
-		public const string ButtonsWrapPanelName = "_ButtonsWrapPanel";
+        /// <summary>
+        /// The name of the wrap panel that contains the buttons.
+        /// </summary>
+        public const string ButtonsWrapPanelName = "_ButtonsWrapPanel";
 
-		/// <summary>
-		/// The name of the main content holder, used to prevent that an element is wrapped multiple times.
-		/// </summary>
-		public const string MainContentHolderName = "_MainContentHolder";
+        /// <summary>
+        /// The name of the main content holder, used to prevent that an element is wrapped multiple times.
+        /// </summary>
+        public const string MainContentHolderName = "_MainContentHolder";
 
         /// <summary>
         /// The name of the info bar message control.
@@ -96,46 +92,29 @@ namespace Catel.Windows
         /// The name of the default cancel button.
         /// </summary>
         public const string DefaultCancelButtonName = "cancelButton";
-		#endregion
+        #endregion
 
-		/// <summary>
-		/// Determines whether the specified <see cref="FrameworkElement"/> can be safely wrapped.
-		/// </summary>
-		/// <param name="frameworkElement">The framework element.</param>
-		/// <returns>
-		/// 	<c>true</c> if the specified <see cref="FrameworkElement"/> can be safely wrapped; otherwise, <c>false</c>.
-		/// </returns>
-		public static bool CanBeWrapped(FrameworkElement frameworkElement)
-		{
-			if (frameworkElement == null)
-			{
-			    return false;
-			}
+        /// <summary>
+        /// Determines whether the specified <see cref="FrameworkElement"/> can be safely wrapped.
+        /// </summary>
+        /// <param name="frameworkElement">The framework element.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified <see cref="FrameworkElement"/> can be safely wrapped; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool CanBeWrapped(FrameworkElement frameworkElement)
+        {
+            if (frameworkElement == null)
+            {
+                return false;
+            }
 
-			if (frameworkElement.Name == MainContentHolderName)
-			{
-			    return false;
-			}
+            if (string.Equals(frameworkElement.Name, MainContentHolderName))
+            {
+                return false;
+            }
 
-			return true;
-		}
-
-		/// <summary>
-		/// Wraps the specified framework element without any buttons.
-		/// </summary>
-		/// <param name="frameworkElement">The framework element.</param>
-		/// <param name="wrapOptions">The wrap options.</param>
-		/// <returns>
-		/// 	<see cref="Grid"/> that contains the wrapped content.
-		/// </returns>
-		/// <remarks>
-		/// The framework element that is passed must be disconnected from the parent first. It is recommended to first check whether a
-		/// framework element can be wrapped by using the <see cref="CanBeWrapped"/> method.
-		/// </remarks>
-		public static Grid Wrap(FrameworkElement frameworkElement, WrapOptions wrapOptions)
-		{
-			return Wrap(frameworkElement, wrapOptions, new DataWindowButton[] { }, null as object);
-		}
+            return true;
+        }
 
         /// <summary>
         /// Wraps the specified framework element without any buttons.
@@ -153,31 +132,10 @@ namespace Catel.Windows
         /// This method will automatically handle the disconnecting of the framework element from the parent is the <paramref name="parentContentControl"/>
         /// is passed.
         /// </remarks>
-        public static Grid Wrap(FrameworkElement frameworkElement, WrapOptions wrapOptions, UserControl parentContentControl)
+        public static Grid Wrap(FrameworkElement frameworkElement, WrapOptions wrapOptions, ContentControl parentContentControl = null)
         {
             return Wrap(frameworkElement, wrapOptions, new DataWindowButton[] { }, parentContentControl);
         }
-
-		/// <summary>
-		/// Wraps the specified framework element without any buttons.
-		/// </summary>
-		/// <param name="frameworkElement">The framework element.</param>
-		/// <param name="wrapOptions">The wrap options.</param>
-		/// <param name="parentContentControl">The parent content control.</param>
-		/// <returns>
-		/// 	<see cref="Grid"/> that contains the wrapped content.
-		/// </returns>
-		/// <remarks>
-		/// The framework element that is passed must be disconnected from the parent first. It is recommended to first check whether a
-		/// framework element can be wrapped by using the <see cref="CanBeWrapped"/> method.
-        /// <para />
-		/// This method will automatically handle the disconnecting of the framework element from the parent is the <paramref name="parentContentControl"/>
-		/// is passed.
-		/// </remarks>
-		public static Grid Wrap(FrameworkElement frameworkElement, WrapOptions wrapOptions, ContentControl parentContentControl)
-		{
-			return Wrap(frameworkElement, wrapOptions, new DataWindowButton[] {}, parentContentControl);
-		}
 
         /// <summary>
         /// Wraps the specified framework element.
@@ -193,34 +151,15 @@ namespace Catel.Windows
         /// This method will automatically handle the disconnecting of the framework element from the parent is the <paramref name="parentContentControl"/>
         /// is passed.
         /// </remarks>
-        public static Grid Wrap(FrameworkElement frameworkElement, WrapOptions wrapOptions, DataWindowButton[] buttons, ContentControl parentContentControl = null)
-        {
-            return Wrap(frameworkElement, wrapOptions, buttons, parentContentControl as object);
-        }
-
-		/// <summary>
-		/// Wraps the specified framework element.
-		/// </summary>
-		/// <param name="frameworkElement">The framework element.</param>
-		/// <param name="wrapOptions">The wrap options.</param>
-		/// <param name="buttons">The buttons to add.</param>
-		/// <param name="parentContentControl">The parent content control.</param>
-		/// <returns><see cref="Grid"/> that contains the wrapped content.</returns>
-		/// <remarks>
-		/// The framework element that is passed must be disconnected from the parent first. It is recommended to first check whether a
-		/// framework element can be wrapped by using the <see cref="CanBeWrapped"/> method.
-		/// This method will automatically handle the disconnecting of the framework element from the parent is the <paramref name="parentContentControl"/>
-		/// is passed.
-		/// </remarks>
-        private static Grid Wrap(FrameworkElement frameworkElement, WrapOptions wrapOptions, DataWindowButton[] buttons, object parentContentControl)
+        public static Grid Wrap(FrameworkElement frameworkElement, WrapOptions wrapOptions, DataWindowButton[] buttons, ContentControl parentContentControl)
         {
             Argument.IsNotNull("frameworkElement", frameworkElement);
             Argument.IsNotNull("buttons", buttons);
 
-			if (frameworkElement.Name == MainContentHolderName)
-			{
-			    return (Grid)frameworkElement;
-			}
+            if (string.Equals(frameworkElement.Name, MainContentHolderName))
+            {
+                return (Grid)frameworkElement;
+            }
 
 #if SILVERLIGHT
             // According to the documentation, no visual tree is garantueed in the Loaded event of the user control.
@@ -234,32 +173,32 @@ namespace Catel.Windows
 #endif
 
             if (parentContentControl != null)
-			{
+            {
                 SetControlContent(parentContentControl, null);
-			}
+            }
 
-			FrameworkElement mainContent = frameworkElement;
+            var mainContent = frameworkElement;
 
-			// Create the outside grid, so the inner grid is never the same as the main content holder
-			var outsideGrid = new Grid();
-			outsideGrid.Name = MainContentHolderName;
+            // Create the outside grid, so the inner grid is never the same as the main content holder
+            var outsideGrid = new Grid();
+            outsideGrid.Name = MainContentHolderName;
 
-			if (Application.Current != null)
-			{
+            if (Application.Current != null)
+            {
 #if SILVERLIGHT
                 // TODO: Fix styles for silverlight
 #else
-				outsideGrid.Resources.MergedDictionaries.Add(Application.Current.Resources);
+                outsideGrid.Resources.MergedDictionaries.Add(Application.Current.Resources);
 #endif
-			}
+            }
 
-			#region Generate buttons
+            #region Generate buttons
 #if !NETFX_CORE
-			if (buttons.Length > 0)
-			{
-				// Add wrappanel containing the buttons
-				var buttonsWrapPanel = new WrapPanel();
-				buttonsWrapPanel.Name = ButtonsWrapPanelName;
+            if (buttons.Length > 0)
+            {
+                // Add wrappanel containing the buttons
+                var buttonsWrapPanel = new WrapPanel();
+                buttonsWrapPanel.Name = ButtonsWrapPanelName;
 #if SILVERLIGHT
                 buttonsWrapPanel.Style = Application.Current.Resources["DataWindowButtonContainerStyle"] as Style;
 #else
@@ -267,22 +206,22 @@ namespace Catel.Windows
 #endif
 
                 foreach (var dataWindowButton in buttons)
-				{
-					var button = new Button();
+                {
+                    var button = new Button();
                     if (dataWindowButton.CommandBindingPath != null)
                     {
                         button.SetBinding(ButtonBase.CommandProperty, new Binding(dataWindowButton.CommandBindingPath));
                     }
                     else
                     {
-                        button.Command = dataWindowButton.Command;     
+                        button.Command = dataWindowButton.Command;
                     }
 
-					button.Content = dataWindowButton.Text;
+                    button.Content = dataWindowButton.Text;
 #if NET
                     button.SetResourceReference(FrameworkElement.StyleProperty, "DataWindowButtonStyle");
-					button.IsDefault = dataWindowButton.IsDefault;
-					button.IsCancel = dataWindowButton.IsCancel;
+                    button.IsDefault = dataWindowButton.IsDefault;
+                    button.IsCancel = dataWindowButton.IsCancel;
 #else
                     button.Style = Application.Current.Resources["DataWindowButtonStyle"] as Style;
 #endif
@@ -297,32 +236,32 @@ namespace Catel.Windows
                     }
 
                     buttonsWrapPanel.Children.Add(button);
-				}
+                }
 
-				// Create dockpanel that will dock the buttons underneath the content
-				var subDockPanel = new DockPanel();
-				subDockPanel.LastChildFill = true;
-				DockPanel.SetDock(buttonsWrapPanel, Dock.Bottom);
-				subDockPanel.Children.Add(buttonsWrapPanel);
+                // Create dockpanel that will dock the buttons underneath the content
+                var subDockPanel = new DockPanel();
+                subDockPanel.LastChildFill = true;
+                DockPanel.SetDock(buttonsWrapPanel, Dock.Bottom);
+                subDockPanel.Children.Add(buttonsWrapPanel);
 
-				// Add actual content
-				subDockPanel.Children.Add(frameworkElement);
+                // Add actual content
+                subDockPanel.Children.Add(frameworkElement);
 
-				// The dockpanel is now the main content
-				mainContent = subDockPanel;
-			}
+                // The dockpanel is now the main content
+                mainContent = subDockPanel;
+            }
 #endif
-			#endregion
+            #endregion
 
-			#region Generate internal grid
-			// Create grid
-			var internalGrid = new Grid();
-			internalGrid.Name = InternalGridName;
-			internalGrid.Children.Add(mainContent);
+            #region Generate internal grid
+            // Create grid
+            var internalGrid = new Grid();
+            internalGrid.Name = InternalGridName;
+            internalGrid.Children.Add(mainContent);
 
-			// Grid is now the main content
-			mainContent = internalGrid;
-			#endregion
+            // Grid is now the main content
+            mainContent = internalGrid;
+            #endregion
 
             #region Generate WarningAndErrorValidator
             if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.GenerateWarningAndErrorValidatorForDataContext))
@@ -341,33 +280,33 @@ namespace Catel.Windows
 #if !NETFX_CORE
             if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.GenerateInlineInfoBarMessageControl) ||
                 Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.GenerateOverlayInfoBarMessageControl))
-			{
-				// Create info bar message control
-				var infoBarMessageControl = new InfoBarMessageControl();
-			    infoBarMessageControl.Name = InfoBarMessageControlName;
-				infoBarMessageControl.Content = mainContent;
+            {
+                // Create info bar message control
+                var infoBarMessageControl = new InfoBarMessageControl();
+                infoBarMessageControl.Name = InfoBarMessageControlName;
+                infoBarMessageControl.Content = mainContent;
 
                 if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.GenerateOverlayInfoBarMessageControl))
                 {
                     infoBarMessageControl.Mode = InfoBarMessageControlMode.Overlay;
                 }
 
-				// This is now the main content
-				mainContent = infoBarMessageControl;
-			}
+                // This is now the main content
+                mainContent = infoBarMessageControl;
+            }
 #endif
-			#endregion
+            #endregion
 
-			// Set content of the outside grid
-			outsideGrid.Children.Add(mainContent);
+            // Set content of the outside grid
+            outsideGrid.Children.Add(mainContent);
 
-			if (parentContentControl != null)
-			{
+            if (parentContentControl != null)
+            {
                 SetControlContent(parentContentControl, outsideGrid);
-			}
+            }
 
-			return outsideGrid;
-		}
+            return outsideGrid;
+        }
 
         /// <summary>
         /// Gets a wrapped element mapped by the <paramref name="wrapOption"/>.
@@ -380,7 +319,7 @@ namespace Catel.Windows
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="wrappedGrid"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The <paramref name="wrapOption"/> is <see cref="WrapOptions.All"/>.</exception>
-        public static T GetWrappedElement<T>(Grid wrappedGrid, WrapOptions wrapOption) 
+        public static T GetWrappedElement<T>(Grid wrappedGrid, WrapOptions wrapOption)
             where T : FrameworkElement
         {
             return GetWrappedElement(wrappedGrid, wrapOption) as T;
@@ -429,7 +368,7 @@ namespace Catel.Windows
         /// <exception cref="ArgumentNullException">The <paramref name="wrappedGrid"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="controlName"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The <paramref name="controlName"/> is not a valid control name.</exception>
-        public static T GetWrappedElement<T>(Grid wrappedGrid, string controlName) 
+        public static T GetWrappedElement<T>(Grid wrappedGrid, string controlName)
             where T : FrameworkElement
         {
             return GetWrappedElement(wrappedGrid, controlName) as T;
@@ -453,7 +392,7 @@ namespace Catel.Windows
 
             if ((controlName != DefaultOkButtonName) &&
                 (controlName != DefaultCancelButtonName) &&
-                (controlName != InfoBarMessageControlName) && 
+                (controlName != InfoBarMessageControlName) &&
                 (controlName != WarningAndErrorValidatorName))
             {
                 throw new ArgumentOutOfRangeException("controlName");
@@ -476,5 +415,5 @@ namespace Catel.Windows
             var propertyInfo = contentControl.GetType().GetPropertyEx("Content");
             propertyInfo.SetValue(contentControl, element, null);
         }
-	}
+    }
 }

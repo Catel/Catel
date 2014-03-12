@@ -26,6 +26,7 @@ namespace Catel.Windows
     using System.Diagnostics;
     using System.Runtime.InteropServices;
     using System.Windows.Interop;
+    using System.Windows.Documents;
 #endif
 
 #if SILVERLIGHT
@@ -83,6 +84,31 @@ namespace Catel.Windows
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Hides the validation adorner.
+        /// </summary>
+        /// <param name="frameworkElement">The framework element.</param>
+        public static void HideValidationAdorner(this FrameworkElement frameworkElement)
+        {
+            if (frameworkElement == null)
+            {
+                return;
+            }
+
+#if NET
+            frameworkElement.ApplyTemplate();
+
+            var adornerLayer = AdornerLayer.GetAdornerLayer(frameworkElement);
+            if (adornerLayer != null)
+            {
+                adornerLayer.Visibility = Visibility.Collapsed;
+            }
+
+            Validation.SetValidationAdornerSite(frameworkElement, null);
+            Validation.SetErrorTemplate(frameworkElement, null);
+#endif
+        }
+
 #if NET
 		/// <summary>
 		/// Activates the window this framework element contains to.

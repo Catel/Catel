@@ -104,6 +104,8 @@ namespace Catel.Windows.Controls
 
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
+
+            this.HideValidationAdorner();
         }
         #endregion
 

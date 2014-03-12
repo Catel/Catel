@@ -905,7 +905,7 @@ namespace Catel.Windows
 
             var contentGrid = WrapControlHelper.Wrap((FrameworkElement)newContent, wrapOptions, _buttons.ToArray(), this);
 
-            var internalGrid = contentGrid.FindVisualDescendant(obj => (obj is FrameworkElement) && (((FrameworkElement)obj).Name == WrapControlHelper.InternalGridName)) as Grid;
+            var internalGrid = contentGrid.FindVisualDescendant(obj => (obj is FrameworkElement) && string.Equals(((FrameworkElement)obj).Name,  WrapControlHelper.InternalGridName)) as Grid;
             if (internalGrid != null)
             {
 #if SILVERLIGHT

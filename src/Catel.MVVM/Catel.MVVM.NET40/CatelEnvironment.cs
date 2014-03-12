@@ -38,6 +38,7 @@ namespace Catel
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        private static bool _bypassDevEnvCheck;
         private static bool? _isInDesignMode;
 
         /// <summary>
@@ -83,7 +84,15 @@ namespace Catel
         /// This behavior is not very useful when using Catel in Visual Studio extensions, so it is possible to bypass that specific check.
         /// </summary>
         /// <value><c>true</c> if the check should be bypassed; otherwise, <c>false</c>.</value>
-        public static bool BypassDevEnvCheck { get; set; }
+        public static bool BypassDevEnvCheck
+        {
+            get { return _bypassDevEnvCheck; }
+            set
+            {
+                _bypassDevEnvCheck = value;
+                _isInDesignMode = null;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether property change notifications are currently disabled for all instances.
