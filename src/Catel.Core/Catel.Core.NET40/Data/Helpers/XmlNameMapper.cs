@@ -253,10 +253,13 @@ namespace Catel.Data
             string mappedName = propertyName;
             if (attribute != null)
             {
-                mappedName = attribute.ElementName;
+                if (!string.IsNullOrWhiteSpace(attribute.ElementName))
+                {
+                    mappedName = attribute.ElementName;
+                }
             }
 
-            if (string.IsNullOrEmpty(mappedName))
+            if (!string.IsNullOrEmpty(mappedName))
             {
                 _xmlNameToPropertyNameMappings[type].Add(mappedName, propertyName);
                 _xmlPropertyNameToXmlNameMappings[type].Add(propertyName, mappedName);

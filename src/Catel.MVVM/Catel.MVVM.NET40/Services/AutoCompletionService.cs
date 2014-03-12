@@ -58,7 +58,7 @@ namespace Catel.Services
                 Count = g.Select(x => x).Distinct().Count()
             }).OrderBy(x => x.Count).Select(x => x.Value).Take(10);
 
-            return orderedPropertyValues.ToArray();
+            return orderedPropertyValues.OrderBy(x => x).ToArray();
         }
         #endregion
     }
