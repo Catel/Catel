@@ -41,7 +41,8 @@ namespace Catel
 
             ViewModelServiceHelper.RegisterDefaultViewModelServices(serviceLocator);
 
-            if (CatelEnvironment.IsInDesignMode)
+            // Don't use property, we cannot trust the cached property here yet in Visual Studio
+            if (CatelEnvironment.GetIsInDesignMode())
             {
                 foreach (var assembly in AssemblyHelper.GetLoadedAssemblies())
                 {

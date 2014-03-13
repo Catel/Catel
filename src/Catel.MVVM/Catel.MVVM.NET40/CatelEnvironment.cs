@@ -51,27 +51,10 @@ namespace Catel
         {
             get
             {
-                if (_isInDesignMode.HasValue)
+                if (!_isInDesignMode.HasValue)
                 {
-                    return _isInDesignMode.Value;
+                    _isInDesignMode = GetIsInDesignMode();
                 }
-
-#if NET
-                var prop = DesignerProperties.IsInDesignModeProperty;
-                _isInDesignMode = (bool)DependencyPropertyDescriptor.FromProperty(prop, typeof(FrameworkElement)).Metadata.DefaultValue;
-
-                if (!BypassDevEnvCheck)
-                {
-                    if (!_isInDesignMode.Value && EnvironmentHelper.IsProcessHostedByTool)
-                    {
-                        _isInDesignMode = true;
-                    }
-                }
-#elif NETFX_CORE
-                _isInDesignMode = global::Windows.ApplicationModel.DesignMode.DesignModeEnabled;
-#else
-                _isInDesignMode = DesignerProperties.IsInDesignTool;
-#endif
 
                 return _isInDesignMode.Value;
             }
@@ -144,5 +127,40 @@ namespace Catel
             }
         }
 #endif
+
+        /// <summary>
+        /// Gets whether the software is currently in design mode.
+        /// <para />
+        /// Note that unless the <see cref="IsInDesignMode"/>, the value is not cached but always determined at runtime.
+        /// </summary>
+        /// <returns><c>true</c> if the software is in design mode, <c>false</c> otherwise.</returns>
+        public static bool GetIsInDesignMode()
+        {
+            bool? isInDesignMode = null;
+
+#if NET
+            var prop = DesignerProperties.IsInDesignModeProperty;
+            isInDesignMode = (bool)DependencyPropertyDescriptor.FromProperty(prop, typeof(FrameworkElement)).Metadata.DefaultValue;
+
+            if (!isInDesignMode.Value)
+            {
+                isInDesignMode = DesignerProperties.GetIsInDesignMode(new DependencyObject());
+            }
+
+            if (!BypassDevEnvCheck)
+            {
+                if (!isInDesignMode.Value && EnvironmentHelper.IsProcessHostedByTool)
+                {
+                    isInDesignMode = true;
+                }
+            }
+#elif NETFX_CORE
+            isInDesignMode = global::Windows.ApplicationModel.DesignMode.DesignModeEnabled;
+#else
+            isInDesignMode = DesignerProperties.IsInDesignTool;
+#endif
+
+            return isInDesignMode.Value;
+        }
     }
 }
