@@ -120,7 +120,7 @@ namespace Catel.Runtime.Serialization.Xml
                 return;
             }
 
-            Type objectType = obj.GetType();
+            var objectType = obj.GetType();
 
             if (ShouldTypeBeIgnored(objectType, serializerTypeInfo))
             {
@@ -146,7 +146,7 @@ namespace Catel.Runtime.Serialization.Xml
                 }
             }
 
-            // Collections might contain interface types, so if this is an IEnumerable, we need to loop all the instances (performance warning!)
+                // Collections might contain interface types, so if this is an IEnumerable, we need to loop all the instances (performance warning!)
             else if ((obj is IEnumerable) && (!(obj is string)))
             {
                 var objAsIEnumerable = (IEnumerable)obj;
@@ -176,30 +176,49 @@ namespace Catel.Runtime.Serialization.Xml
             Log.Debug("Getting known types for '{0}'", type.GetSafeFullName());
 
             // If this is an interface or abstract, we need to retieve all items that might possible implement or derive
-            if (type.IsInterfaceEx() || type.IsAbstractEx())
+            bool isInterface = type.IsInterfaceEx();
+            bool isAbstract = type.IsAbstractEx();
+            if (isInterface || isAbstract)
             {
                 if (!serializerTypeInfo.IsTypeAlreadyHandled(type))
                 {
-                    Log.Debug("Type is an interface, checking all types deriving from this interface");
-
-                    // Don't check this interface again in children checks
-                    serializerTypeInfo.AddTypeAsHandled(type);
-
-                    // Interfaces are not a type, and in fact a LOT of types can be added (in fact every object implementing the interface). For
-                    // serialization, this is not a problem (we know the exact type), but for deserialization this IS an issue because we should
-                    // expect EVERY type that implements the type in the whole AppDomain.
+                    // Interfaces / abstract classes are not a type, and in fact a LOT of types can be added (in fact every object implementing 
+                    // the interface). For serialization, this is not a problem (we know the exact type), but for deserialization this IS an 
+                    // issue because we should expect EVERY type that implements the type in the whole AppDomain.
                     // This is huge performance hit, but it's the cost for dynamic easy on-the-fly serialization in WPF and Silverlight. Luckily
                     // we already implemented caching.
-                    var typesDerivingFromInterface = TypeCache.GetTypes(t => t.ImplementsInterfaceEx(type));
-                    foreach (var typeDerivingFromInterface in typesDerivingFromInterface)
+
+                    // Don't check this type again in children checks
+                    serializerTypeInfo.AddTypeAsHandled(type);
+
+                    Log.Debug("Type is an interface / abstract class, checking all types implementing / deriving");
+
+                    if (isInterface)
                     {
-                        if (typeDerivingFromInterface != type)
+                        var typesImplementingInterface = TypeCache.GetTypesImplementingInterface(type);
+                        //var typesImplementingInterface = TypeCache.GetTypes(t => t.ImplementsInterfaceEx(type));
+                        foreach (var typeImplementingInterface in typesImplementingInterface)
                         {
-                            GetKnownTypes(typeDerivingFromInterface, serializerTypeInfo);
+                            if (typeImplementingInterface != type)
+                            {
+                                GetKnownTypes(typeImplementingInterface, serializerTypeInfo);
+                            }
                         }
                     }
 
-                    Log.Debug("Finished checking all types deriving from this interface");
+                    if (isAbstract)
+                    {
+                        var typesDerivingFromClass = TypeCache.GetTypes(type.IsAssignableFromEx);
+                        foreach (var typeDerivingFromClass in typesDerivingFromClass)
+                        {
+                            if (typeDerivingFromClass != type)
+                            {
+                                GetKnownTypes(typeDerivingFromClass, serializerTypeInfo);
+                            }
+                        }
+                    }
+
+                    Log.Debug("Finished checking all types implementing / deriving");
                 }
 
                 // The interface itself is ignored
@@ -259,7 +278,8 @@ namespace Catel.Runtime.Serialization.Xml
                 foreach (var knownTypeByAttribute in knowTypesByAttributes)
                 {
                     var attributeType = knownTypeByAttribute;
-                    if (attributeType.FullName != null)
+                    var attributeTypeFullName = attributeType.GetSafeFullName();
+                    if (attributeTypeFullName != null)
                     {
                         GetKnownTypes(knownTypeByAttribute, serializerTypeInfo);
                     }
@@ -273,23 +293,18 @@ namespace Catel.Runtime.Serialization.Xml
 
         private void AddTypeMembers(Type type, XmlSerializerTypeInfo serializerTypeInfo)
         {
+            var typesToCheck = new List<Type>();
+
             var isModelBase = (type == typeof(ModelBase)) || typeof(ModelBase).IsAssignableFromEx(type);
             if (isModelBase)
             {
-                var catelTypeInfo = PropertyDataManager.Default.GetCatelTypeInfo(type);
-                var modelBaseProperties = catelTypeInfo.GetCatelProperties();
-                foreach (var modelBaseProperty in modelBaseProperties)
-                {
-                    var propertyType = modelBaseProperty.Value.Type;
-                    if (propertyType.FullName != null)
-                    {
-                        GetKnownTypes(propertyType, serializerTypeInfo);
-                    }
-                    else
-                    {
-                        serializerTypeInfo.AddTypeAsHandled(propertyType);
-                    }
-                }
+                // No need to check members, they will be serialized by ModelBase
+                //var catelTypeInfo = PropertyDataManager.Default.GetCatelTypeInfo(type);
+                //var modelBaseProperties = catelTypeInfo.GetCatelProperties();
+                //foreach (var modelBaseProperty in modelBaseProperties)
+                //{
+                //    typesToCheck.Add(modelBaseProperty.Value.Type);
+                //}
             }
             else
             {
@@ -299,32 +314,82 @@ namespace Catel.Runtime.Serialization.Xml
                 var fields = type.GetFieldsEx(BindingFlagsHelper.GetFinalBindingFlags(false, false, allowNonPublicReflection));
                 foreach (var field in fields)
                 {
-                    var fieldType = field.FieldType;
-                    if (fieldType.FullName != null)
-                    {
-                        GetKnownTypes(fieldType, serializerTypeInfo);
-                    }
-                    else
-                    {
-                        serializerTypeInfo.AddTypeAsHandled(fieldType);
-                    }
+                    typesToCheck.Add(field.FieldType);
                 }
 
                 // Properties
                 var properties = type.GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(false, false, allowNonPublicReflection));
                 foreach (var property in properties)
                 {
-                    var propertyType = property.PropertyType;
-                    if (propertyType.FullName != null)
-                    {
-                        GetKnownTypes(propertyType, serializerTypeInfo);
-                    }
-                    else
-                    {
-                        serializerTypeInfo.AddTypeAsHandled(propertyType);
-                    }
+                    typesToCheck.Add(property.PropertyType);
                 }
             }
+
+            foreach (var typeToCheck in typesToCheck)
+            {
+                if (serializerTypeInfo.IsTypeAlreadyHandled(typeToCheck))
+                {
+                    continue;
+                }
+
+                if (!IsTypeSerializable(typeToCheck, serializerTypeInfo))
+                {
+                    serializerTypeInfo.AddTypeAsHandled(typeToCheck);
+                    continue;
+                }
+
+                var propertyTypeFullName = typeToCheck.GetSafeFullName();
+                if (propertyTypeFullName == null)
+                {
+                    serializerTypeInfo.AddTypeAsHandled(typeToCheck);
+                    continue;
+                }
+
+                GetKnownTypes(typeToCheck, serializerTypeInfo);
+            }
+        }
+
+        /// <summary>
+        /// Determines whether the specified type is serializable.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="serializerTypeInfo">The serializer type information.</param>
+        /// <returns><c>true</c> if the specified type is serializable; otherwise, <c>false</c>.</returns>
+        protected virtual bool IsTypeSerializable(Type type, XmlSerializerTypeInfo serializerTypeInfo)
+        {
+            if (type == null)
+            {
+                return false;
+            }
+
+            // DataContract attribute
+            if (AttributeHelper.IsDecoratedWithAttribute<DataContractAttribute>(type))
+            {
+                return true;
+            }
+
+#if NET
+            // Implements ISerializable
+            if (type.ImplementsInterfaceEx<ISerializable>())
+            {
+                return true;
+            }
+#endif
+
+            // Implements IXmlSerializer
+            if (type.ImplementsInterfaceEx<System.Xml.Serialization.IXmlSerializable>())
+            {
+                return true;
+            }
+
+            // Is ModelBase
+            if (typeof (ModelBase).IsAssignableFromEx(type))
+            {
+                return true;
+            }
+
+            // IsSerializable
+            return type.IsSerializableEx();
         }
 
         /// <summary>
@@ -358,11 +423,12 @@ namespace Catel.Runtime.Serialization.Xml
 
             if (type.IsCOMObjectEx())
             {
+                serializerTypeInfo.AddTypeAsHandled(type);
                 return true;
             }
 
-            return serializerTypeInfo.ContainsKnownType(type) || 
-                   serializerTypeInfo.IsTypeAlreadyHandled(type) || 
+            return serializerTypeInfo.ContainsKnownType(type) ||
+                   serializerTypeInfo.IsTypeAlreadyHandled(type) ||
                    serializerTypeInfo.IsCollectionAlreadyHandled(type);
         }
 
@@ -444,34 +510,8 @@ namespace Catel.Runtime.Serialization.Xml
             // See this issue http://catel.codeplex.com/workitem/7167
             if (serializerTypeInfo.IsSpecialCollectionType(typeToAdd))
             {
-                // Always ignore as a test
+                // Always ignore
                 return false;
-
-                // TODO: Also check interfaces
-                //    // It might be a base type, loop all
-                //    var baseType = typeToAdd;
-                //    while (baseType != null)
-                //    {
-                //        if (baseType.IsGenericTypeEx())
-                //        {
-                //            if (baseType.GetGenericArgumentsEx()[0].IsInterfaceEx())
-                //            {
-                //                var genericTypeDefinition = baseType.GetGenericTypeDefinitionEx();
-
-                //                var allPossibleMatchingTypes = (from type in serializerTypeInfo.SpecialGenericCollectionTypes
-                //                                                where type.GetGenericTypeDefinitionEx() == genericTypeDefinition
-                //                                                select type).ToList();
-
-                //                if (allPossibleMatchingTypes.Count > 0)
-                //                {
-                //                    Log.Debug("Skipping type '{0}' because there already exists such a type which does the same", typeToAdd.GetSafeFullName());
-                //                    return false;
-                //                }
-                //            }
-                //        }
-
-                //        baseType = baseType.GetBaseTypeEx();
-                //    }
             }
 
             return serializerTypeInfo.AddKnownType(typeToAdd);

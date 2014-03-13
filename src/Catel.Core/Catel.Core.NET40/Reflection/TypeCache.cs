@@ -23,6 +23,11 @@ namespace Catel.Reflection
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
+        /// Cache containing all the types implementing a specific interface.
+        /// </summary>
+        private static Dictionary<Type, HashSet<Type>> _typesByInterface = new Dictionary<Type, HashSet<Type>>();
+
+        /// <summary>
         /// Cache containing all the types by assembly. This means that the first dictionary contains the assembly name
         /// and all types contained by that assembly.
         /// </summary>
@@ -76,7 +81,7 @@ namespace Catel.Reflection
             // Initialize the types of early loaded assemblies.
             lock (_lockObject)
             {
-                Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+                var assemblies = AppDomain.CurrentDomain.GetAssemblies();
                 foreach (var assembly in assemblies)
                 {
                     InitializeTypes(false, assembly);
@@ -94,9 +99,9 @@ namespace Catel.Reflection
         private static void OnAssemblyLoaded(object sender, AssemblyLoadEventArgs args)
         {
             var assembly = args.LoadedAssembly;
-            if (assembly.ReflectionOnly)
+            if (ShouldIgnoreAssembly(assembly))
             {
-                Log.Debug("Reflection '{0}' is loaded for reflection-only, cannot use this assembly", assembly.FullName);
+                Log.Debug("Reflection '{0}' is on the list to be ignored (for example, ReflectionOnly is true), cannot use this assembly", assembly.FullName);
                 return;
             }
 
@@ -110,6 +115,8 @@ namespace Catel.Reflection
 
                 InitializeTypes(false, assembly);
 
+                _loadedAssemblies.Add(assemblyName);
+
                 var handler = AssemblyLoaded;
                 if (handler != null)
                 {
@@ -118,8 +125,6 @@ namespace Catel.Reflection
 
                     handler(null, eventArgs);
                 }
-
-                _loadedAssemblies.Add(assemblyName);
             }
         }
 #endif
@@ -298,6 +303,18 @@ namespace Catel.Reflection
         }
 
         /// <summary>
+        /// Gets the types implementing the specified interface.
+        /// </summary>
+        /// <param name="interfaceType">Type of the interface.</param>
+        /// <returns>Type[].</returns>
+        public static Type[] GetTypesImplementingInterface(Type interfaceType)
+        {
+            Argument.IsNotNull("interfaceType", interfaceType);
+
+            return _typesByInterface.ContainsKey(interfaceType) ? _typesByInterface[interfaceType].ToArray() : new Type[] { };
+        }
+
+        /// <summary>
         /// Gets the types of the specified assembly.
         /// </summary>
         /// <param name="assembly">The assembly.</param>
@@ -432,6 +449,12 @@ namespace Catel.Reflection
                 {
                     _loadedAssemblies.Clear();
 
+                    if (_typesByInterface != null)
+                    {
+                        _typesByInterface.Clear();
+                        _typesByInterface = null;
+                    }
+
                     if (_typesByAssembly != null)
                     {
                         _typesByAssembly.Clear();
@@ -461,6 +484,11 @@ namespace Catel.Reflection
                         _typesWithoutAssemblyLowerCase.Clear();
                         _typesWithoutAssemblyLowerCase = null;
                     }
+                }
+
+                if (_typesByInterface == null)
+                {
+                    _typesByInterface = new Dictionary<Type, HashSet<Type>>();
                 }
 
                 if (_typesByAssembly == null)
@@ -511,14 +539,19 @@ namespace Catel.Reflection
                             continue;
                         }
 
+                        _loadedAssemblies.Add(loadedAssemblyFullName);
+
+                        if (ShouldIgnoreAssembly(loadedAssembly))
+                        {
+                            continue;
+                        }
+
                         typesToAdd[loadedAssembly] = new HashSet<Type>();
 
                         foreach (var type in AssemblyHelper.GetAllTypesSafely(loadedAssembly))
                         {
                             typesToAdd[loadedAssembly].Add(type);
                         }
-
-                        _loadedAssemblies.Add(loadedAssemblyFullName);
                     }
                     catch (Exception ex)
                     {
@@ -530,36 +563,78 @@ namespace Catel.Reflection
                 {
                     foreach (var type in assemblyWithTypes.Value)
                     {
-                        if (ShouldIgnoreType(assemblyWithTypes.Key, type))
-                        {
-                            continue;
-                        }
-
-                        var currentAssembly = assemblyWithTypes.Key;
-
-                        var newAssemblyName = TypeHelper.GetAssemblyNameWithoutOverhead(currentAssembly.FullName);
-                        string newFullType = TypeHelper.FormatType(newAssemblyName, type.FullName);
-
-                        if (!_typesByAssembly.ContainsKey(newAssemblyName))
-                        {
-                            _typesByAssembly[newAssemblyName] = new Dictionary<string, Type>();
-                        }
-
-                        var typesByAssembly = _typesByAssembly[newAssemblyName];
-                        if (!typesByAssembly.ContainsKey(newFullType))
-                        {
-                            typesByAssembly[newFullType] = type;
-
-                            _typesWithAssembly[newFullType] = type;
-                            _typesWithAssemblyLowerCase[newFullType.ToLowerInvariant()] = type;
-
-                            var typeNameWithoutAssembly = TypeHelper.GetTypeName(newFullType);
-                            _typesWithoutAssembly[typeNameWithoutAssembly] = newFullType;
-                            _typesWithoutAssemblyLowerCase[typeNameWithoutAssembly.ToLowerInvariant()] = newFullType.ToLowerInvariant();
-                        }
+                        InitializeType(assemblyWithTypes.Key, type);
                     }
                 }
             }
+        }
+
+        private static void InitializeType(Assembly assembly, Type type)
+        {
+            if (ShouldIgnoreType(assembly, type))
+            {
+                return;
+            }
+
+            var newAssemblyName = TypeHelper.GetAssemblyNameWithoutOverhead(assembly.FullName);
+            string newFullType = TypeHelper.FormatType(newAssemblyName, type.FullName);
+
+            if (!_typesByAssembly.ContainsKey(newAssemblyName))
+            {
+                _typesByAssembly[newAssemblyName] = new Dictionary<string, Type>();
+            }
+
+            var typesByAssembly = _typesByAssembly[newAssemblyName];
+            if (!typesByAssembly.ContainsKey(newFullType))
+            {
+                typesByAssembly[newFullType] = type;
+
+                _typesWithAssembly[newFullType] = type;
+                _typesWithAssemblyLowerCase[newFullType.ToLowerInvariant()] = type;
+
+                var typeNameWithoutAssembly = TypeHelper.GetTypeName(newFullType);
+                _typesWithoutAssembly[typeNameWithoutAssembly] = newFullType;
+                _typesWithoutAssemblyLowerCase[typeNameWithoutAssembly.ToLowerInvariant()] = newFullType.ToLowerInvariant();
+
+                var interfaces = type.GetInterfacesEx();
+                foreach (var iface in interfaces)
+                {
+                    if (!_typesByInterface.ContainsKey(iface))
+                    {
+                        _typesByInterface.Add(iface, new HashSet<Type>());
+                    }
+
+                    _typesByInterface[iface].Add(type);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Determines whether the specified assembly must be ignored by the type cache.
+        /// </summary>
+        /// <param name="assembly">The assembly.</param>
+        /// <returns><c>true</c> if the assembly should be ignored, <c>false</c> otherwise.</returns>
+        private static bool ShouldIgnoreAssembly(Assembly assembly)
+        {
+            if (assembly == null)
+            {
+                return true;
+            }
+
+#if NET
+            if (assembly.ReflectionOnly)
+            {
+                return true;
+            }
+#endif
+
+            var assemblyFullName = assembly.FullName;
+            if (assemblyFullName.StartsWith("System.Reflection.RuntimeAssembly"))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
