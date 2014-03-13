@@ -9,19 +9,30 @@ namespace Catel.Logging
 {
     using System;
     using System.IO;
+    using System.Reflection;
+    using System.Runtime.InteropServices;
+    using Catel.Reflection;
 
     /// <summary>
     /// Log listener which writes all data to a file.
     /// </summary>
     public class FileLogListener : BatchLogListenerBase
     {
+        private const string AppData = "{AppData}";
+
+        private readonly Assembly _assembly;
+        private string _filePath;
+
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="FileLogListener"/> class.
+        /// Initializes a new instance of the <see cref="FileLogListener" /> class.
         /// </summary>
-        public FileLogListener()
+        /// <param name="assembly">The assembly to load the product info from. If <c>null</c>, the entry assembly will be used.</param>
+        public FileLogListener(Assembly assembly = null)
         {
             MaxSizeInKiloBytes = 1000*10; // 10 MB
+
+            _assembly = assembly ?? Assembly.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
         }
 
         /// <summary>
@@ -29,8 +40,10 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="filePath">The file path.</param>
         /// <param name="maxSizeInKiloBytes">The max size in kilo bytes.</param>
+        /// <param name="assembly">The assembly to load the product info from. If <c>null</c>, the entry assembly will be used.</param>
         /// <exception cref="ArgumentException">The <paramref name="filePath" /> is <c>null</c> or whitespace.</exception>
-        public FileLogListener(string filePath, int maxSizeInKiloBytes)
+        public FileLogListener(string filePath, int maxSizeInKiloBytes, Assembly assembly = null)
+            : this(assembly)
         {
             Argument.IsNotNullOrWhitespace(() => filePath);
 
@@ -44,7 +57,32 @@ namespace Catel.Logging
         /// Gets or sets the file path.
         /// </summary>
         /// <value>The file path.</value>
-        public string FilePath { get; set; }
+        public string FilePath
+        {
+            get { return _filePath; }
+            set
+            {
+                _filePath = value;
+                if (!string.IsNullOrWhiteSpace(_filePath))
+                {
+                    if (_filePath.Contains(AppData))
+                    {
+                        string dataDirectory;
+
+                        if (_assembly != null)
+                        {
+                            dataDirectory = IO.Path.GetApplicationDataDirectory(_assembly.Company(), _assembly.Product());
+                        }
+                        else
+                        {
+                            dataDirectory = IO.Path.GetApplicationDataDirectory();
+                        }
+                        
+                        _filePath = _filePath.Replace(AppData, dataDirectory);
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Gets or sets the maximum size information kilo bytes.

@@ -20,6 +20,7 @@ namespace Catel.Core
     using System.Web;
     using Catel.Configuration;
     using System.Reflection;
+    using System.Collections.Generic;
 #endif
 
     /// <summary>
@@ -40,47 +41,32 @@ namespace Catel.Core
 #if NET
             try
             {
-                bool isWebContext = false;
+                var configurations = new List<Configuration>();
 
-                var httpContextType = TypeCache.GetTypeWithoutAssembly("System.Web.HttpContext");
-                if (httpContextType != null)
+                var exeConfig = GetExeConfiguration();
+                if (exeConfig != null)
                 {
-                    var currentPropertyInfo = httpContextType.GetProperty("Current", BindingFlags.Public | BindingFlags.Static);
-                    if (currentPropertyInfo != null)
+                    configurations.Add(exeConfig);
+                }
+
+                var dllConfig = GetDllConfiguration();
+                if (dllConfig != null)
+                {
+                    configurations.Add(dllConfig);
+                }
+
+                var configFilesHandled = new List<string>();
+                foreach (var configuration in configurations)
+                {
+                    var configPath = configuration.FilePath.ToLower();
+                    if (configFilesHandled.Contains(configPath))
                     {
-                        isWebContext = (currentPropertyInfo.GetValue(null, null) != null);
+                        continue;
                     }
-                }
 
-                Configuration config = null;
-                if (isWebContext)
-                {
-                    Log.Debug("Application is living in a web context, loading web configuration");
+                    configFilesHandled.Add(configPath);
 
-                    // All via reflection because we are support .NET 4.0 client profile, reflection equals this call:
-                    //   config = Configuration.WebConfigurationManager.OpenWebConfiguration("~");
-                    var webConfigurationManagerType = TypeCache.GetTypeWithoutAssembly("System.Web.Configuration.WebConfigurationManager");
-                    var openWebConfigurationMethodInfo = webConfigurationManagerType.GetMethodEx("OpenWebConfiguration", new [] { typeof(string) }, allowStaticMembers: true);
-                    config = (Configuration) openWebConfigurationMethodInfo.Invoke(null, new []{ "~" });
-                }
-                else
-                {
-                    Log.Debug("Application is living in an application context, loading application configuration");
-
-                    config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                }
-
-                if (config != null)
-                {
-                    var configurationSection = config.GetSection<LoggingConfigurationSection>("logging", "catel");
-                    if (configurationSection != null)
-                    {
-                        var logListeners = configurationSection.GetLogListeners();
-                        foreach (var logListener in logListeners)
-                        {
-                            LogManager.AddListener(logListener);
-                        }
-                    }
+                    LogManager.LoadListenersFromConfiguration(configuration);
                 }
             }
             catch (Exception ex)
@@ -93,5 +79,59 @@ namespace Catel.Core
             var module = new CoreModule();
             module.Initialize(serviceLocator);
         }
+
+#if NET
+        private static Configuration GetExeConfiguration()
+        {
+            bool isWebContext = false;
+
+            var httpContextType = TypeCache.GetTypeWithoutAssembly("System.Web.HttpContext");
+            if (httpContextType != null)
+            {
+                var currentPropertyInfo = httpContextType.GetProperty("Current", BindingFlags.Public | BindingFlags.Static);
+                if (currentPropertyInfo != null)
+                {
+                    isWebContext = (currentPropertyInfo.GetValue(null, null) != null);
+                }
+            }
+
+            Configuration config = null;
+            if (isWebContext)
+            {
+                Log.Debug("Application is living in a web context, loading web configuration");
+
+                // All via reflection because we are support .NET 4.0 client profile, reflection equals this call:
+                //   config = Configuration.WebConfigurationManager.OpenWebConfiguration("~");
+                var webConfigurationManagerType = TypeCache.GetTypeWithoutAssembly("System.Web.Configuration.WebConfigurationManager");
+                var openWebConfigurationMethodInfo = webConfigurationManagerType.GetMethodEx("OpenWebConfiguration", new[] { typeof(string) }, allowStaticMembers: true);
+                config = (Configuration)openWebConfigurationMethodInfo.Invoke(null, new[] { "~" });
+            }
+            else
+            {
+                Log.Debug("Application is living in an application context, loading application configuration");
+
+                config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            }
+
+            return config;
+        }
+
+        private static Configuration GetDllConfiguration()
+        {
+            var entryAssembly = AssemblyHelper.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
+            if (entryAssembly == null)
+            {
+                return null;
+            }
+
+            var configFile = entryAssembly.Location + ".config";
+            var map = new ExeConfigurationFileMap
+            {
+                ExeConfigFilename = configFile
+            };
+
+            return ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
+        }
+#endif
     }
 }

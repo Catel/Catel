@@ -32,7 +32,8 @@ namespace Catel.Logging
         {
             MaximumBatchCount = maxBatchCount;
 
-            _timer = new Timer(OnTimerTick, null, 5000, 5000);
+            var interval = TimeSpan.FromSeconds(5);
+            _timer = new Timer(OnTimerTick, null, interval, interval);
         }
         #endregion
 

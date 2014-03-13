@@ -31,7 +31,7 @@ namespace Catel.IO
 		/// <returns>Directory for the application data.</returns>
 		public static string GetApplicationDataDirectory()
 		{
-			Assembly assembly = Assembly.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
+			var assembly = Assembly.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
 
 			return GetApplicationDataDirectory(assembly.Company(), assembly.Product());
 		}

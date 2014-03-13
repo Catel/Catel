@@ -10,6 +10,7 @@ namespace Catel.Logging
     using System;
     using System.Collections.Generic;
     using System.Configuration;
+    using System.Reflection;
     using Catel.IoC;
     using Catel.Reflection;
 
@@ -77,8 +78,9 @@ namespace Catel.Logging
         /// <summary>
         /// Gets the log listener which this configuration represents.
         /// </summary>
+        /// <param name="assembly">The assembly to load the product info from. If <c>null</c>, the entry assembly will be used.</param>
         /// <returns>The <see cref="ILogListener"/>.</returns>
-        public ILogListener GetLogListener()
+        public ILogListener GetLogListener(Assembly assembly = null)
         {
             string typeAsString = ObjectToStringHelper.ToString(Type);
             Log.Debug("Creating ILogListener based on configuration for type '{0}'", typeAsString);
@@ -94,7 +96,12 @@ namespace Catel.Logging
             }
 
             var typeFactory = IoCConfiguration.DefaultTypeFactory;
-            logListener = typeFactory.CreateInstance(type) as ILogListener;
+            logListener = typeFactory.CreateInstanceWithParametersAndAutoCompletion(type, assembly) as ILogListener;
+            if (logListener == null)
+            {
+                logListener = typeFactory.CreateInstance(type) as ILogListener;
+            }
+
             if (logListener == null)
             {
                 string error = string.Format("Failed to instantiate type '{0}' or it does not implement ILogListener and thus cannot be used as such", typeAsString);
