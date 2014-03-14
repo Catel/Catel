@@ -68,12 +68,27 @@ namespace Catel.ApiCop
         {
             lock (_lock)
             {
-                if (!_propertiesByTag.ContainsKey(tag))
-                {
-                    _propertiesByTag[tag] = new PropertyBag();
-                }
+                AddTag(tag);
 
                 return _propertiesByTag[tag];
+            }
+        }
+
+        /// <summary>
+        /// Adds the tag so it is known in this rule.
+        /// </summary>
+        /// <param name="tag">The tag.</param>
+        protected void AddTag(string tag)
+        {
+            if (!string.IsNullOrWhiteSpace(tag))
+            {
+                lock (_lock)
+                {
+                    if (!_propertiesByTag.ContainsKey(tag))
+                    {
+                        _propertiesByTag[tag] = new PropertyBag();
+                    }
+                }
             }
         }
 

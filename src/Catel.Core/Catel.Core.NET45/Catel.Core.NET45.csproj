@@ -102,6 +102,9 @@
     <Compile Include="..\Catel.Core.NET40\ApiCop\Rules\InitializationApiCopRule.cs">
       <Link>ApiCop\Rules\InitializationApiCopRule.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\ApiCop\Rules\TooManyDependenciesApiCopRule.cs">
+      <Link>ApiCop\Rules\TooManyDependenciesApiCopRule.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\ApiCop\Rules\UnusedFeatureApiCopRule.cs">
       <Link>ApiCop\Rules\UnusedFeatureApiCopRule.cs</Link>
     </Compile>

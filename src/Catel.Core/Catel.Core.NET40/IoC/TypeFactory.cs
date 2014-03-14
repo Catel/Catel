@@ -11,6 +11,8 @@ namespace Catel.IoC
     using System.Dynamic;
     using System.Linq;
     using System.Reflection;
+    using Catel.ApiCop;
+    using Catel.ApiCop.Rules;
     using Catel.Caching;
     using Catel.Logging;
     using Catel.Reflection;
@@ -28,6 +30,11 @@ namespace Catel.IoC
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// The API cop.
+        /// </summary>
+        private static readonly IApiCop ApiCop = ApiCopManager.GetCurrentClassApiCop();
 
         /// <summary>
         /// The type request path name.
@@ -78,6 +85,11 @@ namespace Catel.IoC
         #endregion
 
         #region Constructors
+        static TypeFactory()
+        {
+            ApiCop.RegisterRule(new TooManyDependenciesApiCopRule("TypeFactory.LimitDependencyInjection", "It is recommended not to inject too many types using dependency injection as this might be a code-smell. Is the class too big? Try splitting it up into smaller classes with less dependencies.", ApiCopRuleLevel.Hint));
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeFactory" /> class.
         /// </summary>
@@ -378,6 +390,10 @@ namespace Catel.IoC
 
                             // We found a constructor that works, cache it
                             constructorCache[constructorCacheKey] = constructor;
+
+                            // Only update the rule when using a constructor for the first time, not when using it from the cache
+                            ApiCop.UpdateRule<TooManyDependenciesApiCopRule>("TypeFactory.LimitDependencyInjection", 
+                                x => x.SetNumberOfDependenciesInjected(typeToConstruct, constructor.GetParameters().Count()));
 
                             return instanceCreatedWithInjection;
                         }

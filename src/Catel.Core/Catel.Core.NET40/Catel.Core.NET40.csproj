@@ -69,6 +69,7 @@
     <Compile Include="ApiCop\Listeners\TextApiCopListenerBase.cs" />
     <Compile Include="ApiCop\Listeners\TextFileApiCopListener.cs" />
     <Compile Include="ApiCop\Rules\InitializationApiCopRule.cs" />
+    <Compile Include="ApiCop\Rules\TooManyDependenciesApiCopRule.cs" />
     <Compile Include="ApiCop\Rules\UnusedFeatureApiCopRule.cs" />
     <Compile Include="Argument.cs" />
     <Compile Include="Attributes\CoverageExcludeAttribute.cs" />
