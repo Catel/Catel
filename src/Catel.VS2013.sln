@@ -157,7 +157,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProjectTemplates", "Project
 	ProjectSection(SolutionItems) = preProject
 		..\templates\C#\ProjectTemplates\Catel.Silverlight.Application.zip = ..\templates\C#\ProjectTemplates\Catel.Silverlight.Application.zip
 		..\templates\C#\ProjectTemplates\Catel.Silverlight.NavigationApplication.zip = ..\templates\C#\ProjectTemplates\Catel.Silverlight.NavigationApplication.zip
-		..\templates\C#\ProjectTemplates\Catel.WP8.Application.zip = ..\templates\C#\ProjectTemplates\Catel.WP8.Application.zip
+		..\templates\C#\ProjectTemplates\Catel.WindowsStore.Application.zip = ..\templates\C#\ProjectTemplates\Catel.WindowsStore.Application.zip
+		..\templates\C#\ProjectTemplates\Catel.WP80.Application.zip = ..\templates\C#\ProjectTemplates\Catel.WP80.Application.zip
 		..\templates\C#\ProjectTemplates\Catel.WPF.Application.zip = ..\templates\C#\ProjectTemplates\Catel.WPF.Application.zip
 		..\templates\C#\ProjectTemplates\Catel.WPF.BrowserApplication.zip = ..\templates\C#\ProjectTemplates\Catel.WPF.BrowserApplication.zip
 	EndProjectSection
@@ -182,7 +183,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProjectTemplates", "Project
 	ProjectSection(SolutionItems) = preProject
 		..\templates\VB.NET\ProjectTemplates\Catel.Silverlight.Application.zip = ..\templates\VB.NET\ProjectTemplates\Catel.Silverlight.Application.zip
 		..\templates\VB.NET\ProjectTemplates\Catel.Silverlight.NavigationApplication.zip = ..\templates\VB.NET\ProjectTemplates\Catel.Silverlight.NavigationApplication.zip
-		..\templates\VB.NET\ProjectTemplates\Catel.WP8.Application.zip = ..\templates\VB.NET\ProjectTemplates\Catel.WP8.Application.zip
+		..\templates\VB.NET\ProjectTemplates\Catel.WP80.Application.zip = ..\templates\VB.NET\ProjectTemplates\Catel.WP80.Application.zip
 		..\templates\VB.NET\ProjectTemplates\Catel.WPF.Application.zip = ..\templates\VB.NET\ProjectTemplates\Catel.WPF.Application.zip
 	EndProjectSection
 EndProject
