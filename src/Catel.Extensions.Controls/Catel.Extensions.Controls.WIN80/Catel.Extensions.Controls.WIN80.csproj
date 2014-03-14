@@ -153,17 +153,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\Catel.Extensions.Controls.NET40\Resources\Images\ClearOutput.png">
-      <Link>Resources\Images\ClearOutput.png</Link>
-    </Content>
-    <Content Include="..\Catel.Extensions.Controls.NET40\Resources\Images\Error.png">
-      <Link>Resources\Images\Error.png</Link>
-    </Content>
-    <Content Include="..\Catel.Extensions.Controls.NET40\Resources\Images\Warning.png">
-      <Link>Resources\Images\Warning.png</Link>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="Obsolete">
       <HintPath>..\..\..\lib\Obsolete.Fody.3.0.0.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
       <Private>False</Private>

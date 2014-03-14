@@ -133,15 +133,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\Catel.Extensions.Controls.NET40\Resources\Images\ClearOutput.png">
-      <Link>Resources\Images\ClearOutput.png</Link>
-    </Content>
-    <Content Include="..\Catel.Extensions.Controls.NET40\Resources\Images\Error.png">
-      <Link>Resources\Images\Error.png</Link>
-    </Content>
-    <Content Include="..\Catel.Extensions.Controls.NET40\Resources\Images\Warning.png">
-      <Link>Resources\Images\Warning.png</Link>
-    </Content>
     <Content Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>

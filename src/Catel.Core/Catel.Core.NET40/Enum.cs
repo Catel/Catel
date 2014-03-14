@@ -110,9 +110,11 @@ namespace Catel
         /// <returns>Array of <see cref="FieldInfo"/> values.</returns>
         private static FieldInfo[] GetFields(Type enumType)
         {
-            var fields = from field in enumType.GetFieldsEx(BindingFlagsHelper.GetFinalBindingFlags(true, true))
-                         where field.IsLiteral
-                         select field;
+            var fields = enumType.GetFieldsEx(BindingFlagsHelper.GetFinalBindingFlags(true, true));
+
+            fields = (from field in fields
+                      where field.IsLiteral && field.IsPublic
+                      select field).ToArray();
 
             return fields.ToArray();
         }
