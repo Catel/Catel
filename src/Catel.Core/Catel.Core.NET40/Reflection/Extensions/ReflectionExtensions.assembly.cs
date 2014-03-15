@@ -24,12 +24,16 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("assembly", assembly);
 
+            Type[] results = null;
+
 #if NETFX_CORE || WP80
-            return (from type in assembly.DefinedTypes
-                    select type.AsType()).ToArray();
+            results = (from type in assembly.DefinedTypes
+                       select type.AsType()).ToArray();
 #else
-            return assembly.GetTypes();
+            results = assembly.GetTypes();
 #endif
+
+            return results;
         }
 
         public static Attribute GetCustomAttributeEx(this Assembly assembly, Type attributeType)

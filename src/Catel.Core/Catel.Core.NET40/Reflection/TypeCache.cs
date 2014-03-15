@@ -8,8 +8,10 @@ namespace Catel.Reflection
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Reflection;
+    using System.Threading;
     using Logging;
 
     /// <summary>
@@ -22,10 +24,14 @@ namespace Catel.Reflection
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+#if NET
+        private static readonly Queue<Assembly> _threadSafeAssemblyQueue = new Queue<Assembly>();
+#endif
+
         /// <summary>
         /// Cache containing all the types implementing a specific interface.
         /// </summary>
-        private static Dictionary<Type, HashSet<Type>> _typesByInterface = new Dictionary<Type, HashSet<Type>>();
+        private static readonly Dictionary<Type, HashSet<Type>> _typesByInterface = new Dictionary<Type, HashSet<Type>>();
 
         /// <summary>
         /// Cache containing all the types by assembly. This means that the first dictionary contains the assembly name
@@ -78,7 +84,7 @@ namespace Catel.Reflection
 #if NET
             AppDomain.CurrentDomain.AssemblyLoad += OnAssemblyLoaded;
 
-            // Initialize the types of early loaded assemblies.
+            // Initialize the types of early loaded assemblies
             lock (_lockObject)
             {
                 var assemblies = AppDomain.CurrentDomain.GetAssemblies();
@@ -88,6 +94,9 @@ namespace Catel.Reflection
                 }
             }
 #endif
+
+            ShouldIgnoreAssemblyEvaluators = new List<Func<Assembly, bool>>();
+            ShouldIgnoreTypeEvaluators = new List<Func<Assembly, Type, bool>>();
         }
 
 #if NET
@@ -105,29 +114,57 @@ namespace Catel.Reflection
                 return;
             }
 
-            lock (_lockObject)
+            // Prevent deadlocks by checking whether this assembly might be loaded from a different thread:
+            // 1) 
+            if (Monitor.TryEnter(_lockObject))
             {
-                var assemblyName = assembly.FullName;
-                if (_loadedAssemblies.Contains(assemblyName))
+                try
                 {
-                    return;
+                    var assemblyName = assembly.FullName;
+                    if (_loadedAssemblies.Contains(assemblyName))
+                    {
+                        return;
+                    }
+
+                    InitializeTypes(false, assembly);
+
+                    _loadedAssemblies.Add(assemblyName);
+
+                    var handler = AssemblyLoaded;
+                    if (handler != null)
+                    {
+                        var types = GetTypesOfAssembly(assembly);
+                        var eventArgs = new AssemblyLoadedEventArgs(assembly, types);
+
+                        handler(null, eventArgs);
+                    }
                 }
-
-                InitializeTypes(false, assembly);
-
-                _loadedAssemblies.Add(assemblyName);
-
-                var handler = AssemblyLoaded;
-                if (handler != null)
+                finally
                 {
-                    var types = GetTypesOfAssembly(assembly);
-                    var eventArgs = new AssemblyLoadedEventArgs(assembly, types);
-
-                    handler(null, eventArgs);
+                    Monitor.Exit(_lockObject);
+                }
+            }
+            else
+            {
+                lock (_threadSafeAssemblyQueue)
+                {
+                    _threadSafeAssemblyQueue.Enqueue(assembly);
                 }
             }
         }
 #endif
+
+        /// <summary>
+        /// Gets the evaluators used to determine whether a specific assembly should be ignored.
+        /// </summary>
+        /// <value>The should ignore assembly function.</value>
+        public static List<Func<Assembly, bool>> ShouldIgnoreAssemblyEvaluators { get; private set; }
+
+        /// <summary>
+        /// Gets the evaluators used to determine whether a specific type should be ignored.
+        /// </summary>
+        /// <value>The should ignore assembly function.</value>
+        public static List<Func<Assembly, Type, bool>> ShouldIgnoreTypeEvaluators { get; private set; } 
 
         #region Events
         /// <summary>
@@ -311,7 +348,15 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("interfaceType", interfaceType);
 
-            return _typesByInterface.ContainsKey(interfaceType) ? _typesByInterface[interfaceType].ToArray() : new Type[] { };
+            lock (_lockObject)
+            {
+                if (!_typesByInterface.ContainsKey(interfaceType))
+                {
+                    _typesByInterface[interfaceType] = new HashSet<Type>(GetTypes(interfaceType.ImplementsInterfaceEx));
+                }
+
+                return _typesByInterface[interfaceType].ToArray();
+            }
         }
 
         /// <summary>
@@ -449,12 +494,6 @@ namespace Catel.Reflection
                 {
                     _loadedAssemblies.Clear();
 
-                    if (_typesByInterface != null)
-                    {
-                        _typesByInterface.Clear();
-                        _typesByInterface = null;
-                    }
-
                     if (_typesByAssembly != null)
                     {
                         _typesByAssembly.Clear();
@@ -486,11 +525,6 @@ namespace Catel.Reflection
                     }
                 }
 
-                if (_typesByInterface == null)
-                {
-                    _typesByInterface = new Dictionary<Type, HashSet<Type>>();
-                }
-
                 if (_typesByAssembly == null)
                 {
                     _typesByAssembly = new Dictionary<string, Dictionary<string, Type>>();
@@ -516,21 +550,19 @@ namespace Catel.Reflection
                     _typesWithoutAssemblyLowerCase = new Dictionary<string, string>();
                 }
 
+                InitializeAssemblies(AssemblyHelper.GetLoadedAssemblies());
+            }
+        }
+
+        private static void InitializeAssemblies(IEnumerable<Assembly> assemblies)
+        {
+            lock (_lockObject)
+            {
                 var typesToAdd = new Dictionary<Assembly, HashSet<Type>>();
 
-                var assembliesToLoad = new List<Assembly>();
-                if (assembly != null)
+                foreach (var assembly in assemblies)
                 {
-                    assembliesToLoad.Add(assembly);
-                }
-                else
-                {
-                    assembliesToLoad.AddRange(AssemblyHelper.GetLoadedAssemblies());
-                }
-
-                foreach (var loadedAssembly in assembliesToLoad)
-                {
-                    var loadedAssemblyFullName = loadedAssembly.FullName;
+                    var loadedAssemblyFullName = assembly.FullName;
 
                     try
                     {
@@ -541,16 +573,16 @@ namespace Catel.Reflection
 
                         _loadedAssemblies.Add(loadedAssemblyFullName);
 
-                        if (ShouldIgnoreAssembly(loadedAssembly))
+                        if (ShouldIgnoreAssembly(assembly))
                         {
                             continue;
                         }
 
-                        typesToAdd[loadedAssembly] = new HashSet<Type>();
+                        typesToAdd[assembly] = new HashSet<Type>();
 
-                        foreach (var type in AssemblyHelper.GetAllTypesSafely(loadedAssembly))
+                        foreach (var type in AssemblyHelper.GetAllTypesSafely(assembly))
                         {
-                            typesToAdd[loadedAssembly].Add(type);
+                            typesToAdd[assembly].Add(type);
                         }
                     }
                     catch (Exception ex)
@@ -566,6 +598,25 @@ namespace Catel.Reflection
                         InitializeType(assemblyWithTypes.Key, type);
                     }
                 }
+
+#if NET
+                var lateLoadedAssemblies = new List<Assembly>();
+
+                lock (_threadSafeAssemblyQueue)
+                {
+                    while (_threadSafeAssemblyQueue.Count > 0)
+                    {
+                        var assembly = _threadSafeAssemblyQueue.Dequeue();
+
+                        lateLoadedAssemblies.Add(assembly);
+                    }
+                }
+
+                if (lateLoadedAssemblies.Count > 0)
+                {
+                    InitializeAssemblies(lateLoadedAssemblies);
+                }
+#endif
             }
         }
 
@@ -596,16 +647,16 @@ namespace Catel.Reflection
                 _typesWithoutAssembly[typeNameWithoutAssembly] = newFullType;
                 _typesWithoutAssemblyLowerCase[typeNameWithoutAssembly.ToLowerInvariant()] = newFullType.ToLowerInvariant();
 
-                var interfaces = type.GetInterfacesEx();
-                foreach (var iface in interfaces)
-                {
-                    if (!_typesByInterface.ContainsKey(iface))
-                    {
-                        _typesByInterface.Add(iface, new HashSet<Type>());
-                    }
+                //var interfaces = type.GetInterfacesEx();
+                //foreach (var iface in interfaces)
+                //{
+                //    if (!_typesByInterface.ContainsKey(iface))
+                //    {
+                //        _typesByInterface.Add(iface, new HashSet<Type>());
+                //    }
 
-                    _typesByInterface[iface].Add(type);
-                }
+                //    _typesByInterface[iface].Add(type);
+                //}
             }
         }
 
@@ -629,9 +680,18 @@ namespace Catel.Reflection
 #endif
 
             var assemblyFullName = assembly.FullName;
-            if (assemblyFullName.StartsWith("System.Reflection.RuntimeAssembly"))
+            if (assemblyFullName.StartsWith("System.Reflection.RuntimeAssembly") ||
+                assemblyFullName.Contains("Anonymously Hosted DynamicMethods Assembly"))
             {
                 return true;
+            }
+
+            foreach (var evaluator in ShouldIgnoreAssemblyEvaluators)
+            {
+                if (evaluator.Invoke(assembly))
+                {
+                    return true;
+                }
             }
 
             return false;
@@ -677,6 +737,14 @@ namespace Catel.Reflection
                 typeName.Contains("System.Data.EntityModel.SchemaObjectModel."))
             {
                 return true;
+            }
+
+            foreach (var evaluator in ShouldIgnoreTypeEvaluators)
+            {
+                if (evaluator.Invoke(assembly, type))
+                {
+                    return true;
+                }
             }
 
             return false;
