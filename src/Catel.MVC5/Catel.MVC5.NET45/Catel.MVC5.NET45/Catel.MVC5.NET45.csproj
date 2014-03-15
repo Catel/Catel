@@ -122,4 +122,5 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Import Project="$(ProjectDir)\..\..\..\..\Tools\Pepita\PepitaGet.targets" />
 </Project>
