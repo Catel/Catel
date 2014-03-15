@@ -107,6 +107,9 @@
     <Compile Include="..\Catel.Extensions.Data.NET40\ExtensionsDataModule.cs">
       <Link>ExtensionsDataModule.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.Data.NET40\ModuleInitializer.cs">
+      <Link>ModuleInitializer.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Extensions.Data.NET40\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>

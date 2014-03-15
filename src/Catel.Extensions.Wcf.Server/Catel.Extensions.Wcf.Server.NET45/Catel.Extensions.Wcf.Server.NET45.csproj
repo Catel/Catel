@@ -79,6 +79,9 @@
     <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\IoC\InstanceProvider.cs">
       <Link>IoC\InstanceProvider.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\ModuleInitializer.cs">
+      <Link>ModuleInitializer.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>

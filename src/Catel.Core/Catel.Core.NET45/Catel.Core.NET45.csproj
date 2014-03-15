@@ -670,6 +670,9 @@
     <Compile Include="..\Catel.Core.NET40\Messaging\Messages\SimpleMessage.cs">
       <Link>Messaging\Messages\SimpleMessage.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\ModuleInitializer.cs">
+      <Link>ModuleInitializer.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>

@@ -111,6 +111,9 @@
     <Compile Include="..\Catel.Extensions.Memento.NET40\MementoService.cs">
       <Link>MementoService.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.Memento.NET40\ModuleInitializer.cs">
+      <Link>ModuleInitializer.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Extensions.Memento.NET40\ObjectObserver.cs">
       <Link>ObjectObserver.cs</Link>
     </Compile>

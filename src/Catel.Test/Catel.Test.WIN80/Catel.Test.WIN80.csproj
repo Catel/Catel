@@ -318,6 +318,9 @@
     <Compile Include="..\Catel.Test.NET40\Messaging\MessageMediatorHelperFacts.cs">
       <Link>Messaging\MessageMediatorHelperFacts.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\ModuleInitializer.cs">
+      <Link>ModuleInitializer.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\MVVM\Auditing\AuditingManagerTest.cs">
       <Link>MVVM\Auditing\AuditingManagerTest.cs</Link>
     </Compile>

@@ -89,6 +89,9 @@
     <Compile Include="..\Catel.MVC4.NET40\IoC\DependencyResolver.cs">
       <Link>IoC\DependencyResolver.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVC4.NET40\ModuleInitializer.cs">
+      <Link>ModuleInitializer.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVC4.NET40\MvcModule.cs">
       <Link>MvcModule.cs</Link>
     </Compile>

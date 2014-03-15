@@ -165,6 +165,9 @@
     <Compile Include="..\Catel.Extensions.Interception.NET40\Invocations\Interfaces\IInvocation.cs">
       <Link>Invocations\Interfaces\IInvocation.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.Interception.NET40\ModuleInitializer.cs">
+      <Link>ModuleInitializer.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Extensions.Interception.NET40\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>

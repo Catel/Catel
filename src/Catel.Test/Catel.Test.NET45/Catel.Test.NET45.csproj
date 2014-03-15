@@ -46,9 +46,9 @@
     <Reference Include="EntityFramework">
       <HintPath>..\..\..\lib\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="FluentValidation, Version=5.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="FluentValidation, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\FluentValidation.5.0.0.1\lib\Net40\FluentValidation.dll</HintPath>
+      <HintPath>..\..\..\lib\FluentValidation.5.1.0.0\lib\Net40\FluentValidation.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Expression.Interactions">
@@ -531,6 +531,9 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Messaging\MessageMediatorHelperFacts.cs">
       <Link>Messaging\MessageMediatorHelperFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\ModuleInitializer.cs">
+      <Link>ModuleInitializer.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\MVVM\Auditing\AuditingManagerTest.cs">
       <Link>MVVM\Auditing\AuditingManagerTest.cs</Link>

@@ -52,9 +52,9 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentValidation, Version=5.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="FluentValidation, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\FluentValidation.5.0.0.1\lib\portable-win+net40+sl50+wp80\FluentValidation.dll</HintPath>
+      <HintPath>..\..\..\lib\FluentValidation.5.1.0.0\lib\portable-win+net40+sl50+wp80\FluentValidation.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Obsolete">
@@ -90,6 +90,9 @@
     </Compile>
     <Compile Include="..\Catel.Extensions.FluentValidation.NET40\FluentValidatorToCatelValidatorAdapter.cs">
       <Link>FluentValidatorToCatelValidatorAdapter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.FluentValidation.NET40\ModuleInitializer.cs">
+      <Link>ModuleInitializer.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Extensions.FluentValidation.NET40\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>

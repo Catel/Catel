@@ -123,6 +123,9 @@
     <Compile Include="..\Catel.Extensions.EntityFramework5.NET40\Helpers\IsolationHelper.cs">
       <Link>Helpers\IsolationHelper.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.EntityFramework5.NET40\ModuleInitializer.cs">
+      <Link>ModuleInitializer.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Extensions.EntityFramework5.NET40\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>

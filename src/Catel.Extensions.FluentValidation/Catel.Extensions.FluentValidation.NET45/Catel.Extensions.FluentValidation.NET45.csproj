@@ -36,9 +36,9 @@
     <DocumentationFile>..\..\..\output\release\NET45\Catel.Extensions.FluentValidation\Catel.Extensions.FluentValidation.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentValidation, Version=5.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="FluentValidation, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\FluentValidation.5.0.0.1\lib\Net40\FluentValidation.dll</HintPath>
+      <HintPath>..\..\..\lib\FluentValidation.5.1.0.0\lib\Net40\FluentValidation.dll</HintPath>
     </Reference>
     <Reference Include="Obsolete">
       <HintPath>..\..\..\lib\Obsolete.Fody.3.0.2.0\Lib\NET35\Obsolete.dll</HintPath>
@@ -70,6 +70,9 @@
     </Compile>
     <Compile Include="..\Catel.Extensions.FluentValidation.NET40\FluentValidatorToCatelValidatorAdapter.cs">
       <Link>FluentValidatorToCatelValidatorAdapter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.FluentValidation.NET40\ModuleInitializer.cs">
+      <Link>ModuleInitializer.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Extensions.FluentValidation.NET40\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>

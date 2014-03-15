@@ -74,6 +74,9 @@
     <Compile Include="..\Catel.Extensions.CSLA.NET40\ExtensionsCSLAModule.cs">
       <Link>ExtensionsCSLAModule.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.CSLA.NET40\ModuleInitializer.cs">
+      <Link>ModuleInitializer.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Extensions.CSLA.NET40\MVVM\ViewModels\Interfaces\IViewModel.cs">
       <Link>MVVM\ViewModels\Interfaces\IViewModel.cs</Link>
     </Compile>

@@ -35,27 +35,36 @@ namespace Catel.Modules
         }
 
         /// <summary>
-        /// 
+        /// Adds the package.
         /// </summary>
-        /// <param name="package"></param>
+        /// <param name="package">The package.</param>
+        /// <exception cref="System.NotImplementedException"></exception>
         public void AddPackage(IPackage package)
         {
             throw new System.NotImplementedException();
         }
 
         /// <summary>
-        /// 
+        /// Removes the package.
         /// </summary>
-        /// <param name="package"></param>
+        /// <param name="package">The package.</param>
+        /// <exception cref="System.NotImplementedException"></exception>
         public void RemovePackage(IPackage package)
         {
             throw new System.NotImplementedException();
         }
 
         /// <summary>
-        /// 
+        /// Gets the source.
         /// </summary>
+        /// <value>The source.</value>
         public string Source { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the package save mode.
+        /// </summary>
+        /// <value>The package save mode.</value>
+        public PackageSaveModes PackageSaveMode { get; set; }
 
         /// <summary>
         /// Gets whether the repository supports prerelease packages.
