@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
-    <id>Catel.Mvc</id>
+    <id>Catel.MVC5</id>
     <version>[VERSION]</version>
 	<title>Catel.MVC 5</title>
     <authors>GeertvanHorrik</authors>
