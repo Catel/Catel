@@ -36,13 +36,13 @@
     <DocumentationFile>..\..\..\output\release\NET45\Catel.Extensions.CSLA\Catel.Extensions.CSLA.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Csla, Version=4.5.40.0, Culture=neutral, PublicKeyToken=93be5fdc093e4c30, processorArchitecture=MSIL">
+    <Reference Include="Csla, Version=4.5.501.0, Culture=neutral, PublicKeyToken=93be5fdc093e4c30, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\CSLA-Core.4.5.40\lib\net45\Csla.dll</HintPath>
+      <HintPath>..\..\..\lib\CSLA-Core.4.5.501\lib\net45\Csla.dll</HintPath>
     </Reference>
-    <Reference Include="Csla.Xaml, Version=4.5.40.0, Culture=neutral, PublicKeyToken=93be5fdc093e4c30, processorArchitecture=MSIL">
+    <Reference Include="Csla.Xaml, Version=4.5.501.0, Culture=neutral, PublicKeyToken=93be5fdc093e4c30, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\CSLA-WPF.4.5.40\lib\net45\Csla.Xaml.dll</HintPath>
+      <HintPath>..\..\..\lib\CSLA-WPF.4.5.501\lib\net45\Csla.Xaml.dll</HintPath>
     </Reference>
     <Reference Include="Obsolete">
       <HintPath>..\..\..\lib\Obsolete.Fody.3.0.2.0\Lib\NET35\Obsolete.dll</HintPath>
