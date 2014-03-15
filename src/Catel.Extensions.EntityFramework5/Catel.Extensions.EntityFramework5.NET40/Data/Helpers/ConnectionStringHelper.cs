@@ -8,7 +8,12 @@ namespace Catel.Data
     using System;
     using System.Configuration;
     using System.Data.Entity;
+
+#if EF5
     using System.Data.Objects;
+#else
+    using System.Data.Entity.Core.Objects;
+#endif
 
     /// <summary>
     /// The connection string helper.

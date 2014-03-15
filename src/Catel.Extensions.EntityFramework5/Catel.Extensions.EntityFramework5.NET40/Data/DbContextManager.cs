@@ -9,8 +9,13 @@ namespace Catel.Data
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    using System.Data.Objects;
     using Logging;
+
+#if EF5
+    using System.Data.Objects;
+#else
+    using System.Data.Entity.Core.Objects;
+#endif
 
     /// <summary>
     /// Provides an automated way to reuse Entity Framework DbContext objects within the context of a single data portal operation.

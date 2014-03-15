@@ -7,7 +7,12 @@ namespace Catel.Data
 {
     using System;
     using System.Data.Entity.Infrastructure;
+
+#if EF5
     using System.Data.Objects;
+#else
+    using System.Data.Entity.Core.Objects;
+#endif
 
     /// <summary>
     /// Interface defining the functionality for the context factory.
