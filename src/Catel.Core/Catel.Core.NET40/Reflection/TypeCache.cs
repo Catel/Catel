@@ -81,6 +81,9 @@ namespace Catel.Reflection
 
         static TypeCache()
         {
+            ShouldIgnoreAssemblyEvaluators = new List<Func<Assembly, bool>>();
+            ShouldIgnoreTypeEvaluators = new List<Func<Assembly, Type, bool>>();
+
 #if NET
             AppDomain.CurrentDomain.AssemblyLoad += OnAssemblyLoaded;
 
@@ -94,9 +97,6 @@ namespace Catel.Reflection
                 }
             }
 #endif
-
-            ShouldIgnoreAssemblyEvaluators = new List<Func<Assembly, bool>>();
-            ShouldIgnoreTypeEvaluators = new List<Func<Assembly, Type, bool>>();
         }
 
 #if NET
@@ -680,8 +680,7 @@ namespace Catel.Reflection
 #endif
 
             var assemblyFullName = assembly.FullName;
-            if (assemblyFullName.StartsWith("System.Reflection.RuntimeAssembly") ||
-                assemblyFullName.Contains("Anonymously Hosted DynamicMethods Assembly"))
+            if (assemblyFullName.Contains("Anonymously Hosted DynamicMethods Assembly"))
             {
                 return true;
             }
