@@ -11,7 +11,6 @@
     <AssemblyName>Catel.Extensions.Wcf.Server</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <FodyPath>..\..\..\lib\Fody.1.18.0.0</FodyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Obsolete">
-      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.0.0\Lib\NET35\Obsolete.dll</HintPath>
+      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.2.0\Lib\NET35\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -55,6 +54,7 @@
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="IoC\Attributes\DependencyInjectionBehaviorAttribute.cs" />
+    <Compile Include="ModuleInitializer.cs" />
     <Compile Include="Serialization\Attributes\ShouldUseBinarySerializationForDataContractsAttribute.cs" />
     <Compile Include="Serialization\Attributes\ShouldUseJsonSerializationForDataContractsAttribute.cs" />
     <Compile Include="Serialization\BinarySerializerOperationBehavior.cs" />
@@ -65,7 +65,6 @@
     <Compile Include="ServiceHost.cs" />
     <Compile Include="Extensions\InstanceContextExtension.cs" />
     <Compile Include="Dispatcher\InstanceContextInitializer.cs" />
-    <Compile Include="ModuleInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataType.cs" />
     <Compile Include="Serialization\Helpers\BinarySerializerHelper.cs" />
@@ -77,7 +76,6 @@
     <Content Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Fody.targets" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -96,5 +94,11 @@
   </Target>
   -->
   <Import Project="$(ProjectDir)\..\..\..\Tools\Pepita\PepitaGet.targets" />
-  <Import Project="Fody.targets" />
+  <Import Project="..\..\..\lib\Fody.1.22.1\build\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.22.1\build\Fody.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\lib\Fody.1.22.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.1.22.1\build\Fody.targets'))" />
+  </Target>
 </Project>

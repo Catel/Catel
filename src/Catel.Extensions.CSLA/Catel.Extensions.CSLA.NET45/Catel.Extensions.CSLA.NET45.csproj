@@ -13,7 +13,6 @@
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.18.0.0</FodyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -46,7 +45,7 @@
       <HintPath>..\..\..\lib\CSLA-WPF.4.5.40\lib\net45\Csla.Xaml.dll</HintPath>
     </Reference>
     <Reference Include="Obsolete">
-      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.0.0\Lib\NET35\Obsolete.dll</HintPath>
+      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.2.0\Lib\NET35\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="PresentationCore" />
@@ -65,7 +64,7 @@
     <None Include="..\Catel.Extensions.CSLA.NET40\Microsoft.Bcl.Build.targets">
       <Link>Microsoft.Bcl.Build.targets</Link>
     </None>
-    <None Include="Fody.targets" />
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -74,9 +73,6 @@
     </Compile>
     <Compile Include="..\Catel.Extensions.CSLA.NET40\ExtensionsCSLAModule.cs">
       <Link>ExtensionsCSLAModule.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.CSLA.NET40\ModuleInitializer.cs">
-      <Link>ModuleInitializer.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Extensions.CSLA.NET40\MVVM\ViewModels\Interfaces\IViewModel.cs">
       <Link>MVVM\ViewModels\Interfaces\IViewModel.cs</Link>
@@ -108,5 +104,11 @@
   <Target Name="BeforeBuild">
   </Target>
   <Import Project="$(ProjectPath)\..\..\..\..\Tools\Pepita\PepitaGet.targets" />
-  <Import Project="Fody.targets" />
+  <Import Project="..\..\..\lib\Fody.1.22.1\build\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.22.1\build\Fody.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\lib\Fody.1.22.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.1.22.1\build\Fody.targets'))" />
+  </Target>
 </Project>

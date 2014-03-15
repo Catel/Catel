@@ -14,7 +14,6 @@
     <TargetFrameworkProfile>Profile158</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <FodyPath>..\..\..\lib\Fody.1.18.0.0</FodyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -621,9 +620,6 @@
     <Compile Include="..\Catel.Core.NET40\Messaging\Messages\SimpleMessage.cs">
       <Link>Messaging\Messages\SimpleMessage.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\ModuleInitializer.cs">
-      <Link>ModuleInitializer.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Core.NET40\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
@@ -912,14 +908,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Fody.targets" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Obsolete">
-      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.0.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\Catel.Core.NET40\Properties\Resources.zh-Hans.resx">
@@ -927,6 +916,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.zh-Hans.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Obsolete">
+      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.2.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -937,5 +932,11 @@
   </Target>
   -->
   <Import Project="$(ProjectDir)\..\..\..\Tools\Pepita\PepitaGet.targets" />
-  <Import Project="Fody.targets" />
+  <Import Project="..\..\..\lib\Fody.1.22.1\build\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.22.1\build\Fody.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\lib\Fody.1.22.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.1.22.1\build\Fody.targets'))" />
+  </Target>
 </Project>

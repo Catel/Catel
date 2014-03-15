@@ -14,7 +14,6 @@
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.18.0.0</FodyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -56,7 +55,7 @@
       <HintPath>..\..\..\lib\Microsoft.Bcl.Async.1.0.16\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
     </Reference>
     <Reference Include="Obsolete">
-      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.0.0\Lib\NET35\Obsolete.dll</HintPath>
+      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.2.0\Lib\NET35\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="PresentationCore" />
@@ -79,7 +78,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Fody.targets" />
+    <None Include="app.config" />
     <None Include="Microsoft.Bcl.Build.targets" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
@@ -116,5 +115,11 @@
   </Target>
   <Import Project="$(ProjectPath)\..\..\..\..\Tools\Pepita\PepitaGet.targets" />
   <Import Project="Microsoft.Bcl.Build.targets" />
-  <Import Project="Fody.targets" />
+  <Import Project="..\..\..\lib\Fody.1.22.1\build\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.22.1\build\Fody.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\lib\Fody.1.22.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.1.22.1\build\Fody.targets'))" />
+  </Target>
 </Project>

@@ -16,7 +16,6 @@
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.18.0.0</FodyPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -80,7 +79,7 @@
       <HintPath>..\..\..\lib\NuGet.Core.2.7.2\lib\net40-Client\NuGet.Core.dll</HintPath>
     </Reference>
     <Reference Include="Obsolete">
-      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.0.0\Lib\NET35\Obsolete.dll</HintPath>
+      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.2.0\Lib\NET35\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="PresentationCore" />
@@ -109,7 +108,6 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Fody.targets" />
     <None Include="FodyWeavers.xml">
       <SubType>Designer</SubType>
     </None>
@@ -437,5 +435,11 @@
   <Target Name="AfterBuild">
   </Target>
   <Import Project="$(ProjectPath)\..\..\..\..\Tools\Pepita\PepitaGet.targets" />
-  <Import Project="Fody.targets" />
+  <Import Project="..\..\..\lib\Fody.1.22.1\build\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.22.1\build\Fody.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\lib\Fody.1.22.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.1.22.1\build\Fody.targets'))" />
+  </Target>
 </Project>

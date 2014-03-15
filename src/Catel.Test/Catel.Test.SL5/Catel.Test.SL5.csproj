@@ -31,7 +31,6 @@
     <LinkedServerProject />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.18.0.0</FodyPath>
   </PropertyGroup>
   <!--
   //
@@ -107,7 +106,7 @@
       <HintPath>..\..\..\lib\Newtonsoft.Json.6.0.1\lib\portable-net40+sl5+wp80+win8+monotouch+monoandroid\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Obsolete">
-      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.0.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
+      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.2.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System.ComponentModel.Composition, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -122,7 +121,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Windows.Browser" />
     <Reference Include="System.Xml.Linq, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <None Include="Fody.targets" />
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -455,9 +453,6 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Messaging\MessageMediatorHelperFacts.cs">
       <Link>Messaging\MessageMediatorHelperFacts.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\ModuleInitializer.cs">
-      <Link>ModuleInitializer.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\MVVM\Auditing\AuditingManagerTest.cs">
       <Link>MVVM\Auditing\AuditingManagerTest.cs</Link>
@@ -809,5 +804,11 @@
   <Target Name="AfterBuild">
   </Target>
   <Import Project="$(ProjectPath)\..\..\..\..\Tools\Pepita\PepitaGet.targets" />
-  <Import Project="Fody.targets" />
+  <Import Project="..\..\..\lib\Fody.1.22.1\build\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.22.1\build\Fody.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\lib\Fody.1.22.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.1.22.1\build\Fody.targets'))" />
+  </Target>
 </Project>
