@@ -885,6 +885,12 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Markup\UpdatableMarkupExtension.cs">
       <Link>Windows\Markup\UpdatableMarkupExtension.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\MediaElementThreadFactory.cs">
+      <Link>Windows\MediaElementThreadFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\MediaElementThreadInfo.cs">
+      <Link>Windows\MediaElementThreadInfo.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Threading\Extensions\DispatcherExtensions.cs">
       <Link>Windows\Threading\Extensions\DispatcherExtensions.cs</Link>
     </Compile>

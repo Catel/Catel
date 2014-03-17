@@ -104,9 +104,11 @@
     <Compile Include="Services\Exceptions\SplashScreenException.cs" />
     <Compile Include="Services\Extensions\IUIVisualizerServiceExtensions.cs" />
     <Compile Include="Services\Interfaces\IAutoCompletionService.cs" />
+    <Compile Include="Windows\MediaElementThreadInfo.cs" />
     <Compile Include="Windows\Data\Converters\CollectionToCountConverter.cs" />
     <Compile Include="Windows\Data\Converters\TextToLowerCaseConverter.cs" />
     <Compile Include="Windows\Data\Converters\TextToUpperCaseConverter.cs" />
+    <Compile Include="Windows\MediaElementThreadFactory.cs" />
     <Compile Include="Windows\Input\InputGesture.cs" />
     <Compile Include="MVVM\Commands\Interfaces\ICompositeCommand.cs" />
     <Compile Include="MVVM\Commands\Interfaces\IAuthenticationProvider.cs" />
