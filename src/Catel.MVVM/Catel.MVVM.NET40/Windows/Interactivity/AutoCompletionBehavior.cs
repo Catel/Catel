@@ -45,6 +45,10 @@ namespace Catel.Windows.Interactivity
 
             _popup = new Popup();
             _popup.Child = _suggestionListBox;
+
+#if NET
+            _popup.StaysOpen = false;
+#endif
         }
         #endregion
 
@@ -144,6 +148,7 @@ namespace Catel.Windows.Interactivity
 #endif
 
                 _suggestionListBox.SelectionChanged += OnSuggestionListBoxSelectionChanged;
+                _suggestionListBox.MouseLeftButtonUp += OnSuggestionListBoxMouseLeftButtonUp;
 
                 UpdateSuggestionBox(false);
             }
@@ -168,6 +173,7 @@ namespace Catel.Windows.Interactivity
 #endif
 
                 _suggestionListBox.SelectionChanged -= OnSuggestionListBoxSelectionChanged;
+                _suggestionListBox.MouseLeftButtonUp -= OnSuggestionListBoxMouseLeftButtonUp;
 
                 _subscribed = false;
             }
@@ -306,6 +312,11 @@ namespace Catel.Windows.Interactivity
                     e.Handled = true;
                 }
             }
+        }
+
+        private void OnSuggestionListBoxMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            UpdateSuggestionBox(false);
         }
 
         private void OnSuggestionListBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
