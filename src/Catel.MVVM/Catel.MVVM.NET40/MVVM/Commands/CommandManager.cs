@@ -10,6 +10,8 @@ namespace Catel.MVVM
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Runtime.CompilerServices;
+    using System.Windows;
     using System.Windows.Input;
     using Catel.Logging;
 
@@ -38,9 +40,11 @@ namespace Catel.MVVM
 
 #if NET
         private bool _subscribedToApplicationActivedEvent;
+        private readonly ConditionalWeakTable<Window, object> _subscribedWindows = new ConditionalWeakTable<Window, object>(); 
+#else
+        private bool _subscribedToKeyboardEvent;
 #endif
 
-        private bool _subscribedToKeyboardEvent;
         private readonly Dictionary<string, InputGesture> _originalCommandGestures = new Dictionary<string, InputGesture>();
         private readonly Dictionary<string, InputGesture> _commandGestures = new Dictionary<string, InputGesture>();
 #endif
@@ -415,13 +419,15 @@ namespace Catel.MVVM
         /// </summary>
         public void SubscribeToKeyboardEvents()
         {
+#if !NET
             if (_subscribedToKeyboardEvent)
             {
                 return;
             }
+#endif
 
 #if NET || SILVERLIGHT
-            var application = System.Windows.Application.Current;
+            var application = Application.Current;
             if (application == null)
             {
                 Log.Warning("Application.Current is null, cannot subscribe to keyboard events");
@@ -437,21 +443,23 @@ namespace Catel.MVVM
                 {
                     application.Activated += OnApplicationActivated;
                     _subscribedToApplicationActivedEvent = true;
-
                     Log.Info("Application.MainWindow is null, cannot subscribe to keyboard events, subscribed to Application.Activated event");
                 }
 
                 return;
             }
 
-            mainWindow.KeyDown += OnKeyDown;
-            _subscribedToKeyboardEvent = true;
+            object obj = null;
+            if (!_subscribedWindows.TryGetValue(mainWindow, out obj))
+            {
+                mainWindow.KeyDown += OnKeyDown;
+                _subscribedWindows.Add(mainWindow, new object());
+            }
 #elif SILVERLIGHT
             var rootVisual = application.RootVisual;
             if (rootVisual == null)
             {
                 Log.Warning("Application.RootVisual is null, cannot subscribe to keyboard events");
-
                 return;
             }
 
@@ -465,9 +473,6 @@ namespace Catel.MVVM
 #if NET
         private void OnApplicationActivated(object sender, EventArgs e)
         {
-            var application = (System.Windows.Application)sender;
-            application.Activated -= OnApplicationActivated;
-
             SubscribeToKeyboardEvents();
         }
 #endif
@@ -476,6 +481,8 @@ namespace Catel.MVVM
         {
             lock (_lockObject)
             {
+                bool keyHandled = false;
+
                 foreach (var commandGesture in _commandGestures)
                 {
                     var keyGesture = commandGesture.Value;
@@ -484,8 +491,14 @@ namespace Catel.MVVM
                         if (keyGesture.Matches(e))
                         {
                             ExecuteCommand(commandGesture.Key);
+                            keyHandled = true;
                         }
                     }
+                }
+
+                if (keyHandled)
+                {
+                    e.Handled = true;
                 }
             }
         }
