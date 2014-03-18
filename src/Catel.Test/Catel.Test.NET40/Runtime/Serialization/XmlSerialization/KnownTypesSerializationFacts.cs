@@ -8,11 +8,13 @@
 namespace Catel.Test.Runtime.Serialization.XmlSerialization
 {
     using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.IO;
+    using System.Linq;
     using System.Runtime.Serialization;
     using Catel.Data;
-
+    using Catel.Test.Data;
 #if NETFX_CORE
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 #else
@@ -96,9 +98,70 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
         #endregion
     }
 
+    [KnownType("KnownTypes")]
+    public class DictionaryTestClass : SavableModelBase<DictionaryTestClass>
+    {
+        // This method returns the array of known types.
+        static Type[] KnownTypes()
+        {
+            return new[] { typeof(ModelBaseFacts.Person) };
+        }
+
+        /// <summary>
+        /// Gets or sets the property value.
+        /// </summary>
+        public Dictionary<string, object> Values
+        {
+            get { return GetValue<Dictionary<string, object>>(ValuesProperty); }
+            set { SetValue(ValuesProperty, value); }
+        }
+
+        /// <summary>
+        /// Register the Values property so it is known in the class.
+        /// </summary>
+        public static readonly PropertyData ValuesProperty = RegisterProperty("Values", typeof(Dictionary<string, object>), new Dictionary<string, object>());
+    }
+
     [TestClass]
     public class Serialization
     {
+        [TestMethod]
+        public void DictionaryWithKnownTypes()
+        {
+            var dictionary = new DictionaryTestClass();
+
+            dictionary.Values.Add("A", new ModelBaseFacts.Person
+            {
+                FirstName = "John",
+                LastName = "Doe"
+            });
+
+            dictionary.Values.Add("B", new ModelBaseFacts.Person
+            {
+                FirstName = "Jane",
+                LastName = "Doe"
+            });
+
+            using (var memoryStream = new MemoryStream())
+            {
+                dictionary.Save(memoryStream, SerializationMode.Xml);
+                memoryStream.Position = 0L;
+                var dictionary2 = DictionaryTestClass.Load(memoryStream, SerializationMode.Xml);
+
+                Assert.AreEqual(dictionary, dictionary2);
+
+                var dic1Elem1 = dictionary.Values.ElementAt(0);
+                var dic2Elem1 = dictionary2.Values.ElementAt(0);
+
+                Assert.AreEqual(dic1Elem1, dic2Elem1);
+
+                var dic1Elem2 = dictionary.Values.ElementAt(1);
+                var dic2Elem2 = dictionary2.Values.ElementAt(1);
+
+                Assert.AreEqual(dic1Elem2, dic2Elem2);
+            }
+        }
+
         [TestMethod]
         public void EnumerableOfInterfacesViaKnownTypes_SameNameDifferentNamespaces_SaveLoadRoundTrip()
         {

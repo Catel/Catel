@@ -9,6 +9,7 @@ namespace Catel.Runtime.Serialization.Xml
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Reflection;
     using System.Runtime.Serialization;
     using Catel.Caching;
@@ -130,7 +131,6 @@ namespace Catel.Runtime.Serialization.Xml
             GetKnownTypes(objectType, serializerTypeInfo);
 
             // Note: the code below is specific for instants of objects, cannot be moved to the GetKnownTypes
-
             if (objectType == typeof(List<KeyValuePair<string, object>>))
             {
                 foreach (var keyValuePair in ((List<KeyValuePair<string, object>>)obj))
@@ -146,7 +146,7 @@ namespace Catel.Runtime.Serialization.Xml
                 }
             }
 
-                // Collections might contain interface types, so if this is an IEnumerable, we need to loop all the instances (performance warning!)
+            // Collections might contain interface types, so if this is an IEnumerable, we need to loop all the instances (performance warning!)
             else if ((obj is IEnumerable) && (!(obj is string)))
             {
                 var objAsIEnumerable = (IEnumerable)obj;
