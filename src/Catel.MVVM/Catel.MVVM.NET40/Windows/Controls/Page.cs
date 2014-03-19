@@ -154,6 +154,19 @@ namespace Catel.Windows.Controls
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the view model container should prevent the 
+        /// creation of a view model.
+        /// <para />
+        /// This property is very useful when using views in transitions where the view model is no longer required.
+        /// </summary>
+        /// <value><c>true</c> if the view model container should prevent view model creation; otherwise, <c>false</c>.</value>
+        public bool PreventViewModelCreation
+        {
+            get { return _logic.GetValue<NavigationPageLogic, bool>(x => x.PreventViewModelCreation); }
+            set { _logic.SetValue<NavigationPageLogic>(x => x.PreventViewModelCreation = value); }
+        }
+
+        /// <summary>
         /// Gets the view model that is contained by the container.
         /// </summary>
         /// <value>The view model.</value>

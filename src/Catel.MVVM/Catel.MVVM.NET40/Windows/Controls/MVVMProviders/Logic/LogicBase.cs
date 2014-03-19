@@ -331,6 +331,15 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         public Type ViewModelType { get; private set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the view model container should prevent the 
+        /// creation of a view model.
+        /// <para />
+        /// This property is very useful when using views in transitions where the view model is no longer required.
+        /// </summary>
+        /// <value><c>true</c> if the view model container should prevent view model creation; otherwise, <c>false</c>.</value>
+        public bool PreventViewModelCreation { get; set; }
+
+        /// <summary>
         /// Gets the target control of this MVVM provider.
         /// </summary>
         /// <value>The target control.</value>
@@ -946,6 +955,12 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             if (ViewModelBehavior == LogicViewModelBehavior.Injected)
             {
                 return ViewModel;
+            }
+
+            if (PreventViewModelCreation)
+            {
+                Log.Info("ViewModel construction is prevented by the PreventViewModelCreation property");
+                return null;
             }
 
             if (IgnoreNullDataContext && (injectionObject == null))
