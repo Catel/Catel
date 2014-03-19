@@ -84,6 +84,7 @@
     <Compile Include="Data\DispatcherObservableObject.cs" />
     <Compile Include="CatelEnvironment.cs" />
     <Compile Include="DesignTimeInitializer.cs" />
+    <Compile Include="Helpers\ThemeHelper.cs" />
     <Compile Include="MVVMModule.cs" />
     <Compile Include="Extensions\NavigationExtensions.cs" />
     <Compile Include="ModuleInitializer.cs" />

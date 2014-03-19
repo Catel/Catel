@@ -235,6 +235,8 @@ namespace Catel.Windows
             SnapsToDevicePixels = true;
 #endif
 
+            ThemeHelper.EnsureCatelMvvmThemeIsLoaded();
+
             var viewModelType = (viewModel != null) ? viewModel.GetType() : GetViewModelType();
             if (viewModelType == null)
             {

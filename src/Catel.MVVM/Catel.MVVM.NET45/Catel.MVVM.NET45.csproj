@@ -96,6 +96,9 @@
     <Compile Include="..\Catel.MVVM.NET40\Extensions\NavigationExtensions.cs">
       <Link>Extensions\NavigationExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Helpers\ThemeHelper.cs">
+      <Link>Helpers\ThemeHelper.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\ModuleInitializer.cs">
       <Link>ModuleInitializer.cs</Link>
     </Compile>

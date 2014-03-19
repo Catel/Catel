@@ -73,6 +73,7 @@ Added/fixed:
 (*) CTL-390 Updated CSLA to 4.5.501
 (*) CTL-391 Updated FluentValidation to 5.1.0.0
 (*) CTL-392 Updated Entity Framework to 6.0.2
+(*) CTL-393 Automatically load themes when DataWindow / Control is used
 (x) CTL-327 ListCollectionView not supported in ChangeNotificationWrapper (causes InvalidCastException)
 (x) CTL-329 VisualStateManager doesn't change state in WP8 in UserControl => introduced option to transfer styles and
     transitions: UserControl.TransferStylesAndTransitionsToViewModelGrid (default value is true)
