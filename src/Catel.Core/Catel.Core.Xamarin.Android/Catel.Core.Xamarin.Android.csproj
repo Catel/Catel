@@ -19,20 +19,22 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\output\debug\Core\Xamarin.Android\</OutputPath>
+    <OutputPath>..\..\..\output\debug\Xamarin.Android\Catel.Core\</OutputPath>
     <DefineConstants>TRACE;DEBUG;XAMARIN;ANDROID</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>..\..\..\output\debug\Xamarin.Android\Catel.Core\Catel.Core.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\output\release\Core\Xamarin.Android\</OutputPath>
+    <OutputPath>..\..\..\output\release\Xamarin.Android\Catel.Core\</OutputPath>
     <DefineConstants>TRACE;XAMARIN;ANDROID</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>..\..\..\output\release\Xamarin.Android\Catel.Core\Catel.Core.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />

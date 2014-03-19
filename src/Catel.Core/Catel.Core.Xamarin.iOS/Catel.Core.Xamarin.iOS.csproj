@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\output\debug\Core\Xamarin.iOS\</OutputPath>
+    <OutputPath>..\..\..\output\debug\Xamarin.iOS\Catel.Core\</OutputPath>
     <DefineConstants>DEBUG;__IOS__;__MOBILE__;XAMARIN;IOS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -24,17 +24,19 @@
     <MtouchDebug>true</MtouchDebug>
     <CodesignKey>iPhone Developer</CodesignKey>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>..\..\..\output\debug\Xamarin.iOS\Catel.Core\Catel.Core.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\output\release\Core\Xamarin.iOS\</OutputPath>
+    <OutputPath>..\..\..\output\release\Xamarin.iOS\Catel.Core\</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <CodesignKey>iPhone Developer</CodesignKey>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DefineConstants>__IOS__;__MOBILE__;XAMARIN;IOS</DefineConstants>
+    <DocumentationFile>..\..\..\output\release\Xamarin.iOS\Catel.Core\Catel.Core.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
