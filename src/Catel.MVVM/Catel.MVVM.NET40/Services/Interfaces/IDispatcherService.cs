@@ -8,12 +8,6 @@ namespace Catel.Services
 {
     using System;
 
-#if NETFX_CORE
-    using global::Windows.UI.Core;
-#else
-    using System.Windows.Threading;
-#endif
-
     /// <summary>
     /// Service that allows the retrieval of the UI dispatcher.
     /// </summary>
@@ -24,10 +18,6 @@ namespace Catel.Services
         /// </summary>
         /// <param name="action">The action.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        /// <remarks>
-        /// For target frameworks where the <see cref="Dispatcher"/> class does not contain the <c>Invoke</c> method, the <c>BeginInvoke</c>
-        /// method will be used instead.
-        /// </remarks>
         void Invoke(Action action);
 
         /// <summary>
@@ -35,10 +25,6 @@ namespace Catel.Services
         /// </summary>
         /// <param name="method">A delegate to a method that takes parameters specified in args, which is pushed onto the Dispatcher event queue.</param>
         /// <param name="args">An array of objects to pass as arguments to the given method. Can be <c>null</c>.</param>
-        /// <remarks>
-        /// For target frameworks where the <see cref="Dispatcher"/> class does not contain the <c>Invoke</c> method, the <c>BeginInvoke</c>
-        /// method will be used instead.
-        /// </remarks>
         /// <exception cref="ArgumentNullException">The <paramref name="method"/> is <c>null</c>.</exception>
         void Invoke(Delegate method, params object[] args);
 
@@ -47,10 +33,6 @@ namespace Catel.Services
         /// </summary>
         /// <param name="action">The action.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        /// <remarks>
-        /// For target frameworks where the <see cref="Dispatcher"/> class does not contain the <c>Invoke</c> method, the <c>BeginInvoke</c>
-        /// method will be used instead.
-        /// </remarks>
         void BeginInvoke(Action action);
 
         /// <summary>
@@ -58,9 +40,6 @@ namespace Catel.Services
         /// </summary>
         /// <param name="method">A delegate to a method that takes parameters specified in args, which is pushed onto the Dispatcher event queue.</param>
         /// <param name="args">An array of objects to pass as arguments to the given method. Can be <c>null</c>.</param>
-        /// <remarks>
-        /// If there is no dispatcher available (for example, during unit tests without UI), the method will be invoked immediately.
-        /// </remarks>
         /// <exception cref="ArgumentNullException">The <paramref name="method"/> is <c>null</c>.</exception>
         void BeginInvoke(Delegate method, params object[] args);
 
@@ -71,10 +50,6 @@ namespace Catel.Services
         /// </summary>
         /// <param name="action">The action.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        /// <remarks>
-        /// For target frameworks where the <see cref="Dispatcher"/> class does not contain the <c>Invoke</c> method, the <c>BeginInvoke</c>
-        /// method will be used instead.
-        /// </remarks>
         void BeginInvokeIfRequired(Action action);
 
         /// <summary>

@@ -13,7 +13,12 @@ namespace Catel.MVVM
 
     using Logging;
     using Reflection;
+
+#if XAMARIN
+
+#else
     using Windows;
+#endif
 
     /// <summary>
     /// Locator for urls.
@@ -80,6 +85,9 @@ namespace Catel.MVVM
                     return viewUri;
                 }
 
+#if XAMARIN
+                throw new MustBeImplementedException();
+#else
                 string shortAssemblyName = TypeHelper.GetAssemblyNameWithoutOverhead(viewModelType.GetAssemblyFullNameEx());
                 var viewAsResourceUri = ResourceHelper.GetResourceUri(viewUri, shortAssemblyName);
 
@@ -89,6 +97,7 @@ namespace Catel.MVVM
                     AddItemToCache(viewModelTypeNameWithAssembly, viewUri);
                     return viewUri;
                 }
+#endif
             }
 
             Log.Warning("Tried resolving the view for '{0}' via all naming conventions, but it did not succeed", viewModelTypeName);

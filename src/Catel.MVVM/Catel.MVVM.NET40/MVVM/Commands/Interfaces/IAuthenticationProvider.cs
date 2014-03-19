@@ -6,15 +6,22 @@
 
 namespace Catel.MVVM
 {
+    using System;
+
 #if NETFX_CORE
-    using global::Windows.UI.Xaml;
+    using View = global::Windows.UI.Xaml.FrameworkElement;
+#elif ANDROID
+    using View = Android.Views.View;
+#elif IOS
+    using View = MonoTouch.UIKit.UIView;
 #else
-    using System.Windows;
+    using View = System.Windows.FrameworkElement;
 #endif
 
     /// <summary>
     /// Interface to allow an authentication mechanism to control the CanExecute state of a command.
     /// </summary>
+    [CLSCompliant(false)]
     public interface IAuthenticationProvider
     {
         /// <summary>
@@ -43,11 +50,12 @@ namespace Catel.MVVM
         /// This method will only be called for UI elements with the <c>Authentication</c> behavior.
         /// </summary>
         /// <param name="element">The element.</param>
-        /// <param name="tag">The tag, retrieved from <see cref="FrameworkElement.Tag"/>.</param>
+        /// <param name="tag">The tag, retrieved from <c>FrameworkElement.Tag</c>.</param>
         /// <param name="authenticationTag">The authentication tag specified by the calling object.</param>
         /// <returns>
         /// 	<c>true</c> if the user has access to the specified UI element; otherwise, <c>false</c>.
         /// </returns>
-        bool HasAccessToUIElement(FrameworkElement element, object tag, object authenticationTag);
+        [CLSCompliant(false)]
+        bool HasAccessToUIElement(View element, object tag, object authenticationTag);
     }
 }

@@ -9,7 +9,10 @@ namespace Catel.MVVM
     using System;
 
     using Catel.Services;
+
+#if !XAMARIN
     using Catel.Windows;
+#endif
 
     using IoC;
     using Logging;
@@ -120,6 +123,33 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<ISplashScreenService, SplashScreenService>(RegistrationType.Transient);
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewExportService, ViewExportService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IStartUpInfoProvider, StartUpInfoProvider>();
+
+#elif XAMARIN
+                if (!serviceLocator.IsTypeRegistered<IMessageMediator>())
+                {
+                    serviceLocator.RegisterInstance(MessageMediator.Default);
+                }
+
+                if (!serviceLocator.IsTypeRegistered<ExceptionHandling.IExceptionService>())
+                {
+                    serviceLocator.RegisterInstance(ExceptionHandling.ExceptionService.Default);
+                }
+
+                // NOTE: Must be in this specific order
+                serviceLocator.RegisterTypeIfNotYetRegistered<IMessageService, MessageService>();
+                //serviceLocator.RegisterTypeIfNotYetRegistered<ILocationService, LocationService>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<IMessageService, MessageService>();
+                //serviceLocator.RegisterTypeIfNotYetRegistered<INavigationService, NavigationService>();
+                //serviceLocator.RegisterTypeIfNotYetRegistered<IPleaseWaitService, PleaseWaitService>();
+                //serviceLocator.RegisterTypeIfNotYetRegistered<ISchedulerService, SchedulerService>();
+                //serviceLocator.RegisterTypeIfNotYetRegistered<IVibrateService, VibrateService>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<IUrlLocator, UrlLocator>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<IViewLocator, ViewLocator>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelLocator, ViewModelLocator>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelFactory, ViewModelFactory>();
+
+                //serviceLocator.RegisterTypeIfNotYetRegistered<IAccelerometerService, AccelerometerService>();
+                //serviceLocator.RegisterTypeIfNotYetRegistered<ICameraService, CameraService>();
 
 #else // WPF
                 if (!serviceLocator.IsTypeRegistered<IMessageMediator>())

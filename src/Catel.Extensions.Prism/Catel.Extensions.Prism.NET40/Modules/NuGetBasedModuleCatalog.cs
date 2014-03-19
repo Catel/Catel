@@ -111,11 +111,7 @@ namespace Catel.Modules
         /// <summary>
         /// Gets or sets the package source.
         /// </summary>
-        public string PackageSource
-        {
-            get;
-            set;
-        }
+        public string PackageSource { get; set; }
 
         /// <summary>
         /// The output directory base Uri

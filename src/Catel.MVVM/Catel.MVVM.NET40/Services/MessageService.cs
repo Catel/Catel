@@ -7,20 +7,26 @@
 namespace Catel.Services
 {
     using System;
-    using System.Windows;
-    using Windows;
 
-#if NETFX_CORE
+#if ANDROID
+    using Android.App;
+#elif IOS
+
+#elif NETFX_CORE
     using global::Windows.UI.Popups;
     using global::System.Threading.Tasks;
+#else
+    using System.Windows;
+    using Windows;
 #endif
 
     /// <summary>
-	/// Message service that implements the <see cref="IMessageService"/> by using the <see cref="MessageBox"/> class.
+	/// Message service that implements the <see cref="IMessageService"/>.
 	/// </summary>
 	public class MessageService : ViewModelServiceBase, IMessageService
 	{
 		#region Methods
+#if !XAMARIN
 		/// <summary>
 		/// Translates the message box result.
 		/// </summary>
@@ -32,20 +38,6 @@ namespace Catel.Services
 		{
 		    return Enum<MessageResult>.ConvertFromOtherEnumValue(result);
 		}
-
-#if NET
-		/// <summary>
-		/// Translates the message image.
-		/// </summary>
-		/// <param name="image">The image.</param>
-		/// <returns>
-		/// Corresponding <see cref="MessageBoxImage"/>.
-		/// </returns>
-		protected static MessageBoxImage TranslateMessageImage(MessageImage image)
-		{
-            return Enum<MessageBoxImage>.ConvertFromOtherEnumValue(image);
-		}
-#endif
 
         /// <summary>
 		/// Translates the message button.
@@ -65,7 +57,22 @@ namespace Catel.Services
                 throw new NotSupportedInPlatformException("MessageBox class does not support MessageButton '{0}'", button);
             }
 		}
-		#endregion
+
+#if NET
+		/// <summary>
+		/// Translates the message image.
+		/// </summary>
+		/// <param name="image">The image.</param>
+		/// <returns>
+		/// Corresponding <see cref="MessageBoxImage"/>.
+		/// </returns>
+		protected static MessageBoxImage TranslateMessageImage(MessageImage image)
+		{
+            return Enum<MessageBoxImage>.ConvertFromOtherEnumValue(image);
+		}
+#endif
+#endif
+        #endregion
 
         #region IMessageService Members
         /// <summary>
@@ -238,10 +245,13 @@ namespace Catel.Services
         {
             Argument.IsNotNullOrWhitespace("message", message);
 
+#if ANDROID
+            throw new MustBeImplementedException();
+#elif IOS
+            throw new MustBeImplementedException();
+#elif NET
             var result = MessageBoxResult.None;
             var messageBoxButton = TranslateMessageButton(button);
-
-#if NET
             var messageBoxImage = TranslateMessageImage(icon);
 
             var activeWindow = Application.Current.GetActiveWindow();
@@ -253,9 +263,13 @@ namespace Catel.Services
             {
                 result = MessageBox.Show(message, caption, messageBoxButton, messageBoxImage);
             }
+
+            return TranslateMessageBoxResult(result);
 #elif NETFX_CORE
             // TODO: Add translations for system
 
+            var result = MessageBoxResult.None;
+            var messageBoxButton = TranslateMessageButton(button);
             var messageDialog = new MessageDialog(message, caption);
 
             if (Enum<MessageButton>.Flags.IsFlagSet(button, MessageButton.OK) || 
@@ -279,11 +293,15 @@ namespace Catel.Services
             }
 
             await messageDialog.ShowAsync();
-#else
-            result = MessageBox.Show(message, caption, messageBoxButton);
-#endif
 
             return TranslateMessageBoxResult(result);
+#else
+            var result = MessageBoxResult.None;
+            var messageBoxButton = TranslateMessageButton(button);
+            result = MessageBox.Show(message, caption, messageBoxButton);
+
+            return TranslateMessageBoxResult(result);
+#endif
         }
         #endregion
     }

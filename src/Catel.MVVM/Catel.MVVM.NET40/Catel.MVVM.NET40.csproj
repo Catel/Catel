@@ -101,6 +101,7 @@
     <Compile Include="MVVM\Commands\EventArgs\CommandExecutedEventArgs.cs" />
     <Compile Include="MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs" />
     <Compile Include="MVVM\Commands\Helpers\CommandHelper.cs" />
+    <Compile Include="MVVM\ViewModels\ViewModelBase.throttling.cs" />
     <Compile Include="Services\AutoCompletionService.cs" />
     <Compile Include="Services\Exceptions\SplashScreenException.cs" />
     <Compile Include="Services\Extensions\IUIVisualizerServiceExtensions.cs" />

@@ -8,12 +8,15 @@
 namespace Catel
 {
     using Catel.MVVM;
-    using Catel.MVVM.Views;
     using Catel.Reflection;
     using Catel.Services;
     using IoC;
 
-#if !NET
+#if !XAMARIN
+    using Catel.MVVM.Views;
+#endif
+
+#if !NET && !XAMARIN
     using Catel.Windows;
 #endif
 
@@ -30,12 +33,16 @@ namespace Catel
         {
             Argument.IsNotNull(() => serviceLocator);
 
-#if !NET && !PCL
+#if !NET && !PCL  && !XAMARIN
             serviceLocator.RegisterTypeIfNotYetRegistered<IFrameworkElementLoadedManager, FrameworkElementLoadedManager>();
 #endif
 
             serviceLocator.RegisterTypeIfNotYetRegistered<ICommandManager, CommandManager>();
+
+#if !XAMARIN
             serviceLocator.RegisterTypeIfNotYetRegistered<IViewManager, ViewManager>();
+#endif
+
             serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelManager, ViewModelManager>();
             serviceLocator.RegisterTypeIfNotYetRegistered<IAutoCompletionService, AutoCompletionService>();
 

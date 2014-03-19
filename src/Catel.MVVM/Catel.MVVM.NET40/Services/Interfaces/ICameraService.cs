@@ -8,8 +8,10 @@ namespace Catel.Services
 {
     using System;
     using System.Collections.Generic;
-
-#if NETFX_CORE
+    
+#if XAMARIN
+    using System.Drawing;
+#elif NETFX_CORE
     using global::Windows.Foundation;
 #else
     using System.Windows;
@@ -62,6 +64,7 @@ namespace Catel.Services
     /// <summary>
     /// Interface for retrieving the camera information.
     /// </summary>
+    [CLSCompliant(false)]
     public interface ICameraService
     {
         #region Properties
@@ -109,12 +112,14 @@ namespace Catel.Services
         /// Gets the preview resolution of the images.
         /// </summary>
         /// <value>The preview resolution.</value>
+        [CLSCompliant(false)]
         Size PreviewResolution { get; }
 
         /// <summary>
         /// Gets or sets the resolution of the actual images.
         /// </summary>
         /// <value>The resolution.</value>
+        [CLSCompliant(false)]
         Size Resolution { get; set; }
 
         ///// <summary>

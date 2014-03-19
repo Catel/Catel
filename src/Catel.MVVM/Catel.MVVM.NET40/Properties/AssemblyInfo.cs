@@ -10,7 +10,7 @@ using System.Windows;
 
 #if NETFX_CORE
 using global::Windows.UI.Xaml.Markup;
-#elif !PCL
+#elif !PCL && !XAMARIN
 using System.Windows.Markup;
 #endif
 
@@ -41,7 +41,7 @@ using System.Windows.Markup;
 #endif
 
 // XmlnsDefinition is not supported in Windows Phone 7 and WinRT
-#if !WINDOWS_PHONE && !NETFX_CORE && !PCL
+#if !WINDOWS_PHONE && !NETFX_CORE && !PCL && !XAMARIN
 
 [assembly: XmlnsPrefix("http://catel.codeplex.com", "catel")]
 [assembly: XmlnsDefinition("http://catel.codeplex.com", "Catel.MVVM")]

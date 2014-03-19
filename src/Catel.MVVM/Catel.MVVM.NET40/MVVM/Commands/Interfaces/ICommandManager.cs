@@ -11,7 +11,7 @@ namespace Catel.MVVM
     using System.Collections.Generic;
     using System.Windows.Input;
 
-#if !WINDOWS_PHONE
+#if !WINDOWS_PHONE && !XAMARIN
     using InputGesture = Catel.Windows.Input.InputGesture;
 #endif
 
@@ -21,7 +21,7 @@ namespace Catel.MVVM
     /// </summary>
     public interface ICommandManager
     {
-#if !WINDOWS_PHONE
+#if !WINDOWS_PHONE && !XAMARIN
         /// <summary>
         /// Creates the command inside the command manager.
         /// <para />
@@ -100,7 +100,7 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         ICommand GetCommand(string commandName);
 
-#if !WINDOWS_PHONE
+#if !WINDOWS_PHONE && !XAMARIN
         /// <summary>
         /// Gets the original input gesture with which the command was initially created.
         /// </summary>

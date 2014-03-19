@@ -381,6 +381,9 @@
     <Compile Include="..\Catel.Core.NET40\ExceptionHandling\Policies\RetryPolicy.cs">
       <Link>ExceptionHandling\Policies\RetryPolicy.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Exceptions\MustBeImplementedException.cs">
+      <Link>Exceptions\MustBeImplementedException.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Exceptions\NotSupportedInPlatformException.cs">
       <Link>Exceptions\NotSupportedInPlatformException.cs</Link>
     </Compile>

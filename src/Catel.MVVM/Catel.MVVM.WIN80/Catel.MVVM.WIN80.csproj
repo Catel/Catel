@@ -250,6 +250,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Locators\ViewModelLocator.cs">
       <Link>MVVM\Locators\ViewModelLocator.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ViewModelBase.throttling.cs">
+      <Link>MVVM\ViewModels\ViewModelBase.throttling.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\AutoCompletionService.cs">
       <Link>Services\AutoCompletionService.cs</Link>
     </Compile>

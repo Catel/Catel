@@ -96,7 +96,7 @@ namespace Catel
             ViewModelServiceHelper.RegisterDefaultViewModelServices(ServiceLocator.Default);
         }
 
-#if !WINDOWS_PHONE && !PCL
+#if !WINDOWS_PHONE && !PCL && !XAMARIN
         /// <summary>
         /// Gets the main window of the application. This is a convenience call to easily allow the retrieval of the main window
         /// for each target framework (WPF, SL, WP7).
@@ -156,6 +156,8 @@ namespace Catel
             }
 #elif NETFX_CORE
             isInDesignMode = global::Windows.ApplicationModel.DesignMode.DesignModeEnabled;
+#elif XAMARIN
+            isInDesignMode = false;
 #else
             isInDesignMode = DesignerProperties.IsInDesignTool;
 #endif

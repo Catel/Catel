@@ -22,12 +22,6 @@ namespace Catel.MVVM
     using Messaging;
     using Reflection;
 
-#if NETFX_CORE
-    using global::Windows.UI.Xaml;
-#else
-    using System.Windows.Threading;
-#endif
-
     #region Enums
     /// <summary>
     /// Available view model events that can be retrieved via the <see cref="InterestedInAttribute"/>.
@@ -102,6 +96,7 @@ namespace Catel.MVVM
 #endif
         private static readonly Dictionary<Type, ViewModelMetadata> _metaData = new Dictionary<Type, ViewModelMetadata>();
 
+#if !XAMARIN
         /// <summary>
         /// The dispatcher service used to dispatch all calls.
         /// </summary>
@@ -109,6 +104,7 @@ namespace Catel.MVVM
         [field: NonSerialized]
 #endif
         private readonly IDispatcherService _dispatcherService;
+#endif
 
         /// <summary>
         /// Value indicating whether the multiple modules warning should be ignored.
@@ -212,61 +208,7 @@ namespace Catel.MVVM
 #endif
         private string _title;
 
-        /// <summary>
-        /// The throttling timer.
-        /// </summary>
 #if NET
-        [field: NonSerialized]
-#endif
-        private readonly DispatcherTimer _throttlingTimer = new DispatcherTimer();
-
-        /// <summary>
-        /// The throttling rate.
-        /// </summary>
-#if NET
-        [field: NonSerialized]
-#endif
-        private TimeSpan _throttlingRate = new TimeSpan(0);
-
-        /// <summary>
-        /// A value indicating whether throttling is enabled.
-        /// </summary>
-#if NET
-        [field: NonSerialized]
-#endif
-        private bool _isThrottlingEnabled;
-
-        /// <summary>
-        /// A value indicating whether throttling is currently being handled.
-        /// </summary>
-#if NET
-        [field: NonSerialized]
-#endif
-        private bool _isHandlingThrottlingNotifications;
-
-        /// <summary>
-        /// Lock object for throttling.
-        /// </summary>
-#if NET
-        [field: NonSerialized]
-#endif
-        private readonly object _throttlingLockObject = new object();
-
-        /// <summary>
-        /// The properties queue used when throttling is enabled.
-        /// </summary>
-#if NET
-        [field: NonSerialized]
-#endif
-        private Dictionary<string, DateTime> _throttlingQueue = new Dictionary<string, DateTime>();
-
-#if NET
-        /// <summary>
-        /// List of view model properties that are implemented as properties and can be ignored by reflection.
-        /// </summary>
-        [field: NonSerialized]
-        private static readonly HashSet<string> _viewModelBaseImplementedProperties;
-
         /// <summary>
         /// The view model properties by type.
         /// </summary>
@@ -284,12 +226,6 @@ namespace Catel.MVVM
             var serviceLocator = IoC.ServiceLocator.Default;
             serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelManager, ViewModelManager>();
             ViewModelManager = serviceLocator.ResolveType<IViewModelManager>();
-
-#if NET
-            var properties = (from property in typeof(ViewModelBase).GetPropertiesEx(false)
-                              select property.Name);
-            _viewModelBaseImplementedProperties = new HashSet<string>(properties);
-#endif
         }
 
         /// <summary>
@@ -360,8 +296,10 @@ namespace Catel.MVVM
                 serviceLocator = ServiceLocator.Default;
             }
 
+#if !XAMARIN
             DependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
             _dispatcherService = DependencyResolver.Resolve<IDispatcherService>();
+#endif
 
             // In silverlight, automatically invalidate commands when property changes
 #if !WINDOWS_PHONE && !NET35
@@ -392,7 +330,7 @@ namespace Catel.MVVM
                 ViewModelManager.AddInterestedViewModelInstance(interestedInAttribute.ViewModelType, this);
             }
 
-            _throttlingTimer.Tick += (sender, e) => OnThrottlingTimerTick();
+            InitializeThrottling();
 
             // Enable validation again like we promised some lines of code ago
             SuspendValidation = false;
@@ -498,55 +436,6 @@ namespace Catel.MVVM
         protected bool IsSaving { get; private set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the <see cref="RaisePropertyChanged"/> will be dispatched using
-        /// the <see cref="IDispatcherService"/>.
-        /// <para />
-        /// The default value is <c>false</c>.
-        /// </summary>
-        [ExcludeFromValidation]
-        protected bool DispatchPropertyChangedEvent { get; set; }
-
-        /// <summary>
-        /// Gets or sets the throttling rate.
-        /// <para />
-        /// When throttling is enabled, the view model will raise property changed event in a timely manner to
-        /// reduce the number of updates the view has to do based on the properties.
-        /// </summary>
-        /// <value>The throttling rate.</value>
-        [ExcludeFromValidation]
-        protected TimeSpan ThrottlingRate
-        {
-            get
-            {
-                return _throttlingRate;
-            }
-            set
-            {
-                Log.Debug("Updating throttling rate of view model '{0}' to an interval of '{1}' ms", UniqueIdentifier, value.TotalMilliseconds);
-
-                _throttlingRate = value;
-                if (_throttlingRate.TotalMilliseconds.Equals(0d))
-                {
-                    _isThrottlingEnabled = false;
-
-                    _throttlingTimer.Stop();
-
-                    Log.Debug("Throttling is disabled because the throttling rate is set to 0");
-                }
-                else
-                {
-                    _isThrottlingEnabled = true;
-
-                    _throttlingTimer.Stop();
-                    _throttlingTimer.Interval = _throttlingRate;
-                    _throttlingTimer.Start();
-
-                    Log.Debug("Throttling is enabled because the throttling rate is set to '{0}' ms", _throttlingRate.TotalMilliseconds);
-                }
-            }
-        }
-
-        /// <summary>
         /// Gets a value indicating whether this instance is closed. If a view model is closed, calling
         /// <see cref="CancelViewModel"/>, <see cref="SaveViewModel"/> or <see cref="CloseViewModel"/>
         /// will have no effect.
@@ -621,6 +510,10 @@ namespace Catel.MVVM
         #endregion
 
         #region Methods
+        partial void InitializeThrottling();
+
+        partial void UninitializeThrottling();
+
         /// <summary>
         /// Converts the object to a string.
         /// </summary>
@@ -628,34 +521,6 @@ namespace Catel.MVVM
         public override string ToString()
         {
             return string.Format("{0} (ID = {1})", GetType().FullName, UniqueIdentifier);
-        }
-
-        /// <summary>
-        /// Called when the throttling timer ticks.
-        /// </summary>
-        private void OnThrottlingTimerTick()
-        {
-            Dictionary<string, DateTime> throttlingQueue;
-
-            lock (_throttlingLockObject)
-            {
-                throttlingQueue = _throttlingQueue;
-                _throttlingQueue = new Dictionary<string, DateTime>();
-            }
-
-            if (throttlingQueue.Count == 0)
-            {
-                return;
-            }
-
-            _isHandlingThrottlingNotifications = true;
-
-            foreach (var throttledProperty in throttlingQueue)
-            {
-                RaisePropertyChanged(throttledProperty.Key);
-            }
-
-            _isHandlingThrottlingNotifications = false;
         }
 
         /// <summary>
@@ -1004,36 +869,6 @@ namespace Catel.MVVM
             }
 
             Log.Debug("Updated all explicit view model to model mappings");
-        }
-
-        /// <summary>
-        /// Raises the <see cref="ObservableObject.PropertyChanged"/> event.
-        /// <para/>
-        /// This is the one and only method that actually raises the <see cref="ObservableObject.PropertyChanged"/> event. All other
-        /// methods are (and should be) just overloads that eventually call this method.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
-        protected override void RaisePropertyChanged(object sender, AdvancedPropertyChangedEventArgs e)
-        {
-            if (_isThrottlingEnabled && !_isHandlingThrottlingNotifications)
-            {
-                lock (_throttlingLockObject)
-                {
-                    _throttlingQueue[e.PropertyName] = DateTime.Now;
-                }
-
-                return;
-            }
-
-            if (DispatchPropertyChangedEvent)
-            {
-                _dispatcherService.BeginInvokeIfRequired(() => base.RaisePropertyChanged(sender, e));
-            }
-            else
-            {
-                base.RaisePropertyChanged(sender, e);
-            }
         }
 
         /// <summary>
@@ -1665,8 +1500,7 @@ namespace Catel.MVVM
                 return;
             }
 
-            _isThrottlingEnabled = false;
-            _throttlingTimer.Stop();
+            UninitializeThrottling();
 
             OnClosing();
 

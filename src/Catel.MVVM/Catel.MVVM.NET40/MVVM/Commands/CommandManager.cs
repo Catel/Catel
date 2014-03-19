@@ -15,15 +15,18 @@ namespace Catel.MVVM
     using System.Windows.Input;
     using Catel.Logging;
 
-#if !WINDOWS_PHONE
+#if !WINDOWS_PHONE && !XAMARIN
     using InputGesture = Catel.Windows.Input.InputGesture;
-#endif
 
 #if NETFX_CORE
     using KeyEventArgs = global::Windows.UI.Xaml.Input.KeyRoutedEventArgs;
 #else
     using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 #endif
+
+#endif
+
+
 
     /// <summary>
     /// Manager that takes care of application-wide commands and can dynamically forward
@@ -36,7 +39,7 @@ namespace Catel.MVVM
         private readonly object _lockObject = new object();
         private readonly Dictionary<string, ICompositeCommand> _commands = new Dictionary<string, ICompositeCommand>();
 
-#if !WINDOWS_PHONE
+#if !WINDOWS_PHONE && !XAMARIN
 
 #if NET
         private bool _subscribedToApplicationActivedEvent;
@@ -54,12 +57,12 @@ namespace Catel.MVVM
         /// </summary>
         public CommandManager()
         {
-#if !WINDOWS_PHONE
+#if !WINDOWS_PHONE && !XAMARIN
             SubscribeToKeyboardEvents();
 #endif
         }
 
-#if !WINDOWS_PHONE
+#if !WINDOWS_PHONE && !XAMARIN
         /// <summary>
         /// Creates the command inside the command manager.
         /// <para />
@@ -323,7 +326,7 @@ namespace Catel.MVVM
             }
         }
 
-#if !WINDOWS_PHONE
+#if !WINDOWS_PHONE && !XAMARIN
         /// <summary>
         /// Gets the original input gesture with which the command was initially created.
         /// </summary>

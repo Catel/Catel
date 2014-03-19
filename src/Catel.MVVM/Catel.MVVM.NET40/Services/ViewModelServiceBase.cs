@@ -7,6 +7,8 @@
 namespace Catel.Services
 {
     using Catel.Services;
+
+#if !XAMARIN
     using Windows.Threading;
 
 #if NETFX_CORE
@@ -15,11 +17,14 @@ namespace Catel.Services
     using System.Windows.Threading;
 #endif
 
+#endif
+
     /// <summary>
     /// Base class for all view model services.
     /// </summary>
     public abstract class ViewModelServiceBase : ServiceBase, IViewModelService
     {
+#if !XAMARIN
         /// <summary>
         /// Gets the current dispatcher.
         /// </summary>
@@ -28,5 +33,6 @@ namespace Catel.Services
         {
             get { return DispatcherHelper.CurrentDispatcher; }
         }
+#endif
     }
 }

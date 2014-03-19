@@ -25,6 +25,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Authentication provider.
         /// </summary>
+        [CLSCompliant(false)]
         protected static readonly IAuthenticationProvider AuthenticationProvider;
 
         /// <summary>
