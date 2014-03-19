@@ -72,7 +72,7 @@ Added/fixed:
     default which decompiles BAML to XAML (which is expensive)
 (*) CTL-390 Updated CSLA to 4.5.501
 (*) CTL-391 Updated FluentValidation to 5.1.0.0
-(*) CTL-392 Updated Entity Framework to 6.0.2
+(*) CTL-392 Updated Entity Framework to 6.1.0
 (*) CTL-393 Automatically load themes when DataWindow / Control is used
 (x) CTL-327 ListCollectionView not supported in ChangeNotificationWrapper (causes InvalidCastException)
 (x) CTL-329 VisualStateManager doesn't change state in WP8 in UserControl => introduced option to transfer styles and
