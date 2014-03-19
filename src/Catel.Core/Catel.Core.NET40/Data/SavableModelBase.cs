@@ -124,7 +124,7 @@ namespace Catel.Data
         }
 
         #region Saving
-#if NET
+#if NET || XAMARIN
         /// <summary>
         /// Saves the object to a file using the default formatting.
         /// </summary>

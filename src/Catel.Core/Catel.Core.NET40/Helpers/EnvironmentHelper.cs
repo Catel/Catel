@@ -78,6 +78,8 @@ namespace Catel
         {
 #if NET
             return Process.GetCurrentProcess().ProcessName.StartsWith("devenv", StringComparison.OrdinalIgnoreCase);
+#elif XAMARIN
+            return false;
 #elif NETFX_CORE
             return global::Windows.ApplicationModel.DesignMode.DesignModeEnabled;
 #else
@@ -96,6 +98,8 @@ namespace Catel
         {
 #if NET
             return Process.GetCurrentProcess().ProcessName.StartsWith("blend", StringComparison.OrdinalIgnoreCase);
+#elif XAMARIN
+            return false;
 #elif NETFX_CORE
             return global::Windows.ApplicationModel.DesignMode.DesignModeEnabled;
 #else

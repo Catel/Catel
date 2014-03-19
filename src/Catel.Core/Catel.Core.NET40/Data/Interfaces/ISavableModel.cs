@@ -34,7 +34,7 @@ namespace Catel.Data
         #endregion
 
         #region Methods
-#if NET
+#if NET || XAMARIN
         /// <summary>
         /// Saves the object to a file using the default formatting.
         /// </summary>

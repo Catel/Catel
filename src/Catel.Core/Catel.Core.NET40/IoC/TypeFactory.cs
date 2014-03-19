@@ -8,7 +8,6 @@ namespace Catel.IoC
 {
     using System;
     using System.Collections.Generic;
-    using System.Dynamic;
     using System.Linq;
     using System.Reflection;
     using Catel.ApiCop;
@@ -16,6 +15,10 @@ namespace Catel.IoC
     using Catel.Caching;
     using Catel.Logging;
     using Catel.Reflection;
+
+#if !XAMARIN
+    using System.Dynamic;
+#endif
 
     /// <summary>
     /// Type factory which will cache constructors to ensure the best performance available.
@@ -854,11 +857,29 @@ namespace Catel.IoC
         /// <returns>The number of special objects.</returns>
         private static int CountSpecialObjects(ConstructorInfo constructor)
         {
-            var specialObjects = (from parameter in constructor.GetParameters()
-                                  where parameter.ParameterType == typeof(DynamicObject) || parameter.ParameterType == typeof(Object)
-                                  select parameter).Count();
+            var parameters = constructor.GetParameters();
 
-            return specialObjects;
+            int counter = 0;
+
+            foreach (var parameter in parameters)
+            {
+                var parameterType = parameter.ParameterType;
+                if (parameterType == typeof (Object))
+                {
+                    counter++;
+                    continue;
+                }
+
+#if !XAMARIN
+                if (parameterType == typeof (DynamicObject))
+                {
+                    counter++;
+                    continue;
+                }
+#endif
+            }
+
+            return counter;
         }
     }
 }

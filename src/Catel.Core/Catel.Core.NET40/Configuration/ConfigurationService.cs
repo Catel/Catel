@@ -84,7 +84,7 @@ namespace Catel.Configuration
         /// <returns><c>true</c> if the value exists, <c>false</c> otherwise.</returns>
         protected virtual bool ValueExists(string key)
         {
-#if PCL
+#if PCL || XAMARIN
             throw new NotSupportedInPlatformException();
 #elif NETFX_CORE
             var settings = ApplicationData.Current.LocalSettings;
@@ -104,7 +104,7 @@ namespace Catel.Configuration
         /// <returns>The value.</returns>
         protected virtual string GetValueFromStore(string key)
         {
-#if PCL
+#if PCL || XAMARIN
             throw new NotSupportedInPlatformException();
 #elif NETFX_CORE
             var settings = ApplicationData.Current.LocalSettings;
@@ -124,7 +124,7 @@ namespace Catel.Configuration
         /// <param name="value">The value.</param>
         protected virtual void SetValueToStore(string key, string value)
         {
-#if PCL
+#if PCL || XAMARIN
             throw new NotSupportedInPlatformException();
 #elif NETFX_CORE
             var settings = ApplicationData.Current.LocalSettings;

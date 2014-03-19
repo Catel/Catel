@@ -447,7 +447,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-            return ImplementsInterfaceEx(type, typeof (TInterface));
+            return ImplementsInterfaceEx(type, typeof(TInterface));
         }
 
         /// <summary>
@@ -974,8 +974,8 @@ namespace Catel.Reflection
 
 #else
 #if WP80
-			return type.GetTypeInfo().GetMethod(name, bindingFlags, null, types, null);
-#elif PCL
+            return type.GetTypeInfo().GetMethod(name, bindingFlags, null, types, null);
+#elif PCL || XAMARIN
             return type.GetTypeInfo().GetMethod(name, types);
 #else
             return type.GetTypeInfo().GetMethod(name, types, bindingFlags);

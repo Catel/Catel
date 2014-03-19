@@ -56,10 +56,18 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("Windows Phone 7.x, Debug")]
 #elif WP80
 [assembly: AssemblyConfiguration("Windows Phone 8.0, Debug")]
+#elif WP81
+[assembly: AssemblyConfiguration("Windows Phone 8.1, Debug")]
 #elif WIN80
 [assembly: AssemblyConfiguration("Windows 8.0, Debug")]
 #elif WIN81
 [assembly: AssemblyConfiguration("Windows 8.1, Debug")]
+#elif PCL
+[assembly: AssemblyConfiguration("PCL, Debug")]
+#elif XAMARIN && ANDROID
+[assembly: AssemblyConfiguration("Xamarin.Android, Debug")]
+#elif XAMARIN && IOS
+[assembly: AssemblyConfiguration("Xamarin.iOS, Debug")]
 #else
 [assembly: AssemblyConfiguration("Unknown, Debug")]
 #endif
@@ -82,10 +90,18 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("Windows Phone 7.x, Release")]
 #elif WP80
 [assembly: AssemblyConfiguration("Windows Phone 8.0, Release")]
+#elif WP81
+[assembly: AssemblyConfiguration("Windows Phone 8.1, Release")]
 #elif WIN80
 [assembly: AssemblyConfiguration("Windows 8.0, Release")]
 #elif WIN81
 [assembly: AssemblyConfiguration("Windows 8.1, Release")]
+#elif PCL
+[assembly: AssemblyConfiguration("PCL, Release")]
+#elif XAMARIN && ANDROID
+[assembly: AssemblyConfiguration("Xamarin.Android, Release")]
+#elif XAMARIN && IOS
+[assembly: AssemblyConfiguration("Xamarin.iOS, Release")]
 #else
 [assembly: AssemblyConfiguration("Unknown, Release")]
 #endif
