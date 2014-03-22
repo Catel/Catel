@@ -7,7 +7,7 @@
 namespace Catel.MVVM
 {
     using System;
-
+    using Catel.MVVM.Views;
     using Catel.Services;
 
 #if !XAMARIN
@@ -41,6 +41,8 @@ namespace Catel.MVVM
             {
                 Log.Debug("Registering default service implementations for IoC container");
 
+                serviceLocator.RegisterTypeIfNotYetRegistered<IViewPropertySelector, ViewPropertySelector>();
+
 #if NETFX_CORE
                 if (!serviceLocator.IsTypeRegistered<IMessageMediator>())
                 {
@@ -53,7 +55,6 @@ namespace Catel.MVVM
                 }
 
                 // NOTE: Must be in this specific order
-                serviceLocator.RegisterTypeIfNotYetRegistered<IDependencyPropertySelector, DependencyPropertySelector>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IDispatcherService, DispatcherService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IMessageService, MessageService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IMessageService, MessageService>();
@@ -77,7 +78,6 @@ namespace Catel.MVVM
                 }
 
                 // NOTE: Must be in this specific order
-                serviceLocator.RegisterTypeIfNotYetRegistered<IDependencyPropertySelector, DependencyPropertySelector>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IDispatcherService, DispatcherService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IMessageService, MessageService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<ILocationService, LocationService>();
@@ -106,7 +106,6 @@ namespace Catel.MVVM
                 }
 
                 // NOTE: Must be in this specific order
-                serviceLocator.RegisterTypeIfNotYetRegistered<IDependencyPropertySelector, DependencyPropertySelector>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IDispatcherService, DispatcherService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IMessageService, MessageService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<INavigationService, NavigationService>();
@@ -163,7 +162,6 @@ namespace Catel.MVVM
                 }
 
                 // NOTE: Must be in this specific order
-                serviceLocator.RegisterTypeIfNotYetRegistered<IDependencyPropertySelector, DependencyPropertySelector>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IDispatcherService, DispatcherService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IMessageService, MessageService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<INavigationService, NavigationService>();

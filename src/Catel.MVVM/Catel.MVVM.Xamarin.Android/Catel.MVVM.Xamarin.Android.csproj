@@ -176,6 +176,36 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Locators\ViewModelLocator.cs">
       <Link>MVVM\Locators\ViewModelLocator.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Providers\Logic\EventArgs\DetermineViewModelInstanceEventArgs.cs">
+      <Link>MVVM\Providers\Logic\EventArgs\DetermineViewModelInstanceEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Providers\Logic\EventArgs\DetermineViewModelTypeEventArgs.cs">
+      <Link>MVVM\Providers\Logic\EventArgs\DetermineViewModelTypeEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Providers\Logic\Extensions\LogicExtensions.cs">
+      <Link>MVVM\Providers\Logic\Extensions\LogicExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Providers\Logic\LogicBase.cs">
+      <Link>MVVM\Providers\Logic\LogicBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Providers\Logic\NavigationLogicBase.cs">
+      <Link>MVVM\Providers\Logic\NavigationLogicBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Providers\Logic\NavigationPageLogic.cs">
+      <Link>MVVM\Providers\Logic\NavigationPageLogic.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Providers\Logic\UserControlLogic.cs">
+      <Link>MVVM\Providers\Logic\UserControlLogic.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Providers\MVVMBehaviorBase.cs">
+      <Link>MVVM\Providers\MVVMBehaviorBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Providers\NavigationPageBehavior.cs">
+      <Link>MVVM\Providers\NavigationPageBehavior.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Providers\UserControlBehavior.cs">
+      <Link>MVVM\Providers\UserControlBehavior.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Tasks\ActionTask.cs">
       <Link>MVVM\Tasks\ActionTask.cs</Link>
     </Compile>
@@ -484,7 +514,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
+    <Folder Include="Extensions\" />
     <Folder Include="Helpers\" />
+    <Folder Include="Services\Extensions\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Catel.Core\Catel.Core.Xamarin.Android\Catel.Core.Xamarin.Android.csproj">

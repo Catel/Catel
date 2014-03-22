@@ -9,7 +9,7 @@ namespace Catel.Windows.Controls
     using System;
     using System.Windows;
     using System.Windows.Data;
-    using Data.Converters;
+    using MVVM.Converters;
 
     /// <summary>
     /// Converter for the <see cref="InfoBarMessageControl"/> to determine whether the control

@@ -14,6 +14,7 @@ namespace Catel.Windows.Data.Converters
     using System.Windows.Controls;
     using System.Windows.Data;
     using System.Windows.Media.Imaging;
+    using Catel.MVVM.Converters;
 
     /// <summary>
     /// Converts an output type to a status that is displayable to the user.

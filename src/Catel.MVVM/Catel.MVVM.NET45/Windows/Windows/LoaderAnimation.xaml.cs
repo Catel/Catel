@@ -6,14 +6,14 @@
 
 namespace Catel.Windows
 {
-	/// <summary>
-	/// Contains a loader animation for the WaitWindow
-	/// </summary>
+    /// <summary>
+    /// Contains a loader animation for the WaitWindow
+    /// </summary>
     public partial class LoaderAnimation
     {
-		/// <summary>
-		/// Initializes a new instance of the <see cref="LoaderAnimation"/> class.
-		/// </summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LoaderAnimation"/> class.
+        /// </summary>
         public LoaderAnimation()
         {
             InitializeComponent();

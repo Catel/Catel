@@ -38,7 +38,7 @@ namespace Catel.MVVM
         /// <remarks>
         /// The <c>CanExecute</c> state of a command is queried a lot. The command itself does not cache any results because
         /// it is not aware of role or identity changes. If caching is required, this must be implemented in the class implementing
-        /// the <see cref="IAuthenticationProvider"/> interface.
+        /// the <see cref="IAuthenticationProvider"/> interface.a
         /// </remarks>
         bool CanCommandBeExecuted(ICatelCommand command, object commandParameter);
 

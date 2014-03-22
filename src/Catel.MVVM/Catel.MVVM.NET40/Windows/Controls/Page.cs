@@ -8,11 +8,11 @@ namespace Catel.Windows.Controls
 {
     using System;
     using System.ComponentModel;
-    using Data;
+    using Catel.MVVM.Providers;
+    using Catel.MVVM.Views;
     using IoC;
     using Logging;
     using MVVM;
-    using MVVMProviders.Logic;
 
 #if NETFX_CORE
     using global::Windows.UI.Xaml;
@@ -48,6 +48,10 @@ namespace Catel.Windows.Controls
 
         private static readonly IViewModelLocator _viewModelLocator;
         private readonly NavigationPageLogic _logic;
+
+        private event EventHandler<EventArgs> _viewLoaded;
+        private event EventHandler<EventArgs> _viewUnloaded;
+        private event EventHandler<EventArgs> _viewDataContextChanged;
         #endregion
 
         #region Constructors
@@ -89,20 +93,20 @@ namespace Catel.Windows.Controls
             }
 
             _logic = new NavigationPageLogic(this, viewModelType);
-            _logic.TargetControlPropertyChanged += (sender, e) =>
+            _logic.TargetViewPropertyChanged += (sender, e) =>
             {
 #if !NET
                 // WPF already calls this method automatically
-                OnPropertyChanged(e.FxEventArgs);
+                OnPropertyChanged(e);
 
-                PropertyChanged.SafeInvoke(this, new PropertyChangedEventArgs(e.PropertyName));
+                PropertyChanged.SafeInvoke(this, e);
 #else
                 // Do not call this for ActualWidth and ActualHeight WPF, will cause problems with NET 40 
                 // on systems where NET45 is *not* installed
                 if (!string.Equals(e.PropertyName, "ActualWidth", StringComparison.InvariantCulture) &&
                     !string.Equals(e.PropertyName, "ActualHeight", StringComparison.InvariantCulture))
                 {
-                    PropertyChanged.SafeInvoke(this, new PropertyChangedEventArgs(e.PropertyName));
+                    PropertyChanged.SafeInvoke(this, e);
                 }
 #endif
             };
@@ -139,8 +143,24 @@ namespace Catel.Windows.Controls
 
             ViewModelChanged.SafeInvoke(this);
 
-            Loaded += (sender, e) => OnLoaded(e);
-            Unloaded += (sender, e) => OnUnloaded(e);
+            Loaded += (sender, e) =>
+            {
+                OnLoaded(e);
+
+                _viewLoaded.SafeInvoke(this);
+            };
+
+            Unloaded += (sender, e) =>
+            {
+                OnUnloaded(e);
+
+                _viewUnloaded.SafeInvoke(this);
+            };
+
+            DataContextChanged += (sender, e) =>
+            {
+                _viewDataContextChanged.SafeInvoke(this);
+            };
         }
         #endregion
 
@@ -173,6 +193,15 @@ namespace Catel.Windows.Controls
         public IViewModel ViewModel
         {
             get { return _logic.GetValue<NavigationPageLogic, IViewModel>(x => x.ViewModel); }
+        }
+
+        /// <summary>
+        /// Gets the parent of the view.
+        /// </summary>
+        /// <value>The parent.</value>
+        object IView.Parent
+        {
+            get { return Parent; }
         }
         #endregion
 
@@ -215,6 +244,33 @@ namespace Catel.Windows.Controls
         /// Occurs when the view model container is unloaded.
         /// </summary>
         public event EventHandler<EventArgs> ViewUnloaded;
+
+        /// <summary>
+        /// Occurs when the view is loaded.
+        /// </summary>
+        event EventHandler<EventArgs> IView.Loaded
+        {
+            add { _viewLoaded += value; }
+            remove { _viewLoaded -= value; }
+        }
+
+        /// <summary>
+        /// Occurs when the view is unloaded.
+        /// </summary>
+        event EventHandler<EventArgs> IView.Unloaded
+        {
+            add { _viewUnloaded += value; }
+            remove { _viewUnloaded -= value; }
+        }
+
+        /// <summary>
+        /// Occurs when the data context has changed.
+        /// </summary>
+        event EventHandler<EventArgs> IView.DataContextChanged
+        {
+            add { _viewDataContextChanged += value; }
+            remove { _viewDataContextChanged -= value; }
+        }
         #endregion
 
         #region Methods
@@ -272,15 +328,13 @@ namespace Catel.Windows.Controls
         {
         }
 
-#if !NET
         /// <summary>
         /// Called when a dependency property on this control has changed.
         /// </summary>
-        /// <param name="e">The <see cref="DependencyPropertyValueChangedEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnPropertyChanged(DependencyPropertyValueChangedEventArgs e)
+        /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
+        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
         {
         }
-#endif
 
         /// <summary>
         /// Called when a property on the current <see cref="ViewModel"/> has changed.
