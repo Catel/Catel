@@ -15,6 +15,7 @@ namespace Catel.MVVM.Providers
     using global::Windows.UI.Xaml;
 #elif WINDOWS_PHONE
     using Microsoft.Phone.Controls;
+    using Catel.Windows;
     using Microsoft.Phone.Shell;
 #elif SILVERLIGHT
     using System.Windows.Controls;
@@ -157,9 +158,9 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        public override void OnTargetControlUnloaded(object sender, UIEventArgs e)
+        public override void OnTargetViewUnloaded(object sender, UIEventArgs e)
         {
-            base.OnTargetControlUnloaded(sender, e);
+            base.OnTargetViewUnloaded(sender, e);
 
 #if NET
             Application.Current.Navigated -= OnNavigatedEvent;
@@ -276,7 +277,7 @@ namespace Catel.MVVM.Providers
 #if NETFX_CORE
             var navigationContext = e.Parameter;
 #elif WINDOWS_PHONE
-            var navigationContext = ((PhoneApplicationPage)TargetControl).NavigationContext;
+            var navigationContext = ((PhoneApplicationPage)TargetView).NavigationContext;
 #elif SILVERLIGHT
             var navigationContext = ((Page)e.Content).NavigationContext;
 #else

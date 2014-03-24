@@ -68,9 +68,7 @@ namespace Catel.Windows.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="Page"/> class.
         /// </summary>
-        /// <remarks>
-        /// It is not possible to inject view models.
-        /// </remarks>
+        /// <remarks>It is not possible to inject view models.</remarks>
         public Page()
         {
             if (CatelEnvironment.IsInDesignMode)
@@ -157,10 +155,10 @@ namespace Catel.Windows.Controls
                 _viewUnloaded.SafeInvoke(this);
             };
 
-            DataContextChanged += (sender, e) =>
+            this.AddDataContextChangedHandler((sender, e) =>
             {
                 _viewDataContextChanged.SafeInvoke(this);
-            };
+            });
         }
         #endregion
 

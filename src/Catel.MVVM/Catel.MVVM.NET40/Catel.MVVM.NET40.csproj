@@ -102,11 +102,13 @@
     <Compile Include="MVVM\Commands\EventArgs\CommandExecutedEventArgs.cs" />
     <Compile Include="MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs" />
     <Compile Include="MVVM\Commands\Helpers\CommandHelper.cs" />
+    <Compile Include="MVVM\Providers\PhonePageLogic.cs" />
     <Compile Include="MVVM\ViewModels\ViewModelBase.throttling.cs" />
     <Compile Include="MVVM\Views\Extensions\ViewExtensions.dispatching.cs" />
     <Compile Include="MVVM\Views\EventArgs\ViewLoadedEventArgs.cs" />
     <Compile Include="MVVM\Views\Extensions\ViewExtensions.properties.cs" />
     <Compile Include="MVVM\Views\Extensions\ViewExtensions.visualtree.cs" />
+    <Compile Include="MVVM\Views\Interfaces\IPhonePage.cs" />
     <Compile Include="MVVM\Views\Interfaces\IViewLoadedManager.cs" />
     <Compile Include="MVVM\Views\ViewLoadedManager.cs" />
     <Compile Include="MVVM\Views\Interfaces\IView.cs" />
@@ -117,7 +119,11 @@
     <Compile Include="Services\Exceptions\SplashScreenException.cs" />
     <Compile Include="Services\Extensions\IUIVisualizerServiceExtensions.cs" />
     <Compile Include="Services\Interfaces\IAutoCompletionService.cs" />
+    <Compile Include="Services\Interfaces\IPhoneService.cs" />
+    <Compile Include="Services\Interfaces\IStateService.cs" />
     <Compile Include="Services\Interfaces\IViewModelWrapperService.cs" />
+    <Compile Include="Services\PhoneService.cs" />
+    <Compile Include="Services\StateService.cs" />
     <Compile Include="Services\ViewModelWrapperService.cs" />
     <Compile Include="Windows\Controls\ValidationResult.cs" />
     <Compile Include="Windows\Controls\ValidationRule.cs" />

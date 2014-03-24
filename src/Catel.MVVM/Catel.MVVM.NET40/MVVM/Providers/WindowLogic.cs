@@ -105,9 +105,9 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        public override void OnTargetControlUnloaded(object sender, EventArgs e)
+        public override void OnTargetViewUnloaded(object sender, EventArgs e)
         {
-            base.OnTargetControlUnloaded(sender, e);
+            base.OnTargetViewUnloaded(sender, e);
 
             ViewModel = null;
         }

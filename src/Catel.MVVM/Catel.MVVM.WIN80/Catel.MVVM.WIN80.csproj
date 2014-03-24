@@ -520,27 +520,6 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\Interfaces\IView.cs">
       <Link>Windows\Controls\Interfaces\IView.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\MVVMProviders\Logic\EventArgs\DetermineViewModelInstanceEventArgs.cs">
-      <Link>Windows\Controls\MVVMProviders\Logic\EventArgs\DetermineViewModelInstanceEventArgs.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\MVVMProviders\Logic\EventArgs\DetermineViewModelTypeEventArgs.cs">
-      <Link>Windows\Controls\MVVMProviders\Logic\EventArgs\DetermineViewModelTypeEventArgs.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\MVVMProviders\Logic\Extensions\LogicExtensions.cs">
-      <Link>Windows\Controls\MVVMProviders\Logic\Extensions\LogicExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\MVVMProviders\Logic\LogicBase.cs">
-      <Link>Windows\Controls\MVVMProviders\Logic\LogicBase.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\MVVMProviders\Logic\NavigationLogicBase.cs">
-      <Link>Windows\Controls\MVVMProviders\Logic\NavigationLogicBase.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\MVVMProviders\Logic\NavigationPageLogic.cs">
-      <Link>Windows\Controls\MVVMProviders\Logic\NavigationPageLogic.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\MVVMProviders\Logic\UserControlLogic.cs">
-      <Link>Windows\Controls\MVVMProviders\Logic\UserControlLogic.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\Page.cs">
       <Link>Windows\Controls\Page.cs</Link>
     </Compile>
@@ -646,9 +625,6 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Data\Helpers\DependencyPropertyInfo.cs">
       <Link>Windows\Data\Helpers\DependencyPropertyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\DependencyPropertySelector.cs">
-      <Link>Windows\DependencyPropertySelector.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Extensions\DependencyObjectExtensions.cs">
       <Link>Windows\Extensions\DependencyObjectExtensions.cs</Link>
     </Compile>
@@ -670,9 +646,6 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Input\InputGesture.cs">
       <Link>Windows\Input\InputGesture.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Windows\Interfaces\IDependencyPropertySelector.cs">
-      <Link>Windows\Interfaces\IDependencyPropertySelector.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Threading\Extensions\DispatcherExtensions.cs">
       <Link>Windows\Threading\Extensions\DispatcherExtensions.cs</Link>
     </Compile>
@@ -682,29 +655,8 @@
     <Compile Include="..\Catel.MVVM.NET45\MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs">
       <Link>MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.SL5\Windows\Controls\ValidationResult.cs">
-      <Link>Windows\Controls\ValidationResult.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.SL5\Windows\Controls\ValidationRule.cs">
-      <Link>Windows\Controls\ValidationRule.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.MVVM.SL5\Windows\EventArgs\FrameworkElementLoadedEventArgs.cs">
       <Link>Windows\EventArgs\FrameworkElementLoadedEventArgs.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.SL5\Windows\FrameworkElementLoadedManager.cs">
-      <Link>Windows\FrameworkElementLoadedManager.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.SL5\Windows\Helpers\DataContextChangedHelper.cs">
-      <Link>Windows\Helpers\DataContextChangedHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.SL5\Windows\Helpers\LogicalTreeHelper.cs">
-      <Link>Windows\Helpers\LogicalTreeHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.SL5\Windows\Interfaces\IFrameworkElementLoadedManager.cs">
-      <Link>Windows\Interfaces\IFrameworkElementLoadedManager.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.SL5\Windows\WeakFrameworkElementInfo.cs">
-      <Link>Windows\WeakFrameworkElementInfo.cs</Link>
     </Compile>
     <Compile Include="Services\PleaseWaitService.cs" />
   </ItemGroup>

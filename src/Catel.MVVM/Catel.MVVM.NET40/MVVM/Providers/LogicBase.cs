@@ -616,7 +616,7 @@ namespace Catel.MVVM.Providers
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         /// <remarks>
-        /// This method will call the <see cref="OnTargetControlUnloaded"/> which can be overriden for custom 
+        /// This method will call the <see cref="OnTargetViewUnloaded"/> which can be overriden for custom 
         /// behavior. This method is required to protect from duplicate unloaded events.
         /// </remarks>
         private void OnTargetViewUnloadedInternal(object sender, EventArgs e)
@@ -646,7 +646,7 @@ namespace Catel.MVVM.Providers
             IsTargetViewLoaded = false;
             _isFirstValidationAfterLoaded = true;
 
-            OnTargetControlUnloaded(sender, e);
+            OnTargetViewUnloaded(sender, e);
 
             var targetViewAsViewModelContainer = TargetView as IViewModelContainer;
             if (targetViewAsViewModelContainer != null)
@@ -664,7 +664,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        public virtual void OnTargetControlUnloaded(object sender, EventArgs e)
+        public virtual void OnTargetViewUnloaded(object sender, EventArgs e)
         {
         }
 

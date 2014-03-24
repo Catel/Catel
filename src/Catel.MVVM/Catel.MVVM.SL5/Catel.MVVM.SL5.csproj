@@ -248,6 +248,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Providers\NavigationPageLogic.cs">
       <Link>MVVM\Providers\NavigationPageLogic.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Providers\PhonePageLogic.cs">
+      <Link>MVVM\Providers\PhonePageLogic.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Providers\UserControlLogic.cs">
       <Link>MVVM\Providers\UserControlLogic.cs</Link>
     </Compile>
@@ -274,6 +277,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Interfaces\IPage.cs">
       <Link>MVVM\Views\Interfaces\IPage.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Interfaces\IPhonePage.cs">
+      <Link>MVVM\Views\Interfaces\IPhonePage.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Interfaces\IUserControl.cs">
       <Link>MVVM\Views\Interfaces\IUserControl.cs</Link>
@@ -317,6 +323,9 @@
     <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\IAutoCompletionService.cs">
       <Link>Services\Interfaces\IAutoCompletionService.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\IPhoneService.cs">
+      <Link>Services\Interfaces\IPhoneService.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\ISchedulerService.cs">
       <Link>Services\Interfaces\ISchedulerService.cs</Link>
     </Compile>
@@ -326,11 +335,17 @@
     <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\IStartUpInfoProvider.cs">
       <Link>Services\Interfaces\IStartUpInfoProvider.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\IStateService.cs">
+      <Link>Services\Interfaces\IStateService.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\IViewExportService.cs">
       <Link>Services\Interfaces\IViewExportService.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\IViewModelWrapperService.cs">
       <Link>Services\Interfaces\IViewModelWrapperService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\PhoneService.cs">
+      <Link>Services\PhoneService.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\SchedulerService.cs">
       <Link>Services\SchedulerService.cs</Link>
@@ -340,6 +355,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\StartUpInfoProvider.cs">
       <Link>Services\StartUpInfoProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\StateService.cs">
+      <Link>Services\StateService.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\ViewExportService.cs">
       <Link>Services\ViewExportService.cs</Link>

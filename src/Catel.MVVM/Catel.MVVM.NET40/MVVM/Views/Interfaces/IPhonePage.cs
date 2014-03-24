@@ -1,18 +1,18 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IPhoneApplicationPage.cs" company="Catel development team">
+// <copyright file="IPhonePage.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Phone.Controls
+namespace Catel.MVVM.Views
 {
-    using Catel.Windows.Controls;
+    using System;
     using MVVM;
 
     /// <summary>
-    /// Interface defining functionality for the <see cref="PhoneApplicationPage"/>.
+    /// Interface defining functionality for a phone application page.
     /// </summary>
-    public interface IPhoneApplicationPage : IView
+    public interface IPhonePage : IView
     {
         /// <summary>
         /// Gets or sets a value indicating whether navigating away from the page should save the view model.
@@ -36,5 +36,10 @@ namespace Catel.Phone.Controls
         /// 	<c>true</c> if the back key cancels the view model; otherwise, <c>false</c>.
         /// </value>
         bool BackKeyCancelsViewModel { get; set; }
+
+        /// <summary>
+        /// Occurs when the back key is pressed.
+        /// </summary>
+        event EventHandler<EventArgs> BackKeyPress;
     }
 }

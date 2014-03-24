@@ -162,7 +162,7 @@ namespace Catel.MVVM.Providers
         public static bool DefaultTransferStylesAndTransitionsToViewModelGridValue { get; set; }
 #endif
 
-#if NET || SL4 || SL5
+#if NET || SL5
         /// <summary>
         /// Gets or sets a value indicating whether to skip the search for an info bar message control. If not skipped,
         /// the user control will search for a the first <see cref="InfoBarMessageControl"/> that can be found. 
@@ -281,10 +281,12 @@ namespace Catel.MVVM.Providers
             {
                 var wrapOptions = WrapOptions.None;
 
+#if NET || SL5
                 if (CreateWarningAndErrorValidatorForViewModel)
                 {
                     wrapOptions |= WrapOptions.CreateWarningAndErrorValidatorForViewModel;
                 }
+#endif
 
                 if (TransferStylesAndTransitionsToViewModelGrid)
                 {
@@ -380,9 +382,9 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        public override void OnTargetControlUnloaded(object sender, EventArgs e)
+        public override void OnTargetViewUnloaded(object sender, EventArgs e)
         {
-            base.OnTargetControlUnloaded(sender, e);
+            base.OnTargetViewUnloaded(sender, e);
 
             if (ViewModel != null)
             {

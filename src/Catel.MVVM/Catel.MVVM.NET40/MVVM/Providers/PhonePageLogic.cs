@@ -4,22 +4,22 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Windows.Controls.MVVMProviders.Logic
+namespace Catel.MVVM.Providers
 {
     using System;
     using System.ComponentModel;
-    using System.Windows;
     using System.Windows.Navigation;
+    using Catel.IoC;
+    using Catel.Services;
     using Logging;
     using MVVM;
-    using Microsoft.Phone.Controls;
-    using Microsoft.Phone.Shell;
+    using MVVM.Views;
     using ViewModelBase = MVVM.ViewModelBase;
 
     /// <summary>
-    /// MVVM Provider behavior implementation for a phone application page.
+    /// MVVM Provider behavior implementation for a phone page.
     /// </summary>
-    public class PhoneApplicationPageLogic : NavigationLogicBase<PhoneApplicationPage>
+    public class PhonePageLogic : NavigationLogicBase<IPhonePage>
     {
         #region Constants
         /// <summary>
@@ -32,12 +32,14 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// <summary>
         /// The log.
         /// </summary>
-        private static ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// A boolean representing whether the application has recovered from tombstoning.
         /// </summary>
         private static bool _recoveredFromTombstoning = false;
+
+        private readonly IPhoneService _phoneService;
 
         private bool _hasNavigatedAway = false;
         private bool _hasPressedBackButton = false;
@@ -46,16 +48,18 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="PhoneApplicationPageLogic"/> class.
+        /// Initializes a new instance of the <see cref="PhonePageLogic"/> class.
         /// </summary>
-        /// <param name="targetPage">The phone application page this provider should take care of.</param>
+        /// <param name="targetPage">The phone page this provider should take care of.</param>
         /// <param name="viewModelType">Type of the view model.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="targetPage"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> does not implement interface <see cref="IViewModel"/>.</exception>
-        public PhoneApplicationPageLogic(PhoneApplicationPage targetPage, Type viewModelType)
+        public PhonePageLogic(IPhonePage targetPage, Type viewModelType)
             : base(targetPage, viewModelType)
         {
+            var dependencyResolver = this.GetDependencyResolver();
+            _phoneService = dependencyResolver.Resolve<IPhoneService>();
         }
         #endregion
 
@@ -88,14 +92,14 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// Gets a value indicating whether the control can be loaded. This is very useful in non-WPF classes where
         /// the <c>LayoutUpdated</c> is used instead of the <c>Loaded</c> event.
         /// <para />
-        /// If this value is <c>true</c>, this logic implementation can call the <see cref="OnTargetControlLoaded" /> when
+        /// If this value is <c>true</c>, this logic implementation can call the <see cref="OnTargetViewUnloaded" /> when
         /// the control is loaded. Otherwise, the call will be ignored.
         /// </summary>
         /// <value><c>true</c> if this instance can control be loaded; otherwise, <c>false</c>.</value>
         /// <remarks>This value is introduced for Windows Phone because a navigation backwards still leads to a call to
         /// <c>LayoutUpdated</c>. To prevent new view models from being created, this property can be overridden by
         /// such logic implementations.</remarks>
-        protected override bool CanControlBeLoaded
+        protected override bool CanViewBeLoaded
         {
             get { return !_hasNavigatedAway; }
         }
@@ -142,7 +146,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// <param name="newDataContext">The new data context.</param>
         protected override void SetDataContext(object newDataContext)
         {
-            TargetControl.DataContext = newDataContext;
+            TargetView.DataContext = newDataContext;
         }
 
         /// <summary>
@@ -152,7 +156,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         {
             if (ViewModel == null)
             {
-                TargetControl.DataContext = null;
+                TargetView.DataContext = null;
             }
 
             base.OnViewModelChanged();
@@ -167,22 +171,19 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// <returns><c>true</c> if this instance can handle the navigation event; otherwise, <c>false</c>.</returns>
         protected override bool CanHandleNavigationAdvanced()
         {
-            var content = RootFrame.Content;
-
-            return ReferenceEquals(content, TargetPage);
+            return _phoneService.CanHandleNavigation((IPhonePage)TargetView);
         }
 
         /// <summary>
-        /// Called when the target control is loaded.
+        /// Called when the target view is loaded.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        public override void OnTargetControlLoaded(object sender, EventArgs e)
+        public override void OnTargetViewLoaded(object sender, EventArgs e)
         {
-            base.OnTargetControlLoaded(sender, e);
+            base.OnTargetViewLoaded(sender, e);
 
             TargetPage.BackKeyPress += OnTargetPageBackKeyPress;
-            //PhoneApplicationService.Current.Deactivated += OnApplicationDeactivated;
         }
 
         /// <summary>
@@ -190,20 +191,19 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        public override void OnTargetControlUnloaded(object sender, EventArgs e)
+        public override void OnTargetViewUnloaded(object sender, EventArgs e)
         {
             TargetPage.BackKeyPress -= OnTargetPageBackKeyPress;
-            //PhoneApplicationService.Current.Deactivated -= OnApplicationDeactivated;
 
-            base.OnTargetControlUnloaded(sender, e);
+            base.OnTargetViewUnloaded(sender, e);
         }
 
         /// <summary>
         /// This method is called when the hardware back key is pressed.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">Set e.Cancel to true to indicate that the request was handled by the application.</param>
-        private void OnTargetPageBackKeyPress(object sender, CancelEventArgs e)
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void OnTargetPageBackKeyPress(object sender, EventArgs e)
         {
             // Note: closing of view model will take place in OnNavigated
             _hasPressedBackButton = true;
@@ -230,22 +230,24 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
             {
                 Tombstoning.SafeInvoke(this);
 
-                switch (viewModelAsViewModelBase.TombstoningMode)
-                {
-                    case TombstoningMode.Disabled:
-                        break;
+                //switch (viewModelAsViewModelBase.TombstoningMode)
+                //{
+                //    case TombstoningMode.Disabled:
+                //        break;
 
-                    case TombstoningMode.Manual:
-                        viewModelAsViewModelBase.PrepareForTombstoneStateInternal(PhoneApplicationService.Current.State);
-                        break;
+                //    case TombstoningMode.Manual:
+                //        throw new MustBeImplementedException();
+                //        //viewModelAsViewModelBase.PrepareForTombstoneStateInternal(PhoneApplicationService.Current.State);
+                //        //break;
 
-                    case TombstoningMode.Auto:
-                        var tombstoneData = ((ViewModelBase)ViewModel).SerializeForTombstoning();
-                        PhoneApplicationService.Current.State[TombstoneKey] = tombstoneData;
+                //    case TombstoningMode.Auto:
+                //        throw new MustBeImplementedException();
+                //        //var tombstoneData = ((ViewModelBase)ViewModel).SerializeForTombstoning();
+                //        //PhoneApplicationService.Current.State[TombstoneKey] = tombstoneData;
 
-                        Log.Debug("Automatically created tombstone data with key '{0}'", TombstoneKey);
-                        break;
-                }
+                //        //Log.Debug("Automatically created tombstone data with key '{0}'", TombstoneKey);
+                //        //break;
+                //}
 
                 Tombstoned.SafeInvoke(this);
             }
@@ -263,7 +265,7 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
                 return;
             }
 
-            if (PhoneApplicationService.Current.StartupMode == StartupMode.Activate)
+            if (_phoneService.StartupMode == StartupMode.Activate)
             {
                 // We just recovered from tombstoning
                 if (!_recoveredFromTombstoning)
@@ -274,36 +276,38 @@ namespace Catel.Windows.Controls.MVVMProviders.Logic
 
                     EnsureViewModel();
 
-                    var viewModel = ViewModel as ViewModelBase;
-                    if (viewModel != null)
-                    {
-                        switch (viewModel.TombstoningMode)
-                        {
-                            case TombstoningMode.Disabled:
-                                break;
+                    //var viewModel = ViewModel as ViewModelBase;
+                    //if (viewModel != null)
+                    //{
+                    //    switch (viewModel.TombstoningMode)
+                    //    {
+                    //        case TombstoningMode.Disabled:
+                    //            break;
 
-                            case TombstoningMode.Manual:
-                                viewModel.RecoverFromTombstoneStateInternal(PhoneApplicationService.Current.State);
-                                break;
+                    //        case TombstoningMode.Manual:
+                    //            throw new MustBeImplementedException();
+                    //            //viewModel.RecoverFromTombstoneStateInternal(PhoneApplicationService.Current.State);
+                    //            //break;
 
-                            case TombstoningMode.Auto:
-                                if (PhoneApplicationService.Current.State.ContainsKey(TombstoneKey))
-                                {
-                                    byte[] data = PhoneApplicationService.Current.State[TombstoneKey] as byte[];
-                                    if (data != null)
-                                    {
-                                        viewModel.DeserializeFromTombstoning(data);
+                    //        case TombstoningMode.Auto:
+                    //            throw new MustBeImplementedException();
+                    //            //if (PhoneApplicationService.Current.State.ContainsKey(TombstoneKey))
+                    //            //{
+                    //            //    byte[] data = PhoneApplicationService.Current.State[TombstoneKey] as byte[];
+                    //            //    if (data != null)
+                    //            //    {
+                    //            //        viewModel.DeserializeFromTombstoning(data);
 
-                                        Log.Debug("Automatically recovered from tombstone data", TombstoneKey);
-                                    }
-                                }
-                                else
-                                {
-                                    Log.Warning("No tombstone data available with key '{0}', no automatic recovery possible", TombstoneKey);
-                                }
-                                break;
-                        }
-                    }
+                    //            //        Log.Debug("Automatically recovered from tombstone data", TombstoneKey);
+                    //            //    }
+                    //            //}
+                    //            //else
+                    //            //{
+                    //            //    Log.Warning("No tombstone data available with key '{0}', no automatic recovery possible", TombstoneKey);
+                    //            //}
+                    //            //break;
+                    //    }
+                    //}
 
                     RecoveredFromTombstoning.SafeInvoke(this);
                 }

@@ -178,10 +178,10 @@ namespace Catel.Windows.Controls
                 _viewUnloaded.SafeInvoke(this);
             };
 
-            DataContextChanged += (sender, e) =>
+            this.AddDataContextChangedHandler((sender, e) =>
             {
                 _viewDataContextChanged.SafeInvoke(this);
-            };
+            });
         }
         #endregion
 

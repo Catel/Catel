@@ -85,7 +85,7 @@ namespace Catel.Windows.Controls
         private readonly Dictionary<object, ValidationData> _objectValidation = new Dictionary<object, ValidationData>();
         private readonly object _objectValidationLock = new object();
 
-#if !NETFX_CORE
+#if NET || SL5
         private InfoBarMessageControl _infoBarMessageControl;
 #endif
         #endregion
@@ -130,6 +130,7 @@ namespace Catel.Windows.Controls
         public static readonly DependencyProperty SourceProperty = DependencyProperty.Register("Source", typeof(object), typeof(WarningAndErrorValidator),
             new PropertyMetadata(null, (sender, e) => ((WarningAndErrorValidator)sender).UpdateSource(e.OldValue, e.NewValue)));
 
+#if NET || SL5
         /// <summary>
         /// Gets or sets a value indicating whether this warning and error validator should automatically register to the first <see cref="InfoBarMessageControl"/> it can find.
         /// </summary>
@@ -145,6 +146,7 @@ namespace Catel.Windows.Controls
         /// </summary>
         public static readonly DependencyProperty AutomaticallyRegisterToInfoBarMessageControlProperty = DependencyProperty.Register("AutomaticallyRegisterToInfoBarMessageControl",
             typeof(bool), typeof(WarningAndErrorValidator), new PropertyMetadata(true));
+#endif
 
         /// <summary>
         /// Gets the unique identifier.
@@ -190,7 +192,7 @@ namespace Catel.Windows.Controls
         /// </summary>
         private void Initialize()
         {
-#if !NETFX_CORE
+#if NET || SL5
             if (AutomaticallyRegisterToInfoBarMessageControl)
             {
                 //_infoBarMessageControl = this.FindLogicalAncestorByType<InfoBarMessageControl>();
@@ -235,7 +237,7 @@ namespace Catel.Windows.Controls
 
             _objectValidation.Clear();
 
-#if !NETFX_CORE
+#if NET || SL5
             if (_infoBarMessageControl != null)
             {
                 _infoBarMessageControl.UnsubscribeWarningAndErrorValidator(this);

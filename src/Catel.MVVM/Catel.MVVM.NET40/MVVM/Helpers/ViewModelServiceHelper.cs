@@ -42,6 +42,7 @@ namespace Catel.MVVM
                 Log.Debug("Registering default service implementations for IoC container");
 
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewPropertySelector, ViewPropertySelector>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<IStateService, StateService>();
 
 #if NETFX_CORE
                 if (!serviceLocator.IsTypeRegistered<IMessageMediator>())
@@ -86,6 +87,7 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<IPleaseWaitService, PleaseWaitService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<ISchedulerService, SchedulerService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IVibrateService, VibrateService>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<IPhoneService, PhoneService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IUrlLocator, UrlLocator>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewLocator, ViewLocator>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelLocator, ViewModelLocator>();
@@ -142,6 +144,7 @@ namespace Catel.MVVM
                 //serviceLocator.RegisterTypeIfNotYetRegistered<IPleaseWaitService, PleaseWaitService>();
                 //serviceLocator.RegisterTypeIfNotYetRegistered<ISchedulerService, SchedulerService>();
                 //serviceLocator.RegisterTypeIfNotYetRegistered<IVibrateService, VibrateService>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<IPhoneService, PhoneService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IUrlLocator, UrlLocator>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewLocator, ViewLocator>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelLocator, ViewModelLocator>();

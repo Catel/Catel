@@ -137,6 +137,10 @@
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
           </ProjectTypes>
           <Name>Themes</Name>
           <Type>DoNotAdd</Type>
@@ -173,6 +177,10 @@
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
           </ProjectTypes>
           <Name>Services\ViewExportService.cs</Name>
           <Type>DoNotAdd</Type>
@@ -242,6 +250,10 @@
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
           </ProjectTypes>
           <Name>Services\SplashScreenService.cs</Name>
           <Type>DoNotAdd</Type>
@@ -251,6 +263,10 @@
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
           </ProjectTypes>
           <Name>Services\UIVisualizerService.cs</Name>
           <Type>DoNotAdd</Type>
@@ -305,6 +321,10 @@
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
           </ProjectTypes>
           <Name>Services\OpenFileService.cs</Name>
           <Type>DoNotAdd</Type>
@@ -314,6 +334,10 @@
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
           </ProjectTypes>
           <Name>Services\FileServiceBase.cs</Name>
           <Type>DoNotAdd</Type>
@@ -323,6 +347,10 @@
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
           </ProjectTypes>
           <Name>Services\SaveFileService.cs</Name>
           <Type>DoNotAdd</Type>
@@ -769,10 +797,101 @@
           <Name>Windows\Interactivity\FocusFirstControl.cs</Name>
           <Type>DoNotAdd</Type>
         </Rule>
+        <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="69" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+          </ProjectTypes>
+          <Name>Windows\Interactivity\WindowEventToCommand.cs</Name>
+          <Type>DoNotAdd</Type>
+        </Rule>
+        <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="70" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+          </ProjectTypes>
+          <Name>MVVM\Providers\WindowLogic.cs</Name>
+          <Type>DoNotAdd</Type>
+        </Rule>
+        <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="71" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+          </ProjectTypes>
+          <Name>MVVM\Providers\Behaviors\WindowBehavior.cs</Name>
+          <Type>DoNotAdd</Type>
+        </Rule>
+        <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="72" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+          </ProjectTypes>
+          <Name>Windows\Windows\DataWindow</Name>
+          <Type>DoNotAdd</Type>
+        </Rule>
+        <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="73" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+          </ProjectTypes>
+          <Name>Windows\Helpers\WrapControlHelper.cs</Name>
+          <Type>DoNotAdd</Type>
+        </Rule>
+        <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="74" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+          </ProjectTypes>
+          <Name>Services\StartUpInfoProvider.cs</Name>
+          <Type>DoNotAdd</Type>
+        </Rule>
+        <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="75" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+          </ProjectTypes>
+          <Name>Windows\Controls\Page.cs</Name>
+          <Type>DoNotAdd</Type>
+        </Rule>
       </Rules>
       <Name>Catel.MVVM.NET40</Name>
     </RootProject>
   </RootProjects>
-  <ProjectMappings xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="69" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" />
+  <ProjectMappings xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="76" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" />
   <EnableAutoLink>true</EnableAutoLink>
 </Configuration>
