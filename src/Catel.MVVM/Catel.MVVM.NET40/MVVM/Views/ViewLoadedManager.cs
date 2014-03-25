@@ -10,6 +10,10 @@ namespace Catel.MVVM.Views
     using System.Collections.Generic;
     using System.Threading;
 
+#if NETFX_CORE
+    using global::Windows.UI.Xaml;
+#endif
+
 #if !NET && !XAMARIN
     using System.Windows;
 #endif

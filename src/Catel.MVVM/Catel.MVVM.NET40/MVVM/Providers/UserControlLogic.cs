@@ -13,10 +13,18 @@ namespace Catel.MVVM.Providers
     using Catel.IoC;
     using Catel.MVVM.Views;
     using Catel.Services;
-    using Catel.Windows.Controls;
     using Logging;
     using MVVM;
     using Reflection;
+
+#if XAMARIN
+    // TODO
+#elif NETFX_CORE
+    using global::Windows.UI.Core;
+    using global::Windows.UI.Xaml;
+#else
+    using Catel.Windows.Controls;
+#endif
 
     /// <summary>
     /// MVVM Provider behavior implementation for a user control.

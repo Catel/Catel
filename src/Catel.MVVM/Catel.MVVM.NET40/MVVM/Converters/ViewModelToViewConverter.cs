@@ -7,10 +7,13 @@
 namespace Catel.MVVM.Converters
 {
     using System;
-    using System.Windows.Data;
     using IoC;
     using MVVM;
     using Environment = Catel.CatelEnvironment;
+
+#if NET
+    using System.Windows.Data;
+#endif
 
     /// <summary>
     /// Converts a view model to a view. This converter is very useful to dynamically load 

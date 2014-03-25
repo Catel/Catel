@@ -25,13 +25,9 @@ namespace Catel.MVVM.Providers
 #if NETFX_CORE
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Navigation;
-
-    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
 #else
     using System.Windows;
     using System.Windows.Navigation;
-
-    using UIEventArgs = System.EventArgs;
 #endif
 
 #if SILVERLIGHT
@@ -146,7 +142,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        public override void OnTargetViewLoaded(object sender, UIEventArgs e)
+        public override void OnTargetViewLoaded(object sender, EventArgs e)
         {
             base.OnTargetViewLoaded(sender, e);
 
@@ -158,7 +154,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        public override void OnTargetViewUnloaded(object sender, UIEventArgs e)
+        public override void OnTargetViewUnloaded(object sender, EventArgs e)
         {
             base.OnTargetViewUnloaded(sender, e);
 
@@ -386,7 +382,7 @@ namespace Catel.MVVM.Providers
             }
 
 #if NETFX_CORE
-            RootFrame = Window.Current.Content as Frame ?? ((Page)TargetControl).Frame;
+            RootFrame = Window.Current.Content as Frame ?? ((Page)TargetView).Frame;
             if (RootFrame == null)
             {
                 return;

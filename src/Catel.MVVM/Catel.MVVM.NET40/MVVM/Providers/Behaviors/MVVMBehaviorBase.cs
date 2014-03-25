@@ -8,10 +8,15 @@ namespace Catel.MVVM.Providers
 {
     using System;
     using System.ComponentModel;
-    using System.Windows;
-    using System.Windows.Interactivity;
     using Catel.Windows.Interactivity;
     using MVVM;
+
+#if NETFX_CORE
+    using global::Windows.UI.Xaml;
+#else
+    using System.Windows;
+    using System.Windows.Interactivity;
+#endif
 
     /// <summary>
     /// A <see cref="Behavior"/> base implementation that takes care of generic MVVM behavior logic.

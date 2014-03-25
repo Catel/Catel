@@ -19,7 +19,7 @@ namespace Catel.Windows.Interactivity
 
     /// <summary>
     /// TriggerAction base class that handles a safe unsubscribe and clean up because the default
-    /// TriggerAction class does not always call <see cref="System.Windows.Interactivity.TriggerAction.OnDetaching"/>.
+    /// TriggerAction class does not always call <c>OnDetaching</c>.
     /// <para />
     /// This class also adds some specific features such as <see cref="ValidateRequiredProperties"/>
     /// which is automatically called when the trigger action is attached.

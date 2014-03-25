@@ -7,13 +7,18 @@
 namespace Catel.MVVM.Providers
 {
     using System;
-    using System.Windows.Controls;
     using Catel.Logging;
     using Catel.MVVM.Views;
     using Catel.Reflection;
 
+#if NETFX_CORE
+    using global::Windows.UI.Xaml.Controls;
+#else
+    using System.Windows.Controls;
+#endif
+
     /// <summary>
-    /// A <see cref="System.Windows.Interactivity.Behavior"/> implementation for a <see cref="Page"/>. 
+    /// A behavior implementation for a <see cref="Page"/>. 
     /// </summary>
     public class NavigationPageBehavior : MVVMBehaviorBase<Page, NavigationPageLogic>
     {

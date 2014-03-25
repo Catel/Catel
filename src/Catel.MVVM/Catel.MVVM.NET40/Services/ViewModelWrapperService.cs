@@ -11,15 +11,25 @@ namespace Catel.Services
     using Catel.Logging;
     using Catel.MVVM.Views;
     using Catel.Reflection;
-    using Catel.Windows;
-    using Catel.Windows.Controls;
-
+    
 #if XAMARIN
 
+#elif NETFX_CORE
+    using global::Windows.UI.Xaml;
+    using global::Windows.UI.Xaml.Controls;
+    using global::Windows.UI.Xaml.Data;
+    using Page = global::Windows.UI.Xaml.Controls.Page;
 #else
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Data;
+    using Page = System.Windows.Controls.Page;
+#endif
+
+
+
+#if !XAMARIN
+    using Catel.Windows;
 #endif
 
     /// <summary>
@@ -119,7 +129,7 @@ namespace Catel.Services
             }
             else
             {
-                var page = view as System.Windows.Controls.Page;
+                var page = view as Page;
                 if (page != null)
                 {
                     content = page.Content as FrameworkElement;
@@ -142,7 +152,7 @@ namespace Catel.Services
                 return;
             }
 
-            var page = view as System.Windows.Controls.Page;
+            var page = view as Page;
             if (page != null)
             {
                 // Note: cast required or SL

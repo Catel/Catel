@@ -14,6 +14,10 @@ namespace Catel.MVVM.Views
     using Catel.Windows;
 
 #if XAMARIN
+    // TODO
+#elif NETFX_CORE
+    using global::Windows.UI.Xaml;
+    using global::Windows.UI.Xaml.Controls;
 #else
     using System.Windows;
     using System.Windows.Controls;

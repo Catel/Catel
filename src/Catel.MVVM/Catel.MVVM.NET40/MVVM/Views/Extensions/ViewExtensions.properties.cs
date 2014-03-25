@@ -10,8 +10,17 @@ namespace Catel.MVVM.Views
     using System;
     using System.ComponentModel;
     using System.Linq;
-    using System.Windows;
     using Catel.Windows.Data;
+
+#if XAMARIN
+    
+#elif NETFX_CORE
+    using global::Windows.UI.Xaml;
+#else
+    using System.Windows;
+#endif
+
+
 
     public static partial class ViewExtensions
     {

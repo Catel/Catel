@@ -44,6 +44,8 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewPropertySelector, ViewPropertySelector>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IStateService, StateService>();
 
+                // TODO: FIX ALL 
+
 #if NETFX_CORE
                 if (!serviceLocator.IsTypeRegistered<IMessageMediator>())
                 {
@@ -61,7 +63,6 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<IMessageService, MessageService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<INavigationService, NavigationService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IPleaseWaitService, PleaseWaitService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IProcessService, ProcessService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<ISchedulerService, SchedulerService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IUrlLocator, UrlLocator>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewLocator, ViewLocator>();

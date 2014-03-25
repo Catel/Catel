@@ -7,23 +7,25 @@
 namespace Catel.MVVM.Providers
 {
     using System;
-    using System.Windows;
-    using System.Windows.Interactivity;
     using Catel.Logging;
     using Catel.MVVM.Views;
     using Catel.Reflection;
+    using Catel.Windows.Interactivity;
     using MVVM;
 
 #if NETFX_CORE
+    using global::Windows.UI.Xaml;
     using ControlType = global::Windows.UI.Xaml.Controls.UserControl;
 #elif NET
     using ControlType = System.Windows.Controls.ContentControl;
+    using System.Windows.Interactivity;
 #else
     using ControlType = System.Windows.Controls.UserControl;
+    using System.Windows.Interactivity;
 #endif
 
     /// <summary>
-    /// A <see cref="Behavior"/> implementation for a user control. 
+    /// A <see cref="Behavior{T}"/> implementation for a user control. 
     /// </summary>
     public class UserControlBehavior : MVVMBehaviorBase<ControlType, UserControlLogic>
     {
@@ -67,7 +69,7 @@ namespace Catel.MVVM.Providers
             set { Logic.SupportParentViewModelContainers = value; }
         }
 
-#if !WINDOWS_PHONE && !XAMARIN
+#if NET || SL5
         /// <summary>
         /// Gets or sets a value indicating whether to skip the search for an info bar message control. If not skipped,
         /// the user control will search for a the first <c>InfoBarMessageControl</c> that can be found. 

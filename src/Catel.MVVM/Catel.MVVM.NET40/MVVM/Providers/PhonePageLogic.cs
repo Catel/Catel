@@ -7,14 +7,18 @@
 namespace Catel.MVVM.Providers
 {
     using System;
-    using System.ComponentModel;
-    using System.Windows.Navigation;
     using Catel.IoC;
     using Catel.Services;
     using Logging;
     using MVVM;
     using MVVM.Views;
     using ViewModelBase = MVVM.ViewModelBase;
+
+#if NETFX_CORE
+    using global::Windows.UI.Xaml.Navigation;
+#else
+    using System.Windows.Navigation;
+#endif
 
     /// <summary>
     /// MVVM Provider behavior implementation for a phone page.

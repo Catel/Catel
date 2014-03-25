@@ -8,7 +8,12 @@
 namespace Catel.MVVM.Views
 {
     using System;
+
+#if NETFX_CORE
+    using global::Windows.UI.Xaml.Controls;
+#else
     using System.Windows.Controls;
+#endif
 
     /// <summary>
     /// View model wrapper class.
