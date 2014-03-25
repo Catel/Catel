@@ -9,18 +9,13 @@ namespace Catel.MVVM.Converters
     using System;
     using IoC;
     using MVVM;
-    using Environment = Catel.CatelEnvironment;
-
-#if NET
-    using System.Windows.Data;
-#endif
 
     /// <summary>
     /// Converts a view model to a view. This converter is very useful to dynamically load 
     /// view content.
     /// </summary>
 #if NET
-    [ValueConversion(typeof(object), typeof(object))]
+    [System.Windows.Data.ValueConversion(typeof(object), typeof(object))]
 #endif
     public class ViewModelToViewConverter : ValueConverterBase
     {
@@ -45,7 +40,7 @@ namespace Catel.MVVM.Converters
         /// <returns>The value to be passed to the target dependency property.</returns>
         protected override object Convert(object value, Type targetType, object parameter)
         {
-            if (Environment.IsInDesignMode || (value == null))
+            if (CatelEnvironment.IsInDesignMode || (value == null))
             {
                 return ConverterHelper.UnsetValue;
             }

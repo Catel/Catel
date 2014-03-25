@@ -9,17 +9,11 @@ namespace Catel.MVVM.Converters
     using System;
     using System.Globalization;
 
-#if NETFX_CORE
-    using global::Windows.UI.Xaml.Data;
-#else
-    using System.Windows.Data;
-#endif
-
     /// <summary>
     /// ShortDateFormattingConverter
     /// </summary>
 #if NET
-    [ValueConversion(typeof (DateTime), typeof (string))]
+    [System.Windows.Data.ValueConversion(typeof(DateTime), typeof(string))]
 #endif
     public class ShortDateFormattingConverter : FormattingConverter
     {

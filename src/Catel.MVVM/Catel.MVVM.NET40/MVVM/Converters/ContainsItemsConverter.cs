@@ -9,17 +9,11 @@ namespace Catel.MVVM.Converters
     using System;
     using System.Collections;
 
-#if NETFX_CORE
-    using global::Windows.UI.Xaml.Data;
-#else
-    using System.Windows.Data;
-#endif
-
     /// <summary>
     /// Converter that converts whether a collection contains items or not.
     /// </summary>
 #if NET
-    [ValueConversion(typeof (IEnumerable), typeof (bool))]
+    [System.Windows.Data.ValueConversion(typeof(IEnumerable), typeof(bool))]
 #endif
     public class ContainsItemsConverter : ValueConverterBase
     {

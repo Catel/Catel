@@ -8,7 +8,6 @@ namespace Catel.Windows.Controls
 {
     using System;
     using System.Windows;
-    using System.Windows.Data;
     using MVVM.Converters;
 
     /// <summary>
@@ -16,7 +15,7 @@ namespace Catel.Windows.Controls
     /// should be visible for the current mode and
     /// </summary>
 #if NET
-    [ValueConversion(typeof(InfoBarMessageControlMode), typeof(Visibility), ParameterType = typeof(InfoBarMessageControlMode))]
+    [System.Windows.Data.ValueConversion(typeof(InfoBarMessageControlMode), typeof(Visibility), ParameterType = typeof(InfoBarMessageControlMode))]
 #endif
     public class InfoBarMessageControlVisibilityConverter : IValueConverter
     {

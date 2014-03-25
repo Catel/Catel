@@ -8,13 +8,7 @@ namespace Catel.MVVM.Converters
 {
     using System;
 
-#if NETFX_CORE
-    using global::Windows.UI.Xaml.Data;
-#else
-    using System.Windows.Data;
-#endif
-
-	/// <summary>
+    /// <summary>
 	/// Converts a selected value to either true of false.
 	/// </summary>
 	/// <remarks>
@@ -22,7 +16,7 @@ namespace Catel.MVVM.Converters
 	/// Original code found at http://geekswithblogs.net/claraoscura/archive/2008/10/17/125901.aspx
 	/// </remarks>
 #if NET
-    [ValueConversion(typeof(bool?), typeof(bool))]
+    [System.Windows.Data.ValueConversion(typeof(bool?), typeof(bool))]
 #endif
     public class IsSelectedConverter : ValueConverterBase
     {

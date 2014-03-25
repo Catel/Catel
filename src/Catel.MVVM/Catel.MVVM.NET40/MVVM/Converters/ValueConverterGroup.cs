@@ -68,7 +68,7 @@ namespace Catel.MVVM.Converters
         /// <returns>
         /// A converted value. If the method returns null, the valid null value is used.
         /// </returns>
-        object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             object output = value;
 
@@ -98,7 +98,7 @@ namespace Catel.MVVM.Converters
         /// <returns>
         /// A converted value. If the method returns null, the valid null value is used.
         /// </returns>
-        object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             object output = value;
 

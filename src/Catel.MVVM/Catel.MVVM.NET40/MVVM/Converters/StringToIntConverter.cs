@@ -8,17 +8,11 @@ namespace Catel.MVVM.Converters
 {
     using System;
 
-#if NETFX_CORE
-    using global::Windows.UI.Xaml.Data;
-#else
-    using System.Windows.Data;
-#endif
-
     /// <summary>
     /// Converts string to integer and back.
     /// </summary>
 #if NET
-    [ValueConversion(typeof (string), typeof (int?))]
+    [System.Windows.Data.ValueConversion(typeof(string), typeof(int?))]
 #endif
     public class StringToIntConverter : ValueConverterBase
     {

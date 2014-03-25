@@ -9,12 +9,6 @@ namespace Catel.MVVM.Converters
     using System;
     using Logging;
 
-#if NETFX_CORE
-    using global::Windows.UI.Xaml.Data;
-#else
-    using System.Windows.Data;
-#endif
-
     #region Enums
     /// <summary>
     /// Available modes for the <see cref="BooleanToTextConverter"/>.
@@ -37,7 +31,7 @@ namespace Catel.MVVM.Converters
     /// BooleanToTextConverter.
     /// </summary>
 #if NET
-    [ValueConversion(typeof (bool), typeof (string))]
+    [System.Windows.Data.ValueConversion(typeof(bool), typeof(string))]
 #endif
     public class BooleanToTextConverter : ValueConverterBase
     {

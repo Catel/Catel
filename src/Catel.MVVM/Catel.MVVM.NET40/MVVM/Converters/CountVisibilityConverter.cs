@@ -12,16 +12,13 @@ namespace Catel.MVVM.Converters
 
 #if NETFX_CORE
     using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Data;
-#else
-    using System.Windows.Data;
 #endif
 
     /// <summary>
     /// Convert for auto collapsing of control depending on given count.
     /// </summary>
 #if NET
-    [ValueConversion(typeof (int), typeof (Visibility))]
+    [System.Windows.Data.ValueConversion(typeof(int), typeof(Visibility))]
 #endif
     public class CountCollapsedConverter : VisibilityConverterBase
     {
@@ -96,7 +93,7 @@ namespace Catel.MVVM.Converters
     /// <summary>
     /// Convert for auto hiding of control depending on given count.
     /// </summary>
-    [ValueConversion(typeof (int), typeof (Visibility))]
+    [System.Windows.Data.ValueConversion(typeof(int), typeof(Visibility))]
     public class CountHiddenConverter : CountCollapsedConverter
     {
         /// <summary>

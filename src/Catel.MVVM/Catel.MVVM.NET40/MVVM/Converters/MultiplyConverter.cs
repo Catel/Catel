@@ -8,17 +8,11 @@ namespace Catel.MVVM.Converters
 {
     using System;
 
-#if NETFX_CORE
-    using global::Windows.UI.Xaml.Data;
-#else
-    using System.Windows.Data;
-#endif
-
     /// <summary>
     /// Calculate the product of given value and factor in parameter.
     /// </summary>
 #if NET
-    [ValueConversion(typeof (int), typeof (int))]
+    [System.Windows.Data.ValueConversion(typeof(int), typeof(int))]
 #endif
     public class MultiplyConverter : ValueConverterBase
     {

@@ -13,9 +13,7 @@ namespace Catel.MVVM.Converters
     /// Converts a comparison of 2 bindings to a boolean whether the 
     /// objects are equal or not.
     /// </summary>
-#if NET
     [ValueConversion(typeof(object), typeof(object))]
-#endif
     public class AreEqualMultiValueConverter : IMultiValueConverter
     {
         /// <summary>

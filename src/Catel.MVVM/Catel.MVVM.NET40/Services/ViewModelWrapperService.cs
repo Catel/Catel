@@ -20,13 +20,12 @@ namespace Catel.Services
     using global::Windows.UI.Xaml.Data;
     using Page = global::Windows.UI.Xaml.Controls.Page;
 #else
+    using Catel.Windows.Controls;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Data;
     using Page = System.Windows.Controls.Page;
 #endif
-
-
 
 #if !XAMARIN
     using Catel.Windows;
@@ -93,7 +92,7 @@ namespace Catel.Services
             vmGrid.Name = InnerWrapperName;
             vmGrid.SetBinding(FrameworkElement.DataContextProperty, new Binding { Path = new PropertyPath("ViewModel"), Source = viewModelSource });
 
-#if NET || SL4 || SL5
+#if NET || SL5
             if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.CreateWarningAndErrorValidatorForViewModel))
             {
                 var warningAndErrorValidator = new WarningAndErrorValidator();

@@ -167,6 +167,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Converters\Helpers\ConverterHelper.cs">
       <Link>MVVM\Converters\Helpers\ConverterHelper.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Converters\Interfaces\IValueConverter.cs">
+      <Link>MVVM\Converters\Interfaces\IValueConverter.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Converters\IntToStringConverter.cs">
       <Link>MVVM\Converters\IntToStringConverter.cs</Link>
     </Compile>

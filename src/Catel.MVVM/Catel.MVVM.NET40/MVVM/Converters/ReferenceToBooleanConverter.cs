@@ -8,17 +8,11 @@ namespace Catel.MVVM.Converters
 {
     using System;
 
-#if NETFX_CORE
-    using global::Windows.UI.Xaml.Data;
-#else
-    using System.Windows.Data;
-#endif
-
     /// <summary>
     /// Implementation of class ReferenceToBooleanConverter
     /// </summary>
 #if NET
-    [ValueConversion(typeof (object), typeof (bool))]
+    [System.Windows.Data.ValueConversion(typeof(object), typeof(bool))]
 #endif
     public class ReferenceToBooleanConverter : ValueConverterBase
     {

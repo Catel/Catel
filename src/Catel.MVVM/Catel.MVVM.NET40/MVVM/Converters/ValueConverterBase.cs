@@ -9,11 +9,11 @@ namespace Catel.MVVM.Converters
     using System;
     using System.Globalization;
 
-#if NETFX_CORE
-    using global::Windows.UI.Xaml.Data;
+#if XAMARIN
+    
+#elif NETFX_CORE
 #else
     using System.ComponentModel;
-    using System.Windows.Data;
 #endif
 
 #if NET || SL5
@@ -46,9 +46,9 @@ namespace Catel.MVVM.Converters
         /// property is set.
         /// </summary>
         /// <remarks>
-        /// Normally this value is ignored as it is in most implementations of <see cref="IValueConverter.Convert"/>.
+        /// Normally this value is ignored as it is in most implementations of <c>Convert</c>.
         /// </remarks>
-#if !NETFX_CORE
+#if NET
         [TypeConverter(typeof(StringToTypeConverter))]
 #endif
         public Type OverrideType { get; set; }
@@ -58,9 +58,9 @@ namespace Catel.MVVM.Converters
         /// property is set.
         /// </summary>
         /// <remarks>
-        /// Normally this value is ignored as it is in most implementations of <see cref="IValueConverter.ConvertBack"/>.
+        /// Normally this value is ignored as it is in most implementations of <c>ConvertBack</c>.
         /// </remarks>
-#if !NETFX_CORE
+#if NET
         [TypeConverter(typeof(StringToTypeConverter))]
 #endif
         public Type BackOverrideType { get; set; }

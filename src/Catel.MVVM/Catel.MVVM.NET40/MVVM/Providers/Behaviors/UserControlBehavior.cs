@@ -10,7 +10,6 @@ namespace Catel.MVVM.Providers
     using Catel.Logging;
     using Catel.MVVM.Views;
     using Catel.Reflection;
-    using Catel.Windows.Interactivity;
     using MVVM;
 
 #if NETFX_CORE
@@ -18,9 +17,11 @@ namespace Catel.MVVM.Providers
     using ControlType = global::Windows.UI.Xaml.Controls.UserControl;
 #elif NET
     using ControlType = System.Windows.Controls.ContentControl;
+    using System.Windows;
     using System.Windows.Interactivity;
 #else
     using ControlType = System.Windows.Controls.UserControl;
+    using System.Windows;
     using System.Windows.Interactivity;
 #endif
 

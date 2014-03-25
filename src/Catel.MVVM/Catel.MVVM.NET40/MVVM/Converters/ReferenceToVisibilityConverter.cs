@@ -7,13 +7,11 @@
 namespace Catel.MVVM.Converters
 {
     using System;
-    using System.Windows;
 
 #if NETFX_CORE
     using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Data;
 #else
-    using System.Windows.Data;
+    using System.Windows;
 #endif
 
     /// <summary>
@@ -22,7 +20,7 @@ namespace Catel.MVVM.Converters
     /// If the reference is null, Visibility.Collapsed will be returned.
     /// </summary>
 #if NET
-    [ValueConversion(typeof (object), typeof (Visibility))]
+    [System.Windows.Data.ValueConversion(typeof (object), typeof (Visibility))]
 #endif
     public class ReferenceToCollapsingVisibilityConverter : VisibilityConverterBase
     {
@@ -69,7 +67,7 @@ namespace Catel.MVVM.Converters
     /// If the reference contains a value, Visibility.Visible will be returned. 
     /// If the reference is null, Visibility.Hidden will be returned.
     /// </summary>
-    [ValueConversion(typeof (object), typeof (Visibility))]
+    [System.Windows.Data.ValueConversion(typeof(object), typeof(Visibility))]
     public class ReferenceToHidingVisibilityConverter : ReferenceToCollapsingVisibilityConverter
     {
         /// <summary>

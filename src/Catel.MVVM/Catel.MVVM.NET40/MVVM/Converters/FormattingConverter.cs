@@ -8,17 +8,11 @@ namespace Catel.MVVM.Converters
 {
     using System;
 
-#if NETFX_CORE
-    using global::Windows.UI.Xaml.Data;
-#else
-    using System.Windows.Data;
-#endif
-
     /// <summary>
     /// Converter for formatting values.
     /// </summary>
 #if NET
-    [ValueConversion(typeof (object), typeof (string))]
+    [System.Windows.Data.ValueConversion(typeof(object), typeof(string))]
 #endif
     public class FormattingConverter : ValueConverterBase
     {

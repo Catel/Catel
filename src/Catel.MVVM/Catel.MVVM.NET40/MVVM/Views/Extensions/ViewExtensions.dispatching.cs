@@ -8,13 +8,14 @@
 namespace Catel.MVVM.Views
 {
     using System;
-    using System.Windows;
     using Catel.Windows.Threading;
 
-#if NETFX_CORE
+#if XAMARIN
+
+#elif NETFX_CORE
     using global::Windows.UI.Xaml;
-#elif SILVERLIGHT
-    using Catel.Windows.Threading;
+#else
+    using System.Windows;
 #endif
 
     /// <summary>

@@ -8,18 +8,12 @@ namespace Catel.MVVM.Converters
 {
     using System;
 
-#if NETFX_CORE
-    using global::Windows.UI.Xaml.Data;
-#else
-    using System.Windows.Data;
-#endif
-
     /// <summary>
     /// Converts a value to a representive value for nullable.
     /// </summary>
     /// <remarks>Resolves problem with databinding with nullables. When textbox hasn't a value then null is expected as return value.</remarks>
 #if NET
-    [ValueConversion(typeof (object), typeof (object))]
+    [System.Windows.Data.ValueConversion(typeof(object), typeof(object))]
 #endif
     public class NullableValueConverter : ValueConverterBase
     {

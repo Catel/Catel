@@ -8,18 +8,12 @@ namespace Catel.MVVM.Converters
 {
     using System;
 
-#if NETFX_CORE
-    using global::Windows.UI.Xaml.Data;
-#else
-    using System.Windows.Data;
-#endif
-
     /// <summary>
     /// Convert a value to it's inverted value.
     /// </summary>
     /// <remarks>Currently only values of type bool are accepted.</remarks>
 #if NET
-    [ValueConversion(typeof (bool), typeof (bool))]
+    [System.Windows.Data.ValueConversion(typeof(bool), typeof(bool))]
 #endif
     public class BooleanToOppositeBooleanConverter : ValueConverterBase
     {

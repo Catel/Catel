@@ -102,6 +102,7 @@
     <Compile Include="MVVM\Commands\EventArgs\CommandExecutedEventArgs.cs" />
     <Compile Include="MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs" />
     <Compile Include="MVVM\Commands\Helpers\CommandHelper.cs" />
+    <Compile Include="MVVM\Converters\Interfaces\IValueConverter.cs" />
     <Compile Include="MVVM\Providers\PhonePageLogic.cs" />
     <Compile Include="MVVM\ViewModels\ViewModelBase.throttling.cs" />
     <Compile Include="MVVM\Views\Extensions\ViewExtensions.dispatching.cs" />

@@ -10,10 +10,8 @@ namespace Catel.MVVM.Converters
 
 #if NETFX_CORE
     using global::Windows.UI;
-    using global::Windows.UI.Xaml.Data;
     using global::Windows.UI.Xaml.Media;
 #else
-    using System.Windows.Data;
     using System.Windows.Media;
 #endif
 
@@ -21,7 +19,7 @@ namespace Catel.MVVM.Converters
     /// ColorToBrushConverter
     /// </summary>
 #if NET
-    [ValueConversion(typeof (Color), typeof (Brush))]
+    [System.Windows.Data.ValueConversion(typeof(Color), typeof(Brush))]
 #endif
     public class ColorToBrushConverter : ValueConverterBase
     {

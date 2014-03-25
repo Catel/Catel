@@ -12,8 +12,6 @@ namespace Catel.MVVM.Converters
 #if NETFX_CORE
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Data;
-#else
-    using System.Windows.Data;
 #endif
 
     /// <summary>
@@ -22,7 +20,7 @@ namespace Catel.MVVM.Converters
     /// The bool value false will be converted to Visibility.Collapsed.
     /// </summary>
 #if NET
-    [ValueConversion(typeof (bool), typeof (Visibility))]
+    [System.Windows.Data.ValueConversion(typeof(bool), typeof(Visibility))]
 #endif
     public class BooleanToCollapsingVisibilityConverter : VisibilityConverterBase
     {
@@ -119,7 +117,7 @@ namespace Catel.MVVM.Converters
     /// The bool value true will be converted to Visibility.Visible.
     /// The bool value false will be converted to Visibility.Hidden.
     /// </summary>
-    [ValueConversion(typeof (bool), typeof (Visibility))]
+    [System.Windows.Data.ValueConversion(typeof(bool), typeof(Visibility))]
     public class BooleanToHidingVisibilityConverter : BooleanToCollapsingVisibilityConverter
     {
         /// <summary>

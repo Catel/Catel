@@ -10,14 +10,13 @@ namespace Catel.MVVM.Converters
     using System.Collections.Generic;
     using System.Linq;
     using System.Windows.Controls;
-    using System.Windows.Data;
 
 	/// <summary>
 	/// Converts a collection containing <see cref="ValidationError"/> objects to return the first error
 	/// or an empty string in case there are no errors.
 	/// </summary>
 #if NET
-	[ValueConversion(typeof(ICollection<ValidationError>), typeof(string))]
+    [System.Windows.Data.ValueConversion(typeof(ICollection<ValidationError>), typeof(string))]
 #endif
 	public class GetFirstValidationErrorConverter : ValueConverterBase
 	{

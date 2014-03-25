@@ -8,18 +8,12 @@ namespace Catel.MVVM.Converters
 {
     using System;
 
-#if NETFX_CORE
-    using global::Windows.UI.Xaml.Data;
-#else
-    using System.Windows.Data;
-#endif
-
     /// <summary>
     /// Converts a boolean to a grayscale saturation value. If the input is <c>false</c>, this converter will
     /// return <c>0</c>, otherwise <c>1</c>.
     /// </summary>
 #if NET
-    [ValueConversion(typeof(bool), typeof(double))]
+    [System.Windows.Data.ValueConversion(typeof(bool), typeof(double))]
 #endif
     public class BooleanToGrayscaleConverter : ValueConverterBase
     {

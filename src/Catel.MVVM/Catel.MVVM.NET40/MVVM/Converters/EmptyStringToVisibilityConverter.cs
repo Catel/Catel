@@ -11,9 +11,6 @@ namespace Catel.MVVM.Converters
 
 #if NETFX_CORE
     using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Data;
-#else
-    using System.Windows.Data;
 #endif
 
     /// <summary>
@@ -22,7 +19,7 @@ namespace Catel.MVVM.Converters
     /// If the string is null or empty, Visibility.Collapsed will be returned.
     /// </summary>
 #if NET
-    [ValueConversion(typeof (string), typeof (Visibility))]
+    [System.Windows.Data.ValueConversion(typeof(string), typeof(Visibility))]
 #endif
     public class EmptyStringToCollapsingVisibilityConverter : VisibilityConverterBase
     {
@@ -75,7 +72,7 @@ namespace Catel.MVVM.Converters
     /// If the string is not null or empty, Visibility.Visible will be returned. 
     /// If the string is null or empty, Visibility.Hidden will be returned.
     /// </summary>
-    [ValueConversion(typeof (string), typeof (Visibility))]
+    [System.Windows.Data.ValueConversion(typeof(string), typeof(Visibility))]
     public class EmptyStringToHidingVisibilityConverter : EmptyStringToCollapsingVisibilityConverter
     {
         /// <summary>

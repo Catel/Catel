@@ -9,12 +9,6 @@ namespace Catel.MVVM.Converters
     using System;
     using Reflection;
 
-#if NETFX_CORE
-    using global::Windows.UI.Xaml.Data;
-#else
-    using System.Windows.Data;
-#endif
-
     /// <summary>
     /// Converts the result of a method to a value. This makes it possible to bind to a method.
     /// </summary>
@@ -25,7 +19,7 @@ namespace Catel.MVVM.Converters
     /// Code originally comes from http://stackoverflow.com/questions/502250/bind-to-a-method-in-wpf.
     /// </remarks>
 #if NET
-    [ValueConversion(typeof (string), typeof (object))]
+    [System.Windows.Data.ValueConversion(typeof(string), typeof(object))]
 #endif
     public class MethodToValueConverter : ValueConverterBase
     {
