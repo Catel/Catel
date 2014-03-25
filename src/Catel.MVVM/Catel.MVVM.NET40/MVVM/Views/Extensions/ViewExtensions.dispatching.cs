@@ -8,7 +8,10 @@
 namespace Catel.MVVM.Views
 {
     using System;
+
+#if !XAMARIN
     using Catel.Windows.Threading;
+#endif
 
 #if XAMARIN
 

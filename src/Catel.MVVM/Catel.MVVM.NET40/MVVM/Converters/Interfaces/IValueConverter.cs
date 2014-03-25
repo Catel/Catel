@@ -8,6 +8,7 @@
 namespace Catel.MVVM.Converters
 {
 #if XAMARIN
+    using System;
     using System.Globalization;
 #endif
 

@@ -11,23 +11,21 @@ namespace Catel.MVVM.Providers
     using Logging;
     using MVVM;
 
-#if NETFX_CORE
-    using global::Windows.UI.Xaml;
+#if XAMARIN
+
+#elif NETFX_CORE
+    using global::Windows.UI.Xaml; 
+    using global::Windows.UI.Xaml.Controls;
+    using global::Windows.UI.Xaml.Navigation;
 #elif WINDOWS_PHONE
     using Microsoft.Phone.Controls;
     using Catel.Windows;
     using Microsoft.Phone.Shell;
-#elif SILVERLIGHT
-    using System.Windows.Controls;
-    using Catel.Windows;
-#endif
-
-#if NETFX_CORE
-    using global::Windows.UI.Xaml.Controls;
-    using global::Windows.UI.Xaml.Navigation;
 #else
     using System.Windows;
     using System.Windows.Navigation;
+    using System.Windows.Controls;
+    using Catel.Windows;
 #endif
 
 #if SILVERLIGHT

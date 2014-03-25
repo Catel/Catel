@@ -9,7 +9,9 @@ namespace Catel.MVVM.Views
 {
     using System;
 
-#if NETFX_CORE
+#if XAMARIN
+
+#elif NETFX_CORE
     using global::Windows.UI.Xaml.Controls;
 #else
     using System.Windows.Controls;

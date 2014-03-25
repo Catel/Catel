@@ -14,7 +14,9 @@ namespace Catel.MVVM.Providers
     using MVVM.Views;
     using ViewModelBase = MVVM.ViewModelBase;
 
-#if NETFX_CORE
+#if XAMARIN
+
+#elif NETFX_CORE
     using global::Windows.UI.Xaml.Navigation;
 #else
     using System.Windows.Navigation;

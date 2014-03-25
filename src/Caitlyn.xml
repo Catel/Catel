@@ -157,8 +157,6 @@
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
           <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="16" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
-            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
-            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
           </ProjectTypes>
           <Name>MVVM\Views</Name>
           <Type>DoNotAdd</Type>
@@ -1220,10 +1218,19 @@
           <Name>MVVM\Converters\ColorToBrushConverter.cs</Name>
           <Type>DoNotAdd</Type>
         </Rule>
+        <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="106" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+          </ProjectTypes>
+          <Name>MVVM\Converters\VisibilityConverterBase.cs</Name>
+          <Type>DoNotAdd</Type>
+        </Rule>
       </Rules>
       <Name>Catel.MVVM.NET40</Name>
     </RootProject>
   </RootProjects>
-  <ProjectMappings xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="106" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" />
+  <ProjectMappings xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="107" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" />
   <EnableAutoLink>true</EnableAutoLink>
 </Configuration>

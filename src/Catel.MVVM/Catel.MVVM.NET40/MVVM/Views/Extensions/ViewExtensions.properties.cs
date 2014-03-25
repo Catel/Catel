@@ -10,13 +10,15 @@ namespace Catel.MVVM.Views
     using System;
     using System.ComponentModel;
     using System.Linq;
-    using Catel.Windows.Data;
+    
 
 #if XAMARIN
     
 #elif NETFX_CORE
+    using Catel.Windows.Data;
     using global::Windows.UI.Xaml;
 #else
+    using Catel.Windows.Data;
     using System.Windows;
 #endif
 

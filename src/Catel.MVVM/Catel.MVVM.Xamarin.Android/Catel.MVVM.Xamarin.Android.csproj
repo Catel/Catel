@@ -203,9 +203,6 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Converters\ViewModelToViewConverter.cs">
       <Link>MVVM\Converters\ViewModelToViewConverter.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Converters\VisibilityConverterBase.cs">
-      <Link>MVVM\Converters\VisibilityConverterBase.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Exceptions\InvalidViewModelException.cs">
       <Link>MVVM\Exceptions\InvalidViewModelException.cs</Link>
     </Compile>
@@ -370,6 +367,72 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ViewModelToModelMapping.cs">
       <Link>MVVM\ViewModels\ViewModelToModelMapping.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Attributes\ViewToViewModelAttribute.cs">
+      <Link>MVVM\Views\Attributes\ViewToViewModelAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\EventArgs\ViewLoadedEventArgs.cs">
+      <Link>MVVM\Views\EventArgs\ViewLoadedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Extensions\ViewExtensions.dispatching.cs">
+      <Link>MVVM\Views\Extensions\ViewExtensions.dispatching.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Extensions\ViewExtensions.properties.cs">
+      <Link>MVVM\Views\Extensions\ViewExtensions.properties.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Extensions\ViewExtensions.visualtree.cs">
+      <Link>MVVM\Views\Extensions\ViewExtensions.visualtree.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Helpers\ViewToViewModelMappingHelper.cs">
+      <Link>MVVM\Views\Helpers\ViewToViewModelMappingHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Interfaces\IDataWindow.cs">
+      <Link>MVVM\Views\Interfaces\IDataWindow.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Interfaces\IPage.cs">
+      <Link>MVVM\Views\Interfaces\IPage.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Interfaces\IPhonePage.cs">
+      <Link>MVVM\Views\Interfaces\IPhonePage.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Interfaces\IUserControl.cs">
+      <Link>MVVM\Views\Interfaces\IUserControl.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Interfaces\IView.cs">
+      <Link>MVVM\Views\Interfaces\IView.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Interfaces\IViewLoadedManager.cs">
+      <Link>MVVM\Views\Interfaces\IViewLoadedManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Interfaces\IViewManager.cs">
+      <Link>MVVM\Views\Interfaces\IViewManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Interfaces\IViewModelWrapper.cs">
+      <Link>MVVM\Views\Interfaces\IViewModelWrapper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Interfaces\IViewPropertySelector.cs">
+      <Link>MVVM\Views\Interfaces\IViewPropertySelector.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\ViewLoadedManager.cs">
+      <Link>MVVM\Views\ViewLoadedManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\ViewManager.cs">
+      <Link>MVVM\Views\ViewManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\ViewModelWrapper.cs">
+      <Link>MVVM\Views\ViewModelWrapper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\ViewPropertySelector.cs">
+      <Link>MVVM\Views\ViewPropertySelector.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\ViewToViewModelMapping.cs">
+      <Link>MVVM\Views\ViewToViewModelMapping.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\ViewToViewModelMappingContainer.cs">
+      <Link>MVVM\Views\ViewToViewModelMappingContainer.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\WeakViewInfo.cs">
+      <Link>MVVM\Views\WeakViewInfo.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
