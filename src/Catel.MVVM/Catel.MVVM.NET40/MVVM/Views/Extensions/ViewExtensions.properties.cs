@@ -11,7 +11,6 @@ namespace Catel.MVVM.Views
     using System.ComponentModel;
     using System.Linq;
     
-
 #if XAMARIN
     
 #elif NETFX_CORE
@@ -21,8 +20,6 @@ namespace Catel.MVVM.Views
     using Catel.Windows.Data;
     using System.Windows;
 #endif
-
-
 
     public static partial class ViewExtensions
     {

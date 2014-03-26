@@ -7,9 +7,6 @@
 
 namespace Catel.Services
 {
-    using Catel.MVVM;
-    using Catel.MVVM.Views;
-
     /// <summary>
     /// Available tombstoning modes.
     /// </summary>
@@ -60,12 +57,5 @@ namespace Catel.Services
         /// </summary>
         /// <value>The startup mode.</value>
         StartupMode StartupMode { get; }
-
-        /// <summary>
-        /// Determines whether the specified phone page can handle navigation.
-        /// </summary>
-        /// <param name="phonePage">The phone page.</param>
-        /// <returns><c>true</c> if this instance can handle navigation; otherwise, <c>false</c>.</returns>
-        bool CanHandleNavigation(IPhonePage phonePage);
     }
 }

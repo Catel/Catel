@@ -4,14 +4,14 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel
+namespace Catel.MVVM.Navigation
 {
     using System;
 
-#if !NETFX_CORE
-    using System.Windows.Navigation;
-#else
+#if NETFX_CORE
     using global::Windows.UI.Xaml.Navigation;
+#else
+    using System.Windows.Navigation;
 #endif
 
     /// <summary>
@@ -87,7 +87,7 @@ namespace Catel
         /// <returns><c>true</c> if the navigation is for the specified view model; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentException">The <paramref name="uriString"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="viewType"/> is <c>null</c>.</exception>
-        public static bool IsNavigationForView(string uriString, Type viewType)
+        public static bool IsNavigationForView(this string uriString, Type viewType)
         {
             Argument.IsNotNullOrWhitespace("uriString", uriString);
             Argument.IsNotNull("viewType", viewType);
@@ -136,6 +136,21 @@ namespace Catel
 #else
             string uriString = UrlHelper.GetSafeUriString(e.Uri);
 #endif
+
+            return uriString;
+        }
+
+        /// <summary>
+        /// Gets the URI from the navigated context.
+        /// </summary>
+        /// <param name="uri">The URI.</param>
+        /// <returns>The uri.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="uri" /> is <c>null</c> or whitespace.</exception>
+        public static string GetUriWithoutQueryInfo(this string uri)
+        {
+            Argument.IsNotNull("uri", uri);
+
+            string uriString = uri;
 
             return uriString;
         }

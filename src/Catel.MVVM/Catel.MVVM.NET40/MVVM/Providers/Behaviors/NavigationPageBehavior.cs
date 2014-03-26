@@ -20,7 +20,7 @@ namespace Catel.MVVM.Providers
     /// <summary>
     /// A behavior implementation for a <see cref="Page"/>. 
     /// </summary>
-    public class NavigationPageBehavior : MVVMBehaviorBase<Page, NavigationPageLogic>
+    public class NavigationPageBehavior : MVVMBehaviorBase<Page, PageLogic>
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
@@ -42,7 +42,7 @@ namespace Catel.MVVM.Providers
         /// Creates the logic required for MVVM.
         /// </summary>
         /// <returns>The <see cref="LogicBase"/> implementation uses by this behavior.</returns>
-        protected override NavigationPageLogic CreateLogic()
+        protected override PageLogic CreateLogic()
         {
             var associatedObjectType = AssociatedObject.GetType();
             if (!associatedObjectType.ImplementsInterfaceEx<IPage>())
@@ -52,7 +52,7 @@ namespace Catel.MVVM.Providers
                 throw new InvalidOperationException(error);
             }
 
-            return new NavigationPageLogic((IPage)AssociatedObject, ViewModelType);
+            return new PageLogic((IPage)AssociatedObject, ViewModelType);
         }
     }
 }

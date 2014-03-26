@@ -38,30 +38,6 @@ namespace Catel.Services
         /// </summary>
         /// <value>The startup mode.</value>
         public StartupMode StartupMode { get; private set; }
-
-        /// <summary>
-        /// Determines whether the specified phone page can handle navigation.
-        /// </summary>
-        /// <param name="phonePage">The phone page.</param>
-        /// <returns><c>true</c> if this instance can handle navigation; otherwise, <c>false</c>.</returns>
-        public bool CanHandleNavigation(IPhonePage phonePage)
-        {
-            if (phonePage == null)
-            {
-                return false;
-            }
-
-            var rootFrame = Application.Current.RootVisual.FindVisualDescendant(e => e is PhoneApplicationFrame) as PhoneApplicationFrame;
-            if (rootFrame == null)
-            {
-                return false;
-            }
-
-            var content = rootFrame.Content;
-            return ReferenceEquals(content, phonePage);
-        }
-
-
     }
 #endif
 }

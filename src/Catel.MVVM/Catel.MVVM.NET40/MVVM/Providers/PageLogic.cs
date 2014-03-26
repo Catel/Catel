@@ -13,17 +13,17 @@ namespace Catel.MVVM.Providers
     /// <summary>
     /// MVVM Provider behavior implementation for a navigation page.
     /// </summary>
-    public class NavigationPageLogic : NavigationLogicBase<IPage>
+    public class PageLogic : NavigationLogicBase<IPage>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="NavigationPageLogic"/> class.
+        /// Initializes a new instance of the <see cref="PageLogic"/> class.
         /// </summary>
         /// <param name="targetPage">The page this provider should take care of.</param>
         /// <param name="viewModelType">Type of the view model.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="targetPage"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> does not implement interface <see cref="IViewModel"/>.</exception>
-        public NavigationPageLogic(IPage targetPage, Type viewModelType)
+        public PageLogic(IPage targetPage, Type viewModelType)
             : base(targetPage, viewModelType)
         {
         }

@@ -8,6 +8,7 @@ namespace Catel.MVVM.Providers
 {
     using System;
     using Catel.IoC;
+    using Catel.MVVM.Navigation;
     using Catel.Services;
     using Logging;
     using MVVM;
@@ -35,11 +36,6 @@ namespace Catel.MVVM.Providers
         #endregion
 
         #region Fields
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         /// <summary>
         /// A boolean representing whether the application has recovered from tombstoning.
         /// </summary>
@@ -109,15 +105,6 @@ namespace Catel.MVVM.Providers
         {
             get { return !_hasNavigatedAway; }
         }
-
-        /// <summary>
-        /// Gets a value indicating whether this instance can handle navigation.
-        /// </summary>
-        /// <value><c>true</c> if this instance can handle navigation; otherwise, <c>false</c>.</value>
-        protected override bool CanHandleNavigation
-        {
-            get { return true; }
-        }
         #endregion
 
         #region Events
@@ -169,18 +156,6 @@ namespace Catel.MVVM.Providers
         }
 
         /// <summary>
-        /// Determines whether this instance can handle the current navigation event.
-        /// <para />
-        /// This method should only be implemented by deriving types if the <see cref="CanHandleNavigation"/>
-        /// is not sufficient.
-        /// </summary>
-        /// <returns><c>true</c> if this instance can handle the navigation event; otherwise, <c>false</c>.</returns>
-        protected override bool CanHandleNavigationAdvanced()
-        {
-            return _phoneService.CanHandleNavigation((IPhonePage)TargetView);
-        }
-
-        /// <summary>
         /// Called when the target view is loaded.
         /// </summary>
         /// <param name="sender">The sender.</param>
@@ -218,14 +193,14 @@ namespace Catel.MVVM.Providers
         /// <summary> 
         /// Tombstones the application.
         /// </summary>
-        private void TombstoneIfRequired(NavigationEventArgs e)
+        private void TombstoneIfRequired(NavigatedEventArgs e)
         {
             if (_isTombstoned)
             {
                 return;
             }
 
-            var uriString = e.GetUriWithoutQueryInfo();
+            var uriString = e.Uri.GetUriWithoutQueryInfo();
             if (!uriString.IsNavigationToExternal())
             {
                 return;
@@ -326,7 +301,7 @@ namespace Catel.MVVM.Providers
         /// Called when the control has just navigated to this page.
         /// </summary>
         /// <param name="e">The <see cref="NavigationEventArgs" /> instance containing the event data.</param>
-        protected override void OnNavigatedToPage(NavigationEventArgs e)
+        protected override void OnNavigatedToPage(NavigatedEventArgs e)
         {
             RecoverFromTombstoneIfRequired();
 
@@ -339,7 +314,7 @@ namespace Catel.MVVM.Providers
         /// Called when the control has just navigated away from this page.
         /// </summary>
         /// <param name="e">The <see cref="NavigationEventArgs"/> instance containing the event data.</param>
-        protected override void OnNavigatedAwayFromPage(NavigationEventArgs e)
+        protected override void OnNavigatedAwayFromPage(NavigatedEventArgs e)
         {
             // Manual tombstoning in navigation because otherwise it will be too late to handle tombstoning
             TombstoneIfRequired(e);

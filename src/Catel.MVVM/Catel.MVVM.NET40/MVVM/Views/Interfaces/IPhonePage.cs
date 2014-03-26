@@ -10,20 +10,10 @@ namespace Catel.MVVM.Views
     using MVVM;
 
     /// <summary>
-    /// Interface defining functionality for a phone application page.
+    /// Interface defining functionality for a phone page.
     /// </summary>
-    public interface IPhonePage : IView
+    public interface IPhonePage : INavigationView
     {
-        /// <summary>
-        /// Gets or sets a value indicating whether navigating away from the page should save the view model.
-        /// <para />
-        /// The default value is <c>true</c>.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if navigating away should save the view model; otherwise, <c>false</c>.
-        /// </value>
-        bool NavigatingAwaySavesViewModel { get; set; }
-
         /// <summary>
         /// Gets or sets a value indicating whether the back key cancels the view model. This
         /// means that <see cref="IViewModel.CancelViewModel"/> will be called when the back key is pressed.

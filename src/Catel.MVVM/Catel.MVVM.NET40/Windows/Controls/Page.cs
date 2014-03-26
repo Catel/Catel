@@ -8,6 +8,7 @@ namespace Catel.Windows.Controls
 {
     using System;
     using System.ComponentModel;
+    using Catel.MVVM.Navigation;
     using Catel.MVVM.Providers;
     using Catel.MVVM.Views;
     using IoC;
@@ -47,7 +48,7 @@ namespace Catel.Windows.Controls
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private static readonly IViewModelLocator _viewModelLocator;
-        private readonly NavigationPageLogic _logic;
+        private readonly PageLogic _logic;
 
         private event EventHandler<EventArgs> _viewLoaded;
         private event EventHandler<EventArgs> _viewUnloaded;
@@ -90,7 +91,7 @@ namespace Catel.Windows.Controls
                 }
             }
 
-            _logic = new NavigationPageLogic(this, viewModelType);
+            _logic = new PageLogic(this, viewModelType);
             _logic.TargetViewPropertyChanged += (sender, e) =>
             {
 #if !NET
@@ -168,7 +169,7 @@ namespace Catel.Windows.Controls
         /// </summary>
         public Type ViewModelType
         {
-            get { return _logic.GetValue<NavigationPageLogic, Type>(x => x.ViewModelType); }
+            get { return _logic.GetValue<PageLogic, Type>(x => x.ViewModelType); }
         }
 
         /// <summary>
@@ -180,8 +181,8 @@ namespace Catel.Windows.Controls
         /// <value><c>true</c> if the view model container should prevent view model creation; otherwise, <c>false</c>.</value>
         public bool PreventViewModelCreation
         {
-            get { return _logic.GetValue<NavigationPageLogic, bool>(x => x.PreventViewModelCreation); }
-            set { _logic.SetValue<NavigationPageLogic>(x => x.PreventViewModelCreation = value); }
+            get { return _logic.GetValue<PageLogic, bool>(x => x.PreventViewModelCreation); }
+            set { _logic.SetValue<PageLogic>(x => x.PreventViewModelCreation = value); }
         }
 
         /// <summary>
@@ -190,7 +191,21 @@ namespace Catel.Windows.Controls
         /// <value>The view model.</value>
         public IViewModel ViewModel
         {
-            get { return _logic.GetValue<NavigationPageLogic, IViewModel>(x => x.ViewModel); }
+            get { return _logic.GetValue<PageLogic, IViewModel>(x => x.ViewModel); }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether navigating away from the page should save the view model.
+        /// <para />
+        /// The default value is <c>true</c>.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if navigating away should save the view model; otherwise, <c>false</c>.
+        /// </value>
+        public bool NavigatingAwaySavesViewModel
+        {
+            get { return _logic.GetValue<PhonePageLogic, bool>(x => x.NavigatingAwaySavesViewModel, true); }
+            set { _logic.SetValue<PhonePageLogic>(x => x.NavigatingAwaySavesViewModel = value); }
         }
 
         /// <summary>

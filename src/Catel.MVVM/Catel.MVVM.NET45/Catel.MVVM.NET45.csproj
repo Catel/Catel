@@ -96,9 +96,6 @@
     <Compile Include="..\Catel.MVVM.NET40\Extensions\INotifyPropertyChangedExtensions.cs">
       <Link>Extensions\INotifyPropertyChangedExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Extensions\NavigationExtensions.cs">
-      <Link>Extensions\NavigationExtensions.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Helpers\ThemeHelper.cs">
       <Link>Helpers\ThemeHelper.cs</Link>
     </Compile>
@@ -315,6 +312,51 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Locators\ViewModelLocator.cs">
       <Link>MVVM\Locators\ViewModelLocator.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Navigation\EventArgs\NavigatedEventArgs.cs">
+      <Link>MVVM\Navigation\EventArgs\NavigatedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Navigation\EventArgs\NavigatingEventArgs.cs">
+      <Link>MVVM\Navigation\EventArgs\NavigatingEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Navigation\EventArgs\NavigationEventArgsBase.cs">
+      <Link>MVVM\Navigation\EventArgs\NavigationEventArgsBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Navigation\Extensions\NavigationExtensions.cs">
+      <Link>MVVM\Navigation\Extensions\NavigationExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Navigation\Extensions\NavigationModeExtensions.cs">
+      <Link>MVVM\Navigation\Extensions\NavigationModeExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Navigation\NavigationAdapter.cs">
+      <Link>MVVM\Navigation\NavigationAdapter.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Navigation\NavigationAdapter.page.sl.cs">
+      <Link>MVVM\Navigation\NavigationAdapter.page.sl.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Navigation\NavigationAdapter.page.winrt.cs">
+      <Link>MVVM\Navigation\NavigationAdapter.page.winrt.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Navigation\NavigationAdapter.page.wpf.cs">
+      <Link>MVVM\Navigation\NavigationAdapter.page.wpf.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Navigation\NavigationAdapter.phone.android.cs">
+      <Link>MVVM\Navigation\NavigationAdapter.phone.android.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Navigation\NavigationAdapter.phone.ios.cs">
+      <Link>MVVM\Navigation\NavigationAdapter.phone.ios.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Navigation\NavigationAdapter.phone.wp.cs">
+      <Link>MVVM\Navigation\NavigationAdapter.phone.wp.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Navigation\NavigationAdapterBase.cs">
+      <Link>MVVM\Navigation\NavigationAdapterBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Navigation\NavigationContext.cs">
+      <Link>MVVM\Navigation\NavigationContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Navigation\NavigationMode.cs">
+      <Link>MVVM\Navigation\NavigationMode.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Providers\Behaviors\MVVMBehaviorBase.cs">
       <Link>MVVM\Providers\Behaviors\MVVMBehaviorBase.cs</Link>
     </Compile>
@@ -342,8 +384,8 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Providers\NavigationLogicBase.cs">
       <Link>MVVM\Providers\NavigationLogicBase.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Providers\NavigationPageLogic.cs">
-      <Link>MVVM\Providers\NavigationPageLogic.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Providers\PageLogic.cs">
+      <Link>MVVM\Providers\PageLogic.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Providers\PhonePageLogic.cs">
       <Link>MVVM\Providers\PhonePageLogic.cs</Link>
@@ -371,6 +413,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Interfaces\IDataWindow.cs">
       <Link>MVVM\Views\Interfaces\IDataWindow.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Interfaces\INavigationView.cs">
+      <Link>MVVM\Views\Interfaces\INavigationView.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Interfaces\IPage.cs">
       <Link>MVVM\Views\Interfaces\IPage.cs</Link>

@@ -1,16 +1,14 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IPage.cs" company="Catel development team">
+// <copyright file="NavigationAdapter.phone.ios.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.MVVM.Views
+#if IOS
+namespace Catel.MVVM.Navigation
 {
-    /// <summary>
-    /// Interface defining functionality for a page.
-    /// </summary>
-    public interface IPage : INavigationView
+    public partial class NavigationAdapter
     {
-
     }
 }
+#endif

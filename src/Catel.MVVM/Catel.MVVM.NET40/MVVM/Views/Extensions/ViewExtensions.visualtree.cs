@@ -11,14 +11,15 @@ namespace Catel.MVVM.Views
     using System.Collections.Generic;
     using System.Linq;
     using Catel.Logging;
-    using Catel.Windows;
 
 #if XAMARIN
     // TODO
 #elif NETFX_CORE
+    using Catel.Windows;
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
 #else
+    using Catel.Windows;
     using System.Windows;
     using System.Windows.Controls;
 #endif
