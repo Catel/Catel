@@ -9,8 +9,8 @@ namespace Catel.Services
     using System;
 
 #if ANDROID
-    using Android.App;
-    using Android.OS;
+    using global::Android.App;
+    using global::Android.OS;
 #elif IOS
     using MonoTouch.CoreFoundation;
 #elif NETFX_CORE

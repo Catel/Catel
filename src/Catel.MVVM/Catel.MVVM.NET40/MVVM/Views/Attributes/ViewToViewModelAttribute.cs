@@ -7,7 +7,6 @@
 namespace Catel.MVVM.Views
 {
     using System;
-    using System.Windows;
 
     #region Enums
     /// <summary>
@@ -56,7 +55,7 @@ namespace Catel.MVVM.Views
     #endregion
 
     /// <summary>
-    /// A mapper attribute to map a <see cref="FrameworkElement"/> (such as the UserControl or the DataWindow) 
+    /// A mapper attribute to map a <see cref="IView"/> (such as the UserControl or the DataWindow) 
     /// property to a view model property.
     /// <para />
     /// This class is very useful when creating custom user controls that need more parameterized settings than just the

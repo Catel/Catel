@@ -300,7 +300,7 @@ namespace Catel.MVVM.Providers
         /// <summary>
         /// Called when the control has just navigated to this page.
         /// </summary>
-        /// <param name="e">The <see cref="NavigationEventArgs" /> instance containing the event data.</param>
+        /// <param name="e">The <see cref="NavigatedEventArgs" /> instance containing the event data.</param>
         protected override void OnNavigatedToPage(NavigatedEventArgs e)
         {
             RecoverFromTombstoneIfRequired();
@@ -313,7 +313,7 @@ namespace Catel.MVVM.Providers
         /// <summary>
         /// Called when the control has just navigated away from this page.
         /// </summary>
-        /// <param name="e">The <see cref="NavigationEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="NavigatedEventArgs"/> instance containing the event data.</param>
         protected override void OnNavigatedAwayFromPage(NavigatedEventArgs e)
         {
             // Manual tombstoning in navigation because otherwise it will be too late to handle tombstoning

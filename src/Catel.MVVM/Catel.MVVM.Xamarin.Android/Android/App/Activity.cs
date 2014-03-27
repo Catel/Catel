@@ -1,38 +1,25 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PhoneApplicationPage.cs" company="Catel development team">
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Activity.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Phone.Controls
+
+namespace Catel.Android.App
 {
     using System;
     using System.ComponentModel;
-    using System.Windows;
+    using Catel.IoC;
+    using Catel.Logging;
+    using Catel.MVVM;
     using Catel.MVVM.Providers;
     using Catel.MVVM.Views;
-    using Catel.Windows;
-    using IoC;
-    using Logging;
-    using MVVM;
-    using Windows.Data;
+    using global::Android.Views;
 
     /// <summary>
-    /// <see cref="PhoneApplicationPage"/> class that supports MVVM with Catel.
+    /// View implementation that automatically takes care of view models.
     /// </summary>
-    /// <remarks>
-    /// This control can resolve a view model in the following ways:<para />
-    /// <list type="numbered">
-    ///   <item>
-    ///     <description>By using the <see cref="GetViewModelType()"/> method.</description>
-    ///   </item>
-    ///   <item>
-    ///     <description>By using the <see cref="IViewModelLocator"/> which is registered in the <see cref="IServiceLocator"/>.</description>
-    ///   </item>
-    /// </list>
-    /// </remarks>
-    /// <exception cref="InvalidOperationException">The view model of the view could not be resolved. Use either the <see cref="GetViewModelType()"/> method or <see cref="IViewModelLocator"/>.</exception>
-    public class PhoneApplicationPage : Microsoft.Phone.Controls.PhoneApplicationPage, IPhonePage
+    public class Activity : global::Android.App.Activity, IPhonePage
     {
         #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
@@ -40,18 +27,15 @@ namespace Catel.Phone.Controls
         private static readonly IViewModelLocator _viewModelLocator;
 
         private readonly PhonePageLogic _logic;
-
-        private event EventHandler<EventArgs> _backKeyPress;
-        private event EventHandler<EventArgs> _viewLoaded;
-        private event EventHandler<EventArgs> _viewUnloaded;
-        private event EventHandler<EventArgs> _viewDataContextChanged;
+        private object _dataContext;
+        private object _content;
         #endregion
 
         #region Constructors
         /// <summary>
-        /// Initializes static members of the <see cref="PhoneApplicationPage"/> class.
+        /// Initializes static members of the <see cref="Activity"/> class.
         /// </summary>
-        static PhoneApplicationPage()
+        static Activity()
         {
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
 
@@ -59,13 +43,9 @@ namespace Catel.Phone.Controls
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PhoneApplicationPage"/> class.
+        /// Initializes a new instance of the <see cref="Activity"/> class.
         /// </summary>
-        /// <remarks>
-        /// It is not possible to inject view models (actually, you can't even
-        /// pass view models during navigation in Windows Phone 7).
-        /// </remarks>
-        public PhoneApplicationPage()
+        public Activity()
         {
             if (CatelEnvironment.IsInDesignMode)
             {
@@ -124,33 +104,32 @@ namespace Catel.Phone.Controls
             _logic.ViewUnloading += (sender, e) => ViewUnloading.SafeInvoke(this);
             _logic.ViewUnloaded += (sender, e) => ViewUnloaded.SafeInvoke(this);
 
-            _logic.Tombstoning += (sender, e) => OnTombstoning();
-            _logic.Tombstoned += (sender, e) => OnTombstoned();
-            _logic.RecoveringFromTombstoning += (sender, e) => OnRecoveringFromTombstoning();
-            _logic.RecoveredFromTombstoning += (sender, e) => OnRecoveredFromTombstoning();
-
             ViewModelChanged.SafeInvoke(this);
-
-            Loaded += (sender, e) =>
-            {
-                OnLoaded(e);
-
-                _viewLoaded.SafeInvoke(this);
-            };
-
-            Unloaded += (sender, e) =>
-            {
-                OnUnloaded(e);
-
-                _viewUnloaded.SafeInvoke(this);
-            };
-
-            BackKeyPress += (sender, e) => _backKeyPress.SafeInvoke(this);
-            this.AddDataContextChangedHandler((sender, e) => _viewDataContextChanged.SafeInvoke(this));
         }
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets or sets the data context.
+        /// </summary>
+        /// <value>The data context.</value>
+        public object DataContext
+        {
+            get { return _dataContext; }
+            set
+            {
+                _dataContext = value;
+
+                DataContextChanged.SafeInvoke(this);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the tag.
+        /// </summary>
+        /// <value>The tag.</value>
+        public object Tag { get; set; }
+
         /// <summary>
         /// Gets the type of the view model that this user control uses.
         /// </summary>
@@ -241,11 +220,17 @@ namespace Catel.Phone.Controls
         /// </summary>
         /// <value>The content.</value>
         /// <returns>The content of the user control.</returns>
-        object IView.Content
-        {
-            get { return Content; }
-            set { Content = value as UIElement; }
+        object IView.Content 
+        { 
+            get { return _content; }
+            set { SetContentView(value as View); }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the view is enabled.
+        /// </summary>
+        /// <value><c>true</c> if the view is enabled; otherwise, <c>false</c>.</value>
+        public bool IsEnabled { get; set; }
         #endregion
 
         #region Events
@@ -253,7 +238,7 @@ namespace Catel.Phone.Controls
         /// Occurs when a property on the container has changed.
         /// </summary>
         /// <remarks>
-        /// This event makes it possible to externally subscribe to property changes of a <see cref="DependencyObject"/>
+        /// This event makes it possible to externally subscribe to property changes of a view
         /// (mostly the container of a view model) because the .NET Framework does not allows us to.
         /// </remarks>
         public event PropertyChangedEventHandler PropertyChanged;
@@ -289,43 +274,68 @@ namespace Catel.Phone.Controls
         public event EventHandler<EventArgs> ViewUnloaded;
 
         /// <summary>
-        /// Occurs when the back key is pressed.
-        /// </summary>
-        event EventHandler<EventArgs> IPhonePage.BackKeyPress
-        {
-            add { _backKeyPress += value; }
-            remove { _backKeyPress -= value; }
-        }
-
-        /// <summary>
         /// Occurs when the view is loaded.
         /// </summary>
-        event EventHandler<EventArgs> IView.Loaded
-        {
-            add { _viewLoaded += value; }
-            remove { _viewLoaded -= value; }
-        }
+        public event EventHandler<EventArgs> Loaded;
 
         /// <summary>
         /// Occurs when the view is unloaded.
         /// </summary>
-        event EventHandler<EventArgs> IView.Unloaded
-        {
-            add { _viewUnloaded += value; }
-            remove { _viewUnloaded -= value; }
-        }
+        public event EventHandler<EventArgs> Unloaded;
 
         /// <summary>
         /// Occurs when the data context has changed.
         /// </summary>
-        event EventHandler<EventArgs> IView.DataContextChanged
-        {
-            add { _viewDataContextChanged += value; }
-            remove { _viewDataContextChanged -= value; }
-        }
+        public event EventHandler<EventArgs> DataContextChanged;
+
+        /// <summary>
+        /// Occurs when the back key is pressed.
+        /// </summary>
+        public event EventHandler<EventArgs> BackKeyPress;
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Set the activity content to an explicit view.
+        /// </summary>
+        public override void SetContentView(View view)
+        {
+            _content = view;
+
+            base.SetContentView(view);
+        }
+
+        /// <summary>
+        /// Called when the view is loaded.
+        /// </summary>
+        protected override void OnResume()
+        {
+            base.OnResume();
+
+            Loaded.SafeInvoke(this);
+        }
+
+        /// <summary>
+        /// Called as part of the activity lifecycle when an activity is going into
+        ///  the background, but has not (yet) been killed.
+        /// </summary>
+        protected override void OnPause()
+        {
+            Unloaded.SafeInvoke(this);
+
+            base.OnPause();
+        }
+
+        /// <summary>
+        /// Called when the activity has detected the user's press of the back key.
+        /// </summary>
+        public override void OnBackPressed()
+        {
+            base.OnBackPressed();
+
+            BackKeyPress.SafeInvoke(this);
+        }
+
         /// <summary>
         /// Gets the type of the view model. If this method returns <c>null</c>, the view model type will be retrieved by naming 
         /// convention using the <see cref="IViewModelLocator"/> registered in the <see cref="IServiceLocator"/>.
@@ -337,13 +347,13 @@ namespace Catel.Phone.Controls
         }
 
         /// <summary>
-        /// Gets the type of the view model at runtime based on the <see cref="FrameworkElement.DataContext"/>. If this method returns 
+        /// Gets the type of the view model at runtime based on the <see cref="DataContext"/>. If this method returns 
         /// <c>null</c>, the earlier determined view model type will be used instead.
         /// </summary>
         /// <param name="dataContext">The data context. This value can be <c>null</c>.</param>
         /// <returns>The type of the view model or <c>null</c> in case it should be auto determined.</returns>
         /// <remarks>
-        /// Note that this method is only called when the <see cref="FrameworkElement.DataContext"/> changes.
+        /// Note that this method is only called when the <see cref="DataContext"/> changes.
         /// </remarks>
         protected virtual Type GetViewModelType(object dataContext)
         {
@@ -351,33 +361,17 @@ namespace Catel.Phone.Controls
         }
 
         /// <summary>
-        /// Gets the instance of the view model at runtime based on the <see cref="FrameworkElement.DataContext"/>. If this method returns 
+        /// Gets the instance of the view model at runtime based on the <see cref="DataContext"/>. If this method returns 
         /// <c>null</c>, the logic will try to construct the view model by itself.
         /// </summary>
         /// <param name="dataContext">The data context. This value can be <c>null</c>.</param>
         /// <returns>The instance of the view model or <c>null</c> in case it should be auto created.</returns>
         /// <remarks>
-        /// Note that this method is only called when the <see cref="FrameworkElement.DataContext"/> changes.
+        /// Note that this method is only called when the <see cref="DataContext"/> changes.
         /// </remarks>
         protected virtual IViewModel GetViewModelInstance(object dataContext)
         {
             return null;
-        }
-
-        /// <summary>
-        /// Called when the page is loaded.
-        /// </summary>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected virtual void OnLoaded(EventArgs e)
-        {
-        }
-
-        /// <summary>
-        /// Called when the page is unloaded.
-        /// </summary>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected virtual void OnUnloaded(EventArgs e)
-        {
         }
 
         /// <summary>
@@ -431,46 +425,6 @@ namespace Catel.Phone.Controls
         protected bool ApplyChanges()
         {
             return _logic.SaveViewModel();
-        }
-
-        /// <summary>
-        /// Called when the view is about to tombstone itself.
-        /// </summary>
-        /// <remarks>
-        /// Note that it is not required to call the base.
-        /// </remarks>
-        protected virtual void OnTombstoning()
-        {
-        }
-
-        /// <summary>
-        /// Called when the view has just tombstoned itself.
-        /// </summary>
-        /// <remarks>
-        /// Note that it is not required to call the base.
-        /// </remarks>
-        protected virtual void OnTombstoned()
-        {
-        }
-
-        /// <summary>
-        /// Called when the view is about to recover itself from a tombstoned state.
-        /// </summary>
-        /// <remarks>
-        /// Note that it is not required to call the base.
-        /// </remarks>
-        protected virtual void OnRecoveringFromTombstoning()
-        {
-        }
-
-        /// <summary>
-        /// Called when the view has just recovered itself from a tombstoned state.
-        /// </summary>
-        /// <remarks>
-        /// Note that it is not required to call the base.
-        /// </remarks>
-        protected virtual void OnRecoveredFromTombstoning()
-        {
         }
         #endregion
     }

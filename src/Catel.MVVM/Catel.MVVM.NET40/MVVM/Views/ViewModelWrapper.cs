@@ -9,25 +9,11 @@ namespace Catel.MVVM.Views
 {
     using System;
 
-#if XAMARIN
-
-#elif NETFX_CORE
-    using global::Windows.UI.Xaml.Controls;
-#else
-    using System.Windows.Controls;
-#endif
-
     /// <summary>
     /// View model wrapper class.
     /// </summary>
-    public class ViewModelWrapper : IViewModelWrapper
+    public partial class ViewModelWrapper : IViewModelWrapper
     {
-#if !XAMARIN
-        private readonly Grid _grid;
-#else
-
-#endif
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelWrapper"/> class.
         /// </summary>
@@ -37,11 +23,7 @@ namespace Catel.MVVM.Views
         {
             Argument.IsNotNull("viewModelWrapper", viewModelWrapper);
 
-#if !XAMARIN
-            _grid = (Grid) viewModelWrapper;
-#else
-            throw new MustBeImplementedException();
-#endif
+            CreateWrapper(viewModelWrapper);
         }
 
         /// <summary>
@@ -50,11 +32,10 @@ namespace Catel.MVVM.Views
         /// <param name="viewModel">The view model.</param>
         public void UpdateViewModel(IViewModel viewModel)
         {
-#if !XAMARIN
-            _grid.DataContext = viewModel;
-#else
-            throw new MustBeImplementedException();
-#endif
+            SetViewModel(viewModel);
         }
+
+        partial void CreateWrapper(object viewModelWrapper);
+        partial void SetViewModel(IViewModel viewModel);
     }
 }

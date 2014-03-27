@@ -6,11 +6,13 @@
 
 namespace Catel.MVVM.Converters
 {
-    using System.Windows;
     using Reflection;
 
-#if NETFX_CORE
+#if XAMARIN
+#elif NETFX_CORE
     using global::Windows.UI.Xaml;
+#else
+    using System.Windows;
 #endif
 
     /// <summary>
@@ -21,7 +23,12 @@ namespace Catel.MVVM.Converters
         /// <summary>
         /// The generic <c>UnSet</c> value, compatible with WPF and Silverlight.
         /// </summary>
-        public static readonly object UnsetValue = DependencyProperty.UnsetValue;
+        public static readonly object UnsetValue = 
+#if XAMARIN
+            null;
+#else
+            DependencyProperty.UnsetValue;
+#endif
 
         /// <summary>
         /// Checks whether the converted must be inverted. This checks the parameter input and checks whether

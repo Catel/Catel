@@ -1,57 +1,41 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PhoneApplicationPage.cs" company="Catel development team">
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="View.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Phone.Controls
+
+namespace Catel.Android.Views
 {
     using System;
     using System.ComponentModel;
-    using System.Windows;
+    using Catel.IoC;
+    using Catel.Logging;
+    using Catel.MVVM;
     using Catel.MVVM.Providers;
     using Catel.MVVM.Views;
-    using Catel.Windows;
-    using IoC;
-    using Logging;
-    using MVVM;
-    using Windows.Data;
+    using global::Android.Content;
 
     /// <summary>
-    /// <see cref="PhoneApplicationPage"/> class that supports MVVM with Catel.
+    /// View implementation that automatically takes care of view models.
     /// </summary>
-    /// <remarks>
-    /// This control can resolve a view model in the following ways:<para />
-    /// <list type="numbered">
-    ///   <item>
-    ///     <description>By using the <see cref="GetViewModelType()"/> method.</description>
-    ///   </item>
-    ///   <item>
-    ///     <description>By using the <see cref="IViewModelLocator"/> which is registered in the <see cref="IServiceLocator"/>.</description>
-    ///   </item>
-    /// </list>
-    /// </remarks>
-    /// <exception cref="InvalidOperationException">The view model of the view could not be resolved. Use either the <see cref="GetViewModelType()"/> method or <see cref="IViewModelLocator"/>.</exception>
-    public class PhoneApplicationPage : Microsoft.Phone.Controls.PhoneApplicationPage, IPhonePage
+    public class View : global::Android.Views.View, IUserControl
     {
         #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private static readonly IViewModelLocator _viewModelLocator;
 
-        private readonly PhonePageLogic _logic;
-
-        private event EventHandler<EventArgs> _backKeyPress;
-        private event EventHandler<EventArgs> _viewLoaded;
-        private event EventHandler<EventArgs> _viewUnloaded;
-        private event EventHandler<EventArgs> _viewDataContextChanged;
+        private readonly UserControlLogic _logic;
+        private object _dataContext;
+        private object _content;
         #endregion
 
         #region Constructors
         /// <summary>
-        /// Initializes static members of the <see cref="PhoneApplicationPage"/> class.
+        /// Initializes static members of the <see cref="View"/> class.
         /// </summary>
-        static PhoneApplicationPage()
+        static View()
         {
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
 
@@ -59,13 +43,10 @@ namespace Catel.Phone.Controls
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PhoneApplicationPage"/> class.
+        /// Initializes a new instance of the <see cref="View"/> class.
         /// </summary>
-        /// <remarks>
-        /// It is not possible to inject view models (actually, you can't even
-        /// pass view models during navigation in Windows Phone 7).
-        /// </remarks>
-        public PhoneApplicationPage()
+        public View(Context context)
+            : base(context)
         {
             if (CatelEnvironment.IsInDesignMode)
             {
@@ -86,7 +67,7 @@ namespace Catel.Phone.Controls
                 }
             }
 
-            _logic = new PhonePageLogic(this, viewModelType);
+            _logic = new UserControlLogic(this, viewModelType);
             _logic.TargetViewPropertyChanged += (sender, e) =>
             {
                 OnPropertyChanged(e);
@@ -124,39 +105,32 @@ namespace Catel.Phone.Controls
             _logic.ViewUnloading += (sender, e) => ViewUnloading.SafeInvoke(this);
             _logic.ViewUnloaded += (sender, e) => ViewUnloaded.SafeInvoke(this);
 
-            _logic.Tombstoning += (sender, e) => OnTombstoning();
-            _logic.Tombstoned += (sender, e) => OnTombstoned();
-            _logic.RecoveringFromTombstoning += (sender, e) => OnRecoveringFromTombstoning();
-            _logic.RecoveredFromTombstoning += (sender, e) => OnRecoveredFromTombstoning();
-
             ViewModelChanged.SafeInvoke(this);
-
-            Loaded += (sender, e) =>
-            {
-                OnLoaded(e);
-
-                _viewLoaded.SafeInvoke(this);
-            };
-
-            Unloaded += (sender, e) =>
-            {
-                OnUnloaded(e);
-
-                _viewUnloaded.SafeInvoke(this);
-            };
-
-            BackKeyPress += (sender, e) => _backKeyPress.SafeInvoke(this);
-            this.AddDataContextChangedHandler((sender, e) => _viewDataContextChanged.SafeInvoke(this));
         }
         #endregion
 
         #region Properties
         /// <summary>
+        /// Gets or sets the data context.
+        /// </summary>
+        /// <value>The data context.</value>
+        public object DataContext
+        {
+            get { return _dataContext; }
+            set
+            {
+                _dataContext = value;
+
+                DataContextChanged.SafeInvoke(this);
+            }
+        }
+
+        /// <summary>
         /// Gets the type of the view model that this user control uses.
         /// </summary>
         public Type ViewModelType
         {
-            get { return _logic.GetValue<PhonePageLogic, Type>(x => x.ViewModelType); }
+            get { return _logic.GetValue<UserControlLogic, Type>(x => x.ViewModelType); }
         }
 
         /// <summary>
@@ -168,8 +142,8 @@ namespace Catel.Phone.Controls
         /// <value><c>true</c> if the view model container should prevent view model creation; otherwise, <c>false</c>.</value>
         public bool PreventViewModelCreation
         {
-            get { return _logic.GetValue<PhonePageLogic, bool>(x => x.PreventViewModelCreation); }
-            set { _logic.SetValue<PhonePageLogic>(x => x.PreventViewModelCreation = value); }
+            get { return _logic.GetValue<UserControlLogic, bool>(x => x.PreventViewModelCreation); }
+            set { _logic.SetValue<UserControlLogic>(x => x.PreventViewModelCreation = value); }
         }
 
         /// <summary>
@@ -178,53 +152,58 @@ namespace Catel.Phone.Controls
         /// <value>The view model.</value>
         public IViewModel ViewModel
         {
-            get { return _logic.GetValue<PhonePageLogic, IViewModel>(x => x.ViewModel); }
+            get { return _logic.GetValue<UserControlLogic, IViewModel>(x => x.ViewModel); }
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether navigating away from the page should save the view model.
+        /// Gets or sets a value indicating whether the user control should close any existing
+        /// view model when the control is unloaded from the visual tree.
+        /// <para />
+        /// Set this property to <c>false</c> if a view model should be kept alive and re-used
+        /// for unloading/loading instead of creating a new one.
+        /// <para />
+        /// By default, this value is <c>true</c>.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if the view model should be closed when the control is unloaded; otherwise, <c>false</c>.
+        /// </value>
+        public bool CloseViewModelOnUnloaded
+        {
+            get { return _logic.GetValue<UserControlLogic, bool>(x => x.CloseViewModelOnUnloaded, true); }
+            set { _logic.SetValue<UserControlLogic>(x => x.CloseViewModelOnUnloaded = value); }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether parent view model containers are supported. If supported,
+        /// the user control will search for a <see cref="IView"/> that implements the <see cref="IViewModelContainer"/>
+        /// interface. During this search, the user control will use both the visual and logical tree.
+        /// <para />
+        /// If a user control does not have any parent control implementing the <see cref="IViewModelContainer"/> interface, searching
+        /// for it is useless and requires the control to search all the way to the top for the implementation. To prevent this from
+        /// happening, set this property to <c>false</c>.
         /// <para />
         /// The default value is <c>true</c>.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if navigating away should save the view model; otherwise, <c>false</c>.
+        /// <c>true</c> if parent view model containers are supported; otherwise, <c>false</c>.
         /// </value>
-        public bool NavigatingAwaySavesViewModel
+        public bool SupportParentViewModelContainers
         {
-            get { return _logic.GetValue<PhonePageLogic, bool>(x => x.NavigatingAwaySavesViewModel, true); }
-            set { _logic.SetValue<PhonePageLogic>(x => x.NavigatingAwaySavesViewModel = value); }
+            get { return _logic.GetValue<UserControlLogic, bool>(x => x.SupportParentViewModelContainers, true); }
+            set { _logic.SetValue<UserControlLogic>(x => x.SupportParentViewModelContainers = value); }
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the back key cancels the view model. This
-        /// means that <see cref="IViewModel.CancelViewModel"/> will be called when the back key is pressed.
-        /// <para/>
-        /// If this property is <c>false</c>, the <see cref="IViewModel.SaveViewModel"/> will be called instead.
-        /// <para/>
-        /// Default value is <c>true</c>.
+        /// Gets or sets a value indicating whether the user control should automatically be disabled when there is no
+        /// active view model.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if the back key cancels the view model; otherwise, <c>false</c>.
+        /// <c>true</c> if the user control should automatically be disabled when there is no active view model; otherwise, <c>false</c>.
         /// </value>
-        public bool BackKeyCancelsViewModel
+        public bool DisableWhenNoViewModel
         {
-            get { return _logic.GetValue<PhonePageLogic, bool>(x => x.BackKeyCancelsViewModel, true); }
-            set { _logic.SetValue<PhonePageLogic>(x => x.BackKeyCancelsViewModel = value); }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the view model should be closed when navigating forward.
-        /// <para />
-        /// By default, Catel will keep the view models and pages in memory to provide a back-navigation stack. Some
-        /// pages are not required to be listed in the navigation stack and can have this property set to <c>true</c>.
-        /// <para />
-        /// The default value is <c>false</c>.
-        /// </summary>
-        /// <value><c>true</c> if the view modle must be closed on forward navigation; otherwise, <c>false</c>.</value>
-        public bool CloseViewModelOnForwardNavigation
-        {
-            get { return _logic.GetValue<PhonePageLogic, bool>(x => x.CloseViewModelOnForwardNavigation, true); }
-            set { _logic.SetValue<PhonePageLogic>(x => x.CloseViewModelOnForwardNavigation = value); }
+            get { return _logic.GetValue<UserControlLogic, bool>(x => x.DisableWhenNoViewModel, false); }
+            set { _logic.SetValue<UserControlLogic>(x => x.DisableWhenNoViewModel = value); }
         }
 
         /// <summary>
@@ -237,15 +216,31 @@ namespace Catel.Phone.Controls
         }
 
         /// <summary>
+        /// Gets the tag of the view.
+        /// </summary>
+        /// <value>The tag.</value>
+        object IView.Tag
+        {
+            get { return Tag; }
+            set { Tag = (Java.Lang.Object)value; }
+        }
+
+        /// <summary>
         /// Gets or sets the content that is contained within a user control.
         /// </summary>
         /// <value>The content.</value>
         /// <returns>The content of the user control.</returns>
         object IView.Content
         {
-            get { return Content; }
-            set { Content = value as UIElement; }
+            get { return _content; }
+            set { SetContentView(value as View); }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the view is enabled.
+        /// </summary>
+        /// <value><c>true</c> if the view is enabled; otherwise, <c>false</c>.</value>
+        public bool IsEnabled { get; set; }
         #endregion
 
         #region Events
@@ -253,7 +248,7 @@ namespace Catel.Phone.Controls
         /// Occurs when a property on the container has changed.
         /// </summary>
         /// <remarks>
-        /// This event makes it possible to externally subscribe to property changes of a <see cref="DependencyObject"/>
+        /// This event makes it possible to externally subscribe to property changes of a view
         /// (mostly the container of a view model) because the .NET Framework does not allows us to.
         /// </remarks>
         public event PropertyChangedEventHandler PropertyChanged;
@@ -289,43 +284,42 @@ namespace Catel.Phone.Controls
         public event EventHandler<EventArgs> ViewUnloaded;
 
         /// <summary>
-        /// Occurs when the back key is pressed.
-        /// </summary>
-        event EventHandler<EventArgs> IPhonePage.BackKeyPress
-        {
-            add { _backKeyPress += value; }
-            remove { _backKeyPress -= value; }
-        }
-
-        /// <summary>
         /// Occurs when the view is loaded.
         /// </summary>
-        event EventHandler<EventArgs> IView.Loaded
-        {
-            add { _viewLoaded += value; }
-            remove { _viewLoaded -= value; }
-        }
+        public event EventHandler<EventArgs> Loaded;
 
         /// <summary>
         /// Occurs when the view is unloaded.
         /// </summary>
-        event EventHandler<EventArgs> IView.Unloaded
-        {
-            add { _viewUnloaded += value; }
-            remove { _viewUnloaded -= value; }
-        }
+        public event EventHandler<EventArgs> Unloaded;
 
         /// <summary>
         /// Occurs when the data context has changed.
         /// </summary>
-        event EventHandler<EventArgs> IView.DataContextChanged
-        {
-            add { _viewDataContextChanged += value; }
-            remove { _viewDataContextChanged -= value; }
-        }
+        public event EventHandler<EventArgs> DataContextChanged;
         #endregion
 
         #region Methods
+        /// <summary>
+        /// This is called when the view is attached to a window.
+        /// </summary>
+        protected override void OnAttachedToWindow()
+        {
+            base.OnAttachedToWindow();
+
+            Loaded.SafeInvoke(this);
+        }
+
+        /// <summary>
+        /// This is called when the view is detached from a window.
+        /// </summary>
+        protected override void OnDetachedFromWindow()
+        {
+            Unloaded.SafeInvoke(this);
+
+            base.OnDetachedFromWindow();
+        }
+
         /// <summary>
         /// Gets the type of the view model. If this method returns <c>null</c>, the view model type will be retrieved by naming 
         /// convention using the <see cref="IViewModelLocator"/> registered in the <see cref="IServiceLocator"/>.
@@ -337,13 +331,13 @@ namespace Catel.Phone.Controls
         }
 
         /// <summary>
-        /// Gets the type of the view model at runtime based on the <see cref="FrameworkElement.DataContext"/>. If this method returns 
+        /// Gets the type of the view model at runtime based on the <see cref="DataContext"/>. If this method returns 
         /// <c>null</c>, the earlier determined view model type will be used instead.
         /// </summary>
         /// <param name="dataContext">The data context. This value can be <c>null</c>.</param>
         /// <returns>The type of the view model or <c>null</c> in case it should be auto determined.</returns>
         /// <remarks>
-        /// Note that this method is only called when the <see cref="FrameworkElement.DataContext"/> changes.
+        /// Note that this method is only called when the <see cref="DataContext"/> changes.
         /// </remarks>
         protected virtual Type GetViewModelType(object dataContext)
         {
@@ -351,33 +345,17 @@ namespace Catel.Phone.Controls
         }
 
         /// <summary>
-        /// Gets the instance of the view model at runtime based on the <see cref="FrameworkElement.DataContext"/>. If this method returns 
+        /// Gets the instance of the view model at runtime based on the <see cref="DataContext"/>. If this method returns 
         /// <c>null</c>, the logic will try to construct the view model by itself.
         /// </summary>
         /// <param name="dataContext">The data context. This value can be <c>null</c>.</param>
         /// <returns>The instance of the view model or <c>null</c> in case it should be auto created.</returns>
         /// <remarks>
-        /// Note that this method is only called when the <see cref="FrameworkElement.DataContext"/> changes.
+        /// Note that this method is only called when the <see cref="DataContext"/> changes.
         /// </remarks>
         protected virtual IViewModel GetViewModelInstance(object dataContext)
         {
             return null;
-        }
-
-        /// <summary>
-        /// Called when the page is loaded.
-        /// </summary>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected virtual void OnLoaded(EventArgs e)
-        {
-        }
-
-        /// <summary>
-        /// Called when the page is unloaded.
-        /// </summary>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected virtual void OnUnloaded(EventArgs e)
-        {
         }
 
         /// <summary>
@@ -431,46 +409,6 @@ namespace Catel.Phone.Controls
         protected bool ApplyChanges()
         {
             return _logic.SaveViewModel();
-        }
-
-        /// <summary>
-        /// Called when the view is about to tombstone itself.
-        /// </summary>
-        /// <remarks>
-        /// Note that it is not required to call the base.
-        /// </remarks>
-        protected virtual void OnTombstoning()
-        {
-        }
-
-        /// <summary>
-        /// Called when the view has just tombstoned itself.
-        /// </summary>
-        /// <remarks>
-        /// Note that it is not required to call the base.
-        /// </remarks>
-        protected virtual void OnTombstoned()
-        {
-        }
-
-        /// <summary>
-        /// Called when the view is about to recover itself from a tombstoned state.
-        /// </summary>
-        /// <remarks>
-        /// Note that it is not required to call the base.
-        /// </remarks>
-        protected virtual void OnRecoveringFromTombstoning()
-        {
-        }
-
-        /// <summary>
-        /// Called when the view has just recovered itself from a tombstoned state.
-        /// </summary>
-        /// <remarks>
-        /// Note that it is not required to call the base.
-        /// </remarks>
-        protected virtual void OnRecoveredFromTombstoning()
-        {
         }
         #endregion
     }

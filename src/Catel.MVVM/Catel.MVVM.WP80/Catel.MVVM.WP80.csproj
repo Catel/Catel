@@ -371,14 +371,26 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\EventArgs\ViewLoadedEventArgs.cs">
       <Link>MVVM\Views\EventArgs\ViewLoadedEventArgs.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Extensions\ViewExtensions.android.cs">
+      <Link>MVVM\Views\Extensions\ViewExtensions.android.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Extensions\ViewExtensions.cs">
+      <Link>MVVM\Views\Extensions\ViewExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Extensions\ViewExtensions.dispatching.cs">
       <Link>MVVM\Views\Extensions\ViewExtensions.dispatching.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Extensions\ViewExtensions.ios.cs">
+      <Link>MVVM\Views\Extensions\ViewExtensions.ios.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Extensions\ViewExtensions.properties.cs">
       <Link>MVVM\Views\Extensions\ViewExtensions.properties.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Extensions\ViewExtensions.visualtree.cs">
       <Link>MVVM\Views\Extensions\ViewExtensions.visualtree.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Extensions\ViewExtensions.xaml.cs">
+      <Link>MVVM\Views\Extensions\ViewExtensions.xaml.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Interfaces\IDataWindow.cs">
       <Link>MVVM\Views\Interfaces\IDataWindow.cs</Link>
@@ -410,8 +422,17 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\ViewLoadedManager.cs">
       <Link>MVVM\Views\ViewLoadedManager.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\ViewModelWrapper.android.cs">
+      <Link>MVVM\Views\ViewModelWrapper.android.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\ViewModelWrapper.cs">
       <Link>MVVM\Views\ViewModelWrapper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\ViewModelWrapper.ios.cs">
+      <Link>MVVM\Views\ViewModelWrapper.ios.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\ViewModelWrapper.xaml.cs">
+      <Link>MVVM\Views\ViewModelWrapper.xaml.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\ViewPropertySelector.cs">
       <Link>MVVM\Views\ViewPropertySelector.cs</Link>
@@ -743,8 +764,20 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.zh-Hans.resx</DependentUpon>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\ViewModelWrapperService.android.cs">
+      <Link>Services\ViewModelWrapperService.android.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\ViewModelWrapperService.cs">
       <Link>Services\ViewModelWrapperService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\ViewModelWrapperService.ios.cs">
+      <Link>Services\ViewModelWrapperService.ios.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\ViewModelWrapperService.xaml.cs">
+      <Link>Services\ViewModelWrapperService.xaml.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\ViewModelWrapperServiceBase.cs">
+      <Link>Services\ViewModelWrapperServiceBase.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\UserControl.cs">
       <Link>Windows\Controls\UserControl.cs</Link>

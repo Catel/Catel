@@ -216,6 +216,17 @@ namespace Catel.Windows.Controls
         {
             get { return Parent; }
         }
+
+        /// <summary>
+        /// Gets or sets the content that is contained within a user control.
+        /// </summary>
+        /// <value>The content.</value>
+        /// <returns>The content of the user control.</returns>
+        object IView.Content
+        {
+            get { return Content; }
+            set { Content = value as UIElement; }
+        }
         #endregion
 
         #region Events

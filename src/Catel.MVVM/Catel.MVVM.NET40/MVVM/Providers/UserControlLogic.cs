@@ -71,7 +71,7 @@ namespace Catel.MVVM.Providers
             DefaultTransferStylesAndTransitionsToViewModelGridValue = false;
 #endif
 
-#if NET || SL4 || SL5
+#if NET || SL5
             DefaultCreateWarningAndErrorValidatorForViewModelValue = true;
 #endif
         }
@@ -91,9 +91,12 @@ namespace Catel.MVVM.Providers
             SupportParentViewModelContainers = true;
             CloseViewModelOnUnloaded = true;
             UnloadBehavior = DefaultUnloadBehaviorValue;
-            TransferStylesAndTransitionsToViewModelGrid = DefaultTransferStylesAndTransitionsToViewModelGridValue;
 
-#if NET || SL4 || SL5
+#if !XAMARIN
+            TransferStylesAndTransitionsToViewModelGrid = DefaultTransferStylesAndTransitionsToViewModelGridValue;
+#endif
+
+#if NET || SL5
             SkipSearchingForInfoBarMessageControl = DefaultSkipSearchingForInfoBarMessageControlValue;
             CreateWarningAndErrorValidatorForViewModel = DefaultCreateWarningAndErrorValidatorForViewModelValue;
 #endif
@@ -296,10 +299,12 @@ namespace Catel.MVVM.Providers
                 }
 #endif
 
+#if !XAMARIN
                 if (TransferStylesAndTransitionsToViewModelGrid)
                 {
                     wrapOptions |= WrapOptions.TransferStylesAndTransitionsToViewModelGrid;
                 }
+#endif
 
                 Action action = () => viewModelWrapperService.Wrap(targetView, this, wrapOptions);
 

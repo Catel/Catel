@@ -8,10 +8,12 @@ namespace Catel.MVVM.Navigation
 {
     using System;
 
+#if !XAMARIN
 #if NETFX_CORE
     using global::Windows.UI.Xaml.Navigation;
 #else
     using System.Windows.Navigation;
+#endif
 #endif
 
     /// <summary>
@@ -45,6 +47,7 @@ namespace Catel.MVVM.Navigation
             return uriString.Contains("app://external");
         }
 
+#if !XAMARIN
         /// <summary>
         /// Determines whether the navigation is for the specified view.
         /// </summary>
@@ -78,11 +81,12 @@ namespace Catel.MVVM.Navigation
             var uriString = GetUriWithoutQueryInfo(e);
             return IsNavigationForView(uriString, viewType);
         }
+#endif
 
         /// <summary>
         /// Determines whether the navigation is for the specified view model.
         /// </summary>
-        /// <param name="uriString">The <see cref="NavigationEventArgs" /> instance containing the event data.</param>
+        /// <param name="uriString">The uri string instance containing the event data.</param>
         /// <param name="viewType">Type of the view.</param>
         /// <returns><c>true</c> if the navigation is for the specified view model; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentException">The <paramref name="uriString"/> is <c>null</c> or whitespace.</exception>
@@ -102,6 +106,7 @@ namespace Catel.MVVM.Navigation
 #endif
         }
 
+#if !XAMARIN
         /// <summary>
         /// Gets the URI from the navigating context.
         /// </summary>
@@ -139,6 +144,7 @@ namespace Catel.MVVM.Navigation
 
             return uriString;
         }
+#endif
 
         /// <summary>
         /// Gets the URI from the navigated context.
