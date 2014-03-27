@@ -55,6 +55,8 @@ namespace Catel.MVVM.Navigation
         {
             var eventArgs = new NavigatedEventArgs(e.Uri.ToString(), NavigationMode.Unknown);
             HandleNavigatedEvent(eventArgs);
+
+            _lastNavigationContext = e.ExtraData;
         }
     }
 }
