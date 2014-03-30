@@ -13,9 +13,7 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
     using System.IO;
     using System.Linq;
     using System.Runtime.Serialization;
-    using Catel.Collections;
     using Catel.Data;
-    using Catel.Runtime.Serialization.Xml;
     using Catel.Test.Data;
 #if NETFX_CORE
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
@@ -207,48 +205,6 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
                 var c2 = ContainerAbstractClasses.Load(memoryStream, SerializationMode.Xml);
                 Assert.AreEqual(c, c2);
             }
-        }
-
-        [TestMethod]
-        public void DataContractSerializerFactory_NoInstanceTest()
-        {
-            var typeList = new[]
-            {
-                typeof (IEnumerable<IParams>), typeof (ICollection<IParams>),
-                typeof (IDictionary<string, IParams>), typeof (IDictionary<IParams, string>),
-                typeof (IList<IParams>), typeof (Collection<IParams>), typeof (FastObservableCollection<IParams>),
-                 typeof (IEnumerable<KeyValuePair<IParams, object>>), typeof (IEnumerable<Lazy<IParams>>),
-            };
-
-            foreach (var collectionType in typeList)
-            {
-
-                var serializer = new DataContractSerializerFactory().
-                    GetDataContractSerializer(typeof(ContainerAbstractClasses), collectionType, "TestXmlName");
-
-                Assert.IsTrue(serializer.KnownTypes.Contains(typeof(PluginA.Params)));
-                Assert.IsTrue(serializer.KnownTypes.Contains(typeof(PluginB.Params)));
-            }
-        }
-
-        [TestMethod]
-        public void DataContractSerializerFactory_InstanceTest()
-        {
-            var c = new ContainerAbstractClasses();
-
-            var pA = new PluginA.Params();
-            pA.SettingA = "TestA";
-            c.Parameters.Add(pA);
-
-            var pB = new PluginB.Params();
-            pB.SettingB = "TestB";
-            c.Parameters.Add(pB);
-
-            var serializer = new DataContractSerializerFactory().
-                GetDataContractSerializer(typeof(ContainerAbstractClasses), typeof(IDictionary<string, object>), "TestXmlName", null, c.Parameters);
-
-            Assert.IsTrue(serializer.KnownTypes.Contains(typeof(PluginA.Params)));
-            Assert.IsTrue(serializer.KnownTypes.Contains(typeof(PluginB.Params)));
         }
     }
 }
