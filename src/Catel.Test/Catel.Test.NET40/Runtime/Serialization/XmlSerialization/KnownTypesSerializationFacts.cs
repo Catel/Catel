@@ -8,12 +8,15 @@
 namespace Catel.Test.Runtime.Serialization.XmlSerialization
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.IO;
     using System.Linq;
     using System.Runtime.Serialization;
+    using Catel.Collections;
     using Catel.Data;
+    using Catel.Runtime.Serialization.Xml;
     using Catel.Test.Data;
 #if NETFX_CORE
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
@@ -192,7 +195,7 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
             var pA = new PluginA.Params();
             pA.SettingA = "TestA";
             c.Parameters.Add(pA);
-            
+
             var pB = new PluginB.Params();
             pB.SettingB = "TestB";
             c.Parameters.Add(pB);
@@ -204,6 +207,61 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
 
                 var c2 = ContainerAbstractClasses.Load(memoryStream, SerializationMode.Xml);
                 Assert.AreEqual(c, c2);
+            }
+        }
+
+
+        [TestMethod]
+        public void DataContractSerializerFactory_NoInstanceTest()
+        {
+            var typeList = new[]
+            {
+                typeof (IEnumerable<IParams>), typeof (ICollection<IParams>),
+                typeof (IDictionary<string, IParams>), typeof (IDictionary<IParams, string>),
+                typeof (IList<IParams>), typeof (Collection<IParams>), typeof (FastObservableCollection<IParams>),
+                typeof (IEnumerable<KeyValuePair<IParams, object>>), typeof (IEnumerable<Lazy<IParams>>),
+            };
+
+            foreach (var collectionType in typeList)
+            {
+
+                var serializer = new DataContractSerializerFactory().
+                    GetDataContractSerializer(typeof (ContainerAbstractClasses), collectionType, "TestXmlName");
+
+                Assert.IsTrue(serializer.KnownTypes.Contains(typeof (PluginA.Params)));
+                Assert.IsTrue(serializer.KnownTypes.Contains(typeof (PluginB.Params)));
+            }
+        }
+
+        [TestMethod]
+        public void DataContractSerializerFactory_InstanceTest()
+        {
+            var itemList = new IParams[] {new PluginA.Params {SettingA = "TestA"}, new PluginB.Params {SettingB = "TestB"}};
+
+
+            var containerList = new ICollection[]
+            {
+                new Collection<IParams>(itemList), new List<IParams>(itemList),
+                new FastObservableCollection<IParams>(itemList),
+                new Collection<KeyValuePair<IParams, object>>(new[]
+                {
+                    new KeyValuePair<IParams, object>(itemList[0], new object()),
+                    new KeyValuePair<IParams, object>(itemList[1], new object())
+                }),
+                new Collection<Lazy<IParams>>(new[]
+                {
+                    new Lazy<IParams>(() => itemList[0]),
+                    new Lazy<IParams>(() => itemList[1])
+                })
+            };
+
+            foreach (var collection in containerList)
+            {
+                var serializer = new DataContractSerializerFactory().
+                    GetDataContractSerializer(typeof(object), collection.GetType(), "TestXmlName", null, collection);
+
+                Assert.IsTrue(serializer.KnownTypes.Contains(typeof(PluginA.Params)));
+                Assert.IsTrue(serializer.KnownTypes.Contains(typeof(PluginB.Params)));
             }
         }
     }

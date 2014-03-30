@@ -128,36 +128,8 @@ namespace Catel.Runtime.Serialization.Xml
                 return;
             }
 
+            GetKnownTypesForItemsInstance(obj, serializerTypeInfo);
             GetKnownTypes(objectType, serializerTypeInfo);
-
-            // Note: the code below is specific for instants of objects, cannot be moved to the GetKnownTypes
-            if (objectType == typeof(List<KeyValuePair<string, object>>))
-            {
-                foreach (var keyValuePair in ((List<KeyValuePair<string, object>>)obj))
-                {
-                    GetKnownTypesForInstance(keyValuePair.Value, serializerTypeInfo);
-                }
-            }
-            else if (objectType == typeof(List<PropertyValue>))
-            {
-                foreach (var propertyValue in ((List<PropertyValue>)obj))
-                {
-                    GetKnownTypesForInstance(propertyValue.Value, serializerTypeInfo);
-                }
-            }
-
-            // Collections might contain interface types, so if this is an IEnumerable, we need to loop all the instances (performance warning!)
-            else if ((obj is IEnumerable) && (!(obj is string)))
-            {
-                var objAsIEnumerable = (IEnumerable)obj;
-                foreach (object item in objAsIEnumerable)
-                {
-                    if (item != null)
-                    {
-                        GetKnownTypesForInstance(item, serializerTypeInfo);
-                    }
-                }
-            }
         }
 
         /// <summary>
@@ -174,6 +146,8 @@ namespace Catel.Runtime.Serialization.Xml
             }
 
             Log.Debug("Getting known types for '{0}'", type.GetSafeFullName());
+
+            GetKnownTypesForItems(type, serializerTypeInfo);
 
             // If this is an interface or abstract, we need to retieve all items that might possible implement or derive
             bool isInterface = type.IsInterfaceEx();
@@ -287,6 +261,42 @@ namespace Catel.Runtime.Serialization.Xml
                     {
                         serializerTypeInfo.AddTypeAsHandled(attributeType);
                     }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the known types of IEnumerable type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="serializerTypeInfo">The serializer type info.</param>
+        /// <returns>Array of <see cref="Type"/> that are found in the object type.</returns>
+        private void GetKnownTypesForItems(Type type, XmlSerializerTypeInfo serializerTypeInfo)
+        {
+            if (type.ImplementsInterfaceEx<IEnumerable>())
+            {
+                foreach (var argument in type.GenericTypeArguments)
+                {
+                    GetKnownTypes(argument, serializerTypeInfo);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the known types of IEnumerable instance.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <param name="serializerTypeInfo">The serializer type info.</param>
+        /// <returns>Array of <see cref="Type"/> that are found in the object type.</returns>
+        private void GetKnownTypesForItemsInstance(object obj, XmlSerializerTypeInfo serializerTypeInfo)
+        {
+            var ienumerable = obj as IEnumerable;
+
+            if (ienumerable != null)
+            {
+                foreach (var item in ienumerable)
+                {
+                    GetKnownTypesForInstance(item, serializerTypeInfo);
                 }
             }
         }
