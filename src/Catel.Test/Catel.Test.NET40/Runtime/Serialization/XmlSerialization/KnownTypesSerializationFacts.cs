@@ -224,9 +224,8 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
 
             foreach (var collectionType in typeList)
             {
-
                 var serializer = new DataContractSerializerFactory().
-                    GetDataContractSerializer(typeof (ContainerAbstractClasses), collectionType, "TestXmlName");
+                    GetDataContractSerializer(typeof (ContainerAbstractClasses), collectionType, "TestXmlName", null, null);
 
                 Assert.IsTrue(serializer.KnownTypes.Contains(typeof (PluginA.Params)));
                 Assert.IsTrue(serializer.KnownTypes.Contains(typeof (PluginB.Params)));

@@ -36,7 +36,7 @@ namespace Catel.Runtime.Serialization.Xml
 
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
             var dataContractSerializerFactory = dependencyResolver.Resolve<IDataContractSerializerFactory>();
-            var dataContractSerializer = dataContractSerializerFactory.GetDataContractSerializer(typeof(object), objectType, elementName);
+            var dataContractSerializer = dataContractSerializerFactory.GetDataContractSerializer(typeof(object), objectType, elementName, null, null);
 
             var document = new XDocument();
 
@@ -64,7 +64,7 @@ namespace Catel.Runtime.Serialization.Xml
 
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
             var dataContractSerializerFactory = dependencyResolver.Resolve<IDataContractSerializerFactory>();
-            var dataContractSerializer = dataContractSerializerFactory.GetDataContractSerializer(typeof(object), objectType, xmlName);
+            var dataContractSerializer = dataContractSerializerFactory.GetDataContractSerializer(typeof(object), objectType, xmlName, null, null);
 
             var attribute = element.Attribute(XName.Get("type", "http://catel.codeplex.com"));
             if (attribute != null)
@@ -74,7 +74,7 @@ namespace Catel.Runtime.Serialization.Xml
                                                select t).FirstOrDefault();
                 if (actualTypeToDeserialize != null)
                 {
-                    dataContractSerializer = dataContractSerializerFactory.GetDataContractSerializer(typeof(object), actualTypeToDeserialize, xmlName);
+                    dataContractSerializer = dataContractSerializerFactory.GetDataContractSerializer(typeof(object), actualTypeToDeserialize, xmlName, null, null);
                 }
                 else
                 {

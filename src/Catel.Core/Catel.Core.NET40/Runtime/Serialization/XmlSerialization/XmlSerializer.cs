@@ -149,7 +149,7 @@ namespace Catel.Runtime.Serialization.Xml
                     xmlName = propertyDataManager.MapPropertyNameToXmlElementName(type, memberName);
                 }
 
-                _dataContractSerializerFactory.GetDataContractSerializer(type, memberRepresentedType, xmlName);
+                _dataContractSerializerFactory.GetDataContractSerializer(type, memberRepresentedType, xmlName, null, null);
             }
             catch (Exception ex)
             {
@@ -499,7 +499,7 @@ namespace Catel.Runtime.Serialization.Xml
 
             //var xmlSerializationContextInfo = context.Context;
             //var serializer = xmlSerializationContextInfo.GetDataContractSerializer();
-            var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, propertyTypeToDeserialize, xmlName);
+            var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, propertyTypeToDeserialize, xmlName, null, null);
 
             using (var xmlReader = element.CreateReader())
             {
