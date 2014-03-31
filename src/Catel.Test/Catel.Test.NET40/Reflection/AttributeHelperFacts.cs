@@ -9,7 +9,6 @@ namespace Catel.Test.Reflection
     using System;
     using System.Reflection;
     using Catel.Reflection;
-    using Catel.Runtime.Serialization.Binary;
 
 #if NETFX_CORE
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
@@ -36,7 +35,7 @@ namespace Catel.Test.Reflection
             [TestMethod]
             public void ThrowsArgumentNullExceptionForNullPropertyInfo()
             {
-                RedirectTypeAttribute attribute;
+                ObsoleteAttribute attribute;
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => AttributeHelper.TryGetAttribute((MemberInfo)null, out attribute));
             }
 

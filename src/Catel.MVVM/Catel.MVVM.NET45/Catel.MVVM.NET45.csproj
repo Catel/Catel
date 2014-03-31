@@ -471,8 +471,17 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\WeakViewInfo.cs">
       <Link>MVVM\Views\WeakViewInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\AccelerometerService.wp.cs">
+      <Link>Services\AccelerometerService.wp.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\AutoCompletionService.cs">
       <Link>Services\AutoCompletionService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\CameraService.wp.cs">
+      <Link>Services\CameraService.wp.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\CameraServiceBase.cs">
+      <Link>Services\CameraServiceBase.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\DispatcherService.cs">
       <Link>Services\DispatcherService.cs</Link>
@@ -588,8 +597,20 @@
     <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\IViewModelWrapperService.cs">
       <Link>Services\Interfaces\IViewModelWrapperService.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\LocationService.wp.cs">
+      <Link>Services\LocationService.wp.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\MessageService.cs">
       <Link>Services\MessageService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Models\AccelerometerValue.cs">
+      <Link>Services\Models\AccelerometerValue.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Models\Location.cs">
+      <Link>Services\Models\Location.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Models\Size.cs">
+      <Link>Services\Models\Size.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\NamingConvention.cs">
       <Link>Services\NamingConvention.cs</Link>
@@ -603,8 +624,20 @@
     <Compile Include="..\Catel.MVVM.NET40\Services\PhoneService.cs">
       <Link>Services\PhoneService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Services\PleaseWaitService.cs">
-      <Link>Services\PleaseWaitService.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\PleaseWaitService.android.cs">
+      <Link>Services\PleaseWaitService.android.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\PleaseWaitService.ios.cs">
+      <Link>Services\PleaseWaitService.ios.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\PleaseWaitService.winrt.cs">
+      <Link>Services\PleaseWaitService.winrt.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\PleaseWaitService.wp.cs">
+      <Link>Services\PleaseWaitService.wp.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\PleaseWaitService.wpf.cs">
+      <Link>Services\PleaseWaitService.wpf.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\ProcessService.cs">
       <Link>Services\ProcessService.cs</Link>
@@ -618,6 +651,9 @@
     <Compile Include="..\Catel.MVVM.NET40\Services\SelectDirectoryService.cs">
       <Link>Services\SelectDirectoryService.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\SensorServiceBase.cs">
+      <Link>Services\SensorServiceBase.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\SplashScreenService.cs">
       <Link>Services\SplashScreenService.cs</Link>
     </Compile>
@@ -627,8 +663,20 @@
     <Compile Include="..\Catel.MVVM.NET40\Services\StateService.cs">
       <Link>Services\StateService.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Test\AccelerometerService.cs">
+      <Link>Services\Test\AccelerometerService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Test\CameraService.cs">
+      <Link>Services\Test\CameraService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Test\LocationService.cs">
+      <Link>Services\Test\LocationService.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\Test\MessageService.cs">
       <Link>Services\Test\MessageService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Test\NavigationService.cs">
+      <Link>Services\Test\NavigationService.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\Test\OpenFileService.cs">
       <Link>Services\Test\OpenFileService.cs</Link>
@@ -642,11 +690,17 @@
     <Compile Include="..\Catel.MVVM.NET40\Services\Test\SaveFileService.cs">
       <Link>Services\Test\SaveFileService.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\Test\SensorServiceBase.cs">
+      <Link>Services\Test\SensorServiceBase.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\Test\UIVisualizerService.cs">
       <Link>Services\Test\UIVisualizerService.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\UIVisualizerService.cs">
       <Link>Services\UIVisualizerService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\VibrateService.wp.cs">
+      <Link>Services\VibrateService.wp.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\ViewExportService.cs">
       <Link>Services\ViewExportService.cs</Link>

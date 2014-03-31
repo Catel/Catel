@@ -43,6 +43,9 @@
   </PropertyGroup>
   <ItemGroup>
     <!--A reference to the entire .Net Framework and Windows SDK are automatically included-->
+    <None Include="..\Catel.Test.NET40\App.config">
+      <Link>App.config</Link>
+    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -155,6 +158,9 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Data\PropertyDataManagerFacts.cs">
       <Link>Data\PropertyDataManagerFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\Data\SavableModelBaseTest.cs">
+      <Link>Data\SavableModelBaseTest.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Data\TestClasses\ComplexSerializationHierarchy.cs">
       <Link>Data\TestClasses\ComplexSerializationHierarchy.cs</Link>
@@ -345,6 +351,60 @@
     <Compile Include="..\Catel.Test.NET40\MVVM\Commands\ViewModelCommandManagerFacts.cs">
       <Link>MVVM\Commands\ViewModelCommandManagerFacts.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Converters\BooleanToGrayscaleConverterTest.cs">
+      <Link>MVVM\Converters\BooleanToGrayscaleConverterTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Converters\BooleanToOppositeBooleanConverterTest.cs">
+      <Link>MVVM\Converters\BooleanToOppositeBooleanConverterTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Converters\BooleanToTextConverterTest.cs">
+      <Link>MVVM\Converters\BooleanToTextConverterTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Converters\BooleanToVisibilityConverterTest.cs">
+      <Link>MVVM\Converters\BooleanToVisibilityConverterTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Converters\ColorToBrushConverterTest.cs">
+      <Link>MVVM\Converters\ColorToBrushConverterTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Converters\ContainsItemsConverterTest.cs">
+      <Link>MVVM\Converters\ContainsItemsConverterTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Converters\CountVisibilityConverterTest.cs">
+      <Link>MVVM\Converters\CountVisibilityConverterTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Converters\EmptyStringToVisibilityConverterTest.cs">
+      <Link>MVVM\Converters\EmptyStringToVisibilityConverterTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Converters\FormattingConverterTest.cs">
+      <Link>MVVM\Converters\FormattingConverterTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Converters\IsSelectedConverterTest.cs">
+      <Link>MVVM\Converters\IsSelectedConverterTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Converters\IsSelectedValueConverterTest.cs">
+      <Link>MVVM\Converters\IsSelectedValueConverterTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Converters\MethodToValueConverterTest.cs">
+      <Link>MVVM\Converters\MethodToValueConverterTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Converters\MultiplyConverterTest.cs">
+      <Link>MVVM\Converters\MultiplyConverterTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Converters\ReferenceToBooleanConverterTest.cs">
+      <Link>MVVM\Converters\ReferenceToBooleanConverterTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Converters\ReferenceToCollapsingVisibilityConverterTest.cs">
+      <Link>MVVM\Converters\ReferenceToCollapsingVisibilityConverterTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Converters\ShortDateFormattingConverterTest.cs">
+      <Link>MVVM\Converters\ShortDateFormattingConverterTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Converters\TextToLowerCaseConverterFacts.cs">
+      <Link>MVVM\Converters\TextToLowerCaseConverterFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Converters\TextToUpperCaseConverterFacts.cs">
+      <Link>MVVM\Converters\TextToUpperCaseConverterFacts.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\MVVM\Exceptions\InvalidViewModelExceptionFacts.cs">
       <Link>MVVM\Exceptions\InvalidViewModelExceptionFacts.cs</Link>
     </Compile>
@@ -380,6 +440,9 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\MVVM\Services\NamingConventionTest.cs">
       <Link>MVVM\Services\NamingConventionTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Test.NET40\MVVM\Services\SplashScreenServiceTest.cs">
+      <Link>MVVM\Services\SplashScreenServiceTest.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\MVVM\Services\ViewModelServiceBaseTest.cs">
       <Link>MVVM\Services\ViewModelServiceBaseTest.cs</Link>
@@ -444,6 +507,9 @@
     <Compile Include="..\Catel.Test.NET40\Reflection\AppDomainExtensionsTest.cs">
       <Link>Reflection\AppDomainExtensionsTest.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\Reflection\AttributeHelperFacts.cs">
+      <Link>Reflection\AttributeHelperFacts.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\Reflection\PropertyHelperFacts.cs">
       <Link>Reflection\PropertyHelperFacts.cs</Link>
     </Compile>
@@ -504,6 +570,9 @@
     <Compile Include="..\Catel.Test.NET40\Scoping\ScopeManagerFacts.cs">
       <Link>Scoping\ScopeManagerFacts.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.NET40\Services\LanguageServiceFacts.cs">
+      <Link>Services\LanguageServiceFacts.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\Text\StringBuilderExtensionFacts.cs">
       <Link>Text\StringBuilderExtensionFacts.cs</Link>
     </Compile>
@@ -518,60 +587,6 @@
     </Compile>
     <Compile Include="..\Catel.Test.NET40\WeakReferences\WeakEventListenerFacts.cs">
       <Link>WeakReferences\WeakEventListenerFacts.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\BooleanToGrayscaleConverterTest.cs">
-      <Link>Windows\Data\Converters\BooleanToGrayscaleConverterTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\BooleanToOppositeBooleanConverterTest.cs">
-      <Link>Windows\Data\Converters\BooleanToOppositeBooleanConverterTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\BooleanToTextConverterTest.cs">
-      <Link>Windows\Data\Converters\BooleanToTextConverterTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\BooleanToVisibilityConverterTest.cs">
-      <Link>Windows\Data\Converters\BooleanToVisibilityConverterTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\ColorToBrushConverterTest.cs">
-      <Link>Windows\Data\Converters\ColorToBrushConverterTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\ContainsItemsConverterTest.cs">
-      <Link>Windows\Data\Converters\ContainsItemsConverterTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\CountVisibilityConverterTest.cs">
-      <Link>Windows\Data\Converters\CountVisibilityConverterTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\EmptyStringToVisibilityConverterTest.cs">
-      <Link>Windows\Data\Converters\EmptyStringToVisibilityConverterTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\FormattingConverterTest.cs">
-      <Link>Windows\Data\Converters\FormattingConverterTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\IsSelectedConverterTest.cs">
-      <Link>Windows\Data\Converters\IsSelectedConverterTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\IsSelectedValueConverterTest.cs">
-      <Link>Windows\Data\Converters\IsSelectedValueConverterTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\MethodToValueConverterTest.cs">
-      <Link>Windows\Data\Converters\MethodToValueConverterTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\MultiplyConverterTest.cs">
-      <Link>Windows\Data\Converters\MultiplyConverterTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\ReferenceToBooleanConverterTest.cs">
-      <Link>Windows\Data\Converters\ReferenceToBooleanConverterTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\ReferenceToCollapsingVisibilityConverterTest.cs">
-      <Link>Windows\Data\Converters\ReferenceToCollapsingVisibilityConverterTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\ShortDateFormattingConverterTest.cs">
-      <Link>Windows\Data\Converters\ShortDateFormattingConverterTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\TextToLowerCaseConverterFacts.cs">
-      <Link>Windows\Data\Converters\TextToLowerCaseConverterFacts.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Test.NET40\Windows\Data\Converters\TextToUpperCaseConverterFacts.cs">
-      <Link>Windows\Data\Converters\TextToUpperCaseConverterFacts.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Test.NET40\Windows\Helpers\ResourceHelperFacts.cs">
       <Link>Windows\Helpers\ResourceHelperFacts.cs</Link>
@@ -635,7 +650,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logging\Extensions\" />
-    <Folder Include="Runtime\Serialization\Attributes\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

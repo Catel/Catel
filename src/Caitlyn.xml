@@ -433,21 +433,6 @@
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
           <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="43" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL4</ProjectType>
-            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL5</ProjectType>
-            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
-            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
-            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
-            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
-            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
-            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
-            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
-          </ProjectTypes>
-          <Name>Services\PleaseWaitService.cs</Name>
-          <Type>DoNotAdd</Type>
-        </Rule>
-        <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="44" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
@@ -456,7 +441,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="45" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="44" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
@@ -465,7 +450,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="46" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="45" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
@@ -478,7 +463,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="47" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="46" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
@@ -491,7 +476,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="48" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="47" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
@@ -504,7 +489,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="49" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="48" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
@@ -517,7 +502,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="50" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="49" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
@@ -527,7 +512,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="51" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="50" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL4</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL5</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
@@ -542,7 +527,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="52" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="51" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL4</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL5</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
@@ -557,7 +542,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="53" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="52" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL4</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL5</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
@@ -572,7 +557,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="54" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="53" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL4</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL5</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
@@ -587,7 +572,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="55" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="54" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL4</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL5</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
@@ -602,7 +587,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="56" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="55" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL4</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL5</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
@@ -617,7 +602,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="57" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="56" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL4</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL5</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
@@ -632,7 +617,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="58" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="57" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL4</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL5</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
@@ -647,7 +632,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="59" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="58" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL4</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL5</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
@@ -662,7 +647,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="60" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="59" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL4</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL5</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
@@ -677,7 +662,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="61" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="60" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL4</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL5</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
@@ -692,7 +677,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="62" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="61" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL4</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL5</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
@@ -707,7 +692,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="63" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="62" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL4</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL5</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
@@ -722,7 +707,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="64" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="63" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL4</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL5</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
@@ -737,7 +722,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="65" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="64" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL4</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL5</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
@@ -752,7 +737,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="66" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="65" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL4</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL5</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
@@ -767,7 +752,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="67" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="66" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL4</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL5</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
@@ -782,7 +767,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="68" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="67" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL4</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL5</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
@@ -797,7 +782,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="69" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="68" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
@@ -810,7 +795,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="70" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="69" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
@@ -823,7 +808,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="71" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="70" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
@@ -836,7 +821,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="72" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="71" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
@@ -849,7 +834,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="73" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="72" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
@@ -862,7 +847,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="74" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="73" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
@@ -875,7 +860,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="75" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="74" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
@@ -888,7 +873,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="76" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="75" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
@@ -899,7 +884,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="77" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="76" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
@@ -910,7 +895,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="78" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="77" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
@@ -921,7 +906,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="79" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="78" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
@@ -932,7 +917,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="80" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="79" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
@@ -943,7 +928,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="81" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="80" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
@@ -954,7 +939,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="82" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="81" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
@@ -965,7 +950,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="83" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="82" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
@@ -976,7 +961,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="84" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="83" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
@@ -987,7 +972,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="85" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="84" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
@@ -997,7 +982,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="86" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="85" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
@@ -1010,7 +995,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="87" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="86" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
@@ -1023,7 +1008,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="88" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="87" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
@@ -1036,7 +1021,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="89" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="88" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
@@ -1047,7 +1032,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="90" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="89" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
@@ -1058,7 +1043,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="91" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="90" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
@@ -1069,7 +1054,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="92" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="91" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
@@ -1080,7 +1065,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="93" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="92" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
@@ -1091,7 +1076,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="94" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="93" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
@@ -1102,7 +1087,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="95" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="94" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
@@ -1113,7 +1098,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="96" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="95" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
@@ -1124,7 +1109,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="97" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="96" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
@@ -1135,7 +1120,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="98" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="97" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
@@ -1148,7 +1133,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="99" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="98" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
@@ -1161,7 +1146,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="100" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="99" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
@@ -1174,7 +1159,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="101" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="100" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
@@ -1183,7 +1168,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="102" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="101" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
@@ -1192,7 +1177,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="103" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="102" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
@@ -1201,7 +1186,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="104" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="103" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
@@ -1210,7 +1195,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="105" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="104" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
@@ -1219,7 +1204,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="106" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="105" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
@@ -1228,7 +1213,7 @@
           <Type>DoNotAdd</Type>
         </Rule>
         <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
-          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="107" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="106" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
             <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
@@ -1239,7 +1224,277 @@
       </Rules>
       <Name>Catel.MVVM.NET40</Name>
     </RootProject>
+    <RootProject xmlns="ctl1http://schemas.datacontract.org/2004/07/Caitlyn.Models">
+      <Rules xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="107" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="108" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL4</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL5</ProjectType>
+          </ProjectTypes>
+          <Name>Extensions\EntityFramework5</Name>
+          <Type>DoNotAdd</Type>
+        </Rule>
+        <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="109" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+          </ProjectTypes>
+          <Name>Extensions\FluentValidation</Name>
+          <Type>DoNotAdd</Type>
+        </Rule>
+        <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="110" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL4</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL5</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+          </ProjectTypes>
+          <Name>Extensions\Interception</Name>
+          <Type>DoNotAdd</Type>
+        </Rule>
+        <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="111" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+          </ProjectTypes>
+          <Name>Extensions\Prism</Name>
+          <Type>DoNotAdd</Type>
+        </Rule>
+        <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="112" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL4</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL5</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+          </ProjectTypes>
+          <Name>Extensions\Wcf.Server</Name>
+          <Type>DoNotAdd</Type>
+        </Rule>
+        <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="113" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL4</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL5</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+          </ProjectTypes>
+          <Name>Runtime\Serialization\BinarySerialization</Name>
+          <Type>DoNotAdd</Type>
+        </Rule>
+        <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="114" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL4</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL5</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+          </ProjectTypes>
+          <Name>Runtime\Serialization\Attributes\RedirectTypeAttributeTest.cs</Name>
+          <Type>DoNotAdd</Type>
+        </Rule>
+        <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="115" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL4</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL5</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+          </ProjectTypes>
+          <Name>IoC\Configuration</Name>
+          <Type>DoNotAdd</Type>
+        </Rule>
+        <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="116" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL4</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL5</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+          </ProjectTypes>
+          <Name>Extensions\Prism\Modules</Name>
+          <Type>DoNotAdd</Type>
+        </Rule>
+        <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="117" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL4</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL5</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+          </ProjectTypes>
+          <Name>Logging\Configuration</Name>
+          <Type>DoNotAdd</Type>
+        </Rule>
+        <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="118" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL4</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">SL5</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+          </ProjectTypes>
+          <Name>MVVM\Converters\AreEqualMultiValueConverterTest.cs</Name>
+          <Type>DoNotAdd</Type>
+        </Rule>
+        <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="119" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+          </ProjectTypes>
+          <Name>MVVM\Converters\GetFirstValidationErrorConverterTest.cs</Name>
+          <Type>DoNotAdd</Type>
+        </Rule>
+        <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="120" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+          </ProjectTypes>
+          <Name>Data\Helpers\EditableObjectHelperFacts.cs</Name>
+          <Type>DoNotAdd</Type>
+        </Rule>
+        <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="121" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+          </ProjectTypes>
+          <Name>Data\CompositeValidatorProviderFacts.cs</Name>
+          <Type>DoNotAdd</Type>
+        </Rule>
+        <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="122" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+          </ProjectTypes>
+          <Name>Data\CompositeValidatorFacts.cs</Name>
+          <Type>DoNotAdd</Type>
+        </Rule>
+        <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="123" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+          </ProjectTypes>
+          <Name>Windows\Helpers\CommandLineHelperFacts.cs</Name>
+          <Type>DoNotAdd</Type>
+        </Rule>
+        <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="124" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+          </ProjectTypes>
+          <Name>Helpers\WindowHelper.cs</Name>
+          <Type>DoNotAdd</Type>
+        </Rule>
+        <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="125" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+          </ProjectTypes>
+          <Name>Helpers\FilesHelper.cs</Name>
+          <Type>DoNotAdd</Type>
+        </Rule>
+        <Rule xmlns="ctl2http://schemas.datacontract.org/2004/07/Caitlyn.Models">
+          <ProjectTypes xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="126" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP7</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WP80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN80</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">WIN81</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">PCL</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_Android</ProjectType>
+            <ProjectType xmlns="http://schemas.datacontract.org/2004/07/Caitlyn">Xamarin_iOS</ProjectType>
+          </ProjectTypes>
+          <Name>Reflection\AssemblyExtensionsTest.cs</Name>
+          <Type>DoNotAdd</Type>
+        </Rule>
+      </Rules>
+      <Name>Catel.Test.NET40</Name>
+    </RootProject>
   </RootProjects>
-  <ProjectMappings xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="108" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" />
+  <ProjectMappings xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="127" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" />
   <EnableAutoLink>true</EnableAutoLink>
 </Configuration>

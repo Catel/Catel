@@ -291,6 +291,27 @@ namespace Catel.Android.Views
         }
 
         /// <summary>
+        /// Gets the view model as a type.
+        /// </summary>
+        /// <typeparam name="TViewModel">The type of the view model.</typeparam>
+        /// <returns>The view model of <c>null</c>.</returns>
+        protected TViewModel GetViewModel<TViewModel>()
+            where TViewModel : class, IViewModel
+        {
+            return ViewModel as TViewModel;
+        }
+
+        /// <summary>
+        /// Synchronizes the view model. Will be called whenever something has changed.
+        /// <para />
+        /// Normally the binding system would take care of this.
+        /// </summary>
+        protected virtual void SyncViewModel()
+        {
+
+        }
+
+        /// <summary>
         /// This is called when the view is attached to a window.
         /// </summary>
         protected override void OnAttachedToWindow()
@@ -362,6 +383,7 @@ namespace Catel.Android.Views
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         protected virtual void OnViewModelPropertyChanged(PropertyChangedEventArgs e)
         {
+            SyncViewModel();
         }
 
         /// <summary>
@@ -373,6 +395,10 @@ namespace Catel.Android.Views
         /// </remarks>
         protected virtual void OnViewModelChanged()
         {
+            if (ViewModel != null)
+            {
+                SyncViewModel();
+            }
         }
 
         /// <summary>

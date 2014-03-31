@@ -89,7 +89,7 @@ namespace Catel.MVVM.Navigation
             }
 
             _activityLifecycleCallbacksListener = new ActivityLifecycleCallbacksListener();
-            _activityLifecycleCallbacksListener.ActivityStarted += OnActivityStarted;
+            _activityLifecycleCallbacksListener.ActivityResumed += OnActivityResumed;
             _activityLifecycleCallbacksListener.ActivityPaused += OnActivityPaused;
             _activityLifecycleCallbacksListener.ActivityStopped += OnActivityStopped;
 
@@ -118,7 +118,7 @@ namespace Catel.MVVM.Navigation
             }
         }
 
-        private void OnActivityStarted(object sender, ActivityEventArgs e)
+        private void OnActivityResumed(object sender, ActivityEventArgs e)
         {
             var eventArgs = new NavigatedEventArgs(e.Activity.LocalClassName, NavigationMode.New);
             RaiseNavigatedTo(eventArgs);

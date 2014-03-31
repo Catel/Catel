@@ -28,7 +28,6 @@ namespace Catel.Android.App
 
         private readonly PhonePageLogic _logic;
         private object _dataContext;
-        private object _content;
         #endregion
 
         #region Constructors
@@ -287,13 +286,24 @@ namespace Catel.Android.App
         }
 
         /// <summary>
-        /// Set the activity content to an explicit view.
+        /// Gets the view model as a type.
         /// </summary>
-        public override void SetContentView(View view)
+        /// <typeparam name="TViewModel">The type of the view model.</typeparam>
+        /// <returns>The view model of <c>null</c>.</returns>
+        protected TViewModel GetViewModel<TViewModel>()
+            where TViewModel : class, IViewModel
         {
-            _content = view;
+            return ViewModel as TViewModel;
+        }
 
-            base.SetContentView(view);
+        /// <summary>
+        /// Synchronizes the view model. Will be called whenever something has changed.
+        /// <para />
+        /// Normally the binding system would take care of this.
+        /// </summary>
+        protected virtual void SyncViewModel()
+        {
+
         }
 
         /// <summary>
@@ -379,6 +389,7 @@ namespace Catel.Android.App
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         protected virtual void OnViewModelPropertyChanged(PropertyChangedEventArgs e)
         {
+            SyncViewModel();
         }
 
         /// <summary>
@@ -390,6 +401,10 @@ namespace Catel.Android.App
         /// </remarks>
         protected virtual void OnViewModelChanged()
         {
+            if (ViewModel != null)
+            {
+                SyncViewModel();
+            }
         }
 
         /// <summary>

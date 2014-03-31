@@ -42,10 +42,7 @@ namespace Catel.MVVM.Providers
         {
             NavigatingAwaySavesViewModel = true;
 
-            _navigationAdapter = new NavigationAdapter(TargetPage, true);
-            _navigationAdapter.NavigatedTo += OnNavigatedTo;
-            _navigationAdapter.NavigatingAway += OnNavigatingAway;
-            _navigationAdapter.NavigatedAway += OnNavigatedAway;
+            CreateNavigationAdapter();
 
             EnsureViewModel();
         }
@@ -79,6 +76,29 @@ namespace Catel.MVVM.Providers
         #endregion
 
         #region Methods
+        private void CreateNavigationAdapter()
+        {
+            if (_navigationAdapter != null)
+            {
+                _navigationAdapter = new NavigationAdapter(TargetPage, true);
+                _navigationAdapter.NavigatedTo += OnNavigatedTo;
+                _navigationAdapter.NavigatingAway += OnNavigatingAway;
+                _navigationAdapter.NavigatedAway += OnNavigatedAway;
+            }
+        }
+
+        private void DestroyNavigationAdapter()
+        {
+            if (_navigationAdapter != null)
+            {
+                _navigationAdapter.UninitializeNavigationService();
+                _navigationAdapter.NavigatedTo -= OnNavigatedTo;
+                _navigationAdapter.NavigatingAway -= OnNavigatingAway;
+                _navigationAdapter.NavigatedAway -= OnNavigatedAway;
+                _navigationAdapter = null;
+            }
+        }
+
         /// <summary>
         /// Called when the <see cref="LogicBase.TargetView"/> has just been loaded.
         /// </summary>
@@ -88,13 +108,7 @@ namespace Catel.MVVM.Providers
         {
             base.OnTargetViewLoaded(sender, e);
 
-            if (_navigationAdapter != null)
-            {
-                _navigationAdapter = new NavigationAdapter(TargetPage, true);
-                _navigationAdapter.NavigatedTo += OnNavigatedTo;
-                _navigationAdapter.NavigatingAway += OnNavigatingAway;
-                _navigationAdapter.NavigatedAway += OnNavigatedAway;
-            }
+            CreateNavigationAdapter();
         }
 
         /// <summary>
@@ -106,14 +120,7 @@ namespace Catel.MVVM.Providers
         {
             base.OnTargetViewUnloaded(sender, e);
 
-            if (_navigationAdapter != null)
-            {
-                _navigationAdapter.UninitializeNavigationService();
-                _navigationAdapter.NavigatedTo -= OnNavigatedTo;
-                _navigationAdapter.NavigatingAway -= OnNavigatingAway;
-                _navigationAdapter.NavigatedAway -= OnNavigatedAway;
-                _navigationAdapter = null;
-            }
+            DestroyNavigationAdapter();
         }
 
         private void OnNavigatedTo(object sender, NavigatedEventArgs e)
