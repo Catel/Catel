@@ -10,6 +10,7 @@ namespace Catel.MVVM.Navigation
     using System;
     using System.Reflection;
     using Catel.Logging;
+    using Catel.MVVM.Views;
 
     /// <summary>
     /// Navigation adapter class because everyone seems to be implementing their own :-(
@@ -28,7 +29,7 @@ namespace Catel.MVVM.Navigation
         /// </summary>
         /// <param name="navigationTarget">The navigation target.</param>
         /// <param name="isComingFromLoadedEvent">if set to <c>true</c>, the adapter is being created in the loaded event.</param>
-        public NavigationAdapter(object navigationTarget, bool isComingFromLoadedEvent)
+        public NavigationAdapter(IView navigationTarget, bool isComingFromLoadedEvent)
         {
             Argument.IsNotNull("navigationTarget", navigationTarget);
 
@@ -36,7 +37,8 @@ namespace Catel.MVVM.Navigation
             NavigationTargetType = navigationTarget.GetType();
             NavigationContext = new NavigationContext();
 
-            InitializeNavigationService(isComingFromLoadedEvent);
+            // Listen to loaded because not every framework already has the application at this stage
+            NavigationTarget.Loaded += OnNavigationTargetLoaded;
         }
 
         #region Properties
@@ -44,7 +46,7 @@ namespace Catel.MVVM.Navigation
         /// Gets the navigation target.
         /// </summary>
         /// <value>The navigation target.</value>
-        public object NavigationTarget { get; private set; }
+        public IView NavigationTarget { get; private set; }
 
         /// <summary>
         /// Gets the type of the navigation target.
@@ -81,6 +83,13 @@ namespace Catel.MVVM.Navigation
         partial void Initialize();
         partial void Uninitialize();
 
+        private void OnNavigationTargetLoaded(object sender, EventArgs e)
+        {
+            InitializeNavigationService(true);
+
+            NavigationTarget.Loaded -= OnNavigationTargetLoaded;
+        }
+
         private void InitializeNavigationService(bool isComingFromLoadedEvent)
         {
             if (_navigationServiceInitialized)
@@ -94,7 +103,8 @@ namespace Catel.MVVM.Navigation
 
             if (isComingFromLoadedEvent)
             {
-                RaiseNavigatedTo(new NavigatedEventArgs(string.Empty, NavigationMode.New));
+                var eventArgs = new NavigatedEventArgs(string.Empty, NavigationMode.New);
+                RaiseNavigatedTo(eventArgs);
             }
         }
 

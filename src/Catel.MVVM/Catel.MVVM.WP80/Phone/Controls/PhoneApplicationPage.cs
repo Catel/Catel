@@ -94,13 +94,7 @@ namespace Catel.Phone.Controls
                 PropertyChanged.SafeInvoke(this, e);
             };
 
-            _logic.ViewModelChanged += (sender, e) =>
-            {
-                OnViewModelChanged();
-
-                ViewModelChanged.SafeInvoke(this, e);
-                PropertyChanged.SafeInvoke(this, new PropertyChangedEventArgs("ViewModel"));
-            };
+            _logic.ViewModelChanged += (sender, e) => RaiseViewModelChanged();
 
             _logic.ViewModelPropertyChanged += (sender, e) =>
             {
@@ -129,8 +123,6 @@ namespace Catel.Phone.Controls
             _logic.RecoveringFromTombstoning += (sender, e) => OnRecoveringFromTombstoning();
             _logic.RecoveredFromTombstoning += (sender, e) => OnRecoveredFromTombstoning();
 
-            ViewModelChanged.SafeInvoke(this);
-
             Loaded += (sender, e) =>
             {
                 OnLoaded(e);
@@ -147,6 +139,8 @@ namespace Catel.Phone.Controls
 
             BackKeyPress += (sender, e) => _backKeyPress.SafeInvoke(this);
             this.AddDataContextChangedHandler((sender, e) => _viewDataContextChanged.SafeInvoke(this));
+
+            RaiseViewModelChanged();
         }
         #endregion
 
@@ -235,17 +229,6 @@ namespace Catel.Phone.Controls
         {
             get { return Parent; }
         }
-
-        /// <summary>
-        /// Gets or sets the content that is contained within a user control.
-        /// </summary>
-        /// <value>The content.</value>
-        /// <returns>The content of the user control.</returns>
-        object IView.Content
-        {
-            get { return Content; }
-            set { Content = value as UIElement; }
-        }
         #endregion
 
         #region Events
@@ -326,6 +309,14 @@ namespace Catel.Phone.Controls
         #endregion
 
         #region Methods
+        private void RaiseViewModelChanged()
+        {
+            OnViewModelChanged();
+
+            ViewModelChanged.SafeInvoke(this);
+            PropertyChanged.SafeInvoke(this, new PropertyChangedEventArgs("ViewModel"));
+        }
+
         /// <summary>
         /// Gets the type of the view model. If this method returns <c>null</c>, the view model type will be retrieved by naming 
         /// convention using the <see cref="IViewModelLocator"/> registered in the <see cref="IServiceLocator"/>.

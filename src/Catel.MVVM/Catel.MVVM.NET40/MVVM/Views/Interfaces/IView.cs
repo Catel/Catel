@@ -42,12 +42,6 @@ namespace Catel.MVVM.Views
         /// </summary>
         /// <value><c>true</c> if the view is enabled; otherwise, <c>false</c>.</value>
         bool IsEnabled { get; set; }
-
-        /// <summary>
-        /// Gets or sets the content of this view, allowing it to be replaced by a view model wrapper.
-        /// </summary>
-        /// <value>The content.</value>
-        object Content { get; set; }
         #endregion
 
         #region Events

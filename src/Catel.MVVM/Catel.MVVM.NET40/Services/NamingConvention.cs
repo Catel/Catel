@@ -123,7 +123,7 @@ namespace Catel.Services
             Argument.IsNotNullOrWhitespace("conventionToUse", conventionToUse);
 
             string viewWithoutView = TypeHelper.GetTypeNameWithoutNamespace(fullViewName);
-            viewWithoutView = RemoveAllPostfixes(viewWithoutView, new[] { "View", "Control", "UserControl", "Window", "Page" });
+            viewWithoutView = RemoveAllPostfixes(viewWithoutView, new[] { "View", "Control", "UserControl", "Window", "Page", "Activity" });
 
             var constantsWithValues = new Dictionary<string, string>();
             constantsWithValues.Add(Assembly, assembly);

@@ -10,6 +10,7 @@ namespace Catel.MVVM.Views
 {
     using System;
     using System.Collections.Generic;
+    using Catel.Windows.Threading;
 
 #if NETFX_CORE
     using Catel.Windows;
@@ -91,6 +92,12 @@ namespace Catel.MVVM.Views
             }
 
             return foundParent as DependencyObject;
+        }
+
+        static partial void FinalDispatch(IView view, Action action)
+        {
+            var dependencyObject = (DependencyObject)view;
+            dependencyObject.Dispatcher.Invoke(action);
         }
     }
 }

@@ -12,6 +12,10 @@ namespace Catel.MVVM.Views
 {
     public static partial class ViewExtensions
     {
+        static partial void FinalDispatch(IView view, Action action)
+        {
+            throw new MustBeImplementedException();
+        }
     }
 }
 

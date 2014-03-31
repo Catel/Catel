@@ -274,13 +274,7 @@ namespace Catel.Windows
 #endif
             };
 
-            _logic.ViewModelChanged += (sender, e) =>
-            {
-                OnViewModelChanged();
-
-                ViewModelChanged.SafeInvoke(this, e);
-                PropertyChanged.SafeInvoke(this, new PropertyChangedEventArgs("ViewModel"));
-            };
+            _logic.ViewModelChanged += (sender, e) => RaiseViewModelChanged();
 
             _logic.ViewModelPropertyChanged += (sender, e) =>
             {
@@ -339,6 +333,8 @@ namespace Catel.Windows
             {
                 _viewDataContextChanged.SafeInvoke(this);
             };
+
+            RaiseViewModelChanged();
 
 #if NET
             if (setOwnerAndFocus)
@@ -710,6 +706,14 @@ namespace Catel.Windows
         #endregion
 
         #region Methods
+        private void RaiseViewModelChanged()
+        {
+            OnViewModelChanged();
+
+            ViewModelChanged.SafeInvoke(this);
+            PropertyChanged.SafeInvoke(this, new PropertyChangedEventArgs("ViewModel"));
+        }
+
 #if SILVERLIGHT
         /// <summary>
         /// Builds the visual tree for the <see cref="T:System.Windows.Controls.ChildWindow"/> control when a new template is applied.

@@ -8,6 +8,7 @@
 namespace Catel.MVVM.Views
 {
     using System;
+    using Catel.MVVM.Providers;
 
     /// <summary>
     /// View model wrapper class.
@@ -15,15 +16,15 @@ namespace Catel.MVVM.Views
     public partial class ViewModelWrapper : IViewModelWrapper
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ViewModelWrapper"/> class.
+        /// Initializes a new instance of the <see cref="ViewModelWrapper" /> class.
         /// </summary>
-        /// <param name="viewModelWrapper">The view model wrapper object, such as a grid.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModelWrapper"/> is <c>null</c>.</exception>
-        public ViewModelWrapper(object viewModelWrapper)
+        /// <param name="contentToWrap">The view model wrapper object, such as a grid.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="contentToWrap" /> is <c>null</c>.</exception>
+        public ViewModelWrapper(object contentToWrap)
         {
-            Argument.IsNotNull("viewModelWrapper", viewModelWrapper);
+            Argument.IsNotNull("contentToWrap", contentToWrap);
 
-            CreateWrapper(viewModelWrapper);
+            CreateWrapper(contentToWrap);
         }
 
         /// <summary>

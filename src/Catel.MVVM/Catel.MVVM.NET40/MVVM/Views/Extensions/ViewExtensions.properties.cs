@@ -12,7 +12,7 @@ namespace Catel.MVVM.Views
     using System.Linq;
     
 #if XAMARIN
-    
+    // nothing
 #elif NETFX_CORE
     using Catel.Windows.Data;
     using global::Windows.UI.Xaml;
@@ -36,7 +36,7 @@ namespace Catel.MVVM.Views
             var viewProperties = ((FrameworkElement)view).GetDependencyProperties();
             return viewProperties.Select(x => x.PropertyName).ToArray();
 #else
-            throw new MustBeImplementedException();
+            return new string[] { };
 #endif
         }
 

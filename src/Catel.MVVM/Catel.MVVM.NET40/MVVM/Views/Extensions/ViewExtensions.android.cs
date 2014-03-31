@@ -10,10 +10,13 @@ namespace Catel.MVVM.Views
 {
     using System;
     using System.Collections.Generic;
+    using global::Android.OS;
     using global::Android.Views;
 
     public static partial class ViewExtensions
     {
+        private static readonly Handler _handler = new Handler(Looper.MainLooper);
+
         /// <summary>
         /// Finds a parent by predicate. It first tries to find the parent via the <c>UserControl.Parent</c> property, and if that
         /// doesn't satisfy, it uses the <c>UserControl.TemplatedParent</c> property.
@@ -142,6 +145,11 @@ namespace Catel.MVVM.Views
             {
                 return null;
             }
+        }
+
+        static partial void FinalDispatch(IView view, Action action)
+        {
+            _handler.Post(action);
         }
     }
 }

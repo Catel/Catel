@@ -9,18 +9,6 @@ namespace Catel.MVVM.Views
 {
     using System;
 
-#if !XAMARIN
-    using Catel.Windows.Threading;
-#endif
-
-#if XAMARIN
-
-#elif NETFX_CORE
-    using global::Windows.UI.Xaml;
-#else
-    using System.Windows;
-#endif
-
     /// <summary>
     /// Extension methods for views.
     /// </summary>
@@ -38,12 +26,9 @@ namespace Catel.MVVM.Views
             Argument.IsNotNull("view", view);
             Argument.IsNotNull("action", action);
 
-#if !XAMARIN
-            var dependencyObject = (DependencyObject)view;
-            dependencyObject.Dispatcher.Invoke(action);
-#else
-            throw new MustBeImplementedException();
-#endif
+            FinalDispatch(view, action);
         }
+
+        static partial void FinalDispatch(IView view, Action action);
     }
 }

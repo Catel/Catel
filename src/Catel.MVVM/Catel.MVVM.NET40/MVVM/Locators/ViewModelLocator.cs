@@ -84,11 +84,13 @@ namespace Catel.MVVM
             namingConventions.Add(string.Format("{0}.ViewModels.{1}ControlViewModel", NamingConvention.Up, NamingConvention.ViewName));
             namingConventions.Add(string.Format("{0}.ViewModels.{1}WindowViewModel", NamingConvention.Up, NamingConvention.ViewName));
             namingConventions.Add(string.Format("{0}.ViewModels.{1}PageViewModel", NamingConvention.Up, NamingConvention.ViewName));
+            namingConventions.Add(string.Format("{0}.ViewModels.{1}ActivityViewModel", NamingConvention.Up, NamingConvention.ViewName));
 
             namingConventions.Add(string.Format("{0}.ViewModels.{1}ViewModel", NamingConvention.Assembly, NamingConvention.ViewName));
             namingConventions.Add(string.Format("{0}.ViewModels.{1}ControlViewModel", NamingConvention.Assembly, NamingConvention.ViewName));
             namingConventions.Add(string.Format("{0}.ViewModels.{1}WindowViewModel", NamingConvention.Assembly, NamingConvention.ViewName));
             namingConventions.Add(string.Format("{0}.ViewModels.{1}PageViewModel", NamingConvention.Assembly, NamingConvention.ViewName));
+            namingConventions.Add(string.Format("{0}.ViewModels.{1}ActivityViewModel", NamingConvention.Assembly, NamingConvention.ViewName));
 
             return namingConventions;
         }

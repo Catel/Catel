@@ -119,8 +119,10 @@ namespace Catel.MVVM.Views
                         viewInfo.Loaded -= OnViewLoaded;
                         viewInfo.Unloaded -= OnViewUnloaded;
 
+#if !NET && !XAMARIN
                         // Note: always unsubscribe LayoutUpdated
                         viewInfo.LayoutUpdated -= OnViewLayoutUpdated;
+#endif
 
                         _viewElements.RemoveAt(i--);
                     }
@@ -138,7 +140,10 @@ namespace Catel.MVVM.Views
         private void OnViewLoaded(object sender, EventArgs e)
         {
             var viewInfo = (WeakViewInfo)sender;
+
+#if !NET && !XAMARIN
             viewInfo.LayoutUpdated += OnViewLayoutUpdated;
+#endif
 
             // Loaded is always called first on the inner child, add it to the stack
             lock (_loadedStack)
@@ -147,7 +152,7 @@ namespace Catel.MVVM.Views
 
                 _loadedStack.Push(viewInfo);
 
-#if !XAMARIN && !NET
+#if !NET && !XAMARIN
                 view.Dispatch(() => ((FrameworkElement)view).InvalidateMeasure());
 #else
                 // In WPF, handle view as loaded immediately
@@ -181,7 +186,9 @@ namespace Catel.MVVM.Views
                         while (_loadedStack.Count > 0)
                         {
                             var innerViewInfo = _loadedStack.Pop();
+#if !NET && !XAMARIN
                             innerViewInfo.LayoutUpdated -= OnViewLayoutUpdated;
+#endif
 
                             if (innerViewInfo.Action != null)
                             {

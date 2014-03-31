@@ -101,9 +101,13 @@ namespace Catel.MVVM.Providers
             CreateWarningAndErrorValidatorForViewModel = DefaultCreateWarningAndErrorValidatorForViewModelValue;
 #endif
 
+#if XAMARIN
+            CreateViewModelWrapper(false);
+#else
             // NOTE: There is NO unsubscription for this subscription.
             // Hence target control content wrapper grid will be recreated each time content changes.
             targetView.SubscribeToPropertyChanged("Content", OnTargetControlContentChanged);
+#endif
         }
         #endregion
 
@@ -281,14 +285,15 @@ namespace Catel.MVVM.Providers
         /// <summary>
         /// Creates the view model wrapper.
         /// </summary>
-        private void CreateViewModelWrapper()
+        /// <param name="checkIfWrapped">if set to <c>true</c>, check if the view is already wrapped.</param>
+        private void CreateViewModelWrapper(bool checkIfWrapped = true)
         {
             var dependencyResolver = this.GetDependencyResolver();
 
             var targetView = TargetView;
 
             var viewModelWrapperService = dependencyResolver.Resolve<IViewModelWrapperService>();
-            if (!viewModelWrapperService.IsWrapped(targetView))
+            if (checkIfWrapped || !viewModelWrapperService.IsWrapped(targetView))
             {
                 var wrapOptions = WrapOptions.None;
 

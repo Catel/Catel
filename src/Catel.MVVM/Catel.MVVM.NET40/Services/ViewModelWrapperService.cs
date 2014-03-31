@@ -16,8 +16,6 @@ namespace Catel.Services
     /// </summary>
     public partial class ViewModelWrapperService : ViewModelWrapperServiceBase, IViewModelWrapperService
     {
-        private const string InnerWrapperName = "__catelInnerWrapper";
-
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
@@ -47,20 +45,11 @@ namespace Catel.Services
             Argument.IsNotNull("viewModelSource", viewModelSource);
 
 #if XAMARIN
-            throw new MustBeImplementedException();
+            var viewModelWrapper = new ViewModelWrapper(view);
+            return viewModelWrapper;
 #else
             return CreateViewModelGrid(view, viewModelSource, wrapOptions);
 #endif
-        }
-
-        private object GetContent(IView view)
-        {
-            return view.Content;
-        }
-
-        private void SetContent(IView view, object content)
-        {
-            view.Content = content;
         }
     }
 }

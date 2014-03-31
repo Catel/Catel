@@ -41,149 +41,56 @@ namespace Catel.MVVM
             {
                 Log.Debug("Registering default service implementations for IoC container");
 
+                if (!serviceLocator.IsTypeRegistered<IMessageMediator>())
+                {
+                    serviceLocator.RegisterInstance(MessageMediator.Default);
+                }
+
+                if (!serviceLocator.IsTypeRegistered<ExceptionHandling.IExceptionService>())
+                {
+                    serviceLocator.RegisterInstance(ExceptionHandling.ExceptionService.Default);
+                }
+
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewPropertySelector, ViewPropertySelector>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IStateService, StateService>();
-
-                // TODO: FIX ALL 
-
-#if NETFX_CORE
-                if (!serviceLocator.IsTypeRegistered<IMessageMediator>())
-                {
-                    serviceLocator.RegisterInstance(MessageMediator.Default);
-                }
-
-                if (!serviceLocator.IsTypeRegistered<ExceptionHandling.IExceptionService>())
-                {
-                    serviceLocator.RegisterInstance(ExceptionHandling.ExceptionService.Default);
-                }
-
-                // NOTE: Must be in this specific order
                 serviceLocator.RegisterTypeIfNotYetRegistered<IDispatcherService, DispatcherService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IMessageService, MessageService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IMessageService, MessageService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<INavigationService, NavigationService>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<IUrlLocator, UrlLocator>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<IViewLocator, ViewLocator>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelLocator, ViewModelLocator>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelFactory, ViewModelFactory>();
+
+#if !XAMARIN
+                // TODO: Add support in xamarin
                 serviceLocator.RegisterTypeIfNotYetRegistered<IPleaseWaitService, PleaseWaitService>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<INavigationService, NavigationService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<ISchedulerService, SchedulerService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IUrlLocator, UrlLocator>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IViewLocator, ViewLocator>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelLocator, ViewModelLocator>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelFactory, ViewModelFactory>();
-#elif WINDOWS_PHONE
-                if (!serviceLocator.IsTypeRegistered<IMessageMediator>())
-                {
-                    serviceLocator.RegisterInstance(MessageMediator.Default);
-                }
+#endif
 
-                if (!serviceLocator.IsTypeRegistered<ExceptionHandling.IExceptionService>())
-                {
-                    serviceLocator.RegisterInstance(ExceptionHandling.ExceptionService.Default);
-                }
-
-                // NOTE: Must be in this specific order
-                serviceLocator.RegisterTypeIfNotYetRegistered<IDispatcherService, DispatcherService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IMessageService, MessageService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<ILocationService, LocationService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IMessageService, MessageService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<INavigationService, NavigationService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IPleaseWaitService, PleaseWaitService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<ISchedulerService, SchedulerService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IVibrateService, VibrateService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IPhoneService, PhoneService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IUrlLocator, UrlLocator>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IViewLocator, ViewLocator>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelLocator, ViewModelLocator>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelFactory, ViewModelFactory>();
-
-                serviceLocator.RegisterTypeIfNotYetRegistered<IAccelerometerService, AccelerometerService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<ICameraService, CameraService>();
-
-#elif SILVERLIGHT
-                if (!serviceLocator.IsTypeRegistered<IMessageMediator>())
-                {
-                    serviceLocator.RegisterInstance(MessageMediator.Default);
-                }
-
-                if (!serviceLocator.IsTypeRegistered<ExceptionHandling.IExceptionService>())
-                {
-                    serviceLocator.RegisterInstance(ExceptionHandling.ExceptionService.Default);
-                }
-
-                // NOTE: Must be in this specific order
-                serviceLocator.RegisterTypeIfNotYetRegistered<IDispatcherService, DispatcherService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IMessageService, MessageService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<INavigationService, NavigationService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IOpenFileService, OpenFileService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IPleaseWaitService, PleaseWaitService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<ISaveFileService, SaveFileService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<ISchedulerService, SchedulerService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IUIVisualizerService, UIVisualizerService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IUrlLocator, UrlLocator>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IViewLocator, ViewLocator>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IViewExportService, ViewExportService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelLocator, ViewModelLocator>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelFactory, ViewModelFactory>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<ISplashScreenService, SplashScreenService>(RegistrationType.Transient);
-                serviceLocator.RegisterTypeIfNotYetRegistered<IViewExportService, ViewExportService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IStartUpInfoProvider, StartUpInfoProvider>();
-
-#elif XAMARIN
-                if (!serviceLocator.IsTypeRegistered<IMessageMediator>())
-                {
-                    serviceLocator.RegisterInstance(MessageMediator.Default);
-                }
-
-                if (!serviceLocator.IsTypeRegistered<ExceptionHandling.IExceptionService>())
-                {
-                    serviceLocator.RegisterInstance(ExceptionHandling.ExceptionService.Default);
-                }
-
-                // NOTE: Must be in this specific order
-                serviceLocator.RegisterTypeIfNotYetRegistered<IMessageService, MessageService>();
-                //serviceLocator.RegisterTypeIfNotYetRegistered<ILocationService, LocationService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IMessageService, MessageService>();
-                //serviceLocator.RegisterTypeIfNotYetRegistered<INavigationService, NavigationService>();
-                //serviceLocator.RegisterTypeIfNotYetRegistered<IPleaseWaitService, PleaseWaitService>();
-                //serviceLocator.RegisterTypeIfNotYetRegistered<ISchedulerService, SchedulerService>();
-                //serviceLocator.RegisterTypeIfNotYetRegistered<IVibrateService, VibrateService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IPhoneService, PhoneService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IUrlLocator, UrlLocator>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IViewLocator, ViewLocator>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelLocator, ViewModelLocator>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelFactory, ViewModelFactory>();
-
-                //serviceLocator.RegisterTypeIfNotYetRegistered<IAccelerometerService, AccelerometerService>();
-                //serviceLocator.RegisterTypeIfNotYetRegistered<ICameraService, CameraService>();
-
-#else // WPF
-                if (!serviceLocator.IsTypeRegistered<IMessageMediator>())
-                {
-                    serviceLocator.RegisterInstance(MessageMediator.Default);
-                }
-
-                if (!serviceLocator.IsTypeRegistered<ExceptionHandling.IExceptionService>())
-                {
-                    serviceLocator.RegisterInstance(ExceptionHandling.ExceptionService.Default);
-                }
-
-                // NOTE: Must be in this specific order
-                serviceLocator.RegisterTypeIfNotYetRegistered<IDispatcherService, DispatcherService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IMessageService, MessageService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<INavigationService, NavigationService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IOpenFileService, OpenFileService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IPleaseWaitService, PleaseWaitService>();
+#if NET
                 serviceLocator.RegisterTypeIfNotYetRegistered<IProcessService, ProcessService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<ISaveFileService, SaveFileService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<ISchedulerService, SchedulerService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<ISelectDirectoryService, SelectDirectoryService>();
+#endif
+
+#if NET || SL5
+                serviceLocator.RegisterTypeIfNotYetRegistered<IOpenFileService, OpenFileService>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<ISaveFileService, SaveFileService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IUIVisualizerService, UIVisualizerService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IUrlLocator, UrlLocator>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IViewLocator, ViewLocator>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelLocator, ViewModelLocator>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelFactory, ViewModelFactory>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IViewExportService, ViewExportService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<ISplashScreenService, SplashScreenService>(RegistrationType.Transient);
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewExportService, ViewExportService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IStartUpInfoProvider, StartUpInfoProvider>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<ISplashScreenService, SplashScreenService>(RegistrationType.Transient);
+#endif
+
+#if WINDOWS_PHONE || XAMARIN
+                serviceLocator.RegisterTypeIfNotYetRegistered<IPhoneService, PhoneService>();
+
+#if !XAMARIN
+                // TODO: Add support in xamarin
+                serviceLocator.RegisterTypeIfNotYetRegistered<IAccelerometerService, AccelerometerService>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<ILocationService, LocationService>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<IVibrateService, VibrateService>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<ICameraService, CameraService>();
+#endif
 
 #endif
 

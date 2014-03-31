@@ -28,7 +28,6 @@ namespace Catel.Android.Views
 
         private readonly UserControlLogic _logic;
         private object _dataContext;
-        private object _content;
         #endregion
 
         #region Constructors
@@ -75,13 +74,7 @@ namespace Catel.Android.Views
                 PropertyChanged.SafeInvoke(this, e);
             };
 
-            _logic.ViewModelChanged += (sender, e) =>
-            {
-                OnViewModelChanged();
-
-                ViewModelChanged.SafeInvoke(this, e);
-                PropertyChanged.SafeInvoke(this, new PropertyChangedEventArgs("ViewModel"));
-            };
+            _logic.ViewModelChanged += (sender, e) => RaiseViewModelChanged();
 
             _logic.ViewModelPropertyChanged += (sender, e) =>
             {
@@ -105,7 +98,7 @@ namespace Catel.Android.Views
             _logic.ViewUnloading += (sender, e) => ViewUnloading.SafeInvoke(this);
             _logic.ViewUnloaded += (sender, e) => ViewUnloaded.SafeInvoke(this);
 
-            ViewModelChanged.SafeInvoke(this);
+            RaiseViewModelChanged();
         }
         #endregion
 
@@ -226,17 +219,6 @@ namespace Catel.Android.Views
         }
 
         /// <summary>
-        /// Gets or sets the content that is contained within a user control.
-        /// </summary>
-        /// <value>The content.</value>
-        /// <returns>The content of the user control.</returns>
-        object IView.Content
-        {
-            get { return _content; }
-            set { SetContentView(value as View); }
-        }
-
-        /// <summary>
         /// Gets or sets a value indicating whether the view is enabled.
         /// </summary>
         /// <value><c>true</c> if the view is enabled; otherwise, <c>false</c>.</value>
@@ -300,6 +282,14 @@ namespace Catel.Android.Views
         #endregion
 
         #region Methods
+        private void RaiseViewModelChanged()
+        {
+            OnViewModelChanged();
+
+            ViewModelChanged.SafeInvoke(this);
+            PropertyChanged.SafeInvoke(this, new PropertyChangedEventArgs("ViewModel"));
+        }
+
         /// <summary>
         /// This is called when the view is attached to a window.
         /// </summary>

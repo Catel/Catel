@@ -12,7 +12,7 @@ namespace Catel.Services
     using global::Android.App;
     using global::Android.OS;
 #elif IOS
-    using MonoTouch.CoreFoundation;
+    using global::MonoTouch.CoreFoundation;
 #elif NETFX_CORE
     using Windows.Threading;
     using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
@@ -52,7 +52,7 @@ namespace Catel.Services
 #if ANDROID
             _handler.Post(action);
 #elif IOS
-           DispatchQueue.MainQueue.DispatchSync(() => action());
+            DispatchQueue.MainQueue.DispatchSync(() => action());
 #else
             var dispatcher = CurrentDispatcher;
             DispatcherExtensions.Invoke(dispatcher, action);

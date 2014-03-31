@@ -8,6 +8,7 @@
 namespace Catel.MVVM.Navigation
 {
     using System;
+    using Catel.Logging;
     using global::Android.App;
     using global::Android.OS;
 
@@ -23,13 +24,8 @@ namespace Catel.MVVM.Navigation
             public Activity Activity { get; private set; }
         }
 
-        private class ActivityLifecycleCallbacksListener : Application.IActivityLifecycleCallbacks
+        private class ActivityLifecycleCallbacksListener : Java.Lang.Object, Application.IActivityLifecycleCallbacks
         {
-            public void Dispose()
-            {
-                
-            }
-
             public event EventHandler<ActivityEventArgs> ActivityCreated;
 
             public event EventHandler<ActivityEventArgs> ActivityDestroyed;
@@ -42,7 +38,6 @@ namespace Catel.MVVM.Navigation
 
             public event EventHandler<ActivityEventArgs> ActivityStopped;
 
-            public IntPtr Handle { get; private set; }
             public void OnActivityCreated(Activity activity, Bundle savedInstanceState)
             {
                 ActivityCreated.SafeInvoke(this, new ActivityEventArgs(activity));
@@ -85,6 +80,13 @@ namespace Catel.MVVM.Navigation
         {
             var activity = GetNavigationTarget<Activity>();
             var application = activity.Application;
+            if (application == null)
+            {
+                const string error = "To support navigation events in Android, Catel uses a custom ActivityLifecycleCallbacksListener. This requires an app instance though. Please make sure that the Android app contains an Application class.";
+                Log.Error(error);
+
+                throw new NotSupportedException(error);
+            }
 
             _activityLifecycleCallbacksListener = new ActivityLifecycleCallbacksListener();
             _activityLifecycleCallbacksListener.ActivityStarted += OnActivityStarted;
@@ -107,9 +109,12 @@ namespace Catel.MVVM.Navigation
         {
             var activity = GetNavigationTarget<Activity>();
             var intentExtras = activity.Intent.Extras;
-            foreach (var item in intentExtras.KeySet())
+            if (intentExtras != null)
             {
-                NavigationContext.Values[item] = intentExtras.Get(item);
+                foreach (var item in intentExtras.KeySet())
+                {
+                    NavigationContext.Values[item] = intentExtras.Get(item);
+                }
             }
         }
 

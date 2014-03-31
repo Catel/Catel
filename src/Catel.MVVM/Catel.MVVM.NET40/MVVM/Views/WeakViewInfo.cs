@@ -35,10 +35,8 @@ namespace Catel.MVVM.Views
             this.SubscribeToWeakGenericEvent<EventArgs>(view, "Loaded", OnLoaded);
             this.SubscribeToWeakGenericEvent<EventArgs>(view, "Unloaded", OnUnloaded);
 
-#if !XAMARIN
+#if !NET && !XAMARIN
             this.SubscribeToWeakGenericEvent<EventArgs>(view, "LayoutUpdated", OnLayoutUpdated);
-#else
-            throw new MustBeImplementedException();
 #endif
         }
         #endregion
@@ -86,10 +84,12 @@ namespace Catel.MVVM.Views
         /// </summary>
         public event EventHandler<EventArgs> Unloaded;
 
+#if !NET && !XAMARIN
         /// <summary>
         /// Occurs when the view layout is updated.
         /// </summary>
         public event EventHandler<EventArgs> LayoutUpdated;
+#endif
         #endregion
 
         #region Methods
@@ -135,6 +135,7 @@ namespace Catel.MVVM.Views
             }
         }
 
+#if !NET && !XAMARIN
         /// <summary>
         /// Called when the view layout is updated.
         /// </summary>
@@ -148,6 +149,7 @@ namespace Catel.MVVM.Views
                 layoutUpdated(this, e);
             }
         }
+#endif
         #endregion
     }
 }
