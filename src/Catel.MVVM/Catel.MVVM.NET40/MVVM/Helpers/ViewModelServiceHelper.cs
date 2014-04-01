@@ -59,11 +59,11 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewLocator, ViewLocator>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelLocator, ViewModelLocator>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelFactory, ViewModelFactory>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<INavigationService, NavigationService>();
 
 #if !XAMARIN
                 // TODO: Add support in xamarin
                 serviceLocator.RegisterTypeIfNotYetRegistered<IPleaseWaitService, PleaseWaitService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<INavigationService, NavigationService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<ISchedulerService, SchedulerService>();
 #endif
 

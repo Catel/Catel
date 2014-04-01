@@ -48,6 +48,16 @@ namespace Catel.MVVM.Navigation
             }
         }
 
+        /// <summary>
+        /// Determines whether the navigation can be handled by this adapter.
+        /// </summary>
+        /// <returns><c>true</c> if the navigation can be handled by this adapter; otherwise, <c>false</c>.</returns>
+        protected override bool CanHandleNavigation()
+        {
+            var content = RootFrame.Content;
+            return ReferenceEquals(content, NavigationTarget);
+        }
+
         private void OnNavigatingEvent(object sender, NavigatingCancelEventArgs e)
         {
             // We are navigating away

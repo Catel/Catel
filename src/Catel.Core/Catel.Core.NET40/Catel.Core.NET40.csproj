@@ -246,6 +246,12 @@
     <Compile Include="Logging\Configuration\LogListenerConfigurationCollection.cs" />
     <Compile Include="Logging\Configuration\LogListenerConfiguration.cs" />
     <Compile Include="Logging\Listeners\ConsoleLogListener.cs" />
+    <Compile Include="Logging\Listeners\DebugLogListener.ios.cs" />
+    <Compile Include="Logging\Listeners\DebugLogListener.sl.cs" />
+    <Compile Include="Logging\Listeners\DebugLogListener.winrt.cs" />
+    <Compile Include="Logging\Listeners\DebugLogListener.net.cs" />
+    <Compile Include="Logging\Listeners\DebugLogListener.wp.cs" />
+    <Compile Include="Logging\Listeners\DebugLogListener.android.cs" />
     <Compile Include="Logging\Listeners\DebugLogListener.cs" />
     <Compile Include="Logging\EventArgs\LogMessageEventArgs.cs" />
     <Compile Include="Logging\Extensions\LogExtensions.cs" />

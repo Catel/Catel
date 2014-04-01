@@ -152,6 +152,10 @@
     <Compile Include="Services\Models\Location.cs" />
     <Compile Include="Services\LocationService.wp.cs" />
     <Compile Include="Services\Models\Size.cs" />
+    <Compile Include="Services\NavigationService.ios.cs" />
+    <Compile Include="Services\NavigationServiceBase.cs" />
+    <Compile Include="Services\NavigationService.xaml.cs" />
+    <Compile Include="Services\NavigationService.android.cs" />
     <Compile Include="Services\PhoneService.cs" />
     <Compile Include="Services\PleaseWaitService.ios.cs" />
     <Compile Include="Services\PleaseWaitService.android.cs" />

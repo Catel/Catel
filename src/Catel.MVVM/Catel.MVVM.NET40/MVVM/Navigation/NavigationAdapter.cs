@@ -8,7 +8,6 @@
 namespace Catel.MVVM.Navigation
 {
     using System;
-    using System.Reflection;
     using Catel.Logging;
     using Catel.MVVM.Views;
 

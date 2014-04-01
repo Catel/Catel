@@ -434,6 +434,18 @@
     <Compile Include="..\Catel.MVVM.NET40\Services\Models\Size.cs">
       <Link>Services\Models\Size.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\NavigationService.android.cs">
+      <Link>Services\NavigationService.android.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\NavigationService.ios.cs">
+      <Link>Services\NavigationService.ios.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\NavigationService.xaml.cs">
+      <Link>Services\NavigationService.xaml.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\NavigationServiceBase.cs">
+      <Link>Services\NavigationServiceBase.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\PhoneService.cs">
       <Link>Services\PhoneService.cs</Link>
     </Compile>

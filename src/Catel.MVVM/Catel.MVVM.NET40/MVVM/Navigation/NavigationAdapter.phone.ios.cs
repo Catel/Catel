@@ -9,6 +9,14 @@ namespace Catel.MVVM.Navigation
 {
     public partial class NavigationAdapter
     {
+        /// <summary>
+        /// Determines whether the navigation can be handled by this adapter.
+        /// </summary>
+        /// <returns><c>true</c> if the navigation can be handled by this adapter; otherwise, <c>false</c>.</returns>
+        protected override bool CanHandleNavigation()
+        {
+            throw new MustBeImplementedException();
+        }
     }
 }
 #endif

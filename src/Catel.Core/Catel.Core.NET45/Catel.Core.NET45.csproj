@@ -631,8 +631,26 @@
     <Compile Include="..\Catel.Core.NET40\Logging\Listeners\ConsoleLogListener.cs">
       <Link>Logging\Listeners\ConsoleLogListener.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.android.cs">
+      <Link>Logging\Listeners\DebugLogListener.android.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.cs">
       <Link>Logging\Listeners\DebugLogListener.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.ios.cs">
+      <Link>Logging\Listeners\DebugLogListener.ios.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.net.cs">
+      <Link>Logging\Listeners\DebugLogListener.net.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.sl.cs">
+      <Link>Logging\Listeners\DebugLogListener.sl.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.winrt.cs">
+      <Link>Logging\Listeners\DebugLogListener.winrt.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.wp.cs">
+      <Link>Logging\Listeners\DebugLogListener.wp.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Listeners\FileLogListener.cs">
       <Link>Logging\Listeners\FileLogListener.cs</Link>

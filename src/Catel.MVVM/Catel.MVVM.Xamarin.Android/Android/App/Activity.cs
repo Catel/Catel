@@ -14,6 +14,7 @@ namespace Catel.Android.App
     using Catel.MVVM;
     using Catel.MVVM.Providers;
     using Catel.MVVM.Views;
+    using global::Android.OS;
     using global::Android.Views;
 
     /// <summary>
@@ -28,6 +29,8 @@ namespace Catel.Android.App
 
         private readonly PhonePageLogic _logic;
         private object _dataContext;
+
+        private bool _isInitialized;
         #endregion
 
         #region Constructors
@@ -307,11 +310,23 @@ namespace Catel.Android.App
         }
 
         /// <summary>
+        /// Called when the activity is starting.
+        /// </summary>
+        protected override void OnCreate(Bundle savedInstanceState)
+        {
+            base.OnCreate(savedInstanceState);
+
+            _isInitialized = true;
+        }
+
+        /// <summary>
         /// Called when the view is loaded.
         /// </summary>
         protected override void OnResume()
         {
             base.OnResume();
+
+            RaiseViewModelChanged();
 
             Loaded.SafeInvoke(this);
         }
@@ -332,9 +347,9 @@ namespace Catel.Android.App
         /// </summary>
         public override void OnBackPressed()
         {
-            base.OnBackPressed();
-
             BackKeyPress.SafeInvoke(this);
+
+            base.OnBackPressed();
         }
 
         /// <summary>
@@ -389,6 +404,11 @@ namespace Catel.Android.App
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         protected virtual void OnViewModelPropertyChanged(PropertyChangedEventArgs e)
         {
+            if (!_isInitialized)
+            {
+                return;
+            }
+
             SyncViewModel();
         }
 
@@ -401,6 +421,11 @@ namespace Catel.Android.App
         /// </remarks>
         protected virtual void OnViewModelChanged()
         {
+            if (!_isInitialized)
+            {
+                return;
+            }
+
             if (ViewModel != null)
             {
                 SyncViewModel();

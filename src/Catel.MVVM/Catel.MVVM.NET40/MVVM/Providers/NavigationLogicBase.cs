@@ -78,7 +78,7 @@ namespace Catel.MVVM.Providers
         #region Methods
         private void CreateNavigationAdapter()
         {
-            if (_navigationAdapter != null)
+            if (_navigationAdapter == null)
             {
                 _navigationAdapter = new NavigationAdapter(TargetPage, true);
                 _navigationAdapter.NavigatedTo += OnNavigatedTo;

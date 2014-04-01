@@ -86,6 +86,7 @@ namespace Catel.MVVM
                 }
 
 #if XAMARIN
+
                 throw new MustBeImplementedException();
 #else
                 string shortAssemblyName = TypeHelper.GetAssemblyNameWithoutOverhead(viewModelType.GetAssemblyFullNameEx());

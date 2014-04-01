@@ -606,6 +606,21 @@
     <Compile Include="..\Catel.MVVM.NET40\Services\NamingConvention.cs">
       <Link>Services\NamingConvention.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\NavigationService.android.cs">
+      <Link>Services\NavigationService.android.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\NavigationService.cs">
+      <Link>Services\NavigationService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\NavigationService.ios.cs">
+      <Link>Services\NavigationService.ios.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\NavigationService.xaml.cs">
+      <Link>Services\NavigationService.xaml.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\NavigationServiceBase.cs">
+      <Link>Services\NavigationServiceBase.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\PhoneService.cs">
       <Link>Services\PhoneService.cs</Link>
     </Compile>
@@ -699,7 +714,6 @@
   <ItemGroup>
     <Folder Include="Data\" />
     <Folder Include="Helpers\" />
-    <Folder Include="MonoTouch\UIKit\" />
     <Folder Include="Services\Extensions\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
