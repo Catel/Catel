@@ -13,6 +13,7 @@ namespace Catel.Test.IoC
     using System.Linq;
     using Catel.Caching;
     using Catel.IoC;
+    using Catel.IoC.Exceptions;
     using Catel.MVVM;
     using Catel.Services;
     using Catel.Test.Data;
@@ -1416,6 +1417,38 @@ namespace Catel.Test.IoC
                 serviceLocator.RegisterType<InterfaceB, ClassB>();
 
                 ExceptionTester.CallMethodAndExpectException<CircularDependencyException>(() => serviceLocator.ResolveType<InterfaceA>());
+            }
+        }
+
+        [TestClass]
+        public class TheResolveMissingType
+        {
+            interface IDummy
+            {
+                 
+            }
+
+            public class Dummy : IDummy
+            {
+                 
+            }
+
+            [TestMethod]
+            public void ThrowsMissingRegistredTypeException()
+            {
+                var serviceLocator = IoCFactory.CreateServiceLocator();
+
+                ExceptionTester.CallMethodAndExpectException<MissingRegistredTypeException>(() => serviceLocator.ResolveType<IDummy>());
+            }
+
+            [TestMethod]
+            public void ThrowsMissingRegistredByTagTypeException()
+            {
+                var serviceLocator = IoCFactory.CreateServiceLocator();
+                serviceLocator.RegisterType(typeof(IDummy), typeof(Dummy), "SomeTag");
+
+                Assert.IsNotNull(serviceLocator.ResolveType(typeof(IDummy), "SomeTag"));
+                ExceptionTester.CallMethodAndExpectException<MissingRegistredTypeException>(() => serviceLocator.ResolveType<IDummy>());
             }
         }
     }

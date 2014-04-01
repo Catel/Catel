@@ -205,6 +205,7 @@
     <Compile Include="IoC\Conventions\FirstInterfaceRegistrationConvention.cs" />
     <Compile Include="IoC\Conventions\NamingRegistrationConvention.cs" />
     <Compile Include="IoC\Conventions\RegistrationConventionBase.cs" />
+    <Compile Include="IoC\Exceptions\MissingRegistredTypeException.cs" />
     <Compile Include="IoC\Extensions\RegistrationConventionHandlerExtensions.cs" />
     <Compile Include="IoC\Extensions\ServiceLocatorExtensions.conventions.cs" />
     <Compile Include="IoC\Interfaces\IRegistrationConventionHandler.cs" />

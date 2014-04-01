@@ -9,7 +9,7 @@ namespace Catel.Test.IoC
 {
     using System;
     using Catel.IoC;
-
+    using Catel.IoC.Exceptions;
 #if NETFX_CORE
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 #else
@@ -143,6 +143,24 @@ namespace Catel.Test.IoC
                 var resolvedDependencyResolver = dependencyResolverManager.GetDependencyResolverForType(typeof(object));
 
                 Assert.IsTrue(ReferenceEquals(dependencyResolverManager.DefaultDependencyResolver, resolvedDependencyResolver));
+            }
+
+            [TestClass]
+            public class TheResolveMissingType
+            {
+                interface IDummy
+                {
+
+                }
+                [TestMethod]
+                public void ThrowsMissingRegistredTypeException()
+                {
+                    var dependencyResolverManager = new DependencyResolverManager();
+
+                    var resolvedDependencyResolver = dependencyResolverManager.GetDependencyResolverForType(typeof(object));
+
+                    ExceptionTester.CallMethodAndExpectException<MissingRegistredTypeException>(() => resolvedDependencyResolver.Resolve(typeof(IDummy)));
+                }
             }
         }
     }

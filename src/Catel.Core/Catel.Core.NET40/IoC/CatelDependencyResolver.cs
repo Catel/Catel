@@ -10,6 +10,7 @@ namespace Catel.IoC
     using System;
     using Catel.Logging;
     using Catel.Reflection;
+    using Exceptions;
 
     /// <summary>
     /// Implementation of the <see cref="IDependencyResolver"/> interface for Catel by wrapping the
@@ -72,17 +73,11 @@ namespace Catel.IoC
         /// </summary>
         /// <param name="type">The type.</param>
         /// <param name="tag">The tag.</param>
-        /// <returns>The resolved object or <c>null</c> if the type could not be resolved.</returns>
+        /// <returns>The resolved object.</returns>
         public object Resolve(Type type, object tag = null)
         {
             Argument.IsNotNull("type", type);
-
-            if (!_serviceLocator.IsTypeRegistered(type, tag))
-            {
-                Log.Debug("Failed to resolve type '{0}', returning null", type.GetSafeFullName());
-                return null;
-            }
-
+            
             return _serviceLocator.ResolveType(type, tag);
         }
 
@@ -106,7 +101,14 @@ namespace Catel.IoC
 
             for (int i = 0; i < typeCount; i++)
             {
-                resolvedTypes[i] = Resolve(types[i], tag);
+                try
+                {
+                    resolvedTypes[i] = Resolve(types[i], tag);
+                }
+                catch (MissingRegistredTypeException e)
+                {
+                    Log.Debug(e, "Failed to resolve type '{0}', returning null", e.RequestedType.GetSafeFullName());
+                }
             }
 
             return resolvedTypes;

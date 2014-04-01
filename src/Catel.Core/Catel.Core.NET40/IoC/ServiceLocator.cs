@@ -12,6 +12,7 @@ namespace Catel.IoC
     using System.Diagnostics;
     using System.Linq;
     using Catel.Scoping;
+    using Exceptions;
     using Logging;
     using Reflection;
 
@@ -437,7 +438,7 @@ namespace Catel.IoC
         /// <param name="tag">The tag to register the service with. The default value is <c>null</c>.</param>
         /// <returns>An instance of the type registered on the service.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType" /> is <c>null</c>.</exception>
-        /// <exception cref="NotSupportedException">The type is not found in any container.</exception>
+        /// <exception cref="MissingRegistredTypeException">The type is not found in any container.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
         public object ResolveType(Type serviceType, object tag = null)
         {
@@ -457,9 +458,8 @@ namespace Catel.IoC
                     return TypeFactory.CreateInstance(serviceType);
                 }
 
-                var error = string.Format("The type '{0}' is not registered", serviceType.FullName);
-                Log.Error(error);
-                throw new NotSupportedException(error);
+                Log.Error(string.Format("The type '{0}' is not registered", serviceType.FullName));
+                throw new MissingRegistredTypeException(serviceType);
             }
 
             lock (_lockObject)
@@ -486,6 +486,7 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("serviceType", serviceType);
 
+            var resolvedInstances = new List<object>();
             lock (_lockObject)
             {
                 for (int i = 0; i < _registeredTypes.Keys.Count; i++)
@@ -493,10 +494,18 @@ namespace Catel.IoC
                     ServiceInfo serviceInfo = _registeredTypes.Keys.ElementAt(i);
                     if (serviceInfo.Type == serviceType)
                     {
-                        yield return ResolveType(serviceInfo.Type, serviceInfo.Tag);
+                        try
+                        {
+                            resolvedInstances.Add(ResolveType(serviceInfo.Type, serviceInfo.Tag));
+                        }
+                        catch (MissingRegistredTypeException e)
+                        {
+                            Log.Debug(e, "Failed to resolve type '{0}', returning null", e.RequestedType.GetSafeFullName());
+                        }
                     }
                 }
             }
+            return resolvedInstances;
         }
 
         /// <summary>
@@ -846,12 +855,12 @@ namespace Catel.IoC
                 var registeredTypeInfo = _registeredTypes[serviceInfo];
 
                 object instance = registeredTypeInfo.CreateServiceFunc(registeredTypeInfo);
-                if (instance != null)
+                if (instance == null)
+                    throw new MissingRegistredTypeException(serviceType);
+                
+                if (IsTypeRegisteredAsSingleton(serviceType, tag))
                 {
-                    if (IsTypeRegisteredAsSingleton(serviceType, tag))
-                    {
-                        RegisterInstance(serviceType, instance, tag, this);
-                    }
+                    RegisterInstance(serviceType, instance, tag, this);
                 }
 
                 CompleteTypeRequestPathIfRequired(typeRequestInfo);
@@ -877,15 +886,15 @@ namespace Catel.IoC
             {
                 instance = TypeFactory.CreateInstanceUsingActivator(registration.ImplementingType);
             }
+            
+            if (instance == null)
+                throw new MissingRegistredTypeException(registration.DeclaringType);
 
-            if (instance != null)
+            var handler = TypeInstantiated;
+            if (handler != null)
             {
-                var handler = TypeInstantiated;
-                if (handler != null)
-                {
-                    handler(this, new TypeInstantiatedEventArgs(registration.DeclaringType, registration.ImplementingType,
-                        registration.Tag, registration.RegistrationType));
-                }
+                handler(this, new TypeInstantiatedEventArgs(registration.DeclaringType, registration.ImplementingType,
+                    registration.Tag, registration.RegistrationType));
             }
 
             return instance;
