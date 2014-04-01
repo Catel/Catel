@@ -29,7 +29,6 @@ namespace Catel.Android.App
 
         private readonly PhonePageLogic _logic;
         private object _dataContext;
-
         private bool _isInitialized;
         #endregion
 

@@ -15,6 +15,7 @@ namespace Catel.Android.App
     using Catel.MVVM.Providers;
     using Catel.MVVM.Views;
     using global::Android.Content;
+    using global::Android.OS;
     using global::Android.Runtime;
     using global::Android.Util;
 
@@ -30,6 +31,7 @@ namespace Catel.Android.App
 
         private readonly UserControlLogic _logic;
         private object _dataContext;
+        private bool _isInitialized;
         private object _tag;
         #endregion
 
@@ -325,6 +327,16 @@ namespace Catel.Android.App
         }
 
         /// <summary>
+        /// Called to do initial creation of a fragment.
+        /// </summary>
+        public override void OnCreate(Bundle savedInstanceState)
+        {
+            base.OnCreate(savedInstanceState);
+
+            _isInitialized = true;
+        }
+
+        /// <summary>
         /// Called when the fragment is resumed.
         /// </summary>
         public override void OnResume()
@@ -396,6 +408,11 @@ namespace Catel.Android.App
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         protected virtual void OnViewModelPropertyChanged(PropertyChangedEventArgs e)
         {
+            if (!_isInitialized)
+            {
+                return;
+            }
+
             SyncViewModel();
         }
 
@@ -408,6 +425,11 @@ namespace Catel.Android.App
         /// </remarks>
         protected virtual void OnViewModelChanged()
         {
+            if (!_isInitialized)
+            {
+                return;
+            }
+
             if (ViewModel != null)
             {
                 SyncViewModel();

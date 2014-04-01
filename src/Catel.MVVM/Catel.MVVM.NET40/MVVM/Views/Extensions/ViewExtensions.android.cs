@@ -10,7 +10,6 @@ namespace Catel.MVVM.Views
 {
     using System;
     using System.Collections.Generic;
-    using global::Android.App;
     using global::Android.OS;
     using global::Android.Views;
 
