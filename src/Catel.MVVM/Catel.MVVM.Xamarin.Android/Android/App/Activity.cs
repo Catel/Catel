@@ -337,9 +337,10 @@ namespace Catel.Android.App
         /// </summary>
         protected override void OnPause()
         {
-            Unloaded.SafeInvoke(this);
-
             base.OnPause();
+
+            // Note: call *after* base so NavigationAdapter always gets called
+            Unloaded.SafeInvoke(this);
         }
 
         /// <summary>

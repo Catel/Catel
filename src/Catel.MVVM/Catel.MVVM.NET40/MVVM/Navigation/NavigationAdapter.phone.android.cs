@@ -39,11 +39,20 @@ namespace Catel.MVVM.Navigation
     /// </summary>
     public class ActivityLifecycleCallbacksListener : Java.Lang.Object, Application.IActivityLifecycleCallbacks
     {
+        private readonly Activity _activity;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ActivityLifecycleCallbacksListener"/> class.
         /// </summary>
-        public ActivityLifecycleCallbacksListener()
+        public ActivityLifecycleCallbacksListener(Activity activity)
         {
+            _activity = activity;
+
+            var catelActivity = activity as Android.App.Activity;
+            if (catelActivity != null)
+            {
+                catelActivity.BackKeyPress += OnBackKeyPress;
+            }
         }
 
         /// <summary>
@@ -98,6 +107,11 @@ namespace Catel.MVVM.Navigation
         /// <param name="savedInstanceState">State of the saved instance.</param>
         public void OnActivityCreated(Activity activity, Bundle savedInstanceState)
         {
+            if (!ReferenceEquals(activity, _activity))
+            {
+                return;
+            }
+
             var eventArgs = new ActivityEventArgs(activity);
             ActivityCreated.SafeInvoke(this, eventArgs);
         }
@@ -108,6 +122,11 @@ namespace Catel.MVVM.Navigation
         /// <param name="activity">The activity.</param>
         public void OnActivityDestroyed(Activity activity)
         {
+            if (!ReferenceEquals(activity, _activity))
+            {
+                return;
+            }
+
             var eventArgs = new ActivityEventArgs(activity);
             ActivityDestroyed.SafeInvoke(this, eventArgs);
         }
@@ -118,14 +137,13 @@ namespace Catel.MVVM.Navigation
         /// <param name="activity">The activity.</param>
         public void OnActivityPaused(Activity activity)
         {
+            if (!ReferenceEquals(activity, _activity))
+            {
+                return;
+            }
+
             var eventArgs = new ActivityEventArgs(activity);
             ActivityPaused.SafeInvoke(this, eventArgs);
-
-            var catelActivity = activity as Android.App.Activity;
-            if (catelActivity != null)
-            {
-                catelActivity.BackKeyPress -= OnBackKeyPress;
-            }
         }
 
         /// <summary>
@@ -134,14 +152,13 @@ namespace Catel.MVVM.Navigation
         /// <param name="activity">The activity.</param>
         public void OnActivityResumed(Activity activity)
         {
+            if (!ReferenceEquals(activity, _activity))
+            {
+                return;
+            }
+
             var eventArgs = new ActivityEventArgs(activity);
             ActivityResumed.SafeInvoke(this, eventArgs);
-
-            var catelActivity = activity as Android.App.Activity;
-            if (catelActivity != null)
-            {
-                catelActivity.BackKeyPress += OnBackKeyPress;
-            }
         }
 
         /// <summary>
@@ -160,6 +177,11 @@ namespace Catel.MVVM.Navigation
         /// <param name="activity">The activity.</param>
         public void OnActivityStarted(Activity activity)
         {
+            if (!ReferenceEquals(activity, _activity))
+            {
+                return;
+            }
+
             var eventArgs = new ActivityEventArgs(activity);
             ActivityStarted.SafeInvoke(this, eventArgs);
         }
@@ -170,6 +192,11 @@ namespace Catel.MVVM.Navigation
         /// <param name="activity">The activity.</param>
         public void OnActivityStopped(Activity activity)
         {
+            if (!ReferenceEquals(activity, _activity))
+            {
+                return;
+            }
+
             var eventArgs = new ActivityEventArgs(activity);
             ActivityStopped.SafeInvoke(this, eventArgs);
         }
@@ -198,7 +225,7 @@ namespace Catel.MVVM.Navigation
                 throw new NotSupportedException(error);
             }
 
-            _activityLifecycleCallbacksListener = new ActivityLifecycleCallbacksListener();
+            _activityLifecycleCallbacksListener = new ActivityLifecycleCallbacksListener(activity);
             _activityLifecycleCallbacksListener.BackKeyPressed += OnActivityBackKeyPressed;
             _activityLifecycleCallbacksListener.ActivityResumed += OnActivityResumed;
             _activityLifecycleCallbacksListener.ActivityPaused += OnActivityPaused;

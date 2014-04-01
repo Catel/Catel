@@ -80,7 +80,7 @@ namespace Catel.MVVM.Providers
         {
             if (_navigationAdapter == null)
             {
-                _navigationAdapter = new NavigationAdapter(TargetPage, true);
+                _navigationAdapter = new NavigationAdapter(TargetPage);
                 _navigationAdapter.NavigatedTo += OnNavigatedTo;
                 _navigationAdapter.NavigatingAway += OnNavigatingAway;
                 _navigationAdapter.NavigatedAway += OnNavigatedAway;

@@ -27,8 +27,7 @@ namespace Catel.MVVM.Navigation
         /// Initializes a new instance of the <see cref="NavigationAdapter" /> class.
         /// </summary>
         /// <param name="navigationTarget">The navigation target.</param>
-        /// <param name="isComingFromLoadedEvent">if set to <c>true</c>, the adapter is being created in the loaded event.</param>
-        public NavigationAdapter(IView navigationTarget, bool isComingFromLoadedEvent)
+        public NavigationAdapter(IView navigationTarget)
         {
             Argument.IsNotNull("navigationTarget", navigationTarget);
 
