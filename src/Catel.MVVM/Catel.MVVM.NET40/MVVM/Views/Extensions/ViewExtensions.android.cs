@@ -10,6 +10,7 @@ namespace Catel.MVVM.Views
 {
     using System;
     using System.Collections.Generic;
+    using global::Android.App;
     using global::Android.OS;
     using global::Android.Views;
 
@@ -26,9 +27,9 @@ namespace Catel.MVVM.Views
         /// <returns>
         /// 	<see cref="IView"/> or <c>null</c> if no parent is found that matches the predicate.
         /// </returns>
-        public static View FindParentByPredicate(this IView view, Predicate<object> predicate)
+        public static IView FindParentByPredicate(this IView view, Predicate<object> predicate)
         {
-            return FindParentByPredicate((View)view, predicate, -1);
+            return FindParentByPredicate(view, predicate, -1);
         }
 
         /// <summary>
@@ -41,17 +42,17 @@ namespace Catel.MVVM.Views
         /// <returns>
         /// 	<see cref="View"/> or <c>null</c> if no parent is found that matches the predicate.
         /// </returns>
-        public static View FindParentByPredicate(this View view, Predicate<object> predicate, int maxDepth)
+        public static IView FindParentByPredicate(this IView view, Predicate<object> predicate, int maxDepth)
         {
             Argument.IsNotNull("view", view);
             Argument.IsNotNull("predicate", predicate);
 
             object foundParent = null;
 
-            var parents = new List<View>();
+            var parents = new List<IView>();
             if (view.Parent != null)
             {
-                var parentView = view.Parent as View;
+                var parentView = view.Parent as IView;
                 if (parentView != null)
                 {
                     parents.Add(parentView);
@@ -67,7 +68,7 @@ namespace Catel.MVVM.Views
                 }
             }
 
-            return foundParent as View;
+            return foundParent as IView;
         }
 
         /// <summary>
@@ -77,7 +78,7 @@ namespace Catel.MVVM.Views
         /// <param name="condition">The condition.</param>
         /// <param name="maxDepth">The maximum number of levels to go up when searching for the parent. If smaller than 0, no maximum is used.</param>
         /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
-        public static object FindLogicalOrVisualAncestor(this View startElement, Predicate<object> condition, int maxDepth = -1)
+        public static object FindLogicalOrVisualAncestor(this IView startElement, Predicate<object> condition, int maxDepth = -1)
         {
             // Try to find visual ancestor one level up
             object visualAncestor = FindVisualAncestor(startElement, condition, 1);
@@ -107,7 +108,7 @@ namespace Catel.MVVM.Views
         /// <param name="condition">The condition.</param>
         /// <param name="maxDepth">The maximum number of levels to go up when searching for the parent. If smaller than 0, no maximum is used.</param>
         /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
-        public static object FindVisualAncestor(this View startElement, Predicate<object> condition, int maxDepth = -1)
+        public static object FindVisualAncestor(this IView startElement, Predicate<object> condition, int maxDepth = -1)
         {
             var obj = startElement;
             while ((obj != null) && !condition(obj))
@@ -133,13 +134,13 @@ namespace Catel.MVVM.Views
         /// <param name="element">The element to retrieve the parent from.</param>
         /// <returns>The parent or <c>null</c> if the parent could not be found.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="element"/> is <c>null</c>.</exception>
-        public static View GetVisualParent(this View element)
+        public static IView GetVisualParent(this IView element)
         {
             Argument.IsNotNull("element", element);
 
             try
             {
-                return element.Parent as View;
+                return element.Parent as IView;
             }
             catch (Exception)
             {

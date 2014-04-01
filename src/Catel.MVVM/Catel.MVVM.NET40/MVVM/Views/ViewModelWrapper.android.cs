@@ -10,15 +10,7 @@ namespace Catel.MVVM.Views
 {
     public partial class ViewModelWrapper
     {
-        partial void CreateWrapper(object viewModelWrapper)
-        {
-            throw new MustBeImplementedException();
-        }
-
-        partial void SetViewModel(IViewModel viewModel)
-        {
-            throw new MustBeImplementedException();
-        }
+        // no implementation required
     }
 }
 

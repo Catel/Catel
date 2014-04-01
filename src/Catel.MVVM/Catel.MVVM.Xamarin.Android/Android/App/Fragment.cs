@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Android.Views
+namespace Catel.Android.App
 {
     using System;
     using System.ComponentModel;
@@ -15,11 +15,13 @@ namespace Catel.Android.Views
     using Catel.MVVM.Providers;
     using Catel.MVVM.Views;
     using global::Android.Content;
+    using global::Android.Runtime;
+    using global::Android.Util;
 
     /// <summary>
-    /// View implementation that automatically takes care of view models.
+    /// Fragment implementation that automatically takes care of view models.
     /// </summary>
-    public class View : global::Android.Views.View, IUserControl
+    public class Fragment : global::Android.App.Fragment, IUserControl
     {
         #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
@@ -28,13 +30,14 @@ namespace Catel.Android.Views
 
         private readonly UserControlLogic _logic;
         private object _dataContext;
+        private object _tag;
         #endregion
 
         #region Constructors
         /// <summary>
-        /// Initializes static members of the <see cref="View"/> class.
+        /// Initializes static members of the <see cref="Fragment"/> class.
         /// </summary>
-        static View()
+        static Fragment()
         {
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
 
@@ -42,10 +45,20 @@ namespace Catel.Android.Views
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="View"/> class.
+        /// Initializes a new instance of the <see cref="Fragment"/> class.
         /// </summary>
-        public View(Context context)
-            : base(context)
+        /// <param name="javaReference">The java reference.</param>
+        /// <param name="transfer">The transfer.</param>
+        public Fragment(IntPtr javaReference, JniHandleOwnership transfer)
+            : base(javaReference, transfer)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Fragment" /> class.
+        /// </summary>
+        /// <exception cref="System.NotSupportedException"></exception>
+        public Fragment() 
         {
             if (CatelEnvironment.IsInDesignMode)
             {
@@ -205,7 +218,7 @@ namespace Catel.Android.Views
         /// <value>The parent.</value>
         object IView.Parent
         {
-            get { return Parent; }
+            get { return Activity as IView; }
         }
 
         /// <summary>
@@ -214,8 +227,8 @@ namespace Catel.Android.Views
         /// <value>The tag.</value>
         object IView.Tag
         {
-            get { return Tag; }
-            set { Tag = (Java.Lang.Object)value; }
+            get { return _tag; }
+            set { _tag = value; }
         }
 
         /// <summary>
@@ -312,23 +325,23 @@ namespace Catel.Android.Views
         }
 
         /// <summary>
-        /// This is called when the view is attached to a window.
+        /// Called when the fragment is resumed.
         /// </summary>
-        protected override void OnAttachedToWindow()
+        public override void OnResume()
         {
-            base.OnAttachedToWindow();
+            base.OnResume();
 
             Loaded.SafeInvoke(this);
         }
 
         /// <summary>
-        /// This is called when the view is detached from a window.
+        /// Called when the fragment is paused.
         /// </summary>
-        protected override void OnDetachedFromWindow()
+        public override void OnPause()
         {
-            Unloaded.SafeInvoke(this);
+            base.OnPause();
 
-            base.OnDetachedFromWindow();
+            Unloaded.SafeInvoke(this);
         }
 
         /// <summary>

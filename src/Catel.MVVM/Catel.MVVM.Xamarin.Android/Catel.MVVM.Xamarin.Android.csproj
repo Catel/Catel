@@ -702,7 +702,7 @@
     </Compile>
     <Compile Include="Android\App\Activity.cs" />
     <Compile Include="Android\App\Application.cs" />
-    <Compile Include="Android\Views\View.cs" />
+    <Compile Include="Android\App\Fragment.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
