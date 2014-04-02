@@ -12,7 +12,6 @@ namespace Catel.IoC
     using System.Diagnostics;
     using System.Linq;
     using Catel.Scoping;
-    using Exceptions;
     using Logging;
     using Reflection;
 
@@ -438,7 +437,7 @@ namespace Catel.IoC
         /// <param name="tag">The tag to register the service with. The default value is <c>null</c>.</param>
         /// <returns>An instance of the type registered on the service.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType" /> is <c>null</c>.</exception>
-        /// <exception cref="MissingRegistredTypeException">The type is not found in any container.</exception>
+        /// <exception cref="MissingRegisteredTypeException">The type is not found in any container.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
         public object ResolveType(Type serviceType, object tag = null)
         {
@@ -459,7 +458,7 @@ namespace Catel.IoC
                 }
 
                 Log.Error(string.Format("The type '{0}' is not registered", serviceType.FullName));
-                throw new MissingRegistredTypeException(serviceType);
+                throw new MissingRegisteredTypeException(serviceType);
             }
 
             lock (_lockObject)
@@ -498,7 +497,7 @@ namespace Catel.IoC
                         {
                             resolvedInstances.Add(ResolveType(serviceInfo.Type, serviceInfo.Tag));
                         }
-                        catch (MissingRegistredTypeException e)
+                        catch (MissingRegisteredTypeException e)
                         {
                             Log.Debug(e, "Failed to resolve type '{0}', returning null", e.RequestedType.GetSafeFullName());
                         }
@@ -856,7 +855,7 @@ namespace Catel.IoC
 
                 object instance = registeredTypeInfo.CreateServiceFunc(registeredTypeInfo);
                 if (instance == null)
-                    throw new MissingRegistredTypeException(serviceType);
+                    throw new MissingRegisteredTypeException(serviceType);
                 
                 if (IsTypeRegisteredAsSingleton(serviceType, tag))
                 {
@@ -888,7 +887,7 @@ namespace Catel.IoC
             }
             
             if (instance == null)
-                throw new MissingRegistredTypeException(registration.DeclaringType);
+                throw new MissingRegisteredTypeException(registration.DeclaringType);
 
             var handler = TypeInstantiated;
             if (handler != null)

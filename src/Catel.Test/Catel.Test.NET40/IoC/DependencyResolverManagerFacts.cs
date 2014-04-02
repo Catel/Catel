@@ -9,7 +9,6 @@ namespace Catel.Test.IoC
 {
     using System;
     using Catel.IoC;
-    using Catel.IoC.Exceptions;
 #if NETFX_CORE
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 #else
@@ -159,7 +158,7 @@ namespace Catel.Test.IoC
 
                     var resolvedDependencyResolver = dependencyResolverManager.GetDependencyResolverForType(typeof(object));
 
-                    ExceptionTester.CallMethodAndExpectException<MissingRegistredTypeException>(() => resolvedDependencyResolver.Resolve(typeof(IDummy)));
+                    ExceptionTester.CallMethodAndExpectException<MissingRegisteredTypeException>(() => resolvedDependencyResolver.Resolve(typeof(IDummy)));
                 }
             }
         }

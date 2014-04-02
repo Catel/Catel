@@ -13,7 +13,6 @@ namespace Catel.Test.IoC
     using System.Linq;
     using Catel.Caching;
     using Catel.IoC;
-    using Catel.IoC.Exceptions;
     using Catel.MVVM;
     using Catel.Services;
     using Catel.Test.Data;
@@ -1438,7 +1437,7 @@ namespace Catel.Test.IoC
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
 
-                ExceptionTester.CallMethodAndExpectException<MissingRegistredTypeException>(() => serviceLocator.ResolveType<IDummy>());
+                ExceptionTester.CallMethodAndExpectException<MissingRegisteredTypeException>(() => serviceLocator.ResolveType<IDummy>());
             }
 
             [TestMethod]
@@ -1448,7 +1447,7 @@ namespace Catel.Test.IoC
                 serviceLocator.RegisterType(typeof(IDummy), typeof(Dummy), "SomeTag");
 
                 Assert.IsNotNull(serviceLocator.ResolveType(typeof(IDummy), "SomeTag"));
-                ExceptionTester.CallMethodAndExpectException<MissingRegistredTypeException>(() => serviceLocator.ResolveType<IDummy>());
+                ExceptionTester.CallMethodAndExpectException<MissingRegisteredTypeException>(() => serviceLocator.ResolveType<IDummy>());
             }
         }
     }
