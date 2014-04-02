@@ -84,18 +84,26 @@ namespace Catel.MVVM
             namingConventions.Add(string.Format("[UP].Views.{0}Control", NamingConvention.ViewModelName));
             namingConventions.Add(string.Format("[UP].Views.{0}Window", NamingConvention.ViewModelName));
             namingConventions.Add(string.Format("[UP].Views.{0}Page", NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("[UP].Views.{0}Activity", NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("[UP].Views.{0}Fragment", NamingConvention.ViewModelName));
             namingConventions.Add(string.Format("[UP].Controls.{0}", NamingConvention.ViewModelName));
             namingConventions.Add(string.Format("[UP].Controls.{0}Control", NamingConvention.ViewModelName));
             namingConventions.Add(string.Format("[UP].Pages.{0}", NamingConvention.ViewModelName));
             namingConventions.Add(string.Format("[UP].Pages.{0}Page", NamingConvention.ViewModelName));
             namingConventions.Add(string.Format("[UP].Windows.{0}", NamingConvention.ViewModelName));
             namingConventions.Add(string.Format("[UP].Windows.{0}Window", NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("[UP].Activities.{0}", NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("[UP].Activities.{0}Activity", NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("[UP].Fragments.{0}", NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("[UP].Fragments.{0}Fragment", NamingConvention.ViewModelName));
 
             namingConventions.Add(string.Format("{0}.Views.{1}", NamingConvention.Assembly, NamingConvention.ViewModelName));
             namingConventions.Add(string.Format("{0}.Views.{1}View", NamingConvention.Assembly, NamingConvention.ViewModelName));
             namingConventions.Add(string.Format("{0}.Views.{1}Control", NamingConvention.Assembly, NamingConvention.ViewModelName));
             namingConventions.Add(string.Format("{0}.Views.{1}Page", NamingConvention.Assembly, NamingConvention.ViewModelName));
             namingConventions.Add(string.Format("{0}.Views.{1}Window", NamingConvention.Assembly, NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("{0}.Views.{1}Activity", NamingConvention.Assembly, NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("{0}.Views.{1}Fragment", NamingConvention.Assembly, NamingConvention.ViewModelName));
 
             namingConventions.Add(string.Format("{0}.Controls.{1}", NamingConvention.Assembly, NamingConvention.ViewModelName));
             namingConventions.Add(string.Format("{0}.Controls.{1}Control", NamingConvention.Assembly, NamingConvention.ViewModelName));
@@ -103,12 +111,18 @@ namespace Catel.MVVM
             namingConventions.Add(string.Format("{0}.Pages.{1}Page", NamingConvention.Assembly, NamingConvention.ViewModelName));
             namingConventions.Add(string.Format("{0}.Windows.{1}", NamingConvention.Assembly, NamingConvention.ViewModelName));
             namingConventions.Add(string.Format("{0}.Windows.{1}Window", NamingConvention.Assembly, NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("{0}.Activities.{1}", NamingConvention.Assembly, NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("{0}.Activities.{1}Activity", NamingConvention.Assembly, NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("{0}.Fragments.{1}", NamingConvention.Assembly, NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("{0}.Fragments.{1}Fragment", NamingConvention.Assembly, NamingConvention.ViewModelName));
 
             namingConventions.Add(string.Format("{0}.UI.Views.{1}", NamingConvention.Assembly, NamingConvention.ViewModelName));
             namingConventions.Add(string.Format("{0}.UI.Views.{1}View", NamingConvention.Assembly, NamingConvention.ViewModelName));
             namingConventions.Add(string.Format("{0}.UI.Views.{1}Control", NamingConvention.Assembly, NamingConvention.ViewModelName));
             namingConventions.Add(string.Format("{0}.UI.Views.{1}Page", NamingConvention.Assembly, NamingConvention.ViewModelName));
             namingConventions.Add(string.Format("{0}.UI.Views.{1}Window", NamingConvention.Assembly, NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("{0}.UI.Views.{1}Activity", NamingConvention.Assembly, NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("{0}.UI.Views.{1}Fragment", NamingConvention.Assembly, NamingConvention.ViewModelName));
 
             namingConventions.Add(string.Format("{0}.UI.Controls.{1}", NamingConvention.Assembly, NamingConvention.ViewModelName));
             namingConventions.Add(string.Format("{0}.UI.Controls.{1}Control", NamingConvention.Assembly, NamingConvention.ViewModelName));
@@ -116,6 +130,9 @@ namespace Catel.MVVM
             namingConventions.Add(string.Format("{0}.UI.Pages.{1}Page", NamingConvention.Assembly, NamingConvention.ViewModelName));
             namingConventions.Add(string.Format("{0}.UI.Windows.{1}", NamingConvention.Assembly, NamingConvention.ViewModelName));
             namingConventions.Add(string.Format("{0}.UI.Windows.{1}Window", NamingConvention.Assembly, NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("{0}.UI.Activities.{1}", NamingConvention.Assembly, NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("{0}.UI.Activities.{1}Activity", NamingConvention.Assembly, NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("{0}.UI.Activities.{1}Fragment", NamingConvention.Assembly, NamingConvention.ViewModelName));
 
             return namingConventions;
         }

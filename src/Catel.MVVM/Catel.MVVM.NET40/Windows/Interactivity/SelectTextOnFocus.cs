@@ -6,14 +6,13 @@
 
 namespace Catel.Windows.Interactivity
 {
-    using System;
-    using System.Windows;
-    
 #if NETFX_CORE
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
     using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
 #else
+    using System;
+    using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Interactivity;
     using UIEventArgs = System.EventArgs;

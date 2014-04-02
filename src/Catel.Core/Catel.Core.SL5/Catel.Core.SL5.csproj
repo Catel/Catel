@@ -618,8 +618,26 @@
     <Compile Include="..\Catel.Core.NET40\Logging\Listeners\ConsoleLogListener.cs">
       <Link>Logging\Listeners\ConsoleLogListener.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.android.cs">
+      <Link>Logging\Listeners\DebugLogListener.android.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.cs">
       <Link>Logging\Listeners\DebugLogListener.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.ios.cs">
+      <Link>Logging\Listeners\DebugLogListener.ios.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.net.cs">
+      <Link>Logging\Listeners\DebugLogListener.net.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.sl.cs">
+      <Link>Logging\Listeners\DebugLogListener.sl.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.winrt.cs">
+      <Link>Logging\Listeners\DebugLogListener.winrt.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.wp.cs">
+      <Link>Logging\Listeners\DebugLogListener.wp.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Log.cs">
       <Link>Logging\Log.cs</Link>
@@ -882,6 +900,9 @@
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\Helpers\XmlHelper.cs">
       <Link>Runtime\Serialization\XmlSerialization\Helpers\XmlHelper.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\Helpers\XmlSchemaHelper.cs">
+      <Link>Runtime\Serialization\XmlSerialization\Helpers\XmlSchemaHelper.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\Interfaces\IDataContractSerializerFactory.cs">
       <Link>Runtime\Serialization\XmlSerialization\Interfaces\IDataContractSerializerFactory.cs</Link>
     </Compile>
@@ -896,6 +917,9 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\XmlNamespaceManager.cs">
       <Link>Runtime\Serialization\XmlSerialization\XmlNamespaceManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\XmlSchemaManager.cs">
+      <Link>Runtime\Serialization\XmlSerialization\XmlSchemaManager.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Runtime\Serialization\XmlSerialization\XmlSerializationContextInfo.cs">
       <Link>Runtime\Serialization\XmlSerialization\XmlSerializationContextInfo.cs</Link>

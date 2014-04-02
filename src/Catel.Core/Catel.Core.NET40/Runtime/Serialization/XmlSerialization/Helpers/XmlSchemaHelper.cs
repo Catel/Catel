@@ -4,6 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if NET
+
 namespace Catel.Runtime.Serialization.Xml
 {
     using System;
@@ -336,3 +338,5 @@ namespace Catel.Runtime.Serialization.Xml
         #endregion
     }
 }
+
+#endif

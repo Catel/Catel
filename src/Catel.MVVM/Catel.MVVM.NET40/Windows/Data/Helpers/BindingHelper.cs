@@ -22,34 +22,6 @@ namespace Catel.Windows.Data
     public static class BindingHelper
     {
         /// <summary>
-        /// Determines whether the specified data context is a sentinel.
-        /// <para />
-        /// For more information, see http://stackoverflow.com/questions/3868786/wpf-sentinel-objects-and-how-to-check-for-an-internal-type.
-        /// </summary>
-        /// <param name="dataContext">The data context.</param>
-        /// <returns><c>true</c> if the data context is a sentinel; otherwise, <c>false</c>.</returns>
-        public static bool IsSentinelObject(object dataContext)
-        {
-            if (dataContext == null)
-            {
-                return false;
-            }
-
-            var type = dataContext.GetType();
-            if (string.CompareOrdinal(type.FullName, "MS.Internal.NamedObject") == 0)
-            {
-                return true;
-            }
-            
-            if (string.CompareOrdinal(dataContext.ToString(), "{DisconnectedObject}") == 0)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
         /// Gets the binding value.
         /// </summary>
         /// <param name="frameworkElement">The dependency object.</param>

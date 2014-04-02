@@ -9,31 +9,14 @@ namespace Catel.Services
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Windows;
     using Catel.MVVM;
     using IoC;
     using Logging;
-    using Windows;
-
-#if NETFX_CORE
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
-    using global::Windows.UI.Xaml.Navigation;
-#elif WINDOWS_PHONE
-    using System.Windows.Navigation;
-    using System.Net;
-    using Phone.Controls;
-#elif SILVERLIGHT
-    using System.Windows.Navigation;
-    using System.Windows.Browser;
-#else
-    using System.Windows.Navigation;
-#endif
 
     /// <summary>
     /// Service to navigate inside applications.
     /// </summary>
-    public class NavigationService : ViewModelServiceBase, INavigationService
+    public partial class NavigationService : NavigationServiceBase, INavigationService
     {
         #region Fields
         /// <summary>
@@ -41,14 +24,7 @@ namespace Catel.Services
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private static object _rootFrame;
-
         private static readonly Dictionary<string, string> _registeredUris = new Dictionary<string, string>();
-
-#if NET || SL4 || SL5
-        private bool _appClosingByMainWindow;
-        private bool _appClosedFromService;
-#endif
         #endregion
 
         #region Constructors
@@ -57,80 +33,8 @@ namespace Catel.Services
         /// </summary>
         public NavigationService()
         {
-#if NET || SL4 || SL5
-            var mainWindow = CatelEnvironment.MainWindow;
-            if (mainWindow != null)
-            {
-                mainWindow.Closing += (sender, e) =>
-                {
-                    if (!_appClosedFromService)
-                    {
-                        _appClosingByMainWindow = true;
-
-                        if (!CloseApplication())
-                        {
-                            Log.Debug("INavigationService.CloseApplication has canceled the closing of the main window");
-                            e.Cancel = true;
-                        }
-
-                        _appClosingByMainWindow = false;
-                    }
-                };
-            }
-            else
-            {
-                Log.Warning("Application.Current.MainWindow is null, cannot prevent application closing via service");
-            }
-#endif
-
-            if (RootFrame != null)
-            {
-                RootFrame.Navigating += OnRootFrameNavigating;
-                RootFrame.Navigated += OnRootFrameNavigated;
-            }
+            Initialize();
         }
-        #endregion
-
-        #region Properties
-        /// <summary>
-        /// Gets a value indicating whether it is possible to navigate back.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if it is possible to navigate back; otherwise, <c>false</c>.
-        /// </value>
-        public virtual bool CanGoBack
-        {
-            get { return RootFrame.CanGoBack; }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether it is possible to navigate forward.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if it is possible to navigate backforward otherwise, <c>false</c>.
-        /// </value>
-        public virtual bool CanGoForward
-        {
-            get { return RootFrame.CanGoForward; }
-        }
-
-        /// <summary>
-        /// Gets the root frame.
-        /// </summary>
-        /// <value>The root frame.</value>
-#if NETFX_CORE
-        private Frame RootFrame
-#elif WINDOWS_PHONE
-        private Microsoft.Phone.Controls.PhoneApplicationFrame RootFrame
-#elif SILVERLIGHT
-        private System.Windows.Controls.Frame RootFrame
-#else
-        private NavigationWindow RootFrame
-#endif
-        {
-            get { return GetApplicationRootFrame(); }
-        }
-
         #endregion
 
         #region Events
@@ -146,25 +50,12 @@ namespace Catel.Services
         #endregion
 
         #region Methods
-        /// <summary>
-        /// Called when the root frame is about to navigate to a new uri.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="NavigatingCancelEventArgs" /> instance containing the event data.</param>
-        protected virtual void OnRootFrameNavigating(object sender, NavigatingCancelEventArgs e)
-        {
-            
-        }
-
-        /// <summary>
-        /// Called when the root frame has just navigated to a new uri.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="NavigationEventArgs" /> instance containing the event data.</param>
-        protected virtual void OnRootFrameNavigated(object sender, NavigationEventArgs e)
-        {
-            
-        }
+        partial void Initialize();
+        partial void CloseMainWindow();
+        partial void NavigateBack();
+        partial void NavigateForward();
+        partial void NavigateToUri(Uri uri);
+        partial void NavigateWithParameters(string uri, Dictionary<string, object> parameters);
 
         /// <summary>
         /// Closes the current application. The actual implementation depends on the final target framework.
@@ -180,25 +71,7 @@ namespace Catel.Services
                 return false;
             }
 
-#if NET || SL4 || SL5
-            _appClosedFromService = true;
-
-            var mainWindow = CatelEnvironment.MainWindow;
-            if (mainWindow == null)
-            {
-                const string error = "No main window found (not running SL out of browser? Cannot close application without a window.";
-                Log.Error(error);
-                throw new NotSupportedException(error);
-            }
-
-            if (!_appClosingByMainWindow)
-            {
-                mainWindow.Close();
-            }
-#else
-            Log.Error("Closing an application is not possible in '{0}'", Platforms.CurrentPlatform);
-            throw new NotSupportedInPlatformException("Closing an application is not possible");
-#endif
+            CloseMainWindow();
 
 #pragma warning disable 162
             ApplicationClosed.SafeInvoke(this);
@@ -213,7 +86,7 @@ namespace Catel.Services
         {
             if (CanGoBack)
             {
-                RootFrame.GoBack();
+                NavigateBack();
             }
         }
 
@@ -224,7 +97,7 @@ namespace Catel.Services
         {
             if (CanGoForward)
             {
-                RootFrame.GoForward();
+                NavigateForward();
             }
         }
 
@@ -244,15 +117,7 @@ namespace Catel.Services
                 parameters = new Dictionary<string, object>();
             }
 
-#if NETFX_CORE
-            var type = Reflection.TypeCache.GetType(uri);
-            RootFrame.Navigate(type, parameters);
-#elif SILVERLIGHT || WINDOWS_PHONE
-            string finalUri = string.Format("{0}{1}", uri, ToQueryString(parameters));
-            Navigate(new Uri(finalUri, UriKind.RelativeOrAbsolute));
-#else
-            RootFrame.Navigate(new Uri(uri, UriKind.RelativeOrAbsolute), parameters);
-#endif
+            NavigateWithParameters(uri, parameters);
         }
 
         /// <summary>
@@ -284,17 +149,8 @@ namespace Catel.Services
             {
                 if (!_registeredUris.ContainsKey(viewModelTypeName))
                 {
-                    var dependencyResolver = this.GetDependencyResolver();
-
-#if NETFX_CORE
-                    var viewLocator = dependencyResolver.Resolve<IViewLocator>();
-                    var url = viewLocator.ResolveView(viewModelType).AssemblyQualifiedName;
-#else
-                    var urlLocator = dependencyResolver.Resolve<IUrlLocator>();
-                    var url = urlLocator.ResolveUrl(viewModelType);
-#endif
-
-                    _registeredUris.Add(viewModelTypeName, url);
+                    var navigationTarget = ResolveNavigationTarget(viewModelType);
+                    _registeredUris.Add(viewModelTypeName, navigationTarget);
                 }
 
                 Navigate(_registeredUris[viewModelTypeName], parameters);
@@ -310,13 +166,7 @@ namespace Catel.Services
         {
             Argument.IsNotNull("uri", uri);
 
-#if NETFX_CORE
-            var error = string.Format("Direct navigations to urls is not supported in '{0}', cannot navigate to '{1}'. Use Navigate(type) instead.", Platforms.CurrentPlatform, uri.ToString());
-            Log.Error(error);
-            throw new NotSupportedInPlatformException(error);
-#else
-            RootFrame.Navigate(uri);
-#endif
+            NavigateToUri(uri);
         }
 
         /// <summary>
@@ -393,177 +243,6 @@ namespace Catel.Services
 
                 return result;
             }
-        }
-
-        /// <summary>
-        /// Returns the number of total back entries (which is the navigation history).
-        /// </summary>
-        public virtual int GetBackStackCount()
-        {
-#if NETFX_CORE
-            throw new NotImplementedException();
-#elif WINDOWS_PHONE
-            return RootFrame.BackStack.Count();
-#elif SILVERLIGHT
-            throw new NotImplementedException();
-#else
-            return RootFrame.BackStack.Cast<object>().Count();
-#endif
-        }
-
-        /// <summary>
-        /// Removes the last back entry from the navigation history.
-        /// </summary>
-        public virtual void RemoveBackEntry()
-        {
-#if NETFX_CORE
-            throw new NotImplementedException();
-#elif WINDOWS_PHONE
-            RootFrame.RemoveBackEntry();
-#elif SILVERLIGHT
-            throw new NotImplementedException();
-#else
-            RootFrame.RemoveBackEntry();
-#endif
-        }
-
-        /// <summary>
-        /// Removes all the back entries from the navigation history.
-        /// </summary>
-        public virtual void RemoveAllBackEntries()
-        {
-#if NETFX_CORE
-            throw new NotImplementedException();
-#elif WINDOWS_PHONE
-            while (RootFrame.RemoveBackEntry() != null)
-            {
-            }
-#elif SILVERLIGHT
-            throw new NotImplementedException();
-#else
-            while (RootFrame.RemoveBackEntry() != null)
-            {   
-            }
-#endif
-        }
-
-#if SILVERLIGHT
-        /// <summary>
-        /// Converts a dictionary to query string parameters.
-        /// </summary>
-        /// <param name="parameters">The parameters.</param>
-        /// <returns>String containing the paramets as query string. <c>null</c> values will be removed.</returns>
-        /// <remarks>
-        /// This method uses the <see cref="Object.ToString"/> method to convert values to a parameter value. Make sure
-        /// that the objects passed correctly support this.
-        /// </remarks>
-        private static string ToQueryString(Dictionary<string, object> parameters)
-        {
-            string url = string.Empty;
-
-            foreach (var parameter in parameters)
-            {
-                if (parameter.Value != null)
-                {
-                    if (string.IsNullOrEmpty(url))
-                    {
-                        url = "?";
-                    }
-                    else
-                    {
-                        url += "&";
-                    }
-
-                    url += string.Format("{0}={1}", HttpUtility.UrlEncode(parameter.Key), HttpUtility.UrlEncode(parameter.Value.ToString()));
-                }
-            }
-
-            return url;
-        }
-#endif
-
-#if NETFX_CORE
-        /// <summary>
-        /// Gets the application root frame.
-        /// </summary>
-        private Frame GetApplicationRootFrame()
-        {
-            if (_rootFrame == null)
-            {
-                if (Window.Current != null)
-                {
-                    _rootFrame = Window.Current.Content as Frame;
-                }
-            }
-
-            return _rootFrame as Frame;
-        }
-#elif WINDOWS_PHONE
-        /// <summary>
-        /// Gets the application root frame.
-        /// </summary>
-        private Microsoft.Phone.Controls.PhoneApplicationFrame GetApplicationRootFrame()
-        {
-            if (_rootFrame == null)
-            {
-                _rootFrame = Application.Current.RootVisual as Microsoft.Phone.Controls.PhoneApplicationFrame;
-            }
-
-            return _rootFrame as Microsoft.Phone.Controls.PhoneApplicationFrame;
-        }
-#elif SILVERLIGHT
-        /// <summary>
-        /// Gets the application root frame.
-        /// </summary>
-        private System.Windows.Controls.Frame GetApplicationRootFrame()
-        {
-            if (_rootFrame == null)
-            {
-                if (Application.Current != null)
-                {
-                    if (Application.Current.RootVisual != null)
-                    {
-                        _rootFrame = Application.Current.RootVisual.FindVisualDescendant(e => e is System.Windows.Controls.Frame) as System.Windows.Controls.Frame;
-                    }
-                }
-            }
-
-            return _rootFrame as System.Windows.Controls.Frame;
-        }
-#else
-        /// <summary>
-        /// Gets the application root frame.
-        /// </summary>
-        private NavigationWindow GetApplicationRootFrame()
-        {
-            if (_rootFrame == null)
-            {
-                if (Application.Current != null)
-                {
-                    _rootFrame = Application.Current.MainWindow as NavigationWindow;
-                }
-            }
-
-            return _rootFrame as NavigationWindow;
-        }
-#endif
-
-        /// <summary>
-        /// Ensures that the page type is correct for the target framework.
-        /// </summary>
-        /// <param name="pageType">Type of the page.</param>
-        /// <exception cref="ArgumentException">If <paramref name="pageType"/> is not of the right type.</exception>
-        private static void EnsurePageTypeIsCorrect(Type pageType)
-        {
-#if NETFX_CORE
-            Argument.IsOfType("pageType", pageType, typeof(Page));
-#elif WINDOWS_PHONE
-            Argument.IsOfType("pageType", pageType, typeof(PhoneApplicationPage));
-#elif SILVERLIGHT
-            Argument.IsOfType("pageType", pageType, typeof(System.Windows.Controls.Page));
-#else
-            Argument.IsOfType("pageType", pageType, typeof(System.Windows.Controls.Page));
-#endif
         }
         #endregion
     }

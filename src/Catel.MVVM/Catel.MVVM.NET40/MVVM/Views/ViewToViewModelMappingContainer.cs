@@ -9,14 +9,9 @@ namespace Catel.MVVM.Views
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Windows;
 
     using Logging;
     using Reflection;
-
-#if NETFX_CORE
-    using global::Windows.UI.Xaml;
-#endif
 
     /// <summary>
     /// Container class for <see cref="ViewToViewModelMapping"/> elements.
@@ -42,15 +37,15 @@ namespace Catel.MVVM.Views
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="ViewToViewModelMappingContainer"/> class.
+        /// Initializes a new instance of the <see cref="ViewToViewModelMappingContainer" /> class.
         /// </summary>
-        /// <param name="dependencyObject">The dependency object.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="dependencyObject"/> is <c>null</c>.</exception>
-        public ViewToViewModelMappingContainer(DependencyObject dependencyObject)
+        /// <param name="viewModelContainer">The view.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewModelContainer" /> is <c>null</c>.</exception>
+        public ViewToViewModelMappingContainer(IViewModelContainer viewModelContainer)
         {
-            Argument.IsNotNull("dependencyObject", dependencyObject);
+            Argument.IsNotNull("view", viewModelContainer);
 
-            var properties = dependencyObject.GetType().GetPropertiesEx();
+            var properties = viewModelContainer.GetType().GetPropertiesEx();
             foreach (var property in properties)
             {
                 object[] viewToViewModelAttributes = property.GetCustomAttributesEx(typeof(ViewToViewModelAttribute), false);

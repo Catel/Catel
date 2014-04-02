@@ -9,10 +9,12 @@ namespace Catel.Phone.Controls
     using System;
     using System.ComponentModel;
     using System.Windows;
+    using Catel.MVVM.Providers;
+    using Catel.MVVM.Views;
+    using Catel.Windows;
     using IoC;
     using Logging;
     using MVVM;
-    using Windows.Controls.MVVMProviders.Logic;
     using Windows.Data;
 
     /// <summary>
@@ -30,14 +32,19 @@ namespace Catel.Phone.Controls
     /// </list>
     /// </remarks>
     /// <exception cref="InvalidOperationException">The view model of the view could not be resolved. Use either the <see cref="GetViewModelType()"/> method or <see cref="IViewModelLocator"/>.</exception>
-    public class PhoneApplicationPage : Microsoft.Phone.Controls.PhoneApplicationPage, IPhoneApplicationPage
+    public class PhoneApplicationPage : Microsoft.Phone.Controls.PhoneApplicationPage, IPhonePage
     {
         #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private static readonly IViewModelLocator _viewModelLocator;
 
-        private readonly PhoneApplicationPageLogic _logic;
+        private readonly PhonePageLogic _logic;
+
+        private event EventHandler<EventArgs> _backKeyPress;
+        private event EventHandler<EventArgs> _viewLoaded;
+        private event EventHandler<EventArgs> _viewUnloaded;
+        private event EventHandler<EventArgs> _viewDataContextChanged;
         #endregion
 
         #region Constructors
@@ -79,21 +86,15 @@ namespace Catel.Phone.Controls
                 }
             }
 
-            _logic = new PhoneApplicationPageLogic(this, viewModelType);
-            _logic.TargetControlPropertyChanged += (sender, e) =>
+            _logic = new PhonePageLogic(this, viewModelType);
+            _logic.TargetViewPropertyChanged += (sender, e) =>
             {
-                OnPropertyChanged(e.FxEventArgs);
+                OnPropertyChanged(e);
 
-                PropertyChanged.SafeInvoke(this, new PropertyChangedEventArgs(e.PropertyName));
+                PropertyChanged.SafeInvoke(this, e);
             };
 
-            _logic.ViewModelChanged += (sender, e) =>
-            {
-                OnViewModelChanged();
-
-                ViewModelChanged.SafeInvoke(this, e);
-                PropertyChanged.SafeInvoke(this, new PropertyChangedEventArgs("ViewModel"));
-            };
+            _logic.ViewModelChanged += (sender, e) => RaiseViewModelChanged();
 
             _logic.ViewModelPropertyChanged += (sender, e) =>
             {
@@ -115,17 +116,31 @@ namespace Catel.Phone.Controls
             _logic.ViewLoading += (sender, e) => ViewLoading.SafeInvoke(this);
             _logic.ViewLoaded += (sender, e) => ViewLoaded.SafeInvoke(this);
             _logic.ViewUnloading += (sender, e) => ViewUnloading.SafeInvoke(this);
-            _logic.ViewUnloaded += (sender, e) => ViewUnloaded.SafeInvoke(this); 
+            _logic.ViewUnloaded += (sender, e) => ViewUnloaded.SafeInvoke(this);
 
             _logic.Tombstoning += (sender, e) => OnTombstoning();
             _logic.Tombstoned += (sender, e) => OnTombstoned();
             _logic.RecoveringFromTombstoning += (sender, e) => OnRecoveringFromTombstoning();
             _logic.RecoveredFromTombstoning += (sender, e) => OnRecoveredFromTombstoning();
 
-            ViewModelChanged.SafeInvoke(this);
+            Loaded += (sender, e) =>
+            {
+                OnLoaded(e);
 
-            Loaded += (sender, e) => OnLoaded(e);
-            Unloaded += (sender, e) => OnUnloaded(e);
+                _viewLoaded.SafeInvoke(this);
+            };
+
+            Unloaded += (sender, e) =>
+            {
+                OnUnloaded(e);
+
+                _viewUnloaded.SafeInvoke(this);
+            };
+
+            BackKeyPress += (sender, e) => _backKeyPress.SafeInvoke(this);
+            this.AddDataContextChangedHandler((sender, e) => _viewDataContextChanged.SafeInvoke(this));
+
+            RaiseViewModelChanged();
         }
         #endregion
 
@@ -135,7 +150,7 @@ namespace Catel.Phone.Controls
         /// </summary>
         public Type ViewModelType
         {
-            get { return _logic.GetValue<PhoneApplicationPageLogic, Type>(x => x.ViewModelType); }
+            get { return _logic.GetValue<PhonePageLogic, Type>(x => x.ViewModelType); }
         }
 
         /// <summary>
@@ -147,8 +162,8 @@ namespace Catel.Phone.Controls
         /// <value><c>true</c> if the view model container should prevent view model creation; otherwise, <c>false</c>.</value>
         public bool PreventViewModelCreation
         {
-            get { return _logic.GetValue<PhoneApplicationPageLogic, bool>(x => x.PreventViewModelCreation); }
-            set { _logic.SetValue<PhoneApplicationPageLogic>(x => x.PreventViewModelCreation = value); }
+            get { return _logic.GetValue<PhonePageLogic, bool>(x => x.PreventViewModelCreation); }
+            set { _logic.SetValue<PhonePageLogic>(x => x.PreventViewModelCreation = value); }
         }
 
         /// <summary>
@@ -157,7 +172,7 @@ namespace Catel.Phone.Controls
         /// <value>The view model.</value>
         public IViewModel ViewModel
         {
-            get { return _logic.GetValue<PhoneApplicationPageLogic, IViewModel>(x => x.ViewModel); }
+            get { return _logic.GetValue<PhonePageLogic, IViewModel>(x => x.ViewModel); }
         }
 
         /// <summary>
@@ -170,8 +185,8 @@ namespace Catel.Phone.Controls
         /// </value>
         public bool NavigatingAwaySavesViewModel
         {
-            get { return _logic.GetValue<PhoneApplicationPageLogic, bool>(x => x.NavigatingAwaySavesViewModel, true); }
-            set { _logic.SetValue<PhoneApplicationPageLogic>(x => x.NavigatingAwaySavesViewModel = value); }
+            get { return _logic.GetValue<PhonePageLogic, bool>(x => x.NavigatingAwaySavesViewModel, true); }
+            set { _logic.SetValue<PhonePageLogic>(x => x.NavigatingAwaySavesViewModel = value); }
         }
 
         /// <summary>
@@ -187,8 +202,8 @@ namespace Catel.Phone.Controls
         /// </value>
         public bool BackKeyCancelsViewModel
         {
-            get { return _logic.GetValue<PhoneApplicationPageLogic, bool>(x => x.BackKeyCancelsViewModel, true); }
-            set { _logic.SetValue<PhoneApplicationPageLogic>(x => x.BackKeyCancelsViewModel = value); }
+            get { return _logic.GetValue<PhonePageLogic, bool>(x => x.BackKeyCancelsViewModel, true); }
+            set { _logic.SetValue<PhonePageLogic>(x => x.BackKeyCancelsViewModel = value); }
         }
 
         /// <summary>
@@ -202,8 +217,17 @@ namespace Catel.Phone.Controls
         /// <value><c>true</c> if the view modle must be closed on forward navigation; otherwise, <c>false</c>.</value>
         public bool CloseViewModelOnForwardNavigation
         {
-            get { return _logic.GetValue<PhoneApplicationPageLogic, bool>(x => x.CloseViewModelOnForwardNavigation, true); }
-            set { _logic.SetValue<PhoneApplicationPageLogic>(x => x.CloseViewModelOnForwardNavigation = value); }
+            get { return _logic.GetValue<PhonePageLogic, bool>(x => x.CloseViewModelOnForwardNavigation, true); }
+            set { _logic.SetValue<PhonePageLogic>(x => x.CloseViewModelOnForwardNavigation = value); }
+        }
+
+        /// <summary>
+        /// Gets the parent of the view.
+        /// </summary>
+        /// <value>The parent.</value>
+        object IView.Parent
+        {
+            get { return Parent; }
         }
         #endregion
 
@@ -246,9 +270,53 @@ namespace Catel.Phone.Controls
         /// Occurs when the view model container is unloaded.
         /// </summary>
         public event EventHandler<EventArgs> ViewUnloaded;
+
+        /// <summary>
+        /// Occurs when the back key is pressed.
+        /// </summary>
+        event EventHandler<EventArgs> IPhonePage.BackKeyPress
+        {
+            add { _backKeyPress += value; }
+            remove { _backKeyPress -= value; }
+        }
+
+        /// <summary>
+        /// Occurs when the view is loaded.
+        /// </summary>
+        event EventHandler<EventArgs> IView.Loaded
+        {
+            add { _viewLoaded += value; }
+            remove { _viewLoaded -= value; }
+        }
+
+        /// <summary>
+        /// Occurs when the view is unloaded.
+        /// </summary>
+        event EventHandler<EventArgs> IView.Unloaded
+        {
+            add { _viewUnloaded += value; }
+            remove { _viewUnloaded -= value; }
+        }
+
+        /// <summary>
+        /// Occurs when the data context has changed.
+        /// </summary>
+        event EventHandler<EventArgs> IView.DataContextChanged
+        {
+            add { _viewDataContextChanged += value; }
+            remove { _viewDataContextChanged -= value; }
+        }
         #endregion
 
         #region Methods
+        private void RaiseViewModelChanged()
+        {
+            OnViewModelChanged();
+
+            ViewModelChanged.SafeInvoke(this);
+            PropertyChanged.SafeInvoke(this, new PropertyChangedEventArgs("ViewModel"));
+        }
+
         /// <summary>
         /// Gets the type of the view model. If this method returns <c>null</c>, the view model type will be retrieved by naming 
         /// convention using the <see cref="IViewModelLocator"/> registered in the <see cref="IServiceLocator"/>.
@@ -306,8 +374,8 @@ namespace Catel.Phone.Controls
         /// <summary>
         /// Called when a dependency property on this control has changed.
         /// </summary>
-        /// <param name="e">The <see cref="DependencyPropertyValueChangedEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnPropertyChanged(DependencyPropertyValueChangedEventArgs e)
+        /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
+        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
         {
         }
 
@@ -383,7 +451,7 @@ namespace Catel.Phone.Controls
         /// Note that it is not required to call the base.
         /// </remarks>
         protected virtual void OnRecoveringFromTombstoning()
-        {   
+        {
         }
 
         /// <summary>

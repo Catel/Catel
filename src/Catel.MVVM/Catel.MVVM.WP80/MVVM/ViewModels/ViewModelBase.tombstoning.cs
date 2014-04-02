@@ -11,34 +11,9 @@ namespace Catel.MVVM
     using System.IO;
     using Catel.IoC;
     using Catel.Runtime.Serialization;
+    using Catel.Services;
     using Phone.Controls;
     using Logging;
-
-    /// <summary>
-    /// Available tombstoning modes.
-    /// </summary>
-    public enum TombstoningMode
-    {
-        /// <summary>
-        /// The view model will store and recover all values of all view model properties automatically.
-        /// </summary>
-        /// <remarks>
-        /// This mode is not yet supported!
-        /// </remarks>
-        Auto,
-
-        /// <summary>
-        /// Tombstoning will be handled manually by the developer of the view models using the
-        /// <see cref="ViewModelBase.PrepareForTombstoneState"/> and <see cref="ViewModelBase.RecoverFromTombstoneState"/>
-        /// methods.
-        /// </summary>
-        Manual,
-
-        /// <summary>
-        /// Tombstoning capabilities are fully disabled for the view model.
-        /// </summary>
-        Disabled
-    }
 
     public partial class ViewModelBase
     {
@@ -46,7 +21,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Gets or sets the tombstoning mode.
         /// <para />
-        /// The default value is <see cref="MVVM.TombstoningMode.Manual">TombstoningMode.Manual</see>.
+        /// The default value is <see cref="Services.TombstoningMode.Manual">TombstoningMode.Manual</see>.
         /// </summary>
         /// <value>The tombstoning mode.</value>
         public TombstoningMode TombstoningMode { get; protected set; }
@@ -72,7 +47,7 @@ namespace Catel.MVVM
         /// Prepares the state for tombstoning.
         /// <para />
         /// This method will be called when the <see cref="TombstoningMode"/> is set to 
-        /// <see cref="MVVM.TombstoningMode.Manual">TombstoningMode.Manual</see>.
+        /// <see cref="Catel.Services.TombstoningMode.Manual">TombstoningMode.Manual</see>.
         /// </summary>
         /// <param name="state">The target state which can be used to store values.</param>
         protected virtual void PrepareForTombstoneState(IDictionary<string, object> state)
@@ -95,7 +70,7 @@ namespace Catel.MVVM
         /// Recovers the state from tombstoning.
         /// <para />
         /// This method will be called when the <see cref="TombstoningMode"/> is set to
-        /// <see cref="Catel.MVVM.TombstoningMode.Manual">TombstoningMode.Manual</see>.
+        /// <see cref="Services.TombstoningMode.Manual">TombstoningMode.Manual</see>.
         /// </summary>
         /// <param name="state">The source state to recover values from.</param>
         protected virtual void RecoverFromTombstoneState(IDictionary<string, object> state)

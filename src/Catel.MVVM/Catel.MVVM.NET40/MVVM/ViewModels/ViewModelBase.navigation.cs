@@ -8,17 +8,12 @@ namespace Catel.MVVM
 {
     using System;
     using Catel.Data;
-
-#if SILVERLIGHT
-    using NavigationContextType = System.Collections.Generic.Dictionary<string, string>;
-#else
-    using NavigationContextType = System.Collections.Generic.Dictionary<string, object>;
-#endif
+    using Catel.MVVM.Navigation;
 
     public partial class ViewModelBase
     {
         #region Fields
-        private readonly NavigationContextType _navigationContext = new NavigationContextType();
+        private readonly NavigationContext _navigationContext = new NavigationContext();
         #endregion
 
         #region Constructors
@@ -34,7 +29,7 @@ namespace Catel.MVVM
         /// not in the constructor.
         /// </remarks>
         [ExcludeFromValidation]
-        protected NavigationContextType NavigationContext { get { return _navigationContext; } }
+        protected NavigationContext NavigationContext { get { return _navigationContext; } }
         #endregion
 
         #region Events
@@ -59,15 +54,15 @@ namespace Catel.MVVM
         /// to match it to the values of the <paramref name="navigationContext"/>.
         /// </summary>
         /// <param name="navigationContext">The navigation context.</param>
-        public void UpdateNavigationContext(NavigationContextType navigationContext)
+        public void UpdateNavigationContext(NavigationContext navigationContext)
         {
             lock (_navigationContext)
             {
                 if (navigationContext != null)
                 {
-                    foreach (string key in navigationContext.Keys)
+                    foreach (string key in navigationContext.Values.Keys)
                     {
-                        _navigationContext[key] = navigationContext[key];
+                        _navigationContext.Values[key] = navigationContext.Values[key];
                     }
                 }
 

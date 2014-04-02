@@ -4,14 +4,17 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#pragma warning disable 3021 // 'type' does not need a CLSCompliant attribute because the assembly does not have a CLSCompliant attribute
+
 namespace Catel.MVVM
 {
     using System;
+    using Catel.MVVM.Views;
 
 #if NETFX_CORE
     using View = global::Windows.UI.Xaml.FrameworkElement;
 #elif ANDROID
-    using View = Android.Views.View;
+    using View = global::Android.Views.View;
 #elif IOS
     using View = MonoTouch.UIKit.UIView;
 #else
@@ -38,7 +41,7 @@ namespace Catel.MVVM
         /// <remarks>
         /// The <c>CanExecute</c> state of a command is queried a lot. The command itself does not cache any results because
         /// it is not aware of role or identity changes. If caching is required, this must be implemented in the class implementing
-        /// the <see cref="IAuthenticationProvider"/> interface.
+        /// the <see cref="IAuthenticationProvider"/> interface.a
         /// </remarks>
         bool CanCommandBeExecuted(ICatelCommand command, object commandParameter);
 

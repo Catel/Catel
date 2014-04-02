@@ -6,7 +6,7 @@
 
 namespace Catel.Runtime.Serialization
 {
-#if NET || XAMARIN
+#if NET
     using Catel.Runtime.Serialization.Binary;
 #endif
 
@@ -19,7 +19,7 @@ namespace Catel.Runtime.Serialization
     /// </summary>
     public static class SerializationFactory
     {
-#if NET || XAMARIN
+#if NET
         /// <summary>
         /// Gets the binary serializer.
         /// </summary>

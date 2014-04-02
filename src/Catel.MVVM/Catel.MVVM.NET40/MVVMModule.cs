@@ -8,17 +8,11 @@
 namespace Catel
 {
     using Catel.MVVM;
+    using Catel.MVVM.Views;
     using Catel.Reflection;
     using Catel.Services;
     using IoC;
 
-#if !XAMARIN
-    using Catel.MVVM.Views;
-#endif
-
-#if !NET && !XAMARIN
-    using Catel.Windows;
-#endif
 
     /// <summary>
     /// MVVM module which allows the registration of default services in the service locator.
@@ -33,16 +27,10 @@ namespace Catel
         {
             Argument.IsNotNull(() => serviceLocator);
 
-#if !NET && !PCL  && !XAMARIN
-            serviceLocator.RegisterTypeIfNotYetRegistered<IFrameworkElementLoadedManager, FrameworkElementLoadedManager>();
-#endif
-
             serviceLocator.RegisterTypeIfNotYetRegistered<ICommandManager, CommandManager>();
-
-#if !XAMARIN
+            serviceLocator.RegisterTypeIfNotYetRegistered<IViewLoadedManager, ViewLoadedManager>();
+            serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelWrapperService, ViewModelWrapperService>();
             serviceLocator.RegisterTypeIfNotYetRegistered<IViewManager, ViewManager>();
-#endif
-
             serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelManager, ViewModelManager>();
             serviceLocator.RegisterTypeIfNotYetRegistered<IAutoCompletionService, AutoCompletionService>();
 

@@ -50,6 +50,10 @@ namespace Catel
             return SupportedPlatforms.Windows80;
 #elif WIN81
             return SupportedPlatforms.Windows81;
+#elif ANDROID
+            return SupportedPlatforms.Android;
+#elif IOS
+            return SupportedPlatforms.iOS;
 #else
             throw new System.NotSupportedException("Unknown platform is not supported");
 #endif
@@ -99,6 +103,16 @@ namespace Catel
         /// <summary>
         /// The portable class libraries (PCL).
         /// </summary>
-        PCL
+        PCL,
+
+        /// <summary>
+        /// The Android platform.
+        /// </summary>
+        Android,
+
+        /// <summary>
+        /// The iOS platform.
+        /// </summary>
+        iOS
     }
 }

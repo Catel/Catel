@@ -81,7 +81,7 @@ namespace Catel.Windows
             RunStoryboardWithCallback(frameworkElement, _undimmStoryboard, completedDelegate);
         }
 
-#if NET || SL4 || SL5
+#if NET || SL5
         /// <summary>
         /// Blurs the specified framework element.
         /// </summary>

@@ -7,6 +7,8 @@
 namespace Catel.Windows
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Reflection;
     using System.Windows;
     using Logging;
@@ -16,10 +18,15 @@ namespace Catel.Windows
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Media;
+
+    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
+    using VisualStateGroup = global::Windows.UI.Xaml.VisualStateGroup;
 #else
     using System.Windows.Controls;
     using System.Windows.Data;
     using System.Windows.Media;
+
+    using VisualStateGroup = System.Object;
 #endif
 
 #if NET
@@ -75,15 +82,62 @@ namespace Catel.Windows
 #endif
 
         #region Fields
-#if NET
         /// <summary>
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-#endif
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Transfers the styles and transitions from two framework elements.
+        /// </summary>
+        /// <param name="oldElement">The old element.</param>
+        /// <param name="newElement">The new element.</param>
+        public static void TransferStylesAndTransitions(this FrameworkElement oldElement, FrameworkElement newElement)
+        {
+            Argument.IsNotNull("oldElement", oldElement);
+            Argument.IsNotNull("newElement", newElement);
+
+            Log.Debug("Transferring styles and transitions");
+
+            var name = oldElement.Name;
+            var renderTransform = oldElement.RenderTransform;
+            var renderTransformOrigin = oldElement.RenderTransformOrigin;
+
+            oldElement.RenderTransform = null;
+            oldElement.Name = "__dynamicReplacement";
+
+            newElement.Name = name;
+            newElement.RenderTransform = renderTransform;
+            newElement.RenderTransformOrigin = renderTransformOrigin;
+
+            var customVisualStateManager = VisualStateManager.GetCustomVisualStateManager(oldElement);
+            if (customVisualStateManager != null)
+            {
+                VisualStateManager.SetCustomVisualStateManager(oldElement, null);
+                VisualStateManager.SetCustomVisualStateManager(newElement, customVisualStateManager);
+            }
+
+            var oldContentVisualStateGroups = VisualStateManager.GetVisualStateGroups(oldElement);
+            if (oldContentVisualStateGroups.Count > 0)
+            {
+                // Copy to temp list, then clear, then add them to new parent
+                var tempList = new List<VisualStateGroup>(oldContentVisualStateGroups.Cast<VisualStateGroup>());
+
+                oldContentVisualStateGroups.Clear();
+
+                var newContentVisualStateGroups = VisualStateManager.GetVisualStateGroups(newElement);
+                foreach (var visualStateGroup in tempList)
+                {
+                    newContentVisualStateGroups.Add(visualStateGroup);
+                }
+            }
+
+            Log.Debug("Transferred styles and transitions");
+        }
+
+
         /// <summary>
         /// Hides the validation adorner.
         /// </summary>

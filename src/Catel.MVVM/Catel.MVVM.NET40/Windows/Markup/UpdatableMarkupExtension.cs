@@ -13,6 +13,7 @@ namespace Catel.Windows.Markup
     using System.Windows;
     using System.Windows.Threading;
     using Catel.Windows.Threading;
+
 #if !NETFX_CORE
     using System.Windows.Data;
     using System.Windows.Markup;

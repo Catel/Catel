@@ -1,7 +1,6 @@
 ﻿<UserControl x:Class="Catel.Windows.LoaderAnimation"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Name="UserControl">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     
     <!-- Resources -->
     <UserControl.Resources>

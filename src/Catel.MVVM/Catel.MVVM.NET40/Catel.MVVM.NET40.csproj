@@ -84,9 +84,10 @@
     <Compile Include="Data\DispatcherObservableObject.cs" />
     <Compile Include="CatelEnvironment.cs" />
     <Compile Include="DesignTimeInitializer.cs" />
+    <Compile Include="Extensions\INotifyPropertyChangedExtensions.cs" />
     <Compile Include="Helpers\ThemeHelper.cs" />
     <Compile Include="MVVMModule.cs" />
-    <Compile Include="Extensions\NavigationExtensions.cs" />
+    <Compile Include="MVVM\Navigation\Extensions\NavigationExtensions.cs" />
     <Compile Include="ModuleInitializer.cs" />
     <Compile Include="MVVM\Auditing\AuditingManager.cs" />
     <Compile Include="MVVM\Auditing\AuditorBase.cs" />
@@ -101,15 +102,132 @@
     <Compile Include="MVVM\Commands\EventArgs\CommandExecutedEventArgs.cs" />
     <Compile Include="MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs" />
     <Compile Include="MVVM\Commands\Helpers\CommandHelper.cs" />
+    <Compile Include="MVVM\Converters\Interfaces\IValueConverter.cs" />
+    <Compile Include="MVVM\Navigation\EventArgs\NavigationEventArgsBase.cs" />
+    <Compile Include="MVVM\Navigation\Extensions\NavigationModeExtensions.cs" />
+    <Compile Include="MVVM\Navigation\NavigationAdapterBase.cs" />
+    <Compile Include="MVVM\Navigation\NavigationContext.cs" />
+    <Compile Include="MVVM\Navigation\NavigationMode.cs" />
+    <Compile Include="MVVM\Providers\PhonePageLogic.cs" />
     <Compile Include="MVVM\ViewModels\ViewModelBase.throttling.cs" />
+    <Compile Include="MVVM\Navigation\EventArgs\NavigatedEventArgs.cs" />
+    <Compile Include="MVVM\Navigation\EventArgs\NavigatingEventArgs.cs" />
+    <Compile Include="MVVM\Views\Extensions\ViewExtensions.android.cs" />
+    <Compile Include="MVVM\Views\Extensions\ViewExtensions.dispatching.cs" />
+    <Compile Include="MVVM\Views\EventArgs\ViewLoadedEventArgs.cs" />
+    <Compile Include="MVVM\Views\Extensions\ViewExtensions.ios.cs" />
+    <Compile Include="MVVM\Views\Extensions\ViewExtensions.properties.cs" />
+    <Compile Include="MVVM\Views\Extensions\ViewExtensions.visualtree.cs" />
+    <Compile Include="MVVM\Views\Extensions\ViewExtensions.xaml.cs" />
+    <Compile Include="MVVM\Views\Interfaces\INavigationView.cs" />
+    <Compile Include="MVVM\Views\Interfaces\IPhonePage.cs" />
+    <Compile Include="MVVM\Views\Interfaces\IViewLoadedManager.cs" />
+    <Compile Include="MVVM\Navigation\NavigationAdapter.page.sl.cs">
+      <DependentUpon>NavigationAdapter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\Navigation\NavigationAdapter.page.winrt.cs">
+      <DependentUpon>NavigationAdapter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\Navigation\NavigationAdapter.page.wpf.cs">
+      <DependentUpon>NavigationAdapter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\Navigation\NavigationAdapter.phone.android.cs">
+      <DependentUpon>NavigationAdapter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\Navigation\NavigationAdapter.phone.ios.cs">
+      <DependentUpon>NavigationAdapter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\Navigation\NavigationAdapter.phone.wp.cs">
+      <DependentUpon>NavigationAdapter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\Navigation\NavigationAdapter.cs" />
+    <Compile Include="MVVM\Views\Extensions\ViewExtensions.cs" />
+    <Compile Include="MVVM\Views\ViewLoadedManager.cs" />
+    <Compile Include="MVVM\Views\Interfaces\IView.cs" />
+    <Compile Include="MVVM\Views\Interfaces\IViewModelWrapper.cs" />
+    <Compile Include="MVVM\Views\ViewModelWrapper.android.cs" />
+    <Compile Include="MVVM\Views\ViewModelWrapper.cs" />
+    <Compile Include="MVVM\Views\ViewModelWrapper.ios.cs" />
+    <Compile Include="MVVM\Views\ViewModelWrapper.xaml.cs" />
+    <Compile Include="MVVM\Views\WeakViewInfo.cs" />
+    <Compile Include="Services\AccelerometerService.wp.cs" />
+    <Compile Include="Services\CameraService.winrt.cs">
+      <DependentUpon>CameraService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\CameraService.ios.cs">
+      <DependentUpon>CameraService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\CameraService.cs" />
+    <Compile Include="Services\CameraService.android.cs">
+      <DependentUpon>CameraService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Models\AccelerometerValue.cs" />
     <Compile Include="Services\AutoCompletionService.cs" />
+    <Compile Include="Services\CameraService.wp.cs">
+      <DependentUpon>CameraService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\CameraServiceBase.cs" />
     <Compile Include="Services\Exceptions\SplashScreenException.cs" />
     <Compile Include="Services\Extensions\IUIVisualizerServiceExtensions.cs" />
     <Compile Include="Services\Interfaces\IAutoCompletionService.cs" />
+    <Compile Include="Services\Interfaces\IPhoneService.cs" />
+    <Compile Include="Services\Interfaces\IStateService.cs" />
+    <Compile Include="Services\Interfaces\IViewModelWrapperService.cs" />
+    <Compile Include="Services\Models\Location.cs" />
+    <Compile Include="Services\LocationService.wp.cs" />
+    <Compile Include="Services\Models\Size.cs" />
+    <Compile Include="Services\NavigationService.ios.cs">
+      <DependentUpon>NavigationService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\NavigationServiceBase.cs" />
+    <Compile Include="Services\NavigationService.xaml.cs">
+      <DependentUpon>NavigationService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\NavigationService.android.cs">
+      <DependentUpon>NavigationService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\PhoneService.cs" />
+    <Compile Include="Services\PleaseWaitService.cs" />
+    <Compile Include="Services\PleaseWaitService.ios.cs">
+      <DependentUpon>PleaseWaitService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\PleaseWaitService.android.cs">
+      <DependentUpon>PleaseWaitService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\PleaseWaitService.wp.cs">
+      <DependentUpon>PleaseWaitService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\PleaseWaitService.winrt.cs">
+      <DependentUpon>PleaseWaitService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\SensorServiceBase.cs" />
+    <Compile Include="Services\StateService.cs" />
+    <Compile Include="Services\Test\AccelerometerService.cs" />
+    <Compile Include="Services\Test\CameraService.cs" />
+    <Compile Include="Services\Test\LocationService.cs" />
+    <Compile Include="Services\Test\NavigationService.cs" />
+    <Compile Include="Services\Test\SensorServiceBase.cs" />
+    <Compile Include="Services\VibrateService.wp.cs" />
+    <Compile Include="Services\ViewModelWrapperService.android.cs">
+      <DependentUpon>ViewModelWrapperService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\ViewModelWrapperService.ios.cs">
+      <DependentUpon>ViewModelWrapperService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\ViewModelWrapperService.xaml.cs">
+      <DependentUpon>ViewModelWrapperService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\ViewModelWrapperService.cs" />
+    <Compile Include="Services\ViewModelWrapperServiceBase.cs" />
+    <Compile Include="Windows\Controls\ValidationResult.cs" />
+    <Compile Include="Windows\Controls\ValidationRule.cs" />
+    <Compile Include="Windows\Data\Helpers\BindingHelper.cs" />
+    <Compile Include="Windows\Helpers\DataContextChangedHelper.cs" />
+    <Compile Include="Windows\Helpers\SetterValueBindingHelper.cs" />
     <Compile Include="Windows\MediaElementThreadInfo.cs" />
-    <Compile Include="Windows\Data\Converters\CollectionToCountConverter.cs" />
-    <Compile Include="Windows\Data\Converters\TextToLowerCaseConverter.cs" />
-    <Compile Include="Windows\Data\Converters\TextToUpperCaseConverter.cs" />
+    <Compile Include="MVVM\Converters\CollectionToCountConverter.cs" />
+    <Compile Include="MVVM\Converters\TextToLowerCaseConverter.cs" />
+    <Compile Include="MVVM\Converters\TextToUpperCaseConverter.cs" />
     <Compile Include="Windows\MediaElementThreadFactory.cs" />
     <Compile Include="Windows\Input\InputGesture.cs" />
     <Compile Include="MVVM\Commands\Interfaces\ICompositeCommand.cs" />
@@ -172,7 +290,9 @@
     <Compile Include="Services\NamingConvention.cs" />
     <Compile Include="Services\NavigationService.cs" />
     <Compile Include="Services\OpenFileService.cs" />
-    <Compile Include="Services\PleaseWaitService.cs" />
+    <Compile Include="Services\PleaseWaitService.wpf.cs">
+      <DependentUpon>PleaseWaitService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\ProcessService.cs" />
     <Compile Include="Services\SaveFileService.cs" />
     <Compile Include="Services\SchedulerService.cs" />
@@ -278,12 +398,10 @@
     </Compile>
     <Compile Include="Windows\Controls\InfoBarMessageControl\InfoBarMessageControl.cs" />
     <Compile Include="Windows\Controls\InfoBarMessageControl\InfoBarMessageControlVisibilityConverter.cs" />
-    <Compile Include="Windows\Controls\Interfaces\IPage.cs" />
-    <Compile Include="Windows\Controls\Interfaces\IUIElement.cs" />
-    <Compile Include="Windows\Controls\Interfaces\IUserControl.cs" />
-    <Compile Include="Windows\Controls\Interfaces\IView.cs" />
-    <Compile Include="Windows\Data\Converters\StringToTypeConverter.cs" />
-    <Compile Include="Windows\DependencyPropertySelector.cs" />
+    <Compile Include="MVVM\Views\Interfaces\IPage.cs" />
+    <Compile Include="MVVM\Views\Interfaces\IUserControl.cs" />
+    <Compile Include="MVVM\Converters\StringToTypeConverter.cs" />
+    <Compile Include="MVVM\Views\ViewPropertySelector.cs" />
     <Compile Include="Windows\Helpers\CommandLineHelper.cs" />
     <Compile Include="Windows\Input\Helpers\KeyboardHelper.cs" />
     <Compile Include="Windows\Interactivity\AutoCompletionBehavior.cs" />
@@ -291,63 +409,61 @@
     <Compile Include="Windows\Markup\LanguageBinding.cs" />
     <Compile Include="Windows\Markup\UpdatableMarkupExtension.cs" />
     <Compile Include="Windows\Threading\Extensions\DispatcherExtensions.cs" />
-    <Compile Include="Windows\Interfaces\IDependencyPropertySelector.cs" />
-    <Compile Include="Windows\Controls\MVVMProviders\Logic\EventArgs\DetermineViewModelInstanceEventArgs.cs" />
-    <Compile Include="Windows\Controls\MVVMProviders\Logic\EventArgs\DetermineViewModelTypeEventArgs.cs" />
-    <Compile Include="Windows\Controls\MVVMProviders\Logic\Extensions\LogicExtensions.cs" />
-    <Compile Include="Windows\Controls\MVVMProviders\Logic\LogicBase.cs" />
-    <Compile Include="Windows\Controls\MVVMProviders\Logic\NavigationLogicBase.cs" />
-    <Compile Include="Windows\Controls\MVVMProviders\Logic\NavigationPageLogic.cs" />
-    <Compile Include="Windows\Controls\MVVMProviders\Logic\UserControlLogic.cs" />
-    <Compile Include="Windows\Controls\MVVMProviders\Logic\WindowLogic.cs" />
-    <Compile Include="Windows\Controls\MVVMProviders\MVVMBehaviorBase.cs" />
-    <Compile Include="Windows\Controls\MVVMProviders\NavigationPageBehavior.cs" />
-    <Compile Include="Windows\Controls\MVVMProviders\UserControlBehavior.cs" />
-    <Compile Include="Windows\Controls\MVVMProviders\WindowBehavior.cs" />
+    <Compile Include="MVVM\Views\Interfaces\IViewPropertySelector.cs" />
+    <Compile Include="MVVM\Providers\EventArgs\DetermineViewModelInstanceEventArgs.cs" />
+    <Compile Include="MVVM\Providers\EventArgs\DetermineViewModelTypeEventArgs.cs" />
+    <Compile Include="MVVM\Providers\Extensions\LogicExtensions.cs" />
+    <Compile Include="MVVM\Providers\LogicBase.cs" />
+    <Compile Include="MVVM\Providers\NavigationLogicBase.cs" />
+    <Compile Include="MVVM\Providers\PageLogic.cs" />
+    <Compile Include="MVVM\Providers\UserControlLogic.cs" />
+    <Compile Include="MVVM\Providers\WindowLogic.cs" />
+    <Compile Include="MVVM\Providers\Behaviors\MVVMBehaviorBase.cs" />
+    <Compile Include="MVVM\Providers\Behaviors\NavigationPageBehavior.cs" />
+    <Compile Include="MVVM\Providers\Behaviors\UserControlBehavior.cs" />
+    <Compile Include="MVVM\Providers\Behaviors\WindowBehavior.cs" />
     <Compile Include="Windows\Controls\Page.cs" />
     <Compile Include="Windows\Controls\UserControl.cs" />
     <Compile Include="Windows\Controls\VisualWrapper.cs" />
     <Compile Include="Windows\Controls\WarningAndErrorValidator.cs" />
     <Compile Include="Windows\Data\BindingEvaluator.cs" />
     <Compile Include="Windows\Data\BindingWithValidation.cs" />
-    <Compile Include="Windows\Data\Converters\AreEqualMultiValueConverter.cs" />
-    <Compile Include="Windows\Data\Converters\BooleanToGrayscaleConverter.cs" />
-    <Compile Include="Windows\Data\Converters\BooleanToOppositeBooleanConverter.cs" />
-    <Compile Include="Windows\Data\Converters\BooleanToTextConverter.cs" />
-    <Compile Include="Windows\Data\Converters\BooleanToVisibilityConverter.cs" />
-    <Compile Include="Windows\Data\Converters\ColorToBrushConverter.cs" />
-    <Compile Include="Windows\Data\Converters\ContainsItemsConverter.cs" />
-    <Compile Include="Windows\Data\Converters\CountVisibilityConverter.cs" />
-    <Compile Include="Windows\Data\Converters\DebugConverter.cs" />
-    <Compile Include="Windows\Data\Converters\EmptyStringToVisibilityConverter.cs" />
-    <Compile Include="Windows\Data\Converters\FormattingConverter.cs" />
-    <Compile Include="Windows\Data\Converters\GetFirstValidationErrorConverter.cs" />
-    <Compile Include="Windows\Data\Converters\Helpers\ConverterHelper.cs" />
-    <Compile Include="Windows\Data\Converters\IntToStringConverter.cs" />
-    <Compile Include="Windows\Data\Converters\IsSelectedConverter.cs" />
-    <Compile Include="Windows\Data\Converters\IsSelectedValueConverter.cs" />
-    <Compile Include="Windows\Data\Converters\MethodToValueConverter.cs" />
-    <Compile Include="Windows\Data\Converters\MultiplyConverter.cs" />
-    <Compile Include="Windows\Data\Converters\NullableValueConverter.cs" />
-    <Compile Include="Windows\Data\Converters\ReferenceToBooleanConverter.cs" />
-    <Compile Include="Windows\Data\Converters\ReferenceToVisibilityConverter.cs" />
-    <Compile Include="Windows\Data\Converters\ShortDateFormattingConverter.cs" />
-    <Compile Include="Windows\Data\Converters\StringToIntConverter.cs" />
-    <Compile Include="Windows\Data\Converters\ValueConverterBase.cs" />
-    <Compile Include="Windows\Data\Converters\ValueConverterGroup.cs" />
-    <Compile Include="Windows\Data\Converters\ViewModelToViewConverter.cs" />
-    <Compile Include="Windows\Data\Converters\VisibilityConverterBase.cs" />
-    <Compile Include="Windows\Data\DataResource.cs" />
+    <Compile Include="MVVM\Converters\AreEqualMultiValueConverter.cs" />
+    <Compile Include="MVVM\Converters\BooleanToGrayscaleConverter.cs" />
+    <Compile Include="MVVM\Converters\BooleanToOppositeBooleanConverter.cs" />
+    <Compile Include="MVVM\Converters\BooleanToTextConverter.cs" />
+    <Compile Include="MVVM\Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="MVVM\Converters\ColorToBrushConverter.cs" />
+    <Compile Include="MVVM\Converters\ContainsItemsConverter.cs" />
+    <Compile Include="MVVM\Converters\CountVisibilityConverter.cs" />
+    <Compile Include="MVVM\Converters\DebugConverter.cs" />
+    <Compile Include="MVVM\Converters\EmptyStringToVisibilityConverter.cs" />
+    <Compile Include="MVVM\Converters\FormattingConverter.cs" />
+    <Compile Include="MVVM\Converters\GetFirstValidationErrorConverter.cs" />
+    <Compile Include="MVVM\Converters\Helpers\ConverterHelper.cs" />
+    <Compile Include="MVVM\Converters\IntToStringConverter.cs" />
+    <Compile Include="MVVM\Converters\IsSelectedConverter.cs" />
+    <Compile Include="MVVM\Converters\IsSelectedValueConverter.cs" />
+    <Compile Include="MVVM\Converters\MethodToValueConverter.cs" />
+    <Compile Include="MVVM\Converters\MultiplyConverter.cs" />
+    <Compile Include="MVVM\Converters\NullableValueConverter.cs" />
+    <Compile Include="MVVM\Converters\ReferenceToBooleanConverter.cs" />
+    <Compile Include="MVVM\Converters\ReferenceToVisibilityConverter.cs" />
+    <Compile Include="MVVM\Converters\ShortDateFormattingConverter.cs" />
+    <Compile Include="MVVM\Converters\StringToIntConverter.cs" />
+    <Compile Include="MVVM\Converters\ValueConverterBase.cs" />
+    <Compile Include="MVVM\Converters\ValueConverterGroup.cs" />
+    <Compile Include="MVVM\Converters\ViewModelToViewConverter.cs" />
+    <Compile Include="MVVM\Converters\VisibilityConverterBase.cs" />
     <Compile Include="Windows\Data\EventArgs\DependencyPropertyValueChangedEventArgs.cs" />
-    <Compile Include="Windows\Data\Helpers\BindingHelper.cs" />
+    <Compile Include="MVVM\Extensions\ObjectExtensions.cs" />
     <Compile Include="Windows\Data\Helpers\DependencyPropertyChangedHelper.cs" />
     <Compile Include="Windows\Data\Helpers\DependencyPropertyHelper.cs" />
     <Compile Include="Windows\Data\Helpers\DependencyPropertyInfo.cs" />
     <Compile Include="Windows\Extensions\ApplicationExtensions.cs" />
     <Compile Include="Windows\Extensions\DependencyObjectExtensions.cs" />
     <Compile Include="Windows\Extensions\FrameworkElementExtensions.cs" />
-    <Compile Include="Windows\Extensions\UIElementExtensions.cs" />
-    <Compile Include="Windows\Extensions\VisualExtensions.cs" />
+    <Compile Include="Windows\Extensions\UIElementExtensions.focus.cs" />
     <Compile Include="Windows\Extensions\WindowExtensions.cs" />
     <Compile Include="Windows\Helpers\EffectsHelper.cs" />
     <Compile Include="Windows\Helpers\PopupHelper.cs" />
@@ -387,7 +503,7 @@
     <Compile Include="Windows\Threading\Helpers\Dispatcherhelper.cs" />
     <Compile Include="Windows\Windows\DataWindow\DataWindow.cs" />
     <Compile Include="Windows\Windows\DataWindow\DataWindowButton.cs" />
-    <Compile Include="Windows\Windows\Interfaces\IDataWindow.cs" />
+    <Compile Include="MVVM\Views\Interfaces\IDataWindow.cs" />
     <Compile Include="Windows\Windows\LoaderAnimation.xaml.cs">
       <DependentUpon>LoaderAnimation.xaml</DependentUpon>
     </Compile>

@@ -11,7 +11,6 @@ namespace Catel.MVVM.Views
     using System.Collections.Generic;
     using System.Linq;
     using Logging;
-    using Windows.Controls;
 
     /// <summary>
     /// Manager that can search for views belonging to a view model.

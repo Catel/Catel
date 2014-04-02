@@ -399,7 +399,7 @@ namespace Catel.Services
                         parentHeight = (parent.ActualHeight > 0) ? parent.ActualHeight : parentHeight;
                     }
 
-                    BusyIndicator.Measure(new Size(parentWidth, parentHeight));
+                    BusyIndicator.Measure(new System.Windows.Size(parentWidth, parentHeight));
                     var busyIndicatorSize = BusyIndicator.DesiredSize;
 
                     double indicatorWidth = (busyIndicatorSize.Width > 0) ? busyIndicatorSize.Width : DefaultBusyIndicatorWidth;

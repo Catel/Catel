@@ -10,17 +10,11 @@ namespace Catel.MVVM.Views
     using System.Collections.Generic;
     using System.ComponentModel;
 
-#if NETFX_CORE
-    using global::Windows.UI.Xaml;
-#else
-    using System.Windows;
-#endif
-
     using Logging;
     using Reflection;
 
     /// <summary>
-    /// Helper class to fix <see cref="ViewToViewModelMapping"/> for <see cref="FrameworkElement"/>.
+    /// Helper class to fix <see cref="ViewToViewModelMapping"/> for <see cref="IView"/>.
     /// </summary>
     internal class ViewToViewModelMappingHelper
     {
@@ -36,7 +30,7 @@ namespace Catel.MVVM.Views
         private static readonly Dictionary<IViewModelContainer, ViewToViewModelMappingHelper> _viewModelContainers = new Dictionary<IViewModelContainer, ViewToViewModelMappingHelper>();
 
         /// <summary>
-        /// Dictionary of <see cref="ViewToViewModelMappingContainer"/> instances per type (which should be a <see cref="DependencyObject"/>).
+        /// Dictionary of <see cref="ViewToViewModelMappingContainer"/> instances per type.
         /// </summary>
         private static readonly Dictionary<Type, ViewToViewModelMappingContainer> _viewToViewModelMappingContainers = new Dictionary<Type, ViewToViewModelMappingContainer>();
 
@@ -57,24 +51,18 @@ namespace Catel.MVVM.Views
         /// </summary>
         /// <param name="viewModelContainer">The view model container.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelContainer"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="viewModelContainer"/> is not a <see cref="DependencyObject"/>.</exception>
         public ViewToViewModelMappingHelper(IViewModelContainer viewModelContainer)
         {
             Argument.IsNotNull("viewModelContainer", viewModelContainer);
 
             Log.Debug("Initializing view model container to manage ViewToViewModel mappings");
 
-            if (!(viewModelContainer is DependencyObject))
-            {
-                throw new ArgumentException(ResourceHelper.GetString("ViewModelContainerMustBeOfTypeDependencyObject"), "ViewModelContainer");
-            }
-
             ViewModelContainer = viewModelContainer;
             var viewModelContainerType = ViewModelContainerType;
 
             if (!_viewToViewModelMappingContainers.ContainsKey(viewModelContainerType))
             {
-                _viewToViewModelMappingContainers.Add(viewModelContainerType, new ViewToViewModelMappingContainer((DependencyObject)ViewModelContainer));
+                _viewToViewModelMappingContainers.Add(viewModelContainerType, new ViewToViewModelMappingContainer(viewModelContainer));
             }
 
             ViewModelContainer.ViewModelChanged += OnViewModelChanged;
@@ -124,7 +112,6 @@ namespace Catel.MVVM.Views
         /// </summary>
         /// <param name="viewModelContainer">The view model container to initialize the mappings for.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelContainer"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="viewModelContainer"/> is not a <see cref="DependencyObject"/>.</exception>
         public static void InitializeViewToViewModelMappings(IViewModelContainer viewModelContainer)
         {
             Argument.IsNotNull("viewModelContainer", viewModelContainer);

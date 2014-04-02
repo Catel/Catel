@@ -6,12 +6,14 @@
 
 namespace Catel.Windows.Interactivity
 {
+    using System.Windows;
+    using Catel.MVVM.Views;
+
 #if NETFX_CORE
     using global::Windows.UI.Xaml;
     using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
 #else
     using System;
-    using System.Windows;
     using System.Windows.Interactivity;
     using UIEventArgs = System.EventArgs;
 #endif
@@ -23,8 +25,8 @@ namespace Catel.Windows.Interactivity
     /// This class also adds some specific features such as <see cref="ValidateRequiredProperties"/>
     /// which is automatically called when the behavior is attached.
     /// </summary>
-    /// <typeparam name="T">The <see cref="FrameworkElement"/> this behavior should attach to.</typeparam>
-    public abstract class BehaviorBase<T> : Behavior<T> 
+    /// <typeparam name="T">The <see cref="IView"/> this behavior should attach to.</typeparam>
+    public abstract class BehaviorBase<T> : Behavior<T>
         where T : FrameworkElement
     {
         #region Fields

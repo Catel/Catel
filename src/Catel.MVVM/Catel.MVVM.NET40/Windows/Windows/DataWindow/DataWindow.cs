@@ -16,9 +16,9 @@ namespace Catel.Windows
     using System.Windows.Controls.Primitives;
     using System.Windows.Data;
     using System.Windows.Input;
+    using Catel.MVVM.Providers;
+    using Catel.MVVM.Views;
     using Controls;
-    using Controls.MVVMProviders.Logic;
-    using Data;
     using IoC;
     using Logging;
     using MVVM;
@@ -140,6 +140,10 @@ namespace Catel.Windows
         private readonly InfoBarMessageControlGenerationMode _infoBarMessageControlGenerationMode;
 
         private readonly WindowLogic _logic;
+
+        private event EventHandler<EventArgs> _viewLoaded;
+        private event EventHandler<EventArgs> _viewUnloaded;
+        private event EventHandler<EventArgs> _viewDataContextChanged;
         #endregion
 
         #region Constructors
@@ -252,31 +256,25 @@ namespace Catel.Windows
             }
 
             _logic = new WindowLogic(this, viewModelType, viewModel);
-            _logic.TargetControlPropertyChanged += (sender, e) =>
+            _logic.TargetViewPropertyChanged += (sender, e) =>
             {
 #if !NET
                 // WPF already calls this method automatically
-                OnPropertyChanged(e.FxEventArgs);
+                OnPropertyChanged(e);
 
-                PropertyChanged.SafeInvoke(this, new PropertyChangedEventArgs(e.PropertyName));
+                PropertyChanged.SafeInvoke(this, e);
 #else
                 // Do not call this for ActualWidth and ActualHeight WPF, will cause problems with NET 40 
                 // on systems where NET45 is *not* installed
                 if (!string.Equals(e.PropertyName, "ActualWidth", StringComparison.InvariantCulture) &&
                     !string.Equals(e.PropertyName, "ActualHeight", StringComparison.InvariantCulture))
                 {
-                    PropertyChanged.SafeInvoke(this, new PropertyChangedEventArgs(e.PropertyName));
+                    PropertyChanged.SafeInvoke(this, e);
                 }
 #endif
             };
 
-            _logic.ViewModelChanged += (sender, e) =>
-            {
-                OnViewModelChanged();
-
-                ViewModelChanged.SafeInvoke(this, e);
-                PropertyChanged.SafeInvoke(this, new PropertyChangedEventArgs("ViewModel"));
-            };
+            _logic.ViewModelChanged += (sender, e) => RaiseViewModelChanged();
 
             _logic.ViewModelPropertyChanged += (sender, e) =>
             {
@@ -317,8 +315,26 @@ namespace Catel.Windows
             Loaded += (sender, e) => Initialize();
             Closing += OnDataWindowClosing;
 
-            Loaded += (sender, e) => OnLoaded(e);
-            Unloaded += (sender, e) => OnUnloaded(e);
+            Loaded += (sender, e) =>
+            {
+                OnLoaded(e);
+
+                _viewLoaded.SafeInvoke(this);
+            };
+
+            Unloaded += (sender, e) =>
+            {
+                OnUnloaded(e);
+
+                _viewUnloaded.SafeInvoke(this);
+            };
+
+            DataContextChanged += (sender, e) =>
+            {
+                _viewDataContextChanged.SafeInvoke(this);
+            };
+
+            RaiseViewModelChanged();
 
 #if NET
             if (setOwnerAndFocus)
@@ -481,6 +497,15 @@ namespace Catel.Windows
         /// </summary>
         /// <value>The internal grid.</value>
         internal Grid InternalGrid { get; private set; }
+
+        /// <summary>
+        /// Gets the parent of the view.
+        /// </summary>
+        /// <value>The parent.</value>
+        object IView.Parent
+        {
+            get { return Parent; }
+        }
         #endregion
 
         #region Commands
@@ -651,9 +676,44 @@ namespace Catel.Windows
         /// Occurs when the view model container is unloaded.
         /// </summary>
         public event EventHandler<EventArgs> ViewUnloaded;
+
+        /// <summary>
+        /// Occurs when the view is loaded.
+        /// </summary>
+        event EventHandler<EventArgs> IView.Loaded
+        {
+            add { _viewLoaded += value; }
+            remove { _viewLoaded -= value; }
+        }
+
+        /// <summary>
+        /// Occurs when the view is unloaded.
+        /// </summary>
+        event EventHandler<EventArgs> IView.Unloaded
+        {
+            add { _viewUnloaded += value; }
+            remove { _viewUnloaded -= value; }
+        }
+
+        /// <summary>
+        /// Occurs when the data context has changed.
+        /// </summary>
+        event EventHandler<EventArgs> IView.DataContextChanged
+        {
+            add { _viewDataContextChanged += value; }
+            remove { _viewDataContextChanged -= value; }
+        }
         #endregion
 
         #region Methods
+        private void RaiseViewModelChanged()
+        {
+            OnViewModelChanged();
+
+            ViewModelChanged.SafeInvoke(this);
+            PropertyChanged.SafeInvoke(this, new PropertyChangedEventArgs("ViewModel"));
+        }
+
 #if SILVERLIGHT
         /// <summary>
         /// Builds the visual tree for the <see cref="T:System.Windows.Controls.ChildWindow"/> control when a new template is applied.
@@ -1104,15 +1164,13 @@ namespace Catel.Windows
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         protected virtual void OnUnloaded(EventArgs e) { }
 
-#if !NET
         /// <summary>
         /// Called when a dependency property on this control has changed.
         /// </summary>
-        /// <param name="e">The <see cref="DependencyPropertyValueChangedEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnPropertyChanged(DependencyPropertyValueChangedEventArgs e)
+        /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
+        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
         {
         }
-#endif
         #endregion
     }
 }

@@ -29,6 +29,9 @@ Added/fixed (BREAKING CHANGES):
     make sure to set the value on the UserControl
 (*) CTL-309 Moved Catel.MVVM.Services to Catel.Services namespace so all services in all extensions will now be put
     into the same namespace
+(*) CTL-328 Fully abstracted away the MVVM logic so they can be used in Xamarin as well. Therefore all view elements
+    are now implemented as interfaces (mainly IView) and are now located in the Catel.MVVM.Views namespace. This might
+    be a breaking change for people using the behaviors or implementing custom views
 (*) CTL-344 Renamed Catel.Environment class to Catel.CatelEnvironment to prevent name clashing with .NET Environment
 
 Added/fixed:

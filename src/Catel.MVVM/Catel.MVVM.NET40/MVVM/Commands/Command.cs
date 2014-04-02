@@ -4,8 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-// Both Command and CompositeCommand implement ICommand
-#pragma warning disable 1956
+#pragma warning disable 1956 // Both Command and CompositeCommand implement ICommand
+#pragma warning disable 3021 // 'type' does not need a CLSCompliant attribute because the assembly does not have a CLSCompliant attribute
 
 namespace Catel.MVVM
 {
