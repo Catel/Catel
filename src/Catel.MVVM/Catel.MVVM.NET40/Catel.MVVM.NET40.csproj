@@ -122,12 +122,24 @@
     <Compile Include="MVVM\Views\Interfaces\INavigationView.cs" />
     <Compile Include="MVVM\Views\Interfaces\IPhonePage.cs" />
     <Compile Include="MVVM\Views\Interfaces\IViewLoadedManager.cs" />
-    <Compile Include="MVVM\Navigation\NavigationAdapter.page.sl.cs" />
-    <Compile Include="MVVM\Navigation\NavigationAdapter.page.winrt.cs" />
-    <Compile Include="MVVM\Navigation\NavigationAdapter.page.wpf.cs" />
-    <Compile Include="MVVM\Navigation\NavigationAdapter.phone.android.cs" />
-    <Compile Include="MVVM\Navigation\NavigationAdapter.phone.ios.cs" />
-    <Compile Include="MVVM\Navigation\NavigationAdapter.phone.wp.cs" />
+    <Compile Include="MVVM\Navigation\NavigationAdapter.page.sl.cs">
+      <DependentUpon>NavigationAdapter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\Navigation\NavigationAdapter.page.winrt.cs">
+      <DependentUpon>NavigationAdapter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\Navigation\NavigationAdapter.page.wpf.cs">
+      <DependentUpon>NavigationAdapter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\Navigation\NavigationAdapter.phone.android.cs">
+      <DependentUpon>NavigationAdapter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\Navigation\NavigationAdapter.phone.ios.cs">
+      <DependentUpon>NavigationAdapter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\Navigation\NavigationAdapter.phone.wp.cs">
+      <DependentUpon>NavigationAdapter.cs</DependentUpon>
+    </Compile>
     <Compile Include="MVVM\Navigation\NavigationAdapter.cs" />
     <Compile Include="MVVM\Views\Extensions\ViewExtensions.cs" />
     <Compile Include="MVVM\Views\ViewLoadedManager.cs" />
@@ -139,9 +151,21 @@
     <Compile Include="MVVM\Views\ViewModelWrapper.xaml.cs" />
     <Compile Include="MVVM\Views\WeakViewInfo.cs" />
     <Compile Include="Services\AccelerometerService.wp.cs" />
+    <Compile Include="Services\CameraService.winrt.cs">
+      <DependentUpon>CameraService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\CameraService.ios.cs">
+      <DependentUpon>CameraService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\CameraService.cs" />
+    <Compile Include="Services\CameraService.android.cs">
+      <DependentUpon>CameraService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\Models\AccelerometerValue.cs" />
     <Compile Include="Services\AutoCompletionService.cs" />
-    <Compile Include="Services\CameraService.wp.cs" />
+    <Compile Include="Services\CameraService.wp.cs">
+      <DependentUpon>CameraService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\CameraServiceBase.cs" />
     <Compile Include="Services\Exceptions\SplashScreenException.cs" />
     <Compile Include="Services\Extensions\IUIVisualizerServiceExtensions.cs" />
@@ -152,15 +176,30 @@
     <Compile Include="Services\Models\Location.cs" />
     <Compile Include="Services\LocationService.wp.cs" />
     <Compile Include="Services\Models\Size.cs" />
-    <Compile Include="Services\NavigationService.ios.cs" />
+    <Compile Include="Services\NavigationService.ios.cs">
+      <DependentUpon>NavigationService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\NavigationServiceBase.cs" />
-    <Compile Include="Services\NavigationService.xaml.cs" />
-    <Compile Include="Services\NavigationService.android.cs" />
+    <Compile Include="Services\NavigationService.xaml.cs">
+      <DependentUpon>NavigationService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\NavigationService.android.cs">
+      <DependentUpon>NavigationService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\PhoneService.cs" />
-    <Compile Include="Services\PleaseWaitService.ios.cs" />
-    <Compile Include="Services\PleaseWaitService.android.cs" />
-    <Compile Include="Services\PleaseWaitService.wp.cs" />
-    <Compile Include="Services\PleaseWaitService.winrt.cs" />
+    <Compile Include="Services\PleaseWaitService.cs" />
+    <Compile Include="Services\PleaseWaitService.ios.cs">
+      <DependentUpon>PleaseWaitService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\PleaseWaitService.android.cs">
+      <DependentUpon>PleaseWaitService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\PleaseWaitService.wp.cs">
+      <DependentUpon>PleaseWaitService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\PleaseWaitService.winrt.cs">
+      <DependentUpon>PleaseWaitService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\SensorServiceBase.cs" />
     <Compile Include="Services\StateService.cs" />
     <Compile Include="Services\Test\AccelerometerService.cs" />
@@ -169,9 +208,15 @@
     <Compile Include="Services\Test\NavigationService.cs" />
     <Compile Include="Services\Test\SensorServiceBase.cs" />
     <Compile Include="Services\VibrateService.wp.cs" />
-    <Compile Include="Services\ViewModelWrapperService.android.cs" />
-    <Compile Include="Services\ViewModelWrapperService.ios.cs" />
-    <Compile Include="Services\ViewModelWrapperService.xaml.cs" />
+    <Compile Include="Services\ViewModelWrapperService.android.cs">
+      <DependentUpon>ViewModelWrapperService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\ViewModelWrapperService.ios.cs">
+      <DependentUpon>ViewModelWrapperService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\ViewModelWrapperService.xaml.cs">
+      <DependentUpon>ViewModelWrapperService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\ViewModelWrapperService.cs" />
     <Compile Include="Services\ViewModelWrapperServiceBase.cs" />
     <Compile Include="Windows\Controls\ValidationResult.cs" />
@@ -245,7 +290,9 @@
     <Compile Include="Services\NamingConvention.cs" />
     <Compile Include="Services\NavigationService.cs" />
     <Compile Include="Services\OpenFileService.cs" />
-    <Compile Include="Services\PleaseWaitService.wpf.cs" />
+    <Compile Include="Services\PleaseWaitService.wpf.cs">
+      <DependentUpon>PleaseWaitService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\ProcessService.cs" />
     <Compile Include="Services\SaveFileService.cs" />
     <Compile Include="Services\SchedulerService.cs" />

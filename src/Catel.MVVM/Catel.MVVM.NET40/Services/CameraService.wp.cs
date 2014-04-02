@@ -12,10 +12,7 @@ namespace Catel.Services
     using System.Collections.Generic;
     using Microsoft.Devices;
 
-    /// <summary>
-    /// Official implementation of the <see cref="ICameraService"/>.
-    /// </summary>
-    public class CameraService : CameraServiceBase
+    public partial class CameraService
     {
         #region Fields
         private PhotoCamera _photoCamera;

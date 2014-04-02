@@ -8,8 +8,27 @@
 
 namespace Catel.Services
 {
-    internal class PleaseWaitService
+    public partial class PleaseWaitService
     {
+        partial void SetStatus(string status)
+        {
+            throw new MustBeImplementedException();
+        }
+
+        partial void InitializeBusyIndicator()
+        {
+            throw new MustBeImplementedException();
+        }
+
+        partial void ShowBusyIndicator()
+        {
+            throw new MustBeImplementedException();
+        }
+
+        partial void HideBusyIndicator()
+        {
+            throw new MustBeImplementedException();
+        }
     }
 }
 
