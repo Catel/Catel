@@ -49,15 +49,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <exception cref="ArgumentException">The <paramref name="xmlName" /> is <c>null</c> or whitespace.</exception>
         DataContractSerializer GetDataContractSerializer(Type serializingType, Type typeToSerialize, string xmlName, string rootNamespace = null, List<Type> additionalKnownTypes = null);
 
-    }
-
 #if NET
-    /// <summary>
-    /// Extended Interface defining a factory to create <see cref="DataContractSerializer"/> objects for specific types with passing
-    /// <see cref="IDataContractSurrogate"/> and <see cref="DataContractResolver"/>.
-    /// </summary>
-    public interface IDataContractSerializerFactoryEx : IDataContractSerializerFactory
-    {
         /// <summary>
         /// Gets or sets the <see cref="IDataContractSurrogate"/> passed in constructor to <see cref="DataContractSerializer"/>.
         /// <para />
@@ -73,6 +65,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// </summary>
         /// <value>The <see cref="DataContractResolver"/>.</value>
         DataContractResolver DataContractResolver { get; set; }
-    }
 #endif
+
+    }
 }

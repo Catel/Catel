@@ -44,15 +44,7 @@ namespace Catel
 #if NET
             serviceLocator.RegisterType<IBinarySerializer, BinarySerializer>();
 #endif
-
-#if NET
-            var factory = new DataContractSerializerFactory();
-            serviceLocator.RegisterInstance<IDataContractSerializerFactory>(factory);
-            serviceLocator.RegisterInstance<IDataContractSerializerFactoryEx>(factory);
-#else
             serviceLocator.RegisterType<IDataContractSerializerFactory, DataContractSerializerFactory>();
-#endif
-
             serviceLocator.RegisterType<IXmlSerializer, XmlSerializer>();
             serviceLocator.RegisterType<IXmlNamespaceManager, XmlNamespaceManager>();
             serviceLocator.RegisterType<ISerializationManager, SerializationManager>();
