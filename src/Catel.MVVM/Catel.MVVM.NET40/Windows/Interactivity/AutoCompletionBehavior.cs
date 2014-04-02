@@ -251,7 +251,7 @@ namespace Catel.Windows.Interactivity
         {
             UpdateSuggestions();
 
-            if (_availableSuggestions.Length == 0)
+            if (_availableSuggestions == null || _availableSuggestions.Length == 0)
             {
                 UpdateSuggestionBox(false);
             }
