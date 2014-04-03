@@ -1,113 +1,85 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{B9AE0468-56BB-4AFC-8533-8A493FDDF8DA}</ProjectGuid>
+    <ProjectGuid>{9982B461-53BA-401A-868C-72953023122C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Catel</RootNamespace>
     <AssemblyName>Catel.Core</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
+    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
+    <ProjectTypeGuids>{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\output\debug\WIN80\Catel.Core\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WIN;WIN80</DefineConstants>
+    <OutputPath>..\..\..\output\debug\WPRT81\Catel.Core\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_PHONE_APP;WINDOWS_PHONE;WPRT81</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\..\output\debug\WIN80\Catel.Core\Catel.Core.XML</DocumentationFile>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <GenerateLibraryLayout>true</GenerateLibraryLayout>
+    <DocumentationFile>..\..\..\output\debug\WPRT81\Catel.Core\Catel.Core.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\output\release\WIN80\Catel.Core\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE;WIN;WIN80</DefineConstants>
+    <OutputPath>..\..\..\output\release\WPRT81\Catel.Core\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_PHONE_APP;WINDOWS_PHONE;WPRT81</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\..\output\release\WIN80\Catel.Core\Catel.Core.XML</DocumentationFile>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <GenerateLibraryLayout>true</GenerateLibraryLayout>
+    <DocumentationFile>..\..\..\output\release\WPRT81\Catel.Core\Catel.Core.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\ARM\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WIN;WIN80</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>ARM</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>ExpressRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
     <OutputPath>bin\ARM\Release\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE;WIN;WIN80</DefineConstants>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
     <Optimize>true</Optimize>
     <NoWarn>;2008</NoWarn>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>ARM</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>ExpressRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WIN;WIN80</DefineConstants>
-    <NoWarn>;2008</NoWarn>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>ExpressRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE;WIN;WIN80</DefineConstants>
-    <Optimize>true</Optimize>
-    <NoWarn>;2008</NoWarn>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>ExpressRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WIN;WIN80</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>ExpressRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE;WIN;WIN80</DefineConstants>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
     <Optimize>true</Optimize>
     <NoWarn>;2008</NoWarn>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>ExpressRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
@@ -187,9 +159,6 @@
     <Compile Include="..\Catel.Core.NET40\Caching\Policies\AbsoluteExpirationPolicy.cs">
       <Link>Caching\Policies\AbsoluteExpirationPolicy.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\Caching\Policies\CompositeExpirationPolicy.cs">
-      <Link>Caching\Policies\CompositeExpirationPolicy.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Core.NET40\Caching\Policies\CustomExpirationPolicy.cs">
       <Link>Caching\Policies\CustomExpirationPolicy.cs</Link>
     </Compile>
@@ -217,6 +186,9 @@
     <Compile Include="..\Catel.Core.NET40\ComponentModel\EventArgs\CancelEditEventArgs.cs">
       <Link>ComponentModel\EventArgs\CancelEditEventArgs.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\ComponentModel\EventArgs\DataErrorsChangedEventArgs.cs">
+      <Link>ComponentModel\EventArgs\DataErrorsChangedEventArgs.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\ComponentModel\EventArgs\EditEventArgs.cs">
       <Link>ComponentModel\EventArgs\EditEventArgs.cs</Link>
     </Compile>
@@ -232,11 +204,20 @@
     <Compile Include="..\Catel.Core.NET40\ComponentModel\IAdvancedEditableObject.cs">
       <Link>ComponentModel\IAdvancedEditableObject.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\ComponentModel\IDataErrorInfo.cs">
+      <Link>ComponentModel\IDataErrorInfo.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\ComponentModel\IDataWarningInfo.cs">
       <Link>ComponentModel\IDataWarningInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\ComponentModel\INotifyDataErrorInfo.cs">
+      <Link>ComponentModel\INotifyDataErrorInfo.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\ComponentModel\INotifyDataWarningInfo.cs">
       <Link>ComponentModel\INotifyDataWarningInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ComponentModel\INotifyPropertyChanging.cs">
+      <Link>ComponentModel\INotifyPropertyChanging.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Configuration\ConfigurationService.cs">
       <Link>Configuration\ConfigurationService.cs</Link>
@@ -264,12 +245,6 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\ChangeNotificationWrapper.cs">
       <Link>Data\ChangeNotificationWrapper.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\Data\CompositeValidator.cs">
-      <Link>Data\CompositeValidator.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\Data\CompositeValidatorProvider.cs">
-      <Link>Data\CompositeValidatorProvider.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\EventArgs\AdvancedPropertyChangedEventArgs.cs">
       <Link>Data\EventArgs\AdvancedPropertyChangedEventArgs.cs</Link>
@@ -363,6 +338,9 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\ModelBase.propertyregistration.cs">
       <Link>Data\ModelBase.propertyregistration.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Data\ModelBase.serialization.binary.cs">
+      <Link>Data\ModelBase.serialization.binary.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\ModelBase.serialization.cs">
       <Link>Data\ModelBase.serialization.cs</Link>
@@ -604,11 +582,11 @@
     <Compile Include="..\Catel.Core.NET40\IoC\IoCFactory.cs">
       <Link>IoC\IoCFactory.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\IoC\RegistrationConventionHandler.cs">
-      <Link>IoC\RegistrationConventionHandler.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\LateBoundImplementation.cs">
       <Link>IoC\LateBoundImplementation.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\RegistrationConventionHandler.cs">
+      <Link>IoC\RegistrationConventionHandler.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\RegistrationInfo.cs">
       <Link>IoC\RegistrationInfo.cs</Link>
@@ -666,24 +644,30 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.android.cs">
       <Link>Logging\Listeners\DebugLogListener.android.cs</Link>
+      <DependentUpon>DebugLogListener.cs</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.cs">
       <Link>Logging\Listeners\DebugLogListener.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.ios.cs">
       <Link>Logging\Listeners\DebugLogListener.ios.cs</Link>
+      <DependentUpon>DebugLogListener.cs</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.net.cs">
       <Link>Logging\Listeners\DebugLogListener.net.cs</Link>
+      <DependentUpon>DebugLogListener.cs</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.sl.cs">
       <Link>Logging\Listeners\DebugLogListener.sl.cs</Link>
+      <DependentUpon>DebugLogListener.cs</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.winrt.cs">
       <Link>Logging\Listeners\DebugLogListener.winrt.cs</Link>
+      <DependentUpon>DebugLogListener.cs</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.wp.cs">
       <Link>Logging\Listeners\DebugLogListener.wp.cs</Link>
+      <DependentUpon>DebugLogListener.cs</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Log.cs">
       <Link>Logging\Log.cs</Link>
@@ -726,6 +710,60 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Properties\Exceptions.WPRT81.Designer.cs">
+      <Link>Properties\Exceptions.WPRT81.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Exceptions.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Properties\Resources.de.WPRT81.Designer.cs">
+      <Link>Properties\Resources.de.WPRT81.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.de.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Properties\Resources.WPRT81.Designer.cs">
+      <Link>Properties\Resources.WPRT81.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Properties\Resources.es.WPRT81.Designer.cs">
+      <Link>Properties\Resources.es.WPRT81.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.es.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Properties\Resources.fr.WPRT81.Designer.cs">
+      <Link>Properties\Resources.fr.WPRT81.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.fr.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Properties\Resources.it.WPRT81.Designer.cs">
+      <Link>Properties\Resources.it.WPRT81.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.it.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Properties\Resources.nl.WPRT81.Designer.cs">
+      <Link>Properties\Resources.nl.WPRT81.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.nl.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Properties\Resources.tr.WPRT81.Designer.cs">
+      <Link>Properties\Resources.tr.WPRT81.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.tr.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Properties\Resources.zh-Hans.WPRT81.Designer.cs">
+      <Link>Properties\Resources.zh-Hans.WPRT81.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.zh-Hans.resx</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Reflection\BindingFlags.cs">
       <Link>Reflection\BindingFlags.cs</Link>
@@ -964,9 +1002,6 @@
     <Compile Include="..\Catel.Core.NET40\Threading\Helpers\ThreadHelper.cs">
       <Link>Threading\Helpers\ThreadHelper.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.NET40\Threading\SynchronizationContext.cs">
-      <Link>Threading\SynchronizationContext.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Core.NET40\WeakReferences\Interfaces\IExecute.cs">
       <Link>WeakReferences\Interfaces\IExecute.cs</Link>
     </Compile>
@@ -988,50 +1023,76 @@
     <Compile Include="..\Catel.Core.NET40\WeakReferences\WeakEventListener.cs">
       <Link>WeakReferences\WeakEventListener.cs</Link>
     </Compile>
-    <Compile Include="ComponentModel\BackgroundWorker.cs" />
-    <Compile Include="ComponentModel\IDataErrorInfo.cs" />
-    <Compile Include="ComponentModel\INotifyPropertyChanging.cs" />
-    <Compile Include="Threading\Timer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-    <PRIResource Include="Strings\es\Resources.resw" />
-    <PRIResource Include="Strings\fr\Resources.resw" />
-    <PRIResource Include="Strings\it\Resources.resw" />
-    <PRIResource Include="Strings\nl\Resources.resw" />
-    <PRIResource Include="Strings\tr\Resources.resw" />
-    <PRIResource Include="Strings\zh-Hans\Resources.resw" />
+    <Content Include="..\Catel.Core.NET40\FodyWeavers.xml">
+      <Link>FodyWeavers.xml</Link>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="FodyWeavers.xml" />
+    <None Include="..\Catel.Core.NET40\packages.config">
+      <Link>packages.config</Link>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <PRIResource Include="Strings\de\Resources.resw" />
-    <PRIResource Include="Strings\en-US\Exceptions.resw" />
-    <PRIResource Include="Strings\en-US\Resources.resw" />
+    <EmbeddedResource Include="..\Catel.Core.NET40\Properties\Exceptions.resx">
+      <Link>Properties\Exceptions.resx</Link>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Exceptions.WPRT81.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.Core.NET40\Properties\Resources.de.resx">
+      <Link>Properties\Resources.de.resx</Link>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.de.WPRT81.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.Core.NET40\Properties\Resources.es.resx">
+      <Link>Properties\Resources.es.resx</Link>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.es.WPRT81.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.Core.NET40\Properties\Resources.fr.resx">
+      <Link>Properties\Resources.fr.resx</Link>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.fr.WPRT81.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.Core.NET40\Properties\Resources.it.resx">
+      <Link>Properties\Resources.it.resx</Link>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.it.WPRT81.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.Core.NET40\Properties\Resources.nl.resx">
+      <Link>Properties\Resources.nl.resx</Link>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.nl.WPRT81.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.Core.NET40\Properties\Resources.resx">
+      <Link>Properties\Resources.resx</Link>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.WPRT81.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.Core.NET40\Properties\Resources.tr.resx">
+      <Link>Properties\Resources.tr.resx</Link>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.tr.WPRT81.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.Core.NET40\Properties\Resources.zh-Hans.resx">
+      <Link>Properties\Resources.zh-Hans.resx</Link>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.zh-Hans.WPRT81.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Obsolete">
-      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.2.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-  </ItemGroup>
-  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' ">
-    <VisualStudioVersion>11.0</VisualStudioVersion>
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
+    <VisualStudioVersion>12.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetPlatformIdentifier)' == '' ">
+    <TargetPlatformIdentifier>WindowsPhoneApp</TargetPlatformIdentifier>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets. -->
+       Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
   </Target>
-  <Import Project="$(ProjectPath)\..\..\..\..\Tools\Pepita\PepitaGet.targets" />
-  <Import Project="..\..\..\lib\Fody.1.22.1\build\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.22.1\build\Fody.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\lib\Fody.1.22.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.1.22.1\build\Fody.targets'))" />
-  </Target>
+  -->
 </Project>

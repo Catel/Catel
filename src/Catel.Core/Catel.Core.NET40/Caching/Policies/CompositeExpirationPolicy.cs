@@ -7,7 +7,6 @@ namespace Catel.Caching.Policies
 {
     using System.Collections.Generic;
     using System.Linq;
-
     using Catel.Threading;
 
     /// <summary>

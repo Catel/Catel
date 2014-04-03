@@ -4,6 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if NETFX_CORE || PCL
+
 namespace System
 {
     using Catel.Logging;
@@ -93,3 +95,5 @@ namespace System
         #endregion
     }
 }
+
+#endif

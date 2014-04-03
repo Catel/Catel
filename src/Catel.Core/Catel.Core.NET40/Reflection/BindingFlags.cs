@@ -4,6 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if NETFX_CORE
+
 #pragma warning disable 1591
 
 namespace System.Reflection
@@ -32,3 +34,5 @@ namespace System.Reflection
         SuppressChangeType = 0x20000
     }
 }
+
+#endif

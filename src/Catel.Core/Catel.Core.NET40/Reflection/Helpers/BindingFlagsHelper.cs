@@ -9,21 +9,21 @@ namespace Catel.Reflection
     using System.Diagnostics;
     using System.Reflection;
 
-	/// <summary>
-	/// The binding flags helper.
-	/// </summary>
-	public static class BindingFlagsHelper
-	{
+    /// <summary>
+    /// The binding flags helper.
+    /// </summary>
+    public static class BindingFlagsHelper
+    {
 #if NET
 		/// <summary>
 		/// The default binding flags.
 		/// </summary>
 		public const BindingFlags DefaultBindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 #else
-		/// <summary>
-		/// The default binding flags.
-		/// </summary>
-		public const BindingFlags DefaultBindingFlags = BindingFlags.Instance | BindingFlags.Public;
+        /// <summary>
+        /// The default binding flags.
+        /// </summary>
+        public const BindingFlags DefaultBindingFlags = BindingFlags.Instance | BindingFlags.Public;
 #endif
 
         /// <summary>
@@ -39,8 +39,8 @@ namespace Catel.Reflection
         /// <returns>The final binding flags.</returns>
         [DebuggerStepThrough]
         public static BindingFlags GetFinalBindingFlags(bool flattenHierarchy, bool allowStaticMembers, bool? allowNonPublicMembers = null)
-		{
-			var bindingFlags = DefaultBindingFlags;
+        {
+            var bindingFlags = DefaultBindingFlags;
 
             if (allowNonPublicMembers.HasValue)
             {
@@ -54,17 +54,17 @@ namespace Catel.Reflection
                 }
             }
 
-			if (flattenHierarchy)
-			{
+            if (flattenHierarchy)
+            {
                 bindingFlags = Enum<BindingFlags>.Flags.SetFlag(bindingFlags, BindingFlags.FlattenHierarchy);
-			}
+            }
 
-			if (allowStaticMembers)
-			{
+            if (allowStaticMembers)
+            {
                 bindingFlags = Enum<BindingFlags>.Flags.SetFlag(bindingFlags, BindingFlags.Static);
-			}
+            }
 
-			return bindingFlags;
-		}
-	}
+            return bindingFlags;
+        }
+    }
 }

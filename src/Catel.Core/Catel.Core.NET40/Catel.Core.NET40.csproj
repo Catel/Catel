@@ -69,6 +69,7 @@
     <Compile Include="ApiCop\Rules\InitializationApiCopRule.cs" />
     <Compile Include="ApiCop\Rules\TooManyDependenciesApiCopRule.cs" />
     <Compile Include="ApiCop\Rules\UnusedFeatureApiCopRule.cs" />
+    <Compile Include="AppDomain.cs" />
     <Compile Include="Argument.cs" />
     <Compile Include="Attributes\CoverageExcludeAttribute.cs" />
     <Compile Include="Caching\CacheStorage.cs" />
@@ -83,7 +84,10 @@
     <Compile Include="Collections\Extensions\CollectionExtensions.cs" />
     <Compile Include="Collections\Extensions\DictionaryExtensions.cs" />
     <Compile Include="Collections\Helpers\CollectionHelper.cs" />
+    <Compile Include="ComponentModel\EventArgs\PropertyChangingEventArgs.cs" />
     <Compile Include="ComponentModel\Extensions\PropertyChangedEventArgsExtensions.cs" />
+    <Compile Include="ComponentModel\IDataErrorInfo.cs" />
+    <Compile Include="ComponentModel\INotifyPropertyChanging.cs" />
     <Compile Include="Configuration\ConfigurationService.cs" />
     <Compile Include="Configuration\EventArgs\ConfigurationChangedEventArgs.cs" />
     <Compile Include="Configuration\Extensions\ConfigurationExtensions.cs" />
@@ -330,6 +334,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.zh-Hans.resx</DependentUpon>
     </Compile>
+    <Compile Include="Reflection\BindingFlags.cs" />
     <Compile Include="Reflection\CachedPropertyInfo.cs" />
     <Compile Include="Reflection\EventArgs\AssemblyLoadedEventArgs.cs" />
     <Compile Include="Reflection\Exceptions\CannotGetPropertyValueException.cs" />

@@ -74,7 +74,7 @@ namespace Catel.Logging
             Write(log, LogEvent.Info, "System page size:      {0}", Environment.SystemPageSize);
 #endif
 
-#if WINDOWS_PHONE
+#if WINDOWS_PHONE && !NETFX_CORE
             Write(log, LogEvent.Info, "Device name:           {0}", Microsoft.Phone.Info.DeviceStatus.DeviceName);
             Write(log, LogEvent.Info, "Device ID:             {0}", Windows.Phone.System.Analytics.HostInformation.PublisherHostId);
 #endif

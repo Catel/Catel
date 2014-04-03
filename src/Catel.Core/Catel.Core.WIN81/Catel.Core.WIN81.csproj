@@ -167,6 +167,9 @@
     <Compile Include="..\Catel.Core.NET40\ApiCop\Rules\UnusedFeatureApiCopRule.cs">
       <Link>ApiCop\Rules\UnusedFeatureApiCopRule.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\AppDomain.cs">
+      <Link>AppDomain.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Argument.cs">
       <Link>Argument.cs</Link>
     </Compile>
@@ -223,6 +226,9 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\ComponentModel\EventArgs\EndEditEventArgs.cs">
       <Link>ComponentModel\EventArgs\EndEditEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ComponentModel\EventArgs\PropertyChangingEventArgs.cs">
+      <Link>ComponentModel\EventArgs\PropertyChangingEventArgs.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\ComponentModel\Extensions\PropertyChangedEventArgsExtensions.cs">
       <Link>ComponentModel\Extensions\PropertyChangedEventArgsExtensions.cs</Link>
@@ -725,6 +731,9 @@
     <Compile Include="..\Catel.Core.NET40\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Reflection\BindingFlags.cs">
+      <Link>Reflection\BindingFlags.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Reflection\CachedPropertyInfo.cs">
       <Link>Reflection\CachedPropertyInfo.cs</Link>
     </Compile>
@@ -983,23 +992,14 @@
     <Compile Include="..\Catel.Core.NET40\WeakReferences\WeakEventListener.cs">
       <Link>WeakReferences\WeakEventListener.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.Core.WIN80\AppDomain.cs">
-      <Link>AppDomain.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Core.WIN80\ComponentModel\BackgroundWorker.cs">
       <Link>ComponentModel\BackgroundWorker.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.WIN80\ComponentModel\EventArgs\PropertyChangingEventArgs.cs">
-      <Link>ComponentModel\EventArgs\PropertyChangingEventArgs.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.WIN80\ComponentModel\IDataErrorInfo.cs">
       <Link>ComponentModel\IDataErrorInfo.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.WIN80\ComponentModel\INotifyPropertyChanging.cs">
       <Link>ComponentModel\INotifyPropertyChanging.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.WIN80\Reflection\BindingFlags.cs">
-      <Link>Reflection\BindingFlags.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.WIN80\Threading\Timer.cs">
       <Link>Threading\Timer.cs</Link>

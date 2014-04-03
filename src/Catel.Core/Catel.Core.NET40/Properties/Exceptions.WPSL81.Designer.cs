@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Catel.Core.WPSL81.Properties {
+namespace Catel.Properties {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace Catel.Core.WPSL81.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    internal class Exceptions {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources() {
+        internal Exceptions() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Catel.Core.WPSL81.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Catel.Core.WPSL81.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Catel.Properties.Exceptions", typeof(Exceptions).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,32 +61,38 @@ namespace Catel.Core.WPSL81.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} has the following errors:.
+        ///   Looks up a localized string similar to Unfortunately this feature is not supported in the current platform.
         /// </summary>
-        internal static string ErrorsFound {
+        internal static string NotSupportedInPlatform {
             get {
-                return ResourceManager.GetString("ErrorsFound", resourceCulture);
+                return ResourceManager.GetString("NotSupportedInPlatform", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}
-        ///
-        ///Details:
-        ///{1}.
+        ///   Looks up a localized string similar to Unfortunately this is not supported in Silverlight.
         /// </summary>
-        internal static string TraceWithDetails {
+        internal static string NotSupportedInSilverlight {
             get {
-                return ResourceManager.GetString("TraceWithDetails", resourceCulture);
+                return ResourceManager.GetString("NotSupportedInSilverlight", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} has the following warnings:.
+        ///   Looks up a localized string similar to Unfortunately this is not supported in Windows Phone 7.
         /// </summary>
-        internal static string WarningsFound {
+        internal static string NotSupportedInWindowsPhone7 {
             get {
-                return ResourceManager.GetString("WarningsFound", resourceCulture);
+                return ResourceManager.GetString("NotSupportedInWindowsPhone7", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unfortunately this is not supported in WinRT.
+        /// </summary>
+        internal static string NotSupportedInWinRT {
+            get {
+                return ResourceManager.GetString("NotSupportedInWinRT", resourceCulture);
             }
         }
     }

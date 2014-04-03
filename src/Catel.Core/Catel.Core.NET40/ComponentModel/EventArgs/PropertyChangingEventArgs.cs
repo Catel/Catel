@@ -4,6 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if !NET && !SILVERLIGHT
+
 namespace System.ComponentModel
 {
     /// <summary>
@@ -26,3 +28,5 @@ namespace System.ComponentModel
         public string PropertyName { get; private set; }
     }
 }
+
+#endif
