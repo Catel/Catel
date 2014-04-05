@@ -8,6 +8,8 @@
 
 namespace Catel.Services
 {
+    using System;
+    using System.Runtime.CompilerServices;
     using Catel.Logging;
     using Catel.MVVM.Views;
     using Catel.Reflection;
@@ -29,6 +31,8 @@ namespace Catel.Services
     public partial class ViewModelWrapperService
     {
         private const string InnerWrapperName = "__catelInnerWrapper";
+
+        private readonly ConditionalWeakTable<object, object> _weakIsWrappingTable = new ConditionalWeakTable<object, object>();
 
         /// <summary>
         /// Determines whether the specified view is wrapped.
@@ -53,6 +57,14 @@ namespace Catel.Services
             {
                 return null;
             }
+
+            object tempObj = null;
+            if (_weakIsWrappingTable.TryGetValue(view, out tempObj))
+            {
+                return null;
+            }
+
+            _weakIsWrappingTable.Add(view, new object());
 
             var vmGrid = new Grid();
             vmGrid.Name = InnerWrapperName;
