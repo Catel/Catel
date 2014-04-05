@@ -30,21 +30,39 @@ namespace Catel.Services
         /// </summary>
         public event EventHandler<EventArgs> LocationChanged;
 
+        /// <summary>
+        /// Called when the provider is enabled by the user.
+        /// </summary>
+        /// <param name="provider">The name of the location provider associated with this update.</param>
         public void OnProviderEnabled(string provider)
         {
             // Not required
         }
 
+        /// <summary>
+        /// Called when the provider is disabled by the user.
+        /// </summary>
+        /// <param name="provider">The name of the location provider associated with this update.</param>		
         public void OnProviderDisabled(string provider)
         {
             // Not required
         }
 
+        /// <summary>
+        /// Called when the provider status changes.
+        /// </summary>
+        /// <param name="provider">The name of the location provider associated with this update.</param>
+        /// <param name="status">The status.</param>
+        /// <param name="extras">The extras.</param>
         public void OnStatusChanged(string provider, Availability status, Bundle extras)
         {
             StatusChanged.SafeInvoke(this);
         }
 
+        /// <summary>
+        /// Called when the location has changed.
+        /// </summary>
+        /// <param name="location">The new location, as a Location object.</param>
         public void OnLocationChanged(global::Android.Locations.Location location)
         {
             LocationChanged.SafeInvoke(this);
