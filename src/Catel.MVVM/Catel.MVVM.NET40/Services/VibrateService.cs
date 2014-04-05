@@ -15,6 +15,14 @@ namespace Catel.Services
     public partial class VibrateService : IVibrateService
     {
         /// <summary>
+        /// Constructs the vibrate service.
+        /// </summary>	
+        public VibrateService()
+        {
+            Initialize();
+        }
+
+        /// <summary>
         /// Starts vibration on the device.
         /// </summary>
         /// <param name="duration">A TimeSpan object specifying the amount of time, in seconds, for which the phone vibrates.
@@ -33,6 +41,7 @@ namespace Catel.Services
             StopVibration();
         }
 
+        partial void Initialize();
         partial void StartVibration(TimeSpan duration);
         partial void StopVibration();
     }

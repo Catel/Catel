@@ -9,17 +9,34 @@
 namespace Catel.Services
 {
     using System;
+    using global::Android.App;
+    using global::Android.Content;
+    using global::Android.OS;
 
     public partial class VibrateService
     {
+        private Vibrator _vibrator;
+
+        partial void Initialize()
+        {
+            var context = Application.Context;
+            _vibrator = context.GetSystemService(Context.VibratorService) as Vibrator;
+        }
+
         partial void StartVibration(TimeSpan duration)
         {
-            throw new MustBeImplementedException();
+            if (_vibrator != null)
+            {
+                _vibrator.Vibrate((long)duration.TotalMilliseconds);
+            }
         }
 
         partial void StopVibration()
         {
-            throw new MustBeImplementedException();
+            if (_vibrator != null)
+            {
+                _vibrator.Cancel();
+            }
         }
     }
 }
