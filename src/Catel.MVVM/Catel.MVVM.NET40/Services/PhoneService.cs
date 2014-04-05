@@ -10,14 +10,14 @@ namespace Catel.Services
     using Catel.MVVM.Views;
     
 
-#if WINDOWS_PHONE
+#if WINDOWS_PHONE && SILVERLIGHT
     using System.Windows;
     using Catel.Windows;
     using Microsoft.Phone.Controls;
     using Microsoft.Phone.Shell;
 #endif
 
-#if XAMARIN || WINDOWS_PHONE
+#if XAMARIN || (WINDOWS_PHONE && SILVERLIGHT)
     /// <summary>
     /// Phone service.
     /// </summary>
@@ -28,7 +28,7 @@ namespace Catel.Services
         /// </summary>
         public PhoneService()
 	    {
-#if WINDOWS_PHONE
+#if (WINDOWS_PHONE && SILVERLIGHT)
             StartupMode = (StartupMode)PhoneApplicationService.Current.StartupMode;
 #endif
 	    }

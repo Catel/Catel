@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if WINDOWS_PHONE
+#if WINDOWS_PHONE && SILVERLIGHT
 
 namespace Catel.Services
 {

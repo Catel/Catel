@@ -88,7 +88,6 @@ namespace Catel.Windows
         /// easily create a resource URI.
         /// </remarks>
         /// <exception cref="ArgumentException">The <paramref name="uriString"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="UriFormatException">The <paramref name="uriString"/> is not a valid uri.</exception>
         public static bool XamlPageExists(string uriString)
         {
             Argument.IsNotNullOrWhitespace("uriString", uriString);

@@ -43,7 +43,7 @@ namespace Catel.Windows
 #endif
 
     /// <summary>
-    /// Extensions for <see cref="System.Windows.FrameworkElement"/>.
+    /// Extensions for <see cref="FrameworkElement"/>.
     /// </summary>
     public static class FrameworkElementExtensions
     {

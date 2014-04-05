@@ -15,7 +15,19 @@ namespace Catel.Services
     public abstract class SensorServiceBase<TValueInterface, TEventArgs> : ViewModelServiceBase, ISensorService<TValueInterface, TEventArgs>
         where TEventArgs : EventArgs 
     {
+        private readonly IDispatcherService _dispatcherService;
+
         #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SensorServiceBase{TValueInterface, TEventArgs}"/> class.
+        /// </summary>
+        /// <param name="dispatcherService">The dispatcher service.</param>
+        protected SensorServiceBase(IDispatcherService dispatcherService)
+        {
+            Argument.IsNotNull(() => dispatcherService);
+
+            _dispatcherService = dispatcherService;
+        }
         #endregion
 
         #region Properties
@@ -23,15 +35,15 @@ namespace Catel.Services
         /// Gets a value indicating whether the device supports the current sensor and thus supports getting values.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this device supports the current sensor; otherwise, <c>false</c>.
+        /// <c>true</c> if this device supports the current sensor; otherwise, <c>false</c>.
         /// </value>
-        public abstract bool IsSupported { get; }
+        public virtual bool IsSupported { get { return false; } }
 
         /// <summary>
         /// Gets or sets the preferred time between updates.
         /// </summary>
         /// <value>The preferred time between updates.</value>
-        public abstract TimeSpan TimeBetweenUpdates { get; set; }
+        public virtual TimeSpan TimeBetweenUpdates { get; set; }
 
         /// <summary>
         /// Gets the current sensor value. If no value is available, <c>null</c> will be returned.
@@ -60,7 +72,10 @@ namespace Catel.Services
         /// <returns>
         /// The current sensor value. If no value is available, <c>null</c> will be returned.
         /// </returns>
-        public abstract TValueInterface GetCurrentValue();
+        public virtual TValueInterface GetCurrentValue()
+        {
+            return default(TValueInterface);
+        }
 
         /// <summary>
         /// Starts the sensor service so it's retrieving data.
@@ -73,16 +88,21 @@ namespace Catel.Services
         public abstract void Stop();
 
         /// <summary>
+        /// Raises the <see cref="CurrentValueChanged"/> event.
+        /// </summary>
+        protected void RaiseCurrentValueChanged(TEventArgs e)
+        {
+            _dispatcherService.BeginInvoke(() => OnCurrentValueChanged(this, e));
+        }
+
+        /// <summary>
         /// Method to invoke the <see cref="CurrentValueChanged"/> event from derived classes.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         protected void OnCurrentValueChanged(object sender, TEventArgs e)
         {
-            if (CurrentValueChanged != null)
-            {
-                CurrentValueChanged(sender, e);
-            }
+            CurrentValueChanged.SafeInvoke(sender, e);
         }
         #endregion
     }

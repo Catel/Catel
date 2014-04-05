@@ -14,7 +14,7 @@ namespace Catel.MVVM.Converters
 #endif
 
     /// <summary>
-    /// Convert from string to <see cref="System.Windows.Visibility"/>. 
+    /// Convert from string to <see cref="Visibility"/>. 
     /// If the string is not null or empty, Visibility.Visible will be returned. 
     /// If the string is null or empty, Visibility.Collapsed will be returned.
     /// </summary>

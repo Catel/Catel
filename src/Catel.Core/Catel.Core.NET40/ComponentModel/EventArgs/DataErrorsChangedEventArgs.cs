@@ -4,6 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if NET40 || (WINDOWS_PHONE && SILVERLIGHT)
+
 namespace System.ComponentModel
 {
     /// <summary>
@@ -27,3 +29,5 @@ namespace System.ComponentModel
         public string PropertyName { get; private set; }
     }
 }
+
+#endif

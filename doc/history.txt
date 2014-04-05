@@ -18,6 +18,8 @@ Documentation:   http://www.catelproject.com/support/documentation
 Version 4.0.0
 ==================
 
+For an upgrade guide, visit https://catelproject.atlassian.net/wiki/display/CTL/Catel+4.0.0
+
 Release date:
 =============
 2014/xx/xx

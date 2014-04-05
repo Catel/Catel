@@ -24,7 +24,7 @@ namespace Catel.Services
 #elif WINDOWS_PHONE
     using System.Windows.Navigation;
     using System.Net;
-    using Phone.Controls;
+    using Microsoft.Phone.Controls;
 #elif SILVERLIGHT
     using System.Windows.Navigation;
     using System.Windows.Browser;

@@ -4,28 +4,16 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if WINDOWS_PHONE
 
 namespace Catel.Services
 {
     using System;
-    using Microsoft.Devices;
 
     /// <summary>
-    /// Windows Phone 7 implementation of the <see cref="IVibrateService"/>.
+    /// Implementation of the <see cref="IVibrateService"/>.
     /// </summary>
-    public class VibrateService : IVibrateService
+    public partial class VibrateService : IVibrateService
     {
-        #region Fields
-        #endregion
-
-        #region Constructors
-        #endregion
-
-        #region Properties
-        #endregion
-
-        #region Methods
         /// <summary>
         /// Starts vibration on the device.
         /// </summary>
@@ -34,7 +22,7 @@ namespace Catel.Services
         /// <exception cref="ArgumentOutOfRangeException">Duration is greater than the 5 seconds or duration is negative.</exception>
         public void Start(TimeSpan duration)
         {
-            VibrateController.Default.Start(duration);
+            StartVibration(duration);
         }
 
         /// <summary>
@@ -42,10 +30,10 @@ namespace Catel.Services
         /// </summary>
         public void Stop()
         {
-            VibrateController.Default.Stop();
+            StopVibration();
         }
-        #endregion
+
+        partial void StartVibration(TimeSpan duration);
+        partial void StopVibration();
     }
 }
-
-#endif

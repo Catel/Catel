@@ -41,6 +41,15 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <Compile Include="Services\LocationService.winrt.cs">
+      <DependentUpon>LocationService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\LocationService.android.cs">
+      <DependentUpon>LocationService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\LocationService.ios.cs">
+      <DependentUpon>LocationService.cs</DependentUpon>
+    </Compile>
     <Reference Include="Obsolete">
       <HintPath>..\..\..\lib\Obsolete.Fody.3.0.2.0\Lib\NET35\Obsolete.dll</HintPath>
       <Private>False</Private>
@@ -105,6 +114,9 @@
     <Compile Include="MVVM\Converters\Interfaces\IValueConverter.cs" />
     <Compile Include="MVVM\Navigation\EventArgs\NavigationEventArgsBase.cs" />
     <Compile Include="MVVM\Navigation\Extensions\NavigationModeExtensions.cs" />
+    <Compile Include="MVVM\Navigation\NavigationAdapter.phone.wpsl.cs">
+      <DependentUpon>NavigationAdapter.cs</DependentUpon>
+    </Compile>
     <Compile Include="MVVM\Navigation\NavigationAdapterBase.cs" />
     <Compile Include="MVVM\Navigation\NavigationContext.cs" />
     <Compile Include="MVVM\Navigation\NavigationMode.cs" />
@@ -137,9 +149,6 @@
     <Compile Include="MVVM\Navigation\NavigationAdapter.phone.ios.cs">
       <DependentUpon>NavigationAdapter.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVVM\Navigation\NavigationAdapter.phone.wp.cs">
-      <DependentUpon>NavigationAdapter.cs</DependentUpon>
-    </Compile>
     <Compile Include="MVVM\Navigation\NavigationAdapter.cs" />
     <Compile Include="MVVM\Views\Extensions\ViewExtensions.cs" />
     <Compile Include="MVVM\Views\ViewLoadedManager.cs" />
@@ -150,7 +159,19 @@
     <Compile Include="MVVM\Views\ViewModelWrapper.ios.cs" />
     <Compile Include="MVVM\Views\ViewModelWrapper.xaml.cs" />
     <Compile Include="MVVM\Views\WeakViewInfo.cs" />
-    <Compile Include="Services\AccelerometerService.wp.cs" />
+    <Compile Include="Services\AccelerometerService.android.cs">
+      <DependentUpon>AccelerometerService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\AccelerometerService.cs" />
+    <Compile Include="Services\AccelerometerService.ios.cs">
+      <DependentUpon>AccelerometerService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\AccelerometerService.winrt.cs">
+      <DependentUpon>AccelerometerService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\AccelerometerService.wpsl.cs">
+      <DependentUpon>AccelerometerService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\CameraService.winrt.cs">
       <DependentUpon>CameraService.cs</DependentUpon>
     </Compile>
@@ -161,11 +182,31 @@
     <Compile Include="Services\CameraService.android.cs">
       <DependentUpon>CameraService.cs</DependentUpon>
     </Compile>
-    <Compile Include="Services\Models\AccelerometerValue.cs" />
-    <Compile Include="Services\AutoCompletionService.cs" />
-    <Compile Include="Services\CameraService.wp.cs">
+    <Compile Include="Services\CameraService.wpsl.cs">
       <DependentUpon>CameraService.cs</DependentUpon>
     </Compile>
+    <Compile Include="Services\LocationService.cs" />
+    <Compile Include="Services\LocationServiceBase.cs" />
+    <Compile Include="Services\MessageService.android.cs">
+      <DependentUpon>MessageService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\MessageService.ios.cs">
+      <DependentUpon>MessageService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\MessageService.sl.cs">
+      <DependentUpon>MessageService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\MessageService.winrt.cs">
+      <DependentUpon>MessageService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\MessageService.wpf.cs">
+      <DependentUpon>MessageService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\MessageService.wpsl.cs">
+      <DependentUpon>MessageService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Models\AccelerometerValue.cs" />
+    <Compile Include="Services\AutoCompletionService.cs" />
     <Compile Include="Services\CameraServiceBase.cs" />
     <Compile Include="Services\Exceptions\SplashScreenException.cs" />
     <Compile Include="Services\Extensions\IUIVisualizerServiceExtensions.cs" />
@@ -174,7 +215,9 @@
     <Compile Include="Services\Interfaces\IStateService.cs" />
     <Compile Include="Services\Interfaces\IViewModelWrapperService.cs" />
     <Compile Include="Services\Models\Location.cs" />
-    <Compile Include="Services\LocationService.wp.cs" />
+    <Compile Include="Services\LocationService.wpsl.cs">
+      <DependentUpon>LocationService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\Models\Size.cs" />
     <Compile Include="Services\NavigationService.ios.cs">
       <DependentUpon>NavigationService.cs</DependentUpon>
@@ -194,10 +237,10 @@
     <Compile Include="Services\PleaseWaitService.android.cs">
       <DependentUpon>PleaseWaitService.cs</DependentUpon>
     </Compile>
-    <Compile Include="Services\PleaseWaitService.wp.cs">
+    <Compile Include="Services\PleaseWaitService.winrt.cs">
       <DependentUpon>PleaseWaitService.cs</DependentUpon>
     </Compile>
-    <Compile Include="Services\PleaseWaitService.winrt.cs">
+    <Compile Include="Services\PleaseWaitService.wpsl.cs">
       <DependentUpon>PleaseWaitService.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\SensorServiceBase.cs" />
@@ -207,7 +250,19 @@
     <Compile Include="Services\Test\LocationService.cs" />
     <Compile Include="Services\Test\NavigationService.cs" />
     <Compile Include="Services\Test\SensorServiceBase.cs" />
-    <Compile Include="Services\VibrateService.wp.cs" />
+    <Compile Include="Services\VibrateService.android.cs">
+      <DependentUpon>VibrateService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\VibrateService.cs" />
+    <Compile Include="Services\VibrateService.ios.cs">
+      <DependentUpon>VibrateService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\VibrateService.winrt.cs">
+      <DependentUpon>VibrateService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\VibrateService.wpsl.cs">
+      <DependentUpon>VibrateService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\ViewModelWrapperService.android.cs">
       <DependentUpon>ViewModelWrapperService.cs</DependentUpon>
     </Compile>

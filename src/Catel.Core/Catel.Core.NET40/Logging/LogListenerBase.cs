@@ -14,7 +14,10 @@ namespace Catel.Logging
     /// </summary>
     public abstract class LogListenerBase : ILogListener
     {
-        private static readonly Dictionary<LogEvent, string> LogEventStrings;
+        /// <summary>
+        /// The log event strings.
+        /// </summary>
+        protected static readonly Dictionary<LogEvent, string> LogEventStrings;
 
         /// <summary>
         /// Initializes static members of the <see cref="LogListenerBase"/> class.

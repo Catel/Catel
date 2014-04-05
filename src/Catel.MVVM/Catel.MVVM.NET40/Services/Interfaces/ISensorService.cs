@@ -28,7 +28,7 @@ namespace Catel.Services
         /// Gets a value indicating whether the device supports the current sensor and thus supports getting values.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this device supports the current sensor; otherwise, <c>false</c>.
+        /// <c>true</c> if this device supports the current sensor; otherwise, <c>false</c>.
         /// </value>
         bool IsSupported { get; }
 

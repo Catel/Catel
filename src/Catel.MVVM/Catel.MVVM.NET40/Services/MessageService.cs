@@ -21,31 +21,31 @@ namespace Catel.Services
 #endif
 
     /// <summary>
-	/// Message service that implements the <see cref="IMessageService"/>.
-	/// </summary>
-	public class MessageService : ViewModelServiceBase, IMessageService
-	{
-		#region Methods
+    /// Message service that implements the <see cref="IMessageService"/>.
+    /// </summary>
+    public partial class MessageService : ViewModelServiceBase, IMessageService
+    {
+        #region Methods
 #if !XAMARIN
-		/// <summary>
-		/// Translates the message box result.
-		/// </summary>
-		/// <param name="result">The result.</param>
-		/// <returns>
-		/// Corresponding <see cref="MessageResult"/>.
-		/// </returns>
+        /// <summary>
+        /// Translates the message box result.
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns>
+        /// Corresponding <see cref="MessageResult"/>.
+        /// </returns>
         protected static MessageResult TranslateMessageBoxResult(MessageBoxResult result)
-		{
-		    return Enum<MessageResult>.ConvertFromOtherEnumValue(result);
-		}
+        {
+            return Enum<MessageResult>.ConvertFromOtherEnumValue(result);
+        }
 
         /// <summary>
-		/// Translates the message button.
-		/// </summary>
-		/// <param name="button">The button.</param>
-		/// <returns>
-		/// Corresponding <see cref="MessageBoxButton"/>.
-		/// </returns>
+        /// Translates the message button.
+        /// </summary>
+        /// <param name="button">The button.</param>
+        /// <returns>
+        /// Corresponding <see cref="MessageBoxButton"/>.
+        /// </returns>
         protected static MessageBoxButton TranslateMessageButton(MessageButton button)
         {
             try
@@ -56,21 +56,8 @@ namespace Catel.Services
             {
                 throw new NotSupportedInPlatformException("MessageBox class does not support MessageButton '{0}'", button);
             }
-		}
+        }
 
-#if NET
-		/// <summary>
-		/// Translates the message image.
-		/// </summary>
-		/// <param name="image">The image.</param>
-		/// <returns>
-		/// Corresponding <see cref="MessageBoxImage"/>.
-		/// </returns>
-		protected static MessageBoxImage TranslateMessageImage(MessageImage image)
-		{
-            return Enum<MessageBoxImage>.ConvertFromOtherEnumValue(image);
-		}
-#endif
 #endif
         #endregion
 
@@ -218,7 +205,7 @@ namespace Catel.Services
         /// will be invoked when the message is dismissed.
         /// </remarks>
         /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
-        public virtual void ShowAsync(string message, string caption = "", MessageButton button = MessageButton.OK, 
+        public virtual void ShowAsync(string message, string caption = "", MessageButton button = MessageButton.OK,
             MessageImage icon = MessageImage.None, Action<MessageResult> completedCallback = null)
         {
             var result = Show(message, caption, button, icon);
@@ -226,82 +213,6 @@ namespace Catel.Services
             {
                 completedCallback(result);
             }
-        }
-
-        /// <summary>
-        /// Shows the message box.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <param name="caption">The caption.</param>
-        /// <param name="button">The button.</param>
-        /// <param name="icon">The icon.</param>
-        /// <returns>The message result.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
-#if NETFX_CORE
-        protected async virtual Task<MessageResult> ShowMessageBox(string message, string caption = "", MessageButton button = MessageButton.OK, MessageImage icon = MessageImage.None)
-#else
-        protected virtual MessageResult ShowMessageBox(string message, string caption = "", MessageButton button = MessageButton.OK, MessageImage icon = MessageImage.None)
-#endif
-        {
-            Argument.IsNotNullOrWhitespace("message", message);
-
-#if ANDROID
-            throw new MustBeImplementedException();
-#elif IOS
-            throw new MustBeImplementedException();
-#elif NET
-            var result = MessageBoxResult.None;
-            var messageBoxButton = TranslateMessageButton(button);
-            var messageBoxImage = TranslateMessageImage(icon);
-
-            var activeWindow = Application.Current.GetActiveWindow();
-            if (activeWindow != null)
-            {
-                result = MessageBox.Show(activeWindow, message, caption, messageBoxButton, messageBoxImage);
-            }
-            else
-            {
-                result = MessageBox.Show(message, caption, messageBoxButton, messageBoxImage);
-            }
-
-            return TranslateMessageBoxResult(result);
-#elif NETFX_CORE
-            // TODO: Add translations for system
-
-            var result = MessageBoxResult.None;
-            var messageBoxButton = TranslateMessageButton(button);
-            var messageDialog = new MessageDialog(message, caption);
-
-            if (Enum<MessageButton>.Flags.IsFlagSet(button, MessageButton.OK) || 
-                Enum<MessageButton>.Flags.IsFlagSet(button, MessageButton.OKCancel))
-            {
-                messageDialog.Commands.Add(new UICommand("OK", cmd => result = MessageBoxResult.OK));
-            }
-
-            if (Enum<MessageButton>.Flags.IsFlagSet(button, MessageButton.YesNo) ||
-                Enum<MessageButton>.Flags.IsFlagSet(button, MessageButton.YesNoCancel))
-            {
-                messageDialog.Commands.Add(new UICommand("Yes", cmd => result = MessageBoxResult.Yes));
-                messageDialog.Commands.Add(new UICommand("No", cmd => result = MessageBoxResult.No));
-            }
-
-            if (Enum<MessageButton>.Flags.IsFlagSet(button, MessageButton.OKCancel) ||
-                Enum<MessageButton>.Flags.IsFlagSet(button, MessageButton.YesNoCancel))
-            {
-                messageDialog.Commands.Add(new UICommand("Cancel", cmd => result = MessageBoxResult.Cancel));
-                messageDialog.CancelCommandIndex = (uint)messageDialog.Commands.Count - 1;
-            }
-
-            await messageDialog.ShowAsync();
-
-            return TranslateMessageBoxResult(result);
-#else
-            var result = MessageBoxResult.None;
-            var messageBoxButton = TranslateMessageButton(button);
-            result = MessageBox.Show(message, caption, messageBoxButton);
-
-            return TranslateMessageBoxResult(result);
-#endif
         }
         #endregion
     }

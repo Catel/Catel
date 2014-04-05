@@ -350,8 +350,8 @@
       <Link>MVVM\Navigation\NavigationAdapter.phone.ios.cs</Link>
       <DependentUpon>NavigationAdapter.cs</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Navigation\NavigationAdapter.phone.wp.cs">
-      <Link>MVVM\Navigation\NavigationAdapter.phone.wp.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Navigation\NavigationAdapter.phone.wpsl.cs">
+      <Link>MVVM\Navigation\NavigationAdapter.phone.wpsl.cs</Link>
       <DependentUpon>NavigationAdapter.cs</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Navigation\NavigationAdapterBase.cs">
@@ -477,8 +477,24 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\WeakViewInfo.cs">
       <Link>MVVM\Views\WeakViewInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Services\AccelerometerService.wp.cs">
-      <Link>Services\AccelerometerService.wp.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\AccelerometerService.android.cs">
+      <Link>Services\AccelerometerService.android.cs</Link>
+      <DependentUpon>AccelerometerService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\AccelerometerService.cs">
+      <Link>Services\AccelerometerService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\AccelerometerService.ios.cs">
+      <Link>Services\AccelerometerService.ios.cs</Link>
+      <DependentUpon>AccelerometerService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\AccelerometerService.winrt.cs">
+      <Link>Services\AccelerometerService.winrt.cs</Link>
+      <DependentUpon>AccelerometerService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\AccelerometerService.wpsl.cs">
+      <Link>Services\AccelerometerService.wpsl.cs</Link>
+      <DependentUpon>AccelerometerService.cs</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\AutoCompletionService.cs">
       <Link>Services\AutoCompletionService.cs</Link>
@@ -498,8 +514,8 @@
       <Link>Services\CameraService.winrt.cs</Link>
       <DependentUpon>CameraService.cs</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Services\CameraService.wp.cs">
-      <Link>Services\CameraService.wp.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\CameraService.wpsl.cs">
+      <Link>Services\CameraService.wpsl.cs</Link>
       <DependentUpon>CameraService.cs</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\CameraServiceBase.cs">
@@ -619,11 +635,54 @@
     <Compile Include="..\Catel.MVVM.NET40\Services\Interfaces\IViewModelWrapperService.cs">
       <Link>Services\Interfaces\IViewModelWrapperService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Services\LocationService.wp.cs">
-      <Link>Services\LocationService.wp.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\LocationService.android.cs">
+      <Link>Services\LocationService.android.cs</Link>
+      <DependentUpon>LocationService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\LocationService.cs">
+      <Link>Services\LocationService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\LocationService.ios.cs">
+      <Link>Services\LocationService.ios.cs</Link>
+      <DependentUpon>LocationService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\LocationService.winrt.cs">
+      <Link>Services\LocationService.winrt.cs</Link>
+      <DependentUpon>LocationService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\LocationService.wpsl.cs">
+      <Link>Services\LocationService.wpsl.cs</Link>
+      <DependentUpon>LocationService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\LocationServiceBase.cs">
+      <Link>Services\LocationServiceBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\MessageService.android.cs">
+      <Link>Services\MessageService.android.cs</Link>
+      <DependentUpon>MessageService.cs</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\MessageService.cs">
       <Link>Services\MessageService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\MessageService.ios.cs">
+      <Link>Services\MessageService.ios.cs</Link>
+      <DependentUpon>MessageService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\MessageService.sl.cs">
+      <Link>Services\MessageService.sl.cs</Link>
+      <DependentUpon>MessageService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\MessageService.winrt.cs">
+      <Link>Services\MessageService.winrt.cs</Link>
+      <DependentUpon>MessageService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\MessageService.wpf.cs">
+      <Link>Services\MessageService.wpf.cs</Link>
+      <DependentUpon>MessageService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\MessageService.wpsl.cs">
+      <Link>Services\MessageService.wpsl.cs</Link>
+      <DependentUpon>MessageService.cs</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\Models\AccelerometerValue.cs">
       <Link>Services\Models\AccelerometerValue.cs</Link>
@@ -676,12 +735,12 @@
       <Link>Services\PleaseWaitService.winrt.cs</Link>
       <DependentUpon>PleaseWaitService.cs</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Services\PleaseWaitService.wp.cs">
-      <Link>Services\PleaseWaitService.wp.cs</Link>
-      <DependentUpon>PleaseWaitService.cs</DependentUpon>
-    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\PleaseWaitService.wpf.cs">
       <Link>Services\PleaseWaitService.wpf.cs</Link>
+      <DependentUpon>PleaseWaitService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\PleaseWaitService.wpsl.cs">
+      <Link>Services\PleaseWaitService.wpsl.cs</Link>
       <DependentUpon>PleaseWaitService.cs</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\ProcessService.cs">
@@ -744,8 +803,24 @@
     <Compile Include="..\Catel.MVVM.NET40\Services\UIVisualizerService.cs">
       <Link>Services\UIVisualizerService.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Services\VibrateService.wp.cs">
-      <Link>Services\VibrateService.wp.cs</Link>
+    <Compile Include="..\Catel.MVVM.NET40\Services\VibrateService.android.cs">
+      <Link>Services\VibrateService.android.cs</Link>
+      <DependentUpon>VibrateService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\VibrateService.cs">
+      <Link>Services\VibrateService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\VibrateService.ios.cs">
+      <Link>Services\VibrateService.ios.cs</Link>
+      <DependentUpon>VibrateService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\VibrateService.winrt.cs">
+      <Link>Services\VibrateService.winrt.cs</Link>
+      <DependentUpon>VibrateService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Services\VibrateService.wpsl.cs">
+      <Link>Services\VibrateService.wpsl.cs</Link>
+      <DependentUpon>VibrateService.cs</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Services\ViewExportService.cs">
       <Link>Services\ViewExportService.cs</Link>

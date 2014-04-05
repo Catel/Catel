@@ -4,6 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if !NETFX_CORE
+
 namespace System.ComponentModel
 {
     using Collections;
@@ -34,3 +36,5 @@ namespace System.ComponentModel
         IEnumerable GetErrors(string propertyName);
     }
 }
+
+#endif

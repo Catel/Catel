@@ -56,8 +56,10 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("Windows Phone 7.x, Debug")]
 #elif WP80
 [assembly: AssemblyConfiguration("Windows Phone 8.0, Debug")]
-#elif WP81
-[assembly: AssemblyConfiguration("Windows Phone 8.1, Debug")]
+#elif WPSL81
+[assembly: AssemblyConfiguration("Windows Phone 8.1 (Silverlight), Debug")]
+#elif WPRT81
+[assembly: AssemblyConfiguration("Windows Phone 8.1 (Runtime), Debug")]
 #elif WIN80
 [assembly: AssemblyConfiguration("Windows 8.0, Debug")]
 #elif WIN81
@@ -90,8 +92,10 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("Windows Phone 7.x, Release")]
 #elif WP80
 [assembly: AssemblyConfiguration("Windows Phone 8.0, Release")]
-#elif WP81
-[assembly: AssemblyConfiguration("Windows Phone 8.1, Release")]
+#elif WPSL81
+[assembly: AssemblyConfiguration("Windows Phone 8.1 (Silverlight), Release")]
+#elif WPRT81
+[assembly: AssemblyConfiguration("Windows Phone 8.1 (Runtime), Release")]
 #elif WIN80
 [assembly: AssemblyConfiguration("Windows 8.0, Release")]
 #elif WIN81

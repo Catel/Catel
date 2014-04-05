@@ -61,9 +61,17 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelFactory, ViewModelFactory>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<INavigationService, NavigationService>();
 
+                serviceLocator.RegisterTypeIfNotYetRegistered<IPleaseWaitService, PleaseWaitService>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<IAccelerometerService, AccelerometerService>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<ILocationService, LocationService>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<IVibrateService, VibrateService>();
+
+#if !NET && !SL5
+                serviceLocator.RegisterTypeIfNotYetRegistered<ICameraService, CameraService>();
+#endif
+
 #if !XAMARIN
                 // TODO: Add support in xamarin
-                serviceLocator.RegisterTypeIfNotYetRegistered<IPleaseWaitService, PleaseWaitService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<ISchedulerService, SchedulerService>();
 #endif
 
@@ -81,17 +89,8 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<ISplashScreenService, SplashScreenService>(RegistrationType.Transient);
 #endif
 
-#if WINDOWS_PHONE || XAMARIN
+#if (WINDOWS_PHONE && SILVERLIGHT) || XAMARIN
                 serviceLocator.RegisterTypeIfNotYetRegistered<IPhoneService, PhoneService>();
-
-#if !XAMARIN
-                // TODO: Add support in xamarin
-                serviceLocator.RegisterTypeIfNotYetRegistered<IAccelerometerService, AccelerometerService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<ILocationService, LocationService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IVibrateService, VibrateService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<ICameraService, CameraService>();
-#endif
-
 #endif
 
                 Log.Debug("Registered default service implementations for IoC container");

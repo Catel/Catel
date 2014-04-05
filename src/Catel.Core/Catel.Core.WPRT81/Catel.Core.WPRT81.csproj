@@ -1030,11 +1030,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Catel.Core.NET40\packages.config">
-      <Link>packages.config</Link>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="..\Catel.Core.NET40\Properties\Exceptions.resx">
       <Link>Properties\Exceptions.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>

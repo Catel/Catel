@@ -4,34 +4,17 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if WINDOWS_PHONE
+#if WINDOWS_PHONE && SILVERLIGHT
 
 namespace Catel.Services
 {
     using System;
     using Microsoft.Devices.Sensors;
 
-    /// <summary>
-    /// Implementation of the <see cref="IAccelerometerService"/> interface.
-    /// </summary>
-    public class AccelerometerService : SensorServiceBase<IAccelerometerValue, AccelerometerValueChangedEventArgs>, IAccelerometerService
+    public partial class AccelerometerService
     {
         #region Fields
-        private readonly Accelerometer _sensor;
-        #endregion
-
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AccelerometerService"/> class.
-        /// </summary>
-        public AccelerometerService()
-        {
-            if (IsSupported)
-            {
-                _sensor = new Accelerometer();
-                _sensor.CurrentValueChanged += OnSensorValueChanged;    
-            }
-        }
+        private Accelerometer _sensor;
         #endregion
 
         #region Properties
@@ -39,7 +22,7 @@ namespace Catel.Services
         /// Gets a value indicating whether the device supports the current sensor and thus supports getting values.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this device supports the current sensor; otherwise, <c>false</c>.
+        /// <c>true</c> if this device supports the current sensor; otherwise, <c>false</c>.
         /// </value>
         public override bool IsSupported
         {
@@ -72,39 +55,28 @@ namespace Catel.Services
                 currentValue.Acceleration.Y, currentValue.Acceleration.Z);
         }
 
-        /// <summary>
-        /// Starts the sensor service so it's retrieving data.
-        /// </summary>
-        public override void Start()
+        partial void Initialize()
+        {
+            if (IsSupported)
+            {
+                _sensor = new Accelerometer();
+                _sensor.CurrentValueChanged += OnSensorValueChanged;    
+            }
+        }
+
+        partial void StartSensor()
         {
             _sensor.Start();
         }
 
-        /// <summary>
-        /// Stops the sensor service so it's no longer retrieving data.
-        /// </summary>
-        public override void Stop()
+        partial void StopSensor()
         {
             _sensor.Stop();
         }
 
-        /// <summary>
-        /// Called when the current location has changed.
-        /// </summary>
         private void OnSensorValueChanged(object sender, EventArgs e)
         {
-            var value = new AccelerometerValueChangedEventArgs(CurrentValue);
-
-            // Must be thread-safe, dispatch
-            if (Dispatcher != null)
-            {
-                Dispatcher.BeginInvoke(() => OnCurrentValueChanged(this, value));
-            }
-            else
-            {
-                // If no dispatcher is available, trust the user of this service
-                OnCurrentValueChanged(this, value);
-            }
+            RaiseCurrentValueChanged(new AccelerometerValueChangedEventArgs(CurrentValue));
         }
         #endregion
     }

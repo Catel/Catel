@@ -27,11 +27,6 @@ namespace Catel.Reflection
 #endif
         public static Type GetCallingType()
         {
-            if (EnvironmentHelper.IsProcessHostedByTool)
-            {
-                return typeof(object);
-            }
-
 #if NET
             var frame = new StackFrame(2, false);
             var type = frame.GetMethod().DeclaringType;
