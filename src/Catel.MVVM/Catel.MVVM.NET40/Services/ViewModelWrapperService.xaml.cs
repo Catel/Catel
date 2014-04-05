@@ -49,7 +49,7 @@ namespace Catel.Services
         private IViewModelWrapper CreateViewModelGrid(IView view, object viewModelSource, WrapOptions wrapOptions)
         {
             var content = GetContent(view) as FrameworkElement;
-            if (content != null)
+            if (content == null)
             {
                 return null;
             }
