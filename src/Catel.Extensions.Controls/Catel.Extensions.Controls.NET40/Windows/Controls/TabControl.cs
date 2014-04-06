@@ -10,6 +10,7 @@ namespace Catel.Windows.Controls
     using System.Collections;
     using System.Collections.Specialized;
     using System.Linq;
+    using System.Runtime.CompilerServices;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
@@ -19,6 +20,11 @@ namespace Catel.Windows.Controls
     /// </summary>
     public enum LoadTabItemsBehavior
     {
+        /// <summary>
+        /// Loads the current tab and unloads the others.
+        /// </summary>
+        SingleUnloadOthers,
+
         /// <summary>
         /// Load the current tab.
         /// </summary>
@@ -36,15 +42,58 @@ namespace Catel.Windows.Controls
     }
 
     /// <summary>
+    /// Item data for a tab control item.
+    /// </summary>
+    public class TabControlItemData
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TabControlItemData" /> class.
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <param name="content">The content.</param>
+        public TabControlItemData(object container, object content)
+        {
+            Container = container;
+            TabItem = container as TabItem;
+            if (TabItem != null)
+            {
+                TabItem.Content = null;
+            }
+
+            Content = content;
+        }
+
+        /// <summary>
+        /// Gets the container.
+        /// </summary>
+        /// <value>The container.</value>
+        public object Container { get; private set; }
+
+        /// <summary>
+        /// Gets the tab item.
+        /// </summary>
+        /// <value>The tab item.</value>
+        public TabItem TabItem { get; private set; }
+
+        /// <summary>
+        /// Gets the content.
+        /// </summary>
+        /// <value>The content.</value>
+        public object Content { get; private set; }
+    }
+
+    /// <summary>
     /// TabControl that will not remove the tab items from the visual tree. This way, views can be re-used.
     /// </summary>
     /// <remarks>
     /// This code was originally found at http://eric.burke.name/dotnetmania/2009/04/26/22.09.28.
     /// </remarks>
-    [TemplatePart(Name = "PART_ItemsHolder", Type = typeof (Panel))]
+    [TemplatePart(Name = "PART_ItemsHolder", Type = typeof(Panel))]
     public class TabControl : System.Windows.Controls.TabControl
     {
         private Panel _itemsHolder;
+
+        private readonly ConditionalWeakTable<object, object> _wrappedContainers = new ConditionalWeakTable<object, object>();
 
 #if NET
         /// <summary>
@@ -60,7 +109,7 @@ namespace Catel.Windows.Controls
         /// Initializes a new instance of the <see cref="T:System.Windows.Controls.TabControl"/>.class.
         /// </summary>
         /// <remarks></remarks>
-        public TabControl() 
+        public TabControl()
         {
             // this is necessary so that we get the initial databound selected item
             ItemContainerGenerator.StatusChanged += OnItemContainerGeneratorStatusChanged;
@@ -88,7 +137,7 @@ namespace Catel.Windows.Controls
         /// <summary>
         /// Dependency property registration for the <see cref="LoadTabItems"/> property.
         /// </summary>
-        public static readonly DependencyProperty LoadTabItemsProperty = DependencyProperty.Register("LoadTabItems", 
+        public static readonly DependencyProperty LoadTabItemsProperty = DependencyProperty.Register("LoadTabItems",
             typeof(LoadTabItemsBehavior), typeof(TabControl), new PropertyMetadata(LoadTabItemsBehavior.Single));
 
         /// <summary>
@@ -198,28 +247,63 @@ namespace Catel.Windows.Controls
                 return;
             }
 
-            foreach (var item in LoadTabItems >= LoadTabItemsBehavior.AllOnFirstUse ? (IEnumerable)Items : new[] { GetSelectedTabItem() })
+            var selectedTabItem = GetSelectedTabItem();
+            IEnumerable source = null;
+            var unvisible = Visibility.Hidden;
+
+            switch (LoadTabItems)
             {
-                // generate a ContentPresenter if necessary
+                case LoadTabItemsBehavior.Single:
+                    source = new[] { selectedTabItem };
+                    break;
+
+                case LoadTabItemsBehavior.SingleUnloadOthers:
+                case LoadTabItemsBehavior.AllOnFirstUse:
+                case LoadTabItemsBehavior.AllOnStartUp:
+                    source = Items;
+                    unvisible = Visibility.Collapsed;
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            foreach (var item in source)
+            {
+                // Generate a ContentPresenter if necessary
                 if (item != null)
                 {
                     CreateChildContentPresenter(item);
                 }
             }
 
-            var unvisible = LoadTabItems >= LoadTabItemsBehavior.AllOnFirstUse ? Visibility.Hidden : Visibility.Collapsed;
-
-            // show the right child
+            // Show the right child
             foreach (ContentPresenter child in _itemsHolder.Children)
             {
-                var tabItem = child.Tag as TabItem;
-                if (tabItem != null && tabItem.IsSelected)
+                var tabControlItemData = child.Tag as TabControlItemData;
+                if (tabControlItemData != null)
                 {
-                    child.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    child.Visibility = unvisible;
+                    var tabItem = tabControlItemData.TabItem;
+                    if (tabItem != null && tabItem.IsSelected)
+                    {
+                        if (child.Content == null)
+                        {
+                            child.Content = tabControlItemData.Content;
+                        }
+
+                        child.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        if (LoadTabItems == LoadTabItemsBehavior.SingleUnloadOthers)
+                        {
+                            child.Content = null;
+                        }
+                        else
+                        {
+                            child.Visibility = unvisible;
+                        }
+                    }
                 }
             }
         }
@@ -236,8 +320,15 @@ namespace Catel.Windows.Controls
                 return null;
             }
 
-            ContentPresenter cp = FindChildContentPresenter(item);
+            object dummyObject = null;
+            if (_wrappedContainers.TryGetValue(item, out dummyObject))
+            {
+                return null;
+            }
 
+            _wrappedContainers.Add(item, new object());
+
+            var cp = FindChildContentPresenter(item);
             if (cp != null)
             {
                 return cp;
@@ -246,32 +337,42 @@ namespace Catel.Windows.Controls
             // the actual child to be added.  cp.Tag is a reference to the TabItem
             cp = new ContentPresenter();
 
-            if (item is TabItem)
-            {
-                cp.Content = (item as TabItem).Content;
-            }
-            else
-            {
-                cp.Content = item;
-            }
+            var container = GetContentContainer(item);
+            var content = GetContent(item);
+            var tabItemData = new TabControlItemData(container, content);
 
+            cp.Tag = tabItemData;
+            cp.Content = content;
             cp.ContentTemplate = SelectedContentTemplate;
             cp.ContentTemplateSelector = SelectedContentTemplateSelector;
             cp.ContentStringFormat = SelectedContentStringFormat;
             cp.Visibility = Visibility.Collapsed;
 
-            if (item is TabItem)
-            {
-                cp.Tag = item;
-            }
-            else
-            {
-                cp.Tag = ItemContainerGenerator.ContainerFromItem(item);
-            }
-
             _itemsHolder.Children.Add(cp);
 
             return cp;
+        }
+
+        private object GetContent(object item)
+        {
+            var itemAsTabItem = item as TabItem;
+            if (itemAsTabItem != null)
+            {
+                return itemAsTabItem.Content;
+            }
+
+            return item;
+        }
+
+        private object GetContentContainer(object item)
+        {
+            var itemAsTabItem = item as TabItem;
+            if (itemAsTabItem != null)
+            {
+                return itemAsTabItem;
+            }
+
+            return ItemContainerGenerator.ContainerFromItem(item);
         }
 
         /// <summary>
