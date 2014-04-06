@@ -247,6 +247,11 @@ namespace Catel.MVVM
             Argument.IsNotNullOrWhitespace("commandName", commandName);
             Argument.IsNotNull("command", command);
 
+            if (CatelEnvironment.IsInDesignMode)
+            {
+                return;
+            }
+
             lock (_lockObject)
             {
                 Log.Debug("Registering command to '{0}'", commandName);
@@ -276,6 +281,11 @@ namespace Catel.MVVM
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
             Argument.IsNotNull("action", action);
+
+            if (CatelEnvironment.IsInDesignMode)
+            {
+                return;
+            }
 
             lock (_lockObject)
             {
@@ -307,6 +317,11 @@ namespace Catel.MVVM
             Argument.IsNotNullOrWhitespace("commandName", commandName);
             Argument.IsNotNull("command", command);
 
+            if (CatelEnvironment.IsInDesignMode)
+            {
+                return;
+            }
+
             lock (_lockObject)
             {
                 Log.Debug("Unregistering command from '{0}'", commandName);
@@ -336,6 +351,11 @@ namespace Catel.MVVM
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
             Argument.IsNotNull("action", action);
+
+            if (CatelEnvironment.IsInDesignMode)
+            {
+                return;
+            }
 
             lock (_lockObject)
             {
