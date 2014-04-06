@@ -156,5 +156,10 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CommandManager.CreateCommand"/> method.</exception>
         void UnregisterAction(string commandName, Action action);
+
+        /// <summary>
+        /// Invalidates the all the currently registered commands.
+        /// </summary>
+        void InvalidateCommands();
     }
 }

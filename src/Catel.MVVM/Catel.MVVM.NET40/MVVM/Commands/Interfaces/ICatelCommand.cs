@@ -37,7 +37,7 @@ namespace Catel.MVVM
         /// Invokes the <see cref="ICommand.CanExecute"/> with <c>null</c> as parameter.
         /// </summary>
         /// <returns>
-        /// 	<c>true</c> if this instance can execute; otherwise, <c>false</c>.
+        /// <c>true</c> if this instance can execute; otherwise, <c>false</c>.
         /// </returns>
         bool CanExecute();
 
@@ -45,7 +45,7 @@ namespace Catel.MVVM
         /// Invokes the <see cref="ICommand.Execute"/> with <c>null</c> as parameter.
         /// </summary>
         /// <returns>
-        /// 	<c>true</c> if this instance can execute; otherwise, <c>false</c>.
+        /// <c>true</c> if this instance can execute; otherwise, <c>false</c>.
         /// </returns>
         void Execute();
     }

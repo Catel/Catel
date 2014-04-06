@@ -8,12 +8,11 @@
 namespace Catel.MVVM
 {
     using System;
-    using System.Windows.Input;
 
     /// <summary>
     /// Composite command which allows several commands inside a single command being exposed to a view.
     /// </summary>
-    public interface ICompositeCommand : ICommand
+    public interface ICompositeCommand : ICatelCommand
     {
         /// <summary>
         /// Registers the specified command.

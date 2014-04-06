@@ -26,8 +26,6 @@ namespace Catel.MVVM
 
 #endif
 
-
-
     /// <summary>
     /// Manager that takes care of application-wide commands and can dynamically forward
     /// them to the right view models.
@@ -101,6 +99,8 @@ namespace Catel.MVVM
                 _commands.Add(commandName, compositeCommand ?? new CompositeCommand());
                 _originalCommandGestures.Add(commandName, inputGesture);
                 _commandGestures.Add(commandName, inputGesture);
+
+                InvalidateCommands();
             }
         }
 #else
@@ -135,9 +135,29 @@ namespace Catel.MVVM
                 }
 
                 _commands.Add(commandName, compositeCommand ?? new CompositeCommand());
+
+                InvalidateCommands();
             }
         }
 #endif
+
+        /// <summary>
+        /// Invalidates the all the currently registered commands.
+        /// </summary>
+        public void InvalidateCommands()
+        {
+            lock (_lockObject)
+            {
+                foreach (var commandName in _commands.Keys)
+                {
+                    var command = _commands[commandName];
+                    if (command != null)
+                    {
+                        command.RaiseCanExecuteChanged();
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Gets all the registered commands.
@@ -239,6 +259,8 @@ namespace Catel.MVVM
                 }
 
                 _commands[commandName].RegisterCommand(command, viewModel);
+
+                InvalidateCommands();
             }
         }
 
@@ -267,6 +289,8 @@ namespace Catel.MVVM
                 }
 
                 _commands[commandName].RegisterAction(action);
+
+                InvalidateCommands();
             }
         }
 
@@ -295,6 +319,8 @@ namespace Catel.MVVM
                 }
 
                 _commands[commandName].UnregisterCommand(command);
+
+                InvalidateCommands();
             }
         }
 
@@ -323,6 +349,8 @@ namespace Catel.MVVM
                 }
 
                 _commands[commandName].UnregisterAction(action);
+
+                InvalidateCommands();
             }
         }
 
