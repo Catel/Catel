@@ -139,8 +139,6 @@ namespace Catel.Phone.Controls
 
             BackKeyPress += (sender, e) => _backKeyPress.SafeInvoke(this);
             this.AddDataContextChangedHandler((sender, e) => _viewDataContextChanged.SafeInvoke(this));
-
-            RaiseViewModelChanged();
         }
         #endregion
 

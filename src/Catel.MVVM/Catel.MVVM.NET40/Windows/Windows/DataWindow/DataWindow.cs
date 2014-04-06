@@ -334,8 +334,6 @@ namespace Catel.Windows
                 _viewDataContextChanged.SafeInvoke(this);
             };
 
-            RaiseViewModelChanged();
-
 #if NET
             if (setOwnerAndFocus)
             {

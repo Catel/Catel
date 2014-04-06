@@ -176,8 +176,6 @@ namespace Catel.Windows.Controls
             {
                 _viewDataContextChanged.SafeInvoke(this);
             });
-
-            RaiseViewModelChanged();
         }
         #endregion
 

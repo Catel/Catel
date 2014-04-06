@@ -98,8 +98,6 @@ namespace Catel.Android.App
             _logic.ViewLoaded += (sender, e) => ViewLoaded.SafeInvoke(this);
             _logic.ViewUnloading += (sender, e) => ViewUnloading.SafeInvoke(this);
             _logic.ViewUnloaded += (sender, e) => ViewUnloaded.SafeInvoke(this);
-
-            RaiseViewModelChanged();
         }
         #endregion
 
