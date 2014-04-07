@@ -44,7 +44,7 @@
     <Resource Include="Windows\Media\Effects\EmptyEffect\EmptyEffect.ps" />
     <Resource Include="Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.ps" />
     <Reference Include="Obsolete">
-      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.2.0\Lib\NET35\Obsolete.dll</HintPath>
+      <HintPath>..\..\..\lib\Obsolete.Fody.3.1.0.0\Lib\NET35\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />

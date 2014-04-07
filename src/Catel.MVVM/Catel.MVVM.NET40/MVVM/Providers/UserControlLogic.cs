@@ -348,7 +348,7 @@ namespace Catel.MVVM.Providers
             // even if the Content property was changed while InitializeComponents() running there is no triggering of a binding update.
             CreateViewModelWrapper();
 
-#if NET || SL4 || SL5
+#if NET || SL5
             if (!SkipSearchingForInfoBarMessageControl)
             {
                 Log.Debug("Searching for an instance of the InfoBarMessageControl");
