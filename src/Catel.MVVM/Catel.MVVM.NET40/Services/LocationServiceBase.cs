@@ -67,11 +67,13 @@ namespace Catel.Services
         protected void RaiseLocationChanged()
         {
             var locationChanged = LocationChanged;
+            if (locationChanged != null)
+            {
+                var currentLocation = GetCurrentLocation();
+                var value = new LocationChangedEventArgs(currentLocation);
 
-            var currentLocation = GetCurrentLocation();
-            var value = new LocationChangedEventArgs(currentLocation);
-
-            _dispatcherService.BeginInvoke(() => locationChanged(this, value));
+                _dispatcherService.BeginInvoke(() => locationChanged(this, value));
+            }
         }
 
         /// <summary>
