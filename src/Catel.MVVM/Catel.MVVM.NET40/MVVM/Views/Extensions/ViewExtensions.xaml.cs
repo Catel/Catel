@@ -97,7 +97,16 @@ namespace Catel.MVVM.Views
         static partial void FinalDispatch(IView view, Action action)
         {
             var dependencyObject = (DependencyObject)view;
-            dependencyObject.Dispatcher.Invoke(action);
+
+            var dispatcher = dependencyObject.Dispatcher;
+            if (dispatcher.CheckAccess())
+            {
+                action();
+            }
+            else
+            {
+                dispatcher.Invoke(action);
+            }
         }
     }
 }
