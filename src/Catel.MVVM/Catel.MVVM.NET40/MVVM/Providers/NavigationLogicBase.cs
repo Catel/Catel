@@ -43,8 +43,6 @@ namespace Catel.MVVM.Providers
             NavigatingAwaySavesViewModel = true;
 
             CreateNavigationAdapter();
-
-            EnsureViewModel();
         }
         #endregion
 
@@ -109,6 +107,8 @@ namespace Catel.MVVM.Providers
             base.OnTargetViewLoaded(sender, e);
 
             CreateNavigationAdapter();
+
+            EnsureViewModel();
         }
 
         /// <summary>

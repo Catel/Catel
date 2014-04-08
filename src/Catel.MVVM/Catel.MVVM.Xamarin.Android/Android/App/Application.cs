@@ -7,7 +7,8 @@
 
 namespace Catel.Android.App
 {
-    using global::Android.Content;
+    using System;
+    using global::Android.Runtime;
 
     /// <summary>
     /// Application class to be able to have a static context.
@@ -15,11 +16,17 @@ namespace Catel.Android.App
     public class Application : global::Android.App.Application
     {
         /// <summary>
-        /// Initializes static members of the <see cref="Application"/> class.
+        /// The constructor of the application class.
         /// </summary>
-        static Application()
+        /// <param name="javaReference"></param>
+        /// <param name="transfer"></param>
+        public Application(IntPtr javaReference, JniHandleOwnership transfer)
+            : base(javaReference, transfer)
         {
-            Default = new Application();
+            if (Default != null)
+            {
+                Default = this;
+            }
         }
 
         /// <summary>
