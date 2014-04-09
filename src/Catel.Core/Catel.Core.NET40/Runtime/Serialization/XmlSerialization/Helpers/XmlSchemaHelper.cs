@@ -13,6 +13,7 @@ namespace Catel.Runtime.Serialization.Xml
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using System.Runtime.Serialization;
     using System.Xml;
     using System.Xml.Linq;
     using System.Xml.Schema;
@@ -137,8 +138,6 @@ namespace Catel.Runtime.Serialization.Xml
 
             if (typeof(ModelBase).IsAssignableFromEx(type))
             {
-                var typeNs = GetTypeNamespaceForSchema(type);
-
                 var members = new List<MemberInfo>();
                 members.AddRange(from field in serializationManager.GetFieldsToSerialize(type)
                                  select type.GetFieldEx(field));
@@ -163,25 +162,14 @@ namespace Catel.Runtime.Serialization.Xml
                         memberType = propertyInfo.PropertyType;
                     }
 
-                    if (memberType.ImplementsInterfaceEx(typeof(IEnumerable)) && memberType != typeof(string))
-                    {
-                        propertySchemaElement.SchemaTypeName = new XmlQualifiedName(string.Format("{0}", member.Name), typeNs);
+                    propertySchemaElement.IsNillable = memberType.IsNullableType();
+                    propertySchemaElement.MinOccurs = 0;
 
-                        var collectionPropertyType = new XmlSchemaComplexType();
-                        collectionPropertyType.Name = string.Format("{0}", member.Name);
-                        schema.Items.Add(collectionPropertyType);
+                    var exporter = new XsdDataContractExporter(schemaSet);
+                    exporter.Export(memberType);
 
-                        foreach (var genericArgument in memberType.GetGenericArguments())
-                        {
-                            AddTypeToSchemaSet(genericArgument, schemaSet, serializationManager);
-                        }
-                    }
-                    else
-                    {
-                        propertySchemaElement.SchemaTypeName = AddTypeToSchemaSet(memberType, schemaSet, serializationManager);
-                        propertySchemaElement.IsNillable = memberType.IsNullableType();
-                        propertySchemaElement.MinOccurs = 0;
-                    }
+                    propertySchemaElement.SchemaType = exporter.GetSchemaType(memberType);
+                    propertySchemaElement.SchemaTypeName = exporter.GetSchemaTypeName(memberType);
 
                     propertiesSequence.Items.Add(propertySchemaElement);
                 }
@@ -271,6 +259,10 @@ namespace Catel.Runtime.Serialization.Xml
 
                 modelBaseType.ContentModel = complexContent;
             }
+            else
+            {
+                modelBaseType.Particle = propertiesSequence;
+            }
 
             return modelBaseType;
         }
@@ -332,8 +324,7 @@ namespace Catel.Runtime.Serialization.Xml
             var xmlNamespaceManager = XmlNamespaceManager;
             var xmlNamespace = xmlNamespaceManager.GetNamespace(type, "ctl");
 
-            return string.Format("{0}{1}", xmlNamespace.Prefix, xmlNamespace.Uri);
-            //return string.Format("{0}{1}", DefaultNs, type.Namespace);
+            return xmlNamespace.Uri;
         }
         #endregion
     }
