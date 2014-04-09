@@ -343,8 +343,8 @@ namespace Catel.Windows.Controls
 
             cp.Tag = tabItemData;
             cp.Content = content;
-            cp.ContentTemplate = SelectedContentTemplate;
-            cp.ContentTemplateSelector = SelectedContentTemplateSelector;
+            cp.ContentTemplate = ContentTemplate;
+            cp.ContentTemplateSelector = ContentTemplateSelector;
             cp.ContentStringFormat = SelectedContentStringFormat;
             cp.Visibility = Visibility.Collapsed;
 

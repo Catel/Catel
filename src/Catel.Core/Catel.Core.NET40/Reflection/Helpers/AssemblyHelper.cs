@@ -194,7 +194,7 @@ namespace Catel.Reflection
         /// <param name="logLoaderExceptions">If set to <c>true</c>, the loader exceptions will be logged.</param>
         /// <returns>The array of successfully loaded types.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="assembly"/> is <c>null</c>.</exception>
-        public static Type[] GetAllTypesSafely(Assembly assembly, bool logLoaderExceptions = true)
+        public static Type[] GetAllTypesSafely(this Assembly assembly, bool logLoaderExceptions = true)
         {
             Argument.IsNotNull("assembly", assembly);
 
@@ -251,7 +251,7 @@ namespace Catel.Reflection
         /// </summary>
         /// <param name="appDomain">The app domain to search in.</param>
         /// <returns><see cref="List{Assembly}" /> of all loaded assemblies.</returns>
-        public static List<Assembly> GetLoadedAssemblies(AppDomain appDomain)
+        public static List<Assembly> GetLoadedAssemblies(this AppDomain appDomain)
         {
             var assemblies = new List<Assembly>();
 

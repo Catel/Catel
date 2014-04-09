@@ -114,7 +114,7 @@ namespace Catel.MVVM
                     return true;
                 }
 
-                return _commandInfo.Count > 0;
+                return _commandInfo.Count > 0 || _actions.Count > 0;
             }
         }
 

@@ -49,7 +49,7 @@ namespace Catel.MVVM.Views
     /// <para />
     /// Use this one for best performance but loose the automatic view property change notifications.
     /// </summary>
-    public class FastDependencyPropertySelector : ViewPropertySelector
+    public class FastViewPropertySelector : ViewPropertySelector
     {
         /// <summary>
         /// Determines whether all view properties must be subscribed for this type.
