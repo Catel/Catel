@@ -20,11 +20,7 @@ namespace Catel.Runtime.Serialization.Xml
     /// <summary>
     /// Default implementation of the <see cref="IDataContractSerializerFactory" /> interface.
     /// </summary>
-#if NET
     public class DataContractSerializerFactory : IDataContractSerializerFactory
-#else
-    public class DataContractSerializerFactory : IDataContractSerializerFactory
-#endif
     {
         #region Fields
         /// <summary>
