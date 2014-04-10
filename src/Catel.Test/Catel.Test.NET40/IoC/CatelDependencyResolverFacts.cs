@@ -119,12 +119,12 @@ namespace Catel.Test.IoC
             }
 
             [TestMethod]
-            public void ReturnsNullForNonRegisteredType()
+            public void ThrowsTypeNotRegisteredForNonRegisteredType()
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
 
-                Assert.IsNull(dependencyResolver.Resolve(typeof(ITestInterface)));
+                ExceptionTester.CallMethodAndExpectException<TypeNotRegisteredException>(() => dependencyResolver.Resolve(typeof(ITestInterface)));
             }
 
             [TestMethod]
