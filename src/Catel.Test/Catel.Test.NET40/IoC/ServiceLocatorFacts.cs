@@ -1418,5 +1418,37 @@ namespace Catel.Test.IoC
                 ExceptionTester.CallMethodAndExpectException<CircularDependencyException>(() => serviceLocator.ResolveType<InterfaceA>());
             }
         }
+
+        [TestClass]
+        public class TheResolveMissingType
+        {
+            interface IDummy
+            {
+                 
+            }
+
+            public class Dummy : IDummy
+            {
+                 
+            }
+
+            [TestMethod]
+            public void ThrowsMissingRegistredTypeException()
+            {
+                var serviceLocator = IoCFactory.CreateServiceLocator();
+
+                ExceptionTester.CallMethodAndExpectException<MissingRegisteredTypeException>(() => serviceLocator.ResolveType<IDummy>());
+            }
+
+            [TestMethod]
+            public void ThrowsMissingRegistredByTagTypeException()
+            {
+                var serviceLocator = IoCFactory.CreateServiceLocator();
+                serviceLocator.RegisterType(typeof(IDummy), typeof(Dummy), "SomeTag");
+
+                Assert.IsNotNull(serviceLocator.ResolveType(typeof(IDummy), "SomeTag"));
+                ExceptionTester.CallMethodAndExpectException<MissingRegisteredTypeException>(() => serviceLocator.ResolveType<IDummy>());
+            }
+        }
     }
 }

@@ -178,7 +178,7 @@ namespace Catel.IoC
         /// <param name="tag">The tag to register the service with. The default value is <c>null</c>.</param>
         /// <returns>An instance of the type registered on the service.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType" /> is <c>null</c>.</exception>
-        /// <exception cref="NotSupportedException">The type is not found in any container.</exception>
+        /// <exception cref="MissingRegisteredTypeException">The type is not found in any container.</exception>
         /// <remarks>
         /// Note that the actual implementation lays in the hands of the IoC technique being used.
         /// </remarks>
