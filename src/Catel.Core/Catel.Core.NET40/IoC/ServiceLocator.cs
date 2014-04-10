@@ -437,7 +437,7 @@ namespace Catel.IoC
         /// <param name="tag">The tag to register the service with. The default value is <c>null</c>.</param>
         /// <returns>An instance of the type registered on the service.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType" /> is <c>null</c>.</exception>
-        /// <exception cref="MissingRegisteredTypeException">The type is not found in any container.</exception>
+        /// <exception cref="TypeNotRegisteredException">The type is not found in any container.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
         public object ResolveType(Type serviceType, object tag = null)
         {
@@ -457,8 +457,8 @@ namespace Catel.IoC
                     return TypeFactory.CreateInstance(serviceType);
                 }
 
-                Log.Error(string.Format("The type '{0}' is not registered", serviceType.FullName));
-                throw new MissingRegisteredTypeException(serviceType);
+                Log.Error("The type '{0}' is not registered", serviceType.FullName);
+                throw new TypeNotRegisteredException(serviceType);
             }
 
             lock (_lockObject)
@@ -486,24 +486,26 @@ namespace Catel.IoC
             Argument.IsNotNull("serviceType", serviceType);
 
             var resolvedInstances = new List<object>();
+
             lock (_lockObject)
             {
                 for (int i = 0; i < _registeredTypes.Keys.Count; i++)
                 {
-                    ServiceInfo serviceInfo = _registeredTypes.Keys.ElementAt(i);
+                    var serviceInfo = _registeredTypes.Keys.ElementAt(i);
                     if (serviceInfo.Type == serviceType)
                     {
                         try
                         {
                             resolvedInstances.Add(ResolveType(serviceInfo.Type, serviceInfo.Tag));
                         }
-                        catch (MissingRegisteredTypeException e)
+                        catch (TypeNotRegisteredException ex)
                         {
-                            Log.Debug(e, "Failed to resolve type '{0}', returning null", e.RequestedType.GetSafeFullName());
+                            Log.Debug(ex, "Failed to resolve type '{0}', returning null", ex.RequestedType.GetSafeFullName());
                         }
                     }
                 }
             }
+
             return resolvedInstances;
         }
 
@@ -607,7 +609,7 @@ namespace Catel.IoC
             {
                 for (int i = _registeredInstances.Count - 1; i >= 0; i--)
                 {
-                    ServiceInfo serviceInfo = _registeredInstances.Keys.ElementAt(i);
+                    var serviceInfo = _registeredInstances.Keys.ElementAt(i);
                     if (serviceInfo.Type == serviceType)
                     {
                         _registeredInstances.Remove(serviceInfo);
@@ -677,7 +679,7 @@ namespace Catel.IoC
                 RemoveAllInstances(serviceType);
                 for (int i = _registeredTypes.Count - 1; i >= 0; i--)
                 {
-                    ServiceInfo serviceInfo = _registeredTypes.Keys.ElementAt(i);
+                    var serviceInfo = _registeredTypes.Keys.ElementAt(i);
                     if (serviceInfo.Type == serviceType)
                     {
                         _registeredTypes.Remove(serviceInfo);
@@ -855,8 +857,11 @@ namespace Catel.IoC
 
                 object instance = registeredTypeInfo.CreateServiceFunc(registeredTypeInfo);
                 if (instance == null)
-                    throw new MissingRegisteredTypeException(serviceType);
-                
+                {
+                    Log.Error("Type '{0}' is not registered", serviceType.GetSafeFullName());
+                    throw new TypeNotRegisteredException(serviceType);
+                }
+
                 if (IsTypeRegisteredAsSingleton(serviceType, tag))
                 {
                     RegisterInstance(serviceType, instance, tag, this);
@@ -885,9 +890,12 @@ namespace Catel.IoC
             {
                 instance = TypeFactory.CreateInstanceUsingActivator(registration.ImplementingType);
             }
-            
+
             if (instance == null)
-                throw new MissingRegisteredTypeException(registration.DeclaringType);
+            {
+                Log.Error("Type '{0}' is not registered", registration.DeclaringType.GetSafeFullName());
+                throw new TypeNotRegisteredException(registration.DeclaringType);
+            }
 
             var handler = TypeInstantiated;
             if (handler != null)

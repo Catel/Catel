@@ -160,6 +160,9 @@
     <Compile Include="..\Catel.Core.NET40\Caching\Policies\AbsoluteExpirationPolicy.cs">
       <Link>Caching\Policies\AbsoluteExpirationPolicy.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Caching\Policies\CompositeExpirationPolicy.cs">
+      <Link>Caching\Policies\CompositeExpirationPolicy.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Caching\Policies\CustomExpirationPolicy.cs">
       <Link>Caching\Policies\CustomExpirationPolicy.cs</Link>
     </Compile>
@@ -181,14 +184,14 @@
     <Compile Include="..\Catel.Core.NET40\Collections\Helpers\CollectionHelper.cs">
       <Link>Collections\Helpers\CollectionHelper.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\ComponentModel\BackgroundWorker.cs">
+      <Link>ComponentModel\BackgroundWorker.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\ComponentModel\EventArgs\BeginEditEventArgs.cs">
       <Link>ComponentModel\EventArgs\BeginEditEventArgs.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\ComponentModel\EventArgs\CancelEditEventArgs.cs">
       <Link>ComponentModel\EventArgs\CancelEditEventArgs.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\ComponentModel\EventArgs\DataErrorsChangedEventArgs.cs">
-      <Link>ComponentModel\EventArgs\DataErrorsChangedEventArgs.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\ComponentModel\EventArgs\EditEventArgs.cs">
       <Link>ComponentModel\EventArgs\EditEventArgs.cs</Link>
@@ -210,9 +213,6 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\ComponentModel\IDataWarningInfo.cs">
       <Link>ComponentModel\IDataWarningInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\ComponentModel\INotifyDataErrorInfo.cs">
-      <Link>ComponentModel\INotifyDataErrorInfo.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\ComponentModel\INotifyDataWarningInfo.cs">
       <Link>ComponentModel\INotifyDataWarningInfo.cs</Link>
@@ -246,6 +246,12 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\ChangeNotificationWrapper.cs">
       <Link>Data\ChangeNotificationWrapper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Data\CompositeValidator.cs">
+      <Link>Data\CompositeValidator.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Data\CompositeValidatorProvider.cs">
+      <Link>Data\CompositeValidatorProvider.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\EventArgs\AdvancedPropertyChangedEventArgs.cs">
       <Link>Data\EventArgs\AdvancedPropertyChangedEventArgs.cs</Link>
@@ -339,9 +345,6 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\ModelBase.propertyregistration.cs">
       <Link>Data\ModelBase.propertyregistration.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Core.NET40\Data\ModelBase.serialization.binary.cs">
-      <Link>Data\ModelBase.serialization.binary.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Data\ModelBase.serialization.cs">
       <Link>Data\ModelBase.serialization.cs</Link>
@@ -531,6 +534,9 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Exceptions\ExternalContainerNotSupportedException.cs">
       <Link>IoC\Exceptions\ExternalContainerNotSupportedException.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\Exceptions\TypeNotRegisteredException.cs">
+      <Link>IoC\Exceptions\TypeNotRegisteredException.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Extensions\DependencyResolverExtensions.cs">
       <Link>IoC\Extensions\DependencyResolverExtensions.cs</Link>
@@ -1002,6 +1008,9 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Threading\Helpers\ThreadHelper.cs">
       <Link>Threading\Helpers\ThreadHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Threading\SynchronizationContext.cs">
+      <Link>Threading\SynchronizationContext.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\WeakReferences\Interfaces\IExecute.cs">
       <Link>WeakReferences\Interfaces\IExecute.cs</Link>

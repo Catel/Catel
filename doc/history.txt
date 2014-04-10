@@ -35,6 +35,8 @@ Added/fixed (BREAKING CHANGES):
     are now implemented as interfaces (mainly IView) and are now located in the Catel.MVVM.Views namespace. This might
     be a breaking change for people using the behaviors or implementing custom views
 (*) CTL-344 Renamed Catel.Environment class to Catel.CatelEnvironment to prevent name clashing with .NET Environment
+(*) CTL-402 DependencyResolver and ServiceLocator now throw TypeNotRegisteredException when a type is being retrieved
+    that is not yet registered in the ServiceLocator
 
 Added/fixed:
 ============

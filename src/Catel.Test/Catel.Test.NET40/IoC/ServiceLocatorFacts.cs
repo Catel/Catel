@@ -1433,21 +1433,21 @@ namespace Catel.Test.IoC
             }
 
             [TestMethod]
-            public void ThrowsMissingRegistredTypeException()
+            public void ThrowsTypeNotRegisteredException()
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
 
-                ExceptionTester.CallMethodAndExpectException<MissingRegisteredTypeException>(() => serviceLocator.ResolveType<IDummy>());
+                ExceptionTester.CallMethodAndExpectException<TypeNotRegisteredException>(() => serviceLocator.ResolveType<IDummy>());
             }
 
             [TestMethod]
-            public void ThrowsMissingRegistredByTagTypeException()
+            public void ThrowsTypeNotRegisteredByTagException()
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.RegisterType(typeof(IDummy), typeof(Dummy), "SomeTag");
 
                 Assert.IsNotNull(serviceLocator.ResolveType(typeof(IDummy), "SomeTag"));
-                ExceptionTester.CallMethodAndExpectException<MissingRegisteredTypeException>(() => serviceLocator.ResolveType<IDummy>());
+                ExceptionTester.CallMethodAndExpectException<TypeNotRegisteredException>(() => serviceLocator.ResolveType<IDummy>());
             }
         }
     }

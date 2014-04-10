@@ -86,6 +86,7 @@
     <Compile Include="Collections\Extensions\CollectionExtensions.cs" />
     <Compile Include="Collections\Extensions\DictionaryExtensions.cs" />
     <Compile Include="Collections\Helpers\CollectionHelper.cs" />
+    <Compile Include="ComponentModel\BackgroundWorker.cs" />
     <Compile Include="ComponentModel\EventArgs\PropertyChangingEventArgs.cs" />
     <Compile Include="ComponentModel\Extensions\PropertyChangedEventArgsExtensions.cs" />
     <Compile Include="ComponentModel\IDataErrorInfo.cs" />
@@ -211,7 +212,7 @@
     <Compile Include="IoC\Conventions\FirstInterfaceRegistrationConvention.cs" />
     <Compile Include="IoC\Conventions\NamingRegistrationConvention.cs" />
     <Compile Include="IoC\Conventions\RegistrationConventionBase.cs" />
-    <Compile Include="IoC\Exceptions\MissingRegisteredTypeException.cs" />
+    <Compile Include="IoC\Exceptions\TypeNotRegisteredException.cs" />
     <Compile Include="IoC\Extensions\RegistrationConventionHandlerExtensions.cs" />
     <Compile Include="IoC\Extensions\ServiceLocatorExtensions.conventions.cs" />
     <Compile Include="IoC\Interfaces\IRegistrationConventionHandler.cs" />

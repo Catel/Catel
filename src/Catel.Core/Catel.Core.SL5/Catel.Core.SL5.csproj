@@ -120,6 +120,9 @@
     <Compile Include="..\Catel.Core.NET40\ApiCop\Rules\UnusedFeatureApiCopRule.cs">
       <Link>ApiCop\Rules\UnusedFeatureApiCopRule.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\AppDomain.cs">
+      <Link>AppDomain.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Argument.cs">
       <Link>Argument.cs</Link>
     </Compile>
@@ -177,17 +180,26 @@
     <Compile Include="..\Catel.Core.NET40\ComponentModel\EventArgs\EndEditEventArgs.cs">
       <Link>ComponentModel\EventArgs\EndEditEventArgs.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\ComponentModel\EventArgs\PropertyChangingEventArgs.cs">
+      <Link>ComponentModel\EventArgs\PropertyChangingEventArgs.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\ComponentModel\Extensions\PropertyChangedEventArgsExtensions.cs">
       <Link>ComponentModel\Extensions\PropertyChangedEventArgsExtensions.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\ComponentModel\IAdvancedEditableObject.cs">
       <Link>ComponentModel\IAdvancedEditableObject.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\ComponentModel\IDataErrorInfo.cs">
+      <Link>ComponentModel\IDataErrorInfo.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\ComponentModel\IDataWarningInfo.cs">
       <Link>ComponentModel\IDataWarningInfo.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\ComponentModel\INotifyDataWarningInfo.cs">
       <Link>ComponentModel\INotifyDataWarningInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\ComponentModel\INotifyPropertyChanging.cs">
+      <Link>ComponentModel\INotifyPropertyChanging.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Configuration\ConfigurationService.cs">
       <Link>Configuration\ConfigurationService.cs</Link>
@@ -507,6 +519,9 @@
     <Compile Include="..\Catel.Core.NET40\IoC\Exceptions\ExternalContainerNotSupportedException.cs">
       <Link>IoC\Exceptions\ExternalContainerNotSupportedException.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\Exceptions\TypeNotRegisteredException.cs">
+      <Link>IoC\Exceptions\TypeNotRegisteredException.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Extensions\DependencyResolverExtensions.cs">
       <Link>IoC\Extensions\DependencyResolverExtensions.cs</Link>
     </Compile>
@@ -620,24 +635,30 @@
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.android.cs">
       <Link>Logging\Listeners\DebugLogListener.android.cs</Link>
+      <DependentUpon>DebugLogListener.cs</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.cs">
       <Link>Logging\Listeners\DebugLogListener.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.ios.cs">
       <Link>Logging\Listeners\DebugLogListener.ios.cs</Link>
+      <DependentUpon>DebugLogListener.cs</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.net.cs">
       <Link>Logging\Listeners\DebugLogListener.net.cs</Link>
+      <DependentUpon>DebugLogListener.cs</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.sl.cs">
       <Link>Logging\Listeners\DebugLogListener.sl.cs</Link>
+      <DependentUpon>DebugLogListener.cs</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.winrt.cs">
       <Link>Logging\Listeners\DebugLogListener.winrt.cs</Link>
+      <DependentUpon>DebugLogListener.cs</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Listeners\DebugLogListener.wp.cs">
       <Link>Logging\Listeners\DebugLogListener.wp.cs</Link>
+      <DependentUpon>DebugLogListener.cs</DependentUpon>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Logging\Log.cs">
       <Link>Logging\Log.cs</Link>
@@ -734,6 +755,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.zh-Hans.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Reflection\BindingFlags.cs">
+      <Link>Reflection\BindingFlags.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Reflection\CachedPropertyInfo.cs">
       <Link>Reflection\CachedPropertyInfo.cs</Link>

@@ -535,6 +535,9 @@
     <Compile Include="..\Catel.Core.NET40\IoC\Exceptions\ExternalContainerNotSupportedException.cs">
       <Link>IoC\Exceptions\ExternalContainerNotSupportedException.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\IoC\Exceptions\TypeNotRegisteredException.cs">
+      <Link>IoC\Exceptions\TypeNotRegisteredException.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\IoC\Extensions\DependencyResolverExtensions.cs">
       <Link>IoC\Extensions\DependencyResolverExtensions.cs</Link>
     </Compile>

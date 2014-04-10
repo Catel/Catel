@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if !NET && !SILVERLIGHT
+#if NETFX_CORE
 
 namespace System.ComponentModel
 {

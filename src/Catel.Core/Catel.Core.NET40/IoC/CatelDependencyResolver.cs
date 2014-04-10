@@ -73,7 +73,7 @@ namespace Catel.IoC
         /// <param name="type">The type.</param>
         /// <param name="tag">The tag.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
-        /// <exception cref="MissingRegisteredTypeException">The type is not found in any container.</exception>
+        /// <exception cref="TypeNotRegisteredException">The type is not found in any container.</exception>
         /// <returns>The resolved object.</returns>
         public object Resolve(Type type, object tag = null)
         {
@@ -87,7 +87,7 @@ namespace Catel.IoC
         /// </summary>
         /// <param name="types">The types.</param>
         /// <param name="tag">The tag.</param>
-        /// <returns>A lost of resolved types. If one of the types cannot be resolved, that location in the array will be <c>null</c>.</returns>
+        /// <returns>A list of resolved types. If one of the types cannot be resolved, that location in the array will be <c>null</c>.</returns>
         public object[] ResolveAll(Type[] types, object tag = null)
         {
             Argument.IsNotNull("types", types);
@@ -106,7 +106,7 @@ namespace Catel.IoC
                 {
                     resolvedTypes[i] = Resolve(types[i], tag);
                 }
-                catch (MissingRegisteredTypeException e)
+                catch (TypeNotRegisteredException e)
                 {
                     Log.Debug(e, "Failed to resolve type '{0}', returning null", e.RequestedType.GetSafeFullName());
                 }

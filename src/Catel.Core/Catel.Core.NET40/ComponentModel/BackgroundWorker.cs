@@ -4,6 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if NETFX_CORE
+
 namespace System.ComponentModel
 {
     using Threading.Tasks;
@@ -263,3 +265,5 @@ namespace System.ComponentModel
         public bool Cancelled { get; set; }
     }
 }
+
+#endif

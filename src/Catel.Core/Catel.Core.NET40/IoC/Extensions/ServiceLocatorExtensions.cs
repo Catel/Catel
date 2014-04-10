@@ -3,6 +3,7 @@
 //   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Catel.IoC
 {
     using System;
@@ -343,7 +344,7 @@ namespace Catel.IoC
         /// <param name="tag">The tag.</param>
         /// <returns>An instance of the type registered on the service.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
-        /// <exception cref="MissingRegisteredTypeException">The type is not found in any container.</exception>
+        /// <exception cref="TypeNotRegisteredException">The type is not found in any container.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
         public static TService ResolveType<TService>(this IServiceLocator serviceLocator, object tag = null)
         {

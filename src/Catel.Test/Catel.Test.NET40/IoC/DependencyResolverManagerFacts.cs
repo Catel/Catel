@@ -152,13 +152,13 @@ namespace Catel.Test.IoC
 
                 }
                 [TestMethod]
-                public void ThrowsMissingRegistredTypeException()
+                public void ThrowsTypeNotRegisteredException()
                 {
                     var dependencyResolverManager = new DependencyResolverManager();
 
                     var resolvedDependencyResolver = dependencyResolverManager.GetDependencyResolverForType(typeof(object));
 
-                    ExceptionTester.CallMethodAndExpectException<MissingRegisteredTypeException>(() => resolvedDependencyResolver.Resolve(typeof(IDummy)));
+                    ExceptionTester.CallMethodAndExpectException<TypeNotRegisteredException>(() => resolvedDependencyResolver.Resolve(typeof(IDummy)));
                 }
             }
         }
