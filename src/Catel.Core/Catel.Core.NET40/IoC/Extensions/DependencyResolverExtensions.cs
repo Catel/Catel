@@ -46,7 +46,29 @@ namespace Catel.IoC
         /// <summary>
         /// Try to resolve the specified type with the specified tag.
         /// </summary>
-        /// <typeparam name="T">Tye type to resolve.</typeparam>
+        /// <param name="dependencyResolver">The dependency resolver.</param>
+        /// <param name="serviceType">Type of the service.</param>
+        /// <param name="tag">The tag.</param>
+        /// <returns>The resolved object or <c>null</c> if the type could not be resolved.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="dependencyResolver" /> is <c>null</c>.</exception>
+        public static object TryResolve(this IDependencyResolver dependencyResolver, Type serviceType, object tag = null)
+        {
+            Argument.IsNotNull("dependencyResolver", dependencyResolver);
+
+            try
+            {
+                return dependencyResolver.Resolve(serviceType, tag);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Try to resolve the specified type with the specified tag.
+        /// </summary>
+        /// <typeparam name="T">The type to resolve.</typeparam>
         /// <param name="dependencyResolver">The dependency resolver.</param>
         /// <param name="tag">The tag.</param>
         /// <returns>The resolved object or <c>null</c> if the type could not be resolved.</returns>
@@ -55,14 +77,7 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("dependencyResolver", dependencyResolver);
 
-            try
-            {
-                return (T)dependencyResolver.Resolve(typeof(T), tag);
-            }
-            catch (Exception)
-            {
-                return default(T);
-            }
+            return (T)TryResolve(dependencyResolver, typeof (T), tag);
         }
     }
 }

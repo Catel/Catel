@@ -40,8 +40,8 @@ namespace Catel.MVVM
         {
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
 
-            AuthenticationProvider = dependencyResolver.Resolve<IAuthenticationProvider>();
-            DispatcherService = dependencyResolver.Resolve<IDispatcherService>();
+            AuthenticationProvider = dependencyResolver.TryResolve<IAuthenticationProvider>();
+            DispatcherService = dependencyResolver.TryResolve<IDispatcherService>();
         }
     }
 

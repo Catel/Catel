@@ -168,7 +168,7 @@ namespace Catel.Data
                     if (!_hasRetrievedValidatorOnce)
                     {
                         var dependencyResolver = this.GetDependencyResolver();
-                        var validatorProvider = dependencyResolver.Resolve<IValidatorProvider>();
+                        var validatorProvider = dependencyResolver.TryResolve<IValidatorProvider>();
                         if (validatorProvider != null)
                         {
                             _validator = validatorProvider.GetValidator(GetType());

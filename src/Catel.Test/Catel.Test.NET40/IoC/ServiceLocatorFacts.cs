@@ -579,7 +579,7 @@ namespace Catel.Test.IoC
 
                 var ref2 = serviceLocator.ResolveType(typeof(ITestInterface), "2");
 
-                ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => serviceLocator.ResolveType(typeof(ITestInterface), "1"));
+                ExceptionTester.CallMethodAndExpectException<TypeNotRegisteredException>(() => serviceLocator.ResolveType(typeof(ITestInterface), "1"));
                 Assert.IsTrue(serviceLocator.IsTypeRegistered(typeof(ITestInterface), "2"));
                 Assert.IsTrue(object.ReferenceEquals(ref1, ref2));
             }
@@ -619,8 +619,8 @@ namespace Catel.Test.IoC
 
                 serviceLocator.RemoveAllTypes(typeof(ITestInterface));
 
-                ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => serviceLocator.ResolveType(typeof(ITestInterface), "1"));
-                ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => serviceLocator.ResolveType(typeof(ITestInterface), "2"));
+                ExceptionTester.CallMethodAndExpectException<TypeNotRegisteredException>(() => serviceLocator.ResolveType(typeof(ITestInterface), "1"));
+                ExceptionTester.CallMethodAndExpectException<TypeNotRegisteredException>(() => serviceLocator.ResolveType(typeof(ITestInterface), "2"));
             }
             #endregion
         }
@@ -679,7 +679,7 @@ namespace Catel.Test.IoC
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
                 serviceLocator.CanResolveNonAbstractTypesWithoutRegistration = false;
-                ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => serviceLocator.ResolveType(typeof(DependencyInjectionTestClass)));
+                ExceptionTester.CallMethodAndExpectException<TypeNotRegisteredException>(() => serviceLocator.ResolveType(typeof(DependencyInjectionTestClass)));
             }
 
             [TestMethod]
@@ -737,7 +737,7 @@ namespace Catel.Test.IoC
                 var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 Assert.IsFalse(serviceLocator.IsTypeRegistered<ITestInterface>());
-                ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => serviceLocator.ResolveType(typeof(ITestInterface)));
+                ExceptionTester.CallMethodAndExpectException<TypeNotRegisteredException>(() => serviceLocator.ResolveType(typeof(ITestInterface)));
             }
 
             [TestMethod]
@@ -1208,14 +1208,14 @@ namespace Catel.Test.IoC
             }
 
             [TestMethod]
-            public void ThrowsNotSupportedExceptionWhenAtLeastOneTypeIsNotRegistered()
+            public void ThrowsTypeNotRegisteredExceptionWhenAtLeastOneTypeIsNotRegistered()
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 serviceLocator.RegisterType<object>();
                 serviceLocator.RegisterType<ITestInterface1, TestClass1>();
 
-                ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => serviceLocator.ResolveAllTypes(typeof(object), typeof(ITestInterface1), typeof(ITestInterface2)));
+                ExceptionTester.CallMethodAndExpectException<TypeNotRegisteredException>(() => serviceLocator.ResolveAllTypes(typeof(object), typeof(ITestInterface1), typeof(ITestInterface2)));
             }
 
             [TestMethod]
