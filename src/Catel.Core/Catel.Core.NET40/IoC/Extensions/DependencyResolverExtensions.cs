@@ -59,6 +59,11 @@ namespace Catel.IoC
             {
                 return dependencyResolver.Resolve(serviceType, tag);
             }
+            catch (TypeNotRegisteredException)
+            {
+                // Don't break on this exception
+                return null;
+            }
             catch (Exception)
             {
                 return null;
