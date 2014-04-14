@@ -27,7 +27,7 @@
     <DocumentationFile>..\..\..\output\debug\Xamarin.iOS\Catel.Core\Catel.Core.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
+    <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\..\output\release\Xamarin.iOS\Catel.Core\</OutputPath>
     <ErrorReport>prompt</ErrorReport>
@@ -37,6 +37,8 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DefineConstants>__IOS__;__MOBILE__;XAMARIN;IOS</DefineConstants>
     <DocumentationFile>..\..\..\output\release\Xamarin.iOS\Catel.Core\Catel.Core.XML</DocumentationFile>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\SolutionAssemblyInfo.cs">

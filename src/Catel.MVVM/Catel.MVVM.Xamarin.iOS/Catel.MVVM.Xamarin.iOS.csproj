@@ -27,7 +27,7 @@
     <DocumentationFile>..\..\..\output\debug\Xamarin.iOS\Catel.MVVM\Catel.MVVM.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
+    <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\..\output\release\Xamarin.iOS\Catel.MVVM\</OutputPath>
     <ErrorReport>prompt</ErrorReport>
@@ -37,6 +37,7 @@
     <DocumentationFile>..\..\..\output\release\Xamarin.iOS\Catel.MVVM\Catel.MVVM.xml</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DefineConstants>__IOS__;__MOBILE__;XAMARIN;IOS</DefineConstants>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\SolutionAssemblyInfo.cs">

@@ -390,7 +390,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Wcf.Server
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.MVC5", "Catel.MVC5", "{9BC1A8C2-99D2-4000-8395-37508A68CA88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.MVC5.NET45", "Catel.MVC5\Catel.MVC5.NET45\Catel.MVC5.NET45\Catel.MVC5.NET45.csproj", "{62C00328-B780-48E4-88C1-9EEA1A1D6277}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.MVC5.NET45", "Catel.MVC5\Catel.MVC5.NET45\Catel.MVC5.NET45.csproj", "{62C00328-B780-48E4-88C1-9EEA1A1D6277}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Core.Xamarin.iOS", "Catel.Core\Catel.Core.Xamarin.iOS\Catel.Core.Xamarin.iOS.csproj", "{0014F9BD-7B73-48D4-828C-FD2A85B0276B}"
 EndProject
@@ -407,6 +407,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.MVVM.WPSL81", "Catel.MVVM\Catel.MVVM.WPSL81\Catel.MVVM.WPSL81.csproj", "{427247BA-C418-4004-A592-CEA9EDDEA9DF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.MVVM.WPRT81", "Catel.MVVM\Catel.MVVM.WPRT81\Catel.MVVM.WPRT81.csproj", "{2D2F7284-7844-439A-BBDB-638608198895}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{370E5475-7626-45CE-8D9B-4EEC5C1E174E}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
