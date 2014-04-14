@@ -1035,28 +1035,7 @@ namespace Catel.Data
         /// Clones the current object.
         /// </summary>
         /// <returns>Clone of the object or <c>null</c> if unsuccessful.</returns>
-        public object Clone()
-        {
-            // First, try without redirects (why would we even need them, it costs a lot of performance)
-            object clone = Clone(false);
-            if (clone != null)
-            {
-                return clone;
-            }
-
-            // If we got here, cloning without redirects failed, try again with redirects as a last resort
-            clone = Clone(true);
-            return clone;
-        }
-
-        /// <summary>
-        /// Clones the current object with the option to enable redirects.
-        /// </summary>
-        /// <param name="enableRedirects">if set to <c>true</c>, enable supports for redirects.</param>
-        /// <returns>
-        /// Clone of the object or <c>null</c> if unsuccessful.
-        /// </returns>
-        private object Clone(bool enableRedirects)
+        public virtual object Clone()
         {
             try
             {
