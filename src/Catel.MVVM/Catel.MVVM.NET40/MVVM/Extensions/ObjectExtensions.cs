@@ -36,6 +36,11 @@ namespace Catel.MVVM
                 return true;
             }
 
+            if (string.CompareOrdinal(dataContext.ToString(), "{DisconnectedItem}") == 0)
+            {
+                return true;
+            }
+
             return false;
         }
     }
