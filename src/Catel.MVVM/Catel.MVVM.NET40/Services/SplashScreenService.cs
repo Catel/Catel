@@ -7,7 +7,10 @@ namespace Catel.Services
 {
     using System;
     using System.Collections.Generic;
+    using System.Net.Mime;
     using System.Threading;
+    using System.Windows;
+
     using Catel.ExceptionHandling;
     using Catel.Logging;
     using Catel.MVVM;
@@ -348,7 +351,18 @@ namespace Catel.Services
 
             if (asycn)
             {
-                _thread = new Thread(Execute);
+                _thread = new Thread(() =>
+                    {
+                        bool initialized = false;
+                        do
+                        {
+                            _dispatcherService.Invoke(() => initialized = Application.Current.MainWindow != null);
+                            Thread.Sleep(100);
+                        }
+                        while (!initialized);
+
+                        Execute();
+                    });
 #if !SILVERLIGHT
                 _thread.SetApartmentState(ApartmentState.STA);
 #endif                
@@ -357,6 +371,16 @@ namespace Catel.Services
             }
             else
             {
+                if (!Dispatcher.CheckAccess())
+                {
+                    throw new NotSupportedException("This method must be executed in non-UI thread. Please try with CommitAsync.");
+                }
+                
+                if (Application.Current.MainWindow == null)
+                {
+                    throw new NotSupportedException("The application is not completly initialized. Please try with CommitAsync.");
+                }
+
                 Execute();
             }
         }
