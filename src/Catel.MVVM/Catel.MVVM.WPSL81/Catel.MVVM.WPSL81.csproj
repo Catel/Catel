@@ -88,6 +88,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="Resources\Images\" />
     <Folder Include="Windows\Windows\" />
   </ItemGroup>
   <ItemGroup>
@@ -1113,12 +1114,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\Catel.MVVM.NET40\Resources\Images\Error.png">
-      <Link>Resources\Images\Error.png</Link>
-    </Content>
-    <Content Include="..\Catel.MVVM.NET40\Resources\Images\Warning.png">
-      <Link>Resources\Images\Warning.png</Link>
-    </Content>
     <Content Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>

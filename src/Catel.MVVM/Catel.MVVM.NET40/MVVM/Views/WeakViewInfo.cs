@@ -8,6 +8,14 @@ namespace Catel.MVVM.Views
 {
     using System;
 
+#if NETFX_CORE
+    using LoadedEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
+    using LayoutUpdatedEventArgs = System.Object;
+#else
+    using LoadedEventArgs = System.EventArgs;
+    using LayoutUpdatedEventArgs = System.EventArgs;
+#endif
+
     /// <summary>
     /// Class containing weak events for a <see cref="IView"/>. This way it is safe to subscribe
     /// to events of a <see cref="IView"/> without causing memory leaks.
@@ -32,11 +40,11 @@ namespace Catel.MVVM.Views
             _view = new WeakReference(view);
             Action = action;
 
-            this.SubscribeToWeakGenericEvent<EventArgs>(view, "Loaded", OnLoaded);
-            this.SubscribeToWeakGenericEvent<EventArgs>(view, "Unloaded", OnUnloaded);
+            this.SubscribeToWeakGenericEvent<LoadedEventArgs>(view, "Loaded", OnLoaded);
+            this.SubscribeToWeakGenericEvent<LoadedEventArgs>(view, "Unloaded", OnUnloaded);
 
 #if !NET && !XAMARIN
-            this.SubscribeToWeakGenericEvent<EventArgs>(view, "LayoutUpdated", OnLayoutUpdated);
+            this.SubscribeToWeakGenericEvent<LayoutUpdatedEventArgs>(view, "LayoutUpdated", OnLayoutUpdated);
 #endif
         }
         #endregion
@@ -98,7 +106,7 @@ namespace Catel.MVVM.Views
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
-        public void OnLoaded(object sender, EventArgs e)
+        public void OnLoaded(object sender, LoadedEventArgs e)
         {
             if (IsLoaded)
             {
@@ -110,7 +118,7 @@ namespace Catel.MVVM.Views
             var loaded = Loaded;
             if (loaded != null)
             {
-                loaded(this, e);
+                loaded(this, EventArgs.Empty);
             }
         }
 
@@ -119,7 +127,7 @@ namespace Catel.MVVM.Views
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
-        public void OnUnloaded(object sender, EventArgs e)
+        public void OnUnloaded(object sender, LoadedEventArgs e)
         {
             if (!IsLoaded)
             {
@@ -131,7 +139,7 @@ namespace Catel.MVVM.Views
             var unloaded = Unloaded;
             if (unloaded != null)
             {
-                unloaded(this, e);
+                unloaded(this, EventArgs.Empty);
             }
         }
 
@@ -141,12 +149,12 @@ namespace Catel.MVVM.Views
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
-        public void OnLayoutUpdated(object sender, EventArgs e)
+        public void OnLayoutUpdated(object sender, LayoutUpdatedEventArgs e)
         {
             var layoutUpdated = LayoutUpdated;
             if (layoutUpdated != null)
             {
-                layoutUpdated(this, e);
+                layoutUpdated(this, EventArgs.Empty);
             }
         }
 #endif

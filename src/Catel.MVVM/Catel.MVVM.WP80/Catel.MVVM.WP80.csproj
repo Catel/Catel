@@ -1180,14 +1180,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\Catel.MVVM.NET40\Resources\Images\Error.png">
-      <Link>Resources\Images\Error.png</Link>
-    </Content>
-    <Content Include="..\Catel.MVVM.NET40\Resources\Images\Warning.png">
-      <Link>Resources\Images\Warning.png</Link>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
+    <Folder Include="Resources\Images\" />
     <Folder Include="Windows\Windows\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />

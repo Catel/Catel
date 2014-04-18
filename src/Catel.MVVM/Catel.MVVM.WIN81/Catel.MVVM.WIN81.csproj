@@ -959,6 +959,9 @@
     <Compile Include="..\Catel.MVVM.NET40\Services\ViewModelWrapperServiceBase.cs">
       <Link>Services\ViewModelWrapperServiceBase.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\Page.cs">
+      <Link>Windows\Controls\Page.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\UserControl.cs">
       <Link>Windows\Controls\UserControl.cs</Link>
     </Compile>
@@ -1105,14 +1108,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\Catel.MVVM.NET40\Resources\Images\Error.png">
-      <Link>Resources\Images\Error.png</Link>
-    </Content>
-    <Content Include="..\Catel.MVVM.NET40\Resources\Images\Warning.png">
-      <Link>Resources\Images\Warning.png</Link>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
+    <Folder Include="Resources\" />
     <Folder Include="Windows\Windows\" />
   </ItemGroup>
   <ItemGroup>

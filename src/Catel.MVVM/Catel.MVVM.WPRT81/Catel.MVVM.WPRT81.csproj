@@ -87,6 +87,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <Folder Include="Resources\Images\" />
     <Folder Include="Windows\Windows\" />
   </ItemGroup>
   <ItemGroup>
@@ -981,6 +982,9 @@
     <Compile Include="..\Catel.MVVM.NET40\Services\ViewModelWrapperServiceBase.cs">
       <Link>Services\ViewModelWrapperServiceBase.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\Page.cs">
+      <Link>Windows\Controls\Page.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Controls\UserControl.cs">
       <Link>Windows\Controls\UserControl.cs</Link>
     </Compile>
@@ -1049,12 +1053,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\Catel.MVVM.NET40\Resources\Images\Error.png">
-      <Link>Resources\Images\Error.png</Link>
-    </Content>
-    <Content Include="..\Catel.MVVM.NET40\Resources\Images\Warning.png">
-      <Link>Resources\Images\Warning.png</Link>
-    </Content>
     <Content Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
