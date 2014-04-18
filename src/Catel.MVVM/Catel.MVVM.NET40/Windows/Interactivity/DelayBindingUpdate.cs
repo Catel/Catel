@@ -6,14 +6,16 @@
 
 namespace Catel.Windows.Interactivity
 {
-    
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+
 #if NETFX_CORE
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Data;
     using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
     using TimerTickEventArgs = System.Object;
 #else
-    using System.Reflection;
     using System.Windows;
     using System.Windows.Data;
     using System.Windows.Interactivity;
@@ -39,6 +41,8 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        private static readonly List<PropertyInfo> BindingProperties;
+
         private readonly DispatcherTimer _timer;
 
         private Binding _originalBinding;
@@ -47,6 +51,13 @@ namespace Catel.Windows.Interactivity
         #endregion
 
         #region Constructors
+        static DelayBindingUpdate()
+        {
+            BindingProperties = new List<PropertyInfo>(from property in typeof(Binding).GetPropertiesEx()
+                                                       where property.CanRead && property.CanWrite
+                                                       select property);
+        }
+
         /// <summary>
         ///   Initializes a new instance of the <see cref = "DelayBindingUpdate" /> class.
         /// </summary>
@@ -322,16 +333,23 @@ namespace Catel.Windows.Interactivity
 
             var newBinding = new Binding();
 
-            var properties = typeof (Binding).GetPropertiesEx();
-            foreach (var property in properties)
+            foreach (var property in BindingProperties)
             {
-                object propertyValue;
-                if (PropertyHelper.TryGetPropertyValue(binding, property.Name, out propertyValue))
+                try
                 {
+                    if (!property.CanWrite)
+                    {
+                        continue;
+                    }
+
+                    var propertyValue = property.GetValue(binding, null);
                     if (propertyValue != null)
                     {
-                        PropertyHelper.TrySetPropertyValue(newBinding, property.Name, propertyValue);
+                        property.SetValue(newBinding, propertyValue, null);
                     }
+                }
+                catch (Exception)
+                {
                 }
             }
 

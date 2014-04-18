@@ -294,17 +294,18 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         private void StartFocus()
         {
-            if (FocusDelay > 5000)
+            var focusDelay = FocusDelay;
+            if (focusDelay > 5000)
             {
-                FocusDelay = 5000;
+                focusDelay = 5000;
             }
 
-            if (FocusDelay > 25)
+            if (focusDelay > 25)
             {
                 _timer.Stop();
                 _timer.Tick -= OnTimerTick;
 
-                _timer.Interval = new TimeSpan(0, 0, 0, 0, FocusDelay);
+                _timer.Interval = new TimeSpan(0, 0, 0, 0, focusDelay);
                 _timer.Tick += OnTimerTick;
                 _timer.Start();
             }
