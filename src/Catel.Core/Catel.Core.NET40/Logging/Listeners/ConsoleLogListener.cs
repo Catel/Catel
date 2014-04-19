@@ -49,6 +49,9 @@ namespace Catel.Logging
             string consoleMessage = FormatLogEvent(log, message, logEvent, extraData);
 
 #if NET
+            var oldConsoleBackgroundColor = Console.BackgroundColor;
+            var oldConsoleForegroundColor = Console.ForegroundColor;
+
             UpdateConsoleColors(logEvent);
 #endif
 
@@ -56,6 +59,11 @@ namespace Catel.Logging
             System.Diagnostics.Debug.WriteLine(consoleMessage);
 #else
             Console.WriteLine(consoleMessage);
+#endif
+
+#if NET
+            Console.BackgroundColor = oldConsoleBackgroundColor;
+            Console.ForegroundColor = oldConsoleForegroundColor;
 #endif
         }
 

@@ -112,6 +112,7 @@ Added/fixed:
 (x) CTL-405 NullReferenceException is thrown in AutoCompletionBehavior when _availableSuggestions is null
 (x) CTL-409 Fixed SplashScreenService implementation to be used in the Application.OnStartup method context
 (x) CTL-416 Checking for for a binding IsSentinalBindingObject doesn't check for '{DisconnectedItem}'
+(x) CTL-418 ConsoleLogListener doesn't reset colors after logging
 
 Roadmap:
 ========
