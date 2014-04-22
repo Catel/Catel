@@ -73,7 +73,7 @@ namespace Catel.Services
         /// </summary>
         public override void RemoveBackEntry()
         {
-            throw new MustBeImplementedException();
+            //throw new MustBeImplementedException();
         }
 
         /// <summary>

@@ -152,6 +152,9 @@
     <Compile Include="..\Catel.Core.NET40\Collections\Helpers\CollectionHelper.cs">
       <Link>Collections\Helpers\CollectionHelper.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\ComponentModel\BackgroundWorker.cs">
+      <Link>ComponentModel\BackgroundWorker.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\ComponentModel\EventArgs\BeginEditEventArgs.cs">
       <Link>ComponentModel\EventArgs\BeginEditEventArgs.cs</Link>
     </Compile>
@@ -893,8 +896,23 @@
     <Compile Include="..\Catel.Core.NET40\Services\Interfaces\IService.cs">
       <Link>Services\Interfaces\IService.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\Services\LanguageService.android.cs">
+      <Link>Services\LanguageService.android.cs</Link>
+      <DependentUpon>LanguageService.cs</DependentUpon>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\Services\LanguageService.cs">
       <Link>Services\LanguageService.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Services\LanguageService.ios.cs">
+      <Link>Services\LanguageService.ios.cs</Link>
+      <DependentUpon>LanguageService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Services\LanguageService.xaml.cs">
+      <Link>Services\LanguageService.xaml.cs</Link>
+      <DependentUpon>LanguageService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\Catel.Core.NET40\Services\LanguageServiceBase.cs">
+      <Link>Services\LanguageServiceBase.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Core.NET40\Services\Models\LanguageResourceKey.cs">
       <Link>Services\Models\LanguageResourceKey.cs</Link>

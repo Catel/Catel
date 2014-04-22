@@ -10,30 +10,19 @@ namespace Catel.Services
     using System;
     using System.Collections.Generic;
     using System.Globalization;
-    using System.Linq;
-    using System.Reflection;
-    using System.Threading;
-    using Catel.Caching;
-    using Catel.Logging;
-    using Catel.Reflection;
-    using Catel.Services.Models;
-
-#if NETFX_CORE
-    using ResourceManager = Windows.ApplicationModel.Resources.ResourceLoader;
-#else
-    using ResourceManager = System.Resources.ResourceManager;
-#endif
+    using Caching;
+    using Logging;
+    using Models;
 
     /// <summary>
     /// Service to implement the retrieval of language services.
     /// </summary>
-    public class LanguageService : ILanguageService
+    public partial class LanguageService : LanguageServiceBase, ILanguageService
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly List<ILanguageSource> _languageSources = new List<ILanguageSource>();
 
-        private readonly ICacheStorage<string, ResourceManager> _resourceFileCache = new CacheStorage<string, ResourceManager>(storeNullValues: true);
         private readonly ICacheStorage<LanguageResourceKey, string> _stringCache = new CacheStorage<LanguageResourceKey, string>();
 
         private CultureInfo _fallbackCulture;
@@ -65,10 +54,7 @@ namespace Catel.Services
         /// <value>The fallback culture.</value>
         public CultureInfo FallbackCulture
         {
-            get
-            {
-                return _fallbackCulture;
-            }
+            get { return _fallbackCulture; }
             set
             {
                 _fallbackCulture = value;
@@ -82,10 +68,7 @@ namespace Catel.Services
         /// <value>The preferred culture.</value>
         public CultureInfo PreferredCulture
         {
-            get
-            {
-                return _preferredCulture;
-            }
+            get { return _preferredCulture; }
             set
             {
                 _preferredCulture = value;
@@ -118,7 +101,7 @@ namespace Catel.Services
 
             foreach (var languageSource in _languageSources)
             {
-                GetResourceManager(languageSource.GetSource());
+                PreloadLanguageSource(languageSource);
             }
 
             Log.Debug("Preloaded language sources");
@@ -204,82 +187,6 @@ namespace Catel.Services
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// Gets the string from the specified resource file with the current culture.
-        /// </summary>
-        /// <param name="languageSource">The language source.</param>
-        /// <param name="resourceName">Name of the resource.</param>
-        /// <param name="cultureInfo">The culture information.</param>
-        /// <returns>The string or <c>null</c> if the string cannot be found.</returns>
-        protected virtual string GetString(ILanguageSource languageSource, string resourceName, CultureInfo cultureInfo)
-        {
-            var source = languageSource.GetSource();
-            var resourceLoader = GetResourceManager(source);
-
-            if (resourceLoader != null)
-            {
-#if NETFX_CORE
-                return resourceLoader.GetString(resourceName);
-#else
-                return resourceLoader.GetString(resourceName, cultureInfo);
-#endif
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Gets the resource manager.
-        /// </summary>
-        /// <param name="source">The source.</param>
-        private ResourceManager GetResourceManager(string source)
-        {
-            Func<ResourceManager> retrievalFunc = () =>
-                {
-                    try
-                    {
-#if NETFX_CORE && !WIN81
-                        var resourceLoader = new ResourceManager(source);
-#elif WIN81
-                        var resourceLoader = ResourceManager.GetForCurrentView(source);
-#else
-                        var splittedString = source.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-
-                        var assemblyName = splittedString[1].Trim();
-                        var containingAssemblyName = string.Format("{0},", assemblyName);
-
-                        var loadedAssemblies = AssemblyHelper.GetLoadedAssemblies();
-
-                        // Invert so design-time will always pick the latest version
-                        loadedAssemblies.Reverse();
-
-                        var assembly = loadedAssemblies.FirstOrDefault(x => x.FullName.StartsWith(containingAssemblyName));
-                        if (assembly == null)
-                        {
-                            return null;
-                        }
-
-                        string resourceFile = splittedString[0];
-                        var resourceLoader = new ResourceManager(resourceFile, assembly);
-#endif
-
-                        return resourceLoader;
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Warning(ex, "Failed to get the resource manager for source '{0}'", source);
-                        return null;
-                    }
-                };
-
-            if (CacheResults)
-            {
-                return _resourceFileCache.GetFromCacheOrFetch(source, retrievalFunc);
-            }
-
-            return retrievalFunc();
         }
     }
 }

@@ -10,16 +10,21 @@
 namespace Catel.Services
 {
     using System;
+    using Logging;
     using global::Android.App;
     using global::Android.Content;
     using global::Android.Locations;
     using global::Android.OS;
+    using global::Android.Util;
+    using Exception = System.Exception;
 
     /// <summary>
     /// A location listener.
     /// </summary>
-    public class LocationListener : Java.Lang.Object, ILocationListener
+    public class LocationListener : Java.Lang.Thread, ILocationListener
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Occurs when the status has changed.
         /// </summary>
@@ -29,6 +34,29 @@ namespace Catel.Services
         /// Occurs when the location has changed.
         /// </summary>
         public event EventHandler<EventArgs> LocationChanged;
+
+        /// <summary>
+        /// Calls the <c>run()</c> method of the Runnable object the receiver holds.
+        /// </summary>
+        /// <since version="Added in API level 1" />
+        /// <altmember cref="M:Java.Lang.Thread.Start" />
+        public override void Run()
+        {
+            try
+            {
+                Looper.Prepare();
+
+                //mUserLocationHandler = new Handler();
+
+                //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+
+                Looper.Loop();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to start location listener thread");
+            }
+        }
 
         /// <summary>
         /// Called when the provider is enabled by the user.
