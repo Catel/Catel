@@ -11,8 +11,8 @@ namespace Catel.Windows
     using System.Runtime.InteropServices;
     using System.Windows;
     using System.Windows.Interop;
-    using Catel.Reflection;
-    using Catel.Windows.Threading;
+    using Reflection;
+    using Threading;
     using Logging;
 
     /// <summary>
@@ -260,60 +260,67 @@ namespace Catel.Windows
                 return;
             }
 
-            if (ownerWindow != null)
+            try
             {
-                if (ownerWindow == window)
+                if (ownerWindow != null)
                 {
-                    Log.Warning("Cannot set owner window to itself, no owner window set");
-                    return;
-                }
-
-                if (window.Dispatcher.GetThreadId() != ownerWindow.Dispatcher.GetThreadId())
-                {
-                    Log.Warning("The owner window '{0}' is not created on the same thread as the current window '{1}', cannot set owner window",
-                        ownerWindow.GetType().GetSafeFullName(), window.GetType().GetSafeFullName());
-                    return;
-                }
-
-                window.Owner = ownerWindow;
-            }
-            else
-            {
-                // Set owner via interop helper
-                var interopHelper = new WindowInteropHelper(window);
-                interopHelper.Owner = ownerHandle;
-
-                // Get handler (so we can nicely unsubscribe)
-                RoutedEventHandler onWindowLoaded = null;
-                onWindowLoaded = delegate(object sender, RoutedEventArgs e)
-                {
-                    // Since this owner type doesn't support WindowStartupLocation.CenterOwner, do
-                    // it manually
-                    if (window.WindowStartupLocation == WindowStartupLocation.CenterOwner)
+                    if (ReferenceEquals(ownerWindow, window))
                     {
-                        // Get the parent window rect
-                        RECT ownerRect;
-                        if (GetWindowRect(ownerHandle, out ownerRect))
-                        {
-                            // Get some additional information
-                            int ownerWidth = ownerRect.Right - ownerRect.Left;
-                            int ownerHeight = ownerRect.Bottom - ownerRect.Top;
-                            int ownerHorizontalCenter = (ownerWidth / 2) + ownerRect.Left;
-                            int ownerVerticalCenter = (ownerHeight / 2) + ownerRect.Top;
-
-                            // Set the location to manual
-                            window.WindowStartupLocation = WindowStartupLocation.Manual;
-
-                            // Now we know the location of the parent, center the window
-                            window.Left = ownerHorizontalCenter - (window.ActualWidth / 2);
-                            window.Top = ownerVerticalCenter - (window.ActualHeight / 2);
-                        }
+                        Log.Warning("Cannot set owner window to itself, no owner window set");
+                        return;
                     }
 
-                    ((Window)sender).Loaded -= onWindowLoaded;
-                };
+                    if (window.Dispatcher.GetThreadId() != ownerWindow.Dispatcher.GetThreadId())
+                    {
+                        Log.Warning("The owner window '{0}' is not created on the same thread as the current window '{1}', cannot set owner window",
+                            ownerWindow.GetType().GetSafeFullName(), window.GetType().GetSafeFullName());
+                        return;
+                    }
 
-                window.Loaded += onWindowLoaded;
+                    window.Owner = ownerWindow;
+                }
+                else
+                {
+                    // Set owner via interop helper
+                    var interopHelper = new WindowInteropHelper(window);
+                    interopHelper.Owner = ownerHandle;
+
+                    // Get handler (so we can nicely unsubscribe)
+                    RoutedEventHandler onWindowLoaded = null;
+                    onWindowLoaded = delegate(object sender, RoutedEventArgs e)
+                    {
+                        // Since this owner type doesn't support WindowStartupLocation.CenterOwner, do
+                        // it manually
+                        if (window.WindowStartupLocation == WindowStartupLocation.CenterOwner)
+                        {
+                            // Get the parent window rect
+                            RECT ownerRect;
+                            if (GetWindowRect(ownerHandle, out ownerRect))
+                            {
+                                // Get some additional information
+                                int ownerWidth = ownerRect.Right - ownerRect.Left;
+                                int ownerHeight = ownerRect.Bottom - ownerRect.Top;
+                                int ownerHorizontalCenter = (ownerWidth / 2) + ownerRect.Left;
+                                int ownerVerticalCenter = (ownerHeight / 2) + ownerRect.Top;
+
+                                // Set the location to manual
+                                window.WindowStartupLocation = WindowStartupLocation.Manual;
+
+                                // Now we know the location of the parent, center the window
+                                window.Left = ownerHorizontalCenter - (window.ActualWidth / 2);
+                                window.Top = ownerVerticalCenter - (window.ActualHeight / 2);
+                            }
+                        }
+
+                        ((Window)sender).Loaded -= onWindowLoaded;
+                    };
+
+                    window.Loaded += onWindowLoaded;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to set the owner window");
             }
         }
 
@@ -323,7 +330,7 @@ namespace Catel.Windows
         /// <returns>Handle of the main window of the current process.</returns>
         private static IntPtr GetProcessMainWindowHandle()
         {
-            Process process = Process.GetCurrentProcess();
+            var process = Process.GetCurrentProcess();
             var mainWindowHandle = process.MainWindowHandle;
             process.Dispose();
 
@@ -349,7 +356,7 @@ namespace Catel.Windows
         public static void RemoveIcon(this Window window)
         {
             // Get the handle of the window
-            IntPtr windowHandle = new WindowInteropHelper(window).Handle;
+            var windowHandle = new WindowInteropHelper(window).Handle;
 
             // Send message to hide icon
             SendMessage(windowHandle, WM_SETICON, IntPtr.Zero, IntPtr.Zero);
