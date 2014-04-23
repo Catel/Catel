@@ -113,6 +113,7 @@ Added/fixed:
 (x) CTL-409 Fixed SplashScreenService implementation to be used in the Application.OnStartup method context
 (x) CTL-416 Checking for for a binding IsSentinalBindingObject doesn't check for '{DisconnectedItem}'
 (x) CTL-418 ConsoleLogListener doesn't reset colors after logging
+(x) CTL-421 UserControl doesn't refresh on DataContextChanged when used as data template
 
 Roadmap:
 ========

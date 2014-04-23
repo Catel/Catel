@@ -502,7 +502,7 @@ namespace Catel.Windows
         /// <value>The parent.</value>
         object IView.Parent
         {
-            get { return Parent; }
+            get { return this.GetParent(); }
         }
         #endregion
 

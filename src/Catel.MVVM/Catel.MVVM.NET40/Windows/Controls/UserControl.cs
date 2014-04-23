@@ -395,7 +395,7 @@ namespace Catel.Windows.Controls
         /// <value>The parent.</value>
         object IView.Parent
         {
-            get { return Parent; }
+            get { return this.GetParent(); }
         }
         #endregion
 
