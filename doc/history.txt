@@ -11,6 +11,7 @@ For more information about issues or new feature requests, please visit:
 Project website: http://www.catelproject.com
 Issue tracker:   http://www.catelproject.com/support/issue-tracker
 Documentation:   http://www.catelproject.com/support/documentation
+License:         http://www.catelproject.com/about/license
 
 **********************************************************
 
@@ -37,6 +38,7 @@ Added/fixed (BREAKING CHANGES):
 (*) CTL-344 Renamed Catel.Environment class to Catel.CatelEnvironment to prevent name clashing with .NET Environment
 (*) CTL-402 DependencyResolver and ServiceLocator now throw TypeNotRegisteredException when a type is being retrieved
     that is not yet registered in the ServiceLocator
+(*) CTL-419 Changed license to MIT instead of Ms-PL
 
 Added/fixed:
 ============
