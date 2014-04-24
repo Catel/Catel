@@ -10,12 +10,12 @@ namespace Catel.MVVM.Providers
     using System.Collections.Generic;
     using System.ComponentModel;
 
-    using Catel.Caching;
-    using Catel.Data;
+    using Caching;
+    using Data;
     using IoC;
     using Logging;
     using MVVM;
-    using MVVM.Views;
+    using Views;
     using Reflection;
 
     /// <summary>
@@ -173,7 +173,7 @@ namespace Catel.MVVM.Providers
             ViewModelType = viewModelType;
             ViewModel = viewModel;
 
-#if SL4 || SL5
+#if SL5
             Catel.Windows.FrameworkElementExtensions.FixUILanguageBug((System.Windows.FrameworkElement)TargetView);
 #endif
 
@@ -190,7 +190,9 @@ namespace Catel.MVVM.Providers
                 return;
             }
 
-            _viewLoadedManager.AddView(TargetView, () => OnTargetViewLoadedInternal(TargetView, EventArgs.Empty));
+            // Use a weak event for loading to prevent memory leaks
+            _viewLoadedManager.AddView(TargetView);
+            this.SubscribeToWeakGenericEvent<ViewLoadedEventArgs>(_viewLoadedManager, "ViewLoaded", OnViewLoadedManagerLoaded);
 
             TargetView.Unloaded += OnTargetViewUnloadedInternal;
             TargetView.DataContextChanged += OnTargetViewDataContextChanged;
@@ -513,12 +515,16 @@ namespace Catel.MVVM.Providers
         }
 
         /// <summary>
-        /// Called when a property on the view model has changed.
+        /// Called when the view manager loaded.
+        /// <para />
+        /// This method is public because the view loaded manager must be subscribed to as a weak event.
         /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnViewModelPropertyChanged(IViewModel viewModel, PropertyChangedEventArgs e)
+        public void OnViewLoadedManagerLoaded(object sender, ViewLoadedEventArgs e)
         {
+            if (ReferenceEquals(e.View, TargetView))
+            {
+                OnTargetViewLoadedInternal(TargetView, EventArgs.Empty);
+            }
         }
 
         /// <summary>

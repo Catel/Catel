@@ -21,9 +21,8 @@ namespace Catel.MVVM.Views
         /// Adds the element.
         /// </summary>
         /// <param name="view">The view.</param>
-        /// <param name="action">The action to execute when the view is loaded. Can be <c>null</c>.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="view" /> is <c>null</c>.</exception>
-        void AddView(IView view, Action action = null);
+        void AddView(IView view);
 
         /// <summary>
         /// Cleans up the dead links.
@@ -33,6 +32,6 @@ namespace Catel.MVVM.Views
         /// <summary>
         /// Occurs when any of the subscribed framework elements are loaded.
         /// </summary>
-        event EventHandler<EventArgs> ViewLoaded;
+        event EventHandler<ViewLoadedEventArgs> ViewLoaded;
     }
 }

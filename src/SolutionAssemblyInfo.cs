@@ -118,15 +118,11 @@ using System.Runtime.CompilerServices;
 #endif
 
 #if SIGN_ASSEMBLIES
-// Do not sign any Reactive Extensions libraries, they are not signed either
-#if !RX
 // Sign assembly (this is relative to the obj output directory)
 #if X86 || X64
 [assembly: AssemblyKeyFile(@"..\..\..\..\Catel.snk")]
 #else
-
 [assembly: AssemblyKeyFile(@"..\..\..\Catel.snk")]
-#endif
 #endif
 #endif
 

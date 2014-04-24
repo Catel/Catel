@@ -8,11 +8,11 @@ namespace Catel.MVVM.Providers
 {
     using System;
     using System.ComponentModel;
-    using Catel.ApiCop;
-    using Catel.ApiCop.Rules;
-    using Catel.IoC;
-    using Catel.MVVM.Views;
-    using Catel.Services;
+    using ApiCop;
+    using ApiCop.Rules;
+    using IoC;
+    using Views;
+    using Services;
     using Logging;
     using MVVM;
     using Reflection;
@@ -23,7 +23,7 @@ namespace Catel.MVVM.Providers
     using global::Windows.UI.Core;
     using global::Windows.UI.Xaml;
 #else
-    using Catel.Windows.Controls;
+    using Windows.Controls;
 #endif
 
     /// <summary>

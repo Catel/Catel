@@ -8,7 +8,6 @@ namespace Catel.MVVM.Views
 {
     using System;
     using System.Collections.Generic;
-    using System.Threading;
 
 #if NETFX_CORE
     using global::Windows.UI.Xaml;
@@ -54,30 +53,6 @@ namespace Catel.MVVM.Views
         private readonly Stack<WeakViewInfo> _loadedStack = new Stack<WeakViewInfo>();
 
         private readonly object _lock = new object();
-
-        private readonly Timer _timer;
-        #endregion
-
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ViewLoadedManager"/> class.
-        /// <para />
-        /// This constructor automatically cleans up every minute.
-        /// </summary>
-        public ViewLoadedManager()
-            : this(true) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ViewLoadedManager"/> class.
-        /// </summary>
-        /// <param name="automaticallyCleanUpEveryMinute">If set to <c>true</c>, this manager will automatically clean up every minute.</param>
-        public ViewLoadedManager(bool automaticallyCleanUpEveryMinute)
-        {
-            if (automaticallyCleanUpEveryMinute)
-            {
-                _timer = new Timer(OnTimerTick, null, TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1));
-            }
-        }
         #endregion
 
         #region IViewLoadedManager Members
@@ -85,13 +60,12 @@ namespace Catel.MVVM.Views
         /// Adds the view.
         /// </summary>
         /// <param name="view">The view.</param>
-        /// <param name="action">The action to execute when the framework element is loaded. Can be <c>null</c>.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="view" /> is <c>null</c>.</exception>
-        public void AddView(IView view, Action action = null)
+        public void AddView(IView view)
         {
             Argument.IsNotNull("view", view);
 
-            var elementInfo = new WeakViewInfo(view, action);
+            var elementInfo = new WeakViewInfo(view);
 
             elementInfo.Loaded += OnViewLoaded;
             elementInfo.Unloaded += OnViewUnloaded;
@@ -114,8 +88,6 @@ namespace Catel.MVVM.Views
                     var viewInfo = _viewElements[i];
                     if (!viewInfo.IsAlive)
                     {
-                        viewInfo.Action = null;
-
                         viewInfo.Loaded -= OnViewLoaded;
                         viewInfo.Unloaded -= OnViewUnloaded;
 
@@ -133,7 +105,7 @@ namespace Catel.MVVM.Views
         /// <summary>
         /// Occurs when any of the subscribed views are loaded.
         /// </summary>
-        public event EventHandler<EventArgs> ViewLoaded;
+        public event EventHandler<ViewLoadedEventArgs> ViewLoaded;
         #endregion
 
         #region Methods
@@ -166,12 +138,14 @@ namespace Catel.MVVM.Views
             // Not interesting for now...
         }
 
+#if !NET && !XAMARIN
         private void OnViewLayoutUpdated(object sender, EventArgs e)
         {
             var viewInfo = (WeakViewInfo)sender;
 
             HandleViewLoaded(viewInfo.View);
         }
+#endif
 
         private void HandleViewLoaded(IView view)
         {
@@ -189,12 +163,6 @@ namespace Catel.MVVM.Views
 #if !NET && !XAMARIN
                             innerViewInfo.LayoutUpdated -= OnViewLayoutUpdated;
 #endif
-
-                            if (innerViewInfo.Action != null)
-                            {
-                                innerViewInfo.Action();
-                            }
-
                             RaiseViewLoaded(innerViewInfo.View);
                         }
                     }
@@ -209,11 +177,6 @@ namespace Catel.MVVM.Views
             {
                 viewLoaded(this, new ViewLoadedEventArgs(view));
             }
-        }
-
-        private void OnTimerTick(object state)
-        {
-            CleanUp();
         }
         #endregion
     }

@@ -31,14 +31,12 @@ namespace Catel.MVVM.Views
         /// Initializes a new instance of the <see cref="WeakViewInfo"/> class.
         /// </summary>
         /// <param name="view">The view.</param>
-        /// <param name="action">The action.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="view"/> is <c>null</c>.</exception>
-        public WeakViewInfo(IView view, Action action)
+        public WeakViewInfo(IView view)
         {
             Argument.IsNotNull("view", view);
 
             _view = new WeakReference(view);
-            Action = action;
 
             this.SubscribeToWeakGenericEvent<LoadedEventArgs>(view, "Loaded", OnLoaded);
             this.SubscribeToWeakGenericEvent<LoadedEventArgs>(view, "Unloaded", OnUnloaded);
@@ -67,12 +65,6 @@ namespace Catel.MVVM.Views
         {
             get { return _view.Target as IView; }
         }
-
-        /// <summary>
-        /// Gets or sets the action.
-        /// </summary>
-        /// <value>The action.</value>
-        public Action Action { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether the <see cref="View"/> is loaded.
@@ -142,7 +134,7 @@ namespace Catel.MVVM.Views
                 unloaded(this, EventArgs.Empty);
             }
         }
-
+         
 #if !NET && !XAMARIN
         /// <summary>
         /// Called when the view layout is updated.
