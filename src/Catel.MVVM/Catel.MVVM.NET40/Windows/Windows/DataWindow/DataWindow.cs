@@ -237,6 +237,8 @@ namespace Catel.Windows
             WindowStartupLocation = WindowStartupLocation.CenterOwner;
 
             SnapsToDevicePixels = true;
+
+            this.ApplyIconFromApplication();
 #endif
 
             ThemeHelper.EnsureCatelMvvmThemeIsLoaded();

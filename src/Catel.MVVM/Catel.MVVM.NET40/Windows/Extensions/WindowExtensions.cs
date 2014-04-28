@@ -8,9 +8,12 @@ namespace Catel.Windows
 {
     using System;
     using System.Diagnostics;
+    using System.Drawing;
+    using System.Reflection;
     using System.Runtime.InteropServices;
     using System.Windows;
     using System.Windows.Interop;
+    using System.Windows.Media.Imaging;
     using Reflection;
     using Threading;
     using Logging;
@@ -369,6 +372,42 @@ namespace Catel.Windows
 
             // Update the window's non-client area to reflect the changes
             SetWindowPos(windowHandle, IntPtr.Zero, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
+        }
+
+        /// <summary>
+        /// Applies the icon from the entry assembly (the application) to the window.
+        /// </summary>
+        /// <param name="window">The window.</param>
+        public static void ApplyIconFromApplication(this Window window)
+        {
+            Argument.IsNotNull(() => window);
+
+            try
+            {
+                if (window.Icon != null)
+                {
+                    return;
+                }
+
+                var currentApplication = Application.Current;
+                if (currentApplication != null)
+                {
+                    var entryAssembly = Assembly.GetEntryAssembly();
+                    if (entryAssembly != null)
+                    {
+                        var icon = Icon.ExtractAssociatedIcon(entryAssembly.Location);
+                        if (icon != null)
+                        {
+                            window.Icon = Imaging.CreateBitmapSourceFromHIcon(icon.Handle,
+                                new Int32Rect(0, 0, icon.Width, icon.Height), BitmapSizeOptions.FromEmptyOptions());
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to set the application icon to the window");
+            }
         }
     }
 }
