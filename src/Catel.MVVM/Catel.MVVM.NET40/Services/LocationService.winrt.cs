@@ -17,13 +17,14 @@ namespace Catel.Services
     {
         #region Fields
         private Geolocator _geoLocator;
-        private Geopoint _lastKnownPosition;
+        private ILocation _lastKnownPosition;
         #endregion
 
         #region Methods
         private void OnGeolocatorPositionChanged(Geolocator sender, PositionChangedEventArgs e)
         {
-            _lastKnownPosition = e.Position.Coordinate.Point;
+            var coordinate = e.Position.Coordinate;
+            _lastKnownPosition = new Location(coordinate.Latitude, coordinate.Longitude, coordinate.Altitude ?? 0d);
 
             RaiseLocationChanged();
         }
@@ -51,16 +52,7 @@ namespace Catel.Services
         /// </returns>
         public override ILocation GetCurrentLocation()
         {
-            var currentPosition = _lastKnownPosition;
-            if (currentPosition == null)
-            {
-                return null;
-            }
-            
-            var currentLocation = new Location(currentPosition.Position.Latitude, currentPosition.Position.Longitude,
-                currentPosition.Position.Altitude);
-
-            return currentLocation;
+            return _lastKnownPosition;
         }
 
         /// <summary>
