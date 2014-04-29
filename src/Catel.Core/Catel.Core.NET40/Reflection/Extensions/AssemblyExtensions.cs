@@ -74,10 +74,10 @@ namespace Catel.Reflection
         /// </summary>
         /// <param name="assembly">The assembly.</param>
         /// <returns>The informational version.</returns>
-        public static Version InformationalVersion(this Assembly assembly)
+        public static string InformationalVersion(this Assembly assembly)
         {
             var version = GetAssemblyAttribute<AssemblyInformationalVersionAttribute>(assembly);
-            return version == null ? null : new Version(version.InformationalVersion);
+            return version == null ? null : version.InformationalVersion;
         }
 
         /// <summary>

@@ -6,7 +6,6 @@
 
 namespace Catel.Test.Reflection
 {
-    using System;
     using System.Reflection;
 
     using Catel.Reflection;
@@ -32,12 +31,8 @@ namespace Catel.Test.Reflection
         {
             string expected = "Catel.Test";
 
-            string result = string.Empty;
+            var result = MethodBase.GetCurrentMethod().DeclaringType.Assembly.Title();
 
-            // Call function
-            result = MethodBase.GetCurrentMethod().DeclaringType.Assembly.Title();
-
-            // Validate result
             Assert.AreEqual(expected, result);
         }
 
@@ -47,13 +42,10 @@ namespace Catel.Test.Reflection
         [TestMethod]
         public void VersionAutomatic()
         {
-            string expected = "1.0.0.0";
-            string result = string.Empty;
+            string expected = "4.0.0.0";
 
-            // Call function
-            result = MethodBase.GetCurrentMethod().DeclaringType.Assembly.Version();
+            var result = MethodBase.GetCurrentMethod().DeclaringType.Assembly.Version();
 
-            // Validate result
             Assert.AreEqual(expected, result);
         }
 
@@ -63,13 +55,10 @@ namespace Catel.Test.Reflection
         [TestMethod]
         public void VersionWithSeparatorAutomatic()
         {
-            string expected = "1.0";
-            string result = string.Empty;
+            string expected = "4.0";
 
-            // Call function
-            result = MethodBase.GetCurrentMethod().DeclaringType.Assembly.Version(1);
+            var result = MethodBase.GetCurrentMethod().DeclaringType.Assembly.Version(1);
 
-            // Validate result
             Assert.AreEqual(expected, result);
         }
 
@@ -79,13 +68,10 @@ namespace Catel.Test.Reflection
         [TestMethod]
         public void VersionWithSeparatorAutomaticWhereSeparatorCountIsTooHigh()
         {
-            string expected = "1.0.0.0";
-            string result = string.Empty;
+            string expected = "4.0.0.0";
 
-            // Call function
-            result = MethodBase.GetCurrentMethod().DeclaringType.Assembly.Version(8);
+            var result = MethodBase.GetCurrentMethod().DeclaringType.Assembly.Version(8);
 
-            // Validate result
             Assert.AreEqual(expected, result);
         }
 
@@ -95,13 +81,10 @@ namespace Catel.Test.Reflection
         [TestMethod]
         public void InformationalVersionAutomatic()
         {
-            Version expected = new Version("1.0");
-            Version result = null;
+            var expected = "4.0, manually built in Visual Studio";
 
-            // Call function
-            result = MethodBase.GetCurrentMethod().DeclaringType.Assembly.InformationalVersion();
+            var result = MethodBase.GetCurrentMethod().DeclaringType.Assembly.InformationalVersion();
 
-            // Validate result
             Assert.AreEqual(expected, result);
         }
 
@@ -113,12 +96,8 @@ namespace Catel.Test.Reflection
         {
             string expected = "Catel test library";
 
-            string result = string.Empty;
+            var result = MethodBase.GetCurrentMethod().DeclaringType.Assembly.Description();
 
-            // Call function
-            result = MethodBase.GetCurrentMethod().DeclaringType.Assembly.Description();
-
-            // Validate result
             Assert.AreEqual(expected, result);
         }
 
@@ -130,12 +109,8 @@ namespace Catel.Test.Reflection
         {
             string expected = "Catel.Test";
 
-            string result = string.Empty;
+            var result = MethodBase.GetCurrentMethod().DeclaringType.Assembly.Product();
 
-            // Call function
-            result = MethodBase.GetCurrentMethod().DeclaringType.Assembly.Product();
-
-            // Validate result
             Assert.AreEqual(expected, result);
         }
 
@@ -145,14 +120,10 @@ namespace Catel.Test.Reflection
         [TestMethod]
         public void CopyrightAutomatic()
         {
-            // Declare variables
-            string expected = "Copyright © CatenaLogic 2010 - 2012";
-            string result = string.Empty;
+            string expected = "Copyright © CatenaLogic 2010 - 2014";
 
-            // Call function
-            result = MethodBase.GetCurrentMethod().DeclaringType.Assembly.Copyright();
+            var result = MethodBase.GetCurrentMethod().DeclaringType.Assembly.Copyright();
 
-            // Validate result
             Assert.AreEqual(expected, result);
         }
 
@@ -162,14 +133,10 @@ namespace Catel.Test.Reflection
         [TestMethod]
         public void CompanyAutomatic()
         {
-            // Declare variables
             string expected = "CatenaLogic";
-            string result = string.Empty;
 
-            // Call function
-            result = MethodBase.GetCurrentMethod().DeclaringType.Assembly.Company();
+            var result = MethodBase.GetCurrentMethod().DeclaringType.Assembly.Company();
 
-            // Validate result
             Assert.AreEqual(expected, result);
         }
         #endregion
