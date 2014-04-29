@@ -56,8 +56,14 @@ namespace Catel.MVVM.Navigation
 
         private void OnNavigatingEvent(object sender, NavigatingCancelEventArgs e)
         {
+            var sourcePage = string.Empty;
+            if (e.SourcePageType != null)
+            {
+                sourcePage = e.SourcePageType.ToString();
+            }
+
             // We are navigating away
-            var eventArgs = new NavigatingEventArgs(e.SourcePageType.ToString(), e.NavigationMode.Convert());
+            var eventArgs = new NavigatingEventArgs(sourcePage, e.NavigationMode.Convert());
             RaiseNavigatingAway(eventArgs);
 
             e.Cancel = eventArgs.Cancel;
@@ -65,7 +71,13 @@ namespace Catel.MVVM.Navigation
 
         private void OnNavigatedEvent(object sender, NavigationEventArgs e)
         {
-            var eventArgs = new NavigatedEventArgs(e.Uri.ToString(), NavigationMode.Unknown);
+            var uriString = string.Empty;
+            if (e.SourcePageType != null)
+            {
+                uriString = e.SourcePageType.ToString();
+            }
+
+            var eventArgs = new NavigatedEventArgs(uriString, NavigationMode.Unknown);
             HandleNavigatedEvent(eventArgs);
 
             _lastNavigationContext = e.Parameter;

@@ -31,7 +31,18 @@ namespace Catel.Services
         #region IPleaseWaitService Members
         partial void SetStatus(string status)
         {
-            _busyIndicator.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => _statusTextBlock.Text = status);
+            _busyIndicator.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                if (status == null)
+                {
+                    status = string.Empty;
+                }
+
+                if (_statusTextBlock != null)
+                {
+                    _statusTextBlock.Text = status;
+                }
+            });
         }
 
         partial void InitializeBusyIndicator()

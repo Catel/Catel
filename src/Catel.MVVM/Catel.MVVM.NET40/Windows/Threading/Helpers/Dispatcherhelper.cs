@@ -135,10 +135,11 @@ namespace Catel.Windows.Threading
             {
                 return window.Dispatcher;
             }
-            
-            if (CoreWindow.GetForCurrentThread() != null)
+
+            var coreWindow = CoreWindow.GetForCurrentThread();
+            if (coreWindow != null)
             {
-                return CoreWindow.GetForCurrentThread().Dispatcher;
+                return coreWindow.Dispatcher;
             }
 
             return null;

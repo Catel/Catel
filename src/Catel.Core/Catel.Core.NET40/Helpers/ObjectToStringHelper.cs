@@ -37,6 +37,9 @@ namespace Catel
             }
 #endif
 
+#if !NETFX_CORE
+            // Note: cannot be used on NETFX_CORE
+
             // Check if there is a culture specific version
             var instanceType = instance.GetType();
             var toStringMethod = instanceType.GetMethodEx("ToString", new[] {typeof (IFormatProvider)});
@@ -44,6 +47,7 @@ namespace Catel
             {
                 return (string)toStringMethod.Invoke(instance, new object[] { CultureInfo.InvariantCulture });
             }
+#endif
 
             return instance.ToString();
         }

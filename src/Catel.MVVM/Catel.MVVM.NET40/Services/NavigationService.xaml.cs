@@ -40,7 +40,7 @@ namespace Catel.Services
         #region Fields
         private static object _rootFrame;
 
-#if NET || SL4 || SL5
+#if NET || SL5
         private bool _appClosingByMainWindow;
         private bool _appClosedFromService;
 #endif
