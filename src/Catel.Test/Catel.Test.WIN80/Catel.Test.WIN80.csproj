@@ -24,7 +24,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\..\output\debug\WIN80\Test\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WIN;WIN80</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WIN;WIN80; TEST</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,7 +33,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\..\output\release\WIN80\Test\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE;WIN;WIN80</DefineConstants>
+    <DefineConstants>TRACE;NETFX_CORE;WIN;WIN80; TEST</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -54,6 +54,9 @@
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\SolutionAssemblyInfo.cs">
+      <Link>Properties\SolutionAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\ArgumentFacts.cs">
       <Link>ArgumentFacts.cs</Link>
     </Compile>

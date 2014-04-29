@@ -21,7 +21,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\..\output\debug\NET40\Catel.Extensions.FluentValidation\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET; NET40</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET; NET40;FLUENT_VALIDATION</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\..\..\output\debug\NET40\Catel.Extensions.FluentValidation\Catel.Extensions.FluentValidation.XML</DocumentationFile>
@@ -31,7 +31,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\..\output\release\NET40\Catel.Extensions.FluentValidation\</OutputPath>
-    <DefineConstants>TRACE;NET; NET40</DefineConstants>
+    <DefineConstants>TRACE;NET; NET40;FLUENT_VALIDATION</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\..\..\output\release\NET40\Catel.Extensions.FluentValidation\Catel.Extensions.FluentValidation.XML</DocumentationFile>

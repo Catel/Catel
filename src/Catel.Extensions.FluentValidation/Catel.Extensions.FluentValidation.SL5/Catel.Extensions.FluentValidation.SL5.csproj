@@ -31,7 +31,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\..\output\debug\SL5\Catel.Extensions.FluentValidation\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;SILVERLIGHT; SL5</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT; SL5;FLUENT_VALIDATION</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -43,7 +43,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\..\output\release\SL5\Catel.Extensions.FluentValidation\</OutputPath>
-    <DefineConstants>TRACE;SILVERLIGHT; SL5</DefineConstants>
+    <DefineConstants>TRACE;SILVERLIGHT; SL5;FLUENT_VALIDATION</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>

@@ -58,7 +58,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\..\output\debug\SL5\Test\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;SILVERLIGHT; SL5</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT; SL5; TEST</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -69,7 +69,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\..\output\release\SL5\Test\</OutputPath>
-    <DefineConstants>TRACE;SILVERLIGHT; SL5</DefineConstants>
+    <DefineConstants>TRACE;SILVERLIGHT; SL5; TEST</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -124,6 +124,9 @@
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\SolutionAssemblyInfo.cs">
+      <Link>Properties\SolutionAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\ArgumentFacts.cs">
       <Link>ArgumentFacts.cs</Link>
     </Compile>

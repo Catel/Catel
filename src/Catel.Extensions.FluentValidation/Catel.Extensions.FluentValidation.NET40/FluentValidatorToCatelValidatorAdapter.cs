@@ -168,7 +168,8 @@ namespace Catel
         /// </summary>
         /// <typeparam name="TValidator">Type of <see cref="FluentValidation.IValidator" />.</typeparam>
         /// <returns>An instance of <see cref="FluentValidatorToCatelValidatorAdapter" />.</returns>
-        internal static Data.IValidator From<TValidator>() where TValidator : IValidator, new()
+        internal static Data.IValidator From<TValidator>() 
+            where TValidator : IValidator, new()
         {
             return new FluentValidatorToCatelValidatorAdapter(typeof(TValidator));
         }

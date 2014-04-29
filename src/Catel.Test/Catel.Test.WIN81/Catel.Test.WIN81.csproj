@@ -24,7 +24,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\..\output\debug\WIN81\Test\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WIN;WIN81</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WIN;WIN81; TEST</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -32,7 +32,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\..\output\release\WIN81\Test\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE;WIN;WIN81</DefineConstants>
+    <DefineConstants>TRACE;NETFX_CORE;WIN;WIN81; TEST</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -115,6 +115,9 @@
     <SDKReference Include="TestPlatform, Version=11.0" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\SolutionAssemblyInfo.cs">
+      <Link>Properties\SolutionAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.NET40\App.xaml.cs">
       <Link>App.xaml.cs</Link>
       <DependentUpon>App.xaml</DependentUpon>

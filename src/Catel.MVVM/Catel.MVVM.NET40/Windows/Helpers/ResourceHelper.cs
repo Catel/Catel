@@ -24,7 +24,7 @@ namespace Catel.Windows
         /// Ensures that the pack URI is allowed. Sometimes, when no application object is instantiated
         /// yet, the pack URI is not allowed. This method takes care of that.
         /// </summary>
-        internal static void EnsurePackUriIsAllowed()
+        public static void EnsurePackUriIsAllowed()
         {
 #if !NETFX_CORE && !PCL
             if (!UriParser.IsKnownScheme("pack"))

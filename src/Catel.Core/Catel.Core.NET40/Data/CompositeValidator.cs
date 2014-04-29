@@ -9,14 +9,14 @@ namespace Catel.Data
     using System;
     using System.Collections.Generic;
 
-    using Catel.Threading;
+    using Threading;
 
     /// <summary>
     /// Allows the combination of several validators into a single validator. This class will combine all instances of the
     /// <see cref="IValidator"/> class found for a type using the <see cref="IValidatorProvider"/> into this single composite
     /// validator.
     /// </summary>
-    internal sealed class CompositeValidator : IValidator
+    public sealed class CompositeValidator : IValidator
     {
         #region Constants and Fields
 
