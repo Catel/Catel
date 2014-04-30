@@ -264,14 +264,22 @@ namespace Catel.Windows
                     var targetType = defaultStyle.TargetType;
                     if (targetType != null)
                     {
+                        bool hasSetStyle = false;
+
                         var resourceDictionaryDefiningStyle = FindResourceDictionaryDeclaringType(targetResources, targetType);
                         if (resourceDictionaryDefiningStyle != null)
                         {
-                            Log.Debug("Completing the style info for '{0}' with the additional info from the default style definition", targetType);
+                            var style = resourceDictionaryDefiningStyle[targetType] as Style;
+                            if (style != null)
+                            {
+                                Log.Debug("Completing the style info for '{0}' with the additional info from the default style definition", targetType);
 
-                            resourceDictionaryDefiningStyle[targetType] = CompleteStyleWithAdditionalInfo(resourceDictionaryDefiningStyle[targetType] as Style, defaultStyle);
+                                resourceDictionaryDefiningStyle[targetType] = CompleteStyleWithAdditionalInfo(style, defaultStyle);
+                                hasSetStyle = true;
+                            }
                         }
-                        else
+
+                        if (!hasSetStyle)
                         {
                             Log.Debug("Couldn't find style definition for '{0}', creating style forwarder", targetType);
 

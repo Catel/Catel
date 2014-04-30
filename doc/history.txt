@@ -118,6 +118,7 @@ Added/fixed:
 (x) CTL-418 ConsoleLogListener doesn't reset colors after logging
 (x) CTL-421 UserControl doesn't refresh on DataContextChanged when used as data template
 (x) CTL-422 ViewLoadedManager does not release strong reference to views
+(x) CTL-429 Call to StyleHelper.CreateStyleForwardersForDefaultStyles(); leads to exception
 
 Roadmap:
 ========
