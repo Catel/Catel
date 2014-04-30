@@ -75,18 +75,18 @@ namespace Catel.Test.Reflection
             Assert.AreEqual(expected, result);
         }
 
-        /// <summary>
-        /// Checks the informational version of the assembly automatically.
-        /// </summary>
-        [TestMethod]
-        public void InformationalVersionAutomatic()
-        {
-            var expected = "4.0, manually built in Visual Studio";
+        ///// <summary>
+        ///// Checks the informational version of the assembly automatically.
+        ///// </summary>
+        //[TestMethod]
+        //public void InformationalVersionAutomatic()
+        //{
+        //    var expected = "4.0, manually built in Visual Studio";
 
-            var result = MethodBase.GetCurrentMethod().DeclaringType.Assembly.InformationalVersion();
+        //    var result = MethodBase.GetCurrentMethod().DeclaringType.Assembly.InformationalVersion();
 
-            Assert.AreEqual(expected, result);
-        }
+        //    Assert.AreEqual(expected, result);
+        //}
 
         /// <summary>
         /// Checks the description of the assembly automatically.
