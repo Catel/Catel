@@ -70,7 +70,7 @@ namespace Catel.IoC
         /// <exception cref="InvalidOperationException">The type is not registered in the container as transient type.</exception>
         public static T ResolveTypeUsingParameters<T>(this IServiceLocator serviceLocator, object[] parameters, object tag = null)
         {
-            return (T)ResolveTypeUsingParameter(serviceLocator, typeof(T), parameters, tag);
+            return (T)ResolveTypeUsingParameters(serviceLocator, typeof(T), parameters, tag);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="parameters" /> is <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The type is not registered in the container as transient type.</exception>
-        public static object ResolveTypeUsingParameter(this IServiceLocator serviceLocator, Type serviceType, object[] parameters, object tag = null)
+        public static object ResolveTypeUsingParameters(this IServiceLocator serviceLocator, Type serviceType, object[] parameters, object tag = null)
         {
             Argument.IsNotNull("serviceLocator", serviceLocator);
             Argument.IsNotNull("serviceType", serviceType);
