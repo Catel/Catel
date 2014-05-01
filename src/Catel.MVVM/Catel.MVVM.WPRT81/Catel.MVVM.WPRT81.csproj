@@ -88,7 +88,6 @@
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <Folder Include="Resources\Images\" />
-    <Folder Include="Windows\Windows\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
@@ -388,9 +387,6 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Providers\PageLogic.cs">
       <Link>MVVM\Providers\PageLogic.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Providers\PhonePageLogic.cs">
-      <Link>MVVM\Providers\PhonePageLogic.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Providers\UserControlLogic.cs">
       <Link>MVVM\Providers\UserControlLogic.cs</Link>
     </Compile>
@@ -531,9 +527,6 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Interfaces\IPage.cs">
       <Link>MVVM\Views\Interfaces\IPage.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Interfaces\IPhonePage.cs">
-      <Link>MVVM\Views\Interfaces\IPhonePage.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Interfaces\IUserControl.cs">
       <Link>MVVM\Views\Interfaces\IUserControl.cs</Link>
@@ -1125,6 +1118,11 @@
       <HintPath>..\..\..\lib\Obsolete.Fody.3.1.0.0\Lib\portable-net4+sl4+wp8+win8+wpa81+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0">
+      <Name>Behaviors SDK %28XAML%29</Name>
+    </SDKReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

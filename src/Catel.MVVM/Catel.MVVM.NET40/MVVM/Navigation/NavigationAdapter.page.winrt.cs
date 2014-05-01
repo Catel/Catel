@@ -7,13 +7,15 @@
 #if NETFX_CORE
 namespace Catel.MVVM.Navigation
 {
+    using System.Collections.Generic;
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Navigation;
 
     public partial class NavigationAdapter
     {
-        private object _lastNavigationContext;
+        private static Dictionary<string, object> _lastGlobalNavigationContext;
+        private Dictionary<string, object> _lastNavigationContext;
 
         /// <summary>
         /// Gets the root frame.
@@ -41,7 +43,23 @@ namespace Catel.MVVM.Navigation
 
         partial void DetermineNavigationContext()
         {
-            NavigationContext.Values["context"] = _lastNavigationContext;
+            if (_lastNavigationContext == null)
+            {
+                _lastNavigationContext = new Dictionary<string, object>();
+
+                if (_lastGlobalNavigationContext != null)
+                {
+                    foreach (var value in _lastGlobalNavigationContext)
+                    {
+                        _lastNavigationContext[value.Key] = value.Value;
+                    }
+                }
+            }
+
+            foreach (var value in _lastNavigationContext)
+            {
+                NavigationContext.Values[value.Key] = value.Value;
+            }
         }
 
         /// <summary>
@@ -80,7 +98,7 @@ namespace Catel.MVVM.Navigation
             var eventArgs = new NavigatedEventArgs(uriString, NavigationMode.Unknown);
             HandleNavigatedEvent(eventArgs);
 
-            _lastNavigationContext = e.Parameter;
+            _lastGlobalNavigationContext = e.Parameter as Dictionary<string, object>;
         }
     }
 }

@@ -398,9 +398,6 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Providers\PageLogic.cs">
       <Link>MVVM\Providers\PageLogic.cs</Link>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Providers\PhonePageLogic.cs">
-      <Link>MVVM\Providers\PhonePageLogic.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Providers\UserControlLogic.cs">
       <Link>MVVM\Providers\UserControlLogic.cs</Link>
     </Compile>
@@ -541,9 +538,6 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Interfaces\IPage.cs">
       <Link>MVVM\Views\Interfaces\IPage.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Interfaces\IPhonePage.cs">
-      <Link>MVVM\Views\Interfaces\IPhonePage.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\Interfaces\IUserControl.cs">
       <Link>MVVM\Views\Interfaces\IUserControl.cs</Link>

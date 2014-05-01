@@ -7,8 +7,8 @@
 namespace Catel.MVVM.Providers
 {
     using System;
-    using Catel.MVVM.Navigation;
-    using Catel.MVVM.Views;
+    using Navigation;
+    using Views;
     using Logging;
     using MVVM;
 

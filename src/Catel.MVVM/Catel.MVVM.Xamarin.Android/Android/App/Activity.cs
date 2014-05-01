@@ -9,25 +9,24 @@ namespace Catel.Android.App
 {
     using System;
     using System.ComponentModel;
-    using Catel.IoC;
-    using Catel.Logging;
-    using Catel.MVVM;
-    using Catel.MVVM.Providers;
-    using Catel.MVVM.Views;
+    using IoC;
+    using Logging;
+    using MVVM;
+    using MVVM.Providers;
+    using MVVM.Views;
     using global::Android.OS;
-    using global::Android.Views;
 
     /// <summary>
     /// View implementation that automatically takes care of view models.
     /// </summary>
-    public class Activity : global::Android.App.Activity, IPhonePage
+    public class Activity : global::Android.App.Activity, IPage
     {
         #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private static readonly IViewModelLocator _viewModelLocator;
 
-        private readonly PhonePageLogic _logic;
+        private readonly PageLogic _logic;
         private object _dataContext;
         private bool _isInitialized;
         #endregion
@@ -67,7 +66,7 @@ namespace Catel.Android.App
                 }
             }
 
-            _logic = new PhonePageLogic(this, viewModelType);
+            _logic = new PageLogic(this, viewModelType);
             _logic.TargetViewPropertyChanged += (sender, e) =>
             {
                 OnPropertyChanged(e);
@@ -128,7 +127,7 @@ namespace Catel.Android.App
         /// </summary>
         public Type ViewModelType
         {
-            get { return _logic.GetValue<PhonePageLogic, Type>(x => x.ViewModelType); }
+            get { return _logic.GetValue<PageLogic, Type>(x => x.ViewModelType); }
         }
 
         /// <summary>
@@ -140,8 +139,8 @@ namespace Catel.Android.App
         /// <value><c>true</c> if the view model container should prevent view model creation; otherwise, <c>false</c>.</value>
         public bool PreventViewModelCreation
         {
-            get { return _logic.GetValue<PhonePageLogic, bool>(x => x.PreventViewModelCreation); }
-            set { _logic.SetValue<PhonePageLogic>(x => x.PreventViewModelCreation = value); }
+            get { return _logic.GetValue<PageLogic, bool>(x => x.PreventViewModelCreation); }
+            set { _logic.SetValue<PageLogic>(x => x.PreventViewModelCreation = value); }
         }
 
         /// <summary>
@@ -150,7 +149,7 @@ namespace Catel.Android.App
         /// <value>The view model.</value>
         public IViewModel ViewModel
         {
-            get { return _logic.GetValue<PhonePageLogic, IViewModel>(x => x.ViewModel); }
+            get { return _logic.GetValue<PageLogic, IViewModel>(x => x.ViewModel); }
         }
 
         /// <summary>
@@ -163,25 +162,8 @@ namespace Catel.Android.App
         /// </value>
         public bool NavigatingAwaySavesViewModel
         {
-            get { return _logic.GetValue<PhonePageLogic, bool>(x => x.NavigatingAwaySavesViewModel, true); }
-            set { _logic.SetValue<PhonePageLogic>(x => x.NavigatingAwaySavesViewModel = value); }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the back key cancels the view model. This
-        /// means that <see cref="IViewModel.CancelViewModel"/> will be called when the back key is pressed.
-        /// <para/>
-        /// If this property is <c>false</c>, the <see cref="IViewModel.SaveViewModel"/> will be called instead.
-        /// <para/>
-        /// Default value is <c>true</c>.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if the back key cancels the view model; otherwise, <c>false</c>.
-        /// </value>
-        public bool BackKeyCancelsViewModel
-        {
-            get { return _logic.GetValue<PhonePageLogic, bool>(x => x.BackKeyCancelsViewModel, true); }
-            set { _logic.SetValue<PhonePageLogic>(x => x.BackKeyCancelsViewModel = value); }
+            get { return _logic.GetValue<PageLogic, bool>(x => x.NavigatingAwaySavesViewModel, true); }
+            set { _logic.SetValue<PageLogic>(x => x.NavigatingAwaySavesViewModel = value); }
         }
 
         /// <summary>
@@ -195,8 +177,8 @@ namespace Catel.Android.App
         /// <value><c>true</c> if the view modle must be closed on forward navigation; otherwise, <c>false</c>.</value>
         public bool CloseViewModelOnForwardNavigation
         {
-            get { return _logic.GetValue<PhonePageLogic, bool>(x => x.CloseViewModelOnForwardNavigation, true); }
-            set { _logic.SetValue<PhonePageLogic>(x => x.CloseViewModelOnForwardNavigation = value); }
+            get { return _logic.GetValue<PageLogic, bool>(x => x.CloseViewModelOnForwardNavigation, true); }
+            set { _logic.SetValue<PageLogic>(x => x.CloseViewModelOnForwardNavigation = value); }
         }
 
         /// <summary>
