@@ -20,6 +20,7 @@
     <!-- Buttons -->
 	<Style x:Key="DefaultButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
 		<Setter Property="Margin" Value="{DynamicResource Margin.Button}" />
+        <Setter Property="UseLayoutRounding" Value="True" />
 
 		<!-- Due to a bug, adjust the error template (see http://stackoverflow.com/questions/321327/how-do-i-get-rid-of-the-red-rectangle-when-my-wpf-binding-validation-has-failed-a) -->
 		<Setter Property="Validation.ErrorTemplate">
