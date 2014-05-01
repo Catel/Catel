@@ -72,11 +72,22 @@ namespace Catel.Services
         /// will be invoked when the message is dismissed.
         /// </remarks>
         /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
-        public virtual void ShowError(Exception exception, Action completedCallback)
+
+#if NETFX_CORE
+        public async virtual Task ShowError(Exception exception, Action completedCallback)
+#else
+            public virtual void ShowError(Exception exception, Action completedCallback)
+#endif
+
         {
             Argument.IsNotNull("exception", exception);
 
+#if NETFX_CORE
+            await ShowError(exception.Message, string.Empty, completedCallback);
+#else
             ShowError(exception.Message, string.Empty, completedCallback);
+#endif
+
         }
 
         /// <summary>
@@ -90,7 +101,12 @@ namespace Catel.Services
         /// will be invoked when the message is dismissed.
         /// </remarks>
         /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
+#if NETFX_CORE
+        public async virtual Task ShowError(string message, string caption = "", Action completedCallback = null)
+#else
         public virtual void ShowError(string message, string caption = "", Action completedCallback = null)
+#endif
+
         {
             if (string.IsNullOrEmpty(caption))
             {
@@ -102,11 +118,21 @@ namespace Catel.Services
 
             if (completedCallback != null)
             {
+#if NETFX_CORE
+                await ShowAsync(message, caption, button, icon, result => completedCallback());
+#else
                 ShowAsync(message, caption, button, icon, result => completedCallback());
+#endif
+
             }
             else
             {
+#if NETFX_CORE
+                await Show(message, caption, button, icon);
+#else
                 Show(message, caption, button, icon);
+#endif
+
             }
         }
 
@@ -121,7 +147,12 @@ namespace Catel.Services
         /// will be invoked when the message is dismissed.
         /// </remarks>
         /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
+#if NETFX_CORE
+        public async virtual Task ShowWarning(string message, string caption = "", Action completedCallback = null)
+#else
         public virtual void ShowWarning(string message, string caption = "", Action completedCallback = null)
+#endif
+
         {
             if (string.IsNullOrEmpty(caption))
             {
@@ -133,11 +164,20 @@ namespace Catel.Services
 
             if (completedCallback != null)
             {
+#if NETFX_CORE
+                await ShowAsync(message, caption, button, icon, result => completedCallback());
+#else
                 ShowAsync(message, caption, button, icon, result => completedCallback());
+#endif
+
             }
             else
             {
+#if NETFX_CORE
+                await Show(message, caption, button, icon);
+#else
                 Show(message, caption, button, icon);
+#endif
             }
         }
 
@@ -152,7 +192,12 @@ namespace Catel.Services
         /// will be invoked when the message is dismissed.
         /// </remarks>
         /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
-        public virtual void ShowInformation(string message, string caption = "", Action completedCallback = null)
+#if NETFX_CORE
+        public async virtual Task ShowInformation(string message, string caption = "", Action completedCallback = null)
+#else
+            public virtual void ShowInformation(string message, string caption = "", Action completedCallback = null)
+#endif
+
         {
             if (string.IsNullOrEmpty(caption))
             {
@@ -164,11 +209,21 @@ namespace Catel.Services
 
             if (completedCallback != null)
             {
+#if NETFX_CORE
+                await ShowAsync(message, caption, button, icon, result => completedCallback());
+#else
                 ShowAsync(message, caption, button, icon, result => completedCallback());
+#endif
+
             }
             else
             {
+#if NETFX_CORE
+                await Show(message, caption, button, icon);
+#else
                 Show(message, caption, button, icon);
+#endif
+
             }
         }
 
@@ -181,16 +236,19 @@ namespace Catel.Services
         /// <param name="icon">The icon.</param>
         /// <returns>The <see cref="MessageResult"/>.</returns>
         /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
-        public virtual MessageResult Show(string message, string caption = "", MessageButton button = MessageButton.OK, MessageImage icon = MessageImage.None)
-        {
 #if NETFX_CORE
-            var task = ShowMessageBox(message, caption, button, icon);
-            task.Wait();
-            return task.Result;
-#else
-            return ShowMessageBox(message, caption, button, icon);
-#endif
+        public async virtual Task<MessageResult> Show(string message, string caption = "", MessageButton button = MessageButton.OK, MessageImage icon = MessageImage.None)
+        {
+            return await ShowMessageBox(message, caption, button, icon);
         }
+#else
+            public virtual MessageResult Show(string message, string caption = "", MessageButton button = MessageButton.OK, MessageImage icon = MessageImage.None)
+        {
+
+            return ShowMessageBox(message, caption, button, icon);
+            }
+#endif
+
 
         /// <summary>
         /// Shows an information message to the user and allows a callback operation when the message is completed.
@@ -205,15 +263,30 @@ namespace Catel.Services
         /// will be invoked when the message is dismissed.
         /// </remarks>
         /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
+#if NETFX_CORE
+        public async virtual Task ShowAsync(string message, string caption = "", MessageButton button = MessageButton.OK,
+          MessageImage icon = MessageImage.None, Action<MessageResult> completedCallback = null)
+        {
+
+            var result = await Show(message, caption, button, icon);
+            if (completedCallback != null)
+            {
+                completedCallback(result);
+            }
+        }
+#else
+
         public virtual void ShowAsync(string message, string caption = "", MessageButton button = MessageButton.OK,
             MessageImage icon = MessageImage.None, Action<MessageResult> completedCallback = null)
         {
+      
             var result = Show(message, caption, button, icon);
             if (completedCallback != null)
             {
                 completedCallback(result);
             }
         }
+#endif
         #endregion
     }
 }
