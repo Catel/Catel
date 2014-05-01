@@ -41,6 +41,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <Compile Include="MVVM\ViewModels\ViewModelBase.tombstoning.cs" />
     <Compile Include="Services\LocationService.winrt.cs">
       <DependentUpon>LocationService.cs</DependentUpon>
     </Compile>
@@ -279,6 +280,8 @@
     <Compile Include="Windows\Data\Helpers\BindingHelper.cs" />
     <Compile Include="Windows\Helpers\DataContextChangedHelper.cs" />
     <Compile Include="Windows\Helpers\SetterValueBindingHelper.cs" />
+    <Compile Include="Windows\Interactivity\Behavior.cs" />
+    <Compile Include="Windows\Markup\MarkupExtension.cs" />
     <Compile Include="Windows\MediaElementThreadInfo.cs" />
     <Compile Include="MVVM\Converters\CollectionToCountConverter.cs" />
     <Compile Include="MVVM\Converters\TextToLowerCaseConverter.cs" />

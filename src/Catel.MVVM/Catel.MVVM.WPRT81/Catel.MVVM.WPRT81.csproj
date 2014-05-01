@@ -478,6 +478,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ViewModelBase.throttling.cs">
       <Link>MVVM\ViewModels\ViewModelBase.throttling.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ViewModelBase.tombstoning.cs">
+      <Link>MVVM\ViewModels\ViewModelBase.tombstoning.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ViewModelBase.validation.cs">
       <Link>MVVM\ViewModels\ViewModelBase.validation.cs</Link>
     </Compile>
@@ -1045,6 +1048,9 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Input\InputGesture.cs">
       <Link>Windows\Input\InputGesture.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\Behavior.cs">
+      <Link>Windows\Interactivity\Behavior.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Threading\Extensions\DispatcherExtensions.cs">
       <Link>Windows\Threading\Extensions\DispatcherExtensions.cs</Link>
     </Compile>
@@ -1125,6 +1131,11 @@
       <HintPath>..\..\..\lib\Obsolete.Fody.3.1.0.0\Lib\portable-net4+sl4+wp8+win8+wpa81+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0">
+      <Name>Behaviors SDK %28XAML%29</Name>
+    </SDKReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

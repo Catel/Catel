@@ -428,6 +428,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ViewModelBase.throttling.cs">
       <Link>MVVM\ViewModels\ViewModelBase.throttling.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ViewModelBase.tombstoning.cs">
+      <Link>MVVM\ViewModels\ViewModelBase.tombstoning.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\EventArgs\ViewLoadedEventArgs.cs">
       <Link>MVVM\Views\EventArgs\ViewLoadedEventArgs.cs</Link>
     </Compile>
@@ -1025,6 +1028,9 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\Authentication.cs">
       <Link>Windows\Interactivity\Authentication.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\Behavior.cs">
+      <Link>Windows\Interactivity\Behavior.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\BehaviorBase.cs">
       <Link>Windows\Interactivity\BehaviorBase.cs</Link>
     </Compile>
@@ -1061,7 +1067,6 @@
     <Compile Include="..\Catel.MVVM.NET45\MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs">
       <Link>MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs</Link>
     </Compile>
-    <Compile Include="Windows\Interactivity\Behavior.cs" />
   </ItemGroup>
   <ItemGroup>
     <PRIResource Include="..\Catel.MVVM.WIN80\Strings\de\Resources.resw">

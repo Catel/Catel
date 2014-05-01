@@ -4,13 +4,13 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if NETFX_CORE && !WIN80
 
 namespace Catel.Windows.Interactivity
 {
     using System;
-    using System.Reflection;
-    using Catel.Logging;
-    using Catel.Reflection;
+    using Logging;
+    using Reflection;
     using global::Windows.UI.Xaml;
     using Microsoft.Xaml.Interactivity;
 
@@ -91,3 +91,5 @@ namespace Catel.Windows.Interactivity
         #endregion
     }
 }
+
+#endif

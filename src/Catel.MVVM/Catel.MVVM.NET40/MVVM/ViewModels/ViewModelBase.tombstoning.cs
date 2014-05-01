@@ -4,16 +4,17 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if WINDOWS_PHONE && SILVERLIGHT
+
 namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using Catel.IoC;
-    using Catel.Runtime.Serialization;
-    using Catel.Services;
-    using Phone.Controls;
+    using Runtime.Serialization;
+    using Services;
     using Logging;
+    using Microsoft.Phone.Controls;
 
     public partial class ViewModelBase
     {
@@ -123,3 +124,5 @@ namespace Catel.MVVM
         #endregion
     }
 }
+
+#endif
