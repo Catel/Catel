@@ -7,9 +7,9 @@
 namespace Catel.MVVM.Providers
 {
     using System;
-    using Catel.Logging;
-    using Catel.MVVM.Views;
-    using Catel.Reflection;
+    using Logging;
+    using Views;
+    using Reflection;
 
 #if NETFX_CORE
     using global::Windows.UI.Xaml.Controls;
@@ -23,20 +23,6 @@ namespace Catel.MVVM.Providers
     public class NavigationPageBehavior : MVVMBehaviorBase<Page, PageLogic>
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-        /// <summary>
-        /// Gets or sets a value indicating whether navigating away from the page should save the view model.
-        /// <para />
-        /// The default value is <c>true</c>.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if navigating away should save the view model; otherwise, <c>false</c>.
-        /// </value>
-        public bool NavigatingAwaySavesViewModel
-        {
-            get { return Logic.NavigatingAwaySavesViewModel; }
-            set { Logic.NavigatingAwaySavesViewModel = value; }
-        }
 
         /// <summary>
         /// Creates the logic required for MVVM.

@@ -7,24 +7,11 @@
 
 namespace Catel.MVVM.Views
 {
-    using System;
-    using Catel.MVVM.Navigation;
-
     /// <summary>
     /// Interface defining functionality for a view with navigation.
     /// </summary>
     public interface INavigationView : IView
     {
-        /// <summary>
-        /// Gets or sets a value indicating whether navigating away from the view should save the view model.
-        /// <para />
-        /// The default value is <c>true</c>.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if navigating away should save the view model; otherwise, <c>false</c>.
-        /// </value>
-        bool NavigatingAwaySavesViewModel { get; set; }
-
         ///// <summary>
         ///// Occurs when the app has navigated to this view.
         ///// </summary>

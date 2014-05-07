@@ -31,19 +31,6 @@ namespace Catel.MVVM.Providers
         {
         }
 
-        #region Properties
-        /// <summary>
-        /// Gets or sets a value indicating whether the view model should be closed when navigating forward.
-        /// <para />
-        /// By default, Catel will keep the view models and pages in memory to provide a back-navigation stack. Some
-        /// pages are not required to be listed in the navigation stack and can have this property set to <c>true</c>.
-        /// <para />
-        /// The default value is <c>false</c>.
-        /// </summary>
-        /// <value><c>true</c> if the view modle must be closed on forward navigation; otherwise, <c>false</c>.</value>
-        public bool CloseViewModelOnForwardNavigation { get; set; }
-        #endregion
-
         /// <summary>
         /// Sets the data context of the target control.
         /// <para />
@@ -83,30 +70,6 @@ namespace Catel.MVVM.Providers
             }
 
             base.OnViewModelChanged();
-        }
-
-        /// <summary>
-        /// Called when the control has just navigated away from this page.
-        /// </summary>
-        /// <param name="e">The <see cref="NavigatedEventArgs"/> instance containing the event data.</param>
-        protected override void OnNavigatedAwayFromPage(NavigatedEventArgs e)
-        {
-            if (e.Uri.IsNavigationToExternal())
-            {
-                // Don't handle navigation to external page, we are being deactivated (but not tombstoned)
-                return;
-            }
-
-            _hasNavigatedAway = true;
-
-            if (CloseViewModelOnForwardNavigation)
-            {
-                SaveAndCloseViewModel();
-
-                HasHandledSaveAndCancelLogic = true;
-            }
-
-            base.OnNavigatedAwayFromPage(e);
         }
     }
 }
