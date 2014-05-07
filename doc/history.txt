@@ -63,6 +63,7 @@ Added/fixed:
 (+) CTL-389 Added support for MVC 5 (5.1.1) and updated MVC 4 to 4.0.30506
 (+) CTL-406 Added support for Windows Phone 8.1
 (+) CTL-410 Add SingleUnloadOthers to TabControl so only a single view model lives in a tabcontrol
+(+) CTL-436 Add generic ICatelCommand interfaces
 (*) CTL-326 Data annotation validation will no longer be invoked for properties with non-public getters to prevent
     first chance exceptions the first time such a property is being validated
 (*) CTL-334 ViewModelBase now respects SuspendValidation during saving, which means that even if there are validation 

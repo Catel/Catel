@@ -50,7 +50,7 @@ namespace Catel.MVVM
     /// </summary>
     /// <typeparam name="TExecuteParameter">The type of the execute parameter.</typeparam>
     /// <typeparam name="TCanExecuteParameter">The type of the can execute parameter.</typeparam>
-    public class Command<TExecuteParameter, TCanExecuteParameter> : CommandBase, ICatelCommand
+    public class Command<TExecuteParameter, TCanExecuteParameter> : CommandBase, ICatelCommand<TExecuteParameter, TCanExecuteParameter>
     {
         #region Fields
         private Func<TCanExecuteParameter, bool> _canExecuteWithParameter;
@@ -383,7 +383,7 @@ namespace Catel.MVVM
     /// Implements the <see cref="Command{TExecuteParameter, TCanExecuteParameter}"/> class with only the <typeparamref name="TExecuteParameter"/> as generic type.
     /// </summary>
     /// <typeparam name="TExecuteParameter">The type of the execute parameter.</typeparam>
-    public class Command<TExecuteParameter> : Command<TExecuteParameter, TExecuteParameter>
+    public class Command<TExecuteParameter> : Command<TExecuteParameter, TExecuteParameter>, ICatelCommand<TExecuteParameter>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Command{TCanExecuteParameter,TExecuteParameter}"/> class.
