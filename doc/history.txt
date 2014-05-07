@@ -38,6 +38,9 @@ Added/fixed (BREAKING CHANGES):
 (*) CTL-344 Renamed Catel.Environment class to Catel.CatelEnvironment to prevent name clashing with .NET Environment
 (*) CTL-402 DependencyResolver and ServiceLocator now throw TypeNotRegisteredException when a type is being retrieved
     that is not yet registered in the ServiceLocator
+(*) CTL-428 Simplified navigation on all platforms. This means that Catel will no longer keep viewmodels in memory to
+    provide a back stack. This is to make the navigation the same on all platforms. If there is a need to keep state,
+    the developer will be responsible to implement that
 (*) CTL-419 Changed license to MIT instead of Ms-PL
 
 Added/fixed:
