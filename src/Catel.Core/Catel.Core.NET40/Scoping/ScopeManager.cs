@@ -9,9 +9,9 @@ namespace Catel.Scoping
 {
     using System;
     using System.Collections.Generic;
-    using Catel.IoC;
-    using Catel.Logging;
-    using Catel.Reflection;
+    using IoC;
+    using Logging;
+    using Reflection;
 
     /// <summary>
     /// Custom scope manager to define a scope for a type.

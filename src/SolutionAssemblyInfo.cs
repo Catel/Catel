@@ -47,7 +47,7 @@ using System.Runtime.CompilerServices;
 #elif NET45
 [assembly: AssemblyConfiguration("NET45, Debug")]
 #elif NET50
-[assembly: AssemblyConfiguration("NET45, Debug")]
+[assembly: AssemblyConfiguration("NET50, Debug")]
 #elif SL4
 [assembly: AssemblyConfiguration("Silverlight 4, Debug")]
 #elif SL5
@@ -83,7 +83,7 @@ using System.Runtime.CompilerServices;
 #elif NET45
 [assembly: AssemblyConfiguration("NET45, Release")]
 #elif NET50
-[assembly: AssemblyConfiguration("NET45, Release")]
+[assembly: AssemblyConfiguration("NET50, Release")]
 #elif SL4
 [assembly: AssemblyConfiguration("Silverlight 4, Release")]
 #elif SL5
