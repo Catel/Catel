@@ -308,6 +308,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ViewModelBase.throttling.cs">
       <Link>MVVM\ViewModels\ViewModelBase.throttling.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ViewModelBase.tombstoning.cs">
+      <Link>MVVM\ViewModels\ViewModelBase.tombstoning.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Views\EventArgs\ViewLoadedEventArgs.cs">
       <Link>MVVM\Views\EventArgs\ViewLoadedEventArgs.cs</Link>
     </Compile>
@@ -705,6 +708,9 @@
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\AutoCompletionBehavior.cs">
       <Link>Windows\Interactivity\AutoCompletionBehavior.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\Behavior.cs">
+      <Link>Windows\Interactivity\Behavior.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\WindowEventToCommand.cs">
       <Link>Windows\Interactivity\WindowEventToCommand.cs</Link>
     </Compile>
@@ -713,6 +719,9 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Markup\LanguageBinding.cs">
       <Link>Windows\Markup\LanguageBinding.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Markup\MarkupExtension.cs">
+      <Link>Windows\Markup\MarkupExtension.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Markup\ServiceDependencyExtension.cs">
       <Link>Windows\Markup\ServiceDependencyExtension.cs</Link>

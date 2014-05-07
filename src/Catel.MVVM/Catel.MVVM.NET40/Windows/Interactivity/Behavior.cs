@@ -4,13 +4,13 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if NETFX_CORE && !WIN80
 
 namespace Catel.Windows.Interactivity
 {
     using System;
-    using System.Reflection;
-    using Catel.Logging;
-    using Catel.Reflection;
+    using Logging;
+    using Reflection;
     using global::Windows.UI.Xaml;
     using Microsoft.Xaml.Interactivity;
 
@@ -53,7 +53,7 @@ namespace Catel.Windows.Interactivity
         /// <exception cref="System.InvalidOperationException">The associated object is not of the expected type.</exception>
         void IBehavior.Attach(DependencyObject associatedObject)
         {
-            if (associatedObject != null && !associatedObject.GetType().GetTypeInfo().IsSubclassOf(typeof (T)))
+            if (associatedObject != null && typeof(T).IsAssignableFromEx(associatedObject.GetType()))
             {
                 string error = string.Format("Invalid target type '{0}', expected '{1}'", associatedObject.GetType().GetSafeFullName(), typeof (T).GetSafeFullName());
                 Log.Error(error);
@@ -91,3 +91,5 @@ namespace Catel.Windows.Interactivity
         #endregion
     }
 }
+
+#endif

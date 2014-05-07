@@ -4,6 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if !NET && !SL5
 
 namespace Catel.Windows.Markup
 {
@@ -111,3 +112,5 @@ namespace Catel.Windows.Markup
         }
     }
 }
+
+#endif

@@ -72,8 +72,6 @@ namespace Catel.Caching
             _defaultExpirationPolicyInitCode = defaultExpirationPolicyInitCode;
 
             _expirationTimerInterval = TimeSpan.FromSeconds(1);
-
-            UpdateTimer();
         }
         #endregion
 

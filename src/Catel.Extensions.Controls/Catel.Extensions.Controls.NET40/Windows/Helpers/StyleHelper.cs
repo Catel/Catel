@@ -289,7 +289,10 @@ namespace Catel.Windows
                             targetResources.Add(targetType, targetStyle);
 #else
                             var style = new Style(targetType, defaultStyle);
-                            targetResources.Add(targetType, style);
+                            if (!targetResources.Contains(targetType))
+                            {
+                                targetResources.Add(targetType, style);
+                            }
 #endif
                         }
                     }
@@ -579,7 +582,7 @@ namespace Catel.Windows
                     var xamlTypeMapper = new XamlTypeMapper(new[] { "PresentationFramework" });
                     foreach (XmlAttribute namespaceAttribute in doc.DocumentElement.Attributes)
                     {
-                        string xmlNamespace = namespaceAttribute.Name.Replace("xmlns", string.Empty).TrimStart(new [] { ':' });
+                        string xmlNamespace = namespaceAttribute.Name.Replace("xmlns", string.Empty).TrimStart(new[] { ':' });
 
                         string value = namespaceAttribute.Value;
                         string clrNamespace = value;
@@ -592,13 +595,13 @@ namespace Catel.Windows
                             // * clr-namespace:[NAMESPACE];assembly=[ASSEMBLY]
                             if (clrNamespace.Contains(";"))
                             {
-                                clrNamespace = clrNamespace.Split(new [] { ';' })[0];
+                                clrNamespace = clrNamespace.Split(new[] { ';' })[0];
                             }
                             clrNamespace = clrNamespace.Replace("clr-namespace:", string.Empty);
 
                             if (value.Contains(";"))
                             {
-                                assemblyName = value.Split(new [] { ';' })[1].Replace("assembly:", string.Empty);
+                                assemblyName = value.Split(new[] { ';' })[1].Replace("assembly:", string.Empty);
                             }
 
                             xamlTypeMapper.AddMappingProcessingInstruction(xmlNamespace, clrNamespace, assemblyName);

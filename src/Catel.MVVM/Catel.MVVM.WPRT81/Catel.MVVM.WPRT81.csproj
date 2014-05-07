@@ -474,6 +474,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ViewModelBase.throttling.cs">
       <Link>MVVM\ViewModels\ViewModelBase.throttling.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ViewModelBase.tombstoning.cs">
+      <Link>MVVM\ViewModels\ViewModelBase.tombstoning.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ViewModelBase.validation.cs">
       <Link>MVVM\ViewModels\ViewModelBase.validation.cs</Link>
     </Compile>
@@ -1037,6 +1040,39 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Input\InputGesture.cs">
       <Link>Windows\Input\InputGesture.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\Authentication.cs">
+      <Link>Windows\Interactivity\Authentication.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\Behavior.cs">
+      <Link>Windows\Interactivity\Behavior.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\BehaviorBase.cs">
+      <Link>Windows\Interactivity\BehaviorBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\CommandBehaviorBase.cs">
+      <Link>Windows\Interactivity\CommandBehaviorBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\DelayBindingUpdate.cs">
+      <Link>Windows\Interactivity\DelayBindingUpdate.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\Focus.cs">
+      <Link>Windows\Interactivity\Focus.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\KeyPressToCommand.cs">
+      <Link>Windows\Interactivity\KeyPressToCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\SelectTextOnFocus.cs">
+      <Link>Windows\Interactivity\SelectTextOnFocus.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\UpdateBindingBehaviorBase.cs">
+      <Link>Windows\Interactivity\UpdateBindingBehaviorBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\UpdateBindingOnPasswordChanged.cs">
+      <Link>Windows\Interactivity\UpdateBindingOnPasswordChanged.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\UpdateBindingOnTextChanged.cs">
+      <Link>Windows\Interactivity\UpdateBindingOnTextChanged.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Threading\Extensions\DispatcherExtensions.cs">
       <Link>Windows\Threading\Extensions\DispatcherExtensions.cs</Link>

@@ -485,6 +485,9 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ViewModelBase.throttling.cs">
       <Link>MVVM\ViewModels\ViewModelBase.throttling.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ViewModelBase.tombstoning.cs">
+      <Link>MVVM\ViewModels\ViewModelBase.tombstoning.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\ViewModels\ViewModelBase.validation.cs">
       <Link>MVVM\ViewModels\ViewModelBase.validation.cs</Link>
     </Compile>
@@ -1099,6 +1102,21 @@
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Interactivity\UpdateBindingOnTextChanged.cs">
       <Link>Windows\Interactivity\UpdateBindingOnTextChanged.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Markup\CommandManagerBinding.cs">
+      <Link>Windows\Markup\CommandManagerBinding.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Markup\LanguageBinding.cs">
+      <Link>Windows\Markup\LanguageBinding.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Markup\MarkupExtension.cs">
+      <Link>Windows\Markup\MarkupExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Markup\ServiceDependencyExtension.cs">
+      <Link>Windows\Markup\ServiceDependencyExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\Windows\Markup\UpdatableMarkupExtension.cs">
+      <Link>Windows\Markup\UpdatableMarkupExtension.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\Windows\Threading\Extensions\DispatcherExtensions.cs">
       <Link>Windows\Threading\Extensions\DispatcherExtensions.cs</Link>

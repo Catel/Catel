@@ -49,10 +49,14 @@ namespace Catel
                     var resources = application.Resources;
                     foreach (var resource in resources.MergedDictionaries)
                     {
-                        if (resource.Source.ToString().Contains("Catel"))
+                        var source = resource.Source;
+                        if (source != null)
                         {
-                            containsCatelDictionary = true;
-                            break;
+                            if (source.ToString().Contains("Catel"))
+                            {
+                                containsCatelDictionary = true;
+                                break;
+                            }
                         }
                     }
 
