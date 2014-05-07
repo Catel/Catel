@@ -7,13 +7,19 @@
 #if NETFX_CORE
 namespace Catel.MVVM.Navigation
 {
+    using System.Collections.Generic;
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Navigation;
+    
+#if WINDOWS_PHONE
+    using global::Windows.Phone.UI.Input;
+#endif
 
     public partial class NavigationAdapter
     {
-        private object _lastNavigationContext;
+        private static Dictionary<string, object> _lastGlobalNavigationContext;
+        private Dictionary<string, object> _lastNavigationContext;
 
         /// <summary>
         /// Gets the root frame.
@@ -31,17 +37,55 @@ namespace Catel.MVVM.Navigation
 
             RootFrame.Navigating += OnNavigatingEvent;
             RootFrame.Navigated += OnNavigatedEvent;
+            
+#if WINDOWS_PHONE
+            HardwareButtons.BackPressed += OnBackPressed; 
+#endif
         }
 
         partial void Uninitialize()
         {
             RootFrame.Navigating -= OnNavigatingEvent;
             RootFrame.Navigated -= OnNavigatedEvent;
+            
+#if WINDOWS_PHONE
+            HardwareButtons.BackPressed -= OnBackPressed; 
+#endif      
         }
 
+#if WINDOWS_PHONE
+        private void OnBackPressed(object sender, BackPressedEventArgs e) 
+        { 
+            var rootFrame = RootFrame;
+            if (rootFrame.CanGoBack) 
+            { 
+                rootFrame.GoBack();
+ 
+                // Indicate the back button press is handled so the app does not exit 
+                e.Handled = true; 
+            } 
+        } 
+#endif
+        
         partial void DetermineNavigationContext()
         {
-            NavigationContext.Values["context"] = _lastNavigationContext;
+            if (_lastNavigationContext == null)
+            {
+                _lastNavigationContext = new Dictionary<string, object>();
+
+                if (_lastGlobalNavigationContext != null)
+                {
+                    foreach (var value in _lastGlobalNavigationContext)
+                    {
+                        _lastNavigationContext[value.Key] = value.Value;
+                    }
+                }
+            }
+
+            foreach (var value in _lastNavigationContext)
+            {
+                NavigationContext.Values[value.Key] = value.Value;
+            }
         }
 
         /// <summary>
@@ -80,7 +124,7 @@ namespace Catel.MVVM.Navigation
             var eventArgs = new NavigatedEventArgs(uriString, NavigationMode.Unknown);
             HandleNavigatedEvent(eventArgs);
 
-            _lastNavigationContext = e.Parameter;
+            _lastGlobalNavigationContext = e.Parameter as Dictionary<string, object>;
         }
     }
 }

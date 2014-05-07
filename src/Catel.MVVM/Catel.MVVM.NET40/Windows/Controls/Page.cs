@@ -187,20 +187,6 @@ namespace Catel.Windows.Controls
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether navigating away from the page should save the view model.
-        /// <para />
-        /// The default value is <c>true</c>.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if navigating away should save the view model; otherwise, <c>false</c>.
-        /// </value>
-        public bool NavigatingAwaySavesViewModel
-        {
-            get { return _logic.GetValue<PhonePageLogic, bool>(x => x.NavigatingAwaySavesViewModel, true); }
-            set { _logic.SetValue<PhonePageLogic>(x => x.NavigatingAwaySavesViewModel = value); }
-        }
-
-        /// <summary>
         /// Gets the parent of the view.
         /// </summary>
         /// <value>The parent.</value>

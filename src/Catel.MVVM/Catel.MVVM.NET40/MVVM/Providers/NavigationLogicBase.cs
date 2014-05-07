@@ -7,8 +7,8 @@
 namespace Catel.MVVM.Providers
 {
     using System;
-    using Catel.MVVM.Navigation;
-    using Catel.MVVM.Views;
+    using Navigation;
+    using Views;
     using Logging;
     using MVVM;
 
@@ -40,8 +40,6 @@ namespace Catel.MVVM.Providers
         protected NavigationLogicBase(T targetPage, Type viewModelType)
             : base(targetPage, viewModelType)
         {
-            NavigatingAwaySavesViewModel = true;
-
             CreateNavigationAdapter();
         }
         #endregion
@@ -61,16 +59,6 @@ namespace Catel.MVVM.Providers
         {
             get { return (T)TargetView; }
         }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether navigating away from the page should save the view model.
-        /// <para />
-        /// The default value is <c>true</c>.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if navigating away should save the view model; otherwise, <c>false</c>.
-        /// </value>
-        public bool NavigatingAwaySavesViewModel { get; set; }
         #endregion
 
         #region Methods
@@ -162,25 +150,14 @@ namespace Catel.MVVM.Providers
         {
             bool? result = true;
 
-            if (e.Uri != null && e.Uri.IsNavigationToExternal())
-            {
-                Log.Debug("Navigating away from the application");
-
-                SaveAndCloseViewModel();
-
-                return;
-            }
-
             if (!HasHandledSaveAndCancelLogic)
             {
-                if (NavigatingAwaySavesViewModel)
-                {
-                    result = SaveViewModel();
-                }
-                else
-                {
-                    result = CancelViewModel();
-                }
+                result = SaveAndCloseViewModel();
+            }
+
+            if (e.Uri != null && e.Uri.IsNavigationToExternal())
+            {
+                return;
             }
 
             if (!result.HasValue || !result.Value)
@@ -189,11 +166,6 @@ namespace Catel.MVVM.Providers
             }
 
             HasHandledSaveAndCancelLogic = true;
-
-            if (e.NavigationMode == NavigationMode.Back && !e.Cancel)
-            {
-                CloseViewModel(result);
-            }
         }
 
         /// <summary>

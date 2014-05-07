@@ -23,6 +23,7 @@ namespace Catel.Services.Test
         /// <remarks></remarks>
         public NavigationService()
         {
+
         }
 
         #region Properties
@@ -196,7 +197,7 @@ namespace Catel.Services.Test
         /// </summary>
         public int GetBackStackCount()
         {
-            throw new NotImplementedException();
+            return 0;
         }
 
         /// <summary>
@@ -204,7 +205,6 @@ namespace Catel.Services.Test
         /// </summary>
         public void RemoveBackEntry()
         {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -212,7 +212,6 @@ namespace Catel.Services.Test
         /// </summary>
         public void RemoveAllBackEntries()
         {
-            throw new NotImplementedException();
         }
 
         /// <summary>

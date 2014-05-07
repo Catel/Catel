@@ -144,7 +144,6 @@ namespace Catel.Services
 
             string viewModelTypeName = viewModelType.FullName;
 
-            // First try the registered uri (which should always override page registrations)
             lock (_registeredUris)
             {
                 if (!_registeredUris.ContainsKey(viewModelTypeName))

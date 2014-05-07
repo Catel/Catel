@@ -7,6 +7,7 @@
 namespace Catel.Services
 {
     using System;
+    using Logging;
 
 #if ANDROID
     using global::Android.App;
@@ -26,6 +27,27 @@ namespace Catel.Services
     /// </summary>
     public class DispatcherService : IDispatcherService
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+#if !XAMARIN
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DispatcherService"/> class.
+        /// </summary>
+        public DispatcherService()
+        {
+            // Get current dispatcher to make sure we have one
+            var currentDispatcher = CurrentDispatcher;
+            if (currentDispatcher != null)
+            {
+                Log.Debug("Successfully Initialized current dispatcher");
+            }
+            else
+            {
+                Log.Warning("Failed to retrieve the current dispatcher at this point, will try again later");
+            }
+        }
+#endif
+
 #if ANDROID
         private readonly Handler _handler = new Handler(Looper.MainLooper);
 #elif !XAMARIN

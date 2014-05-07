@@ -9,13 +9,12 @@ namespace Catel.Phone.Controls
     using System;
     using System.ComponentModel;
     using System.Windows;
-    using Catel.MVVM.Providers;
-    using Catel.MVVM.Views;
-    using Catel.Windows;
+    using MVVM.Providers;
+    using MVVM.Views;
+    using Windows;
     using IoC;
     using Logging;
     using MVVM;
-    using Windows.Data;
 
     /// <summary>
     /// <see cref="PhoneApplicationPage"/> class that supports MVVM with Catel.
@@ -32,16 +31,15 @@ namespace Catel.Phone.Controls
     /// </list>
     /// </remarks>
     /// <exception cref="InvalidOperationException">The view model of the view could not be resolved. Use either the <see cref="GetViewModelType()"/> method or <see cref="IViewModelLocator"/>.</exception>
-    public class PhoneApplicationPage : Microsoft.Phone.Controls.PhoneApplicationPage, IPhonePage
+    public class PhoneApplicationPage : Microsoft.Phone.Controls.PhoneApplicationPage, IPage
     {
         #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private static readonly IViewModelLocator _viewModelLocator;
 
-        private readonly PhonePageLogic _logic;
+        private readonly PageLogic _logic;
 
-        private event EventHandler<EventArgs> _backKeyPress;
         private event EventHandler<EventArgs> _viewLoaded;
         private event EventHandler<EventArgs> _viewUnloaded;
         private event EventHandler<EventArgs> _viewDataContextChanged;
@@ -86,7 +84,7 @@ namespace Catel.Phone.Controls
                 }
             }
 
-            _logic = new PhonePageLogic(this, viewModelType);
+            _logic = new PageLogic(this, viewModelType);
             _logic.TargetViewPropertyChanged += (sender, e) =>
             {
                 OnPropertyChanged(e);
@@ -118,11 +116,6 @@ namespace Catel.Phone.Controls
             _logic.ViewUnloading += (sender, e) => ViewUnloading.SafeInvoke(this);
             _logic.ViewUnloaded += (sender, e) => ViewUnloaded.SafeInvoke(this);
 
-            _logic.Tombstoning += (sender, e) => OnTombstoning();
-            _logic.Tombstoned += (sender, e) => OnTombstoned();
-            _logic.RecoveringFromTombstoning += (sender, e) => OnRecoveringFromTombstoning();
-            _logic.RecoveredFromTombstoning += (sender, e) => OnRecoveredFromTombstoning();
-
             Loaded += (sender, e) =>
             {
                 OnLoaded(e);
@@ -137,7 +130,6 @@ namespace Catel.Phone.Controls
                 _viewUnloaded.SafeInvoke(this);
             };
 
-            BackKeyPress += (sender, e) => _backKeyPress.SafeInvoke(this);
             this.AddDataContextChangedHandler((sender, e) => _viewDataContextChanged.SafeInvoke(this));
         }
         #endregion
@@ -148,7 +140,7 @@ namespace Catel.Phone.Controls
         /// </summary>
         public Type ViewModelType
         {
-            get { return _logic.GetValue<PhonePageLogic, Type>(x => x.ViewModelType); }
+            get { return _logic.GetValue<PageLogic, Type>(x => x.ViewModelType); }
         }
 
         /// <summary>
@@ -160,8 +152,8 @@ namespace Catel.Phone.Controls
         /// <value><c>true</c> if the view model container should prevent view model creation; otherwise, <c>false</c>.</value>
         public bool PreventViewModelCreation
         {
-            get { return _logic.GetValue<PhonePageLogic, bool>(x => x.PreventViewModelCreation); }
-            set { _logic.SetValue<PhonePageLogic>(x => x.PreventViewModelCreation = value); }
+            get { return _logic.GetValue<PageLogic, bool>(x => x.PreventViewModelCreation); }
+            set { _logic.SetValue<PageLogic>(x => x.PreventViewModelCreation = value); }
         }
 
         /// <summary>
@@ -170,53 +162,7 @@ namespace Catel.Phone.Controls
         /// <value>The view model.</value>
         public IViewModel ViewModel
         {
-            get { return _logic.GetValue<PhonePageLogic, IViewModel>(x => x.ViewModel); }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether navigating away from the page should save the view model.
-        /// <para />
-        /// The default value is <c>true</c>.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if navigating away should save the view model; otherwise, <c>false</c>.
-        /// </value>
-        public bool NavigatingAwaySavesViewModel
-        {
-            get { return _logic.GetValue<PhonePageLogic, bool>(x => x.NavigatingAwaySavesViewModel, true); }
-            set { _logic.SetValue<PhonePageLogic>(x => x.NavigatingAwaySavesViewModel = value); }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the back key cancels the view model. This
-        /// means that <see cref="IViewModel.CancelViewModel"/> will be called when the back key is pressed.
-        /// <para/>
-        /// If this property is <c>false</c>, the <see cref="IViewModel.SaveViewModel"/> will be called instead.
-        /// <para/>
-        /// Default value is <c>true</c>.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if the back key cancels the view model; otherwise, <c>false</c>.
-        /// </value>
-        public bool BackKeyCancelsViewModel
-        {
-            get { return _logic.GetValue<PhonePageLogic, bool>(x => x.BackKeyCancelsViewModel, true); }
-            set { _logic.SetValue<PhonePageLogic>(x => x.BackKeyCancelsViewModel = value); }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the view model should be closed when navigating forward.
-        /// <para />
-        /// By default, Catel will keep the view models and pages in memory to provide a back-navigation stack. Some
-        /// pages are not required to be listed in the navigation stack and can have this property set to <c>true</c>.
-        /// <para />
-        /// The default value is <c>false</c>.
-        /// </summary>
-        /// <value><c>true</c> if the view modle must be closed on forward navigation; otherwise, <c>false</c>.</value>
-        public bool CloseViewModelOnForwardNavigation
-        {
-            get { return _logic.GetValue<PhonePageLogic, bool>(x => x.CloseViewModelOnForwardNavigation, true); }
-            set { _logic.SetValue<PhonePageLogic>(x => x.CloseViewModelOnForwardNavigation = value); }
+            get { return _logic.GetValue<PageLogic, IViewModel>(x => x.ViewModel); }
         }
 
         /// <summary>
@@ -268,15 +214,6 @@ namespace Catel.Phone.Controls
         /// Occurs when the view model container is unloaded.
         /// </summary>
         public event EventHandler<EventArgs> ViewUnloaded;
-
-        /// <summary>
-        /// Occurs when the back key is pressed.
-        /// </summary>
-        event EventHandler<EventArgs> IPhonePage.BackKeyPress
-        {
-            add { _backKeyPress += value; }
-            remove { _backKeyPress -= value; }
-        }
 
         /// <summary>
         /// Occurs when the view is loaded.
@@ -420,46 +357,6 @@ namespace Catel.Phone.Controls
         protected bool ApplyChanges()
         {
             return _logic.SaveViewModel();
-        }
-
-        /// <summary>
-        /// Called when the view is about to tombstone itself.
-        /// </summary>
-        /// <remarks>
-        /// Note that it is not required to call the base.
-        /// </remarks>
-        protected virtual void OnTombstoning()
-        {
-        }
-
-        /// <summary>
-        /// Called when the view has just tombstoned itself.
-        /// </summary>
-        /// <remarks>
-        /// Note that it is not required to call the base.
-        /// </remarks>
-        protected virtual void OnTombstoned()
-        {
-        }
-
-        /// <summary>
-        /// Called when the view is about to recover itself from a tombstoned state.
-        /// </summary>
-        /// <remarks>
-        /// Note that it is not required to call the base.
-        /// </remarks>
-        protected virtual void OnRecoveringFromTombstoning()
-        {
-        }
-
-        /// <summary>
-        /// Called when the view has just recovered itself from a tombstoned state.
-        /// </summary>
-        /// <remarks>
-        /// Note that it is not required to call the base.
-        /// </remarks>
-        protected virtual void OnRecoveredFromTombstoning()
-        {
         }
         #endregion
     }

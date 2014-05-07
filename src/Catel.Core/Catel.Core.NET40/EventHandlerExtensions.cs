@@ -9,12 +9,15 @@ namespace Catel
     using System;
     using System.Collections.Specialized;
     using System.ComponentModel;
+    using Logging;
 
     /// <summary>
     /// Extensions for event handlers.
     /// </summary>
     public static class EventHandlerExtensions
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Invokes the specified <paramref name="handler"/> in a thread-safe manner with <see cref="EventArgs.Empty"/>
         /// as parameter for the event args. Where normally one has to write the following code:
@@ -99,7 +102,7 @@ namespace Catel
         {
             if (handler != null)
             {
-                handler(sender, e);
+                SplitInvoke(handler, sender, e);
                 return true;
             }
 
@@ -136,7 +139,7 @@ namespace Catel
         {
             if (handler != null)
             {
-                handler(sender, e);
+                SplitInvoke(handler, sender, e);
                 return true;
             }
 
@@ -171,7 +174,7 @@ namespace Catel
         {
             if (handler != null)
             {
-                handler(sender, e);
+                SplitInvoke(handler, sender, e);
                 return true;
             }
 
@@ -206,11 +209,36 @@ namespace Catel
         {
             if (handler != null)
             {
-                handler(sender, e);
+                SplitInvoke(handler, sender, e);
                 return true;
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Invokes the registered handlers one by one. This way it is easy to determine which subscription on a specific event handler
+        /// is causing issues.
+        /// </summary>
+        /// <param name="handler">The handler.</param>
+        /// <param name="args">The arguments.</param>
+        private static void SplitInvoke(Delegate handler, params object[] args)
+        {
+            var invocationList = handler.GetInvocationList();
+
+            for (int i = 0; i < invocationList.Length; i++)
+            {
+                try
+                {
+                    var invocationItem = invocationList[i];
+                    invocationItem.DynamicInvoke(args);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Failed to invoke event handler at index '{0}'", i);
+                    throw;
+                }
+            }
         }
     }
 }

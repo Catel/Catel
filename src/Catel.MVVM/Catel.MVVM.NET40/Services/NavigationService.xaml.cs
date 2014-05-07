@@ -224,8 +224,14 @@ namespace Catel.Services
         /// </summary>
         public override void RemoveBackEntry()
         {
-#if NETFX_CORE
-            throw new NotSupportedInPlatformException();
+#if NETFX_CORE && WINDOWS_PHONE
+            var lastItem = RootFrame.BackStack.LastOrDefault();
+            if (lastItem != null)
+            {
+                RootFrame.BackStack.Remove(lastItem);
+            }
+#elif NETFX_CORE
+            throw new MustBeImplementedException();
 #elif WINDOWS_PHONE
             RootFrame.RemoveBackEntry();
 #elif SILVERLIGHT
@@ -240,8 +246,10 @@ namespace Catel.Services
         /// </summary>
         public override void RemoveAllBackEntries()
         {
-#if NETFX_CORE
-            throw new NotSupportedInPlatformException();
+#if NETFX_CORE && WINDOWS_PHONE
+            RootFrame.BackStack.Clear();
+#elif NETFX_CORE 
+            throw new MustBeImplementedException();
 #elif WINDOWS_PHONE
             while (RootFrame.RemoveBackEntry() != null)
             {
