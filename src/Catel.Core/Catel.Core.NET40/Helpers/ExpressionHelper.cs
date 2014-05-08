@@ -9,6 +9,7 @@ namespace Catel
     using System;
     using System.Collections.Generic;
     using System.Linq.Expressions;
+    using System.Reflection;
     using Logging;
 
     /// <summary>
@@ -86,13 +87,26 @@ namespace Catel
             }
 
             var constantExpression = body.Expression as ConstantExpression;
+            if (constantExpression != null)
+            {
+                return constantExpression.Value;
+            }
 
-            //if ((constantExpression == null) && (body.Expression is MemberExpression))
-            //{
-            //    constantExpression = ((MemberExpression) body.Expression).Expression as ConstantExpression;
-            //}
+            var memberExpression = body.Expression as MemberExpression;
+            if (memberExpression != null)
+            {
+                var fieldInfo = memberExpression.Member as FieldInfo;
+                if (fieldInfo != null)
+                {
+                    var ownerConstantExpression = memberExpression.Expression as ConstantExpression;
+                    if (ownerConstantExpression != null)
+                    {
+                        return fieldInfo.GetValue(ownerConstantExpression.Value);
+                    }
+                }
+            }
 
-            return (constantExpression != null) ? constantExpression.Value : null;
+            return null;
         }
     }
 }

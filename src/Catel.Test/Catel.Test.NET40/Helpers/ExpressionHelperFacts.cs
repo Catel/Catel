@@ -40,6 +40,11 @@ namespace Catel.Test
         [TestClass]
         public class TheGetOwnerMethod
         {
+            public class TestModel
+            {
+                public string Property { get; set; }
+            }
+
             /// <summary>
             ///   Test property to test owner.
             /// </summary>
@@ -54,7 +59,18 @@ namespace Catel.Test
             [TestMethod]
             public void ReturnsRightOwnerUsingExpression()
             {
-                Assert.AreEqual(this, ExpressionHelper.GetOwner(() => MyProperty));
+                var owner = ExpressionHelper.GetOwner(() => MyProperty);
+
+                Assert.IsTrue(ReferenceEquals(this, owner));
+            }
+
+            [TestMethod]
+            public void ReturnsRightOwnerWhenUsingAdditionalParent()
+            {
+                var testModel = new TestModel();
+                var owner = ExpressionHelper.GetOwner(() => testModel.Property);
+
+                Assert.IsTrue(ReferenceEquals(testModel, owner));
             }
         }
     }
