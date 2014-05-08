@@ -42,7 +42,9 @@ namespace Catel.Test
         {
             public class TestModel
             {
-                public string Property { get; set; }
+                public string StringProperty { get; set; }
+
+                public int IntProperty { get; set; }
             }
 
             /// <summary>
@@ -65,10 +67,19 @@ namespace Catel.Test
             }
 
             [TestMethod]
-            public void ReturnsRightOwnerWhenUsingAdditionalParent()
+            public void ReturnsRightOwnerWhenUsingAdditionalParentWithStringProperty()
             {
                 var testModel = new TestModel();
-                var owner = ExpressionHelper.GetOwner(() => testModel.Property);
+                var owner = ExpressionHelper.GetOwner(() => testModel.StringProperty);
+
+                Assert.IsTrue(ReferenceEquals(testModel, owner));
+            }
+
+            [TestMethod]
+            public void ReturnsRightOwnerWhenUsingAdditionalParentWithIntProperty()
+            {
+                var testModel = new TestModel();
+                var owner = ExpressionHelper.GetOwner(() => testModel.IntProperty);
 
                 Assert.IsTrue(ReferenceEquals(testModel, owner));
             }

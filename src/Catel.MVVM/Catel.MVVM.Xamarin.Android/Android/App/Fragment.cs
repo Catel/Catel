@@ -9,15 +9,13 @@ namespace Catel.Android.App
 {
     using System;
     using System.ComponentModel;
-    using Catel.IoC;
-    using Catel.Logging;
-    using Catel.MVVM;
-    using Catel.MVVM.Providers;
-    using Catel.MVVM.Views;
-    using global::Android.Content;
+    using IoC;
+    using Logging;
+    using MVVM;
+    using MVVM.Providers;
+    using MVVM.Views;
     using global::Android.OS;
     using global::Android.Runtime;
-    using global::Android.Util;
 
     /// <summary>
     /// Fragment implementation that automatically takes care of view models.
@@ -31,8 +29,9 @@ namespace Catel.Android.App
 
         private readonly UserControlLogic _logic;
         private object _dataContext;
-        private bool _isInitialized;
         private object _tag;
+
+        private BindingContext _bindingContext;
         #endregion
 
         #region Constructors
@@ -301,6 +300,11 @@ namespace Catel.Android.App
 
             ViewModelChanged.SafeInvoke(this);
             PropertyChanged.SafeInvoke(this, new PropertyChangedEventArgs("ViewModel"));
+
+            if (_bindingContext != null)
+            {
+                _bindingContext.DetermineIfBindingsAreRequired(ViewModel);
+            }
         }
 
         /// <summary>
@@ -315,23 +319,15 @@ namespace Catel.Android.App
         }
 
         /// <summary>
-        /// Synchronizes the view model. Will be called whenever something has changed.
+        /// Called when the bindings must be added. This can happen
         /// <para />
         /// Normally the binding system would take care of this.
         /// </summary>
-        protected virtual void SyncViewModel()
+        /// <param name="bindingContext">The binding context.</param>
+        /// <param name="viewModel">The view model.</param>
+        /// <returns><c>true</c> if the bindings were successfully added.</returns>
+        protected virtual void AddBindings(BindingContext bindingContext, IViewModel viewModel)
         {
-
-        }
-
-        /// <summary>
-        /// Called to do initial creation of a fragment.
-        /// </summary>
-        public override void OnCreate(Bundle savedInstanceState)
-        {
-            base.OnCreate(savedInstanceState);
-
-            _isInitialized = true;
         }
 
         /// <summary>
@@ -342,6 +338,10 @@ namespace Catel.Android.App
             base.OnResume();
 
             Loaded.SafeInvoke(this);
+
+            _bindingContext = new BindingContext();
+            _bindingContext.BindingUpdateRequired += OnBindingUpdateRequired;
+            _bindingContext.DetermineIfBindingsAreRequired(ViewModel);
         }
 
         /// <summary>
@@ -352,6 +352,15 @@ namespace Catel.Android.App
             base.OnPause();
 
             Unloaded.SafeInvoke(this);
+
+            _bindingContext.BindingUpdateRequired -= OnBindingUpdateRequired;
+            _bindingContext.Clear();
+            _bindingContext = null;
+        }
+
+        private void OnBindingUpdateRequired(object sender, EventArgs e)
+        {
+            AddBindings(_bindingContext, ViewModel);
         }
 
         /// <summary>
@@ -406,12 +415,6 @@ namespace Catel.Android.App
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         protected virtual void OnViewModelPropertyChanged(PropertyChangedEventArgs e)
         {
-            if (!_isInitialized)
-            {
-                return;
-            }
-
-            SyncViewModel();
         }
 
         /// <summary>
@@ -423,15 +426,6 @@ namespace Catel.Android.App
         /// </remarks>
         protected virtual void OnViewModelChanged()
         {
-            if (!_isInitialized)
-            {
-                return;
-            }
-
-            if (ViewModel != null)
-            {
-                SyncViewModel();
-            }
         }
 
         /// <summary>

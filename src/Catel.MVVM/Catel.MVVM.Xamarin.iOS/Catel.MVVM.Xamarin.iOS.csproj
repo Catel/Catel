@@ -76,6 +76,27 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Auditing\Interfaces\IAuditor.cs">
       <Link>MVVM\Auditing\Interfaces\IAuditor.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Bindings\Binding.cs">
+      <Link>MVVM\Bindings\Binding.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Bindings\BindingBase.cs">
+      <Link>MVVM\Bindings\BindingBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Bindings\BindingContext.cs">
+      <Link>MVVM\Bindings\BindingContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Bindings\BindingMode.cs">
+      <Link>MVVM\Bindings\BindingMode.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Bindings\BindingParty.cs">
+      <Link>MVVM\Bindings\BindingParty.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Bindings\CommandBinding.cs">
+      <Link>MVVM\Bindings\CommandBinding.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Bindings\Extensions\BindingExtensions.cs">
+      <Link>MVVM\Bindings\Extensions\BindingExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Command.cs">
       <Link>MVVM\Commands\Command.cs</Link>
     </Compile>

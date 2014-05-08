@@ -41,6 +41,13 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <Compile Include="MVVM\Bindings\Binding.cs" />
+    <Compile Include="MVVM\Bindings\BindingBase.cs" />
+    <Compile Include="MVVM\Bindings\BindingContext.cs" />
+    <Compile Include="MVVM\Bindings\BindingMode.cs" />
+    <Compile Include="MVVM\Bindings\BindingParty.cs" />
+    <Compile Include="MVVM\Bindings\CommandBinding.cs" />
+    <Compile Include="MVVM\Bindings\Extensions\BindingExtensions.cs" />
     <Compile Include="MVVM\ViewModels\ViewModelBase.tombstoning.cs" />
     <Compile Include="Services\LocationService.winrt.cs">
       <DependentUpon>LocationService.cs</DependentUpon>

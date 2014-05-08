@@ -51,7 +51,9 @@ namespace Catel
                 }
             }
 
-            var body = propertyExpression.Body as MemberExpression;
+            var expressionToHandle = GetExpressionToHandle(propertyExpression);
+
+            var body = expressionToHandle as MemberExpression;
             if (body == null)
             {
                 Log.Warning("Failed to retrieve the body of the expression (value is null)");
@@ -79,7 +81,9 @@ namespace Catel
         {
             Argument.IsNotNull("propertyExpression", propertyExpression);
 
-            var body = propertyExpression.Body as MemberExpression;
+            var expressionToHandle = GetExpressionToHandle(propertyExpression);
+
+            var body = expressionToHandle as MemberExpression;
             if (body == null)
             {
                 Log.Warning("Failed to retrieve the body of the expression (value is null)");
@@ -107,6 +111,20 @@ namespace Catel
             }
 
             return null;
+        }
+
+        private static Expression GetExpressionToHandle<TProperty>(Expression<Func<TProperty>> propertyExpression)
+        {
+            var expressionToHandle = propertyExpression.Body; 
+
+            // Might occur in Android, maybe on other platforms as well
+            var unaryExpression = expressionToHandle as UnaryExpression;
+            if (unaryExpression != null)
+            {
+                expressionToHandle = unaryExpression.Operand;
+            }
+
+            return expressionToHandle;
         }
     }
 }

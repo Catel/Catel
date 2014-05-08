@@ -28,7 +28,8 @@ namespace Catel.Android.App
 
         private readonly PageLogic _logic;
         private object _dataContext;
-        private bool _isInitialized;
+
+        private BindingContext _bindingContext;
         #endregion
 
         #region Constructors
@@ -222,11 +223,6 @@ namespace Catel.Android.App
         /// Occurs when the data context has changed.
         /// </summary>
         public event EventHandler<EventArgs> DataContextChanged;
-
-        /// <summary>
-        /// Occurs when the back key is pressed.
-        /// </summary>
-        public event EventHandler<EventArgs> BackKeyPress;
         #endregion
 
         #region Methods
@@ -236,6 +232,11 @@ namespace Catel.Android.App
 
             ViewModelChanged.SafeInvoke(this);
             PropertyChanged.SafeInvoke(this, new PropertyChangedEventArgs("ViewModel"));
+
+            if (_bindingContext != null)
+            {
+                _bindingContext.DetermineIfBindingsAreRequired(ViewModel);
+            }
         }
 
         /// <summary>
@@ -248,25 +249,16 @@ namespace Catel.Android.App
         {
             return ViewModel as TViewModel;
         }
-
         /// <summary>
-        /// Synchronizes the view model. Will be called whenever something has changed.
+        /// Called when the bindings must be added. This can happen
         /// <para />
         /// Normally the binding system would take care of this.
         /// </summary>
-        protected virtual void SyncViewModel()
+        /// <param name="bindingContext">The binding context.</param>
+        /// <param name="viewModel">The view model.</param>
+        /// <returns><c>true</c> if the bindings were successfully added.</returns>
+        protected virtual void AddBindings(BindingContext bindingContext, IViewModel viewModel)
         {
-
-        }
-
-        /// <summary>
-        /// Called when the activity is starting.
-        /// </summary>
-        protected override void OnCreate(Bundle savedInstanceState)
-        {
-            base.OnCreate(savedInstanceState);
-
-            _isInitialized = true;
         }
 
         /// <summary>
@@ -279,6 +271,10 @@ namespace Catel.Android.App
             RaiseViewModelChanged();
 
             Loaded.SafeInvoke(this);
+
+            _bindingContext = new BindingContext();
+            _bindingContext.BindingUpdateRequired += OnBindingUpdateRequired;
+            _bindingContext.DetermineIfBindingsAreRequired(ViewModel);
         }
 
         /// <summary>
@@ -291,16 +287,15 @@ namespace Catel.Android.App
 
             // Note: call *after* base so NavigationAdapter always gets called
             Unloaded.SafeInvoke(this);
+
+            _bindingContext.BindingUpdateRequired -= OnBindingUpdateRequired;
+            _bindingContext.Clear();
+            _bindingContext = null;
         }
 
-        /// <summary>
-        /// Called when the activity has detected the user's press of the back key.
-        /// </summary>
-        public override void OnBackPressed()
+        private void OnBindingUpdateRequired(object sender, EventArgs e)
         {
-            BackKeyPress.SafeInvoke(this);
-
-            base.OnBackPressed();
+            AddBindings(_bindingContext, ViewModel);
         }
 
         /// <summary>
@@ -355,12 +350,6 @@ namespace Catel.Android.App
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         protected virtual void OnViewModelPropertyChanged(PropertyChangedEventArgs e)
         {
-            if (!_isInitialized)
-            {
-                return;
-            }
-
-            SyncViewModel();
         }
 
         /// <summary>
@@ -372,15 +361,6 @@ namespace Catel.Android.App
         /// </remarks>
         protected virtual void OnViewModelChanged()
         {
-            if (!_isInitialized)
-            {
-                return;
-            }
-
-            if (ViewModel != null)
-            {
-                SyncViewModel();
-            }
         }
 
         /// <summary>

@@ -1160,7 +1160,7 @@ namespace Catel.MVVM
                 }
             }
 
-#if (NET || SL4 || SL5) && !NET35
+#if (NET || SL5) && !NET35
             if (ValidateModelsOnInitialization)
             {
                 var validationResults = new List<System.ComponentModel.DataAnnotations.ValidationResult>();

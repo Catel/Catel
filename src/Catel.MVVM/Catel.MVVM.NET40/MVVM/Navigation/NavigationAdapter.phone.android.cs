@@ -8,7 +8,7 @@
 namespace Catel.MVVM.Navigation
 {
     using System;
-    using Catel.Logging;
+    using Logging;
     using global::Android.App;
     using global::Android.OS;
     using global::Android.Runtime;
@@ -47,12 +47,6 @@ namespace Catel.MVVM.Navigation
         public ActivityLifecycleCallbacksListener(Activity activity)
         {
             _activity = activity;
-
-            var catelActivity = activity as Android.App.Activity;
-            if (catelActivity != null)
-            {
-                catelActivity.BackKeyPress += OnBackKeyPress;
-            }
         }
 
         /// <summary>
@@ -64,11 +58,6 @@ namespace Catel.MVVM.Navigation
             : base(handle, transfer)
         {
         }
-
-        /// <summary>
-        /// Occurs when the back key is pressed.
-        /// </summary>
-        public event EventHandler<ActivityEventArgs> BackKeyPressed;
 
         /// <summary>
         /// Occurs when the activity is created.
@@ -200,12 +189,6 @@ namespace Catel.MVVM.Navigation
             var eventArgs = new ActivityEventArgs(activity);
             ActivityStopped.SafeInvoke(this, eventArgs);
         }
-
-        private void OnBackKeyPress(object sender, EventArgs e)
-        {
-            var eventArgs = new ActivityEventArgs((Activity)sender);
-            BackKeyPressed.SafeInvoke(this, eventArgs);
-        }
     }
 
     public partial class NavigationAdapter
@@ -226,7 +209,6 @@ namespace Catel.MVVM.Navigation
             }
 
             _activityLifecycleCallbacksListener = new ActivityLifecycleCallbacksListener(activity);
-            _activityLifecycleCallbacksListener.BackKeyPressed += OnActivityBackKeyPressed;
             _activityLifecycleCallbacksListener.ActivityResumed += OnActivityResumed;
             _activityLifecycleCallbacksListener.ActivityPaused += OnActivityPaused;
             _activityLifecycleCallbacksListener.ActivityStopped += OnActivityStopped;
@@ -242,7 +224,6 @@ namespace Catel.MVVM.Navigation
                 var application = activity.Application;
                 application.UnregisterActivityLifecycleCallbacks(_activityLifecycleCallbacksListener);
 
-                _activityLifecycleCallbacksListener.BackKeyPressed -= OnActivityBackKeyPressed;
                 _activityLifecycleCallbacksListener.ActivityResumed -= OnActivityResumed;
                 _activityLifecycleCallbacksListener.ActivityPaused -= OnActivityPaused;
                 _activityLifecycleCallbacksListener.ActivityStopped -= OnActivityStopped;
@@ -279,14 +260,6 @@ namespace Catel.MVVM.Navigation
 
             var eventArgs = new NavigatedEventArgs(e.Activity.LocalClassName, NavigationMode.New);
             RaiseNavigatedTo(eventArgs);
-        }
-
-        private void OnActivityBackKeyPressed(object sender, ActivityEventArgs e)
-        {
-            _lastActivity = e.Activity;
-
-            var eventArgs = new NavigatedEventArgs(e.Activity.LocalClassName, NavigationMode.Back);
-            RaiseNavigatedAway(eventArgs);
         }
 
         private void OnActivityPaused(object sender, ActivityEventArgs e)

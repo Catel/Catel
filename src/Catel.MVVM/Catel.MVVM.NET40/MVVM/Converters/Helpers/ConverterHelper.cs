@@ -25,7 +25,7 @@ namespace Catel.MVVM.Converters
         /// </summary>
         public static readonly object UnsetValue = 
 #if XAMARIN
-            null;
+            new UnsetBindingValue();
 #else
             DependencyProperty.UnsetValue;
 #endif
@@ -47,4 +47,13 @@ namespace Catel.MVVM.Converters
             return invert;
         }
     }
+
+#if XAMARIN
+    /// <summary>
+    /// Unset binding value class.
+    /// </summary>
+    public class UnsetBindingValue
+    {
+    }
+#endif
 }
