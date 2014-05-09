@@ -90,18 +90,18 @@ namespace Catel.MVVM
         /// Gets the binding source.
         /// </summary>
         /// <value>The source.</value>
-        public object Source
+        public BindingParty Source
         {
-            get { return (_source != null) ? _source.Instance : null; }
+            get { return _source; }
         }
 
         /// <summary>
         /// Gets the binding target.
         /// </summary>
         /// <value>The target.</value>
-        public object Target
+        public BindingParty Target
         {
-            get { return (_target != null) ? _target.Instance : null; }
+            get { return _target; }
         }
 
         /// <summary>
@@ -151,9 +151,11 @@ namespace Catel.MVVM
         protected override void Uninitialize()
         {
             _source.ValueChanged -= OnSourceValueChanged;
+            _source.Dispose();
             _source = null;
 
             _target.ValueChanged -= OnTargetValueChanged;
+            _target.Dispose();
             _target = null;
 
             Log.Debug("Uninitialized binding '{0}'", this);

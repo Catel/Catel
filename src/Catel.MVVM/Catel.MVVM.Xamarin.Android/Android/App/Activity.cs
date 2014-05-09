@@ -14,7 +14,6 @@ namespace Catel.Android.App
     using MVVM;
     using MVVM.Providers;
     using MVVM.Views;
-    using global::Android.OS;
 
     /// <summary>
     /// View implementation that automatically takes care of view models.
@@ -272,9 +271,7 @@ namespace Catel.Android.App
 
             Loaded.SafeInvoke(this);
 
-            _bindingContext = new BindingContext();
-            _bindingContext.BindingUpdateRequired += OnBindingUpdateRequired;
-            _bindingContext.DetermineIfBindingsAreRequired(ViewModel);
+            InitializeBindingContext();
         }
 
         /// <summary>
@@ -287,6 +284,28 @@ namespace Catel.Android.App
 
             // Note: call *after* base so NavigationAdapter always gets called
             Unloaded.SafeInvoke(this);
+
+            UninitializeBindingContext();
+        }
+
+        private void InitializeBindingContext()
+        {
+            if (_bindingContext != null)
+            {
+                UninitializeBindingContext();
+            }
+
+            _bindingContext = new BindingContext();
+            _bindingContext.BindingUpdateRequired += OnBindingUpdateRequired;
+            _bindingContext.DetermineIfBindingsAreRequired(ViewModel);
+        }
+
+        private void UninitializeBindingContext()
+        {
+            if (_bindingContext == null)
+            {
+                return;
+            }
 
             _bindingContext.BindingUpdateRequired -= OnBindingUpdateRequired;
             _bindingContext.Clear();

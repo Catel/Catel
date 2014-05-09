@@ -195,6 +195,7 @@ namespace Catel.MVVM.Navigation
     {
         private ActivityLifecycleCallbacksListener _activityLifecycleCallbacksListener;
         private Activity _lastActivity;
+        private bool _isFirstTimeLoaded = true;
 
         partial void Initialize()
         {
@@ -209,11 +210,25 @@ namespace Catel.MVVM.Navigation
             }
 
             _activityLifecycleCallbacksListener = new ActivityLifecycleCallbacksListener(activity);
-            _activityLifecycleCallbacksListener.ActivityResumed += OnActivityResumed;
             _activityLifecycleCallbacksListener.ActivityPaused += OnActivityPaused;
             _activityLifecycleCallbacksListener.ActivityStopped += OnActivityStopped;
 
             application.RegisterActivityLifecycleCallbacks(_activityLifecycleCallbacksListener);
+
+            // The first time, the general adapter will take care of this
+            if (_isFirstTimeLoaded)
+            {
+                _isFirstTimeLoaded = false;
+            }
+            else
+            {
+                // Note: we don't subscribe to ActivityResumed because that equals the Loaded event. This adapter
+                // is also created on the loaded
+                _lastActivity = activity;
+
+                var eventArgs = new NavigatedEventArgs(GetNavigationUri(activity), NavigationMode.New);
+                RaiseNavigatedTo(eventArgs);
+            }
         }
 
         partial void Uninitialize()
@@ -224,7 +239,6 @@ namespace Catel.MVVM.Navigation
                 var application = activity.Application;
                 application.UnregisterActivityLifecycleCallbacks(_activityLifecycleCallbacksListener);
 
-                _activityLifecycleCallbacksListener.ActivityResumed -= OnActivityResumed;
                 _activityLifecycleCallbacksListener.ActivityPaused -= OnActivityPaused;
                 _activityLifecycleCallbacksListener.ActivityStopped -= OnActivityStopped;
                 _activityLifecycleCallbacksListener.Dispose();
@@ -254,12 +268,20 @@ namespace Catel.MVVM.Navigation
             return ReferenceEquals(_lastActivity, NavigationTarget);
         }
 
-        private void OnActivityResumed(object sender, ActivityEventArgs e)
+        /// <summary>
+        /// Gets the navigation URI for the target page.
+        /// </summary>
+        /// <param name="target">The target.</param>
+        /// <returns>System.String.</returns>
+        protected override string GetNavigationUri(object target)
         {
-            _lastActivity = e.Activity;
+            var activity = target as Activity;
+            if (activity == null)
+            {
+                return null;
+            }
 
-            var eventArgs = new NavigatedEventArgs(e.Activity.LocalClassName, NavigationMode.New);
-            RaiseNavigatedTo(eventArgs);
+            return activity.LocalClassName;
         }
 
         private void OnActivityPaused(object sender, ActivityEventArgs e)
@@ -267,7 +289,7 @@ namespace Catel.MVVM.Navigation
             _lastActivity = e.Activity;
 
             // We are navigating away
-            var eventArgs = new NavigatingEventArgs(e.Activity.LocalClassName, NavigationMode.New);
+            var eventArgs = new NavigatingEventArgs(GetNavigationUri(e.Activity), NavigationMode.New);
             RaiseNavigatingAway(eventArgs);
 
             //e.Cancel = eventArgs.Cancel;
@@ -277,7 +299,7 @@ namespace Catel.MVVM.Navigation
         {
             _lastActivity = e.Activity;
 
-            var eventArgs = new NavigatedEventArgs(e.Activity.LocalClassName, NavigationMode.New);
+            var eventArgs = new NavigatedEventArgs(GetNavigationUri(e.Activity), NavigationMode.New);
             RaiseNavigatedAway(eventArgs);
         }
     }

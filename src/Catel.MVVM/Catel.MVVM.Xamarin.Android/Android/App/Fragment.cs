@@ -59,7 +59,7 @@ namespace Catel.Android.App
         /// Initializes a new instance of the <see cref="Fragment" /> class.
         /// </summary>
         /// <exception cref="System.NotSupportedException"></exception>
-        public Fragment() 
+        public Fragment()
         {
             if (CatelEnvironment.IsInDesignMode)
             {
@@ -339,9 +339,7 @@ namespace Catel.Android.App
 
             Loaded.SafeInvoke(this);
 
-            _bindingContext = new BindingContext();
-            _bindingContext.BindingUpdateRequired += OnBindingUpdateRequired;
-            _bindingContext.DetermineIfBindingsAreRequired(ViewModel);
+            InitializeBindingContext();
         }
 
         /// <summary>
@@ -352,6 +350,28 @@ namespace Catel.Android.App
             base.OnPause();
 
             Unloaded.SafeInvoke(this);
+
+            UninitializeBindingContext();
+        }
+
+        private void InitializeBindingContext()
+        {
+            if (_bindingContext != null)
+            {
+                UninitializeBindingContext();
+            }
+
+            _bindingContext = new BindingContext();
+            _bindingContext.BindingUpdateRequired += OnBindingUpdateRequired;
+            _bindingContext.DetermineIfBindingsAreRequired(ViewModel);
+        }
+
+        private void UninitializeBindingContext()
+        {
+            if (_bindingContext == null)
+            {
+                return;
+            }
 
             _bindingContext.BindingUpdateRequired -= OnBindingUpdateRequired;
             _bindingContext.Clear();

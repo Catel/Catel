@@ -9,7 +9,6 @@ namespace Catel.MVVM.Providers
     using System;
     using Navigation;
     using Views;
-    using Logging;
     using MVVM;
 
     /// <summary>
@@ -20,12 +19,9 @@ namespace Catel.MVVM.Providers
         where T : IView
     {
         #region Fields
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         private NavigationAdapter _navigationAdapter;
+
+        private bool _hasHandledNavigatingAway;
         #endregion
 
         #region Constructors
@@ -40,17 +36,11 @@ namespace Catel.MVVM.Providers
         protected NavigationLogicBase(T targetPage, Type viewModelType)
             : base(targetPage, viewModelType)
         {
-            CreateNavigationAdapter();
+            CreateNavigationAdapter(false);
         }
         #endregion
 
         #region Properties
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance has handled save and cancel logic.
-        /// </summary>
-        /// <value><c>true</c> if this instance has handled save and cancel logic; otherwise, <c>false</c>.</value>
-        protected bool HasHandledSaveAndCancelLogic { get; set; }
-
         /// <summary>
         /// Gets the target page.
         /// </summary>
@@ -62,7 +52,7 @@ namespace Catel.MVVM.Providers
         #endregion
 
         #region Methods
-        private void CreateNavigationAdapter()
+        private void CreateNavigationAdapter(bool comingFromLoadedEvent)
         {
             if (_navigationAdapter == null)
             {
@@ -70,6 +60,11 @@ namespace Catel.MVVM.Providers
                 _navigationAdapter.NavigatedTo += OnNavigatedTo;
                 _navigationAdapter.NavigatingAway += OnNavigatingAway;
                 _navigationAdapter.NavigatedAway += OnNavigatedAway;
+
+                if (comingFromLoadedEvent)
+                {
+                    OnNavigatedTo(this, new NavigatedEventArgs(_navigationAdapter.GetNavigationUriForTargetPage(), NavigationMode.New));
+                }
             }
         }
 
@@ -92,9 +87,11 @@ namespace Catel.MVVM.Providers
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         public override void OnTargetViewLoaded(object sender, EventArgs e)
         {
+            _hasHandledNavigatingAway = false;
+
             base.OnTargetViewLoaded(sender, e);
 
-            CreateNavigationAdapter();
+            CreateNavigationAdapter(true);
 
             EnsureViewModel();
         }
@@ -106,6 +103,13 @@ namespace Catel.MVVM.Providers
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         public override void OnTargetViewUnloaded(object sender, EventArgs e)
         {
+            if (!_hasHandledNavigatingAway)
+            {
+                OnNavigatingAway(this, new NavigatingEventArgs(_navigationAdapter.GetNavigationUriForTargetPage(), NavigationMode.New));
+
+                _hasHandledNavigatingAway = true;
+            }
+
             base.OnTargetViewUnloaded(sender, e);
 
             DestroyNavigationAdapter();
@@ -119,6 +123,11 @@ namespace Catel.MVVM.Providers
         private void OnNavigatingAway(object sender, NavigatingEventArgs e)
         {
             OnNavigatingAwayFromPage(e);
+
+            if (!e.Cancel)
+            {
+                _hasHandledNavigatingAway = true;
+            }
         }
 
         private void OnNavigatedAway(object sender, NavigatedEventArgs e)
@@ -150,10 +159,7 @@ namespace Catel.MVVM.Providers
         {
             bool? result = true;
 
-            if (!HasHandledSaveAndCancelLogic)
-            {
-                result = SaveAndCloseViewModel();
-            }
+            result = SaveAndCloseViewModel();
 
             if (e.Uri != null && e.Uri.IsNavigationToExternal())
             {
@@ -164,8 +170,6 @@ namespace Catel.MVVM.Providers
             {
                 e.Cancel = true;
             }
-
-            HasHandledSaveAndCancelLogic = true;
         }
 
         /// <summary>

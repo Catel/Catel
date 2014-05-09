@@ -10,6 +10,7 @@ namespace Catel.MVVM.Navigation
     using System.Windows;
     using System.Windows.Navigation;
     using Catel.Logging;
+    using IoC;
 
     public partial class NavigationAdapter
     {
@@ -40,6 +41,19 @@ namespace Catel.MVVM.Navigation
         {
             var content = Application.Current.MainWindow.Content;
             return ReferenceEquals(content, NavigationTarget);
+        }
+
+        /// <summary>
+        /// Gets the navigation URI for the target page.
+        /// </summary>
+        /// <param name="target">The target.</param>
+        /// <returns>System.String.</returns>
+        protected override string GetNavigationUri(object target)
+        {
+            var dependencyResolver = this.GetDependencyResolver();
+            var urlLocator = dependencyResolver.Resolve<IUrlLocator>();
+
+            return urlLocator.ResolveUrl(NavigationTargetType);
         }
 
         private void OnNavigatingEvent(object sender, NavigatingCancelEventArgs e)

@@ -8,8 +8,8 @@
 namespace Catel.MVVM.Navigation
 {
     using System;
-    using Catel.Logging;
-    using Catel.MVVM.Views;
+    using Logging;
+    using Views;
 
     /// <summary>
     /// Navigation adapter class because everyone seems to be implementing their own :-(
@@ -119,6 +119,15 @@ namespace Catel.MVVM.Navigation
             Uninitialize();
 
             _navigationServiceInitialized = false;
+        }
+
+        /// <summary>
+        /// Gets the navigation URI for the target page.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public string GetNavigationUriForTargetPage()
+        {
+            return GetNavigationUri(NavigationTarget);
         }
 
         /// <summary>

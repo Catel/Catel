@@ -21,6 +21,13 @@ namespace Catel.MVVM.Navigation
         {
             return true;
         }
+
+        /// <summary>
+        /// Gets the navigation URI for the target page.
+        /// </summary>
+        /// <param name="target">The target.</param>
+        /// <returns>System.String.</returns>
+        protected abstract string GetNavigationUri(object target);
         #endregion
     }
 }

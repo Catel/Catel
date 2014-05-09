@@ -9,9 +9,10 @@
 namespace Catel.MVVM
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Linq.Expressions;
     using System.Reflection;
+    using System.Runtime.InteropServices;
     using Data;
     using Logging;
     using Reflection;
@@ -19,7 +20,7 @@ namespace Catel.MVVM
     /// <summary>
     /// Contains information about a specific binding party (either source or target).
     /// </summary>
-    public class BindingParty
+    public class BindingParty : IDisposable
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
@@ -28,8 +29,11 @@ namespace Catel.MVVM
         private readonly string _propertyName;
         private readonly WeakReference _instance;
 
+        private ChangeNotificationWrapper _changeNotificationWrapper;
+        private List<IWeakEventListener> _weakEventListeners = new List<IWeakEventListener>();
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="BindingParty"/> class.
+        /// Initializes a new instance of the <see cref="BindingParty" /> class.
         /// </summary>
         /// <param name="instance">The instance.</param>
         /// <param name="propertyName">Name of the property.</param>
@@ -48,8 +52,8 @@ namespace Catel.MVVM
                 Log.ErrorAndThrowException<InvalidOperationException>("Property '{0}' not found, cannot create binding", _toStringValue);
             }
 
-            var changeNotificationWrapper = new ChangeNotificationWrapper(instance);
-            changeNotificationWrapper.PropertyChanged += OnInstancePropertyChanged;
+            _changeNotificationWrapper = new ChangeNotificationWrapper(instance);
+            _changeNotificationWrapper.PropertyChanged += OnInstancePropertyChanged;
         }
 
         #region Events
@@ -66,9 +70,9 @@ namespace Catel.MVVM
         /// Note that this value is stored in a weak reference and can be <c>null</c> if garbage collected.
         /// </summary>
         /// <value>The instance.</value>
-        public object Instance 
+        public object Instance
         {
-            get { return (_instance != null && _instance.IsAlive) ? _instance.Target : null; } 
+            get { return (_instance != null && _instance.IsAlive) ? _instance.Target : null; }
         }
 
         /// <summary>
@@ -86,7 +90,7 @@ namespace Catel.MVVM
         {
             if (string.IsNullOrEmpty(e.PropertyName) || string.Equals(e.PropertyName, _propertyName))
             {
-                ValueChanged.SafeInvoke(this);
+                RaiseValueChanged();
             }
         }
 
@@ -97,6 +101,31 @@ namespace Catel.MVVM
         public override string ToString()
         {
             return _toStringValue;
+        }
+
+        /// <summary>
+        /// Adds the event so it will be used as source to raise the <see cref="ValueChanged"/> event.
+        /// </summary>
+        /// <param name="eventName">Name of the event.</param>
+        public void AddEvent(string eventName)
+        {
+            Argument.IsNotNull("eventName", eventName);
+
+            Log.Debug("Adding subscription to event '{0}'", eventName);
+
+            var target = _instance.Target;
+            if (target == null)
+            {
+                Log.ErrorAndThrowException<InvalidOperationException>("Target is no longer alive, cannot add event subscription");
+            }
+
+            var weakEventListener = this.SubscribeToWeakGenericEvent<EventArgs>(target, eventName, OnEvent);
+            _weakEventListeners.Add(weakEventListener);
+        }
+
+        private void OnEvent(object sender, EventArgs eventArgs)
+        {
+            RaiseValueChanged();
         }
 
         /// <summary>
@@ -131,6 +160,47 @@ namespace Catel.MVVM
             }
 
             _propertyInfo.SetValue(instance, newValue);
+        }
+
+        /// <summary>
+        /// Raises the <see cref="ValueChanged"/> event.
+        /// </summary>
+        private void RaiseValueChanged()
+        {
+            ValueChanged.SafeInvoke(this);
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_changeNotificationWrapper != null)
+                {
+                    _changeNotificationWrapper.PropertyChanged -= OnInstancePropertyChanged;
+                    _changeNotificationWrapper.UnsubscribeFromAllEvents();
+                    _changeNotificationWrapper = null;
+                }
+
+                foreach (var weakEventListener in _weakEventListeners)
+                {
+                    weakEventListener.Detach();
+                }
+
+                _weakEventListeners.Clear();
+            }
         }
         #endregion
     }

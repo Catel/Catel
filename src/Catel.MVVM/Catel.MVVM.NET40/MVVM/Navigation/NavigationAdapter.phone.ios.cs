@@ -17,6 +17,24 @@ namespace Catel.MVVM.Navigation
         {
             throw new MustBeImplementedException();
         }
+
+        /// <summary>
+        /// Gets the navigation URI for the target page.
+        /// </summary>
+        /// <param name="target">The target.</param>
+        /// <returns>System.String.</returns>
+        protected override string GetNavigationUri(object target)
+        {
+            throw new MustBeImplementedException();
+
+            //var activity = target as Activity;
+            //if (activity == null)
+            //{
+            //    return null;
+            //}
+
+            //return activity.LocalClassName;
+        }
     }
 }
 #endif

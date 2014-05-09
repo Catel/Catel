@@ -180,7 +180,10 @@ namespace Catel.MVVM
 
             if (_lastViewModelId != currentViewModelId)
             {
-                Clear();
+                if (_lastViewModelId.HasValue)
+                {
+                    Clear();
+                }
 
                 if (viewModel != null)
                 {

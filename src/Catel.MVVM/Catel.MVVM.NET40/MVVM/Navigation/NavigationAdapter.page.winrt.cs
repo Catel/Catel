@@ -11,7 +11,8 @@ namespace Catel.MVVM.Navigation
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Navigation;
-    
+    using IoC;
+
 #if WINDOWS_PHONE
     using global::Windows.Phone.UI.Input;
 #endif
@@ -96,6 +97,19 @@ namespace Catel.MVVM.Navigation
         {
             var content = RootFrame.Content;
             return ReferenceEquals(content, NavigationTarget);
+        }
+
+        /// <summary>
+        /// Gets the navigation URI for the target page.
+        /// </summary>
+        /// <param name="target">The target.</param>
+        /// <returns>System.String.</returns>
+        protected override string GetNavigationUri(object target)
+        {
+            var dependencyResolver = this.GetDependencyResolver();
+            var urlLocator = dependencyResolver.Resolve<IUrlLocator>();
+
+            return urlLocator.ResolveUrl(NavigationTargetType);
         }
 
         private void OnNavigatingEvent(object sender, NavigatingCancelEventArgs e)
