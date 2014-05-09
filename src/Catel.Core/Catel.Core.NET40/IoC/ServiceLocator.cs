@@ -8,10 +8,8 @@ namespace Catel.IoC
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Diagnostics;
     using System.Linq;
-    using Catel.Scoping;
     using Logging;
     using Reflection;
 
@@ -117,11 +115,6 @@ namespace Catel.IoC
         private readonly Dictionary<ServiceInfo, ServiceLocatorRegistration> _registeredTypes = new Dictionary<ServiceInfo, ServiceLocatorRegistration>();
 
         /// <summary>
-        /// The types currently being exported.
-        /// </summary>
-        private readonly List<ServiceInfo> _typesCurrentlyBeingExported = new List<ServiceInfo>();
-
-        /// <summary>
         /// The synchronization object.
         /// </summary>
         private readonly object _lockObject = new object();
@@ -183,7 +176,7 @@ namespace Catel.IoC
             {
                 if (_typeFactory == null)
                 {
-                    _typeFactory = (ITypeFactory)ResolveType(typeof (ITypeFactory));
+                    _typeFactory = (ITypeFactory)ResolveType(typeof(ITypeFactory));
                 }
 
                 return _typeFactory;
@@ -351,16 +344,17 @@ namespace Catel.IoC
         /// <returns><c>true</c> if the <paramref name="serviceType" /> type is registered as singleton, otherwise <c>false</c>.</returns>
         public bool IsTypeRegisteredAsSingleton(Type serviceType, object tag = null)
         {
-            // Required to support the MissingTypeEventArgs
-            if (!IsTypeRegistered(serviceType, tag))
-            {
-                return false;
-            }
-
-            var serviceInfo = new ServiceInfo(serviceType, tag);
-
             lock (_lockObject)
             {
+                // Required to support the MissingTypeEventArgs
+                if (!IsTypeRegistered(serviceType, tag))
+                {
+                    return false;
+                }
+
+                var serviceInfo = new ServiceInfo(serviceType, tag);
+
+
                 if (_registeredInstances.ContainsKey(serviceInfo))
                 {
                     return _registeredInstances[serviceInfo].RegistrationType == RegistrationType.Singleton;
@@ -443,26 +437,21 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("serviceType", serviceType);
 
-            bool isTypeRegistered = false;
-
             lock (_lockObject)
             {
-                isTypeRegistered = IsTypeRegistered(serviceType, tag);
-            }
+                var isTypeRegistered = IsTypeRegistered(serviceType, tag);
 
-            if (!isTypeRegistered)
-            {
-                if (CanResolveNonAbstractTypesWithoutRegistration && serviceType.IsClassEx() && !serviceType.IsAbstractEx())
+                if (!isTypeRegistered)
                 {
-                    return TypeFactory.CreateInstance(serviceType);
+                    if (CanResolveNonAbstractTypesWithoutRegistration && serviceType.IsClassEx() && !serviceType.IsAbstractEx())
+                    {
+                        return TypeFactory.CreateInstance(serviceType);
+                    }
+
+                    Log.Error("The type '{0}' is not registered", serviceType.FullName);
+                    throw new TypeNotRegisteredException(serviceType);
                 }
 
-                Log.Error("The type '{0}' is not registered", serviceType.FullName);
-                throw new TypeNotRegisteredException(serviceType);
-            }
-
-            lock (_lockObject)
-            {
                 var serviceInfo = new ServiceInfo(serviceType, tag);
                 if (_registeredInstances.ContainsKey(serviceInfo))
                 {
@@ -657,6 +646,7 @@ namespace Catel.IoC
             lock (_lockObject)
             {
                 RemoveInstance(serviceType, tag);
+
                 var serviceInfo = new ServiceInfo(serviceType, tag);
                 if (_registeredTypes.ContainsKey(serviceInfo))
                 {
@@ -677,6 +667,7 @@ namespace Catel.IoC
             lock (_lockObject)
             {
                 RemoveAllInstances(serviceType);
+
                 for (int i = _registeredTypes.Count - 1; i >= 0; i--)
                 {
                     var serviceInfo = _registeredTypes.Keys.ElementAt(i);
