@@ -832,6 +832,7 @@
     <Compile Include="..\Catel.MVVM.NET40\Services\ViewModelWrapperServiceBase.cs">
       <Link>Services\ViewModelWrapperServiceBase.cs</Link>
     </Compile>
+    <Compile Include="Android\App\TabActivity.cs" />
     <Compile Include="Android\App\Activity.cs" />
     <Compile Include="Android\App\Application.cs" />
     <Compile Include="Android\App\Fragment.cs" />
