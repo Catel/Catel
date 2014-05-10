@@ -106,8 +106,14 @@
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Bindings\CommandBinding.cs">
       <Link>MVVM\Bindings\CommandBinding.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Bindings\Extensions\BindingContextExtensions.cs">
+      <Link>MVVM\Bindings\Extensions\BindingContextExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Bindings\Extensions\BindingExtensions.cs">
       <Link>MVVM\Bindings\Extensions\BindingExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.MVVM.NET40\MVVM\Bindings\Extensions\BindingPartyExtensions.cs">
+      <Link>MVVM\Bindings\Extensions\BindingPartyExtensions.cs</Link>
     </Compile>
     <Compile Include="..\Catel.MVVM.NET40\MVVM\Commands\Command.cs">
       <Link>MVVM\Commands\Command.cs</Link>

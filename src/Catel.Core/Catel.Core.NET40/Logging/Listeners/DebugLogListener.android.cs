@@ -26,7 +26,6 @@ namespace Catel.Logging
             switch (logEvent)
             {
                 case LogEvent.Debug:
-            
                     System.Diagnostics.Trace.WriteLine(consoleMessage);
                     break;
 

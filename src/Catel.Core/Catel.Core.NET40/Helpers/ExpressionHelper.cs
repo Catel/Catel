@@ -41,13 +41,13 @@ namespace Catel
         {
             Argument.IsNotNull("propertyExpression", propertyExpression);
 
-            string propertyExpressionAsString = propertyExpression.ToString();
+            string expressionAsString = propertyExpression.ToString();
 
             if (!ignoreCache)
             {
-                if (_propertyNameCache.ContainsKey(propertyExpressionAsString))
+                if (_propertyNameCache.ContainsKey(expressionAsString))
                 {
-                    return _propertyNameCache[propertyExpressionAsString];
+                    return _propertyNameCache[expressionAsString];
                 }
             }
 
@@ -61,9 +61,9 @@ namespace Catel
             }
 
             string propertyName = body.Member.Name;
-            if (!_propertyNameCache.ContainsKey(propertyExpressionAsString))
+            if (!_propertyNameCache.ContainsKey(expressionAsString))
             {
-                _propertyNameCache.Add(propertyExpressionAsString, propertyName);
+                _propertyNameCache.Add(expressionAsString, propertyName);
             }
 
             return propertyName;

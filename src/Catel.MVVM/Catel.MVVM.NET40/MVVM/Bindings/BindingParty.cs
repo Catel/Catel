@@ -107,7 +107,8 @@ namespace Catel.MVVM
         /// Adds the event so it will be used as source to raise the <see cref="ValueChanged"/> event.
         /// </summary>
         /// <param name="eventName">Name of the event.</param>
-        public void AddEvent(string eventName)
+        public void AddEvent<TEventArgs>(string eventName)
+            where TEventArgs : EventArgs
         {
             Argument.IsNotNull("eventName", eventName);
 
@@ -119,13 +120,8 @@ namespace Catel.MVVM
                 Log.ErrorAndThrowException<InvalidOperationException>("Target is no longer alive, cannot add event subscription");
             }
 
-            var weakEventListener = this.SubscribeToWeakGenericEvent<EventArgs>(target, eventName, OnEvent);
+            var weakEventListener = this.SubscribeToWeakGenericEvent<TEventArgs>(target, eventName, (sender, e) => RaiseValueChanged());
             _weakEventListeners.Add(weakEventListener);
-        }
-
-        private void OnEvent(object sender, EventArgs eventArgs)
-        {
-            RaiseValueChanged();
         }
 
         /// <summary>
