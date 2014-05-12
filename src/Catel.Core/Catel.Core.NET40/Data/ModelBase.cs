@@ -106,7 +106,6 @@ namespace Catel.Data
 #endif
         internal readonly PropertyBag _propertyBag = new PropertyBag();
 
-#if !WP7
         /// <summary>
         /// The change notification wrappers for all property values.
         /// </summary>
@@ -114,7 +113,6 @@ namespace Catel.Data
         [field: NonSerialized]
 #endif
         private readonly Dictionary<string, ChangeNotificationWrapper> _propertyValueChangeNotificationWrappers = new Dictionary<string, ChangeNotificationWrapper>();
-#endif
 
         /// <summary>
         /// Lock object for the <see cref="_propertyBag"/> field.
@@ -796,7 +794,6 @@ namespace Catel.Data
                 return;
             }
 
-#if !WP7
             lock (_propertyValuesLock)
             {
                 if (_propertyValueChangeNotificationWrappers.ContainsKey(propertyName))
@@ -824,10 +821,8 @@ namespace Catel.Data
                     _propertyValueChangeNotificationWrappers[propertyName] = wrapper;
                 }
             }
-#endif
         }
 
-#if !WP7
         /// <summary>
         /// Called when a property that implements <see cref="INotifyPropertyChanged"/> raises the event.
         /// </summary>
@@ -869,8 +864,6 @@ namespace Catel.Data
 
             SetDirtyAndAutomaticallyValidate(string.Empty, true);
         }
-
-#endif
         #endregion
 
         #region INotifyPropertyChanged Members

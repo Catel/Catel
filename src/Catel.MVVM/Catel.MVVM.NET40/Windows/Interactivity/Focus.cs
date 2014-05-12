@@ -340,7 +340,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         private bool SetFocus()
         {
-#if SL4 || SL5
+#if SL5
             System.Windows.Browser.HtmlPage.Plugin.Focus();
 #endif
 

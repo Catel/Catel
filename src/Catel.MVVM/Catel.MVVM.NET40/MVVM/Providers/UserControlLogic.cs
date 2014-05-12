@@ -45,7 +45,7 @@ namespace Catel.MVVM.Providers
         private IViewModelContainer _parentViewModelContainer;
         private IViewModel _parentViewModel;
 
-#if NET || SL4 || SL5
+#if NET ||SL5
         private InfoBarMessageControl _infoBarMessageControl;
 #endif
         #endregion
@@ -860,7 +860,7 @@ namespace Catel.MVVM.Providers
                 return;
             }
 
-#if NET || SL4 || SL5
+#if NET || SL5
             if (_infoBarMessageControl != null)
             {
                 _infoBarMessageControl.ClearObjectMessages(obj);

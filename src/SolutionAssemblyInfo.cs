@@ -40,20 +40,14 @@ using System.Runtime.CompilerServices;
 
 #if DEBUG
 
-#if NET35
-[assembly: AssemblyConfiguration("NET35, Debug")]
-#elif NET40
+#if NET40
 [assembly: AssemblyConfiguration("NET40, Debug")]
 #elif NET45
 [assembly: AssemblyConfiguration("NET45, Debug")]
 #elif NET50
 [assembly: AssemblyConfiguration("NET50, Debug")]
-#elif SL4
-[assembly: AssemblyConfiguration("Silverlight 4, Debug")]
 #elif SL5
 [assembly: AssemblyConfiguration("Silverlight 5, Debug")]
-#elif WP7
-[assembly: AssemblyConfiguration("Windows Phone 7.x, Debug")]
 #elif WP80
 [assembly: AssemblyConfiguration("Windows Phone 8.0, Debug")]
 #elif WPSL81
@@ -76,20 +70,14 @@ using System.Runtime.CompilerServices;
 
 #else
 
-#if NET35
-[assembly: AssemblyConfiguration("NET35, Release")]
-#elif NET40
+#if NET40
 [assembly: AssemblyConfiguration("NET40, Release")]
 #elif NET45
 [assembly: AssemblyConfiguration("NET45, Release")]
 #elif NET50
 [assembly: AssemblyConfiguration("NET50, Release")]
-#elif SL4
-[assembly: AssemblyConfiguration("Silverlight 4, Release")]
 #elif SL5
 [assembly: AssemblyConfiguration("Silverlight 5, Release")]
-#elif WP7
-[assembly: AssemblyConfiguration("Windows Phone 7.x, Release")]
 #elif WP80
 [assembly: AssemblyConfiguration("Windows Phone 8.0, Release")]
 #elif WPSL81

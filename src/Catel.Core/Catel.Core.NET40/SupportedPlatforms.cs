@@ -38,14 +38,14 @@ namespace Catel
             return SupportedPlatforms.NET45;
 #elif NET50
             return SupportedPlatforms.NET50;
-#elif SL4
-            throw new System.NotSupportedException("SL4 is not supported");
 #elif SL5
             return SupportedPlatforms.Silverlight5;
-#elif WP7
-            throw new System.NotSupportedException("WP7 is not supported");
 #elif WP80
             return SupportedPlatforms.WindowsPhone80;
+#elif WP81 && SILVERLIGHT
+            return SupportedPlatforms.WindowsPhone81Silverlight;
+#elif WP81 && NETFX_CORE
+            return SupportedPlatforms.WindowsPhone81Runtime;
 #elif WIN80
             return SupportedPlatforms.Windows80;
 #elif WIN81
@@ -91,6 +91,16 @@ namespace Catel
         WindowsPhone80,
 
         /// <summary>
+        /// Windows Phone 8.1 (Silverlight).
+        /// </summary>
+        WindowsPhone81Silverlight,
+
+        /// <summary>
+        /// Windows Phone 8.1 (Runtime).
+        /// </summary>
+        WindowsPhone81Runtime,
+
+        /// <summary>
         /// Windows Runtime 8.0.
         /// </summary>
         Windows80,
@@ -99,11 +109,6 @@ namespace Catel
         /// Windows Runtime 8.1.
         /// </summary>
         Windows81,
-
-        /// <summary>
-        /// The portable class libraries (PCL).
-        /// </summary>
-        PCL,
 
         /// <summary>
         /// The Android platform.

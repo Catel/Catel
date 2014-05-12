@@ -30,7 +30,7 @@ namespace Catel.Reflection
 #if NET
             return System.IO.Path.GetFileNameWithoutExtension(assembly.CodeBase);
 #else
-            throw new NotSupportedException("Only supported in .NET, not in SL, WP7 or WinRT");
+            throw new NotSupportedInPlatform();
 #endif
         }
 

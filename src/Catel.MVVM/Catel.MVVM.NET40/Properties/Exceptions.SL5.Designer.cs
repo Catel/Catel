@@ -119,7 +119,7 @@ namespace Catel.MVVM.Properties {
         ///
         ///Make sure that the property is a Catel property, not a regular property.
         ///
-        ///If you are sure that you have a model with this name, make sure it&apos;s public instead of private or protected for Silverlight and WP7 because non-public reflection is not allowed in Silverlight..
+        ///If you are sure that you have a model with this name, make sure it&apos;s public instead of private or protected for Silverlight and Windows Phone because non-public reflection is not allowed in Silverlight.
         /// </summary>
         internal static string ModelNotRegistered {
             get {

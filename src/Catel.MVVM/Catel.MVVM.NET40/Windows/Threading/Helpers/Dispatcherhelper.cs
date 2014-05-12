@@ -98,7 +98,7 @@ namespace Catel.Windows.Threading
 #endif
 
         /// <summary>
-        /// Gets the current dispatcher. This property is compatible with WPF, SL and WP7, and also works
+        /// Gets the current dispatcher. This property is compatible with WPF, Silverlight, Windows Phone, etc, and also works
         /// when there is no application object (for example, during unit tests).
         /// </summary>
         /// <value>The current dispatcher.</value>

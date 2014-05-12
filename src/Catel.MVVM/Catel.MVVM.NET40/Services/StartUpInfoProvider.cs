@@ -50,7 +50,7 @@ namespace Catel.Services
         }
 #endif
 
-#if SL4 || SL5
+#if SL5
         /// <summary>
         /// Gets the silverlight application initialization parameters.
         /// </summary>

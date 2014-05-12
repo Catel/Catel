@@ -173,7 +173,7 @@ namespace Catel.MVVM
 
             RaiseCanExecuteChanged();
 
-            // Run the action on a new thread from the thread pool (this will therefore work in SL and WP7 as well)
+            // Run the action on a new thread from the thread pool (this will therefore work in Silverlight and Windows Phone as well)
 #if NETFX_CORE
             ThreadPool.RunAsync(state =>
 #else

@@ -99,7 +99,7 @@ namespace Catel
 #if !WINDOWS_PHONE && !PCL && !XAMARIN
         /// <summary>
         /// Gets the main window of the application. This is a convenience call to easily allow the retrieval of the main window
-        /// for each target framework (WPF, SL, WP7).
+        /// for each target framework (WPF, Silverlight, Windows Phone, etc).
         /// </summary>
         public static Window MainWindow
         {

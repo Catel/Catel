@@ -444,7 +444,7 @@
         #endregion
 
         #region Attribute validation
-#if NET || SL4 || SL5
+#if NET || SL5
         [TestMethod]
         public void AttributeValidation_DoNotValidate()
         {

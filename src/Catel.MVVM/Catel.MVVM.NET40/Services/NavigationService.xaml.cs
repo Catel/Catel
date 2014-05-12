@@ -91,7 +91,7 @@ namespace Catel.Services
         #region Methods
         partial void Initialize()
         {
-#if NET || SL4 || SL5
+#if NET || SL5
             var mainWindow = CatelEnvironment.MainWindow;
             if (mainWindow != null)
             {

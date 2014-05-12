@@ -1015,7 +1015,7 @@ namespace Catel.Reflection
 #endif
         }
 
-#if NET40 || SILVERLIGHT || WP7 || PCL
+#if NET40 || SILVERLIGHT || PCL
 
         /// <summary>
         /// The type infos cache.

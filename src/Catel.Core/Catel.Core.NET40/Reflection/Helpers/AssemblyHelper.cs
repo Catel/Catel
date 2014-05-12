@@ -18,7 +18,7 @@ namespace Catel.Reflection
     using System.Windows;
 #endif
 
-#if SL4 || SL5
+#if SL5
     using System.Windows.Resources;
     using System.Xml.Linq;
     using Threading;
@@ -43,22 +43,7 @@ namespace Catel.Reflection
 
         private static readonly Dictionary<string, string> _assemblyMappings = new Dictionary<string, string>();
 
-#if SL4
-        private static readonly List<Assembly> _frameworkAssemblies = new List<Assembly>(); 
-#endif
-
-        /// <summary>
-        /// Initializes static members of the <see cref="AssemblyHelper"/> class.
-        /// </summary>
-        static AssemblyHelper()
-        {
-#if SL4
-            _frameworkAssemblies.Add(Assembly.Load("mscorlib"));
-            _frameworkAssemblies.Add(typeof(Uri).Assembly); // system
-#endif
-        }
-
-#if SL4 || SL5
+#if SL5
         private static readonly List<Assembly> _externalAssemblies = new List<Assembly>();
 
         /// <summary>
@@ -255,11 +240,7 @@ namespace Catel.Reflection
         {
             var assemblies = new List<Assembly>();
 
-#if SL4
-            assemblies.AddRange(_frameworkAssemblies);
-#else
             assemblies.AddRange(appDomain.GetAssemblies());
-#endif
 
 #if SILVERLIGHT
             try
@@ -271,7 +252,7 @@ namespace Catel.Reflection
 #if WINDOWS_PHONE
                         try
                         {
-                            // It's not much, but it's the best we could do for WP7
+                            // It's not much, but it's the best we could do for Windows Phone
                             assemblies.Add(Assembly.Load(assemblyPart.Source.Replace(".dll", string.Empty)));
                         }
                         catch (Exception)
@@ -294,7 +275,7 @@ namespace Catel.Reflection
                 Log.Error(ex, "Failed to load Deployment.Current.Parts");
             }
 
-#if SL4 || SL5
+#if SL5
             // Add the loaded xap cache
             assemblies.AddRange(_externalAssemblies);
 #endif
