@@ -6,6 +6,7 @@
 
 namespace Catel.Reflection
 {
+    using Catel;
     using System;
     using System.Reflection;
 
@@ -30,7 +31,7 @@ namespace Catel.Reflection
 #if NET
             return System.IO.Path.GetFileNameWithoutExtension(assembly.CodeBase);
 #else
-            throw new NotSupportedInPlatform();
+            throw new NotSupportedInPlatformException();
 #endif
         }
 
