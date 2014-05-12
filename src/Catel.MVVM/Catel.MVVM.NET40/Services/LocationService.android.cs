@@ -118,7 +118,7 @@ namespace Catel.Services
         /// </summary>
         protected override void Initialize()
         {
-            var context = Application.Context;
+            var context = Catel.Android.ContextHelper.CurrentContext;
             _locationManager = context.GetSystemService(Context.LocationService) as LocationManager;
 
             _locationListener = new LocationListener();

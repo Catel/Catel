@@ -14,7 +14,6 @@ namespace Catel.Android.App
     using MVVM;
     using MVVM.Providers;
     using MVVM.Views;
-    using global::Android.OS;
     using global::Android.Runtime;
 
     /// <summary>

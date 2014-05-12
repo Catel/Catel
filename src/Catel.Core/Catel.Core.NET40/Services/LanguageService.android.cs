@@ -9,7 +9,7 @@
 namespace Catel.Services
 {
     using System.Globalization;
-    using Android.Content.Res;
+    using global::Android.Content.Res;
 
     public partial class LanguageService
     {
@@ -41,7 +41,7 @@ namespace Catel.Services
             //var element = stringsXmlDocument.XPathSelectElement(xpath);
             //return element.Value;
 
-            var context = global::Android.App.Application.Context;
+            var context = Android.ContextHelper.CurrentContext;
             var packageName = context.PackageName;
             
             var id = context.Resources.GetIdentifier(resourceName, "string", packageName);

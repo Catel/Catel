@@ -97,7 +97,7 @@ namespace Catel.Services
 
         partial void Initialize()
         {
-            var context = Application.Context;
+            var context = Catel.Android.ContextHelper.CurrentContext;
             _sensorManager = context.GetSystemService(Context.SensorService) as SensorManager;
             _sensor = _sensorManager.GetDefaultSensor(SensorType.Accelerometer);
 

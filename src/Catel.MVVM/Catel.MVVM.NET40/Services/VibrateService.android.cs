@@ -9,7 +9,6 @@
 namespace Catel.Services
 {
     using System;
-    using global::Android.App;
     using global::Android.Content;
     using global::Android.OS;
 
@@ -19,7 +18,7 @@ namespace Catel.Services
 
         partial void Initialize()
         {
-            var context = Application.Context;
+            var context = Android.ContextHelper.CurrentContext;
             _vibrator = context.GetSystemService(Context.VibratorService) as Vibrator;
         }
 

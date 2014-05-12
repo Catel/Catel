@@ -101,7 +101,7 @@ namespace Catel.Services
         partial void NavigateWithParameters(string uri, Dictionary<string, object> parameters)
         {
             throw new MustBeImplementedException();
-            //var context = Application.Context;
+            //var context = Catel.Android.ContextHelper.CurrentContext;
 
             //var navigationTargetType = TypeCache.GetType(uri);
             //var intent = new Intent(context, navigationTargetType);

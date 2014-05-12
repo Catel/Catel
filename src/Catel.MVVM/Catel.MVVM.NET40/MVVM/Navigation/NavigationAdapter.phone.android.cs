@@ -8,6 +8,7 @@
 namespace Catel.MVVM.Navigation
 {
     using System;
+    using Android;
     using Logging;
     using global::Android.App;
     using global::Android.OS;
@@ -229,6 +230,8 @@ namespace Catel.MVVM.Navigation
                 var eventArgs = new NavigatedEventArgs(GetNavigationUri(activity), NavigationMode.New);
                 RaiseNavigatedTo(eventArgs);
             }
+
+            ContextHelper.CurrentContext = activity;
         }
 
         partial void Uninitialize()
