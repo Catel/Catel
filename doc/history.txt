@@ -93,6 +93,7 @@ Added/fixed:
 (*) CTL-400 Don't handle errors in CommandManager when designer is attached
 (*) CTL-413 ModelBase.Clone is now virtual
 (*) CTL-426 DataWindow automatically use application icon if no icon specified
+(*) CTL-440 Support nested view models (parent / child relations) when views are in ContentPresenter
 (x) CTL-327 ListCollectionView not supported in ChangeNotificationWrapper (causes InvalidCastException)
 (x) CTL-329 VisualStateManager doesn't change state in WP8 in UserControl => introduced option to transfer styles and
     transitions: UserControl.TransferStylesAndTransitionsToViewModelGrid (default value is true)

@@ -10,16 +10,16 @@ namespace Catel.MVVM.Views
 {
     using System;
     using System.Collections.Generic;
-    using Catel.Windows.Threading;
+    using Windows.Threading;
+    using Windows;
 
 #if NETFX_CORE
-    using Catel.Windows;
     using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
+    using global::Windows.UI.Xaml.Media;
 #else
-    using Catel.Windows;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Media;
 #endif
 
     public static partial class ViewExtensions
@@ -82,6 +82,13 @@ namespace Catel.MVVM.Views
                 parents.Add(view.TemplatedParent);
             }
 #endif
+
+            var visualTreeParent = VisualTreeHelper.GetParent(view);
+            if (visualTreeParent != null)
+            {
+                parents.Add(visualTreeParent);
+            }
+
             foreach (var parent in parents)
             {
                 foundParent = parent.FindLogicalOrVisualAncestor(predicate, maxDepth);
