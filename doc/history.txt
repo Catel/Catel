@@ -124,6 +124,7 @@ Added/fixed:
 (x) CTL-422 ViewLoadedManager does not release strong reference to views
 (x) CTL-429 Call to StyleHelper.CreateStyleForwardersForDefaultStyles(); leads to exception
 (x) CTL-437 Possible deadlock in ServiceLocator.ResolveType
+(x) CTL-439 Catch up of property validation validates the same propery multiple times
 
 Roadmap:
 ========

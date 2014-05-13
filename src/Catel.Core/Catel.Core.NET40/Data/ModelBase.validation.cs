@@ -94,7 +94,7 @@ namespace Catel.Data
 #if NET
         [field: NonSerialized]
 #endif
-        private readonly List<string> _propertiesNotCheckedDuringDisabledValidation = new List<string>();
+        private readonly HashSet<string> _propertiesNotCheckedDuringDisabledValidation = new HashSet<string>();
 
         /// <summary>
         /// The property names that failed to validate and should be skipped next time for NET 4.0 
@@ -103,7 +103,7 @@ namespace Catel.Data
 #if NET
         [field: NonSerialized]
 #endif
-        private static readonly Dictionary<Type, List<string>> _propertyValuesIgnoredOrFailedForValidation = new Dictionary<Type, List<string>>();
+        private static readonly Dictionary<Type, HashSet<string>> _propertyValuesIgnoredOrFailedForValidation = new Dictionary<Type, HashSet<string>>();
 
 #if !WINDOWS_PHONE && !NETFX_CORE && !PCL && !NET35
 

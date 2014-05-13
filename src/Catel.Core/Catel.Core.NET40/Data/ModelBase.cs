@@ -12,23 +12,11 @@ namespace Catel.Data
     using System.Collections.Specialized;
     using System.ComponentModel;
     using System.IO;
-    using System.Linq;
-    using System.Linq.Expressions;
-    using System.Reflection;
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
-    using Catel.IoC;
-    using Collections;
-
-    using Reflection;
+    using IoC;
     using Logging;
     using Runtime.Serialization;
-
-#if NET
-    using Runtime.Serialization.Binary;
-#endif
-
-    using Runtime.Serialization.Xml;
 
     #region Enums
     /// <summary>
@@ -581,7 +569,7 @@ namespace Catel.Data
 #if !WINDOWS_PHONE && !NETFX_CORE && !PCL && !NET35
             if (!_propertyValuesIgnoredOrFailedForValidation.ContainsKey(type))
             {
-                _propertyValuesIgnoredOrFailedForValidation.Add(type, new List<string>());
+                _propertyValuesIgnoredOrFailedForValidation.Add(type, new HashSet<string>());
 
                 // Ignore modelbase properties
                 _propertyValuesIgnoredOrFailedForValidation[type].Add("EqualityComparer");

@@ -13,11 +13,11 @@ namespace Catel.Modules.ModuleManager.ViewModels
     using System.Linq;
     using System.Threading;
 
-    using Catel.Data;
-    using Catel.Logging;
-    using Catel.Modules.ModuleManager.Models;
-    using Catel.MVVM;
-    using Catel.Services;
+    using Data;
+    using Logging;
+    using Models;
+    using MVVM;
+    using Services;
 
     using Microsoft.Practices.Prism.Modularity;
 
