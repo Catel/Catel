@@ -24,6 +24,22 @@ namespace Catel.MVVM
 
     #region Enums
     /// <summary>
+    /// Available clean up models for a model.
+    /// </summary>
+    public enum ModelCleanUpMode
+    {
+        /// <summary>
+        /// Call <see cref="IEditableObject.CancelEdit"/>.
+        /// </summary>
+        CancelEdit,
+
+        /// <summary>
+        /// Call <see cref="IEditableObject.EndEdit"/>.
+        /// </summary>
+        EndEdit
+    }
+
+    /// <summary>
     /// Available view model events that can be retrieved via the <see cref="InterestedInAttribute"/>.
     /// </summary>
     public enum ViewModelEvent
@@ -63,22 +79,6 @@ namespace Catel.MVVM
     /// (such as WPF, Silverlight, etc).</remarks>
     public abstract partial class ViewModelBase : ModelBase, IViewModel, INotifyableViewModel, IRelationalViewModel
     {
-        /// <summary>
-        /// Available clean up models for a model.
-        /// </summary>
-        private enum ModelCleanUpMode
-        {
-            /// <summary>
-            /// Call <see cref="IEditableObject.CancelEdit"/>.
-            /// </summary>
-            CancelEdit,
-
-            /// <summary>
-            /// Call <see cref="IEditableObject.EndEdit"/>.
-            /// </summary>
-            EndEdit
-        }
-
         #region Fields
         /// <summary>
         /// The log.
@@ -702,7 +702,7 @@ namespace Catel.MVVM
                     }
                 }
             }
-            
+
             ValidateViewModelToModelMappings();
 
             if (!_ignoreMultipleModelsWarning)
@@ -1125,6 +1125,24 @@ namespace Catel.MVVM
             OnModelPropertyChanged(sender, e);
 
             Validate();
+        }
+
+        /// <summary>
+        /// Resets the model by calling uninitializing and initializing the model again. This means that if the model
+        /// supports 
+        /// <see cref="IEditableObject"/>, it will be reset.
+        /// </summary>
+        /// <param name="modelProperty">The model property.</param>
+        /// <param name="modelCleanUpMode">The model clean up mode.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="modelProperty"/> is <c>null</c>.</exception>
+        protected void ResetModel(string modelProperty, ModelCleanUpMode modelCleanUpMode)
+        {
+            Argument.IsNotNull("modelProperty", modelProperty);
+
+            var model = GetValue(modelProperty);
+
+            UninitializeModel(modelProperty, model, modelCleanUpMode);
+            InitializeModel(modelProperty, model);
         }
 
         /// <summary>
