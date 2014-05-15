@@ -15,7 +15,6 @@ namespace Catel.Modules
     using Logging;
     using Microsoft.Practices.Prism.Modularity;
     using Reflection;
-    using Threading;
 
     /// <summary>
     /// ModuleCatalog that allows the downloading of all modules dynamically based on the <see cref="ModuleInfo.Ref"/> property.

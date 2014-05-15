@@ -21,14 +21,14 @@ namespace Catel
     using Microsoft.Practices.Prism.Modularity;
     using Microsoft.Practices.Prism.Regions;
 
-    #if NET
+#if NET
     using Modules.ModuleManager;
-    #endif
+#endif
 
     using MVVM;
     using Services;
     using MVVM.Tasks;
-    
+
     using Reflection;
 
     /// <summary>

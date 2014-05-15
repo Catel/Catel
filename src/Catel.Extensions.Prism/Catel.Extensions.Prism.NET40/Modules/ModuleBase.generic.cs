@@ -21,6 +21,8 @@ namespace Catel.Modules
     public abstract class ModuleBase<TContainer> : IModule
         where TContainer : class
     {
+        private bool _initialized;
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ModuleBase{T}"/> class.
@@ -75,6 +77,13 @@ namespace Catel.Modules
         /// </summary>
         public void Initialize()
         {
+            if (_initialized)
+            {
+                return;
+            }
+
+            _initialized = true;
+
             OnInitializing();
 
             OnRegisterViewsAndTypes();
