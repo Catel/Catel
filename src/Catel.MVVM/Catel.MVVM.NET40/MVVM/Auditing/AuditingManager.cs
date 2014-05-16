@@ -8,6 +8,7 @@ namespace Catel.MVVM.Auditing
 {
     using System;
     using System.Collections.Generic;
+    using IoC;
 
     /// <summary>
     /// Handles the auditing for MVVM inside Catel.
@@ -49,6 +50,19 @@ namespace Catel.MVVM.Auditing
             {
                 _instance._auditors.Clear();
             }
+        }
+
+        /// <summary>
+        /// Registers a auditor and automatically instantiates it by using the <see cref="ITypeFactory"/>.
+        /// </summary>
+        /// <typeparam name="TAuditor">The type of the auditor.</typeparam>
+        public static void RegisterAuditor<TAuditor>()
+            where TAuditor : IAuditor
+        {
+            var typeFactory = IoCConfiguration.DefaultTypeFactory;
+            var auditor = typeFactory.CreateInstance<TAuditor>();
+
+            RegisterAuditor(auditor);
         }
 
         /// <summary>
@@ -103,14 +117,14 @@ namespace Catel.MVVM.Auditing
         /// <summary>
         /// Must be called when a specific view model type is created.
         /// </summary>
-        /// <param name="viewModelType">Type of the view model.</param>
-        internal static void OnViewModelCreated(Type viewModelType)
+        /// <param name="viewModel">The view model.</param>
+        internal static void OnViewModelCreated(IViewModel viewModel)
         {
             lock (_instance._auditors)
             {
                 foreach (var auditor in _instance._auditors)
                 {
-                    auditor.OnViewModelCreated(viewModelType);
+                    auditor.OnViewModelCreated(viewModel);
                 }
             }
         }

@@ -29,7 +29,7 @@ namespace Catel.Test.MVVM.Auditing
         public bool OnViewModelCreatedCalled { get; set; }
         public Type OnViewModelCreatedType { get; set; }
 
-        public override void OnViewModelCreated(Type viewModelType)
+        public override void OnViewModelCreated(IViewModel viewModel)
         {
             if (OnViewModelCreatedCalled)
             {
@@ -37,7 +37,7 @@ namespace Catel.Test.MVVM.Auditing
             }
 
             OnViewModelCreatedCalled = true;
-            OnViewModelCreatedType = viewModelType;
+            OnViewModelCreatedType = viewModel.GetType();
         }
 
         public bool OnPropertyChangingCalled { get; set; }

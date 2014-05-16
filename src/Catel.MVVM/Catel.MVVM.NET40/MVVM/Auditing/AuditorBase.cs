@@ -52,8 +52,8 @@ namespace Catel.MVVM.Auditing
         /// <summary>
         /// Called when a specific view model type is created.
         /// </summary>
-        /// <param name="viewModelType">Type of the view model.</param>
-        public virtual void OnViewModelCreated(Type viewModelType) { }
+        /// <param name="viewModel">The view model.</param>
+        public virtual void OnViewModelCreated(IViewModel viewModel) { }
 
         /// <summary>
         /// Called when the property of a view model is about to change.

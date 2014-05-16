@@ -35,7 +35,7 @@ namespace Catel.MVVM.Auditing
 
             SubscribeEvents(viewModel);
 
-            AuditingManager.OnViewModelCreated(viewModel.GetType());
+            AuditingManager.OnViewModelCreated(viewModel);
         }
 
         /// <summary>
