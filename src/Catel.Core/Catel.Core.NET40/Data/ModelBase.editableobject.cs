@@ -158,6 +158,21 @@ namespace Catel.Data
 #endif
         private event EventHandler<BeginEditEventArgs> _beginEditingEvent;
 
+				/// <summary>
+				/// Occurs when the edit cancel has been completed or canceled.
+				/// </summary>
+				/// <remarks>
+				/// This event uses <see cref="EventArgs"/> instead of
+				/// an derived version of <see cref="EditEventArgs"/> because
+				/// having a Cancel flag would be misleading and there appears to
+				/// be no need for the <see cref="EditEventArgs.EditableObject"/> as
+				/// the sender of the event should be the same information.
+				/// </remarks>
+#if NET
+				[field: NonSerialized]
+#endif
+				private event EventHandler<EventArgs> _cancelEditingCompletedEvent;
+
 #if NET
         [field: NonSerialized]
 #endif
@@ -174,7 +189,19 @@ namespace Catel.Data
             remove { _beginEditingEvent -= value; }
         }
 
-        event EventHandler<CancelEditEventArgs> IAdvancedEditableObject.CancelEditing
+				event EventHandler<EventArgs> IAdvancedEditableObject.CancelEditingCompleted
+				{
+					add
+					{
+						_cancelEditingCompletedEvent += value;
+					}
+					remove
+					{
+						_cancelEditingCompletedEvent += value;
+					}
+				}
+
+				event EventHandler<CancelEditEventArgs> IAdvancedEditableObject.CancelEditing
         {
             add { _cancelEditingEvent += value; }
             remove { _cancelEditingEvent += value; }
@@ -202,7 +229,23 @@ namespace Catel.Data
         {
         }
 
-        /// <summary>
+				/// <summary>
+				/// Raises the <see cref="IAdvancedEditableObject.CancelEditingCompleted"/> event.
+				/// </summary>
+				/// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+				/// <remarks>
+				/// This event uses <see cref="EventArgs"/> instead of
+				/// an derived version of <see cref="EditEventArgs"/> because
+				/// having a Cancel flag would be misleading and there appears to
+				/// be no need for the <see cref="EditEventArgs.EditableObject"/> as
+				/// this object should be the same as what would have been put into 
+				/// <see cref="EditEventArgs.EditableObject"/>.
+				/// </remarks>
+				protected virtual void OnCancelEditCompleted (EventArgs e)
+				{
+				}
+
+				/// <summary>
         /// Raises the <see cref="IEditableObject.EndEdit"/> event.
         /// </summary>
         /// <param name="e">The <see cref="System.ComponentModel.EditEventArgs"/> instance containing the event data.</param>
@@ -240,11 +283,7 @@ namespace Catel.Data
         /// </summary>
         void IEditableObject.CancelEdit()
         {
-            if (_backup == null)
-            {
-                return;
-            }
-
+					EventArgs	ea = new EventArgs();
             var eventArgs = new CancelEditEventArgs(this);
             _cancelEditingEvent.SafeInvoke(this, eventArgs);
             OnCancelEdit(eventArgs);
@@ -252,25 +291,38 @@ namespace Catel.Data
             if (eventArgs.Cancel)
             {
                 Log.Info("IEditableObject.CancelEdit is canceled by the event args");
-                return;
-            }
+								goto cancel_completed;
+						}
 
-            Log.Debug("IEditableObject.CancelEdit");
+						if (_backup == null)
+						{
+							goto cancel_completed;
+						}
+
+						Log.Debug("IEditableObject.CancelEdit");
 
             _backup.RestoreBackup();
             _backup = null;
-        }
+
+/*
+ *			One could make the argument that the completed event should only
+ *			occur if the cancel was allowed to complete.  However, I believe
+ *			that consistency of the event should be the overriding factor.
+ *			
+ *			The user code can easily ignore the event when needed, and it is
+ *			more difficult for the user code to synthesize the event if it was
+ *			needed and not supplied.
+ */
+					cancel_completed:
+						_cancelEditingCompletedEvent.SafeInvoke(this, ea);
+						OnCancelEditCompleted(ea);
+				}
 
         /// <summary>
         /// Pushes changes since the last <see cref="IEditableObject.BeginEdit()"/> call.
         /// </summary>
         void IEditableObject.EndEdit()
         {
-            if (_backup == null)
-            {
-                return;
-            }
-
             var eventArgs = new EndEditEventArgs(this);
             _endEditingEvent.SafeInvoke(this, eventArgs);
             OnEndEdit(eventArgs);
@@ -281,7 +333,12 @@ namespace Catel.Data
                 return;
             }
 
-            Log.Debug("IEditableObject.EndEdit");
+						if (_backup == null)
+						{
+							return;
+						}
+
+						Log.Debug("IEditableObject.EndEdit");
 
             _backup = null;
         }
