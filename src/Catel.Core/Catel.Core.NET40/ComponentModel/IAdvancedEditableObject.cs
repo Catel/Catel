@@ -25,7 +25,12 @@ namespace System.ComponentModel
         /// </summary>
         event EventHandler<CancelEditEventArgs> CancelEditing;
 
-        /// <summary>
+				/// <summary>
+				/// Occurs when the edit cancel has been completed or canceled.
+				/// </summary>
+				event EventHandler<EventArgs> CancelEditingCompleted;
+
+				/// <summary>
         /// Occurs when the editing of the object has just been ended.
         /// </summary>
         event EventHandler<EndEditEventArgs> EndEditing;
