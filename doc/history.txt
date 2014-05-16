@@ -92,6 +92,8 @@ Added/fixed:
 (*) CTL-397 Invalidate CommandManagerBindings when command is registered
 (*) CTL-400 Don't handle errors in CommandManager when designer is attached
 (*) CTL-413 ModelBase.Clone is now virtual
+(*) CTL-425 Introduced IAdvancedEditableObject.CancelEditingCompleted to receive more information on how the IEditableObject
+    has been canceled (was it canceled at all)
 (*) CTL-426 DataWindow automatically use application icon if no icon specified
 (*) CTL-440 Support nested view models (parent / child relations) when views are in ContentPresenter
 (x) CTL-327 ListCollectionView not supported in ChangeNotificationWrapper (causes InvalidCastException)

@@ -221,6 +221,9 @@
     <Compile Include="..\Catel.Core.NET40\ComponentModel\EventArgs\BeginEditEventArgs.cs">
       <Link>ComponentModel\EventArgs\BeginEditEventArgs.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Core.NET40\ComponentModel\EventArgs\CancelEditCompletedEventArgs.cs">
+      <Link>ComponentModel\EventArgs\CancelEditCompletedEventArgs.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Core.NET40\ComponentModel\EventArgs\CancelEditEventArgs.cs">
       <Link>ComponentModel\EventArgs\CancelEditEventArgs.cs</Link>
     </Compile>

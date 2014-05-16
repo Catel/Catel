@@ -24,13 +24,13 @@ namespace Catel.Test.Data
             {
                 var advancedEditableObject = (IAdvancedEditableObject)this;
                 advancedEditableObject.BeginEditing += (sender, e) => BeginEditingCalled = true;
-								advancedEditableObject.CancelEditing += (sender, e) =>
-								{
-									e.Cancel = DoCancelCancel;
-									CancelEditingCalled = true;
-								};
-								advancedEditableObject.CancelEditingCompleted += (sender, e) => CancelEditingCompletedCalled = true;
-								advancedEditableObject.EndEditing += (sender, e) => EndEditingCalled = true;
+                advancedEditableObject.CancelEditing += (sender, e) =>
+                {
+                    e.Cancel = DoCancelCancel;
+                    CancelEditingCalled = true;
+                };
+                advancedEditableObject.CancelEditingCompleted += (sender, e) => CancelEditingCompletedCalled = true;
+                advancedEditableObject.EndEditing += (sender, e) => EndEditingCalled = true;
             }
 
             public bool OnBeginEditCalled
@@ -56,41 +56,37 @@ namespace Catel.Test.Data
                 private set { _onCancelEditCalled = value; }
             }
 
-						public bool OnCancelEditCompletedCalled
-						{
-							get;
-							private set;
-						}
+            public bool OnCancelEditCompletedCalled
+            {
+                get;
+                private set;
+            }
 
-						public bool CancelEditingCalled
+            public bool CancelEditingCalled
             {
                 get { return _cancelEditingCalled; }
                 private set { _cancelEditingCalled = value; }
             }
 
-						public bool CancelEditingCompletedCalled
-						{
-							get;
-							private set;
-						}
+            public bool CancelEditingCompletedCalled
+            {
+                get;
+                private set;
+            }
 
-						protected override void OnCancelEdit (EditEventArgs e)
+            protected override void OnCancelEdit(EditEventArgs e)
             {
                 OnCancelEditCalled = true;
             }
 
-						protected override void OnCancelEditCompleted (EventArgs e)
-						{
-							OnCancelEditCompletedCalled = true;
-						}
+            protected override void OnCancelEditCompleted(CancelEditCompletedEventArgs e)
+            {
+                OnCancelEditCompletedCalled = true;
+            }
 
-						public bool DoCancelCancel
-						{
-							get;
-							set;
-						}
+            public bool DoCancelCancel { get; set; }
 
-						public bool OnEndEditCalled
+            public bool OnEndEditCalled
             {
                 get { return _onEndEditCalled; }
                 private set { _onEndEditCalled = value; }
@@ -234,11 +230,11 @@ namespace Catel.Test.Data
 
                 editableObjectAsIEditableObject.CancelEdit();
 
-								Assert.IsTrue(editableObject.CancelEditingCalled);
-								Assert.IsTrue(editableObject.CancelEditingCompletedCalled);
-								Assert.IsTrue(editableObject.OnCancelEditCalled);
-								Assert.IsTrue(editableObject.OnCancelEditCompletedCalled);
-						}
+                Assert.IsTrue(editableObject.CancelEditingCalled);
+                Assert.IsTrue(editableObject.CancelEditingCompletedCalled);
+                Assert.IsTrue(editableObject.OnCancelEditCalled);
+                Assert.IsTrue(editableObject.OnCancelEditCompletedCalled);
+            }
 
             [TestMethod]
             public void InvokesCancelEditingEventAfterBeginEditIsCalled()
@@ -249,36 +245,36 @@ namespace Catel.Test.Data
                 Assert.IsFalse(editableObject.CancelEditingCalled);
                 Assert.IsFalse(editableObject.OnCancelEditCalled);
 
-								editableObjectAsIEditableObject.BeginEdit();
-								editableObjectAsIEditableObject.CancelEdit();
+                editableObjectAsIEditableObject.BeginEdit();
+                editableObjectAsIEditableObject.CancelEdit();
 
-								Assert.IsTrue(editableObject.CancelEditingCalled);
-								Assert.IsTrue(editableObject.CancelEditingCompletedCalled);
-								Assert.IsTrue(editableObject.OnCancelEditCalled);
-								Assert.IsTrue(editableObject.OnCancelEditCompletedCalled);
-						}
+                Assert.IsTrue(editableObject.CancelEditingCalled);
+                Assert.IsTrue(editableObject.CancelEditingCompletedCalled);
+                Assert.IsTrue(editableObject.OnCancelEditCalled);
+                Assert.IsTrue(editableObject.OnCancelEditCompletedCalled);
+            }
 
-						[TestMethod]
-						public void InvokesCancelEditingCompletedEventAfterCancelEditIsCanceled ()
-						{
-							var editableObject = new EditableObject();
-							var editableObjectAsIEditableObject = (IEditableObject)editableObject;
+            [TestMethod]
+            public void InvokesCancelEditingCompletedEventAfterCancelEditIsCanceled()
+            {
+                var editableObject = new EditableObject();
+                var editableObjectAsIEditableObject = (IEditableObject)editableObject;
 
-							editableObject.DoCancelCancel = true;
+                editableObject.DoCancelCancel = true;
 
-							Assert.IsFalse(editableObject.CancelEditingCalled);
-							Assert.IsFalse(editableObject.OnCancelEditCalled);
+                Assert.IsFalse(editableObject.CancelEditingCalled);
+                Assert.IsFalse(editableObject.OnCancelEditCalled);
 
-							editableObjectAsIEditableObject.BeginEdit();
-							editableObjectAsIEditableObject.CancelEdit();
+                editableObjectAsIEditableObject.BeginEdit();
+                editableObjectAsIEditableObject.CancelEdit();
 
-							Assert.IsTrue(editableObject.CancelEditingCalled);
-							Assert.IsTrue(editableObject.CancelEditingCompletedCalled);
-							Assert.IsTrue(editableObject.OnCancelEditCalled);
-							Assert.IsTrue(editableObject.OnCancelEditCompletedCalled);
-						}
-						
-						[TestMethod]
+                Assert.IsTrue(editableObject.CancelEditingCalled);
+                Assert.IsTrue(editableObject.CancelEditingCompletedCalled);
+                Assert.IsTrue(editableObject.OnCancelEditCalled);
+                Assert.IsTrue(editableObject.OnCancelEditCompletedCalled);
+            }
+
+            [TestMethod]
             public void IgnoresPropertiesNotInBackup()
             {
                 var editableObject = new EditableObject();
@@ -350,9 +346,9 @@ namespace Catel.Test.Data
 
                 editableObjectAsIEditableObject.EndEdit();
 
-								Assert.IsTrue(editableObject.EndEditingCalled);
-								Assert.IsTrue(editableObject.OnEndEditCalled);
-						}
+                Assert.IsTrue(editableObject.EndEditingCalled);
+                Assert.IsTrue(editableObject.OnEndEditCalled);
+            }
 
             [TestMethod]
             public void InvokesEndEditingEventAfterBeginEditIsCalled()
