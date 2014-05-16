@@ -567,24 +567,27 @@ namespace Catel.Data
             var type = GetType();
 
 #if !WINDOWS_PHONE && !NETFX_CORE && !PCL && !NET35
-            if (!_propertyValuesIgnoredOrFailedForValidation.ContainsKey(type))
+            lock (_propertyValuesIgnoredOrFailedForValidation)
             {
-                _propertyValuesIgnoredOrFailedForValidation.Add(type, new HashSet<string>());
+                if (!_propertyValuesIgnoredOrFailedForValidation.ContainsKey(type))
+                {
+                    _propertyValuesIgnoredOrFailedForValidation.Add(type, new HashSet<string>());
 
-                // Ignore modelbase properties
-                _propertyValuesIgnoredOrFailedForValidation[type].Add("EqualityComparer");
-                _propertyValuesIgnoredOrFailedForValidation[type].Add("LeanAndMeanModel");
-                _propertyValuesIgnoredOrFailedForValidation[type].Add("DisableEventSubscriptionsOfChildValues");
-                _propertyValuesIgnoredOrFailedForValidation[type].Add("IsInitializing");
-                _propertyValuesIgnoredOrFailedForValidation[type].Add("IsInitialized");
-                _propertyValuesIgnoredOrFailedForValidation[type].Add("ContainsNonSerializableMembers");
-                _propertyValuesIgnoredOrFailedForValidation[type].Add("AlwaysInvokeNotifyChanged");
-                _propertyValuesIgnoredOrFailedForValidation[type].Add("HandlePropertyAndCollectionChanges");
-                _propertyValuesIgnoredOrFailedForValidation[type].Add("AutomaticallyValidateOnPropertyChanged");
-                _propertyValuesIgnoredOrFailedForValidation[type].Add("DeserializationSucceeded");
-                _propertyValuesIgnoredOrFailedForValidation[type].Add("IsValidating");
-                _propertyValuesIgnoredOrFailedForValidation[type].Add("SuspendValidation");
-                _propertyValuesIgnoredOrFailedForValidation[type].Add("HideValidationResults");
+                    // Ignore modelbase properties
+                    _propertyValuesIgnoredOrFailedForValidation[type].Add("EqualityComparer");
+                    _propertyValuesIgnoredOrFailedForValidation[type].Add("LeanAndMeanModel");
+                    _propertyValuesIgnoredOrFailedForValidation[type].Add("DisableEventSubscriptionsOfChildValues");
+                    _propertyValuesIgnoredOrFailedForValidation[type].Add("IsInitializing");
+                    _propertyValuesIgnoredOrFailedForValidation[type].Add("IsInitialized");
+                    _propertyValuesIgnoredOrFailedForValidation[type].Add("ContainsNonSerializableMembers");
+                    _propertyValuesIgnoredOrFailedForValidation[type].Add("AlwaysInvokeNotifyChanged");
+                    _propertyValuesIgnoredOrFailedForValidation[type].Add("HandlePropertyAndCollectionChanges");
+                    _propertyValuesIgnoredOrFailedForValidation[type].Add("AutomaticallyValidateOnPropertyChanged");
+                    _propertyValuesIgnoredOrFailedForValidation[type].Add("DeserializationSucceeded");
+                    _propertyValuesIgnoredOrFailedForValidation[type].Add("IsValidating");
+                    _propertyValuesIgnoredOrFailedForValidation[type].Add("SuspendValidation");
+                    _propertyValuesIgnoredOrFailedForValidation[type].Add("HideValidationResults");
+                }
             }
 #endif
 
