@@ -842,6 +842,18 @@ namespace Catel.Test.IoC
 
                 Assert.IsTrue(invoked);
             }
+
+            [TestMethod]
+            public void DoesNotCorruptTypeRequestPathOnMultipleCallsWithExceptions()
+            {
+                var serviceLocator = IoCFactory.CreateServiceLocator();
+
+                serviceLocator.TryResolveType<ITestInterface>();
+
+                serviceLocator.RegisterType<ITestInterface, TestClass1>();
+
+                Assert.IsNotNull(serviceLocator.ResolveType<ITestInterface>());
+            }
         }
 
         [TestClass]

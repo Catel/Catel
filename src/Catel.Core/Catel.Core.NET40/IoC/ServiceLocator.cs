@@ -448,8 +448,7 @@ namespace Catel.IoC
                         return TypeFactory.CreateInstance(serviceType);
                     }
 
-                    Log.Error("The type '{0}' is not registered", serviceType.FullName);
-                    throw new TypeNotRegisteredException(serviceType);
+                    ThrowTypeNotRegisteredException(serviceType);
                 }
 
                 var serviceInfo = new ServiceInfo(serviceType, tag);
@@ -849,8 +848,7 @@ namespace Catel.IoC
                 object instance = registeredTypeInfo.CreateServiceFunc(registeredTypeInfo);
                 if (instance == null)
                 {
-                    Log.Error("Type '{0}' is not registered", serviceType.GetSafeFullName());
-                    throw new TypeNotRegisteredException(serviceType);
+                    ThrowTypeNotRegisteredException(serviceType);
                 }
 
                 if (IsTypeRegisteredAsSingleton(serviceType, tag))
@@ -884,8 +882,7 @@ namespace Catel.IoC
 
             if (instance == null)
             {
-                Log.Error("Type '{0}' is not registered", registration.DeclaringType.GetSafeFullName());
-                throw new TypeNotRegisteredException(registration.DeclaringType);
+                ThrowTypeNotRegisteredException(registration.DeclaringType);
             }
 
             var handler = TypeInstantiated;
@@ -920,6 +917,19 @@ namespace Catel.IoC
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Throws the <see cref="TypeNotRegisteredException" /> but will also reset the current type request path.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        private void ThrowTypeNotRegisteredException(Type type)
+        {
+            _currentTypeRequestPath = null;
+            // or _currentTypeRequestPath.PopType();
+
+            Log.Error("The type '{0}' is not registered", type.GetSafeFullName());
+            throw new TypeNotRegisteredException(type);
         }
         #endregion
 
