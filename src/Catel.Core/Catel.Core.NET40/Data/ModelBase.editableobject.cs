@@ -283,7 +283,7 @@ namespace Catel.Data
         /// </summary>
         void IEditableObject.CancelEdit()
         {
-					EventArgs	ea = new EventArgs();
+					CancelEditCompletedEventArgs		cecea;
             var eventArgs = new CancelEditEventArgs(this);
             _cancelEditingEvent.SafeInvoke(this, eventArgs);
             OnCancelEdit(eventArgs);
@@ -291,12 +291,18 @@ namespace Catel.Data
             if (eventArgs.Cancel)
             {
                 Log.Info("IEditableObject.CancelEdit is canceled by the event args");
-								goto cancel_completed;
+								cecea = new CancelEditCompletedEventArgs(true);
+								_cancelEditingCompletedEvent.SafeInvoke(this, cecea);
+								OnCancelEditCompleted(cecea);
+								return;
 						}
 
 						if (_backup == null)
 						{
-							goto cancel_completed;
+							cecea = new CancelEditCompletedEventArgs(true);
+							_cancelEditingCompletedEvent.SafeInvoke(this, cecea);
+							OnCancelEditCompleted(cecea);
+							return;
 						}
 
 						Log.Debug("IEditableObject.CancelEdit");
@@ -304,18 +310,9 @@ namespace Catel.Data
             _backup.RestoreBackup();
             _backup = null;
 
-/*
- *			One could make the argument that the completed event should only
- *			occur if the cancel was allowed to complete.  However, I believe
- *			that consistency of the event should be the overriding factor.
- *			
- *			The user code can easily ignore the event when needed, and it is
- *			more difficult for the user code to synthesize the event if it was
- *			needed and not supplied.
- */
-					cancel_completed:
-						_cancelEditingCompletedEvent.SafeInvoke(this, ea);
-						OnCancelEditCompleted(ea);
+						cecea = new CancelEditCompletedEventArgs(false);
+						_cancelEditingCompletedEvent.SafeInvoke(this, cecea);
+						OnCancelEditCompleted(cecea);
 				}
 
         /// <summary>

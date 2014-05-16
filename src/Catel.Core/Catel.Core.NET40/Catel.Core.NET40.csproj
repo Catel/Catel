@@ -87,6 +87,7 @@
     <Compile Include="Collections\Extensions\DictionaryExtensions.cs" />
     <Compile Include="Collections\Helpers\CollectionHelper.cs" />
     <Compile Include="ComponentModel\BackgroundWorker.cs" />
+    <Compile Include="ComponentModel\EventArgs\CancelEditCompletedEventArgs.cs" />
     <Compile Include="ComponentModel\EventArgs\PropertyChangingEventArgs.cs" />
     <Compile Include="ComponentModel\Extensions\PropertyChangedEventArgsExtensions.cs" />
     <Compile Include="ComponentModel\IDataErrorInfo.cs" />
