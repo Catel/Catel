@@ -1,0 +1,240 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3604FF18-B278-4508-AA83-88D34F6C026D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Catel</RootNamespace>
+    <AssemblyName>Catel.Extensions.Prism5</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\output\debug\NET45\Catel.Extensions.Prism5\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET; NET45; PRISM5</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>..\..\..\output\debug\NET45\Catel.Extensions.Prism5\Catel.Extensions.Prism5.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\output\release\NET45\Catel.Extensions.Prism5\</OutputPath>
+    <DefineConstants>TRACE;NET; NET45; PRISM5</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>..\..\..\output\release\NET45\Catel.Extensions.Prism\Catel.Extensions.Prism5.XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Practices.Prism.Composition">
+      <HintPath>..\..\..\lib\Prism.Composition.5.0.0\lib\NET45\Microsoft.Practices.Prism.Composition.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.Interactivity">
+      <HintPath>..\..\..\lib\Prism.Interactivity.5.0.0\lib\NET45\Microsoft.Practices.Prism.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.Mvvm">
+      <HintPath>..\..\..\lib\Prism.Mvvm.1.0.0\lib\net45\Microsoft.Practices.Prism.Mvvm.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.Mvvm.Desktop">
+      <HintPath>..\..\..\lib\Prism.Mvvm.1.0.0\lib\net45\Microsoft.Practices.Prism.Mvvm.Desktop.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.PubSubEvents">
+      <HintPath>..\..\..\lib\Prism.PubSubEvents.1.0.0\lib\portable-sl4+wp7+windows8+net40\Microsoft.Practices.Prism.PubSubEvents.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.SharedInterfaces">
+      <HintPath>..\..\..\lib\Prism.Mvvm.1.0.0\lib\net45\Microsoft.Practices.Prism.SharedInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\..\..\lib\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.XmlTransform">
+      <HintPath>..\..\..\lib\Microsoft.Web.Xdt.1.0.0\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
+    </Reference>
+    <Reference Include="NuGet.Core, Version=2.8.50320.36, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\NuGet.Core.2.8.1\lib\net40-Client\NuGet.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Obsolete">
+      <HintPath>..\..\..\lib\Obsolete.Fody.3.1.0.0\Lib\NET35\Obsolete.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\SolutionAssemblyInfo.cs">
+      <Link>Properties\SolutionAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\BootstrapperBase.cs">
+      <Link>BootstrapperBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\BootstrapperBase.generic.cs">
+      <Link>BootstrapperBase.generic.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\ExtensionsPrismModule.cs">
+      <Link>ExtensionsPrismModule.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Extensions\DependencyObjectExtensions.cs">
+      <Link>Extensions\DependencyObjectExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Extensions\ILogExtensions.cs">
+      <Link>Extensions\ILogExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Extensions\IRegionManagerExtensions.cs">
+      <Link>Extensions\IRegionManagerExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\ModuleInitializer.cs">
+      <Link>ModuleInitializer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\MVVM\Services\Extensions\IUIVisualizerServiceExtensions.cs">
+      <Link>MVVM\Services\Extensions\IUIVisualizerServiceExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\MVVM\Services\Extensions\ISplashScreenServiceExtensions.cs">
+      <Link>MVVM\Services\Extensions\ISplashScreenServiceExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Interfaces\IModuleTracker.cs">
+      <Link>Interfaces\IModuleTracker.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Interfaces\IRegionInfo.cs">
+      <Link>Interfaces\IRegionInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Interfaces\IViewInfo.cs">
+      <Link>Interfaces\IViewInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Modules\CompositeModuleCatalog.cs">
+      <Link>Modules\CompositeModuleCatalog.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Modules\CompositeNuGetBasedModuleCatalog.cs">
+      <Link>Modules\CompositeNuGetBasedModuleCatalog.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Modules\CompositePackageRepository.cs">
+      <Link>Modules\CompositePackageRepository.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Modules\Extensions\ModuleInfoExtensions.cs">
+      <Link>Modules\Extensions\ModuleInfoExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Modules\Interfaces\INuGetBasedModuleCatalog.cs">
+      <Link>Modules\Interfaces\INuGetBasedModuleCatalog.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Modules\ModuleCatalog.cs">
+      <Link>Modules\ModuleCatalog.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Modules\ModuleBase.cs">
+      <Link>Modules\ModuleBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Modules\ModuleBase.generic.cs">
+      <Link>Modules\ModuleBase.generic.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Modules\ModuleManager\Interfaces\IModuleInfoManager.cs">
+      <Link>Modules\ModuleManager\Interfaces\IModuleInfoManager.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Modules\ModuleManager\Models\ModuleTemplate.cs">
+      <Link>Modules\ModuleManager\Models\ModuleTemplate.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Modules\ModuleManager\ModuleManager.cs">
+      <Link>Modules\ModuleManager\ModuleManager.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Modules\ModuleManager\ViewModels\ModuleManagerViewModel.cs">
+      <Link>Modules\ModuleManager\ViewModels\ModuleManagerViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Modules\NuGetBasedModuleCatalog.cs">
+      <Link>Modules\NuGetBasedModuleCatalog.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Modules\NuGetBasedModuleCatalogParentChildBehavior.cs">
+      <Link>Modules\NuGetBasedModuleCatalogParentChildBehavior.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Modules\NuGet\InstallPackageRequest.cs">
+      <Link>Modules\NuGet\InstallPackageRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Modules\NuGet\NuGetModuleTypeLoader.cs">
+      <Link>Modules\NuGet\NuGetModuleTypeLoader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Modules\NuGet\RemoteInstallPackageRequest.cs">
+      <Link>Modules\NuGet\RemoteInstallPackageRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Modules\SafeDirectoryModuleCatalog.cs">
+      <Link>Modules\SafeDirectoryModuleCatalog.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Properties\AssemblyInfo.cs">
+      <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\ServiceLocatorAdapter.cs">
+      <Link>ServiceLocatorAdapter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\MVVM\Services\Interfaces\IUICompositionService.cs">
+      <Link>MVVM\Services\Interfaces\IUICompositionService.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\MVVM\Services\UICompositionService.cs">
+      <Link>MVVM\Services\UICompositionService.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Tasks\BootstrapperTaskFactory.cs">
+      <Link>Tasks\BootstrapperTaskFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism.NET40\Tasks\Interfaces\IBootstrapperTaskFactory.cs">
+      <Link>Tasks\Interfaces\IBootstrapperTaskFactory.cs</Link>
+    </Compile>
+    <Compile Include="Modules\ModuleManager\Views\ModuleManagerView.xaml.cs">
+      <DependentUpon>ModuleManagerView.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Catel.Core\Catel.Core.NET45\Catel.Core.NET45.csproj">
+      <Project>{d748be60-bad6-4d1b-be5a-c24943a56594}</Project>
+      <Name>Catel.Core.NET45</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Catel.MVVM\Catel.MVVM.NET45\Catel.MVVM.NET45.csproj">
+      <Project>{bedeb2cb-51ab-4af6-85f9-6a596b4603bb}</Project>
+      <Name>Catel.MVVM.NET45</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FodyWeavers.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Modules\ModuleManager\Views\ModuleManagerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <Import Project="$(ProjectPath)\..\..\..\..\Tools\Pepita\PepitaGet.targets" />
+  <Import Project="..\..\..\lib\Fody.1.22.1\build\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.22.1\build\Fody.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\lib\Fody.1.22.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.1.22.1\build\Fody.targets'))" />
+  </Target>
+</Project>

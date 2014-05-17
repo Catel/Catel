@@ -16,7 +16,11 @@ namespace Catel
     using Logging;
 
     using Microsoft.Practices.Prism;
+#if PRISM5
+    using Microsoft.Practices.Prism.PubSubEvents;
+#else
     using Microsoft.Practices.Prism.Events;
+#endif
     using Microsoft.Practices.Prism.Logging;
     using Microsoft.Practices.Prism.Modularity;
     using Microsoft.Practices.Prism.Regions;

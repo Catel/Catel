@@ -162,6 +162,7 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("Catel.Extensions.Interception")]
 [assembly: InternalsVisibleTo("Catel.Extensions.Memento")]
 [assembly: InternalsVisibleTo("Catel.Extensions.Prism")]
+[assembly: InternalsVisibleTo("Catel.Extensions.Prism5")]
 
 [assembly: InternalsVisibleTo("Catel.Test")]
 #endif

@@ -30,6 +30,7 @@ Added/fixed (BREAKING CHANGES):
 (+) CTL-354 Introduced UserControl.UnloadBehavior to specify the behavior which will be handled when the view is
     being unloaded or the data context changes. This defaults to SaveAndCloseViewModel. If other logic is required,
     make sure to set the value on the UserControl
+(+) CTL-427 Added support for Prism5 in a new extension (Catel.Extensions.Prism5)
 (*) CTL-309 Moved Catel.MVVM.Services to Catel.Services namespace so all services in all extensions will now be put
     into the same namespace
 (*) CTL-328 Fully abstracted away the MVVM logic so they can be used in Xamarin as well. Therefore all view elements
