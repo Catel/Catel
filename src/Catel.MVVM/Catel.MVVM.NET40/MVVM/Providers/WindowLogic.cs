@@ -8,7 +8,7 @@ namespace Catel.MVVM.Providers
 {
     using System;
     using System.Windows;
-    using Catel.MVVM.Views;
+    using Views;
     using Logging;
     using MVVM;
     using Reflection;
