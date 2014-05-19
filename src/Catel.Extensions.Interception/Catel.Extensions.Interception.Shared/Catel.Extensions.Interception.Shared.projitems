@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>5b33158e-5b9e-4099-a300-7a409d392556</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Catel.Extensions.Interception.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Adapters\InterceptorAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Adapters\InvocationAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\DoNotInterceptAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Callbacks\Callback.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Callbacks\CallbackBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Callbacks\Interfaces\ICallbackVisitor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Callbacks\OnAfterCallback.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Callbacks\OnBeforeCallback.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Callbacks\OnCatchCallback.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Callbacks\OnFinallyCallback.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Callbacks\OnInvokeCallback.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Callbacks\OnReturnCallback.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Callbacks\SelectCallbackVisitor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Collections\CallbackCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Collections\StateInterceptorCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Definitions\Interfaces\IMemberDefinition.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Definitions\MemberDefinition.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ProxyInitializationException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExtensionsInterceptionModule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\EnumerableExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ExpressionExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\MethodInfoExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ServiceLocatorExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Factories\Interfaces\IProxyFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Factories\ProxyFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Handlers\CallbackHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Handlers\HandlerBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Handlers\InterceptorHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Handlers\Interfaces\ICallbackHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Handlers\Interfaces\IInterceptorHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interceptors\ContextInterceptor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interceptors\FunctionInterceptor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interceptors\InterceptorBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interceptors\Interfaces\IInterceptor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interceptors\Interfaces\IStateInterceptor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interceptors\StateInterceptor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Invocations\Interfaces\IInvocation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\Confirm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\It.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\Require.cs" />
+  </ItemGroup>
+</Project>

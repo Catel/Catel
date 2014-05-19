@@ -78,21 +78,15 @@
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\SolutionAssemblyInfo.cs">
-      <Link>Properties\SolutionAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="Config\DependencyInjectionConfig.cs" />
-    <Compile Include="MvcModule.cs" />
-    <Compile Include="IoC\DependencyResolver.cs" />
-    <Compile Include="ModuleInitializer.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\Catel.Core\Catel.Core.NET40\Catel.Core.NET40.csproj">
       <Project>{43147a1a-c8a0-4645-824d-0e7caf0293fc}</Project>
       <Name>Catel.Core.NET40</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="..\Catel.MVC4.Shared\Catel.MVC4.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.MVC4.Shared\Catel.MVC4.Shared.projitems')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

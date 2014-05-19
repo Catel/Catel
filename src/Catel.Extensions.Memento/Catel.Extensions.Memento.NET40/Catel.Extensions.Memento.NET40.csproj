@@ -47,28 +47,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\SolutionAssemblyInfo.cs">
-      <Link>Properties\SolutionAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="ActionUndo.cs" />
-    <Compile Include="Attributes\IgnoreMementoSupportAttribute.cs" />
-    <Compile Include="Batch.cs" />
-    <Compile Include="CollectionChangeUndo.cs" />
-    <Compile Include="CollectionObserver.cs" />
-    <Compile Include="ExtensionsMementoModule.cs" />
-    <Compile Include="Interfaces\IMementoBatch.cs" />
-    <Compile Include="Interfaces\IMementoService.cs" />
-    <Compile Include="Interfaces\IMementoSupport.cs" />
-    <Compile Include="MementoService.cs" />
-    <Compile Include="ModuleInitializer.cs" />
-    <Compile Include="ObjectObserver.cs" />
-    <Compile Include="ObserverBase.cs" />
-    <Compile Include="OperationSet.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PropertyChangeUndo.cs" />
-    <Compile Include="UndoBase.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\Catel.Core\Catel.Core.NET40\Catel.Core.NET40.csproj">
       <Project>{43147a1a-c8a0-4645-824d-0e7caf0293fc}</Project>
       <Name>Catel.Core.NET40</Name>
@@ -80,6 +58,10 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="..\Catel.Extensions.Memento.Shared\Catel.Extensions.Memento.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Extensions.Memento.Shared\Catel.Extensions.Memento.Shared.projitems')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -53,35 +53,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\SolutionAssemblyInfo.cs">
-      <Link>Properties\SolutionAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.FluentValidation.NET40\Attributes\DisplayNameAttribute.cs">
-      <Link>Attributes\DisplayNameAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.FluentValidation.NET40\Attributes\ValidatorDescriptionAttribute.cs">
-      <Link>Attributes\ValidatorDescriptionAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.FluentValidation.NET40\ExtensionsFluentValidationModule.cs">
-      <Link>ExtensionsFluentValidationModule.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.FluentValidation.NET40\FluentValidatorProvider.cs">
-      <Link>FluentValidatorProvider.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.FluentValidation.NET40\FluentValidatorToCatelValidatorAdapter.cs">
-      <Link>FluentValidatorToCatelValidatorAdapter.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.FluentValidation.NET40\ModuleInitializer.cs">
-      <Link>ModuleInitializer.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.FluentValidation.NET40\Properties\AssemblyInfo.cs">
-      <Link>Properties\AssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.FluentValidation.NET40\ValidationType.cs">
-      <Link>ValidationType.cs</Link>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\Catel.Core\Catel.Core.NET45\Catel.Core.NET45.csproj">
       <Project>{d748be60-bad6-4d1b-be5a-c24943a56594}</Project>
       <Name>Catel.Core.NET45</Name>
@@ -93,6 +64,10 @@
   <ItemGroup>
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="..\Catel.Extensions.FluentValidation.Shared\Catel.Extensions.FluentValidation.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Extensions.FluentValidation.Shared\Catel.Extensions.FluentValidation.Shared.projitems')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

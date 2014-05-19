@@ -53,31 +53,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\SolutionAssemblyInfo.cs">
-      <Link>Properties\SolutionAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.DynamicObjects.NET40\Data\DynamicModelBase.cs">
-      <Link>Data\DynamicModelBase.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.DynamicObjects.NET40\Data\DynamicModelBaseMetaObject.cs">
-      <Link>Data\DynamicModelBaseMetaObject.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.DynamicObjects.NET40\ExtensionsDynamicObjectsModule.cs">
-      <Link>ExtensionsDynamicObjectsModule.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.DynamicObjects.NET40\ModuleInitializer.cs">
-      <Link>ModuleInitializer.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.DynamicObjects.NET40\Properties\AssemblyInfo.cs">
-      <Link>Properties\AssemblyInfo.cs</Link>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="..\Catel.Extensions.DynamicObjects.Shared\Catel.Extensions.DynamicObjects.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Extensions.DynamicObjects.Shared\Catel.Extensions.DynamicObjects.Shared.projitems')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

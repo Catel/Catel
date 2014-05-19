@@ -73,40 +73,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\SolutionAssemblyInfo.cs">
-      <Link>Properties\SolutionAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.FluentValidation.NET40\Attributes\DisplayNameAttribute.cs">
-      <Link>Attributes\DisplayNameAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.FluentValidation.NET40\Attributes\ValidatorDescriptionAttribute.cs">
-      <Link>Attributes\ValidatorDescriptionAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.FluentValidation.NET40\ExtensionsFluentValidationModule.cs">
-      <Link>ExtensionsFluentValidationModule.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.FluentValidation.NET40\FluentValidatorProvider.cs">
-      <Link>FluentValidatorProvider.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.FluentValidation.NET40\FluentValidatorToCatelValidatorAdapter.cs">
-      <Link>FluentValidatorToCatelValidatorAdapter.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.FluentValidation.NET40\ModuleInitializer.cs">
-      <Link>ModuleInitializer.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.FluentValidation.NET40\Properties\AssemblyInfo.cs">
-      <Link>Properties\AssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.FluentValidation.NET40\ValidationType.cs">
-      <Link>ValidationType.cs</Link>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="..\Catel.Extensions.FluentValidation.Shared\Catel.Extensions.FluentValidation.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Extensions.FluentValidation.Shared\Catel.Extensions.FluentValidation.Shared.projitems')" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
