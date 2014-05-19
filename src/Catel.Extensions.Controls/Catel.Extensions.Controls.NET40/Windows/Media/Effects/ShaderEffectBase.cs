@@ -4,6 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if NET || SL5
+
 namespace Catel.Windows.Media.Effects
 {
     using System;
@@ -154,3 +156,5 @@ namespace Catel.Windows.Media.Effects
         #endregion
     }
 }
+
+#endif

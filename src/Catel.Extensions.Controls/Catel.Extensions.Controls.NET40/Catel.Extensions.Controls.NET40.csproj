@@ -78,117 +78,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\SolutionAssemblyInfo.cs">
-      <Link>Properties\SolutionAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="ExtensionsControlsModule.cs" />
-    <Compile Include="ModuleInitializer.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Exceptions.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Exceptions.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Resources.de.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.de.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Resources.es.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.es.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Resources.fr.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.fr.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Resources.it.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.it.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Resources.nl.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.nl.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Resources.tr.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.tr.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Resources.zh-Hans.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.zh-Hans.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Controls\AnimatedGif.cs" />
-    <Compile Include="Windows\Controls\DropDownButton.cs" />
-    <Compile Include="Windows\Controls\FrameRateCounter.cs" />
-    <Compile Include="Windows\Controls\LinkLabel\BindableRun.cs" />
-    <Compile Include="Windows\Controls\LinkLabel\LinkLabel.cs" />
-    <Compile Include="Windows\Controls\LinkLabel\LinkLabelBehavior.cs" />
-    <Compile Include="Windows\Controls\LinkLabel\LinkLabelClickBehavior.cs" />
     <Compile Include="Windows\Controls\MultiLineInput.xaml.cs">
       <DependentUpon>MultiLineInput.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\Controls\RadioButtonEx.cs" />
-    <Compile Include="Windows\Controls\RichToolTip.cs" />
-    <Compile Include="Windows\Controls\ScrollViewerProperties.cs" />
-    <Compile Include="Windows\Controls\StackGrid\EmptyCell.cs" />
-    <Compile Include="Windows\Controls\StackGrid\EmptyColumn.cs" />
-    <Compile Include="Windows\Controls\StackGrid\EmptyRow.cs" />
-    <Compile Include="Windows\Controls\StackGrid\StackGrid.cs" />
-    <Compile Include="Windows\Controls\TabControl.cs" />
-    <Compile Include="Windows\Controls\TraceOutputControl\Helpers\TraceHelper.cs" />
-    <Compile Include="Windows\Controls\TraceOutputControl\Models\TraceEntry.cs" />
-    <Compile Include="Windows\Controls\TraceOutputControl\OutputTraceListener.cs" />
-    <Compile Include="Windows\Controls\TraceOutputControl\OutputTypeConverter.cs" />
-    <Compile Include="Windows\Controls\TraceOutputControl\TraceListenerBase.cs" />
-    <Compile Include="Windows\Controls\TraceOutputControl\ViewModels\TraceOutputViewModel.cs" />
     <Compile Include="Windows\Controls\TraceOutputControl\Views\TraceOutputControl.xaml.cs">
       <DependentUpon>TraceOutputControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\Controls\WatermarkTextBox.cs" />
-    <Compile Include="Windows\Helpers\StyleHelper.cs" />
-    <Compile Include="Windows\Markup\Ricciolo\AppDomainTypeResolver.cs" />
-    <Compile Include="Windows\Markup\Ricciolo\BamlAssembly.cs" />
-    <Compile Include="Windows\Markup\Ricciolo\BamlBinaryReader.cs" />
-    <Compile Include="Windows\Markup\Ricciolo\BamlFile.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Windows\Markup\Ricciolo\BamlRecordType.cs" />
-    <Compile Include="Windows\Markup\Ricciolo\DotNetType.cs" />
-    <Compile Include="Windows\Markup\Ricciolo\IDependencyPropertyDescriptor.cs" />
-    <Compile Include="Windows\Markup\Ricciolo\IType.cs" />
-    <Compile Include="Windows\Markup\Ricciolo\ITypeResolver.cs" />
-    <Compile Include="Windows\Markup\Ricciolo\KnownInfo.cs" />
-    <Compile Include="Windows\Markup\Ricciolo\PropertyDeclaration.cs" />
-    <Compile Include="Windows\Markup\Ricciolo\ResourceName.cs" />
-    <Compile Include="Windows\Markup\Ricciolo\TypeDeclaration.cs" />
-    <Compile Include="Windows\Markup\Ricciolo\WpfDependencyPropertyDescriptor.cs" />
-    <Compile Include="Windows\Markup\Ricciolo\XmlBamlElement.cs" />
-    <Compile Include="Windows\Markup\Ricciolo\XmlBamlNode.cs" />
-    <Compile Include="Windows\Markup\Ricciolo\XmlBamlProperty.cs" />
-    <Compile Include="Windows\Markup\Ricciolo\XmlBamlPropertyElement.cs" />
-    <Compile Include="Windows\Markup\Ricciolo\XmlBamlReader.cs" />
-    <Compile Include="Windows\Markup\Ricciolo\XmlBamlText.cs" />
-    <Compile Include="Windows\Markup\Ricciolo\XmlNamespace.cs" />
-    <Compile Include="Windows\Markup\Ricciolo\XmlPIMapping.cs" />
-    <Compile Include="Windows\Markup\XamlTypeResolver.cs" />
     <Compile Include="Windows\Media\Effects\EmptyEffect\EmptyEffect.cs" />
     <Compile Include="Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.cs" />
     <Compile Include="Windows\Media\Effects\ShaderEffectBase.cs" />
-    <Compile Include="Windows\Media\Extensions\ImageSourceExtensions.cs" />
-    <Compile Include="Windows\Media\Extensions\VisualExtensions.cs" />
-    <Compile Include="Windows\Media\Imaging\Extensions\BitmapExtensions.cs" />
     <Compile Include="Windows\Windows\MultiLineInputWindow.xaml.cs">
       <DependentUpon>MultiLineInputWindow.xaml</DependentUpon>
     </Compile>
@@ -255,61 +153,20 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Windows\Media\Effects\EmptyEffect.fx" />
-    <Content Include="Windows\Media\Effects\EmptyEffect\EmptyEffect.fx" />
-    <Content Include="Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.fx" />
     <Resource Include="Resources\Images\ClearOutput.png" />
     <Resource Include="Resources\Images\Error.png" />
     <Resource Include="Resources\Images\Search.png" />
     <Resource Include="Resources\Images\Warning.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\Exceptions.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Exceptions.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.de.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.de.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.es.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.es.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.fr.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.fr.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.it.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.it.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.nl.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.nl.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.tr.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.tr.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.zh-Hans.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.zh-Hans.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
+    <Folder Include="Properties\" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Windows\Media\Effects\EmptyEffect.fx" />
+    <Content Include="Windows\Media\Effects\EmptyEffect\EmptyEffect.fx" />
+    <Content Include="Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.fx" />
+  </ItemGroup>
+  <Import Project="..\Catel.Extensions.Controls.Shared\Catel.Extensions.Controls.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Extensions.Controls.Shared\Catel.Extensions.Controls.Shared.projitems')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets. -->

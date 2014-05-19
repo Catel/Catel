@@ -34,8 +34,9 @@ namespace Catel.Windows
         {
             InitializeComponent();
 
-            ChoiceSpecify = Extensions.Controls.Properties.Resources.ChoiceSpecify;
-            Title = Extensions.Controls.Properties.Resources.MultipleChoiceWindowTitle;
+            Title = "Make a choice";
+            ChoiceSpecify = "Specify";
+            
             AllowSpecify = allowSpecify;
             ChoiceCollection = new List<Choice>();
             ChoiceCollection.AddRange(choiceCollection);

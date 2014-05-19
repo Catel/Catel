@@ -83,211 +83,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\SolutionAssemblyInfo.cs">
-      <Link>Properties\SolutionAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\ExtensionsControlsModule.cs">
-      <Link>ExtensionsControlsModule.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\ModuleInitializer.cs">
-      <Link>ModuleInitializer.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\AssemblyInfo.cs">
-      <Link>Properties\AssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Exceptions.NET45.Designer.cs">
-      <Link>Properties\Exceptions.NET45.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Exceptions.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.de.NET45.Designer.cs">
-      <Link>Properties\Resources.de.NET45.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.de.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.es.NET45.Designer.cs">
-      <Link>Properties\Resources.es.NET45.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.es.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.fr.NET45.Designer.cs">
-      <Link>Properties\Resources.fr.NET45.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.fr.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.it.NET45.Designer.cs">
-      <Link>Properties\Resources.it.NET45.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.it.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.NET45.Designer.cs">
-      <Link>Properties\Resources.NET45.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.nl.NET45.Designer.cs">
-      <Link>Properties\Resources.nl.NET45.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.nl.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.tr.NET45.Designer.cs">
-      <Link>Properties\Resources.tr.NET45.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.tr.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.zh-Hans.NET45.Designer.cs">
-      <Link>Properties\Resources.zh-Hans.NET45.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.zh-Hans.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\AnimatedGif.cs">
-      <Link>Windows\Controls\AnimatedGif.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\DropDownButton.cs">
-      <Link>Windows\Controls\DropDownButton.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\FrameRateCounter.cs">
-      <Link>Windows\Controls\FrameRateCounter.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\LinkLabel\BindableRun.cs">
-      <Link>Windows\Controls\LinkLabel\BindableRun.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\LinkLabel\LinkLabel.cs">
-      <Link>Windows\Controls\LinkLabel\LinkLabel.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\LinkLabel\LinkLabelBehavior.cs">
-      <Link>Windows\Controls\LinkLabel\LinkLabelBehavior.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\LinkLabel\LinkLabelClickBehavior.cs">
-      <Link>Windows\Controls\LinkLabel\LinkLabelClickBehavior.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\RadioButtonEx.cs">
-      <Link>Windows\Controls\RadioButtonEx.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\RichToolTip.cs">
-      <Link>Windows\Controls\RichToolTip.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\ScrollViewerProperties.cs">
-      <Link>Windows\Controls\ScrollViewerProperties.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\StackGrid\EmptyCell.cs">
-      <Link>Windows\Controls\StackGrid\EmptyCell.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\StackGrid\EmptyColumn.cs">
-      <Link>Windows\Controls\StackGrid\EmptyColumn.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\StackGrid\EmptyRow.cs">
-      <Link>Windows\Controls\StackGrid\EmptyRow.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\StackGrid\StackGrid.cs">
-      <Link>Windows\Controls\StackGrid\StackGrid.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\TabControl.cs">
-      <Link>Windows\Controls\TabControl.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\TraceOutputControl\Helpers\TraceHelper.cs">
-      <Link>Windows\Controls\TraceOutputControl\Helpers\TraceHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\TraceOutputControl\Models\TraceEntry.cs">
-      <Link>Windows\Controls\TraceOutputControl\Models\TraceEntry.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\TraceOutputControl\OutputTraceListener.cs">
-      <Link>Windows\Controls\TraceOutputControl\OutputTraceListener.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\TraceOutputControl\OutputTypeConverter.cs">
-      <Link>Windows\Controls\TraceOutputControl\OutputTypeConverter.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\TraceOutputControl\TraceListenerBase.cs">
-      <Link>Windows\Controls\TraceOutputControl\TraceListenerBase.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\TraceOutputControl\ViewModels\TraceOutputViewModel.cs">
-      <Link>Windows\Controls\TraceOutputControl\ViewModels\TraceOutputViewModel.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\WatermarkTextBox.cs">
-      <Link>Windows\Controls\WatermarkTextBox.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Helpers\StyleHelper.cs">
-      <Link>Windows\Helpers\StyleHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Markup\Ricciolo\AppDomainTypeResolver.cs">
-      <Link>Windows\Markup\Ricciolo\AppDomainTypeResolver.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Markup\Ricciolo\BamlAssembly.cs">
-      <Link>Windows\Markup\Ricciolo\BamlAssembly.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Markup\Ricciolo\BamlBinaryReader.cs">
-      <Link>Windows\Markup\Ricciolo\BamlBinaryReader.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Markup\Ricciolo\BamlFile.cs">
-      <Link>Windows\Markup\Ricciolo\BamlFile.cs</Link>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Markup\Ricciolo\BamlRecordType.cs">
-      <Link>Windows\Markup\Ricciolo\BamlRecordType.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Markup\Ricciolo\DotNetType.cs">
-      <Link>Windows\Markup\Ricciolo\DotNetType.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Markup\Ricciolo\IDependencyPropertyDescriptor.cs">
-      <Link>Windows\Markup\Ricciolo\IDependencyPropertyDescriptor.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Markup\Ricciolo\IType.cs">
-      <Link>Windows\Markup\Ricciolo\IType.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Markup\Ricciolo\ITypeResolver.cs">
-      <Link>Windows\Markup\Ricciolo\ITypeResolver.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Markup\Ricciolo\KnownInfo.cs">
-      <Link>Windows\Markup\Ricciolo\KnownInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Markup\Ricciolo\PropertyDeclaration.cs">
-      <Link>Windows\Markup\Ricciolo\PropertyDeclaration.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Markup\Ricciolo\ResourceName.cs">
-      <Link>Windows\Markup\Ricciolo\ResourceName.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Markup\Ricciolo\TypeDeclaration.cs">
-      <Link>Windows\Markup\Ricciolo\TypeDeclaration.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Markup\Ricciolo\WpfDependencyPropertyDescriptor.cs">
-      <Link>Windows\Markup\Ricciolo\WpfDependencyPropertyDescriptor.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Markup\Ricciolo\XmlBamlElement.cs">
-      <Link>Windows\Markup\Ricciolo\XmlBamlElement.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Markup\Ricciolo\XmlBamlNode.cs">
-      <Link>Windows\Markup\Ricciolo\XmlBamlNode.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Markup\Ricciolo\XmlBamlProperty.cs">
-      <Link>Windows\Markup\Ricciolo\XmlBamlProperty.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Markup\Ricciolo\XmlBamlPropertyElement.cs">
-      <Link>Windows\Markup\Ricciolo\XmlBamlPropertyElement.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Markup\Ricciolo\XmlBamlReader.cs">
-      <Link>Windows\Markup\Ricciolo\XmlBamlReader.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Markup\Ricciolo\XmlBamlText.cs">
-      <Link>Windows\Markup\Ricciolo\XmlBamlText.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Markup\Ricciolo\XmlNamespace.cs">
-      <Link>Windows\Markup\Ricciolo\XmlNamespace.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Markup\Ricciolo\XmlPIMapping.cs">
-      <Link>Windows\Markup\Ricciolo\XmlPIMapping.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Markup\XamlTypeResolver.cs">
-      <Link>Windows\Markup\XamlTypeResolver.cs</Link>
-    </Compile>
     <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\EmptyEffect\EmptyEffect.cs">
       <Link>Windows\Media\Effects\EmptyEffect\EmptyEffect.cs</Link>
     </Compile>
@@ -296,15 +91,6 @@
     </Compile>
     <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\ShaderEffectBase.cs">
       <Link>Windows\Media\Effects\ShaderEffectBase.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Extensions\ImageSourceExtensions.cs">
-      <Link>Windows\Media\Extensions\ImageSourceExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Extensions\VisualExtensions.cs">
-      <Link>Windows\Media\Extensions\VisualExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Imaging\Extensions\BitmapExtensions.cs">
-      <Link>Windows\Media\Imaging\Extensions\BitmapExtensions.cs</Link>
     </Compile>
     <Compile Include="Windows\Controls\MultiLineInput.xaml.cs">
       <DependentUpon>MultiLineInput.xaml</DependentUpon>
@@ -398,73 +184,23 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\EmptyEffect.fx">
+    <None Include="FodyWeavers.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\EmptyEffect.fx">
       <Link>Windows\Media\Effects\EmptyEffect.fx</Link>
-    </Content>
+    </Resource>
     <Content Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\EmptyEffect\EmptyEffect.fx">
       <Link>Windows\Media\Effects\EmptyEffect\EmptyEffect.fx</Link>
     </Content>
     <Content Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.fx">
       <Link>Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.fx</Link>
     </Content>
-    <None Include="FodyWeavers.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Exceptions.resx">
-      <Link>Properties\Exceptions.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Exceptions.NET45.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.de.resx">
-      <Link>Properties\Resources.de.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.de.NET45.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.es.resx">
-      <Link>Properties\Resources.es.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.es.NET45.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.fr.resx">
-      <Link>Properties\Resources.fr.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.fr.NET45.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.it.resx">
-      <Link>Properties\Resources.it.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.it.NET45.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.nl.resx">
-      <Link>Properties\Resources.nl.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.nl.NET45.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.resx">
-      <Link>Properties\Resources.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.NET45.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.tr.resx">
-      <Link>Properties\Resources.tr.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.tr.NET45.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.zh-Hans.resx">
-      <Link>Properties\Resources.zh-Hans.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.zh-Hans.NET45.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-  </ItemGroup>
+  <Import Project="..\Catel.Extensions.Controls.Shared\Catel.Extensions.Controls.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Extensions.Controls.Shared\Catel.Extensions.Controls.Shared.projitems')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

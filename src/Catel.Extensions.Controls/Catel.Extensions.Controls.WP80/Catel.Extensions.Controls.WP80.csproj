@@ -48,91 +48,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\SolutionAssemblyInfo.cs">
-      <Link>Properties\SolutionAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\ExtensionsControlsModule.cs">
-      <Link>ExtensionsControlsModule.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\ModuleInitializer.cs">
-      <Link>ModuleInitializer.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\AssemblyInfo.cs">
-      <Link>Properties\AssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Exceptions.WP80.Designer.cs">
-      <Link>Properties\Exceptions.WP80.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Exceptions.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.de.WP80.Designer.cs">
-      <Link>Properties\Resources.de.WP80.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.de.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.es.WP80.Designer.cs">
-      <Link>Properties\Resources.es.WP80.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.es.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.fr.WP80.Designer.cs">
-      <Link>Properties\Resources.fr.WP80.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.fr.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.it.WP80.Designer.cs">
-      <Link>Properties\Resources.it.WP80.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.it.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.nl.WP80.Designer.cs">
-      <Link>Properties\Resources.nl.WP80.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.nl.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.tr.WP80.Designer.cs">
-      <Link>Properties\Resources.tr.WP80.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.tr.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.WP80.Designer.cs">
-      <Link>Properties\Resources.WP80.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.zh-Hans.WP80.Designer.cs">
-      <Link>Properties\Resources.zh-Hans.WP80.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.zh-Hans.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\StackGrid\EmptyCell.cs">
-      <Link>Windows\Controls\StackGrid\EmptyCell.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\StackGrid\EmptyColumn.cs">
-      <Link>Windows\Controls\StackGrid\EmptyColumn.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\StackGrid\EmptyRow.cs">
-      <Link>Windows\Controls\StackGrid\EmptyRow.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\StackGrid\StackGrid.cs">
-      <Link>Windows\Controls\StackGrid\StackGrid.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Helpers\StyleHelper.cs">
-      <Link>Windows\Helpers\StyleHelper.cs</Link>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Windows\Media\Extensions\" />
-    <Folder Include="Windows\Media\Imaging\Extensions\" />
+    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Catel.Core\Catel.Core.WP80\Catel.Core.WP80.csproj">
@@ -145,78 +61,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\Catel.Extensions.Controls.NET40\Resources\Images\ClearOutput.png">
-      <Link>Resources\Images\ClearOutput.png</Link>
-    </Content>
-    <Content Include="..\Catel.Extensions.Controls.NET40\Resources\Images\Error.png">
-      <Link>Resources\Images\Error.png</Link>
-    </Content>
-    <Content Include="..\Catel.Extensions.Controls.NET40\Resources\Images\Warning.png">
-      <Link>Resources\Images\Warning.png</Link>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Exceptions.resx">
-      <Link>Properties\Exceptions.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Exceptions.WP80.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.de.resx">
-      <Link>Properties\Resources.de.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.de.WP80.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.es.resx">
-      <Link>Properties\Resources.es.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.es.WP80.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.fr.resx">
-      <Link>Properties\Resources.fr.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.fr.WP80.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.it.resx">
-      <Link>Properties\Resources.it.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.it.WP80.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.nl.resx">
-      <Link>Properties\Resources.nl.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.nl.WP80.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.resx">
-      <Link>Properties\Resources.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.WP80.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.tr.resx">
-      <Link>Properties\Resources.tr.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.tr.WP80.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.zh-Hans.resx">
-      <Link>Properties\Resources.zh-Hans.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.zh-Hans.WP80.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="Obsolete">
       <HintPath>..\..\..\lib\Obsolete.Fody.3.1.0.0\Lib\portable-net4+sl4+wp8+win8+wpa81+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
+  <Import Project="..\Catel.Extensions.Controls.Shared\Catel.Extensions.Controls.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Extensions.Controls.Shared\Catel.Extensions.Controls.Shared.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />
   <ProjectExtensions />

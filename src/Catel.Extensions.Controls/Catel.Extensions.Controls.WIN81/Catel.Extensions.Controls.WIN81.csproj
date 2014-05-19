@@ -105,33 +105,6 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <Compile Include="..\..\SolutionAssemblyInfo.cs">
-      <Link>Properties\SolutionAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\ExtensionsControlsModule.cs">
-      <Link>ExtensionsControlsModule.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\ModuleInitializer.cs">
-      <Link>ModuleInitializer.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\AssemblyInfo.cs">
-      <Link>Properties\AssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\StackGrid\EmptyCell.cs">
-      <Link>Windows\Controls\StackGrid\EmptyCell.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\StackGrid\EmptyColumn.cs">
-      <Link>Windows\Controls\StackGrid\EmptyColumn.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\StackGrid\EmptyRow.cs">
-      <Link>Windows\Controls\StackGrid\EmptyRow.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\StackGrid\StackGrid.cs">
-      <Link>Windows\Controls\StackGrid\StackGrid.cs</Link>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -148,9 +121,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Windows\Helpers\" />
-    <Folder Include="Windows\Media\Extensions\" />
-    <Folder Include="Windows\Media\Imaging\Extensions\" />
+    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Obsolete">
@@ -161,6 +132,7 @@
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>
+  <Import Project="..\Catel.Extensions.Controls.Shared\Catel.Extensions.Controls.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Extensions.Controls.Shared\Catel.Extensions.Controls.Shared.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

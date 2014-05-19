@@ -68,98 +68,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\SolutionAssemblyInfo.cs">
-      <Link>Properties\SolutionAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\ExtensionsControlsModule.cs">
-      <Link>ExtensionsControlsModule.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\ModuleInitializer.cs">
-      <Link>ModuleInitializer.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\AssemblyInfo.cs">
-      <Link>Properties\AssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Exceptions.SL5.Designer.cs">
-      <Link>Properties\Exceptions.SL5.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Exceptions.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.de.SL5.Designer.cs">
-      <Link>Properties\Resources.de.SL5.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.de.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.es.SL5.Designer.cs">
-      <Link>Properties\Resources.es.SL5.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.es.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.fr.SL5.Designer.cs">
-      <Link>Properties\Resources.fr.SL5.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.fr.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.it.SL5.Designer.cs">
-      <Link>Properties\Resources.it.SL5.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.it.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.nl.SL5.Designer.cs">
-      <Link>Properties\Resources.nl.SL5.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.nl.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.SL5.Designer.cs">
-      <Link>Properties\Resources.SL5.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.tr.SL5.Designer.cs">
-      <Link>Properties\Resources.tr.SL5.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.tr.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.zh-Hans.SL5.Designer.cs">
-      <Link>Properties\Resources.zh-Hans.SL5.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.zh-Hans.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\StackGrid\EmptyCell.cs">
-      <Link>Windows\Controls\StackGrid\EmptyCell.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\StackGrid\EmptyColumn.cs">
-      <Link>Windows\Controls\StackGrid\EmptyColumn.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\StackGrid\EmptyRow.cs">
-      <Link>Windows\Controls\StackGrid\EmptyRow.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Controls\StackGrid\StackGrid.cs">
-      <Link>Windows\Controls\StackGrid\StackGrid.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Helpers\StyleHelper.cs">
-      <Link>Windows\Helpers\StyleHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\EmptyEffect\EmptyEffect.cs">
-      <Link>Windows\Media\Effects\EmptyEffect\EmptyEffect.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.cs">
-      <Link>Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\ShaderEffectBase.cs">
-      <Link>Windows\Media\Effects\ShaderEffectBase.cs</Link>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
+    <Resource Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\EmptyEffect\EmptyEffect.ps">
+      <Link>Windows\Media\Effects\EmptyEffect\EmptyEffect.ps</Link>
+    </Resource>
+    <Resource Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.ps">
+      <Link>Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.ps</Link>
+    </Resource>
     <None Include="FodyWeavers.xml" />
     <None Include="packages.config" />
     <Resource Include="..\Catel.Extensions.Controls.NET40\Resources\Images\ClearOutput.png">
@@ -171,29 +85,9 @@
     <Resource Include="..\Catel.Extensions.Controls.NET40\Resources\Images\Warning.png">
       <Link>Resources\Images\Warning.png</Link>
     </Resource>
-    <Content Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\EmptyEffect.fx">
-      <Link>Windows\Media\Effects\EmptyEffect.fx</Link>
-    </Content>
-    <Content Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\EmptyEffect\EmptyEffect.fx">
-      <Link>Windows\Media\Effects\EmptyEffect\EmptyEffect.fx</Link>
-    </Content>
-    <Content Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.fx">
-      <Link>Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.fx</Link>
-    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\EmptyEffect\EmptyEffect.ps">
-      <Link>Windows\Media\Effects\EmptyEffect\EmptyEffect.ps</Link>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.ps">
-      <Link>Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.ps</Link>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Windows\Media\Extensions\" />
-    <Folder Include="Windows\Media\Imaging\Extensions\" />
+    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Catel.Core\Catel.Core.SL5\Catel.Core.SL5.csproj">
@@ -204,62 +98,6 @@
       <Project>{5E382C94-510F-4943-8F9E-E6EC3F139E8E}</Project>
       <Name>Catel.MVVM.SL5</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Exceptions.resx">
-      <Link>Properties\Exceptions.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Exceptions.SL5.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.de.resx">
-      <Link>Properties\Resources.de.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.de.SL5.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.es.resx">
-      <Link>Properties\Resources.es.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.es.SL5.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.fr.resx">
-      <Link>Properties\Resources.fr.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.fr.SL5.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.it.resx">
-      <Link>Properties\Resources.it.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.it.SL5.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.nl.resx">
-      <Link>Properties\Resources.nl.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.nl.SL5.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.resx">
-      <Link>Properties\Resources.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.SL5.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.tr.resx">
-      <Link>Properties\Resources.tr.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.tr.SL5.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.Extensions.Controls.NET40\Properties\Resources.zh-Hans.resx">
-      <Link>Properties\Resources.zh-Hans.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.zh-Hans.SL5.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Catel.Extensions.Controls.Properties</CustomToolNamespace>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Themes\Generic.xaml">
@@ -279,6 +117,29 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\EmptyEffect\EmptyEffect.cs">
+      <Link>Windows\Media\Effects\EmptyEffect\EmptyEffect.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.cs">
+      <Link>Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\ShaderEffectBase.cs">
+      <Link>Windows\Media\Effects\ShaderEffectBase.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\EmptyEffect.fx">
+      <Link>Windows\Media\Effects\EmptyEffect.fx</Link>
+    </Resource>
+    <Content Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\EmptyEffect\EmptyEffect.fx">
+      <Link>Windows\Media\Effects\EmptyEffect\EmptyEffect.fx</Link>
+    </Content>
+    <Content Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.fx">
+      <Link>Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.fx</Link>
+    </Content>
+  </ItemGroup>
+  <Import Project="..\Catel.Extensions.Controls.Shared\Catel.Extensions.Controls.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Extensions.Controls.Shared\Catel.Extensions.Controls.Shared.projitems')" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>

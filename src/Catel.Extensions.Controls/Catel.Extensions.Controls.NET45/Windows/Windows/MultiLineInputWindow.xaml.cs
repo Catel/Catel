@@ -24,8 +24,8 @@ namespace Catel.Windows
         public MultiLineInputWindow()
             : base(DataWindowMode.OkCancel)
         {
-            Title = Extensions.Controls.Properties.Resources.MultiLineInputWindowChangeText;
-            Explanation = Extensions.Controls.Properties.Resources.MultiLineInputWindowExplanation;
+            Title = "Change text";
+            Explanation = "Change the text below";
 
             InitializeComponent();
 
