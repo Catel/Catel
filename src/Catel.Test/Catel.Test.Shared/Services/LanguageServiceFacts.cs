@@ -50,22 +50,21 @@ namespace Catel.Test.Services
                 Assert.AreEqual(null, languageService.GetString("NonExistingResourceName"));
             }
 
-            [TestMethod]
-            public void ReturnsStringForCoreAssembly()
-            {
-                var languageService = new LanguageService();
+            //[TestMethod]
+            //public void ReturnsStringForCoreAssembly()
+            //{
+            //    var languageService = new LanguageService();
 
-                Assert.AreEqual("{0} has the following warnings:", languageService.GetString("WarningsFound"));
-            }
+            //    Assert.AreEqual("{0} has the following warnings:", languageService.GetString("WarningsFound"));
+            //}
 
-            [TestMethod]
-            public void ReturnsStringForMvvmAssembly()
-            {
-                var languageService = new LanguageService();
+            //[TestMethod]
+            //public void ReturnsStringForMvvmAssembly()
+            //{
+            //    var languageService = new LanguageService();
 
-                Assert.AreEqual("Warning", languageService.GetString("WarningTitle"));
-                Assert.AreEqual("Warning", languageService.GetString("WarningTitle"));
-            }
+            //    Assert.AreEqual("Warning", languageService.GetString("WarningTitle"));
+            //}
         }
         #endregion
     }
