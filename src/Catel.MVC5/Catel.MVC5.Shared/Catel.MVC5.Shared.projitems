@@ -9,6 +9,8 @@
     <Import_RootNamespace>Catel.MVC5.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Config\DependencyInjectionConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IoC\DependencyResolver.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MvcModule.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
