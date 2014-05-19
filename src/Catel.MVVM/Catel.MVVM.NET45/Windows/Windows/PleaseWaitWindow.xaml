@@ -1,13 +1,14 @@
 ﻿<Window x:Class="Catel.Windows.PleaseWaitWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="clr-namespace:Catel.Windows.Controls"
-        xmlns:converters="clr-namespace:Catel.MVVM.Converters"
-        Width="Auto" MaxWidth="600" ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStyle="None" ShowInTaskbar="False" 
+        xmlns:Controls="clr-namespace:Catel.Windows.Controls"
+        xmlns:Converters="clr-namespace:Catel.MVVM.Converters"
+        Width="Auto" MaxWidth="600"
+        ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStyle="None" ShowInTaskbar="False" 
         WindowStartupLocation="CenterOwner" Cursor="Wait" AllowsTransparency="True" Background="Transparent">
 
     <Window.Resources>
-        <converters:BooleanToCollapsingVisibilityConverter x:Key="BooleanToCollapsingVisibilityConverter" />
+        <Converters:BooleanToCollapsingVisibilityConverter x:Key="BooleanToCollapsingVisibilityConverter" />
     </Window.Resources>
 
     <!-- Content -->
@@ -18,7 +19,7 @@
                 Width="Auto" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="3" 
                 Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" CornerRadius="5">
             <StackPanel Orientation="Horizontal">
-                <controls:VisualWrapper x:Name="indeterminateVisualWrapper" Width="32" Height="32" Margin="10" />
+                <Controls:VisualWrapper x:Name="indeterminateVisualWrapper" Width="32" Height="32" Margin="10" />
 
                 <Label Content="{Binding Text}" Padding="0,0,10,0" Foreground="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"
                                    FontSize="14" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="Auto"/>

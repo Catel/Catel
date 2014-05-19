@@ -45,7 +45,9 @@ namespace Catel.Windows
     public partial class PleaseWaitWindow
     {
         #region Fields
-        private MediaElementThreadInfo _mediaElementThreadInfo;
+        private static readonly AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
+
+        private Thread _thread;
 
         private readonly List<FrameworkElement> _dimmedElements = new List<FrameworkElement>();
         #endregion
@@ -261,11 +263,7 @@ namespace Catel.Windows
         {
             if (!dimm)
             {
-                Action action = () =>
-                {
-                    UpdateLayout(); 
-                    Close();
-                };
+                Action action = () => { UpdateLayout(); Close(); };
 
                 foreach (var element in _dimmedElements)
                 {
@@ -286,8 +284,6 @@ namespace Catel.Windows
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
-
-                    element.IsHitTestVisible = true;
                 }
 
                 _dimmedElements.Clear();
@@ -321,8 +317,6 @@ namespace Catel.Windows
                             throw new ArgumentOutOfRangeException();
                     }
 
-                    element.IsHitTestVisible = false;
-
                     if (!_dimmedElements.Contains(element))
                     {
                         _dimmedElements.Add(element);
@@ -343,8 +337,10 @@ namespace Catel.Windows
         /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            _mediaElementThreadInfo = MediaElementThreadFactory.CreateMediaElementsOnWorkerThread(CreateIndeterminateElement);
-            indeterminateVisualWrapper.Child = _mediaElementThreadInfo.HostVisual;
+            var hostVisuals = CreateMediaElementsOnWorkerThread();
+
+            indeterminateVisualWrapper.Child = hostVisuals[0];
+            //determinateVisualWrapper.Child = hostVisuals[1];
         }
 
         /// <summary>
@@ -369,10 +365,10 @@ namespace Catel.Windows
             Loaded -= OnLoaded;
             LayoutUpdated -= OnLayoutUpdated;
 
-            if (_mediaElementThreadInfo != null)
+            if (_thread != null)
             {
-                _mediaElementThreadInfo.Dispose();
-                _mediaElementThreadInfo = null;
+                _thread.Abort();
+                _thread = null;
             }
 
             // Make sure we are not leaving the owner window dimmed in case a direct call to Close is invoked
@@ -394,9 +390,59 @@ namespace Catel.Windows
             base.OnClosed(e);
         }
 
+        /// <summary>
+        /// Creates the media element on worker thread.
+        /// </summary>
+        /// <returns></returns>
+        private HostVisual[] CreateMediaElementsOnWorkerThread()
+        {
+            var visuals = new[] { new HostVisual(), new HostVisual() };
+
+            _thread = new Thread(WorkerThread);
+
+            _thread.SetApartmentState(ApartmentState.STA);
+            _thread.IsBackground = true;
+            _thread.Start(visuals);
+
+            _autoResetEvent.WaitOne();
+
+            return visuals;
+        }
+
+        private static void WorkerThread(object arg)
+        {
+            try
+            {
+                var hostVisuals = (HostVisual[])arg;
+
+                var indeterminateSource = new VisualTargetPresentationSource(hostVisuals[0]);
+                var determinateSource = new VisualTargetPresentationSource(hostVisuals[1]);
+
+                _autoResetEvent.Set();
+
+                indeterminateSource.RootVisual = CreateIndeterminateElement();
+                determinateSource.RootVisual = CreateDeterminateElement();
+
+                Dispatcher.Run();
+            }
+            catch
+            {
+            }
+        }
+
         private static FrameworkElement CreateIndeterminateElement()
         {
             return new LoaderAnimation { Width = 32, Height = 32 };
+        }
+
+        private static FrameworkElement CreateDeterminateElement()
+        {
+            return null;
+
+            //var progressBar = new ProgressBar { Minimum = 0, Maximum = 100 };
+            //progressBar.Value = 50;
+
+            //return progressBar;
         }
         #endregion
     }

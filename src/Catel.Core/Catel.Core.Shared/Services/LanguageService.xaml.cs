@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || SILVERLIGHT || NETFX_CORE
+#if !XAMARIN
 
 namespace Catel.Services
 {
