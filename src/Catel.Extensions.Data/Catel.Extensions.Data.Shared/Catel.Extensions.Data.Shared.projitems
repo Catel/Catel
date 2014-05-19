@@ -6,7 +6,7 @@
     <SharedGUID>41c1b6d9-e16a-4137-b573-1ab9da17eff3</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Catel.Extensions.Data.Shared</Import_RootNamespace>
+    <Import_RootNamespace>Catel</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Expressions\Extensions\ExpressionExtensions.cs" />

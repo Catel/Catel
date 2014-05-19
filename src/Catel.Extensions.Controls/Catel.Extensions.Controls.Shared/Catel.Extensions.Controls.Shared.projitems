@@ -6,7 +6,7 @@
     <SharedGUID>6ed252b8-178a-4349-8940-afd2cb2b87e3</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Catel.Extensions.Controls.Shared</Import_RootNamespace>
+    <Import_RootNamespace>Catel</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ExtensionsControlsModule.cs" />

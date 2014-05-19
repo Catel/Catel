@@ -6,7 +6,7 @@
     <SharedGUID>c7bc725e-fa25-46a8-9288-c708b69e5bd3</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Catel.Extensions.FluentValidation.Shared</Import_RootNamespace>
+    <Import_RootNamespace>Catel</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\DisplayNameAttribute.cs" />

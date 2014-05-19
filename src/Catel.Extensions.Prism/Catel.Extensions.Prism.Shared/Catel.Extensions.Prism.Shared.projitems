@@ -6,7 +6,7 @@
     <SharedGUID>5f51a610-215c-49c0-a214-433fd769e37c</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Catel.Extensions.Prism.Shared</Import_RootNamespace>
+    <Import_RootNamespace>Catel</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)BootstrapperBase.cs" />

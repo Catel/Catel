@@ -6,7 +6,7 @@
     <SharedGUID>ffaccf18-9a3f-4585-bd42-66453cf615c4</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Catel.Extensions.Wcf.Server.Shared</Import_RootNamespace>
+    <Import_RootNamespace>Catel</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Activation\ServiceHostFactory.cs" />

@@ -6,7 +6,7 @@
     <SharedGUID>c848666a-bf2d-476f-ae4c-3ea40e475692</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Catel.Extensions.CSLA.Shared</Import_RootNamespace>
+    <Import_RootNamespace>Catel</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ExtensionsCSLAModule.cs" />

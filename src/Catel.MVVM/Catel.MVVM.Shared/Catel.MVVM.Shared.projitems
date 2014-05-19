@@ -6,7 +6,7 @@
     <SharedGUID>8c7eab82-554b-4761-b67e-7e9b9a306914</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Catel.MVVM.Shared</Import_RootNamespace>
+    <Import_RootNamespace>Catel</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\DesignTimeCodeAttribute.cs" />

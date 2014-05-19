@@ -6,7 +6,7 @@
     <SharedGUID>5b33158e-5b9e-4099-a300-7a409d392556</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Catel.Extensions.Interception.Shared</Import_RootNamespace>
+    <Import_RootNamespace>Catel</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Adapters\InterceptorAdapter.cs" />

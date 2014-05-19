@@ -6,7 +6,7 @@
     <SharedGUID>f8820ae3-4021-4622-a0a9-e33876a471b4</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Catel.Extensions.DynamicObjects.Shared</Import_RootNamespace>
+    <Import_RootNamespace>Catel</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Data\DynamicModelBase.cs" />

@@ -6,7 +6,7 @@
     <SharedGUID>3743a304-3ee5-4909-bfec-988d59d1b33a</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Catel.Core.Shared</Import_RootNamespace>
+    <Import_RootNamespace>Catel</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ApiCop\ApiCop.cs" />

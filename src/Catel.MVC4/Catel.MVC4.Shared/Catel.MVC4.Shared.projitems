@@ -6,7 +6,7 @@
     <SharedGUID>06b7664e-06dc-4d39-bf57-4c3f92ebc3ff</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Catel.MVC4.Shared</Import_RootNamespace>
+    <Import_RootNamespace>Catel</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Config\DependencyInjectionConfig.cs" />
