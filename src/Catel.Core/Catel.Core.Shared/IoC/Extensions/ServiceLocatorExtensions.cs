@@ -246,7 +246,7 @@ namespace Catel.IoC
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
         public static void RegisterType<TServiceImplementation>(this IServiceLocator serviceLocator, RegistrationType registrationType = RegistrationType.Singleton)
         {
-            RegisterTypeWithTag<TServiceImplementation>(serviceLocator, null, registrationType);
+            RegisterTypeWithTag<TServiceImplementation>(serviceLocator, (object)null, registrationType);
         }
 
         /// <summary>

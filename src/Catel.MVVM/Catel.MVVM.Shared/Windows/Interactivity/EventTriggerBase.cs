@@ -130,8 +130,7 @@ namespace Catel.Windows.Interactivity
         }
 
         /// <summary>
-        /// Uninitializes the behavior. This method is called when <see cref="OnDetaching"/> is called, or when the
-        /// <see cref="System.Windows.Interactivity.TriggerBase{T}.AssociatedObject"/> is unloaded.
+        /// Uninitializes the behavior. This method is called when <see cref="OnDetaching"/> is called, or when the associated object is unloaded.
         /// <para />
         /// If dependency properties are used, it is very important to use <see cref="DependencyObject.ClearValue(System.Windows.DependencyProperty)"/> 
         /// to clear the value of the dependency properties in this method.
@@ -141,8 +140,8 @@ namespace Catel.Windows.Interactivity
         }
 
         /// <summary>
-        /// Called when the <see cref="System.Windows.Interactivity.TriggerBase{T}.AssociatedObject"/> is loaded. This method is introduced to prevent
-        /// double initialization when the <see cref="System.Windows.Interactivity.TriggerBase{T}.AssociatedObject"/> is already loaded.
+        /// Called when the associated object is loaded. This method is introduced to prevent
+        /// double initialization when the associated object is already loaded.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
@@ -161,7 +160,7 @@ namespace Catel.Windows.Interactivity
         }
 
         /// <summary>
-        /// Called when the <see cref="System.Windows.Interactivity.TriggerBase{T}.AssociatedObject"/> is loaded.
+        /// Called when the associated object is loaded.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
@@ -170,8 +169,8 @@ namespace Catel.Windows.Interactivity
         }
 
         /// <summary>
-        /// Called when the <see cref="System.Windows.Interactivity.TriggerBase{T}.AssociatedObject"/> is unloaded. This 
-        /// method is introduced to prevent double uninitialization when the <see cref="System.Windows.Interactivity.TriggerBase{T}.AssociatedObject"/> is already unloaded.
+        /// Called when the associated object is unloaded. This 
+        /// method is introduced to prevent double uninitialization when the associated object is already unloaded.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
@@ -190,7 +189,7 @@ namespace Catel.Windows.Interactivity
         }
 
         /// <summary>
-        /// Called when the <see cref="System.Windows.Interactivity.TriggerBase{T}.AssociatedObject"/> is unloaded.
+        /// Called when the associated object is unloaded.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>

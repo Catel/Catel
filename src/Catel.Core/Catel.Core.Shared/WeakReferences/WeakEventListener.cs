@@ -561,24 +561,8 @@ namespace Catel
         {
             Argument.IsNotNull("methodInfo", methodInfo);
 
-#if NETFX_CORE
-
-            bool unsubscribed = false;
-
 #if WIN80
-            if (_eventRegistrationToken != null)
-            {
-                methodInfo.Invoke(source, new object[] { _eventRegistrationToken });
-
-                unsubscribed = true;
-            }
-#endif
-
-            if (!unsubscribed)
-            {
-                methodInfo.Invoke(source, new object[] { _internalEventDelegate });
-            }
-
+            methodInfo.Invoke(source, new object[] { _eventRegistrationToken });
 #else
             methodInfo.Invoke(source, new object[] { _internalEventDelegate });
 #endif

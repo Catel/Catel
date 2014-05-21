@@ -65,7 +65,7 @@ namespace Catel.Data
             // Option to override or late-bind connection string
             if (string.IsNullOrEmpty(databaseNameOrConnectionStringName))
             {
-                var connectionStringManager = dependencyResolver.Resolve<IConnectionStringManager>();
+                var connectionStringManager = dependencyResolver.TryResolve<IConnectionStringManager>();
                 if (connectionStringManager != null)
                 {
                     databaseNameOrConnectionStringName = connectionStringManager.GetConnectionString(typeof(TContext), databaseNameOrConnectionStringName, label);

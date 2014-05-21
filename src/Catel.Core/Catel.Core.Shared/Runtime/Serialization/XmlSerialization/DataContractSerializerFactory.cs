@@ -82,7 +82,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <exception cref="ArgumentNullException">The <paramref name="serializingType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="typeToSerialize" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="xmlName" /> is <c>null</c> or whitespace.</exception>
-        [ObsoleteEx(RemoveInVersion = "4.5", TreatAsErrorFromVersion = "4.2",
+        [ObsoleteEx(RemoveInVersion = "5.0", TreatAsErrorFromVersion = "4.2",
             Replacement = "IDataContractSerializerFactory.GetDataContractSerializer(serializingType, typeToSerialize, xmlName, rootNamespace, additionalKnownTypes)")]
         public virtual DataContractSerializer GetDataContractSerializer(Type serializingType, Type typeToSerialize, string xmlName, string rootNamespace = null, object serializingObject = null, List<Type> additionalKnownTypes = null)
         {
@@ -186,7 +186,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <param name="obj">The object to retrieve the known types for.</param>
         /// <param name="serializerTypeInfo">The serializer type info.</param>
         /// <returns>Array of <see cref="Type"/> that are found in the object instance.</returns>
-         [ObsoleteEx(RemoveInVersion = "4.5", TreatAsErrorFromVersion = "4.2",
+         [ObsoleteEx(RemoveInVersion = "5.0", TreatAsErrorFromVersion = "4.2",
              Replacement = "DataContractSerializerFactory.GetKnownTypes(type, serializerTypeInfo)")]
          protected virtual void GetKnownTypesForInstance(object obj, XmlSerializerTypeInfo serializerTypeInfo)
         {
@@ -366,7 +366,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <param name="obj">The object.</param>
         /// <param name="serializerTypeInfo">The serializer type info.</param>
         /// <returns>Array of <see cref="Type"/> that are found in the object type.</returns>  
-        [ObsoleteEx(RemoveInVersion = "4.5", TreatAsErrorFromVersion = "4.2",
+        [ObsoleteEx(RemoveInVersion = "5.0", TreatAsErrorFromVersion = "4.2",
              Replacement = "DataContractSerializerFactory.GetKnownTypesForItems(type, serializerTypeInfo)")]
      
         private void GetKnownTypesForItemsInstance(object obj, XmlSerializerTypeInfo serializerTypeInfo)

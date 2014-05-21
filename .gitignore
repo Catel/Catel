@@ -18,7 +18,10 @@ obj
 [Ll]ib/
 *_i.c
 *_p.c
+*.chk
+*.ide
 *.ilk
+*.jrs
 *.meta
 *.obj
 *.orig

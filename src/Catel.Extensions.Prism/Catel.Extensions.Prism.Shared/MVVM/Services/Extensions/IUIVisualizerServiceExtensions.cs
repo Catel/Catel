@@ -17,7 +17,7 @@ namespace Catel.Services
     using MVVM.Views;
 
     /// <summary>
-    ///     Extension methods for the <see cref="IUIVisualizerService" />.
+    /// Extension methods for the <see cref="IUIVisualizerService" />.
     /// </summary>
     public static class IUIVisualizerServiceExtensions
     {
@@ -40,7 +40,7 @@ namespace Catel.Services
         /// <exception cref="NotSupportedException">If the implementation of IRegionManager is not registered in the IoC container</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="viewModel" /> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="viewModel" /> is <c>null</c>.</exception>
-        [ObsoleteEx(RemoveInVersion = "4.5", TreatAsErrorFromVersion = "4.2", Replacement = "IUICompositionService.Activate(viewModel, regionName)")]
+        [ObsoleteEx(RemoveInVersion = "5.0", TreatAsErrorFromVersion = "4.2", Replacement = "IUICompositionService.Activate(viewModel, regionName)")]
         public static void Activate(this IUIVisualizerService @this, IViewModel viewModel, string regionName = null)
         {
             Argument.IsNotNull("@this", @this);
@@ -65,7 +65,7 @@ namespace Catel.Services
         /// <exception cref="System.ArgumentNullException">The <paramref name="viewModel" /> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentException">The <paramref name="regionName" /> is <c>null</c> or whitespace.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="viewModel" /> is <c>null</c>.</exception>
-        [ObsoleteEx(RemoveInVersion = "4.5", TreatAsErrorFromVersion = "4.2", Replacement = "IUICompositionService.Activate(viewModel, parentViewModel, regionName)")]
+        [ObsoleteEx(RemoveInVersion = "5.0", TreatAsErrorFromVersion = "4.2", Replacement = "IUICompositionService.Activate(viewModel, parentViewModel, regionName)")]
         public static void Activate(this IUIVisualizerService @this, IViewModel viewModel, IViewModel parentViewModel, string regionName)
         {
             Argument.IsNotNull("@this", @this);
@@ -81,7 +81,7 @@ namespace Catel.Services
         /// <param name="viewModel">The view model.</param>
         /// <exception cref="ArgumentException">If <paramref name="viewModel" /> is <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">If the <paramref name="viewModel" /> was no show at least one time in a <see cref="IRegion" />.</exception>
-        [ObsoleteEx(RemoveInVersion = "4.5", TreatAsErrorFromVersion = "4.2", Replacement = "IUICompositionService.Activate(viewModel, parentViewModel, regionName)")]
+        [ObsoleteEx(RemoveInVersion = "5.0", TreatAsErrorFromVersion = "4.2", Replacement = "IUICompositionService.Activate(viewModel, parentViewModel, regionName)")]
         public static void Deactivate(this IUIVisualizerService @this, IViewModel viewModel)
         {
             Argument.IsNotNull("@this", @this);

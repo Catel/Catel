@@ -42,7 +42,7 @@ namespace Catel.Windows.Interactivity
             DependencyProperty.Register("IsMouseOver", typeof(bool), typeof(MouseInfo), new PropertyMetadata(false));
 
         /// <summary>
-        /// Called when the <see cref="System.Windows.Interactivity.TriggerBase{T}.AssociatedObject"/> is loaded.
+        /// Called when the associated object is loaded.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
@@ -53,7 +53,7 @@ namespace Catel.Windows.Interactivity
         }
 
         /// <summary>
-        /// Called when the <see cref="System.Windows.Interactivity.TriggerBase{T}.AssociatedObject"/> is unloaded.
+        /// Called when the associated object is unloaded.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>

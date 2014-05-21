@@ -103,7 +103,7 @@ namespace Catel.IoC
             Argument.IsNotNull("dependencyResolver", dependencyResolver);
 
             _dependencyResolver = dependencyResolver;
-            var serviceLocator = _dependencyResolver.Resolve<IServiceLocator>();
+            var serviceLocator = _dependencyResolver.TryResolve<IServiceLocator>();
             if (serviceLocator != null)
             {
                 serviceLocator.TypeRegistered += OnServiceLocatorTypeRegistered;
@@ -613,7 +613,7 @@ namespace Catel.IoC
                 var ctorParameters = constructor.GetParameters();
                 for (int i = parameters.Length; i < ctorParameters.Length; i++)
                 {
-                    var ctorParameterValue = _dependencyResolver.Resolve(ctorParameters[i].ParameterType);
+                    var ctorParameterValue = _dependencyResolver.TryResolve(ctorParameters[i].ParameterType);
                     if (ctorParameterValue == null)
                     {
                         return null;
