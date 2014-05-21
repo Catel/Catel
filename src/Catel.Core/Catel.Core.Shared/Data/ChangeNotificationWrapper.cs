@@ -12,9 +12,11 @@ namespace Catel.Data
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.ComponentModel;
+    using System.Linq;
     using System.Runtime.CompilerServices;
     using System.Windows;
     using Catel.Logging;
+    using Reflection;
     using IWeakEventListener = Catel.IWeakEventListener;
 
     /// <summary>
@@ -171,7 +173,15 @@ namespace Catel.Data
             // Reset requires our own logic
             if (e.Action == NotifyCollectionChangedAction.Reset)
             {
-                UpdateCollectionSubscriptions((IEnumerable)sender);
+                var enumerable = sender as IEnumerable;
+                if (enumerable != null)
+                {
+                    UpdateCollectionSubscriptions(enumerable);
+                }
+                else
+                {
+                    Log.Warning("Received NotifyCollectionChangedAction.Reset for '{0}', but the type does implement IEnumerable", sender.GetType().GetSafeFullName());
+                }
             }
 
             if (e.NewItems != null)
@@ -242,7 +252,8 @@ namespace Catel.Data
                     List<WeakReference> collectionItems;
                     if (_collectionItems.TryGetValue(collection, out collectionItems))
                     {
-                        foreach (var item in collectionItems)
+                        var oldItems = collectionItems.ToArray();
+                        foreach (var item in oldItems)
                         {
                             if (item.IsAlive)
                             {
@@ -253,7 +264,8 @@ namespace Catel.Data
 
                         collectionItems.Clear();
 
-                        foreach (var item in collection)
+                        var newItems = collection.Cast<object>().ToArray();
+                        foreach (var item in newItems)
                         {
                             SubscribeNotifyChangedEvents(item, true);
                         }
