@@ -613,12 +613,7 @@ namespace Catel.IoC
                 var ctorParameters = constructor.GetParameters();
                 for (int i = parameters.Length; i < ctorParameters.Length; i++)
                 {
-                    var ctorParameterValue = _dependencyResolver.TryResolve(ctorParameters[i].ParameterType);
-                    if (ctorParameterValue == null)
-                    {
-                        return null;
-                    }
-
+                    var ctorParameterValue = _dependencyResolver.Resolve(ctorParameters[i].ParameterType);
                     finalParameters.Add(ctorParameterValue);
                 }
 
