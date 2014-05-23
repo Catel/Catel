@@ -53,5 +53,19 @@ namespace Catel.MVVM
         /// </summary>
         /// <value>The check can execute of all commands to determine can execute for composite command.</value>
         bool CheckCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand { get; set; }
+
+        /// <summary>
+        /// Registers the specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        void RegisterAction(Action<object> action);
+
+        /// <summary>
+        /// Unregisters the specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        void UnregisterAction(Action<object> action);
     }
 }

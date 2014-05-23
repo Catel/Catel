@@ -10,7 +10,7 @@ namespace Catel.MVVM
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Catel.Logging;
+    using Logging;
 
     /// <summary>
     /// Composite command which allows several commands inside a single command being exposed to a view.
@@ -25,6 +25,7 @@ namespace Catel.MVVM
         private readonly object _lock = new object();
         private readonly List<CommandInfo> _commandInfo = new List<CommandInfo>();
         private readonly List<Action> _actions = new List<Action>();
+        private readonly List<Action<object>> _actionsWithParameter = new List<Action<object>>();
 
         #region Constructors
         /// <summary>
@@ -33,7 +34,7 @@ namespace Catel.MVVM
         public CompositeCommand()
             : base(null)
         {
-            InitializeActions(null, ExecuteCompositeCommand, null, CanExecuteCompositeCommand);
+            InitializeActions(ExecuteCompositeCommand, null, CanExecuteCompositeCommand, null);
         }
         #endregion
 
@@ -48,7 +49,7 @@ namespace Catel.MVVM
         #endregion
 
         #region Methods
-        private void ExecuteCompositeCommand()
+        private void ExecuteCompositeCommand(object parameter)
         {
             lock (_lock)
             {
@@ -61,9 +62,9 @@ namespace Catel.MVVM
                     {
                         if (command != null)
                         {
-                            if (command.CanExecute())
+                            if (command.CanExecute(parameter))
                             {
-                                command.Execute();
+                                command.Execute(parameter);
                             }
                         }
                     }
@@ -88,10 +89,26 @@ namespace Catel.MVVM
                         Log.Error(ex, "Failed to execute one of the actions in the composite commands, execution will continue");
                     }
                 }
+
+                var actionsWithParameter = _actionsWithParameter.ToList();
+                foreach (var actionWithParameter in actionsWithParameter)
+                {
+                    try
+                    {
+                        if (actionWithParameter != null)
+                        {
+                            actionWithParameter(parameter);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, "Failed to execute one of the actions in the composite commands, execution will continue");
+                    }
+                }
             }
         }
 
-        private bool CanExecuteCompositeCommand()
+        private bool CanExecuteCompositeCommand(object parameter)
         {
             lock (_lock)
             {
@@ -104,7 +121,7 @@ namespace Catel.MVVM
                     {
                         if (command != null)
                         {
-                            if (!command.CanExecute())
+                            if (!command.CanExecute(parameter))
                             {
                                 return false;
                             }
@@ -114,7 +131,7 @@ namespace Catel.MVVM
                     return true;
                 }
 
-                return _commandInfo.Count > 0 || _actions.Count > 0;
+                return _commandInfo.Count > 0 || _actions.Count > 0 || _actionsWithParameter.Count > 0;
             }
         }
 
@@ -153,6 +170,23 @@ namespace Catel.MVVM
                 _actions.Add(action);
 
                 Log.Debug("Registered action in CompositeCommand");
+            }
+        }
+
+        /// <summary>
+        /// Registers the specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        public void RegisterAction(Action<object> action)
+        {
+            Argument.IsNotNull("action", action);
+
+            lock (_lock)
+            {
+                _actionsWithParameter.Add(action);
+
+                Log.Debug("Registered action<object> in CompositeCommand");
             }
         }
 
@@ -203,6 +237,30 @@ namespace Catel.MVVM
                 }
             }
         }
+
+        /// <summary>
+        /// Unregisters the specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        public void UnregisterAction(Action<object> action)
+        {
+            Argument.IsNotNull("action", action);
+
+            lock (_lock)
+            {
+                for (int i = _actionsWithParameter.Count - 1; i >= 0; i--)
+                {
+                    if (ReferenceEquals(_actionsWithParameter[i], action))
+                    {
+                        _actionsWithParameter.RemoveAt(i);
+
+                        Log.Debug("Unregistered action<object> from CompositeCommand");
+                    }
+                }
+            }
+        }
+
 
         #endregion
 

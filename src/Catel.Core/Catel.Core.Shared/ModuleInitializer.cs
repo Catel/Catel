@@ -7,18 +7,12 @@
 namespace Catel.Core
 {
     using System;
-    using Catel.Data;
-    using Catel.Reflection;
-    using Catel.Runtime.Serialization;
-    using ExceptionHandling;
+    using Reflection;
     using IoC;
-    using Messaging;
-    using Catel.Logging;
+    using Logging;
 
 #if NET
     using System.Configuration;
-    using System.Web;
-    using Catel.Configuration;
     using System.Reflection;
     using System.Collections.Generic;
 #endif

@@ -7,19 +7,19 @@
 
 namespace Catel
 {
-    using Catel.Configuration;
-    using Catel.Data;
-    using Catel.ExceptionHandling;
-    using Catel.IoC;
-    using Catel.Messaging;
-    using Catel.Runtime.Serialization;
-    using Catel.Services;
+    using Configuration;
+    using Data;
+    using ExceptionHandling;
+    using IoC;
+    using Messaging;
+    using Runtime.Serialization;
+    using Services;
 
 #if NET
-    using Catel.Runtime.Serialization.Binary;
+    using Runtime.Serialization.Binary;
 #endif
 
-    using Catel.Runtime.Serialization.Xml;
+    using Runtime.Serialization.Xml;
 
     /// <summary>
     /// Core module which allows the registration of default services in the service locator.

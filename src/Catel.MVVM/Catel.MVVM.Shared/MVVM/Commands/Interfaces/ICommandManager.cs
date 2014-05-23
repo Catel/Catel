@@ -161,5 +161,25 @@ namespace Catel.MVVM
         /// Invalidates the all the currently registered commands.
         /// </summary>
         void InvalidateCommands();
+
+        /// <summary>
+        /// Registers the action with the specified command name.
+        /// </summary>
+        /// <param name="commandName">Name of the command.</param>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CommandManager.CreateCommand"/> method.</exception>
+        void RegisterAction(string commandName, Action<object> action);
+
+        /// <summary>
+        /// Unregisters the action with the specified command name.
+        /// </summary>
+        /// <param name="commandName">Name of the command.</param>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CommandManager.CreateCommand"/> method.</exception>
+        void UnregisterAction(string commandName, Action<object> action);
     }
 }

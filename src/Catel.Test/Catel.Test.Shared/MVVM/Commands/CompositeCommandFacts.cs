@@ -73,6 +73,60 @@ namespace Catel.Test.MVVM
         }
 
         [TestClass]
+        public class TheRegisterGenericActionMethod
+        {
+            [TestMethod]
+            public void ThrowsArgumentNullExceptionForNullAction()
+            {
+                var compositeCommand = new CompositeCommand();
+
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => compositeCommand.RegisterAction((Action<object>)null));
+            }
+
+            [TestMethod]
+            public void RegistersActionForExecution()
+            {
+                var compositeCommand = new CompositeCommand();
+
+                bool executed = false;
+                var action = new Action<object>(obj => executed = true);
+
+                compositeCommand.RegisterAction(action);
+                compositeCommand.Execute();
+
+                Assert.IsTrue(executed);
+            }
+        }
+
+        [TestClass]
+        public class TheUnregisterGenericActionMethod
+        {
+            [TestMethod]
+            public void ThrowsArgumentNullExceptionForNullAction()
+            {
+                var compositeCommand = new CompositeCommand();
+
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => compositeCommand.UnregisterAction((Action<object>)null));
+            }
+
+            [TestMethod]
+            public void UnregistersCommandForExecution()
+            {
+                var compositeCommand = new CompositeCommand();
+
+                bool executed = false;
+                var action = new Action<object>(obj => executed = true);
+
+                compositeCommand.RegisterAction(action);
+                compositeCommand.UnregisterAction(action);
+
+                compositeCommand.Execute();
+
+                Assert.IsFalse(executed);
+            }
+        }
+
+        [TestClass]
         public class TheAutoUnsubscribeFunctionality
         {
             [TestMethod]
