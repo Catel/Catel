@@ -31,17 +31,6 @@ namespace Catel.IoC
         object CreateInstanceWithParameters(Type typeToConstruct, params object[] parameters);
 
         /// <summary>
-        /// Creates an instance of the specified type using <c>>Activator.CreateInstance</c>.
-        /// <para />
-        /// The advantage of using this method is that the results are being cached if the execution fails thus
-        /// the next call will be extremely fast.
-        /// </summary>
-        /// <param name="typeToConstruct">The type to construct.</param>
-        /// <returns>The instantiated type using dependency injection.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct"/> is <c>null</c>.</exception>
-        object CreateInstanceUsingActivator(Type typeToConstruct);
-
-        /// <summary>
         /// Clears the cache of all constructors.
         /// <para />
         /// This call is normally not necessary since the type factory should keep an eye on the 

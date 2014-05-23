@@ -27,12 +27,12 @@ namespace Catel.IoC
     ///     <catel>
     ///         <ioc>
     ///             <serviceLocatorConfigurations>
-    ///                 <serviceLocatorConfiguration [name="default"] [supportDependencyInjection="true"]>
+    ///                 <serviceLocatorConfiguration [name="default"]>
     ///                     <register interfaceType="Catel.Services.IUIVisualizerService" implementationType="Catel.Services.UIVisualizerService" />
     ///                     <register interfaceType="Catel.Services.IProcessService" implementationType="Catel.Services.ProcessService" />
     ///                     <!-- Add more registrations here if is requiered -->
     ///                 </serviceLocatorConfiguration>
-    ///                 <serviceLocatorConfiguration name="test" supportDependencyInjection="false">
+    ///                 <serviceLocatorConfiguration name="test">
     ///                     <register interfaceType="Catel.Services.IUIVisualizerService" implementationType="Catel.Services.Test.UIVisualizerService" type="Transient"/>
     ///                     <register interfaceType="Catel.Services.IProcessService" implementationType="Catel.Services.Test.ProcessService" />
     ///                     <!-- Add more registrations here if is requiered -->
@@ -47,12 +47,12 @@ namespace Catel.IoC
     public sealed class IoCConfigurationSection : ConfigurationSection
     {
         #region Constants
-        
+
         /// <summary>
         /// The service locator configuration collection property name.
         /// </summary>
         private const string ServiceLocatorConfigurationCollectionPropertyName = "serviceLocatorConfigurations";
-        
+
         #endregion
 
         #region Properties
@@ -64,30 +64,30 @@ namespace Catel.IoC
         {
             get
             {
-				return (ServiceLocatorConfigurationCollection)base[ServiceLocatorConfigurationCollectionPropertyName];
+                return (ServiceLocatorConfigurationCollection)base[ServiceLocatorConfigurationCollectionPropertyName];
             }
         }
-        
+
         /// <summary>
         /// Gets the Default service locator configuration.
         /// </summary>
         public ServiceLocatorConfiguration DefaultServiceLocatorConfiguration
         {
-        	get 
-        	{
-				return ServiceLocatorConfigurationCollection.Cast<ServiceLocatorConfiguration>().FirstOrDefault(element => element.Name == "default");		 
-        	}
+            get
+            {
+                return ServiceLocatorConfigurationCollection.Cast<ServiceLocatorConfiguration>().FirstOrDefault(element => element.Name == "default");
+            }
         }
-        
+
         /// <summary>
         /// Gets the service locator configuration from a given name.
         /// </summary>
         /// <param name="name">The name of the service locator configuration.</param>
         public ServiceLocatorConfiguration GetServiceLocatorConfiguration(string name = "default")
         {
-			return ServiceLocatorConfigurationCollection.Cast<ServiceLocatorConfiguration>().FirstOrDefault(element => element.Name == name);		 
-        } 
-      
+            return ServiceLocatorConfigurationCollection.Cast<ServiceLocatorConfiguration>().FirstOrDefault(element => element.Name == name);
+        }
+
         #endregion
     }
 }

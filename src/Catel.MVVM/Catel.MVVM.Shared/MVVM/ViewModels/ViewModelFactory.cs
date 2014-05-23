@@ -107,17 +107,8 @@ namespace Catel.MVVM
                 return viewModel;
             }
 
-            // Last resort: Activator
-            viewModel = _typeFactory.CreateInstanceUsingActivator(viewModelType) as IViewModel;
-            if (viewModel != null)
-            {
-                Log.Debug("Constructed view model '{0}' using Activator.CreateInstance", viewModelType.FullName);
-            }
-            else
-            {
-                Log.Debug("Could not construct view model '{0}' using injection of data context '{1}' or Activator.CreateInstance",
-                    viewModelType.FullName, ObjectToStringHelper.ToTypeString(dataContext));
-            }
+            Log.Debug("Could not construct view model '{0}' using injection of data context '{1}'",
+                viewModelType.FullName, ObjectToStringHelper.ToTypeString(dataContext));
 
             return viewModel;
         }
@@ -134,8 +125,8 @@ namespace Catel.MVVM
         public TViewModel CreateViewModel<TViewModel>(object dataContext)
             where TViewModel : IViewModel
         {
-            var viewModelType = typeof (TViewModel);
-            return (TViewModel) CreateViewModel(viewModelType, dataContext);
+            var viewModelType = typeof(TViewModel);
+            return (TViewModel)CreateViewModel(viewModelType, dataContext);
         }
     }
 }

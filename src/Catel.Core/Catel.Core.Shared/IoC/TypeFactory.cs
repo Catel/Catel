@@ -10,11 +10,11 @@ namespace Catel.IoC
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-    using Catel.ApiCop;
-    using Catel.ApiCop.Rules;
-    using Catel.Caching;
-    using Catel.Logging;
-    using Catel.Reflection;
+    using ApiCop;
+    using ApiCop.Rules;
+    using Caching;
+    using Logging;
+    using Reflection;
 
 #if !XAMARIN
     using System.Dynamic;
@@ -140,7 +140,7 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct"/> is <c>null</c>.</exception>
         public object CreateInstance(Type typeToConstruct)
         {
-            return CreateInstanceWithSpecifiedParameters(typeToConstruct, null, true, true);
+            return CreateInstanceWithSpecifiedParameters(typeToConstruct, null, true);
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("typeToConstruct", typeToConstruct);
 
-            return CreateInstanceWithSpecifiedParameters(typeToConstruct, parameters, false, false);
+            return CreateInstanceWithSpecifiedParameters(typeToConstruct, parameters, false);
         }
 
         /// <summary>
@@ -170,52 +170,7 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("typeToConstruct", typeToConstruct);
 
-            return CreateInstanceWithSpecifiedParameters(typeToConstruct, parameters, true, false);
-        }
-
-        /// <summary>
-        /// Creates an instance of the specified type using <c>>Activator.CreateInstance</c>.
-        /// <para />
-        /// The advantage of using this method is that the results are being cached if the execution fails thus
-        /// the next call will be extremely fast.
-        /// </summary>
-        /// <param name="typeToConstruct">The type to construct.</param>
-        /// <returns>The instantiated type using dependency injection.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct"/> is <c>null</c>.</exception>
-        public object CreateInstanceUsingActivator(Type typeToConstruct)
-        {
-            Argument.IsNotNull("typeToConstruct", typeToConstruct);
-
-            object instance = null;
-
-            lock (_lockObject)
-            {
-                if (!_canUseActivatorCache.ContainsKey(typeToConstruct) || _canUseActivatorCache[typeToConstruct])
-                {
-                    try
-                    {
-                        Log.Debug("No constructor could be used, using Activator.CreateInstance. Cannot cache this either.");
-
-                        instance = Activator.CreateInstance(typeToConstruct);
-
-                        _canUseActivatorCache[typeToConstruct] = (instance != null);
-                    }
-#if !NETFX_CORE && !PCL
-                    catch (MissingMethodException)
-#else
-                    catch (Exception)
-#endif
-                    {
-                        _canUseActivatorCache[typeToConstruct] = false;
-
-                        Log.Debug("Failed to use Activator.CreateInstance, cannot instantiate type '{0}'", typeToConstruct.FullName);
-                    }
-                }
-            }
-
-            InitializeAfterConstruction(instance);
-
-            return instance;
+            return CreateInstanceWithSpecifiedParameters(typeToConstruct, parameters, true);
         }
 
         /// <summary>
@@ -317,12 +272,11 @@ namespace Catel.IoC
         /// <param name="typeToConstruct">The type to construct.</param>
         /// <param name="parameters">The parameters to inject.</param>
         /// <param name="autoCompleteDependencies">if set to <c>true</c>, the additional dependencies will be auto completed.</param>
-        /// <param name="useActivatorIfAllConstructorsFail">if set to <c>true</c>, use the Activator class to construct the type.</param>
         /// <param name="preventCircularDependencies">if set to <c>true</c>, prevent circular dependencies using the <see cref="TypeRequestPath"/>.</param>
         /// <returns>The instantiated type using dependency injection.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct" /> is <c>null</c>.</exception>
         private object CreateInstanceWithSpecifiedParameters(Type typeToConstruct, object[] parameters,
-            bool autoCompleteDependencies, bool useActivatorIfAllConstructorsFail, bool preventCircularDependencies = true)
+            bool autoCompleteDependencies, bool preventCircularDependencies = true)
         {
             Argument.IsNotNull("typeToConstruct", typeToConstruct);
 
@@ -403,20 +357,6 @@ namespace Catel.IoC
                     }
 
                     Log.Debug("No constructor could be used, cannot construct type '{0}' with the specified parameters", typeToConstruct.FullName);
-
-                    if (useActivatorIfAllConstructorsFail)
-                    {
-                        var createdInstanceUsingActivator = CreateInstanceUsingActivator(typeToConstruct);
-                        if (createdInstanceUsingActivator != null)
-                        {
-                            if (preventCircularDependencies)
-                            {
-                                CompleteTypeRequestPathIfRequired(typeRequestInfo);
-                            }
-
-                            return createdInstanceUsingActivator;
-                        }
-                    }
                 }
                 catch (CircularDependencyException)
                 {

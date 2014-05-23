@@ -9,7 +9,6 @@
 namespace Catel.Test.IoC.Configuration
 {
     using System.Configuration;
-    using System.Linq;
     using Catel.Configuration;
     using Catel.IoC;
     
@@ -43,7 +42,6 @@ namespace Catel.Test.IoC.Configuration
             var serviceLocator = IoCFactory.CreateServiceLocator();
             serviceLocatorConfiguration.Configure(serviceLocator);
 
-            Assert.AreEqual(serviceLocatorConfiguration.SupportDependencyInjection, serviceLocator.SupportDependencyInjection);
             foreach (Registration registration in serviceLocatorConfiguration)
             {
                 serviceLocator.IsTypeRegistered(registration.InterfaceType);
@@ -65,7 +63,6 @@ namespace Catel.Test.IoC.Configuration
             var serviceLocator = IoCFactory.CreateServiceLocator();
             serviceLocatorConfiguration.Configure(serviceLocator);
 
-            Assert.AreEqual(serviceLocatorConfiguration.SupportDependencyInjection, serviceLocator.SupportDependencyInjection);
             foreach (Registration registration in serviceLocatorConfiguration)
             {
                 serviceLocator.IsTypeRegistered(registration.InterfaceType);

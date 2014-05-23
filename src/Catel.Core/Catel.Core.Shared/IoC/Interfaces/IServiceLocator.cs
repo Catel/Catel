@@ -51,25 +51,6 @@ namespace Catel.IoC
         bool CanResolveNonAbstractTypesWithoutRegistration { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this service locator supports dependency inject.
-        /// <para />
-        /// If this property is <c>true</c>, the service locator will try to instantiate the object with 
-        /// all constructors, starting with the one with the most parameters.
-        /// <para />
-        /// If a constructor fails, the service locator will try the constructor with less parameters until the
-        /// type is either constructed successfully or all constructors are tried.
-        /// <para />
-        /// If this property is <c>false</c>, it will only use <see cref="Activator.CreateInstance(System.Type)"/> to
-        /// instantiate the service.
-        /// <para />
-        /// By default, this value is <c>true</c>.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the service locator should support dependency injection; otherwise, <c>false</c>.
-        /// </value>
-        bool SupportDependencyInjection { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether this service locators will automatically register types via attributes.
         /// </summary>
         /// <remarks>

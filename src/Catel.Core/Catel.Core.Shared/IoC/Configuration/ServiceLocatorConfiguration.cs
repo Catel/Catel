@@ -26,11 +26,6 @@ namespace Catel.IoC
         private const string NamePropertyName = "name";
 
         /// <summary>
-        /// The support dependency injection property name
-        /// </summary>
-        private const string SupportDependencyInjectionPropertyName = "supportDependencyInjection";
-
-        /// <summary>
         /// The item element name.
         /// </summary>
         private const string ItemElementName = "register";
@@ -42,11 +37,9 @@ namespace Catel.IoC
         /// Initializes a new instance of the <see cref="ServiceLocatorConfiguration" /> class.
         /// </summary>
         /// <param name="name">The configuration name.</param>
-        /// <param name="supportDependencyInjection">Indicates whether the <see cref="IServiceLocator" /> configured with this section will support dependency injection or not.</param>
-        public ServiceLocatorConfiguration(string name = "default", bool supportDependencyInjection = true)
+        public ServiceLocatorConfiguration(string name = "default")
         {
             Name = name;
-            SupportDependencyInjection = supportDependencyInjection;
         }
 
         #endregion
@@ -62,17 +55,6 @@ namespace Catel.IoC
         {
             get { return (string)this[NamePropertyName]; }
             set { this[NamePropertyName] = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the configuration support dependency injection.
-        /// </summary>
-        /// <value><c>true</c> if [support dependency injection]; otherwise, <c>false</c>.</value>
-        [ConfigurationProperty(SupportDependencyInjectionPropertyName, DefaultValue = true, IsRequired = false)]
-        public bool SupportDependencyInjection
-        {
-            get { return (bool)this[SupportDependencyInjectionPropertyName]; }
-            set { this[SupportDependencyInjectionPropertyName] = value; }
         }
 
         /// <summary>
@@ -126,7 +108,6 @@ namespace Catel.IoC
         /// <param name="serviceLocator">The instance of <see cref="IServiceLocator" /></param>
         public void Configure(IServiceLocator serviceLocator)
         {
-            serviceLocator.SupportDependencyInjection = SupportDependencyInjection;
             foreach (Registration registrationElement in this)
             {
                 serviceLocator.RegisterType(registrationElement.InterfaceType, registrationElement.ImplementationType, registrationElement.Tag, registrationElement.RegistrationType);

@@ -142,7 +142,6 @@ namespace Catel.IoC
             _autoRegistrationManager = new ServiceLocatorAutoRegistrationManager(this);
 
             IgnoreRuntimeIncorrectUsageOfRegisterAttribute = true;
-            SupportDependencyInjection = true;
             CanResolveNonAbstractTypesWithoutRegistration = true;
 
             // Register default implementations
@@ -189,22 +188,6 @@ namespace Catel.IoC
         /// Gets or sets a value indicating whether the service locator can resolve non abstract types without registration.
         /// </summary>
         public bool CanResolveNonAbstractTypesWithoutRegistration { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this service locator supports dependency inject.
-        /// <para />
-        /// If this property is <c>true</c>, the service locator will try to instantiate the object with 
-        /// all constructors, starting with the one with the most parameters.
-        /// <para />
-        /// If a constructor fails, the service locator will try the constructor with less parameters until the
-        /// type is either constructed successfully or all constructors are tried.
-        /// <para />
-        /// By default, this value is <c>true</c>.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the service locator should support dependency injection; otherwise, <c>false</c>.
-        /// </value>
-        public bool SupportDependencyInjection { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this service locators will ignore incorrect usage of <see cref="ServiceLocatorRegistrationAttribute"/> 
@@ -869,17 +852,7 @@ namespace Catel.IoC
         /// <returns>The service instance.</returns>
         private object CreateServiceInstance(ServiceLocatorRegistration registration)
         {
-            object instance;
-
-            if (SupportDependencyInjection)
-            {
-                instance = TypeFactory.CreateInstance(registration.ImplementingType);
-            }
-            else
-            {
-                instance = TypeFactory.CreateInstanceUsingActivator(registration.ImplementingType);
-            }
-
+            object instance = TypeFactory.CreateInstance(registration.ImplementingType);
             if (instance == null)
             {
                 ThrowTypeNotRegisteredException(registration.DeclaringType);

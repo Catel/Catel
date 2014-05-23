@@ -42,6 +42,7 @@ Added/fixed (BREAKING CHANGES):
     provide a back stack. This is to make the navigation the same on all platforms. If there is a need to keep state,
     the developer will be responsible to implement that
 (*) CTL-419 Changed license to MIT instead of Ms-PL
+(*) CTL-444 Remove Activator.CreateInstance from TypeFactory (it will automatically determine what to use now)
 
 Added/fixed:
 ============
