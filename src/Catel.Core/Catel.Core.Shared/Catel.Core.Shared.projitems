@@ -256,7 +256,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Helpers\DelegateHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Helpers\PropertyHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Helpers\PropertyHelper.expression.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Reflection\Helpers\StackTraceHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Helpers\StaticHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Helpers\TypeHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\TypeCache.cs" />
