@@ -235,7 +235,7 @@ namespace Catel.Windows
         /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
         public static object FindVisualAncestor(this DependencyObject startElement, Predicate<object> condition, int maxDepth = -1)
         {
-            DependencyObject obj = startElement;
+            var obj = startElement;
             while ((obj != null) && !condition(obj))
             {
                 if (maxDepth == 0)
@@ -339,11 +339,22 @@ namespace Catel.Windows
         }
 
         /// <summary>
+        /// Finds the visual descendant by name.
+        /// </summary>
+        /// <param name="startElement">The start element.</param>
+        /// <param name="name">The name of the element to search for.</param>
+        /// <returns>object or <c>null</c> if the descendant is not found.</returns>
+        public static DependencyObject FindVisualDescendantByName(this DependencyObject startElement, string name)
+        {
+            return FindVisualDescendant(startElement, o => (o is FrameworkElement) && string.Equals(((FrameworkElement)o).Name, name));
+        }
+
+        /// <summary>
         /// Finds the visual descendant by type.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="startElement">The start element.</param>
-        /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
+        /// <returns>object or <c>null</c> if the descendant is not found.</returns>
         public static T FindVisualDescendantByType<T>(this DependencyObject startElement)
             where T : DependencyObject
         {
