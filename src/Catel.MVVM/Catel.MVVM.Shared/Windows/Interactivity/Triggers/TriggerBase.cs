@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EventTriggerBase.cs" company="Catel development team">
+// <copyright file="TriggerBase.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -9,12 +9,13 @@
 namespace Catel.Windows.Interactivity
 {
     using System;
-
+    using System.Windows;
+    using IoC;
 #if NETFX_CORE
     using global::Windows.UI.Xaml;
     using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
 #else
-    using System.Windows;
+    using System.Windows.Interactivity;
     using UIEventArgs = System.EventArgs;
 #endif
 
@@ -26,23 +27,32 @@ namespace Catel.Windows.Interactivity
     /// which is automatically called when the trigger is attached.
     /// </summary>
     /// <typeparam name="T">The <see cref="FrameworkElement"/> this trigger should attach to.</typeparam>
-#if NETFX_CORE
-    public abstract class EventTriggerBase<T> : EventTriggerBehavior
-#else
-    public abstract class EventTriggerBase<T> : System.Windows.Interactivity.EventTriggerBase<T>
-#endif
+    public abstract class TriggerBase<T> : System.Windows.Interactivity.TriggerBase<T>, ITrigger
         where T : FrameworkElement
     {
         #region Fields
+        private static readonly IInteractivityManager InteractivityManager;
+
         private bool _isClean = true;
+        #endregion
+
+        #region Constructors
+        /// <summary>
+        /// Constructs the trigger base.
+        /// </summary>
+        static TriggerBase()
+        {
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+            InteractivityManager = dependencyResolver.TryResolve<IInteractivityManager>();
+        }
         #endregion
 
         #region Properties
         /// <summary>
-        /// Gets a value indicating whether the <c>AssociatedObject</c> is loaded.
+        /// Gets a value indicating whether the <c>TriggerBase{T}.AssociatedObject</c> is loaded.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if the <c>AssociatedObject</c> is loaded; otherwise, <c>false</c>.
+        /// 	<c>true</c> if the <c>TriggerBase{T}.AssociatedObject</c> is loaded; otherwise, <c>false</c>.
         /// </value>
         public bool IsAssociatedObjectLoaded { get; private set; }
 
@@ -54,27 +64,13 @@ namespace Catel.Windows.Interactivity
         {
             get { return CatelEnvironment.IsInDesignMode; }
         }
-
-        /// <summary>
-        /// Gets the object to which the trigger is attached.
-        /// </summary>
-        /// <value>The associated object.</value>
-        protected new T AssociatedObject { get { return (T)base.AssociatedObject; } }
         #endregion
 
         #region Methods
         /// <summary>
-        /// Specifies the name of the Event this EventTriggerBase is listening for.
-        /// </summary>
-        protected override string GetEventName()
-        {
-            throw new InvalidOperationException("This method MUST be overriden and the base cannot be called");
-        }
-
-        /// <summary>
         /// Called after the action is attached to an AssociatedObject.
         /// </summary>
-        protected override sealed void OnAttached()
+        protected sealed override void OnAttached()
         {
             if (IsInDesignMode)
             {
@@ -91,12 +87,17 @@ namespace Catel.Windows.Interactivity
             ValidateRequiredProperties();
 
             Initialize();
+
+            if (InteractivityManager != null)
+            {
+                InteractivityManager.RegisterTrigger(this);
+            }
         }
 
         /// <summary>
         /// Called when the action is being detached from its AssociatedObject, but before it has actually occurred.
         /// </summary>
-        protected override sealed void OnDetaching()
+        protected sealed override void OnDetaching()
         {
             if (IsInDesignMode)
             {
@@ -127,25 +128,28 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         protected virtual void Initialize()
         {
+
         }
 
         /// <summary>
-        /// Uninitializes the behavior. This method is called when <see cref="OnDetaching"/> is called, or when the associated object is unloaded.
+        /// Uninitializes the behavior. This method is called when <see cref="OnDetaching"/> is called, or when the
+        /// <see cref="System.Windows.Interactivity.TriggerBase{T}.AssociatedObject"/> is unloaded.
         /// <para />
         /// If dependency properties are used, it is very important to use <see cref="DependencyObject.ClearValue(System.Windows.DependencyProperty)"/> 
         /// to clear the value of the dependency properties in this method.
         /// </summary>
         protected virtual void Uninitialize()
         {
+
         }
 
         /// <summary>
-        /// Called when the associated object is loaded. This method is introduced to prevent
-        /// double initialization when the associated object is already loaded.
+        /// Called when the <see cref="System.Windows.Interactivity.TriggerBase{T}.AssociatedObject"/> is loaded. This method is introduced to prevent
+        /// double initialization when the <see cref="System.Windows.Interactivity.TriggerBase{T}.AssociatedObject"/> is already loaded.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnAssociatedObjectLoadedInternal(object sender, EventArgs e)
+        private void OnAssociatedObjectLoadedInternal(object sender, UIEventArgs e)
         {
             if (IsAssociatedObjectLoaded)
             {
@@ -160,7 +164,7 @@ namespace Catel.Windows.Interactivity
         }
 
         /// <summary>
-        /// Called when the associated object is loaded.
+        /// Called when the <see cref="System.Windows.Interactivity.TriggerBase{T}.AssociatedObject"/> is loaded.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
@@ -169,12 +173,12 @@ namespace Catel.Windows.Interactivity
         }
 
         /// <summary>
-        /// Called when the associated object is unloaded. This 
-        /// method is introduced to prevent double uninitialization when the associated object is already unloaded.
+        /// Called when the <see cref="System.Windows.Interactivity.TriggerBase{T}.AssociatedObject"/> is unloaded. This 
+        /// method is introduced to prevent double uninitialization when the <see cref="System.Windows.Interactivity.TriggerBase{T}.AssociatedObject"/> is already unloaded.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnAssociatedObjectUnloadedInternal(object sender, EventArgs e)
+        private void OnAssociatedObjectUnloadedInternal(object sender, UIEventArgs e)
         {
             if (!IsAssociatedObjectLoaded)
             {
@@ -189,11 +193,11 @@ namespace Catel.Windows.Interactivity
         }
 
         /// <summary>
-        /// Called when the associated object is unloaded.
+        /// Called when the <see cref="System.Windows.Interactivity.TriggerBase{T}.AssociatedObject"/> is unloaded.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected virtual void OnAssociatedObjectUnloaded(object sender, EventArgs e)
+        protected virtual void OnAssociatedObjectUnloaded(object sender, UIEventArgs e)
         {
         }
 
@@ -215,6 +219,11 @@ namespace Catel.Windows.Interactivity
             }
 
             Uninitialize();
+
+            if (InteractivityManager != null)
+            {
+                InteractivityManager.UnregisterTrigger(this);
+            }
         }
         #endregion
     }

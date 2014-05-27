@@ -12,7 +12,7 @@ namespace Catel.Windows.Interactivity
     using Logging;
     using Reflection;
     using global::Windows.UI.Xaml;
-    using Microsoft.Xaml.Interactivity;
+    using IXamlBehavior = Microsoft.Xaml.Interactivity.IBehavior;
 
     /// <summary>
     /// Base class for the behavior because the SDK in WIN81 only ships with interfaces.
@@ -20,7 +20,7 @@ namespace Catel.Windows.Interactivity
     /// This class tries to mimic the WPF, Silverlight and Windows Phone behavior class to allow reusage of the behaviors in Catel.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class Behavior<T> : DependencyObject, IBehavior
+    public abstract class Behavior<T> : DependencyObject, IXamlBehavior
         where T : DependencyObject
     {
         /// <summary>
@@ -41,7 +41,7 @@ namespace Catel.Windows.Interactivity
         /// Gets the <see cref="T:Windows.UI.Xaml.DependencyObject" /> to which the <seealso cref="T:Microsoft.Xaml.Interactivity.IBehavior" /> is attached.
         /// </summary>
         /// <value>The associated object.</value>
-        DependencyObject IBehavior.AssociatedObject
+        DependencyObject IXamlBehavior.AssociatedObject
         {
             get { return AssociatedObject; }
         }
@@ -51,7 +51,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="associatedObject">The <see cref="T:Windows.UI.Xaml.DependencyObject" /> to which the <seealso cref="T:Microsoft.Xaml.Interactivity.IBehavior" /> will be attached.</param>
         /// <exception cref="System.InvalidOperationException">The associated object is not of the expected type.</exception>
-        void IBehavior.Attach(DependencyObject associatedObject)
+        void IXamlBehavior.Attach(DependencyObject associatedObject)
         {
             if (associatedObject != null && typeof(T).IsAssignableFromEx(associatedObject.GetType()))
             {
@@ -67,7 +67,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Detaches this instance from its associated object.
         /// </summary>
-        void IBehavior.Detach()
+        void IXamlBehavior.Detach()
         {
             OnDetaching();
             AssociatedObject = null;

@@ -7,10 +7,11 @@
 
 namespace Catel
 {
-    using Catel.MVVM;
-    using Catel.MVVM.Views;
-    using Catel.Reflection;
-    using Catel.Services;
+    using Windows.Interactivity;
+    using MVVM;
+    using MVVM.Views;
+    using Reflection;
+    using Services;
     using IoC;
 
 
@@ -33,6 +34,10 @@ namespace Catel
             serviceLocator.RegisterTypeIfNotYetRegistered<IViewManager, ViewManager>();
             serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelManager, ViewModelManager>();
             serviceLocator.RegisterTypeIfNotYetRegistered<IAutoCompletionService, AutoCompletionService>();
+
+#if !XAMARIN && !WIN80
+            serviceLocator.RegisterTypeIfNotYetRegistered<IInteractivityManager, InteractivityManager>();
+#endif
 
             ViewModelServiceHelper.RegisterDefaultViewModelServices(serviceLocator);
 

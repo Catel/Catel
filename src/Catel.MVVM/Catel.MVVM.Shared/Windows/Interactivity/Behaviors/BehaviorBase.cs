@@ -9,7 +9,8 @@
 namespace Catel.Windows.Interactivity
 {
     using System.Windows;
-    using Catel.MVVM.Views;
+    using IoC;
+    using MVVM.Views;
 
 #if NETFX_CORE
     using global::Windows.UI.Xaml;
@@ -28,14 +29,24 @@ namespace Catel.Windows.Interactivity
     /// which is automatically called when the behavior is attached.
     /// </summary>
     /// <typeparam name="T">The <see cref="IView"/> this behavior should attach to.</typeparam>
-    public abstract class BehaviorBase<T> : Behavior<T>
+    public abstract class BehaviorBase<T> : Behavior<T>, IBehavior
         where T : FrameworkElement
     {
         #region Fields
+        private static readonly IInteractivityManager InteractivityManager;
+
         private bool _isClean = true;
         #endregion
 
         #region Constructors
+        /// <summary>
+        /// Constructs the behavior base.
+        /// </summary>
+        static BehaviorBase()
+        {
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+            InteractivityManager = dependencyResolver.TryResolve<IInteractivityManager>();
+        }
         #endregion
 
         #region Properties
@@ -78,6 +89,11 @@ namespace Catel.Windows.Interactivity
             ValidateRequiredProperties();
 
             Initialize();
+
+            if (InteractivityManager != null)
+            {
+                InteractivityManager.RegisterBehavior(this);
+            }
         }
 
         /// <summary>
@@ -206,6 +222,11 @@ namespace Catel.Windows.Interactivity
             }
 
             Uninitialize();
+
+            if (InteractivityManager != null)
+            {
+                InteractivityManager.UnregisterBehavior(this);
+            }
         }
         #endregion
     }

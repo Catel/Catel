@@ -66,6 +66,7 @@ Added/fixed:
 (+) CTL-410 Add SingleUnloadOthers to TabControl so only a single view model lives in a tabcontrol
 (+) CTL-436 Add generic ICatelCommand interfaces
 (+) CTL-445 Support command parameters with application-wide commands
+(+) CTL-446 Create InteractivityManager to allow events when behaviors are created
 (*) CTL-326 Data annotation validation will no longer be invoked for properties with non-public getters to prevent
     first chance exceptions the first time such a property is being validated
 (*) CTL-334 ViewModelBase now respects SuspendValidation during saving, which means that even if there are validation 
