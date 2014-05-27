@@ -9,9 +9,8 @@ namespace Catel.IoC
 {
     using System;
     using System.Collections.Generic;
-    using Catel.Caching;
-    using Catel.Logging;
-    using Catel.Reflection;
+    using Logging;
+    using Reflection;
 
     /// <summary>
     /// Factory responsible for creating IoC components.

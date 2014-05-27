@@ -58,7 +58,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Markup\Ricciolo\XmlBamlText.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Markup\Ricciolo\XmlNamespace.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Markup\Ricciolo\XmlPIMapping.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows\Markup\XamlTypeResolver.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Media\Extensions\ImageSourceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Media\Extensions\VisualExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Media\Imaging\Extensions\BitmapExtensions.cs" />

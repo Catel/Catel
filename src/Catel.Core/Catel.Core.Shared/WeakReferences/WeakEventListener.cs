@@ -85,7 +85,7 @@ namespace Catel
         /// <summary>
         /// The type for event subscriptions. This can differ from TSource for explicitly implemented events.
         /// </summary>
-        private Type _typeForEventSubscriptions;
+        private readonly Type _typeForEventSubscriptions;
 
 #if NETFX_CORE
         /// <summary>

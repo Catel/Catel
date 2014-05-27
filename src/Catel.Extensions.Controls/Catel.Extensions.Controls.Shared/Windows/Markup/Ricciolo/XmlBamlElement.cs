@@ -86,40 +86,6 @@ namespace Ricciolo.StylesExplorer.MarkupReflection
         }
     }
 
-    internal class KeyMapping
-    {
-        private string _key;
-        private TypeDeclaration _declaration;
-        private string _trueKey;
-
-        public KeyMapping(string key, TypeDeclaration declaration, string trueKey)
-        {
-            _key = key;
-            _declaration = declaration;
-            _trueKey = trueKey;
-        }
-
-        public string Key
-        {
-            get { return _key; }
-        }
-
-        public TypeDeclaration Declaration
-        {
-            get { return _declaration; }
-        }
-
-        public string TrueKey
-        {
-            get { return _trueKey; }
-        }
-
-        public override string ToString()
-        {
-            return String.Format("{0} - {1} - {2}", Key, Declaration, TrueKey);
-        }
-    }
-
     internal class KeysResourcesCollection : List<KeysResource>
     {
         public KeysResource Last

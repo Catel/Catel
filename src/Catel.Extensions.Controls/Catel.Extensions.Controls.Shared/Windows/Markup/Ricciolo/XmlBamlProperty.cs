@@ -79,9 +79,6 @@ namespace Ricciolo.StylesExplorer.MarkupReflection
         Dictionary,
         Complex
     }
-
-    internal class XmlBamlPropertyCollection : List<XmlBamlNode>
-    { }
 }
 
 #endif
