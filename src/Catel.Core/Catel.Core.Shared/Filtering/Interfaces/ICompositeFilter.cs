@@ -30,15 +30,19 @@ namespace Catel
         CompositePredicate<T> Excludes { get; set; }
         #endregion
 
-        #region Methods
         /// <summary>
         /// Checks whether the target matches any of the <see cref="Includes"/> and does
         /// not match any of the <see cref="Excludes"/>.
         /// </summary>
         /// <param name="target">The target.</param>
         /// <returns><c>true</c> if the match is a successful hit, <c>false</c> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="target"/> is <c>null</c>.</exception>
         bool Matches(T target);
-        #endregion
+
+        /// <summary>
+        /// Object implementation of the <see cref="CompositeFilter{T}.Matches"/> method so it can be used for non-generic predicates.
+        /// </summary>
+        /// <param name="target">The target.</param>
+        /// <returns><c>true</c> if the match is a successful hit, <c>false</c> otherwise.</returns>
+        bool MatchesObject(object target);
     }
 }

@@ -7,8 +7,6 @@
 
 namespace Catel
 {
-    using System;
-
     /// <summary>
     /// Composite filter.
     /// </summary>
@@ -48,12 +46,24 @@ namespace Catel
         /// </summary>
         /// <param name="target">The target.</param>
         /// <returns><c>true</c> if the match is a successful hit, <c>false</c> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="target"/> is <c>null</c>.</exception>
         public bool Matches(T target)
         {
-            Argument.IsNotNull("target", target);
+            if (target == null)
+            {
+                return false;
+            }
 
             return Includes.MatchesAny(target) && Excludes.DoesNotMatchAny(target);
+        }
+
+        /// <summary>
+        /// Object implementation of the <see cref="Matches"/> method so it can be used for non-generic predicates.
+        /// </summary>
+        /// <param name="target">The target.</param>
+        /// <returns><c>true</c> if the match is a successful hit, <c>false</c> otherwise.</returns>
+        public bool MatchesObject(object target)
+        {
+            return Matches(target as T);
         }
         #endregion
     }
