@@ -199,70 +199,33 @@ namespace Catel.Services
         /// Shows an error message to the user and allows a callback operation when the message is completed.
         /// </summary>
         /// <param name="exception">The exception.</param>
-        /// <param name="completedCallback">The callback to invoke when the message is completed. Can be <c>null</c>.</param>
-        /// <remarks>
-        /// There is no garantuee that the method will be executed asynchronous, only that the <paramref name="completedCallback"/>
-        /// will be invoked when the message is dismissed.
-        /// </remarks>
         /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
-#if NETFX_CORE
-        Task ShowError(Exception exception, Action completedCallback = null);
-#else
-        void ShowError(Exception exception, Action completedCallback = null);
-#endif
+        Task<MessageResult> ShowError(Exception exception);
 
         /// <summary>
         /// Shows an error message to the user and allows a callback operation when the message is completed.
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="caption">The caption.</param>
-        /// <param name="completedCallback">The callback to invoke when the message is completed. Can be <c>null</c>.</param>
-        /// <remarks>
-        /// There is no garantuee that the method will be executed asynchronous, only that the <paramref name="completedCallback"/>
-        /// will be invoked when the message is dismissed.
-        /// </remarks>
         /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
-#if NETFX_CORE
-        Task ShowError(string message, string caption = "", Action completedCallback = null);
-#else
-        void ShowError(string message, string caption = "", Action completedCallback = null);
-#endif
-
+        Task<MessageResult> ShowError(string message, string caption = "");
 
         /// <summary>
         /// Shows a warning message to the user and allows a callback operation when the message is completed.
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="caption">The caption.</param>
-        /// <param name="completedCallback">The callback to invoke when the message is completed. Can be <c>null</c>.</param>
-        /// <remarks>
-        /// There is no garantuee that the method will be executed asynchronous, only that the <paramref name="completedCallback"/>
-        /// will be invoked when the message is dismissed.
-        /// </remarks>
         /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
+        Task<MessageResult> ShowWarning(string message, string caption = "");
 
-#if NETFX_CORE
-        Task ShowWarning(string message, string caption = "", Action completedCallback = null);
-#else
-        void ShowWarning(string message, string caption = "", Action completedCallback = null);
-#endif
         /// <summary>
         /// Shows an information message to the user and allows a callback operation when the message is completed.
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="caption">The caption.</param>
-        /// <param name="completedCallback">The callback to invoke when the message is completed. Can be <c>null</c>.</param>
-        /// <remarks>
-        /// There is no garantuee that the method will be executed asynchronous, only that the <paramref name="completedCallback"/>
-        /// will be invoked when the message is dismissed.
-        /// </remarks>
         /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
-#if NETFX_CORE
-        Task ShowInformation(string message, string caption = "", Action completedCallback = null);
-#else
-                void ShowInformation(string message, string caption = "", Action completedCallback = null);
+        Task<MessageResult> ShowInformation(string message, string caption = "");
 
-#endif
         /// <summary>
         /// Shows the specified message and returns the result.
         /// </summary>
@@ -272,30 +235,6 @@ namespace Catel.Services
         /// <param name="icon">The icon.</param>
         /// <returns>The <see cref="MessageResult"/>.</returns>
         /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
-#if NETFX_CORE
         Task<MessageResult> Show(string message, string caption = "", MessageButton button = MessageButton.OK, MessageImage icon = MessageImage.None);
-#else
-        MessageResult Show(string message, string caption = "", MessageButton button = MessageButton.OK, MessageImage icon = MessageImage.None);
-#endif
-        /// <summary>
-        /// Shows an information message to the user and allows a callback operation when the message is completed.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <param name="caption">The caption.</param>
-        /// <param name="button">The button.</param>
-        /// <param name="icon">The icon.</param>
-        /// <param name="completedCallback">The callback to invoke when the message is completed. Can be <c>null</c>.</param>
-        /// <remarks>
-        /// There is no garantuee that the method will be executed asynchronous, only that the <paramref name="completedCallback"/>
-        /// will be invoked when the message is dismissed.
-        /// </remarks>
-        /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
-#if NETFX_CORE
-        Task ShowAsync(string message, string caption = "", MessageButton button = MessageButton.OK,
-            MessageImage icon = MessageImage.None, Action<MessageResult> completedCallback = null);
-#else
-        void ShowAsync(string message, string caption = "", MessageButton button = MessageButton.OK,
-            MessageImage icon = MessageImage.None, Action<MessageResult> completedCallback = null);
-#endif
     }
 }

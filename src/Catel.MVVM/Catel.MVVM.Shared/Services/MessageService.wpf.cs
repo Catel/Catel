@@ -10,8 +10,9 @@
 namespace Catel.Services
 {
     using System;
+    using System.Threading.Tasks;
     using System.Windows;
-    using Catel.Windows;
+    using Windows;
 
     public partial class MessageService
     {
@@ -36,25 +37,28 @@ namespace Catel.Services
         /// <param name="icon">The icon.</param>
         /// <returns>The message result.</returns>
         /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
-        protected virtual MessageResult ShowMessageBox(string message, string caption = "", MessageButton button = MessageButton.OK, MessageImage icon = MessageImage.None)
+        protected virtual Task<MessageResult> ShowMessageBox(string message, string caption = "", MessageButton button = MessageButton.OK, MessageImage icon = MessageImage.None)
         {
             Argument.IsNotNullOrWhitespace("message", message);
 
-            var result = MessageBoxResult.None;
-            var messageBoxButton = TranslateMessageButton(button);
-            var messageBoxImage = TranslateMessageImage(icon);
-
-            var activeWindow = Application.Current.GetActiveWindow();
-            if (activeWindow != null)
+            return new Task<MessageResult>(() =>
             {
-                result = MessageBox.Show(activeWindow, message, caption, messageBoxButton, messageBoxImage);
-            }
-            else
-            {
-                result = MessageBox.Show(message, caption, messageBoxButton, messageBoxImage);
-            }
+                var result = MessageBoxResult.None;
+                var messageBoxButton = TranslateMessageButton(button);
+                var messageBoxImage = TranslateMessageImage(icon);
 
-            return TranslateMessageBoxResult(result);
+                var activeWindow = Application.Current.GetActiveWindow();
+                if (activeWindow != null)
+                {
+                    result = MessageBox.Show(activeWindow, message, caption, messageBoxButton, messageBoxImage);
+                }
+                else
+                {
+                    result = MessageBox.Show(message, caption, messageBoxButton, messageBoxImage);
+                }
+
+                return TranslateMessageBoxResult(result);
+            });
         }
     }
 }

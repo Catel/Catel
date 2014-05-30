@@ -43,6 +43,8 @@ Added/fixed (BREAKING CHANGES):
     the developer will be responsible to implement that
 (*) CTL-419 Changed license to MIT instead of Ms-PL
 (*) CTL-444 Remove Activator.CreateInstance from TypeFactory (it will automatically determine what to use now)
+(*) CTL-449 Convert all methods in the IMessageService to async so it works the same on all platforms. Note that this is
+    a breaking change and users should use await or Task.ContinueWith to await the result
 
 Added/fixed:
 ============

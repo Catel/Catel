@@ -50,22 +50,10 @@ namespace Catel.Services.Test
         /// Shows an error message to the user and allows a callback operation when the message is completed.
         /// </summary>
         /// <param name="exception">The exception.</param>
-        /// <param name="completedCallback">The callback to invoke when the message is completed. Can be <c>null</c>.</param>
-        /// <remarks>
-        /// There is no garantuee that the method will be executed asynchronous, only that the <paramref name="completedCallback"/>
-        /// will be invoked when the message is dismissed.
-        /// </remarks>
         /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
-#if NETFX_CORE
-        public async Task ShowError(Exception exception, Action completedCallback = null)
-#else
-        public void ShowError(Exception exception, Action completedCallback = null)
-#endif
+        public Task<MessageResult> ShowError(Exception exception)
         {
-            if (completedCallback != null)
-            {
-                completedCallback();
-            }
+            return new Task<MessageResult>(() => MessageResult.None);
         }
 
         /// <summary>
@@ -73,23 +61,11 @@ namespace Catel.Services.Test
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="caption">The caption.</param>
-        /// <param name="completedCallback">The callback to invoke when the message is completed. Can be <c>null</c>.</param>
-        /// <remarks>
-        /// There is no garantuee that the method will be executed asynchronous, only that the <paramref name="completedCallback"/>
-        /// will be invoked when the message is dismissed.
-        /// </remarks>
         /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentException">The <paramref name="caption"/> is <c>null</c> or whitespace.</exception>
-#if NETFX_CORE
-        public async Task ShowError(string message, string caption = "", Action completedCallback = null)
-#else
-        public void ShowError(string message, string caption = "", Action completedCallback = null)
-#endif
+        public Task<MessageResult> ShowError(string message, string caption = "")
         {
-            if (completedCallback != null)
-            {
-                completedCallback();
-            }
+            return new Task<MessageResult>(() => MessageResult.None);
         }
 
         /// <summary>
@@ -97,23 +73,11 @@ namespace Catel.Services.Test
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="caption">The caption.</param>
-        /// <param name="completedCallback">The callback to invoke when the message is completed. Can be <c>null</c>.</param>
-        /// <remarks>
-        /// There is no garantuee that the method will be executed asynchronous, only that the <paramref name="completedCallback"/>
-        /// will be invoked when the message is dismissed.
-        /// </remarks>
         /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentException">The <paramref name="caption"/> is <c>null</c> or whitespace.</exception>
-#if NETFX_CORE
-        public async Task ShowWarning(string message, string caption = "", Action completedCallback = null)
-#else
-        public void ShowWarning(string message, string caption = "", Action completedCallback = null)
-#endif
+        public Task<MessageResult> ShowWarning(string message, string caption = "")
         {
-            if (completedCallback != null)
-            {
-                completedCallback();
-            }
+            return new Task<MessageResult>(() => MessageResult.None);
         }
 
         /// <summary>
@@ -121,23 +85,11 @@ namespace Catel.Services.Test
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="caption">The caption.</param>
-        /// <param name="completedCallback">The callback to invoke when the message is completed. Can be <c>null</c>.</param>
-        /// <remarks>
-        /// There is no garantuee that the method will be executed asynchronous, only that the <paramref name="completedCallback"/>
-        /// will be invoked when the message is dismissed.
-        /// </remarks>
         /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentException">The <paramref name="caption"/> is <c>null</c> or whitespace.</exception>
-#if NETFX_CORE
-        public async Task ShowInformation(string message, string caption = "", Action completedCallback = null)
-#else
-        public void ShowInformation(string message, string caption = "", Action completedCallback = null)
-#endif
+        public Task<MessageResult> ShowInformation(string message, string caption = "")
         {
-            if (completedCallback != null)
-            {
-                completedCallback();
-            }
+            return new Task<MessageResult>(() => MessageResult.None);
         }
 
         /// <summary>
@@ -150,7 +102,6 @@ namespace Catel.Services.Test
         /// <returns>The <see cref="MessageResult"/>.</returns>
         /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentException">The <paramref name="caption"/> is <c>null</c> or whitespace.</exception>
-#if NETFX_CORE
         public Task<MessageResult> Show(string message, string caption = "", MessageButton button = MessageButton.OK, MessageImage icon = MessageImage.None)
         {
             if (ExpectedResults.Count == 0)
@@ -160,49 +111,6 @@ namespace Catel.Services.Test
 
             return new Task<MessageResult>(()=> ExpectedResults.Dequeue());
         }
-#else
-        public MessageResult Show(string message, string caption = "", MessageButton button = MessageButton.OK, MessageImage icon = MessageImage.None)
-        {
-            if (ExpectedResults.Count == 0)
-            {
-                throw new Exception(ResourceHelper.GetString("NoExpectedResultsInQueueForUnitTest"));
-            }
-
-            return ExpectedResults.Dequeue();
-        }
-#endif
-
-
-        /// <summary>
-        /// Shows an information message to the user and allows a callback operation when the message is completed.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <param name="caption">The caption.</param>
-        /// <param name="button">The button.</param>
-        /// <param name="icon">The icon.</param>
-        /// <param name="completedCallback">The callback to invoke when the message is completed. Can be <c>null</c>.</param>
-        /// <remarks>
-        /// There is no garantuee that the method will be executed asynchronous, only that the <paramref name="completedCallback"/>
-        /// will be invoked when the message is dismissed.
-        /// </remarks>
-        /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="caption"/> is <c>null</c> or whitespace.</exception>
-#if NETFX_CORE
-        public async Task ShowAsync(string message, string caption = "", MessageButton button = MessageButton.OK, MessageImage icon = MessageImage.None, Action<MessageResult> completedCallback = null)
-        {
-            var result = await Show(message, caption, button, icon);                        
-#else
-        public void ShowAsync(string message, string caption = "", MessageButton button = MessageButton.OK, MessageImage icon = MessageImage.None, Action<MessageResult> completedCallback = null)
-        {
-            var result = Show(message, caption, button, icon);
-
-#endif
-            if (completedCallback != null)
-            {
-                completedCallback(result);
-            }
-        }
-
         #endregion
     }
 }

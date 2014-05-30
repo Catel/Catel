@@ -9,6 +9,7 @@
 namespace Catel.Services
 {
     using System;
+    using System.Threading.Tasks;
     using System.Windows;
 
     public partial class MessageService
@@ -22,15 +23,17 @@ namespace Catel.Services
         /// <param name="icon">The icon.</param>
         /// <returns>The message result.</returns>
         /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
-        protected virtual MessageResult ShowMessageBox(string message, string caption = "", MessageButton button = MessageButton.OK, MessageImage icon = MessageImage.None)
+        protected virtual Task<MessageResult> ShowMessageBox(string message, string caption = "", MessageButton button = MessageButton.OK, MessageImage icon = MessageImage.None)
         {
             Argument.IsNotNullOrWhitespace("message", message);
 
-            var result = MessageBoxResult.None;
-            var messageBoxButton = TranslateMessageButton(button);
-            result = MessageBox.Show(message, caption, messageBoxButton);
+            return new Task<MessageResult>(() =>
+            {
+                var messageBoxButton = TranslateMessageButton(button);
+                var result = MessageBox.Show(message, caption, messageBoxButton);
 
-            return TranslateMessageBoxResult(result);
+                return TranslateMessageBoxResult(result);
+            });
         }
     }
 }
