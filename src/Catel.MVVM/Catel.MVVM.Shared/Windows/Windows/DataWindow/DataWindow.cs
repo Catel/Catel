@@ -321,6 +321,10 @@ namespace Catel.Windows
 
             Loaded += (sender, e) =>
             {
+#if SL5
+                Dispatcher.BeginInvoke(RaiseCanExecuteChangedForAllCommands);
+#endif
+
                 OnLoaded(e);
 
                 _viewLoaded.SafeInvoke(this);
