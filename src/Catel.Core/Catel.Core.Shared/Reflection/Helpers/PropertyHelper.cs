@@ -183,7 +183,8 @@ namespace Catel.Reflection
             }
 
 #if NETFX_CORE || PCL
-            return propertyInfo.GetValue(obj, null);
+            value = (TValue)propertyInfo.GetValue(obj, null);
+            return true;
 #else
             try
             {
