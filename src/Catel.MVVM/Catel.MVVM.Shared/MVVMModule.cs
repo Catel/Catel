@@ -29,7 +29,7 @@ namespace Catel
             Argument.IsNotNull(() => serviceLocator);
 
             serviceLocator.RegisterTypeIfNotYetRegistered<ICommandManager, CommandManager>();
-            serviceLocator.RegisterTypeIfNotYetRegistered<IViewLoadedManager, ViewLoadedManager>();
+            serviceLocator.RegisterTypeIfNotYetRegistered<IViewLoadManager, ViewLoadManager>();
             serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelWrapperService, ViewModelWrapperService>();
             serviceLocator.RegisterTypeIfNotYetRegistered<IViewManager, ViewManager>();
             serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelManager, ViewModelManager>();

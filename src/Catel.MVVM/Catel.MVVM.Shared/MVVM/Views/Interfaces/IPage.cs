@@ -11,6 +11,5 @@ namespace Catel.MVVM.Views
     /// </summary>
     public interface IPage : INavigationView
     {
-
     }
 }

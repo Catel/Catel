@@ -24,9 +24,7 @@ namespace Catel.MVVM.Providers
         /// <param name="targetPage">The page this provider should take care of.</param>
         /// <param name="viewModelType">Type of the view model.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="targetPage"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> does not implement interface <see cref="IViewModel"/>.</exception>
-        public PageLogic(IPage targetPage, Type viewModelType)
+        public PageLogic(IPage targetPage, Type viewModelType = null)
             : base(targetPage, viewModelType)
         {
         }

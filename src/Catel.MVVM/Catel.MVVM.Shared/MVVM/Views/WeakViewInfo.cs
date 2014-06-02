@@ -30,19 +30,19 @@ namespace Catel.MVVM.Views
         /// <summary>
         /// Initializes a new instance of the <see cref="WeakViewInfo"/> class.
         /// </summary>
-        /// <param name="view">The view.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="view"/> is <c>null</c>.</exception>
-        public WeakViewInfo(IView view)
+        /// <param name="viewLoadState">The view load state.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewLoadState"/> is <c>null</c>.</exception>
+        public WeakViewInfo(IViewLoadState viewLoadState)
         {
-            Argument.IsNotNull("view", view);
+            Argument.IsNotNull("viewLoadState", viewLoadState);
 
-            _view = new WeakReference(view);
+            _view = new WeakReference(viewLoadState);
 
-            this.SubscribeToWeakGenericEvent<LoadedEventArgs>(view, "Loaded", OnLoaded);
-            this.SubscribeToWeakGenericEvent<LoadedEventArgs>(view, "Unloaded", OnUnloaded);
+            this.SubscribeToWeakGenericEvent<LoadedEventArgs>(viewLoadState, "Loaded", OnLoaded);
+            this.SubscribeToWeakGenericEvent<LoadedEventArgs>(viewLoadState, "Unloaded", OnUnloaded);
 
 #if !NET && !XAMARIN
-            this.SubscribeToWeakGenericEvent<LayoutUpdatedEventArgs>(view, "LayoutUpdated", OnLayoutUpdated);
+            this.SubscribeToWeakGenericEvent<LayoutUpdatedEventArgs>(viewLoadState.View, "LayoutUpdated", OnLayoutUpdated);
 #endif
         }
         #endregion
@@ -63,7 +63,16 @@ namespace Catel.MVVM.Views
         /// <value>The view.</value>
         public IView View
         {
-            get { return _view.Target as IView; }
+            get
+            {
+                var viewLoadState = _view.Target as IViewLoadState;
+                if (viewLoadState != null)
+                {
+                    return viewLoadState.View;
+                }
+
+                return null;
+            }
         }
 
         /// <summary>

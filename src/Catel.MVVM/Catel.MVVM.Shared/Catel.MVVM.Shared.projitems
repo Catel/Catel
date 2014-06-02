@@ -160,7 +160,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelToModelMapping.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Attributes\ViewToViewModelAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\EventArgs\ViewLoadedEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\EventArgs\ViewLoadEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Extensions\ViewExtensions.android.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Extensions\ViewExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Extensions\ViewExtensions.dispatching.cs" />
@@ -174,11 +174,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Interfaces\IPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Interfaces\IUserControl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Interfaces\IView.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Interfaces\IViewLoadedManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Interfaces\IViewLoadManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Interfaces\IViewLoadState.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Interfaces\IViewManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Interfaces\IViewModelWrapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Interfaces\IViewPropertySelector.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\ViewLoadedManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\ViewLoadManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\ViewManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\ViewModelWrapper.android.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\ViewModelWrapper.cs" />

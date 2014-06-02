@@ -1,24 +1,32 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Activity.cs" company="Catel development team">
+// <copyright file="UIViewController.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Android.App
+namespace Catel.MonoTouch.UIKit
 {
     using System;
     using System.ComponentModel;
+    using global::MonoTouch.Foundation;
+    using IoC;
+    using Logging;
     using MVVM;
     using MVVM.Providers;
     using MVVM.Views;
 
     /// <summary>
-    /// View implementation that automatically takes care of view models.
+    /// UI View controller implementation that automatically takes care of view models.
     /// </summary>
-    public class Activity : global::Android.App.Activity, IPage
+    [Register("UIViewController")]
+    public class UIViewController : global::MonoTouch.UIKit.UIViewController, IPage
     {
         #region Fields
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        private static readonly IViewModelLocator _viewModelLocator;
+
         private readonly PageLogic _logic;
         private object _dataContext;
 
@@ -27,16 +35,40 @@ namespace Catel.Android.App
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="Activity"/> class.
+        /// Initializes static members of the <see cref="UIViewController"/> class.
         /// </summary>
-        public Activity()
+        static UIViewController()
+        {
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+
+            _viewModelLocator = dependencyResolver.Resolve<IViewModelLocator>();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UIViewController"/> class.
+        /// </summary>
+        public UIViewController()
         {
             if (CatelEnvironment.IsInDesignMode)
             {
                 return;
             }
 
-            _logic = new PageLogic(this);
+            var viewModelType = GetViewModelType();
+            if (viewModelType == null)
+            {
+                Log.Debug("GetViewModelType() returned null, using the ViewModelLocator to resolve the view model");
+
+                viewModelType = _viewModelLocator.ResolveViewModel(GetType());
+                if (viewModelType == null)
+                {
+                    const string error = "The view model of the view could not be resolved. Use either the GetViewModelType() method or IViewModelLocator";
+                    Log.Error(error);
+                    throw new NotSupportedException(error);
+                }
+            }
+
+            _logic = new PageLogic(this, viewModelType);
             _logic.TargetViewPropertyChanged += (sender, e) =>
             {
                 OnPropertyChanged(e);
@@ -52,8 +84,24 @@ namespace Catel.Android.App
 
                 ViewModelPropertyChanged.SafeInvoke(this, e);
             };
+
+            _logic.DetermineViewModelInstance += (sender, e) =>
+            {
+                e.ViewModel = GetViewModelInstance(e.DataContext);
+            };
+
+            _logic.DetermineViewModelType += (sender, e) =>
+            {
+                e.ViewModelType = GetViewModelType(e.DataContext);
+            };
+
+            _logic.ViewLoading += (sender, e) => ViewLoading.SafeInvoke(this);
+            _logic.ViewLoaded += (sender, e) => ViewLoaded.SafeInvoke(this);
+            _logic.ViewUnloading += (sender, e) => ViewUnloading.SafeInvoke(this);
+            _logic.ViewUnloaded += (sender, e) => ViewUnloaded.SafeInvoke(this);
         }
         #endregion
+
 
         #region Properties
         /// <summary>
@@ -113,7 +161,7 @@ namespace Catel.Android.App
         /// <value>The parent.</value>
         object IView.Parent
         {
-            get { return Parent; }
+            get { return null; }
         }
 
         /// <summary>
@@ -142,6 +190,26 @@ namespace Catel.Android.App
         /// Occurs when a property on the <see cref="ViewModel"/> has changed.
         /// </summary>
         public event EventHandler<PropertyChangedEventArgs> ViewModelPropertyChanged;
+
+        /// <summary>
+        /// Occurs when the view model container is loading.
+        /// </summary>
+        public event EventHandler<EventArgs> ViewLoading;
+
+        /// <summary>
+        /// Occurs when the view model container is loaded.
+        /// </summary>
+        public event EventHandler<EventArgs> ViewLoaded;
+
+        /// <summary>
+        /// Occurs when the view model container starts unloading.
+        /// </summary>
+        public event EventHandler<EventArgs> ViewUnloading;
+
+        /// <summary>
+        /// Occurs when the view model container is unloaded.
+        /// </summary>
+        public event EventHandler<EventArgs> ViewUnloaded;
 
         /// <summary>
         /// Occurs when the view is loaded.
@@ -188,9 +256,9 @@ namespace Catel.Android.App
         /// <summary>
         /// Called when the view is loaded.
         /// </summary>
-        protected override void OnResume()
+        public override void ViewDidAppear(bool animated)
         {
-            base.OnResume();
+            base.ViewDidAppear(animated);
 
             RaiseViewModelChanged();
 
@@ -199,13 +267,9 @@ namespace Catel.Android.App
             InitializeBindingContext();
         }
 
-        /// <summary>
-        /// Called as part of the activity lifecycle when an activity is going into
-        ///  the background, but has not (yet) been killed.
-        /// </summary>
-        protected override void OnPause()
+        public override void ViewDidDisappear(bool animated)
         {
-            base.OnPause();
+            base.ViewDidDisappear(animated);
 
             // Note: call *after* base so NavigationAdapter always gets called
             Unloaded.SafeInvoke(this);
@@ -243,6 +307,44 @@ namespace Catel.Android.App
         }
 
         /// <summary>
+        /// Gets the type of the view model. If this method returns <c>null</c>, the view model type will be retrieved by naming 
+        /// convention using the <see cref="IViewModelLocator"/> registered in the <see cref="IServiceLocator"/>.
+        /// </summary>
+        /// <returns>The type of the view model or <c>null</c> in case it should be auto determined.</returns>
+        protected virtual Type GetViewModelType()
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the type of the view model at runtime based on the <see cref="DataContext"/>. If this method returns 
+        /// <c>null</c>, the earlier determined view model type will be used instead.
+        /// </summary>
+        /// <param name="dataContext">The data context. This value can be <c>null</c>.</param>
+        /// <returns>The type of the view model or <c>null</c> in case it should be auto determined.</returns>
+        /// <remarks>
+        /// Note that this method is only called when the <see cref="DataContext"/> changes.
+        /// </remarks>
+        protected virtual Type GetViewModelType(object dataContext)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the instance of the view model at runtime based on the <see cref="DataContext"/>. If this method returns 
+        /// <c>null</c>, the logic will try to construct the view model by itself.
+        /// </summary>
+        /// <param name="dataContext">The data context. This value can be <c>null</c>.</param>
+        /// <returns>The instance of the view model or <c>null</c> in case it should be auto created.</returns>
+        /// <remarks>
+        /// Note that this method is only called when the <see cref="DataContext"/> changes.
+        /// </remarks>
+        protected virtual IViewModel GetViewModelInstance(object dataContext)
+        {
+            return null;
+        }
+
+        /// <summary>
         /// Called when a dependency property on this control has changed.
         /// </summary>
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
@@ -267,6 +369,32 @@ namespace Catel.Android.App
         /// </remarks>
         protected virtual void OnViewModelChanged()
         {
+        }
+
+        /// <summary>
+        /// Validates the data.
+        /// </summary>
+        /// <returns>True if successful, otherwise false.</returns>
+        protected bool ValidateData()
+        {
+            return _logic.ValidateViewModel();
+        }
+
+        /// <summary>
+        /// Discards all changes made by this window.
+        /// </summary>
+        protected void DiscardChanges()
+        {
+            _logic.CancelViewModel();
+        }
+
+        /// <summary>
+        /// Applies all changes made by this window.
+        /// </summary>
+        /// <returns>True if successful, otherwise false.</returns>
+        protected bool ApplyChanges()
+        {
+            return _logic.SaveViewModel();
         }
         #endregion
     }

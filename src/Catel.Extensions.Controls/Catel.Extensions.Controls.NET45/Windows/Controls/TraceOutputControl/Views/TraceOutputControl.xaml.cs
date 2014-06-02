@@ -49,17 +49,6 @@ namespace Catel.Windows.Controls
 
         #region Methods
         /// <summary>
-        /// Gets the type of the view model. If this method returns <c>null</c>, the view model type will be retrieved by naming
-        /// convention using the <see cref="IViewModelLocator"/> registered in the <see cref="IServiceLocator"/>.
-        /// </summary>
-        /// <returns>The type of the view model or <c>null</c> in case it should be auto determined.</returns>
-        /// <remarks></remarks>
-        protected override Type GetViewModelType()
-        {
-            return typeof(TraceOutputViewModel);
-        }
-
-        /// <summary>
         /// Called when the <see cref="UserControl.ViewModel"/> has changed.
         /// </summary>
         /// <remarks></remarks>

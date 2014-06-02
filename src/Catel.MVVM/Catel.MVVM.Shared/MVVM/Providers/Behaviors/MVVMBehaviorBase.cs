@@ -220,11 +220,6 @@ namespace Catel.MVVM.Providers
             Logic.ViewModelChanged += OnLogicViewModelChanged;
             Logic.ViewModelPropertyChanged += OnLogicViewModelPropertyChanged;
             Logic.TargetViewPropertyChanged += OnLogicTargetViewPropertyChanged;
-
-            Logic.ViewLoading += OnViewLoading;
-            Logic.ViewLoaded += OnViewLoaded;
-            Logic.ViewUnloading += OnViewUnloading;
-            Logic.ViewUnloaded += OnViewUnloaded;
         }
 
         /// <summary>
@@ -237,11 +232,6 @@ namespace Catel.MVVM.Providers
             Logic.ViewModelChanged -= OnLogicViewModelChanged;
             Logic.ViewModelPropertyChanged -= OnLogicViewModelPropertyChanged;
             Logic.TargetViewPropertyChanged -= OnLogicTargetViewPropertyChanged;
-
-            Logic.ViewLoading -= OnViewLoading;
-            Logic.ViewLoaded -= OnViewLoaded;
-            Logic.ViewUnloading -= OnViewUnloading;
-            Logic.ViewUnloaded -= OnViewUnloaded;
 
             ClearValue(ViewModelTypeProperty);
         }

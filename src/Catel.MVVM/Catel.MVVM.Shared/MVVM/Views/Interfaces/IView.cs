@@ -60,9 +60,5 @@ namespace Catel.MVVM.Views
         /// </summary>
         event EventHandler<EventArgs> DataContextChanged;
         #endregion
-
-        #region Methods
-
-        #endregion
     }
 }

@@ -40,32 +40,6 @@ namespace Catel.MVVM.Providers
     }
 
     /// <summary>
-    /// Available view load state events.
-    /// </summary>
-    public enum ViewLoadStateEvent
-    {
-        /// <summary>
-        /// The view is about to be loaded.
-        /// </summary>
-        Loading,
-
-        /// <summary>
-        /// The view has just been loaded.
-        /// </summary>
-        Loaded,
-
-        /// <summary>
-        /// The view is about to be unloaded.
-        /// </summary>
-        Unloading,
-
-        /// <summary>
-        /// The view has just been unloaded.
-        /// </summary>
-        Unloaded
-    }
-
-    /// <summary>
     /// The available view model behaviors.
     /// </summary>
     public enum LogicViewModelBehavior
@@ -85,7 +59,7 @@ namespace Catel.MVVM.Providers
     /// Base implementation of the behaviors, which defines all the different possible situations
     /// a behavior must implement / support to be a valid MVVM provider behavior.
     /// </summary>
-    public abstract class LogicBase : ObservableObject
+    public abstract class LogicBase : ObservableObject, IViewLoadState
     {
         #region Fields
         /// <summary>
@@ -97,6 +71,11 @@ namespace Catel.MVVM.Providers
         /// The view model factory.
         /// </summary>
         private static readonly IViewModelFactory _viewModelFactory;
+
+        /// <summary>
+        /// The view model locator.
+        /// </summary>
+        private static readonly IViewModelLocator _viewModelLocator;
 
         /// <summary>
         /// The view manager.
@@ -126,14 +105,9 @@ namespace Catel.MVVM.Providers
         private bool _isFirstValidationAfterLoaded = true;
 
         /// <summary>
-        /// The last invoked view load state event.
-        /// </summary>
-        private ViewLoadStateEvent _lastInvokedViewLoadStateEvent;
-
-        /// <summary>
         /// The view loaded manager.
         /// </summary>
-        private static readonly IViewLoadedManager _viewLoadedManager;
+        protected static readonly IViewLoadManager ViewLoadManager;
         #endregion
 
         #region Constructors
@@ -145,9 +119,10 @@ namespace Catel.MVVM.Providers
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
 
             _viewModelFactory = dependencyResolver.Resolve<IViewModelFactory>();
+            _viewModelLocator = dependencyResolver.Resolve<IViewModelLocator>();
             _viewManager = dependencyResolver.Resolve<IViewManager>();
             _viewPropertySelector = dependencyResolver.Resolve<IViewPropertySelector>();
-            _viewLoadedManager = dependencyResolver.Resolve<IViewLoadedManager>();
+            ViewLoadManager = dependencyResolver.Resolve<IViewLoadManager>();
         }
 
         /// <summary>
@@ -159,11 +134,20 @@ namespace Catel.MVVM.Providers
         /// <exception cref="ArgumentNullException">The <paramref name="targetView"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> does not implement interface <see cref="IViewModel"/>.</exception>
-        protected LogicBase(IView targetView, Type viewModelType, IViewModel viewModel = null)
+        protected LogicBase(IView targetView, Type viewModelType = null, IViewModel viewModel = null)
         {
             Argument.IsNotNull("targetView", targetView);
-            Argument.IsNotNull("viewModelType", viewModelType);
-            Argument.ImplementsInterface("viewModelType", viewModelType, typeof(IViewModel));
+
+            if (viewModelType == null)
+            {
+                viewModelType = (viewModel != null) ? viewModel.GetType() : _viewModelLocator.ResolveViewModel(targetView.GetType());
+                if (viewModelType == null)
+                {
+                    string error = string.Format("The view model of the view '{0}' could not be resolved. Make sure to customize the IViewModelLocator or register the view and view model manually", targetView.GetType().GetSafeFullName());
+                    Log.Error(error);
+                    throw new NotSupportedException(error);
+                }
+            }
 
             UniqueIdentifier = UniqueIdentifierHelper.GetUniqueIdentifier<LogicBase>();
 
@@ -191,10 +175,16 @@ namespace Catel.MVVM.Providers
             }
 
             // Use a weak event for loading to prevent memory leaks
-            _viewLoadedManager.AddView(TargetView);
-            this.SubscribeToWeakGenericEvent<ViewLoadedEventArgs>(_viewLoadedManager, "ViewLoaded", OnViewLoadedManagerLoaded);
+            ViewLoadManager.AddView(this);
+            this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewLoading", OnViewLoadedManagerLoading);
+            this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewLoaded", OnViewLoadedManagerLoaded);
+            this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewUnloading", OnViewLoadedManagerUnloading);
+            this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewUnloaded", OnViewLoadedManagerUnloaded);
 
-            TargetView.Unloaded += OnTargetViewUnloadedInternal;
+            // Required so the ViewLoadManager can handle the rest
+            targetView.Loaded += (sender, e) => Loaded.SafeInvoke(this);
+            targetView.Unloaded += (sender, e) => Unloaded.SafeInvoke(this);
+
             TargetView.DataContextChanged += OnTargetViewDataContextChanged;
 
             // This also subscribes to DataContextChanged, don't double subscribe
@@ -327,8 +317,8 @@ namespace Catel.MVVM.Providers
         /// model should be created.
         /// <para />
         /// This property will automatically be set to <c>true</c> when a parent view model container invokes the
-        /// <see cref="IViewModelContainer.ViewUnloading"/> event. It will be set to <c>false</c> again when the parent
-        /// view model container invokes the <see cref="IViewModelContainer.ViewLoading"/>.
+        /// <see cref="IViewLoadManager.ViewUnloading"/> event. It will be set to <c>false</c> again when the parent
+        /// view model container invokes the <see cref="IViewLoadManager.ViewLoading"/>.
         /// <para />
         /// The default value is <c>false</c>.
         /// </summary>
@@ -369,6 +359,47 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <value><c>true</c> if this instance is unloading; otherwise, <c>false</c>.</value>
         protected bool IsUnloading { get; private set; }
+
+        private bool CanLoad
+        {
+            get
+            {
+                // Don't do this again (another bug in WPF: OnLoaded is called more than OnUnloaded)
+                if (IsTargetViewLoaded)
+                {
+                    return false;
+                }
+
+                if (!CanViewBeLoaded)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        private bool CanUnload
+        {
+            get
+            {
+                // Don't do this again (another bug in WPF: OnLoaded is called more than OnUnloaded)
+                if (!IsTargetViewLoaded)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// The view.
+        /// </summary>
+        IView IViewLoadState.View 
+        {
+            get { return TargetView; }
+        }
         #endregion
 
         #region Events
@@ -415,24 +446,14 @@ namespace Catel.MVVM.Providers
         public event EventHandler<PropertyChangedEventArgs> TargetViewPropertyChanged;
 
         /// <summary>
-        /// Occurs when the view model container is loading.
-        /// </summary>
-        public event EventHandler<EventArgs> ViewLoading;
-
-        /// <summary>
         /// Occurs when the view model container is loaded.
         /// </summary>
-        public event EventHandler<EventArgs> ViewLoaded;
-
-        /// <summary>
-        /// Occurs when the view model container starts unloading.
-        /// </summary>
-        public event EventHandler<EventArgs> ViewUnloading;
+        public event EventHandler<EventArgs> Loaded;
 
         /// <summary>
         /// Occurs when the view model container is unloaded.
         /// </summary>
-        public event EventHandler<EventArgs> ViewUnloaded;
+        public event EventHandler<EventArgs> Unloaded;
         #endregion
 
         #region Methods
@@ -515,16 +536,70 @@ namespace Catel.MVVM.Providers
         }
 
         /// <summary>
-        /// Called when the view manager loaded.
+        /// Called when the view manager is unloading.
         /// <para />
         /// This method is public because the view loaded manager must be subscribed to as a weak event.
         /// </summary>
-        public void OnViewLoadedManagerLoaded(object sender, ViewLoadedEventArgs e)
+        public void OnViewLoadedManagerLoading(object sender, ViewLoadEventArgs e)
+        {
+            if (ReferenceEquals(e.View, TargetView))
+            {
+                OnTargetViewLoadingInternal(TargetView, EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Called when the view manager is loaded.
+        /// <para />
+        /// This method is public because the view loaded manager must be subscribed to as a weak event.
+        /// </summary>
+        public void OnViewLoadedManagerLoaded(object sender, ViewLoadEventArgs e)
         {
             if (ReferenceEquals(e.View, TargetView))
             {
                 OnTargetViewLoadedInternal(TargetView, EventArgs.Empty);
             }
+        }
+
+        /// <summary>
+        /// Called when the view manager is unloading.
+        /// <para />
+        /// This method is public because the view loaded manager must be subscribed to as a weak event.
+        /// </summary>
+        public void OnViewLoadedManagerUnloading(object sender, ViewLoadEventArgs e)
+        {
+            if (ReferenceEquals(e.View, TargetView))
+            {
+                OnTargetViewUnloadingInternal(TargetView, EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Called when the view manager is unloaded.
+        /// <para />
+        /// This method is public because the view loaded manager must be subscribed to as a weak event.
+        /// </summary>
+        public void OnViewLoadedManagerUnloaded(object sender, ViewLoadEventArgs e)
+        {
+            if (ReferenceEquals(e.View, TargetView))
+            {
+                OnTargetViewUnloadedInternal(TargetView, EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Called when the <see cref="TargetView"/> is about to be loaded.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        private void OnTargetViewLoadingInternal(object sender, EventArgs e)
+        {
+            if (!CanLoad)
+            {
+                return;
+            }
+
+            IsLoading = true;
         }
 
         /// <summary>
@@ -538,26 +613,18 @@ namespace Catel.MVVM.Providers
         /// </remarks>
         private void OnTargetViewLoadedInternal(object sender, EventArgs e)
         {
-            // Don't do this again (another bug in WPF: OnLoaded is called more than OnUnloaded)
-            if (IsTargetViewLoaded)
+            if (!CanLoad)
             {
-                return;
-            }
-
-            if (!CanViewBeLoaded)
-            {
-                Log.Debug("Received Loaded or LayoutUpdated, but CanViewBeLoaded is false thus not treating the control as loaded");
                 return;
             }
 
             Log.Debug("Target view '{0}' is loaded", TargetView.GetType().Name);
 
-            InvokeViewLoadEvent(ViewLoadStateEvent.Loading);
-
-            IsLoading = true;
-
             var view = TargetView;
-            _viewManager.RegisterView(view);
+            if (view != null)
+            {
+                _viewManager.RegisterView(view);
+            }
 
             IsTargetViewLoaded = true;
 
@@ -595,8 +662,6 @@ namespace Catel.MVVM.Providers
             });
 
             IsLoading = false;
-
-            InvokeViewLoadEvent(ViewLoadStateEvent.Loaded);
         }
 
         /// <summary>
@@ -617,6 +682,21 @@ namespace Catel.MVVM.Providers
         }
 
         /// <summary>
+        /// Called when the <see cref="TargetView"/> is about to be unloaded.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        private void OnTargetViewUnloadingInternal(object sender, EventArgs e)
+        {
+            if (!CanUnload)
+            {
+                return;
+            }
+
+            IsUnloading = true;
+        }
+
+        /// <summary>
         /// Called when the <see cref="TargetView"/> has just been unloaded.
         /// </summary>
         /// <param name="sender">The sender.</param>
@@ -627,24 +707,15 @@ namespace Catel.MVVM.Providers
         /// </remarks>
         private void OnTargetViewUnloadedInternal(object sender, EventArgs e)
         {
-            // Don't do this again (another bug in WPF: OnLoaded is called more than OnUnloaded)
-            if (!IsTargetViewLoaded)
+            if (!CanUnload)
             {
                 return;
             }
 
-            InvokeViewLoadEvent(ViewLoadStateEvent.Unloading);
-
-            IsUnloading = true;
-
             Log.Debug("Target control '{0}' is unloaded", TargetView.GetType().Name);
 
-            var view = TargetView as IView;
-            if (view == null)
-            {
-                Log.Warning("Cannot unregister view '{0}' in the view manager because it does not implement IView", TargetView.GetType().FullName);
-            }
-            else
+            var view = TargetView;
+            if (view != null)
             {
                 _viewManager.UnregisterView(view);
             }
@@ -661,8 +732,6 @@ namespace Catel.MVVM.Providers
             }
 
             IsUnloading = false;
-
-            InvokeViewLoadEvent(ViewLoadStateEvent.Unloaded);
         }
 
         /// <summary>
@@ -948,47 +1017,6 @@ namespace Catel.MVVM.Providers
                 (viewModelInstance != null) ? string.Empty : " NOT");
 
             return viewModelInstance;
-        }
-
-        /// <summary>
-        /// Invokes the specific view load event and makes sure that it isn't double invoked.
-        /// </summary>
-        /// <param name="viewLoadStateEvent">The view load state event.</param>
-        /// <exception cref="System.ArgumentOutOfRangeException">viewLoadStateEvent</exception>
-        protected void InvokeViewLoadEvent(ViewLoadStateEvent viewLoadStateEvent)
-        {
-            if (_lastInvokedViewLoadStateEvent == viewLoadStateEvent)
-            {
-                return;
-            }
-
-            EventHandler<EventArgs> handler = null;
-
-            switch (viewLoadStateEvent)
-            {
-                case ViewLoadStateEvent.Loading:
-                    handler = ViewLoading;
-                    break;
-
-                case ViewLoadStateEvent.Loaded:
-                    handler = ViewLoaded;
-                    break;
-
-                case ViewLoadStateEvent.Unloading:
-                    handler = ViewUnloading;
-                    break;
-
-                case ViewLoadStateEvent.Unloaded:
-                    handler = ViewUnloaded;
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException("viewLoadStateEvent");
-            }
-
-            handler.SafeInvoke(this);
-
-            _lastInvokedViewLoadStateEvent = viewLoadStateEvent;
         }
         #endregion
     }

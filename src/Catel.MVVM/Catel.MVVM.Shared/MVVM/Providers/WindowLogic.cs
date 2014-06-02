@@ -55,12 +55,28 @@ namespace Catel.MVVM.Providers
         /// <param name="viewModelType">Type of the view model.</param>
         /// <param name="viewModel">The view model to inject.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="targetWindow"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> does not implement interface <see cref="IViewModel"/>.</exception>
-        public WindowLogic(IView targetWindow, Type viewModelType, IViewModel viewModel = null)
+        public WindowLogic(IView targetWindow, Type viewModelType = null, IViewModel viewModel = null)
             : base(targetWindow, viewModelType, viewModel)
         {
-            _dynamicEventListener = new DynamicEventListener(targetWindow, "Closed", this, "OnTargetWindowClosed");
+            var targetWindowType = targetWindow.GetType();
+
+            string eventName;
+
+            var closedEvent = targetWindowType.GetEventEx("Closed");
+            if (closedEvent != null)
+            {
+                eventName = "Closed";
+
+                _dynamicEventListener = new DynamicEventListener(targetWindow, "Closed", this, "OnTargetWindowClosed");
+            }
+            else
+            {
+                eventName = "Unloaded";
+
+                _dynamicEventListener = new DynamicEventListener(targetWindow, "Unloaded", this, "OnTargetWindowClosed");
+            }
+
+            Log.Debug("Using '{0}.{1}' event to determine window closing", targetWindowType.FullName, eventName);
         }
         #endregion
 

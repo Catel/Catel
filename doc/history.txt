@@ -45,6 +45,8 @@ Added/fixed (BREAKING CHANGES):
 (*) CTL-444 Remove Activator.CreateInstance from TypeFactory (it will automatically determine what to use now)
 (*) CTL-449 Convert all methods in the IMessageService to async so it works the same on all platforms. Note that this is
     a breaking change and users should use await or Task.ContinueWith to await the result
+(*) CTL-452 Make it simple to use Catel on 3rd party controls (major changes internally, but it is now much easier
+    to use Catel on other views)
 
 Added/fixed:
 ============

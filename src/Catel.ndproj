@@ -1920,7 +1920,7 @@ warnif count > 0
 // Filter procedure for types that should'nt be considered as dead
 let canTypeBeConsideredAsDeadProc = new Func<IType, bool>(
    t => !t.IsPublic && //   Public types might be used by client applications of your assemblies.
-         t.Name != "Program" && 
+         t.Name != "Program" && t.Name != "ProcessedByFody" &&
         !t.IsGeneratedByCompiler &&
 
          // If you don't want to link NDepend.API.dll, you can use your own IsNotDeadCodeAttribute and adapt this rule.

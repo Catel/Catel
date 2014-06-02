@@ -83,9 +83,7 @@ namespace Catel.MVVM.Providers
         /// <param name="viewModelType">Type of the view model.</param>
         /// <param name="viewModel">The view model.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="targetView"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> does not implement interface <see cref="IViewModel"/>.</exception>
-        public UserControlLogic(IView targetView, Type viewModelType, IViewModel viewModel = null)
+        public UserControlLogic(IView targetView, Type viewModelType = null, IViewModel viewModel = null)
             : base(targetView, viewModelType, viewModel)
         {
             SupportParentViewModelContainers = true;
@@ -108,6 +106,9 @@ namespace Catel.MVVM.Providers
             // Hence target control content wrapper grid will be recreated each time content changes.
             targetView.SubscribeToPropertyChanged("Content", OnTargetControlContentChanged);
 #endif
+
+            this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewLoading", OnViewLoadedManagerLoadingForParentView);
+            this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewUnloading", OnViewLoadedManagerUnloadingForParentView);
         }
         #endregion
 
@@ -462,7 +463,6 @@ namespace Catel.MVVM.Providers
 
             base.OnTargetViewDataContextChanged(sender, e);
 
-            //var oldDataContext = e.OldValue;
             var dataContext = TargetView.DataContext;
 
             if (dataContext.IsSentinelBindingObject())
@@ -470,14 +470,35 @@ namespace Catel.MVVM.Providers
                 return;
             }
 
-            //if (oldDataContext != null)
-            //{
-            //    ClearWarningsAndErrorsForObject(oldDataContext);
-            //}
-
             if (!IsUnloading)
             {
                 UpdateDataContextToUseViewModel(dataContext);
+            }
+        }
+
+        /// <summary>
+        /// Public event to get information about the parent view.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The event args.</param>
+        public void OnViewLoadedManagerLoadingForParentView(object sender, ViewLoadEventArgs e)
+        {
+            if (ReferenceEquals(e.View, ParentViewModelContainer))
+            {
+                OnParentViewModelContainerLoading(e.View, EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Public event to get information about the parent view.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The event args.</param>
+        public void OnViewLoadedManagerUnloadingForParentView(object sender, ViewLoadEventArgs e)
+        {
+            if (ReferenceEquals(e.View, ParentViewModelContainer))
+            {
+                OnParentViewModelContainerUnloading(e.View, EventArgs.Empty);
             }
         }
 
@@ -512,8 +533,6 @@ namespace Catel.MVVM.Providers
             if (_parentViewModelContainer != null)
             {
                 _parentViewModelContainer.ViewModelChanged += OnParentViewModelContainerViewModelChanged;
-                _parentViewModelContainer.ViewLoading += OnParentViewModelContainerLoading;
-                _parentViewModelContainer.ViewUnloading += OnParentViewModelContainerUnloading;
 
                 SubscribeToParentViewModel(_parentViewModelContainer.ViewModel);
             }
@@ -531,8 +550,6 @@ namespace Catel.MVVM.Providers
                 UnsubscribeFromParentViewModel();
 
                 _parentViewModelContainer.ViewModelChanged -= OnParentViewModelContainerViewModelChanged;
-                _parentViewModelContainer.ViewLoading -= OnParentViewModelContainerLoading;
-                _parentViewModelContainer.ViewUnloading -= OnParentViewModelContainerUnloading;
 
                 _parentViewModelContainer = null;
             }
@@ -745,9 +762,6 @@ namespace Catel.MVVM.Providers
 
                 IgnoreNullDataContext = true;
             }
-
-            // We are about to be unloaded as well
-            InvokeViewLoadEvent(ViewLoadStateEvent.Unloading);
         }
 
         private void OnParentViewModelContainerLoading(object sender, EventArgs e)

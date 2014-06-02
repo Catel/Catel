@@ -9,8 +9,6 @@ namespace Catel.Android.App
 {
     using System;
     using System.ComponentModel;
-    using IoC;
-    using Logging;
     using MVVM;
     using MVVM.Providers;
     using MVVM.Views;
@@ -22,10 +20,6 @@ namespace Catel.Android.App
     public class Fragment : global::Android.App.Fragment, IUserControl
     {
         #region Fields
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-        private static readonly IViewModelLocator _viewModelLocator;
-
         private readonly UserControlLogic _logic;
         private object _dataContext;
         private object _tag;
@@ -34,16 +28,6 @@ namespace Catel.Android.App
         #endregion
 
         #region Constructors
-        /// <summary>
-        /// Initializes static members of the <see cref="Fragment"/> class.
-        /// </summary>
-        static Fragment()
-        {
-            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-
-            _viewModelLocator = dependencyResolver.Resolve<IViewModelLocator>();
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Fragment"/> class.
         /// </summary>
@@ -65,21 +49,7 @@ namespace Catel.Android.App
                 return;
             }
 
-            var viewModelType = GetViewModelType();
-            if (viewModelType == null)
-            {
-                Log.Debug("GetViewModelType() returned null, using the ViewModelLocator to resolve the view model");
-
-                viewModelType = _viewModelLocator.ResolveViewModel(GetType());
-                if (viewModelType == null)
-                {
-                    const string error = "The view model of the view could not be resolved. Use either the GetViewModelType() method or IViewModelLocator";
-                    Log.Error(error);
-                    throw new NotSupportedException(error);
-                }
-            }
-
-            _logic = new UserControlLogic(this, viewModelType);
+            _logic = new UserControlLogic(this, null);
             _logic.TargetViewPropertyChanged += (sender, e) =>
             {
                 OnPropertyChanged(e);
@@ -95,21 +65,6 @@ namespace Catel.Android.App
 
                 ViewModelPropertyChanged.SafeInvoke(this, e);
             };
-
-            _logic.DetermineViewModelInstance += (sender, e) =>
-            {
-                e.ViewModel = GetViewModelInstance(e.DataContext);
-            };
-
-            _logic.DetermineViewModelType += (sender, e) =>
-            {
-                e.ViewModelType = GetViewModelType(e.DataContext);
-            };
-
-            _logic.ViewLoading += (sender, e) => ViewLoading.SafeInvoke(this);
-            _logic.ViewLoaded += (sender, e) => ViewLoaded.SafeInvoke(this);
-            _logic.ViewUnloading += (sender, e) => ViewUnloading.SafeInvoke(this);
-            _logic.ViewUnloaded += (sender, e) => ViewUnloaded.SafeInvoke(this);
         }
         #endregion
 
@@ -257,26 +212,6 @@ namespace Catel.Android.App
         public event EventHandler<PropertyChangedEventArgs> ViewModelPropertyChanged;
 
         /// <summary>
-        /// Occurs when the view model container is loading.
-        /// </summary>
-        public event EventHandler<EventArgs> ViewLoading;
-
-        /// <summary>
-        /// Occurs when the view model container is loaded.
-        /// </summary>
-        public event EventHandler<EventArgs> ViewLoaded;
-
-        /// <summary>
-        /// Occurs when the view model container starts unloading.
-        /// </summary>
-        public event EventHandler<EventArgs> ViewUnloading;
-
-        /// <summary>
-        /// Occurs when the view model container is unloaded.
-        /// </summary>
-        public event EventHandler<EventArgs> ViewUnloaded;
-
-        /// <summary>
         /// Occurs when the view is loaded.
         /// </summary>
         public event EventHandler<EventArgs> Loaded;
@@ -383,44 +318,6 @@ namespace Catel.Android.App
         }
 
         /// <summary>
-        /// Gets the type of the view model. If this method returns <c>null</c>, the view model type will be retrieved by naming 
-        /// convention using the <see cref="IViewModelLocator"/> registered in the <see cref="IServiceLocator"/>.
-        /// </summary>
-        /// <returns>The type of the view model or <c>null</c> in case it should be auto determined.</returns>
-        protected virtual Type GetViewModelType()
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// Gets the type of the view model at runtime based on the <see cref="DataContext"/>. If this method returns 
-        /// <c>null</c>, the earlier determined view model type will be used instead.
-        /// </summary>
-        /// <param name="dataContext">The data context. This value can be <c>null</c>.</param>
-        /// <returns>The type of the view model or <c>null</c> in case it should be auto determined.</returns>
-        /// <remarks>
-        /// Note that this method is only called when the <see cref="DataContext"/> changes.
-        /// </remarks>
-        protected virtual Type GetViewModelType(object dataContext)
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// Gets the instance of the view model at runtime based on the <see cref="DataContext"/>. If this method returns 
-        /// <c>null</c>, the logic will try to construct the view model by itself.
-        /// </summary>
-        /// <param name="dataContext">The data context. This value can be <c>null</c>.</param>
-        /// <returns>The instance of the view model or <c>null</c> in case it should be auto created.</returns>
-        /// <remarks>
-        /// Note that this method is only called when the <see cref="DataContext"/> changes.
-        /// </remarks>
-        protected virtual IViewModel GetViewModelInstance(object dataContext)
-        {
-            return null;
-        }
-
-        /// <summary>
         /// Called when a dependency property on this control has changed.
         /// </summary>
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
@@ -445,32 +342,6 @@ namespace Catel.Android.App
         /// </remarks>
         protected virtual void OnViewModelChanged()
         {
-        }
-
-        /// <summary>
-        /// Validates the data.
-        /// </summary>
-        /// <returns>True if successful, otherwise false.</returns>
-        protected bool ValidateData()
-        {
-            return _logic.ValidateViewModel();
-        }
-
-        /// <summary>
-        /// Discards all changes made by this window.
-        /// </summary>
-        protected void DiscardChanges()
-        {
-            _logic.CancelViewModel();
-        }
-
-        /// <summary>
-        /// Applies all changes made by this window.
-        /// </summary>
-        /// <returns>True if successful, otherwise false.</returns>
-        protected bool ApplyChanges()
-        {
-            return _logic.SaveViewModel();
         }
         #endregion
     }
