@@ -10,13 +10,18 @@ namespace Catel.Services
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using System.Windows;
-    using Catel.MVVM;
+    using MVVM;
 
     using Logging;
     using MVVM.Properties;
     using Reflection;
+    using Catel.Windows.Threading;
+
+#if NET
     using Windows;
+#endif
 
 #if NETFX_CORE
     using global::Windows.UI.Xaml;
@@ -174,7 +179,7 @@ namespace Catel.Services
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         /// <exception cref="ViewModelNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(System.Type,System.Type)"/> method first.</exception>
-        public virtual bool Show(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
+        public virtual Task<bool> Show(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             Argument.IsNotNull("viewModel", viewModel);
 
@@ -203,7 +208,7 @@ namespace Catel.Services
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type)"/> method first.</exception>
-        public virtual bool Show(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
+        public virtual Task<bool> Show(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             Argument.IsNotNullOrWhitespace("name", name);
 
@@ -215,13 +220,16 @@ namespace Catel.Services
                 }
             }
 
-            var window = CreateWindow(name, data, completedProc, false);
-            if (window != null)
+            return new Task<bool>(() =>
             {
-                ShowWindow(window, false);
-            }
+                var window = CreateWindow(name, data, completedProc, false);
+                if (window != null)
+                {
+                    ShowWindow(window, false);
+                }
 
-            return (window != null);
+                return (window != null);
+            });
         }
 
         /// <summary>
@@ -234,7 +242,7 @@ namespace Catel.Services
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type)"/> method first.</exception>
-        public virtual bool? ShowDialog(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
+        public virtual Task<bool?> ShowDialog(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             Argument.IsNotNull("viewModel", viewModel);
 
@@ -263,7 +271,7 @@ namespace Catel.Services
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type)"/> method first.</exception>
-        public virtual bool? ShowDialog(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
+        public virtual Task<bool?> ShowDialog(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             Argument.IsNotNullOrWhitespace("name", name);
 
@@ -281,7 +289,7 @@ namespace Catel.Services
                 return ShowWindow(window, true);
             }
 
-            return false;
+            return new Task<bool?>(() => false);
         }
 
 #if NET
@@ -383,31 +391,36 @@ namespace Catel.Services
         /// <param name="window">The window.</param>
         /// <param name="showModal">If <c>true</c>, the window should be shown as modal.</param>
         /// <returns><c>true</c> if the window is closed with success; otherwise <c>false</c> or <c>null</c>.</returns>
-        protected virtual bool? ShowWindow(FrameworkElement window, bool showModal)
+        protected virtual Task<bool?> ShowWindow(FrameworkElement window, bool showModal)
         {
-            if (showModal)
+            return Task<bool?>.Factory.StartNew(() =>
             {
-                var showDialogMethodInfo = window.GetType().GetMethodEx("ShowDialog");
-                if (showDialogMethodInfo != null)
+                if (showModal)
                 {
-                    // Child window does not have a ShowDialog, so not null is allowed
-                    return showDialogMethodInfo.Invoke(window, null) as bool?;
+                    var showDialogMethodInfo = window.GetType().GetMethodEx("ShowDialog");
+                    if (showDialogMethodInfo != null)
+                    {
+                        // Child window does not have a ShowDialog, so not null is allowed
+                        bool? result = null;
+                        window.Dispatcher.Invoke(() => result = showDialogMethodInfo.Invoke(window, null) as bool?);
+                        return result;
+                    }
+
+                    Log.Warning("Method 'ShowDialog' not found on '{0}', falling back to 'Show'", window.GetType().Name);
                 }
 
-                Log.Warning("Method 'ShowDialog' not found on '{0}', falling back to 'Show'", window.GetType().Name);
-            }
+                var showMethodInfo = window.GetType().GetMethodEx("Show");
+                if (showMethodInfo == null)
+                {
+                    string error = string.Format("Method 'Show' not found on '{0}', cannot show the window", window.GetType().Name);
+                    Log.Error(error);
 
-            var showMethodInfo = window.GetType().GetMethodEx("Show");
-            if (showMethodInfo == null)
-            {
-                string error = string.Format("Method 'Show' not found on '{0}', cannot show the window", window.GetType().Name);
-                Log.Error(error);
+                    throw new NotSupportedException(error);
+                }
 
-                throw new NotSupportedException(error);
-            }
-
-            showMethodInfo.Invoke(window, null);
-            return null;
+                window.Dispatcher.Invoke(() => showMethodInfo.Invoke(window, null));
+                return null;
+            });
         }
         #endregion
     }

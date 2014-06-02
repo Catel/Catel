@@ -8,6 +8,7 @@ namespace Catel.Services.Test
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using System.Windows;
     using Catel.MVVM;
 
@@ -122,7 +123,7 @@ namespace Catel.Services.Test
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type)"/> method first.</exception>
-        public bool Show(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
+        public Task<bool> Show(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             return Show(viewModel.GetType().FullName, viewModel, completedProc);
         }
@@ -138,14 +139,14 @@ namespace Catel.Services.Test
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type)"/> method first.</exception>
-        public bool Show(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
+        public Task<bool> Show(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             if (ExpectedShowResults.Count == 0)
             {
                 throw new Exception(ResourceHelper.GetString("NoExpectedResultsInQueueForUnitTest"));
             }
 
-            return ExpectedShowResults.Dequeue().Invoke();
+            return new Task<bool>(() => ExpectedShowResults.Dequeue().Invoke());
         }
 
         /// <summary>
@@ -158,7 +159,7 @@ namespace Catel.Services.Test
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type)"/> method first.</exception>
-        public bool? ShowDialog(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
+        public Task<bool?> ShowDialog(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             return ShowDialog(viewModel.GetType().FullName, viewModel, completedProc);
         }
@@ -174,14 +175,14 @@ namespace Catel.Services.Test
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type)"/> method first.</exception>
-        public bool? ShowDialog(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
+        public Task<bool?> ShowDialog(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             if (ExpectedShowDialogResults.Count == 0)
             {
                 throw new Exception(ResourceHelper.GetString("NoExpectedResultsInQueueForUnitTest"));
             }
 
-            return ExpectedShowDialogResults.Dequeue().Invoke();
+            return new Task<bool?>(() => ExpectedShowDialogResults.Dequeue().Invoke());
         }
         #endregion
     }

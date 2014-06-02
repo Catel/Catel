@@ -8,8 +8,9 @@
 namespace Catel.Services
 {
     using System;
-    using Catel.IoC;
-    using Catel.MVVM;
+    using System.Threading.Tasks;
+    using IoC;
+    using MVVM;
 
     /// <summary>
     /// Extension methods for the <see cref="IUIVisualizerService"/>.
@@ -25,7 +26,7 @@ namespace Catel.Services
         /// <param name="completedProc">The completed proc.</param>
         /// <returns><c>true</c> if shown successfully, <c>false</c> otherwise.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="uiVisualizerService" /> is <c>null</c>.</exception>
-        public static bool Show<TViewModel>(this IUIVisualizerService uiVisualizerService, object model = null, EventHandler<UICompletedEventArgs> completedProc = null)
+        public static Task<bool> Show<TViewModel>(this IUIVisualizerService uiVisualizerService, object model = null, EventHandler<UICompletedEventArgs> completedProc = null)
             where TViewModel : IViewModel
         {
             Argument.IsNotNull("uiVisualizerService", uiVisualizerService);
@@ -44,7 +45,7 @@ namespace Catel.Services
         /// <param name="completedProc">The completed proc.</param>
         /// <returns>The dialog result.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="uiVisualizerService" /> is <c>null</c>.</exception>
-        public static bool? ShowDialog<TViewModel>(this IUIVisualizerService uiVisualizerService, object model = null, EventHandler<UICompletedEventArgs> completedProc = null)
+        public static Task<bool?> ShowDialog<TViewModel>(this IUIVisualizerService uiVisualizerService, object model = null, EventHandler<UICompletedEventArgs> completedProc = null)
             where TViewModel : IViewModel
         {
             Argument.IsNotNull("uiVisualizerService", uiVisualizerService);

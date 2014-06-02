@@ -7,7 +7,8 @@
 namespace Catel.Services
 {
     using System;
-    using Catel.MVVM;
+    using System.Threading.Tasks;
+    using MVVM;
 
     /// <summary>
     /// This interface defines a UI controller which can be used to display dialogs
@@ -64,7 +65,7 @@ namespace Catel.Services
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type)"/> method first.</exception>
-        bool Show(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null);
+        Task<bool> Show(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null);
 
         /// <summary>
         /// Shows a window that is registered with the specified view model in a non-modal state.
@@ -77,7 +78,7 @@ namespace Catel.Services
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type)"/> method first.</exception>
-        bool Show(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null);
+        Task<bool> Show(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null);
 
         /// <summary>
         /// Shows a window that is registered with the specified view model in a modal state.
@@ -89,7 +90,7 @@ namespace Catel.Services
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type)"/> method first.</exception>
-        bool? ShowDialog(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null);
+        Task<bool?> ShowDialog(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null);
 
         /// <summary>
         /// Shows a window that is registered with the specified view model in a modal state.
@@ -102,7 +103,7 @@ namespace Catel.Services
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type)"/> method first.</exception>
-        bool? ShowDialog(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null);
+        Task<bool?> ShowDialog(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null);
         #endregion
     }
 }

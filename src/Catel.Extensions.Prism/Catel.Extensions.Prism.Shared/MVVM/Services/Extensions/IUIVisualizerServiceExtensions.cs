@@ -8,7 +8,7 @@ namespace Catel.Services
 {
     using System;
     using System.Threading;
-
+    using System.Threading.Tasks;
     using IoC;
 
     using Microsoft.Practices.Prism.Regions;
@@ -107,29 +107,34 @@ namespace Catel.Services
         /// <remarks>If the <see cref="IViewManager.GetViewsOfViewModel" /> method returns no active views for the <paramref name="viewModel" /> in the expected <paramref name="timeOutInMilliseconds" /> time
         /// then this method will assume that the view is actually opened and invokes <paramref name="openedProc" /> anyway.</remarks>
         [CLSCompliant(false)]
-        public static bool Show(this IUIVisualizerService @this, IViewModel viewModel, Action openedProc = null, EventHandler<UICompletedEventArgs> completedProc = null, uint timeOutInMilliseconds = 10000)
+        public static Task<bool> Show(this IUIVisualizerService @this, IViewModel viewModel, Action openedProc = null, EventHandler<UICompletedEventArgs> completedProc = null, uint timeOutInMilliseconds = 10000)
         {
             Argument.IsNotNull("@this", @this);
 
-            bool result = @this.Show(viewModel, completedProc);
-
-            if (result && openedProc != null)
+            return new Task<bool>(() =>
             {
-                var startTime = DateTime.Now;
-                ThreadPool.QueueUserWorkItem(state =>
+                var innerTask = @this.Show(viewModel, completedProc);
+                return innerTask.ContinueWith(t =>
+                {
+                    if (t.Result && openedProc != null)
                     {
-                        var viewManager = ResolveTypeFromContainer<IViewManager>();
-                        while (viewManager.GetViewsOfViewModel(viewModel).Length == 0 && DateTime.Now.Subtract(startTime).TotalMilliseconds < timeOutInMilliseconds)
+                        var startTime = DateTime.Now;
+                        ThreadPool.QueueUserWorkItem(state =>
                         {
-                            ThreadHelper.Sleep(100);
-                        }
+                            var viewManager = ResolveTypeFromContainer<IViewManager>();
+                            while (viewManager.GetViewsOfViewModel(viewModel).Length == 0 && DateTime.Now.Subtract(startTime).TotalMilliseconds < timeOutInMilliseconds)
+                            {
+                                ThreadHelper.Sleep(100);
+                            }
 
-                        var dispatcherService = ResolveTypeFromContainer<IDispatcherService>();
-                        dispatcherService.Invoke(openedProc);
-                    });
-            }
+                            var dispatcherService = ResolveTypeFromContainer<IDispatcherService>();
+                            dispatcherService.Invoke(openedProc);
+                        });
+                    }
 
-            return result;
+                    return t.Result;
+                }).Result;
+            });
         }
 
         #endregion
