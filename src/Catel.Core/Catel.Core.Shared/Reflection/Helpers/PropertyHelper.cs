@@ -214,6 +214,17 @@ namespace Catel.Reflection
             Argument.IsNotNull("obj", obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
+            var propertyInfo = GetPropertyInfo(obj, property);
+            if (propertyInfo == null)
+            {
+                return false;
+            }
+
+            if (!propertyInfo.CanWrite)
+            {
+                return false;
+            }
+
             try
             {
                 SetPropertyValue(obj, property, value);
