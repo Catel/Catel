@@ -25,7 +25,7 @@ namespace Catel.Reflection
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private static readonly ICacheStorage<string, PropertyInfo> _availableProperties = new CacheStorage<string, PropertyInfo>();  
+        private static readonly ICacheStorage<string, PropertyInfo> _availableProperties = new CacheStorage<string, PropertyInfo>();
         #endregion
 
         #region Methods
@@ -111,31 +111,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("obj", obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
-            TValue defaultValue = default(TValue);
-
-            var propertyInfo = GetPropertyInfo(obj, property);
-            if (propertyInfo == null)
-            {
-                value = defaultValue;
-                return false;
-            }
-
-            if (!propertyInfo.CanRead)
-            {
-                value = defaultValue;
-                return false;
-            }
-
-            try
-            {
-                value = (TValue) propertyInfo.GetValue(obj, null);
-                return true;
-            }
-            catch (Exception)
-            {
-                value = defaultValue;
-                return false;
-            }
+            return TryGetPropertyValue(obj, property, false, out value);
         }
 
         /// <summary>
@@ -150,37 +126,7 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
         public static object GetPropertyValue(object obj, string property)
         {
-            Argument.IsNotNull("obj", obj);
-            Argument.IsNotNullOrWhitespace("property", property);
-
-            var propertyInfo = GetPropertyInfo(obj, property);
-            if (propertyInfo == null)
-            {
-                Log.Error("Property '{0}' is not found on the object '{1}', probably the wrong field is being mapped", property, obj.GetType().Name);
-                throw new PropertyNotFoundException(property);
-            }
-
-            // Return property value if available
-            if (!propertyInfo.CanRead)
-            {
-                Log.Error("Cannot read property {0}.'{1}'", obj.GetType().Name, property);
-                throw new CannotGetPropertyValueException(property);
-            }
-
-#if NETFX_CORE || PCL
-            return propertyInfo.GetValue(obj, null);
-#else
-            try
-            {
-                return propertyInfo.GetValue(obj, null);
-            }
-            catch (MethodAccessException)
-            {
-                Log.Error("Cannot read property {0}.'{1}'", obj.GetType().Name, property);
-                throw new CannotGetPropertyValueException(property);
-            }
-
-#endif
+            return GetPropertyValue<object>(obj, property);
         }
 
         /// <summary>
@@ -196,7 +142,66 @@ namespace Catel.Reflection
         /// <exception cref="CannotGetPropertyValueException">The property value cannot be read.</exception>
         public static TValue GetPropertyValue<TValue>(object obj, string property)
         {
-            return (TValue) GetPropertyValue(obj, property);
+            TValue returnValue;
+
+            TryGetPropertyValue(obj, property, true, out returnValue);
+
+            return returnValue;
+        }
+
+        private static bool TryGetPropertyValue<TValue>(object obj, string property, bool throwOnException, out TValue value)
+        {
+            Argument.IsNotNull("obj", obj);
+            Argument.IsNotNullOrWhitespace("property", property);
+
+            value = default(TValue);
+
+            var propertyInfo = GetPropertyInfo(obj, property);
+            if (propertyInfo == null)
+            {
+                Log.Error("Property '{0}' is not found on the object '{1}', probably the wrong field is being mapped", property, obj.GetType().Name);
+
+                if (throwOnException)
+                {
+                    throw new PropertyNotFoundException(property);
+                }
+
+                return false;
+            }
+
+            // Return property value if available
+            if (!propertyInfo.CanRead)
+            {
+                Log.Error("Cannot read property {0}.'{1}'", obj.GetType().Name, property);
+
+                if (throwOnException)
+                {
+                    throw new CannotGetPropertyValueException(property);
+                }
+
+                return false;
+            }
+
+#if NETFX_CORE || PCL
+            return propertyInfo.GetValue(obj, null);
+#else
+            try
+            {
+                value = (TValue)propertyInfo.GetValue(obj, null);
+                return true;
+            }
+            catch (MethodAccessException)
+            {
+                Log.Error("Cannot read property {0}.'{1}'", obj.GetType().Name, property);
+
+                if (throwOnException)
+                {
+                    throw new CannotGetPropertyValueException(property);
+                }
+
+                return false;
+            }
+#endif
         }
 
         /// <summary>
@@ -211,29 +216,7 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
         public static bool TrySetPropertyValue(object obj, string property, object value)
         {
-            Argument.IsNotNull("obj", obj);
-            Argument.IsNotNullOrWhitespace("property", property);
-
-            var propertyInfo = GetPropertyInfo(obj, property);
-            if (propertyInfo == null)
-            {
-                return false;
-            }
-
-            if (!propertyInfo.CanWrite)
-            {
-                return false;
-            }
-
-            try
-            {
-                SetPropertyValue(obj, property, value);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            return TrySetPropertyValue(obj, property, value, false);
         }
 
         /// <summary>
@@ -248,6 +231,11 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
         public static void SetPropertyValue(object obj, string property, object value)
         {
+            TrySetPropertyValue(obj, property, value, true);
+        }
+
+        private static bool TrySetPropertyValue(object obj, string property, object value, bool throwOnError)
+        {
             Argument.IsNotNull("obj", obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
@@ -255,18 +243,29 @@ namespace Catel.Reflection
             if (propertyInfo == null)
             {
                 Log.Error("Property '{0}' is not found on the object '{1}', probably the wrong field is being mapped", property, obj.GetType().Name);
-                throw new PropertyNotFoundException(property);
+
+                if (throwOnError)
+                {
+                    throw new PropertyNotFoundException(property);
+                }
+
+                return false;
             }
 
             if (!propertyInfo.CanWrite)
             {
                 Log.Error("Cannot write property {0}.'{1}'", obj.GetType().Name, property);
-                throw new CannotSetPropertyValueException(property);
+
+                if (throwOnError)
+                {
+                    throw new CannotSetPropertyValueException(property);
+                }
+
+                return false;
             }
 
 #if NETFX_CORE
             propertyInfo.SetValue(obj, value, null);
-            return;
 #else
 
 #if NET
@@ -277,11 +276,19 @@ namespace Catel.Reflection
             if (setMethod == null)
             {
                 Log.Error("Cannot write property {0}.'{1}', SetMethod is null", obj.GetType().Name, property);
-                throw new CannotSetPropertyValueException(property);
+
+                if (throwOnError)
+                {
+                    throw new CannotSetPropertyValueException(property);
+                }
+
+                return false;
             }
 
-            setMethod.Invoke(obj, new[] {value});
+            setMethod.Invoke(obj, new[] { value });
 #endif
+
+            return true;
         }
 
 #if !NETFX_CORE && !PCL
@@ -313,7 +320,7 @@ namespace Catel.Reflection
                 throw new PropertyNotFoundException(property);
             }
 
-            return (TValue) propertyInfo.GetValue(obj, BindingFlags, null, new object[] {}, CultureInfo.InvariantCulture);
+            return (TValue)propertyInfo.GetValue(obj, BindingFlags, null, new object[] { }, CultureInfo.InvariantCulture);
         }
 
 #endif
