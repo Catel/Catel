@@ -338,6 +338,7 @@ namespace Catel.Services
         protected virtual FrameworkElement CreateWindow(Type windowType, object data, EventHandler<UICompletedEventArgs> completedProc, bool isModal)
         {
             var window = ViewHelper.ConstructViewWithViewModel(windowType, data);
+
 #if NET
             PropertyHelper.TrySetPropertyValue(window, "Owner", GetActiveWindow());
 #endif
