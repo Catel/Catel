@@ -24,10 +24,5 @@ namespace Catel.MVVM
         /// Occurs when the <see cref="ViewModel"/> property has changed.
         /// </summary>
         event EventHandler<EventArgs> ViewModelChanged;
-
-        /// <summary>
-        /// Occurs when a property on the <see cref="ViewModel"/> has changed.
-        /// </summary>
-        event EventHandler<PropertyChangedEventArgs> ViewModelPropertyChanged;
     }
 }
