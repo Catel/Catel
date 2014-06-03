@@ -9,6 +9,7 @@ namespace Catel.Reflection
     using System;
     using System.Linq.Expressions;
     using System.Reflection;
+    using Caching;
     using Logging;
 
     /// <summary>
@@ -16,6 +17,8 @@ namespace Catel.Reflection
     /// </summary>
     public static partial class PropertyHelper
     {
+        private static ICacheStorage<string, string> _expressionNameCache = new CacheStorage<string, string>(); 
+
         /// <summary>
         /// Gets the name of the property based on the expression.
         /// </summary>
@@ -81,51 +84,54 @@ namespace Catel.Reflection
 
             const string NoMemberExpression = "The expression is not a member access expression";
 
-            // TODO: Add caching for performance?
+            string cacheKey = string.Format("{0}_{1}_{2}", propertyExpression, allowNested, nested);
 
-            MemberExpression memberExpression;
+            return _expressionNameCache.GetFromCacheOrFetch(cacheKey, () =>
+            {
+                MemberExpression memberExpression;
 
-            var unaryExpression = propertyExpression as UnaryExpression;
-            if (unaryExpression != null)
-            {
-                memberExpression = unaryExpression.Operand as MemberExpression;
-            }
-            else
-            {
-                memberExpression = propertyExpression as MemberExpression;
-            }
-
-            if (memberExpression == null)
-            {
-                if (nested)
+                var unaryExpression = propertyExpression as UnaryExpression;
+                if (unaryExpression != null)
                 {
-                    return string.Empty;
+                    memberExpression = unaryExpression.Operand as MemberExpression;
+                }
+                else
+                {
+                    memberExpression = propertyExpression as MemberExpression;
                 }
 
-                Log.Error(NoMemberExpression);
-                throw new NotSupportedException(NoMemberExpression);
-            }
-
-            var propertyInfo = memberExpression.Member as PropertyInfo;
-            if (propertyInfo == null)
-            {
-                if (nested)
+                if (memberExpression == null)
                 {
-                    return string.Empty;
+                    if (nested)
+                    {
+                        return string.Empty;
+                    }
+
+                    Log.Error(NoMemberExpression);
+                    throw new NotSupportedException(NoMemberExpression);
                 }
 
-                Log.Error(NoMemberExpression);
-                throw new NotSupportedException(NoMemberExpression);
-            }
+                var propertyInfo = memberExpression.Member as PropertyInfo;
+                if (propertyInfo == null)
+                {
+                    if (nested)
+                    {
+                        return string.Empty;
+                    }
 
-            if (allowNested && (memberExpression.Expression != null) && (memberExpression.Expression.NodeType == ExpressionType.MemberAccess))
-            {
-                var propertyName = GetPropertyName(memberExpression.Expression, true, true);
+                    Log.Error(NoMemberExpression);
+                    throw new NotSupportedException(NoMemberExpression);
+                }
 
-                return propertyName + (!string.IsNullOrEmpty(propertyName) ? "." : string.Empty) + propertyInfo.Name;
-            }
+                if (allowNested && (memberExpression.Expression != null) && (memberExpression.Expression.NodeType == ExpressionType.MemberAccess))
+                {
+                    var propertyName = GetPropertyName(memberExpression.Expression, true, true);
 
-            return propertyInfo.Name;
+                    return propertyName + (!string.IsNullOrEmpty(propertyName) ? "." : string.Empty) + propertyInfo.Name;
+                }
+
+                return propertyInfo.Name;
+            });
         }
     }
 }
