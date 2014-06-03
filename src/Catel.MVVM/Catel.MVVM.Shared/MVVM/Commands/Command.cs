@@ -10,10 +10,9 @@
 namespace Catel.MVVM
 {
     using System;
-    using System.Collections.Generic;
     using System.Windows.Input;
 
-    using Catel.Services;
+    using Services;
 
     using IoC;
 
@@ -57,11 +56,6 @@ namespace Catel.MVVM
         private Func<bool> _canExecuteWithoutParameter;
         private Action<TExecuteParameter> _executeWithParameter;
         private Action _executeWithoutParameter;
-
-        /// <summary>
-        /// List of subscribed event handlers so the commands can be unsubscribed upon disposing.
-        /// </summary>
-        private readonly List<EventHandler> _subscribedEventHandlers = new List<EventHandler>();
         #endregion
 
         #region Constructors
@@ -100,47 +94,13 @@ namespace Catel.MVVM
             Tag = tag;
             AutomaticallyDispatchEvents = true;
         }
-
-        /// <summary>
-        /// Releases unmanaged resources and performs other cleanup operations before the
-        /// <see cref="Command&lt;TExecuteParameter, TCanExecuteParameter&gt;"/> is reclaimed by garbage collection.
-        /// </summary>
-        ~Command()
-        {
-            Dispose(false);
-        }
         #endregion
 
         #region Events
         /// <summary>
         /// Occurs when changes occur that affect whether or not the command should execute.
         /// </summary>
-#if NET
-        public event EventHandler CanExecuteChanged
-        {
-            add
-            {
-                System.Windows.Input.CommandManager.RequerySuggested += value;
-
-                lock (_subscribedEventHandlers)
-                {
-                    _subscribedEventHandlers.Add(value);
-                }
-            }
-
-            remove
-            {
-                lock (_subscribedEventHandlers)
-                {
-                    _subscribedEventHandlers.Remove(value);
-                }
-
-                System.Windows.Input.CommandManager.RequerySuggested -= value;
-            }
-        }
-#else
         public event EventHandler CanExecuteChanged;
-#endif
 
         /// <summary>
         /// Occurs when the command has just been executed successfully.
@@ -183,7 +143,7 @@ namespace Catel.MVVM
         /// Defines the method that determines whether the command can execute in its current state.
         /// </summary>
         /// <returns>
-        /// 	<c>true</c> if this command can be executed; otherwise, <c>false</c>.
+        /// <c>true</c> if this command can be executed; otherwise, <c>false</c>.
         /// </returns>
         /// <remarks>
         /// Not a default parameter value because the <see cref="ICommand.CanExecute"/> has no default parameter value.
@@ -215,7 +175,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="parameter">The parameter.</param>
         /// <returns>
-        /// 	<c>true</c> if this instance can execute the specified parameter; otherwise, <c>false</c>.
+        /// <c>true</c> if this instance can execute the specified parameter; otherwise, <c>false</c>.
         /// </returns>
         public virtual bool CanExecute(TCanExecuteParameter parameter)
         {
@@ -304,21 +264,7 @@ namespace Catel.MVVM
         /// </summary>
         public virtual void RaiseCanExecuteChanged()
         {
-            var action = new Action(() =>
-            {
-#if NET
-                foreach (var handler in _subscribedEventHandlers)
-                {
-                    handler.SafeInvoke(this);
-                }
-
-                System.Windows.Input.CommandManager.InvalidateRequerySuggested();
-#else
-                CanExecuteChanged.SafeInvoke(this);
-#endif
-            });
-
-            AutoDispatchIfRequired(action);
+            AutoDispatchIfRequired(() => CanExecuteChanged.SafeInvoke(this));
         }
 
         /// <summary>
@@ -341,39 +287,6 @@ namespace Catel.MVVM
             else
             {
                 action();
-            }
-        }
-        #endregion
-
-        #region IDisposable Members
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// Releases unmanaged and - optionally - managed resources.
-        /// </summary>
-        /// <param name="disposeManagedResources"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-        protected virtual void Dispose(bool disposeManagedResources)
-        {
-            if (disposeManagedResources)
-            {
-                lock (_subscribedEventHandlers)
-                {
-#if NET
-                    foreach (var eventHandler in _subscribedEventHandlers)
-                    {
-                        System.Windows.Input.CommandManager.RequerySuggested -= eventHandler;
-                    }
-#endif
-
-                    _subscribedEventHandlers.Clear();
-                }
             }
         }
         #endregion

@@ -246,46 +246,6 @@ namespace Catel.MVVM
             Log.Debug("Unregistered commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, _viewModel.UniqueIdentifier);
         }
 
-        private void DisposeCommands()
-        {
-            Log.Debug("Disposing commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, _viewModel.UniqueIdentifier);
-
-            var type = _viewModelType;
-            var properties = new List<PropertyInfo>();
-            properties.AddRange(type.GetPropertiesEx());
-
-            foreach (var propertyInfo in properties)
-            {
-                if (propertyInfo.PropertyType.ImplementsInterfaceEx(typeof(ICommand)))
-                {
-                    var command = propertyInfo.GetValue(_viewModel, null) as ICommand;
-                    if (command != null)
-                    {
-                        var commandAsICatelCommand = command as ICatelCommand;
-                        if (commandAsICatelCommand != null)
-                        {
-                            commandAsICatelCommand.Dispose();
-                        }
-#if NET
-                        try
-                        {
-                            if (propertyInfo.CanWrite)
-                            {
-                                propertyInfo.SetValue(_viewModel, null, null);
-                            }
-                        }
-                        catch (Exception)
-                        {
-                            Log.Warning("Failed to set command '{0}' to null", propertyInfo.Name);
-                        }
-#endif
-                    }
-                }
-            }
-
-            Log.Debug("Disposed commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, _viewModel.UniqueIdentifier);
-        }
-
         private void OnViewModelCommandExecuted(object sender, CommandExecutedEventArgs e)
         {
             lock (_lock)
@@ -317,7 +277,6 @@ namespace Catel.MVVM
             _commandHandlers.Clear();
 
             UnregisterCommands();
-            DisposeCommands();
 
             _viewModel.Initialized -= OnViewModelInitialized;
             _viewModel.PropertyChanged -= OnViewModelPropertyChanged;

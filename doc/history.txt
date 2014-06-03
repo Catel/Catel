@@ -104,6 +104,7 @@ Added/fixed:
     has been canceled (was it canceled at all)
 (*) CTL-426 DataWindow automatically use application icon if no icon specified
 (*) CTL-440 Support nested view models (parent / child relations) when views are in ContentPresenter
+(-) CTL-453 Remove CommandManager code from Command
 (x) CTL-327 ListCollectionView not supported in ChangeNotificationWrapper (causes InvalidCastException)
 (x) CTL-329 VisualStateManager doesn't change state in WP8 in UserControl => introduced option to transfer styles and
     transitions: UserControl.TransferStylesAndTransitionsToViewModelGrid (default value is true)

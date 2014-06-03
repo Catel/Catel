@@ -12,7 +12,7 @@ namespace Catel.MVVM
     /// <summary>
     /// Advanced <see cref="ICommand"/> interface definition to provide advanced functionality.
     /// </summary>
-    public interface ICatelCommand : ICommand, IDisposable
+    public interface ICatelCommand : ICommand
     {
         /// <summary>
         /// Gets the tag for this command. A tag is a way to link any object to a command so you can use your own

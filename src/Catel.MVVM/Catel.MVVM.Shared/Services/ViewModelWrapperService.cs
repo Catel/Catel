@@ -8,8 +8,8 @@
 namespace Catel.Services
 {
     using System;
-    using Catel.Logging;
-    using Catel.MVVM.Views;
+    using Logging;
+    using MVVM.Views;
 
     /// <summary>
     /// The view model wrapper service which is responsible of ensuring the view model container layer.

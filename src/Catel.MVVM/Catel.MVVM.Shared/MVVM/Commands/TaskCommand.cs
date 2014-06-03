@@ -139,15 +139,6 @@ namespace Catel.MVVM
 
             _progress = new Progress<TProgress>(OnProgressChanged);
         }
-
-        /// <summary>
-        /// Releases unmanaged resources and performs other cleanup operations before the
-        /// <see cref="Catel.MVVM.Command{TExecuteParameter,TCanExecuteParameter}" /> is reclaimed by garbage collection.
-        /// </summary>
-        ~TaskCommand()
-        {
-            Dispose(false);
-        }
         #endregion
 
         #region Events
@@ -310,24 +301,6 @@ namespace Catel.MVVM
             else
             {
                 action();
-            }
-        }
-        #endregion
-
-        #region IDisposable Members
-
-        /// <summary>
-        /// Releases unmanaged and - optionally - managed resources.
-        /// </summary>
-        /// <param name="disposeManagedResources"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to
-        /// release only unmanaged resources.</param>
-        protected override void Dispose(bool disposeManagedResources)
-        {
-            base.Dispose(disposeManagedResources);
-
-            if (disposeManagedResources)
-            {
-                CancelCommand.Dispose();
             }
         }
         #endregion
