@@ -54,11 +54,17 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="action">The action to execute on double click. This is very useful when the behavior is added
         /// via code and an action must be invoked instead of a command.</param>
-        public DoubleClickToCommand(Action action)
+        /// <param name="doubleClickMilliseconds">The double click acceptance window in milliseconds.</param>
+        public DoubleClickToCommand(Action action, int doubleClickMilliseconds = 500)
         {
+            if (doubleClickMilliseconds < 0)
+            {
+                doubleClickMilliseconds = 50;
+            }
+
             _timer = new DispatcherTimer
             {
-                Interval = new TimeSpan(0, 0, 0, 0, 200)
+                Interval = new TimeSpan(0, 0, 0, 0, doubleClickMilliseconds)
             };
 
             _timer.Tick += OnTimerTick;
