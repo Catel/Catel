@@ -18,13 +18,12 @@ namespace Catel.Windows
     using System.Windows.Controls.Primitives;
     using System.Windows.Data;
     using System.Windows.Input;
-    using MVVM.Providers;
     using MVVM.Views;
     using Controls;
-    using IoC;
     using Logging;
     using MVVM;
     using Exceptions = MVVM.Properties.Exceptions;
+    using Catel.MVVM.Providers;
 
 #if SILVERLIGHT
     using System.Windows.Media;
@@ -967,9 +966,7 @@ namespace Catel.Windows
         /// </summary>
         protected virtual void Initialize()
         {
-#if SL5
-            Dispatcher.BeginInvoke(RaiseCanExecuteChangedForAllCommands);
-#endif
+            Dispatcher.BeginInvoke(new Action(RaiseCanExecuteChangedForAllCommands));
         }
 
         /// <summary>
@@ -1003,7 +1000,7 @@ namespace Catel.Windows
         /// </summary>
         protected void RaiseCanExecuteChangedForAllCommands()
         {
-            foreach (ICommand command in Commands)
+            foreach (var command in Commands)
             {
                 var commandAsICatelCommand = command as ICatelCommand;
                 if (commandAsICatelCommand != null)
