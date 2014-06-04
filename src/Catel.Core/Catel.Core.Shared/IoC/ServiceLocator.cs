@@ -548,74 +548,6 @@ namespace Catel.IoC
         }
 
         /// <summary>
-        /// Remove the registered instance of a service.
-        /// </summary>
-        /// <param name="serviceType">The type of the service.</param>
-        /// <param name="tag">The tag of the registered the service.</param>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="serviceType" /> is <c>null</c>.</exception>
-        public void RemoveInstance(Type serviceType, object tag = null)
-        {
-            Argument.IsNotNull("serviceType", serviceType);
-
-            lock (_lockObject)
-            {
-                var serviceInfo = new ServiceInfo(serviceType, tag);
-                if (_registeredInstances.ContainsKey(serviceInfo))
-                {
-                    _registeredInstances.Remove(serviceInfo);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Remove all registered instances of a service.
-        /// </summary>
-        /// <param name="serviceType">The type of the service.</param>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
-        public void RemoveAllInstances(Type serviceType)
-        {
-            Argument.IsNotNull("serviceType", serviceType);
-
-            lock (_lockObject)
-            {
-                for (int i = _registeredInstances.Count - 1; i >= 0; i--)
-                {
-                    var serviceInfo = _registeredInstances.Keys.ElementAt(i);
-                    if (serviceInfo.Type == serviceType)
-                    {
-                        _registeredInstances.Remove(serviceInfo);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Remove all registered instances.
-        /// </summary>
-        /// <param name="tag">The tag of the registered the service. The default value is <c>null</c>.</param>
-        public void RemoveAllInstances(object tag = null)
-        {
-            lock (_lockObject)
-            {
-                if (tag == null)
-                {
-                    _registeredInstances.Clear();
-                }
-                else
-                {
-                    for (int i = _registeredInstances.Count - 1; i >= 0; i--)
-                    {
-                        var serviceInfo = _registeredInstances.Keys.ElementAt(i);
-                        if (TagHelper.AreTagsEqual(serviceInfo.Tag, tag))
-                        {
-                            _registeredInstances.Remove(serviceInfo);
-                        }
-                    }
-                }
-            }
-        }
-
-        /// <summary>
         /// Removes the registered type with the specific tag.
         /// </summary>
         /// <param name="serviceType">The type of the service.</param>
@@ -627,9 +559,12 @@ namespace Catel.IoC
 
             lock (_lockObject)
             {
-                RemoveInstance(serviceType, tag);
-
                 var serviceInfo = new ServiceInfo(serviceType, tag);
+                if (_registeredInstances.ContainsKey(serviceInfo))
+                {
+                    _registeredInstances.Remove(serviceInfo);
+                }
+
                 if (_registeredTypes.ContainsKey(serviceInfo))
                 {
                     _registeredTypes.Remove(serviceInfo);
@@ -648,8 +583,17 @@ namespace Catel.IoC
 
             lock (_lockObject)
             {
-                RemoveAllInstances(serviceType);
+                // Instances
+                for (int i = _registeredInstances.Count - 1; i >= 0; i--)
+                {
+                    var serviceInfo = _registeredInstances.Keys.ElementAt(i);
+                    if (serviceInfo.Type == serviceType)
+                    {
+                        _registeredInstances.Remove(serviceInfo);
+                    }
+                }
 
+                // Registration
                 for (int i = _registeredTypes.Count - 1; i >= 0; i--)
                 {
                     var serviceInfo = _registeredTypes.Keys.ElementAt(i);

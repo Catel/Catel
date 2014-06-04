@@ -48,6 +48,7 @@ Added/fixed (BREAKING CHANGES):
 (*) CTL-451 Convert IUIVisualizerService to async implementation
 (*) CTL-452 Make it simple to use Catel on 3rd party controls (major changes internally, but it is now much easier
     to use Catel on other views)
+(-) CTL-454 Removed the RemoveInstance methods from the IServiceLocator interface. Use IServiceLocator.RemoveType instead
 
 Added/fixed:
 ============

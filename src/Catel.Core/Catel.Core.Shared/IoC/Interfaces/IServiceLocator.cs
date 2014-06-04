@@ -173,31 +173,6 @@ namespace Catel.IoC
         /// <exception cref="System.ArgumentNullException">The <paramref name="serviceType" /> is <c>null</c>.</exception>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
         IEnumerable<object> ResolveTypes(Type serviceType);
-
-        /// <summary>
-        /// Remove the registered instance of a service.
-        /// </summary>
-        /// <param name="serviceType">The type of the service.</param>
-        /// <param name="tag">
-        /// The tag of the registered the service.
-        /// </param>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="serviceType"/> is <c>null</c>.
-        /// </exception>
-        void RemoveInstance(Type serviceType, object tag = null);
-
-        /// <summary>
-        /// Remove all registered instances of a service.
-        /// </summary>
-        /// <param name="serviceType">The type of the service.</param>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
-        void RemoveAllInstances(Type serviceType);
-
-        /// <summary>
-        /// Remove all registered instances.
-        /// </summary>
-        /// <param name="tag">The tag of the registered the service. The default value is <c>null</c>.</param>
-        void RemoveAllInstances(object tag = null);
         #endregion
 
         /// <summary>
