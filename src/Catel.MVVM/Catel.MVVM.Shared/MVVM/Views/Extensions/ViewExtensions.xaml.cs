@@ -10,6 +10,7 @@ namespace Catel.MVVM.Views
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Windows.Threading;
     using Windows;
 
@@ -33,11 +34,41 @@ namespace Catel.MVVM.Views
         {
             Argument.IsNotNull("element", element);
 
+            return GetPossibleParents(element).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets the possible parents of the specified element, both for Silverlight and WPF.
+        /// </summary>
+        /// <param name="element">The element.</param>
+        /// <returns>The possible parents <see cref="FrameworkElement"/> or <c>null</c> if there is no parent.</returns>
+        public static FrameworkElement[] GetPossibleParents(this FrameworkElement element)
+        {
+            Argument.IsNotNull("element", element);
+
+            var parents = new List<FrameworkElement>();
+
+            var elementParent = element.Parent as FrameworkElement;
+            if (elementParent != null)
+            {
+                parents.Add(elementParent);
+            }
+
 #if NET
-            return (element.Parent ?? element.TemplatedParent) as FrameworkElement;
-#else
-            return element.Parent as FrameworkElement;
+            var templatedParent = element.TemplatedParent as FrameworkElement;
+            if (templatedParent != null)
+            {
+                parents.Add(templatedParent);
+            }
 #endif
+
+            var visualTreeParent = VisualTreeHelper.GetParent(element) as FrameworkElement;
+            if (visualTreeParent != null)
+            {
+                parents.Add(visualTreeParent);
+            }
+
+            return parents.ToArray();
         }
 
         /// <summary>
@@ -47,7 +78,7 @@ namespace Catel.MVVM.Views
         /// <param name="view">The control.</param>
         /// <param name="predicate">The predicate.</param>
         /// <returns>
-        /// 	<see cref="DependencyObject"/> or <c>null</c> if no parent is found that matches the predicate.
+        /// <see cref="DependencyObject"/> or <c>null</c> if no parent is found that matches the predicate.
         /// </returns>
         public static DependencyObject FindParentByPredicate(this IView view, Predicate<object> predicate)
         {
@@ -62,7 +93,7 @@ namespace Catel.MVVM.Views
         /// <param name="predicate">The predicate.</param>
         /// <param name="maxDepth">The maximum number of levels to go up when searching for the parent. If smaller than 0, no maximum is used.</param>
         /// <returns>
-        /// 	<see cref="DependencyObject"/> or <c>null</c> if no parent is found that matches the predicate.
+        /// <see cref="DependencyObject"/> or <c>null</c> if no parent is found that matches the predicate.
         /// </returns>
         public static DependencyObject FindParentByPredicate(this FrameworkElement view, Predicate<object> predicate, int maxDepth)
         {
@@ -71,24 +102,7 @@ namespace Catel.MVVM.Views
 
             object foundParent = null;
 
-            var parents = new List<DependencyObject>();
-            if (view.Parent != null)
-            {
-                parents.Add(view.Parent);
-            }
-#if NET
-            if (view.TemplatedParent != null)
-            {
-                parents.Add(view.TemplatedParent);
-            }
-#endif
-
-            var visualTreeParent = VisualTreeHelper.GetParent(view);
-            if (visualTreeParent != null)
-            {
-                parents.Add(visualTreeParent);
-            }
-
+            var parents = GetPossibleParents(view);
             foreach (var parent in parents)
             {
                 foundParent = parent.FindLogicalOrVisualAncestor(predicate, maxDepth);

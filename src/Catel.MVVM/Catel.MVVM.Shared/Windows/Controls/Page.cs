@@ -127,15 +127,6 @@ namespace Catel.Windows.Controls
         {
             get { return _logic.GetValue<PageLogic, IViewModel>(x => x.ViewModel); }
         }
-
-        /// <summary>
-        /// Gets the parent of the view.
-        /// </summary>
-        /// <value>The parent.</value>
-        object IView.Parent
-        {
-            get { return this.GetParent(); }
-        }
         #endregion
 
         #region Events

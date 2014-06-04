@@ -109,15 +109,6 @@ namespace Catel.Phone.Controls
         {
             get { return _logic.GetValue<PageLogic, IViewModel>(x => x.ViewModel); }
         }
-
-        /// <summary>
-        /// Gets the parent of the view.
-        /// </summary>
-        /// <value>The parent.</value>
-        object IView.Parent
-        {
-            get { return Parent; }
-        }
         #endregion
 
         #region Events
@@ -168,7 +159,7 @@ namespace Catel.Phone.Controls
         }
         #endregion
 
-#region Methods
+        #region Methods
         private void RaiseViewModelChanged()
         {
             OnViewModelChanged();

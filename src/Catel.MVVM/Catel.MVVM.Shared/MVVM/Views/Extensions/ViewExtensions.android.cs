@@ -49,9 +49,11 @@ namespace Catel.MVVM.Views
             object foundParent = null;
 
             var parents = new List<IView>();
-            if (view.Parent != null)
+
+            var userControl = view as IUserControl;
+            if (userControl != null && userControl.Parent != null)
             {
-                var parentView = view.Parent as IView;
+                var parentView = userControl.Parent as IView;
                 if (parentView != null)
                 {
                     parents.Add(parentView);
@@ -139,7 +141,13 @@ namespace Catel.MVVM.Views
 
             try
             {
-                return element.Parent as IView;
+                var userControl = element as IUserControl;
+                if (userControl == null)
+                {
+                    return null;
+                }
+
+                return userControl.Parent as IView;
             }
             catch (Exception)
             {

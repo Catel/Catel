@@ -169,10 +169,7 @@ namespace Catel.Android.App
         /// Gets the parent of the view.
         /// </summary>
         /// <value>The parent.</value>
-        object IView.Parent
-        {
-            get { return Activity as IView; }
-        }
+        public object Parent { get { return null; } }
 
         /// <summary>
         /// Gets the tag of the view.

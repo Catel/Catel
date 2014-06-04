@@ -14,7 +14,7 @@ namespace Catel.Windows
     using System.Reflection;
     using System.Windows;
     using Logging;
-
+    using MVVM.Views;
 #if NETFX_CORE
     using global::Windows.UI;
     using global::Windows.UI.Xaml;
@@ -177,24 +177,11 @@ namespace Catel.Windows
                 return;
             }
 
-            // Check if the framework element has an owner
-            Window ownerWindow = null;
-            FrameworkElement parentFrameworkElement = frameworkElement;
-            while (parentFrameworkElement != null)
-            {
-                ownerWindow = parentFrameworkElement as Window;
-                if (ownerWindow != null)
-                {
-                    break;
-                }
-
-                parentFrameworkElement = parentFrameworkElement.Parent as FrameworkElement;
-            }
-
             try
             {
                 // Get the handle (of the window or process)
-                IntPtr windowHandle = (ownerWindow != null) ? new WindowInteropHelper(ownerWindow).Handle : Process.GetCurrentProcess().MainWindowHandle;
+                var ownerWindow = frameworkElement.FindVisualAncestorByType<Window>();
+                var windowHandle = (ownerWindow != null) ? new WindowInteropHelper(ownerWindow).Handle : Process.GetCurrentProcess().MainWindowHandle;
                 if (windowHandle != IntPtr.Zero)
                 {
                     SetForegroundWindowEx(windowHandle);
@@ -216,8 +203,8 @@ namespace Catel.Windows
         /// </remarks>
         private static void SetForegroundWindowEx(IntPtr hWnd)
         {
-            IntPtr foregroundWindowThreadID = GetWindowThreadProcessId(GetForegroundWindow(), IntPtr.Zero);
-            IntPtr currentThreadID = GetCurrentThreadId();
+            var foregroundWindowThreadID = GetWindowThreadProcessId(GetForegroundWindow(), IntPtr.Zero);
+            var currentThreadID = GetCurrentThreadId();
 
             if (!AttachThreadInput(foregroundWindowThreadID, currentThreadID, true))
             {
@@ -225,7 +212,7 @@ namespace Catel.Windows
                 return;
             }
 
-            IntPtr lastActivePopupWindow = GetLastActivePopup(hWnd);
+            var lastActivePopupWindow = GetLastActivePopup(hWnd);
             SetActiveWindow(lastActivePopupWindow);
 
             if (!AttachThreadInput(foregroundWindowThreadID, currentThreadID, false))
@@ -258,39 +245,6 @@ namespace Catel.Windows
         }
 #endif
 
-        /// <summary>
-        /// Gets the parent. This method first tries to use the <see cref="FrameworkElement.Parent"/> property. If that is <c>null</c>,
-        /// it will use the <c>FrameworkElement.TemplatedParent</c>. If that is <c>null</c>, this method assumes there is no
-        /// parent and will return <c>null</c>.
-        /// </summary>
-        /// <param name="frameworkElement">The framework element.</param>
-        /// <returns>The parent or <c>null</c>.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="frameworkElement"/> is <c>null</c>.</exception>
-        public static DependencyObject GetParent(this FrameworkElement frameworkElement)
-        {
-            Argument.IsNotNull("frameworkElement", frameworkElement);
-
-            var parent = VisualTreeHelper.GetParent(frameworkElement);
-            if (parent != null)
-            {
-                return parent;
-            }
-
-            if (frameworkElement.Parent != null)
-            {
-                return frameworkElement.Parent;
-            }
-
-#if NET
-            if (frameworkElement.TemplatedParent != null)
-            {
-                return frameworkElement.TemplatedParent;
-            }
-#endif
-
-            return null;
-        }
-
 #if SILVERLIGHT
         /// <summary>
         /// Fixes the UI language bug in Silverlight.
@@ -322,7 +276,7 @@ namespace Catel.Windows
                     return true;
                 }
 
-                frameworkElement = frameworkElement.Parent as FrameworkElement;
+                frameworkElement = frameworkElement.GetParent();
             }
 
             return Application.Current.Resources.TryFindResource(resourceKey, out value);

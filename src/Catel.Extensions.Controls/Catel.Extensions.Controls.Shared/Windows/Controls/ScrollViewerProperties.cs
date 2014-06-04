@@ -12,6 +12,7 @@ namespace Catel.Windows.Controls
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
+    using MVVM.Views;
 
     /// <summary>
     /// Container class for custom Attached properties for ScrollViewer.
@@ -104,7 +105,7 @@ namespace Catel.Windows.Controls
 
             if (!previewEventArg.Handled && ((args.Delta > 0 && scrollControl.VerticalOffset == 0) || (args.Delta <= 0 && scrollControl.VerticalOffset >= scrollControl.ExtentHeight - scrollControl.ViewportHeight)))
             {
-                var parent = (UIElement)((FrameworkElement)sender).Parent;
+                var parent = (UIElement)((FrameworkElement)sender).GetParent();
 
                 if (parent != null)
                 {

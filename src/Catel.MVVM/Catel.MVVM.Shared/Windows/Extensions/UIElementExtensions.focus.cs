@@ -156,7 +156,7 @@ namespace Catel.Windows
 
                     while (parentsToFocus.Count > 0)
                     {
-                        FrameworkElement parentToFocus = parentsToFocus.Pop();
+                        var parentToFocus = parentsToFocus.Pop();
                         parentToFocus.Focus();
                     }
                 }

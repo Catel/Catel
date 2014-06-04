@@ -20,9 +20,11 @@ namespace Catel.MVVM.Providers
 #if XAMARIN
     // TODO
 #elif NETFX_CORE
+    using global::Windows.UI;
     using global::Windows.UI.Core;
     using global::Windows.UI.Xaml;
 #else
+    using System.Windows;
     using Windows.Controls;
 #endif
 
@@ -455,7 +457,7 @@ namespace Catel.MVVM.Providers
             CreateViewModelWrapper();
 
             // Fix for CTL-307: DataContextChanged is invoked before Unloaded because Parent is set to null
-            var targetControlParent = TargetView.Parent;
+            var targetControlParent = TargetView.GetParent();
             if (targetControlParent == null)
             {
                 return;

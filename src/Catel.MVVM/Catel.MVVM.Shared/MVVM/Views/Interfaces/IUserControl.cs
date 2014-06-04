@@ -8,8 +8,14 @@ namespace Catel.MVVM.Views
 {
     using MVVM;
 
-#if NET || SL5
-    using Catel.Windows.Controls;
+#if XAMARIN
+    using ViewType = System.Object;
+#elif NETFX_CORE
+    using ViewType = global::Windows.UI.Xaml.DependencyObject;
+#else
+    using ViewType = System.Windows.DependencyObject;
+
+    using Windows.Controls;
 #endif
 
     /// <summary>
@@ -73,5 +79,11 @@ namespace Catel.MVVM.Views
         /// 	<c>true</c> if the user control should automatically be disabled when there is no active view model; otherwise, <c>false</c>.
         /// </value>
         bool DisableWhenNoViewModel { get; set; }
+
+        /// <summary>
+        /// Gets the parent of the view.
+        /// </summary>
+        /// <value>The parent.</value>
+        ViewType Parent { get; }
     }
 }

@@ -32,12 +32,6 @@ namespace Catel.MVVM.Views
         object Tag { get; set; }
 
         /// <summary>
-        /// Gets the parent of the view.
-        /// </summary>
-        /// <value>The parent.</value>
-        object Parent { get; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether the view is enabled.
         /// </summary>
         /// <value><c>true</c> if the view is enabled; otherwise, <c>false</c>.</value>

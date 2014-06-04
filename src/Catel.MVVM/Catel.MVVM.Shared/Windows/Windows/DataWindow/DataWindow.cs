@@ -451,15 +451,6 @@ namespace Catel.Windows
         /// </summary>
         /// <value>The internal grid.</value>
         internal Grid InternalGrid { get; private set; }
-
-        /// <summary>
-        /// Gets the parent of the view.
-        /// </summary>
-        /// <value>The parent.</value>
-        object IView.Parent
-        {
-            get { return this.GetParent(); }
-        }
         #endregion
 
         #region Commands

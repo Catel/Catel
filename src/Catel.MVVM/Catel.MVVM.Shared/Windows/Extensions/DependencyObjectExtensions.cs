@@ -52,6 +52,8 @@ namespace Catel.Windows
         }
 #endif
 
+
+
         /// <summary>
         /// Returns the ancestory object of a <see cref="DependencyObject"/>.
         /// </summary>
@@ -417,7 +419,7 @@ namespace Catel.Windows
 
             // Search all child nodes
             var children = new List<DependencyObject>(dependencyObject.GetVisualChildren());
-            foreach (DependencyObject child in children)
+            foreach (var child in children)
             {
                 if (IsElementWithName(child, name))
                 {
@@ -452,71 +454,6 @@ namespace Catel.Windows
 
             return false;
         }
-
-#if NET
-        /// <summary>
-        /// Updates all the bindings of the specified <paramref name="element"/>.
-        /// </summary>
-        /// <param name="element">The element.</param>
-        /// <param name="recursive">if set to <c>true</c>, the bindings will be updated recursively using the <see cref="VisualTreeHelper"/>.</param>
-        public static void UpdateAllBindings(this FrameworkElement element, bool recursive = false)
-        {
-            var bindingExpressions = GetBindingExpressions(element, recursive);
-            foreach (var bindingExpression in bindingExpressions)
-            {
-                bindingExpression.UpdateSource();
-            }
-        }
-
-        /// <summary>
-        /// Gets all the binding expressions of the specified <paramref name="element"/>.
-        /// </summary>
-        /// <param name="element">The element.</param>
-        /// <param name="recursive">if set to <c>true</c>, the bindings will be searched recursively using the <see cref="VisualTreeHelper"/>.</param>
-        /// <returns>
-        /// 	<see cref="IEnumerable{BindingExpression}"/> containing all bindings.
-        /// </returns>
-        /// <remarks>
-        /// This code is originally found at http://stackoverflow.com/questions/3586870/retrieve-all-data-bindings-from-wpf-window.
-        /// </remarks>
-        public static IEnumerable<BindingExpression> GetBindingExpressions(this FrameworkElement element, bool recursive = false)
-        {
-            var bindings = new List<BindingExpression>();
-            var dpList = new List<DependencyPropertyInfo>();
-
-            //dpList.AddRange(GetDependencyProperties(element));
-            //dpList.AddRange(GetAttachedProperties(element));
-
-            dpList.AddRange(element.GetDependencyProperties());
-
-            foreach (var dp in dpList)
-            {
-                var bindingExpression = BindingOperations.GetBindingExpression(element, dp.DependencyProperty);
-                if (bindingExpression != null)
-                {
-                    bindings.Add(bindingExpression);
-                }
-            }
-
-            if (recursive)
-            {
-                int childrenCount = VisualTreeHelper.GetChildrenCount(element);
-                if (childrenCount > 0)
-                {
-                    for (int i = 0; i < childrenCount; i++)
-                    {
-                        var child = VisualTreeHelper.GetChild(element, i) as FrameworkElement;
-                        if (child != null)
-                        {
-                            bindings.AddRange(GetBindingExpressions(child, true));
-                        }
-                    }
-                }
-            }
-
-            return bindings;
-        }
-#endif
     }
 }
 
