@@ -257,6 +257,8 @@ namespace Catel.MVVM
                 _executeWithoutParameter();
                 RaiseExecuted(parameter);
             }
+
+            RaiseCanExecuteChanged();
         }
 
         /// <summary>
