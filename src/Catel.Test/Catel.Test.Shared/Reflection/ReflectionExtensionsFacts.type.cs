@@ -8,6 +8,7 @@ namespace Catel.Test.Reflection
 {
     using System;
     using System.Collections.Generic;
+    using System.Runtime.InteropServices;
     using Catel.Reflection;
 
 #if NETFX_CORE
@@ -18,6 +19,41 @@ namespace Catel.Test.Reflection
 
     public partial class ReflectionExtensionsFacts
     {
+        [TestClass]
+        public class TheImplementsInterfaceExMethod
+        {
+            public interface ISomeInterface
+            {
+                
+            }
+
+            public class A : ISomeInterface
+            {
+                
+            }
+
+            public class B : A
+            {
+                
+            }
+
+            [TestMethod]
+            public void ReturnsTrueForTypeDirectImplementingInterface()
+            {
+                var type = typeof(A);
+
+                Assert.IsTrue(type.ImplementsInterfaceEx<ISomeInterface>());
+            }
+
+            [TestMethod]
+            public void ReturnsTrueForTypeDerivetiveImplementingInterface()
+            {
+                var type = typeof (B);
+
+                Assert.IsTrue(type.ImplementsInterfaceEx<ISomeInterface>());
+            }
+        }
+
         [TestClass]
         public class TheIsInstanceOfTypeExMethod
         {
