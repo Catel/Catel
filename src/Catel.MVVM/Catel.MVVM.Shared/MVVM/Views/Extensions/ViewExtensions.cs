@@ -22,18 +22,18 @@ namespace Catel.MVVM.Views
         {
             Argument.IsNotNull("view", view);
 
+#if XAMARIN
             var userControl = view as IUserControl;
             if (userControl == null)
             {
                 return null;
             }
 
-#if XAMARIN
             return userControl.Parent;
 #elif NETFX_CORE
-            return ((global::Windows.UI.Xaml.FrameworkElement)userControl).GetParent();
+            return ((global::Windows.UI.Xaml.FrameworkElement)view).GetParent();
 #else
-            return ((System.Windows.FrameworkElement)userControl).GetParent();
+            return ((System.Windows.FrameworkElement)view).GetParent();
 #endif
         }
     }

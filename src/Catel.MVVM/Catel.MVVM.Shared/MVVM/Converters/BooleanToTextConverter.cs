@@ -67,7 +67,7 @@ namespace Catel.MVVM.Converters
                     return (typedValue) ? "x" : string.Empty;
 
                 case BooleanToTextConverterMode.YesNo:
-                    return (typedValue) ? Catel.ResourceHelper.GetString("Yes") : Catel.ResourceHelper.GetString("No");
+                    return (typedValue) ? ResourceHelper.GetString("Yes") : Catel.ResourceHelper.GetString("No");
 
                 default:
                     // Some strange way, this method fails (all known modes must be handled), so return "failed"
