@@ -11,11 +11,12 @@ namespace Catel
     using System.ComponentModel;
     using System.Linq;
     using System.Reflection;
+    
     using Catel.Caching;
     using Logging;
     using Reflection;
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
     using EventArgsBase = System.Object;
     using System.Runtime.InteropServices.WindowsRuntime;
 #else
@@ -44,7 +45,7 @@ namespace Catel
     public class WeakEventListener<TTarget, TSource, TEventArgs> : IWeakEventListener
         where TTarget : class
         where TSource : class
-#if !NETFX_CORE
+#if !NETFX_CORE && !PCL
         where TEventArgs : EventArgsBase
 #endif
     {
@@ -87,7 +88,7 @@ namespace Catel
         /// </summary>
         private readonly Type _typeForEventSubscriptions;
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
         /// <summary>
         /// The event registration token that is required to remove the event handler in WinRT.
         /// </summary>
@@ -407,7 +408,7 @@ namespace Catel
                 return false;
             }
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             var addMethod = eventInfo.AddMethod;
 #else
             var addMethod = eventInfo.GetAddMethod();
@@ -437,7 +438,7 @@ namespace Catel
 
             _internalEventDelegate = DelegateHelper.CreateDelegate(handlerType, this, "OnEvent");
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             if (methodInfo.ReturnType == typeof(void))
             {
                 methodInfo.Invoke(source, new object[] { _internalEventDelegate });
@@ -509,7 +510,7 @@ namespace Catel
                 return false;
             }
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             var removeMethod = eventInfo.RemoveMethod;
 #else
             var removeMethod = eventInfo.GetRemoveMethod();
@@ -657,7 +658,7 @@ namespace Catel
         /// <see cref="NotifyCollectionChangedEventHandler"/> or <see cref="EventHandler{TEventArgs}"/>.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
         public static IWeakEventListener SubscribeToWeakGenericEvent<TEventArgs>(TTarget target, TSource source, string eventName, EventHandler<TEventArgs> handler)
-#if !NETFX_CORE
+#if !NETFX_CORE && !PCL
  where TEventArgs : EventArgsBase
 #endif
         {
@@ -845,7 +846,7 @@ namespace Catel
         /// <see cref="NotifyCollectionChangedEventHandler"/> or <see cref="EventHandler{TEventArgs}"/>.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
         public static IWeakEventListener SubscribeToWeakGenericEvent<TEventArgs>(this object target, object source, string eventName, EventHandler<TEventArgs> handler)
-#if !NETFX_CORE
+#if !NETFX_CORE && !PCL
  where TEventArgs : EventArgsBase
 #endif
         {

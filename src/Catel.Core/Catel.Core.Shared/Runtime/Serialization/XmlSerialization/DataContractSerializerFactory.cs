@@ -349,11 +349,7 @@ namespace Catel.Runtime.Serialization.Xml
         {
             if (type.ImplementsInterfaceEx<IEnumerable>())
             {
-#if (NET || PCL || SILVERLIGHT)
-                foreach (var argument in type.GetGenericArguments())
-#else
-                foreach (var argument in type.GenericTypeArguments)
-#endif
+                foreach (var argument in type.GetGenericArgumentsEx())
                 {
                     GetKnownTypes(argument, serializerTypeInfo);
                 }

@@ -19,7 +19,7 @@ namespace Catel
         /// <returns>System.String.</returns>
         public static int GetCurrentThreadId()
         {
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             return System.Environment.CurrentManagedThreadId;
 #else
             return Thread.CurrentThread.ManagedThreadId;

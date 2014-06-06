@@ -165,7 +165,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             return type.GetTypeInfo().GetCustomAttributes(inherit).ToArray();
 #else
             return type.GetCustomAttributes(inherit).ToAttributeArray();
@@ -186,7 +186,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("type", type);
             Argument.IsNotNull("attributeType", attributeType);
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             return type.GetTypeInfo().GetCustomAttributes(attributeType, inherit).ToArray();
 #else
             return type.GetCustomAttributes(attributeType, inherit).ToAttributeArray();
@@ -203,7 +203,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             return type.GetTypeInfo().ContainsGenericParameters;
 #else
             return type.ContainsGenericParameters;
@@ -220,7 +220,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             return type.GetTypeInfo().Assembly;
 #else
             return type.Assembly;
@@ -237,7 +237,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             return type.GetTypeInfo().Assembly.FullName;
 #else
             return type.Assembly.FullName;
@@ -257,7 +257,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("type", type);
             Argument.IsNotNull("typeToCheck", typeToCheck);
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             return (type.GetTypeInfo().BaseType == typeToCheck);
 #else
             return type.BaseType == typeToCheck;
@@ -280,7 +280,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             return type.GetTypeInfo().IsSerializable;
 #elif NET
             return type.IsSerializable;
@@ -305,7 +305,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             return type.GetTypeInfo().IsPublic;
 #else
             return type.IsPublic;
@@ -328,7 +328,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             return type.GetTypeInfo().IsNestedPublic;
 #else
             return type.IsNestedPublic;
@@ -351,7 +351,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             return type.GetTypeInfo().IsInterface;
 #else
             return type.IsInterface;
@@ -367,7 +367,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             return type.GetTypeInfo().IsAbstract;
 #else
             return type.IsAbstract;
@@ -383,7 +383,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             return type.GetTypeInfo().IsClass;
 #else
             return type.IsClass;
@@ -406,7 +406,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             return type.GetTypeInfo().IsValueType;
 #else
             return type.IsValueType;
@@ -429,7 +429,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             return type.GetTypeInfo().IsGenericType;
 #else
             return type.IsGenericType;
@@ -476,7 +476,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             return type.GetTypeInfo().IsPrimitive;
 #else
             return type.IsPrimitive;
@@ -493,7 +493,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             return type.GetTypeInfo().IsEnum;
 #else
             return type.IsEnum;
@@ -532,7 +532,7 @@ namespace Catel.Reflection
                 throw new NotSupportedException(string.Format("The type '{0}' is not generic, cannot get generic type", type.FullName));
             }
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             return type.GetTypeInfo().GetGenericTypeDefinition();
 #else
             return type.GetGenericTypeDefinition();
@@ -551,7 +551,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             return type.GetTypeInfo().GenericTypeArguments;
 #else
             return type.GetGenericArguments();
@@ -568,7 +568,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             return type.GetTypeInfo().ImplementedInterfaces.ToArray();
 #else
             return type.GetInterfaces();
@@ -585,7 +585,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             return type.GetTypeInfo().BaseType;
 #else
             return type.BaseType;
@@ -605,7 +605,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("type", type);
             Argument.IsNotNull("typeToCheck", typeToCheck);
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             return type.GetTypeInfo().IsAssignableFrom(typeToCheck.GetTypeInfo());
 #else
             return type.IsAssignableFrom(typeToCheck);
@@ -661,14 +661,14 @@ namespace Catel.Reflection
 
 #if ENABLE_CACHE
             var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Constructor, BindingFlags.Default, types);
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             return _constructorCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetConstructor(types, BindingFlagsHelper.GetFinalBindingFlags(false, false)));
 #else
             return _constructorCache.GetFromCacheOrFetch(cacheKey, () => type.GetConstructor(types));
 #endif
 #else
-#if NETFX_CORE
-			return type.GetTypeInfo().GetConstructor(types, BindingFlagsHelper.GetFinalBindingFlags(false, false));
+#if NETFX_CORE || PCL
+            return type.GetTypeInfo().GetConstructor(types, BindingFlagsHelper.GetFinalBindingFlags(false, false));
 #else
             return type.GetConstructor(types);
 #endif
@@ -687,14 +687,14 @@ namespace Catel.Reflection
 
 #if ENABLE_CACHE
             var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Constructor, BindingFlags.Default, "allctors");
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             return _constructorsCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().DeclaredConstructors.ToArray());
 #else
             return _constructorsCache.GetFromCacheOrFetch(cacheKey, type.GetConstructors);
 #endif
 #else
-#if NETFX_CORE
-			return type.GetTypeInfo().DeclaredConstructors.ToArray();
+#if NETFX_CORE || PCL
+            return type.GetTypeInfo().DeclaredConstructors.ToArray();
 #else
             return type.GetConstructors();
 #endif
@@ -975,7 +975,7 @@ namespace Catel.Reflection
 #else
 #if WP80
             return type.GetTypeInfo().GetMethod(name, bindingFlags, null, types, null);
-#elif PCL || XAMARIN
+#elif XAMARIN
             return type.GetTypeInfo().GetMethod(name, types);
 #else
             return type.GetTypeInfo().GetMethod(name, types, bindingFlags);
@@ -1015,7 +1015,7 @@ namespace Catel.Reflection
 #endif
         }
 
-#if NET40 || SILVERLIGHT || PCL
+#if NET40 || SILVERLIGHT
 
         /// <summary>
         /// The type infos cache.

@@ -7,7 +7,7 @@
 namespace Catel.Reflection
 {
     using System.Collections.Generic;
-#if NETFX_CORE || NET45
+#if NETFX_CORE || NET45 || PCL
     using System;
     using System.Linq;
     using System.Reflection;

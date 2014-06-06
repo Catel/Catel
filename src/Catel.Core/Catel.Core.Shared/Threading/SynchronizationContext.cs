@@ -7,7 +7,6 @@
 namespace Catel.Threading
 {
     using System;
-    using System.ComponentModel;
     using System.Threading;
 
     /// <summary>
@@ -61,61 +60,6 @@ namespace Catel.Threading
                     Release();
                 }
             }
-        }
-
-        /// <summary>
-        /// This method enqueue the execution of the <paramref name="code" /> into a exclusive lock.
-        /// </summary>
-        /// <param name="code">The code to be executed.</param>
-        /// <param name="runWorkerCompletedEventHandler">Method that will handle the RunWorkerCompleted event of a <see cref="BackgroundWorker" /> class.
-        /// It occurs when the background operation has completed, has been canceled, or has raised an exception.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
-        /// <remarks>If the lock is acquired before call this method, then the <paramref name="code" /> execution is delayed until the lock would released, without blocking the current thread.
-        /// This method relay the execution of the code into an instance of <see cref="BackgroundWorker" />.</remarks>
-        public void Enqueue(Action code, RunWorkerCompletedEventHandler runWorkerCompletedEventHandler = null)
-        {
-            Argument.IsNotNull("code", code);
-
-            var worker = new BackgroundWorker();
-            worker.RunWorkerCompleted += (sender, args) =>
-                {
-                    var handler = runWorkerCompletedEventHandler;
-                    if (handler != null)
-                    {
-                        handler.Invoke(this, args);
-                    }
-                };
-
-            worker.DoWork += (sender, args) => Execute(code);
-            worker.RunWorkerAsync();
-        }
-
-        /// <summary>
-        /// This method execute the <paramref name="code" /> into a exclusive lock and returns a value.
-        /// </summary>
-        /// <typeparam name="T">The result type.</typeparam>
-        /// <param name="code">The code to be executed.</param>
-        /// <param name="runWorkerCompletedEventHandler">Method that will handle the RunWorkerCompleted event of a <see cref="BackgroundWorker" /> class.
-        /// It occurs when the background operation has completed, has been canceled, or has raised an exception.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
-        /// <remarks>If the lock is acquired before call this method, then the <paramref name="code" /> execution is delayed until the lock would released, blocking the current thread.
-        /// This method relay the execution of the code into an instance of <see cref="BackgroundWorker" />.</remarks>
-        public void Enqueue<T>(Func<T> code, RunWorkerCompletedEventHandler runWorkerCompletedEventHandler = null)
-        {
-            Argument.IsNotNull("code", code);
-
-            var worker = new BackgroundWorker();
-            worker.RunWorkerCompleted += (sender, args) =>
-                {
-                    var handler = runWorkerCompletedEventHandler;
-                    if (handler != null)
-                    {
-                        handler.Invoke(this, args);
-                    }
-                };
-
-            worker.DoWork += (sender, args) => args.Result = Execute(code);
-            worker.RunWorkerAsync();
         }
 
         /// <summary>

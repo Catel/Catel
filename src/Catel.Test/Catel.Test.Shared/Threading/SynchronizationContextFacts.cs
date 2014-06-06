@@ -90,47 +90,6 @@ namespace Catel.Test.Threading
         }
 
         [TestClass]
-        public class TheEnqueueMethod
-        {
-            #region Public Methods and Operators
-
-            [TestMethod]
-            public void AdquiresTheLockDuringTheExecutionAndReleaseItAtTheEnd()
-            {
-                var @event = new AutoResetEvent(false);
-                var context = new SynchronizationContext();
-                Assert.IsFalse(context.IsLockAcquired);
-                context.Enqueue(() => Assert.IsTrue(context.IsLockAcquired), (sender, args) => @event.Set());
-                @event.WaitOne();
-                Assert.IsFalse(context.IsLockAcquired);
-            }
-
-            [TestMethod]
-            public void AdquiresTheLockDuringTheExecutionAndReleaseItAtTheEndAndReturnAValue()
-            {
-                var @event = new AutoResetEvent(false);
-                var context = new SynchronizationContext();
-                Assert.IsFalse(context.IsLockAcquired);
-                int expected = new Random().Next(50, 100);
-                int result = 0;
-                context.Enqueue(() =>
-                {
-                    Assert.IsTrue(context.IsLockAcquired);
-                    return expected;
-                }, (sender, args) =>
-                    {
-                        result = (int)args.Result;
-                        @event.Set();
-                    });
-                @event.WaitOne();
-                Assert.IsFalse(context.IsLockAcquired);
-                Assert.AreEqual(expected, result);
-            }
-
-            #endregion
-        }
-
-        [TestClass]
         public class TheReleaseMethod
         {
             #region Public Methods and Operators

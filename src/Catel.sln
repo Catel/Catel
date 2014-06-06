@@ -436,6 +436,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Catel.Test.Shared", "Catel.
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Catel.MVVM.Shared", "Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.shproj", "{8C7EAB82-554B-4761-B67E-7E9B9A306914}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Core.PCL", "Catel.Core\Catel.Core.PCL\Catel.Core.PCL.csproj", "{C35D5DC5-7149-4E56-9F0C-90D8F6A1C495}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Catel.Extensions.Controls\Catel.Extensions.Controls.Shared\Catel.Extensions.Controls.Shared.projitems*{42085288-1c51-4f2a-a70e-debd80e62870}*SharedItemsImports = 4
@@ -486,6 +488,7 @@ Global
 		Catel.Extensions.CSLA\Catel.Extensions.CSLA.Shared\Catel.Extensions.CSLA.Shared.projitems*{58e5120b-bf91-4d36-804f-fc294daf183e}*SharedItemsImports = 4
 		Catel.Extensions.Data\Catel.Extensions.Data.Shared\Catel.Extensions.Data.Shared.projitems*{87db1def-5033-4edf-947d-cc890e5b84b6}*SharedItemsImports = 4
 		Catel.Extensions.Memento\Catel.Extensions.Memento.Shared\Catel.Extensions.Memento.Shared.projitems*{c1e36b63-d33e-4f25-844b-0de262d8a01a}*SharedItemsImports = 13
+		Catel.Core\Catel.Core.Shared\Catel.Core.Shared.projitems*{c35d5dc5-7149-4e56-9f0c-90d8f6a1c495}*SharedItemsImports = 4
 		Catel.Core\Catel.Core.Shared\Catel.Core.Shared.projitems*{c022232f-d54e-4c23-9f16-360f9812a53e}*SharedItemsImports = 4
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{2d2f7284-7844-439a-bbdb-638608198895}*SharedItemsImports = 4
 		Catel.Test\Catel.Test.Shared\Catel.Test.Shared.projitems*{8a06b835-2476-497f-895c-929c94d5b99d}*SharedItemsImports = 4
@@ -1486,6 +1489,16 @@ Global
 		{2D2F7284-7844-439A-BBDB-638608198895}.Release|x64.ActiveCfg = Release|Any CPU
 		{2D2F7284-7844-439A-BBDB-638608198895}.Release|x86.ActiveCfg = Release|x86
 		{2D2F7284-7844-439A-BBDB-638608198895}.Release|x86.Build.0 = Release|x86
+		{C35D5DC5-7149-4E56-9F0C-90D8F6A1C495}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C35D5DC5-7149-4E56-9F0C-90D8F6A1C495}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C35D5DC5-7149-4E56-9F0C-90D8F6A1C495}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{C35D5DC5-7149-4E56-9F0C-90D8F6A1C495}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C35D5DC5-7149-4E56-9F0C-90D8F6A1C495}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C35D5DC5-7149-4E56-9F0C-90D8F6A1C495}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C35D5DC5-7149-4E56-9F0C-90D8F6A1C495}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C35D5DC5-7149-4E56-9F0C-90D8F6A1C495}.Release|ARM.ActiveCfg = Release|Any CPU
+		{C35D5DC5-7149-4E56-9F0C-90D8F6A1C495}.Release|x64.ActiveCfg = Release|Any CPU
+		{C35D5DC5-7149-4E56-9F0C-90D8F6A1C495}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1630,6 +1643,7 @@ Global
 		{6ED252B8-178A-4349-8940-AFD2CB2B87E3} = {1F4484D6-CE9B-428E-B640-FB777F260F97}
 		{84191838-C476-4E1A-9129-07D8C906674A} = {8C3710FE-B6C7-4261-81B6-897F4B286B2B}
 		{8C7EAB82-554B-4761-B67E-7E9B9A306914} = {162DE45B-B7A2-4D4A-B90D-F1762133C31C}
+		{C35D5DC5-7149-4E56-9F0C-90D8F6A1C495} = {3F661942-9946-4292-9FE7-6B576782D5F9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.2\lib\NET35

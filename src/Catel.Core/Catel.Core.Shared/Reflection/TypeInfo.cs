@@ -9,11 +9,12 @@ namespace Catel.Reflection
     using System;
     using System.Globalization;
     using System.Reflection;
+
 #if NET
     using System.Runtime.InteropServices;
 #endif
 
-#if !NET45 && !NETFX_CORE
+#if !NET45 && !NETFX_CORE && !PCL
 
     /// <summary>
     /// The type info.

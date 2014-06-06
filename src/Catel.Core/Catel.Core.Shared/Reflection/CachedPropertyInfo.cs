@@ -33,7 +33,7 @@ namespace Catel.Reflection
 
             _publicGetter = new Lazy<bool>(() =>
             {
-#if NETFX_CORE
+#if NETFX_CORE || PCL
                 var getMethod = propertyInfo.GetMethod;
 #else
                 var getMethod = propertyInfo.GetGetMethod(false);
@@ -44,7 +44,7 @@ namespace Catel.Reflection
 
             _publicSetter = new Lazy<bool>(() =>
             {
-#if NETFX_CORE
+#if NETFX_CORE || PCL
                 var setMethod = propertyInfo.SetMethod;
 #else
                 var setMethod = propertyInfo.GetSetMethod(false);

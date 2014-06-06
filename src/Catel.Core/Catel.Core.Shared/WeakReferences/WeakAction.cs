@@ -100,7 +100,7 @@ namespace Catel
         {
             Argument.IsNotNull("action", action);
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             Log.Warning("Since WinRT won't allow specific reflection, the WeakAction is implemented as regular action");
 
             _action = action;
@@ -195,7 +195,7 @@ namespace Catel
         {
             Argument.IsNotNull("action", action);
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             Log.Warning("Since WinRT won't allow specific reflection, the WeakAction is implemented as regular action");
 
             _action = action;

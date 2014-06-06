@@ -22,7 +22,6 @@ namespace Catel.Reflection
     using System.Windows.Resources;
     using System.Xml.Linq;
     using Threading;
-
 #endif
 
 #if NETFX_CORE
@@ -128,7 +127,7 @@ namespace Catel.Reflection
 #elif NETFX_CORE
                 assembly = global::Windows.ApplicationModel.Core.CoreApplication.MainView.GetType().GetAssemblyEx();
 #else
-                assembly = typeof(AssemblyHelper).Assembly;
+                assembly = typeof(AssemblyHelper).GetAssemblyEx();
 #endif
             }
             catch (Exception ex)

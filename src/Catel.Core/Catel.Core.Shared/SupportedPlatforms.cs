@@ -118,6 +118,11 @@ namespace Catel
         /// <summary>
         /// The iOS platform.
         /// </summary>
-        iOS
+        iOS,
+
+        /// <summary>
+        /// Portable Class Library platform.
+        /// </summary>
+        PCL
     }
 }

@@ -49,6 +49,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\EventArgs\EditEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\EventArgs\EndEditEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\EventArgs\PropertyChangingEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\EventArgs\RunWorkerCompletedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\Extensions\PropertyChangedEventArgsExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\IAdvancedEditableObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\IDataErrorInfo.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\INotifyDataErrorInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\INotifyDataWarningInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\INotifyPropertyChanging.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\RunWorkerCompletedEventHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\ConfigurationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\EventArgs\ConfigurationChangedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Extensions\ConfigurationExtensions.cs" />

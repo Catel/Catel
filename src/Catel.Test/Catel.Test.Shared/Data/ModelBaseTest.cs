@@ -310,44 +310,6 @@
         }
         #endregion
 
-        #region IClonable tests
-        /// <summary>
-        /// Tests the deep-clone functionality for 1 level deep.
-        /// </summary>
-        [TestMethod]
-        public void CloneLevel1()
-        {
-            var obj = ModelBaseTestHelper.CreateIniEntryObject();
-            var clonedObj = obj.Clone();
-
-            Assert.AreEqual(obj, clonedObj);
-        }
-
-        /// <summary>
-        /// Tests the deep-clone functionality for 2 levels deep.
-        /// </summary>
-        [TestMethod]
-        public void CloneLevel2()
-        {
-            var obj = ModelBaseTestHelper.CreateIniFileObject();
-            var clonedObj = obj.Clone();
-
-            Assert.AreEqual(obj, clonedObj);
-        }
-
-        /// <summary>
-        /// Tests the deep-clone functionality for 3 levels deep.
-        /// </summary>
-        [TestMethod]
-        public void CloneLevel3()
-        {
-            var obj = ModelBaseTestHelper.CreateComputerSettingsObject();
-            var clonedObj = obj.Clone();
-
-            Assert.AreEqual(obj, clonedObj);
-        }
-        #endregion
-
         #region INotifyPropertyChanging tests
         public class ChangingTest : ModelBase
         {

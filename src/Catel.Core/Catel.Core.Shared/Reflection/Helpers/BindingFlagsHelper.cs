@@ -15,10 +15,10 @@ namespace Catel.Reflection
     public static class BindingFlagsHelper
     {
 #if NET
-		/// <summary>
-		/// The default binding flags.
-		/// </summary>
-		public const BindingFlags DefaultBindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+        /// <summary>
+        /// The default binding flags.
+        /// </summary>
+        public const BindingFlags DefaultBindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 #else
         /// <summary>
         /// The default binding flags.

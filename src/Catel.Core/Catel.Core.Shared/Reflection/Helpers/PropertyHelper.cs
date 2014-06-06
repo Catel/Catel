@@ -48,7 +48,7 @@ namespace Catel.Reflection
                 return false;
             }
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             var getMethod = propertyInfo.GetMethod;
 #else
             var getMethod = propertyInfo.GetGetMethod();
@@ -265,7 +265,7 @@ namespace Catel.Reflection
                 return false;
             }
 
-#if NETFX_CORE
+#if NETFX_CORE || PCL
             propertyInfo.SetValue(obj, value, null);
 #else
 
