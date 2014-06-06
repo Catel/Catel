@@ -108,7 +108,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FodyWeavers.xml" />
+    <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Catel.Core\Catel.Core.WIN81\Catel.Core.WIN81.csproj">

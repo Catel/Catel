@@ -110,9 +110,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FodyWeavers.xml">
+    <None Include="FodyWeavers.xml">
       <SubType>Designer</SubType>
-    </Content>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

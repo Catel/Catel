@@ -59,9 +59,9 @@
     <DocumentationFile>..\..\..\output\release\WP80\Catel.Core\Catel.Core.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="FodyWeavers.xml">
+    <None Include="FodyWeavers.xml">
       <SubType>Designer</SubType>
-    </Content>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

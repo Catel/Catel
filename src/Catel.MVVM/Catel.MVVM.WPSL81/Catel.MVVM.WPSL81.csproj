@@ -147,7 +147,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FodyWeavers.xml" />
+    <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Exceptions.resx">

@@ -85,7 +85,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FodyWeavers.xml" />
+    <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

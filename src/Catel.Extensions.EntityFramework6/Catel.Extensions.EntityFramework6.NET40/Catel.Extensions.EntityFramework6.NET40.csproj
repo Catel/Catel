@@ -126,7 +126,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FodyWeavers.xml" />
+    <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
