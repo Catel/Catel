@@ -1013,35 +1013,5 @@ namespace Catel.Data
             }
         }
         #endregion
-
-        #region ICloneable Members
-        /// <summary>
-        /// Clones the current object.
-        /// </summary>
-        /// <returns>Clone of the object or <c>null</c> if unsuccessful.</returns>
-        public virtual object Clone()
-        {
-            try
-            {
-                using (var stream = new MemoryStream())
-                {
-                    var serializer = SerializationFactory.GetXmlSerializer();
-
-                    serializer.Serialize(this, stream);
-
-                    stream.Position = 0L;
-
-                    object clone = serializer.Deserialize(GetType(), stream);
-                    return clone;
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex);
-
-                return null;
-            }
-        }
-        #endregion
     }
 }
