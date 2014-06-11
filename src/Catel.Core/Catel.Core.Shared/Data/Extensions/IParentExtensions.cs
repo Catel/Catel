@@ -22,9 +22,11 @@ namespace Catel.Data
         /// <param name="maxLevels">The maximum levels to search. If <c>-1</c>, the number is unlimited.</param>
         /// <returns>The parent or <c>null</c> if the parent is not found.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
-        public static TParent FindParent<TParent>(IParent model, int maxLevels = -1) 
+        public static TParent FindParent<TParent>(this IParent model, int maxLevels = -1) 
             where TParent : class
         {
+            Argument.IsNotNull("model", model);
+
             if (maxLevels == 0)
             {
                 return null;
