@@ -4,6 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if NET
 
 namespace Catel.Windows.Interactivity
 {
@@ -205,3 +206,5 @@ namespace Catel.Windows.Interactivity
         }
     }
 }
+
+#endif
