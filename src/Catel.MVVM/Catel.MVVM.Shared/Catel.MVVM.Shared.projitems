@@ -353,6 +353,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\MouseInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\Navigate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\NumericTextBox.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\AutoScroll.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\SelectTextOnFocus.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\UpdateBindingBehaviorBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\UpdateBindingOnPasswordChanged.cs" />
