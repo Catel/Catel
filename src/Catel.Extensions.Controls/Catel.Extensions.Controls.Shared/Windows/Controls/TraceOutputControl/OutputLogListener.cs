@@ -8,9 +8,6 @@
 
 namespace Catel.Windows.Controls
 {
-    using System.Diagnostics;
-
-    using Diagnostics;
     using Logging;
 
     /// <summary>
@@ -19,19 +16,10 @@ namespace Catel.Windows.Controls
     public class OutputLogListener : LogListenerBase
     {
         /// <summary>
-        /// The trace listener.
-        /// </summary>
-        private readonly TraceLogger _traceLogger;
-
-        /// <summary>
         /// The output log listener.
         /// </summary>
         public OutputLogListener()
         {
-            _traceLogger = new TraceLogger();
-            _traceLogger.ActiveTraceLevel = TraceLevel.Verbose;
-
-            Trace.Listeners.Add(_traceLogger);
         }
     }
 }

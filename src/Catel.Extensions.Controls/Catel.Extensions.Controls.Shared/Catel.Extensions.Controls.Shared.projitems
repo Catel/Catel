@@ -32,8 +32,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\TraceOutputControl\Filters\TraceEntryFilter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\TraceOutputControl\Models\TraceEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\TraceOutputControl\OutputLogListener.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\TraceOutputControl\TraceLogger.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\TraceOutputControl\TraceListenerBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\TraceOutputControl\ViewModels\TraceOutputViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\WatermarkTextBox.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Helpers\StyleHelper.cs" />
