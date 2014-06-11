@@ -92,6 +92,27 @@ namespace Catel.Logging
         public bool IsErrorEnabled { get; set; }
 
         /// <summary>
+        /// Occurs when a log message is written to one of the logs.
+        /// </summary>
+        public event EventHandler<LogMessageEventArgs> LogMessage;
+
+        /// <summary>
+        /// Raises the <see cref="LogMessage"/> event.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="extraData">The extra data.</param>
+        /// <param name="logEvent">The log event.</param>
+        protected void RaiseLogMessage(ILog log, string message, object extraData, LogEvent logEvent)
+        {
+            var handler = LogMessage;
+            if (handler != null)
+            {
+                handler(this, new LogMessageEventArgs(log, message, extraData, logEvent));
+            }
+        }
+
+        /// <summary>
         /// Formats the log event to a message which can be written to a log persistence storage.
         /// </summary>
         /// <param name="log">The log.</param>
@@ -120,6 +141,8 @@ namespace Catel.Logging
             }
 
             Write(log, message, logEvent, extraData);
+
+            RaiseLogMessage(log, message, extraData, logEvent);
         }
 
         /// <summary>

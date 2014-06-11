@@ -39,7 +39,7 @@ namespace Catel.Diagnostics
             TraceSourceCollection.Add(PresentationTraceSources.MarkupSource);
             TraceSourceCollection.Add(PresentationTraceSources.ResourceDictionarySource);
 
-            foreach (TraceSource traceSource in TraceSourceCollection)
+            foreach (var traceSource in TraceSourceCollection)
             {
                 traceSource.Listeners.Add(this);
             }

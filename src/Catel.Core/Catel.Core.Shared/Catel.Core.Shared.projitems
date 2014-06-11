@@ -136,6 +136,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\Policies\RetryPolicy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\MustBeImplementedException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\NotSupportedInPlatformException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Filtering\CompositeFilter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Filtering\CompositePredicate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Filtering\Interfaces\ICompositeFilter.cs" />
@@ -221,6 +222,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\FileLogListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Log.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\LogBatchEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\LogEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\LogEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\LogListenerBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\LogManager.cs" />

@@ -11,31 +11,24 @@ namespace Catel.Windows.Controls
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Diagnostics;
+    using System.ComponentModel;
     using System.Globalization;
     using System.Linq;
     using System.Text;
     using System.Text.RegularExpressions;
     using System.Windows;
-    using Catel.Data;
-    using Diagnostics;
+    using Filters;
+    using Logging;
     using MVVM;
     using Services;
+    using System.Windows.Data;
 
     /// <summary>
     /// TraceOutput view model.
     /// </summary>
     public class TraceOutputViewModel : ViewModelBase
     {
-        /// <summary>
-        /// The trace listener.
-        /// </summary>
-        private readonly OutputTraceListener _traceListener;
-
-        /// <summary>
-        /// The trace entries with all trace items.
-        /// </summary>
-        private readonly ObservableCollection<TraceEntry> _traceEntries = new ObservableCollection<TraceEntry>();
+        private readonly OutputLogListener _outputLogListener;
 
         /// <summary>
         /// The dispatcher service.
@@ -56,14 +49,17 @@ namespace Catel.Windows.Controls
 
             CopyToClipboard = new Command(OnCopyToClipboardExecute, OnCopyToClipboardCanExecute);
             ClearOutput = new Command(OnClearOutputExecute);
+            ClearFilter = new Command(OnClearFilterExecute);
 
-            _traceListener = new OutputTraceListener();
-            Trace.Listeners.Add(_traceListener);
+            _outputLogListener = new OutputLogListener();
+            _outputLogListener.LogMessage += OnLogMessage;
 
-            _traceListener.ActiveTraceLevel = TraceLevel.Verbose;
-            _traceListener.WrittenLine += WriteLine;
+            LogManager.AddListener(_outputLogListener);
 
-            TraceEntryCollection = new ObservableCollection<TraceEntry>();
+            TraceEntries = new ObservableCollection<TraceEntry>();
+            TraceEntriesSourceList = new CollectionViewSource { Source = TraceEntries };
+            TraceEntriesList = TraceEntriesSourceList.View;
+            Levels = Enum<LogEvent>.GetValues().OrderBy(x => x).ToList();
         }
         #endregion
 
@@ -78,77 +74,87 @@ namespace Catel.Windows.Controls
         }
 
         /// <summary>
-        /// Gets or sets the available trace levels.
+        /// Gets or sets the available levels.
         /// </summary>
-        public Collection<TraceLevel> AvailableTraceLevels
-        {
-            get { return GetValue<Collection<TraceLevel>>(AvailableTraceLevelsProperty); }
-            set { SetValue(AvailableTraceLevelsProperty, value); }
-        }
+        public List<LogEvent> Levels { get; private set; }
 
         /// <summary>
-        /// Register the AvailableTraceLevels property so it is known in the class.
+        /// Gets or sets the selected level.
         /// </summary>
-        public static readonly PropertyData AvailableTraceLevelsProperty = RegisterProperty("AvailableTraceLevels", typeof(Collection<TraceLevel>),
-            () => new Collection<TraceLevel>(Enum<TraceLevel>.GetValues().OrderBy(x => x).ToArray()));
-
-        /// <summary>
-        /// Gets or sets the selected trace level.
-        /// </summary>
-        public TraceLevel SelectedTraceLevel
-        {
-            get { return GetValue<TraceLevel>(SelectedTraceLevelProperty); }
-            set { SetValue(SelectedTraceLevelProperty, value); }
-        }
-
-        /// <summary>
-        /// Register the SelectedTraceLevel property so it is known in the class.
-        /// </summary>
-        public static readonly PropertyData SelectedTraceLevelProperty = RegisterProperty("SelectedTraceLevel", typeof(TraceLevel), TraceLevel.Verbose,
-            (sender, e) => ((TraceOutputViewModel)sender).UpdateTraceLevel());
-
-        /// <summary>
-        /// Gets or sets the collection of selected trace entries.
-        /// </summary>
-        public List<TraceEntry> SelectedTraceEntryCollection
-        {
-            get { return GetValue<List<TraceEntry>>(SelectedTraceEntryCollectionProperty); }
-            set { SetValue(SelectedTraceEntryCollectionProperty, value); }
-        }
-
-        /// <summary>
-        /// Register the SelectedTraceEntryCollection property so it is known in the class.
-        /// </summary>
-        public static readonly PropertyData SelectedTraceEntryCollectionProperty = RegisterProperty("SelectedTraceEntryCollection", typeof(List<TraceEntry>), null);
+        [DefaultValue(LogEvent.Debug)]
+        public LogEvent SelectedLevel { get; set; }
 
         /// <summary>
         /// Gets the list of trace entries.
         /// </summary>
-        /// <remarks>
-        /// Not a Catel property to prevent StackOverflow exceptions and improve speed. Change notification is not required
-        /// because this property is only set in the constructor.
-        /// </remarks>
-        public ObservableCollection<TraceEntry> TraceEntryCollection { get; private set; }
+        public ObservableCollection<TraceEntry> TraceEntries { get; private set; }
+
+        /// <summary>
+        /// Gets the trace entries source list.
+        /// </summary>
+        /// <value>The trace entries source list.</value>
+        public CollectionViewSource TraceEntriesSourceList { get; private set; }
+
+        /// <summary>
+        /// Gets the trace entries list.
+        /// </summary>
+        /// <value>The trace entries list.</value>
+        public ICollectionView TraceEntriesList { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the selected trace entries.
+        /// </summary>
+        /// <value>The selected trace entries.</value>
+        public List<TraceEntry> SelectedTraceEntries { get; set; } 
+
+        /// <summary>
+        /// Gets or sets the filter.
+        /// </summary>
+        /// <value>The filter.</value>
+        public string Filter { get; set; }
+
         #endregion
 
         #region Commands
+        /// <summary>
+        /// Gets the ClearOutput command.
+        /// </summary>
+        public Command ClearOutput { get; private set; }
+
+        private void OnClearOutputExecute()
+        {
+            var traceEntries = TraceEntries;
+            if (traceEntries != null)
+            {
+                traceEntries.Clear();
+            }
+        }
+
+        /// <summary>
+        /// Gets the clear filter command.
+        /// </summary>
+        /// <value>The clear filter.</value>
+        public Command ClearFilter { get; private set; }
+
+        private void OnClearFilterExecute()
+        {
+            Filter = string.Empty;
+        }
+
         /// <summary>
         /// Gets the CopyToClipboard command.
         /// </summary>
         public Command CopyToClipboard { get; private set; }
 
-        /// <summary>
-        /// Method to check whether the CopyToClipboard command can be executed.
-        /// </summary>
-        /// <returns><c>true</c> if the command can be executed; otherwise <c>false</c></returns>
         private bool OnCopyToClipboardCanExecute()
         {
-            if (SelectedTraceEntryCollection == null)
+            var selectedTraceEntries = SelectedTraceEntries;
+            if (selectedTraceEntries == null)
             {
                 return false;
             }
 
-            if (SelectedTraceEntryCollection.Count == 0)
+            if (selectedTraceEntries.Count == 0)
             {
                 return false;
             }
@@ -156,86 +162,49 @@ namespace Catel.Windows.Controls
             return true;
         }
 
-        /// <summary>
-        /// Method to invoke when the CopyToClipboard command is executed.
-        /// </summary>
         private void OnCopyToClipboardExecute()
         {
-            var text = TraceEntriesToString(SelectedTraceEntryCollection);
+            var text = TraceEntriesToString(SelectedTraceEntries);
             if (!string.IsNullOrEmpty(text))
             {
                 Clipboard.SetText(text, TextDataFormat.Text);
             }
         }
-
-        /// <summary>
-        /// Gets the ClearOutput command.
-        /// </summary>
-        public Command ClearOutput { get; private set; }
-
-        /// <summary>
-        /// Method to invoke when the ClearOutput command is executed.
-        /// </summary>
-        private void OnClearOutputExecute()
-        {
-            TraceEntryCollection.Clear();
-        }
         #endregion
 
         #region Methods
-        /// <summary>
-        /// Writes a line to the output window.
-        /// </summary>
-        /// <param name="message">Message to write.</param>
-        /// <param name="eventType">Type of the event.</param>
-        private void WriteLine(string message, TraceEventType eventType)
+        private void OnFilterChanged()
+        {
+            ApplyFilter();
+        }
+
+        private void OnSelectedLevelChanged()
+        {
+            ApplyFilter();
+        }
+
+        private void ApplyFilter()
+        {
+            var traceEntriesList = TraceEntriesList;
+            if (traceEntriesList != null)
+            {
+                var filterText = Filter.PrepareAsSearchFilter();
+
+                TraceEntriesList.Filter = new TraceEntryFilter(filterText, SelectedLevel).MatchesObject;
+            }
+        }
+
+        private void OnLogMessage(object sender, LogMessageEventArgs e)
         {
             _dispatcherService.Invoke(() =>
             {
-                var traceEntry = new TraceEntry(TraceHelper.ConvertTraceEventTypeToTraceLevel(eventType), message);
-                _traceEntries.Add(traceEntry);
-
-                if (EntryMatchesLevel(traceEntry))
+                var traceEntries = TraceEntries;
+                if (traceEntries != null)
                 {
-                    TraceEntryCollection.Add(traceEntry);
+                    var traceEntry = new TraceEntry(new LogEntry(e));
+                    TraceEntries.Add(traceEntry);
                 }
             });
-        }
-
-        /// <summary>
-        /// Updates the trace level and rebuilds the trace list.
-        /// </summary>
-        private void UpdateTraceLevel()
-        {
-            TraceEntryCollection.Clear();
-
-            if (SelectedTraceEntryCollection != null)
-            {
-                SelectedTraceEntryCollection.Clear();
-            }
-
-            foreach (var entry in _traceEntries)
-            {
-                if (EntryMatchesLevel(entry))
-                {
-                    TraceEntryCollection.Add(entry);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Determines if the given entry matches the filter tracelevel.
-        /// </summary>
-        /// <param name="traceEntry">The trace entry.</param>
-        /// <returns>true if matches of if filter is 'Off', false if not </returns>
-        private bool EntryMatchesLevel(TraceEntry traceEntry)
-        {
-            if (SelectedTraceLevel == TraceLevel.Off || SelectedTraceLevel == TraceLevel.Verbose)
-            {
-                return true;
-            }
-
-            return (traceEntry.TraceLevel <= SelectedTraceLevel);
         }
 
         /// <summary>
@@ -247,7 +216,7 @@ namespace Catel.Windows.Controls
         {
             const string columnText = " | ";
 
-            int maxTypeLength = AvailableTraceLevels.Max(c => c.ToString("G").Length);
+            int maxTypeLength = Levels.Max(c => c.ToString("G").Length);
             var rv = new StringBuilder();
             var rxMultiline = new Regex(@"(?<=(^|\n)).*", RegexOptions.Multiline | RegexOptions.Compiled);
 
@@ -256,7 +225,7 @@ namespace Catel.Windows.Controls
                 foreach (var entry in entries)
                 {
                     string date = entry.Time.ToString(CultureInfo.CurrentUICulture);
-                    string type = entry.TraceLevel.ToString("G").PadRight(maxTypeLength, ' ');
+                    string type = entry.LogEvent.ToString("G").PadRight(maxTypeLength, ' ');
                     string datefiller = new String(' ', date.Length);
                     string typefiller = new String(' ', type.Length);
 

@@ -28,10 +28,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\StackGrid\EmptyRow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\StackGrid\StackGrid.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\TabControl.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\TraceOutputControl\Helpers\TraceHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\TraceOutputControl\Converters\OutputTypeConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\TraceOutputControl\Filters\TraceEntryFilter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\TraceOutputControl\Models\TraceEntry.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\TraceOutputControl\OutputTraceListener.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\TraceOutputControl\OutputTypeConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\TraceOutputControl\OutputLogListener.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\TraceOutputControl\TraceLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\TraceOutputControl\TraceListenerBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\TraceOutputControl\ViewModels\TraceOutputViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\WatermarkTextBox.cs" />

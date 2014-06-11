@@ -8,6 +8,8 @@
 namespace Catel
 {
     using Catel.IoC;
+    using Catel.MVVM;
+    using Catel.Windows.Controls;
 
     /// <summary>
     /// Extensions.Controls module which allows the registration of default services in the service locator.
@@ -22,7 +24,8 @@ namespace Catel
         {
             Argument.IsNotNull(() => serviceLocator);
 
-            // Register services here
+            var viewModelLocator = serviceLocator.ResolveType<IViewModelLocator>();
+            viewModelLocator.Register(typeof(TraceOutputControl), typeof(TraceOutputViewModel));
         }
     }
 }

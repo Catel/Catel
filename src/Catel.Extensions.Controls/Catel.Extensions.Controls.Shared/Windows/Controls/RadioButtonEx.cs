@@ -35,8 +35,8 @@ namespace Catel.Windows.Controls
         /// </summary>
         public RadioButtonEx()
         {
-            Checked += RadioButtonExtended_Checked;
-            Unchecked += RadioButtonExtended_Unchecked;
+            Checked += this.OnRadioButtonExtendedChecked;
+            Unchecked += this.OnRadioButtonExtendedUnchecked;
         }
         #endregion
 
@@ -77,7 +77,7 @@ namespace Catel.Windows.Controls
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
-        private void RadioButtonExtended_Unchecked(object sender, RoutedEventArgs e)
+        private void OnRadioButtonExtendedUnchecked(object sender, RoutedEventArgs e)
         {
             if (!_isChanging)
             {
@@ -90,7 +90,7 @@ namespace Catel.Windows.Controls
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
-        private void RadioButtonExtended_Checked(object sender, RoutedEventArgs e)
+        private void OnRadioButtonExtendedChecked(object sender, RoutedEventArgs e)
         {
             if (!_isChanging)
             {

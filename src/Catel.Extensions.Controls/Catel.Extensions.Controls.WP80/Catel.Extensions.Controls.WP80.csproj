@@ -52,7 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Catel.Core\Catel.Core.WP80\Catel.Core.WP80.csproj">
-      <Project>{222A55F1-A032-4FAF-92C1-C51A2F7D2725}</Project>
+      <Project>{222a55f1-a032-4faf-92c1-c51a2f7d2725}</Project>
       <Name>Catel.Core.WP80</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Catel.MVVM\Catel.MVVM.WP80\Catel.MVVM.WP80.csproj">
@@ -61,6 +61,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Catel.Fody.Attributes">
+      <HintPath>..\..\..\lib\Catel.Fody.2.0.0\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
+    </Reference>
     <Reference Include="Obsolete">
       <HintPath>..\..\..\lib\Obsolete.Fody.3.1.0.0\Lib\portable-net4+sl4+wp8+win8+wpa81+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
       <Private>False</Private>

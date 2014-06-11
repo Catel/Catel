@@ -41,11 +41,29 @@ namespace Catel.Windows.Interactivity
 
         #region Properties
         /// <summary>
+        /// A boolean that determines whether the behavior should automatically scroll as soon as the 
+        /// control is loaded.
+        /// <para />
+        /// The default value is <c>true</c>.
+        /// </summary>
+        public bool ScrollOnLoaded
+        {
+            get { return (bool)GetValue(ScrollOnLoadedProperty); }
+            set { SetValue(ScrollOnLoadedProperty, value); }
+        }
+
+        /// <summary>
+        /// The scroll on loaded property.
+        /// </summary>
+        public static readonly DependencyProperty ScrollOnLoadedProperty =
+            DependencyProperty.Register("ScrollOnLoaded", typeof(bool), typeof(AutoScroll), new PropertyMetadata(true));
+
+        /// <summary>
         /// The scoll direction.
         /// <para />
         /// The default value is <see cref="Catel.Windows.Interactivity.ScrollDirection.Bottom"/>.
         /// </summary>
-        private ScrollDirection ScrollDirection
+        public ScrollDirection ScrollDirection
         {
             get { return (ScrollDirection)GetValue(ScrollDirectionProperty); }
             set { SetValue(ScrollDirectionProperty, value); }
@@ -55,12 +73,12 @@ namespace Catel.Windows.Interactivity
         /// The scroll direction property.
         /// </summary>
         public static readonly DependencyProperty ScrollDirectionProperty =
-            DependencyProperty.Register("ScrollDirection", typeof(int), typeof(AutoScroll), new PropertyMetadata(ScrollDirection.Bottom));
+            DependencyProperty.Register("ScrollDirection", typeof(ScrollDirection), typeof(AutoScroll), new PropertyMetadata(ScrollDirection.Bottom));
 
         /// <summary>
         /// The scoll threshold in which the behavior will scroll down even when it is not fully down.
         /// <para />
-        /// The default value is <c>10</c>.
+        /// The default value is <c>5</c>.
         /// </summary>
         public int ScrollTreshold
         {
@@ -72,7 +90,7 @@ namespace Catel.Windows.Interactivity
         /// The scroll treshold property.
         /// </summary>
         public static readonly DependencyProperty ScrollTresholdProperty =
-            DependencyProperty.Register("ScrollTreshold", typeof(int), typeof(AutoScroll), new PropertyMetadata(10));
+            DependencyProperty.Register("ScrollTreshold", typeof(int), typeof(AutoScroll), new PropertyMetadata(5));
         #endregion
 
         /// <summary>
@@ -132,6 +150,11 @@ namespace Catel.Windows.Interactivity
                 if (_collection != null)
                 {
                     _collection.CollectionChanged += OnCollectionChanged;
+
+                    if (ScrollOnLoaded)
+                    {
+                        ScrollToEnd();
+                    }
                 }
             }
         }
@@ -142,20 +165,25 @@ namespace Catel.Windows.Interactivity
             {
                 if (_isScrollbarAtEnd)
                 {
-                    switch (ScrollDirection)
-                    {
-                        case ScrollDirection.Top:
-                            _scrollViewer.ScrollToTop();
-                            break;
-
-                        case ScrollDirection.Bottom:
-                            _scrollViewer.ScrollToBottom();
-                            break;
-
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
+                    ScrollToEnd();
                 }
+            }
+        }
+
+        private void ScrollToEnd()
+        {
+            switch (ScrollDirection)
+            {
+                case ScrollDirection.Top:
+                    _scrollViewer.ScrollToTop();
+                    break;
+
+                case ScrollDirection.Bottom:
+                    _scrollViewer.ScrollToBottom();
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 

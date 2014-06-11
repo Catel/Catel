@@ -14,12 +14,13 @@ namespace Catel.Windows.Data.Converters
     using System.Windows.Data;
     using System.Windows.Media.Imaging;
     using Catel.MVVM.Converters;
+    using Catel.Logging;
 
     /// <summary>
     /// Converts an output type to a status that is displayable to the user.
     /// </summary>
 #if NET
-    [ValueConversion(typeof(TraceLevel), typeof(Image))]
+    [ValueConversion(typeof(LogEvent), typeof(Image))]
 #endif
     public class OutputTypeConverter : ValueConverterBase
     {
@@ -46,15 +47,15 @@ namespace Catel.Windows.Data.Converters
         {
             Image image = null;
 
-            if (!(value is TraceLevel))
+            if (!(value is LogEvent))
             {
                 return image;
             }
 
-            var traceLevel = (TraceLevel)value;
-            switch (traceLevel)
+            var logEvent = (LogEvent)value;
+            switch (logEvent)
             {
-                case TraceLevel.Error:
+                case LogEvent.Error:
                     if (_errorImage == null)
                     {
                         _errorImage = new BitmapImage(new Uri(string.Format("/{0};component/Resources/Images/Error.png", AssemblyName), UriKind.RelativeOrAbsolute));
@@ -64,7 +65,7 @@ namespace Catel.Windows.Data.Converters
                     image.Source = _errorImage;
                     break;
 
-                case TraceLevel.Warning:
+                case LogEvent.Warning:
                     if (_warningImage == null)
                     {
                         _warningImage = new BitmapImage(new Uri(string.Format("/{0};component/Resources/Images/Warning.png", AssemblyName), UriKind.RelativeOrAbsolute));
@@ -77,15 +78,7 @@ namespace Catel.Windows.Data.Converters
 
             if (image != null)
             {
-                //// Or hardcoded on 16 x 16?
-                //Binding b = new Binding("Width");
-                //b.Source = image.Source;
-                //image.SetBinding(Image.MaxWidthProperty, b);
                 image.MaxWidth = 16;
-
-                //b = new Binding("Height");
-                //b.Source = image.Source;
-                //image.SetBinding(Image.MaxHeightProperty, b);
                 image.MaxHeight = 16;
             }
 

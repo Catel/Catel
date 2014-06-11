@@ -83,7 +83,6 @@ namespace Catel.MVVM
             _viewModel = viewModel;
             _viewModelType = viewModel.GetType();
             _viewModel.Initialized += OnViewModelInitialized;
-            _viewModel.PropertyChanged += OnViewModelPropertyChanged;
             _viewModel.Closed += OnViewModelClosed;
 
             var properties = new List<PropertyInfo>();
@@ -167,15 +166,18 @@ namespace Catel.MVVM
                         var command = propertyInfo.GetValue(_viewModel, null) as ICommand;
                         if (command != null)
                         {
-                            Log.Debug("Found command '{0}' on view model '{1}'", propertyInfo.Name, _viewModelType.Name);
-
-                            var commandAsICatelCommand = command as ICatelCommand;
-                            if (commandAsICatelCommand != null)
+                            if (!_commands.ContainsKey(command))
                             {
-                                commandAsICatelCommand.Executed += OnViewModelCommandExecuted;
-                            }
+                                Log.Debug("Found command '{0}' on view model '{1}'", propertyInfo.Name, _viewModelType.Name);
 
-                            _commands.Add(command, propertyInfo.Name);
+                                var commandAsICatelCommand = command as ICatelCommand;
+                                if (commandAsICatelCommand != null)
+                                {
+                                    commandAsICatelCommand.Executed += OnViewModelCommandExecuted;
+                                }
+
+                                _commands.Add(command, propertyInfo.Name);
+                            }
                         }
                     }
                     catch (Exception)
