@@ -54,6 +54,8 @@ namespace Catel.Windows.Controls
             _outputLogListener = new OutputLogListener();
             _outputLogListener.LogMessage += OnLogMessage;
 
+            IgnoreCatelLogging = true;
+
             LogManager.AddListener(_outputLogListener);
 
             TraceEntries = new ObservableCollection<TraceEntry>();
@@ -71,6 +73,20 @@ namespace Catel.Windows.Controls
         public override string Title
         {
             get { return "Trace output"; }
+        }
+
+        /// <summary>
+        /// <c>true</c> if the Catel logging should be ignored.
+        /// <para />
+        /// The default is <c>true</c>.
+        /// </summary>
+        /// <remarks>
+        /// Note that this is a wrapper property and does not support <see cref="INotifyPropertyChanged"/>.
+        /// </remarks>
+        public bool IgnoreCatelLogging
+        {
+            get { return _outputLogListener.IgnoreCatelLogging; }
+            set { _outputLogListener.IgnoreCatelLogging = value; }
         }
 
         /// <summary>

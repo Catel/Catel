@@ -8,6 +8,8 @@
 namespace Catel.Windows.Controls
 {
     using System.Linq;
+    using System.Windows;
+    using MVVM.Views;
 
     /// <summary>
     /// Interaction logic for TraceOutputControl.xaml
@@ -31,6 +33,24 @@ namespace Catel.Windows.Controls
                 }
             };
         }
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets or sets whether the Catel logging should be ignored.
+        /// </summary>
+        [ViewToViewModel(MappingType = ViewToViewModelMappingType.ViewToViewModel)]
+        public bool IgnoreCatelLogging
+        {
+            get { return (bool)GetValue(IgnoreCatelLoggingProperty); }
+            set { SetValue(IgnoreCatelLoggingProperty, value); }
+        }
+
+        /// <summary>
+        /// Using a DependencyProperty as the backing store for IgnoreCatelLogging.  This enables animation, styling, binding, etc...
+        /// </summary>
+        public static readonly DependencyProperty IgnoreCatelLoggingProperty =
+            DependencyProperty.Register("IgnoreCatelLogging", typeof(bool), typeof(TraceOutputControl), new PropertyMetadata(true));
         #endregion
     }
 }
