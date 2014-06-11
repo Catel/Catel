@@ -24,8 +24,10 @@ namespace Catel
         {
             Argument.IsNotNull(() => serviceLocator);
 
+#if NET
             var viewModelLocator = serviceLocator.ResolveType<IViewModelLocator>();
             viewModelLocator.Register(typeof(TraceOutputControl), typeof(TraceOutputViewModel));
+#endif
         }
     }
 }
