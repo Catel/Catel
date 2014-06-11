@@ -67,12 +67,4 @@ namespace Catel.MVVM
         /// <returns><c>true</c> if this instance can execute; otherwise, <c>false</c>.</returns>
         void Execute(TExecuteParameter parameter);
     }
-
-    /// <summary>
-    /// Advanced <see cref="ICommand" /> interface definition to provide advanced functionality.
-    /// </summary>
-    /// <typeparam name="TExecuteParameter">The type of the execute parameter.</typeparam>
-    public interface ICatelCommand<TExecuteParameter> : ICatelCommand<TExecuteParameter, TExecuteParameter>
-    {
-    }
 }

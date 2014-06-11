@@ -45,14 +45,25 @@ namespace Catel.MVVM
         /// <param name="action">The action.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         void UnregisterAction(Action action);
-        
+
         /// <summary>
         /// Gets or sets whether this command should check the can execute of all commands to determine can execute for composite command.
         /// <para />
-        /// The default value is <c>false</c> which means the composite command can be executed if it contains 1 or more commands.
+        /// The default value is <c>true</c> which means the composite command can only be executed if all commands can be executed. If
+        /// there is a requirement to allow partial invocation, set this property to false.
         /// </summary>
         /// <value>The check can execute of all commands to determine can execute for composite command.</value>
+        [ObsoleteEx(Replacement = "AllowPartialExecution (inverted!)", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
         bool CheckCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether partial execution of commands is allowed. If this value is <c>true</c>, this composite
+        /// command will always be executable and only invoke the internal commands that are executable.
+        /// <para />
+        /// The default value is <c>false</c>.
+        /// </summary>
+        /// <value><c>true</c> if partial execution is allowed; otherwise, <c>false</c>.</value>
+        bool AllowPartialExecution { get; set; }
 
         /// <summary>
         /// Registers the specified action.

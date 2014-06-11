@@ -298,7 +298,7 @@ namespace Catel.MVVM
     /// Implements the <see cref="Command{TExecuteParameter, TCanExecuteParameter}"/> class with only the <typeparamref name="TExecuteParameter"/> as generic type.
     /// </summary>
     /// <typeparam name="TExecuteParameter">The type of the execute parameter.</typeparam>
-    public class Command<TExecuteParameter> : Command<TExecuteParameter, TExecuteParameter>, ICatelCommand<TExecuteParameter>
+    public class Command<TExecuteParameter> : Command<TExecuteParameter, TExecuteParameter>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Command{TCanExecuteParameter,TExecuteParameter}"/> class.
