@@ -9,6 +9,7 @@
 namespace Catel.Windows.Markup
 {
     using System;
+    using System.Windows;
     using System.Windows.Threading;
     using Catel.IoC;
     using Catel.Services;
@@ -32,7 +33,6 @@ namespace Catel.Windows.Markup
         {
             var dependencyResolver = this.GetDependencyResolver();
             _languageService = dependencyResolver.Resolve<ILanguageService>();
-            _languageService.LanguageUpdated += OnLanguageUpdated;
         }
 
         /// <summary>
@@ -80,6 +80,26 @@ namespace Catel.Windows.Markup
 
             var resource = _languageService.GetString(ResourceName);
             return resource;
+        }
+
+        /// <summary>
+        /// Called when the target object is loaded.
+        /// <para />
+        /// Note that this method will only be called if the target object is a <see cref="FrameworkElement"/>.
+        /// </summary>
+        protected override void OnTargetObjectLoaded()
+        {
+            _languageService.LanguageUpdated += OnLanguageUpdated;
+        }
+
+        /// <summary>
+        /// Called when the target object is unloaded.
+        /// <para />
+        /// Note that this method will only be called if the target object is a <see cref="FrameworkElement"/>.
+        /// </summary>
+        protected override void OnTargetObjectUnloaded()
+        {
+            _languageService.LanguageUpdated -= OnLanguageUpdated;
         }
     }
 }

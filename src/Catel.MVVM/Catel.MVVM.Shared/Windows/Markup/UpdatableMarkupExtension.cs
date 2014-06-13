@@ -31,6 +31,7 @@ namespace Catel.Windows.Markup
         #region Fields
         private object _targetObject;
         private object _targetProperty;
+        private bool _isFrameworkElementLoaded;
         #endregion
 
         #region Constructors
@@ -73,10 +74,63 @@ namespace Catel.Windows.Markup
             {
                 _targetObject = target.TargetObject;
                 _targetProperty = target.TargetProperty;
+
+                var frameworkElement = _targetObject as FrameworkElement;
+                if (frameworkElement != null)
+                {
+#if NET
+                    _isFrameworkElementLoaded = frameworkElement.IsLoaded;
+#endif
+
+                    frameworkElement.Loaded += OnTargetObjectLoadedInternal;
+                    frameworkElement.Unloaded += OnTargetObjectUnloadedInternal;
+                }
             }
 #endif
 
             return ProvideDynamicValue();
+        }
+
+        private void OnTargetObjectLoadedInternal(object sender, RoutedEventArgs e)
+        {
+            if (_isFrameworkElementLoaded)
+            {
+                return;
+            }
+
+            OnTargetObjectLoaded();
+
+            _isFrameworkElementLoaded = true;
+        }
+
+        /// <summary>
+        /// Called when the target object is loaded.
+        /// <para />
+        /// Note that this method will only be called if the target object is a <see cref="FrameworkElement"/>.
+        /// </summary>
+        protected virtual void OnTargetObjectLoaded()
+        {   
+        }
+
+        private void OnTargetObjectUnloadedInternal(object sender, RoutedEventArgs e)
+        {
+            if (!_isFrameworkElementLoaded)
+            {
+                return;
+            }
+
+            OnTargetObjectUnloaded();
+
+            _isFrameworkElementLoaded = false;
+        }
+
+        /// <summary>
+        /// Called when the target object is unloaded.
+        /// <para />
+        /// Note that this method will only be called if the target object is a <see cref="FrameworkElement"/>.
+        /// </summary>
+        protected virtual void OnTargetObjectUnloaded()
+        {
         }
 
         /// <summary>
@@ -88,7 +142,8 @@ namespace Catel.Windows.Markup
 
             if (_targetObject != null)
             {
-                if (_targetProperty is DependencyProperty)
+                var targetPropertyAsDependencyProperty = _targetProperty as DependencyProperty;
+                if (targetPropertyAsDependencyProperty != null)
                 {
                     var obj = _targetObject as DependencyObject;
                     if (obj == null)
@@ -96,9 +151,7 @@ namespace Catel.Windows.Markup
                         return;
                     }
 
-                    var prop = (DependencyProperty)_targetProperty;
-
-                    Action updateAction = () => obj.SetValue(prop, value);
+                    Action updateAction = () => obj.SetValue(targetPropertyAsDependencyProperty, value);
 
                     if (obj.CheckAccess())
                     {
