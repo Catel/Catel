@@ -70,7 +70,7 @@ namespace Catel.MVVM.Providers
         /// <summary>
         /// The view model factory.
         /// </summary>
-        private static readonly IViewModelFactory _viewModelFactory;
+        private static IViewModelFactory _viewModelFactory;
 
         /// <summary>
         /// The view model locator.
@@ -118,7 +118,6 @@ namespace Catel.MVVM.Providers
         {
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
 
-            _viewModelFactory = dependencyResolver.Resolve<IViewModelFactory>();
             _viewModelLocator = dependencyResolver.Resolve<IViewModelLocator>();
             _viewManager = dependencyResolver.Resolve<IViewManager>();
             _viewPropertySelector = dependencyResolver.Resolve<IViewPropertySelector>();
@@ -204,7 +203,15 @@ namespace Catel.MVVM.Providers
         /// </summary>
         protected IViewModelFactory ViewModelFactory
         {
-            get { return _viewModelFactory; }
+            get
+            {
+                if (_viewModelFactory == null)
+                {
+                    var dependencyResolver = this.GetDependencyResolver();
+                    _viewModelFactory = dependencyResolver.Resolve<IViewModelFactory>();
+                }
+                return _viewModelFactory;
+            }
         }
 
         /// <summary>
