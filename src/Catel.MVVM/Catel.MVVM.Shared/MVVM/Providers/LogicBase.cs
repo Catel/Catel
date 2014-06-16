@@ -207,7 +207,7 @@ namespace Catel.MVVM.Providers
             {
                 if (_viewModelFactory == null)
                 {
-                    var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+                    var dependencyResolver = this.GetDependencyResolver();
                     _viewModelFactory = dependencyResolver.Resolve<IViewModelFactory>();
                 }
                 return _viewModelFactory;
