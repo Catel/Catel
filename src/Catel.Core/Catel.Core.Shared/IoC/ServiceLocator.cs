@@ -799,7 +799,7 @@ namespace Catel.IoC
             object instance = TypeFactory.CreateInstance(registration.ImplementingType);
             if (instance == null)
             {
-                ThrowTypeNotRegisteredException(registration.DeclaringType);
+                ThrowTypeNotRegisteredException(registration.DeclaringType, "Failed to instantiate the type using the TypeFactory.");
             }
 
             var handler = TypeInstantiated;
@@ -840,13 +840,14 @@ namespace Catel.IoC
         /// Throws the <see cref="TypeNotRegisteredException" /> but will also reset the current type request path.
         /// </summary>
         /// <param name="type">The type.</param>
-        private void ThrowTypeNotRegisteredException(Type type)
+        /// <param name="message">The message.</param>
+        private void ThrowTypeNotRegisteredException(Type type, string message = null)
         {
             _currentTypeRequestPath = null;
             // or _currentTypeRequestPath.PopType();
 
             Log.Error("The type '{0}' is not registered", type.GetSafeFullName());
-            throw new TypeNotRegisteredException(type);
+            throw new TypeNotRegisteredException(type, message);
         }
         #endregion
 

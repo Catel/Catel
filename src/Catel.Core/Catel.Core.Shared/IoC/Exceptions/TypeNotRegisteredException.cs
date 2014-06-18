@@ -8,6 +8,7 @@
 namespace Catel.IoC
 {
     using System;
+    using Reflection;
 
     /// <summary>
     /// Exception class in case an requested type from <see cref="IServiceLocator"/> is not registered.
@@ -16,11 +17,13 @@ namespace Catel.IoC
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="TypeNotRegisteredException"/> class.
+        /// Initializes a new instance of the <see cref="TypeNotRegisteredException" /> class.
         /// </summary>
         /// <param name="requestedType">The requested type.</param>
-        public TypeNotRegisteredException(Type requestedType)
-            : base("The specified type is not registered. Please register type before using it.")
+        /// <param name="message">The message.</param>
+        public TypeNotRegisteredException(Type requestedType, string message)
+            : base(string.Format("The specified type '{0}' is not registered. Please register type before using it. {1}", 
+            requestedType.GetSafeFullName(), message ?? string.Empty))
         {
             RequestedType = requestedType;
         }
