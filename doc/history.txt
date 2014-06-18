@@ -134,6 +134,7 @@ Added/fixed:
 (x) CTL-381 LanguageService.GetResourceManager() method retrieves wrong assembly and therefore cannot find resource
 (x) CTL-384 WarningAndErrorValidator should hide ValidationAdorner
 (x) CTL-385 XmlAttribute values are not respected without explicit name
+(x) CTL-395 IValidationSummary property is null and this prevents command execution in case there are no errors
 (x) CTL-405 NullReferenceException is thrown in AutoCompletionBehavior when _availableSuggestions is null
 (x) CTL-409 Fixed SplashScreenService implementation to be used in the Application.OnStartup method context
 (x) CTL-416 Checking for for a binding IsSentinalBindingObject doesn't check for '{DisconnectedItem}'

@@ -35,8 +35,8 @@ namespace Catel.MVVM
 
             var command = new Command(execute, () =>
             {
-                IValidationSummary validationSummary = property.Invoke();
-                return (validationSummary != null) && (!validationSummary.HasErrors);
+                var validationSummary = property.Invoke();
+                return ((validationSummary == null) || !validationSummary.HasErrors);
             }, tag);
 
             return command;
@@ -62,8 +62,8 @@ namespace Catel.MVVM
 
             var command = new Command<TExecuteParameter>(execute, parameter =>
             {
-                IValidationSummary validationSummary = property.Invoke();
-                return (validationSummary != null) && (!validationSummary.HasErrors);
+                var validationSummary = property.Invoke();
+                return ((validationSummary == null) || !validationSummary.HasErrors);
             }, tag);
 
             return command;
