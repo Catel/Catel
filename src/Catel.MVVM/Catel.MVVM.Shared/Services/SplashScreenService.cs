@@ -220,11 +220,11 @@ namespace Catel.Services
         {
             CommitUsingViewModel(TryCreateProgressNotifyableViewModelFrom(viewModelType));
         }
-      
+
         #endregion
 
         #region Methods
-     
+
         /// <summary>
         /// The execute.
         /// </summary>
@@ -256,9 +256,9 @@ namespace Catel.Services
                         else
                         {
                             // TODO: Display smooth detailed progress using the PleasWaitService
-// ReSharper disable AccessToModifiedClosure
+                            // ReSharper disable AccessToModifiedClosure
                             _dispatcherService.Invoke(() => _pleaseWaitService.UpdateStatus(progress++, total, task.Name));
-// ReSharper restore AccessToModifiedClosure
+                            // ReSharper restore AccessToModifiedClosure
                         }
 
                         if (task.AutomaticallyDispatch)
@@ -367,7 +367,7 @@ namespace Catel.Services
                     });
 #if !SILVERLIGHT
                 _thread.SetApartmentState(ApartmentState.STA);
-#endif                
+#endif
                 _completedCallback = completedCallback;
                 _thread.Start();
             }
@@ -377,7 +377,7 @@ namespace Catel.Services
                 {
                     throw new NotSupportedException("This method must be executed in non-UI thread. Please try with CommitAsync.");
                 }
-                
+
                 if (Application.Current.MainWindow == null)
                 {
                     throw new NotSupportedException("The application is not completly initialized. Please try with CommitAsync.");
@@ -431,7 +431,7 @@ namespace Catel.Services
                 _progressNotifyableViewModel = viewModelFunc == null ? null : viewModelFunc.Invoke();
                 if (_progressNotifyableViewModel != null && show)
                 {
-                    _uiVisualizerService.Show(_progressNotifyableViewModel);
+                    _dispatcherService.Invoke(() => _uiVisualizerService.Show(_progressNotifyableViewModel).RunSynchronously());
                 }
 
                 IsCommitting = true;
