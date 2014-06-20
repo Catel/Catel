@@ -148,6 +148,7 @@ Added/fixed:
 (x) CTL-463 Its not possible to register a CustomViewModelFactory
 (x) CTL-464 Fixed SplashScreenService (due to Asynchronisity of UIVisualizerService)
 (x) CTL-465 DebugLogListener SL throws InvalidOperationException on disabled html bridge
+(x) CTL-466 Catel and Microsoft Fakes does not work because of reflection on explicit interface properties
 
 Roadmap:
 ========

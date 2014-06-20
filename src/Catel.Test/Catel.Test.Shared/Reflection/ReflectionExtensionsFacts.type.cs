@@ -123,5 +123,40 @@ namespace Catel.Test.Reflection
                 Assert.IsFalse(type.IsInstanceOfTypeEx(instance));
             }            
         }
+
+        [TestClass]
+        public class TheGetPropertyExMethod
+        {
+            public interface IPerson : INameProvider
+            {
+                
+            }
+
+            public interface INameProvider
+            {
+                string FirstName { get; }
+            }
+
+            public class Person : IPerson
+            {
+                string INameProvider.FirstName { get { return "John"; } }
+            }
+
+            [TestMethod]
+            public void ReturnsNoExplicitInterfacePropertiesWhenDisabled()
+            {
+                var propertyInfo = typeof (Person).GetPropertyEx("FirstName", allowExplicitInterfaceProperties: false);
+
+                Assert.IsNull(propertyInfo);
+            }
+
+            [TestMethod]
+            public void ReturnsExplicitInterfacePropertiesWhenEnabled()
+            {
+                var propertyInfo = typeof(Person).GetPropertyEx("FirstName", allowExplicitInterfaceProperties: true);
+
+                Assert.IsNotNull(propertyInfo);
+            }
+        }
     }
 }

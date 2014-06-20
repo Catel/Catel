@@ -647,7 +647,7 @@ namespace Catel.Test.Extensions.Prism
                 var dispatcherServiceMock = new Mock<IDispatcherService>();
                 dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>())).Callback((Action action) => action.Invoke());
                 var visualizerServiceMock = new Mock<IUIVisualizerService>();
-                visualizerServiceMock.Setup(service => service.Show(It.Is<FooViewModel>(model => ReferenceEquals(model, fooViewModel)), null)).Returns(true);
+                visualizerServiceMock.Setup(service => service.Show(It.Is<FooViewModel>(model => ReferenceEquals(model, fooViewModel)), null)).Returns(new Task<bool>(() => true));
                 var viewManagerMock = new Mock<IViewManager>();
                 viewManagerMock.Setup(manager => manager.GetViewsOfViewModel(fooViewModel)).Returns(new IView[] { new FooViewModelView(fooViewModel) });
                 
@@ -673,7 +673,7 @@ namespace Catel.Test.Extensions.Prism
                 var dispatcherServiceMock = new Mock<IDispatcherService>();
                 dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>())).Callback((Action action) => action.Invoke());
                 var visualizerServiceMock = new Mock<IUIVisualizerService>();
-                visualizerServiceMock.Setup(service => service.Show(It.Is<FooViewModel>(model => ReferenceEquals(model, fooViewModel)), null)).Returns(true);
+                visualizerServiceMock.Setup(service => service.Show(It.Is<FooViewModel>(model => ReferenceEquals(model, fooViewModel)), null)).Returns(new Task<bool>(() => true));
                 var viewManagerMock = new Mock<IViewManager>();
                 viewManagerMock.Setup(manager => manager.GetViewsOfViewModel(fooViewModel)).Returns(new IView[] { });
 
