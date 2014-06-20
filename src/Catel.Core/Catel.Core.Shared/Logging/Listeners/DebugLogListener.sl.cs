@@ -25,7 +25,7 @@ namespace Catel.Logging
         {
             try
             {
-                if (_console == null)
+                if (_console == null && HtmlPage.IsEnabled)
                 {
                     if (!_dispatcher.CheckAccess())
                     {

@@ -147,6 +147,7 @@ Added/fixed:
 (x) CTL-462 Memory Leaks using Language Binding
 (x) CTL-463 Its not possible to register a CustomViewModelFactory
 (x) CTL-464 Fixed SplashScreenService (due to Asynchronisity of UIVisualizerService)
+(x) CTL-465 DebugLogListener SL throws InvalidOperationException on disabled html bridge
 
 Roadmap:
 ========
