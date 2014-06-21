@@ -8,8 +8,11 @@ namespace Catel.MVVM.Views
 {
     using System;
 
-#if NETFX_CORE
+#if NETFX_CORE && WIN80
     using LoadedEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
+    using LayoutUpdatedEventArgs = System.Object;
+#elif NETFX_CORE
+    using LoadedEventArgs = System.Object;
     using LayoutUpdatedEventArgs = System.Object;
 #else
     using LoadedEventArgs = System.EventArgs;
