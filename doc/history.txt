@@ -111,6 +111,7 @@ Added/fixed:
 (*) CTL-440 Support nested view models (parent / child relations) when views are in ContentPresenter
 (*) CTL-456 Allow DoubleClickToCommand timeout specific and default to 500ms
 (*) CTL-460 Improve TraceOutputControl so it uses Catel logging system
+(*) CTL-470 Naming conventions should not strip multiple postfixes
 (-) CTL-453 Remove CommandManager code from Command
 (x) CTL-327 ListCollectionView not supported in ChangeNotificationWrapper (causes InvalidCastException)
 (x) CTL-329 VisualStateManager doesn't change state in WP8 in UserControl => introduced option to transfer styles and

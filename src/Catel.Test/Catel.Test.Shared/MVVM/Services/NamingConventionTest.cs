@@ -144,6 +144,17 @@ namespace Catel.Test.Services
 
                 Assert.AreEqual("MyProject.MyAssembly.ViewModels.ExampleViewModel", result);
             }
+
+            [TestMethod]
+            public void ReturnsRightResultForViewEndingWithBothControlAndView()
+            {
+                string viewName = "ExampleControlView";
+                string convention = string.Format("{0}.ViewModels.{1}ViewModel", NamingConvention.Assembly, NamingConvention.ViewName);
+
+                string result = NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", viewName, convention);
+
+                Assert.AreEqual("MyProject.MyAssembly.ViewModels.ExampleControlViewModel", result);
+            }
         }
 
         [TestClass]

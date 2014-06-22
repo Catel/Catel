@@ -296,6 +296,7 @@ namespace Catel.Services
                 {
                     int lastIndex = value.LastIndexOf(postfix, StringComparison.CurrentCultureIgnoreCase);
                     value = value.Remove(lastIndex, postfix.Length);
+                    break;
                 }
             }
 
