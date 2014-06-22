@@ -11,6 +11,7 @@ namespace Catel.Services
     using System;
     using System.Threading.Tasks;
     using System.Windows;
+    using Windows;
 
     public partial class MessageService
     {
@@ -33,9 +34,8 @@ namespace Catel.Services
             {
                 MessageBoxResult result;
                 var messageBoxButton = TranslateMessageButton(button);
-                var messageBoxImage = TranslateMessageImage(icon);
 
-                result = MessageBox.Show(message, caption, messageBoxButton, messageBoxImage);
+                result = MessageBox.Show(message, caption, messageBoxButton);
 
                 tcs.SetResult(TranslateMessageBoxResult(result));
             });
