@@ -4,8 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-
-
 #if SL5
 
 namespace Catel.Services
@@ -29,13 +27,28 @@ namespace Catel.Services
         {
             Argument.IsNotNullOrWhitespace("message", message);
 
-            return new Task<MessageResult>(() =>
-            {
-                var messageBoxButton = TranslateMessageButton(button);
-                var result = MessageBox.Show(message, caption, messageBoxButton);
+            var tcs = new TaskCompletionSource<MessageResult>();
 
-                return TranslateMessageBoxResult(result);
+            _dispatcherService.BeginInvoke(() =>
+            {
+                MessageBoxResult result;
+                var messageBoxButton = TranslateMessageButton(button);
+                var messageBoxImage = TranslateMessageImage(icon);
+
+                var activeWindow = Application.Current.GetActiveWindow();
+                if (activeWindow != null)
+                {
+                    result = MessageBox.Show(activeWindow, message, caption, messageBoxButton, messageBoxImage);
+                }
+                else
+                {
+                    result = MessageBox.Show(message, caption, messageBoxButton, messageBoxImage);
+                }
+
+                tcs.SetResult(TranslateMessageBoxResult(result));
             });
+
+            return tcs.Task;
         }
     }
 }
