@@ -35,15 +35,7 @@ namespace Catel.Services
                 var messageBoxButton = TranslateMessageButton(button);
                 var messageBoxImage = TranslateMessageImage(icon);
 
-                var activeWindow = Application.Current.GetActiveWindow();
-                if (activeWindow != null)
-                {
-                    result = MessageBox.Show(activeWindow, message, caption, messageBoxButton, messageBoxImage);
-                }
-                else
-                {
-                    result = MessageBox.Show(message, caption, messageBoxButton, messageBoxImage);
-                }
+                result = MessageBox.Show(message, caption, messageBoxButton, messageBoxImage);
 
                 tcs.SetResult(TranslateMessageBoxResult(result));
             });
