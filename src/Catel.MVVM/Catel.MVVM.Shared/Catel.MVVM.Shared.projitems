@@ -55,6 +55,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\BooleanToTextConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\CollectionToCountConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\CollectionToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\ColorToBrushConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\ContainsItemsConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\CountVisibilityConverter.cs" />
