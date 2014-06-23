@@ -23,24 +23,48 @@ namespace Catel.Windows.Controls
     public enum LoadTabItemsBehavior
     {
         /// <summary>
-        /// Loads the current tab and unloads the others.
+        /// Load all tabs using lazy loading, but keeps the tabs in memory afterwards.
         /// </summary>
-        SingleUnloadOthers,
+        LazyLoading,
 
         /// <summary>
-        /// Load the current tab.
+        /// Load all tabs using lazy loading. As soon as a tab is loaded, all other loaded tabs will be unloaded.
         /// </summary>
-        Single,
+        LazyLoadingUnloadOthers,
 
         /// <summary>
-        /// Load all when a tab is used for the first time.
+        /// Load all tabs as soon as the tab control is loaded.
         /// </summary>
-        AllOnFirstUse,
+        EagerLoading,
 
         /// <summary>
-        /// Load all as soon as the control is loaded.
+        /// Load all tabs when any of the tabs is used for the first time.
         /// </summary>
-        AllOnStartUp,
+        EagerLoadingOnFirstUse,
+
+        /// <summary>
+        /// Obsolete, use <see cref="LazyLoading"/> instead.
+        /// </summary>
+        [ObsoleteEx(Replacement = "LazyLoading", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
+        Single = LazyLoading,
+
+        /// <summary>
+        /// Obsolete, use <see cref="LazyLoadingUnloadOthers"/> instead.
+        /// </summary>
+        [ObsoleteEx(Replacement = "LazyLoadingUnloadOthers", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
+        SingleUnloadOthers = LazyLoadingUnloadOthers,
+
+        /// <summary>
+        /// Obsolete, use <see cref="EagerLoading"/> instead.
+        /// </summary>
+        [ObsoleteEx(Replacement = "EagerLoading", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
+        AllOnStartUp = EagerLoading,
+
+        /// <summary>
+        /// Obsolete, use <see cref="EagerLoadingOnFirstUse"/> instead.
+        /// </summary>
+        [ObsoleteEx(Replacement = "EagerLoadingOnFirstUse", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
+        AllOnFirstUse = EagerLoadingOnFirstUse
     }
 
     /// <summary>
@@ -125,7 +149,7 @@ namespace Catel.Windows.Controls
         /// <summary>
         /// Gets or sets the load tab items.
         /// <para />
-        /// The default value is <see cref="LoadTabItemsBehavior.Single"/>.
+        /// The default value is <see cref="LoadTabItemsBehavior.LazyLoading"/>.
         /// </summary>
         /// <value>
         /// The load tab items.
@@ -140,7 +164,7 @@ namespace Catel.Windows.Controls
         /// Dependency property registration for the <see cref="LoadTabItems"/> property.
         /// </summary>
         public static readonly DependencyProperty LoadTabItemsProperty = DependencyProperty.Register("LoadTabItems",
-            typeof(LoadTabItemsBehavior), typeof(TabControl), new PropertyMetadata(LoadTabItemsBehavior.Single));
+            typeof(LoadTabItemsBehavior), typeof(TabControl), new PropertyMetadata(LoadTabItemsBehavior.LazyLoading));
 
         /// <summary>
         /// Called when the tab control is loaded.
@@ -151,7 +175,7 @@ namespace Catel.Windows.Controls
         {
             Loaded -= OnTabControlLoaded;
 
-            if (LoadTabItems == LoadTabItemsBehavior.AllOnStartUp)
+            if (LoadTabItems == LoadTabItemsBehavior.EagerLoading)
             {
                 UpdateItems();
             }
@@ -251,19 +275,19 @@ namespace Catel.Windows.Controls
 
             var selectedTabItem = GetSelectedTabItem();
             IEnumerable source = null;
-            var unvisible = Visibility.Hidden;
+            var invisible = Visibility.Hidden;
 
             switch (LoadTabItems)
             {
-                case LoadTabItemsBehavior.Single:
+                case LoadTabItemsBehavior.LazyLoading:
+                case LoadTabItemsBehavior.LazyLoadingUnloadOthers:
                     source = new[] { selectedTabItem };
                     break;
 
-                case LoadTabItemsBehavior.SingleUnloadOthers:
-                case LoadTabItemsBehavior.AllOnFirstUse:
-                case LoadTabItemsBehavior.AllOnStartUp:
+                case LoadTabItemsBehavior.EagerLoading:
+                case LoadTabItemsBehavior.EagerLoadingOnFirstUse:
                     source = Items;
-                    unvisible = Visibility.Collapsed;
+                    invisible = Visibility.Collapsed;
                     break;
 
                 default:
@@ -297,13 +321,13 @@ namespace Catel.Windows.Controls
                     }
                     else
                     {
-                        if (LoadTabItems == LoadTabItemsBehavior.SingleUnloadOthers)
+                        if (LoadTabItems == LoadTabItemsBehavior.LazyLoadingUnloadOthers)
                         {
                             child.Content = null;
                         }
                         else
                         {
-                            child.Visibility = unvisible;
+                            child.Visibility = invisible;
                         }
                     }
                 }
