@@ -10,6 +10,7 @@ namespace Catel.Windows.Controls
     using System.Linq;
     using System.Windows;
     using MVVM.Views;
+    using Logging;
 
     /// <summary>
     /// Interaction logic for TraceOutputControl.xaml
@@ -39,7 +40,7 @@ namespace Catel.Windows.Controls
         /// <summary>
         /// Gets or sets whether the Catel logging should be ignored.
         /// </summary>
-        [ViewToViewModel(MappingType = ViewToViewModelMappingType.ViewToViewModel)]
+        [ViewToViewModel(MappingType = ViewToViewModelMappingType.TwoWayViewModelWins)]
         public bool IgnoreCatelLogging
         {
             get { return (bool)GetValue(IgnoreCatelLoggingProperty); }
@@ -51,6 +52,37 @@ namespace Catel.Windows.Controls
         /// </summary>
         public static readonly DependencyProperty IgnoreCatelLoggingProperty =
             DependencyProperty.Register("IgnoreCatelLogging", typeof(bool), typeof(TraceOutputControl), new PropertyMetadata(true));
+
+        /// <summary>
+        /// Gets or sets the selected level.
+        /// </summary>
+        /// <value>The selected level.</value>
+        [ViewToViewModel(MappingType = ViewToViewModelMappingType.TwoWayViewModelWins)]
+        public LogEvent SelectedLevel
+        {
+            get { return (LogEvent)GetValue(SelectedLevelProperty); }
+            set { SetValue(SelectedLevelProperty, value); }
+        }
+
+        /// <summary>
+        /// Using a DependencyProperty as the backing store for SelectedLevel.  This enables animation, styling, binding, etc...
+        /// </summary>
+        public static readonly DependencyProperty SelectedLevelProperty =
+            DependencyProperty.Register("SelectedLevel", typeof(LogEvent), typeof(TraceOutputControl), new PropertyMetadata(LogEvent.Debug));
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// Clears all messages from the control.
+        /// </summary>
+        public void Clear()
+        {
+            var vm = ViewModel as TraceOutputViewModel;
+            if (vm != null)
+            {
+                vm.ClearOutput.Execute();
+            }
+        }
         #endregion
     }
 }
