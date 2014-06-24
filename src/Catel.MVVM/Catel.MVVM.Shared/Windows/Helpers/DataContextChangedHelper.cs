@@ -45,6 +45,11 @@ namespace Catel.Windows
         /// <param name="e">Property change details.</param>
         private static void OnInheritedDataContextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
+            if (ObjectHelper.AreEqualReferences(e.OldValue, e.NewValue))
+            {
+                return;
+            }
+
             var handler = d.GetValue(DataContextChangedHandlerProperty) as DependencyPropertyChangedEventHandler;
             if (handler != null)
             {
