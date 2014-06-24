@@ -16,6 +16,7 @@ namespace Catel.Windows.Controls
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
+    using System.Windows.Markup;
 
     /// <summary>
     /// Load behavior of the tabs in the <see cref="TabControl"/>.
@@ -77,7 +78,8 @@ namespace Catel.Windows.Controls
         /// </summary>
         /// <param name="container">The container.</param>
         /// <param name="content">The content.</param>
-        public TabControlItemData(object container, object content)
+        /// <param name="item">The item.</param>
+        public TabControlItemData(object container, object content, object item)
         {
             Container = container;
             TabItem = container as TabItem;
@@ -87,6 +89,7 @@ namespace Catel.Windows.Controls
             }
 
             Content = content;
+            Item = item;
         }
 
         /// <summary>
@@ -106,6 +109,12 @@ namespace Catel.Windows.Controls
         /// </summary>
         /// <value>The content.</value>
         public object Content { get; private set; }
+
+        /// <summary>
+        /// The item from which it was generated.
+        /// </summary>
+        /// <value>The item.</value>
+        public object Item { get; private set; }
     }
 
     /// <summary>
@@ -164,7 +173,22 @@ namespace Catel.Windows.Controls
         /// Dependency property registration for the <see cref="LoadTabItems"/> property.
         /// </summary>
         public static readonly DependencyProperty LoadTabItemsProperty = DependencyProperty.Register("LoadTabItems",
-            typeof(LoadTabItemsBehavior), typeof(TabControl), new PropertyMetadata(LoadTabItemsBehavior.LazyLoading));
+            typeof(LoadTabItemsBehavior), typeof(TabControl), new PropertyMetadata(LoadTabItemsBehavior.LazyLoading,
+                (sender, e) => ((TabControl)sender).OnLoadTabItemsChanged()));
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this tab control uses any of the lazy loading options.
+        /// </summary>
+        /// <value><c>true</c> if this instance is lazy loading; otherwise, <c>false</c>.</value>
+        public bool IsLazyLoading
+        {
+            get
+            {
+                var loadTabItems = LoadTabItems;
+
+                return loadTabItems == LoadTabItemsBehavior.LazyLoading || loadTabItems == LoadTabItemsBehavior.LazyLoadingUnloadOthers;
+            }
+        }
 
         /// <summary>
         /// Called when the tab control is loaded.
@@ -208,6 +232,25 @@ namespace Catel.Windows.Controls
             UpdateItems();
         }
 
+        private void OnLoadTabItemsChanged()
+        {
+            if (!IsLazyLoading)
+            {
+                // Load all items now by setting the content
+                foreach (ContentPresenter child in _itemsHolder.Children)
+                {
+                    var tabControlItemData = child.Tag as TabControlItemData;
+                    if (tabControlItemData != null)
+                    {
+                        if (child.Content == null)
+                        {
+                            child.Content = tabControlItemData.Content;
+                        }
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// When the items change we remove any generated panel children and add any new ones as necessary
         /// </summary>
@@ -233,7 +276,7 @@ namespace Catel.Windows.Controls
                     {
                         foreach (var item in e.OldItems)
                         {
-                            ContentPresenter cp = FindChildContentPresenter(item);
+                            var cp = FindChildContentPresenter(item);
                             if (cp != null)
                             {
                                 _itemsHolder.Children.Remove(cp);
@@ -273,30 +316,8 @@ namespace Catel.Windows.Controls
                 return;
             }
 
-            var selectedTabItem = GetSelectedTabItem();
-            IEnumerable source = null;
-            var invisible = Visibility.Hidden;
-
-            switch (LoadTabItems)
+            foreach (var item in Items)
             {
-                case LoadTabItemsBehavior.LazyLoading:
-                case LoadTabItemsBehavior.LazyLoadingUnloadOthers:
-                    source = new[] { selectedTabItem };
-                    break;
-
-                case LoadTabItemsBehavior.EagerLoading:
-                case LoadTabItemsBehavior.EagerLoadingOnFirstUse:
-                    source = Items;
-                    invisible = Visibility.Collapsed;
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-            foreach (var item in source)
-            {
-                // Generate a ContentPresenter if necessary
                 if (item != null)
                 {
                     CreateChildContentPresenter(item);
@@ -325,10 +346,8 @@ namespace Catel.Windows.Controls
                         {
                             child.Content = null;
                         }
-                        else
-                        {
-                            child.Visibility = invisible;
-                        }
+
+                        child.Visibility = Visibility.Hidden;
                     }
                 }
             }
@@ -338,18 +357,17 @@ namespace Catel.Windows.Controls
         /// Create the child ContentPresenter for the given item (could be data or a TabItem)
         /// </summary>
         /// <param name="item">The item.</param>
-        /// <returns></returns>
-        private ContentPresenter CreateChildContentPresenter(object item)
+        private void CreateChildContentPresenter(object item)
         {
             if (item == null)
             {
-                return null;
+                return;
             }
 
             object dummyObject = null;
             if (_wrappedContainers.TryGetValue(item, out dummyObject))
             {
-                return null;
+                return;
             }
 
             _wrappedContainers.Add(item, new object());
@@ -357,7 +375,7 @@ namespace Catel.Windows.Controls
             var cp = FindChildContentPresenter(item);
             if (cp != null)
             {
-                return cp;
+                return;
             }
 
             // the actual child to be added.  cp.Tag is a reference to the TabItem
@@ -365,18 +383,20 @@ namespace Catel.Windows.Controls
 
             var container = GetContentContainer(item);
             var content = GetContent(item);
-            var tabItemData = new TabControlItemData(container, content);
+            var tabItemData = new TabControlItemData(container, content, item);
 
             cp.Tag = tabItemData;
-            cp.Content = content;
+
+            if (!IsLazyLoading)
+            {
+                cp.Content = content;
+            }
+
             cp.ContentTemplate = ContentTemplate;
             cp.ContentTemplateSelector = ContentTemplateSelector;
             cp.ContentStringFormat = SelectedContentStringFormat;
-            cp.Visibility = Visibility.Collapsed;
 
             _itemsHolder.Children.Add(cp);
-
-            return cp;
         }
 
         private object GetContent(object item)
@@ -424,7 +444,13 @@ namespace Catel.Windows.Controls
                 return null;
             }
 
-            return _itemsHolder.Children.Cast<ContentPresenter>().FirstOrDefault(cp => cp.Content == data);
+            var existingCp = _itemsHolder.Children.Cast<ContentPresenter>().FirstOrDefault(cp => ReferenceEquals(((TabControlItemData)cp.Tag).Item, data));
+            if (existingCp != null)
+            {
+                return existingCp;
+            }
+
+            return null;
         }
 
         /// <summary>
