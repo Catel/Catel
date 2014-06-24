@@ -11,11 +11,6 @@ namespace Catel.MVVM
     using Logging;
     using Reflection;
 
-#if NET
-    using System.Reflection;
-#endif
-
-
     /// <summary>
     /// Default implementation of the <see cref="IViewModelFactory"/> which allows custom instantation of view models. This way,
     /// if a view model contains a complex constructor or needs caching, this factory can be used.

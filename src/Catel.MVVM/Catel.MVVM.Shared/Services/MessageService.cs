@@ -8,13 +8,13 @@ namespace Catel.Services
 {
     using System;
     using System.Threading.Tasks;
+
 #if ANDROID
     using Android.App;
 #elif IOS
 
 #elif NETFX_CORE
     using global::Windows.UI.Popups;
-    using global::System.Threading.Tasks;
 #else
     using System.Windows;
     using Windows;

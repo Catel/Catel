@@ -138,7 +138,7 @@ namespace Catel.Windows.Interactivity
         /// <see cref="Behavior{T}.AssociatedObject"/> is unloaded.
         /// <para />
         /// If dependency properties are used, it is very important to use 
-        /// <see cref="DependencyObject.ClearValue(System.Windows.DependencyProperty)"/> to clear the value
+        /// <see cref="DependencyObject.ClearValue(DependencyProperty)"/> to clear the value
         /// of the dependency properties in this method.
         /// </summary>
         protected virtual void Uninitialize()
