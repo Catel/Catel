@@ -162,6 +162,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelToModelMapping.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Attributes\ViewToViewModelAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\EventArgs\ViewLoadEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\EventArgs\ViewStackPartEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Extensions\ViewExtensions.android.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Extensions\ViewExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Extensions\ViewExtensions.dispatching.cs" />
@@ -189,6 +190,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\ViewPropertySelector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\ViewToViewModelMapping.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\ViewToViewModelMappingContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\ViewStack.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\WeakViewInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Phone\PhoneApplicationPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />

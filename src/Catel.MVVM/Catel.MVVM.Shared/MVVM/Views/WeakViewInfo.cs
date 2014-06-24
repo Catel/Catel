@@ -26,33 +26,43 @@ namespace Catel.MVVM.Views
     public class WeakViewInfo
     {
         #region Fields
-        private readonly WeakReference _view;
+        private WeakReference _view;
+
+        private bool _isViewLoadState;
         #endregion
+
 
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="WeakViewInfo"/> class.
         /// </summary>
+        /// <param name="view">The view.</param>
+        /// <param name="isViewLoaded">if set to <c>true</c>, the view is already loaded.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="view"/> is <c>null</c>.</exception>
+        public WeakViewInfo(IView view, bool isViewLoaded = false)
+        {
+            Argument.IsNotNull("view", view);
+
+            Initialize(view, isViewLoaded);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WeakViewInfo" /> class.
+        /// </summary>
         /// <param name="viewLoadState">The view load state.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewLoadState"/> is <c>null</c>.</exception>
-        public WeakViewInfo(IViewLoadState viewLoadState)
+        /// <param name="isViewLoaded">if set to <c>true</c>, the view is already loaded.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewLoadState" /> is <c>null</c>.</exception>
+        public WeakViewInfo(IViewLoadState viewLoadState, bool isViewLoaded = false)
         {
             Argument.IsNotNull("viewLoadState", viewLoadState);
 
-            _view = new WeakReference(viewLoadState);
-
-            this.SubscribeToWeakGenericEvent<LoadedEventArgs>(viewLoadState, "Loaded", OnLoaded);
-            this.SubscribeToWeakGenericEvent<LoadedEventArgs>(viewLoadState, "Unloaded", OnUnloaded);
-
-#if !NET && !XAMARIN
-            this.SubscribeToWeakGenericEvent<LayoutUpdatedEventArgs>(viewLoadState.View, "LayoutUpdated", OnLayoutUpdated);
-#endif
+            Initialize(viewLoadState, isViewLoaded);
         }
         #endregion
 
         #region Properties
         /// <summary>
-        /// Gets a value indicating whether the link to the <see cref="View"/> is alive.
+        /// Gets a value indicating whether the link to the <see cref="IView"/> is alive.
         /// </summary>
         /// <value><c>true</c> if the link is alive; otherwise, <c>false</c>.</value>
         public bool IsAlive
@@ -68,13 +78,18 @@ namespace Catel.MVVM.Views
         {
             get
             {
-                var viewLoadState = _view.Target as IViewLoadState;
-                if (viewLoadState != null)
+                if (_isViewLoadState)
                 {
-                    return viewLoadState.View;
+                    var viewLoadState = _view.Target as IViewLoadState;
+                    if (viewLoadState != null)
+                    {
+                        return viewLoadState.View;
+                    }
+
+                    return null;
                 }
 
-                return null;
+                return _view.Target as IView;
             }
         }
 
@@ -96,7 +111,7 @@ namespace Catel.MVVM.Views
         /// </summary>
         public event EventHandler<EventArgs> Unloaded;
 
-#if !NET && !XAMARIN
+#if SILVERLIGHT
         /// <summary>
         /// Occurs when the view layout is updated.
         /// </summary>
@@ -105,12 +120,64 @@ namespace Catel.MVVM.Views
         #endregion
 
         #region Methods
+        private void Initialize(object viewObject, bool isViewLoaded)
+        {
+            _view = new WeakReference(viewObject);
+            _isViewLoadState = true;
+
+            IsLoaded = isViewLoaded;
+            _isViewLoadState = viewObject is IViewLoadState;
+
+            this.SubscribeToWeakGenericEvent<LoadedEventArgs>(viewObject, "Loaded", OnViewLoadStateLoaded);
+            this.SubscribeToWeakGenericEvent<LoadedEventArgs>(viewObject, "Unloaded", OnViewLoadStateUnloaded);
+
+#if SILVERLIGHT
+            var view = View;
+            this.SubscribeToWeakGenericEvent<LayoutUpdatedEventArgs>(view, "LayoutUpdated", OnLayoutUpdated);
+#endif
+        }
+
         /// <summary>
         /// Called when the view is loaded.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
-        public void OnLoaded(object sender, LoadedEventArgs e)
+        public void OnViewLoaded(object sender, EventArgs e)
+        {
+            OnLoaded();
+        }
+
+        /// <summary>
+        /// Called when the view is unloaded.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
+        public void OnViewUnloaded(object sender, EventArgs e)
+        {
+            OnUnloaded();
+        }
+
+        /// <summary>
+        /// Called when the view is loaded.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
+        public void OnViewLoadStateLoaded(object sender, LoadedEventArgs e)
+        {
+            OnLoaded();
+        }
+
+        /// <summary>
+        /// Called when the view is unloaded.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
+        public void OnViewLoadStateUnloaded(object sender, LoadedEventArgs e)
+        {
+            OnUnloaded();
+        }
+
+        private void OnLoaded()
         {
             if (IsLoaded)
             {
@@ -126,12 +193,7 @@ namespace Catel.MVVM.Views
             }
         }
 
-        /// <summary>
-        /// Called when the view is unloaded.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
-        public void OnUnloaded(object sender, LoadedEventArgs e)
+        private void OnUnloaded()
         {
             if (!IsLoaded)
             {
@@ -146,8 +208,8 @@ namespace Catel.MVVM.Views
                 unloaded(this, EventArgs.Empty);
             }
         }
-         
-#if !NET && !XAMARIN
+
+#if SILVERLIGHT
         /// <summary>
         /// Called when the view layout is updated.
         /// </summary>

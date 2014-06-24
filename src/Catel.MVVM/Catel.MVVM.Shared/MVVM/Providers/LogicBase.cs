@@ -173,7 +173,6 @@ namespace Catel.MVVM.Providers
                 return;
             }
 
-            // Use a weak event for loading to prevent memory leaks
             ViewLoadManager.AddView(this);
             this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewLoading", OnViewLoadedManagerLoading);
             this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewLoaded", OnViewLoadedManagerLoaded);
