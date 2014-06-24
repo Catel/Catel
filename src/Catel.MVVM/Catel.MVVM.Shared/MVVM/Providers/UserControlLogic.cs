@@ -453,6 +453,11 @@ namespace Catel.MVVM.Providers
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         public override void OnTargetViewDataContextChanged(object sender, EventArgs e)
         {
+            if (!IsTargetViewLoaded && !IsLoading)
+            {
+                return;
+            }
+
             // Fix in WinRT to make sure inner grid is created
             CreateViewModelWrapper();
 
