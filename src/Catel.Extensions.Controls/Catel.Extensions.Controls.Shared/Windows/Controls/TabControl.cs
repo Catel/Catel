@@ -236,15 +236,18 @@ namespace Catel.Windows.Controls
         {
             if (!IsLazyLoading)
             {
-                // Load all items now by setting the content
-                foreach (ContentPresenter child in _itemsHolder.Children)
+                if (_itemsHolder != null)
                 {
-                    var tabControlItemData = child.Tag as TabControlItemData;
-                    if (tabControlItemData != null)
+                    // Load all items now by setting the content
+                    foreach (ContentPresenter child in _itemsHolder.Children)
                     {
-                        if (child.Content == null)
+                        var tabControlItemData = child.Tag as TabControlItemData;
+                        if (tabControlItemData != null)
                         {
-                            child.Content = tabControlItemData.Content;
+                            if (child.Content == null)
+                            {
+                                child.Content = tabControlItemData.Content;
+                            }
                         }
                     }
                 }
