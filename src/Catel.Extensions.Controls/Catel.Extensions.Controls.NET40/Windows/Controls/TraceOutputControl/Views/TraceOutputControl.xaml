@@ -103,7 +103,7 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn Width="Auto">
+                    <GridViewColumn Width="600">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Message}" FontFamily="Courier New" />
