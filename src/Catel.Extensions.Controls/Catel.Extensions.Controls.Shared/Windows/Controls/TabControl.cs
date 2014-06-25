@@ -9,14 +9,15 @@
 namespace Catel.Windows.Controls
 {
     using System;
-    using System.Collections;
     using System.Collections.Specialized;
     using System.Linq;
     using System.Runtime.CompilerServices;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
-    using System.Windows.Markup;
+    using Data;
+    using System.Collections.Generic;
+    using Threading;
 
     /// <summary>
     /// Load behavior of the tabs in the <see cref="TabControl"/>.
@@ -78,17 +79,20 @@ namespace Catel.Windows.Controls
         /// </summary>
         /// <param name="container">The container.</param>
         /// <param name="content">The content.</param>
+        /// <param name="contentTemplate">The content template.</param>
         /// <param name="item">The item.</param>
-        public TabControlItemData(object container, object content, object item)
+        public TabControlItemData(object container, object content, DataTemplate contentTemplate, object item)
         {
             Container = container;
             TabItem = container as TabItem;
             if (TabItem != null)
             {
                 TabItem.Content = null;
+                TabItem.ContentTemplate = null;
             }
 
             Content = content;
+            ContentTemplate = contentTemplate;
             Item = item;
         }
 
@@ -109,6 +113,12 @@ namespace Catel.Windows.Controls
         /// </summary>
         /// <value>The content.</value>
         public object Content { get; private set; }
+
+        /// <summary>
+        /// Gets the content template.
+        /// </summary>
+        /// <value>The content.</value>
+        public DataTemplate ContentTemplate { get; private set; }
 
         /// <summary>
         /// The item from which it was generated.
@@ -153,6 +163,8 @@ namespace Catel.Windows.Controls
 #if SL5
             DefaultStyleKey = typeof (TabControl);
 #endif
+
+            this.SubscribeToDependencyProperty("SelectedItem", OnSelectedItemChanged);
         }
 
         /// <summary>
@@ -185,7 +197,6 @@ namespace Catel.Windows.Controls
             get
             {
                 var loadTabItems = LoadTabItems;
-
                 return loadTabItems == LoadTabItemsBehavior.LazyLoading || loadTabItems == LoadTabItemsBehavior.LazyLoadingUnloadOthers;
             }
         }
@@ -199,10 +210,7 @@ namespace Catel.Windows.Controls
         {
             Loaded -= OnTabControlLoaded;
 
-            if (LoadTabItems == LoadTabItemsBehavior.EagerLoading)
-            {
-                UpdateItems();
-            }
+            InitializeItems();
         }
 
         /// <summary>
@@ -216,7 +224,7 @@ namespace Catel.Windows.Controls
             {
                 ItemContainerGenerator.StatusChanged -= OnItemContainerGeneratorStatusChanged;
 
-                UpdateItems();
+                InitializeItems();
             }
         }
 
@@ -229,29 +237,12 @@ namespace Catel.Windows.Controls
 
             _itemsHolder = GetTemplateChild("PART_ItemsHolder") as Panel;
 
-            UpdateItems();
+            InitializeItems();
         }
 
         private void OnLoadTabItemsChanged()
         {
-            if (!IsLazyLoading)
-            {
-                if (_itemsHolder != null)
-                {
-                    // Load all items now by setting the content
-                    foreach (ContentPresenter child in _itemsHolder.Children)
-                    {
-                        var tabControlItemData = child.Tag as TabControlItemData;
-                        if (tabControlItemData != null)
-                        {
-                            if (child.Content == null)
-                            {
-                                child.Content = tabControlItemData.Content;
-                            }
-                        }
-                    }
-                }
-            }
+            InitializeItems();
         }
 
         /// <summary>
@@ -289,37 +280,34 @@ namespace Catel.Windows.Controls
 
                     // don't do anything with new items because we don't want to
                     // create visuals that aren't being shown
-
-                    UpdateItems();
                     break;
 
                 case NotifyCollectionChangedAction.Replace:
                     throw new NotImplementedException("Replace not implemented yet");
             }
+
+            InitializeItems();
         }
 
-        /// <summary>
-        /// Update the visible child in the ItemsHolder.
-        /// </summary>
-        /// <param name="e"></param>
-        protected override void OnSelectionChanged(SelectionChangedEventArgs e)
+        private void OnSelectedItemChanged(object sender, DependencyPropertyValueChangedEventArgs e)
         {
-            base.OnSelectionChanged(e);
-
             UpdateItems();
         }
 
-        /// <summary>
-        /// Generate a ContentPresenter for every item.
-        /// </summary>
-        private void UpdateItems()
+        private void InitializeItems()
         {
             if (_itemsHolder == null)
             {
                 return;
             }
 
-            foreach (var item in Items)
+            var items = Items;
+            if (items == null)
+            {
+                return;
+            }
+
+            foreach (var item in items)
             {
                 if (item != null)
                 {
@@ -327,7 +315,85 @@ namespace Catel.Windows.Controls
                 }
             }
 
-            // Show the right child
+            var loadAllItems = (LoadTabItems == LoadTabItemsBehavior.AllOnStartUp) || (IsLoaded && !IsLazyLoading);
+            if (loadAllItems)
+            {
+                foreach (ContentPresenter child in _itemsHolder.Children)
+                {
+                    var tabControlItemData = child.Tag as TabControlItemData;
+                    if (tabControlItemData != null)
+                    {
+                        var tabItem = tabControlItemData.TabItem;
+                        if (tabItem != null)
+                        {
+                            ShowChildContent(child, tabControlItemData);
+
+                            // Collapsed is hidden + not loaded
+                            child.Visibility = Visibility.Collapsed;
+
+                            if (LoadTabItems == LoadTabItemsBehavior.EagerLoading)
+                            {
+                                EagerLoadAllTabs();
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (SelectedItem != null)
+            {
+                UpdateItems();
+            }
+        }
+
+        private void EagerLoadAllTabs()
+        {
+            if (_itemsHolder == null)
+            {
+                return;
+            }
+
+            foreach (ContentPresenter child in _itemsHolder.Children)
+            {
+                var tabControlItemData = child.Tag as TabControlItemData;
+                if (tabControlItemData != null)
+                {
+                    var tabItem = tabControlItemData.TabItem;
+                    if (tabItem != null)
+                    {
+                        ShowChildContent(child, tabControlItemData);
+                    }
+                }
+
+                // Always start invisible, the selection will take care of visibility
+                child.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void UpdateItems()
+        {
+            if (_itemsHolder == null)
+            {
+                return;
+            }
+
+            var items = Items;
+            if (items == null)
+            {
+                return;
+            }
+
+            if (SelectedItem != null)
+            {
+                if (!IsLazyLoading)
+                {
+                    EagerLoadAllTabs();
+                }
+            }
+
+            // Show the right child first (to prevent flickering)
+            var itemsToHide = new List<ContentPresenter>();
+
             foreach (ContentPresenter child in _itemsHolder.Children)
             {
                 var tabControlItemData = child.Tag as TabControlItemData;
@@ -338,20 +404,29 @@ namespace Catel.Windows.Controls
                     {
                         if (child.Content == null)
                         {
-                            child.Content = tabControlItemData.Content;
+                            ShowChildContent(child, tabControlItemData);
                         }
 
                         child.Visibility = Visibility.Visible;
                     }
                     else
                     {
-                        if (LoadTabItems == LoadTabItemsBehavior.LazyLoadingUnloadOthers)
-                        {
-                            child.Content = null;
-                        }
-
-                        child.Visibility = Visibility.Hidden;
+                        itemsToHide.Add(child);
                     }
+                }
+            }
+
+            // Now hide so we have prevented flickering
+            foreach (var itemToHide in itemsToHide)
+            {
+                var child = itemToHide;
+
+                // Note: hidden, not collapsed otherwise items will not be loaded
+                child.Visibility = Visibility.Hidden;
+
+                if (LoadTabItems == LoadTabItemsBehavior.LazyLoadingUnloadOthers)
+                {
+                    HideChildContent(child);
                 }
             }
         }
@@ -386,16 +461,16 @@ namespace Catel.Windows.Controls
 
             var container = GetContentContainer(item);
             var content = GetContent(item);
-            var tabItemData = new TabControlItemData(container, content, item);
+
+            var tabItemData = new TabControlItemData(container, content, ContentTemplate, item);
 
             cp.Tag = tabItemData;
 
             if (!IsLazyLoading)
             {
-                cp.Content = content;
+                ShowChildContent(cp, tabItemData);
             }
 
-            cp.ContentTemplate = ContentTemplate;
             cp.ContentTemplateSelector = ContentTemplateSelector;
             cp.ContentStringFormat = SelectedContentStringFormat;
 
@@ -422,6 +497,25 @@ namespace Catel.Windows.Controls
             }
 
             return ItemContainerGenerator.ContainerFromItem(item);
+        }
+
+        private void ShowChildContent(ContentPresenter child, TabControlItemData tabControlItemData)
+        {
+            if (child.Content == null)
+            {
+                child.Content = tabControlItemData.Content;
+            }
+
+            if (child.ContentTemplate == null)
+            {
+                child.ContentTemplate = tabControlItemData.ContentTemplate;
+            }
+        }
+
+        private void HideChildContent(ContentPresenter child)
+        {
+            child.Content = null;
+            child.ContentTemplate = null;
         }
 
         /// <summary>
