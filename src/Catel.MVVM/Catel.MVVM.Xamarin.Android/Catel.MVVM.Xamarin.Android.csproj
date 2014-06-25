@@ -39,6 +39,10 @@
     <DocumentationFile>..\..\..\output\release\Xamarin.Android\Catel.MVVM\Catel.MVVM.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Catel.Fody.Attributes, Version=2.2.0.0, Culture=neutral, PublicKeyToken=1c8163524cbe02e6, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Catel.Fody.2.2.0-Unstable0007\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
     <Reference Include="Obsolete">
@@ -61,16 +65,16 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Catel.Core\Catel.Core.Xamarin.Android\Catel.Core.Xamarin.Android.csproj">
-      <Project>{f8073034-ce6c-41ad-9852-7aeece9536cc}</Project>
-      <Name>Catel.Core.Xamarin.Android</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Catel.Core\Catel.Core.Xamarin.Android\Catel.Core.Xamarin.Android.csproj">
+      <Project>{f8073034-ce6c-41ad-9852-7aeece9536cc}</Project>
+      <Name>Catel.Core.Xamarin.Android</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
