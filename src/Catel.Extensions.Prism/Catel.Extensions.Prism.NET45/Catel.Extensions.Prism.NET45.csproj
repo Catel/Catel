@@ -36,6 +36,9 @@
     <DocumentationFile>..\..\..\output\release\NET45\Catel.Extensions.Prism\Catel.Extensions.Prism.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Catel.Fody.Attributes">
+      <HintPath>..\..\..\lib\Catel.Fody.2.2.0-Unstable0008\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Expression.Interactions">
       <HintPath>..\..\..\lib\Prism.4.1.0.0\lib\NET40\Microsoft.Expression.Interactions.dll</HintPath>
     </Reference>

@@ -52,6 +52,9 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Catel.Fody.Attributes">
+      <HintPath>..\..\..\lib\Catel.Fody.2.2.0-Unstable0008\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
+    </Reference>
     <Reference Include="FluentValidation, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\FluentValidation.5.1.0.0\lib\portable-win+net40+sl50+wp80\FluentValidation.dll</HintPath>

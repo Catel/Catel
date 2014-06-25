@@ -37,6 +37,9 @@
     <DocumentationFile>..\..\..\output\release\NET40\Catel.Extensions.CSLA\Catel.Extensions.CSLA.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Catel.Fody.Attributes">
+      <HintPath>..\..\..\lib\Catel.Fody.2.2.0-Unstable0008\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
+    </Reference>
     <Reference Include="Csla, Version=4.5.501.0, Culture=neutral, PublicKeyToken=93be5fdc093e4c30, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\CSLA-Core.4.5.501\lib\net40\Csla.dll</HintPath>
