@@ -21,7 +21,8 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:InfoBarMessageControl">
-                    <Grid x:Name="rootGrid" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
+                    <Grid x:Name="rootGrid" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}"
+                          HorizontalAlignment="{TemplateBinding HorizontalAlignment}" VerticalAlignment="{TemplateBinding VerticalAlignment}">
 
                         <Grid>
                             <Grid.RowDefinitions>
