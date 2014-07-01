@@ -31,11 +31,17 @@
                             </Grid.RowDefinitions>
 
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            
+
                             <!-- Actual content -->
-                            <ContentPresenter Grid.Row="1" x:Name="contentPresenter" />
+                            <ContentPresenter Grid.Row="1" x:Name="contentPresenter" 
+                                              Margin="{TemplateBinding Padding}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              Content="{TemplateBinding Content}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              Cursor="{TemplateBinding Cursor}" />
 
                             <!-- Message bar, by default in-line (Grid.Row = 0) -->
                             <StackPanel Grid.Row="0" x:Name="PART_MessageBar"
@@ -80,8 +86,9 @@
                             </behaviors:Popup.PreferredOrientations>
 
                             <Grid Background="{StaticResource InfoBarMessageErrorTextBackgroundBrush}"
-								  DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
-                                
+								  DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                                  HorizontalAlignment="{TemplateBinding HorizontalAlignment}" VerticalAlignment="{TemplateBinding VerticalAlignment}">
+
                                 <!-- Column definitions -->
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
@@ -93,7 +100,7 @@
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
-                                
+
                                 <!-- List of errors -->
                                 <ItemsControl Grid.Row="0" Grid.Column="0" ItemsSource="{Binding ErrorMessageCollection}" VerticalAlignment="Top"
 											  Visibility="{Binding ErrorMessageCollection.Count, Converter={StaticResource CountCollapsedConverter}}">
