@@ -990,6 +990,66 @@ namespace Catel.Data
                 RaisePropertyChanged("HasWarnings");
             }
         }
+
+        /// <summary>
+        /// Gets the current business warnings.
+        /// </summary>
+        /// <returns>The warnings or <see cref="string.Empty"/> if no warning is available.</returns>
+        protected virtual string GetBusinessRuleWarnings()
+        {
+            var warning = (from businessRuleWarning in ValidationContext.GetBusinessRuleWarnings()
+                           select businessRuleWarning.Message).FirstOrDefault();
+
+            return warning ?? string.Empty;
+        }
+        
+        /// <summary>
+        /// Gets the warnings for a specific column.
+        /// </summary>
+        /// <param name="columnName">Column name.</param>
+        /// <returns>The warnings or <see cref="string.Empty"/> if no warning is available.</returns>
+        protected virtual string GetFieldWarnings(string columnName)
+        {
+            if (string.IsNullOrEmpty(columnName))
+            {
+                return string.Empty;
+            }
+
+            var warning = (from fieldWarning in ValidationContext.GetFieldWarnings(columnName)
+                           select fieldWarning.Message).FirstOrDefault();
+
+            return warning ?? string.Empty;
+        }
+
+        /// <summary>
+        /// Gets the current errors errors.
+        /// </summary>
+        /// <returns>The errors or <see cref="string.Empty"/> if no error is available.</returns>
+        protected virtual string GetBusinessRuleErrors()
+        {
+            var error = (from businessRuleError in ValidationContext.GetBusinessRuleErrors()
+                         select businessRuleError.Message).FirstOrDefault();
+
+            return error ?? string.Empty;
+        }
+
+        /// <summary>
+        /// Gets the errors for a specific column.
+        /// </summary>
+        /// <param name="columnName">Column name.</param>
+        /// <returns>The errors or <see cref="string.Empty"/> if no error is available.</returns>
+        protected virtual string GetFieldErrors(string columnName)
+        {
+            if (string.IsNullOrEmpty(columnName))
+            {
+                return string.Empty;
+            }
+
+            var error = (from fieldError in ValidationContext.GetFieldErrors(columnName)
+                         select fieldError.Message).FirstOrDefault();
+
+            return error ?? string.Empty;
+        }
         #endregion
 
         #region IDataWarningInfo Members
@@ -1010,10 +1070,7 @@ namespace Catel.Data
                     Validate();
                 }
 
-                var warning = (from businessRuleWarning in ValidationContext.GetBusinessRuleWarnings()
-                               select businessRuleWarning.Message).FirstOrDefault();
-
-                return warning ?? string.Empty;
+                return this.GetBusinessRuleWarnings();
             }
         }
 
@@ -1041,10 +1098,7 @@ namespace Catel.Data
                     Validate();
                 }
 
-                var warning = (from fieldWarning in ValidationContext.GetFieldWarnings(columnName)
-                               select fieldWarning.Message).FirstOrDefault();
-
-                return warning ?? string.Empty;
+                return this.GetFieldWarnings(columnName);
             }
         }
         #endregion
@@ -1067,10 +1121,7 @@ namespace Catel.Data
                     Validate();
                 }
 
-                var error = (from businessRuleError in ValidationContext.GetBusinessRuleErrors()
-                             select businessRuleError.Message).FirstOrDefault();
-
-                return error ?? string.Empty;
+                return this.GetBusinessRuleErrors();
             }
         }
 
@@ -1098,10 +1149,7 @@ namespace Catel.Data
                     Validate();
                 }
 
-                var error = (from fieldError in ValidationContext.GetFieldErrors(columnName)
-                             select fieldError.Message).FirstOrDefault();
-
-                return error ?? string.Empty;
+                return this.GetFieldErrors(columnName);
             }
         }
         #endregion
