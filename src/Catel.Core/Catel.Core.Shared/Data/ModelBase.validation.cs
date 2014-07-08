@@ -1070,7 +1070,7 @@ namespace Catel.Data
                     Validate();
                 }
 
-                return this.GetBusinessRuleWarnings();
+                return GetBusinessRuleWarnings() ?? string.Empty;
             }
         }
 
@@ -1098,7 +1098,7 @@ namespace Catel.Data
                     Validate();
                 }
 
-                return this.GetFieldWarnings(columnName);
+                return GetFieldWarnings(columnName) ?? string.Empty;
             }
         }
         #endregion
@@ -1121,7 +1121,7 @@ namespace Catel.Data
                     Validate();
                 }
 
-                return this.GetBusinessRuleErrors();
+                return GetBusinessRuleErrors() ?? string.Empty;
             }
         }
 
@@ -1149,7 +1149,7 @@ namespace Catel.Data
                     Validate();
                 }
 
-                return this.GetFieldErrors(columnName);
+                return GetFieldErrors(columnName) ?? string.Empty;
             }
         }
         #endregion
