@@ -114,6 +114,7 @@ Added/fixed:
 (*) CTL-470 Naming conventions should not strip multiple postfixes
 (*) CTL-473 Improve the way loaded views are handled
 (*) CTL-479 Make IDataErrorInfo/IDataWarningInfo methods customizable in ModelBase
+(*) CTL-481 Share lock for ServiceLocator / TypeFactory / DependencyResolver to prevent memory leaks
 (-) CTL-453 Remove CommandManager code from Command
 (x) CTL-327 ListCollectionView not supported in ChangeNotificationWrapper (causes InvalidCastException)
 (x) CTL-329 VisualStateManager doesn't change state in WP8 in UserControl => introduced option to transfer styles and

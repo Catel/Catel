@@ -24,7 +24,7 @@ namespace Catel.IoC
         #region Constants
         private static Func<IServiceLocator> _createServiceLocatorFunc;
         private static Func<IServiceLocator, IDependencyResolver> _createDependencyResolverFunc;
-        private static Func<IDependencyResolver, ITypeFactory> _createTypeFactoryFunc;
+        private static Func<IServiceLocator, ITypeFactory> _createTypeFactoryFunc;
 
         private static List<Type> _serviceLocatorInitializers = new List<Type>(); 
         #endregion
@@ -37,7 +37,7 @@ namespace Catel.IoC
         {
             CreateServiceLocatorFunc = () => new ServiceLocator();
             CreateDependencyResolverFunc = serviceLocator => new CatelDependencyResolver(serviceLocator);
-            CreateTypeFactoryFunc = dependencyResolver => new TypeFactory(dependencyResolver);
+            CreateTypeFactoryFunc = serviceLocator => new TypeFactory(serviceLocator);
 
             TypeCache.AssemblyLoaded += OnAssemblyLoaded;
         }
@@ -96,7 +96,7 @@ namespace Catel.IoC
         /// Gets or sets the create default service locator function.
         /// </summary>
         /// <value>The create default service locator function.</value>
-        public static Func<IDependencyResolver, ITypeFactory> CreateTypeFactoryFunc
+        public static Func<IServiceLocator, ITypeFactory> CreateTypeFactoryFunc
         {
             get
             {
@@ -148,24 +148,31 @@ namespace Catel.IoC
                     throw new Exception(error);
                 }
 
-                var dependencyResolver = CreateDependencyResolverFunc(serviceLocator);
-                if (dependencyResolver == null)
+                if (!serviceLocator.IsTypeRegistered<IDependencyResolver>())
                 {
-                    string error = string.Format("Failed to create the IDependencyResolver instance using the factory method");
-                    Log.Error(error);
-                    throw new Exception(error);
+                    var dependencyResolver = CreateDependencyResolverFunc(serviceLocator);
+                    if (dependencyResolver == null)
+                    {
+                        string error = string.Format("Failed to create the IDependencyResolver instance using the factory method");
+                        Log.Error(error);
+                        throw new Exception(error);
+                    }
+
+                    serviceLocator.RegisterInstance(typeof(IDependencyResolver), dependencyResolver);
                 }
 
-                var typeFactory = CreateTypeFactoryFunc(dependencyResolver);
-                if (typeFactory == null)
+                if (!serviceLocator.IsTypeRegistered<ITypeFactory>())
                 {
-                    string error = string.Format("Failed to create the ITypeFactory instance using the factory method");
-                    Log.Error(error);
-                    throw new Exception(error);
-                }
+                    var typeFactory = CreateTypeFactoryFunc(serviceLocator);
+                    if (typeFactory == null)
+                    {
+                        string error = string.Format("Failed to create the ITypeFactory instance using the factory method");
+                        Log.Error(error);
+                        throw new Exception(error);
+                    }
 
-                serviceLocator.RegisterInstance(typeof (IDependencyResolver), dependencyResolver);
-                serviceLocator.RegisterInstance(typeof (ITypeFactory), typeFactory);
+                    serviceLocator.RegisterInstance(typeof(ITypeFactory), typeFactory);
+                }
 
                 if (initializeServiceLocator)
                 {

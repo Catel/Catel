@@ -115,11 +115,6 @@ namespace Catel.IoC
         private readonly Dictionary<ServiceInfo, ServiceLocatorRegistration> _registeredTypes = new Dictionary<ServiceInfo, ServiceLocatorRegistration>();
 
         /// <summary>
-        /// The synchronization object.
-        /// </summary>
-        private readonly object _lockObject = new object();
-
-        /// <summary>
         /// The current type request path.
         /// </summary>
         private TypeRequestPath _currentTypeRequestPath;
@@ -127,7 +122,7 @@ namespace Catel.IoC
         /// <summary>
         /// The type factory.
         /// </summary>
-        private ITypeFactory _typeFactory;
+        private readonly ITypeFactory _typeFactory;
         #endregion
 
         #region Constructors
@@ -136,8 +131,14 @@ namespace Catel.IoC
         /// </summary>
         public ServiceLocator()
         {
+            Lock = new object();
+
             // Must be registered first, already resolved by TypeFactory
             RegisterInstance(typeof(IServiceLocator), this);
+            RegisterInstance(typeof(IDependencyResolver), IoCFactory.CreateDependencyResolverFunc(this));
+
+            _typeFactory = IoCFactory.CreateTypeFactoryFunc(this);
+            RegisterInstance(typeof(ITypeFactory), _typeFactory);
 
             _autoRegistrationManager = new ServiceLocatorAutoRegistrationManager(this);
 
@@ -166,21 +167,12 @@ namespace Catel.IoC
         }
 
         /// <summary>
-        /// Gets the type factory.
+        /// Gets the lock object that will be shared in the fixed set of ServiceLocator / TypeFactory / DependencyResolver.
+        /// <para />
+        /// Custom implementations of IoC components can use this lock to lock a set to prevent deadlocks.
         /// </summary>
-        /// <value>The type factory.</value>
-        private ITypeFactory TypeFactory
-        {
-            get
-            {
-                if (_typeFactory == null)
-                {
-                    _typeFactory = (ITypeFactory)ResolveType(typeof(ITypeFactory));
-                }
-
-                return _typeFactory;
-            }
-        }
+        /// <value>The lock.</value>
+        public object Lock { get; private set; }
         #endregion
 
         #region IServiceLocator Members
@@ -225,7 +217,7 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("serviceType", serviceType);
 
-            lock (_lockObject)
+            lock (Lock)
             {
                 // Always check via IsTypeRegistered, allow late-time registration
                 if (!IsTypeRegistered(serviceType, tag))
@@ -255,7 +247,7 @@ namespace Catel.IoC
 
             var serviceInfo = new ServiceInfo(serviceType, tag);
 
-            lock (_lockObject)
+            lock (Lock)
             {
                 if (_registeredInstances.ContainsKey(serviceInfo))
                 {
@@ -327,7 +319,7 @@ namespace Catel.IoC
         /// <returns><c>true</c> if the <paramref name="serviceType" /> type is registered as singleton, otherwise <c>false</c>.</returns>
         public bool IsTypeRegisteredAsSingleton(Type serviceType, object tag = null)
         {
-            lock (_lockObject)
+            lock (Lock)
             {
                 // Required to support the MissingTypeEventArgs
                 if (!IsTypeRegistered(serviceType, tag))
@@ -420,7 +412,7 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("serviceType", serviceType);
 
-            lock (_lockObject)
+            lock (Lock)
             {
                 var isTypeRegistered = IsTypeRegistered(serviceType, tag);
 
@@ -428,7 +420,7 @@ namespace Catel.IoC
                 {
                     if (CanResolveNonAbstractTypesWithoutRegistration && serviceType.IsClassEx() && !serviceType.IsAbstractEx())
                     {
-                        return TypeFactory.CreateInstance(serviceType);
+                        return _typeFactory.CreateInstance(serviceType);
                     }
 
                     ThrowTypeNotRegisteredException(serviceType);
@@ -458,7 +450,7 @@ namespace Catel.IoC
 
             var resolvedInstances = new List<object>();
 
-            lock (_lockObject)
+            lock (Lock)
             {
                 for (int i = 0; i < _registeredTypes.Keys.Count; i++)
                 {
@@ -497,7 +489,7 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("types", types);
 
-            lock (_lockObject)
+            lock (Lock)
             {
                 // Note: do NOT rewrite as linq because that is much slower
                 // ReSharper disable LoopCanBeConvertedToQuery
@@ -531,7 +523,7 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("types", types);
 
-            lock (_lockObject)
+            lock (Lock)
             {
                 // Note: do NOT rewrite as linq because that is much slower
                 var values = new List<object>();
@@ -557,7 +549,7 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("serviceType", serviceType);
 
-            lock (_lockObject)
+            lock (Lock)
             {
                 var serviceInfo = new ServiceInfo(serviceType, tag);
                 if (_registeredInstances.ContainsKey(serviceInfo))
@@ -581,7 +573,7 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("serviceType", serviceType);
 
-            lock (_lockObject)
+            lock (Lock)
             {
                 // Instances
                 for (int i = _registeredInstances.Count - 1; i >= 0; i--)
@@ -645,7 +637,7 @@ namespace Catel.IoC
 
             var registeredTypeInfo = new ServiceLocatorRegistration(serviceType, instance.GetType(), tag, RegistrationType.Singleton, x => instance);
 
-            lock (_lockObject)
+            lock (Lock)
             {
                 var serviceInfo = new ServiceInfo(serviceType, tag);
 
@@ -709,7 +701,7 @@ namespace Catel.IoC
             // Outside lock scope for event
             ServiceLocatorRegistration registeredTypeInfo = null;
 
-            lock (_lockObject)
+            lock (Lock)
             {
                 if (!registerIfAlreadyRegistered && IsTypeRegistered(serviceType, tag))
                 {
@@ -747,7 +739,7 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("serviceType", serviceType);
 
-            lock (_lockObject)
+            lock (Lock)
             {
                 var typeRequestInfo = new TypeRequestInfo(serviceType);
                 if (_currentTypeRequestPath == null)
@@ -796,7 +788,7 @@ namespace Catel.IoC
         /// <returns>The service instance.</returns>
         private object CreateServiceInstance(ServiceLocatorRegistration registration)
         {
-            object instance = TypeFactory.CreateInstance(registration.ImplementingType);
+            object instance = _typeFactory.CreateInstance(registration.ImplementingType);
             if (instance == null)
             {
                 ThrowTypeNotRegisteredException(registration.DeclaringType, "Failed to instantiate the type using the TypeFactory.");
@@ -819,7 +811,7 @@ namespace Catel.IoC
         /// <param name="typeRequestInfoForTypeJustConstructed">The type request info.</param>
         private void CompleteTypeRequestPathIfRequired(TypeRequestInfo typeRequestInfoForTypeJustConstructed)
         {
-            lock (_lockObject)
+            lock (Lock)
             {
                 if (_currentTypeRequestPath != null)
                 {

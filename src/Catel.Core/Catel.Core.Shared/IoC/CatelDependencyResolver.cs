@@ -8,8 +8,8 @@
 namespace Catel.IoC
 {
     using System;
-    using Catel.Logging;
-    using Catel.Reflection;
+    using Logging;
+    using Reflection;
 
     /// <summary>
     /// Implementation of the <see cref="IDependencyResolver"/> interface for Catel by wrapping the
@@ -100,15 +100,18 @@ namespace Catel.IoC
             int typeCount = types.Length;
             var resolvedTypes = new object[typeCount];
 
-            for (int i = 0; i < typeCount; i++)
+            lock (_serviceLocator.Lock)
             {
-                try
+                for (int i = 0; i < typeCount; i++)
                 {
-                    resolvedTypes[i] = Resolve(types[i], tag);
-                }
-                catch (TypeNotRegisteredException e)
-                {
-                    Log.Debug(e, "Failed to resolve type '{0}', returning null", e.RequestedType.GetSafeFullName());
+                    try
+                    {
+                        resolvedTypes[i] = Resolve(types[i], tag);
+                    }
+                    catch (TypeNotRegisteredException e)
+                    {
+                        Log.Debug(e, "Failed to resolve type '{0}', returning null", e.RequestedType.GetSafeFullName());
+                    }
                 }
             }
 
