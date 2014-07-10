@@ -62,42 +62,15 @@ namespace Catel.Services.Test
 
         #region Methods
         /// <summary>
-        /// Registers the specified view model and the window type. This way, Catel knowns what
-        /// window to show when a specific view model window is requested.
+        /// Registers the specified name.
         /// </summary>
-        /// <param name="viewModelType">Type of the view model.</param>
+        /// <param name="name">The name.</param>
         /// <param name="windowType">Type of the window.</param>
-        /// <exception cref="ArgumentException">The <paramref name="viewModelType"/> does not implement <see cref="IViewModel"/>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="windowType"/> is not a window.</exception>
-        public void Register(Type viewModelType, Type windowType)
+        /// <param name="throwExceptionIfExists">if set to <c>true</c> [throw exception if exists].</param>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public void Register(string name, Type windowType, bool throwExceptionIfExists = true)
         {
             // No implementation by design
-        }
-
-        /// <summary>
-        /// Registers the specified view model and the window type. This way, Catel knowns what
-        /// window to show when a specific view model window is requested.
-        /// </summary>
-        /// <param name="name">Name of the registered window.</param>
-        /// <param name="windowType">Type of the window.</param>
-        /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="windowType"/> is not of a window.</exception>
-        public void Register(string name, Type windowType)
-        {
-            // No implementation by design
-        }
-
-        /// <summary>
-        /// This unregisters the specified view model.
-        /// </summary>
-        /// <param name="viewModelType">Type of the view model to unregister.</param>
-        /// <returns>
-        /// 	<c>true</c> if the view model is unregistered; otherwise <c>false</c>.
-        /// </returns>
-        public bool Unregister(Type viewModelType)
-        {
-            // No implementation by design
-            return true;
         }
 
         /// <summary>
@@ -122,8 +95,8 @@ namespace Catel.Services.Test
         /// 	<c>true</c> if the popup window is successfully opened; otherwise <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
-        /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type)"/> method first.</exception>
-        public Task<bool> Show(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
+        /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
+        public Task<bool?> Show(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             return Show(viewModel.GetType().FullName, viewModel, completedProc);
         }
@@ -138,15 +111,15 @@ namespace Catel.Services.Test
         /// 	<c>true</c> if the popup window is successfully opened; otherwise <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type)"/> method first.</exception>
-        public Task<bool> Show(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
+        /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
+        public Task<bool?> Show(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             if (ExpectedShowResults.Count == 0)
             {
                 throw new Exception(ResourceHelper.GetString("NoExpectedResultsInQueueForUnitTest"));
             }
 
-            return new Task<bool>(() => ExpectedShowResults.Dequeue().Invoke());
+            return new Task<bool?>(() => ExpectedShowResults.Dequeue().Invoke());
         }
 
         /// <summary>
@@ -158,7 +131,7 @@ namespace Catel.Services.Test
         /// Nullable boolean representing the dialog result.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
-        /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type)"/> method first.</exception>
+        /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
         public Task<bool?> ShowDialog(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             return ShowDialog(viewModel.GetType().FullName, viewModel, completedProc);
@@ -174,7 +147,7 @@ namespace Catel.Services.Test
         /// Nullable boolean representing the dialog result.
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type)"/> method first.</exception>
+        /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
         public Task<bool?> ShowDialog(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             if (ExpectedShowDialogResults.Count == 0)
@@ -183,6 +156,17 @@ namespace Catel.Services.Test
             }
 
             return new Task<bool?>(() => ExpectedShowDialogResults.Dequeue().Invoke());
+        }
+
+        /// <summary>
+        /// Determines whether the specified name is registered.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns><c>true</c> if the specified name is registered; otherwise, <c>false</c>.</returns>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public virtual bool IsRegistered(string name)
+        {
+            return true;
         }
         #endregion
     }
