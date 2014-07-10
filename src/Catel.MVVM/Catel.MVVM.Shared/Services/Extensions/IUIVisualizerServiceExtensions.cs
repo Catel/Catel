@@ -22,6 +22,17 @@ namespace Catel.Services
         /// <summary>
         /// Determines whether the specified view model type is registered.
         /// </summary>
+        /// <typeparam name="TViewModel">The type of the view model.</typeparam>
+        /// <param name="uiVisualizerService">The UI visualizer service.</param>
+        /// <returns><c>true</c> if the specified view model type is registered; otherwise, <c>false</c>.</returns>
+        public static bool IsRegistered<TViewModel>(this IUIVisualizerService uiVisualizerService)
+        {
+            return IsRegistered(uiVisualizerService, typeof(TViewModel));
+        }
+
+        /// <summary>
+        /// Determines whether the specified view model type is registered.
+        /// </summary>
         /// <param name="uiVisualizerService">The UI visualizer service.</param>
         /// <param name="viewModelType">Type of the view model.</param>
         /// <returns><c>true</c> if the specified view model type is registered; otherwise, <c>false</c>.</returns>
@@ -31,6 +42,21 @@ namespace Catel.Services
             Argument.IsNotNull("viewModelType", viewModelType);
 
             return uiVisualizerService.IsRegistered(viewModelType.FullName);
+        }
+
+        /// <summary>
+        /// Registers the specified view model and the window type. This way, Catel knowns what
+        /// window to show when a specific view model window is requested.
+        /// </summary>
+        /// <typeparam name="TViewModel">The type of the view model.</typeparam>
+        /// <typeparam name="TView">The type of the view.</typeparam>
+        /// <param name="uiVisualizerService">The UI visualizer service.</param>
+        /// <param name="throwExceptionIfExists">if set to <c>true</c>, this method will throw an exception when already registered.</param>
+        /// <exception cref="System.ArgumentException">viewModelType</exception>
+        /// <exception cref="ArgumentException">viewModelType</exception>
+        public static void Register<TViewModel, TView>(this IUIVisualizerService uiVisualizerService, bool throwExceptionIfExists = true)
+        {
+            Register(uiVisualizerService, typeof (TViewModel), typeof (TView), throwExceptionIfExists);
         }
 
         /// <summary>
@@ -53,7 +79,18 @@ namespace Catel.Services
                 throw new ArgumentException(Exceptions.ArgumentMustImplementIViewModelInterface, "viewModelType");
             }
 
-            uiVisualizerService.Register(viewModelType.FullName, windowType);
+            uiVisualizerService.Register(viewModelType.FullName, windowType, throwExceptionIfExists);
+        }
+
+        /// <summary>
+        /// This unregisters the specified view model.
+        /// </summary>
+        /// <typeparam name="TViewModel">The type of the view model.</typeparam>
+        /// <param name="uiVisualizerService">The UI visualizer service.</param>
+        /// <returns><c>true</c> if the view model is unregistered; otherwise <c>false</c>.</returns>
+        public static bool Unregister<TViewModel>(this IUIVisualizerService uiVisualizerService)
+        {
+            return Unregister(uiVisualizerService, typeof(TViewModel));
         }
 
         /// <summary>
