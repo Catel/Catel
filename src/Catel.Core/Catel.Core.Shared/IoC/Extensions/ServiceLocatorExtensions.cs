@@ -368,12 +368,20 @@ namespace Catel.IoC
 
             try
             {
-                return (TService)serviceLocator.ResolveType(typeof(TService), tag);
+                lock (serviceLocator.Lock)
+                {
+                    if (serviceLocator.IsTypeRegistered(typeof (TService), tag))
+                    {
+                        return (TService) serviceLocator.ResolveType(typeof (TService), tag);
+                    }
+                }
             }
             catch (Exception)
             {
-                return default(TService);
+                // ignore
             }
+
+            return default(TService);
         }
 
         /// <summary>
