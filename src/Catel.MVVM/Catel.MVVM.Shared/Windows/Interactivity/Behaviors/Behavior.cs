@@ -53,7 +53,7 @@ namespace Catel.Windows.Interactivity
         /// <exception cref="System.InvalidOperationException">The associated object is not of the expected type.</exception>
         void IXamlBehavior.Attach(DependencyObject associatedObject)
         {
-            if (associatedObject != null && typeof(T).IsAssignableFromEx(associatedObject.GetType()))
+            if (associatedObject != null && typeof(T).IsInstanceOfTypeEx(associatedObject.GetType()))
             {
                 string error = string.Format("Invalid target type '{0}', expected '{1}'", associatedObject.GetType().GetSafeFullName(), typeof (T).GetSafeFullName());
                 Log.Error(error);

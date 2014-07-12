@@ -319,7 +319,8 @@ namespace Catel.MVVM.Providers
                 // NOTE: Beginning invoke (running async) because setting of TargetControl Content property causes memory faults
                 // when this method called by TargetControlContentChanged handler.
 #if NETFX_CORE
-                ((FrameworkElement)TargetView).Dispatcher.RunAsync(CoreDispatcherPriority.High, () => { action(); });
+                var dispatcher = ((FrameworkElement)TargetView).Dispatcher;
+                dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { action(); });
 #else
                 action();
 #endif

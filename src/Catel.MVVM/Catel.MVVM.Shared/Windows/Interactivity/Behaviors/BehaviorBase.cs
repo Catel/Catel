@@ -36,6 +36,7 @@ namespace Catel.Windows.Interactivity
         private static readonly IInteractivityManager InteractivityManager;
 
         private bool _isClean = true;
+        private int _loadCounter;
         #endregion
 
         #region Constructors
@@ -56,7 +57,7 @@ namespace Catel.Windows.Interactivity
         /// <value>
         /// 	<c>true</c> if the <see cref="Behavior{T}.AssociatedObject"/> is loaded; otherwise, <c>false</c>.
         /// </value>
-        public bool IsAssociatedObjectLoaded { get; private set; }
+        public bool IsAssociatedObjectLoaded { get { return _loadCounter > 0; } }
 
         /// <summary>
         /// Gets a value indicating whether this instance is in design mode.
@@ -84,7 +85,6 @@ namespace Catel.Windows.Interactivity
             AssociatedObject.Loaded += OnAssociatedObjectLoadedInternal;
 
             _isClean = false;
-            IsAssociatedObjectLoaded = false;
 
             ValidateRequiredProperties();
 
@@ -154,14 +154,15 @@ namespace Catel.Windows.Interactivity
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void OnAssociatedObjectLoadedInternal(object sender, UIEventArgs e)
         {
-            if (IsAssociatedObjectLoaded)
+            _loadCounter++;
+
+            // Yes, 1, because we just increased the counter
+            if (_loadCounter != 1)
             {
                 return;
             }
 
             AssociatedObject.Unloaded += OnAssociatedObjectUnloadedInternal;
-
-            IsAssociatedObjectLoaded = true;
 
             OnAssociatedObjectLoaded(sender, e);
         }
@@ -183,16 +184,16 @@ namespace Catel.Windows.Interactivity
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void OnAssociatedObjectUnloadedInternal(object sender, UIEventArgs e)
         {
-            if (!IsAssociatedObjectLoaded)
+            _loadCounter--;
+
+            if (_loadCounter != 0)
             {
                 return;
             }
 
-            IsAssociatedObjectLoaded = false;
-
             OnAssociatedObjectUnloaded(sender, e);
 
-            CleanUp();
+            //CleanUp();
         }
 
         /// <summary>

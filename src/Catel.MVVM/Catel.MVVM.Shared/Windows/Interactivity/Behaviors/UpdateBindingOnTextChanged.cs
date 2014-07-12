@@ -91,7 +91,7 @@ namespace Catel.Windows.Interactivity
         /// Called when the <c>TextChanged</c> event occurs.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.Windows.Controls.TextChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The text change event args instance containing the event data.</param>
         private void OnAssociatedObjectTextChanged(object sender, TextChangedEventArgs e)
         {
             if (UpdateDelay < 50)
