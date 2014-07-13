@@ -59,7 +59,7 @@ namespace Catel.Logging
         {
             lock (_lock)
             {
-                _logBatch.Add(new LogBatchEntry(log, message, logEvent, extraData));
+                _logBatch.Add(new LogBatchEntry(log, message, logEvent, extraData, DateTime.Now));
 
                 if (_logBatch.Count >= MaximumBatchCount)
                 {

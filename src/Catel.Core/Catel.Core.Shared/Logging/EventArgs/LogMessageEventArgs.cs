@@ -20,7 +20,7 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
         /// <param name="logEvent">The log event.</param>
-        internal LogMessageEventArgs(ILog log, string message, object extraData, LogEvent logEvent)
+        public LogMessageEventArgs(ILog log, string message, object extraData, LogEvent logEvent)
             : this(log, message, extraData, logEvent, DateTime.Now) { }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace Catel.Logging
         /// <param name="extraData">The extra data.</param>
         /// <param name="logEvent">The log event.</param>
         /// <param name="time">The time.</param>
-        internal LogMessageEventArgs(ILog log, string message, object extraData, LogEvent logEvent, DateTime time)
+        public LogMessageEventArgs(ILog log, string message, object extraData, LogEvent logEvent, DateTime time)
         {
             Log = log;
             Time = time;
