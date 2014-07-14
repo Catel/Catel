@@ -7,12 +7,7 @@
 namespace Catel.Test.Messaging
 {
     using Catel.Messaging;
-
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class MessageBaseFacts
     {
@@ -26,10 +21,10 @@ namespace Catel.Test.Messaging
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheConstructor
         {
-            [TestMethod]
+            [TestCase]
             public void CorrectlySetsInjectionData()
             {
                 var message = new TestMessage("my content");
@@ -38,13 +33,13 @@ namespace Catel.Test.Messaging
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheSendWithMethod
         {
             private bool _messageSent;
             private string _messageData;
 
-            [TestMethod]
+            [TestCase]
             public void SendsMessageWithDataWithoutTag()
             {
                 var messageMediator = MessageMediator.Default;
@@ -61,7 +56,7 @@ namespace Catel.Test.Messaging
                 Assert.AreEqual("test", _messageData);
             }
 
-            [TestMethod]
+            [TestCase]
             public void SendsMessageWithDataWithTag()
             {
                 var messageMediator = MessageMediator.Default;
@@ -85,12 +80,12 @@ namespace Catel.Test.Messaging
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheRegisterMethod
         {
             private bool _messageSent;
 
-            [TestMethod]
+            [TestCase]
             public void RegistersHandlerForMessageWithoutTag()
             {
                 TestMessage.Register(this, OnTestMessage);
@@ -104,7 +99,7 @@ namespace Catel.Test.Messaging
                 Assert.IsTrue(_messageSent);
             }
 
-            [TestMethod]
+            [TestCase]
             public void RegistersHandlerForMessageWithTag()
             {
                 TestMessage.Register(this, OnTestMessage, "mytag");
@@ -124,12 +119,12 @@ namespace Catel.Test.Messaging
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheUnregisterMethod
         {
             private bool _messageSent;
 
-            [TestMethod]
+            [TestCase]
             public void UnregistersHandlerForMessageWithoutTag()
             {
                 TestMessage.Register(this, OnTestMessage);
@@ -149,7 +144,7 @@ namespace Catel.Test.Messaging
                 Assert.IsFalse(_messageSent);
             }
 
-            [TestMethod]
+            [TestCase]
             public void UnregistersHandlerForMessageWithTag()
             {
                 TestMessage.Register(this, OnTestMessage, "mytag");
@@ -175,10 +170,10 @@ namespace Catel.Test.Messaging
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheWithMethod
         {
-            [TestMethod]
+            [TestCase]
             public void CreatesMessageWithData()
             {
                 var message = TestMessage.With("test");

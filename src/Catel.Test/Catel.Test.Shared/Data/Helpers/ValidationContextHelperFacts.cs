@@ -10,24 +10,20 @@ namespace Catel.Test.Data
     using System.Collections.Generic;
     using Catel.Data;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class ValidationContextChangeFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheConstructor
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullValidationResult()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new ValidationContextChange(null, ValidationContextChangeType.Added));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsValuesCorrectlyForAddedError()
             {
                 var change = new ValidationContextChange(FieldValidationResult.CreateError("Property", "Error"), ValidationContextChangeType.Added);
@@ -37,7 +33,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(ValidationContextChangeType.Added, change.ChangeType);
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsValuesCorrectlyForRemovedError()
             {
                 var change = new ValidationContextChange(FieldValidationResult.CreateError("Property", "Error"), ValidationContextChangeType.Removed);
@@ -51,22 +47,22 @@ namespace Catel.Test.Data
 
     public class ValidationContextHelperFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheGetChangesMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullFirstArgument()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ValidationContextHelper.GetChanges(null, new ValidationContext()));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullSecondArgument()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ValidationContextHelper.GetChanges(new ValidationContext(), null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsEmptyCollectionForEqualValidationContexts()
             {
                 var fieldValidationResults1 = new List<IFieldValidationResult>();
@@ -92,7 +88,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, changes.Count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsChangesForAddedFieldWarning()
             {
                 var fieldValidationResults1 = new List<IFieldValidationResult>();
@@ -121,7 +117,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(ValidationContextChangeType.Added, changes[0].ChangeType);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsChangesForRemovedFieldWarning()
             {
                 var fieldValidationResults1 = new List<IFieldValidationResult>();
@@ -150,7 +146,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(ValidationContextChangeType.Removed, changes[0].ChangeType);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsChangesForAddedFieldError()
             {
                 var fieldValidationResults1 = new List<IFieldValidationResult>();
@@ -179,7 +175,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(ValidationContextChangeType.Added, changes[0].ChangeType);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsChangesForRemovedFieldError()
             {
                 var fieldValidationResults1 = new List<IFieldValidationResult>();
@@ -208,7 +204,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(ValidationContextChangeType.Removed, changes[0].ChangeType);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsChangesForAddedBusinessRuleWarning()
             {
                 var fieldValidationResults1 = new List<IFieldValidationResult>();
@@ -236,7 +232,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(ValidationContextChangeType.Added, changes[0].ChangeType);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsChangesForRemovedBusinessRuleWarning()
             {
                 var fieldValidationResults1 = new List<IFieldValidationResult>();
@@ -264,7 +260,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(ValidationContextChangeType.Removed, changes[0].ChangeType);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsChangesForAddedBusinessRuleError()
             {
                 var fieldValidationResults1 = new List<IFieldValidationResult>();
@@ -292,7 +288,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(ValidationContextChangeType.Added, changes[0].ChangeType);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsChangesForRemovedBusinessRuleError()
             {
                 var fieldValidationResults1 = new List<IFieldValidationResult>();
@@ -320,7 +316,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(ValidationContextChangeType.Removed, changes[0].ChangeType);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsChangesForComplexScenario()
             {
                 var fieldValidationResults1 = new List<IFieldValidationResult>();

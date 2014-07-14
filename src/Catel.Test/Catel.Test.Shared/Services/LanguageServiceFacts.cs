@@ -9,19 +9,14 @@ namespace Catel.Test.Services
 {
     using System;
     using Catel.Services;
-
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class LanguageServiceFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheRegisterLanguageSourceMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullLanguageSource()
             {
                 var languageService = new LanguageService();
@@ -31,10 +26,10 @@ namespace Catel.Test.Services
         }
 
         #region Nested type: TheGetStringMethod
-        [TestClass]
+        [TestFixture]
         public class TheGetStringMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullResourceName()
             {
                 var languageService = new LanguageService();
@@ -42,7 +37,7 @@ namespace Catel.Test.Services
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => languageService.GetString(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsNullForNonExistingResource()
             {
                 var languageService = new LanguageService();
@@ -50,7 +45,7 @@ namespace Catel.Test.Services
                 Assert.AreEqual(null, languageService.GetString("NonExistingResourceName"));
             }
 
-            //[TestMethod]
+            //[TestCase]
             //public void ReturnsStringForCoreAssembly()
             //{
             //    var languageService = new LanguageService();
@@ -58,7 +53,7 @@ namespace Catel.Test.Services
             //    Assert.AreEqual("{0} has the following warnings:", languageService.GetString("WarningsFound"));
             //}
 
-            //[TestMethod]
+            //[TestCase]
             //public void ReturnsStringForMvvmAssembly()
             //{
             //    var languageService = new LanguageService();

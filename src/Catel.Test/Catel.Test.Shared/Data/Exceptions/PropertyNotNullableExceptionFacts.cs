@@ -8,18 +8,14 @@ namespace Catel.Test.Data.Exceptions
 {
     using Catel.Data;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class PropertyNotNullableExceptionFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheConstructor
         {
-            [TestMethod]
+            [TestCase]
             public void SetsValuesCorrectly()
             {
                 var exception = new PropertyNotNullableException("PropertyName", typeof (string));

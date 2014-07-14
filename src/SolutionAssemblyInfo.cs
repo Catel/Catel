@@ -101,7 +101,7 @@ using System.Runtime.CompilerServices;
 #endif
 
 // CLS compliant
-#if !NETFX_CORE && !XAMARIN
+#if !NETFX_CORE && !XAMARIN && !TEST
 [assembly: CLSCompliant(true)]
 #endif
 

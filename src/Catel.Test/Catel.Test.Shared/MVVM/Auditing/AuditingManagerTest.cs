@@ -8,17 +8,12 @@ namespace Catel.Test.MVVM.Auditing
 {
     using System;
     using Catel.MVVM.Auditing;
+    using NUnit.Framework;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
-
-    [TestClass]
+    [TestFixture]
     public class AuditingManagerTest
     {
-        [TestMethod]
+        [TestCase]
         public void Clear_ValidAuditor()
         {
             AuditingManager.Clear();
@@ -33,13 +28,13 @@ namespace Catel.Test.MVVM.Auditing
             Assert.AreEqual(0, AuditingManager.RegisteredAuditorsCount);
         }
 
-        [TestMethod]
+        [TestCase]
         public void RegisterAuditor_Null()
         {
             ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => AuditingManager.RegisterAuditor(null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void RegisterAuditor_ValidAuditor()
         {
             AuditingManager.Clear();
@@ -50,7 +45,7 @@ namespace Catel.Test.MVVM.Auditing
             Assert.AreEqual(1, AuditingManager.RegisteredAuditorsCount);
         }
 
-        [TestMethod]
+        [TestCase]
         public void RegisterAuditor_SameAuditorTwice()
         {
             AuditingManager.Clear();
@@ -62,13 +57,13 @@ namespace Catel.Test.MVVM.Auditing
             Assert.AreEqual(1, AuditingManager.RegisteredAuditorsCount);
         }
 
-        [TestMethod]
+        [TestCase]
         public void UnregisterAuditor_Null()
         {
             ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => AuditingManager.UnregisterAuditor(null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void UnregisterAuditor_UnregisterExisting()
         {
             AuditingManager.Clear();
@@ -83,7 +78,7 @@ namespace Catel.Test.MVVM.Auditing
             Assert.AreEqual(0, AuditingManager.RegisteredAuditorsCount);
         }
 
-        [TestMethod]
+        [TestCase]
         public void UnregisterAuditor_UnregisterNotExisting()
         {
             AuditingManager.Clear();
@@ -94,7 +89,7 @@ namespace Catel.Test.MVVM.Auditing
             Assert.AreEqual(0, AuditingManager.RegisteredAuditorsCount);
         }
 
-        [TestMethod]
+        [TestCase]
         public void UnregisterAuditor_UnregisterNotExistingWithAnotherRegistered()
         {
             AuditingManager.Clear();

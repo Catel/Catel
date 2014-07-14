@@ -11,24 +11,20 @@ namespace Catel.Test.Memento
     using Data;
     using Mocks;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class ActionUndoFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheConstructor
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullInstance()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new ActionUndo(null, () => MockModel.Change("test")));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullUndoMethod()
             {
                 var obj = new object();
@@ -37,10 +33,10 @@ namespace Catel.Test.Memento
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheUndoMethod
         {
-            [TestMethod]
+            [TestCase]
             public void SetsOldValue()
             {
                 var action = new ActionUndo(this, () => MockModel.Change("previousValue"));
@@ -49,7 +45,7 @@ namespace Catel.Test.Memento
                 Assert.AreEqual("previousValue", MockModel.Name);
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsNewValue()
             {
                 var action = new ActionUndo(this, () => MockModel.Change("previousValue"), () => MockModel.Change("nextValue"));
@@ -58,7 +54,7 @@ namespace Catel.Test.Memento
                 Assert.AreEqual("nextValue", MockModel.Name);
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsOldAndNewValue()
             {
                 var action = new ActionUndo(this, () => MockModel.Change("previousValue"), () => MockModel.Change("nextValue"));
@@ -74,10 +70,10 @@ namespace Catel.Test.Memento
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheActionsThroughMementoServiceMethod
         {
-            [TestMethod]
+            [TestCase]
             public void CallActions()
             {
                 var value = false;
@@ -94,7 +90,7 @@ namespace Catel.Test.Memento
                 Assert.IsFalse(value);
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetProperty()
             {
                 var instance = new IniEntry();

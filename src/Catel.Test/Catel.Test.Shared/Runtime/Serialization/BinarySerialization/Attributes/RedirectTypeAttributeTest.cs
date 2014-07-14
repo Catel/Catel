@@ -10,17 +10,13 @@ namespace Catel.Test.Runtime.Serialization
 {
     using Catel.Runtime.Serialization.Binary;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class RedirectTypeAttributeTest
     {
         #region Methods
-        [TestMethod]
+        [TestCase]
         public void Constructor()
         {
             var attribute = new RedirectTypeAttribute("originalAssembly", "originalType");
@@ -29,7 +25,7 @@ namespace Catel.Test.Runtime.Serialization
             Assert.AreEqual("originalType", attribute.OriginalTypeName);
         }
 
-        [TestMethod]
+        [TestCase]
         public void OriginalType()
         {
             var attribute = new RedirectTypeAttribute("Catel.Core.Old", "Catel.DataStuff.DataObjectBase");
@@ -37,7 +33,7 @@ namespace Catel.Test.Runtime.Serialization
             Assert.AreEqual("Catel.DataStuff.DataObjectBase, Catel.Core.Old", attribute.OriginalType);
         }
 
-        [TestMethod]
+        [TestCase]
         public void TypeToLoad()
         {
             var attribute = new RedirectTypeAttribute("Catel.Core.Old", "Catel.DataStuff.DataObjectBase");

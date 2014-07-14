@@ -10,18 +10,14 @@ namespace Catel.Test.Configuration
     using System;
     using Catel.Configuration;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class ConfigurationServiceFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheGetValueMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullKey()
             {
                 var configurationService = new ConfigurationService();
@@ -29,7 +25,7 @@ namespace Catel.Test.Configuration
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => configurationService.GetValue<string>(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForEmptyKey()
             {
                 var configurationService = new ConfigurationService();
@@ -37,7 +33,7 @@ namespace Catel.Test.Configuration
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => configurationService.GetValue<string>(string.Empty));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsExistingValue()
             {
                 var configurationService = new ConfigurationService();
@@ -47,7 +43,7 @@ namespace Catel.Test.Configuration
                 Assert.AreEqual("myValue", configurationService.GetValue<string>("myKey"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsDefaultValueForNonExistingValue()
             {
                 var configurationService = new ConfigurationService();
@@ -56,10 +52,10 @@ namespace Catel.Test.Configuration
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheSetValueMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullKey()
             {
                 var configurationService = new ConfigurationService();
@@ -67,7 +63,7 @@ namespace Catel.Test.Configuration
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => configurationService.SetValue(null, "value"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForEmptyKey()
             {
                 var configurationService = new ConfigurationService();
@@ -75,7 +71,7 @@ namespace Catel.Test.Configuration
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => configurationService.SetValue(string.Empty, "value"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsValueCorrectly()
             {
                 var configurationService = new ConfigurationService();
@@ -86,10 +82,10 @@ namespace Catel.Test.Configuration
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheConfigurationChangedEvent
         {
-            [TestMethod]
+            [TestCase]
             public void IsInvokedDuringSetValueMethod()
             {
                 var configurationService = new ConfigurationService();

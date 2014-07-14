@@ -12,13 +12,9 @@ namespace Catel.Test.Reflection
     using Catel.Data;
     using Catel.Reflection;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class TypeHelperFacts
     {
         #region Test classes
@@ -33,11 +29,11 @@ namespace Catel.Test.Reflection
         #endregion
 
         #region Nested type: TheConvertTypeToVersionIndependentTypeMethod
-        [TestClass]
+        [TestFixture]
         public class TheConvertTypeToVersionIndependentTypeMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullOrEmptyType()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeHelper.ConvertTypeToVersionIndependentType(null));
@@ -45,7 +41,7 @@ namespace Catel.Test.Reflection
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeHelper.ConvertTypeToVersionIndependentType(" "));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsVersionIndependentTypeForSimpleVersionIndependentType()
             {
                 const string input = "Catel.Data.ObservableObject, Catel.Core";
@@ -56,7 +52,7 @@ namespace Catel.Test.Reflection
                 Assert.AreEqual(output, realOutput);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsVersionIndependentTypeForComplexVersionIndependentType()
             {
                 string input = "System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib";
@@ -67,7 +63,7 @@ namespace Catel.Test.Reflection
                 Assert.AreEqual(output, realOutput);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsVersionIndependentTypeForSimpleVersionDependentType()
             {
                 string input = typeof (ObservableObject).AssemblyQualifiedName;
@@ -78,7 +74,7 @@ namespace Catel.Test.Reflection
                 Assert.AreEqual(output, realOutput);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsVersionIndependentTypeForComplexVersionDependentType()
             {
                 // Use a different key token because MS key tokens are not changed
@@ -94,17 +90,17 @@ namespace Catel.Test.Reflection
         #endregion
 
         #region Nested type: TheFormatInnerTypesMethod
-        [TestClass]
+        [TestFixture]
         public class TheFormatInnerTypesMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ReturnsEmptyStringForEmptyArray()
             {
                 Assert.AreEqual(string.Empty, TypeHelper.FormatInnerTypes(new string[] {}));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsArrayOfTypesForFilledArray()
             {
                 string expectedValue = "[string],[string],[int]";
@@ -118,11 +114,11 @@ namespace Catel.Test.Reflection
         #endregion
 
         #region Nested type: TheFormatTypeMethod
-        [TestClass]
+        [TestFixture]
         public class TheFormatTypeMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullOrEmptyAssemblyName()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeHelper.FormatType(null, "Type"));
@@ -130,7 +126,7 @@ namespace Catel.Test.Reflection
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeHelper.FormatType(" ", "Type"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullOrEmptyTypeName()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeHelper.FormatType("Catel.Core", null));
@@ -138,7 +134,7 @@ namespace Catel.Test.Reflection
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeHelper.FormatType("Catel.Core", " "));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFormattedType()
             {
                 string expectedValue = "Catel.Test.Helpers.TypeHelperFacts, Catel.Test";
@@ -152,24 +148,24 @@ namespace Catel.Test.Reflection
         #endregion
 
         #region Nested type: TheGetAssemblyNameMethod
-        [TestClass]
+        [TestFixture]
         public class TheGetAssemblyNameMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullFullTypeName()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeHelper.GetAssemblyName(null));
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeHelper.GetAssemblyName(string.Empty));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsNullForTypeWithoutAssembly()
             {
                 Assert.AreEqual(null, TypeHelper.GetAssemblyName("Catel.Test.TypeHelper"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsAssemblyForTypeWithAssembly()
             {
                 Assert.AreEqual("Catel.Core", TypeHelper.GetAssemblyName("Catel.Test.TypeHelper, Catel.Core"));
@@ -179,11 +175,11 @@ namespace Catel.Test.Reflection
         #endregion
 
         #region Nested type: TheGetAssemblyNameWithoutOverheadMethod
-        [TestClass]
+        [TestFixture]
         public class TheGetAssemblyNameWithoutOverheadMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullOrEmptyAssemblyName()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeHelper.GetAssemblyNameWithoutOverhead(null));
@@ -191,7 +187,7 @@ namespace Catel.Test.Reflection
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeHelper.GetAssemblyNameWithoutOverhead(" "));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsAssemblyNameForAssemblyWithoutOverhead()
             {
                 var input = "Catel.Core";
@@ -200,7 +196,7 @@ namespace Catel.Test.Reflection
                 Assert.AreEqual(expected, TypeHelper.GetAssemblyNameWithoutOverhead(input));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsAssemblyNameForAssemblyWithOverhead()
             {
                 var input = "Catel.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1c8163524cbe02e6";
@@ -213,11 +209,11 @@ namespace Catel.Test.Reflection
         #endregion
 
         #region Nested type: TheGetInnerTypesMethod
-        [TestClass]
+        [TestFixture]
         public class TheGetInnerTypesMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullOrEmptyType()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeHelper.GetInnerTypes(null));
@@ -225,7 +221,7 @@ namespace Catel.Test.Reflection
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeHelper.GetInnerTypes(" "));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsEmptyArrayForNonGenericType()
             {
                 var input = "Catel.Data.ObservableObject, Catel.Core";
@@ -234,7 +230,7 @@ namespace Catel.Test.Reflection
                 Assert.AreEqual(0, output.Length);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsInnerTypesForSimpleGenericType()
             {
                 var input = "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=xxxxxxx], [System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=xxxxxxx]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=xxxxxxx";
@@ -245,7 +241,7 @@ namespace Catel.Test.Reflection
                 Assert.AreEqual("System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=xxxxxxx", output[1]);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsInnerTypesForComplexGenericType()
             {
                 var input = "System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=xxxxxxx], [System.Collections.Generic.List`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=xxxxxxx]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=xxxxxxx]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=xxxxxxx";
@@ -260,30 +256,30 @@ namespace Catel.Test.Reflection
         #endregion
 
         #region Nested type: TheGetTypeNameMethod
-        [TestClass]
+        [TestFixture]
         public class TheGetTypeNameMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullFullTypeName()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeHelper.GetTypeName(null));
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeHelper.GetTypeName(string.Empty));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTypeNameForTypeWithoutAssembly()
             {
                 Assert.AreEqual("Catel.Test.TypeHelper", TypeHelper.GetTypeName("Catel.Test.TypeHelper"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTypeNameForTypeWithAssembly()
             {
                 Assert.AreEqual("Catel.Test.TypeHelper", TypeHelper.GetTypeName("Catel.Test.TypeHelper, Catel.Core"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTypeNameForGenericTypes()
             {
                 string input = "System.Collections.Generic.List`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]";
@@ -296,24 +292,24 @@ namespace Catel.Test.Reflection
         #endregion
 
         #region Nested type: TheGetTypeNameWithAssemblyMethod
-        [TestClass]
+        [TestFixture]
         public class TheGetTypeNameWithAssemblyMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullFullTypeName()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeHelper.GetTypeNameWithAssembly(null));
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeHelper.GetTypeNameWithAssembly(string.Empty));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFullTypeNameForTypeWithAssemblyWithoutOverhead()
             {
                 Assert.AreEqual("Catel.Test.TypeHelper, Catel.Core", TypeHelper.GetTypeNameWithAssembly("Catel.Test.TypeHelper, Catel.Core"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFullTypeNameForTypeWithAssembly()
             {
                 Assert.AreEqual("Catel.Test.TypeHelper, Catel.Core", TypeHelper.GetTypeNameWithAssembly("Catel.Test.TypeHelper, Catel.Core, Version=1.0.0.0, PublicKeyToken=1234578, Culture=neutral"));
@@ -323,24 +319,24 @@ namespace Catel.Test.Reflection
         #endregion
 
         #region Nested type: TheGetTypeNameWithoutNamespaceMethod
-        [TestClass]
+        [TestFixture]
         public class TheGetTypeNameWithoutNamespaceMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullFullTypeName()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeHelper.GetTypeNameWithoutNamespace(null));
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeHelper.GetTypeNameWithoutNamespace(string.Empty));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTypeNameForTypeWithoutAssembly()
             {
                 Assert.AreEqual("TypeHelper", TypeHelper.GetTypeNameWithoutNamespace("Catel.Test.TypeHelper"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTypeNameForTypeWithAssembly()
             {
                 Assert.AreEqual("TypeHelper", TypeHelper.GetTypeNameWithoutNamespace("Catel.Test.TypeHelper, Catel.Core"));
@@ -350,24 +346,24 @@ namespace Catel.Test.Reflection
         #endregion
 
         #region Nested type: TheGetTypeNamespaceMethod
-        [TestClass]
+        [TestFixture]
         public class TheGetTypeNamespaceMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullFullTypeName()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeHelper.GetTypeNamespace(null));
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeHelper.GetTypeNamespace(string.Empty));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTypeNamespaceForTypeWithoutAssembly()
             {
                 Assert.AreEqual("Catel.Test", TypeHelper.GetTypeNamespace("Catel.Test.TypeHelper"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTypeNamespaceForTypeWithAssembly()
             {
                 Assert.AreEqual("Catel.Test", TypeHelper.GetTypeNamespace("Catel.Test.TypeHelper, Catel.Core"));
@@ -377,11 +373,11 @@ namespace Catel.Test.Reflection
         #endregion
 
         #region Nested type: TheGetTypeWithAssemblyMethod
-        [TestClass]
+        [TestFixture]
         public class TheGetTypeWithAssemblyMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForInvalidAssemblyName()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeCache.GetTypeWithAssembly(null, "Catel.Core"));
@@ -389,7 +385,7 @@ namespace Catel.Test.Reflection
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeCache.GetTypeWithAssembly(" ", "Catel.Core"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForInvalidTypeName()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeCache.GetTypeWithAssembly("Catel.Reflection.TypeHelper", null));
@@ -397,25 +393,25 @@ namespace Catel.Test.Reflection
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeCache.GetTypeWithAssembly("Catel.Reflection.TypeHelper", " "));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsNullForUnavailableType()
             {
                 Assert.IsNull(TypeCache.GetTypeWithAssembly("Catel.UnknownType", "Catel.Core"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTypeForAvailableType()
             {
                 Assert.AreEqual(typeof(TypeHelper), TypeCache.GetTypeWithAssembly("Catel.Reflection.TypeHelper", "Catel.Core"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsNullWithoutIgnoringCase()
             {
                 Assert.AreEqual(null, TypeCache.GetTypeWithAssembly("cAtEl.rEfLeCtIoN.tYpEhElPeR", "cAtEl.CoRe", false));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTypeWithIgnoringCase()
             {
                 Assert.AreEqual(typeof(TypeHelper), TypeCache.GetTypeWithAssembly("cAtEl.rEfLeCtIoN.tYpEhElPeR", "cAtEl.CoRe", true));
@@ -425,11 +421,11 @@ namespace Catel.Test.Reflection
         #endregion
 
         #region Nested type: TheGetTypeWithoutAssemblyMethod
-        [TestClass]
+        [TestFixture]
         public class TheGetTypeWithoutAssemblyMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForInvalidTypeName()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeCache.GetTypeWithoutAssembly(null));
@@ -437,25 +433,25 @@ namespace Catel.Test.Reflection
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeCache.GetTypeWithoutAssembly(" "));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsNullForUnavailableType()
             {
                 Assert.IsNull(TypeCache.GetTypeWithoutAssembly("Catel.UnknownType"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTypeForAvailableType()
             {
                 Assert.AreEqual(typeof(TypeHelper), TypeCache.GetTypeWithoutAssembly("Catel.Reflection.TypeHelper"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsNullWithoutIgnoringCase()
             {
                 Assert.AreEqual(null, TypeCache.GetTypeWithoutAssembly("cAtEl.rEfLeCtIoN.tYpEhElPeR", false));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTypeWithIgnoringCase()
             {
                 Assert.AreEqual(typeof(TypeHelper), TypeCache.GetTypeWithoutAssembly("cAtEl.rEfLeCtIoN.tYpEhElPeR", true));
@@ -465,24 +461,24 @@ namespace Catel.Test.Reflection
         #endregion
 
         #region Nested type: TheGetTypedInstanceMethod
-        [TestClass]
+        [TestFixture]
         public class TheGetTypedInstanceMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ReturnsNullForNullInstance()
             {
                 Assert.AreEqual(null, TypeHelper.GetTypedInstance<List<int>>(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsNotSupportedExceptionForInvalidCast()
             {
                 var list = new List<int>();
                 ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => TypeHelper.GetTypedInstance<List<string>>(list));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTypedInstanceWhenInstanceIsOfType()
             {
                 var list = new List<int>();
@@ -493,11 +489,11 @@ namespace Catel.Test.Reflection
         #endregion
 
         #region Nested type: TheGetTypesMethod
-        [TestClass]
+        [TestFixture]
         public class TheGetTypesMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ReturnsAllTypesThatMatchThePredicate()
             {
                 var allTypes = TypeCache.GetTypes();
@@ -510,23 +506,23 @@ namespace Catel.Test.Reflection
         #endregion
 
         #region Nested type: TheIsSubclassOfRawGenericMethod
-        [TestClass]
+        [TestFixture]
         public class TheIsSubclassOfRawGenericMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullGeneric()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => TypeHelper.IsSubclassOfRawGeneric(null, typeof (bool)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullToCheck()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => TypeHelper.IsSubclassOfRawGeneric(typeof (bool), null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForNonDerivingClass()
             {
                 var genericType = typeof (SavableModelBase<>);
@@ -535,7 +531,7 @@ namespace Catel.Test.Reflection
                 Assert.IsFalse(TypeHelper.IsSubclassOfRawGeneric(genericType, toCheck.GetType()));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForDerivingClass()
             {
                 var genericType = typeof (List<>);

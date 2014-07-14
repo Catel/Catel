@@ -8,11 +8,7 @@ namespace Catel.Test.Extensions.Data.Specifications
 {
     using Catel.Data.Specifications;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
     
     public class CompositeSpecificationFacts
     {

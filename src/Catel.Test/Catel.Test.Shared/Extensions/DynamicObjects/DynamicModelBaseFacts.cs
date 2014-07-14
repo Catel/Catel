@@ -11,11 +11,8 @@ namespace Catel.Test.Extensions.DynamicObjects
     using System.IO;
     using Catel.Data;
     using Catel.Runtime.Serialization;
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+
+    using NUnit.Framework;
 
     public class DynamicModelBaseFacts
     {
@@ -23,10 +20,10 @@ namespace Catel.Test.Extensions.DynamicObjects
         {
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetValueProperties
         {
-            [TestMethod]
+            [TestCase]
             public void CorrectlyReturnsTheRightValue()
             {
                 dynamic model = new DynamicModel();
@@ -40,10 +37,10 @@ namespace Catel.Test.Extensions.DynamicObjects
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheSetValueProperties
         {
-            [TestMethod]
+            [TestCase]
             public void AutomaticallyRegistersNonExistingProperty()
             {
                 dynamic model = new DynamicModel();
@@ -57,10 +54,10 @@ namespace Catel.Test.Extensions.DynamicObjects
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheModelBaseFunctionality
         {
-            [TestMethod]
+            [TestCase]
             public void SupportsSerialization()
             {
                 dynamic model = new DynamicModel();

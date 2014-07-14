@@ -12,12 +12,7 @@ namespace Catel.Test.IoC
     using Catel.Services;
     using Catel.Test.MVVM.ViewModels.TestClasses;
     using Data;
-
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class TypeFactoryFacts
     {
@@ -101,16 +96,16 @@ namespace Catel.Test.IoC
             public long LongValue { get; private set; }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheCreateInstanceMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ResolvesTypeWithStaticAndNonStaticConstructorButUsesNonStatic()
             {
-                Assert.IsInstanceOfType(TypeFactory.Default.CreateInstance<StaticCtorClass>(), typeof(StaticCtorClass));
+                Assert.IsInstanceOf(typeof(StaticCtorClass), TypeFactory.Default.CreateInstance<StaticCtorClass>());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ResolvesTypeUsingDependencyInjectionFallBackToDefaultConstructor()
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -121,7 +116,7 @@ namespace Catel.Test.IoC
                 Assert.IsTrue(instance.UsedDefaultConstructor);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ResolvesTypeUsingDependencyInjectionFallBackToFirstConstructor()
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -138,7 +133,7 @@ namespace Catel.Test.IoC
                 Assert.AreEqual(null, instance.StringValue);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ResolvesTypeUsingDependencyInjectionFallBackToSecondConstructor()
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -156,7 +151,7 @@ namespace Catel.Test.IoC
                 Assert.AreEqual(null, instance.StringValue);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ResolvesTypeUsingDependencyInjectionUsesConstructorWithMostParametersFirst()
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -175,7 +170,7 @@ namespace Catel.Test.IoC
                 Assert.AreEqual("hi there", instance.StringValue);
             }
 
-            [TestMethod]
+            [TestCase]
             public void CallsCustomInitializationWhenNeeded()
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -185,7 +180,7 @@ namespace Catel.Test.IoC
                 Assert.IsTrue(instance.HasCalledCustomInitialization);
             }
 
-            [TestMethod]
+            [TestCase]
             public void AutomaticallyRegistersDependencyResolverInDependencyResolverManager()
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -214,7 +209,7 @@ namespace Catel.Test.IoC
                 public Z(X x) { }
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsCircularDependencyExceptionForInvalidTypeRequestPath()
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -232,7 +227,7 @@ namespace Catel.Test.IoC
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheCreateInstanceWithAutoCompletionMethod
         {
             public class Person
@@ -279,7 +274,7 @@ namespace Catel.Test.IoC
                 public IUIVisualizerService UiVisualizerService { get; set; }
             }
 
-            [TestMethod]
+            [TestCase]
             public void CreatesTypeUsingSimpleCustomInjectionAndAutoCompletion()
             {
                 var typeFactory = TypeFactory.Default;
@@ -289,7 +284,7 @@ namespace Catel.Test.IoC
                 Assert.AreEqual(42, instance.IntValue);
             }
 
-            [TestMethod]
+            [TestCase]
             public void CreatesTypeUsingComplexCustomInjectionAndAutoCompletion()
             {
                 var typeFactory = TypeFactory.Default;
@@ -301,7 +296,7 @@ namespace Catel.Test.IoC
                 Assert.AreEqual(42L, instance.LongValue);
             }
 
-            [TestMethod]
+            [TestCase]
             public void CreatesTypeWhenDynamicConstructorIsAvailable()
             {
                 var typeFactory = TypeFactory.Default;
@@ -313,7 +308,7 @@ namespace Catel.Test.IoC
                 Assert.IsTrue(instance.IsTypedConstructorCalled);
             }
 
-            [TestMethod]
+            [TestCase]
             public void CreatesTypeWithInjectionConstructorAttribute()
             {
                 var typeFactory = TypeFactory.Default;
@@ -323,7 +318,7 @@ namespace Catel.Test.IoC
                 Assert.IsTrue(instance.IsRightConstructorUsed);
             }
 
-            [TestMethod]
+            [TestCase]
             public void CreatesTypeWithPropertyInjection()
             {
                 var typeFactory = TypeFactory.Default;

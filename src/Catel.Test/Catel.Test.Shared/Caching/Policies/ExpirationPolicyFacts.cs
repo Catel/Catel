@@ -9,11 +9,7 @@ namespace Catel.Test.Caching.Policies
 
     using Catel.Caching.Policies;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     /// <summary>
     /// The expiration policy facts.
@@ -25,7 +21,7 @@ namespace Catel.Test.Caching.Policies
         /// <summary>
         /// The absolute method.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class TheAbsoluteMethod
         {
             #region Methods
@@ -33,7 +29,7 @@ namespace Catel.Test.Caching.Policies
             /// <summary>
             /// Returns null if expiration date time is in the pass.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ReturnsNullIfExpirationDateTimeIsInThePass()
             {
                 Assert.IsNull(ExpirationPolicy.Absolute(DateTime.Now.AddDays(-1)));
@@ -43,7 +39,7 @@ namespace Catel.Test.Caching.Policies
             /// <summary>
             /// Not returns null if expiration date time is in the pass if force is equals true.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void NotReturnsNullIfExpirationDateTimeIsInThePassIfForceIsEqualsTrue()
             {
                 Assert.IsNotNull(ExpirationPolicy.Absolute(DateTime.Now.AddDays(-1), true));
@@ -58,7 +54,7 @@ namespace Catel.Test.Caching.Policies
         /// <summary>
         /// The duration method.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class TheDurationMethod
         {
             #region Methods
@@ -66,7 +62,7 @@ namespace Catel.Test.Caching.Policies
             /// <summary>
             /// Returns null if ticks of time span is less or equals to zero.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ReturnsNullIfTicksOfTimeSpanIsLessOrEqualsToZero()
             {
                 Assert.IsNull(ExpirationPolicy.Duration(new TimeSpan(0)));
@@ -75,7 +71,7 @@ namespace Catel.Test.Caching.Policies
             /// <summary>
             /// Not returns null if ticks of time span is less or equals to zero if force is equals true.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void NotReturnsNullIfTicksOfTimeSpanIsLessOrEqualsToZeroIfForceIsEqualsTrue()
             {
                 Assert.IsNotNull(ExpirationPolicy.Duration(new TimeSpan(0), true));
@@ -90,7 +86,7 @@ namespace Catel.Test.Caching.Policies
         /// <summary>
         /// The sliding method.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class TheSlidingMethod
         {
             #region Methods
@@ -98,7 +94,7 @@ namespace Catel.Test.Caching.Policies
             /// <summary>
             /// The returns null if ticks of time span is less or equals to zero.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ReturnsNullIfTicksOfTimeSpanIsLessOrEqualsToZero()
             {
                 Assert.IsNull(ExpirationPolicy.Sliding(new TimeSpan(0)));
@@ -107,7 +103,7 @@ namespace Catel.Test.Caching.Policies
             /// <summary>
             /// Not returns null if ticks of time span is less or equals to zero if force is equals true.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void NotReturnsNullIfTicksOfTimeSpanIsLessOrEqualsToZeroIfForceIsEqualsTrue()
             {
                 Assert.IsNotNull(ExpirationPolicy.Sliding(new TimeSpan(0), true));
@@ -122,30 +118,30 @@ namespace Catel.Test.Caching.Policies
         /// <summary>
         /// The custom method.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class TheCustomMethod
         {
             #region Methods
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsNullIfFunctionReturnsTrue()
             {
                 Assert.IsNull(ExpirationPolicy.Custom(() => true));
             }        
             
-            [TestMethod]
+            [TestCase]
             public void ReturnsNullIfFunctionIsNull()
             {
                 Assert.IsNull(ExpirationPolicy.Custom(null));
             }
             
-            [TestMethod]
+            [TestCase]
             public void NotReturnsNullIfFunctionIsNullIfForceIsEqualsTrue()
             {
                 Assert.IsNotNull(ExpirationPolicy.Custom(null, null, true));
             }
             
-            [TestMethod]
+            [TestCase]
             public void NotReturnsNullIfFunctionReturnsFalse()
             {
                 Assert.IsNotNull(ExpirationPolicy.Custom(() => false));

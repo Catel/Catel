@@ -7,25 +7,20 @@ namespace Catel.Test.IoC
 {
     using System;
     using Catel.IoC;
-
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class TypeRequestInfoFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheConstructor
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new TypeRequestInfo(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsValuesCorrectly()
             {
                 var typeRequestInfo = new TypeRequestInfo(typeof(int), "mytag");
@@ -35,10 +30,10 @@ namespace Catel.Test.IoC
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheComparisonMethods
         {
-            [TestMethod]
+            [TestCase]
             public void FunctionsCorrectlyForEqualTypes()
             {
                 var obj1 = new TypeRequestInfo(typeof(int), "mytag");
@@ -54,7 +49,7 @@ namespace Catel.Test.IoC
                 Assert.IsTrue(obj2.Equals(obj1));
             }
 
-            [TestMethod]
+            [TestCase]
             public void FunctionsCorrectlyForDifferentTypes()
             {
                 var obj1 = new TypeRequestInfo(typeof(int), "mytag");
@@ -70,7 +65,7 @@ namespace Catel.Test.IoC
                 Assert.IsFalse(obj2.Equals(obj1));
             }
 
-            [TestMethod]
+            [TestCase]
             public void FunctionsCorrectlyForDifferentTags()
             {
                 var obj1 = new TypeRequestInfo(typeof(int), "mytag1");

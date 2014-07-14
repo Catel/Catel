@@ -11,30 +11,30 @@ namespace Catel.Test.Extensions.Wcf.Server
     using System;
     using System.Linq;
     using Catel.IoC;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using ServiceModel;
     using Services;
 
     public class ServiceHostFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheConstructorMethod
         {
             private readonly Uri[] _endpoints = { new Uri("http://localhost") };
 
-            [TestMethod]
+            [TestCase]
             public void ShouldThrowArgumentNullExceptionForNullAsServiceLocator()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new ServiceHost(null, typeof(TestService), _endpoints));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ShouldThrowArgumentNullExceptionForNullAsServiceType()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new ServiceHost(ServiceLocator.Default, null, _endpoints));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ShouldSucceedToCreateInstance()
             {
                 var serviceType = typeof (TestService);

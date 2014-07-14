@@ -11,24 +11,20 @@ namespace Catel.Test.Memento
     using Catel.Collections;
     using Catel.Memento;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class CollectionChangeUndoFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheConstructor
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullInstance()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new CollectionChangeUndo(null, CollectionChangeType.Add, 0, 0, null, null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsValuesCorrectly()
             {
                 var table = new List<object>();
@@ -43,10 +39,10 @@ namespace Catel.Test.Memento
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheUndoMethod
         {
-            [TestMethod]
+            [TestCase]
             public void HandlesCollectionAddCorrectly()
             {
                 var table = new List<string>(new[] {"currentValue"});
@@ -61,10 +57,10 @@ namespace Catel.Test.Memento
             // TODO: Write replace, remove, move
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheRedoMethod
         {
-            [TestMethod]
+            [TestCase]
             public void HandlesCollectionAddCorrectly()
             {
                 var table = new List<string>();

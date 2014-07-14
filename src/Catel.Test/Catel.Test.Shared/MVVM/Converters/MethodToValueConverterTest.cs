@@ -10,17 +10,13 @@ namespace Catel.Test.MVVM.Converters
     using System.Globalization;
     using Catel.MVVM.Converters;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class MethodToValueConverterTest
     {
         #region Methods
-        [TestMethod]
+        [TestCase]
         public void Convert_ValidMethod()
         {
             var converter = new MethodToValueConverter();
@@ -29,7 +25,7 @@ namespace Catel.Test.MVVM.Converters
             Assert.AreEqual("ABCD", converter.Convert(" ABCD ", typeof (string), "Trim", (CultureInfo)null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void Convert_NullValue()
         {
             var converter = new MethodToValueConverter();
@@ -37,7 +33,7 @@ namespace Catel.Test.MVVM.Converters
             Assert.IsNull(converter.Convert(null, typeof (string), "ToString", (CultureInfo)null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void Convert_InvalidMethod()
         {
             var converter = new MethodToValueConverter();
@@ -45,7 +41,7 @@ namespace Catel.Test.MVVM.Converters
             Assert.AreEqual("Pineapple", converter.Convert("Pineapple", typeof (string), "InvalidMethodName", (CultureInfo)null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void ConvertBack()
         {
             var converter = new MethodToValueConverter();

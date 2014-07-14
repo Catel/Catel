@@ -9,24 +9,20 @@ namespace Catel.Test
     using System;
     using Data;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class ExpressionHelperFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheGetPropertyNameMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullPropertyExpression()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ExpressionHelper.GetPropertyName<object>(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightPropertyNameUsingExpression()
             {
                 var iniEntry = new IniEntry();
@@ -37,7 +33,7 @@ namespace Catel.Test
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetOwnerMethod
         {
             public class TestModel
@@ -52,13 +48,13 @@ namespace Catel.Test
             /// </summary>
             public string MyProperty { get; set; }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullPropertyExpression()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ExpressionHelper.GetOwner<object>(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightOwnerUsingExpression()
             {
                 var owner = ExpressionHelper.GetOwner(() => MyProperty);
@@ -66,7 +62,7 @@ namespace Catel.Test
                 Assert.IsTrue(ReferenceEquals(this, owner));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightOwnerWhenUsingAdditionalParentWithStringProperty()
             {
                 var testModel = new TestModel();
@@ -75,7 +71,7 @@ namespace Catel.Test
                 Assert.IsTrue(ReferenceEquals(testModel, owner));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightOwnerWhenUsingAdditionalParentWithIntProperty()
             {
                 var testModel = new TestModel();

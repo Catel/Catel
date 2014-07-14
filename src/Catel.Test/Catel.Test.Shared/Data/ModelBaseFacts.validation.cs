@@ -12,19 +12,15 @@ namespace Catel.Test.Data
     using Catel.Data;
     using Catel.IoC;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public partial class ModelBaseFacts
     {
-        [TestClass]
+        [TestFixture]
         public class OldStyleUnitTests
         {
             #region Validation
-            [TestMethod]
+            [TestCase]
             public void ValidationWithWarnings()
             {
                 var validationObject = new ObjectWithValidation();
@@ -66,7 +62,7 @@ namespace Catel.Test.Data
             }
 
 #if !WINDOWS_PHONE
-            [TestMethod]
+            [TestCase]
             public void ValidationUsingAnnotationsForCatelProperties()
             {
                 var validationObject = new ObjectWithValidation();
@@ -82,7 +78,7 @@ namespace Catel.Test.Data
                 Assert.IsFalse(validationObject.HasErrors);
             }
 
-            //[TestMethod]
+            //[TestCase]
             //public void ValidationUsingAnnotationsForNonCatelProperties()
             //{
             //    var validationObject = new ObjectWithValidation();
@@ -100,7 +96,7 @@ namespace Catel.Test.Data
             //    Assert.IsFalse(validationObject.HasErrors);
             //}  
 
-            [TestMethod]
+            [TestCase]
             public void ValidationUsingAnnotationsForNonCatelCalculatedProperties()
             {
                 var validationObject = new ObjectWithValidation();
@@ -112,7 +108,7 @@ namespace Catel.Test.Data
 
             #region IDataErrorInfo tests
 #if !WINDOWS_PHONE
-            [TestMethod]
+            [TestCase]
             public void IDataErrorInfo_FieldWithError()
             {
                 var obj = new ValidationTest();
@@ -128,7 +124,7 @@ namespace Catel.Test.Data
                 Assert.IsTrue(string.IsNullOrEmpty(((IDataErrorInfo)obj)["ErrorWhenEmpty"]));
             }
 
-            [TestMethod]
+            [TestCase]
             public void IDataErrorInfo_SetFieldErrorOutsideValidation()
             {
                 var obj = new ValidationTest();
@@ -144,7 +140,7 @@ namespace Catel.Test.Data
                 Assert.IsFalse(string.IsNullOrEmpty(((IDataErrorInfo)obj)["ErrorWhenEmpty"]));
             }
 
-            [TestMethod]
+            [TestCase]
             public void IDataErrorInfo_SetBusinessErrorOutsideValidation()
             {
                 var obj = new ValidationTest();
@@ -164,7 +160,7 @@ namespace Catel.Test.Data
 
             #region INotifyDataErrorInfo tests
 #if !WINDOWS_PHONE
-            [TestMethod]
+            [TestCase]
             public void INotifyDataErrorInfo_FieldWithError()
             {
                 var obj = new ValidationTest();
@@ -204,7 +200,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void INotifyDataErrorInfo_Null()
             {
                 var obj = new ValidationTest();
@@ -244,7 +240,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void INotifyDataErrorInfo_EmptyString()
             {
                 var obj = new ValidationTest();
@@ -287,7 +283,7 @@ namespace Catel.Test.Data
             #endregion
 
             #region IDataWarningInfo tests
-            [TestMethod]
+            [TestCase]
             public void IDataWarningInfo_FieldWithWarning()
             {
                 var obj = new ValidationTest();
@@ -303,7 +299,7 @@ namespace Catel.Test.Data
                 Assert.IsTrue(string.IsNullOrEmpty(((IDataWarningInfo)obj)["WarningWhenEmpty"]));
             }
 
-            [TestMethod]
+            [TestCase]
             public void IDataErrorInfo_SetFieldWarningOutsideValidation()
             {
                 var obj = new ValidationTest();
@@ -319,7 +315,7 @@ namespace Catel.Test.Data
                 Assert.IsFalse(string.IsNullOrEmpty(((IDataWarningInfo)obj)["WarningWhenEmpty"]));
             }
 
-            [TestMethod]
+            [TestCase]
             public void IDataErrorInfo_SetBusinessWarningOutsideValidation()
             {
                 var obj = new ValidationTest();
@@ -337,7 +333,7 @@ namespace Catel.Test.Data
             #endregion
 
             #region INotifyDataWarningInfo tests
-            [TestMethod]
+            [TestCase]
             public void INotifyDataWarningInfo_FieldWithWarning()
             {
                 var obj = new ValidationTest();
@@ -377,7 +373,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void INotifyDataWarningInfo_Null()
             {
                 var obj = new ValidationTest();
@@ -417,7 +413,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void INotifyDataWarningInfo_EmptyString()
             {
                 var obj = new ValidationTest();
@@ -459,7 +455,7 @@ namespace Catel.Test.Data
             #endregion
 
             #region IValidator implementation
-            [TestMethod]
+            [TestCase]
             public void IValidator_CheckIfEventsAreFired()
             {
                 var validator = new TestValidator();
@@ -485,7 +481,7 @@ namespace Catel.Test.Data
             }
 
 #if !WINDOWS_PHONE
-            [TestMethod]
+            [TestCase]
             public void IValidator_AddFieldErrors()
             {
                 var validator = new TestValidator();
@@ -502,7 +498,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual("Error", dataErrorInfo[ClassWithValidator.ErrorPropertyProperty.Name]);
             }
 
-            [TestMethod]
+            [TestCase]
             public void IValidator_AddBusinessRuleErrors()
             {
                 var validator = new TestValidator();
@@ -520,7 +516,7 @@ namespace Catel.Test.Data
             #endregion
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheValidateModelAttribute
         {
             [ValidateModel(typeof(TestValidator))]
@@ -571,7 +567,7 @@ namespace Catel.Test.Data
                 }
             }
 
-            [TestMethod]
+            [TestCase]
             public void AutomaticallyCreatesValidator()
             {
                 ServiceLocator.Default.RegisterType<IValidatorProvider, AttributeValidatorProvider>();
@@ -585,7 +581,7 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheSuspendValidationProperty
         {
             public class SuspendValidationModel : ModelBase
@@ -606,7 +602,7 @@ namespace Catel.Test.Data
                 public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), string.Empty);
             }
 
-            [TestMethod]
+            [TestCase]
             public void PreventsAttributeBasedValidation()
             {
                 var model = new SuspendValidationModel();
@@ -619,7 +615,7 @@ namespace Catel.Test.Data
                 Assert.IsFalse(model.HasErrors);
             }
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlyValidatesUnvalidatedPropertiesWhenSetToTrue()
             {
                 var model = new SuspendValidationModel();
@@ -639,19 +635,19 @@ namespace Catel.Test.Data
 
 #if NET
         // Test case for https://catelproject.atlassian.net/browse/CTL-246
-        [TestClass]
+        [TestFixture]
         public class ValidationOfNonCatelProperties
         {
             public class ModelWithCalculatedPropertiesValidation : ModelBase
             {
-                [Range(1, 10)]
+                [System.ComponentModel.DataAnnotations.Range(1, 10)]
                 public int Weight
                 {
                     get { return 2 * 6; }
                 }
             }
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlyValidatesNonCatelProperties()
             {
                 var model = new ModelWithCalculatedPropertiesValidation();

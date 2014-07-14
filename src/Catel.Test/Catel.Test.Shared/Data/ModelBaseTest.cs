@@ -7,13 +7,9 @@
     using System.IO;
     using Catel.Data;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class ModelBaseTest
     {
         #region Fields
@@ -24,7 +20,7 @@
 
         #region Initialization and cleanup
 #if !NETFX_CORE
-        [TestInitialize]
+        [SetUp]
         public void Initialize()
         {
             if (_filesHelper == null)
@@ -33,7 +29,7 @@
             }
         }
 
-        [TestCleanup]
+        [TearDown]
         public void CleanUp()
         {
             if (_filesHelper != null)
@@ -46,7 +42,7 @@
         #endregion
 
         #region Equal tests
-        [TestMethod]
+        [TestCase]
         public void Equals_Generic()
         {
             // Create 2 objects
@@ -58,7 +54,7 @@
             Assert.IsTrue(obj2.Equals(obj1));
         }
 
-        [TestMethod]
+        [TestCase]
         public void Equals_Generic_Null()
         {
             // Create 2 objects
@@ -69,7 +65,7 @@
             Assert.IsFalse(obj1.Equals(obj2));
         }
 
-        [TestMethod]
+        [TestCase]
         public void Equals_DifferentClassesEqualProperties()
         {
             ClassWithoutPropertiesA a = new ClassWithoutPropertiesA();
@@ -82,7 +78,7 @@
         /// <summary>
         /// Tests the Equals method 1 level deep.
         /// </summary>
-        [TestMethod]
+        [TestCase]
         public void EqualsLevel1()
         {
             // Create 2 objects
@@ -96,7 +92,7 @@
         /// <summary>
         /// Tests the Equals method 2 level deep.
         /// </summary>
-        [TestMethod]
+        [TestCase]
         public void EqualsLevel2()
         {
             // Create 2 objects
@@ -110,7 +106,7 @@
         /// <summary>
         /// Tests the Equals method 3 level deep.
         /// </summary>
-        [TestMethod]
+        [TestCase]
         public void EqualsLevel3()
         {
             // Create 2 objects
@@ -121,7 +117,7 @@
             Assert.AreEqual(obj1, obj2);
         }
 
-        [TestMethod]
+        [TestCase]
         public void Equals_AreNotEqual()
         {
             // Create 2 objects
@@ -137,7 +133,7 @@
         /// <summary>
         /// Tests the parent and child relations.
         /// </summary>
-        [TestMethod]
+        [TestCase]
         public void TestParentAndChildRelationsWhenCreating()
         {
             var parent = new Parent("Parent");
@@ -150,7 +146,7 @@
         /// <summary>
         /// Tests the parent and child relations after deserialization.
         /// </summary>
-        [TestMethod]
+        [TestCase]
         public void TestParentAndChildRelationsWhenBinaryDeserializing()
         {
             var parent = new Parent("Parent");
@@ -174,7 +170,7 @@
         /// <summary>
         /// Tests the parent and child relations after deserialization.
         /// </summary>
-        [TestMethod]
+        [TestCase]
         public void TestParentAndChildRelationsWhenXmlDeserializing()
         {
             var parent = new Parent("Parent");
@@ -201,7 +197,7 @@
         /// Creates the and verify properties on inherited class. This test is used to determine
         /// if the properties defined in a derived class are also registered properly.
         /// </summary>
-        [TestMethod]
+        [TestCase]
         public void CreateAndVerifyPropertiesOnInheritedClass()
         {
             // Create extend ini entry
@@ -216,7 +212,7 @@
         #endregion
 
         #region Read-only tests
-        [TestMethod]
+        [TestCase]
         public void ReadOnlyTest()
         {
             // Declare variables
@@ -241,7 +237,7 @@
         #endregion
 
         #region Default values
-        [TestMethod]
+        [TestCase]
         public void DefaultValues_ValueType_NoDefaultValue()
         {
             var obj = new ObjectWithDefaultValues();
@@ -249,7 +245,7 @@
             Assert.AreEqual(0, obj.ValueType_NoDefaultValue);
         }
 
-        [TestMethod]
+        [TestCase]
         public void DefaultValues_ValueType_DefaultValueViaValue()
         {
             var obj = new ObjectWithDefaultValues();
@@ -257,7 +253,7 @@
             Assert.AreEqual(5, obj.ValueType_DefaultValueViaValue);
         }
 
-        [TestMethod]
+        [TestCase]
         public void DefaultValues_ValueType_DefaultValueViaCallback()
         {
             var obj = new ObjectWithDefaultValues();
@@ -265,7 +261,7 @@
             Assert.AreEqual(10, obj.ValueType_DefaultValueViaCallback);
         }
 
-        [TestMethod]
+        [TestCase]
         public void DefaultValues_ReferenceType_NoDefaultValue()
         {
             var obj = new ObjectWithDefaultValues();
@@ -273,16 +269,16 @@
             Assert.AreEqual(null, obj.ReferenceType_NoDefaultValue);
         }
 
-        [TestMethod]
+        [TestCase]
         public void DefaultValues_ReferenceType_DefaultValueViaValue()
         {
             var obj = new ObjectWithDefaultValues();
 
             Assert.AreNotEqual(null, obj.ReferenceType_DefaultValueViaValue);
-            Assert.IsInstanceOfType(obj.ReferenceType_DefaultValueViaValue, typeof(Collection<int>));
+            Assert.IsInstanceOf(typeof(Collection<int>), obj.ReferenceType_DefaultValueViaValue);
         }
 
-        [TestMethod]
+        [TestCase]
         public void DefaultValues_ReferenceType_DefaultValueViaValue_SameInstanceForAllClasses()
         {
             var obj1 = new ObjectWithDefaultValues();
@@ -291,16 +287,16 @@
             Assert.IsTrue(ReferenceEquals(obj1.ReferenceType_DefaultValueViaValue, obj2.ReferenceType_DefaultValueViaValue));
         }
 
-        [TestMethod]
+        [TestCase]
         public void DefaultValues_ReferenceType_DefaultValueViaCallback()
         {
             var obj = new ObjectWithDefaultValues();
 
             Assert.AreNotEqual(null, obj.ReferenceType_DefaultValueViaCallback);
-            Assert.IsInstanceOfType(obj.ReferenceType_DefaultValueViaCallback, typeof(Collection<int>));
+            Assert.IsInstanceOf(typeof(Collection<int>), obj.ReferenceType_DefaultValueViaCallback);
         }
 
-        [TestMethod]
+        [TestCase]
         public void DefaultValues_ReferenceType_DefaultValueViaValue_DifferentInstanceForAllClasses()
         {
             var obj1 = new ObjectWithDefaultValues();
@@ -352,7 +348,7 @@
             public static readonly PropertyData CancallableProperty = RegisterProperty("Cancallable", typeof(string), "cancallable");
         }
 
-        [TestMethod]
+        [TestCase]
         public void NotifyPropertyChanging()
         {
             var obj = ModelBaseTestHelper.CreateIniEntryObject();
@@ -380,7 +376,7 @@
             Assert.IsTrue(isInvoked, "PropertyChanging was not invoked");
         }
 
-        [TestMethod]
+        [TestCase]
         public void NotifyPropertyChangingDoesNotCallForEqualPropertyValue()
         {
             var changingTest = new ChangingTest();
@@ -389,7 +385,7 @@
             changingTest.NonCancallable = ChangingTest.NonCancallableProperty.GetDefaultValue<string>();
         }
 
-        [TestMethod]
+        [TestCase]
         public void NotifyPropertyChangingPreventsSetValue()
         {
             var changingTest = new ChangingTest();
@@ -407,7 +403,7 @@
 
         #region Attribute validation
 #if NET || SL5
-        [TestMethod]
+        [TestCase]
         public void AttributeValidation_DoNotValidate()
         {
             var instance = new ObjectWithValidation();
@@ -426,7 +422,7 @@
         #endregion
 
         #region INotifyPropertyChanged tests
-        [TestMethod]
+        [TestCase]
         public void NotifyPropertyChanged_Automatic()
         {
             var obj = ModelBaseTestHelper.CreateIniEntryObject();
@@ -454,7 +450,7 @@
             }
         }
 
-        [TestMethod]
+        [TestCase]
         public void NotifyPropertyChanged_ManualByExpression()
         {
             var obj = ModelBaseTestHelper.CreateIniEntryObject();
@@ -482,7 +478,7 @@
             }
         }
 
-        [TestMethod]
+        [TestCase]
         public void NotifyPropertyChanged_ManualByStringLiteral()
         {
             var obj = ModelBaseTestHelper.CreateIniEntryObject();
@@ -510,7 +506,7 @@
             }
         }
 
-        [TestMethod]
+        [TestCase]
         public void NotifyPropertyChanged_OldValueSupport()
         {
             var obj = new IniEntry();
@@ -538,7 +534,7 @@
             Assert.AreEqual("new value", newValue);
         }
 
-        [TestMethod]
+        [TestCase]
         public void InvokePropertyChangedForAllRegisteredProperties()
         {
             List<string> expectedProperties = new List<string>();
@@ -568,10 +564,10 @@
         }
         #endregion
 
-        [TestClass]
+        [TestFixture]
         public class TheHideValidationResultsProperty
         {
-            [TestMethod]
+            [TestCase]
             public void HidesTheFieldErrorsWhenTrue()
             {
                 var obj = new ValidationTest();
@@ -587,7 +583,7 @@
                 Assert.AreNotEqual(string.Empty, ((IDataErrorInfo)obj)["ErrorWhenEmpty"]);
             }
 
-            [TestMethod]
+            [TestCase]
             public void HidesTheBusinessRuleErrorsWhenTrue()
             {
                 var obj = new ValidationTest();
@@ -603,7 +599,7 @@
                 Assert.AreNotEqual(string.Empty, ((IDataErrorInfo)obj).Error);
             }
 
-            [TestMethod]
+            [TestCase]
             public void HidesTheFieldWarningsWhenTrue()
             {
                 var obj = new ValidationTest();
@@ -619,7 +615,7 @@
                 Assert.AreNotEqual(string.Empty, ((IDataWarningInfo)obj)["WarningWhenEmpty"]);
             }
 
-            [TestMethod]
+            [TestCase]
             public void HidesTheBusinessRuleWarningsWhenTrue()
             {
                 var obj = new ValidationTest();
@@ -636,10 +632,10 @@
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheIsDirtyProperty
         {
-            [TestMethod]
+            [TestCase]
             public void IsFalseByDefault()
             {
                 var model = new ObjectWithCustomType();
@@ -647,7 +643,7 @@
                 Assert.IsFalse(model.IsDirty);
             }
 
-            [TestMethod]
+            [TestCase]
             public void IsTrueAfterChange()
             {
                 var model = new ObjectWithCustomType();
@@ -658,7 +654,7 @@
         }
 
         #region IsDirty with children test
-        [TestMethod]
+        [TestCase]
         public void IsDirtyWithChildrenWhenSavingChild()
         {
             // Create a collection
@@ -677,7 +673,7 @@
             Assert.IsTrue(computerSettings.IsDirty);
         }
 
-        [TestMethod]
+        [TestCase]
         public void IsDirtyWithChildrenWhenSavingParent()
         {
             // Create a collection
@@ -698,7 +694,7 @@
         #endregion
 
         #region Get/set value
-        [TestMethod]
+        [TestCase]
         public void GetValue_Null()
         {
             IniEntry entry = new IniEntry();
@@ -706,7 +702,7 @@
             ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => entry.GetValue<string>(null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void GetValue_NonExistingProperty()
         {
             IniEntry entry = new IniEntry();
@@ -714,7 +710,7 @@
             ExceptionTester.CallMethodAndExpectException<PropertyNotRegisteredException>(() => entry.GetValue<string>("Non-existing property"));
         }
 
-        [TestMethod]
+        [TestCase]
         public void GetValue_ExistingProperty()
         {
             IniEntry entry = new IniEntry();
@@ -725,14 +721,14 @@
         #endregion
 
         #region Late property registration
-        [TestMethod]
+        [TestCase]
         public void InitializePropertyAfterConstruction_Null()
         {
             var obj = new DynamicObject();
             ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => obj.InitializePropertyAfterConstruction(null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void InitializePropertyAfterConstruction_SingleInstanceConstruction()
         {
             var obj = new DynamicObject();
@@ -743,7 +739,7 @@
             Assert.AreEqual(5, obj.GetValue<int>(dynamicProperty.Name));
         }
 
-        [TestMethod]
+        [TestCase]
         public void InitializePropertyAfterConstruction_DoubleInstanceConstruction()
         {
             // Added because of a bug where double instantiation would not initialize the properties correctly
@@ -766,7 +762,7 @@
 
         #region Non magic string property registration overload
 #if !NETFX_CORE
-        [TestMethod]
+        [TestCase]
         public void PropertiesAreActuallyRegistered()
         {
             var instance = new ClassWithPropertiesRegisteredByNonMagicStringOverload();
@@ -776,7 +772,7 @@
             Assert.IsTrue(instance.IsPropertyRegistered("IntPropertyExcludedFromSerializationAndBackup"));
         }
 
-        [TestMethod]
+        [TestCase]
         public void PropertiesAreActuallyRegisteredWithDefaultValues()
         {
             var instance = new ClassWithPropertiesRegisteredByNonMagicStringOverload();
@@ -786,7 +782,7 @@
             Assert.AreEqual(ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyExcludedFromSerializationAndBackupProperty.GetDefaultValue<int>(), instance.IntPropertyExcludedFromSerializationAndBackup);
         }
 
-        [TestMethod]
+        [TestCase]
         public void PropertiesAreActuallyRegisteredWithTheSpecifiedConfigurationForSerializationAndBackup()
         {
             Assert.AreEqual(true, ClassWithPropertiesRegisteredByNonMagicStringOverload.StringPropertyWithSpecifiedDefaultValueProperty.IncludeInSerialization);
@@ -801,7 +797,7 @@
             Assert.AreEqual(false, ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyExcludedFromSerializationAndBackupProperty.IncludeInBackup);
         }
 
-        [TestMethod]
+        [TestCase]
         public void PropertiesAreRegisteredWithPropertyChangeNotification()
         {
             Assert.IsNotNull(ClassWithPropertiesRegisteredByNonMagicStringOverload.IntPropertyWithPropertyChangeNoticationProperty.PropertyChangedEventHandler);
@@ -852,7 +848,7 @@
             public static readonly PropertyData ReferenceTypeWithDefaultValueProperty = RegisterProperty<TestModelWithGenericPropertyRegistrations, object>(o => o.ReferenceTypeWithDefaultValue, () => new object());
         }
 
-        [TestMethod]
+        [TestCase]
         public void PropertiesAreRegisteredWithGenerics()
         {
             var model = new TestModelWithGenericPropertyRegistrations();

@@ -8,42 +8,38 @@ namespace Catel.Test
 {
     using Data;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class TagHelperFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheAreTagsEqualMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForBothNull()
             {
                 Assert.IsTrue(TagHelper.AreTagsEqual(null, null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForEqualStrings()
             {
                 Assert.IsTrue(TagHelper.AreTagsEqual("Catel", "Catel"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForDifferentStrings()
             {
                 Assert.IsFalse(TagHelper.AreTagsEqual("Catel", "mvvm"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForDifferentCasingStrings()
             {
                 Assert.IsFalse(TagHelper.AreTagsEqual("Catel", "catel"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForEqualInstances()
             {
                 IniEntry firstEntry = ModelBaseTestHelper.CreateIniEntryObject("A", "B", "C");
@@ -56,7 +52,7 @@ namespace Catel.Test
                 Assert.IsTrue(TagHelper.AreTagsEqual(firstEntry, secondEntry));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForDifferentInstances()
             {
                 IniEntry firstEntry = ModelBaseTestHelper.CreateIniEntryObject("A", "B", "C");

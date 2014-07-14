@@ -22,7 +22,7 @@ namespace Catel.Test.Extensions.Prism
     //using Microsoft.Practices.Prism.Modularity;
     //using Microsoft.Practices.Prism.Regions;
     //using Microsoft.Practices.Prism.Regions.Behaviors;
-    //using Microsoft.VisualStudio.TestTools.UnitTesting;
+    //using NUnit.Framework;
 
     //using Moq;
 
@@ -31,7 +31,7 @@ namespace Catel.Test.Extensions.Prism
     ///// <summary>
     ///// Summary description for BootstraperBaseTests
     ///// </summary>
-    //[TestClass]
+    //[TestFixture]
     //public class BootstrapperBaseTests
     //{
     //    #region Constants
@@ -52,7 +52,7 @@ namespace Catel.Test.Extensions.Prism
     //    /// <summary>
     //    /// The test method 1.
     //    /// </summary>
-    //    [TestMethod]
+    //    [TestCase]
     //    public void AfterRunWithDefaultConfigurationIModuleInitializerTypeCouldBeResolvedViaServiceLocator()
     //    {
     //        this.InitializeBootstrapperIfRequired();
@@ -76,7 +76,7 @@ namespace Catel.Test.Extensions.Prism
     //    /// <summary>
     //    /// The after run with default configuration i module manager type could be resolved via service locator.
     //    /// </summary>
-    //    [TestMethod]
+    //    [TestCase]
     //    public void AfterRunWithDefaultConfigurationIModuleManagerTypeCouldBeResolvedViaServiceLocator()
     //    {
     //        this.InitializeBootstrapperIfRequired();
@@ -87,7 +87,7 @@ namespace Catel.Test.Extensions.Prism
     //    /// <summary>
     //    /// The after run with default configuration region adapter mappings type could be resolved via service locator.
     //    /// </summary>
-    //    [TestMethod]
+    //    [TestCase]
     //    public void AfterRunWithDefaultConfigurationRegionAdapterMappingsTypeCouldBeResolvedViaServiceLocator()
     //    {
     //        this.InitializeBootstrapperIfRequired();
@@ -98,7 +98,7 @@ namespace Catel.Test.Extensions.Prism
     //    /// <summary>
     //    /// The after run with default configuration i region manager type could be resolved via service locator.
     //    /// </summary>
-    //    [TestMethod]
+    //    [TestCase]
     //    public void AfterRunWithDefaultConfigurationIRegionManagerTypeCouldBeResolvedViaServiceLocator()
     //    {
     //        this.InitializeBootstrapperIfRequired();
@@ -109,7 +109,7 @@ namespace Catel.Test.Extensions.Prism
     //    /// <summary>
     //    /// The after run with default configuration i event aggregator type could be resolved via service locator.
     //    /// </summary>
-    //    [TestMethod]
+    //    [TestCase]
     //    public void AfterRunWithDefaultConfigurationIEventAggregatorTypeCouldBeResolvedViaServiceLocator()
     //    {
     //        this.InitializeBootstrapperIfRequired();
@@ -120,7 +120,7 @@ namespace Catel.Test.Extensions.Prism
     //    /// <summary>
     //    /// The after run with default configuration i region view registry type could be resolved via service locator.
     //    /// </summary>
-    //    [TestMethod]
+    //    [TestCase]
     //    public void AfterRunWithDefaultConfigurationIRegionViewRegistryTypeCouldBeResolvedViaServiceLocator()
     //    {
     //        this.InitializeBootstrapperIfRequired();
@@ -131,7 +131,7 @@ namespace Catel.Test.Extensions.Prism
     //    /// <summary>
     //    /// The after run with default configuration i region behavior factory type could be resolved via service locator.
     //    /// </summary>
-    //    [TestMethod]
+    //    [TestCase]
     //    public void AfterRunWithDefaultConfigurationIRegionBehaviorFactoryTypeCouldBeResolvedViaServiceLocator()
     //    {
     //        this.InitializeBootstrapperIfRequired();
@@ -142,7 +142,7 @@ namespace Catel.Test.Extensions.Prism
     //    /// <summary>
     //    /// The after run with default configuration i region navigation journal entry type could be resolved via service locator.
     //    /// </summary>
-    //    [TestMethod]
+    //    [TestCase]
     //    public void AfterRunWithDefaultConfigurationIRegionNavigationJournalEntryTypeCouldBeResolvedViaServiceLocator()
     //    {
     //        this.InitializeBootstrapperIfRequired();
@@ -153,7 +153,7 @@ namespace Catel.Test.Extensions.Prism
     //    /// <summary>
     //    /// The after run with default configuration i region navigation journal type could be resolved via service locator.
     //    /// </summary>
-    //    [TestMethod]
+    //    [TestCase]
     //    public void AfterRunWithDefaultConfigurationIRegionNavigationJournalTypeCouldBeResolvedViaServiceLocator()
     //    {
     //        this.InitializeBootstrapperIfRequired();
@@ -164,7 +164,7 @@ namespace Catel.Test.Extensions.Prism
     //    /// <summary>
     //    /// The after run with default configuration i region navigation content loader type could be resolved via service locator.
     //    /// </summary>
-    //    [TestMethod]
+    //    [TestCase]
     //    public void AfterRunWithDefaultConfigurationIRegionNavigationContentLoaderTypeCouldBeResolvedViaServiceLocator()
     //    {
     //        this.InitializeBootstrapperIfRequired();
@@ -175,7 +175,7 @@ namespace Catel.Test.Extensions.Prism
     //    /// <summary>
     //    /// The after run with default configuration i region navigation service loader type could be resolved via service locator.
     //    /// </summary>
-    //    [TestMethod]
+    //    [TestCase]
     //    public void AfterRunWithDefaultConfigurationIRegionNavigationServiceLoaderTypeCouldBeResolvedViaServiceLocator()
     //    {
     //        this.InitializeBootstrapperIfRequired();
@@ -186,7 +186,7 @@ namespace Catel.Test.Extensions.Prism
     //    /// <summary>
     //    /// The after run with default configuration auto populate region behavior is not registered.
     //    /// </summary>
-    //    [TestMethod]
+    //    [TestCase]
     //    public void AfterRunWithDefaultConfigurationAutoPopulateRegionBehaviorIsNotRegistered()
     //    {
     //        this.InitializeBootstrapperIfRequired();
@@ -196,7 +196,7 @@ namespace Catel.Test.Extensions.Prism
     //    /// <summary>
     //    /// The after run with default configuration delayed region creation behavior is not registered.
     //    /// </summary>
-    //    [TestMethod]
+    //    [TestCase]
     //    public void AfterRunWithDefaultConfigurationDelayedRegionCreationBehaviorIsNotRegistered()
     //    {
     //        this.InitializeBootstrapperIfRequired();
@@ -206,7 +206,7 @@ namespace Catel.Test.Extensions.Prism
     //    /// <summary>
     //    /// The after run with default configuration region active aware behavior is not registered.
     //    /// </summary>
-    //    [TestMethod]
+    //    [TestCase]
     //    public void AfterRunWithDefaultConfigurationRegionActiveAwareBehaviorIsNotRegistered()
     //    {
     //        this.InitializeBootstrapperIfRequired();
@@ -216,7 +216,7 @@ namespace Catel.Test.Extensions.Prism
     //    /// <summary>
     //    /// The after run with default configuration region manager registration behavior is not registered.
     //    /// </summary>
-    //    [TestMethod]
+    //    [TestCase]
     //    public void AfterRunWithDefaultConfigurationRegionManagerRegistrationBehaviorIsNotRegistered()
     //    {
     //        this.InitializeBootstrapperIfRequired();
@@ -226,7 +226,7 @@ namespace Catel.Test.Extensions.Prism
     //    /// <summary>
     //    /// The after run with default configuration region member lifetime behavior is not registered.
     //    /// </summary>
-    //    [TestMethod]
+    //    [TestCase]
     //    public void AfterRunWithDefaultConfigurationRegionMemberLifetimeBehaviorIsNotRegistered()
     //    {
     //        this.InitializeBootstrapperIfRequired();
@@ -236,7 +236,7 @@ namespace Catel.Test.Extensions.Prism
     //    /// <summary>
     //    /// The after run with default selector items source sync behavior is not registered.
     //    /// </summary>
-    //    [TestMethod]
+    //    [TestCase]
     //    public void AfterRunWithDefaultSelectorItemsSourceSyncBehaviorIsNotRegistered()
     //    {
     //        this.InitializeBootstrapperIfRequired();
@@ -246,7 +246,7 @@ namespace Catel.Test.Extensions.Prism
     //    /// <summary>
     //    /// The after run with default sync region context with host behavior is not registered.
     //    /// </summary>
-    //    [TestMethod]
+    //    [TestCase]
     //    public void AfterRunWithDefaultSyncRegionContextWithHostBehaviorIsNotRegistered()
     //    {
     //        this.InitializeBootstrapperIfRequired();
@@ -256,7 +256,7 @@ namespace Catel.Test.Extensions.Prism
     //    /// <summary>
     //    /// The after run with default configuration bind region context to dependency object behavior is not registered.
     //    /// </summary>
-    //    [TestMethod]
+    //    [TestCase]
     //    public void AfterRunWithDefaultConfigurationBindRegionContextToDependencyObjectBehaviorIsNotRegistered()
     //    {
     //        this.InitializeBootstrapperIfRequired();
@@ -349,7 +349,7 @@ namespace Catel.Test.Extensions.Prism
     //    /// <summary>
     //    /// The the run method.
     //    /// </summary>
-    //    [TestClass]
+    //    [TestFixture]
     //    public class TheRunMethod
     //    {
     //        #region Methods
@@ -357,7 +357,7 @@ namespace Catel.Test.Extensions.Prism
     //        /// <summary>
     //        /// The throws invalid operation exception if module catalog is null.
     //        /// </summary>
-    //        [TestMethod]
+    //        [TestCase]
     //        public void ThrowsInvalidOperationExceptionIfModuleCatalogIsNull()
     //        {
     //            ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => new NullModuleCatalogBootstrapper(new ServiceLocator()).Run());
@@ -366,7 +366,7 @@ namespace Catel.Test.Extensions.Prism
     //        /// <summary>
     //        /// Throws module type loader not found exception if module type not found.
     //        /// </summary>
-    //        [TestMethod]
+    //        [TestCase]
     //        public void ThrowsModuleTypeLoaderNotFoundExceptionIfModuleTypeNotFound()
     //        {
     //            ExceptionTester.CallMethodAndExpectException<ModuleTypeLoaderNotFoundException>(() => new UnknowModuleBootstrapper(new ServiceLocator()).Run());
@@ -375,7 +375,7 @@ namespace Catel.Test.Extensions.Prism
     //        /// <summary>
     //        /// Registers a module when module manager notifies its 100 percent of load progress.
     //        /// </summary>
-    //        [TestMethod]
+    //        [TestCase]
     //        public void RegistersAModuleWhenModuleManagerNotifiesIts100PercentOfLoadProgress()
     //        {
     //            var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -389,7 +389,7 @@ namespace Catel.Test.Extensions.Prism
     //        /// <summary>
     //        /// The registers a module when module manager notifies its 100 percent of load progress.
     //        /// </summary>
-    //        [TestMethod]
+    //        [TestCase]
     //        public void DoesNotRegisterAModuleIfModuleManagerDoesNotNotifyThe100PercentOfLoadProgress()
     //        {
     //            var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -594,7 +594,7 @@ namespace Catel.Test.Extensions.Prism
     //    /// <summary>
     //    /// The the run with splash screen.
     //    /// </summary>
-    //    [TestClass]
+    //    [TestFixture]
     //    public class TheRunWithSplashScreen
     //    {
     //        #region Methods
@@ -602,7 +602,7 @@ namespace Catel.Test.Extensions.Prism
     //        /// <summary>
     //        /// The registers the boot tasks and calls commit async.
     //        /// </summary>
-    //        [TestMethod]
+    //        [TestCase]
     //        public void RegistersTheBootTasksAndCallsCommitAsync()
     //        {
     //            var splashScreenServiceMock = new Mock<ISplashScreenService>();

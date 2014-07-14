@@ -11,24 +11,20 @@ namespace Catel.Test.MVVM.ViewModels
 
     using TestClasses;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class ManagedViewModelTest
     {
         #region Methods
-        [TestMethod]
+        [TestCase]
         public void Constructor()
         {
             var viewModel = new ManagedViewModel(typeof (InterestingViewModel));
             Assert.AreEqual(typeof (InterestingViewModel), viewModel.ViewModelType);
         }
 
-        [TestMethod]
+        [TestCase]
         public void AddViewModelInstance_Null()
         {
             ViewModelManager.ClearAll();
@@ -38,7 +34,7 @@ namespace Catel.Test.MVVM.ViewModels
             ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewModel.AddViewModelInstance(null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void AddViewModelInstance_WrongType()
         {
             ViewModelManager.ClearAll();
@@ -58,7 +54,7 @@ namespace Catel.Test.MVVM.ViewModels
             }
         }
 
-        [TestMethod]
+        [TestCase]
         public void AddViewModelInstance_NewInstance()
         {
             ViewModelManager.ClearAll();
@@ -67,7 +63,7 @@ namespace Catel.Test.MVVM.ViewModels
             viewModel.AddViewModelInstance(new InterestingViewModel());
         }
 
-        [TestMethod]
+        [TestCase]
         public void RemoveViewModelInstance_Null()
         {
             ViewModelManager.ClearAll();
@@ -77,7 +73,7 @@ namespace Catel.Test.MVVM.ViewModels
             ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewModel.RemoveViewModelInstance(null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void RemoveViewModelInstance_NotRegisteredViewModel()
         {
             ViewModelManager.ClearAll();
@@ -86,7 +82,7 @@ namespace Catel.Test.MVVM.ViewModels
             viewModel.RemoveViewModelInstance(new InterestingViewModel());
         }
 
-        [TestMethod]
+        [TestCase]
         public void RemoveViewModelInstance_RegisteredViewModel()
         {
             ViewModelManager.ClearAll();
@@ -98,7 +94,7 @@ namespace Catel.Test.MVVM.ViewModels
             viewModel.RemoveViewModelInstance(interestingViewModel);
         }
 
-        [TestMethod]
+        [TestCase]
         public void AddInterestedViewModel_Null()
         {
             ViewModelManager.ClearAll();
@@ -108,7 +104,7 @@ namespace Catel.Test.MVVM.ViewModels
             ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewModel.AddInterestedViewModel(null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void RemoveInterestedViewModel_Null()
         {
             ViewModelManager.ClearAll();
@@ -118,7 +114,7 @@ namespace Catel.Test.MVVM.ViewModels
             ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewModel.RemoveInterestedViewModel(null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void InterestingViewModelPropertyChanged()
         {
             ViewModelManager.ClearAll();
@@ -138,7 +134,7 @@ namespace Catel.Test.MVVM.ViewModels
             interestedViewModel.CloseViewModel(false);
         }
 
-        [TestMethod]
+        [TestCase]
         public void InterestingViewModelCommandExecuted()
         {
             ViewModelManager.ClearAll();
@@ -160,7 +156,7 @@ namespace Catel.Test.MVVM.ViewModels
             interestedViewModel.CloseViewModel(false);
         }
 
-        [TestMethod]
+        [TestCase]
         public void InterestingViewModelCommandExecutedWithCommandParameter()
         {
             ViewModelManager.ClearAll();
@@ -181,7 +177,7 @@ namespace Catel.Test.MVVM.ViewModels
             interestedViewModel.CloseViewModel(false);
         }
 
-        [TestMethod]
+        [TestCase]
         public void InterestedViewModelAutomaticallyBeingRemovedWhenClosed()
         {
             ViewModelManager.ClearAll();
@@ -207,7 +203,7 @@ namespace Catel.Test.MVVM.ViewModels
             interestedViewModel.CloseViewModel(false);
         }
 
-        [TestMethod]
+        [TestCase]
         public void InterestingViewModel_Event_SavingAndSaved()
         {
             ViewModelManager.ClearAll();
@@ -225,7 +221,7 @@ namespace Catel.Test.MVVM.ViewModels
             interestedViewModel.CloseViewModel(false);
         }
 
-        [TestMethod]
+        [TestCase]
         public void InterestingViewModel_Event_CancelingAndCanceled()
         {
             ViewModelManager.ClearAll();
@@ -243,7 +239,7 @@ namespace Catel.Test.MVVM.ViewModels
             interestedViewModel.CloseViewModel(false);
         }
 
-        [TestMethod]
+        [TestCase]
         public void InterestingViewModel_Event_Closed()
         {
             ViewModelManager.ClearAll();

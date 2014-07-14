@@ -6,11 +6,7 @@
 
 namespace Catel.Test.MVVM.Exceptions
 {
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class InvalidViewModelExceptionFacts
     {

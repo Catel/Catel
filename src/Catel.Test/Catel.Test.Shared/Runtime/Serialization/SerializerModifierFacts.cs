@@ -14,18 +14,14 @@ namespace Catel.Test.Runtime.Serialization
     using Catel.Runtime.Serialization;
     using Catel.Test.Data;
     using Catel.Test.Runtime.Serialization.TestModels;
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class SerializerModifierFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheSerializerModifierFunctionality
         {
-            [TestMethod]
+            [TestCase]
             public void ComplexInheritanceWorksWithXml()
             {
                 var modelC = new TestModels.ModelC();
@@ -42,7 +38,7 @@ namespace Catel.Test.Runtime.Serialization
             }
 
 #if NET
-            [TestMethod]
+            [TestCase]
             public void ComplexInheritanceWorksWithBinary()
             {
                 var modelC = new TestModels.ModelC();
@@ -59,7 +55,7 @@ namespace Catel.Test.Runtime.Serialization
             }
 #endif
 
-            [TestMethod]
+            [TestCase]
             public void MembersIgnoredViaModifier()
             {
                 var modelC = new TestModels.ModelC();
@@ -70,7 +66,7 @@ namespace Catel.Test.Runtime.Serialization
                 Assert.AreEqual(null, clonedModelC.IgnoredMember);
             }
 
-            [TestMethod]
+            [TestCase]
             public void SerializesAndDeserializesCompletelyDifferentType()
             {
                 var changingType = new ChangingType();

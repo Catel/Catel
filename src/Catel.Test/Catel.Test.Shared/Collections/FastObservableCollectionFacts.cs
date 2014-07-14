@@ -10,18 +10,14 @@ namespace Catel.Test.Collections
     using System.Linq;
     using Catel.Collections;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class FastObservableCollectionFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheIsDirtyProperty
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseWhenNoPendingNotificationsAreListed()
             {
                 var fastCollection = new FastObservableCollection<int>();
@@ -31,7 +27,7 @@ namespace Catel.Test.Collections
                 Assert.IsFalse(fastCollection.IsDirty);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueWhenPendingNotificationsAreListed()
             {
                 var fastCollection = new FastObservableCollection<int>();
@@ -47,17 +43,17 @@ namespace Catel.Test.Collections
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheAddRangeMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullCollection()
             {
                 var fastCollection = new FastObservableCollection<int>();
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => fastCollection.AddItems(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void RaisesSingleEventWhileAddingRange()
             {
                 int counter = 0;
@@ -72,17 +68,17 @@ namespace Catel.Test.Collections
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheRemoveRangeMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullCollection()
             {
                 var fastCollection = new FastObservableCollection<int>();
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => fastCollection.RemoveItems(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void RaisesSingleEventWhileAddingRange()
             {
                 int counter = 0;
@@ -97,10 +93,10 @@ namespace Catel.Test.Collections
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheSuspendNotificationsMethod
         {
-            [TestMethod]
+            [TestCase]
             public void SuspendsValidationWhileAddingAndRemovingItems()
             {
                 int counter = 0;
@@ -128,10 +124,10 @@ namespace Catel.Test.Collections
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class SupportsLinq
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsSingleElementUsingLinq()
             {
                 var fastCollection = new FastObservableCollection<int>();

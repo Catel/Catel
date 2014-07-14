@@ -15,18 +15,14 @@ namespace Catel.Test.Runtime.Serialization
     using Catel.Runtime.Serialization;
     using Catel.Test.Data;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class BinarySerializerFacts
     {
-        [TestClass]
+        [TestFixture]
         public class BasicSerializationFacts
         {
-            [TestMethod]
+            [TestCase]
             public void BinarySerializationLevel1()
             {
                 var originalObject = ModelBaseTestHelper.CreateIniEntryObject();
@@ -35,7 +31,7 @@ namespace Catel.Test.Runtime.Serialization
                 Assert.AreEqual(originalObject, clonedObject);
             }
 
-            [TestMethod]
+            [TestCase]
             public void BinarySerializationLevel2()
             {
                 var originalObject = ModelBaseTestHelper.CreateIniFileObject();
@@ -44,7 +40,7 @@ namespace Catel.Test.Runtime.Serialization
                 Assert.AreEqual(originalObject, clonedObject);
             }
 
-            [TestMethod]
+            [TestCase]
             public void BinarySerializationLevel3()
             {
                 var originalObject = ModelBaseTestHelper.CreateComputerSettingsObject();
@@ -53,7 +49,7 @@ namespace Catel.Test.Runtime.Serialization
                 Assert.AreEqual(originalObject, clonedObject);
             }
 
-            [TestMethod]
+            [TestCase]
             public void BinarySerializationComplexGraphWithInheritance()
             {
                 var originalObject = ModelBaseTestHelper.CreateHierarchicalGraphWithInheritance();
@@ -62,7 +58,7 @@ namespace Catel.Test.Runtime.Serialization
                 Assert.AreEqual(originalObject, clonedObject);
             }
 
-            [TestMethod]
+            [TestCase]
             public void BinarySerializationWithPrivateMembers()
             {
                 // Create new object
@@ -76,10 +72,10 @@ namespace Catel.Test.Runtime.Serialization
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class AdvancedSerializationFacts
         {
-            [TestMethod]
+            [TestCase]
             public void CorrectlySerializesCustomizedModels()
             {
                 var testModel = new TestModel();
@@ -105,7 +101,7 @@ namespace Catel.Test.Runtime.Serialization
                 Assert.AreEqual("included", clonedModel.IncludedCatelProperty);
             }
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlyHandlesSameInstancesInGraph()
             {
                 var graph = SerializationTestHelper.CreateComplexCircularTestModelGraph();
@@ -117,10 +113,10 @@ namespace Catel.Test.Runtime.Serialization
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheWarmupMethod
         {
-            [TestMethod]
+            [TestCase]
             public void WarmsUpSpecificTypes()
             {
                 var typesToWarmup = new Type[] { typeof(CircularTestModel), typeof(TestModel) };
@@ -141,7 +137,7 @@ namespace Catel.Test.Runtime.Serialization
                 // This unit test is written to easily test this functionality though.
             }
 
-            [TestMethod]
+            [TestCase]
             public void WarmsUpAllTypes()
             {
                 var serializer = SerializationFactory.GetBinarySerializer();

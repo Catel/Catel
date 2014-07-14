@@ -8,19 +8,14 @@ namespace Catel.Test.Threading
 {
     using System;
     using Catel.Threading;
-
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class TaskHelperFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheRunAndWaitMethod
         {
-            [TestMethod]
+            [TestCase]
             public void CorrectlyWaitsForAllTasksToBeCompleted()
             {
                 bool a = false;

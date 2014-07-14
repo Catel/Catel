@@ -11,12 +11,7 @@ namespace Catel.Test.IoC
     using System.Linq;
     using Catel.IoC;
     using Catel.Reflection;
-
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     /// <summary>
     /// These feature tests are based on http://featuretests.apphb.com/DependencyInjection.html#GeneralInformation
@@ -55,10 +50,10 @@ namespace Catel.Test.IoC
         }
         #endregion
 
-        [TestClass]
+        [TestFixture]
         public class ListTests
         {
-            //[TestMethod]
+            //[TestCase]
             //public void Array()
             //{
             //    var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -68,7 +63,7 @@ namespace Catel.Test.IoC
             //    AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<IService[]>>(serviceLocator);
             //}
 
-            //[TestMethod]
+            //[TestCase]
             //public void List()
             //{
             //    var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -78,7 +73,7 @@ namespace Catel.Test.IoC
             //    AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<IList<IService>>>(serviceLocator);
             //}
 
-            //[TestMethod]
+            //[TestCase]
             //public void Collection()
             //{
             //    var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -88,7 +83,7 @@ namespace Catel.Test.IoC
             //    AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<ICollection<IService>>>(serviceLocator);
             //}
 
-            //[TestMethod]
+            //[TestCase]
             //public void Enumerable()
             //{
             //    var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -98,7 +93,7 @@ namespace Catel.Test.IoC
             //    AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<IEnumerable<IService>>>(serviceLocator);
             //}
 
-            //[TestMethod]
+            //[TestCase]
             //public void IReadOnlyCollection()
             //{
             //    var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -106,7 +101,7 @@ namespace Catel.Test.IoC
             //    AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<IReadOnlyCollection<IService>>>(serviceLocator);
             //}
 
-            //[TestMethod]
+            //[TestCase]
             //public void IReadOnlyList()
             //{
             //    var serviceLocator = IoCFactory.CreateServiceLocator();

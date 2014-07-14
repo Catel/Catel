@@ -9,18 +9,14 @@ namespace Catel.Test.Runtime
 {
     using Catel.Runtime;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class ReferenceManagerFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheRegisterManuallyMethod
         {
-            [TestMethod]
+            [TestCase]
             public void RegistersManualIds()
             {
                 var obj1 = new object();
@@ -44,10 +40,10 @@ namespace Catel.Test.Runtime
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetInfoByIdMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsNullForNonExistingId()
             {
                 var obj1 = new object();
@@ -63,7 +59,7 @@ namespace Catel.Test.Runtime
                 Assert.IsNull(referenceManager.GetInfoById(5));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsReferenceInfoForNonExistingId()
             {
                 var obj1 = new object();
@@ -80,10 +76,10 @@ namespace Catel.Test.Runtime
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetInfoMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsNullForNullInstance()
             {
                 var referenceManager = new ReferenceManager();
@@ -91,7 +87,7 @@ namespace Catel.Test.Runtime
                 Assert.IsNull(referenceManager.GetInfo(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForFirstUsageOnFirstUsage()
             {
                 var referenceManager = new ReferenceManager();
@@ -100,7 +96,7 @@ namespace Catel.Test.Runtime
                 Assert.IsTrue(referenceInfo.IsFirstUsage);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForFirstUsageOnSecondUsage()
             {
                 var referenceManager = new ReferenceManager();
@@ -112,7 +108,7 @@ namespace Catel.Test.Runtime
                 Assert.IsFalse(referenceInfo.IsFirstUsage);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsSameInfoForSameReference()
             {
                 var obj1 = new object();

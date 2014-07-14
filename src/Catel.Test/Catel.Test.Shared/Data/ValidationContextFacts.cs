@@ -10,18 +10,14 @@ namespace Catel.Test.Data
     using System.Collections.Generic;
     using Catel.Data;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class ValidationContextFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheConstructor
         {
-            [TestMethod]
+            [TestCase]
             public void AcceptsNullArguments()
             {
                 var validationContext = new ValidationContext(null, null);
@@ -31,10 +27,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheHasWarningsProperty
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForValidationContextWithoutWarnings()
             {
                 var context = new ValidationContext();
@@ -42,7 +38,7 @@ namespace Catel.Test.Data
                 Assert.IsFalse(context.HasWarnings);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForValidationContextWithFieldWarnings()
             {
                 var context = CreateValidationContextSimple(true, false, false, false);
@@ -50,7 +46,7 @@ namespace Catel.Test.Data
                 Assert.IsTrue(context.HasWarnings);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForValidationContextWithBusinessRuleWarnings()
             {
                 var context = CreateValidationContextSimple(false, false, true, false);
@@ -59,10 +55,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheHasErrorsProperty
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForValidationContextWithoutErrors()
             {
                 var context = new ValidationContext();
@@ -70,7 +66,7 @@ namespace Catel.Test.Data
                 Assert.IsFalse(context.HasErrors);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForValidationContextWithFieldErrors()
             {
                 var context = CreateValidationContextSimple(false, true, false, false);
@@ -78,7 +74,7 @@ namespace Catel.Test.Data
                 Assert.IsTrue(context.HasErrors);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForValidationContextWithBusinessRuleErrors()
             {
                 var context = CreateValidationContextSimple(false, false, false, true);
@@ -87,10 +83,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetValidationCountMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightAmountForEmptyValidationContext()
             {
                 var context = new ValidationContext();
@@ -98,7 +94,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, context.GetValidationCount());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightAmountForFilledValidationContext()
             {
                 var context = CreateValidationContext();
@@ -106,7 +102,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(8, context.GetValidationCount());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightAmountForEmptyValidationContextWithTag()
             {
                 var context = new ValidationContext();
@@ -114,7 +110,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, context.GetValidationCount("tag"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightAmountForFilledValidationContextWithTag()
             {
                 var context = CreateValidationContext();
@@ -123,10 +119,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetValidationsMethods
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForEmptyContext()
             {
                 var context = new ValidationContext();
@@ -135,7 +131,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, validations.Count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForFilledContext()
             {
                 var context = CreateValidationContext();
@@ -160,7 +156,7 @@ namespace Catel.Test.Data
                 Assert.IsTrue(validations[7] is IBusinessRuleValidationResult);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForEmptyContextWithTag()
             {
                 var context = new ValidationContext();
@@ -169,7 +165,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, validations.Count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForFilledContextWithTag()
             {
                 var context = CreateValidationContext();
@@ -187,10 +183,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetWarningCount
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsZeroForContextWithoutWarnings()
             {
                 var context = new ValidationContext();
@@ -198,7 +194,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, context.GetWarningCount());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForFilledContext()
             {
                 var context = CreateValidationContext();
@@ -206,7 +202,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(4, context.GetWarningCount());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForFilledContextWithTag()
             {
                 var context = CreateValidationContext();
@@ -216,10 +212,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetWarningsMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForEmptyContext()
             {
                 var context = new ValidationContext();
@@ -228,7 +224,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, fieldValidations.Count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForFilledContext()
             {
                 var context = CreateValidationContext();
@@ -249,7 +245,7 @@ namespace Catel.Test.Data
                 Assert.IsTrue(warnings[3] is IBusinessRuleValidationResult);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForFilledContextWithTag()
             {
                 var context = CreateValidationContext();
@@ -265,10 +261,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetErrorCount
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsZeroForContextWithoutErrors()
             {
                 var context = new ValidationContext();
@@ -276,7 +272,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, context.GetWarningCount());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForFilledContext()
             {
                 var context = CreateValidationContext();
@@ -284,7 +280,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(4, context.GetErrorCount());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForFilledContextWithTag()
             {
                 var context = CreateValidationContext();
@@ -294,10 +290,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetErrorsMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForEmptyContext()
             {
                 var context = new ValidationContext();
@@ -306,7 +302,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, fieldValidations.Count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForFilledContext()
             {
                 var context = CreateValidationContext();
@@ -327,7 +323,7 @@ namespace Catel.Test.Data
                 Assert.IsTrue(errors[3] is IBusinessRuleValidationResult);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForFilledContextWithTag()
             {
                 var context = CreateValidationContext();
@@ -343,10 +339,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetFieldValidationCountMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightAmountForEmptyValidationContext()
             {
                 var context = new ValidationContext();
@@ -354,7 +350,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, context.GetFieldValidationCount());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightAmountForFilledValidationContext()
             {
                 var context = CreateValidationContext();
@@ -362,7 +358,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(4, context.GetFieldValidationCount());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightAmountForEmptyValidationContextWithTag()
             {
                 var context = new ValidationContext();
@@ -370,7 +366,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, context.GetFieldValidationCount("tag"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightAmountForFilledValidationContextWithTag()
             {
                 var context = CreateValidationContext();
@@ -379,10 +375,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetFieldValidationsMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForEmptyContext()
             {
                 var context = new ValidationContext();
@@ -391,7 +387,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, fieldValidations.Count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForFilledContext()
             {
                 var context = CreateValidationContext();
@@ -404,7 +400,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual("ErrorWithTag", fieldValidations[3].Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForEmptyContextWithTag()
             {
                 var context = new ValidationContext();
@@ -413,7 +409,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, fieldValidations.Count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForFilledContextWithTag()
             {
                 var context = CreateValidationContext();
@@ -424,7 +420,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual("ErrorWithTag", fieldValidations[1].Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForEmptyContextWithPropertyName()
             {
                 var context = new ValidationContext();
@@ -433,7 +429,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, fieldValidations.Count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForFilledContextWithPropertyName()
             {
                 var context = CreateValidationContext();
@@ -446,7 +442,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual("ErrorWithTag", fieldValidations[3].Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForEmptyContextWithTagAndPropertyName()
             {
                 var context = new ValidationContext();
@@ -455,7 +451,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, fieldValidations.Count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForFilledContextWithTagAndPropertyName()
             {
                 var context = CreateValidationContext();
@@ -467,10 +463,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetFieldWarningCountMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightAmountForEmptyValidationContext()
             {
                 var context = new ValidationContext();
@@ -478,7 +474,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, context.GetFieldWarningCount());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightAmountForFilledValidationContext()
             {
                 var context = CreateValidationContext();
@@ -486,7 +482,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(2, context.GetFieldWarningCount());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightAmountForEmptyValidationContextWithTag()
             {
                 var context = new ValidationContext();
@@ -494,7 +490,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, context.GetFieldWarningCount("tag"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightAmountForFilledValidationContextWithTag()
             {
                 var context = CreateValidationContext();
@@ -503,10 +499,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetFieldWarningsMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForEmptyContext()
             {
                 var context = new ValidationContext();
@@ -515,7 +511,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, fieldValidations.Count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForFilledContext()
             {
                 var context = CreateValidationContext();
@@ -526,7 +522,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual("WarningWithTag", fieldValidations[1].Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForEmptyContextWithTag()
             {
                 var context = new ValidationContext();
@@ -535,7 +531,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, fieldValidations.Count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForFilledContextWithTag()
             {
                 var context = CreateValidationContext();
@@ -545,7 +541,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual("WarningWithTag", fieldValidations[0].Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForEmptyContextWithPropertyName()
             {
                 var context = new ValidationContext();
@@ -554,7 +550,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, fieldValidations.Count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForFilledContextWithPropertyName()
             {
                 var context = CreateValidationContext();
@@ -565,7 +561,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual("WarningWithTag", fieldValidations[1].Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForEmptyContextWithTagAndPropertyName()
             {
                 var context = new ValidationContext();
@@ -574,7 +570,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, fieldValidations.Count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForFilledContextWithTagAndPropertyName()
             {
                 var context = CreateValidationContext();
@@ -585,10 +581,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetFieldErrorCountMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightAmountForEmptyValidationContext()
             {
                 var context = new ValidationContext();
@@ -596,7 +592,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, context.GetFieldErrorCount());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightAmountForFilledValidationContext()
             {
                 var context = CreateValidationContext();
@@ -604,7 +600,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(2, context.GetFieldErrorCount());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightAmountForEmptyValidationContextWithTag()
             {
                 var context = new ValidationContext();
@@ -612,7 +608,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, context.GetFieldErrorCount("tag"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightAmountForFilledValidationContextWithTag()
             {
                 var context = CreateValidationContext();
@@ -621,10 +617,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetFieldErrorsMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForEmptyContext()
             {
                 var context = new ValidationContext();
@@ -633,7 +629,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, fieldValidations.Count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForFilledContext()
             {
                 var context = CreateValidationContext();
@@ -644,7 +640,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual("ErrorWithTag", fieldValidations[1].Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForEmptyContextWithTag()
             {
                 var context = new ValidationContext();
@@ -653,7 +649,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, fieldValidations.Count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForFilledContextWithTag()
             {
                 var context = CreateValidationContext();
@@ -663,7 +659,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual("ErrorWithTag", fieldValidations[0].Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForEmptyContextWithPropertyName()
             {
                 var context = new ValidationContext();
@@ -672,7 +668,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, fieldValidations.Count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForFilledContextWithPropertyName()
             {
                 var context = CreateValidationContext();
@@ -683,7 +679,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual("ErrorWithTag", fieldValidations[1].Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForEmptyContextWithTagAndPropertyName()
             {
                 var context = new ValidationContext();
@@ -692,7 +688,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, fieldValidations.Count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForFilledContextWithTagAndPropertyName()
             {
                 var context = CreateValidationContext();
@@ -703,10 +699,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetBusinessRuleValidationCountMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightAmountForEmptyValidationContext()
             {
                 var context = new ValidationContext();
@@ -714,7 +710,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, context.GetBusinessRuleValidationCount());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightAmountForFilledValidationContext()
             {
                 var context = CreateValidationContext();
@@ -722,7 +718,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(4, context.GetBusinessRuleValidationCount());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightAmountForEmptyValidationContextWithTag()
             {
                 var context = new ValidationContext();
@@ -730,7 +726,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, context.GetBusinessRuleValidationCount("tag"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightAmountForFilledValidationContextWithTag()
             {
                 var context = CreateValidationContext();
@@ -739,10 +735,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetBusinessRuleValidationsMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForEmptyContext()
             {
                 var context = new ValidationContext();
@@ -751,7 +747,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, businessRuleValidations.Count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForFilledContext()
             {
                 var context = CreateValidationContext();
@@ -764,7 +760,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual("ErrorWithTag", businessRuleValidations[3].Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForEmptyContextWithTag()
             {
                 var context = new ValidationContext();
@@ -773,7 +769,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, businessRuleValidations.Count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForFilledContextWithTag()
             {
                 var context = CreateValidationContext();
@@ -785,10 +781,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetBusinessRuleWarningCountMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightAmountForEmptyValidationContext()
             {
                 var context = new ValidationContext();
@@ -796,7 +792,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, context.GetBusinessRuleWarningCount());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightAmountForFilledValidationContext()
             {
                 var context = CreateValidationContext();
@@ -804,7 +800,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(2, context.GetBusinessRuleWarningCount());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightAmountForEmptyValidationContextWithTag()
             {
                 var context = new ValidationContext();
@@ -812,7 +808,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, context.GetBusinessRuleWarningCount("tag"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightAmountForFilledValidationContextWithTag()
             {
                 var context = CreateValidationContext();
@@ -821,10 +817,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetBusinessRuleWarningsMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForEmptyContext()
             {
                 var context = new ValidationContext();
@@ -833,7 +829,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, businessRuleValidations.Count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForFilledContext()
             {
                 var context = CreateValidationContext();
@@ -844,7 +840,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual("WarningWithTag", businessRuleValidations[1].Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForEmptyContextWithTag()
             {
                 var context = new ValidationContext();
@@ -853,7 +849,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, businessRuleValidations.Count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForFilledContextWithTag()
             {
                 var context = CreateValidationContext();
@@ -864,10 +860,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetBusinessRuleErrorCountMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightAmountForEmptyValidationContext()
             {
                 var context = new ValidationContext();
@@ -875,7 +871,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, context.GetBusinessRuleErrorCount());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightAmountForFilledValidationContext()
             {
                 var context = CreateValidationContext();
@@ -883,7 +879,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(2, context.GetBusinessRuleErrorCount());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightAmountForEmptyValidationContextWithTag()
             {
                 var context = new ValidationContext();
@@ -891,7 +887,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, context.GetBusinessRuleErrorCount("tag"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightAmountForFilledValidationContextWithTag()
             {
                 var context = CreateValidationContext();
@@ -900,10 +896,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetBusinessRuleErrorsMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForEmptyContext()
             {
                 var context = new ValidationContext();
@@ -912,7 +908,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, businessRuleValidations.Count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForFilledContext()
             {
                 var context = CreateValidationContext();
@@ -923,7 +919,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual("ErrorWithTag", businessRuleValidations[1].Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForEmptyContextWithTag()
             {
                 var context = new ValidationContext();
@@ -932,7 +928,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, businessRuleValidations.Count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValidationsForFilledContextWithTag()
             {
                 var context = CreateValidationContext();
@@ -943,10 +939,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheAddFieldValidationResultMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullValidationResult()
             {
                 var validationContext = new ValidationContext();
@@ -954,7 +950,7 @@ namespace Catel.Test.Data
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => validationContext.AddFieldValidationResult(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void AddsSingleValidationResultForField()
             {
                 var validationContext = new ValidationContext();
@@ -967,7 +963,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(1, validationContext.GetFieldValidationCount());
             }
 
-            [TestMethod]
+            [TestCase]
             public void AddsMultipleValidationResultsForField()
             {
                 var validationContext = new ValidationContext();
@@ -983,10 +979,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheRemoveFieldValidationResultMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullValidationResult()
             {
                 var validationContext = new ValidationContext();
@@ -994,7 +990,7 @@ namespace Catel.Test.Data
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => validationContext.RemoveFieldValidationResult(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlyHandlesRemovalOfExistingValidationResult()
             {
                 var validationContext = new ValidationContext();
@@ -1009,7 +1005,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, validationContext.GetFieldValidationCount());
             }
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlyHandlesRemovalOfNonExistingValidationResult()
             {
                 var validationContext = new ValidationContext();
@@ -1023,10 +1019,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheAddBusinessRuleValidationResultMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullValidationResult()
             {
                 var validationContext = new ValidationContext();
@@ -1034,7 +1030,7 @@ namespace Catel.Test.Data
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => validationContext.AddBusinessRuleValidationResult(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void AddsValidationResultOnce()
             {
                 var validationContext = new ValidationContext();
@@ -1047,7 +1043,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(1, validationContext.GetBusinessRuleValidationCount());
             }
 
-            [TestMethod]
+            [TestCase]
             public void AddsValidationResultTwice()
             {
                 var validationContext = new ValidationContext();
@@ -1063,10 +1059,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheRemoveBusinessRuleValidationMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullValidationResult()
             {
                 var validationContext = new ValidationContext();
@@ -1074,7 +1070,7 @@ namespace Catel.Test.Data
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => validationContext.RemoveBusinessRuleValidationResult(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlyHandlesRemovalOfExistingValidationResult()
             {
                 var validationContext = new ValidationContext();
@@ -1089,7 +1085,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, validationContext.GetBusinessRuleValidationCount());
             }
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlyHandlesRemovalOfNonExistingValidationResult()
             {
                 var validationContext = new ValidationContext();
@@ -1103,16 +1099,16 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheSynchronizeWithContextMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullValidationContext()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new ValidationContext().SynchronizeWithContext(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlySynchronizesWithNoChanges()
             {
                 var fieldValidationResults1 = new List<IFieldValidationResult>();
@@ -1165,7 +1161,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(ValidationResultType.Error, businessRuleValidations[counter].ValidationResultType);
             }
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlySynchronizesWithAddedFieldWarning()
             {
                 var fieldValidationResults1 = new List<IFieldValidationResult>();
@@ -1217,7 +1213,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(ValidationResultType.Error, businessRuleValidations[counter].ValidationResultType);
             }
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlySynchronizesWithRemovedFieldWarning()
             {
                 var fieldValidationResults1 = new List<IFieldValidationResult>();
@@ -1264,7 +1260,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(ValidationResultType.Error, businessRuleValidations[counter].ValidationResultType);
             }
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlySynchronizesWithAddedFieldError()
             {
                 var fieldValidationResults1 = new List<IFieldValidationResult>();
@@ -1316,7 +1312,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(ValidationResultType.Error, businessRuleValidations[counter].ValidationResultType);
             }
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlySynchronizesWithRemovedFieldError()
             {
                 var fieldValidationResults1 = new List<IFieldValidationResult>();
@@ -1363,7 +1359,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(ValidationResultType.Error, businessRuleValidations[counter].ValidationResultType);
             }
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlySynchronizesWithAddedBusinessRuleWarning()
             {
                 var fieldValidationResults1 = new List<IFieldValidationResult>();
@@ -1415,7 +1411,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(ValidationResultType.Warning, businessRuleValidations[counter].ValidationResultType);
             }
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlySynchronizesWithRemovedBusinessRuleWarning()
             {
                 var fieldValidationResults1 = new List<IFieldValidationResult>();
@@ -1463,7 +1459,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(ValidationResultType.Error, businessRuleValidations[counter].ValidationResultType);
             }
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlySynchronizesWithAddedBusinessRuleError()
             {
                 var fieldValidationResults1 = new List<IFieldValidationResult>();
@@ -1515,7 +1511,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(ValidationResultType.Error, businessRuleValidations[counter].ValidationResultType);
             }
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlySynchronizesWithRemovedBusinessRuleError()
             {
                 var fieldValidationResults1 = new List<IFieldValidationResult>();

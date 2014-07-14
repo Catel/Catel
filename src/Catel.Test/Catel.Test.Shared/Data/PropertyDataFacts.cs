@@ -6,19 +6,14 @@
 
 namespace Catel.Test.Data
 {
-
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class PropertyDataFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheDefaultValueProperty
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsDefaultValueForReferenceTypes()
             {
                 var propertiesObject = new ObjectWithoutDefaultValues();
@@ -27,7 +22,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(null, propertiesObject.ReferenceTypeWithoutDefaultValue);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsDefaultValueForValueTypes()
             {
                 var propertiesObject = new ObjectWithoutDefaultValues();
@@ -37,10 +32,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetDefaultValueMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsDefaultValueForReferenceType()
             {
                 var property = ObjectWithoutDefaultValues.ReferenceTypeProperty;
@@ -48,7 +43,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(property.GetDefaultValue(), property.GetDefaultValue<object>());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsDefaultValueForValueType()
             {
                 var property = ObjectWithoutDefaultValues.ValueTypeProperty;

@@ -8,17 +8,13 @@ namespace Catel.Test.MVVM.Exceptions
 {
     using Catel.MVVM;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class ViewModelNotRegisteredExceptionTest
     {
         #region Methods
-        [TestMethod]
+        [TestCase]
         public void Constructor()
         {
             try

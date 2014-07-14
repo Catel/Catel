@@ -13,20 +13,20 @@ namespace Catel.Test.Extensions.EntityFramework5.Extensions
     using Catel.Data;
     using Catel.Test.EntityFramework5.DbContextTest;
     using Catel.Test.EntityFramework5.DbContextTest.Repositories;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     public class QueryableExtensionsFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheIncludeMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullQueryable()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => QueryableExtensions.Include<DbContextCustomer>(null, x => x.DbContextOrders));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullExpression()
             {
                 using (var dbContext = new TestDbContextContainer())
@@ -38,7 +38,7 @@ namespace Catel.Test.Extensions.EntityFramework5.Extensions
                 }
             }
 
-            [TestMethod]
+            [TestCase]
             public void IncludesEntitiesUsingExpression()
             {
                 using (var dbContext = new TestDbContextContainer())

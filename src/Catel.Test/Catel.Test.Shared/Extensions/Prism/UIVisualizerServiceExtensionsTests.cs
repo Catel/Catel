@@ -19,16 +19,12 @@ namespace Catel.Test.Extensions.Prism
     using Catel.MVVM.Views;
     using Catel.Windows.Controls;
     using Microsoft.Practices.Prism.Regions;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Moq;
+
+    using NUnit.Framework;
 
 #if SILVERLIGHT
     using Microsoft.Silverlight.Testing;
-#endif
-
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
 #endif
 
     /// <summary>
@@ -151,7 +147,7 @@ namespace Catel.Test.Extensions.Prism
         /// <summary>
         /// The the show method.
         /// </summary>
-        [TestClass]
+        [TestFixture, Explicit]
         public class TheActivateMethod
         {
             #region Fields
@@ -190,8 +186,8 @@ namespace Catel.Test.Extensions.Prism
             /// <summary>
             /// The init.
             /// </summary>
-            [TestInitialize]
-            public void Init()
+            [SetUp]
+            public void SetUp()
             {
                 _regionManagerMock = new Mock<IRegionManager>();
                 _activeViewCollection = new Mock<IViewsCollection>();
@@ -215,7 +211,7 @@ namespace Catel.Test.Extensions.Prism
             ///// <summary>
             ///// The throws not supported exception if the region manager is not avaliable.
             ///// </summary>
-            //[TestMethod]
+            //[TestCase]
             //public void ThrowsNotSupportedExceptionIfTheRegionManagerIsNotAvaliable()
             //{
             //    var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -238,7 +234,7 @@ namespace Catel.Test.Extensions.Prism
             /// <summary>
             /// The throws invalid operation if is the first activation of a view model is requested with out region.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ThrowsInvalidOperationIfIsTheFirstActivationOfAViewModelIsRequestedWithOutRegion()
             {
                 _serviceLocator.RegisterInstance(_regionManagerMock.Object);
@@ -257,7 +253,7 @@ namespace Catel.Test.Extensions.Prism
             /// <summary>
             /// The test.
             /// </summary>
-            [TestMethod]
+            [TestCase, Explicit]
             public void CallsAddAndActivateMethodsOfAnExistingRegionWithTheViewThatsBelongToTheViewModel()
             {
                 SetupDefaultRegionManager();
@@ -279,7 +275,7 @@ namespace Catel.Test.Extensions.Prism
             /// <summary>
             /// The allows the reactivation of a deactivated view model.
             /// </summary>
-            [TestMethod]
+            [TestCase, Explicit]
             public void AllowsTheReactivationOfADeactivatedViewModel()
             {
                 SetupDefaultRegionManager();
@@ -310,7 +306,7 @@ namespace Catel.Test.Extensions.Prism
             /// <summary>
             /// The test.
             /// </summary>
-            [TestMethod]
+            [TestCase, Explicit]
             public void NotCallsAddOrActivateMethodsOfViewThatsBelongToTheViewModelIsAlreadyActive()
             {
                 _activeViewCollection.Setup(collection => collection.Contains(It.IsAny<FooViewModelView>())).Returns(true);
@@ -345,7 +341,7 @@ namespace Catel.Test.Extensions.Prism
             /// <summary>
             /// The tries to resolve the views of the parent view model using the view manager.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void TriesToResolveTheViewsOfTheParentViewModelUsingTheViewManager()
             {
                 var fooViewModel = new FooViewModel(_serviceLocator);
@@ -364,7 +360,7 @@ namespace Catel.Test.Extensions.Prism
             /// <summary>
             /// The sets the existing region manager and creates a parent child relationship between the view model with the region and the injected one.
             /// </summary>
-            [TestMethod]
+            [TestCase, Explicit]
             public void SetsTheExistingRegionManagerAndCreatesAParentChildRelationshipBetweenTheViewModelWithTheRegionAndTheInjectedOne()
             {
                 SetupDefaultRegionManager();
@@ -397,7 +393,7 @@ namespace Catel.Test.Extensions.Prism
             /// <summary>
             /// The make a call to resolve the region manager if not found in the visual tree and creates a parent child relationship between the view model with the region and the injected one.
             /// </summary>
-            [TestMethod]
+            [TestCase, Explicit]
             public void MakeACallToResolveTheRegionManagerIfNotFoundInTheVisualTreeAndCreatesAParentChildRelationshipBetweenTheViewModelWithTheRegionAndTheInjectedOne()
             {
                 SetupDefaultRegionManager();
@@ -435,7 +431,7 @@ namespace Catel.Test.Extensions.Prism
             /// <summary>
             /// The throws argument null exception if view model is null.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionIfViewModelIsNull()
             {
                 var uiVisualizerService = _serviceLocator.ResolveType<IUIVisualizerService>();
@@ -445,7 +441,7 @@ namespace Catel.Test.Extensions.Prism
             /// <summary>
             /// The throws argument null exception if parent view model is null.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionIfParentViewModelIsNull()
             {
                 var uiVisualizerService = _serviceLocator.ResolveType<IUIVisualizerService>();
@@ -455,7 +451,7 @@ namespace Catel.Test.Extensions.Prism
             /// <summary>
             /// The throws invalid operation exception if view model and parent view model are reference equals.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ThrowsInvalidOperationExceptionIfViewModelAndParentViewModelAreReferenceEquals()
             {
                 var uiVisualizerService = _serviceLocator.ResolveType<IUIVisualizerService>();
@@ -503,7 +499,7 @@ namespace Catel.Test.Extensions.Prism
         /// <summary>
         /// The the deactivate method.
         /// </summary>
-        [TestClass]
+        [TestFixture, Explicit]
         public class TheDeactivateMethod
         {
             #region Fields
@@ -542,8 +538,8 @@ namespace Catel.Test.Extensions.Prism
             /// <summary>
             /// The init.
             /// </summary>
-            [TestInitialize]
-            public void Init()
+            [SetUp]
+            public void SetUp()
             {
                 _regionManagerMock = new Mock<IRegionManager>();
                 _activeViewCollection = new Mock<IViewsCollection>();
@@ -581,7 +577,7 @@ namespace Catel.Test.Extensions.Prism
             /// <summary>
             /// The is called is the method is close and remove method of the region is called.
             /// </summary>
-            [TestMethod]
+            [TestCase, Explicit]
             public void IsCalledIsTheMethodIsCloseAndRemoveMethodOfTheRegionIsCalled()
             {
                 SetupRegionManagerBehaviorRelatedWithMainRegion();
@@ -605,7 +601,7 @@ namespace Catel.Test.Extensions.Prism
             /// <summary>
             /// The throws argument exception if the view model is null.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionIfTheViewModelIsNull()
             {
                 _serviceLocator.RegisterInstance<IRegionManager>(_regionManagerMock.Object);
@@ -616,7 +612,7 @@ namespace Catel.Test.Extensions.Prism
             /// <summary>
             /// The throws invalid operation exception if the view model is null.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ThrowsInvalidOperationExceptionIfTheViewModelIsNull()
             {
                 var uiVisualizerService = _serviceLocator.ResolveType<IUIVisualizerService>();
@@ -630,14 +626,14 @@ namespace Catel.Test.Extensions.Prism
         /// <summary>
         /// The the show method.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class TheShowMethod
 #if SILVERLIGHT
             : SilverlightTest
 #endif
         {
 #if SILVERLIGHT
-            [TestMethod]
+            [TestCase]
             [Asynchronous]
             public void TheOpenedActionIsCalledWhenViewManagerHaveRegisteredAViewForTheViewModel()
             {
@@ -663,7 +659,7 @@ namespace Catel.Test.Extensions.Prism
                     });
             }
 
-            [TestMethod]
+            [TestCase]
             [Asynchronous]
             public void TheOpenedActionIsCalledEvenWhenThereNoViewsAvailablesInTheExpectedTimeForTheCurrentViewModelButUnlockingTheInspectionThread()
             {
@@ -694,7 +690,7 @@ namespace Catel.Test.Extensions.Prism
             ///// <summary>
             ///// The the opened action is called when view manager have registered a view for the view model.
             ///// </summary>
-            //[TestMethod]
+            //[TestCase]
             //public void TheOpenedActionIsCalledWhenViewManagerHaveRegisteredAViewForTheViewModel()
             //{
             //    var serviceLocator = ServiceLocator.Default;
@@ -724,7 +720,7 @@ namespace Catel.Test.Extensions.Prism
             ///// <summary>
             ///// The the opened action is called even when there no views availables in the expected time for the current view model but unlocking the inspection thread.
             ///// </summary>
-            //[TestMethod]
+            //[TestCase]
             //public async void TheOpenedActionIsCalledEvenWhenThereNoViewsAvailablesInTheExpectedTimeForTheCurrentViewModelButUnlockingTheInspectionThread()
             //{
             //    var serviceLocator = ServiceLocator.Default;

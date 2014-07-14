@@ -12,9 +12,9 @@ namespace Catel.Test.Interception
     using System.Reflection;
     using Catel.IoC;
     using Catel.Reflection;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class MethodInterceptionTests
     {
         #region Fields
@@ -22,13 +22,13 @@ namespace Catel.Test.Interception
         #endregion
 
         #region Methods
-        [TestInitialize]
-        public void Initialization()
+        [SetUp]
+        public void SetUp()
         {
             _serviceLocator = ServiceLocator.Default;
         }
 
-        [TestMethod]
+        [TestCase]
         public void ShouldCallbackOnBefore()
         {
             _serviceLocator.ConfigureInterceptionForType<ITestService, TestService>()
@@ -42,7 +42,7 @@ namespace Catel.Test.Interception
             Assert.IsTrue(resolvedTestService.WasExecuted);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ShouldCallbackOnAfter()
         {
             _serviceLocator.ConfigureInterceptionForType<ITestService, TestService>()
@@ -56,7 +56,7 @@ namespace Catel.Test.Interception
             Assert.IsTrue(resolvedTestService.WasExecuted);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ShouldCallbackOnCatchAndOnFinally()
         {
             var index = 0;
@@ -73,7 +73,7 @@ namespace Catel.Test.Interception
             Assert.AreEqual(1, index);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ShouldCallbackOnBeforeOnFinallyAndOnAfter()
         {
             var index = 0;
@@ -99,7 +99,7 @@ namespace Catel.Test.Interception
             Assert.AreEqual(3, index);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ShouldCallbackOnReturnAndReplaceReturnValue()
         {
             _serviceLocator.ConfigureInterceptionForType<ITestService, TestService>()
@@ -114,7 +114,7 @@ namespace Catel.Test.Interception
             Assert.IsTrue(resolvedTestService.WasExecuted);
         }
 
-        [TestMethod]
+        [TestCase]
         public void CanCallbackOnFinallyIfMethodThrows()
         {
             _serviceLocator.ConfigureInterceptionForType<ITestService, TestService>()
@@ -127,7 +127,7 @@ namespace Catel.Test.Interception
             Assert.IsTrue(resolvedTestService.WasExecuted);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ShouldInterceptAllMembersExceptWhichTagged()
         {
             var index = 0;
@@ -149,7 +149,7 @@ namespace Catel.Test.Interception
             Assert.AreEqual(5, index);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ShouldInterceptAllMethodsGettersAndSetters()
         {
             var index = 0;
@@ -170,7 +170,7 @@ namespace Catel.Test.Interception
             Assert.AreEqual(5, index);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ShouldInterceptGenericMethods()
         {
             var index = 0;
@@ -196,7 +196,7 @@ namespace Catel.Test.Interception
             Assert.AreEqual(2, index);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ShouldInterceptMultipleMembersUsingFluentInstruction()
         {
             var index = 0;
@@ -229,7 +229,7 @@ namespace Catel.Test.Interception
             Assert.AreEqual(3, index);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ShouldInterceptOverloadedMethods()
         {
             var value = false;
@@ -246,7 +246,7 @@ namespace Catel.Test.Interception
         }
 
         [Ignore]
-        [TestMethod]
+        [TestCase]
         public void ShouldInterceptMethodUsingPredicate()
         {
             var index = 0;
@@ -269,7 +269,7 @@ namespace Catel.Test.Interception
             Assert.AreEqual(4, index);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ShouldInterceptManyMethodsWithOneCallback()
         {
             var index = 0;
@@ -294,7 +294,7 @@ namespace Catel.Test.Interception
             Assert.AreEqual(3, index);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ShouldUseTheProvidedTargetInstance()
         {
             var testService = new TestService{Name = "providedInstance"};
@@ -307,7 +307,7 @@ namespace Catel.Test.Interception
             resolvedTestService.Perform();
         }
 
-        [TestMethod]
+        [TestCase]
         public void ShouldInferTargetMethodIfATargetObjectExists()
         {
             var testService = new TestService();
@@ -322,7 +322,7 @@ namespace Catel.Test.Interception
             Assert.IsTrue(testService.WasExecuted);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ShouldSkipTarget()
         {
             var testService = new TestService();

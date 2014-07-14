@@ -10,11 +10,7 @@ namespace Catel.Test.Data
     using System.ComponentModel;
     using Catel.Data;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public partial class ModelBaseFacts
     {
@@ -147,10 +143,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheBeginEditMethod
         {
-            [TestMethod]
+            [TestCase]
             public void AllowsDoubleCalls()
             {
                 var editableObject = new EditableObject();
@@ -160,7 +156,7 @@ namespace Catel.Test.Data
                 editableObjectAsIEditableObject.BeginEdit();
             }
 
-            [TestMethod]
+            [TestCase]
             public void InvokesBeginEditingEvent()
             {
                 var editableObject = new EditableObject();
@@ -176,10 +172,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheCancelEditMethod
         {
-            [TestMethod]
+            [TestCase]
             public void CancelsChangesCorrectlyForSimpleTypes()
             {
                 var iniEntry = ModelBaseTestHelper.CreateIniEntryObject();
@@ -196,7 +192,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual("MyOldValue", iniEntry.Value);
             }
 
-            [TestMethod]
+            [TestCase]
             public void CancelsChangesCorrectlyForObjectWithCustomType()
             {
                 var obj = new ObjectWithCustomType();
@@ -213,13 +209,13 @@ namespace Catel.Test.Data
                 Assert.AreEqual(Gender.Female, obj.Gender);
             }
 
-            [TestMethod]
+            [TestCase]
             public void CancelsChangesForSelfReferencingTypes()
             {
                 //Assert.Inconclusive("Fix in 3.1");
             }
 
-            [TestMethod]
+            [TestCase]
             public void DoesNotInvokeCancelEditingEventAfterBeginEditIsCalled()
             {
                 var editableObject = new EditableObject();
@@ -236,7 +232,7 @@ namespace Catel.Test.Data
                 Assert.IsTrue(editableObject.OnCancelEditCompletedCalled);
             }
 
-            [TestMethod]
+            [TestCase]
             public void InvokesCancelEditingEventAfterBeginEditIsCalled()
             {
                 var editableObject = new EditableObject();
@@ -254,7 +250,7 @@ namespace Catel.Test.Data
                 Assert.IsTrue(editableObject.OnCancelEditCompletedCalled);
             }
 
-            [TestMethod]
+            [TestCase]
             public void InvokesCancelEditingCompletedEventAfterCancelEditIsCanceled()
             {
                 var editableObject = new EditableObject();
@@ -274,7 +270,7 @@ namespace Catel.Test.Data
                 Assert.IsTrue(editableObject.OnCancelEditCompletedCalled);
             }
 
-            [TestMethod]
+            [TestCase]
             public void IgnoresPropertiesNotInBackup()
             {
                 var editableObject = new EditableObject();
@@ -292,10 +288,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheEndEditMethod
         {
-            [TestMethod]
+            [TestCase]
             public void AppliesChangesCorrectlyForSimpleTypes()
             {
                 var iniEntry = ModelBaseTestHelper.CreateIniEntryObject();
@@ -312,7 +308,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual("MyNewValue", iniEntry.Value);
             }
 
-            [TestMethod]
+            [TestCase]
             public void AppliesChangesCorrectlyForObjectWithCustomType()
             {
                 var obj = new ObjectWithCustomType();
@@ -329,13 +325,13 @@ namespace Catel.Test.Data
                 Assert.AreEqual(Gender.Male, obj.Gender);
             }
 
-            [TestMethod]
+            [TestCase]
             public void AppliesChangesForSelfReferencingTypes()
             {
                 //Assert.Inconclusive("Fix in 3.1");
             }
 
-            [TestMethod]
+            [TestCase]
             public void DoesNotInvokeEndEditingEventAfterBeginEditIsCalled()
             {
                 var editableObject = new EditableObject();
@@ -350,7 +346,7 @@ namespace Catel.Test.Data
                 Assert.IsTrue(editableObject.OnEndEditCalled);
             }
 
-            [TestMethod]
+            [TestCase]
             public void InvokesEndEditingEventAfterBeginEditIsCalled()
             {
                 var editableObject = new EditableObject();
@@ -367,10 +363,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheClearIsDirtyMethod
         {
-            [TestMethod]
+            [TestCase]
             public void CorrectlyRaisesPropertyChangedForIsDirty()
             {
                 int isDirtyChangedCalls = 0;

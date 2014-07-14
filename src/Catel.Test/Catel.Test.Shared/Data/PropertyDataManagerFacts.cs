@@ -11,20 +11,16 @@ namespace Catel.Test.Data
     using System.Linq;
     using Catel.Data;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class PropertyDataManagerFacts
     {
         #region Nested type: SupportsGenericClasses
-        [TestClass]
+        [TestFixture]
         public class SupportsGenericClasses
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ReturnsNoPropertiesForOpenGenericTypes()
             {
                 var propertyDataManager = new PropertyDataManager();
@@ -33,7 +29,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, catelTypeInfo.GetCatelProperties().Count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsPropertiesForClosedGenericTypes()
             {
                 var propertyDataManager = new PropertyDataManager();
@@ -85,18 +81,18 @@ namespace Catel.Test.Data
         #endregion
 
         #region Nested type: TheGetPropertiesMethod
-        [TestClass]
+        [TestFixture]
         public class TheGetCatelTypeInfoMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
                 var propertyDataManager = new PropertyDataManager();
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => propertyDataManager.GetCatelTypeInfo(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightPropertiesByType()
             {
                 var propertyDataManager = new PropertyDataManager();
@@ -118,11 +114,11 @@ namespace Catel.Test.Data
         #endregion
 
         #region Nested type: TheGetPropertyDataMethod
-        [TestClass]
+        [TestFixture]
         public class TheGetPropertyDataMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
                 PropertyDataManager propertyDataManager = new PropertyDataManager();
@@ -132,7 +128,7 @@ namespace Catel.Test.Data
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => propertyDataManager.GetPropertyData(null, "stringProperty"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullAndEmptyName()
             {
                 PropertyDataManager propertyDataManager = new PropertyDataManager();
@@ -143,7 +139,7 @@ namespace Catel.Test.Data
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => propertyDataManager.GetPropertyData(typeof (PropertyDataManagerFacts), string.Empty));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsPropertyNotRegisteredExceptionForUnregisteredProperty()
             {
                 PropertyDataManager propertyDataManager = new PropertyDataManager();
@@ -151,7 +147,7 @@ namespace Catel.Test.Data
                 ExceptionTester.CallMethodAndExpectException<PropertyNotRegisteredException>(() => propertyDataManager.GetPropertyData(typeof (PropertyDataManagerFacts), "stringProperty"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsPropertyDataForRegisteredProperty()
             {
                 PropertyDataManager propertyDataManager = new PropertyDataManager();
@@ -167,11 +163,11 @@ namespace Catel.Test.Data
         #endregion
 
         #region Nested type: TheIsPropertyRegisteredMethod
-        [TestClass]
+        [TestFixture]
         public class TheIsPropertyRegisteredMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
                 PropertyDataManager propertyDataManager = new PropertyDataManager();
@@ -181,7 +177,7 @@ namespace Catel.Test.Data
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => propertyDataManager.IsPropertyRegistered(null, "stringProperty"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullAndEmptyName()
             {
                 PropertyDataManager propertyDataManager = new PropertyDataManager();
@@ -192,7 +188,7 @@ namespace Catel.Test.Data
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => propertyDataManager.IsPropertyRegistered(typeof (PropertyDataManagerFacts), string.Empty));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForRegisteredProperty()
             {
                 PropertyDataManager propertyDataManager = new PropertyDataManager();
@@ -202,7 +198,7 @@ namespace Catel.Test.Data
                 Assert.IsTrue(propertyDataManager.IsPropertyRegistered(typeof (PropertyDataManagerFacts), "stringProperty"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForUnregisteredProperty()
             {
                 PropertyDataManager propertyDataManager = new PropertyDataManager();
@@ -214,11 +210,11 @@ namespace Catel.Test.Data
         #endregion
 
         #region Nested type: TheMapPropertyNameToXmlElementNameMethod
-        [TestClass]
+        [TestFixture]
         public class TheMapPropertyNameToXmlElementNameMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
                 var propertyDataManager = new PropertyDataManager();
@@ -228,7 +224,7 @@ namespace Catel.Test.Data
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => propertyDataManager.MapPropertyNameToXmlElementName(null, "stringProperty"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullAndEmptyName()
             {
                 var propertyDataManager = new PropertyDataManager();
@@ -239,7 +235,7 @@ namespace Catel.Test.Data
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => propertyDataManager.MapPropertyNameToXmlElementName(typeof (PropertyDataManagerFacts), string.Empty));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightXmlNameWithoutMappings()
             {
                 // Required to have properties registered
@@ -250,7 +246,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual("PropertyWithoutMapping", xmlName);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightXmlNameWithMappings()
             {
                 // Required to have properties registered
@@ -265,11 +261,11 @@ namespace Catel.Test.Data
         #endregion
 
         #region Nested type: TheMapXmlElementNameToPropertyNameMethod
-        [TestClass]
+        [TestFixture]
         public class TheMapXmlElementNameToPropertyNameMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
                 var propertyDataManager = new PropertyDataManager();
@@ -279,7 +275,7 @@ namespace Catel.Test.Data
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => propertyDataManager.MapXmlElementNameToPropertyName(null, "stringProperty"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullAndEmptyName()
             {
                 var propertyDataManager = new PropertyDataManager();
@@ -290,7 +286,7 @@ namespace Catel.Test.Data
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => propertyDataManager.MapXmlElementNameToPropertyName(typeof (PropertyDataManagerFacts), string.Empty));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightPropertyNameWithoutMappings()
             {
                 // Required to have properties registered
@@ -301,7 +297,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual("PropertyWithoutMapping", propertyName);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightPropertyNameWithMappings()
             {
                 // Required to have properties registered
@@ -316,11 +312,11 @@ namespace Catel.Test.Data
         #endregion
 
         #region Nested type: TheRegisterPropertyMethod
-        [TestClass]
+        [TestFixture]
         public class TheRegisterPropertyMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void SuccessfullyRegistersProperty()
             {
                 var propertyDataManager = new PropertyDataManager();
@@ -332,7 +328,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual("defaultValue", catelTypeInfo.GetPropertyData("stringProperty").GetDefaultValue());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsPropertyAlreadyRegisteredExceptionForDoubleRegistration()
             {
                 var propertyDataManager = new PropertyDataManager();

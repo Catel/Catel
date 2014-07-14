@@ -9,15 +9,15 @@
 namespace Catel.Test.Extensions.EntityFramework5.Data
 {
     using Catel.Data;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using Test.EntityFramework5.DbContextTest;
 
     public class ConnectionStringManagerFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheGetConnectionStringMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsNullByDefault()
             {
                 var connectionStringManager = new ConnectionStringManager();

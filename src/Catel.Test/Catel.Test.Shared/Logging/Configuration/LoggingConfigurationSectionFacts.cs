@@ -13,18 +13,13 @@ namespace Catel.Test.Logging.Configuration
     using Catel.Configuration;
     using Catel.IoC;
     using Catel.Logging;
+    using NUnit.Framework;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
-
-    [TestClass]
+    [TestFixture]
     public class IoLoggingConfigurationSectionFacts
     {
         #region Methods
-        [TestMethod]
+        [TestCase]
         public void LoadSectionFromConfigurationFileTest()
         {
             var openExeConfiguration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
@@ -34,7 +29,7 @@ namespace Catel.Test.Logging.Configuration
             Assert.AreNotEqual(0, configurationSection.LogListenerConfigurationCollection.Count);
         }
 
-        [TestMethod]
+        [TestCase]
         public void InitializeLogListenersFromConfiguration()
         {
             var openExeConfiguration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);

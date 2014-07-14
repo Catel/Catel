@@ -12,18 +12,14 @@ namespace Catel.Test.IO
 
     using Catel.Reflection;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     using Path = Catel.IO.Path;
 
     /// <summary>
     ///   Summary description for PathTest
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public class PathTest
     {
         #region Fields
@@ -34,7 +30,7 @@ namespace Catel.Test.IO
 
         #region Initialization & cleanup
 #if NET
-        [TestInitialize]
+        [SetUp]
         public void Initialize()
         {
             // Determine test directory
@@ -49,7 +45,7 @@ namespace Catel.Test.IO
             Directory.CreateDirectory(_testDirectory);
         }
 
-        [TestCleanup]
+        [TearDown]
         public void CleanUp()
         {
             // Delete test directory
@@ -63,7 +59,7 @@ namespace Catel.Test.IO
 
         #region GetApplicationDataDirectory
 #if NET
-        //[TestMethod]
+        //[TestCase]
         //public void GetApplicationData_EntryAssembly()
         //{
         //    string expected = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -74,7 +70,7 @@ namespace Catel.Test.IO
         //    Assert.AreEqual(expected, result);
         //}
 
-        [TestMethod]
+        [TestCase]
         public void GetApplicationDataDirectoryForAppOnly()
         {
             string expected = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -85,7 +81,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(expected, result);
         }
 
-        [TestMethod]
+        [TestCase]
         public void GetApplicationDataDirectory_CompanyAndApp()
         {
             string expected = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -96,7 +92,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(expected, result);
         }
 
-        [TestMethod]
+        [TestCase]
         public void GetApplicationDataDirectory_CompanyAndAppAndTestDirectoryCreation()
         {
             // Set up directory
@@ -117,7 +113,7 @@ namespace Catel.Test.IO
         #endregion
 
         #region GetDirectoryName
-        [TestMethod]
+        [TestCase]
         public void GetDirectoryName_NormalDirectory()
         {
             string result = Path.GetDirectoryName(@"C:\ParentDirectory\ChildDirectory");
@@ -125,7 +121,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(@"C:\ParentDirectory", result);
         }
 
-        [TestMethod]
+        [TestCase]
         public void GetDirectoryName_RootDirectory()
         {
             string result = Path.GetDirectoryName(@"C:\");
@@ -135,7 +131,7 @@ namespace Catel.Test.IO
         #endregion
 
         #region GetFileName
-        [TestMethod]
+        [TestCase]
         public void GetFileName_WithDirectory()
         {
             // Declare variables
@@ -149,7 +145,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(expectedOutput, output);
         }
 
-        [TestMethod]
+        [TestCase]
         public void GetFileName_WithoutDirectory()
         {
             // Declare variables
@@ -163,7 +159,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(expectedOutput, output);
         }
 
-        [TestMethod]
+        [TestCase]
         public void GetFileName_EmptyInput()
         {
             ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Path.GetFileName(null));
@@ -172,7 +168,7 @@ namespace Catel.Test.IO
         #endregion
 
         #region GetParentDirectory
-        [TestMethod]
+        [TestCase]
         public void GetParentDirectory_File()
         {
             // Declare variables
@@ -186,7 +182,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(expectedOutput, output);
         }
 
-        [TestMethod]
+        [TestCase]
         public void GetParentDirectory_DirectoryEndingWithSlash()
         {
             // Declare variables
@@ -200,7 +196,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(expectedOutput, output);
         }
 
-        [TestMethod]
+        [TestCase]
         public void GetParentDirectory_DirectoryNotEndingWithSlash()
         {
             // Declare variables
@@ -214,7 +210,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(expectedOutput, output);
         }
 
-        [TestMethod]
+        [TestCase]
         public void GetParentDirectory_InvalidInput()
         {
             // Declare variables
@@ -228,7 +224,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(expectedOutput, output);
         }
 
-        [TestMethod]
+        [TestCase]
         public void GetParentDirectory_EmptyInput()
         {
             // Declare variables
@@ -244,7 +240,7 @@ namespace Catel.Test.IO
         #endregion
 
         #region GetRelativePath
-        [TestMethod]
+        [TestCase]
         public void GetRelativePath_Root()
         {
             // Declare variables
@@ -258,7 +254,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(@"Windows\notepad.exe".ToLower(), relative.ToLower());
         }
 
-        [TestMethod]
+        [TestCase]
         public void GetRelativePath_SingleDirectory()
         {
             // Declare variables
@@ -272,7 +268,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(@"notepad.exe".ToLower(), relative.ToLower());
         }
 
-        [TestMethod]
+        [TestCase]
         public void GetRelativePath_SingleDirectoryNotEndingWithSlash()
         {
             // Declare variables
@@ -286,7 +282,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(@"notepad.exe".ToLower(), relative.ToLower());
         }
 
-        [TestMethod]
+        [TestCase]
         public void GetRelativePath_DeeperDirectory()
         {
             // Declare variables
@@ -300,7 +296,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(@"..\notepad.exe".ToLower(), relative.ToLower());
         }
 
-        [TestMethod]
+        [TestCase]
         public void GetRelativePath_SameDirectoryLevelWithDifferentName()
         {
             // Declare variables
@@ -315,7 +311,7 @@ namespace Catel.Test.IO
         }
 
 #if NET
-        [TestMethod]
+        [TestCase]
         public void GetRelativePath_EmptyBasePath()
         {
             // Get current directory
@@ -336,7 +332,7 @@ namespace Catel.Test.IO
         }
 #endif
 
-        [TestMethod]
+        [TestCase]
         public void GetRelativePath_DeepTree()
         {
             // Declare variables
@@ -350,7 +346,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(@"..\..\Level1_\Level2_".ToLower(), relative.ToLower());
         }
 
-        [TestMethod]
+        [TestCase]
         public void GetRelativePath_HigherDirectory()
         {
             // Declare variables
@@ -364,7 +360,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(@"..\..".ToLower(), relative.ToLower());
         }
 
-        [TestMethod]
+        [TestCase]
         public void GetRelativePath_DifferentBaseDirectory()
         {
             // Declare variables
@@ -378,7 +374,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(@"..\Windows\notepad.exe".ToLower(), relative.ToLower());
         }
 
-        [TestMethod]
+        [TestCase]
         public void GetRelativePath_DifferentRoot()
         {
             // Declare variables
@@ -392,7 +388,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(@"C:\Windows\notepad.exe".ToLower(), relative.ToLower());
         }
 
-        [TestMethod]
+        [TestCase]
         public void GetRelativePath_InvalidInput()
         {
             ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Path.GetRelativePath(null, @"C:\test\"));
@@ -401,7 +397,7 @@ namespace Catel.Test.IO
 
         #region GetFullPath
 #if NET
-        [TestMethod]
+        [TestCase]
         public void GetFullPath_FromRootDirectory()
         {
             // Declare variables
@@ -415,7 +411,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(@"C:\Windows\notepad.exe".ToLower(), full.ToLower());
         }
 
-        [TestMethod]
+        [TestCase]
         public void GetFullPath_FileNameOnly()
         {
             // Declare variables
@@ -429,7 +425,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(@"C:\Windows\notepad.exe".ToLower(), full.ToLower());
         }
 
-        [TestMethod]
+        [TestCase]
         public void GetFullPath_FileNameOnlyAndDirectoryWithoutTrailingSlash()
         {
             // Declare variables
@@ -443,7 +439,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(@"C:\Windows\notepad.exe".ToLower(), full.ToLower());
         }
 
-        [TestMethod]
+        [TestCase]
         public void GetFullPath_RelativeDotsDirectory()
         {
             // Declare variables
@@ -457,7 +453,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(@"C:\Windows\notepad.exe".ToLower(), full.ToLower());
         }
 
-        [TestMethod]
+        [TestCase]
         public void GetFullPath_RelativeDotsAndNameDirectory()
         {
             // Declare variables
@@ -471,7 +467,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(@"C:\Windows\notepad.exe".ToLower(), full.ToLower());
         }
 
-        [TestMethod]
+        [TestCase]
         public void GetFullPath_NoBasePath()
         {
             // Declare variables
@@ -488,14 +484,14 @@ namespace Catel.Test.IO
         #endregion
 
         #region AppendTrailing
-        [TestMethod]
+        [TestCase]
         public void AppendTrailingSlash_EmptyValue()
         {
             ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Path.AppendTrailingSlash(null));
             ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Path.AppendTrailingSlash(string.Empty));
         }
 
-        [TestMethod]
+        [TestCase]
         public void AppendTrailingBackslash_WithoutTrailingBackslash()
         {
             // Declare variables
@@ -508,7 +504,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(@"C:\Windows\", result);
         }
 
-        [TestMethod]
+        [TestCase]
         public void AppendTrailingSlash_WithoutTrailingSlash()
         {
             // Declare variables
@@ -521,7 +517,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(@"http://www.catenalogic.com/", result);
         }
 
-        [TestMethod]
+        [TestCase]
         public void AppendTrailingBackslash_WithTrailingBackslash()
         {
             // Declare variables
@@ -534,7 +530,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(@"C:\Windows\", result);
         }
 
-        [TestMethod]
+        [TestCase]
         public void AppendTrailingSlash_WithTrailingSlash()
         {
             // Declare variables
@@ -549,7 +545,7 @@ namespace Catel.Test.IO
         #endregion
 
         #region Combine
-        [TestMethod]
+        [TestCase]
         public void CombinePath_NoValues()
         {
             // Call method
@@ -559,7 +555,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(@"", result);
         }
 
-        [TestMethod]
+        [TestCase]
         public void CombinePath_EmptyValues()
         {
             // Declare variables
@@ -574,7 +570,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(@"", result);
         }
 
-        [TestMethod]
+        [TestCase]
         public void CombinePath_OneNullValue()
         {
             // Declare variables
@@ -589,7 +585,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(@"C:\Program Files", result);
         }
 
-        [TestMethod]
+        [TestCase]
         public void CombinePath_1Value()
         {
             // Declare variables
@@ -602,7 +598,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(@"C:\Windows", result);
         }
 
-        [TestMethod]
+        [TestCase]
         public void CombinePath_2Values()
         {
             // Declare variables
@@ -616,7 +612,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(@"C:\Windows", result);
         }
 
-        [TestMethod]
+        [TestCase]
         public void CombinePath_3Values()
         {
             // Declare variables
@@ -633,7 +629,7 @@ namespace Catel.Test.IO
         #endregion
 
         #region CombineUrls
-        [TestMethod]
+        [TestCase]
         public void CombineUrls_NoValues()
         {
             // Call method
@@ -643,7 +639,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(@"", result);
         }
 
-        [TestMethod]
+        [TestCase]
         public void CombineUrls_1Value()
         {
             // Declare variables
@@ -656,7 +652,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(@"http://www.catenalogic.com", result);
         }
 
-        [TestMethod]
+        [TestCase]
         public void CombineUrls_2Values()
         {
             // Declare variables
@@ -670,7 +666,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(@"http://www.catenalogic.com/products", result);
         }
 
-        [TestMethod]
+        [TestCase]
         public void CombineUrls_3Values()
         {
             // Declare variables
@@ -685,7 +681,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(@"http://www.catenalogic.com/products/updater", result);
         }
 
-        [TestMethod]
+        [TestCase]
         public void CombineUrls_3ValuesAndGarbageSlashes()
         {
             // Declare variables
@@ -700,7 +696,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(@"http://www.catenalogic.com/products/updater", result);
         }
 
-        [TestMethod]
+        [TestCase]
         public void CombineUrls_3ValuesAndRootedPath()
         {
             // Declare variables
@@ -716,7 +712,7 @@ namespace Catel.Test.IO
         }
 
 
-        [TestMethod]
+        [TestCase]
         public void CombineUrls_3ValuesAnd1Empty()
         {
             // Declare variables
@@ -733,14 +729,14 @@ namespace Catel.Test.IO
         #endregion
 
         #region RemoveStartSlashes
-        [TestMethod]
+        [TestCase]
         public void RemoveStartSlashes_EmptyInput()
         {
             ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Path.RemoveStartSlashes(null));
             ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Path.RemoveStartSlashes(string.Empty));
         }
 
-        [TestMethod]
+        [TestCase]
         public void RemoveStartSlashes_StartingWithSlash()
         {
             string result = Path.RemoveStartSlashes(@"\withStartSlash");
@@ -748,7 +744,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(@"withStartSlash", result);
         }
 
-        [TestMethod]
+        [TestCase]
         public void RemoveStartSlashes_NotStartingWithSlash()
         {
             string result = Path.RemoveStartSlashes(@"withoutStartSlash");
@@ -758,14 +754,14 @@ namespace Catel.Test.IO
         #endregion
 
         #region RemoveTrailingSlashes
-        [TestMethod]
+        [TestCase]
         public void RemoveTrailingSlashes_EmptyInput()
         {
             ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Path.RemoveTrailingSlashes(null));
             ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Path.RemoveTrailingSlashes(string.Empty));
         }
 
-        [TestMethod]
+        [TestCase]
         public void RemoveTrailingSlashes_EndingWithSlash()
         {
             string result = Path.RemoveTrailingSlashes(@"withEndingSlash\");
@@ -773,7 +769,7 @@ namespace Catel.Test.IO
             Assert.AreEqual(@"withEndingSlash", result);
         }
 
-        [TestMethod]
+        [TestCase]
         public void RemoveTrailingSlashes_NotRemoveTrailingSlashes_EndingWithSlash()
         {
             string result = Path.RemoveTrailingSlashes(@"withoutEndingSlash");

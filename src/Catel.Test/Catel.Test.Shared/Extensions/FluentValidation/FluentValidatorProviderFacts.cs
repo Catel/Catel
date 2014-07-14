@@ -13,11 +13,7 @@ namespace Catel.Test.Extensions.FluentValidation
     using Catel.Test.Extensions.FluentValidation.Models;
     using Catel.Test.Extensions.FluentValidation.ViewModels;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     /// <summary>
     /// The person view model test fixture.
@@ -27,11 +23,11 @@ namespace Catel.Test.Extensions.FluentValidation
         /// <summary>
         /// The fluent validator provider test.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class FluentValidatorProviderTest
         {
-            [TestInitialize]
-            public void Init()
+            [SetUp]
+            public void SetUp()
             {
                 ServiceLocator.Default.RegisterType<IValidatorProvider, FluentValidatorProvider>();
             }
@@ -39,7 +35,7 @@ namespace Catel.Test.Extensions.FluentValidation
             /// <summary>
             /// The validation 
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ModelBaseWithFieldValidationTest()
             {
                 var personViewModel = new PersonViewModelWithModel { Person = new Person { FirstName = "Igr Alexánder", LastName = string.Empty } };
@@ -54,7 +50,7 @@ namespace Catel.Test.Extensions.FluentValidation
             /// <summary>
             /// The person view model no errors test.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ViewModelBaseNoErrorsTest()
             {
                 var personViewModel = new PersonViewModel { PersonFirstName = "Igr Alexánder", PersonLastName = "Fernández Saúco" };
@@ -69,7 +65,7 @@ namespace Catel.Test.Extensions.FluentValidation
             /// <summary>
             /// The person view model with field errors and business rule warnings test.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ViewModelBaseWithFieldErrorsAndBusinessRuleWarningsValidationTest()
             {
                 var personViewModel = new PersonViewModel();
@@ -93,7 +89,7 @@ namespace Catel.Test.Extensions.FluentValidation
             /// <summary>
             /// The person view with out validator test.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void PersonViewWithOutValidatorTest()
             {
                 var validatorProvider = ServiceLocator.Default.ResolveType<IValidatorProvider>();
@@ -105,14 +101,14 @@ namespace Catel.Test.Extensions.FluentValidation
         /// <summary>
         /// The the cache usage.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class GetValidatorMethod
         {
             /// <summary>
             /// The init.
             /// </summary>
-            [TestInitialize]
-            public void Init()
+            [SetUp]
+            public void SetUp()
             {
                 ServiceLocator.Default.RegisterType<IValidatorProvider, FluentValidatorProvider>();
             }
@@ -120,7 +116,7 @@ namespace Catel.Test.Extensions.FluentValidation
             /// <summary>
             /// The person view with out validator test.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void MustReturnsTheSameInstanceIfCacheIsActive()
             {
                 var validatorProvider = ServiceLocator.Default.ResolveType<IValidatorProvider>();
@@ -133,7 +129,7 @@ namespace Catel.Test.Extensions.FluentValidation
             /// <summary>
             /// The returns different instances if it turned off.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ReturnsDifferentInstancesIfCacheTurnedOff()
             {
                 var validatorProvider = ServiceLocator.Default.ResolveType<IValidatorProvider>();

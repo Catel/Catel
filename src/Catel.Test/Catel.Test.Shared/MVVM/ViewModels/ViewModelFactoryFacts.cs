@@ -9,12 +9,7 @@ namespace Catel.Test.MVVM.ViewModels
     using System;
     using Catel.IoC;
     using Catel.MVVM;
-
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class ViewModelFactoryFacts
     {
@@ -54,17 +49,17 @@ namespace Catel.Test.MVVM.ViewModels
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheCreateViewModelMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullViewModelType()
             {
                 var viewModelFactory = new ViewModelFactory(TypeFactory.Default);
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewModelFactory.CreateViewModel(null, null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsExceptionCausedByInjectionConstructor()
             {
                 var viewModelFactory = new ViewModelFactory(TypeFactory.Default);
@@ -72,7 +67,7 @@ namespace Catel.Test.MVVM.ViewModels
                     e => string.Equals(e.Message, "test"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void InstantiatesViewModelUsingInjectionForDataContext()
             {
                 var viewModelFactory = new ViewModelFactory(TypeFactory.Default);
@@ -82,7 +77,7 @@ namespace Catel.Test.MVVM.ViewModels
                 Assert.AreEqual(5, viewModel.Integer);
             }
 
-            [TestMethod]
+            [TestCase]
             public void InstantiatesViewModelUsingDefaultConstructorForNullDataContext()
             {
                 var viewModelFactory = new ViewModelFactory(TypeFactory.Default);
@@ -91,7 +86,7 @@ namespace Catel.Test.MVVM.ViewModels
                 Assert.IsTrue(viewModel.EmptyConstructorCalled);
             }
 
-            [TestMethod]
+            [TestCase]
             public void InstantiatesViewModelUsingDefaultConstructorForDataContext()
             {
                 var viewModelFactory = new ViewModelFactory(TypeFactory.Default);

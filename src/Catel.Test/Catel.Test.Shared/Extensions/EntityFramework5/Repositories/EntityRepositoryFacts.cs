@@ -14,24 +14,24 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
     using Catel.Test.EntityFramework5.DbContextTest;
     using Catel.Test.EntityFramework5.DbContextTest.Repositories;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     public class EntityRepositoryFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheConstructor
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullDbContext()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new DbContextOrderRepository(null));
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetByKeyMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsNullIfKeyIsInvalid()
             {
                 using (var dbContext = new TestDbContextContainer())
@@ -43,7 +43,7 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
                 }
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsEntityIfKeyIsValid()
             {
                 using (var dbContext = new TestDbContextContainer())
@@ -60,10 +60,10 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheSingleMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsExceptionWhenTableDoesNotContainEntity()
             {
                 using (var dbContext = new TestDbContextContainer())
@@ -75,7 +75,7 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
                 }
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsEntityWhenTableContainsEntity()
             {
                 using (var dbContext = new TestDbContextContainer())
@@ -93,10 +93,10 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheSingleOrDefaultMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsNullWhenTableContainsEntity()
             {
                 using (var dbContext = new TestDbContextContainer())
@@ -109,7 +109,7 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
                 }
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsEntityWhenTableContainsEntity()
             {
                 using (var dbContext = new TestDbContextContainer())
@@ -127,10 +127,10 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheFirstMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsExceptionWhenTableDoesNotContainEntity()
             {
                 using (var dbContext = new TestDbContextContainer())
@@ -142,7 +142,7 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
                 }
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsEntityWhenTableContainsEntity()
             {
                 using (var dbContext = new TestDbContextContainer())
@@ -160,10 +160,10 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheFirstOrDefaultMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsNullWhenTableContainsEntity()
             {
                 using (var dbContext = new TestDbContextContainer())
@@ -176,7 +176,7 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
                 }
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsEntityWhenTableContainsEntity()
             {
                 using (var dbContext = new TestDbContextContainer())
@@ -194,10 +194,10 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheAddMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullEntity()
             {
                 using (var dbContext = new TestDbContextContainer())
@@ -209,7 +209,7 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
                 }  
             }
 
-            [TestMethod]
+            [TestCase]
             public void AddsNonExistingEntity()
             {
                 using (var dbContext = new TestDbContextContainer())
@@ -229,10 +229,10 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheAttachMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullEntity()
             {
                 using (var dbContext = new TestDbContextContainer())
@@ -244,7 +244,7 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
                 }
             }
 
-            [TestMethod]
+            [TestCase]
             public void AddsNonExistingEntity()
             {
                 using (var dbContext = new TestDbContextContainer())
@@ -264,10 +264,10 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheDeleteMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullEntity()
             {
                 using (var dbContext = new TestDbContextContainer())
@@ -279,7 +279,7 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
                 }
             }
 
-            [TestMethod]
+            [TestCase]
             public void DeletesSpecificEntity()
             {
                 using (var dbContext = new TestDbContextContainer())
@@ -303,7 +303,7 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
                 }
             }
 
-            [TestMethod]
+            [TestCase]
             public void SucceedsWhenNoEntitiesMatchFilter()
             {
                 using (var dbContext = new TestDbContextContainer())
@@ -317,7 +317,7 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
                 }
             }
 
-            [TestMethod]
+            [TestCase]
             public void SucceedsWhenEntitiesMatchFilter()
             {
                 using (var dbContext = new TestDbContextContainer())
@@ -340,10 +340,10 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheUpdateMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullEntity()
             {
                 using (var dbContext = new TestDbContextContainer())
@@ -355,7 +355,7 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
                 }
             }
 
-            [TestMethod]
+            [TestCase]
             public void UpdatesEntity()
             {
                 using (var dbContext = new TestDbContextContainer())
@@ -380,10 +380,10 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheFindMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsCorrectEntities()
             {
                 using (var dbContext = new TestDbContextContainer())
@@ -402,10 +402,10 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetAllMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsCorrectEntities()
             {
                 using (var dbContext = new TestDbContextContainer())
@@ -424,10 +424,10 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheCountMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsCorrectEntityCount()
             {
                 using (var dbContext = new TestDbContextContainer())

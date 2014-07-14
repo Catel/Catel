@@ -10,56 +10,56 @@ namespace Catel.Test.Runtime.Serialization
 {
     using Catel.Reflection;
     using Catel.Runtime.Serialization.Binary;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     public class RedirectDeserializationBinderFacts
     {
-        [TestClass]
+        [TestFixture]
         public class ThePerformanceTests
         {
-            [TestMethod]
+            [TestCase]
             public void PerformanceTestWithoutMultithreadedInitialization()
             {
                 PerformanceTest(-1);
             }
 
-            [TestMethod]
+            [TestCase]
             public void PerformanceTestWithMultithreadedInitialization100TypesPerThread()
             {
                 PerformanceTest(100);
             }
 
-            [TestMethod]
+            [TestCase]
             public void PerformanceTestWithMultithreadedInitialization250TypesPerThread()
             {
                 PerformanceTest(250);
             }
 
-            [TestMethod]
+            [TestCase]
             public void PerformanceTestWithMultithreadedInitialization500TypesPerThread()
             {
                 PerformanceTest(500);
             }
 
-            [TestMethod]
+            [TestCase]
             public void PerformanceTestWithMultithreadedInitialization1000TypesPerThread()
             {
                 PerformanceTest(1000);
             }
 
-            [TestMethod]
+            [TestCase]
             public void PerformanceTestWithMultithreadedInitialization2500TypesPerThread()
             {
                 PerformanceTest(2500);
             }
 
-            [TestMethod]
+            [TestCase]
             public void PerformanceTestWithMultithreadedInitialization5000TypesPerThread()
             {
                 PerformanceTest(5000);
             }
 
-            [TestMethod]
+            [TestCase]
             public void PerformanceTestWithMultithreadedInitialization10000TypesPerThread()
             {
                 PerformanceTest(10000);

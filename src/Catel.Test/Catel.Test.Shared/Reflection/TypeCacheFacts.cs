@@ -8,19 +8,14 @@ namespace Catel.Test.Reflection
     using System;
     using System.Collections.Generic;
     using Catel.Reflection;
-
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class TypeCacheFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheGetTypeMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsTypeFromMsCorlib()
             {
                 var type = TypeCache.GetType("System.String");
@@ -28,7 +23,7 @@ namespace Catel.Test.Reflection
                 Assert.AreEqual(typeof(string), type);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTypeFromSystem()
             {
                 var type = TypeCache.GetType("System.Uri");
@@ -36,7 +31,7 @@ namespace Catel.Test.Reflection
                 Assert.AreEqual(typeof(Uri), type);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTypeFromSystemCore()
             {
                 var type = TypeCache.GetType("System.Lazy`1");
@@ -44,7 +39,7 @@ namespace Catel.Test.Reflection
                 Assert.AreEqual(typeof(Lazy<>), type);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTypeForLateBoundGenericTypeMultipleTimes()
             {
                 var type = TypeCache.GetType("System.Collections.Generic.List`1[[System.Int32]]");

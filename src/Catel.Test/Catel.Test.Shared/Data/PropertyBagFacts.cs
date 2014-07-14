@@ -10,18 +10,14 @@ namespace Catel.Test.Data
 
     using Catel.Data;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class PropertyBagFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheIsPropertyAvailableMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForInvalidPropertyName()
             {
                 var propertyBag = new PropertyBag();
@@ -30,7 +26,7 @@ namespace Catel.Test.Data
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => propertyBag.IsPropertyAvailable(string.Empty));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForNonRegisteredPropertyName()
             {
                 var propertyBag = new PropertyBag();
@@ -38,7 +34,7 @@ namespace Catel.Test.Data
                 Assert.IsFalse(propertyBag.IsPropertyAvailable("MyProperty"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForRegisteredPropertyName()
             {
                 var propertyBag = new PropertyBag();
@@ -48,10 +44,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetAllPropertiesMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsAllRegisteredPropertiesWithCorrectValues()
             {
                 var propertyBag = new PropertyBag();
@@ -70,10 +66,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetPropertyValueMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForInvalidPropertyName()
             {
                 var propertyBag = new PropertyBag();
@@ -82,7 +78,7 @@ namespace Catel.Test.Data
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => propertyBag.GetPropertyValue<object>(string.Empty));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsDefaultValueForNonRegisteredProperty()
             {
                 var propertyBag = new PropertyBag();
@@ -91,7 +87,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, propertyBag.GetPropertyValue<int>("IntProperty"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightPropertyValue()
             {
                 var propertyBag = new PropertyBag();
@@ -104,10 +100,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheSetPropertyValueMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForInvalidPropertyName()
             {
                 var propertyBag = new PropertyBag();
@@ -116,7 +112,7 @@ namespace Catel.Test.Data
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => propertyBag.SetPropertyValue(string.Empty, null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsPropertyCorrectly()
             {
                 var propertyBag = new PropertyBag();

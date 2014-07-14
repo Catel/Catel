@@ -7,18 +7,14 @@ namespace Catel.Test.Memento
 {
     using Catel.Memento;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class BatchFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheActionCountProperty
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsZeroForEmptyBatch()
             {
                 var batch = new Batch();
@@ -26,7 +22,7 @@ namespace Catel.Test.Memento
                 Assert.AreEqual(0, batch.ActionCount);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsOneForBatchWithOneAction()
             {
                 var model = new Mocks.MockModel();
@@ -38,10 +34,10 @@ namespace Catel.Test.Memento
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheIsEmptyBatchProperty
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForEmptyBatch()
             {
                 var batch = new Batch();
@@ -49,7 +45,7 @@ namespace Catel.Test.Memento
                 Assert.IsTrue(batch.IsEmptyBatch);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForBatchWithOneAction()
             {
                 var model = new Mocks.MockModel();
@@ -60,7 +56,7 @@ namespace Catel.Test.Memento
                 Assert.IsFalse(batch.IsEmptyBatch);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForBatchWithMultipleActions()
             {
                 var model1 = new Mocks.MockModel();
@@ -74,10 +70,10 @@ namespace Catel.Test.Memento
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheIsSingleActionBatchProperty
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForEmptyBatch()
             {
                 var batch = new Batch();
@@ -85,7 +81,7 @@ namespace Catel.Test.Memento
                 Assert.IsFalse(batch.IsSingleActionBatch);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForBatchWithOneAction()
             {
                 var model = new Mocks.MockModel();
@@ -96,7 +92,7 @@ namespace Catel.Test.Memento
                 Assert.IsTrue(batch.IsSingleActionBatch);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForBatchWithMultipleActions()
             {
                 var model1 = new Mocks.MockModel();
@@ -110,10 +106,10 @@ namespace Catel.Test.Memento
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheCanRedoProperty
         {
-            [TestMethod]
+            [TestCase]
             public void IsFalseWhenNoActionsCanRedo()
             {
                 var model1 = new Mocks.MockModel();
@@ -124,7 +120,7 @@ namespace Catel.Test.Memento
                 Assert.IsFalse(batch.CanRedo);
             }
 
-            [TestMethod]
+            [TestCase]
             public void IsTrueWhenAtLeastOneActionCanRedo()
             {
                 var model1 = new Mocks.MockModel();

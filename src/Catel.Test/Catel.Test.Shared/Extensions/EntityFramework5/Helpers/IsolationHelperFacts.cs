@@ -11,16 +11,16 @@ namespace Catel.Test.Extensions.EntityFramework5
     using System;
     using System.Data;
     using Catel.Data;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     public class IsolationHelperFacts
     {
         #region Nested type: TheTranslateTransactionLevelToSqlMethod
-        [TestClass]
+        [TestFixture]
         public class TheTranslateTransactionLevelToSqlMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ReturnsCorrectValueForReadUncommitted()
             {
                 var expectedValue = "SET TRANSACTION LEVEL ISOLATION LEVEL READ UNCOMMITTED;";

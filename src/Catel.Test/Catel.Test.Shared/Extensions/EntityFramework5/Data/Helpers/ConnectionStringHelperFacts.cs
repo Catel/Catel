@@ -12,22 +12,22 @@ namespace Catel.Test.Extensions.EntityFramework5.Data
     using System.Data.Entity;
     using System.Data.Objects;
     using Catel.Data;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using Test.EntityFramework5.DbContextTest;
     using Test.EntityFramework5.ObjectContextTest;
 
     public class ConnectionStringHelperFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheDbContextSetConnectionStringMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullDbContext()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ConnectionStringHelper.SetConnectionString((DbContext)null, "dummy"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullOrWhitespaceConnectionString()
             {
                 var dbContext = new TestDbContextContainer();
@@ -36,7 +36,7 @@ namespace Catel.Test.Extensions.EntityFramework5.Data
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => ConnectionStringHelper.SetConnectionString(dbContext, string.Empty));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsConnectionString()
             {
                 var dbContext = new TestDbContextContainer();
@@ -47,16 +47,16 @@ namespace Catel.Test.Extensions.EntityFramework5.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheObjectContextSetConnectionStringMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullDbContext()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ConnectionStringHelper.SetConnectionString((ObjectContext)null, "dummy"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullOrWhitespaceConnectionString()
             {
                 var connectionString = EfConnectionStringHelper.GetEntityFrameworkConnectionString(typeof(TestObjectContextContainer), TestConnectionStrings.ObjectContextDefault);
@@ -66,7 +66,7 @@ namespace Catel.Test.Extensions.EntityFramework5.Data
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => ConnectionStringHelper.SetConnectionString(objectContext, string.Empty));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsConnectionString()
             {
                 var connectionString = EfConnectionStringHelper.GetEntityFrameworkConnectionString(typeof(TestObjectContextContainer), TestConnectionStrings.ObjectContextDefault);
@@ -79,16 +79,16 @@ namespace Catel.Test.Extensions.EntityFramework5.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheDbContextGetConnectionStringMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullDbContext()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ConnectionStringHelper.SetConnectionString((DbContext)null, "dummy"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsNamedConnectionString()
             {
                 var context = new TestDbContextContainer();
@@ -97,10 +97,10 @@ namespace Catel.Test.Extensions.EntityFramework5.Data
 
                 var connectionString = context.GetConnectionString();
 
-                Assert.AreEqual(expectedString, connectionString, true);
+                Assert.IsTrue(string.Equals(expectedString, connectionString, StringComparison.OrdinalIgnoreCase));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRealConnectionString()
             {
                 var context = new TestDbContextContainer();
@@ -110,20 +110,20 @@ namespace Catel.Test.Extensions.EntityFramework5.Data
                 context.SetConnectionString(TestConnectionStrings.DbContextModified);
                 var connectionString = context.GetConnectionString();
 
-                Assert.AreEqual(expectedString, connectionString, true);
+                Assert.IsTrue(string.Equals(expectedString, connectionString, StringComparison.OrdinalIgnoreCase));
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheObjectContextGetConnectionStringMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullObjectContext()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ConnectionStringHelper.SetConnectionString((ObjectContext)null, "dummy"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsNamedConnectionString()
             {
                 var context = new TestObjectContextContainer();
@@ -132,10 +132,10 @@ namespace Catel.Test.Extensions.EntityFramework5.Data
 
                 var connectionString = context.GetConnectionString();
 
-                Assert.AreEqual(expectedString, connectionString, true);
+                Assert.IsTrue(string.Equals(expectedString, connectionString, StringComparison.OrdinalIgnoreCase));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRealConnectionString()
             {
                 var context = new TestObjectContextContainer();
@@ -145,7 +145,7 @@ namespace Catel.Test.Extensions.EntityFramework5.Data
                 context.SetConnectionString(TestConnectionStrings.ObjectContextModified);
                 var connectionString = context.GetConnectionString();
 
-                Assert.AreEqual(expectedString, connectionString, true);
+                Assert.IsTrue(string.Equals(expectedString, connectionString, StringComparison.OrdinalIgnoreCase));
             }
         }
     }

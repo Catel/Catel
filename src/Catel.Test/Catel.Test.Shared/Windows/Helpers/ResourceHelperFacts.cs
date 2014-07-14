@@ -9,30 +9,26 @@ namespace Catel.Test.Windows
     using System;
     using Catel.Windows;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class ResourceHelperFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheGetResourceUriMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullResourceUri()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => ResourceHelper.GetResourceUri(null, null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForEmptyResourceUri()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => ResourceHelper.GetResourceUri(string.Empty, null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsPackUriForMethodWithOnlyResourceUri()
             {
                 string packUri = ResourceHelper.GetResourceUri("App.xaml");
@@ -44,7 +40,7 @@ namespace Catel.Test.Windows
 #endif
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsPackUriForCurrentApplicationWithoutStartingSlash()
             {
                 string packUri = ResourceHelper.GetResourceUri("App.xaml", null);
@@ -56,7 +52,7 @@ namespace Catel.Test.Windows
 #endif
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsPackUriForCurrentApplicationWithStartingSlash()
             {
                 string packUri = ResourceHelper.GetResourceUri("/App.xaml", null);
@@ -68,7 +64,7 @@ namespace Catel.Test.Windows
 #endif
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsPackUriForOtherAssemblyWithStartingSlash()
             {
                 string packUri = ResourceHelper.GetResourceUri("App.xaml", "Catel.MVVM");
@@ -80,7 +76,7 @@ namespace Catel.Test.Windows
 #endif
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsPackUriForOtherAssemblyWithoutStartingSlash()
             {
                 string packUri = ResourceHelper.GetResourceUri("/App.xaml", "Catel.MVVM");
@@ -93,48 +89,48 @@ namespace Catel.Test.Windows
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheXamlPageExistsMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullString()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => ResourceHelper.XamlPageExists((string)null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForEmptyString()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => ResourceHelper.XamlPageExists(string.Empty));
             }
 
 #if !NETFX_CORE
-            [TestMethod]
+            [TestCase]
             public void ThrowsUriFormatExceptionForInvalidUriString()
             {
                 ExceptionTester.CallMethodAndExpectException<UriFormatException>(() => ResourceHelper.XamlPageExists("pac://,test[]df`"));
             }
 #endif
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullUri()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ResourceHelper.XamlPageExists((Uri)null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForNonExistingResourceAsUriString()
             {
                 Assert.IsFalse(ResourceHelper.XamlPageExists(ResourceHelper.GetResourceUri("MyApp.xaml", "Catel.Test")));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForExistingResourceAsUriString()
             {
                 Assert.IsTrue(ResourceHelper.XamlPageExists(ResourceHelper.GetResourceUri("App.xaml", "Catel.Test")));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForNonExistingResourceAsUri()
             {
                 ResourceHelper.EnsurePackUriIsAllowed();
@@ -142,7 +138,7 @@ namespace Catel.Test.Windows
                 Assert.IsFalse(ResourceHelper.XamlPageExists(new Uri(ResourceHelper.GetResourceUri("MyApp.xaml", "Catel.Test"), UriKind.RelativeOrAbsolute)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForExistingResourceAsUri()
             {
                 ResourceHelper.EnsurePackUriIsAllowed();

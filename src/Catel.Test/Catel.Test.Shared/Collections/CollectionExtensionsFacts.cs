@@ -11,25 +11,21 @@ namespace Catel.Test.Collections
     using System.Collections.ObjectModel;
     using Catel.Collections;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class CollectionExtensionsFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheCanMoveItemUpMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullList()
             {
                 int item = 2;
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.CanMoveItemUp(null, item));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForNullItem()
             {
                 var list = new List<int> {};
@@ -37,7 +33,7 @@ namespace Catel.Test.Collections
                 Assert.IsFalse(list.CanMoveItemUp(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForListWithSingleItem()
             {
                 var list = new List<int> { 1 };
@@ -45,7 +41,7 @@ namespace Catel.Test.Collections
                 Assert.IsFalse(list.CanMoveItemUp(1));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForNonContainedItem()
             {
                 var list = new List<int> { 1, 2 };
@@ -53,7 +49,7 @@ namespace Catel.Test.Collections
                 Assert.IsFalse(list.CanMoveItemUp(3));                
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForItemAtFirstPosition()
             {
                 var list = new List<int> { 1, 2, 3 };
@@ -61,7 +57,7 @@ namespace Catel.Test.Collections
                 Assert.IsFalse(list.CanMoveItemUp(1));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForItemNoAtFirstPosition()
             {
                 var list = new List<int> { 1, 2, 3 };
@@ -70,24 +66,24 @@ namespace Catel.Test.Collections
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheMoveItemUpMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullList()
             {
                 int item = 2;
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.MoveItemUp(null, item));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullItem()
             {
                 var list = new List<int> { 1, 2, 3 };
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => list.MoveItemUp(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForNotContainedItem()
             {
                 var list = new List<int> { 1, 2, 3 };
@@ -99,7 +95,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(3, list[2]);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForContainedItemAtFirstPosition()
             {
                 var list = new List<int> { 1, 2, 3 };
@@ -111,7 +107,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(3, list[2]);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueAndMovesItemUpForContainedItemAtSecondPosition()
             {
                 var list = new List<int> { 1, 2, 3 };
@@ -124,17 +120,17 @@ namespace Catel.Test.Collections
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheCanMoveItemDownMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullList()
             {
                 int item = 2;
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.CanMoveItemDown(null, item));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForNullItem()
             {
                 var list = new List<int> { };
@@ -142,7 +138,7 @@ namespace Catel.Test.Collections
                 Assert.IsFalse(list.CanMoveItemDown(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForListWithSingleItem()
             {
                 var list = new List<int> { 1 };
@@ -150,7 +146,7 @@ namespace Catel.Test.Collections
                 Assert.IsFalse(list.CanMoveItemDown(1));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForNonContainedItem()
             {
                 var list = new List<int> { 1, 2 };
@@ -158,7 +154,7 @@ namespace Catel.Test.Collections
                 Assert.IsFalse(list.CanMoveItemDown(3));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForItemAtLastPosition()
             {
                 var list = new List<int> { 1, 2, 3 };
@@ -166,7 +162,7 @@ namespace Catel.Test.Collections
                 Assert.IsFalse(list.CanMoveItemDown(3));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForItemNoAtLastPosition()
             {
                 var list = new List<int> { 1, 2, 3 };
@@ -175,30 +171,30 @@ namespace Catel.Test.Collections
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheMoveItemUpByIndexMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullList()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.MoveItemUpByIndex(null, 2));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForIndexSmallerThanZero()
             {
                 var list = new List<int> { 1, 2, 3 };
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.MoveItemUpByIndex(null, -1));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForIndexLargerThanListCount()
             {
                 var list = new List<int> { 1, 2, 3 };
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.MoveItemUpByIndex(null, 3));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForContainedItemAtFirstPosition()
             {
                 var list = new List<int> { 1, 2, 3 };
@@ -210,7 +206,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(3, list[2]);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueAndMovesItemUpForContainedItemAtSecondPosition()
             {
                 var list = new List<int> { 1, 2, 3 };
@@ -223,24 +219,24 @@ namespace Catel.Test.Collections
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheMoveItemDownMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullList()
             {
                 int item = 2;
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.MoveItemDown(null, item));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullItem()
             {
                 var list = new List<int> { 1, 2, 3 };
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => list.MoveItemDown(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForNotContainedItem()
             {
                 var list = new List<int> { 1, 2, 3 };
@@ -252,7 +248,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(3, list[2]);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForContainedItemAtLastPosition()
             {
                 var list = new List<int> { 1, 2, 3 };
@@ -264,7 +260,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(3, list[2]);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueAndMovesItemDownForContainedItemAtSecondPosition()
             {
                 var list = new List<int> { 1, 2, 3 };
@@ -277,30 +273,30 @@ namespace Catel.Test.Collections
             }            
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheMoveItemDownByIndexMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullList()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.MoveItemDownByIndex(null, 2));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForIndexSmallerThanZero()
             {
                 var list = new List<int> { 1, 2, 3 };
                 ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => list.MoveItemDownByIndex(-1));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForIndexLargerThanListCount()
             {
                 var list = new List<int> { 1, 2, 3 };
                 ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => list.MoveItemDownByIndex(3));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForContainedItemAtLastPosition()
             {
                 var list = new List<int> { 1, 2, 3 };
@@ -312,7 +308,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(3, list[2]);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueAndMovesItemDownForContainedItemAtSecondPosition()
             {
                 var list = new List<int> { 1, 2, 3 };
@@ -325,16 +321,16 @@ namespace Catel.Test.Collections
             }            
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheRemoveFirstMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullList()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.RemoveFirst(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ExitsSilentlyForEmptyList()
             {
                 var list = new List<int>();
@@ -342,7 +338,7 @@ namespace Catel.Test.Collections
                 list.RemoveFirst();
             }
 
-            [TestMethod]
+            [TestCase]
             public void RemovesFirstItemFromList()
             {
                 var list = new List<int>(new [] { 1, 2, 3 });
@@ -355,16 +351,16 @@ namespace Catel.Test.Collections
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheRemoveLastMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullList()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.RemoveLast(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ExitsSilentlyForEmptyList()
             {
                 var list = new List<int>();
@@ -372,7 +368,7 @@ namespace Catel.Test.Collections
                 list.RemoveLast();
             }
 
-            [TestMethod]
+            [TestCase]
             public void RemovesLastItemFromList()
             {
                 var list = new List<int>(new[] { 1, 2, 3 });
@@ -385,10 +381,10 @@ namespace Catel.Test.Collections
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheAddRangeMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullCollection()
             {
                 var newList = new List<int> { 4, 5, 6 };
@@ -396,7 +392,7 @@ namespace Catel.Test.Collections
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.AddRange(null, newList));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullRange()
             {
                 var collection = new ObservableCollection<int> { 1, 2, 3 };
@@ -404,7 +400,7 @@ namespace Catel.Test.Collections
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => collection.AddRange(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void AddsItemsToEmptyCollection()
             {
                 var collection = new ObservableCollection<int>();
@@ -418,7 +414,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(6, collection[2]);
             }
 
-            [TestMethod]
+            [TestCase]
             public void AddsItemsToFilledCollection()
             {
                 var collection = new ObservableCollection<int> { 1, 2, 3 };
@@ -435,7 +431,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(6, collection[5]);
             }
 
-            [TestMethod]
+            [TestCase]
             public void AddsNoItemsToFilledCollectionWhenItemsToAddIsEmpty()
             {
                 var collection = new ObservableCollection<int> { 1, 2, 3 };
@@ -450,10 +446,10 @@ namespace Catel.Test.Collections
             }    
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheReplaceRangeMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullCollection()
             {
                 var newList = new List<int> { 4, 5, 6 };
@@ -461,7 +457,7 @@ namespace Catel.Test.Collections
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.ReplaceRange(null, newList));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullRange()
             {
                 var collection = new ObservableCollection<int> { 1, 2, 3 };
@@ -469,7 +465,7 @@ namespace Catel.Test.Collections
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => collection.ReplaceRange(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReplacesFilledCollectionByEmptyCollection()
             {
                 var collection = new ObservableCollection<int> { 1, 2, 3 };
@@ -480,7 +476,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(0, collection.Count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReplacesEmptyCollectionByFilledCollection()
             {
                 var collection = new ObservableCollection<int>();
@@ -494,7 +490,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(6, collection[2]);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReplacedFilledCollectionByFilledCollection()
             {
                 var collection = new ObservableCollection<int> { 1, 2, 3 };

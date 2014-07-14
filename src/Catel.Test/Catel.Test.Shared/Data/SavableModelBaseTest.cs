@@ -12,18 +12,15 @@ namespace Catel.Test.Data
     using Catel.Data;
     using Catel.Runtime.Serialization;
     using Catel.Test.Runtime.Serialization;
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
 
-    [TestClass]
+    using NUnit.Framework;
+
+    [TestFixture]
     public class SavableModelBaseTest
     {
         #region Generic Loads
 #if NET
-        [TestMethod]
+        [TestCase]
         public void Load_FileName_SerializationMode_Binary()
         {
             var originalObject = ModelBaseTestHelper.CreateIniFileObject();
@@ -33,7 +30,7 @@ namespace Catel.Test.Data
         }
 #endif
 
-        [TestMethod]
+        [TestCase]
         public void Load_FileName_SerializationMode_Xml()
         {
             var originalObject = ModelBaseTestHelper.CreateIniFileObject();
@@ -43,7 +40,7 @@ namespace Catel.Test.Data
         }
 
 #if NET
-        [TestMethod]
+        [TestCase]
         public void Load_Stream_SerializationMode_Binary()
         {
             using (var memoryStream = new MemoryStream())
@@ -59,7 +56,7 @@ namespace Catel.Test.Data
         }
 #endif
 
-        [TestMethod]
+        [TestCase]
         public void Load_Stream_SerializationMode_Xml()
         {
             using (var memoryStream = new MemoryStream())
@@ -75,7 +72,7 @@ namespace Catel.Test.Data
         }
         #endregion
 
-        [TestMethod]
+        [TestCase]
         public void ToXml()
         {
             var iniFile = ModelBaseTestHelper.CreateIniFileObject();

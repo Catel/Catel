@@ -247,7 +247,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Input\InputGestureFacts.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)Caching\CacheStorageFacts.cs.orig" />
     <None Include="$(MSBuildThisFileDirectory)Caching\Policies\ExpirationPolicyFacts.cs.orig" />
     <None Include="$(MSBuildThisFileDirectory)Test References\Catel.Core.accessor" />
   </ItemGroup>

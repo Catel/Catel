@@ -8,24 +8,20 @@
 namespace Catel.Test
 {
     using System;
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class UrlHelperFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheGetSafeUriStringMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullUri()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => UrlHelper.GetSafeUriString(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsSafeUriString()
             {
                 var inputUri = new Uri("/Views/MainPage.xaml", UriKind.RelativeOrAbsolute);
@@ -35,7 +31,7 @@ namespace Catel.Test
             }
 
             // Test case for https://catelproject.atlassian.net/browse/CTL-240
-            [TestMethod]
+            [TestCase]
             public void ReturnsSafeUriStringForUriWithMultipleStartingSlashes()
             {
                 var inputUri = new Uri("//Views/MainPage.xaml", UriKind.RelativeOrAbsolute);

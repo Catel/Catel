@@ -8,25 +8,20 @@ namespace Catel.Test.Messaging
 {
     using System;
     using Catel.Messaging;
-
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class MessageMediatorHelperFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheSubscribeRecipientMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullInstance()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => MessageMediatorHelper.SubscribeRecipient(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SubscribesToMessagesWithoutTagsCorrectly()
             {
                 var messageMediator = new MessageMediator();
@@ -44,7 +39,7 @@ namespace Catel.Test.Messaging
                 Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithTag);
             }
 
-            [TestMethod]
+            [TestCase]
             public void SubscribesToMessagesWithTagsCorrectly()
             {
                 var messageMediator = new MessageMediator();
@@ -63,16 +58,16 @@ namespace Catel.Test.Messaging
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheUnsubscribeRecipientMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullInstance()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => MessageMediatorHelper.UnsubscribeRecipient(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void UnsubscribesToMessagesWithoutTagsCorrectly()
             {
                 var messageMediator = new MessageMediator();
@@ -98,7 +93,7 @@ namespace Catel.Test.Messaging
                 Assert.AreEqual(0, recipient.MessagesReceivedViaMessageMediatorWithTag);
             }
 
-            [TestMethod]
+            [TestCase]
             public void UnsubscribesToMessagesWithTagsCorrectly()
             {
                 var messageMediator = new MessageMediator();

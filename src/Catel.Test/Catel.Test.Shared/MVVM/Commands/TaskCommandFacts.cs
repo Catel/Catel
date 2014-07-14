@@ -14,9 +14,9 @@ namespace Catel.Test.MVVM.Commands
 
     using Catel.MVVM;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class TaskCommandFacts
     {
         #region Constants
@@ -24,7 +24,7 @@ namespace Catel.Test.MVVM.Commands
         #endregion
 
         #region Methods
-        [TestMethod]
+        [TestCase]
         public async Task TestCommandCancellation()
         {
             var taskCommand = new TaskCommand(TestExecute);

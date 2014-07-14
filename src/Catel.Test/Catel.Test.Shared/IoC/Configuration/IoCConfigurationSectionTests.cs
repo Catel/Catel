@@ -11,18 +11,14 @@ namespace Catel.Test.IoC.Configuration
     using System.Configuration;
     using Catel.Configuration;
     using Catel.IoC;
-    
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
 
-    [TestClass]
+    using NUnit.Framework;
+
+    [TestFixture]
     public class IoCConfigurationSectionTests
     {
         #region Methods
-        [TestMethod]
+        [TestCase]
         public void LoadSectionFromConfigurationFileTest()
         {
             Configuration openExeConfiguration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
@@ -31,7 +27,7 @@ namespace Catel.Test.IoC.Configuration
             Assert.AreNotEqual(0, configurationSection.ServiceLocatorConfigurationCollection.Count);
         }
 
-        [TestMethod]
+        [TestCase]
         public void InitializeServiceLocatorFromDefaultConfiguration()
         {
             Configuration openExeConfiguration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
@@ -52,7 +48,7 @@ namespace Catel.Test.IoC.Configuration
             }
         }
 
-        [TestMethod]
+        [TestCase]
         public void InitializeServiceLocatorFromNonDefaultConfiguration()
         {
             Configuration openExeConfiguration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);

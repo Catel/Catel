@@ -13,19 +13,15 @@
 
     using TestViewModel = TestClasses.TestViewModel;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class ViewModelBaseTest
     {
-        [TestClass]
+        [TestFixture]
         public class TheHasDirtyModelsProperty
         {
-            [TestMethod]
+            [TestCase]
             public void IsModelRegistered_ExistingModel()
             {
                 var person = new Person();
@@ -43,7 +39,7 @@
         }
 
         #region ViewModelToModel mappings
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_DoubleModels()
         {
             var firstPerson = new Person();
@@ -73,7 +69,7 @@
             Assert.AreEqual("Another email", viewModel.Email);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_PropertyChanges()
         {
             const string FirstName = "first name";
@@ -99,7 +95,7 @@
         }
 
 #if !WINDOWS_PHONE
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_FieldErrors()
         {
             var person = new Person();
@@ -119,7 +115,7 @@
             Assert.AreNotEqual(string.Empty, viewModelAsError[TestViewModel.FirstNameProperty.Name]);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_FieldWarnings()
         {
             var person = new Person();
@@ -144,7 +140,7 @@
             Assert.AreEqual(string.Empty, viewModelAsWarning[TestViewModel.MiddleNameProperty.Name]);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_BusinessErrors()
         {
             var person = new Person();
@@ -165,7 +161,7 @@
             Assert.AreNotEqual(string.Empty, viewModelAsError.Error);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_BusinessWarnings()
         {
             var person = new Person();
@@ -186,7 +182,7 @@
             Assert.AreEqual(string.Empty, viewModelAsWarning.Warning);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_ValidateModelsOnInitialization()
         {
             var person = new PersonWithDataAnnotations();
@@ -195,7 +191,7 @@
             Assert.AreNotEqual(0, viewModel.ValidationContext.GetValidationCount());
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_DoNotValidateModelsOnInitialization_UpdateViaViewModel()
         {
             var person = new PersonWithDataAnnotations();
@@ -210,7 +206,7 @@
             Assert.AreNotEqual(0, viewModel.ValidationContext.GetValidationCount());
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_DoNotValidateModelsOnInitialization_UpdateViaModel()
         {
             var person = new PersonWithDataAnnotations();
@@ -226,7 +222,7 @@
         }
 #endif
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_DoNotMapWhenViewModelIsClosed()
         {
             var person = new Person();
@@ -242,7 +238,7 @@
             Assert.AreEqual("test1", person.FirstName);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_TwoWay_InitiatedFromModel()
         {
             var person = new Person();
@@ -258,7 +254,7 @@
             Assert.AreEqual(person.FirstName, viewModel.FirstNameAsTwoWay);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_TwoWay_InitiatedFromViewModel()
         {
             var person = new Person();
@@ -274,7 +270,7 @@
             Assert.AreEqual(person.FirstName, viewModel.FirstNameAsTwoWay);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_OneWay_InitiatedFromModel()
         {
             var person = new Person();
@@ -290,7 +286,7 @@
             Assert.AreEqual(person.FirstName, viewModel.FirstNameAsOneWay);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_OneWay_InitiatedFromViewModel()
         {
             var person = new Person();
@@ -306,7 +302,7 @@
             Assert.AreNotEqual(person.FirstName, viewModel.FirstNameAsOneWay);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_OneWayToSource_InitiatedFromModel()
         {
             var person = new Person();
@@ -322,7 +318,7 @@
             Assert.AreNotEqual(person.FirstName, viewModel.FirstNameAsOneWayToSource);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_OneWayToSource_InitiatedFromViewModel()
         {
             var person = new Person();
@@ -338,7 +334,7 @@
             Assert.AreEqual(person.FirstName, viewModel.FirstNameAsOneWayToSource);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_Explicit_InitiatedFromModel()
         {
             var person = new Person();
@@ -354,7 +350,7 @@
             Assert.AreNotEqual(person.FirstName, viewModel.FirstNameAsExplicit);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_Explicit_InitiatedFromViewModel()
         {
             var person = new Person();
@@ -370,7 +366,7 @@
             Assert.AreNotEqual(person.FirstName, viewModel.FirstNameAsExplicit);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_Explicit_InitiatedManually()
         {
             var person = new Person();
@@ -389,7 +385,7 @@
         #endregion
 
         #region Child view models
-        [TestMethod]
+        [TestCase]
         public void SetParentviewModel()
         {
             var viewModel = new TestViewModel();
@@ -400,7 +396,7 @@
             Assert.AreEqual(parentViewModel, viewModel.GetParentViewModelForTest());
         }
 
-        [TestMethod]
+        [TestCase]
         public void RegisterChildViewModel_Null()
         {
             var viewModel = new TestViewModel();
@@ -412,7 +408,7 @@
         /// Checks whether a child view model is correctly subscribed by making sure the parent view model is also
         /// being validated. Then, it unsubscribes the child view model by closing it.
         /// </summary>
-        [TestMethod]
+        [TestCase]
         public void RegisterChildViewModel_RemovedViaClosingChildViewModel()
         {
             bool validationTriggered = false;
@@ -460,7 +456,7 @@
         /// Checks whether a child view model is correctly subscribed by making sure the parent view model is also
         /// being validated. Then, it unsubscribes the child view model by calling UnregisterChildViewModel.
         /// </summary>
-        [TestMethod]
+        [TestCase]
         public void RegisterChildViewModel_RemovedViaUnregisterChildViewModel()
         {
             bool validationTriggered = false;
@@ -504,7 +500,7 @@
             Assert.IsFalse(validationTriggered, "Validating event should not be triggered because child view model is removed");
         }
 
-        [TestMethod]
+        [TestCase]
         public void ChildViewModelUpdatesValidation()
         {
             Person person = new Person();
@@ -530,7 +526,7 @@
         }
         #endregion
 
-        [TestMethod]
+        [TestCase]
         public void GetAllModels()
         {
             Person person = new Person();
@@ -544,7 +540,7 @@
             Assert.AreEqual(person, models[0]);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ModelsSavedBySave()
         {
             Person person = new Person();
@@ -562,7 +558,7 @@
             Assert.AreEqual("new first name", person.FirstName);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ModelsCanceledByCancel()
         {
             Person person = new Person();
@@ -580,7 +576,7 @@
             Assert.AreEqual("first name", person.FirstName);            
         }
 
-        [TestMethod]
+        [TestCase]
         public void IsModelRegistered_ExistingModel()
         {
             Person person = new Person();
@@ -592,7 +588,7 @@
             Assert.IsTrue(viewModel.IsModelRegisteredForTest("Person"));
         }
 
-        [TestMethod]
+        [TestCase]
         public void IsModelRegistered_NonExistingModel()
         {
             Person person = new Person();
@@ -604,7 +600,7 @@
             Assert.IsFalse(viewModel.IsModelRegisteredForTest("SecondPerson"));
         }
 
-        [TestMethod]
+        [TestCase]
         public void InvalidateCommands_Manual()
         {
             bool canExecuteChangedTriggered = false;
@@ -634,7 +630,7 @@
             Assert.IsFalse(canExecuteChangedTriggered);
         }
 
-        [TestMethod]
+        [TestCase]
         public void InvalidateCommands_AutomaticByPropertyChange()
         {
             bool canExecuteChangedTriggered = false;
@@ -665,7 +661,7 @@
         }
 
         #region Validation
-        //[TestMethod]
+        //[TestCase]
         //public void DeferredValidation()
         //{
         //    var viewModel = new TestViewModelWithDeferredValidation();
@@ -679,7 +675,7 @@
         //}
 
 #if !WINDOWS_PHONE
-        [TestMethod]
+        [TestCase]
         public void ModelValidation_NotifyDataErrorInfo_FieldErrors()
         {
             var testViewModel = new TestViewModel();
@@ -700,7 +696,7 @@
             Assert.IsFalse(testViewModel.HasErrors);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ModelValidation_NotifyDataErrorInfo_BusinessErrors()
         {
             var testViewModel = new TestViewModel();
@@ -721,7 +717,7 @@
             Assert.IsFalse(testViewModel.HasErrors);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ModelValidation_NotifyDataWarningInfo_FieldWarnings()
         {
             var testViewModel = new TestViewModel();
@@ -742,7 +738,7 @@
             Assert.IsFalse(testViewModel.HasWarnings);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ModelValidation_NotifyDataWarningInfo_BusinessWarnings()
         {
             var testViewModel = new TestViewModel();
@@ -764,7 +760,7 @@
         }
 #endif
 
-        [TestMethod]
+        [TestCase]
         public void ValidationToViewModel_WithoutTagFiltering()
         {
             var viewModel = new TestViewModelWithValidationTags();
@@ -777,7 +773,7 @@
             Assert.AreEqual(2, summary.FieldErrors.Count);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ValidationToViewModel_NullTag()
         {
             var viewModel = new TestViewModelWithValidationTags();
@@ -790,7 +786,7 @@
             Assert.AreEqual(0, summary.FieldErrors.Count);  
         }
 
-        [TestMethod]
+        [TestCase]
         public void ValidationToViewModel_NonExistingTag()
         {
             var viewModel = new TestViewModelWithValidationTags();
@@ -803,7 +799,7 @@
             Assert.AreEqual(0, summary.FieldErrors.Count);  
         }
 
-        [TestMethod]
+        [TestCase]
         public void ValidationToViewModel_ExistingTag()
         {
             var viewModel = new TestViewModelWithValidationTags();
@@ -817,7 +813,7 @@
         }
         #endregion
 
-        [TestMethod]
+        [TestCase]
         public void CancelAfterCloseProtection()
         {
             var auditor = new TestAuditor();
@@ -842,7 +838,7 @@
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
         }
 
-        [TestMethod]
+        [TestCase]
         public void SaveAfterCloseProtection()
         {
             var auditor = new TestAuditor();
@@ -867,7 +863,7 @@
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
         }
 
-        [TestMethod]
+        [TestCase]
         public void CloseAfterCloseProtection()
         {
             var auditor = new TestAuditor();
@@ -889,7 +885,7 @@
         }
 
 #if WINDOWS_PHONE
-        [TestMethod]
+        [TestCase]
         public void Tombstoning_AutomaticRecovery()
         {
             var vm = new TestViewModel();

@@ -8,25 +8,20 @@ namespace Catel.Test.IoC.EventArgs
 {
     using System;
     using Catel.IoC;
-
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class MissingTypeEventArgsFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheConstructor
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullInterfaceType()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new MissingTypeEventArgs(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsValuesCorrectly()
             {
                 var eventArgs = new MissingTypeEventArgs(typeof (ITestInterface));

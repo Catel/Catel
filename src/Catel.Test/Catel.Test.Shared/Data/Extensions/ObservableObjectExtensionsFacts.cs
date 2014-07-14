@@ -10,11 +10,7 @@ namespace Catel.Test.Data
     using System;
     using Catel.Data;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class ObservableObjectExtensionsFacts
     {
@@ -23,16 +19,16 @@ namespace Catel.Test.Data
             
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheRaiseAllPropertiesChangedMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullObject()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ObservableObjectExtensions.RaiseAllPropertiesChanged(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void RaisesPropertyChangedEventCorrectly()
             {
                 var model = new TestModel();

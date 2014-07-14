@@ -9,12 +9,7 @@ namespace Catel.Test.Logging
     using System;
 
     using Catel.Logging;
-
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class LogFacts
     {
@@ -30,10 +25,10 @@ namespace Catel.Test.Logging
         private const string ArgumentNullExceptionText = "[ArgumentNullException] System.ArgumentNullException: Value cannot be null.";
 #endif
 
-        [TestClass]
+        [TestFixture]
         public class ThePerformance
         {
-            [TestMethod]
+            [TestCase]
             public void LoggingPerformance()
             {
                 var log = LogManager.GetLogger(typeof (ThePerformance));
@@ -44,10 +39,10 @@ namespace Catel.Test.Logging
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheIndentMethod
         {
-            [TestMethod]
+            [TestCase]
             public void IncreasesIndentLevel()
             {
                 LogManager.AddDebugListener();
@@ -60,7 +55,7 @@ namespace Catel.Test.Logging
                 Assert.AreEqual(1, log.IndentLevel);
             }
 
-            [TestMethod]
+            [TestCase]
             public void WritesMessagesWithIndent()
             {
                 LogManager.AddDebugListener();
@@ -79,10 +74,10 @@ namespace Catel.Test.Logging
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheUnindentMethod
         {
-            [TestMethod]
+            [TestCase]
             public void DecreasesIndentLevel()
             {
                 LogManager.AddDebugListener();
@@ -95,7 +90,7 @@ namespace Catel.Test.Logging
                 Assert.AreEqual(1, log.IndentLevel);
             }
 
-            [TestMethod]
+            [TestCase]
             public void WriteMessagesWithUnIndent()
             {
                 LogManager.AddDebugListener();
@@ -116,10 +111,10 @@ namespace Catel.Test.Logging
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheIndentLevelProperty
         {
-            [TestMethod]
+            [TestCase]
             public void DefaultsToZero()
             {
                 LogManager.AddDebugListener();
@@ -128,7 +123,7 @@ namespace Catel.Test.Logging
                 Assert.AreEqual(0, log.IndentLevel);
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsPositiveValue()
             {
                 LogManager.AddDebugListener();
@@ -137,7 +132,7 @@ namespace Catel.Test.Logging
                 Assert.AreEqual(5, log.IndentSize);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentOutOfRangeForNegativeValue()
             {
                 LogManager.AddDebugListener();
@@ -148,10 +143,10 @@ namespace Catel.Test.Logging
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheIndentSizeProperty
         {
-            [TestMethod]
+            [TestCase]
             public void DefaultsToTwo()
             {
                 LogManager.AddDebugListener();
@@ -160,7 +155,7 @@ namespace Catel.Test.Logging
                 Assert.AreEqual(2, log.IndentSize);
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsPositiveValue()
             {
                 LogManager.AddDebugListener();
@@ -169,7 +164,7 @@ namespace Catel.Test.Logging
                 Assert.AreEqual(5, log.IndentSize);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentOutOfRangeForNegativeValue()
             {
                 LogManager.AddDebugListener();
@@ -180,16 +175,16 @@ namespace Catel.Test.Logging
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheConstructor
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new Log(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void CreatesLogForType()
             {
                 LogManager.AddDebugListener();
@@ -199,10 +194,10 @@ namespace Catel.Test.Logging
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheDebugMethod
         {
-            [TestMethod]
+            [TestCase]
             public void CorrectlyLogsMessageWithBraces()
             {
                 LogManager.AddDebugListener();
@@ -211,7 +206,7 @@ namespace Catel.Test.Logging
                 log.Debug("This is a string with { and sometimes and ending }");
             }
 
-            [TestMethod]
+            [TestCase]
             public void Debug_Message_Null()
             {
                 LogManager.AddDebugListener();
@@ -220,7 +215,7 @@ namespace Catel.Test.Logging
                 log.Debug((string) null);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Debug_Message()
             {
                 LogManager.AddDebugListener();
@@ -237,7 +232,7 @@ namespace Catel.Test.Logging
                 Assert.AreEqual("log message", eventArgs.Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Debug_MessageFormat_Null()
             {
                 LogManager.AddDebugListener();
@@ -246,7 +241,7 @@ namespace Catel.Test.Logging
                 log.Debug((string) null, null);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Debug_MessageFormat()
             {
                 LogManager.AddDebugListener();
@@ -263,7 +258,7 @@ namespace Catel.Test.Logging
                 Assert.AreEqual("log message 1", eventArgs.Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Debug_Exception_Null()
             {
                 LogManager.AddDebugListener();
@@ -272,7 +267,7 @@ namespace Catel.Test.Logging
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Debug((Exception) null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void Debug_Exception()
             {
                 LogManager.AddDebugListener();
@@ -290,7 +285,7 @@ namespace Catel.Test.Logging
                 Assert.AreEqual(string.Format("{0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Debug_ExceptionWithMessage_ExceptionNull()
             {
                 LogManager.AddDebugListener();
@@ -299,7 +294,7 @@ namespace Catel.Test.Logging
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Debug(null, string.Empty));
             }
 
-            [TestMethod]
+            [TestCase]
             public void Debug_ExceptionWithMessage_MessageNull()
             {
                 LogManager.AddDebugListener();
@@ -310,7 +305,7 @@ namespace Catel.Test.Logging
                 log.Debug(exception, null);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Debug_ExceptionWithMessage()
             {
                 LogManager.AddDebugListener();
@@ -328,7 +323,7 @@ namespace Catel.Test.Logging
                 Assert.AreEqual(string.Format("additional message | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Debug_ExceptionWithMessageFormat_ExceptionNull()
             {
                 LogManager.AddDebugListener();
@@ -337,7 +332,7 @@ namespace Catel.Test.Logging
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Debug(null, "additional message", 1));
             }
 
-            [TestMethod]
+            [TestCase]
             public void Debug_ExceptionWithMessageFormat_MessageFormatNull()
             {
                 LogManager.AddDebugListener();
@@ -348,7 +343,7 @@ namespace Catel.Test.Logging
                 log.Debug(exception, null, 1);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Debug_ExceptionWithMessageFormat()
             {
                 LogManager.AddDebugListener();
@@ -367,10 +362,10 @@ namespace Catel.Test.Logging
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheInfoMethod
         {
-            [TestMethod]
+            [TestCase]
             public void CorrectlyLogsMessageWithBraces()
             {
                 LogManager.AddDebugListener();
@@ -379,7 +374,7 @@ namespace Catel.Test.Logging
                 log.Info("This is a string with { and sometimes and ending }");
             }
 
-            [TestMethod]
+            [TestCase]
             public void Info_Message_Null()
             {
                 LogManager.AddDebugListener();
@@ -388,7 +383,7 @@ namespace Catel.Test.Logging
                 log.Info((string) null);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Info_Message()
             {
                 LogManager.AddDebugListener();
@@ -405,7 +400,7 @@ namespace Catel.Test.Logging
                 Assert.AreEqual("log message", eventArgs.Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Info_MessageFormat_Null()
             {
                 LogManager.AddDebugListener();
@@ -414,7 +409,7 @@ namespace Catel.Test.Logging
                 log.Info((string) null, null);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Info_MessageFormat()
             {
                 LogManager.AddDebugListener();
@@ -431,7 +426,7 @@ namespace Catel.Test.Logging
                 Assert.AreEqual("log message 1", eventArgs.Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Info_Exception_Null()
             {
                 LogManager.AddDebugListener();
@@ -440,7 +435,7 @@ namespace Catel.Test.Logging
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Info((Exception) null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void Info_Exception()
             {
                 LogManager.AddDebugListener();
@@ -458,7 +453,7 @@ namespace Catel.Test.Logging
                 Assert.AreEqual(string.Format("{0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Info_ExceptionWithMessage_ExceptionNull()
             {
                 LogManager.AddDebugListener();
@@ -467,7 +462,7 @@ namespace Catel.Test.Logging
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Info(null, string.Empty));
             }
 
-            [TestMethod]
+            [TestCase]
             public void Info_ExceptionWithMessage_MessageNull()
             {
                 LogManager.AddDebugListener();
@@ -478,7 +473,7 @@ namespace Catel.Test.Logging
                 log.Info(exception, null);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Info_ExceptionWithMessage()
             {
                 LogManager.AddDebugListener();
@@ -496,7 +491,7 @@ namespace Catel.Test.Logging
                 Assert.AreEqual(string.Format("additional message | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Info_ExceptionWithMessageFormat_ExceptionNull()
             {
                 LogManager.AddDebugListener();
@@ -505,7 +500,7 @@ namespace Catel.Test.Logging
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Info(null, "additional message", 1));
             }
 
-            [TestMethod]
+            [TestCase]
             public void Info_ExceptionWithMessageFormat_MessageFormatNull()
             {
                 LogManager.AddDebugListener();
@@ -516,7 +511,7 @@ namespace Catel.Test.Logging
                 log.Info(exception, null, 1);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Info_ExceptionWithMessageFormat()
             {
                 LogManager.AddDebugListener();
@@ -535,10 +530,10 @@ namespace Catel.Test.Logging
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheWarningMethod
         {
-            [TestMethod]
+            [TestCase]
             public void CorrectlyLogsMessageWithBraces()
             {
                 LogManager.AddDebugListener();
@@ -547,7 +542,7 @@ namespace Catel.Test.Logging
                 log.Warning("This is a string with { and sometimes and ending }");
             }
 
-            [TestMethod]
+            [TestCase]
             public void Warning_Message_Null()
             {
                 LogManager.AddDebugListener();
@@ -556,7 +551,7 @@ namespace Catel.Test.Logging
                 log.Warning((string) null);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Warning_Message()
             {
                 LogManager.AddDebugListener();
@@ -573,7 +568,7 @@ namespace Catel.Test.Logging
                 Assert.AreEqual("log message", eventArgs.Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Warning_MessageFormat_Null()
             {
                 LogManager.AddDebugListener();
@@ -582,7 +577,7 @@ namespace Catel.Test.Logging
                 log.Warning((string) null, null);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Warning_MessageFormat()
             {
                 LogManager.AddDebugListener();
@@ -599,7 +594,7 @@ namespace Catel.Test.Logging
                 Assert.AreEqual("log message 1", eventArgs.Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Warning_Exception_Null()
             {
                 LogManager.AddDebugListener();
@@ -608,7 +603,7 @@ namespace Catel.Test.Logging
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Warning((Exception) null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void Warning_Exception()
             {
                 LogManager.AddDebugListener();
@@ -626,7 +621,7 @@ namespace Catel.Test.Logging
                 Assert.AreEqual(string.Format("{0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Warning_ExceptionWithMessage_ExceptionNull()
             {
                 LogManager.AddDebugListener();
@@ -635,7 +630,7 @@ namespace Catel.Test.Logging
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Warning(null, string.Empty));
             }
 
-            [TestMethod]
+            [TestCase]
             public void Warning_ExceptionWithMessage_MessageNull()
             {
                 LogManager.AddDebugListener();
@@ -646,7 +641,7 @@ namespace Catel.Test.Logging
                 log.Warning(exception, null);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Warning_ExceptionWithMessage()
             {
                 LogManager.AddDebugListener();
@@ -664,7 +659,7 @@ namespace Catel.Test.Logging
                 Assert.AreEqual(string.Format("additional message | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Warning_ExceptionWithMessageFormat_ExceptionNull()
             {
                 LogManager.AddDebugListener();
@@ -673,7 +668,7 @@ namespace Catel.Test.Logging
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Warning(null, "additional message", 1));
             }
 
-            [TestMethod]
+            [TestCase]
             public void Warning_ExceptionWithMessageFormat_MessageFormatNull()
             {
                 LogManager.AddDebugListener();
@@ -684,7 +679,7 @@ namespace Catel.Test.Logging
                 log.Warning(exception, null, 1);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Warning_ExceptionWithMessageFormat()
             {
                 LogManager.AddDebugListener();
@@ -703,10 +698,10 @@ namespace Catel.Test.Logging
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheErrorMethod
         {
-            [TestMethod]
+            [TestCase]
             public void CorrectlyLogsMessageWithBraces()
             {
                 LogManager.AddDebugListener();
@@ -715,7 +710,7 @@ namespace Catel.Test.Logging
                 log.Error("This is a string with { and sometimes and ending }");
             }
 
-            [TestMethod]
+            [TestCase]
             public void Error_Message_Null()
             {
                 LogManager.AddDebugListener();
@@ -724,7 +719,7 @@ namespace Catel.Test.Logging
                 log.Error((string) null);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Error_Message()
             {
                 LogManager.AddDebugListener();
@@ -741,7 +736,7 @@ namespace Catel.Test.Logging
                 Assert.AreEqual("log message", eventArgs.Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Error_MessageFormat_Null()
             {
                 LogManager.AddDebugListener();
@@ -750,7 +745,7 @@ namespace Catel.Test.Logging
                 log.Error((string) null, null);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Error_MessageFormat()
             {
                 LogManager.AddDebugListener();
@@ -767,7 +762,7 @@ namespace Catel.Test.Logging
                 Assert.AreEqual("log message 1", eventArgs.Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Error_Exception_Null()
             {
                 LogManager.AddDebugListener();
@@ -776,7 +771,7 @@ namespace Catel.Test.Logging
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Error((Exception) null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void Error_Exception()
             {
                 LogManager.AddDebugListener();
@@ -794,7 +789,7 @@ namespace Catel.Test.Logging
                 Assert.AreEqual(string.Format("{0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Error_ExceptionWithMessage_ExceptionNull()
             {
                 LogManager.AddDebugListener();
@@ -803,7 +798,7 @@ namespace Catel.Test.Logging
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Error(null, string.Empty));
             }
 
-            [TestMethod]
+            [TestCase]
             public void Error_ExceptionWithMessage_MessageNull()
             {
                 LogManager.AddDebugListener();
@@ -814,7 +809,7 @@ namespace Catel.Test.Logging
                 log.Error(exception, null);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Error_ExceptionWithMessage()
             {
                 LogManager.AddDebugListener();
@@ -832,7 +827,7 @@ namespace Catel.Test.Logging
                 Assert.AreEqual(string.Format("additional message | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Error_ExceptionWithMessageFormat_ExceptionNull()
             {
                 LogManager.AddDebugListener();
@@ -841,7 +836,7 @@ namespace Catel.Test.Logging
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Error(null, "additional message", 1));
             }
 
-            [TestMethod]
+            [TestCase]
             public void Error_ExceptionWithMessageFormat_MessageFormatNull()
             {
                 LogManager.AddDebugListener();
@@ -852,7 +847,7 @@ namespace Catel.Test.Logging
                 log.Error(exception, null, 1);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Error_ExceptionWithMessageFormat()
             {
                 LogManager.AddDebugListener();
@@ -870,7 +865,7 @@ namespace Catel.Test.Logging
                 Assert.AreEqual(string.Format("additional message 1 | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ErrorAndThrowException_NullInput()
             {
                 LogManager.AddDebugListener();
@@ -879,7 +874,7 @@ namespace Catel.Test.Logging
                 log.ErrorAndThrowException<InvalidOperationException>(null);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ErrorAndThrowException_ExceptionWithoutMessageConstructor()
             {
                 LogManager.AddDebugListener();
@@ -888,7 +883,7 @@ namespace Catel.Test.Logging
                 ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => log.ErrorAndThrowException<ExceptionWithoutStringConstructor>("exception test"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ErrorAndThrowException_ExceptionWithMessageConstructor()
             {
                 LogManager.AddDebugListener();

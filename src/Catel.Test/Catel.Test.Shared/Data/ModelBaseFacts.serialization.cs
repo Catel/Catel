@@ -15,6 +15,7 @@ namespace Catel.Test.Data
     using Catel.Data;
     using Catel.Logging;
     using Newtonsoft.Json;
+
 #if NET
     using System;
     using System.ComponentModel;
@@ -23,12 +24,11 @@ namespace Catel.Test.Data
     using System.Runtime.Serialization.Formatters.Binary;
 #endif
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
+    using NUnit.Framework;
+
+#if !NETFX_CORE
     using Catel.Reflection;
     using Catel.Runtime.Serialization;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
 #endif
 
     public partial class ModelBaseFacts
@@ -371,7 +371,7 @@ namespace Catel.Test.Data
         }
         #endregion
 
-        [TestClass]
+        [TestFixture]
         public class TheJsonSerialization
         {
 #if NET
@@ -474,7 +474,7 @@ namespace Catel.Test.Data
                 #endregion
             }
 
-            [TestMethod]
+            [TestCase]
             public void CanSerializeToJson()
             {
                 var model = new JsonExampleModel();
@@ -489,7 +489,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual("{\"name\":\"Geert\",\"modules\":[{\"name\":\"Name 1\"},{\"name\":\"Name 2\"},{\"name\":\"Name 3\"}]}", json);
             }
 
-            [TestMethod]
+            [TestCase]
             public void CanDeserializeFromJson()
             {
                 const string json = "{ \"name\": \"Geert\" }";
@@ -501,10 +501,10 @@ namespace Catel.Test.Data
         }
 
 #if NET
-        [TestClass]
+        [TestFixture]
         public class TheBinarySerializationWithCircularReferencesIssue
         {
-            [TestMethod]
+            [TestCase]
             public void CanSerializeAndDeserializeObjects()
             {
                 var customer = new Customer();

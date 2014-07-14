@@ -7,11 +7,7 @@ namespace Catel.Test.Caching.Policies
 {
     using Catel.Caching.Policies;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class CustomExpirationPolicyFacts
     {
@@ -20,7 +16,7 @@ namespace Catel.Test.Caching.Policies
         /// <summary>
         /// The can reset property.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class TheCanResetProperty
         {
             #region Methods
@@ -28,13 +24,13 @@ namespace Catel.Test.Caching.Policies
             /// <summary>
             /// The returns true if an action is specified.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueIfAnActionIsSpecified()
             {
                 Assert.IsTrue(new CustomExpirationPolicy(() => true, () => ThreadHelper.Sleep(0)).CanReset);
             }         
             
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseIfAnActionNotIsSpecified()
             {
                 Assert.IsFalse(new CustomExpirationPolicy(() => true).CanReset);
@@ -49,24 +45,24 @@ namespace Catel.Test.Caching.Policies
         /// <summary>
         /// The the is expired property.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class TheIsExpiredProperty
         {
             #region Methods
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueIfFunctionRetursTrue()
             {
                 Assert.IsTrue(new CustomExpirationPolicy(() => true).IsExpired);
             }         
             
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueIfActionIsNull()
             {
                 Assert.IsTrue(new CustomExpirationPolicy().IsExpired);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueIfFunctionRetursFalse()
             {
                 Assert.IsFalse(new CustomExpirationPolicy(() => false).IsExpired);
@@ -81,7 +77,7 @@ namespace Catel.Test.Caching.Policies
         /// <summary>
         /// The can reset property.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class TheResetMethod
         {
             #region Methods
@@ -89,7 +85,7 @@ namespace Catel.Test.Caching.Policies
             /// <summary>
             /// Invokes the action.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void InvokesTheAction()
             {
                 bool actionInvoked = false;

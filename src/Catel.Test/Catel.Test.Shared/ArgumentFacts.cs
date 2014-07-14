@@ -16,155 +16,154 @@ namespace Catel.Test
 
     using ViewModels;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
+
+#if !NETFX_CORE
     using Moq;
 #endif
 
     public partial class ArgumentFacts
     {
-        [TestClass]
+        [TestFixture]
         public partial class TheIsNotNullMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullParamValue()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotNull("param", null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SucceedsForValueType()
             {
                 Argument.IsNotNull("param", 1);
             }
 
-            [TestMethod]
+            [TestCase]
             public void SucceedsForReferenceType()
             {
                 Argument.IsNotNull("param", new object());
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public partial class TheIsNotNullOrEmptyMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullStringParamValue()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsNotNullOrEmpty("param", (string)null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullGuidParamValue()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsNotNullOrEmpty("param", (Guid?)null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForEmptyGuidParamValue()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsNotNullOrEmpty("param", Guid.Empty));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForEmptyStringParamValue()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsNotNullOrEmpty("param", string.Empty));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SucceedsForStringWithOnlySpaces()
             {
                 Argument.IsNotNullOrEmpty("param", "  ");
             }
 
-            [TestMethod]
+            [TestCase]
             public void SucceedsForStringWithCharacters()
             {
                 Argument.IsNotNullOrEmpty("param", "test");
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public partial class TheIsNotNullOrWhitespaceMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullParamValue()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsNotNullOrWhitespace("param", null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForEmptyStringParamValue()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsNotNullOrWhitespace("param", string.Empty));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForStringWithOnlySpacesParamValue()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsNotNullOrWhitespace("param", "  "));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SucceedsForStringWithCharacters()
             {
                 Argument.IsNotNullOrWhitespace("param", "test");
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public partial class TheIsNotNullOrEmptyArrayMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullParamValue()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsNotNullOrEmptyArray("param", null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForEmptyIntArrayParamValue()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsNotNullOrEmptyArray("param", new int[] { }));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SucceedsForFilledIntArray()
             {
                 Argument.IsNotNullOrEmptyArray("param", new int[] { 1 });
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForEmptyByteArrayParamValue()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsNotNullOrEmptyArray("param", new byte[] { }));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SucceedsForFilledByteArray()
             {
                 Argument.IsNotNullOrEmptyArray("param", new byte[] { 1 });
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public partial class TheIsNotOutOfRangeMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForTooSmallIntegerParamValue()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => Argument.IsNotOutOfRange("param", 1, 2, 3));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForTooLargeIntegerParamValue()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => Argument.IsNotOutOfRange("param", 3, 1, 2));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SucceedsForValidIntegers()
             {
                 Argument.IsNotOutOfRange("param", 1, 1, 3);
@@ -173,19 +172,19 @@ namespace Catel.Test
             }
 
 #if NET
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForTooSmallDoubleParamValue()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => Argument.IsNotOutOfRange("param", 1d, 2d, 3d));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForTooLargeDoubleParamValue()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => Argument.IsNotOutOfRange("param", 3d, 1d, 2d));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SucceedsForValidDoubles()
             {
                 Argument.IsNotOutOfRange("param", 1d, 1d, 3d);
@@ -195,16 +194,16 @@ namespace Catel.Test
 #endif
         }
 
-        [TestClass]
+        [TestFixture]
         public partial class TheIsMinimalMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForTooSmallIntegerParamValue()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => Argument.IsMinimal("param", 2, 3));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SucceedsForValidInteger()
             {
                 Argument.IsMinimal("param", 3, 2);
@@ -212,13 +211,13 @@ namespace Catel.Test
             }
 
 #if NET
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForTooSmallDoubleParamValue()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => Argument.IsMinimal("param", 2d, 3d));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SucceedsForValidDouble()
             {
                 Argument.IsMinimal("param", 3d, 2d);
@@ -227,16 +226,16 @@ namespace Catel.Test
 #endif
         }
 
-        [TestClass]
+        [TestFixture]
         public partial class TheIsMaximumMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForTooLargeIntegerParamValue()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => Argument.IsMaximum("param", 3, 2));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SucceedsForValidInteger()
             {
                 Argument.IsMaximum("param", 2, 3);
@@ -244,13 +243,13 @@ namespace Catel.Test
             }
 
 #if NET
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForTooLargeDoubleParamValue()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => Argument.IsMaximum("param", 3d, 2d));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SucceedsForValidDouble()
             {
                 Argument.IsMaximum("param", 2d, 3d);
@@ -259,268 +258,268 @@ namespace Catel.Test
 #endif
         }
 
-        [TestClass]
+        [TestFixture]
         public partial class TheImplementsInterfaceMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullInstance()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.ImplementsInterface(null, null as object, typeof(IList)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SucceedsForInstanceImplementingInterface()
             {
                 Argument.ImplementsInterface("myParam", new List<int>(), typeof(IList));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SucceedsForInstanceImplementingInterfaceGeneric()
             {
                 Argument.ImplementsInterface<IList>("myParam", new List<int>());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.ImplementsInterface("myParam", null, typeof(IList)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullInterfaceType()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.ImplementsInterface("myParam", typeof(List<int>), null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForTypeNotImplementingInterface()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.ImplementsInterface("myParam", typeof(List<int>), typeof(INotifyPropertyChanged)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SucceedsForTypeImplementingInterface()
             {
                 Argument.ImplementsInterface("myParam", typeof(List<int>), typeof(IList));
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public partial class TheInheritsFromMethod
         {
-            [TestMethod]
+            [TestCase]
             public void SucceedsForTypeInheritsFrom()
             {
                 Argument.InheritsFrom("myParam", typeof(CoverageExcludeAttribute), typeof(Attribute));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SucceedsForInstanceInheritsFrom()
             {
                 Argument.InheritsFrom("myParam", new CoverageExcludeAttribute(ExcludeReason.TestCode), typeof(Attribute));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SucceedsForGenericInheritsFrom()
             {
                 Argument.InheritsFrom<Attribute>("myParam", new CoverageExcludeAttribute(ExcludeReason.TestCode));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullInstance()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.InheritsFrom(null, null as object, typeof(Exception)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.InheritsFrom("myParam", null, typeof(Exception)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullInstance()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.InheritsFrom("myParam", null as object, typeof(Exception)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullBaseType()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.InheritsFrom("myParam", typeof(Exception), null));
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public partial class TheIsOfTypeMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullInstance()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsOfType(null, null as object, typeof(ViewModelBase)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SucceedsForInstanceImplementingRequiredType()
             {
                 Argument.IsOfType("myParam", new PersonViewModel(), typeof(ViewModelBase));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsOfType("myParam", null, typeof(ViewModelBase)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullNotRequiredType()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsOfType("myParam", typeof(PersonViewModel), null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForTypeNotImplementingRequiredType()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsOfType("myParam", typeof(PersonViewModel), typeof(ViewLocator)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SucceedsForTypeImplementingRequiredType()
             {
                 Argument.IsOfType("myParam", typeof(PersonViewModel), typeof(ViewModelBase));
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheIsNotOfTypeMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullInstance()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsNotOfType(null, null as object, typeof(ViewModelLocator)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SucceedsForInstanceNotImplementingNotRequiredType()
             {
                 Argument.IsNotOfType("myParam", new ViewLocator(), typeof(ViewModelLocator));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotOfType("myParam", null, typeof(ViewModelLocator)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullNotRequiredType()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotOfType("myParam", typeof(ViewLocator), null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SucceedsForTypeNotImplementingNotRequiredType()
             {
                 Argument.IsNotOfType("myParam", typeof(ViewLocator), typeof(ViewModelLocator));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForTypeImplementingNotRequiredType()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsNotOfType("myParam", typeof(PersonViewModel), typeof(ViewModelBase)));
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheIsSupportedMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullMessage()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsSupported(true, null));
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsSupported(true, string.Empty));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsNotSupportedExceptionForNotSupported()
             {
                 ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => Argument.IsSupported(false, "Just not supported"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SucceedsForSupported()
             {
                 Argument.IsSupported(true, "Just not supported");
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public partial class TheIsNotMatchMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullValue()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsNotMatch("myParam", null, ".+"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullPattern()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsNotMatch("myParam", string.Empty, null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForValueThatMatchWithThePattern()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsNotMatch("myParam", "Match any single character that is not a line break character, between one and unlimited times", ".+"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SucceedsForValueThatNotMatchWithThePattern()
             {
                 Argument.IsNotMatch("myParam", "Match a single digit, between one and unlimited times", "\\d+");
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public partial class TheIsMatchMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullValue()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsMatch("myParam", null, ".+"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullPattern()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsMatch("myParam", string.Empty, null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForValueThatMatchWithThePattern()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsMatch("myParam", "\n", ".+"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SucceedsForValueThatMatchWithThePattern()
             {
                 Argument.IsMatch("myParam", "1234567890", "\\d+");
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public partial class TheIsValidMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNotValid()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsValid("myParam", "value", false));
             }            
             
 #if !NETFX_CORE
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNotValidValidator()
             {
                 var validatorMock = new Mock<IValueValidator<string>>();
@@ -529,35 +528,35 @@ namespace Catel.Test
             }  
 #endif
             
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNotValidFunc()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsValid("myParam", "value", () => false));
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsValid("myParam", "value", s => s.Length > 10));
             }
             
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionIfFuncIsNull()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsValid("myParam", "value", (Func<string, bool>)null));
   
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionifValidatorIsNull()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsValid("myParam", "value", (IValueValidator<string>)null));
             }
             
 
-            [TestMethod]
+            [TestCase]
             public void SucceedsForValid()
             {
                 Argument.IsValid("myParam", "value", true);
             }       
             
 #if !NETFX_CORE
-            [TestMethod]
+            [TestCase]
             public void SucceedsForValid_Validator()
             {
                 var validatorMock = new Mock<IValueValidator<string>>();
@@ -566,7 +565,7 @@ namespace Catel.Test
             }
 #endif
 
-            [TestMethod]
+            [TestCase]
             public void SucceedsForValid_Func()
             {
                 Argument.IsValid("myParam", "value", () => true);

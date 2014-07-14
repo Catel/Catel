@@ -10,24 +10,20 @@ namespace Catel.Test.MVVM.Converters
 {
     using Catel.MVVM.Converters;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class GetFirstValidationErrorConverterTest
     {
         #region Methods
-        [TestMethod]
+        [TestCase]
         public void Convert_Null()
         {
             var converter = new GetFirstValidationErrorConverter();
             Assert.AreEqual(string.Empty, converter.Convert(null, typeof (string), null, null));
         }
 
-        //[TestMethod]
+        //[TestCase]
         //public void Convert_ObjectWithError()
         //{
         //    List<ValidationError> errors = new List<ValidationError>();
@@ -37,13 +33,13 @@ namespace Catel.Test.MVVM.Converters
         //    Assert.AreEqual(string.Empty, converter.Convert(null, typeof(object), null, null));
         //}
 
-        //[TestMethod]
+        //[TestCase]
         //public void Convert_ObjectWithoutErrors()
         //{
         //    Assert.Fail("Need to write unit test");
         //}
 
-        [TestMethod]
+        [TestCase]
         public void ConvertBack()
         {
             var converter = new GetFirstValidationErrorConverter();

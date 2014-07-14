@@ -13,7 +13,7 @@ namespace Catel.Test.Extensions.Prism
     using Catel.Logging;
 
     using Microsoft.Practices.Prism.Logging;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using Moq;
 
@@ -27,7 +27,7 @@ namespace Catel.Test.Extensions.Prism
         /// <summary>
         /// The the debug method.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class TheDebugMethod
         {
             #region Methods
@@ -35,7 +35,7 @@ namespace Catel.Test.Extensions.Prism
             /// <summary>
             /// Throws argument null exception when message format is null.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionWhenMessageFormatIsNull()
             {
                 var logMock = new Mock<ILog>();
@@ -45,7 +45,7 @@ namespace Catel.Test.Extensions.Prism
             /// <summary>
             /// Throws argument null exception when exception is null.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionWhenExceptionIsNull()
             {
                 var logMock = new Mock<ILog>();
@@ -55,7 +55,7 @@ namespace Catel.Test.Extensions.Prism
             ///// <summary>
             ///// Puts the priority value into the message format.
             ///// </summary>
-            //[TestMethod]
+            //[TestCase]
             //public void PutsThePriorityValueIntoTheMessageFormat()
             //{
             //    var logMock = new Mock<ILog>();
@@ -66,7 +66,7 @@ namespace Catel.Test.Extensions.Prism
             ///// <summary>
             ///// Puts the priority value into the message format 2.
             ///// </summary>
-            //[TestMethod]
+            //[TestCase]
             //public void PutsThePriorityValueIntoTheMessageFormat2()
             //{
             //    var logMock = new Mock<ILog>();
@@ -84,7 +84,7 @@ namespace Catel.Test.Extensions.Prism
         /// <summary>
         /// The the error method.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class TheErrorMethod
         {
             #region Methods
@@ -92,7 +92,7 @@ namespace Catel.Test.Extensions.Prism
             /// <summary>
             /// Throws argument null exception when message format is null.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionWhenMessageFormatIsNull()
             {
                 var logMock = new Mock<ILog>();
@@ -102,7 +102,7 @@ namespace Catel.Test.Extensions.Prism
             /// <summary>
             /// Throws argument null exception when exception is null.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionWhenExceptionIsNull()
             {
                 var logMock = new Mock<ILog>();
@@ -112,7 +112,7 @@ namespace Catel.Test.Extensions.Prism
             ///// <summary>
             ///// Put the priority value into the message format.
             ///// </summary>
-            //[TestMethod]
+            //[TestCase]
             //public void PutsThePriorityValueIntoTheMessageFormat()
             //{
             //    var logMock = new Mock<ILog>();
@@ -123,7 +123,7 @@ namespace Catel.Test.Extensions.Prism
             ///// <summary>
             ///// Puts the priority value into the message format 2.
             ///// </summary>
-            //[TestMethod]
+            //[TestCase]
             //public void PutsThePriorityValueIntoTheMessageFormat2()
             //{
             //    var logMock = new Mock<ILog>();
@@ -141,7 +141,7 @@ namespace Catel.Test.Extensions.Prism
         /// <summary>
         /// The the info method.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class TheInfoMethod
         {
             #region Methods
@@ -149,7 +149,7 @@ namespace Catel.Test.Extensions.Prism
             /// <summary>
             /// Throws argument null exception when message format is null.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionWhenMessageFormatIsNull()
             {
                 var logMock = new Mock<ILog>();
@@ -159,7 +159,7 @@ namespace Catel.Test.Extensions.Prism
             /// <summary>
             /// Throws argument null exception when exception is null.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionWhenExceptionIsNull()
             {
                 var logMock = new Mock<ILog>();
@@ -169,7 +169,7 @@ namespace Catel.Test.Extensions.Prism
             ///// <summary>
             ///// Puts the priority value into the message format.
             ///// </summary>
-            //[TestMethod]
+            //[TestCase]
             //public void PutThePriorityValueIntoTheMessageFormat()
             //{
             //    var logMock = new Mock<ILog>();
@@ -180,7 +180,7 @@ namespace Catel.Test.Extensions.Prism
             ///// <summary>
             ///// Puts the priority value into the message format 2.
             ///// </summary>
-            //[TestMethod]
+            //[TestCase]
             //public void PutsThePriorityValueIntoTheMessageFormat2()
             //{
             //    var logMock = new Mock<ILog>();
@@ -198,7 +198,7 @@ namespace Catel.Test.Extensions.Prism
         /// <summary>
         /// The warning method.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class TheWarningMethod
         {
             #region Methods
@@ -206,7 +206,7 @@ namespace Catel.Test.Extensions.Prism
             /// <summary>
             /// Throws argument null exception when message format is null.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionWhenMessageFormatIsNull()
             {
                 var logMock = new Mock<ILog>();
@@ -216,7 +216,7 @@ namespace Catel.Test.Extensions.Prism
             /// <summary>
             /// Throws argument null when exception exception is null.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionWhenExceptionIsNull()
             {
                 var logMock = new Mock<ILog>();
@@ -226,7 +226,7 @@ namespace Catel.Test.Extensions.Prism
             ///// <summary>
             ///// Put the priority value into the message format.
             ///// </summary>
-            //[TestMethod]
+            //[TestCase]
             //public void PutsThePriorityValueIntoTheMessageFormat()
             //{
             //    var logMock = new Mock<ILog>();
@@ -237,7 +237,7 @@ namespace Catel.Test.Extensions.Prism
             ///// <summary>
             ///// Put the priority value into the message format 2.
             ///// </summary>
-            //[TestMethod]
+            //[TestCase]
             //public void PutsThePriorityValueIntoTheMessageFormat2()
             //{
             //    var logMock = new Mock<ILog>();

@@ -7,17 +7,12 @@
 namespace Catel.Test.MVVM.Auditing
 {
     using Catel.MVVM.Auditing;
+    using NUnit.Framework;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
-
-    [TestClass]
+    [TestFixture]
     public class AuditorTest
     {
-        [TestMethod]
+        [TestCase]
         public void OnViewModelCreating()
         {
             AuditingManager.Clear();
@@ -31,7 +26,7 @@ namespace Catel.Test.MVVM.Auditing
             Assert.AreEqual(typeof (TestViewModel), auditor.OnViewModelCreatingType);
         }
 
-        [TestMethod]
+        [TestCase]
         public void OnViewModelCreated()
         {
             AuditingManager.Clear();
@@ -46,7 +41,7 @@ namespace Catel.Test.MVVM.Auditing
         }
 
 #if NET
-        [TestMethod]
+        [TestCase]
         public void OnPropertyChanging()
         {
             AuditingManager.Clear();
@@ -64,7 +59,7 @@ namespace Catel.Test.MVVM.Auditing
         }
 #endif
 
-        [TestMethod]
+        [TestCase]
         public void OnPropertyChanged()
         {
             AuditingManager.Clear();
@@ -81,7 +76,7 @@ namespace Catel.Test.MVVM.Auditing
             Assert.AreEqual("test", auditor.OnPropertyChangedNewValue);
         }
 
-        [TestMethod]
+        [TestCase]
         public void OnPropertyChanged_IgnoredProperties()
         {
             AuditingManager.Clear();
@@ -99,7 +94,7 @@ namespace Catel.Test.MVVM.Auditing
             Assert.AreEqual(null, auditor.OnPropertyChangedNewValue);
         }
 
-        [TestMethod]
+        [TestCase]
         public void OnCommandExecuted()
         {
             AuditingManager.Clear();
@@ -117,7 +112,7 @@ namespace Catel.Test.MVVM.Auditing
             Assert.AreEqual("test", auditor.OnCommandExecutedCommandParameter);
         }
 
-        [TestMethod]
+        [TestCase]
         public void OnViewModelSaving()
         {
             AuditingManager.Clear();
@@ -132,7 +127,7 @@ namespace Catel.Test.MVVM.Auditing
             Assert.AreEqual(viewModel, auditor.OnViewModelSavingViewModel);
         }
 
-        [TestMethod]
+        [TestCase]
         public void OnViewModelSaved()
         {
             AuditingManager.Clear();
@@ -147,7 +142,7 @@ namespace Catel.Test.MVVM.Auditing
             Assert.AreEqual(viewModel, auditor.OnViewModelSavedViewModel);
         }
 
-        [TestMethod]
+        [TestCase]
         public void OnViewModelCanceling()
         {
             AuditingManager.Clear();
@@ -162,7 +157,7 @@ namespace Catel.Test.MVVM.Auditing
             Assert.AreEqual(viewModel, auditor.OnViewModelCancelingViewModel);
         }
 
-        [TestMethod]
+        [TestCase]
         public void OnViewModelCanceled()
         {
             AuditingManager.Clear();
@@ -177,7 +172,7 @@ namespace Catel.Test.MVVM.Auditing
             Assert.AreEqual(viewModel, auditor.OnViewModelCanceledViewModel);
         }
 
-        [TestMethod]
+        [TestCase]
         public void OnViewModelClosing()
         {
             AuditingManager.Clear();
@@ -192,7 +187,7 @@ namespace Catel.Test.MVVM.Auditing
             Assert.AreEqual(viewModel, auditor.OnViewModelClosingViewModel);
         }
 
-        [TestMethod]
+        [TestCase]
         public void OnViewModelClosed()
         {
             AuditingManager.Clear();
