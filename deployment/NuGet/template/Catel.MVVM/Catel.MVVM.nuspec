@@ -23,15 +23,19 @@
 	<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>
 	
     <dependencies>
-		<group targetFramework="net40">
-		  <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
-		</group>	    
+        <group>
+          <dependency id="Catel.Core" version="[VERSION]" />
+        </group>
+
+        <group targetFramework="net40">
+          <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
+          <dependency id="Catel.Core" version="[VERSION]" />
+        </group>      
         
         <group targetFramework="sl50">
           <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
-        </group>         
-    
-      <dependency id="Catel.Core" version="[VERSION]" />
+          <dependency id="Catel.Core" version="[VERSION]" />
+        </group> 
     </dependencies>
 	
   </metadata>

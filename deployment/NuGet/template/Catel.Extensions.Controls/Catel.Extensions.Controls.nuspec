@@ -21,15 +21,19 @@
 	<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>
 	
     <dependencies>
-        <dependency id="Catel.MVVM" version="[VERSION]" />
+        <group>
+          <dependency id="Catel.MVVM" version="[VERSION]" />
+        </group>
 
         <group targetFramework="net40">
           <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
-        </group>
+          <dependency id="Catel.MVVM" version="[VERSION]" />
+        </group>      
         
         <group targetFramework="sl50">
           <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
-        </group>           
+          <dependency id="Catel.MVVM" version="[VERSION]" />
+        </group>        
     </dependencies>
 	
   </metadata>

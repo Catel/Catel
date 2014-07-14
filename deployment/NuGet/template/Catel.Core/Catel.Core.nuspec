@@ -22,6 +22,9 @@
 	<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>
     
     <dependencies>
+        <group>
+        </group>
+    
         <group targetFramework="net40">
           <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
         </group>

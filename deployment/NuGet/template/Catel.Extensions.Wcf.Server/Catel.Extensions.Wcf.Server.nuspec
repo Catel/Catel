@@ -21,15 +21,14 @@
 	<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>
 	
     <dependencies>
-        <dependency id="Catel.Core" version="[VERSION]" />
+        <group>
+          <dependency id="Catel.Core" version="[VERSION]" />
+        </group>
       
         <group targetFramework="net40">
           <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
+          <dependency id="Catel.Core" version="[VERSION]" />
         </group>      
-        
-        <group targetFramework="sl50">
-          <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
-        </group>           
     </dependencies>
   </metadata>
 </package>
