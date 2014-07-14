@@ -160,6 +160,7 @@ Added/fixed:
 (x) CTL-466 Catel and Microsoft Fakes does not work because of reflection on explicit interface properties
 (x) CTL-467 Async MessageService does not show MessageBox (Task gets never started)
 (x) CTL-478 InfoBarMessageControl does not respect Horizontal/Vertical- (Content)Alignment
+(x) CTL-487 TypeHelper doesn't always return the right typename / assemblyname
 
 Roadmap:
 ========

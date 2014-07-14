@@ -137,8 +137,13 @@ namespace Catel.Reflection
         {
             Argument.IsNotNullOrWhitespace("fullTypeName", fullTypeName);
 
-            int splitterPos = fullTypeName.IndexOf(", ", StringComparison.Ordinal);
+            var lastGenericIndex = fullTypeName.LastIndexOf("]]", StringComparison.Ordinal);
+            if (lastGenericIndex != -1)
+            {
+                fullTypeName = fullTypeName.Substring(lastGenericIndex + 2);
+            }
 
+            var splitterPos = fullTypeName.IndexOf(", ", StringComparison.Ordinal);
             var assemblyName = (splitterPos != -1) ? fullTypeName.Substring(splitterPos + 1).Trim() : null;
             return assemblyName;
         }
