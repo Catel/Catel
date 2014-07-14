@@ -79,6 +79,7 @@ Added/fixed:
 (+) CTL-446 Create InteractivityManager to allow events when behaviors are created
 (+) CTL-459 Add AutoScroll behavior to automatically scroll ItemsControl lists
 (+) CTL-469 Add async methods to the ICacheStorage 
+(+) CTL-485 Create RollingInMemoryLogListener to be able to query the latest log messages
 (*) CTL-326 Data annotation validation will no longer be invoked for properties with non-public getters to prevent
     first chance exceptions the first time such a property is being validated
 (*) CTL-334 ViewModelBase now respects SuspendValidation during saving, which means that even if there are validation 

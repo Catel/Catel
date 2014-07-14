@@ -308,6 +308,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\XmlSerializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scoping\EventArgs\ScopeClosedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scoping\ScopeManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IRollingInMemoryLogService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\RollingInMemoryLogService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ILanguageService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ILanguageSource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IService.cs" />

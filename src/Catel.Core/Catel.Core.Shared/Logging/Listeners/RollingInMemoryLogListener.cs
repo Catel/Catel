@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Logging.Listeners
+namespace Catel.Logging
 {
     using System;
     using System.Collections.Generic;

@@ -51,6 +51,8 @@ namespace Catel
 
             serviceLocator.RegisterType<IModelEqualityComparer, ModelEqualityComparer>();
             serviceLocator.RegisterType<IConfigurationService, ConfigurationService>();
+
+            serviceLocator.RegisterType<IRollingInMemoryLogService, RollingInMemoryLogService>();
         }
     }
 }
