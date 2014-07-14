@@ -116,7 +116,7 @@ namespace Catel.Logging
                     {
                         foreach (var batchEntry in batchEntries)
                         {
-                            var message = FormatLogEvent(batchEntry.Log, batchEntry.Message, batchEntry.LogEvent, batchEntry.ExtraData);
+                            var message = FormatLogEvent(batchEntry.Log, batchEntry.Message, batchEntry.LogEvent, batchEntry.ExtraData, batchEntry.Time);
 
                             writer.WriteLine(message);
                         }

@@ -412,7 +412,7 @@ namespace Catel.Logging
             var logMessage = LogMessage;
             if (logMessage != null)
             {
-                var eventArgs = new LogMessageEventArgs(this, string.Format("{0}{1}", new string(' ', IndentLevel * IndentSize), message), extraData, logEvent);
+                var eventArgs = new LogMessageEventArgs(this, string.Format("{0}{1}", new string(' ', IndentLevel * IndentSize), message), extraData, logEvent, DateTime.Now);
                 logMessage(this, eventArgs);
             }
         }

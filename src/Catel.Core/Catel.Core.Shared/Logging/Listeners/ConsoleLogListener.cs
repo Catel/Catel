@@ -6,7 +6,10 @@
 namespace Catel.Logging
 {
     using System;
+
+#if NET
     using System.Collections.Generic;
+#endif
 
     /// <summary>
     /// Log listener that writes to the console.
@@ -44,9 +47,10 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="logEvent">The log event.</param>
         /// <param name="extraData">The additional data.</param>
-        protected override void Write(ILog log, string message, LogEvent logEvent, object extraData)
+        /// <param name="time">The time.</param>
+        protected override void Write(ILog log, string message, LogEvent logEvent, object extraData, DateTime time)
         {
-            string consoleMessage = FormatLogEvent(log, message, logEvent, extraData);
+            string consoleMessage = FormatLogEvent(log, message, logEvent, extraData, time);
 
 #if NET
             var oldConsoleBackgroundColor = Console.BackgroundColor;

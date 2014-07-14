@@ -38,7 +38,7 @@ namespace Catel.Test.Logging
 
             public int ErrorCount { get; private set; }
 
-            protected override void Write(ILog log, string message, LogEvent logEvent, object extraData)
+            protected override void Write(ILog log, string message, LogEvent logEvent, object extraData, DateTime time)
             {
                 if (log.TargetType != typeof(TestLogListener))
                 {

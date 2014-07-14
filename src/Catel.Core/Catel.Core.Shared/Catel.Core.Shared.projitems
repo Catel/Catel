@@ -220,6 +220,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\DebugLogListener.winrt.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\DebugLogListener.wp.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\FileLogListener.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\RollingInMemoryLogListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Log.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\LogBatchEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\LogEntry.cs" />

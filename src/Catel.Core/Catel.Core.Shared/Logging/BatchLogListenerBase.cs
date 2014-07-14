@@ -55,11 +55,12 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="logEvent">The log event.</param>
         /// <param name="extraData">The additional data.</param>
-        protected override void Write(ILog log, string message, LogEvent logEvent, object extraData)
+        /// <param name="time">The time.</param>
+        protected override void Write(ILog log, string message, LogEvent logEvent, object extraData, DateTime time)
         {
             lock (_lock)
             {
-                _logBatch.Add(new LogBatchEntry(log, message, logEvent, extraData, DateTime.Now));
+                _logBatch.Add(new LogBatchEntry(log, message, logEvent, extraData, time));
 
                 if (_logBatch.Count >= MaximumBatchCount)
                 {
