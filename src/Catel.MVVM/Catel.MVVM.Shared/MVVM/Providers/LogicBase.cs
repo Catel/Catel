@@ -9,7 +9,7 @@ namespace Catel.MVVM.Providers
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
-
+    using System.Threading.Tasks;
     using Caching;
     using Data;
     using IoC;
@@ -863,29 +863,29 @@ namespace Catel.MVVM.Providers
         /// Cancels the view model.
         /// </summary>
         /// <returns><c>true</c> if the view model is successfully canceled; otherwise <c>false</c>.</returns>
-        public virtual bool CancelViewModel()
+        public async virtual Task<bool> CancelViewModel()
         {
             if (ViewModel == null)
             {
                 return false;
             }
 
-            return ViewModel.CancelViewModel();
+            return await ViewModel.CancelViewModel();
         }
 
         /// <summary>
         /// Cancels and closes the view model.
         /// </summary>
         /// <returns><c>true</c> if the view model is successfully canceled; otherwise <c>false</c>.</returns>
-        public bool CancelAndCloseViewModel()
+        public async Task<bool> CancelAndCloseViewModel()
         {
-            bool result = CancelViewModel();
+            var result = await CancelViewModel();
             if (!result)
             {
                 return result;
             }
 
-            CloseViewModel(result);
+            await CloseViewModel(result);
 
             return result;
         }
@@ -894,29 +894,29 @@ namespace Catel.MVVM.Providers
         /// Saves the view model.
         /// </summary>
         /// <returns><c>true</c> if the view model is successfully saved; otherwise <c>false</c>.</returns>
-        public virtual bool SaveViewModel()
+        public async virtual Task<bool> SaveViewModel()
         {
             if (ViewModel == null)
             {
                 return false;
             }
 
-            return ViewModel.SaveViewModel();
+            return await ViewModel.SaveViewModel();
         }
 
         /// <summary>
         /// Saves and closes the view model. If the saving fails, the view model is not closed.
         /// </summary>
         /// <returns><c>true</c> if the view model is successfully saved; otherwise <c>false</c>.</returns>
-        public bool SaveAndCloseViewModel()
+        public async Task<bool> SaveAndCloseViewModel()
         {
-            bool result = SaveViewModel();
+            var result = await SaveViewModel();
             if (!result)
             {
                 return result;
             }
 
-            CloseViewModel(result);
+            await CloseViewModel(result);
 
             return result;
         }
@@ -924,11 +924,11 @@ namespace Catel.MVVM.Providers
         /// <summary>
         /// Closes the view model.
         /// </summary>
-        public virtual void CloseViewModel(bool? result)
+        public async virtual Task CloseViewModel(bool? result)
         {
             if (ViewModel != null)
             {
-                ViewModel.CloseViewModel(result);
+                await ViewModel.CloseViewModel(result);
                 ViewModel = null;
             }
         }

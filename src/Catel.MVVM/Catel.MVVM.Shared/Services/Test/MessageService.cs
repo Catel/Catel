@@ -53,7 +53,7 @@ namespace Catel.Services.Test
         /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
         public Task<MessageResult> ShowError(Exception exception)
         {
-            return new Task<MessageResult>(() => MessageResult.None);
+            return Task.Factory.StartNew(() => MessageResult.None);
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace Catel.Services.Test
         /// <exception cref="ArgumentException">The <paramref name="caption"/> is <c>null</c> or whitespace.</exception>
         public Task<MessageResult> ShowError(string message, string caption = "")
         {
-            return new Task<MessageResult>(() => MessageResult.None);
+            return Task.Factory.StartNew(() => MessageResult.None);
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace Catel.Services.Test
         /// <exception cref="ArgumentException">The <paramref name="caption"/> is <c>null</c> or whitespace.</exception>
         public Task<MessageResult> ShowWarning(string message, string caption = "")
         {
-            return new Task<MessageResult>(() => MessageResult.None);
+            return Task.Factory.StartNew(() => MessageResult.None);
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace Catel.Services.Test
         /// <exception cref="ArgumentException">The <paramref name="caption"/> is <c>null</c> or whitespace.</exception>
         public Task<MessageResult> ShowInformation(string message, string caption = "")
         {
-            return new Task<MessageResult>(() => MessageResult.None);
+            return Task.Factory.StartNew(() => MessageResult.None);
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace Catel.Services.Test
                 throw new Exception(ResourceHelper.GetString("NoExpectedResultsInQueueForUnitTest"));
             }
 
-            return new Task<MessageResult>(()=> ExpectedResults.Dequeue());
+            return Task.Factory.StartNew(() => ExpectedResults.Dequeue());
         }
         #endregion
     }

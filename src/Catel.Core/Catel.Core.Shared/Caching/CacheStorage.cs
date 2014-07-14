@@ -270,9 +270,7 @@ namespace Catel.Caching
         /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
         public Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<TValue> code, ExpirationPolicy expirationPolicy, bool @override = false)
         {
-            var taskFactory = new TaskFactory<TValue>();
-
-            return taskFactory.StartNew(() => GetFromCacheOrFetch(key, code, expirationPolicy, @override));
+            return Task.Factory.StartNew(() => GetFromCacheOrFetch(key, code, expirationPolicy, @override));
         }
 
         /// <summary>
@@ -289,9 +287,7 @@ namespace Catel.Caching
         /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
         public Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<TValue> code, bool @override = false, TimeSpan expiration = default(TimeSpan))
         {
-            var taskFactory = new TaskFactory<TValue>();
-
-            return taskFactory.StartNew(() => GetFromCacheOrFetch(key, code, @override, expiration));
+            return Task.Factory.StartNew(() => GetFromCacheOrFetch(key, code, @override, expiration));
         }
 
         /// <summary>

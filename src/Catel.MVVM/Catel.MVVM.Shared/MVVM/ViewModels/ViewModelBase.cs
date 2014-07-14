@@ -11,7 +11,7 @@ namespace Catel.MVVM
     using System.ComponentModel;
     using System.Linq;
     using System.Reflection;
-
+    using System.Threading.Tasks;
     using Catel.Services;
 
     using Collections;
@@ -1266,7 +1266,7 @@ namespace Catel.MVVM
         /// <returns>
         ///	<c>true</c> if successful; otherwise <c>false</c>.
         /// </returns>
-        protected virtual bool Cancel() { return true; }
+        protected virtual Task<bool> Cancel() { return Task.Factory.StartNew(() => true); }
 
         /// <summary>
         /// Saves the data.
@@ -1274,7 +1274,7 @@ namespace Catel.MVVM
         /// <returns>
         /// <c>true</c> if successful; otherwise <c>false</c>.
         /// </returns>
-        protected virtual bool Save() { return true; }
+        protected virtual Task<bool> Save() { return Task.Factory.StartNew(() => true); }
 
         /// <summary>
         /// Called when the view model is about to be closed.
@@ -1289,7 +1289,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Closes this instance. Always called after the <see cref="Cancel"/> of <see cref="Save"/> method.
         /// </summary>
-        protected virtual void Close() { }
+        protected virtual Task Close() { return Task.Factory.StartNew(() => { }); }
 
         /// <summary>
         /// Called when the view model has just been closed.
@@ -1379,7 +1379,7 @@ namespace Catel.MVVM
         /// Cancels the editing of the data.
         /// </summary>
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
-        public bool CancelViewModel()
+        public async Task<bool> CancelViewModel()
         {
             if (IsClosed)
             {
@@ -1395,7 +1395,7 @@ namespace Catel.MVVM
                 return false;
             }
 
-            bool cancel = Cancel();
+            var cancel = await Cancel();
 
             Log.Info(cancel ? "Canceled view model '{0}'" : "Failed to cancel view model '{0}'", GetType());
             if (!cancel)
@@ -1422,12 +1422,12 @@ namespace Catel.MVVM
         /// Cancels the editing of the data, but also closes the view model in the same call.
         /// </summary>
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
-        public bool CancelAndCloseViewModel()
+        public async Task<bool> CancelAndCloseViewModel()
         {
-            bool result = CancelViewModel();
+            var result = await CancelViewModel();
             if (result)
             {
-                CloseViewModel(false);
+                await CloseViewModel(false);
             }
 
             return result;
@@ -1437,7 +1437,7 @@ namespace Catel.MVVM
         /// Saves the data.
         /// </summary>
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
-        public bool SaveViewModel()
+        public async Task<bool> SaveViewModel()
         {
             if (IsClosed)
             {
@@ -1470,7 +1470,7 @@ namespace Catel.MVVM
                 return false;
             }
 
-            bool saved = Save();
+            var saved = await Save();
 
             Log.Info(saved ? "Saved view model '{0}'" : "Failed to save view model '{0}'", GetType());
 
@@ -1496,12 +1496,12 @@ namespace Catel.MVVM
         /// Saves the data, but also closes the view model in the same call if the save succeeds.
         /// </summary>
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
-        public bool SaveAndCloseViewModel()
+        public async Task<bool> SaveAndCloseViewModel()
         {
-            bool result = SaveViewModel();
+            bool result = await SaveViewModel();
             if (result)
             {
-                CloseViewModel(true);
+                await CloseViewModel(true);
             }
 
             return result;
@@ -1511,7 +1511,7 @@ namespace Catel.MVVM
         /// Closes this instance. Always called after the <see cref="Cancel"/> of <see cref="Save"/> method.
         /// </summary>
         /// <param name="result">The result to pass to the view. This will, for example, be used as <c>DialogResult</c>.</param>
-        public void CloseViewModel(bool? result)
+        public async Task CloseViewModel(bool? result)
         {
             if (IsClosed)
             {
@@ -1524,7 +1524,7 @@ namespace Catel.MVVM
 
             ViewModelManager.UnregisterAllModels(this);
 
-            Close();
+            await Close();
 
             SuspendValidation = true;
 

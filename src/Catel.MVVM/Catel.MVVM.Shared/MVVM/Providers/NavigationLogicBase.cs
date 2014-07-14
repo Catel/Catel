@@ -153,11 +153,11 @@ namespace Catel.MVVM.Providers
         /// Called when the control has just been navigated away from the page.
         /// </summary>
         /// <param name="e">The <see cref="NavigatingEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnNavigatingAwayFromPage(NavigatingEventArgs e)
+        protected async virtual void OnNavigatingAwayFromPage(NavigatingEventArgs e)
         {
             bool? result = true;
 
-            result = SaveAndCloseViewModel();
+            result = await SaveAndCloseViewModel();
 
             if (e.Uri != null && e.Uri.IsNavigationToExternal())
             {

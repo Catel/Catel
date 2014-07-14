@@ -186,7 +186,7 @@ namespace Catel.MVVM.Providers
         /// Public to allow the generated ILGenerator to access this method.
         /// </remarks>
         // ReSharper disable UnusedMember.Local
-        public void OnTargetWindowClosed()
+        public async void OnTargetWindowClosed()
         // ReSharper restore UnusedMember.Local
         {
 #if SILVERLIGHT
@@ -212,7 +212,7 @@ namespace Catel.MVVM.Providers
                     Log.Warning("Failed to get the 'DialogResult' property of window type '{0}', using 'null' as dialog result", TargetWindow.GetType().Name);
                 }
 
-                CloseViewModel(dialogResult);
+                await CloseViewModel(dialogResult);
             }
 
             _dynamicEventListener.UnsubscribeFromEvent();

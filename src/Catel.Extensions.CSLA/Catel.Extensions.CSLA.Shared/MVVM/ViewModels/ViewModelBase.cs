@@ -7,6 +7,7 @@
 namespace Catel.MVVM.CSLA
 {
     using System;
+    using System.Threading.Tasks;
     using Auditing;
     using Csla.Xaml;
     using IoC;
@@ -331,47 +332,50 @@ namespace Catel.MVVM.CSLA
         /// <summary>
         /// Cancels the editing of the data.
         /// </summary>
-        bool MVVM.IViewModel.CancelViewModel()
+        Task<bool> MVVM.IViewModel.CancelViewModel()
         {
-            if (IsClosed)
+            return Task.Factory.StartNew(() =>
             {
-                return false;
-            }
+                if (IsClosed)
+                {
+                    return false;
+                }
 
-            var cancelingEventArgs = new CancelingEventArgs();
-            _catelCanceling.SafeInvoke(this, cancelingEventArgs);
+                var cancelingEventArgs = new CancelingEventArgs();
+                _catelCanceling.SafeInvoke(this, cancelingEventArgs);
 
-            if (cancelingEventArgs.Cancel)
-            {
-                return false;
-            }
+                if (cancelingEventArgs.Cancel)
+                {
+                    return false;
+                }
 
-            if (base.CanCancel)
-            {
-                base.DoCancel();
-            }
+                if (base.CanCancel)
+                {
+                    base.DoCancel();
+                }
 
-            _catelCanceled.SafeInvoke(this);
+                _catelCanceled.SafeInvoke(this);
 
-            return true;
+                return true;
+            });
         }
 
         /// <summary>
         /// Cancels the editing of the data, but also closes the view model in the same call.
         /// </summary>
-        bool MVVM.IViewModel.CancelAndCloseViewModel()
+        async Task<bool> MVVM.IViewModel.CancelAndCloseViewModel()
         {
             if (IsClosed)
             {
                 return true;
             }
 
-            if (!CatelViewModel.CancelViewModel())
+            if (!await CatelViewModel.CancelViewModel())
             {
                 return false;
             }
 
-            CatelViewModel.CloseViewModel(false);
+            await CatelViewModel.CloseViewModel(false);
 
             return true;
         }
@@ -382,32 +386,35 @@ namespace Catel.MVVM.CSLA
         /// <returns>
         /// <c>true</c> if successful; otherwise <c>false</c>.
         /// </returns>
-        bool MVVM.IViewModel.SaveViewModel()
+        Task<bool> MVVM.IViewModel.SaveViewModel()
         {
-            if (IsClosed)
+            return Task.Factory.StartNew(() =>
             {
-                return false;
-            }
+                if (IsClosed)
+                {
+                    return false;
+                }
 
-            if (!base.CanSave)
-            {
-                return false;
-            }
+                if (!base.CanSave)
+                {
+                    return false;
+                }
 
-            var e = new SavingEventArgs();
-            _catelSaving.SafeInvoke(this, e);
-            if (e.Cancel)
-            {
-                return false;
-            }
+                var e = new SavingEventArgs();
+                _catelSaving.SafeInvoke(this, e);
+                if (e.Cancel)
+                {
+                    return false;
+                }
 
-            base.Save(this, new ExecuteEventArgs());
+                base.Save(this, new ExecuteEventArgs());
 
-            _catelSaved.SafeInvoke(this);
+                _catelSaved.SafeInvoke(this);
 
-            // Was original call, but not supported in SL
-            //base.DoSave();
-            return true;
+                // Was original call, but not supported in SL
+                //base.DoSave();
+                return true;
+            });
         }
 
         /// <summary>
@@ -416,19 +423,19 @@ namespace Catel.MVVM.CSLA
         /// <returns>
         /// <c>true</c> if successful; otherwise <c>false</c>.
         /// </returns>
-        bool MVVM.IViewModel.SaveAndCloseViewModel()
+        async Task<bool> MVVM.IViewModel.SaveAndCloseViewModel()
         {
             if (IsClosed)
             {
                 return false;
             }
 
-            if (!CatelViewModel.SaveViewModel())
+            if (!await CatelViewModel.SaveViewModel())
             {
                 return false;
             }
 
-            CatelViewModel.CloseViewModel(true);
+            await CatelViewModel.CloseViewModel(true);
             return true;
         }
 
@@ -436,20 +443,23 @@ namespace Catel.MVVM.CSLA
         /// Closes this instance. Always called after the <see cref="M:Catel.MVVM.IViewModel.CancelViewModel"/> of <see cref="M:Catel.MVVM.IViewModel.SaveViewModel"/> method.
         /// </summary>
         /// <param name="result">The result to pass to the view. This will, for example, be used as <c>DialogResult</c>.</param>
-        void MVVM.IViewModel.CloseViewModel(bool? result)
+        Task MVVM.IViewModel.CloseViewModel(bool? result)
         {
-            if (IsClosed)
+            return Task.Factory.StartNew(() =>
             {
-                return;
-            }
+                if (IsClosed)
+                {
+                    return;
+                }
 
-            _catelClosing.SafeInvoke(this);
+                _catelClosing.SafeInvoke(this);
 
-            IsClosed = true;
+                IsClosed = true;
 
-            ViewModelManager.UnregisterViewModelInstance(this);
+                ViewModelManager.UnregisterViewModelInstance(this);
 
-            _catelClosed.SafeInvoke(this, new ViewModelClosedEventArgs(this, result));
+                _catelClosed.SafeInvoke(this, new ViewModelClosedEventArgs(this, result));
+            });
         }
 
         /// <summary>

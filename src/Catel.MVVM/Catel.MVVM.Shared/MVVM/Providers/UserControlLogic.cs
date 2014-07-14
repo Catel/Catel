@@ -787,7 +787,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="CancelingEventArgs"/> instance containing the event data.</param>
-        private void OnParentViewModelCanceling(object sender, CancelingEventArgs e)
+        private async void OnParentViewModelCanceling(object sender, CancelingEventArgs e)
         {
             // The parent view model is canceled, cancel our view model as well
             if (ViewModel != null)
@@ -808,7 +808,7 @@ namespace Catel.MVVM.Providers
 
                 if (!ViewModel.IsClosed)
                 {
-                    e.Cancel = !ViewModel.CancelViewModel();
+                    e.Cancel = !await ViewModel.CancelViewModel();
                 }
             }
         }
@@ -818,7 +818,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="SavingEventArgs"/> instance containing the event data.</param>
-        private void OnParentViewModelSaving(object sender, SavingEventArgs e)
+        private async void OnParentViewModelSaving(object sender, SavingEventArgs e)
         {
             // The parent view model is saved, save our view model as well
             if (ViewModel != null)
@@ -839,7 +839,7 @@ namespace Catel.MVVM.Providers
 
                 if (!ViewModel.IsClosed)
                 {
-                    e.Cancel = !ViewModel.SaveViewModel();
+                    e.Cancel = !await ViewModel.SaveViewModel();
                 }
             }
         }

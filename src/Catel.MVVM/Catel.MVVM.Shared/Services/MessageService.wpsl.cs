@@ -27,7 +27,7 @@ namespace Catel.Services
         {
             Argument.IsNotNullOrWhitespace("message", message);
 
-            return new Task<MessageResult>(() =>
+            return Task.Factory.StartNew<MessageResult>(() =>
             {
                 var messageBoxButton = TranslateMessageButton(button);
                 var result = MessageBox.Show(message, caption, messageBoxButton);

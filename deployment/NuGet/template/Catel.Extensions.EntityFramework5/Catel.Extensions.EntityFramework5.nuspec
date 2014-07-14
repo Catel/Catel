@@ -20,17 +20,18 @@
 		<!--<iconUrl>file://content/icon.png</iconUrl>-->
 	<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>
 	
-	<dependencies>
-		<group targetFramework="net40">
-		  <dependency id="Catel.Core" version="[VERSION]" />
-		  <dependency id="EntityFramework" version="5.0.0" />
-		</group>
-		
-		<group targetFramework="net45">
-		  <dependency id="Catel.Core" version="[VERSION]" />
-		  <dependency id="EntityFramework" version="5.0.0" />
-		</group>
-	</dependencies>
+    <dependencies>
+        <group targetFramework="net40">
+          <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
+        </group>
+        
+        <group targetFramework="sl50">
+          <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
+        </group>           
+
+        <dependency id="Catel.Core" version="[VERSION]" />
+        <dependency id="EntityFramework" version="5.0.0" />        
+    </dependencies>
 	
   </metadata>
 </package>

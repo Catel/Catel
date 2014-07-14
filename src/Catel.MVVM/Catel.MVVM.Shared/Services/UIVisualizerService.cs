@@ -211,7 +211,7 @@ namespace Catel.Services
                 return ShowWindow(window, false);
             }
 
-            return new Task<bool?>(() => false);
+            return Task.Factory.StartNew<bool?>(() => false);
         }
 
         /// <summary>
@@ -271,7 +271,7 @@ namespace Catel.Services
                 return ShowWindow(window, true);
             }
 
-            return new Task<bool?>(() => false);
+            return Task.Factory.StartNew<bool?>(() => false);
         }
 
 #if NET

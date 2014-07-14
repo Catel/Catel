@@ -119,7 +119,7 @@ namespace Catel.Services.Test
                 throw new Exception(ResourceHelper.GetString("NoExpectedResultsInQueueForUnitTest"));
             }
 
-            return new Task<bool?>(() => ExpectedShowResults.Dequeue().Invoke());
+            return Task.Factory.StartNew<bool?>(() => ExpectedShowResults.Dequeue().Invoke());
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace Catel.Services.Test
                 throw new Exception(ResourceHelper.GetString("NoExpectedResultsInQueueForUnitTest"));
             }
 
-            return new Task<bool?>(() => ExpectedShowDialogResults.Dequeue().Invoke());
+            return Task.Factory.StartNew<bool?>(() => ExpectedShowDialogResults.Dequeue().Invoke());
         }
 
         /// <summary>

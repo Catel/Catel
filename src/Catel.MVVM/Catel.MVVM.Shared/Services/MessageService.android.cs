@@ -55,7 +55,7 @@ namespace Catel.Services
                     throw new ArgumentOutOfRangeException("button");
             }
 
-            return new Task<MessageResult>(() =>
+            return Task<MessageResult>.Run(() =>
             {
                 builder.SetMessage(message).SetTitle(caption);
                 builder.Show();
