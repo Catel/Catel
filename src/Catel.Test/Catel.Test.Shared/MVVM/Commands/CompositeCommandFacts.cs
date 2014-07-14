@@ -125,7 +125,7 @@ namespace Catel.Test.MVVM
         public class TheAutoUnsubscribeFunctionality
         {
             [TestCase]
-            public void AutomaticallyUnsubscribesCommandOnViewModelClosed()
+            public async void AutomaticallyUnsubscribesCommandOnViewModelClosed()
             {
                 var vm = new CompositeCommandViewModel();
                 var compositeCommand = new CompositeCommand();
@@ -134,7 +134,7 @@ namespace Catel.Test.MVVM
 
                 Assert.IsFalse(vm.IsTestCommand1Executed);
 
-                vm.CloseViewModel(false);
+                await vm.CloseViewModel(false);
 
                 compositeCommand.Execute();
 

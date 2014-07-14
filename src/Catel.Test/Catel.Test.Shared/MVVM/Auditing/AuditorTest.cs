@@ -113,7 +113,7 @@ namespace Catel.Test.MVVM.Auditing
         }
 
         [TestCase]
-        public void OnViewModelSaving()
+        public async void OnViewModelSaving()
         {
             AuditingManager.Clear();
 
@@ -121,14 +121,14 @@ namespace Catel.Test.MVVM.Auditing
             AuditingManager.RegisterAuditor(auditor);
 
             var viewModel = new TestViewModel();
-            viewModel.SaveViewModel();
+            await viewModel.SaveViewModel();
 
             Assert.AreEqual(true, auditor.OnViewModelSavingCalled);
             Assert.AreEqual(viewModel, auditor.OnViewModelSavingViewModel);
         }
 
         [TestCase]
-        public void OnViewModelSaved()
+        public async void OnViewModelSaved()
         {
             AuditingManager.Clear();
 
@@ -136,14 +136,14 @@ namespace Catel.Test.MVVM.Auditing
             AuditingManager.RegisterAuditor(auditor);
 
             var viewModel = new TestViewModel();
-            viewModel.SaveViewModel();
+            await viewModel.SaveViewModel();
 
             Assert.AreEqual(true, auditor.OnViewModelSavedCalled);
             Assert.AreEqual(viewModel, auditor.OnViewModelSavedViewModel);
         }
 
         [TestCase]
-        public void OnViewModelCanceling()
+        public async void OnViewModelCanceling()
         {
             AuditingManager.Clear();
 
@@ -151,14 +151,14 @@ namespace Catel.Test.MVVM.Auditing
             AuditingManager.RegisterAuditor(auditor);
 
             var viewModel = new TestViewModel();
-            viewModel.CancelViewModel();
+            await viewModel.CancelViewModel();
 
             Assert.AreEqual(true, auditor.OnViewModelCancelingCalled);
             Assert.AreEqual(viewModel, auditor.OnViewModelCancelingViewModel);
         }
 
         [TestCase]
-        public void OnViewModelCanceled()
+        public async void OnViewModelCanceled()
         {
             AuditingManager.Clear();
 
@@ -166,14 +166,14 @@ namespace Catel.Test.MVVM.Auditing
             AuditingManager.RegisterAuditor(auditor);
 
             var viewModel = new TestViewModel();
-            viewModel.CancelViewModel();
+            await viewModel.CancelViewModel();
 
             Assert.AreEqual(true, auditor.OnViewModelCanceledCalled);
             Assert.AreEqual(viewModel, auditor.OnViewModelCanceledViewModel);
         }
 
         [TestCase]
-        public void OnViewModelClosing()
+        public async void OnViewModelClosing()
         {
             AuditingManager.Clear();
 
@@ -181,14 +181,14 @@ namespace Catel.Test.MVVM.Auditing
             AuditingManager.RegisterAuditor(auditor);
 
             var viewModel = new TestViewModel();
-            viewModel.CloseViewModel(null);
+            await viewModel.CloseViewModel(null);
 
             Assert.AreEqual(true, auditor.OnViewModelClosingCalled);
             Assert.AreEqual(viewModel, auditor.OnViewModelClosingViewModel);
         }
 
         [TestCase]
-        public void OnViewModelClosed()
+        public async void OnViewModelClosed()
         {
             AuditingManager.Clear();
 
@@ -196,7 +196,7 @@ namespace Catel.Test.MVVM.Auditing
             AuditingManager.RegisterAuditor(auditor);
 
             var viewModel = new TestViewModel();
-            viewModel.CloseViewModel(null);
+            await viewModel.CloseViewModel(null);
 
             Assert.AreEqual(true, auditor.OnViewModelClosedCalled);
             Assert.AreEqual(viewModel, auditor.OnViewModelClosedViewModel);

@@ -223,7 +223,7 @@
 #endif
 
         [TestCase]
-        public void ViewModelWithViewModelToModelMappings_DoNotMapWhenViewModelIsClosed()
+        public async void ViewModelWithViewModelToModelMappings_DoNotMapWhenViewModelIsClosed()
         {
             var person = new Person();
             var viewModel = new TestViewModel(person, true);
@@ -232,7 +232,7 @@
             viewModel.FirstName = "test1";
             Assert.AreEqual("test1", person.FirstName);
 
-            viewModel.CloseViewModel(true);
+            await viewModel.CloseViewModel(true);
             viewModel.FirstName = "test2";
 
             Assert.AreEqual("test1", person.FirstName);
@@ -409,12 +409,12 @@
         /// being validated. Then, it unsubscribes the child view model by closing it.
         /// </summary>
         [TestCase]
-        public void RegisterChildViewModel_RemovedViaClosingChildViewModel()
+        public async void RegisterChildViewModel_RemovedViaClosingChildViewModel()
         {
             bool validationTriggered = false;
-            ManualResetEvent validatedEvent = new ManualResetEvent(false);
+            var validatedEvent = new ManualResetEvent(false);
 
-            Person person = new Person();
+            var person = new Person();
             person.FirstName = "first name";
             person.LastName = "last name";
 
@@ -439,7 +439,7 @@
 #endif
             Assert.IsTrue(validationTriggered, "Validating event is not triggered");
 
-            childViewModel.CloseViewModel(null);
+            await childViewModel.CloseViewModel(null);
 
             validationTriggered = false;
             validatedEvent.Reset();
@@ -529,7 +529,7 @@
         [TestCase]
         public void GetAllModels()
         {
-            Person person = new Person();
+            var person = new Person();
             person.FirstName = "first name";
             person.LastName = "last name";
 
@@ -541,9 +541,9 @@
         }
 
         [TestCase]
-        public void ModelsSavedBySave()
+        public async void ModelsSavedBySave()
         {
-            Person person = new Person();
+            var person = new Person();
             person.FirstName = "first name";
             person.LastName = "last name";
 
@@ -552,16 +552,16 @@
 
             viewModel.FirstName = "new first name";
 
-            viewModel.SaveAndCloseViewModel();
+            await viewModel.SaveAndCloseViewModel();
 
             Assert.IsFalse(person.IsInEditSession);
             Assert.AreEqual("new first name", person.FirstName);
         }
 
         [TestCase]
-        public void ModelsCanceledByCancel()
+        public async void ModelsCanceledByCancel()
         {
-            Person person = new Person();
+            var person = new Person();
             person.FirstName = "first name";
             person.LastName = "last name";
 
@@ -570,7 +570,7 @@
 
             viewModel.FirstName = "new first name";
 
-            viewModel.CancelAndCloseViewModel();
+            await viewModel.CancelAndCloseViewModel();
 
             Assert.IsFalse(person.IsInEditSession);
             Assert.AreEqual("first name", person.FirstName);            
@@ -579,7 +579,7 @@
         [TestCase]
         public void IsModelRegistered_ExistingModel()
         {
-            Person person = new Person();
+            var person = new Person();
             person.FirstName = "first name";
             person.LastName = "last name";
 
@@ -591,7 +591,7 @@
         [TestCase]
         public void IsModelRegistered_NonExistingModel()
         {
-            Person person = new Person();
+            var person = new Person();
             person.FirstName = "first name";
             person.LastName = "last name";
 
@@ -604,7 +604,7 @@
         public void InvalidateCommands_Manual()
         {
             bool canExecuteChangedTriggered = false;
-            ManualResetEvent canExecuteChangedEvent = new ManualResetEvent(false);
+            var canExecuteChangedEvent = new ManualResetEvent(false);
 
             var viewModel = new TestViewModel();
             viewModel.SetInvalidateCommandsOnPropertyChanged(false);
@@ -814,7 +814,7 @@
         #endregion
 
         [TestCase]
-        public void CancelAfterCloseProtection()
+        public async void CancelAfterCloseProtection()
         {
             var auditor = new TestAuditor();
             AuditingManager.RegisterAuditor(auditor);
@@ -824,7 +824,7 @@
             Assert.AreEqual(false, auditor.OnViewModelCanceledCalled);
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
 
-            vm.CancelAndCloseViewModel();
+            await vm.CancelAndCloseViewModel();
 
             Assert.AreEqual(true, auditor.OnViewModelCanceledCalled);
             Assert.AreEqual(true, auditor.OnViewModelClosedCalled);
@@ -832,14 +832,14 @@
             auditor.OnViewModelCanceledCalled = false;
             auditor.OnViewModelClosedCalled = false;
 
-            vm.CancelAndCloseViewModel();
+            await vm.CancelAndCloseViewModel();
 
             Assert.AreEqual(false, auditor.OnViewModelCanceledCalled);
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
         }
 
         [TestCase]
-        public void SaveAfterCloseProtection()
+        public async void SaveAfterCloseProtection()
         {
             var auditor = new TestAuditor();
             AuditingManager.RegisterAuditor(auditor);
@@ -849,7 +849,7 @@
             Assert.AreEqual(false, auditor.OnViewModelSavedCalled);
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
 
-            vm.SaveAndCloseViewModel();
+            await vm.SaveAndCloseViewModel();
 
             Assert.AreEqual(true, auditor.OnViewModelSavedCalled);
             Assert.AreEqual(true, auditor.OnViewModelClosedCalled);
@@ -857,14 +857,14 @@
             auditor.OnViewModelSavedCalled = false;
             auditor.OnViewModelClosedCalled = false;
 
-            vm.SaveAndCloseViewModel();
+            await vm.SaveAndCloseViewModel();
 
             Assert.AreEqual(false, auditor.OnViewModelSavedCalled);
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
         }
 
         [TestCase]
-        public void CloseAfterCloseProtection()
+        public async void CloseAfterCloseProtection()
         {
             var auditor = new TestAuditor();
             AuditingManager.RegisterAuditor(auditor);
@@ -873,13 +873,13 @@
 
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
 
-            vm.CloseViewModel(null);
+            await vm.CloseViewModel(null);
 
             Assert.AreEqual(true, auditor.OnViewModelClosedCalled);
 
             auditor.OnViewModelClosedCalled = false;
 
-            vm.CloseViewModel(null);
+            await vm.CloseViewModel(null);
 
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
         }
