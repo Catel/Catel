@@ -20,8 +20,7 @@
 	<licenseUrl>http://www.catelproject.com/license/</licenseUrl>
 	<!--<iconUrl>file://content/icon.png</iconUrl>-->
 	<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>
-  </metadata>
-  
+    
     <dependencies>
         <group targetFramework="net40">
           <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
@@ -30,6 +29,6 @@
         <group targetFramework="sl50">
           <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
         </group>        
-    </dependencies>  
-  
+    </dependencies>      
+  </metadata>
 </package>
