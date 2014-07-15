@@ -90,6 +90,11 @@ namespace Catel.Test.Data
             public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), string.Empty);
         }
 
+        public class ModelWithRuntimeProperties : ModelBase
+        {
+            
+        }
+
         public class TestModel : ModelBase
         {
             public TestModel()
@@ -156,6 +161,24 @@ namespace Catel.Test.Data
                 model.FirstName = "Geert";
 
                 Assert.AreEqual(0, counter);
+            }
+        }
+
+        [TestFixture]
+        public class TheUnregisterPropertyMethod
+        {
+            [TestCase]
+            public void CanUnregisterRuntimeProperty()
+            {
+                var model = new ModelWithRuntimeProperties();
+                var property = ModelBase.RegisterProperty("RuntimePropertyBeingUnregistered", typeof (string));
+                model.InitializePropertyAfterConstruction(property);
+
+                Assert.IsTrue(PropertyDataManager.Default.IsPropertyRegistered(typeof(ModelWithRuntimeProperties), "RuntimePropertyBeingUnregistered"));
+
+                ModelBase.UnregisterProperty(typeof (ModelWithRuntimeProperties), "RuntimePropertyBeingUnregistered");
+
+                Assert.IsFalse(PropertyDataManager.Default.IsPropertyRegistered(typeof(ModelWithRuntimeProperties), "RuntimePropertyBeingUnregistered"));
             }
         }
 

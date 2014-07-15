@@ -138,6 +138,28 @@ namespace Catel.Data
         }
 
         /// <summary>
+        /// Unregisters a property for a specific type.
+        /// </summary>
+        /// <param name="type">The type for which to register the property.</param>
+        /// <param name="name">The name of the property.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
+        public void UnregisterProperty(Type type, string name)
+        {
+            Argument.IsNotNullOrWhitespace("name", name);
+
+            lock (_propertyDataLock)
+            {
+                if (!_propertyData.ContainsKey(type))
+                {
+                    _propertyData.Add(type, new CatelTypeInfo(type));
+                }
+
+                _propertyData[type].UnregisterProperty(name);
+            }
+        }
+
+        /// <summary>
         /// Returns whether a specific property is registered.
         /// </summary>
         /// <param name="type">The type for which to check whether the property is registered.</param>

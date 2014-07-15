@@ -232,6 +232,22 @@ namespace Catel.Data
         }
 
         /// <summary>
+        /// Unregisters the property.
+        /// <para />
+        /// Note that the unregistration of a property applies to all models of the same type. It is not possible to 
+        /// unregister a property for a single instance of a type.
+        /// </summary>
+        /// <param name="modelType">Type of the model, required because it cannot be retrieved in a static context.</param>
+        /// <param name="name">The name.</param>
+        protected internal static void UnregisterProperty(Type modelType, string name)
+        {
+            Argument.IsNotNull("modelType", modelType);
+            Argument.IsNotNullOrWhitespace("name", name);
+
+            PropertyDataManager.UnregisterProperty(modelType, name);
+        }
+
+        /// <summary>
         /// Initializes all the properties for this object.
         /// </summary>
         private void InitializeProperties()
