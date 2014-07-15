@@ -20,14 +20,23 @@ namespace Catel.MVVM.Converters
     /// <summary>
     /// Converts the count of a collection to the visibility.
     /// </summary>
-    public class CollectionToVisibilityConverter : VisibilityConverterBase
+    public class CollectionToCollapsingVisibilityConverter : VisibilityConverterBase
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="CollectionToVisibilityConverter"/> class.
+        /// Initializes a new instance of the <see cref="CollectionToCollapsingVisibilityConverter"/> class.
         /// </summary>
-        public CollectionToVisibilityConverter()
-            : base(Visibility.Collapsed)
+        public CollectionToCollapsingVisibilityConverter()
+            : this(Visibility.Collapsed)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CollectionToCollapsingVisibilityConverter" /> class.
+        /// </summary>
+        /// <param name="visibility">The visibility.</param>
+        public CollectionToCollapsingVisibilityConverter(Visibility visibility)
+            : base(visibility)
         {
         }
         #endregion
@@ -63,6 +72,25 @@ namespace Catel.MVVM.Converters
             return isVisible;
         }
     }
+
+#if NET
+    /// <summary>
+    /// Convert from bool to <see cref="T:System.Windows.Visibility" /> and back.
+    /// The bool value true will be converted to Visibility.Visible.
+    /// The bool value false will be converted to Visibility.Hidden.
+    /// </summary>
+    [System.Windows.Data.ValueConversion(typeof(bool), typeof(Visibility))]
+    public class CollectionToHidingVisibilityConverter : CollectionToCollapsingVisibilityConverter
+    {
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public CollectionToHidingVisibilityConverter()
+            : base(Visibility.Hidden)
+        {
+        }
+    }
+#endif
 }
 
 #endif
