@@ -29,10 +29,12 @@ namespace Catel.Windows.Interactivity
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
-        /// Called when the associated object is loaded.
+        /// Initializes this instance.
         /// </summary>
-        protected override void OnAssociatedObjectLoaded()
+        protected override void Initialize()
         {
+            base.Initialize();
+
             var viewModelContainer = AssociatedObject as IViewModelContainer;
             if (viewModelContainer == null)
             {
@@ -48,15 +50,17 @@ namespace Catel.Windows.Interactivity
         }
 
         /// <summary>
-        /// Called when the associated object is unloaded.
+        /// Uninitializes this instance.
         /// </summary>
-        protected override void OnAssociatedObjectUnloaded()
+        protected override void Uninitialize()
         {
             var viewModelContainer = AssociatedObject as IViewModelContainer;
             if (viewModelContainer != null)
             {
                 viewModelContainer.ViewModelChanged -= OnViewModelChanged;
             }
+
+            base.Uninitialize();
         }
 
         private void OnViewModelChanged(object sender, EventArgs e)
