@@ -28,9 +28,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Called when the <see cref="Behavior{T}.AssociatedObject"/> is loaded.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnAssociatedObjectLoaded(object sender, UIEventArgs e)
+        protected override void OnAssociatedObjectLoaded()
         {
             AssociatedObject.GotFocus += OnGotFocus;
 
@@ -44,9 +42,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Called when the <see cref="Behavior{T}.AssociatedObject"/> is unloaded.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnAssociatedObjectUnloaded(object sender, UIEventArgs e)
+        protected override void OnAssociatedObjectUnloaded()
         {
             AssociatedObject.GotFocus -= OnGotFocus;
 

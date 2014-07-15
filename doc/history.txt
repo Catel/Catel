@@ -54,6 +54,8 @@ Added/fixed (BREAKING CHANGES):
 (*) CTL-488 Convert IViewModel interface to support full async
 (-) CTL-454 Removed the RemoveInstance methods from the IServiceLocator interface. Use IServiceLocator.RemoveType instead
 (-) CTL-458 Removed usage of ICloneable. If one wants to clone an object, simply serialize / deserialize it
+(-) CTL-490 Remove parameters from BehaviorBase.OnAssociatedObjectLoaded. This is only a breaking change if there are 
+    custom behaviors
 
 Added/fixed:
 ============

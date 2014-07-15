@@ -68,9 +68,7 @@ namespace Catel.Windows.Interactivity
         /// <para />
         /// Registers the event subscription.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnAssociatedObjectLoaded(object sender, EventArgs e)
+        protected override void OnAssociatedObjectLoaded()
         {
             UnsubscribeFromWindowEvent();
             SubscribeToWindowEvent();
@@ -80,9 +78,7 @@ namespace Catel.Windows.Interactivity
         /// Called when the associated object is unloaded.
         /// Deregisters the event subscription.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnAssociatedObjectUnloaded(object sender, EventArgs e)
+        protected override void OnAssociatedObjectUnloaded()
         {
             UnsubscribeFromWindowEvent();
         }

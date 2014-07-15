@@ -276,13 +276,11 @@ namespace Catel.MVVM.Providers
         /// <summary>
         /// Called when the <see cref="MVVMBehaviorBase{TAttachedType,TLogicType}.AssociatedObject"/> is loaded.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         /// <remarks>
         /// The behavior is initialized when the associated object is loaded because the <see cref="EventTarget"/>
         /// class requires loaded associated objects.
         /// </remarks>
-        protected override void OnAssociatedObjectLoaded(object sender, EventArgs e)
+        protected override void OnAssociatedObjectLoaded()
         {
             if (!string.IsNullOrEmpty(Save))
             {

@@ -164,15 +164,13 @@ namespace Catel.Windows.Interactivity
 
             AssociatedObject.Unloaded += OnAssociatedObjectUnloadedInternal;
 
-            OnAssociatedObjectLoaded(sender, e);
+            OnAssociatedObjectLoaded();
         }
 
         /// <summary>
         /// Called when the <see cref="Behavior{T}.AssociatedObject"/> is loaded.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected virtual void OnAssociatedObjectLoaded(object sender, UIEventArgs e)
+        protected virtual void OnAssociatedObjectLoaded()
         {
         }
 
@@ -191,7 +189,7 @@ namespace Catel.Windows.Interactivity
                 return;
             }
 
-            OnAssociatedObjectUnloaded(sender, e);
+            OnAssociatedObjectUnloaded();
 
             //CleanUp();
         }
@@ -199,9 +197,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Called when the <see cref="Behavior{T}.AssociatedObject"/> is unloaded.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected virtual void OnAssociatedObjectUnloaded(object sender, UIEventArgs e)
+        protected virtual void OnAssociatedObjectUnloaded()
         {
         }
 

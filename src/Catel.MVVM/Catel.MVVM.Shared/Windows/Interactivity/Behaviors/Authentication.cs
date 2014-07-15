@@ -133,11 +133,9 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Called when the <see cref="Behavior{T}.AssociatedObject"/> has been loaded.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         /// <exception cref="InvalidOperationException">No instance of <see cref="IAuthenticationProvider"/> is registered in the <see cref="IServiceLocator"/>.</exception>
         /// <exception cref="InvalidOperationException">The <see cref="Action"/> is set to <see cref="AuthenticationAction.Disable"/> and the <see cref="Behavior{T}.AssociatedObject"/> is not a <see cref="Control"/>.</exception>
-        protected override void OnAssociatedObjectLoaded(object sender, UIEventArgs e)
+        protected override void OnAssociatedObjectLoaded()
         {
             if (!_authenticationProvider.HasAccessToUIElement(AssociatedObject, AssociatedObject.Tag, AuthenticationTag))
             {
