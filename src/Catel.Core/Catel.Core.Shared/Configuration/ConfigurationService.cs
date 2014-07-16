@@ -87,7 +87,7 @@ namespace Catel.Configuration
 #if PCL || XAMARIN
             throw new NotSupportedInPlatformException();
 #elif NETFX_CORE
-            var settings = ApplicationData.Current.LocalSettings;
+            var settings = ApplicationData.Current.RoamingSettings;
             return settings.Values.ContainsKey(key);
 #elif WINDOWS_PHONE || SILVERLIGHT
             var settings = IsolatedStorageSettings.ApplicationSettings;
@@ -107,7 +107,7 @@ namespace Catel.Configuration
 #if PCL || XAMARIN
             throw new NotSupportedInPlatformException();
 #elif NETFX_CORE
-            var settings = ApplicationData.Current.LocalSettings;
+            var settings = ApplicationData.Current.RoamingSettings;
             return (string)settings.Values[key];
 #elif WINDOWS_PHONE || SILVERLIGHT
             var settings = IsolatedStorageSettings.ApplicationSettings;
@@ -127,7 +127,7 @@ namespace Catel.Configuration
 #if PCL || XAMARIN
             throw new NotSupportedInPlatformException();
 #elif NETFX_CORE
-            var settings = ApplicationData.Current.LocalSettings;
+            var settings = ApplicationData.Current.RoamingSettings;
             settings.Values[key] = value;
 #elif WINDOWS_PHONE || SILVERLIGHT
             var settings = IsolatedStorageSettings.ApplicationSettings;
