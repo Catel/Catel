@@ -322,7 +322,11 @@ namespace Catel.Services
             var window = ViewHelper.ConstructViewWithViewModel(windowType, data);
 
 #if NET
-            PropertyHelper.TrySetPropertyValue(window, "Owner", GetActiveWindow());
+            var activeWindow = GetActiveWindow();
+            if (window != activeWindow)
+            {
+                PropertyHelper.TrySetPropertyValue(window, "Owner", activeWindow);
+            }
 #endif
 
             if ((window != null) && (completedProc != null))
