@@ -46,7 +46,7 @@ namespace Catel.Runtime
         /// <summary>
         /// The hashset containing the used ids.
         /// </summary>
-        private HashSet<int> _usedIds = new HashSet<int>(); 
+        private readonly HashSet<int> _usedIds = new HashSet<int>(); 
         #endregion
 
         #region Constructors
@@ -165,6 +165,11 @@ namespace Catel.Runtime
         {
             lock (_lock)
             {
+                if (_referenceInfoByInstance.ContainsKey(referenceInfo))
+                {
+                    return;
+                }
+
                 _referenceInfoByInstance.Add(referenceInfo.Instance, referenceInfo);
                 _referenceInfoById.Add(referenceInfo.Id, referenceInfo);
 
