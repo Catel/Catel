@@ -76,7 +76,6 @@ namespace Catel.Windows.Markup
                 _targetProperty = target.TargetProperty;
 
                 FrameworkElement frameworkElement;
-                FrameworkContentElement frameworkContentElement;
                 if ((frameworkElement = _targetObject as FrameworkElement) != null) 
                 {
 #if NET
@@ -86,8 +85,12 @@ namespace Catel.Windows.Markup
                     frameworkElement.Loaded += OnTargetObjectLoadedInternal;
                     frameworkElement.Unloaded += OnTargetObjectUnloadedInternal;
                 }
-                else if ((frameworkContentElement = _targetObject as FrameworkContentElement) != null)
+#if !SILVERLIGHT
+                else if (_targetObject is FrameworkContentElement)
                 {
+                    FrameworkContentElement frameworkContentElement;
+
+                    frameworkContentElement = _targetObject as FrameworkContentElement;
 #if NET
                     _isFrameworkElementLoaded = frameworkContentElement.IsLoaded;
 #endif
@@ -95,6 +98,7 @@ namespace Catel.Windows.Markup
                     frameworkContentElement.Loaded += OnTargetObjectLoadedInternal;
                     frameworkContentElement.Unloaded += OnTargetObjectUnloadedInternal;
                 }
+#endif
             }
 #endif
 
