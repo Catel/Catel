@@ -146,6 +146,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Interfaces\IViewModelContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Interfaces\IViewModelFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Interfaces\IViewModelManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Interfaces\IViewModelToModelConverterBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ManagedViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ModelErrorInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ModelInfo.cs" />
@@ -159,6 +160,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelMetadata.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelToModelConverterBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelToModelCopyConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelToModelMapping.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Attributes\ViewToViewModelAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\EventArgs\ViewLoadEventArgs.cs" />

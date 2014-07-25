@@ -90,5 +90,21 @@ namespace Catel.MVVM
         /// </summary>
         /// <value>The mode.</value>
         public ViewModelToModelMode Mode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of the converter.
+        /// <para />
+        /// The default value is <see cref="ViewModelToModelMode.TwoWay"/>.
+        /// </summary>
+        /// <value>The converter.</value>
+        public Type ConverterType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the additional constructor args.
+        /// <para />
+        /// This args would be passed to constructor.
+        /// </summary>
+        /// <value>The additional constructor args.</value>
+        public object[] AdditionalConstructorArgs { get; set; }
 	}
 }

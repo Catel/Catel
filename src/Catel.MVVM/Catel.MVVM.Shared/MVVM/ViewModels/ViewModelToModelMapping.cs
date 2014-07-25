@@ -7,6 +7,9 @@
 namespace Catel.MVVM
 {
     using System;
+    using Windows.Interactivity.DragDropHelpers;
+    using IoC;
+    using ViewModels;
 
     /// <summary>
     /// Model value class to store the mapping of the View Model to a Model mapping.
@@ -21,7 +24,7 @@ namespace Catel.MVVM
         /// <param name="attribute">The <see cref="ViewModelToModelAttribute"/> that was used to define the mapping.</param>
         /// <exception cref="ArgumentException">The <paramref name="viewModelProperty"/> is <c>null</c> or whitespace.</exception>
         public ViewModelToModelMapping(string viewModelProperty, ViewModelToModelAttribute attribute)
-            : this(viewModelProperty, attribute.Model, attribute.Property, attribute.Mode)
+            : this(viewModelProperty, attribute.Model, attribute.Property, attribute.Mode, attribute.ConverterType, attribute.AdditionalConstructorArgs)
         {
         }
 
@@ -32,8 +35,10 @@ namespace Catel.MVVM
         /// <param name="modelProperty">The model property.</param>
         /// <param name="valueProperty">The value property.</param>
         /// <param name="mode">The mode.</param>
+        /// <param name="converterType">Converter type</param>
+        /// <param name="additionalConstructorArgs">Constructor args</param>
         /// <exception cref="ArgumentException">The <paramref name="viewModelProperty"/> is <c>null</c> or whitespace.</exception>
-        public ViewModelToModelMapping(string viewModelProperty, string modelProperty, string valueProperty, ViewModelToModelMode mode)
+        public ViewModelToModelMapping(string viewModelProperty, string modelProperty, string valueProperty, ViewModelToModelMode mode, Type converterType, object[] additionalConstructorArgs)
         {
             Argument.IsNotNullOrWhitespace("viewModelProperty", viewModelProperty);
 
@@ -41,6 +46,21 @@ namespace Catel.MVVM
             ModelProperty = modelProperty;
             ValueProperty = valueProperty;
             Mode = mode;
+            ConverterType = converterType;
+
+            object[] args;
+            if (!additionalConstructorArgs.IsNullOrEmpty())
+            {
+                args = new object[1 + additionalConstructorArgs.Length];
+                args[0] = valueProperty;
+                additionalConstructorArgs.CopyTo(args, 1);
+            }
+            else
+            {
+                args = new[] { valueProperty };
+            }
+
+            Converter = (IViewModelToModelConverter)this.GetTypeFactory().CreateInstanceWithParameters(ConverterType, args);
         }
         #endregion
 
@@ -68,6 +88,22 @@ namespace Catel.MVVM
         /// </summary>
         /// <value>The mode.</value>
         public ViewModelToModelMode Mode { get; private set; }
+
+        /// <summary>
+        /// Gets the type of the converter.
+        /// <para />
+        /// The default value is <see cref="ViewModelToModelMode.TwoWay"/>.
+        /// </summary>
+        /// <value>The converter type.</value>
+        public Type ConverterType { get; private set; }
+
+        /// <summary>
+        /// Gets the converter.
+        /// <para />
+        /// The default value is <see cref="ViewModelToModelMode.TwoWay"/>.
+        /// </summary>
+        /// <value>The converter.</value>
+        public IViewModelToModelConverter Converter { get; private set; }
         #endregion
     }
 }

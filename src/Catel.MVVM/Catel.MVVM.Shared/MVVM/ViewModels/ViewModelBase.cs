@@ -21,6 +21,7 @@ namespace Catel.MVVM
     using Logging;
     using Messaging;
     using Reflection;
+    using ViewModels;
 
     #region Enums
     /// <summary>
@@ -910,24 +911,29 @@ namespace Catel.MVVM
                     foreach (KeyValuePair<string, ViewModelToModelMapping> viewModelToModelMap in _viewModelToModelMap)
                     {
                         ViewModelToModelMapping mapping = viewModelToModelMap.Value;
+                        IViewModelToModelConverter converter = mapping.Converter;
                         if (string.CompareOrdinal(mapping.ModelProperty, e.PropertyName) == 0)
                         {
+                            object value;
                             if (newModelValue != null)
                             {
                                 // We have a new model, ignore OneWayToSource
-                                if (mapping.Mode != ViewModelToModelMode.OneWayToSource)
-                                {
-                                    var value = PropertyHelper.GetPropertyValue(newModelValue, mapping.ValueProperty);
-                                    SetValue(mapping.ViewModelProperty, value, true, ValidateModelsOnInitialization);
-                                }
+                                if (mapping.Mode == ViewModelToModelMode.OneWayToSource)
+                                    continue;
+
+                                value = PropertyHelper.GetPropertyValue(newModelValue, mapping.ValueProperty);
                             }
                             else
                             {
                                 // Always restore default value when a model becomes null
                                 var propertyData = GetPropertyData(mapping.ViewModelProperty);
-                                var value = propertyData.GetDefaultValue();
-                                SetValue(mapping.ViewModelProperty, value, true, ValidateModelsOnInitialization);
+                                value = propertyData.GetDefaultValue();
                             }
+
+                            if (converter.CanConvert(value, this))
+                                value = converter.Convert(value, this);
+
+                            SetValue(mapping.ViewModelProperty, value, true, ValidateModelsOnInitialization);
                         }
                     }
                 }
@@ -1095,7 +1101,8 @@ namespace Catel.MVVM
             foreach (KeyValuePair<string, ViewModelToModelMapping> map in _viewModelToModelMap)
             {
                 ViewModelToModelMapping mapping = map.Value;
-                if (string.CompareOrdinal(mapping.ValueProperty, e.PropertyName) == 0)
+                IViewModelToModelConverter converter = mapping.Converter;
+                if (converter.ShouldConvert(e.PropertyName))
                 {
                     // Check if this is the right model (duplicate mappings might exist)
                     if (_modelObjects[mapping.ModelProperty] == sender)
@@ -1107,6 +1114,8 @@ namespace Catel.MVVM
                             object modelValue = PropertyHelper.GetPropertyValue(sender, e.PropertyName);
                             if (!ObjectHelper.AreEqualReferences(viewModelValue, modelValue))
                             {
+                                if (converter.CanConvert(modelValue, this))
+                                    modelValue = converter.Convert(modelValue, this);
                                 SetValue(mapping.ViewModelProperty, modelValue);
                             }
                         }
