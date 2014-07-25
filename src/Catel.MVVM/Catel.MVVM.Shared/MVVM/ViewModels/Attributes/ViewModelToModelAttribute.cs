@@ -7,6 +7,7 @@
 namespace Catel.MVVM
 {
     using System;
+    using ViewModels;
 
     /// <summary>
     /// Specifies the different mapping modes available for the <see cref="ViewModelToModelAttribute" />.
@@ -67,6 +68,7 @@ namespace Catel.MVVM
 			Property = property;
 
             Mode = ViewModelToModelMode.TwoWay;
+		    ConverterType = typeof (ViewModelToModelCopyConverter);
 		}
 
 		/// <summary>
