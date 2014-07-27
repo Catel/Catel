@@ -655,8 +655,8 @@ namespace Catel.MVVM
 
                 if (!mapping.Converter.CanConvert(modelPropertyPropertyTypes.ToArray(), viewModelPropertyType, GetType()))
                 {
-                    Log.Warning("Property '{0}' mapped on model property '{1}' cannot be converted via given converter '{2}'",
-                        mapping.ViewModelProperty, mapping.ValueProperties[0], mapping.ConverterType);
+                    Log.Warning("Property '{0}' mapped on model properties '{1}' cannot be converted via given converter '{2}'",
+                        mapping.ViewModelProperty, string.Join(", ", mapping.ValueProperties), mapping.ConverterType);
                 }
             }
         }
