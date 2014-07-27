@@ -7,19 +7,22 @@
 
 namespace Catel.MVVM.ViewModels
 {
+    using System;
+    using System.Linq;
+
     /// <summary>
     /// 
     /// </summary>
-    public abstract class ViewModelToModelConverter : IViewModelToModelConverter
+    public abstract class ViewModelToModelConverterBase : IViewModelToModelConverter
     {
         #region Constructors
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="propertyName">Name of property on which attribute was setted</param>
-        protected ViewModelToModelConverter(string propertyName)
+        /// <param name="propertyNames">Name of property on which attribute was setted</param>
+        protected ViewModelToModelConverterBase(string[] propertyNames)
         {
-            PropertyName = propertyName;
+            PropertyNames = propertyNames;
         }
         #endregion
 
@@ -27,10 +30,10 @@ namespace Catel.MVVM.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        public string PropertyName { get; private set; }
+        public string[] PropertyNames { get; private set; }
         #endregion
 
-        #region IViewModelToModelConverterBase Members
+        #region IViewModelToModelConverter Members
         /// <summary>
         /// 
         /// </summary>
@@ -38,8 +41,40 @@ namespace Catel.MVVM.ViewModels
         /// <returns></returns>
         public bool ShouldConvert(string propertyName)
         {
-            return string.CompareOrdinal(propertyName, PropertyName) == 0;
+            foreach (string x in PropertyNames)
+            {
+                if (string.CompareOrdinal(propertyName, x) == 0)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="types"></param>
+        /// <param name="outType"></param>
+        /// <param name="viewModelType">Owner VM type</param>
+        /// <returns></returns>
+        public abstract bool CanConvert(Type[] types, Type outType, Type viewModelType);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="values"></param>
+        /// <param name="viewModel">Owner VM</param>
+        /// <returns></returns>
+        public abstract object Convert(object[] values, IViewModel viewModel);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="inType"></param>
+        /// <param name="outTypes"></param>
+        /// <param name="viewModelType"></param>
+        /// <returns></returns>
+        public abstract bool CanConvertBack(Type inType, Type[] outTypes, Type viewModelType);
 
         /// <summary>
         /// 
@@ -47,31 +82,8 @@ namespace Catel.MVVM.ViewModels
         /// <param name="value">Property value</param>
         /// <param name="viewModel">Owner VM</param>
         /// <returns></returns>
-        public abstract bool CanConvert(object value, IViewModel viewModel);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value">Property value</param>
-        /// <param name="viewModel">Owner VM</param>
-        /// <returns></returns>
-        public abstract object Convert(object value, IViewModel viewModel);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value">Property value</param>
-        /// <param name="viewModel">Owner VM</param>
-        /// <returns></returns>
-        public abstract bool CanConvertBack(object value, IViewModel viewModel);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value">Property value</param>
-        /// <param name="viewModel">Owner VM</param>
-        /// <returns></returns>
-        public abstract object ConvertBack(object value, IViewModel viewModel);
+        public abstract object[] ConvertBack(object value, IViewModel viewModel);
+        
         #endregion
     }
 }

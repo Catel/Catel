@@ -108,5 +108,13 @@ namespace Catel.MVVM
         /// </summary>
         /// <value>The additional constructor args.</value>
         public object[] AdditionalConstructorArgs { get; set; }
+
+        /// <summary>
+        /// Gets or sets the additional properties to triger converter.
+        /// <para />
+        /// This args would be passed to constructor.
+        /// </summary>
+        /// <value>The additional properties to watch.</value>
+        public string[] AdditionalPropertiesToWatch { get; set; }
 	}
 }

@@ -82,16 +82,19 @@
             Assert.AreEqual(string.Empty, viewModel.FirstName);
             Assert.AreEqual(string.Empty, person.LastName);
             Assert.AreEqual(string.Empty, viewModel.LastName);
+            Assert.AreEqual(string.Empty, viewModel.FullName);
 
             // Model to view model mapping
             person.FirstName = FirstName;
             Assert.AreEqual(FirstName, person.FirstName);
             Assert.AreEqual(FirstName, viewModel.FirstName);
+            Assert.AreEqual(FirstName, viewModel.FullName);
 
             // View model to model mapping
             viewModel.LastName = LastName;
             Assert.AreEqual(LastName, person.LastName);
             Assert.AreEqual(LastName, viewModel.LastName);
+            Assert.AreEqual(FirstName + " " + LastName, viewModel.FullName);
         }
 
 #if !WINDOWS_PHONE

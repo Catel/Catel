@@ -634,23 +634,29 @@ namespace Catel.MVVM
 
                 var viewModelPropertyType = GetPropertyData(mapping.ViewModelProperty).Type;
                 var modelPropertyType = GetPropertyData(mapping.ModelProperty).Type;
+                var modelPropertyPropertyTypes = new List<Type>(mapping.ValueProperties.Length);
 
-                var modelPropertyPropertyInfo = modelPropertyType.GetPropertyEx(mapping.ValueProperty);
-                if (modelPropertyPropertyInfo == null)
+                foreach (var valueProperty in mapping.ValueProperties)
                 {
-                    Log.Warning("Mapped viewmodel property '{0}' to model property '{1}' is invalid because property '{1}' is not found on the model '{2}'.\n\n" +
-                        "If the property is defined in a sub-interface, reflection does not return it as a valid property. If this is the case, you can safely ignore this warning",
-                        mapping.ViewModelProperty, mapping.ValueProperty, mapping.ModelProperty);
-                    //throw new PropertyNotFoundInModelException(mapping.ViewModelProperty, mapping.ModelProperty, mapping.ValueProperty);
-                    // Disabled because a property defined in an interface is not detected by FlattenHierarchy
-                }
-                else
-                {
-                    if (viewModelPropertyType != modelPropertyPropertyInfo.PropertyType)
+                    var modelPropertyPropertyInfo = modelPropertyType.GetPropertyEx(valueProperty);
+                    if (modelPropertyPropertyInfo == null)
                     {
-                        Log.Warning("Property '{0}' mapped on model property '{1}' is of the wrong type ('{2}'), should be '{3}'",
-                            mapping.ViewModelProperty, mapping.ValueProperty, viewModelPropertyType, modelPropertyPropertyInfo.PropertyType);
+                        Log.Warning("Mapped viewmodel property '{0}' to model property '{1}' is invalid because property '{1}' is not found on the model '{2}'.\n\n" +
+                                    "If the property is defined in a sub-interface, reflection does not return it as a valid property. If this is the case, you can safely ignore this warning",
+                            mapping.ViewModelProperty, valueProperty, mapping.ModelProperty);
+                        //throw new PropertyNotFoundInModelException(mapping.ViewModelProperty, mapping.ModelProperty, mapping.ValueProperty);
+                        // Disabled because a property defined in an interface is not detected by FlattenHierarchy
                     }
+                    else
+                    {
+                        modelPropertyPropertyTypes.Add(modelPropertyPropertyInfo.PropertyType);
+                    }
+                }
+
+                if (!mapping.Converter.CanConvert(modelPropertyPropertyTypes.ToArray(), viewModelPropertyType, GetType()))
+                {
+                    Log.Warning("Property '{0}' mapped on model property '{1}' cannot be converted via given converter '{2}'",
+                        mapping.ViewModelProperty, mapping.ValueProperties[0], mapping.ConverterType);
                 }
             }
         }
@@ -857,14 +863,17 @@ namespace Catel.MVVM
                 if (model != null)
                 {
                     object value = GetValue(mapping.ViewModelProperty);
-
-                    if (PropertyHelper.TrySetPropertyValue(model, mapping.ValueProperty, value))
+                    var modelValues = mapping.Converter.ConvertBack(value, this);
+                    for (int i = 0; i < mapping.ValueProperties.Length; i++)
                     {
-                        Log.Debug("Updated property '{0}' on model type '{1}' to '{2}'", mapping.ValueProperty, model.GetType().Name, ObjectToStringHelper.ToString(value));
-                    }
-                    else
-                    {
-                        Log.Warning("Failed to set property '{0}' on model type '{1}'", mapping.ValueProperty, model.GetType().Name);
+                        if (PropertyHelper.TrySetPropertyValue(model, mapping.ValueProperties[i], modelValues[i]))
+                        {
+                            Log.Debug("Updated property '{0}' on model type '{1}' to '{2}'", mapping.ValueProperties, model.GetType().Name, ObjectToStringHelper.ToString(value));
+                        }
+                        else
+                        {
+                            Log.Warning("Failed to set property '{0}' on model type '{1}'", mapping.ValueProperties, model.GetType().Name);
+                        }
                     }
                 }
             }
@@ -914,26 +923,33 @@ namespace Catel.MVVM
                         IViewModelToModelConverter converter = mapping.Converter;
                         if (string.CompareOrdinal(mapping.ModelProperty, e.PropertyName) == 0)
                         {
-                            object value;
+                            var values = new object[mapping.ValueProperties.Length];
                             if (newModelValue != null)
                             {
                                 // We have a new model, ignore OneWayToSource
                                 if (mapping.Mode == ViewModelToModelMode.OneWayToSource)
                                     continue;
 
-                                value = PropertyHelper.GetPropertyValue(newModelValue, mapping.ValueProperty);
+                                for (var index = 0; index < mapping.ValueProperties.Length; index++)
+                                {
+                                    var property = mapping.ValueProperties[index];
+                                    values[index] = PropertyHelper.GetPropertyValue(newModelValue, property);
+                                }
                             }
                             else
                             {
                                 // Always restore default value when a model becomes null
-                                var propertyData = GetPropertyData(mapping.ViewModelProperty);
-                                value = propertyData.GetDefaultValue();
+                                for (var index = 0; index < mapping.ValueProperties.Length; index++)
+                                {
+                                    var property = mapping.ValueProperties[index];
+                                    var propertyData = GetPropertyData(property);
+                                    values[index] = propertyData.GetDefaultValue();
+                                }
                             }
 
-                            if (converter.CanConvert(value, this))
-                                value = converter.Convert(value, this);
+                            values[0] = converter.Convert(values, this);
 
-                            SetValue(mapping.ViewModelProperty, value, true, ValidateModelsOnInitialization);
+                            SetValue(mapping.ViewModelProperty, values[0], true, ValidateModelsOnInitialization);
                         }
                     }
                 }
@@ -951,32 +967,35 @@ namespace Catel.MVVM
                         if (model != null)
                         {
                             object viewModelValue = GetValue(e.PropertyName);
-                            object modelValue = PropertyHelper.GetPropertyValue(model, mapping.ValueProperty);
-                            if (!ObjectHelper.AreEqualReferences(viewModelValue, modelValue))
-                            {
-                                object valueToSet = viewModelValue;
-                                string propertyToSet = mapping.ValueProperty;
+                            //object modelValue = PropertyHelper.GetPropertyValue(model, mapping.ValueProperties);
+                            //if (!ObjectHelper.AreEqualReferences(viewModelValue, modelValue))
+                            //{
+                                string[] propertiesToSet = mapping.ValueProperties;
 
 #if !WINDOWS_PHONE && !NET35
                                 if (_modelErrorInfo.ContainsKey(mapping.ModelProperty))
                                 {
-                                    _modelErrorInfo[mapping.ModelProperty].ClearDefaultErrors(mapping.ValueProperty);
+                                    mapping.ValueProperties.ForEach(_modelErrorInfo[mapping.ModelProperty].ClearDefaultErrors);
                                 }
 #endif
 
                                 // Only TwoWay or OneWayToSource mappings should be mapped
                                 if ((mapping.Mode == ViewModelToModelMode.TwoWay) || (mapping.Mode == ViewModelToModelMode.OneWayToSource))
                                 {
-                                    if (PropertyHelper.TrySetPropertyValue(model, propertyToSet, valueToSet))
+                                    var valuesToSet = mapping.Converter.ConvertBack(viewModelValue, this);
+                                    for (int index = 0; index < valuesToSet.Length; index++)
                                     {
-                                        Log.Debug("Updated property '{0}' on model type '{1}' to '{2}'", propertyToSet, model.GetType().Name, ObjectToStringHelper.ToString(valueToSet));
-                                    }
-                                    else
-                                    {
-                                        Log.Warning("Failed to set property '{0}' on model type '{1}'", propertyToSet, model.GetType().Name);
+                                        if (PropertyHelper.TrySetPropertyValue(model, propertiesToSet[index], valuesToSet[index]))
+                                        {
+                                            Log.Debug("Updated property '{0}' on model type '{1}' to '{2}'", propertiesToSet[index], model.GetType().Name, ObjectToStringHelper.ToString(valuesToSet[index]));
+                                        }
+                                        else
+                                        {
+                                            Log.Warning("Failed to set property '{0}' on model type '{1}'", propertiesToSet[index], model.GetType().Name);
+                                        }
                                     }
                                 }
-                            }
+                            //}
                         }
                         else
                         {
@@ -1110,14 +1129,15 @@ namespace Catel.MVVM
                         // Only map properties in TwoWay or OneWay mode
                         if ((mapping.Mode == ViewModelToModelMode.TwoWay) || (mapping.Mode == ViewModelToModelMode.OneWay))
                         {
-                            object viewModelValue = GetValue(mapping.ViewModelProperty);
-                            object modelValue = PropertyHelper.GetPropertyValue(sender, e.PropertyName);
-                            if (!ObjectHelper.AreEqualReferences(viewModelValue, modelValue))
+                            var values = new object[mapping.ValueProperties.Length];
+                            for (var index = 0; index < mapping.ValueProperties.Length; index++)
                             {
-                                if (converter.CanConvert(modelValue, this))
-                                    modelValue = converter.Convert(modelValue, this);
-                                SetValue(mapping.ViewModelProperty, modelValue);
+                                var property = mapping.ValueProperties[index];
+                                values[index] = PropertyHelper.GetPropertyValue(sender, property);
                             }
+
+                            var convertedValue = mapping.Converter.Convert(values, this);
+                            SetValue(mapping.ViewModelProperty, convertedValue);
                         }
                     }
                 }

@@ -179,60 +179,63 @@ namespace Catel.MVVM
             {
                 ViewModelToModelMapping mapping = viewModelToModelMap.Value;
                 var model = GetValue(mapping.ModelProperty);
-                string modelProperty = mapping.ValueProperty;
+                string[] modelProperties = mapping.ValueProperties;
 
-                bool hasSetFieldError = false;
-                bool hasSetFieldWarning = false;
-
-                // IDataErrorInfo
-                var dataErrorInfo = model as IDataErrorInfo;
-                if (dataErrorInfo != null)
+                foreach (var modelProperty in modelProperties)
                 {
-                    if (!string.IsNullOrEmpty(dataErrorInfo[modelProperty]))
+                    bool hasSetFieldError = false;
+                    bool hasSetFieldWarning = false;
+
+                    // IDataErrorInfo
+                    var dataErrorInfo = model as IDataErrorInfo;
+                    if (dataErrorInfo != null)
                     {
-                        SetFieldValidationResult(FieldValidationResult.CreateError(mapping.ViewModelProperty, dataErrorInfo[modelProperty]));
-
-                        hasSetFieldError = true;
-                    }
-                }
-
-                // IDataWarningInfo
-                var dataWarningInfo = model as IDataWarningInfo;
-                if (dataWarningInfo != null)
-                {
-                    if (!string.IsNullOrEmpty(dataWarningInfo[modelProperty]))
-                    {
-                        SetFieldValidationResult(FieldValidationResult.CreateWarning(mapping.ViewModelProperty, dataWarningInfo[modelProperty]));
-
-                        hasSetFieldWarning = true;
-                    }
-                }
-
-                // INotifyDataErrorInfo & INotifyDataWarningInfo
-                if (_modelErrorInfo.ContainsKey(mapping.ModelProperty))
-                {
-                    var modelErrorInfo = _modelErrorInfo[mapping.ModelProperty];
-
-                    if (!hasSetFieldError)
-                    {
-                        foreach (string error in modelErrorInfo.GetErrors(modelProperty))
+                        if (!string.IsNullOrEmpty(dataErrorInfo[modelProperty]))
                         {
-                            if (!string.IsNullOrEmpty(error))
-                            {
-                                SetFieldValidationResult(FieldValidationResult.CreateError(mapping.ViewModelProperty, error));
-                                break;
-                            }
+                            SetFieldValidationResult(FieldValidationResult.CreateError(mapping.ViewModelProperty, dataErrorInfo[modelProperty]));
+
+                            hasSetFieldError = true;
                         }
                     }
 
-                    if (!hasSetFieldWarning)
+                    // IDataWarningInfo
+                    var dataWarningInfo = model as IDataWarningInfo;
+                    if (dataWarningInfo != null)
                     {
-                        foreach (string warning in modelErrorInfo.GetWarnings(modelProperty))
+                        if (!string.IsNullOrEmpty(dataWarningInfo[modelProperty]))
                         {
-                            if (!string.IsNullOrEmpty(warning))
+                            SetFieldValidationResult(FieldValidationResult.CreateWarning(mapping.ViewModelProperty, dataWarningInfo[modelProperty]));
+
+                            hasSetFieldWarning = true;
+                        }
+                    }
+
+                    // INotifyDataErrorInfo & INotifyDataWarningInfo
+                    if (_modelErrorInfo.ContainsKey(mapping.ModelProperty))
+                    {
+                        var modelErrorInfo = _modelErrorInfo[mapping.ModelProperty];
+
+                        if (!hasSetFieldError)
+                        {
+                            foreach (string error in modelErrorInfo.GetErrors(modelProperty))
                             {
-                                SetFieldValidationResult(FieldValidationResult.CreateWarning(mapping.ViewModelProperty, warning));
-                                break;
+                                if (!string.IsNullOrEmpty(error))
+                                {
+                                    SetFieldValidationResult(FieldValidationResult.CreateError(mapping.ViewModelProperty, error));
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!hasSetFieldWarning)
+                        {
+                            foreach (string warning in modelErrorInfo.GetWarnings(modelProperty))
+                            {
+                                if (!string.IsNullOrEmpty(warning))
+                                {
+                                    SetFieldValidationResult(FieldValidationResult.CreateWarning(mapping.ViewModelProperty, warning));
+                                    break;
+                                }
                             }
                         }
                     }

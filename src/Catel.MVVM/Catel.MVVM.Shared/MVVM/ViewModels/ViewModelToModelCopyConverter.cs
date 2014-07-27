@@ -1,29 +1,66 @@
 ﻿namespace Catel.MVVM.ViewModels
 {
-    class ViewModelToModelCopyConverter : ViewModelToModelConverter
+    using System;
+    using Reflection;
+
+    /// <summary>
+    /// ViewModelToModelMapping Copy Converter
+    /// </summary>
+    public class ViewModelToModelCopyConverter : ViewModelToModelConverterBase
     {
-        public ViewModelToModelCopyConverter(string propertyName) : base(propertyName)
+        /// <summary>
+        /// Creates an instanse of converter
+        /// </summary>
+        /// <param name="propertyNames">All properties to watch</param>
+        public ViewModelToModelCopyConverter(string[] propertyNames)
+            : base(propertyNames)
         {
         }
 
-        public override bool CanConvert(object value, IViewModel viewModel)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="types"></param>
+        /// <param name="outType"></param>
+        /// <param name="viewModelType">Owner VM type</param>
+        /// <returns></returns>
+        public override bool CanConvert(Type[] types, Type outType, Type viewModelType)
         {
-            return true;
+            return types.Length == 1 && outType.IsAssignableFromEx(types[0]);
         }
 
-        public override object Convert(object value, IViewModel viewModel)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="values"></param>
+        /// <param name="viewModel">Owner VM</param>
+        /// <returns></returns>
+        public override object Convert(object[] values, IViewModel viewModel)
         {
-            return value;
+            return values[0];
         }
 
-        public override bool CanConvertBack(object value, IViewModel viewModel)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="inType"></param>
+        /// <param name="outTypes"></param>
+        /// <param name="viewModelType"></param>
+        /// <returns></returns>
+        public override bool CanConvertBack(Type inType, Type[] outTypes, Type viewModelType)
         {
-            return true;
+            return outTypes.Length == 1 && outTypes[0].IsAssignableFromEx(inType);
         }
 
-        public override object ConvertBack(object value, IViewModel viewModel)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value">Property value</param>
+        /// <param name="viewModel">Owner VM</param>
+        /// <returns></returns>
+        public override object[] ConvertBack(object value, IViewModel viewModel)
         {
-            return value;
+            return new[] {value};
         }
     }
 }

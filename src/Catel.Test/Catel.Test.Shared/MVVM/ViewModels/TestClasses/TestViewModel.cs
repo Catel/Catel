@@ -4,12 +4,18 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+
 namespace Catel.Test.MVVM.ViewModels.TestClasses
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using Castle.Core.Internal;
     using Catel.Data;
     using Catel.IoC;
     using Catel.MVVM;
+    using Catel.MVVM.ViewModels;
 
     /// <summary>
     /// Test view model.
@@ -61,7 +67,7 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         /// <param name="specialValidationModel">The special validation model.</param>
         /// <param name="validateModelsOnInitialization">if set to <c>true</c>, the view model will validate on initialization.</param>
         private TestViewModel(IServiceLocator serviceLocator, IPerson person, SpecialValidationModel specialValidationModel,
-                              bool validateModelsOnInitialization = true)
+            bool validateModelsOnInitialization = true)
             : base(serviceLocator)
         {
             ValidateModelsOnInitialization = validateModelsOnInitialization;
@@ -160,6 +166,9 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         /// Register the BusinessRuleWarningWhenEmpty property so it is known in the class.
         /// </summary>
         public static readonly PropertyData BusinessRuleWarningWhenEmptyProperty = RegisterProperty("BusinessRuleWarningWhenEmpty", typeof (string));
+
+        /// <summary>Register the FullName property so it is known in the class.</summary>
+        public static readonly PropertyData FullNameProperty = RegisterProperty<TestViewModel, string>(model => model.FullName);
         #endregion
 
         #region Properties
@@ -191,6 +200,16 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         {
             get { return GetValue<string>(LastNameProperty); }
             set { SetValue(LastNameProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the full name.
+        /// </summary>
+        [ViewModelToModel("Person", "FirstName", AdditionalPropertiesToWatch = new[] { "MiddleName", "LastName" }, ConverterType = typeof(CollapsMapping))]
+        public string FullName
+        {
+            get { return GetValue<string>(FullNameProperty); }
+            set { SetValue(FullNameProperty, value); }
         }
 
         /// <summary>
@@ -583,4 +602,47 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         }
         #endregion
     }
+
+    public class CollapsMapping : ViewModelToModelCopyConverter
+    {
+        private readonly char _separator;
+
+        public CollapsMapping(string[] propertyNames)
+            : this(propertyNames, ' ')
+        {
+        }
+
+        public CollapsMapping(string[] propertyNames, char separator = ' ')
+            : base(propertyNames)
+        {
+            _separator = separator;
+        }
+
+        public char Separator
+        {
+            get { return _separator; }
+        }
+
+        public override bool CanConvert(Type[] types, Type outType, Type viewModelType)
+        {
+            return types.All(x => x == typeof(string)) && outType == typeof(string);
+        }
+
+        public override object Convert(object[] values, IViewModel viewModel)
+        {
+            return string.Join(Separator.ToString(), values.Where(x => !string.IsNullOrWhiteSpace((string) x)));
+        }
+
+
+        public override bool CanConvertBack(Type inType, Type[] outTypes, Type viewModelType)
+        {
+            return outTypes.All(x => x == typeof(string)) && inType == typeof(string);
+        }
+
+        public override object[] ConvertBack(object value, IViewModel viewModel)
+        {
+            return ((string) value).Split(Separator);
+        }
+    }
+
 }
