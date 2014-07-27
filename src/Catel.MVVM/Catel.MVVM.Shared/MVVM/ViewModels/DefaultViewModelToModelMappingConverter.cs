@@ -6,13 +6,13 @@
     /// <summary>
     /// ViewModelToModelMapping Copy Converter
     /// </summary>
-    public class ViewModelToModelCopyConverter : ViewModelToModelConverterBase
+    public class DefaultViewModelToModelMappingConverter : ViewModelToModelConverterBase
     {
         /// <summary>
-        /// Creates an instanse of converter
+        /// Creates an instance of converter
         /// </summary>
         /// <param name="propertyNames">All properties to watch</param>
-        public ViewModelToModelCopyConverter(string[] propertyNames)
+        public DefaultViewModelToModelMappingConverter(string[] propertyNames)
             : base(propertyNames)
         {
         }

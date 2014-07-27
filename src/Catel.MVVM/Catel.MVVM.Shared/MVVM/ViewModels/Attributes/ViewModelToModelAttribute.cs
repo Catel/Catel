@@ -68,7 +68,7 @@ namespace Catel.MVVM
 			Property = property;
 
             Mode = ViewModelToModelMode.TwoWay;
-		    ConverterType = typeof (ViewModelToModelCopyConverter);
+		    ConverterType = typeof (DefaultViewModelToModelMappingConverter);
 		}
 
 		/// <summary>

@@ -928,7 +928,9 @@ namespace Catel.MVVM
                             {
                                 // We have a new model, ignore OneWayToSource
                                 if (mapping.Mode == ViewModelToModelMode.OneWayToSource)
+                                {
                                     continue;
+                                }
 
                                 for (var index = 0; index < mapping.ValueProperties.Length; index++)
                                 {

@@ -74,6 +74,8 @@
         {
             const string FirstName = "first name";
             const string LastName = "last name";
+            const uint Age1 = 1;
+            const uint Age2 = 2;
 
             var person = new Person();
             var viewModel = new TestViewModel(person);
@@ -82,7 +84,11 @@
             Assert.AreEqual(string.Empty, viewModel.FirstName);
             Assert.AreEqual(string.Empty, person.LastName);
             Assert.AreEqual(string.Empty, viewModel.LastName);
+
             Assert.AreEqual(string.Empty, viewModel.FullName);
+
+            Assert.AreEqual(0, person.Age);
+            Assert.AreEqual("0", viewModel.Age);
 
             // Model to view model mapping
             person.FirstName = FirstName;
@@ -95,6 +101,15 @@
             Assert.AreEqual(LastName, person.LastName);
             Assert.AreEqual(LastName, viewModel.LastName);
             Assert.AreEqual(FirstName + " " + LastName, viewModel.FullName);
+            Assert.AreEqual(FirstName + ";" + LastName, viewModel.FullNameWithCustomSeparator);
+
+            person.Age = Age1;
+            Assert.AreEqual(Age1, person.Age);
+            Assert.AreEqual(Age1.ToString(), viewModel.Age);
+
+            viewModel.Age = Age2.ToString();
+            Assert.AreEqual(Age2, person.Age);
+            Assert.AreEqual(Age2.ToString(), viewModel.Age);
         }
 
 #if !WINDOWS_PHONE
