@@ -983,7 +983,12 @@ namespace Catel.MVVM
                                 if ((mapping.Mode == ViewModelToModelMode.TwoWay) || (mapping.Mode == ViewModelToModelMode.OneWayToSource))
                                 {
                                     var valuesToSet = mapping.Converter.ConvertBack(viewModelValue, this);
-                                    for (int index = 0; index < valuesToSet.Length; index++)
+                                    if (propertiesToSet.Length != valuesToSet.Length)
+                                    {
+                                        Log.Error("Properties - values count mismatch, properties '{0}', values '{1}'",
+                                            string.Join(", ", propertiesToSet), string.Join(", ", valuesToSet));
+                                    }
+                                    for (int index = 0; index < propertiesToSet.Length && index < valuesToSet.Length; index++)
                                     {
                                         if (PropertyHelper.TrySetPropertyValue(model, propertiesToSet[index], valuesToSet[index]))
                                         {

@@ -205,7 +205,7 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Gets or sets the full name.
         /// </summary>
-        [ViewModelToModel("Person", "FirstName", AdditionalPropertiesToWatch = new[] { "MiddleName", "LastName" }, ConverterType = typeof(CollapsMapping))]
+        [ViewModelToModel("Person", "FirstName", AdditionalPropertiesToWatch = new[] { "LastName" }, ConverterType = typeof(CollapsMapping))]
         public string FullName
         {
             get { return GetValue<string>(FullNameProperty); }

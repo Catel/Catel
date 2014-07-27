@@ -466,8 +466,8 @@
             ManualResetEvent validatedEvent = new ManualResetEvent(false);
 
             Person person = new Person();
-            person.FirstName = "first name";
-            person.LastName = "last name";
+            person.FirstName = "first_name";
+            person.LastName = "last_name";
 
             var viewModel = new TestViewModel();
             var childViewModel = new TestViewModel(person);
@@ -507,7 +507,7 @@
         public void ChildViewModelUpdatesValidation()
         {
             Person person = new Person();
-            person.LastName = "last name";
+            person.LastName = "last_name";
 
             var viewModel = new TestViewModel();
             var childViewModel = new TestViewModel(person);
@@ -517,7 +517,7 @@
             Assert.IsTrue(viewModel.HasErrors);
             Assert.IsTrue(childViewModel.HasErrors);
 
-            person.FirstName = "first name";
+            person.FirstName = "first_name";
 
             Assert.IsFalse(viewModel.HasErrors);
             Assert.IsFalse(childViewModel.HasErrors);
@@ -533,8 +533,8 @@
         public void GetAllModels()
         {
             var person = new Person();
-            person.FirstName = "first name";
-            person.LastName = "last name";
+            person.FirstName = "first_name";
+            person.LastName = "last_name";
 
             var viewModel = new TestViewModel(person);
 
@@ -595,8 +595,8 @@
         public void IsModelRegistered_NonExistingModel()
         {
             var person = new Person();
-            person.FirstName = "first name";
-            person.LastName = "last name";
+            person.FirstName = "first_name";
+            person.LastName = "last_name";
 
             var viewModel = new TestViewModel(person);
 
