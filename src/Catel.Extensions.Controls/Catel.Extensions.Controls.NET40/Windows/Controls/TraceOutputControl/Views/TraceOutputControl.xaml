@@ -106,7 +106,7 @@
                     <GridViewColumn Width="600">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Message}" FontFamily="Courier New" />
+                                <TextBlock Text="{Binding Message}" FontFamily="Courier New" TextWrapping="Wrap" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
