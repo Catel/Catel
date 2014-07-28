@@ -85,7 +85,7 @@ namespace Catel.Windows.Markup
         /// <summary>
         /// Called when the target object is loaded.
         /// <para />
-        /// Note that this method will only be called if the target object is a <see cref="FrameworkElement"/>.
+        /// Note that this method will only be called if the target object is a <see cref="FrameworkElement"/> or <see cref="FrameworkContentElement"/>.
         /// </summary>
         protected override void OnTargetObjectLoaded()
         {
@@ -95,7 +95,7 @@ namespace Catel.Windows.Markup
         /// <summary>
         /// Called when the target object is unloaded.
         /// <para />
-        /// Note that this method will only be called if the target object is a <see cref="FrameworkElement"/>.
+        /// Note that this method will only be called if the target object is a <see cref="FrameworkElement"/> or <see cref="FrameworkContentElement"/>.
         /// </summary>
         protected override void OnTargetObjectUnloaded()
         {

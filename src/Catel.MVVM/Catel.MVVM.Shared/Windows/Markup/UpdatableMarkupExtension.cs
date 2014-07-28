@@ -76,7 +76,6 @@ namespace Catel.Windows.Markup
                 _targetProperty = target.TargetProperty;
 
                 FrameworkElement frameworkElement;
-                FrameworkContentElement frameworkContentElement;
                 if ((frameworkElement = _targetObject as FrameworkElement) != null) 
                 {
 #if NET
@@ -86,8 +85,12 @@ namespace Catel.Windows.Markup
                     frameworkElement.Loaded += OnTargetObjectLoadedInternal;
                     frameworkElement.Unloaded += OnTargetObjectUnloadedInternal;
                 }
-                else if ((frameworkContentElement = _targetObject as FrameworkContentElement) != null)
+#if !SILVERLIGHT
+                else if (_targetObject is FrameworkContentElement)
                 {
+                    FrameworkContentElement frameworkContentElement;
+
+                    frameworkContentElement = _targetObject as FrameworkContentElement;
 #if NET
                     _isFrameworkElementLoaded = frameworkContentElement.IsLoaded;
 #endif
@@ -95,6 +98,7 @@ namespace Catel.Windows.Markup
                     frameworkContentElement.Loaded += OnTargetObjectLoadedInternal;
                     frameworkContentElement.Unloaded += OnTargetObjectUnloadedInternal;
                 }
+#endif
             }
 #endif
 
@@ -116,7 +120,7 @@ namespace Catel.Windows.Markup
         /// <summary>
         /// Called when the target object is loaded.
         /// <para />
-        /// Note that this method will only be called if the target object is a <see cref="FrameworkElement"/>.
+        /// Note that this method will only be called if the target object is a <see cref="FrameworkElement"/> or <see cref="FrameworkContentElement"/>.
         /// </summary>
         protected virtual void OnTargetObjectLoaded()
         {   
@@ -137,7 +141,7 @@ namespace Catel.Windows.Markup
         /// <summary>
         /// Called when the target object is unloaded.
         /// <para />
-        /// Note that this method will only be called if the target object is a <see cref="FrameworkElement"/>.
+        /// Note that this method will only be called if the target object is a <see cref="FrameworkElement"/> or <see cref="FrameworkContentElement"/>.
         /// </summary>
         protected virtual void OnTargetObjectUnloaded()
         {
