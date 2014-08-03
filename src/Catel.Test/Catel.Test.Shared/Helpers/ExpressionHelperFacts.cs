@@ -38,14 +38,23 @@ namespace Catel.Test
         {
             public class TestModel
             {
+                public TestModel()
+                {
+                    InnerModel = new InnerTestModel();
+                }
+
                 public string StringProperty { get; set; }
 
                 public int IntProperty { get; set; }
+
+                public InnerTestModel InnerModel { get; private set; }
             }
 
-            /// <summary>
-            ///   Test property to test owner.
-            /// </summary>
+            public class InnerTestModel
+            {
+                public string InnerProperty { get; set; }
+            }
+
             public string MyProperty { get; set; }
 
             [TestCase]
@@ -63,7 +72,7 @@ namespace Catel.Test
             }
 
             [TestCase]
-            public void ReturnsRightOwnerWhenUsingAdditionalParentWithStringProperty()
+            public void ReturnsRightOwnerWhenUsingAdditionalParent()
             {
                 var testModel = new TestModel();
                 var owner = ExpressionHelper.GetOwner(() => testModel.StringProperty);
@@ -78,6 +87,15 @@ namespace Catel.Test
                 var owner = ExpressionHelper.GetOwner(() => testModel.IntProperty);
 
                 Assert.IsTrue(ReferenceEquals(testModel, owner));
+            }
+
+            [TestCase]
+            public void ReturnsRightOwnerWhenUsingInnerModel()
+            {
+                var testModel = new TestModel();
+                var owner = ExpressionHelper.GetOwner(() => testModel.InnerModel.InnerProperty);
+
+                Assert.IsTrue(ReferenceEquals(testModel.InnerModel, owner));
             }
         }
     }
