@@ -172,20 +172,23 @@ namespace Catel.Runtime
 
                 _referenceInfoByInstance.Add(referenceInfo.Instance, referenceInfo);
                 _referenceInfoById.Add(referenceInfo.Id, referenceInfo);
-
-                _usedIds.Add(referenceInfo.Id);
             }
         }
 
         private int GetNextId()
         {
-            int id = _counter++;
-            while (_usedIds.Contains(id))
+            lock (_lock)
             {
-                id = _counter++;
-            }
+                var id = _counter++;
+                while (_usedIds.Contains(id))
+                {
+                    id = _counter++;
+                }
 
-            return id;
+                _usedIds.Add(id);
+
+                return id;
+            }
         }
         #endregion
     }
