@@ -162,7 +162,7 @@ namespace Catel.MVVM.Views
 
         private void AddViewAfterLoaded(UninitializedViewInfo uninitializedViewInfo)
         {
-            bool createNewStack = true;
+            var isTopViewStack = true;
 
             var viewLoadState = uninitializedViewInfo.ViewLoadState;
             var view = viewLoadState.View;
@@ -177,7 +177,7 @@ namespace Catel.MVVM.Views
                     var uninitializedParent = _uninitializedViews[parent];
                     uninitializedParent.ViewStack.AddChild(uninitializedViewInfo.ViewStack, uninitializedParent.ViewStack);
 
-                    createNewStack = false;
+                    isTopViewStack = false;
                 }
                 else
                 {
@@ -199,23 +199,23 @@ namespace Catel.MVVM.Views
                             
 
                             viewStack = existingViewStack;
-                            createNewStack = false;
+                            isTopViewStack = false;
                             break;
                         }
                     }
                 }
             }
 
-            if (createNewStack)
+            if (isTopViewStack)
             {
-                var newViewStack = new ViewStack(view, true);
+                var topViewStack = uninitializedViewInfo.ViewStack;
 
-                newViewStack.ViewStackLoaded += OnViewStackLoaded;
-                newViewStack.ViewStackUnloaded += OnViewStackUnloaded;
+                topViewStack.ViewStackLoaded += OnViewStackLoaded;
+                topViewStack.ViewStackUnloaded += OnViewStackUnloaded;
 
-                _viewStacks.Add(newViewStack);
+                _viewStacks.Add(topViewStack);
 
-                viewStack = newViewStack;
+                viewStack = topViewStack;
             }
 
             if (viewStack != null)
