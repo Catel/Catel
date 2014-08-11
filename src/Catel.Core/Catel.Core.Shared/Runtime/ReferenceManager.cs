@@ -161,17 +161,21 @@ namespace Catel.Runtime
             }
         }
 
-        private void AddReferenceInfo(ReferenceInfo referenceInfo)
+        private bool AddReferenceInfo(ReferenceInfo referenceInfo)
         {
             lock (_lock)
             {
-                if (_referenceInfoByInstance.ContainsKey(referenceInfo))
+                if (_referenceInfoByInstance.ContainsKey(referenceInfo) || _usedIds.Contains(referenceInfo.Id))
                 {
-                    return;
+                    return false;
                 }
 
                 _referenceInfoByInstance.Add(referenceInfo.Instance, referenceInfo);
                 _referenceInfoById.Add(referenceInfo.Id, referenceInfo);
+
+                _usedIds.Add(referenceInfo.Id);
+
+                return true;
             }
         }
 
@@ -184,8 +188,6 @@ namespace Catel.Runtime
                 {
                     id = _counter++;
                 }
-
-                _usedIds.Add(id);
 
                 return id;
             }
