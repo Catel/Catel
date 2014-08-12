@@ -19,7 +19,6 @@ namespace Catel.Logging
     {
         #region Fields
         private readonly object _lock = new object();
-        private readonly object _flushLock = new object();
 
         private readonly Timer _timer;
         private List<LogBatchEntry> _logBatch = new List<LogBatchEntry>();
@@ -30,7 +29,7 @@ namespace Catel.Logging
         /// Initializes a new instance of the <see cref="BatchLogListenerBase" /> class.
         /// </summary>
         /// <param name="maxBatchCount">The maximum batch count.</param>
-        public BatchLogListenerBase(int maxBatchCount = 50)
+        public BatchLogListenerBase(int maxBatchCount = 100)
         {
             MaximumBatchCount = maxBatchCount;
 
@@ -85,7 +84,16 @@ namespace Catel.Logging
         /// <summary>
         /// Flushes the current queue.
         /// </summary>
-        public async void Flush()
+        public void Flush()
+        {
+            FlushAsync().Wait();
+        }
+
+        /// <summary>
+        /// Flushes the current queue asynchronous.
+        /// </summary>
+        /// <returns>Task so it can be awaited.</returns>
+        public async Task FlushAsync()
         {
             List<LogBatchEntry> batchToSubmit;
 
@@ -96,16 +104,11 @@ namespace Catel.Logging
                 _logBatch = new List<LogBatchEntry>();
             }
 
-            await Task.Factory.StartNew(() =>
+            // TODO: Consider to always flush in the same background thread
+            if (batchToSubmit.Count > 0)
             {
-                lock (_flushLock)
-                {
-                    if (batchToSubmit.Count > 0)
-                    {
-                        WriteBatch(batchToSubmit).Wait();
-                    }
-                }
-            });
+                await WriteBatch(batchToSubmit);
+            }
         }
 
         /// <summary>

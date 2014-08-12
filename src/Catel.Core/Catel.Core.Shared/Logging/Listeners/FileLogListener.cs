@@ -120,6 +120,8 @@ namespace Catel.Logging
 
                             await writer.WriteLineAsync(message);
                         }
+
+                        await writer.FlushAsync();
                     }
                 }
             }
