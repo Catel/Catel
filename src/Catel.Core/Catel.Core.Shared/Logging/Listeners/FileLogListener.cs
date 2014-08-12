@@ -12,8 +12,8 @@ namespace Catel.Logging
     using System;
     using System.IO;
     using System.Reflection;
-    using System.Runtime.InteropServices;
-    using Catel.Reflection;
+    using Reflection;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Log listener which writes all data to a file.
@@ -98,7 +98,7 @@ namespace Catel.Logging
         /// Writes the batch of entries.
         /// </summary>
         /// <param name="batchEntries">The batch entries.</param>
-        protected override void WriteBatch(System.Collections.Generic.List<LogBatchEntry> batchEntries)
+        protected override async Task WriteBatch(System.Collections.Generic.List<LogBatchEntry> batchEntries)
         {
             try
             {
@@ -107,7 +107,7 @@ namespace Catel.Logging
                 var fileInfo = new FileInfo(filePath);
                 if (fileInfo.Exists && (fileInfo.Length/1024 >= MaxSizeInKiloBytes))
                 {
-                    CreateCopyOfCurrentLogFile(FilePath);
+                    await CreateCopyOfCurrentLogFile(FilePath);
                 }
 
                 using (var fileStream = new FileStream(filePath, FileMode.Append, FileAccess.Write, FileShare.Read))
@@ -118,7 +118,7 @@ namespace Catel.Logging
                         {
                             var message = FormatLogEvent(batchEntry.Log, batchEntry.Message, batchEntry.LogEvent, batchEntry.ExtraData, batchEntry.Time);
 
-                            writer.WriteLine(message);
+                            await writer.WriteLineAsync(message);
                         }
                     }
                 }
@@ -129,16 +129,19 @@ namespace Catel.Logging
             }
         }
 
-        private void CreateCopyOfCurrentLogFile(string filePath)
+        private async Task CreateCopyOfCurrentLogFile(string filePath)
         {
-            for (int i = 1; i < 999; i++)
+            await Task.Factory.StartNew(() =>
             {
-                var possibleFilePath = string.Format("{0}.{1:000}", filePath, i);
-                if (!File.Exists(possibleFilePath))
+                for (int i = 1; i < 999; i++)
                 {
-                    File.Move(filePath, possibleFilePath);
+                    var possibleFilePath = string.Format("{0}.{1:000}", filePath, i);
+                    if (!File.Exists(possibleFilePath))
+                    {
+                        File.Move(filePath, possibleFilePath);
+                    }
                 }
-            }
+            });
         }
         #endregion
     }
