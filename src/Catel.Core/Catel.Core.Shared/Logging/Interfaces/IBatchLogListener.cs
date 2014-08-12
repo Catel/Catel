@@ -16,15 +16,10 @@ namespace Catel.Logging
     {
         #region Methods
         /// <summary>
-        /// Flushes the current queue.
-        /// </summary>
-        void Flush();
-
-        /// <summary>
         /// Flushes the current queue asynchronous.
         /// </summary>
         /// <returns>Task so it can be awaited.</returns>
-        Task FlushAsync();
+        Task Flush();
         #endregion
     }
 }

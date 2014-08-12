@@ -9,6 +9,7 @@ namespace Catel.Logging
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -19,6 +20,8 @@ namespace Catel.Logging
     {
         #region Fields
         private readonly object _lock = new object();
+        private readonly object _flushLock = new object();
+        private int _flushCount;
 
         private readonly Timer _timer;
         private List<LogBatchEntry> _logBatch = new List<LogBatchEntry>();
@@ -65,7 +68,9 @@ namespace Catel.Logging
 
                 if (_logBatch.Count >= MaximumBatchCount)
                 {
+#pragma warning disable 4014
                     Flush();
+#pragma warning restore 4014
                 }
             }
         }
@@ -76,24 +81,18 @@ namespace Catel.Logging
             {
                 if (_logBatch.Count > 0)
                 {
+#pragma warning disable 4014
                     Flush();
+#pragma warning restore 4014
                 }
             }
-        }
-
-        /// <summary>
-        /// Flushes the current queue.
-        /// </summary>
-        public void Flush()
-        {
-            FlushAsync().Wait();
         }
 
         /// <summary>
         /// Flushes the current queue asynchronous.
         /// </summary>
         /// <returns>Task so it can be awaited.</returns>
-        public async Task FlushAsync()
+        public async Task Flush()
         {
             List<LogBatchEntry> batchToSubmit;
 
@@ -104,10 +103,31 @@ namespace Catel.Logging
                 _logBatch = new List<LogBatchEntry>();
             }
 
-            // TODO: Consider to always flush in the same background thread
+            await Task.Factory.StartNew(() =>
+            {
+                while (true)
+                {
+                    lock (_flushLock)
+                    {
+                        if (_flushCount == 0)
+                        {
+                            _flushCount++;
+                            return;
+                        }
+                    }
+
+                    ThreadHelper.Sleep(10);
+                }
+            });
+
             if (batchToSubmit.Count > 0)
             {
                 await WriteBatch(batchToSubmit);
+            }
+
+            lock (_flushLock)
+            {
+                _flushCount--;
             }
         }
 

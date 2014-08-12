@@ -13,7 +13,7 @@ namespace Catel.Logging
     using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
     using Reflection;
-
+    using Threading;
 #if NET
     using System.Configuration;
     using Catel.Configuration;
@@ -446,9 +446,9 @@ namespace Catel.Logging
         /// <summary>
         /// Flushes all listeners that implement the <see cref="IBatchLogListener" /> by calling <see cref="IBatchLogListener.Flush" />.
         /// </summary>
-        public static async void FlushAll()
+        public static void FlushAll()
         {
-            await FlushAllAsync();
+            TaskHelper.RunAndWait(() => FlushAllAsync().Wait());
         }
 
         /// <summary>
@@ -473,7 +473,7 @@ namespace Catel.Logging
 
             foreach (var logListenerToFlush in logListenersToFlush)
             {
-                await logListenerToFlush.FlushAsync();
+                await logListenerToFlush.Flush();
             }
         }
 
