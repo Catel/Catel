@@ -392,7 +392,7 @@ namespace Catel.Windows.Controls
             }
 
             // Show the right child first (to prevent flickering)
-            var itemsToHide = new List<ContentPresenter>();
+            var itemsToHide = new Dictionary<ContentPresenter, TabControlItemData>();
 
             foreach (ContentPresenter child in _itemsHolder.Children)
             {
@@ -411,7 +411,7 @@ namespace Catel.Windows.Controls
                     }
                     else
                     {
-                        itemsToHide.Add(child);
+                        itemsToHide.Add(child, tabControlItemData);
                     }
                 }
             }
@@ -422,11 +422,11 @@ namespace Catel.Windows.Controls
                 var child = itemToHide;
 
                 // Note: hidden, not collapsed otherwise items will not be loaded
-                child.Visibility = Visibility.Hidden;
+                child.Key.Visibility = Visibility.Hidden;
 
                 if (LoadTabItems == LoadTabItemsBehavior.LazyLoadingUnloadOthers)
                 {
-                    HideChildContent(child);
+                    HideChildContent(child.Key, child.Value);
                 }
             }
         }
@@ -510,12 +510,16 @@ namespace Catel.Windows.Controls
             {
                 child.ContentTemplate = tabControlItemData.ContentTemplate;
             }
+
+            tabControlItemData.TabItem.Content = child;
         }
 
-        private void HideChildContent(ContentPresenter child)
+        private void HideChildContent(ContentPresenter child, TabControlItemData tabControlItemData)
         {
             child.Content = null;
             child.ContentTemplate = null;
+
+            tabControlItemData.TabItem.Content = null;
         }
 
         /// <summary>
