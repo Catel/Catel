@@ -36,6 +36,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\CommandManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\CompositeCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\EventArgs\CommandCanceledEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\EventArgs\CommandCreatedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\EventArgs\CommandEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\EventArgs\CommandExecutedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs" />

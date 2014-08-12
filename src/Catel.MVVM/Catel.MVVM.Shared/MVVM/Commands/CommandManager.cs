@@ -60,6 +60,13 @@ namespace Catel.MVVM
 #endif
         }
 
+        #region Events
+        /// <summary>
+        /// Occurs when a command has been created.
+        /// </summary>
+        public event EventHandler<CommandCreatedEventArgs> CommandCreated;
+        #endregion
+
 #if !WINDOWS_PHONE && !XAMARIN
         /// <summary>
         /// Creates the command inside the command manager.
@@ -96,11 +103,18 @@ namespace Catel.MVVM
                     return;
                 }
 
-                _commands.Add(commandName, compositeCommand ?? new CompositeCommand());
+                if (compositeCommand == null)
+                {
+                    compositeCommand = new CompositeCommand();
+                }
+
+                _commands.Add(commandName, compositeCommand);
                 _originalCommandGestures.Add(commandName, inputGesture);
                 _commandGestures.Add(commandName, inputGesture);
 
                 InvalidateCommands();
+
+                CommandCreated.SafeInvoke(this, new CommandCreatedEventArgs(compositeCommand, commandName));
             }
         }
 #else
@@ -134,9 +148,16 @@ namespace Catel.MVVM
                     return;
                 }
 
-                _commands.Add(commandName, compositeCommand ?? new CompositeCommand());
+                if (compositeCommand == null)
+                {
+                    compositeCommand = new CompositeCommand();
+                }
+
+                _commands.Add(commandName, compositeCommand);
 
                 InvalidateCommands();
+
+                CommandCreated.SafeInvoke(this, new CommandCreatedEventArgs(compositeCommand, commandName));
             }
         }
 #endif
