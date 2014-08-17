@@ -53,6 +53,9 @@ Added/fixed (BREAKING CHANGES):
 (*) CTL-486 Add time to all log listeners. This is a breaking change for classes implementing ILogListener
 (*) CTL-488 Convert IViewModel interface to support full async
 (*) CTL-506 BatchLogListenerBase.WriteBatch is now async so it won't block any UI
+(*) CTL-507 Use FastViewPropertySelector as default for major performance boost. This is a breaking change if the controls
+    use the ViewToViewModel mappings. If so, register the ViewPropertySelector class at application startup to get old
+    behavior
 (-) CTL-454 Removed the RemoveInstance methods from the IServiceLocator interface. Use IServiceLocator.RemoveType instead
 (-) CTL-458 Removed usage of ICloneable. If one wants to clone an object, simply serialize / deserialize it
 (-) CTL-490 Remove parameters from BehaviorBase.OnAssociatedObjectLoaded. This is only a breaking change if there are 

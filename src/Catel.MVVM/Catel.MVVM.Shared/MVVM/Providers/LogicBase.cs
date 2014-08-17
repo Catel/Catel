@@ -142,7 +142,7 @@ namespace Catel.MVVM.Providers
                 viewModelType = (viewModel != null) ? viewModel.GetType() : _viewModelLocator.ResolveViewModel(targetView.GetType());
                 if (viewModelType == null)
                 {
-                    string error = string.Format("The view model of the view '{0}' could not be resolved. Make sure to customize the IViewModelLocator or register the view and view model manually", targetView.GetType().GetSafeFullName());
+                    var error = string.Format("The view model of the view '{0}' could not be resolved. Make sure to customize the IViewModelLocator or register the view and view model manually", targetView.GetType().GetSafeFullName());
                     Log.Error(error);
                     throw new NotSupportedException(error);
                 }
@@ -173,6 +173,8 @@ namespace Catel.MVVM.Providers
                 return;
             }
 
+            Log.Debug("Subscribing to view events");
+
             ViewLoadManager.AddView(this);
             this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewLoading", OnViewLoadedManagerLoading);
             this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewLoaded", OnViewLoadedManagerLoaded);
@@ -184,6 +186,8 @@ namespace Catel.MVVM.Providers
             targetView.Unloaded += (sender, e) => Unloaded.SafeInvoke(this);
 
             TargetView.DataContextChanged += OnTargetViewDataContextChanged;
+
+            Log.Debug("Subscribing to view properties");
 
             // This also subscribes to DataContextChanged, don't double subscribe
             var viewPropertiesToSubscribe = DetermineInterestingViewProperties();
