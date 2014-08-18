@@ -6,7 +6,7 @@
 
 #if !XAMARIN && !NET40 && !PCL && !SILVERLIGHT
 
-namespace Catel.Logging.Listeners
+namespace Catel.Logging
 {
     using System;
     using System.Diagnostics.Tracing;
