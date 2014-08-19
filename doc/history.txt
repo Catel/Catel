@@ -170,6 +170,8 @@ Added/fixed:
 (x) CTL-476 Exception in BootstrapperBase.RunWithSplashScreen<>()
 (x) CTL-478 InfoBarMessageControl does not respect Horizontal/Vertical- (Content)Alignment
 (x) CTL-487 TypeHelper doesn't always return the right typename / assemblyname
+(x) CTL-504 Catel.Fody GenerateXmlSchema and WeaveProperties Bug where web service models were not being
+    deserialized correctly
 
 Roadmap:
 ========
