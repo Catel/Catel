@@ -28,6 +28,7 @@ namespace Catel.Logging
 
         #region Fields
         private readonly IJsonLogFormatter _jsonLogFormatter;
+        private readonly object _lock = new object();
 
         private WebClient _webClient;
         private string _webApiUrl;
@@ -77,7 +78,7 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="batchEntries"></param>
         /// <exception cref="ArgumentNullException">The <paramref name="batchEntries"/> is <c>null</c>.</exception>
-        protected override Task WriteBatch(List<LogBatchEntry> batchEntries)
+        protected override async Task WriteBatch(List<LogBatchEntry> batchEntries)
         {
             Argument.IsNotNull("batchEntries", batchEntries);
 
@@ -97,34 +98,34 @@ namespace Catel.Logging
 
                 var message = textWriter.ToString();
 
-                if (_webClient == null)
+                lock (_lock)
                 {
-                    var baseUri = ServerUrl;
-                    if (!baseUri.EndsWith("/"))
+                    if (_webClient == null)
                     {
-                        baseUri += "/";
+                        var baseUri = ServerUrl;
+                        if (!baseUri.EndsWith("/"))
+                        {
+                            baseUri += "/";
+                        }
+
+                        _webApiUrl = string.Format("{0}{1}", baseUri, BulkUploadResource);
+
+                        _webClient = new WebClient {Encoding = Encoding.UTF8};
+                        _webClient.Headers[HttpRequestHeader.ContentType] = "application/json";
+
+                        if (!string.IsNullOrWhiteSpace(ApiKey))
+                        {
+                            _webClient.Headers.Add(ApiKeyHeaderName, ApiKey);
+                        }
                     }
-
-                    _webApiUrl = string.Format("{0}{1}", baseUri, BulkUploadResource);
-
-                    _webClient = new WebClient {Encoding = Encoding.UTF8};
-                    _webClient.Headers[HttpRequestHeader.ContentType] = "application/json";
-
                 }
 
-                if (!string.IsNullOrWhiteSpace(ApiKey))
-                {
-                    _webClient.Headers.Add(ApiKeyHeaderName, ApiKey);
-                }
-
-                return Task.Factory.StartNew(() => _webClient.UploadString(_webApiUrl, message));
+                await Task.Factory.StartNew(() => _webClient.UploadString(_webApiUrl, message));
             }
             catch (Exception)
             {
                 // Swallow
             }
-
-            return null;
         }
 
         #endregion

@@ -5,6 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 #if NET
+
 namespace Catel.Logging
 {
     using System;
@@ -65,8 +66,10 @@ namespace Catel.Logging
                 {LogEvent.Error, "Error"}
             };
 
-            ApplicationName = AppDomain.CurrentDomain.FriendlyName.Replace(".vshost.exe", string.Empty);
-            ApplicationVersion = Assembly.GetEntryAssembly().Version();
+            var assembly = AssemblyHelper.GetEntryAssembly();
+
+            ApplicationName = assembly.Title();
+            ApplicationVersion = assembly.Version();
         }
         #endregion
 
@@ -95,13 +98,13 @@ namespace Catel.Logging
 
             textWriter.Write("{");
 
-            var delim = "";
+            var delim = string.Empty;
             WriteJsonProperty("Timestamp", time, ref delim, textWriter);
             WriteJsonProperty("Level", LogEventStrings[logEvent], ref delim, textWriter);
             WriteJsonProperty("MessageTemplate", message, ref delim, textWriter);
 
             textWriter.Write(",\"Properties\":{");
-            var pdelim = "";
+            var pdelim = string.Empty;
             WriteJsonProperty("ApplicationName", ApplicationName, ref pdelim, textWriter);
             WriteJsonProperty("ApplicationVersion", ApplicationVersion, ref pdelim, textWriter);
             WriteJsonProperty("TargetType", log.TargetType.FullName, ref pdelim, textWriter);
@@ -192,4 +195,5 @@ namespace Catel.Logging
         #endregion
     }
 }
+
 #endif
