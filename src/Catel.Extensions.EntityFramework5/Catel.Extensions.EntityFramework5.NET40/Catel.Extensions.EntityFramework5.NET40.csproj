@@ -102,6 +102,7 @@
     <Compile Include="Data\DbContextManager.cs" />
     <Compile Include="Data\UnitOfWork.generic.cs" />
     <Compile Include="ExtensionsEntityFramework5Module.cs" />
+    <Compile Include="Extensions\ConfigurationExtensions.cs" />
     <Compile Include="Extensions\DbContextExtensions.cs" />
     <Compile Include="Extensions\DbContextExtensions.generic.cs" />
     <Compile Include="Extensions\DbContextExtensions.transactions.cs" />

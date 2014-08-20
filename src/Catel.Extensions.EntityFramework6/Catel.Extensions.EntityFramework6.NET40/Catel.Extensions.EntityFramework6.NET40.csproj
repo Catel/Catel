@@ -120,6 +120,9 @@
     <Compile Include="..\..\Catel.Extensions.EntityFramework5\Catel.Extensions.EntityFramework5.NET40\Data\UnitOfWork.generic.cs">
       <Link>Data\UnitOfWork.generic.cs</Link>
     </Compile>
+    <Compile Include="..\..\Catel.Extensions.EntityFramework5\Catel.Extensions.EntityFramework5.NET40\Extensions\ConfigurationExtensions.cs">
+      <Link>Extensions\ConfigurationExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\..\Catel.Extensions.EntityFramework5\Catel.Extensions.EntityFramework5.NET40\Extensions\DbContextExtensions.cs">
       <Link>Extensions\DbContextExtensions.cs</Link>
     </Compile>
