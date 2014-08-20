@@ -46,26 +46,26 @@ namespace Catel.Logging
 
         #region Properties
         /// <summary>
-        /// The seq server url.
+        /// Gets or sets the seq server url.
         /// </summary>
         public string ServerUrl { get; set; }
 
         /// <summary>
-        /// Provide an seq server api key.
+        /// Gets or sets the seq server api key.
         /// </summary>
         public string ApiKey { get; set; }
         #endregion
 
         #region Methods
         /// <summary>
-        /// Formats the log infos.
+        /// Formats the log event to a message which can be written to a log persistence storage.
         /// </summary>
-        /// <param name="log"></param>
-        /// <param name="message"></param>
-        /// <param name="logEvent"></param>
-        /// <param name="extraData"></param>
-        /// <param name="time"></param>
-        /// <returns></returns>
+        /// <param name="log">The log.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="logEvent">The log event.</param>
+        /// <param name="extraData">The extra data.</param>
+        /// <param name="time">The time.</param>
+        /// <returns>The formatted log event.</returns>
         protected override string FormatLogEvent(ILog log, string message, LogEvent logEvent, object extraData, DateTime time)
         {
             var messageResult = _jsonLogFormatter.FormatLogEvent(log, message, logEvent, time);
@@ -74,9 +74,10 @@ namespace Catel.Logging
         }
 
         /// <summary>
-        /// Writes the bacth log entries.
+        /// Writes the batch of entries.
         /// </summary>
-        /// <param name="batchEntries"></param>
+        /// <param name="batchEntries">The batch entries.</param>
+        /// <returns>Task so this can be done asynchronously.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="batchEntries"/> is <c>null</c>.</exception>
         protected override async Task WriteBatch(List<LogBatchEntry> batchEntries)
         {
