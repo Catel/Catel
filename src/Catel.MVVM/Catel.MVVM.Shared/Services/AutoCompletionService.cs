@@ -9,6 +9,7 @@ namespace Catel.Services
 {
     using System;
     using System.Collections;
+    using System.Collections.Generic;
     using System.Linq;
     using Catel;
     using Catel.Data;
@@ -36,15 +37,26 @@ namespace Catel.Services
         /// <param name="filter">The filter.</param>
         /// <param name="source">The source.</param>
         /// <returns>System.String[].</returns>
-        /// <exception cref="ArgumentException">The <paramref name="property"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="source"/> is <c>null</c>.</exception>
-        public string[] GetAutoCompleteValues(string property, string filter, IEnumerable source)
+        public virtual string[] GetAutoCompleteValues(string property, string filter, IEnumerable source)
         {
-            Argument.IsNotNullOrWhitespace("property", property);
             Argument.IsNotNull("source", source);
 
-            var propertyValues = (from x in source.Cast<object>()
-                                  select GetPropertyValue(x, property)).Where(x => !string.Equals(x, "null")).Distinct().ToList();
+            List<string> propertyValues;
+
+            if (string.IsNullOrWhiteSpace(property))
+            {
+                // Filter items directly
+                propertyValues = (from x in source.Cast<string>()
+                                  select x).ToList();
+            }
+            else
+            {
+                propertyValues = (from x in source.Cast<object>()
+                                  select GetPropertyValue(x, property)).ToList();
+            }
+
+            propertyValues = propertyValues.Where(x => !string.Equals(x, "null")).Distinct().ToList();
 
             var filteredValues = propertyValues;
 

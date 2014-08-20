@@ -23,7 +23,6 @@ namespace Catel.Services
         /// <param name="filter">The filter.</param>
         /// <param name="source">The source.</param>
         /// <returns>System.String[].</returns>
-        /// <exception cref="ArgumentException">The <paramref name="property"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="source"/> is <c>null</c>.</exception>
         string[] GetAutoCompleteValues(string property, string filter, IEnumerable source);
         #endregion
