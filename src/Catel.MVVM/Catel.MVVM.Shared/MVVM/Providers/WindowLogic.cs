@@ -166,7 +166,7 @@ namespace Catel.MVVM.Providers
                 {
                     result = PropertyHelper.TrySetPropertyValue(TargetWindow, "DialogResult", _closeInitiatedByViewModelResult);
                 }
-                catch (InvalidOperationException ex)
+                catch (Exception ex)
                 {
                     Log.Warning("Failed to set the 'DialogResult' exception: {0}", ex);
                     result = false;
