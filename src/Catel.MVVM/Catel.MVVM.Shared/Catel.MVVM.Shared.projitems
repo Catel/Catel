@@ -72,6 +72,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\MethodToValueConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\MultiplyConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\NullableValueConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\PlatformToBooleanConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\ReferenceToBooleanConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\ReferenceToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\ShortDateFormattingConverter.cs" />

@@ -326,7 +326,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\Models\LanguageResourceKey.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Models\LanguageResourceSource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\ServiceBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SupportedPlatforms.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Platforms.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Test\ExceptionTester.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Text\Extensions\StringBuilderExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Helpers\TaskHelper.cs" />

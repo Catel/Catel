@@ -90,6 +90,7 @@ Added/fixed:
 (+) CTL-489 Allow property unregistration via ModelBase.UnregisterProperty
 (+) CTL-508 Added the SeqLogListener
 (+) CTL-509 Added the EventLogListener
+(+) CTL-511 Add PlatformToBooleanConverter to know which platform is being used
 (*) CTL-326 Data annotation validation will no longer be invoked for properties with non-public getters to prevent
     first chance exceptions the first time such a property is being validated
 (*) CTL-334 ViewModelBase now respects SuspendValidation during saving, which means that even if there are validation 
