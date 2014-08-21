@@ -23,23 +23,23 @@ namespace Catel.MVVM.Converters
         /// <returns>System.Object.</returns>
         protected override object Convert(object value, System.Type targetType, object parameter)
         {
-            var stringValue = ObjectToStringHelper.ToString(value);
+            var parameterAsString = ObjectToStringHelper.ToString(parameter);
 
-            var isSupported = false;
+            var supportedPlatforms = parameterAsString.Split(new[] { '|' });
 
-            KnownPlatforms platform = KnownPlatforms.Unknown;
-            if (Enum<KnownPlatforms>.TryParse(stringValue, out platform))
+            foreach (var supportedPlatform in supportedPlatforms)
             {
-                isSupported = Platforms.IsPlatformSupported(platform);
+                KnownPlatforms platform = KnownPlatforms.Unknown;
+                if (Enum<KnownPlatforms>.TryParse(supportedPlatform, out platform))
+                {
+                    if (Platforms.IsPlatformSupported(platform))
+                    {
+                        return true;
+                    }
+                }
             }
 
-            bool invert = ConverterHelper.ShouldInvert(parameter);
-            if (invert)
-            {
-                isSupported = !isSupported;
-            }
-
-            return isSupported;
+            return false;
         }
     }
 }
