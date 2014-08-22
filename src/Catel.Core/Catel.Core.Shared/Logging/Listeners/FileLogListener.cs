@@ -104,6 +104,12 @@ namespace Catel.Logging
             {
                 var filePath = FilePath;
 
+                var directoryName = Path.GetDirectoryName(filePath);
+                if (!string.IsNullOrWhiteSpace(directoryName))
+                {
+                    Directory.CreateDirectory(directoryName);
+                }
+
                 var fileInfo = new FileInfo(filePath);
                 if (fileInfo.Exists && (fileInfo.Length/1024 >= MaxSizeInKiloBytes))
                 {
