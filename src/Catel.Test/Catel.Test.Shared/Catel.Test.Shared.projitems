@@ -141,6 +141,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)IO\PathTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Configuration\LoggingConfigurationSectionFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\EventArgs\LogMessageEventArgsTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\FileLogListenerFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\LogFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\LogManagerTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\MessageBaseFacts.cs" />

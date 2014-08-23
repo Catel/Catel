@@ -64,25 +64,31 @@ namespace Catel.Logging
             get { return _filePath; }
             set
             {
-                _filePath = value;
-                if (!string.IsNullOrWhiteSpace(_filePath))
-                {
-                    if (_filePath.Contains(AppData))
-                    {
-                        string dataDirectory;
+                var filePath = value;
 
-                        if (_assembly != null)
-                        {
-                            dataDirectory = IO.Path.GetApplicationDataDirectory(_assembly.Company(), _assembly.Product());
-                        }
-                        else
-                        {
-                            dataDirectory = IO.Path.GetApplicationDataDirectory();
-                        }
-                        
-                        _filePath = _filePath.Replace(AppData, dataDirectory);
+                filePath = value;
+                if (!string.IsNullOrWhiteSpace(filePath))
+                {
+                    string dataDirectory;
+
+                    if (_assembly != null)
+                    {
+                        dataDirectory = IO.Path.GetApplicationDataDirectory(_assembly.Company(), _assembly.Product());
                     }
+                    else
+                    {
+                        dataDirectory = IO.Path.GetApplicationDataDirectory();
+                    }
+
+                    if (filePath.Contains(AppData))
+                    {
+                        filePath = filePath.Replace(AppData, dataDirectory);
+                    }
+
+                    filePath = IO.Path.GetFullPath(filePath, dataDirectory);
                 }
+
+                _filePath = filePath;
             }
         }
 
