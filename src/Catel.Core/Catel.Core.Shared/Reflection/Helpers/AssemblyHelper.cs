@@ -121,7 +121,26 @@ namespace Catel.Reflection
             try
             {
 #if NET
-                assembly = Assembly.GetEntryAssembly();
+                var httpApplication = HttpContextHelper.GetHttpApplicationInstance();
+                if (httpApplication != null)
+                {
+                    // Special treatment for ASP.NET
+                    var type = httpApplication.GetType();
+                    while ((type != null) && (type != typeof(object)) && (string.Equals(type.Namespace, "ASP", StringComparison.Ordinal)))
+                    {
+                        type = type.BaseType;
+                    }
+
+                    if (type != null)
+                    {
+                        assembly = type.Assembly;
+                    }
+                }
+
+                if (assembly == null)
+                {
+                    assembly = Assembly.GetEntryAssembly();
+                }
 #elif SILVERLIGHT
                 assembly = System.Windows.Application.Current.GetType().Assembly;
 #elif NETFX_CORE

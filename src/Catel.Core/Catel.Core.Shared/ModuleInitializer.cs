@@ -77,20 +77,8 @@ namespace Catel.Core
 #if NET
         private static Configuration GetExeConfiguration()
         {
-            bool isWebContext = false;
-
-            var httpContextType = TypeCache.GetTypeWithoutAssembly("System.Web.HttpContext");
-            if (httpContextType != null)
-            {
-                var currentPropertyInfo = httpContextType.GetProperty("Current", BindingFlags.Public | BindingFlags.Static);
-                if (currentPropertyInfo != null)
-                {
-                    isWebContext = (currentPropertyInfo.GetValue(null, null) != null);
-                }
-            }
-
             Configuration config = null;
-            if (isWebContext)
+            if (HttpContextHelper.HasHttpContext())
             {
                 Log.Debug("Application is living in a web context, loading web configuration");
 

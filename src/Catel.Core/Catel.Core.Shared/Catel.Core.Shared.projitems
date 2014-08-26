@@ -149,6 +149,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\EnvironmentHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ExpressionHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\HashHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\HttpContextHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ObjectHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ObjectToStringHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ParallelHelper.cs" />

@@ -9,9 +9,7 @@
 namespace Catel.Test.Logging.Listeners
 {
     using System;
-    using System.Reflection;
     using Catel.Logging;
-    using Catel.Reflection;
     using NUnit.Framework;
 
     public class FileLogListenerFacts
@@ -19,9 +17,9 @@ namespace Catel.Test.Logging.Listeners
         [TestFixture]
         public class TheFilePathProperty
         {
-            [TestCase(@"log.txt", @"{AppData}\CatenaLogic\Catel.Test\log.txt")]
-            [TestCase(@"..\log.txt", @"{AppData}\CatenaLogic\log.txt")]
-            [TestCase(@"c:\source\log.txt", @"c:\source\log.txt")]
+            [TestCase(@"myapp.log", @"{AppData}\CatenaLogic\Catel.Test\myapp.log")]
+            [TestCase(@"..\myapp.log", @"{AppData}\CatenaLogic\myapp.log")]
+            [TestCase(@"c:\source\myapp.log", @"c:\source\myapp.log")]
             public void ReturnsRightFullPath(string path, string expectedPath)
             {
                 var assembly = GetType().Assembly;

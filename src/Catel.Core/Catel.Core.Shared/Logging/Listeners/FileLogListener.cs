@@ -6,10 +6,11 @@
 
 #if NET
 
-
 namespace Catel.Logging
 {
     using System;
+    using System.Diagnostics;
+    using System.Globalization;
     using System.IO;
     using System.Reflection;
     using Reflection;
@@ -21,6 +22,8 @@ namespace Catel.Logging
     public class FileLogListener : BatchLogListenerBase
     {
         private const string AppData = "{AppData}";
+        private const string AppDir = "{AppDir}";
+        private const string AutoLogFileName = "{AutoLogFileName}";
 
         private readonly Assembly _assembly;
         private string _filePath;
@@ -32,9 +35,14 @@ namespace Catel.Logging
         /// <param name="assembly">The assembly to load the product info from. If <c>null</c>, the entry assembly will be used.</param>
         public FileLogListener(Assembly assembly = null)
         {
-            MaxSizeInKiloBytes = 1000*10; // 10 MB
+            MaxSizeInKiloBytes = 1000 * 10; // 10 MB
 
             _assembly = assembly ?? Assembly.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
+
+            if (string.IsNullOrWhiteSpace(_filePath))
+            {
+                _filePath = DetermineFilePath(AutoLogFileName);
+            }
         }
 
         /// <summary>
@@ -62,34 +70,7 @@ namespace Catel.Logging
         public string FilePath
         {
             get { return _filePath; }
-            set
-            {
-                var filePath = value;
-
-                filePath = value;
-                if (!string.IsNullOrWhiteSpace(filePath))
-                {
-                    string dataDirectory;
-
-                    if (_assembly != null)
-                    {
-                        dataDirectory = IO.Path.GetApplicationDataDirectory(_assembly.Company(), _assembly.Product());
-                    }
-                    else
-                    {
-                        dataDirectory = IO.Path.GetApplicationDataDirectory();
-                    }
-
-                    if (filePath.Contains(AppData))
-                    {
-                        filePath = filePath.Replace(AppData, dataDirectory);
-                    }
-
-                    filePath = IO.Path.GetFullPath(filePath, dataDirectory);
-                }
-
-                _filePath = filePath;
-            }
+            set { _filePath = DetermineFilePath(value); }
         }
 
         /// <summary>
@@ -117,7 +98,7 @@ namespace Catel.Logging
                 }
 
                 var fileInfo = new FileInfo(filePath);
-                if (fileInfo.Exists && (fileInfo.Length/1024 >= MaxSizeInKiloBytes))
+                if (fileInfo.Exists && (fileInfo.Length / 1024 >= MaxSizeInKiloBytes))
                 {
                     await CreateCopyOfCurrentLogFile(FilePath);
                 }
@@ -156,6 +137,54 @@ namespace Catel.Logging
                     }
                 }
             });
+        }
+
+        private string DetermineFilePath(string filePath)
+        {
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                filePath = string.Empty;
+            }
+
+            string dataDirectory;
+
+            if (_assembly != null)
+            {
+                dataDirectory = IO.Path.GetApplicationDataDirectory(_assembly.Company(), _assembly.Product());
+            }
+            else
+            {
+                dataDirectory = IO.Path.GetApplicationDataDirectory();
+            }
+
+            if (filePath.Contains(AppData))
+            {
+                filePath = filePath.Replace(AppData, dataDirectory);
+            }
+
+            if (filePath.Contains(AppDir))
+            {
+                filePath = filePath.Replace(AppDir, AppDomain.CurrentDomain.BaseDirectory);
+            }
+
+            if (filePath.Contains(AutoLogFileName))
+            {
+                var now = DateTime.Now;
+                var autoLogFileName = string.Format(CultureInfo.InvariantCulture, "{0}_{1}_{2}_{3}", 
+                    Path.GetFileName(_assembly.Location), now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+                    now.ToString("HHmmss", CultureInfo.InvariantCulture), Process.GetCurrentProcess().Id);
+
+                filePath = filePath.Replace(AutoLogFileName, autoLogFileName);
+            }
+
+            filePath = IO.Path.GetFullPath(filePath, dataDirectory);
+
+            if (!filePath.EndsWith(".log"))
+            {
+                filePath += ".log";
+            }
+
+            return filePath;
         }
         #endregion
     }
