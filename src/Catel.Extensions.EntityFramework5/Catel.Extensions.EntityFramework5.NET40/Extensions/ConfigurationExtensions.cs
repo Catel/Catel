@@ -24,19 +24,19 @@ namespace Catel.Data
         public static EntityTypeConfiguration<TEntity> IgnoreCatelProperties<TEntity>(this EntityTypeConfiguration<TEntity> configuration)
             where TEntity : ModelBase
         {
-            configuration.Ignore(x => x.BusinessRuleErrorCount);
-            configuration.Ignore(x => x.BusinessRuleWarningCount);
-            configuration.Ignore(x => x.FieldErrorCount);
-            configuration.Ignore(x => x.FieldWarningCount);
-            configuration.Ignore(x => x.HasErrors);
-            configuration.Ignore(x => x.HasWarnings);
+            //configuration.Ignore(x => x.BusinessRuleErrorCount);
+            //configuration.Ignore(x => x.BusinessRuleWarningCount);
+            //configuration.Ignore(x => x.FieldErrorCount);
+            //configuration.Ignore(x => x.FieldWarningCount);
+            //configuration.Ignore(x => x.HasErrors);
+            //configuration.Ignore(x => x.HasWarnings);
             configuration.Ignore(x => x.IsDirty);
             configuration.Ignore(x => x.IsEditable);
             configuration.Ignore(x => x.IsInEditSession);
             configuration.Ignore(x => x.IsReadOnly);
             configuration.Ignore(x => x.Mode);
-            configuration.Ignore(x => x.ValidationContext);
-            configuration.Ignore(x => x.Validator);
+            //configuration.Ignore(x => x.ValidationContext);
+            //configuration.Ignore(x => x.Validator);
 
             return configuration;
         }

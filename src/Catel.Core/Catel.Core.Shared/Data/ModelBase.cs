@@ -543,7 +543,7 @@ namespace Catel.Data
         /// </summary>
         protected virtual void OnDeserialized()
         {
-            Deserialized.SafeInvoke(this);
+            _deserialized.SafeInvoke(this);
         }
 
         /// <summary>
@@ -551,8 +551,6 @@ namespace Catel.Data
         /// </summary>
         private void Initialize()
         {
-            ValidationContext = new ValidationContext();
-
             SuspendValidation = DefaultSuspendValidationValue;
             DeserializationSucceeded = false;
             HandlePropertyAndCollectionChanges = true;

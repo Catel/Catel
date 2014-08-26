@@ -59,7 +59,7 @@ namespace Catel.MVVM.Providers
     /// Base implementation of the behaviors, which defines all the different possible situations
     /// a behavior must implement / support to be a valid MVVM provider behavior.
     /// </summary>
-    public abstract class LogicBase : ObservableObject, IViewLoadState
+    public abstract class LogicBase : ObservableObject, IViewLoadState, IUniqueIdentifyable
     {
         #region Fields
         /// <summary>

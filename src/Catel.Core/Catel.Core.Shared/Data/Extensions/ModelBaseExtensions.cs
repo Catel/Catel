@@ -21,17 +21,19 @@ namespace Catel.Data
         /// <summary>
         /// Returns a message that contains all the current warnings.
         /// </summary>
-        /// <param name="modelBase">The model base.</param>
+        /// <param name="model">The model base.</param>
         /// <param name="userFriendlyObjectName">Name of the user friendly object.</param>
         /// <returns>
         /// Warning string or empty in case of no warnings.
         /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="modelBase"/> is <c>null</c>.</exception>
-        public static string GetWarningMessage(this ModelBase modelBase, string userFriendlyObjectName = null)
+        /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
+        public static string GetWarningMessage(this ModelBase model, string userFriendlyObjectName = null)
         {
-            Argument.IsNotNull("modelBase", modelBase);
+            Argument.IsNotNull("model", model);
 
-            if (!modelBase.HasWarnings)
+            var validationContext = ((IModelValidation) model).ValidationContext;
+
+            if (!validationContext.HasWarnings)
             {
                 return string.Empty;
             }
@@ -39,12 +41,12 @@ namespace Catel.Data
             if (string.IsNullOrEmpty(userFriendlyObjectName))
             {
                 // Use the real entity name (stupid developer that passes a useless value)
-                userFriendlyObjectName = modelBase.GetType().Name;
+                userFriendlyObjectName = model.GetType().Name;
             }
 
             var messageBuilder = new StringBuilder();
             messageBuilder.AppendLine(ResourceHelper.GetString("WarningsFound"), userFriendlyObjectName);
-            messageBuilder.Append(GetListMessages(modelBase.ValidationContext, ValidationResultType.Warning));
+            messageBuilder.Append(GetListMessages(validationContext, ValidationResultType.Warning));
 
             return messageBuilder.ToString();
         }
@@ -52,17 +54,19 @@ namespace Catel.Data
         /// <summary>
         /// Returns a message that contains all the current errors.
         /// </summary>
-        /// <param name="modelBase">The model base.</param>
+        /// <param name="model">The model base.</param>
         /// <param name="userFriendlyObjectName">Name of the user friendly object.</param>
         /// <returns>
         /// Error string or empty in case of no errors.
         /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="modelBase"/> is <c>null</c>.</exception>
-        public static string GetErrorMessage(this ModelBase modelBase, string userFriendlyObjectName = null)
+        /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
+        public static string GetErrorMessage(this ModelBase model, string userFriendlyObjectName = null)
         {
-            Argument.IsNotNull("modelBase", modelBase);
+            Argument.IsNotNull("model", model);
 
-            if (!modelBase.HasErrors)
+            var validationContext = ((IModelValidation)model).ValidationContext;
+
+            if (!validationContext.HasErrors)
             {
                 return string.Empty;
             }
@@ -70,12 +74,12 @@ namespace Catel.Data
             if (string.IsNullOrEmpty(userFriendlyObjectName))
             {
                 // Use the real entity name (stupid developer that passes a useless value)
-                userFriendlyObjectName = modelBase.GetType().Name;
+                userFriendlyObjectName = model.GetType().Name;
             }
 
             var messageBuilder = new StringBuilder();
             messageBuilder.AppendLine(ResourceHelper.GetString("ErrorsFound"), userFriendlyObjectName);
-            messageBuilder.Append(GetListMessages(modelBase.ValidationContext, ValidationResultType.Error));
+            messageBuilder.Append(GetListMessages(validationContext, ValidationResultType.Error));
 
             return messageBuilder.ToString();
         }

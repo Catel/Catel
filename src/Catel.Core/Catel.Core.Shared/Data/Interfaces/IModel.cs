@@ -8,11 +8,6 @@ namespace Catel.Data
 {
     using System;
     using System.ComponentModel;
-    using System.Xml.Serialization;
-
-#if NET
-    using System.Runtime.Serialization;
-#endif
 
     /// <summary>
     /// IModelBase that the <see cref="ModelBase"/> must implement to easily pass objects to methods as non-generic.
@@ -20,11 +15,8 @@ namespace Catel.Data
     /// <remarks>
     /// This interface defines all the non-generic interfaces that the <see cref="ModelBase"/> class implements.
     /// </remarks>
-    public interface IModel : INotifyPropertyChanging, INotifyPropertyChanged, IParent, INotifyDataErrorInfo, INotifyDataWarningInfo
-                                        , IDataErrorInfo, IDataWarningInfo, IAdvancedEditableObject, IXmlSerializable, IModelEditor
-#if NET
-                                        , ISerializable
-#endif
+    public interface IModel : INotifyPropertyChanging, INotifyPropertyChanged, IParent, IAdvancedEditableObject, 
+        IModelEditor, IModelValidation, IModelSerialization
     {
         #region Properties
         /// <summary>
@@ -38,19 +30,6 @@ namespace Catel.Data
         /// </summary>
         /// <value><c>true</c> if this object is dirty; otherwise, <c>false</c>.</value>
         bool IsDirty { get; }
-
-        /// <summary>
-        /// Gets the validation context which contains all information about the validation.
-        /// </summary>
-        /// <value>The validation context.</value>
-        IValidationContext ValidationContext { get; }
-
-        /// <summary>
-        /// Gets a value indicating whether the object is currently hiding its validation results. If the object
-        /// hides its validation results, it is still possible to retrieve the validation results using the
-        /// <see cref="ValidationContext"/>.
-        /// </summary>
-        bool IsHidingValidationResults { get; }
         #endregion
 
         #region Methods
@@ -103,18 +82,6 @@ namespace Catel.Data
         /// <returns>Type of the property.</returns>
         /// <exception cref="PropertyNotRegisteredException">Thrown when the property is not registered.</exception>
         Type GetPropertyType(PropertyData property);
-
-        /// <summary>
-        /// Validates the current object for field and business rule errors.
-        /// </summary>
-        /// <param name="force">if set to <c>true</c>, a validation is forced. When the validation is not forced, it means 
-        /// that when the object is already validated, and no properties have been changed, no validation actually occurs 
-        /// since there is no reason for any values to have changed.
-        /// </param>
-        /// <remarks>
-        /// To check wether this object contains any errors, use the <see cref="INotifyDataErrorInfo.HasErrors"/> property.
-        /// </remarks>
-        void Validate(bool force = false);
         #endregion
     }
 }

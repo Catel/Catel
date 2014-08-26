@@ -54,7 +54,8 @@ namespace Catel.Test.MVVM.ViewModels
 
                 vm.FirstName = "some value";
 
-                var lastUpdated = vm.ValidationContext.LastModifiedTicks;
+                var validation = vm as IModelValidation;
+                var lastUpdated = validation.ValidationContext.LastModifiedTicks;
 
                 vm.FirstName = null;
 

@@ -27,6 +27,7 @@
                 var person = new Person();
                 person.FirstName = "first name";
                 person.LastName = "last name";
+                person.ClearIsDirty();
 
                 var viewModel = new TestViewModel(person);
 
@@ -127,15 +128,17 @@
             person.FirstName = "first name";
             person.LastName = "last name";
 
-            Assert.IsFalse(viewModel.HasErrors);
-            Assert.IsTrue(viewModel.HasWarnings);
+            var validation = viewModel as IModelValidation;
+
+            Assert.IsFalse(validation.HasErrors);
+            Assert.IsTrue(validation.HasWarnings);
             Assert.AreNotEqual(string.Empty, personAsWarning[Person.MiddleNameProperty.Name]);
             Assert.AreNotEqual(string.Empty, viewModelAsWarning[TestViewModel.MiddleNameProperty.Name]);
 
             person.MiddleName = "middle name";
 
-            Assert.IsFalse(viewModel.HasErrors);
-            Assert.IsFalse(viewModel.HasWarnings);
+            Assert.IsFalse(validation.HasErrors);
+            Assert.IsFalse(validation.HasWarnings);
             Assert.AreEqual(string.Empty, personAsWarning[Person.MiddleNameProperty.Name]);
             Assert.AreEqual(string.Empty, viewModelAsWarning[TestViewModel.MiddleNameProperty.Name]);
         }
@@ -188,7 +191,7 @@
             var person = new PersonWithDataAnnotations();
             var viewModel = new TestViewModel(person, true);
 
-            Assert.AreNotEqual(0, viewModel.ValidationContext.GetValidationCount());
+            Assert.AreNotEqual(0, viewModel.GetValidationContext().GetValidationCount());
         }
 
         [TestCase]
@@ -197,13 +200,13 @@
             var person = new PersonWithDataAnnotations();
             var viewModel = new TestViewModel(person, false);
 
-            Assert.AreEqual(0, person.ValidationContext.GetValidationCount());
-            Assert.AreEqual(0, viewModel.ValidationContext.GetValidationCount());
+            Assert.AreEqual(0, person.GetValidationContext().GetValidationCount());
+            Assert.AreEqual(0, viewModel.GetValidationContext().GetValidationCount());
 
             viewModel.FirstName = null;
 
-            Assert.AreNotEqual(0, person.ValidationContext.GetValidationCount());
-            Assert.AreNotEqual(0, viewModel.ValidationContext.GetValidationCount());
+            Assert.AreNotEqual(0, person.GetValidationContext().GetValidationCount());
+            Assert.AreNotEqual(0, viewModel.GetValidationContext().GetValidationCount());
         }
 
         [TestCase]
@@ -212,13 +215,13 @@
             var person = new PersonWithDataAnnotations();
             var viewModel = new TestViewModel(person, false);
 
-            Assert.AreEqual(0, person.ValidationContext.GetValidationCount());
-            Assert.AreEqual(0, viewModel.ValidationContext.GetValidationCount());
+            Assert.AreEqual(0, person.GetValidationContext().GetValidationCount());
+            Assert.AreEqual(0, viewModel.GetValidationContext().GetValidationCount());
 
             person.FirstName = null;
 
-            Assert.AreNotEqual(0, person.ValidationContext.GetValidationCount());
-            Assert.AreNotEqual(0, viewModel.ValidationContext.GetValidationCount());
+            Assert.AreNotEqual(0, person.GetValidationContext().GetValidationCount());
+            Assert.AreNotEqual(0, viewModel.GetValidationContext().GetValidationCount());
         }
 #endif
 
@@ -503,7 +506,7 @@
         [TestCase]
         public void ChildViewModelUpdatesValidation()
         {
-            Person person = new Person();
+            var person = new Person();
             person.LastName = "last name";
 
             var viewModel = new TestViewModel();
@@ -721,42 +724,44 @@
         public void ModelValidation_NotifyDataWarningInfo_FieldWarnings()
         {
             var testViewModel = new TestViewModel();
+            var validation = testViewModel as IModelValidation;
 
-            Assert.IsFalse(testViewModel.HasWarnings);
+            Assert.IsFalse(validation.HasWarnings);
 
             testViewModel.SpecialValidationModel = new SpecialValidationModel();
 
-            Assert.IsFalse(testViewModel.HasWarnings);
+            Assert.IsFalse(validation.HasWarnings);
 
             testViewModel.SpecialValidationModel.FieldWarningWhenEmpty = string.Empty;
 
-            Assert.IsTrue(testViewModel.HasWarnings);
+            Assert.IsTrue(validation.HasWarnings);
             Assert.AreNotEqual(string.Empty, ((IDataWarningInfo)testViewModel)["FieldWarningWhenEmpty"]);
 
             testViewModel.SpecialValidationModel.FieldWarningWhenEmpty = "no warning";
 
-            Assert.IsFalse(testViewModel.HasWarnings);
+            Assert.IsFalse(validation.HasWarnings);
         }
 
         [TestCase]
         public void ModelValidation_NotifyDataWarningInfo_BusinessWarnings()
         {
             var testViewModel = new TestViewModel();
+            var validation = testViewModel as IModelValidation;
 
-            Assert.IsFalse(testViewModel.HasWarnings);
+            Assert.IsFalse(validation.HasWarnings);
 
             testViewModel.SpecialValidationModel = new SpecialValidationModel();
 
-            Assert.IsFalse(testViewModel.HasWarnings);
+            Assert.IsFalse(validation.HasWarnings);
 
             testViewModel.SpecialValidationModel.BusinessRuleWarningWhenEmpty = string.Empty;
 
-            Assert.IsTrue(testViewModel.HasWarnings);
+            Assert.IsTrue(validation.HasWarnings);
             Assert.AreNotEqual(string.Empty, ((IDataWarningInfo)testViewModel).Warning);
 
             testViewModel.SpecialValidationModel.BusinessRuleWarningWhenEmpty = "no warning";
 
-            Assert.IsFalse(testViewModel.HasWarnings);
+            Assert.IsFalse(validation.HasWarnings);
         }
 #endif
 

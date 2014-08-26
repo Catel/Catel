@@ -231,38 +231,6 @@ namespace Catel.Test.Data
         #endregion
 
         #region Methods
-        public void SetFieldErrorOutsideValidation()
-        {
-            if (string.IsNullOrEmpty(ErrorWhenEmpty))
-            {
-                SetFieldValidationResult(FieldValidationResult.CreateError(ErrorWhenEmptyProperty, "Should not be empty"));
-            }
-        }
-
-        public void SetFieldWarningOutsideValidation()
-        {
-            if (string.IsNullOrEmpty(WarningWhenEmpty))
-            {
-                SetFieldValidationResult(FieldValidationResult.CreateWarning(WarningWhenEmptyProperty, "Should not be empty"));
-            }
-        }
-
-        public void SetBusinessRuleErrorOutsideValidation()
-        {
-            if (string.IsNullOrEmpty(BusinessRuleErrorWhenEmpty))
-            {
-                SetBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError("BusinessRuleErrorWhenEmpty should not be empty"));
-            }
-        }
-
-        public void SetBusinessRuleWarningOutsideValidation()
-        {
-            if (string.IsNullOrEmpty(BusinessRuleWarningWhenEmpty))
-            {
-                SetBusinessRuleValidationResult(BusinessRuleValidationResult.CreateWarning("BusinessRuleWarningWhenEmpty should not be empty"));
-            }
-        }
-
         protected override void ValidateFields(List<IFieldValidationResult> validationResults)
         {
             if (string.IsNullOrEmpty(ErrorWhenEmpty))

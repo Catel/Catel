@@ -78,7 +78,7 @@ namespace Catel.Windows.Controls
     /// Control for adding business rule validation to the form. Assign a value or binding to source for the business object or 
     /// collection of business objects to validate.
     /// </summary>
-    public class WarningAndErrorValidator : Control
+    public class WarningAndErrorValidator : Control, IUniqueIdentifyable
     {
         #region Fields
         /// <summary>

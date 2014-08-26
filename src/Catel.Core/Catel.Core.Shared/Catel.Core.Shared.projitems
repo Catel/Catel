@@ -77,6 +77,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\Exceptions\PropertyAlreadyRegisteredException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Exceptions\PropertyNotNullableException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Exceptions\PropertyNotRegisteredException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\IModelValidationExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\IParentExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\ModelBaseExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\ObservableObjectExtensions.cs" />
@@ -89,6 +90,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IModelEditor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IModelEqualityComparer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IModelSerialization.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IModelValidation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IParent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\ISavableModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IValidationContext.cs" />
@@ -154,6 +157,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\TagHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\UniqueIdentifierHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\UrlHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IUniqueIdentifyable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\Attributes\InjectAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\Attributes\InjectionConstructorAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\Attributes\ServiceLocatorRegistrationAttribute.cs" />

@@ -77,7 +77,7 @@ namespace Catel.MVVM
     /// </summary>
     /// <remarks>This view model base does not add any services. The technique specific implementation should take care of that
     /// (such as WPF, Silverlight, etc).</remarks>
-    public abstract partial class ViewModelBase : ModelBase, IViewModel, INotifyableViewModel, IRelationalViewModel
+    public abstract partial class ViewModelBase : ModelBase, IViewModel, INotifyableViewModel, IRelationalViewModel, IUniqueIdentifyable
     {
         #region Fields
         /// <summary>
@@ -470,9 +470,9 @@ namespace Catel.MVVM
         /// <c>true</c> if this instance has errors; otherwise, <c>false</c>.
         /// </value>
         [ExcludeFromValidation]
-        public new bool HasErrors
+        public bool HasErrors
         {
-            get { return base.HasErrors || _childViewModelsHaveErrors; }
+            get { return ((INotifyDataErrorInfo)this).HasErrors || _childViewModelsHaveErrors; }
         }
 
         /// <summary>
@@ -760,7 +760,25 @@ namespace Catel.MVVM
                     childViewModel.Closed += OnChildViewModelClosed;
                 }
 
-                if (childViewModel.HasErrors || childViewModel.HasWarnings)
+                var validate = false;
+
+                // The ViewModelBase.HasErrors has a diff implementation than IModelValidation, this might (or should) be changed
+                // but this is the easiest and most reliable way to make it work now
+                var viewModelBase = childViewModel as ViewModelBase;
+                if (viewModelBase != null && viewModelBase.HasErrors)
+                {
+                    validate = true;
+                }
+                else
+                {
+                    var validationContext = ((IModelValidation)childViewModel).ValidationContext;
+                    if (validationContext.HasErrors || validationContext.HasWarnings)
+                    {
+                        validate = true;
+                    }
+                }
+
+                if (validate)
                 {
                     Validate();
                 }
@@ -774,7 +792,7 @@ namespace Catel.MVVM
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         private void OnChildViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if ((e.PropertyName == "HasErrors") || (e.PropertyName == "HasWarnings"))
+            if ((e.PropertyName == "INotifyDataErrorInfo.HasErrors") || (e.PropertyName == "INotifyDataWarningInfo.HasWarnings"))
             {
                 Validate();
             }
@@ -1092,9 +1110,9 @@ namespace Catel.MVVM
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         private void OnModelPropertyChangedInternal(object sender, PropertyChangedEventArgs e)
         {
-            foreach (KeyValuePair<string, ViewModelToModelMapping> map in _viewModelToModelMap)
+            foreach (var map in _viewModelToModelMap)
             {
-                ViewModelToModelMapping mapping = map.Value;
+                var mapping = map.Value;
                 if (string.CompareOrdinal(mapping.ValueProperty, e.PropertyName) == 0)
                 {
                     // Check if this is the right model (duplicate mappings might exist)
