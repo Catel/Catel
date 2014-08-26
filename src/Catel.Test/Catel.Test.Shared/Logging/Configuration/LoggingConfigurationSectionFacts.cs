@@ -51,7 +51,7 @@ namespace Catel.Test.Logging.Configuration
 
             var assembly = typeof(FileLogListener).Assembly;
             var appDataDirectory = Catel.IO.Path.GetApplicationDataDirectory(assembly.Company(), assembly.Product());
-            Assert.AreEqual(fileLogListener.FilePath, Path.Combine(appDataDirectory, "CatelLogging.txt"));
+            Assert.AreEqual(fileLogListener.FilePath, Path.Combine(appDataDirectory, "CatelLogging.txt.log"));
         }
         #endregion
     }

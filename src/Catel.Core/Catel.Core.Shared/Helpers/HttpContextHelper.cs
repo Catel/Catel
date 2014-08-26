@@ -41,14 +41,13 @@ namespace Catel
             var httpContext = GetHttpContext();
             if (httpContext != null)
             {
-
                 var applicationInstanceProperty = httpContext.GetType().GetProperty("ApplicationInstance");
                 if (applicationInstanceProperty != null)
                 {
                     var applicationInstance = applicationInstanceProperty.GetValue(httpContext, null);
                     if (applicationInstance != null)
                     {
-                        
+                        return applicationInstance;
                     }
                 }
             }
