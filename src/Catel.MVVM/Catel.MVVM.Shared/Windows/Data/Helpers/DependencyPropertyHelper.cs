@@ -49,7 +49,7 @@ namespace Catel.Windows.Data
         /// <summary>
         /// The cache for the cache keys.
         /// </summary>
-        private static readonly ICacheStorage<Type, string> _cacheKeyCache = new CacheStorage<Type, string>();  
+        private static readonly ICacheStorage<Type, string> _cacheKeyCache = new CacheStorage<Type, string>();
 
         /// <summary>
         /// Gets all dependency properties of the specified <see cref="FrameworkElement"/>.
@@ -61,9 +61,22 @@ namespace Catel.Windows.Data
         {
             Argument.IsNotNull("frameworkElement", frameworkElement);
 
-            EnsureItemInCache(frameworkElement);
+            return GetDependencyProperties(frameworkElement.GetType());
+        }
 
-            return _cacheByParentType[frameworkElement.GetType()];
+        /// <summary>
+        /// Gets all dependency properties of the specified <see cref="Type"/>.
+        /// </summary>
+        /// <param name="viewType">The view type.</param>
+        /// <returns>List containing all dependency properties of the specified <see cref="FrameworkElement"/>.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewType"/> is <c>null</c>.</exception>
+        public static List<DependencyPropertyInfo> GetDependencyProperties(Type viewType)
+        {
+            Argument.IsNotNull("viewType", viewType);
+
+            EnsureItemInCache(viewType);
+
+            return _cacheByParentType[viewType];
         }
 
         /// <summary>
@@ -79,9 +92,11 @@ namespace Catel.Windows.Data
             Argument.IsNotNull("frameworkElement", frameworkElement);
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
 
-            EnsureItemInCache(frameworkElement);
+            var viewType = frameworkElement.GetType();
 
-            var propertyKey = GetDependencyPropertyCacheKey(frameworkElement, propertyName);
+            EnsureItemInCache(viewType);
+
+            var propertyKey = GetDependencyPropertyCacheKey(viewType, propertyName);
 
             return _cacheByPropertyName.ContainsKey(propertyKey) ? _cacheByPropertyName[propertyKey] : null;
         }
@@ -97,7 +112,7 @@ namespace Catel.Windows.Data
             Argument.IsNotNull("frameworkElement", frameworkElement);
             Argument.IsNotNull("dependencyProperty", dependencyProperty);
 
-            EnsureItemInCache(frameworkElement);
+            EnsureItemInCache(frameworkElement.GetType());
 
             return _cacheByDependencyProperty.ContainsKey(dependencyProperty) ? _cacheByDependencyProperty[dependencyProperty] : null;
         }
@@ -105,45 +120,40 @@ namespace Catel.Windows.Data
         /// <summary>
         /// Gets the dependency property cache key prefix.
         /// </summary>
-        /// <param name="frameworkElement">The framework element.</param>
+        /// <param name="viewType">The view type.</param>
         /// <returns>The dependency property cache key prefix based on the framework element..</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="frameworkElement"/> is <c>null</c>.</exception>
-        public static string GetDependencyPropertyCacheKeyPrefix(FrameworkElement frameworkElement)
+        /// <exception cref="ArgumentNullException">The <paramref name="viewType"/> is <c>null</c>.</exception>
+        public static string GetDependencyPropertyCacheKeyPrefix(Type viewType)
         {
-            Argument.IsNotNull("frameworkElement", frameworkElement);
+            Argument.IsNotNull("viewType", viewType);
 
-            var frameworkElementType = frameworkElement.GetType();
-
-            return _cacheKeyCache.GetFromCacheOrFetch(frameworkElementType, () => frameworkElement.GetType().FullName.Replace(".", "_"));
+            return _cacheKeyCache.GetFromCacheOrFetch(viewType, () => viewType.FullName.Replace(".", "_"));
         }
 
         /// <summary>
         /// Gets the dependency property key for the cache.
         /// </summary>
-        /// <param name="frameworkElement">The framework element.</param>
+        /// <param name="viewType">The view type.</param>
         /// <param name="propertyName">Name of the property.</param>
         /// <returns>The key to use in the cache.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="frameworkElement"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
-        public static string GetDependencyPropertyCacheKey(FrameworkElement frameworkElement, string propertyName)
+        public static string GetDependencyPropertyCacheKey(Type viewType, string propertyName)
         {
-            Argument.IsNotNull("frameworkElement", frameworkElement);
+            Argument.IsNotNull("viewType", viewType);
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
 
-            return string.Format("{0}_{1}", GetDependencyPropertyCacheKeyPrefix(frameworkElement), propertyName);
+            return string.Format("{0}_{1}", GetDependencyPropertyCacheKeyPrefix(viewType), propertyName);
         }
 
         /// <summary>
         /// Ensures that the dependency properties of the specified <see cref="FrameworkElement"/> are in the cache.
         /// </summary>
-        /// <param name="frameworkElement">The framework element.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="frameworkElement"/> is <c>null</c>.</exception>
-        private static void EnsureItemInCache(this FrameworkElement frameworkElement)
+        /// <param name="viewType">The view type.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewType"/> is <c>null</c>.</exception>
+        private static void EnsureItemInCache(this Type viewType)
         {
-            Argument.IsNotNull("frameworkElement", frameworkElement);
-
-            var type = frameworkElement.GetType();
-            if (_cacheByParentType.ContainsKey(type))
+            if (_cacheByParentType.ContainsKey(viewType))
             {
                 return;
             }
@@ -151,10 +161,10 @@ namespace Catel.Windows.Data
             var properties = new List<DependencyPropertyInfo>();
 
             var typeMembers = new List<MemberInfo>();
-            typeMembers.AddRange(type.GetFieldsEx(BindingFlagsHelper.GetFinalBindingFlags(true, true)));
-            typeMembers.AddRange(type.GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(true, true)));
+            typeMembers.AddRange(viewType.GetFieldsEx(BindingFlagsHelper.GetFinalBindingFlags(true, true)));
+            typeMembers.AddRange(viewType.GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(true, true)));
 
-            foreach (MemberInfo member in typeMembers)
+            foreach (var member in typeMembers)
             {
                 var fieldInfo = member as FieldInfo;
                 var propertyInfo = member as PropertyInfo;
@@ -190,14 +200,14 @@ namespace Catel.Windows.Data
                 DependencyProperty dependencyProperty;
                 if (fieldInfo != null)
                 {
-                    dependencyProperty = (DependencyProperty)fieldInfo.GetValue(frameworkElement);
+                    dependencyProperty = (DependencyProperty)fieldInfo.GetValue(null);
                 }
                 else if (propertyInfo != null)
                 {
 #if NETFX_CORE
-                    dependencyProperty = (DependencyProperty)propertyInfo.GetValue(frameworkElement);
+                    dependencyProperty = (DependencyProperty)propertyInfo.GetValue(null);
 #else
-                    dependencyProperty = (DependencyProperty)propertyInfo.GetValue(frameworkElement, null);
+                    dependencyProperty = (DependencyProperty)propertyInfo.GetValue(null, null);
 #endif
                 }
                 else
@@ -207,12 +217,12 @@ namespace Catel.Windows.Data
 
                 properties.Add(new DependencyPropertyInfo(dependencyProperty, name));
 
-                string propertyKey = GetDependencyPropertyCacheKey(frameworkElement, name);
+                string propertyKey = GetDependencyPropertyCacheKey(viewType, name);
                 _cacheByPropertyName[propertyKey] = dependencyProperty;
                 _cacheByDependencyProperty[dependencyProperty] = name;
             }
-            
-            _cacheByParentType[type] = properties;
+
+            _cacheByParentType[viewType] = properties;
         }
     }
 }

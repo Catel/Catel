@@ -42,18 +42,25 @@ namespace Catel.Services
         {
             Argument.IsNotNull("source", source);
 
-            List<string> propertyValues;
+            var propertyValues = new List<string>();
 
             if (string.IsNullOrWhiteSpace(property))
             {
-                // Filter items directly
-                propertyValues = (from x in source.Cast<string>()
-                                  select x).ToList();
+                try
+                {
+                    // Filter items directly
+                    propertyValues.AddRange(from x in source.Cast<string>()
+                                            select x);
+                }
+                catch (Exception)
+                {
+                    // Swallow
+                }
             }
             else
             {
-                propertyValues = (from x in source.Cast<object>()
-                                  select GetPropertyValue(x, property)).ToList();
+                propertyValues.AddRange(from x in source.Cast<object>()
+                                        select GetPropertyValue(x, property));
             }
 
             propertyValues = propertyValues.Where(x => !string.Equals(x, "null")).Distinct().ToList();

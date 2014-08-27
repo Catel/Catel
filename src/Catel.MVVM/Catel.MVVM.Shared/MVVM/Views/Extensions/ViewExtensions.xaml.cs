@@ -11,8 +11,11 @@ namespace Catel.MVVM.Views
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Windows.Data;
     using Windows.Threading;
     using Windows;
+    using IoC;
+    using Reflection;
 
 #if NETFX_CORE
     using global::Windows.UI.Xaml;
@@ -25,6 +28,44 @@ namespace Catel.MVVM.Views
 
     public static partial class ViewExtensions
     {
+        private static readonly HashSet<Type> _autoDetectedViewtypes = new HashSet<Type>(); 
+
+        /// <summary>
+        /// Automatically detects view properties to subscribe to by searching for dependency properties
+        /// decorated with the <see cref="ViewToViewModelAttribute"/>.
+        /// </summary>
+        /// <param name="viewType">The view type.</param>
+        public static void AutoDetectViewPropertiesToSubscribe(this Type viewType)
+        {
+            Argument.IsNotNull("viewType", viewType);
+
+            lock (_autoDetectedViewtypes)
+            {
+                if (_autoDetectedViewtypes.Contains(viewType))
+                {
+                    return;
+                }
+
+                var serviceLocator = ServiceLocator.Default;
+                var viewPropertySelector = serviceLocator.ResolveType<IViewPropertySelector>();
+
+                var dependencyProperties = Catel.Windows.Data.DependencyPropertyHelper.GetDependencyProperties(viewType);
+                foreach (var dependencyProperty in dependencyProperties)
+                {
+                    var propertyInfo = viewType.GetPropertyEx(dependencyProperty.PropertyName);
+                    if (propertyInfo != null)
+                    {
+                        if (AttributeHelper.IsDecoratedWithAttribute<ViewToViewModelAttribute>(propertyInfo))
+                        {
+                            viewPropertySelector.AddPropertyToSubscribe(dependencyProperty.PropertyName, viewType);
+                        }
+                    }
+                }
+
+                _autoDetectedViewtypes.Add(viewType);
+            }
+        }
+
         /// <summary>
         /// Gets the parent of the specified element, both for Silverlight and WPF.
         /// </summary>

@@ -88,11 +88,6 @@ namespace Catel.MVVM.Providers
         private static readonly IViewPropertySelector _viewPropertySelector;
 
         /// <summary>
-        /// A list of dependency properties to subscribe to per type.
-        /// </summary>
-        private static readonly ICacheStorage<Type, List<string>> _viewPropertiesToSubscribe = new CacheStorage<Type, List<string>>();
-
-        /// <summary>
         /// The view model instances currently held by this provider. This value should only be used
         /// inside the <see cref="ViewModel"/> property. For accessing the view model, use the 
         /// <see cref="ViewModel"/> property.
@@ -406,7 +401,7 @@ namespace Catel.MVVM.Providers
         /// <summary>
         /// The view.
         /// </summary>
-        IView IViewLoadState.View 
+        IView IViewLoadState.View
         {
             get { return TargetView; }
         }
@@ -475,34 +470,31 @@ namespace Catel.MVVM.Providers
         {
             var targetViewType = TargetViewType;
 
-            return _viewPropertiesToSubscribe.GetFromCacheOrFetch(targetViewType, () =>
+            var finalProperties = new List<string>();
+
+            if ((_viewPropertySelector == null) || (_viewPropertySelector.MustSubscribeToAllViewProperties(targetViewType)))
             {
                 var viewProperties = TargetView.GetProperties();
-                var finalProperties = new List<string>();
-
-                if ((_viewPropertySelector == null) || (_viewPropertySelector.MustSubscribeToAllViewProperties(targetViewType)))
+                finalProperties.AddRange(viewProperties);
+            }
+            else
+            {
+                var propertiesToSubscribe = _viewPropertySelector.GetViewPropertiesToSubscribeTo(targetViewType);
+                if (!propertiesToSubscribe.Contains("DataContext"))
                 {
-                    finalProperties.AddRange(viewProperties);
-                }
-                else
-                {
-                    var propertiesToSubscribe = _viewPropertySelector.GetViewPropertiesToSubscribeTo(targetViewType);
-                    if (!propertiesToSubscribe.Contains("DataContext"))
-                    {
-                        propertiesToSubscribe.Add("DataContext");
-                    }
-
-                    foreach (var gatheredViewProperty in viewProperties)
-                    {
-                        if (propertiesToSubscribe.Contains(gatheredViewProperty))
-                        {
-                            finalProperties.Add(gatheredViewProperty);
-                        }
-                    }
+                    propertiesToSubscribe.Add("DataContext");
                 }
 
-                return finalProperties;
-            });
+                foreach (var propertyToSubscribe in propertiesToSubscribe)
+                {
+                    if (propertiesToSubscribe.Contains(propertyToSubscribe))
+                    {
+                        finalProperties.Add(propertyToSubscribe);
+                    }
+                }
+            }
+
+            return finalProperties;
         }
 
         /// <summary>

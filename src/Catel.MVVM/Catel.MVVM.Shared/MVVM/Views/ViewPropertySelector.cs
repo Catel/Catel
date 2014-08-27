@@ -6,6 +6,7 @@
 
 namespace Catel.MVVM.Views
 {
+    using Catel.Logging;
     using System;
     using System.Collections.Generic;
 
@@ -20,6 +21,49 @@ namespace Catel.MVVM.Views
     /// </summary>
     public class ViewPropertySelector : IViewPropertySelector
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        private readonly List<string> _allViewsProperties = new List<string>();
+        private readonly Dictionary<Type, List<string>> _viewProperties = new Dictionary<Type, List<string>>();
+
+        /// <summary>
+        /// Adds the property to subscribe to.
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <param name="targetViewType">Type of the target view. If <c>null</c>, all target views will subscribe to this property.</param>
+        public void AddPropertyToSubscribe(string propertyName, Type targetViewType)
+        {
+            if (string.IsNullOrWhiteSpace(propertyName))
+            {
+                return;
+            }
+
+            if (targetViewType == null)
+            {
+                Log.Debug("Added property '{0}' on all views to subscribe to", propertyName);
+
+                if (!_allViewsProperties.Contains(propertyName))
+                {
+                    _allViewsProperties.Add(propertyName);
+                }
+            }
+            else
+            {
+                Log.Debug("Added property '{0}.{1}' to subscribe to", targetViewType.Name, propertyName);
+
+                if (!_viewProperties.ContainsKey(targetViewType))
+                {
+                    _viewProperties[targetViewType] = new List<string>();
+                }
+
+                var properties = _viewProperties[targetViewType];
+                if (!properties.Contains(propertyName))
+                {
+                    properties.Add(propertyName);
+                }
+            }
+        }
+
         /// <summary>
         /// Determines whether all view properties must be subscribed for this type.
         /// </summary>
@@ -40,7 +84,24 @@ namespace Catel.MVVM.Views
         /// <returns>The list of view properties to subscribe to.</returns>
         public virtual List<string> GetViewPropertiesToSubscribeTo(Type targetViewType)
         {
-            return new List<string>();
+            var properties = new List<string>();
+
+            properties.AddRange(_allViewsProperties);
+
+            if (_viewProperties.ContainsKey(targetViewType))
+            {
+                var viewProperties = _viewProperties[targetViewType];
+
+                foreach (var property in viewProperties)
+                {
+                    if (!properties.Contains(property))
+                    {
+                        properties.Add(property);
+                    }
+                }
+            }
+
+            return properties;
         }
     }
 
