@@ -21,16 +21,16 @@ namespace Catel.Data
     {
         #region Properties
         /// <summary>
-        /// Gets the <see cref="SerializationMode"/> of this object.
-        /// </summary>
-        /// <value>The serialization mode.</value>
-        SerializationMode Mode { get; }
-
-        /// <summary>
         /// Gets the bytes of the current binary serialized data object.
         /// </summary>
         /// <value>The bytes that represent the object data.</value>
         byte[] Bytes { get; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="SerializationMode"/> of this object.
+        /// </summary>
+        /// <value>The serialization mode.</value>
+        SerializationMode Mode { get; set; }
         #endregion
 
         #region Methods

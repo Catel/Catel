@@ -135,6 +135,16 @@ namespace Catel.Data
         [field: NonSerialized]
 #endif
         private event EventHandler<DataErrorsChangedEventArgs> _warningsChanged;
+
+#if NET
+        [field: NonSerialized]
+#endif
+        private event EventHandler<ValidationEventArgs> _validating;
+
+#if NET
+        [field: NonSerialized]
+#endif
+        private event EventHandler<ValidationEventArgs> _validated;
         #endregion
 
         #region Properties
@@ -333,10 +343,11 @@ namespace Catel.Data
         /// <summary>
         /// Occurs when the object is validating.
         /// </summary>
-#if NET
-        [field: NonSerialized]
-#endif
-        public event EventHandler Validating;
+        event EventHandler<ValidationEventArgs> IModelValidation.Validating
+        {
+            add { _validating += value; }
+            remove { _validating -= value; }
+        }
 
         /// <summary>
         /// Occurs when the object is about the validate the fields.
@@ -373,10 +384,11 @@ namespace Catel.Data
         /// <summary>
         /// Occurs when the object is validated.
         /// </summary>
-#if NET
-        [field: NonSerialized]
-#endif
-        public event EventHandler Validated;
+        event EventHandler<ValidationEventArgs> IModelValidation.Validated
+        {
+            add { _validated += value; }
+            remove { _validated -= value; }
+        }
         #endregion
 
         #region Methods
@@ -581,7 +593,11 @@ namespace Catel.Data
         /// <param name="validationContext">The validation context.</param>
         protected virtual void OnValidating(IValidationContext validationContext)
         {
-            Validating.SafeInvoke(this);
+            var handler = _validating;
+            if (handler != null)
+            {
+                handler(this, new ValidationEventArgs(validationContext));
+            }
         }
 
         /// <summary>
@@ -671,7 +687,11 @@ namespace Catel.Data
         /// <param name="validationContext">The validation context.</param>
         protected virtual void OnValidated(IValidationContext validationContext)
         {
-            Validated.SafeInvoke(this);
+            var handler = _validated;
+            if (handler != null)
+            {
+                handler(this, new ValidationEventArgs(validationContext));
+            }
         }
 
         /// <summary>
@@ -684,7 +704,22 @@ namespace Catel.Data
         /// <remarks>
         /// To check whether this object contains any errors, use the <see cref="INotifyDataErrorInfo.HasErrors"/> property.
         /// </remarks>
-        public void Validate(bool force = false)
+        void IModelValidation.Validate(bool force)
+        {
+            Validate(force);
+        }
+
+        /// <summary>
+        /// Validates the current object for field and business rule errors.
+        /// </summary>
+        /// <param name="force">If set to <c>true</c>, a validation is forced. When the validation is not forced, it means 
+        /// that when the object is already validated, and no properties have been changed, no validation actually occurs 
+        /// since there is no reason for any values to have changed.
+        /// </param>
+        /// <remarks>
+        /// To check whether this object contains any errors, use the <see cref="INotifyDataErrorInfo.HasErrors"/> property.
+        /// </remarks>
+        protected void Validate(bool force = false)
         {
             Validate(force, true);
         }

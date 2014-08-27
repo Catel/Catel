@@ -151,7 +151,7 @@ namespace Catel.Data
 
             Log.Debug("Loaded object");
 
-            var resultAsModelBase = result as ModelBase;
+            var resultAsModelBase = result as ISavableModel;
             if (resultAsModelBase != null)
             {
                 resultAsModelBase.Mode = mode;

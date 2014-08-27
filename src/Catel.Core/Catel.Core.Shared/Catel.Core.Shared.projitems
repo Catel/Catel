@@ -72,6 +72,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\CompositeValidatorProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\EventArgs\AdvancedPropertyChangedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\EventArgs\AdvancedPropertyChangingEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\EventArgs\ValidationEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Exceptions\InvalidPropertyException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Exceptions\InvalidPropertyValueException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Exceptions\PropertyAlreadyRegisteredException.cs" />

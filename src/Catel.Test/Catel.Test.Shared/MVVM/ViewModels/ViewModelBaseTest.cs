@@ -427,11 +427,11 @@
             Assert.IsFalse(childViewModel.HasErrors);
 
             ((IRelationalViewModel)viewModel).RegisterChildViewModel(childViewModel);
-            viewModel.Validating += delegate
-                                        {
-                                            validationTriggered = true;
-                                            validatedEvent.Set();
-                                        };
+            ((IModelValidation)viewModel).Validating += delegate
+            {
+                validationTriggered = true;
+                validatedEvent.Set();
+            };
 
             childViewModel.FirstName = string.Empty;
 
@@ -475,7 +475,7 @@
             Assert.IsFalse(childViewModel.HasErrors);
 
             ((IRelationalViewModel)viewModel).RegisterChildViewModel(childViewModel);
-            viewModel.Validating += delegate
+            ((IModelValidation)viewModel).Validating += delegate
             {
                 validationTriggered = true;
                 validatedEvent.Set();
@@ -550,14 +550,15 @@
             person.FirstName = "first name";
             person.LastName = "last name";
 
+            var model = person as IModel;
             var viewModel = new TestViewModel(person);
-            Assert.IsTrue(person.IsInEditSession);
+            Assert.IsTrue(model.IsInEditSession);
 
             viewModel.FirstName = "new first name";
 
             await viewModel.SaveAndCloseViewModel();
 
-            Assert.IsFalse(person.IsInEditSession);
+            Assert.IsFalse(model.IsInEditSession);
             Assert.AreEqual("new first name", person.FirstName);
         }
 
@@ -568,14 +569,15 @@
             person.FirstName = "first name";
             person.LastName = "last name";
 
+            var model = person as IModel;
             var viewModel = new TestViewModel(person);
-            Assert.IsTrue(person.IsInEditSession);
+            Assert.IsTrue(model.IsInEditSession);
 
             viewModel.FirstName = "new first name";
 
             await viewModel.CancelAndCloseViewModel();
 
-            Assert.IsFalse(person.IsInEditSession);
+            Assert.IsFalse(model.IsInEditSession);
             Assert.AreEqual("first name", person.FirstName);            
         }
 

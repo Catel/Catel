@@ -262,7 +262,7 @@ namespace Catel.Test.Data
                 var model = new LatePropertyRegistrationModel();
                 var validation = model as IModelValidation;
 
-                model.Validate(true);
+                validation.Validate(true);
                 Assert.IsFalse(validation.HasErrors);
 
                 var propertyData = PropertyDataManager.Default.GetPropertyData(typeof(LatePropertyRegistrationModel), "CanSave");

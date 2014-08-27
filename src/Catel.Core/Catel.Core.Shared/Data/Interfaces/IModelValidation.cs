@@ -7,6 +7,7 @@
 
 namespace Catel.Data
 {
+    using System;
     using System.ComponentModel;
 
     /// <summary>
@@ -58,6 +59,16 @@ namespace Catel.Data
         /// <see cref="ValidationContext"/>.
         /// </summary>
         bool IsHidingValidationResults { get; }
+
+        /// <summary>
+        /// Occurs when the object is validating.
+        /// </summary>
+        event EventHandler<ValidationEventArgs> Validating;
+
+        /// <summary>
+        /// Occurs when the object is validated.
+        /// </summary>
+        event EventHandler<ValidationEventArgs> Validated;
 
         /// <summary>
         /// Validates the current object for field and business rule errors.

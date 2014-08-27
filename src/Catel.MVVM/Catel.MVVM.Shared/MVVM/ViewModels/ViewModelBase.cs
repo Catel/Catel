@@ -341,7 +341,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Occurs when the view model has been initialized.
         /// </summary>
-        public new event EventHandler<EventArgs> Initialized;
+        public event EventHandler<EventArgs> Initialized;
 
         /// <summary>
         /// Occurs when a command on the view model has been executed.
@@ -693,7 +693,7 @@ namespace Catel.MVVM
                     {
                         if (_modelObjectsInfo[modelKeyValuePair.Key].SupportIEditableObject)
                         {
-                            var modelKeyValuePairValueAsModelBaseBase = modelKeyValuePair.Value as ModelBase;
+                            var modelKeyValuePairValueAsModelBaseBase = modelKeyValuePair.Value as IModel;
                             if ((modelKeyValuePairValueAsModelBaseBase == null) || !modelKeyValuePairValueAsModelBaseBase.IsInEditSession)
                             {
                                 EditableObjectHelper.BeginEditObject(modelKeyValuePair.Value);

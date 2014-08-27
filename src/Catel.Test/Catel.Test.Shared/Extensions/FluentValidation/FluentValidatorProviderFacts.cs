@@ -41,7 +41,7 @@ namespace Catel.Test.Extensions.FluentValidation
                 var personViewModel = new PersonViewModelWithModel { Person = new Person { FirstName = "Igr Alexánder", LastName = string.Empty } };
                 
                 // I have to add this call here
-                personViewModel.Validate();
+                ((IModelValidation)personViewModel).Validate();
 
                 var validationSummary = personViewModel.GetValidationContext().GetValidationSummary("Person");
 
@@ -56,7 +56,7 @@ namespace Catel.Test.Extensions.FluentValidation
             {
                 var personViewModel = new PersonViewModel { PersonFirstName = "Igr Alexánder", PersonLastName = "Fernández Saúco" };
 
-                personViewModel.Validate();
+                ((IModelValidation)personViewModel).Validate();
 
                 var validationSummary = personViewModel.GetValidationContext().GetValidationSummary("Person");
 
@@ -71,7 +71,7 @@ namespace Catel.Test.Extensions.FluentValidation
             public void ViewModelBaseWithFieldErrorsAndBusinessRuleWarningsValidationTest()
             {
                 var personViewModel = new PersonViewModel();
-                personViewModel.Validate();
+                ((IModelValidation)personViewModel).Validate();
 
                 var validationSummary = personViewModel.GetValidationContext().GetValidationSummary("Person");
 

@@ -136,7 +136,7 @@ namespace Catel.MVVM
                         continue;
                     }
 
-                    var modelValueAsModelBaseBase = model.Value as ModelBase;
+                    var modelValueAsModelBaseBase = model.Value as IModelValidation;
                     if (modelValueAsModelBaseBase != null)
                     {
                         modelValueAsModelBaseBase.Validate();

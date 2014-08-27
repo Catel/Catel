@@ -30,6 +30,21 @@ namespace Catel.Data
         /// </summary>
         /// <value><c>true</c> if this object is dirty; otherwise, <c>false</c>.</value>
         bool IsDirty { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether the object is currently in an edit session, started by the <see cref="IEditableObject.BeginEdit"/> method.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is currently in an edit session; otherwise, <c>false</c>.
+        /// </value>
+        bool IsInEditSession { get; }
+        #endregion
+
+        #region Events
+        /// <summary>
+        /// Occurs when the object is initialized.
+        /// </summary>
+        event EventHandler<EventArgs> Initialized;
         #endregion
 
         #region Methods
