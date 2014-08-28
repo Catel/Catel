@@ -178,6 +178,7 @@ Added/fixed:
 (x) CTL-504 Catel.Fody GenerateXmlSchema and WeaveProperties Bug where web service models were not being
     deserialized correctly
 (x) CTL-512 Closing a window via CloseViewModel in the view model does not work
+(x) CTL-517 Fixed possible NullReferenceException in AutoScroll behavior
 
 Roadmap:
 ========

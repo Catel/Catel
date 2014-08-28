@@ -158,17 +158,19 @@ namespace Catel.Windows.Interactivity
 
         private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (_scrollViewer != null)
+            if (_isScrollbarAtEnd)
             {
-                if (_isScrollbarAtEnd)
-                {
-                    ScrollToEnd();
-                }
+                ScrollToEnd();
             }
         }
 
         private void ScrollToEnd()
         {
+            if (_scrollViewer == null)
+            {
+                return;
+            }
+
             switch (ScrollDirection)
             {
                 case ScrollDirection.Top:
