@@ -68,6 +68,14 @@ namespace Catel.Data.Repositories
         TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate = null);
 
         /// <summary>
+        /// Gets an new entity instance, which may be a proxy if the entity meets the proxy requirements and the underlying context is configured to create proxies.
+        /// <para />
+        /// Note that the returned proxy entity is NOT added or attached to the set.
+        /// </summary>
+        /// <returns>The proxy entity</returns>
+        TEntity Create();
+
+        /// <summary>
         /// Adds the specified entity to the repository.
         /// </summary>
         /// <param name="entity">The entity to add.</param>

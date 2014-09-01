@@ -7,6 +7,7 @@
 namespace Catel.MVVM.CSLA
 {
     using System;
+    using System.ComponentModel;
     using System.Threading.Tasks;
     using Auditing;
     using Csla.Xaml;
@@ -17,7 +18,7 @@ namespace Catel.MVVM.CSLA
     /// </summary>
     /// <typeparam name="TModel">The type of the T model.</typeparam>
     [CLSCompliant(false)]
-    public abstract class ViewModelBase<TModel> : ViewModel<TModel>, IViewModel
+    public abstract class ViewModelBase<TModel> : ViewModel<TModel>, IViewModel, IUniqueIdentifyable
     {
         #region Fields
         /// <summary>
@@ -103,46 +104,6 @@ namespace Catel.MVVM.CSLA
         /// </summary>
         /// <value><c>true</c> if the view model is closed; otherwise, <c>false</c>.</value>
         public bool IsClosed { get; private set; }
-
-        /// <summary>
-        /// Gets a value indicating whether this instance has errors.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance has errors; otherwise, <c>false</c>.
-        /// </value>
-        bool MVVM.IViewModel.HasErrors
-        {
-            get
-            {
-                var businessBase = Model as Csla.Core.BusinessBase;
-                if (businessBase == null)
-                {
-                    return false;
-                }
-
-                return !businessBase.IsValid;
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether this instance has warnings.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance has warnings; otherwise, <c>false</c>.
-        /// </value>
-        bool MVVM.IViewModel.HasWarnings
-        {
-            get
-            {
-                var businessBase = Model as Csla.Core.BusinessBase;
-                if (businessBase == null)
-                {
-                    return false;
-                }
-
-                return !businessBase.IsValid;
-            }
-        }
 
         /// <summary>
         /// Gets a value indicating whether this instance has a dirty model.

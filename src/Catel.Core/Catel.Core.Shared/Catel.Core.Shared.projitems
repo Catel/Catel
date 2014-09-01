@@ -72,11 +72,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\CompositeValidatorProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\EventArgs\AdvancedPropertyChangedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\EventArgs\AdvancedPropertyChangingEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\EventArgs\ValidationEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Exceptions\InvalidPropertyException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Exceptions\InvalidPropertyValueException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Exceptions\PropertyAlreadyRegisteredException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Exceptions\PropertyNotNullableException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Exceptions\PropertyNotRegisteredException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\IModelValidationExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\IParentExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\ModelBaseExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\ObservableObjectExtensions.cs" />
@@ -89,6 +91,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IModelEditor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IModelEqualityComparer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IModelSerialization.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IModelValidation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IParent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\ISavableModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IValidationContext.cs" />
@@ -146,6 +150,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\EnvironmentHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ExpressionHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\HashHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\HttpContextHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ObjectHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ObjectToStringHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ParallelHelper.cs" />
@@ -154,6 +159,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\TagHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\UniqueIdentifierHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\UrlHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IUniqueIdentifyable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\Attributes\InjectAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\Attributes\InjectionConstructorAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\Attributes\ServiceLocatorRegistrationAttribute.cs" />
@@ -208,6 +214,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Configuration\LogListenerConfigurationCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\EventArgs\LogMessageEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Extensions\LogExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\Formatters\Interfaces\IJsonLogFormatter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\Formatters\JsonLogFormatter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Interfaces\IBatchLogListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Interfaces\ILog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Interfaces\ILogListener.cs" />
@@ -219,8 +227,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\DebugLogListener.sl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\DebugLogListener.winrt.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\DebugLogListener.wp.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\EtwLogListener.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\EventLogListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\FileLogListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\RollingInMemoryLogListener.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\SeqLogListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Log.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\LogBatchEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\LogEntry.cs" />
@@ -321,7 +332,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\Models\LanguageResourceKey.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Models\LanguageResourceSource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\ServiceBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SupportedPlatforms.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Platforms.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Test\ExceptionTester.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Text\Extensions\StringBuilderExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Helpers\TaskHelper.cs" />

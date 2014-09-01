@@ -9,7 +9,9 @@ namespace Catel.Logging
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Base class for log listeners that can write in batches.
@@ -18,6 +20,8 @@ namespace Catel.Logging
     {
         #region Fields
         private readonly object _lock = new object();
+        private readonly object _flushLock = new object();
+        private int _flushCount;
 
         private readonly Timer _timer;
         private List<LogBatchEntry> _logBatch = new List<LogBatchEntry>();
@@ -28,7 +32,7 @@ namespace Catel.Logging
         /// Initializes a new instance of the <see cref="BatchLogListenerBase" /> class.
         /// </summary>
         /// <param name="maxBatchCount">The maximum batch count.</param>
-        public BatchLogListenerBase(int maxBatchCount = 50)
+        public BatchLogListenerBase(int maxBatchCount = 100)
         {
             MaximumBatchCount = maxBatchCount;
 
@@ -64,7 +68,9 @@ namespace Catel.Logging
 
                 if (_logBatch.Count >= MaximumBatchCount)
                 {
+#pragma warning disable 4014
                     Flush();
+#pragma warning restore 4014
                 }
             }
         }
@@ -75,15 +81,18 @@ namespace Catel.Logging
             {
                 if (_logBatch.Count > 0)
                 {
+#pragma warning disable 4014
                     Flush();
+#pragma warning restore 4014
                 }
             }
         }
 
         /// <summary>
-        /// Flushes the current queue.
+        /// Flushes the current queue asynchronous.
         /// </summary>
-        public void Flush()
+        /// <returns>Task so it can be awaited.</returns>
+        public async Task Flush()
         {
             List<LogBatchEntry> batchToSubmit;
 
@@ -94,9 +103,31 @@ namespace Catel.Logging
                 _logBatch = new List<LogBatchEntry>();
             }
 
+            await Task.Factory.StartNew(() =>
+            {
+                while (true)
+                {
+                    lock (_flushLock)
+                    {
+                        if (_flushCount == 0)
+                        {
+                            _flushCount++;
+                            return;
+                        }
+                    }
+
+                    ThreadHelper.Sleep(10);
+                }
+            });
+
             if (batchToSubmit.Count > 0)
             {
-                WriteBatch(batchToSubmit);
+                await WriteBatch(batchToSubmit);
+            }
+
+            lock (_flushLock)
+            {
+                _flushCount--;
             }
         }
 
@@ -104,7 +135,8 @@ namespace Catel.Logging
         /// Writes the batch of entries.
         /// </summary>
         /// <param name="batchEntries">The batch entries.</param>
-        protected abstract void WriteBatch(List<LogBatchEntry> batchEntries);
+        /// <returns>Task so this can be done asynchronously.</returns>
+        protected abstract Task WriteBatch(List<LogBatchEntry> batchEntries);
         #endregion
     }
 }

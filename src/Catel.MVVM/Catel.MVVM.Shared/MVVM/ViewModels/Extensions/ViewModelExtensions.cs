@@ -31,7 +31,7 @@ namespace Catel.MVVM
             // so always assume invalidated
             return true;
 #else
-            if (viewModel.ValidationContext.LastModifiedTicks > lastUpdated)
+            if (((IModelValidation)viewModel).ValidationContext.LastModifiedTicks > lastUpdated)
             {
                 return true;
             }
@@ -108,7 +108,7 @@ namespace Catel.MVVM
         {
             var validationContext = new ValidationContext();
 
-            validationContext.SynchronizeWithContext(viewModel.ValidationContext, true);
+            validationContext.SynchronizeWithContext(((IModelValidation)viewModel).ValidationContext, true);
 
             if (recursive)
             {

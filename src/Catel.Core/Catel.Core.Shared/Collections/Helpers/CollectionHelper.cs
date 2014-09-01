@@ -10,6 +10,7 @@
 namespace Catel.Collections
 {
     using System.Collections;
+    using System.Runtime.InteropServices;
 
     /// <summary>
     /// Collection helper class.
@@ -41,16 +42,16 @@ namespace Catel.Collections
                 return true;
             }
 
-            IEnumerator enumeratorA = listA.GetEnumerator();
-            IEnumerator enumeratorB = listB.GetEnumerator();
+            var enumeratorA = listA.GetEnumerator();
+            var enumeratorB = listB.GetEnumerator();
 
-            bool enumAHasValue = enumeratorA.MoveNext();
-            bool enumBHasValue = enumeratorB.MoveNext();
+            var enumAHasValue = enumeratorA.MoveNext();
+            var enumBHasValue = enumeratorB.MoveNext();
 
             while (enumAHasValue && enumBHasValue)
             {
-                object currentA = enumeratorA.Current;
-                object currentB = enumeratorB.Current;
+                var currentA = enumeratorA.Current;
+                var currentB = enumeratorB.Current;
 
                 if (currentA == currentB)
                 {
@@ -60,12 +61,7 @@ namespace Catel.Collections
                     continue;
                 }
 
-                if ((currentA == null) || (currentB == null))
-                {
-                    return false;
-                }
-
-                if (!currentA.Equals(currentB))
+                if (!ObjectHelper.AreEqual(currentA, currentB))
                 {
                     return false;
                 }

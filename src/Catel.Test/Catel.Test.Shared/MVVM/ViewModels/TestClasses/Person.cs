@@ -150,6 +150,11 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         #endregion
 
         #region Methods
+        public void ClearIsDirty()
+        {
+            IsDirty = false;
+        }
+
         protected override void ValidateFields(List<IFieldValidationResult> validationResults)
         {
             if (string.IsNullOrEmpty(FirstName))

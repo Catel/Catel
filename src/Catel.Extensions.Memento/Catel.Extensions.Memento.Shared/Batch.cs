@@ -13,7 +13,7 @@ namespace Catel.Memento
     /// <summary>
     /// Represents a batch of memento actions.
     /// </summary>
-    public class Batch : IMementoBatch
+    public class Batch : IMementoBatch, IUniqueIdentifyable
     {
         #region Constants
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();

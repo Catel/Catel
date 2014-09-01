@@ -159,10 +159,21 @@ namespace Catel.MVVM.Providers
             }
 #endif
 
-            if ((_closeInitiatedByViewModel ?? false) && (_closeInitiatedByViewModelResult != null))
+            if (_closeInitiatedByViewModelResult != null)
             {
+                bool result;
+                try
+                {
+                    result = PropertyHelper.TrySetPropertyValue(TargetWindow, "DialogResult", _closeInitiatedByViewModelResult);
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning("Failed to set the 'DialogResult' exception: {0}", ex);
+                    result = false;
+                }
+
                 // Support all windows (even those that do not derive from ChildWindow)
-                if (!PropertyHelper.TrySetPropertyValue(TargetWindow, "DialogResult", _closeInitiatedByViewModelResult))
+                if (!result)
                 {
                     Log.Warning("Failed to set the 'DialogResult' property of window type '{0}', closing window via method", TargetWindow.GetType().Name);
 

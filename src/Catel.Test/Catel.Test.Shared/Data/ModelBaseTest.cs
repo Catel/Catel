@@ -409,12 +409,12 @@
             var instance = new ObjectWithValidation();
 
             instance.SetValue(ObjectWithValidation.ValueWithAnnotationsProperty.Name, string.Empty, true, false);
-            var fieldValidations = instance.ValidationContext.GetFieldValidations(ObjectWithValidation.ValueWithAnnotationsProperty.Name);
+            var fieldValidations = instance.GetValidationContext().GetFieldValidations(ObjectWithValidation.ValueWithAnnotationsProperty.Name);
 
             Assert.AreEqual(0, fieldValidations.Count);
 
             instance.SetValue(ObjectWithValidation.ValueWithAnnotationsProperty.Name, null, true, true);
-            fieldValidations = instance.ValidationContext.GetFieldValidations(ObjectWithValidation.ValueWithAnnotationsProperty.Name);
+            fieldValidations = instance.GetValidationContext().GetFieldValidations(ObjectWithValidation.ValueWithAnnotationsProperty.Name);
 
             Assert.AreEqual(1, fieldValidations.Count);
         }
@@ -571,11 +571,12 @@
             public void HidesTheFieldErrorsWhenTrue()
             {
                 var obj = new ValidationTest();
+                var validation = obj as IModelValidation;
                 obj.HideValidationResults = true;
 
                 obj.ErrorWhenEmpty = string.Empty;
 
-                Assert.IsFalse(obj.HasErrors);
+                Assert.IsFalse(validation.HasErrors);
                 Assert.AreEqual(string.Empty, ((IDataErrorInfo)obj)["ErrorWhenEmpty"]);
 
                 obj.HideValidationResults = false;
@@ -587,11 +588,12 @@
             public void HidesTheBusinessRuleErrorsWhenTrue()
             {
                 var obj = new ValidationTest();
+                var validation = obj as IModelValidation;
                 obj.HideValidationResults = true;
 
                 obj.BusinessRuleErrorWhenEmpty = string.Empty;
 
-                Assert.IsFalse(obj.HasErrors);
+                Assert.IsFalse(validation.HasErrors);
                 Assert.AreEqual(string.Empty, ((IDataErrorInfo)obj).Error);
 
                 obj.HideValidationResults = false;
@@ -603,11 +605,12 @@
             public void HidesTheFieldWarningsWhenTrue()
             {
                 var obj = new ValidationTest();
+                var validation = obj as IModelValidation;
                 obj.HideValidationResults = true;
 
                 obj.WarningWhenEmpty = string.Empty;
 
-                Assert.IsFalse(obj.HasWarnings);
+                Assert.IsFalse(validation.HasWarnings);
                 Assert.AreEqual(string.Empty, ((IDataWarningInfo)obj)["WarningWhenEmpty"]);
 
                 obj.HideValidationResults = false;
@@ -619,11 +622,12 @@
             public void HidesTheBusinessRuleWarningsWhenTrue()
             {
                 var obj = new ValidationTest();
+                var validation = obj as IModelValidation;
                 obj.HideValidationResults = true;
 
                 obj.BusinessRuleWarningWhenEmpty = string.Empty;
 
-                Assert.IsFalse(obj.HasWarnings);
+                Assert.IsFalse(validation.HasWarnings);
                 Assert.AreEqual(string.Empty, ((IDataWarningInfo)obj).Warning);
 
                 obj.HideValidationResults = false;
@@ -697,7 +701,7 @@
         [TestCase]
         public void GetValue_Null()
         {
-            IniEntry entry = new IniEntry();
+            var entry = new IniEntry();
 
             ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => entry.GetValue<string>(null));
         }
@@ -705,7 +709,7 @@
         [TestCase]
         public void GetValue_NonExistingProperty()
         {
-            IniEntry entry = new IniEntry();
+            var entry = new IniEntry();
 
             ExceptionTester.CallMethodAndExpectException<PropertyNotRegisteredException>(() => entry.GetValue<string>("Non-existing property"));
         }
@@ -713,7 +717,7 @@
         [TestCase]
         public void GetValue_ExistingProperty()
         {
-            IniEntry entry = new IniEntry();
+            var entry = new IniEntry();
             entry.Key = "key value";
             var value = entry.GetValue<string>(IniEntry.KeyProperty.Name);
             Assert.AreEqual("key value", value);

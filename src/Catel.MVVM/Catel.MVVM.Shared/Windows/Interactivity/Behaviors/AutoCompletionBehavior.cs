@@ -4,19 +4,34 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || SL5
+#if NET || SL5 || (NETFX_CORE && !WIN80)
 
 namespace Catel.Windows.Interactivity
 {
-    using System;
     using System.Collections;
+    using IoC;
+    using Services;
+    using Input;
+
+#if NETFX_CORE
+    using global::Windows.Foundation;
+    using global::Windows.UI;
+    using global::Windows.UI.Xaml;
+    using global::Windows.UI.Xaml.Controls;
+    using global::Windows.UI.Xaml.Controls.Primitives;
+    using global::Windows.UI.Xaml.Input;
+    using global::Windows.UI.Xaml.Media;
+
+    using KeyEventArgs = global::Windows.UI.Xaml.Input.KeyRoutedEventArgs;
+    using Key = global::Windows.System.VirtualKey;
+    using ModifierKeys = global::Windows.System.VirtualKeyModifiers;
+#else
+    using System;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
     using System.Windows.Input;
-    using Catel.IoC;
-    using Catel.Services;
-    using Catel.Windows.Input;
+#endif
 
     /// <summary>
     /// Auto complete behavior to support auto complete on a <c>TextBox</c> control.
@@ -27,6 +42,8 @@ namespace Catel.Windows.Interactivity
         private readonly IAutoCompletionService _autoCompletionService;
         private readonly ListBox _suggestionListBox;
         private readonly Popup _popup;
+
+        private bool _isUpdatingAssociatedObject;
 
         private bool _subscribed;
         private string _valueAtSuggestionBoxOpen;
@@ -44,11 +61,19 @@ namespace Catel.Windows.Interactivity
 
             _suggestionListBox = new ListBox();
 
+#if NETFX_CORE
+            _suggestionListBox.Background = new SolidColorBrush(Colors.Gainsboro);
+#endif
+
             _popup = new Popup();
             _popup.Child = _suggestionListBox;
 
 #if NET
             _popup.StaysOpen = false;
+#elif NETFX_CORE
+            _popup.IsLightDismissEnabled = true;
+#else
+            // To determine
 #endif
         }
         #endregion
@@ -99,8 +124,8 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// The items source property.
         /// </summary>
-        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource",  typeof(IEnumerable), 
-            typeof(AutoCompletionBehavior), new PropertyMetadata((sender, e) => ((AutoCompletionBehavior)sender).OnItemsSourceChanged()));
+        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(IEnumerable),
+            typeof(AutoCompletionBehavior), new PropertyMetadata(null, (sender, e) => ((AutoCompletionBehavior)sender).OnItemsSourceChanged()));
         #endregion
 
         #region Methods
@@ -145,7 +170,12 @@ namespace Catel.Windows.Interactivity
 #endif
 
                 _suggestionListBox.SelectionChanged += OnSuggestionListBoxSelectionChanged;
+
+#if NETFX_CORE
+                _suggestionListBox.Tapped += OnSuggestionListBoxTapped;
+#else
                 _suggestionListBox.MouseLeftButtonUp += OnSuggestionListBoxMouseLeftButtonUp;
+#endif
 
                 UpdateSuggestionBox(false);
             }
@@ -170,7 +200,12 @@ namespace Catel.Windows.Interactivity
 #endif
 
                 _suggestionListBox.SelectionChanged -= OnSuggestionListBoxSelectionChanged;
+
+#if NETFX_CORE
+                _suggestionListBox.Tapped -= OnSuggestionListBoxTapped;
+#else
                 _suggestionListBox.MouseLeftButtonUp -= OnSuggestionListBoxMouseLeftButtonUp;
+#endif
 
                 _subscribed = false;
             }
@@ -190,12 +225,35 @@ namespace Catel.Windows.Interactivity
 #if NET
             _popup.PlacementTarget = textBox;
             _popup.Placement = PlacementMode.Bottom;
+#elif NETFX_CORE
+            var offset = CalculateOffset(AssociatedObject, new Point(0, 0));
+
+            _popup.HorizontalOffset = offset.X;
+            _popup.VerticalOffset = offset.Y;
+            _popup.Width = AssociatedObject.ActualWidth;
+
 #else
-            // TODO: Support silverlight
+            // TODO: Determine
 #endif
 
             _popup.IsOpen = isVisible;
+
+#if NETFX_CORE
+            AssociatedObject.Focus(FocusState.Programmatic);
+#endif
         }
+
+#if NETFX_CORE
+        private static Point CalculateOffset(FrameworkElement element, Point offset)
+        {
+            var transform = element.TransformToVisual(Window.Current.Content);
+            var point = transform.TransformPoint(offset);
+
+            point.Y += element.ActualHeight;
+
+            return point;
+        }
+#endif
 
         private void UpdateSuggestions()
         {
@@ -213,7 +271,7 @@ namespace Catel.Windows.Interactivity
             var text = AssociatedObject.Text;
             string[] availableSuggestions = null;
 
-            if (!string.IsNullOrWhiteSpace(PropertyName) && (ItemsSource != null))
+            if (ItemsSource != null)
             {
                 availableSuggestions = _autoCompletionService.GetAutoCompleteValues(PropertyName, text, ItemsSource);
             }
@@ -246,6 +304,12 @@ namespace Catel.Windows.Interactivity
 
         private void OnTextChanged(object sender, TextChangedEventArgs e)
         {
+            if (_isUpdatingAssociatedObject)
+            {
+                _isUpdatingAssociatedObject = false;
+                return;
+            }
+
             UpdateSuggestions();
 
             if (_availableSuggestions == null || _availableSuggestions.Length == 0)
@@ -305,16 +369,25 @@ namespace Catel.Windows.Interactivity
                     // Cancel the selection
                     UpdateSuggestionBox(false);
 
+                    _isUpdatingAssociatedObject = true;
+
                     AssociatedObject.Text = _valueAtSuggestionBoxOpen;
                     e.Handled = true;
                 }
             }
         }
 
+#if NETFX_CORE
+        private void OnSuggestionListBoxTapped(object sender, TappedRoutedEventArgs e)
+        {
+            UpdateSuggestionBox(false);
+        }
+#else
         private void OnSuggestionListBoxMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             UpdateSuggestionBox(false);
         }
+#endif
 
         private void OnSuggestionListBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -326,6 +399,8 @@ namespace Catel.Windows.Interactivity
 
                 if (_suggestionListBox.SelectedIndex != -1)
                 {
+                    _isUpdatingAssociatedObject = true;
+
                     textBox.Text = _suggestionListBox.SelectedItem.ToString();
                 }
 

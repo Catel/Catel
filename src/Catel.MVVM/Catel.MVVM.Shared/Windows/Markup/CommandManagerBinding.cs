@@ -20,7 +20,7 @@ namespace Catel.Windows.Markup
     /// <summary>
     /// Binds commands to the command manager.
     /// </summary>
-    public class CommandManagerBinding : MarkupExtension
+    public class CommandManagerBinding : UpdatableMarkupExtension
     {
         private readonly ICommandManager _commandManager;
 
@@ -53,11 +53,41 @@ namespace Catel.Windows.Markup
         public string CommandName { get; set; }
 
         /// <summary>
-        /// When implemented in a derived class, returns an object that is provided as the value of the target property for this markup extension.
+        /// Called when the target object has been loaded.
         /// </summary>
-        /// <param name="serviceProvider">A service provider helper that can provide services for the markup extension.</param>
-        /// <returns>The object value to set on the property where the extension is applied.</returns>
-        public override object ProvideValue(IServiceProvider serviceProvider)
+        protected override void OnTargetObjectLoaded()
+        {
+            base.OnTargetObjectLoaded();
+
+            _commandManager.CommandCreated += OnCommandManagerCommandCreated;
+
+            // It's possible that we have a late-bound command, always update
+            UpdateValue();
+        }
+
+        /// <summary>
+        /// Called when the target object has been unloaded.
+        /// </summary>
+        protected override void OnTargetObjectUnloaded()
+        {
+            _commandManager.CommandCreated -= OnCommandManagerCommandCreated;
+
+            base.OnTargetObjectUnloaded();
+        }
+
+        private void OnCommandManagerCommandCreated(object sender, CommandCreatedEventArgs e)
+        {
+            if (string.Equals(CommandName, e.Name))
+            {
+                UpdateValue();
+            }
+        }
+
+        /// <summary>
+        /// Provides the dynamic value.
+        /// </summary>
+        /// <returns>System.Object.</returns>
+        protected override object ProvideDynamicValue()
         {
             if (_commandManager == null)
             {

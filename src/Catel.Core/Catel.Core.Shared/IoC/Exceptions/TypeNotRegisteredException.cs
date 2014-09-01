@@ -13,7 +13,7 @@ namespace Catel.IoC
     /// <summary>
     /// Exception class in case an requested type from <see cref="IServiceLocator"/> is not registered.
     /// </summary>
-    internal class TypeNotRegisteredException : Exception
+    public class TypeNotRegisteredException : Exception
     {
         #region Constructors
         /// <summary>

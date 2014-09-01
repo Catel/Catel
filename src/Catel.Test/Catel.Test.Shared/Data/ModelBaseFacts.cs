@@ -139,14 +139,15 @@ namespace Catel.Test.Data
             public void SuspendsValidation()
             {
                 var model = new LeanAndMeanModel();
+                var validation = model as IModelValidation;
 
                 model.LeanAndMeanModelWrapper = true;
 
-                Assert.IsFalse(model.HasErrors);
+                Assert.IsFalse(validation.HasErrors);
 
                 model.FirstName = null;
 
-                Assert.IsFalse(model.HasErrors);
+                Assert.IsFalse(validation.HasErrors);
             }
 
             [TestCase]
@@ -259,9 +260,10 @@ namespace Catel.Test.Data
             public void CorrectlyHandlesLateRegistrationOfCalculatedProperties()
             {
                 var model = new LatePropertyRegistrationModel();
+                var validation = model as IModelValidation;
 
-                model.Validate(true);
-                Assert.IsFalse(model.HasErrors);
+                validation.Validate(true);
+                Assert.IsFalse(validation.HasErrors);
 
                 var propertyData = PropertyDataManager.Default.GetPropertyData(typeof(LatePropertyRegistrationModel), "CanSave");
                 Assert.IsTrue(propertyData.IsCalculatedProperty);

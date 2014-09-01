@@ -44,14 +44,22 @@ namespace Catel.Data
 
     public partial class ModelBase
     {
+        #region Fields
+#if NET
+        [field: NonSerialized]
+#endif
+        private event EventHandler<EventArgs> _deserialized;
+        #endregion
+
         #region Events
         /// <summary>
         /// Occurs when the object is deserialized.
         /// </summary>
-#if NET
-        [field: NonSerialized]
-#endif
-        public event EventHandler Deserialized;
+        event EventHandler<EventArgs> IModelSerialization.Deserialized
+        {
+            add { _deserialized += value; }
+            remove { _deserialized -= value; }
+        }
         #endregion
 
         #region Loading
@@ -143,7 +151,7 @@ namespace Catel.Data
 
             Log.Debug("Loaded object");
 
-            var resultAsModelBase = result as ModelBase;
+            var resultAsModelBase = result as ISavableModel;
             if (resultAsModelBase != null)
             {
                 resultAsModelBase.Mode = mode;

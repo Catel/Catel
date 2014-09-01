@@ -41,9 +41,10 @@ namespace Catel.Test.Extensions.FluentValidation
                 var personViewModel = new PersonViewModelWithModel { Person = new Person { FirstName = "Igr Alexánder", LastName = string.Empty } };
                 
                 // I have to add this call here
-                personViewModel.Validate();
-                
-                IValidationSummary validationSummary = personViewModel.ValidationContext.GetValidationSummary("Person");
+                ((IModelValidation)personViewModel).Validate();
+
+                var validationSummary = personViewModel.GetValidationContext().GetValidationSummary("Person");
+
                 Assert.IsTrue(validationSummary.HasErrors);
             }
 
@@ -55,9 +56,10 @@ namespace Catel.Test.Extensions.FluentValidation
             {
                 var personViewModel = new PersonViewModel { PersonFirstName = "Igr Alexánder", PersonLastName = "Fernández Saúco" };
 
-                personViewModel.Validate();
+                ((IModelValidation)personViewModel).Validate();
 
-                IValidationSummary validationSummary = personViewModel.ValidationContext.GetValidationSummary("Person");
+                var validationSummary = personViewModel.GetValidationContext().GetValidationSummary("Person");
+
                 Assert.IsFalse(validationSummary.HasErrors);
                 Assert.IsFalse(validationSummary.HasWarnings);
             }
@@ -69,9 +71,9 @@ namespace Catel.Test.Extensions.FluentValidation
             public void ViewModelBaseWithFieldErrorsAndBusinessRuleWarningsValidationTest()
             {
                 var personViewModel = new PersonViewModel();
-                personViewModel.Validate();
+                ((IModelValidation)personViewModel).Validate();
 
-                IValidationSummary validationSummary = personViewModel.ValidationContext.GetValidationSummary("Person");
+                var validationSummary = personViewModel.GetValidationContext().GetValidationSummary("Person");
 
                 Assert.IsTrue(validationSummary.HasErrors);
                 Assert.IsTrue(validationSummary.HasFieldErrors);
@@ -94,6 +96,7 @@ namespace Catel.Test.Extensions.FluentValidation
             {
                 var validatorProvider = ServiceLocator.Default.ResolveType<IValidatorProvider>();
                 IValidator validator = validatorProvider.GetValidator(typeof(NoFluentValidatorViewModel));
+
                 Assert.IsNull(validator);
             }
         }
@@ -120,8 +123,10 @@ namespace Catel.Test.Extensions.FluentValidation
             public void MustReturnsTheSameInstanceIfCacheIsActive()
             {
                 var validatorProvider = ServiceLocator.Default.ResolveType<IValidatorProvider>();
+
                 IValidator validator1 = validatorProvider.GetValidator(typeof(PersonViewModel));
                 Assert.IsNotNull(validator1);
+
                 IValidator validator2 = validatorProvider.GetValidator(typeof(PersonViewModel));
                 Assert.AreEqual(validator1, validator2);
             }

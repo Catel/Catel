@@ -141,6 +141,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)IO\PathTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Configuration\LoggingConfigurationSectionFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\EventArgs\LogMessageEventArgsTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\FileLogListenerFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\LogFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\LogManagerTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\MessageBaseFacts.cs" />
@@ -208,6 +209,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Helpers\ViewToViewModelMappingHelperTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\ViewToViewModelMappingContainerTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\ViewToViewModelMappingTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlatformsFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\AppDomainExtensionsTest.cs" />

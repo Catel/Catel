@@ -51,7 +51,7 @@ namespace Catel.MVVM
                     serviceLocator.RegisterInstance(ExceptionHandling.ExceptionService.Default);
                 }
 
-                serviceLocator.RegisterTypeIfNotYetRegistered<IViewPropertySelector, ViewPropertySelector>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<IViewPropertySelector, FastViewPropertySelector>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IStateService, StateService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IDispatcherService, DispatcherService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IMessageService, MessageService>();

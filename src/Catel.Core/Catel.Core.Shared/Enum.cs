@@ -138,6 +138,29 @@ namespace Catel
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
         public static bool TryParse(string input, out TEnum? result)
         {
+            return TryParse(input, true, out result);
+        }
+
+        /// <summary>
+        /// Tries to parse an enum value name.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <param name="result">The result.</param>
+        /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
+        public static bool TryParse(string input, out TEnum result)
+        {
+            return TryParse(input, true, out result);
+        }
+
+        /// <summary>
+        /// Tries to parse an enum value name.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <param name="ignoreCase">if set to <c>true</c>, the case will be ignored.</param>
+        /// <param name="result">The result.</param>
+        /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
+        public static bool TryParse(string input, bool ignoreCase, out TEnum? result)
+        {
             result = null;
             if (!Enum.IsDefined(typeof(TEnum), input))
             {
@@ -146,7 +169,7 @@ namespace Catel
 
             try
             {
-                result = (TEnum)Enum.Parse(typeof(TEnum), input, true);
+                result = (TEnum)Enum.Parse(typeof(TEnum), input, ignoreCase);
             }
             catch (Exception)
             {
@@ -160,12 +183,13 @@ namespace Catel
         /// Tries to parse an enum value name.
         /// </summary>
         /// <param name="input">The input.</param>
+        /// <param name="ignoreCase">if set to <c>true</c>, the case will be ignored.</param>
         /// <param name="result">The result.</param>
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
-        public static bool TryParse(string input, out TEnum result)
+        public static bool TryParse(string input, bool ignoreCase, out TEnum result)
         {
             TEnum? temp;
-            if (!TryParse(input, out temp))
+            if (!TryParse(input, ignoreCase, out temp))
             {
                 // input not found in the Enum, fill the out parameter with the first item from the enum
                 var values = GetValues().ToArray();

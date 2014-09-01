@@ -9,10 +9,12 @@
 namespace Catel.Test.Logging.Configuration
 {
     using System.Configuration;
+    using System.IO;
     using System.Linq;
     using Catel.Configuration;
     using Catel.IoC;
     using Catel.Logging;
+    using Catel.Reflection;
     using NUnit.Framework;
 
     [TestFixture]
@@ -46,7 +48,10 @@ namespace Catel.Test.Logging.Configuration
             Assert.IsTrue(fileLogListener.IsInfoEnabled);
             Assert.IsTrue(fileLogListener.IsWarningEnabled);
             Assert.IsTrue(fileLogListener.IsErrorEnabled);
-            Assert.AreEqual(fileLogListener.FilePath, "CatelLogging.txt");
+
+            var assembly = typeof(FileLogListener).Assembly;
+            var appDataDirectory = Catel.IO.Path.GetApplicationDataDirectory(assembly.Company(), assembly.Product());
+            Assert.AreEqual(fileLogListener.FilePath, Path.Combine(appDataDirectory, "CatelLogging.txt.log"));
         }
         #endregion
     }

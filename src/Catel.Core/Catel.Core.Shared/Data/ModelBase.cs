@@ -141,6 +141,11 @@ namespace Catel.Data
         [field: NonSerialized]
 #endif
         private int? _hashCode;
+
+#if NET
+        [field: NonSerialized]
+#endif
+        private event EventHandler<EventArgs> _initialized;
         #endregion
 
         #region Constructors
@@ -189,10 +194,11 @@ namespace Catel.Data
         /// <summary>
         /// Occurs when the object is initialized.
         /// </summary>
-#if NET
-        [field: NonSerialized]
-#endif
-        public event EventHandler Initialized;
+        event EventHandler<EventArgs> IModel.Initialized
+        {
+            add { _initialized += value; }
+            remove { _initialized -= value; }
+        }
         #endregion
 
         #region Operators
@@ -417,26 +423,12 @@ namespace Catel.Data
         }
 
         /// <summary>
-        /// Gets the <see cref="SerializationMode"/> of this object.
-        /// </summary>
-        /// <value>The serialization mode.</value>
-#if NET || SILVERLIGHT
-        [Browsable(false)]
-#endif
-        [XmlIgnore]
-        public SerializationMode Mode { get; private set; }
-
-        /// <summary>
         /// Gets a value indicating whether the object is currently in an edit session, started by the <see cref="IEditableObject.BeginEdit"/> method.
         /// </summary>
         /// <value>
         /// <c>true</c> if this instance is currently in an edit session; otherwise, <c>false</c>.
         /// </value>
-#if NET || SILVERLIGHT
-        [Browsable(false)]
-#endif
-        [XmlIgnore]
-        public bool IsInEditSession
+        bool IModel.IsInEditSession
         {
             get { return _backup != null; }
         }
@@ -478,19 +470,6 @@ namespace Catel.Data
         /// </summary>
         public static readonly PropertyData IsReadOnlyProperty = RegisterProperty("IsReadOnly", typeof(bool), false, false,
             (sender, e) => ((ModelBase)sender).RaisePropertyChanged("IsEditable"), false, true, true);
-
-        /// <summary>
-        /// Gets a value indicating whether this object is editable. This is the opposite of the <see cref="IsReadOnly"/> property.
-        /// </summary>
-        /// <value><c>true</c> if this object is editable; otherwise, <c>false</c>.</value>
-#if NET || SILVERLIGHT
-        [Browsable(false)]
-#endif
-        [XmlIgnore]
-        public bool IsEditable
-        {
-            get { return !IsReadOnly; }
-        }
 
         /// <summary>
         /// Gets a value indicating whether the deserialization has succeeded. If automatic deserialization fails, the object
@@ -535,7 +514,7 @@ namespace Catel.Data
             IsInitializing = false;
             IsInitialized = true;
 
-            Initialized.SafeInvoke(this);
+            _initialized.SafeInvoke(this);
         }
 
         /// <summary>
@@ -543,7 +522,7 @@ namespace Catel.Data
         /// </summary>
         protected virtual void OnDeserialized()
         {
-            Deserialized.SafeInvoke(this);
+            _deserialized.SafeInvoke(this);
         }
 
         /// <summary>
@@ -551,18 +530,11 @@ namespace Catel.Data
         /// </summary>
         private void Initialize()
         {
-            ValidationContext = new ValidationContext();
-
             SuspendValidation = DefaultSuspendValidationValue;
             DeserializationSucceeded = false;
             HandlePropertyAndCollectionChanges = true;
             AlwaysInvokeNotifyChanged = false;
             AutomaticallyValidateOnPropertyChanged = true;
-#if NET
-            Mode = SerializationMode.Binary;
-#else
-            Mode = SerializationMode.Xml;
-#endif
 
             var type = GetType();
 

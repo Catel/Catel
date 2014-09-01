@@ -111,6 +111,9 @@
     <Compile Include="..\Catel.Extensions.EntityFramework5.NET40\ExtensionsEntityFramework5Module.cs">
       <Link>ExtensionsEntityFramework5Module.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Extensions.EntityFramework5.NET40\Extensions\ConfigurationExtensions.cs">
+      <Link>Extensions\ConfigurationExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Extensions.EntityFramework5.NET40\Extensions\DbContextExtensions.cs">
       <Link>Extensions\DbContextExtensions.cs</Link>
     </Compile>
@@ -147,7 +150,6 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  
   <Import Project="..\..\..\lib\Fody.1.22.1\build\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.22.1\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

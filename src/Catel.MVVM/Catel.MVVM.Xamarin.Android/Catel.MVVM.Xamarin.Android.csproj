@@ -56,7 +56,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Android\App\TabActivity.cs" />
     <Compile Include="Android\App\Activity.cs" />
     <Compile Include="Android\App\Application.cs" />
     <Compile Include="Android\App\Fragment.cs" />

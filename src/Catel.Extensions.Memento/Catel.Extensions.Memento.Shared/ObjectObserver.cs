@@ -74,8 +74,9 @@ namespace Catel.Memento
             var modelBase = sender as ModelBase;
             if (modelBase != null)
             {
-                if ((string.CompareOrdinal(e.PropertyName, "HasErrors") == 0) || (string.CompareOrdinal(e.PropertyName, "IsDirty") == 0) ||
-                    (string.CompareOrdinal(e.PropertyName, "HasWarnings") == 0))
+                if ((string.CompareOrdinal(e.PropertyName, "INotifyDataErrorInfo.HasErrors") == 0) ||
+                    (string.CompareOrdinal(e.PropertyName, "INotifyDataWarningInfo.HasWarnings") == 0) || 
+                    (string.CompareOrdinal(e.PropertyName, "IsDirty") == 0))
                 {
                     return;
                 }

@@ -52,6 +52,11 @@ Added/fixed (BREAKING CHANGES):
 (*) CTL-483 UIVisualizerService improvements (moved some methods to extension methods)
 (*) CTL-486 Add time to all log listeners. This is a breaking change for classes implementing ILogListener
 (*) CTL-488 Convert IViewModel interface to support full async
+(*) CTL-506 BatchLogListenerBase.WriteBatch is now async so it won't block any UI
+(*) CTL-507 Use FastViewPropertySelector as default for major performance boost. This is a breaking change if the controls
+    use the ViewToViewModel mappings. If so, register the ViewPropertySelector class at application startup to get old
+    behavior
+(*) CTL-515 Implement validation members explicitly on ModelBase so clean up most rarely used members
 (-) CTL-454 Removed the RemoveInstance methods from the IServiceLocator interface. Use IServiceLocator.RemoveType instead
 (-) CTL-458 Removed usage of ICloneable. If one wants to clone an object, simply serialize / deserialize it
 (-) CTL-490 Remove parameters from BehaviorBase.OnAssociatedObjectLoaded. This is only a breaking change if there are 
@@ -84,6 +89,10 @@ Added/fixed:
 (+) CTL-469 Add async methods to the ICacheStorage 
 (+) CTL-485 Create RollingInMemoryLogListener to be able to query the latest log messages
 (+) CTL-489 Allow property unregistration via ModelBase.UnregisterProperty
+(+) CTL-508 Added the SeqLogListener
+(+) CTL-509 Added the EventLogListener
+(+) CTL-511 Add PlatformToBooleanConverter to know which platform is being used
+(+) CTL-515 Add model initialization and uninitialization members availale in ViewModelBase
 (*) CTL-326 Data annotation validation will no longer be invoked for properties with non-public getters to prevent
     first chance exceptions the first time such a property is being validated
 (*) CTL-334 ViewModelBase now respects SuspendValidation during saving, which means that even if there are validation 
@@ -122,6 +131,7 @@ Added/fixed:
 (*) CTL-473 Improve the way loaded views are handled
 (*) CTL-479 Make IDataErrorInfo/IDataWarningInfo methods customizable in ModelBase
 (*) CTL-481 Share lock for ServiceLocator / TypeFactory / DependencyResolver to prevent memory leaks
+(*) CTL-512 FileLogListener should create directory if it doesn't exist
 (-) CTL-453 Remove CommandManager code from Command
 (x) CTL-327 ListCollectionView not supported in ChangeNotificationWrapper (causes InvalidCastException)
 (x) CTL-329 VisualStateManager doesn't change state in WP8 in UserControl => introduced option to transfer styles and
@@ -166,6 +176,10 @@ Added/fixed:
 (x) CTL-476 Exception in BootstrapperBase.RunWithSplashScreen<>()
 (x) CTL-478 InfoBarMessageControl does not respect Horizontal/Vertical- (Content)Alignment
 (x) CTL-487 TypeHelper doesn't always return the right typename / assemblyname
+(x) CTL-504 Catel.Fody GenerateXmlSchema and WeaveProperties Bug where web service models were not being
+    deserialized correctly
+(x) CTL-512 Closing a window via CloseViewModel in the view model does not work
+(x) CTL-517 Fixed possible NullReferenceException in AutoScroll behavior
 
 Roadmap:
 ========

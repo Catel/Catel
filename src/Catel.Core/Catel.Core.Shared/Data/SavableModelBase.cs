@@ -52,6 +52,11 @@ namespace Catel.Data
         /// </summary>
         protected SavableModelBase()
         {
+#if NET
+            Mode = SerializationMode.Binary;
+#else
+            Mode = SerializationMode.Xml;
+#endif
         }
 
 #if NET
@@ -83,6 +88,16 @@ namespace Catel.Data
         {
             get { return ToByteArray(); }
         }
+
+        /// <summary>
+        /// Gets the <see cref="SerializationMode"/> of this object.
+        /// </summary>
+        /// <value>The serialization mode.</value>
+#if NET || SILVERLIGHT
+        [Browsable(false)]
+#endif
+        [XmlIgnore]
+        public SerializationMode Mode { get; set; }
         #endregion
 
         #region Methods

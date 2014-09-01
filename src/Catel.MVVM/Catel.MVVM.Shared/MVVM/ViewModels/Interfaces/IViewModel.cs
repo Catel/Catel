@@ -17,22 +17,6 @@ namespace Catel.MVVM
     {
         #region Properties
         /// <summary>
-        /// Gets a value indicating whether this instance has errors.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance has errors; otherwise, <c>false</c>.
-        /// </value>
-        bool HasErrors { get; }
-
-        /// <summary>
-        /// Gets a value indicating whether this instance has warnings.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance has warnings; otherwise, <c>false</c>.
-        /// </value>
-        bool HasWarnings { get; }
-
-        /// <summary>
         /// Gets a value indicating whether this instance has a dirty model.
         /// </summary>
         /// <value><c>true</c> if this instance has a dirty model; otherwise, <c>false</c>.</value>

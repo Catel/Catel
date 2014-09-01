@@ -59,7 +59,7 @@ namespace Catel.MVVM.Providers
     /// Base implementation of the behaviors, which defines all the different possible situations
     /// a behavior must implement / support to be a valid MVVM provider behavior.
     /// </summary>
-    public abstract class LogicBase : ObservableObject, IViewLoadState
+    public abstract class LogicBase : ObservableObject, IViewLoadState, IUniqueIdentifyable
     {
         #region Fields
         /// <summary>
@@ -86,11 +86,6 @@ namespace Catel.MVVM.Providers
         /// The view property selector.
         /// </summary>
         private static readonly IViewPropertySelector _viewPropertySelector;
-
-        /// <summary>
-        /// A list of dependency properties to subscribe to per type.
-        /// </summary>
-        private static readonly ICacheStorage<Type, List<string>> _viewPropertiesToSubscribe = new CacheStorage<Type, List<string>>();
 
         /// <summary>
         /// The view model instances currently held by this provider. This value should only be used
@@ -142,7 +137,7 @@ namespace Catel.MVVM.Providers
                 viewModelType = (viewModel != null) ? viewModel.GetType() : _viewModelLocator.ResolveViewModel(targetView.GetType());
                 if (viewModelType == null)
                 {
-                    string error = string.Format("The view model of the view '{0}' could not be resolved. Make sure to customize the IViewModelLocator or register the view and view model manually", targetView.GetType().GetSafeFullName());
+                    var error = string.Format("The view model of the view '{0}' could not be resolved. Make sure to customize the IViewModelLocator or register the view and view model manually", targetView.GetType().GetSafeFullName());
                     Log.Error(error);
                     throw new NotSupportedException(error);
                 }
@@ -173,6 +168,8 @@ namespace Catel.MVVM.Providers
                 return;
             }
 
+            Log.Debug("Subscribing to view events");
+
             ViewLoadManager.AddView(this);
             this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewLoading", OnViewLoadedManagerLoading);
             this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewLoaded", OnViewLoadedManagerLoaded);
@@ -184,6 +181,8 @@ namespace Catel.MVVM.Providers
             targetView.Unloaded += (sender, e) => Unloaded.SafeInvoke(this);
 
             TargetView.DataContextChanged += OnTargetViewDataContextChanged;
+
+            Log.Debug("Subscribing to view properties");
 
             // This also subscribes to DataContextChanged, don't double subscribe
             var viewPropertiesToSubscribe = DetermineInterestingViewProperties();
@@ -402,7 +401,7 @@ namespace Catel.MVVM.Providers
         /// <summary>
         /// The view.
         /// </summary>
-        IView IViewLoadState.View 
+        IView IViewLoadState.View
         {
             get { return TargetView; }
         }
@@ -471,34 +470,31 @@ namespace Catel.MVVM.Providers
         {
             var targetViewType = TargetViewType;
 
-            return _viewPropertiesToSubscribe.GetFromCacheOrFetch(targetViewType, () =>
+            var finalProperties = new List<string>();
+
+            if ((_viewPropertySelector == null) || (_viewPropertySelector.MustSubscribeToAllViewProperties(targetViewType)))
             {
                 var viewProperties = TargetView.GetProperties();
-                var finalProperties = new List<string>();
-
-                if ((_viewPropertySelector == null) || (_viewPropertySelector.MustSubscribeToAllViewProperties(targetViewType)))
+                finalProperties.AddRange(viewProperties);
+            }
+            else
+            {
+                var propertiesToSubscribe = _viewPropertySelector.GetViewPropertiesToSubscribeTo(targetViewType);
+                if (!propertiesToSubscribe.Contains("DataContext"))
                 {
-                    finalProperties.AddRange(viewProperties);
-                }
-                else
-                {
-                    var propertiesToSubscribe = _viewPropertySelector.GetViewPropertiesToSubscribeTo(targetViewType);
-                    if (!propertiesToSubscribe.Contains("DataContext"))
-                    {
-                        propertiesToSubscribe.Add("DataContext");
-                    }
-
-                    foreach (var gatheredViewProperty in viewProperties)
-                    {
-                        if (propertiesToSubscribe.Contains(gatheredViewProperty))
-                        {
-                            finalProperties.Add(gatheredViewProperty);
-                        }
-                    }
+                    propertiesToSubscribe.Add("DataContext");
                 }
 
-                return finalProperties;
-            });
+                foreach (var propertyToSubscribe in propertiesToSubscribe)
+                {
+                    if (propertiesToSubscribe.Contains(propertyToSubscribe))
+                    {
+                        finalProperties.Add(propertyToSubscribe);
+                    }
+                }
+            }
+
+            return finalProperties;
         }
 
         /// <summary>
