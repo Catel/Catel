@@ -19,7 +19,6 @@ namespace Catel.MVVM
     using IoC;
     using Logging;
     using Reflection;
-    using ViewModels;
     using Services;
 
     #region Enums
@@ -86,7 +85,7 @@ namespace Catel.MVVM
 #if NET
         [field: NonSerialized]
 #endif
-            private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Dictionary containing the view model metadata of a view model type so it has to be calculated only once.
@@ -94,7 +93,7 @@ namespace Catel.MVVM
 #if NET
         [field: NonSerialized]
 #endif
-            private static readonly Dictionary<Type, ViewModelMetadata> _metaData = new Dictionary<Type, ViewModelMetadata>();
+        private static readonly Dictionary<Type, ViewModelMetadata> _metaData = new Dictionary<Type, ViewModelMetadata>();
 
 #if !XAMARIN
         /// <summary>
@@ -103,7 +102,7 @@ namespace Catel.MVVM
 #if NET
         [field: NonSerialized]
 #endif
-            private readonly IDispatcherService _dispatcherService;
+        private readonly IDispatcherService _dispatcherService;
 #endif
 
         /// <summary>
@@ -112,7 +111,7 @@ namespace Catel.MVVM
 #if NET
         [field: NonSerialized]
 #endif
-            private readonly bool _ignoreMultipleModelsWarning;
+        private readonly bool _ignoreMultipleModelsWarning;
 
         /// <summary>
         /// Value indicating whether the view model is already initialized via a call to <see cref="InitializeViewModel" />.
@@ -120,7 +119,7 @@ namespace Catel.MVVM
 #if NET
         [field: NonSerialized]
 #endif
-            private bool _isViewModelInitialized;
+        private bool _isViewModelInitialized;
 
         /// <summary>
         /// Value indicating whether the view model attributes are initialized. 
@@ -128,7 +127,7 @@ namespace Catel.MVVM
 #if NET
         [field: NonSerialized]
 #endif
-            private bool _areViewModelAttributesIntialized;
+        private bool _areViewModelAttributesIntialized;
 
         /// <summary>
         /// Value indicating whether the specified models are dirty.
@@ -136,12 +135,12 @@ namespace Catel.MVVM
 #if NET
         [field: NonSerialized]
 #endif
-            private readonly Dictionary<string, bool> _modelsDirtyFlags = new Dictionary<string, bool>();
+        private readonly Dictionary<string, bool> _modelsDirtyFlags = new Dictionary<string, bool>();
 
 #if NET
         [field: NonSerialized]
 #endif
-            private readonly object _modelLock = new object();
+        private readonly object _modelLock = new object();
 
         /// <summary>
         /// Dictionary of available models inside the view model.
@@ -149,7 +148,7 @@ namespace Catel.MVVM
 #if NET
         [field: NonSerialized]
 #endif
-            private readonly Dictionary<string, object> _modelObjects = new Dictionary<string, object>();
+        private readonly Dictionary<string, object> _modelObjects = new Dictionary<string, object>();
 
         /// <summary>
         /// Dictionary with info about the available models inside the view model.
@@ -157,7 +156,7 @@ namespace Catel.MVVM
 #if NET
         [field: NonSerialized]
 #endif
-            private readonly Dictionary<string, ModelInfo> _modelObjectsInfo = new Dictionary<string, ModelInfo>();
+        private readonly Dictionary<string, ModelInfo> _modelObjectsInfo = new Dictionary<string, ModelInfo>();
 
         /// <summary>
         /// Dictionary with data error info about a specific model.
@@ -165,7 +164,7 @@ namespace Catel.MVVM
 #if NET
         [field: NonSerialized]
 #endif
-            private readonly Dictionary<string, ModelErrorInfo> _modelErrorInfo = new Dictionary<string, ModelErrorInfo>();
+        private readonly Dictionary<string, ModelErrorInfo> _modelErrorInfo = new Dictionary<string, ModelErrorInfo>();
 
         /// <summary>
         /// List of child view models which can be registed by the <c>RegisterChildViewModel</c> method.
@@ -173,7 +172,7 @@ namespace Catel.MVVM
 #if NET
         [field: NonSerialized]
 #endif
-            internal readonly List<IViewModel> ChildViewModels = new List<IViewModel>();
+        internal readonly List<IViewModel> ChildViewModels = new List<IViewModel>();
 
         /// <summary>
         /// Value to determine whether child view models have errors or not.
@@ -181,7 +180,7 @@ namespace Catel.MVVM
 #if NET
         [field: NonSerialized]
 #endif
-            private bool _childViewModelsHaveErrors;
+        private bool _childViewModelsHaveErrors;
 
         /// <summary>
         /// Gets the view model manager.
@@ -190,7 +189,7 @@ namespace Catel.MVVM
 #if NET
         [field: NonSerialized]
 #endif
-            protected static readonly IViewModelManager ViewModelManager;
+        protected static readonly IViewModelManager ViewModelManager;
 
         /// <summary>
         /// Mappings from view model properties to models and their properties.
@@ -198,7 +197,7 @@ namespace Catel.MVVM
 #if NET
         [field: NonSerialized]
 #endif
-            private readonly Dictionary<string, ViewModelToModelMapping> _viewModelToModelMap = new Dictionary<string, ViewModelToModelMapping>();
+        private readonly Dictionary<string, ViewModelToModelMapping> _viewModelToModelMap = new Dictionary<string, ViewModelToModelMapping>();
 
         /// <summary>
         /// The backing field for the title property.
@@ -206,14 +205,7 @@ namespace Catel.MVVM
 #if NET
         [field: NonSerialized]
 #endif
-            private string _title;
-
-#if NET
-        /// <summary>
-        /// The view model properties by type.
-        /// </summary>
-        [field: NonSerialized] private static readonly Dictionary<Type, HashSet<string>> _viewModelPropertiesByType = new Dictionary<Type, HashSet<string>>();
-#endif
+        private string _title;
         #endregion
 
         #region Constructors
@@ -280,16 +272,6 @@ namespace Catel.MVVM
 
             Log.Debug("Creating view model of type '{0}' with unique identifier {1}", GetType().Name, UniqueIdentifier);
 
-#if NET
-            var viewModelType = GetType();
-            if (!_viewModelPropertiesByType.ContainsKey(viewModelType))
-            {
-                var properties = (from property in viewModelType.GetPropertiesEx()
-                    select property.Name);
-                _viewModelPropertiesByType[viewModelType] = new HashSet<string>(properties);
-            }
-#endif
-
             _ignoreMultipleModelsWarning = ignoreMultipleModelsWarning;
 
             if (serviceLocator == null)
@@ -311,7 +293,7 @@ namespace Catel.MVVM
 
             ViewModelCommandManager = MVVM.ViewModelCommandManager.Create(this);
             ViewModelCommandManager.AddHandler((viewModel, propertyName, command, commandParameter) =>
-                CommandExecuted.SafeInvoke(this, new CommandExecutedEventArgs((ICatelCommand) command, commandParameter, propertyName)));
+                CommandExecuted.SafeInvoke(this, new CommandExecutedEventArgs((ICatelCommand)command, commandParameter, propertyName)));
 
             SupportIEditableObject = supportIEditableObject;
 
@@ -325,7 +307,7 @@ namespace Catel.MVVM
 
             ViewModelManager.RegisterViewModelInstance(this);
 
-            object[] interestedInAttributes = GetType().GetCustomAttributesEx(typeof (InterestedInAttribute), true);
+            object[] interestedInAttributes = GetType().GetCustomAttributesEx(typeof(InterestedInAttribute), true);
             foreach (InterestedInAttribute interestedInAttribute in interestedInAttributes)
             {
                 ViewModelManager.AddInterestedViewModelInstance(interestedInAttribute.ViewModelType, this);
@@ -470,7 +452,7 @@ namespace Catel.MVVM
         [ExcludeFromValidation]
         public bool HasErrors
         {
-            get { return ((INotifyDataErrorInfo) this).HasErrors || _childViewModelsHaveErrors; }
+            get { return ((INotifyDataErrorInfo)this).HasErrors || _childViewModelsHaveErrors; }
         }
 
         /// <summary>
@@ -485,8 +467,8 @@ namespace Catel.MVVM
             get
             {
                 var hasDirtyModels = (from dirtyModelFlag in _modelsDirtyFlags
-                    where dirtyModelFlag.Value
-                    select dirtyModelFlag).Any();
+                                      where dirtyModelFlag.Value
+                                      select dirtyModelFlag).Any();
                 if (hasDirtyModels)
                 {
                     return true;
@@ -565,7 +547,7 @@ namespace Catel.MVVM
             foreach (var propertyInfo in properties)
             {
                 #region Model attributes
-                var modelAttribute = propertyInfo.GetCustomAttributeEx(typeof (ModelAttribute), true) as ModelAttribute;
+                var modelAttribute = propertyInfo.GetCustomAttributeEx(typeof(ModelAttribute), true) as ModelAttribute;
                 if (modelAttribute != null)
                 {
                     modelObjectsInfo.Add(propertyInfo.Name, new ModelInfo(propertyInfo.Name, modelAttribute));
@@ -573,7 +555,7 @@ namespace Catel.MVVM
                 #endregion
 
                 #region ViewModelToModel attributes
-                var viewModelToModelAttribute = propertyInfo.GetCustomAttributeEx(typeof (ViewModelToModelAttribute), true) as ViewModelToModelAttribute;
+                var viewModelToModelAttribute = propertyInfo.GetCustomAttributeEx(typeof(ViewModelToModelAttribute), true) as ViewModelToModelAttribute;
                 if (viewModelToModelAttribute != null)
                 {
                     if (string.IsNullOrEmpty(viewModelToModelAttribute.Property))
@@ -590,10 +572,10 @@ namespace Catel.MVVM
                 #endregion
 
                 #region ValidationToViewModel attributes
-                var validationToViewModelAttribute = propertyInfo.GetCustomAttributeEx(typeof (ValidationToViewModelAttribute), true) as ValidationToViewModelAttribute;
+                var validationToViewModelAttribute = propertyInfo.GetCustomAttributeEx(typeof(ValidationToViewModelAttribute), true) as ValidationToViewModelAttribute;
                 if (validationToViewModelAttribute != null)
                 {
-                    if (propertyInfo.PropertyType != typeof (IValidationSummary))
+                    if (propertyInfo.PropertyType != typeof(IValidationSummary))
                     {
                         string error = string.Format("A property decorated with the ValidationToViewModel attribute must be of type IValidationSummary, but '{0}' is not", propertyInfo.Name);
                         Log.Error(error);
@@ -775,7 +757,7 @@ namespace Catel.MVVM
                 }
                 else
                 {
-                    var validationContext = ((IModelValidation) childViewModel).ValidationContext;
+                    var validationContext = ((IModelValidation)childViewModel).ValidationContext;
                     if (validationContext.HasErrors || validationContext.HasWarnings)
                     {
                         validate = true;
@@ -809,7 +791,7 @@ namespace Catel.MVVM
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void OnChildViewModelClosed(object sender, EventArgs e)
         {
-            ((IRelationalViewModel) this).UnregisterChildViewModel((IViewModel) sender);
+            ((IRelationalViewModel)this).UnregisterChildViewModel((IViewModel)sender);
         }
 
         /// <summary>
@@ -869,8 +851,8 @@ namespace Catel.MVVM
             Log.Debug("Updating all explicit view model to model mappings");
 
             var explicitMappings = (from mapping in _viewModelToModelMap
-                where mapping.Value.Mode == ViewModelToModelMode.Explicit
-                select mapping.Value);
+                                    where mapping.Value.Mode == ViewModelToModelMode.Explicit
+                                    select mapping.Value);
 
             foreach (var mapping in explicitMappings)
             {
@@ -987,36 +969,36 @@ namespace Catel.MVVM
                             //object modelValue = PropertyHelper.GetPropertyValue(model, mapping.ValueProperties);
                             //if (!ObjectHelper.AreEqualReferences(viewModelValue, modelValue))
                             //{
-                                string[] propertiesToSet = mapping.ValueProperties;
+                            string[] propertiesToSet = mapping.ValueProperties;
 
 #if !WINDOWS_PHONE && !NET35
-                                if (_modelErrorInfo.ContainsKey(mapping.ModelProperty))
-                                {
-                                    mapping.ValueProperties.ForEach(_modelErrorInfo[mapping.ModelProperty].ClearDefaultErrors);
-                                }
+                            if (_modelErrorInfo.ContainsKey(mapping.ModelProperty))
+                            {
+                                mapping.ValueProperties.ForEach(_modelErrorInfo[mapping.ModelProperty].ClearDefaultErrors);
+                            }
 #endif
 
-                                // Only TwoWay or OneWayToSource mappings should be mapped
-                                if ((mapping.Mode == ViewModelToModelMode.TwoWay) || (mapping.Mode == ViewModelToModelMode.OneWayToSource))
+                            // Only TwoWay or OneWayToSource mappings should be mapped
+                            if ((mapping.Mode == ViewModelToModelMode.TwoWay) || (mapping.Mode == ViewModelToModelMode.OneWayToSource))
+                            {
+                                var valuesToSet = mapping.Converter.ConvertBack(viewModelValue, this);
+                                if (propertiesToSet.Length != valuesToSet.Length)
                                 {
-                                    var valuesToSet = mapping.Converter.ConvertBack(viewModelValue, this);
-                                    if (propertiesToSet.Length != valuesToSet.Length)
+                                    Log.Error("Properties - values count mismatch, properties '{0}', values '{1}'",
+                                        string.Join(", ", propertiesToSet), string.Join(", ", valuesToSet));
+                                }
+                                for (int index = 0; index < propertiesToSet.Length && index < valuesToSet.Length; index++)
+                                {
+                                    if (PropertyHelper.TrySetPropertyValue(model, propertiesToSet[index], valuesToSet[index]))
                                     {
-                                        Log.Error("Properties - values count mismatch, properties '{0}', values '{1}'",
-                                            string.Join(", ", propertiesToSet), string.Join(", ", valuesToSet));
+                                        Log.Debug("Updated property '{0}' on model type '{1}' to '{2}'", propertiesToSet[index], model.GetType().Name, ObjectToStringHelper.ToString(valuesToSet[index]));
                                     }
-                                    for (int index = 0; index < propertiesToSet.Length && index < valuesToSet.Length; index++)
+                                    else
                                     {
-                                        if (PropertyHelper.TrySetPropertyValue(model, propertiesToSet[index], valuesToSet[index]))
-                                        {
-                                            Log.Debug("Updated property '{0}' on model type '{1}' to '{2}'", propertiesToSet[index], model.GetType().Name, ObjectToStringHelper.ToString(valuesToSet[index]));
-                                        }
-                                        else
-                                        {
-                                            Log.Warning("Failed to set property '{0}' on model type '{1}'", propertiesToSet[index], model.GetType().Name);
-                                        }
+                                        Log.Warning("Failed to set property '{0}' on model type '{1}'", propertiesToSet[index], model.GetType().Name);
                                     }
                                 }
+                            }
                             //}
                         }
                         else
@@ -1166,8 +1148,8 @@ namespace Catel.MVVM
             }
 
             var modelNameOnViewModel = (from modelObject in _modelObjects
-                where ObjectHelper.AreEqualReferences(modelObject.Value, sender)
-                select modelObject.Key).FirstOrDefault();
+                                        where ObjectHelper.AreEqualReferences(modelObject.Value, sender)
+                                        select modelObject.Key).FirstOrDefault();
             if (!string.IsNullOrEmpty(modelNameOnViewModel))
             {
                 _modelsDirtyFlags[modelNameOnViewModel] = true;
@@ -1339,9 +1321,9 @@ namespace Catel.MVVM
         /// <returns>
         ///	<c>true</c> if successful; otherwise <c>false</c>.
         /// </returns>
-        protected virtual Task<bool> Cancel()
+        protected virtual async Task<bool> Cancel()
         {
-            return Task.Factory.StartNew(() => true);
+            return true;
         }
 
         /// <summary>
@@ -1350,9 +1332,9 @@ namespace Catel.MVVM
         /// <returns>
         /// <c>true</c> if successful; otherwise <c>false</c>.
         /// </returns>
-        protected virtual Task<bool> Save()
+        protected virtual async Task<bool> Save()
         {
-            return Task.Factory.StartNew(() => true);
+            return true;
         }
 
         /// <summary>
@@ -1368,9 +1350,8 @@ namespace Catel.MVVM
         /// <summary>
         /// Closes this instance. Always called after the <see cref="Cancel"/> of <see cref="Save"/> method.
         /// </summary>
-        protected virtual Task Close()
+        protected virtual async Task Close()
         {
-            return Task.Factory.StartNew(() => { });
         }
 
         /// <summary>

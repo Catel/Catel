@@ -6,7 +6,7 @@
 
 #if !XAMARIN
 
-namespace Catel.MVVM.ViewModels
+namespace Catel.MVVM
 {
     using System.ComponentModel;
 

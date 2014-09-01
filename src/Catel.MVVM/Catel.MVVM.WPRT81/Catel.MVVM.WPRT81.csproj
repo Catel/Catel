@@ -29,6 +29,7 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <GenerateLibraryLayout>true</GenerateLibraryLayout>
     <DocumentationFile>..\..\..\output\debug\WPRT81\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>
+    <NoWarn>1998</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -40,6 +41,7 @@
     <DocumentationFile>..\..\..\output\release\WPRT81\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <GenerateLibraryLayout>true</GenerateLibraryLayout>
+    <NoWarn>1998</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>

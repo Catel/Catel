@@ -15,7 +15,6 @@ namespace Catel.Data
 
     public partial class ModelBase
     {
-#if !NETFX_CORE
         /// <summary>
         /// Registers a property that will be automatically handled by this object.
         /// </summary>
@@ -39,7 +38,7 @@ namespace Catel.Data
 
             var memberExpression = (MemberExpression)propertyExpression.Body;
 
-#if !PCL
+#if !PCL && !NETFX_CORE
             if (memberExpression.Member.MemberType != MemberTypes.Property)
             {
                 throw new ArgumentException("The member type of the body of the property expression should be a property");
@@ -80,7 +79,7 @@ namespace Catel.Data
 
             var memberExpression = (MemberExpression)propertyExpression.Body;
 
-#if !PCL
+#if !PCL && !NETFX_CORE
             if (memberExpression.Member.MemberType != MemberTypes.Property)
             {
                 throw new ArgumentException("The member type of the body of the property expression should be a property");
@@ -102,7 +101,6 @@ namespace Catel.Data
                 }
             }, includeInSerialization, includeInBackup, setParent);
         }
-#endif
 
         /// <summary>
         /// Registers a property that will be automatically handled by this object.

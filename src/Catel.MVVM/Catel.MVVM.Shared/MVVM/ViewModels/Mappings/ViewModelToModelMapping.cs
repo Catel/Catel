@@ -10,7 +10,6 @@ namespace Catel.MVVM
     using System;
     using Windows.Interactivity.DragDropHelpers;
     using IoC;
-    using ViewModels;
 
     /// <summary>
     /// Model value class to store the mapping of the View Model to a Model mapping.

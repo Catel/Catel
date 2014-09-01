@@ -7,7 +7,6 @@
 namespace Catel.MVVM
 {
     using System;
-    using ViewModels;
 
     /// <summary>
     /// Specifies the different mapping modes available for the <see cref="ViewModelToModelAttribute" />.

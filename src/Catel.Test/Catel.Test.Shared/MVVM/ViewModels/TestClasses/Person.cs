@@ -259,7 +259,7 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         }
 
         /// <summary>Register the Age property so it is known in the class.</summary>
-        public static readonly PropertyData AgeProperty = RegisterProperty<PersonWithDataAnnotations, uint>(model => model.Age);
+        public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof(string), string.Empty);
 
         public uint Age
         {
@@ -270,7 +270,7 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the LastName property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof (string), string.Empty);
+        public static readonly PropertyData AgeProperty = RegisterProperty<PersonWithDataAnnotations, uint>(model => model.Age);
 
         /// <summary>
         /// Gets or sets the contact info.
