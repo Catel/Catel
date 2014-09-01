@@ -164,7 +164,7 @@ namespace Catel.Services
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         /// <exception cref="ViewModelNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
-        public virtual Task<bool?> Show(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
+        public virtual async Task<bool?> Show(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             Argument.IsNotNull("viewModel", viewModel);
 
@@ -179,7 +179,7 @@ namespace Catel.Services
                 }
             }
 
-            return Show(viewModelTypeName, viewModel, completedProc);
+            return await Show(viewModelTypeName, viewModel, completedProc);
         }
 
         /// <summary>
@@ -193,7 +193,7 @@ namespace Catel.Services
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type, bool)"/> method first.</exception>
-        public virtual Task<bool?> Show(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
+        public virtual async Task<bool?> Show(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             Argument.IsNotNullOrWhitespace("name", name);
 
@@ -208,10 +208,10 @@ namespace Catel.Services
             var window = CreateWindow(name, data, completedProc, false);
             if (window != null)
             {
-                return ShowWindow(window, false);
+                return await ShowWindow(window, false);
             }
 
-            return Task.Factory.StartNew<bool?>(() => false);
+            return false;
         }
 
         /// <summary>
@@ -224,7 +224,7 @@ namespace Catel.Services
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
-        public virtual Task<bool?> ShowDialog(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
+        public virtual async Task<bool?> ShowDialog(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             Argument.IsNotNull("viewModel", viewModel);
 
@@ -239,7 +239,7 @@ namespace Catel.Services
                 }
             }
 
-            return ShowDialog(viewModelTypeName, viewModel, completedProc);
+            return await ShowDialog(viewModelTypeName, viewModel, completedProc);
         }
 
         /// <summary>
@@ -253,7 +253,7 @@ namespace Catel.Services
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
-        public virtual Task<bool?> ShowDialog(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
+        public virtual async Task<bool?> ShowDialog(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             Argument.IsNotNullOrWhitespace("name", name);
 
@@ -268,10 +268,10 @@ namespace Catel.Services
             var window = CreateWindow(name, data, completedProc, true);
             if (window != null)
             {
-                return ShowWindow(window, true);
+                return await ShowWindow(window, true);
             }
 
-            return Task.Factory.StartNew<bool?>(() => false);
+            return false;
         }
 
 #if NET

@@ -13,7 +13,6 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
     using Catel.Data;
     using Catel.IoC;
     using Catel.MVVM;
-    using Catel.MVVM.ViewModels;
 
     /// <summary>
     /// Test view model.

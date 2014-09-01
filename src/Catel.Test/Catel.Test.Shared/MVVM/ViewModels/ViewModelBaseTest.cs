@@ -18,27 +18,6 @@
     [TestFixture]
     public class ViewModelBaseTest
     {
-        [TestFixture]
-        public class TheHasDirtyModelsProperty
-        {
-            [TestCase]
-            public void IsModelRegistered_ExistingModel()
-            {
-                var person = new Person();
-                person.FirstName = "first name";
-                person.LastName = "last name";
-                person.ClearIsDirty();
-
-                var viewModel = new TestViewModel(person);
-
-                Assert.IsFalse(viewModel.HasDirtyModel);
-
-                person.FirstName = "new first name";
-
-                Assert.IsTrue(viewModel.HasDirtyModel);
-            }            
-        }
-
         #region ViewModelToModel mappings
         [TestCase]
         public void ViewModelWithViewModelToModelMappings_DoubleModels()
@@ -208,6 +187,8 @@
         {
             var person = new PersonWithDataAnnotations();
             var viewModel = new TestViewModel(person, true);
+
+            ((IModelValidation)person).Validate(true);
 
             Assert.AreNotEqual(0, viewModel.GetValidationContext().GetValidationCount());
         }
@@ -525,7 +506,7 @@
         public void ChildViewModelUpdatesValidation()
         {
             var person = new Person();
-            person.LastName = "last_name";
+            person.FirstName = "first_name";
 
             var viewModel = new TestViewModel();
             var childViewModel = new TestViewModel(person);
@@ -535,12 +516,12 @@
             Assert.IsTrue(viewModel.HasErrors);
             Assert.IsTrue(childViewModel.HasErrors);
 
-            person.FirstName = "first_name";
+            person.LastName = "last_name";
 
             Assert.IsFalse(viewModel.HasErrors);
             Assert.IsFalse(childViewModel.HasErrors);
 
-            person.FirstName = string.Empty;
+            person.LastName = string.Empty;
 
             Assert.IsTrue(viewModel.HasErrors);
             Assert.IsTrue(childViewModel.HasErrors);

@@ -965,10 +965,7 @@ namespace Catel.MVVM
                         object model = _modelObjects[mapping.ModelProperty];
                         if (model != null)
                         {
-                            object viewModelValue = GetValue(e.PropertyName);
-                            //object modelValue = PropertyHelper.GetPropertyValue(model, mapping.ValueProperties);
-                            //if (!ObjectHelper.AreEqualReferences(viewModelValue, modelValue))
-                            //{
+                            var viewModelValue = GetValue(e.PropertyName);
                             string[] propertiesToSet = mapping.ValueProperties;
 
 #if !WINDOWS_PHONE && !NET35
@@ -999,7 +996,6 @@ namespace Catel.MVVM
                                     }
                                 }
                             }
-                            //}
                         }
                         else
                         {
