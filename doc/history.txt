@@ -132,6 +132,7 @@ Added/fixed:
 (*) CTL-479 Make IDataErrorInfo/IDataWarningInfo methods customizable in ModelBase
 (*) CTL-481 Share lock for ServiceLocator / TypeFactory / DependencyResolver to prevent memory leaks
 (*) CTL-512 FileLogListener should create directory if it doesn't exist
+(*) CTL-521 Catel is now able to handle entities derived from a base class
 (-) CTL-453 Remove CommandManager code from Command
 (x) CTL-327 ListCollectionView not supported in ChangeNotificationWrapper (causes InvalidCastException)
 (x) CTL-329 VisualStateManager doesn't change state in WP8 in UserControl => introduced option to transfer styles and
