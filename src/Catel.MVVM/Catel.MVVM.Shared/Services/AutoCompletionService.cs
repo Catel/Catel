@@ -49,7 +49,7 @@ namespace Catel.Services
                 try
                 {
                     // Filter items directly
-                    propertyValues.AddRange(from x in source.Cast<string>()
+                    propertyValues.AddRange(from x in source.OfType<string>()
                                             select x);
                 }
                 catch (Exception)
