@@ -22,7 +22,6 @@
 	
 	<dependencies>		
 		<group targetFramework="net40">
-          <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
 		  <dependency id="Catel.MVVM" version="[VERSION]" />
 		  <dependency id="CSLA-WPF" version="4.5.20" />
 		</group>	
@@ -33,7 +32,6 @@
 		</group>		
 
 		<group targetFramework="sl50">
-          <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
 		  <dependency id="Catel.MVVM" version="[VERSION]" />
 		  <dependency id="CSLA-Silverlight" version="4.5.20" />
 		</group>	

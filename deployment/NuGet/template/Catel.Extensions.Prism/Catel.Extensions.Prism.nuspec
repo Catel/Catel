@@ -21,22 +21,8 @@
 	<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>
 	
     <dependencies>
-        <group>
-          <dependency id="Catel.MVVM" version="[VERSION]" />
-          <dependency id="Prism" version="4.1.0.0" />        
-        </group>
-      
-        <group targetFramework="net40">
-          <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
           <dependency id="Catel.MVVM" version="[VERSION]" />
           <dependency id="Prism" version="4.1.0.0" />                  
-        </group>      
-        
-        <group targetFramework="sl50">
-          <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
-          <dependency id="Catel.MVVM" version="[VERSION]" />
-          <dependency id="Prism" version="4.1.0.0" />                  
-        </group>           
     </dependencies>
 	
   </metadata>

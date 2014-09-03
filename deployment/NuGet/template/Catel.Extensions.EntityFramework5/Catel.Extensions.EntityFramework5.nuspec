@@ -21,16 +21,8 @@
 	<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>
 	
     <dependencies>
-        <group>
           <dependency id="Catel.Core" version="[VERSION]" />
-          <dependency id="EntityFramework" version="5.0.0" />                  
-        </group>
-    
-        <group targetFramework="net40">
-          <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
-          <dependency id="Catel.Core" version="[VERSION]" />
-          <dependency id="EntityFramework" version="5.0.0" />          
-        </group>          
+          <dependency id="EntityFramework" version="5.0.0" />             
     </dependencies>
 	
   </metadata>
