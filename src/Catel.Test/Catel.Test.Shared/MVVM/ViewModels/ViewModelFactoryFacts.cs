@@ -7,6 +7,7 @@
 namespace Catel.Test.MVVM.ViewModels
 {
     using System;
+    using System.Reflection;
     using Catel.IoC;
     using Catel.MVVM;
     using NUnit.Framework;
@@ -63,8 +64,8 @@ namespace Catel.Test.MVVM.ViewModels
             public void ThrowsExceptionCausedByInjectionConstructor()
             {
                 var viewModelFactory = new ViewModelFactory(TypeFactory.Default);
-                ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => viewModelFactory.CreateViewModel<TestViewModel>("test"),
-                    e => string.Equals(e.Message, "test"));
+                ExceptionTester.CallMethodAndExpectException<TargetInvocationException>(() => viewModelFactory.CreateViewModel<TestViewModel>("test"),
+                    e => string.Equals(e.InnerException.Message, "test"));
             }
 
             [TestCase]
