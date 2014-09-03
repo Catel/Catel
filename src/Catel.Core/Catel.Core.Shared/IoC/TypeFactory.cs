@@ -579,7 +579,7 @@ namespace Catel.IoC
             {
                 // Real exceptions bubble up, otherwise return null
                 Log.Error(ex, "Failed to instantiate type '{0}', but this was an unexpected error", typeToConstruct.FullName);
-                throw ex.InnerException ?? ex;
+                throw;
             }
 
             Log.Debug("Failed to create instance using dependency injection for type '{0}' using constructor '{1}'",
