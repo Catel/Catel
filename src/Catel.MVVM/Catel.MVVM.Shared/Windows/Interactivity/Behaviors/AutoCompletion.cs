@@ -36,8 +36,7 @@ namespace Catel.Windows.Interactivity
     /// <summary>
     /// Auto complete behavior to support auto complete on a <c>TextBox</c> control.
     /// </summary>
-    [ObsoleteEx(Replacement = "AutoCompletion", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
-    public class AutoCompletionBehavior : BehaviorBase<TextBox>
+    public class AutoCompletion : BehaviorBase<TextBox>
     {
         #region Fields
         private readonly IAutoCompletionService _autoCompletionService;
@@ -53,14 +52,15 @@ namespace Catel.Windows.Interactivity
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="AutoCompletionBehavior"/> class.
+        /// Initializes a new instance of the <see cref="AutoCompletion"/> class.
         /// </summary>
-        public AutoCompletionBehavior()
+        public AutoCompletion()
         {
             var dependencyResolver = this.GetDependencyResolver();
             _autoCompletionService = dependencyResolver.Resolve<IAutoCompletionService>();
 
             _suggestionListBox = new ListBox();
+            _suggestionListBox.Margin = new Thickness(0d);
 
 #if NETFX_CORE
             _suggestionListBox.Background = new SolidColorBrush(Colors.Gainsboro);
@@ -94,7 +94,7 @@ namespace Catel.Windows.Interactivity
         /// The is enabled property.
         /// </summary>
         public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.Register("IsEnabled", typeof(bool),
-            typeof(AutoCompletionBehavior), new PropertyMetadata(true, (sender, e) => ((AutoCompletionBehavior)sender).OnIsEnabledChanged()));
+            typeof(AutoCompletion), new PropertyMetadata(true, (sender, e) => ((AutoCompletion)sender).OnIsEnabledChanged()));
 
         /// <summary>
         /// Gets or sets the name of the property.
@@ -110,7 +110,7 @@ namespace Catel.Windows.Interactivity
         /// The property name property.
         /// </summary>
         public static readonly DependencyProperty PropertyNameProperty = DependencyProperty.Register("PropertyName", typeof(string),
-            typeof(AutoCompletionBehavior), new PropertyMetadata(string.Empty, (sender, e) => ((AutoCompletionBehavior)sender).OnPropertyNameChanged()));
+            typeof(AutoCompletion), new PropertyMetadata(string.Empty, (sender, e) => ((AutoCompletion)sender).OnPropertyNameChanged()));
 
         /// <summary>
         /// Gets or sets the items source.
@@ -126,7 +126,7 @@ namespace Catel.Windows.Interactivity
         /// The items source property.
         /// </summary>
         public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(IEnumerable),
-            typeof(AutoCompletionBehavior), new PropertyMetadata(null, (sender, e) => ((AutoCompletionBehavior)sender).OnItemsSourceChanged()));
+            typeof(AutoCompletion), new PropertyMetadata(null, (sender, e) => ((AutoCompletion)sender).OnItemsSourceChanged()));
         #endregion
 
         #region Methods
