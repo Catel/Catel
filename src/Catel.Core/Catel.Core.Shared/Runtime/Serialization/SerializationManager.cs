@@ -79,7 +79,7 @@ namespace Catel.Runtime.Serialization
 
             return _fieldsToSerializeCache.GetFromCacheOrFetch(type, () =>
             {
-                var fields = new List<string>();
+                var fields = new HashSet<string>();
 
                 var typeFields = type.GetFieldsEx();
                 foreach (var typeField in typeFields)
@@ -90,7 +90,7 @@ namespace Catel.Runtime.Serialization
                     }
                 }
 
-                return new HashSet<string>(fields);
+                return fields;
             });
         }
 
@@ -106,12 +106,12 @@ namespace Catel.Runtime.Serialization
 
             return _propertiesToSerializeCache.GetFromCacheOrFetch(type, () =>
             {
-                var properties = new List<string>();
+                var properties = new HashSet<string>();
 
                 var propertyDataManager = PropertyDataManager.Default;
                 var catelTypeInfo = propertyDataManager.GetCatelTypeInfo(type);
                 var catelProperties = catelTypeInfo.GetCatelProperties();
-                var catelPropertyNames = catelProperties.Keys.ToList();
+                var catelPropertyNames = new HashSet<string>(catelProperties.Keys);
                 foreach (var modelProperty in catelProperties)
                 {
                     var propertyData = modelProperty.Value;
@@ -155,7 +155,7 @@ namespace Catel.Runtime.Serialization
                     }
                 }
 
-                return new HashSet<string>(properties);
+                return properties;
             });
         }
 
@@ -175,7 +175,7 @@ namespace Catel.Runtime.Serialization
                 var catelTypeInfo = propertyDataManager.GetCatelTypeInfo(type);
                 var properties = (from property in catelTypeInfo.GetCatelProperties()
                                   where !property.Value.IsModelBaseProperty
-                                  select property.Key).ToList();
+                                  select property.Key);
 
                 return new HashSet<string>(properties);
             });

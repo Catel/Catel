@@ -29,7 +29,7 @@ namespace Catel.Data
         /// <summary>
         /// The validator providers.
         /// </summary>
-        private readonly List<IValidatorProvider> _validatorProviders = new List<IValidatorProvider>();
+        private readonly HashSet<IValidatorProvider> _validatorProviders = new HashSet<IValidatorProvider>();
         #endregion
 
         #region Public Methods and Operators
@@ -74,14 +74,15 @@ namespace Catel.Data
         /// <remarks>If there are more than once validator provider and they retrieve more than once validator all of these will be aggregated into a single <see cref="CompositeValidator" />.</remarks>
         protected override IValidator GetValidator(Type targetType)
         {
-            IValidator validator;
+            IValidator validator; 
+
             lock (_syncObj)
             {
                 IList<IValidator> discoveredValidators = _validatorProviders.Select(validatorProvider => validatorProvider.GetValidator(targetType)).Where(discoveredValidator => discoveredValidator != null).ToList();
                 if (discoveredValidators.Count > 1)
                 {
                     var composite = new CompositeValidator();
-                    foreach (IValidator discoveredValidator in discoveredValidators)
+                    foreach (var discoveredValidator in discoveredValidators)
                     {
                         composite.Add(discoveredValidator);
                     }

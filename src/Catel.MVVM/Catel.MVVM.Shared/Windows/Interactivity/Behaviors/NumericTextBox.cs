@@ -42,7 +42,7 @@ namespace Catel.Windows.Interactivity
         private const string PeriodCharacter = ".";
         private const string CommaCharacter = ",";
 
-        private static readonly List<Key> AllowedKeys = new List<Key>
+        private static readonly HashSet<Key> AllowedKeys = new HashSet<Key>
         {
             Key.Back,
 

@@ -23,7 +23,7 @@ namespace Catel.Data
         /// <summary>
         /// The validator list.
         /// </summary>
-        private readonly List<IValidator> _validators = new List<IValidator>();
+        private readonly HashSet<IValidator> _validators = new HashSet<IValidator>();
 
         /// <summary>
         /// The synchronization context.
@@ -91,7 +91,7 @@ namespace Catel.Data
         {
             try
             {
-                foreach (IValidator validator in _validators)
+                foreach (var validator in _validators)
                 {
                     validator.Validate(instance, validationContext);
                 }
@@ -106,31 +106,19 @@ namespace Catel.Data
         /// <summary>
         /// Called just before any validation is caused.
         /// </summary>
-        /// <param name="instance">
-        /// The instance that is about to be validated.
-        /// </param>
-        /// <param name="previousFieldValidationResults">
-        /// The previous field validation results.
-        /// </param>
-        /// <param name="previousBusinessRuleValidationResults">
-        /// The previous business rule validation results.
-        /// </param>
-        /// <exception cref="ArgumentNullException">
-        /// The <paramref name="instance"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="ArgumentNullException">
-        /// The <paramref name="previousFieldValidationResults"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="ArgumentNullException">
-        /// The <paramref name="previousBusinessRuleValidationResults"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="instance">The instance that is about to be validated.</param>
+        /// <param name="previousFieldValidationResults">The previous field validation results.</param>
+        /// <param name="previousBusinessRuleValidationResults">The previous business rule validation results.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="instance" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="previousFieldValidationResults" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="previousBusinessRuleValidationResults" /> is <c>null</c>.</exception>
         public void BeforeValidation(object instance, List<IFieldValidationResult> previousFieldValidationResults, List<IBusinessRuleValidationResult> previousBusinessRuleValidationResults)
         {
             _synchronizationContext.Acquire();
 
             try
             {
-                foreach (IValidator validator in _validators)
+                foreach (var validator in _validators)
                 {
                     validator.BeforeValidation(instance, previousFieldValidationResults, previousBusinessRuleValidationResults);
                 }
@@ -145,23 +133,15 @@ namespace Catel.Data
         /// <summary>
         /// Called just before the specified instance is about to be validate its fields.
         /// </summary>
-        /// <param name="instance">
-        /// The instance that is about to be validated.
-        /// </param>
-        /// <param name="previousValidationResults">
-        /// The previous validation results.
-        /// </param>
-        /// <exception cref="ArgumentNullException">
-        /// The <paramref name="instance"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="ArgumentNullException">
-        /// The <paramref name="previousValidationResults"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="instance">The instance that is about to be validated.</param>
+        /// <param name="previousValidationResults">The previous validation results.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="instance" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="previousValidationResults" /> is <c>null</c>.</exception>
         public void BeforeValidateFields(object instance, List<IFieldValidationResult> previousValidationResults)
         {
             try
             {
-                foreach (IValidator validator in _validators)
+                foreach (var validator in _validators)
                 {
                     validator.BeforeValidateFields(instance, previousValidationResults);
                 }
@@ -176,23 +156,15 @@ namespace Catel.Data
         /// <summary>
         /// Called just before the specified instance is about to be validate its business rules.
         /// </summary>
-        /// <param name="instance">
-        /// The instance that is about to be validated.
-        /// </param>
-        /// <param name="previousValidationResults">
-        /// The validation results.
-        /// </param>
-        /// <exception cref="ArgumentNullException">
-        /// The <paramref name="instance"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="ArgumentNullException">
-        /// The <paramref name="previousValidationResults"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="instance">The instance that is about to be validated.</param>
+        /// <param name="previousValidationResults">The validation results.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="instance" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="previousValidationResults" /> is <c>null</c>.</exception>
         public void BeforeValidateBusinessRules(object instance, List<IBusinessRuleValidationResult> previousValidationResults)
         {
             try
             {
-                foreach (IValidator validator in _validators)
+                foreach (var validator in _validators)
                 {
                     validator.BeforeValidateBusinessRules(instance, previousValidationResults);
                 }
@@ -208,23 +180,15 @@ namespace Catel.Data
         /// Validates the fields of the specified instance. The results must be added to the list of validation
         /// results.
         /// </summary>
-        /// <param name="instance">
-        /// The instance to validate.
-        /// </param>
-        /// <param name="validationResults">
-        /// The validation results.
-        /// </param>
-        /// <exception cref="ArgumentNullException">
-        /// The <paramref name="instance"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="ArgumentNullException">
-        /// The <paramref name="validationResults"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="instance">The instance to validate.</param>
+        /// <param name="validationResults">The validation results.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="instance" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="validationResults" /> is <c>null</c>.</exception>
         public void ValidateFields(object instance, List<IFieldValidationResult> validationResults)
         {
             try
             {
-                foreach (IValidator validator in _validators)
+                foreach (var validator in _validators)
                 {
                     validator.ValidateFields(instance, validationResults);
                 }
@@ -240,23 +204,15 @@ namespace Catel.Data
         /// Validates the business rules of the specified instance. The results must be added to the list of validation
         /// results.
         /// </summary>
-        /// <param name="instance">
-        /// The instance to validate.
-        /// </param>
-        /// <param name="validationResults">
-        /// The validation results.
-        /// </param>
-        /// <exception cref="ArgumentNullException">
-        /// The <paramref name="instance"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="ArgumentNullException">
-        /// The <paramref name="validationResults"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="instance">The instance to validate.</param>
+        /// <param name="validationResults">The validation results.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="instance" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="validationResults" /> is <c>null</c>.</exception>
         public void ValidateBusinessRules(object instance, List<IBusinessRuleValidationResult> validationResults)
         {
             try
             {
-                foreach (IValidator validator in _validators)
+                foreach (var validator in _validators)
                 {
                     validator.ValidateBusinessRules(instance, validationResults);
                 }
@@ -273,23 +229,15 @@ namespace Catel.Data
         /// <summary>
         /// Called just after the specified instance has validated its business rules.
         /// </summary>
-        /// <param name="instance">
-        /// The instance that has just been validated.
-        /// </param>
-        /// <param name="validationResults">
-        /// The validation results.
-        /// </param>
-        /// <exception cref="ArgumentNullException">
-        /// The <paramref name="instance"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="ArgumentNullException">
-        /// The <paramref name="validationResults"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="instance">The instance that has just been validated.</param>
+        /// <param name="validationResults">The validation results.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="instance" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="validationResults" /> is <c>null</c>.</exception>
         public void AfterValidateBusinessRules(object instance, List<IBusinessRuleValidationResult> validationResults)
         {
             try
             {
-                foreach (IValidator validator in _validators)
+                foreach (var validator in _validators)
                 {
                     validator.AfterValidateBusinessRules(instance, validationResults);
                 }
@@ -304,23 +252,15 @@ namespace Catel.Data
         /// <summary>
         /// Called just after the specified instance has validated its fields.
         /// </summary>
-        /// <param name="instance">
-        /// The instance that has just been validated.
-        /// </param>
-        /// <param name="validationResults">
-        /// The validation results.
-        /// </param>
-        /// <exception cref="ArgumentNullException">
-        /// The <paramref name="instance"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="ArgumentNullException">
-        /// The <paramref name="validationResults"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="instance">The instance that has just been validated.</param>
+        /// <param name="validationResults">The validation results.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="instance" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="validationResults" /> is <c>null</c>.</exception>
         public void AfterValidateFields(object instance, List<IFieldValidationResult> validationResults)
         {
             try
             {
-                foreach (IValidator validator in _validators)
+                foreach (var validator in _validators)
                 {
                     validator.AfterValidateFields(instance, validationResults);
                 }
@@ -335,29 +275,17 @@ namespace Catel.Data
         /// <summary>
         /// Called just after all validation has been executed.
         /// </summary>
-        /// <param name="instance">
-        /// The instance that has just been validated.
-        /// </param>
-        /// <param name="fieldValidationResults">
-        /// The current field validation results.
-        /// </param>
-        /// <param name="businessRuleValidationResults">
-        /// The current business rule validation results.
-        /// </param>
-        /// <exception cref="ArgumentNullException">
-        /// The <paramref name="instance"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="ArgumentNullException">
-        /// The <paramref name="fieldValidationResults"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="ArgumentNullException">
-        /// The <paramref name="businessRuleValidationResults"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="instance">The instance that has just been validated.</param>
+        /// <param name="fieldValidationResults">The current field validation results.</param>
+        /// <param name="businessRuleValidationResults">The current business rule validation results.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="instance" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="fieldValidationResults" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="businessRuleValidationResults" /> is <c>null</c>.</exception>
         public void AfterValidation(object instance, List<IFieldValidationResult> fieldValidationResults, List<IBusinessRuleValidationResult> businessRuleValidationResults)
         {
             try
             {
-                foreach (IValidator validator in _validators)
+                foreach (var validator in _validators)
                 {
                     validator.AfterValidation(instance, fieldValidationResults, businessRuleValidationResults);
                 }

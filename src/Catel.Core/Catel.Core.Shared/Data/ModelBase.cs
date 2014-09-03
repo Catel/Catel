@@ -701,7 +701,7 @@ namespace Catel.Data
         /// </summary>
         protected void ClearIsDirtyOnAllChilds()
         {
-            ClearIsDirtyOnAllChilds(this, new List<IModel>());
+            ClearIsDirtyOnAllChilds(this, new HashSet<IModel>());
         }
 
         /// <summary>
@@ -709,7 +709,7 @@ namespace Catel.Data
         /// </summary>
         /// <param name="obj">The object.</param>
         /// <param name="handledReferences">The already handled references, required to prevent circular stackoverflows.</param>
-        private static void ClearIsDirtyOnAllChilds(object obj, List<IModel> handledReferences)
+        private static void ClearIsDirtyOnAllChilds(object obj, HashSet<IModel> handledReferences)
         {
             var objAsModelBase = obj as ModelBase;
             var objAsIEnumerable = obj as IEnumerable;

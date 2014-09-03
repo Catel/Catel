@@ -479,7 +479,7 @@ namespace Catel.MVVM.Providers
             }
             else
             {
-                var propertiesToSubscribe = _viewPropertySelector.GetViewPropertiesToSubscribeTo(targetViewType);
+                var propertiesToSubscribe = new HashSet<string>(_viewPropertySelector.GetViewPropertiesToSubscribeTo(targetViewType));
                 if (!propertiesToSubscribe.Contains("DataContext"))
                 {
                     propertiesToSubscribe.Add("DataContext");

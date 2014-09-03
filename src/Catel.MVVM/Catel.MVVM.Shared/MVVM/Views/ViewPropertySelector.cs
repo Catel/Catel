@@ -23,8 +23,8 @@ namespace Catel.MVVM.Views
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private readonly List<string> _allViewsProperties = new List<string>();
-        private readonly Dictionary<Type, List<string>> _viewProperties = new Dictionary<Type, List<string>>();
+        private readonly HashSet<string> _allViewsProperties = new HashSet<string>();
+        private readonly Dictionary<Type, HashSet<string>> _viewProperties = new Dictionary<Type, HashSet<string>>();
 
         /// <summary>
         /// Adds the property to subscribe to.
@@ -53,7 +53,7 @@ namespace Catel.MVVM.Views
 
                 if (!_viewProperties.ContainsKey(targetViewType))
                 {
-                    _viewProperties[targetViewType] = new List<string>();
+                    _viewProperties[targetViewType] = new HashSet<string>();
                 }
 
                 var properties = _viewProperties[targetViewType];

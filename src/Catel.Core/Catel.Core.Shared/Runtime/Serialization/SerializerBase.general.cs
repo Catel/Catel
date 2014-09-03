@@ -100,7 +100,7 @@ namespace Catel.Runtime.Serialization
             });
 
             var listToSerialize = new List<MemberValue>();
-            var checkedMemberNames = new List<string>();
+            var checkedMemberNames = new HashSet<string>();
 
             foreach (var propertyName in modelInfo.PropertiesByName.Keys)
             {

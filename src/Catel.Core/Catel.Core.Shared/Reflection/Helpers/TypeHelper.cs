@@ -26,7 +26,7 @@ namespace Catel.Reflection
         /// <summary>
         /// A list of microsoft public key tokens.
         /// </summary>
-        private static readonly List<string> _microsoftPublicKeyTokens;
+        private static readonly HashSet<string> _microsoftPublicKeyTokens;
         #endregion
 
         #region Constructors
@@ -35,7 +35,7 @@ namespace Catel.Reflection
         /// </summary>
         static TypeHelper()
         {
-            _microsoftPublicKeyTokens = new List<string>();
+            _microsoftPublicKeyTokens = new HashSet<string>();
             _microsoftPublicKeyTokens.Add("b77a5c561934e089");
             _microsoftPublicKeyTokens.Add("b03f5f7f11d50a3a");
             _microsoftPublicKeyTokens.Add("31bf3856ad364e35");

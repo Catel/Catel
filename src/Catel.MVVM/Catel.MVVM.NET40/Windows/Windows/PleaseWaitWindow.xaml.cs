@@ -49,7 +49,7 @@ namespace Catel.Windows
 
         private Thread _thread;
 
-        private readonly List<FrameworkElement> _dimmedElements = new List<FrameworkElement>();
+        private readonly HashSet<FrameworkElement> _dimmedElements = new HashSet<FrameworkElement>();
         #endregion
 
         #region Constructors

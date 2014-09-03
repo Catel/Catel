@@ -37,12 +37,12 @@ namespace Catel.MVVM.Views
         /// <summary>
         /// List of properties in the view model that should be ignored.
         /// </summary>
-        private readonly List<string> _ignoredViewModelChanges = new List<string>();
+        private readonly HashSet<string> _ignoredViewModelChanges = new HashSet<string>();
 
         /// <summary>
         /// List of properties in the view that should be ignored.
         /// </summary>
-        private readonly List<string> _ignoredViewChanges = new List<string>();
+        private readonly HashSet<string> _ignoredViewChanges = new HashSet<string>();
         #endregion
 
         #region Constructors

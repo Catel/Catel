@@ -18,7 +18,7 @@ namespace Catel.MVVM.Auditing
         /// Gets a list of properties that should be ignored.
         /// </summary>
         /// <value>The list of properties to ignore.</value>
-        List<string> PropertiesToIgnore { get; }
+        HashSet<string> PropertiesToIgnore { get; }
 
         /// <summary>
         /// Called when a specific view model type is being created.

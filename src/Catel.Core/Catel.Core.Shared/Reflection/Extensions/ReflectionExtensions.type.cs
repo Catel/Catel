@@ -75,17 +75,17 @@ namespace Catel.Reflection
         /// <summary>
         /// Dictionary containing all possible implicit conversions of system types.
         /// </summary>
-        private static readonly Dictionary<Type, List<Type>> _convertableDictionary = new Dictionary<Type, List<Type>>
+        private static readonly Dictionary<Type, HashSet<Type>> _convertableDictionary = new Dictionary<Type, HashSet<Type>>
             {
-                {typeof (decimal), new List<Type> {typeof (sbyte), typeof (byte), typeof (short), typeof (ushort), typeof (int), typeof (uint), typeof (long), typeof (ulong), typeof (char)}},
-                {typeof (double), new List<Type> {typeof (sbyte), typeof (byte), typeof (short), typeof (ushort), typeof (int), typeof (uint), typeof (long), typeof (ulong), typeof (char), typeof (float)}},
-                {typeof (float), new List<Type> {typeof (sbyte), typeof (byte), typeof (short), typeof (ushort), typeof (int), typeof (uint), typeof (long), typeof (ulong), typeof (char), typeof (float)}},
-                {typeof (ulong), new List<Type> {typeof (byte), typeof (ushort), typeof (uint), typeof (char)}},
-                {typeof (long), new List<Type> {typeof (sbyte), typeof (byte), typeof (short), typeof (ushort), typeof (int), typeof (uint), typeof (char)}},
-                {typeof (uint), new List<Type> {typeof (byte), typeof (ushort), typeof (char)}},
-                {typeof (int), new List<Type> {typeof (sbyte), typeof (byte), typeof (short), typeof (ushort), typeof (char)}},
-                {typeof (ushort), new List<Type> {typeof (byte), typeof (char)}},
-                {typeof (short), new List<Type> {typeof (byte)}}
+                {typeof (decimal), new HashSet<Type> {typeof (sbyte), typeof (byte), typeof (short), typeof (ushort), typeof (int), typeof (uint), typeof (long), typeof (ulong), typeof (char)}},
+                {typeof (double), new HashSet<Type> {typeof (sbyte), typeof (byte), typeof (short), typeof (ushort), typeof (int), typeof (uint), typeof (long), typeof (ulong), typeof (char), typeof (float)}},
+                {typeof (float), new HashSet<Type> {typeof (sbyte), typeof (byte), typeof (short), typeof (ushort), typeof (int), typeof (uint), typeof (long), typeof (ulong), typeof (char), typeof (float)}},
+                {typeof (ulong), new HashSet<Type> {typeof (byte), typeof (ushort), typeof (uint), typeof (char)}},
+                {typeof (long), new HashSet<Type> {typeof (sbyte), typeof (byte), typeof (short), typeof (ushort), typeof (int), typeof (uint), typeof (char)}},
+                {typeof (uint), new HashSet<Type> {typeof (byte), typeof (ushort), typeof (char)}},
+                {typeof (int), new HashSet<Type> {typeof (sbyte), typeof (byte), typeof (short), typeof (ushort), typeof (char)}},
+                {typeof (ushort), new HashSet<Type> {typeof (byte), typeof (char)}},
+                {typeof (short), new HashSet<Type> {typeof (byte)}}
             };
 
         /// <summary>

@@ -63,7 +63,7 @@ namespace Catel.Windows.PopupBehavior
         /// <summary>
         /// List of popups that should automatically be resized to have the same size as the parent.
         /// </summary>
-        private static readonly IList<System.Windows.Controls.Primitives.Popup> _customPopupResizing = new List<System.Windows.Controls.Primitives.Popup>();
+        private static readonly HashSet<System.Windows.Controls.Primitives.Popup> _customPopupResizing = new HashSet<System.Windows.Controls.Primitives.Popup>();
 
         private static readonly IList<PopupPlacement> popupPlacements = new List<PopupPlacement>(new PopupPlacement[] { PopupPlacement.Top, PopupPlacement.Bottom, PopupPlacement.Left, PopupPlacement.Right });
         private static readonly IList<PopupHorizontalAlignment> horizontalAlignments = new List<PopupHorizontalAlignment>(new PopupHorizontalAlignment[] { PopupHorizontalAlignment.Center, PopupHorizontalAlignment.LeftCenter, PopupHorizontalAlignment.RightCenter, PopupHorizontalAlignment.Left, PopupHorizontalAlignment.Right });
