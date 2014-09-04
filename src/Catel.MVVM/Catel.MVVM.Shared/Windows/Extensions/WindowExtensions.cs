@@ -394,7 +394,7 @@ namespace Catel.Windows
                 var currentApplication = Application.Current;
                 if (currentApplication != null)
                 {
-                    var entryAssembly = Assembly.GetEntryAssembly();
+                    var entryAssembly = AssemblyHelper.GetEntryAssembly();
                     if (entryAssembly != null)
                     {
                         var icon = Icon.ExtractAssociatedIcon(entryAssembly.Location);
