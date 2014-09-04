@@ -37,5 +37,21 @@ namespace Catel.Configuration
         /// <param name="value">The value.</param>
         /// <exception cref="ArgumentException">The <paramref name="key"/> is <c>null</c> or whitespace.</exception>
         void SetValue(string key, object value);
+
+        /// <summary>
+        /// Determines whether the specified value is available.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns><c>true</c> if the specified value is available; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="key"/> is <c>null</c> or whitespace.</exception>
+        bool IsValueAvailable(string key);
+
+        /// <summary>
+        /// Initializes the value by setting the value to the <paramref name="defaultValue" /> if the value does not yet exist.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="defaultValue">The default value.</param>
+        /// <exception cref="ArgumentException">The <paramref name="key"/> is <c>null</c> or whitespace.</exception>
+        void InitializeValue(string key, object defaultValue);
     }
 }

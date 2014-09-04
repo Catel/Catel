@@ -78,6 +78,35 @@ namespace Catel.Configuration
         }
 
         /// <summary>
+        /// Determines whether the specified value is available.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns><c>true</c> if the specified value is available; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="key"/> is <c>null</c> or whitespace.</exception>
+        public bool IsValueAvailable(string key)
+        {
+            Argument.IsNotNullOrWhitespace("key", key);
+
+            return ValueExists(key);
+        }
+
+        /// <summary>
+        /// Initializes the value by setting the value to the <paramref name="defaultValue" /> if the value does not yet exist.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="defaultValue">The default value.</param>
+        /// <exception cref="ArgumentException">The <paramref name="key"/> is <c>null</c> or whitespace.</exception>
+        public void InitializeValue(string key, object defaultValue)
+        {
+            Argument.IsNotNullOrWhitespace("key", key);
+
+            if (!IsValueAvailable(key))
+            {
+                SetValue(key, defaultValue);
+            }
+        }
+
+        /// <summary>
         /// Determines whether the specified key value exists in the configuration.
         /// </summary>
         /// <param name="key">The key.</param>
