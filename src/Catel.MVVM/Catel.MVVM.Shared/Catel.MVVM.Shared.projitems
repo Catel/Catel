@@ -166,6 +166,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Attributes\ViewToViewModelAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\EventArgs\DataContextChangedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\EventArgs\ViewLoadEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\EventArgs\ViewStackPartEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Extensions\ViewExtensions.android.cs" />

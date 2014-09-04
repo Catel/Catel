@@ -143,7 +143,7 @@ namespace Catel.Windows
 
         private event EventHandler<EventArgs> _viewLoaded;
         private event EventHandler<EventArgs> _viewUnloaded;
-        private event EventHandler<EventArgs> _viewDataContextChanged;
+        private event EventHandler<DataContextChangedEventArgs> _viewDataContextChanged;
         #endregion
 
         #region Constructors
@@ -289,7 +289,7 @@ namespace Catel.Windows
 
             Loaded += (sender, e) => Initialize();
             Closing += OnDataWindowClosing;
-            DataContextChanged += (sender, e) => _viewDataContextChanged.SafeInvoke(this);
+            DataContextChanged += (sender, e) => _viewDataContextChanged.SafeInvoke(this, new DataContextChangedEventArgs(e.OldValue, e.NewValue));
 
 #if NET
             if (setOwnerAndFocus)
@@ -624,7 +624,7 @@ namespace Catel.Windows
         /// <summary>
         /// Occurs when the data context has changed.
         /// </summary>
-        event EventHandler<EventArgs> IView.DataContextChanged
+        event EventHandler<DataContextChangedEventArgs> IView.DataContextChanged
         {
             add { _viewDataContextChanged += value; }
             remove { _viewDataContextChanged -= value; }

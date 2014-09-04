@@ -750,8 +750,13 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        public virtual void OnTargetViewDataContextChanged(object sender, EventArgs e)
+        public virtual void OnTargetViewDataContextChanged(object sender, DataContextChangedEventArgs e)
         {
+            if (e.AreEqual)
+            {
+                return;
+            }
+
             Log.Debug("DataContext of TargetView '{0}' has changed to '{1}'", TargetView.GetType().Name, ObjectToStringHelper.ToTypeString(TargetView.DataContext));
 
             var dataContext = TargetView.DataContext;

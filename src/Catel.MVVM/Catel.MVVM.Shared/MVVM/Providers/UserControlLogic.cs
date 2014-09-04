@@ -452,8 +452,13 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        public override void OnTargetViewDataContextChanged(object sender, EventArgs e)
+        public override void OnTargetViewDataContextChanged(object sender, Catel.MVVM.Views.DataContextChangedEventArgs e)
         {
+            if (e.AreEqual)
+            {
+                return;
+            }
+
             if (!IsTargetViewLoaded && !IsLoading)
             {
                 return;
