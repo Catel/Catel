@@ -23,7 +23,12 @@ namespace Catel.Logging
     {
         private const string AppData = "{AppData}";
         private const string AppDir = "{AppDir}";
+        private const string Date = "{Date}";
+        private const string Time = "{Time}";
+        private const string AssemblyName = "{AssemblyName}";
+        private const string ProcessId = "{ProcessId}";
         private const string AutoLogFileName = "{AutoLogFileName}";
+        private readonly string AutoLogFileNameReplacement = string.Format("{0}_{1}_{2}_{3}", AssemblyName, Date, Time, ProcessId);
 
         private readonly Assembly _assembly;
         private string _filePath;
@@ -37,7 +42,7 @@ namespace Catel.Logging
         {
             MaxSizeInKiloBytes = 1000 * 10; // 10 MB
 
-            _assembly = assembly ?? Assembly.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
+            _assembly = assembly ?? AssemblyHelper.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
 
             if (string.IsNullOrWhiteSpace(_filePath))
             {
@@ -146,6 +151,11 @@ namespace Catel.Logging
                 filePath = string.Empty;
             }
 
+            if (filePath.Contains(AutoLogFileName))
+            {
+                filePath = filePath.Replace(AutoLogFileName, AutoLogFileNameReplacement);
+            }
+
             string dataDirectory;
 
             if (_assembly != null)
@@ -157,6 +167,26 @@ namespace Catel.Logging
                 dataDirectory = IO.Path.GetApplicationDataDirectory();
             }
 
+            if (filePath.Contains(AssemblyName))
+            {
+                filePath = filePath.Replace(AssemblyName, _assembly.GetName().Name);
+            }
+
+            if (filePath.Contains(ProcessId))
+            {
+                filePath = filePath.Replace(ProcessId, Process.GetCurrentProcess().Id.ToString());
+            }
+
+            if (filePath.Contains(Date))
+            {
+                filePath = filePath.Replace(Date, DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+            }
+
+            if (filePath.Contains(Time))
+            {
+                filePath = filePath.Replace(Time, DateTime.Now.ToString("HHmmss", CultureInfo.InvariantCulture));
+            }
+
             if (filePath.Contains(AppData))
             {
                 filePath = filePath.Replace(AppData, dataDirectory);
@@ -165,16 +195,6 @@ namespace Catel.Logging
             if (filePath.Contains(AppDir))
             {
                 filePath = filePath.Replace(AppDir, AppDomain.CurrentDomain.BaseDirectory);
-            }
-
-            if (filePath.Contains(AutoLogFileName))
-            {
-                var now = DateTime.Now;
-                var autoLogFileName = string.Format(CultureInfo.InvariantCulture, "{0}_{1}_{2}_{3}", 
-                    Path.GetFileName(_assembly.Location), now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
-                    now.ToString("HHmmss", CultureInfo.InvariantCulture), Process.GetCurrentProcess().Id);
-
-                filePath = filePath.Replace(AutoLogFileName, autoLogFileName);
             }
 
             filePath = IO.Path.GetFullPath(filePath, dataDirectory);

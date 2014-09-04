@@ -141,6 +141,17 @@ namespace Catel.Reflection
                 {
                     assembly = Assembly.GetEntryAssembly();
                 }
+
+                if (assembly == null)
+                {
+                    var appDomain = AppDomain.CurrentDomain;
+                    var setupInfo = appDomain.SetupInformation;
+                    var assemblyPath = Path.Combine(setupInfo.ApplicationBase, setupInfo.ApplicationName);
+
+                    assembly = (from x in appDomain.GetAssemblies()
+                                where string.Equals(x.Location, assemblyPath)
+                                select x).FirstOrDefault();
+                }
 #elif SILVERLIGHT
                 assembly = System.Windows.Application.Current.GetType().Assembly;
 #elif NETFX_CORE
