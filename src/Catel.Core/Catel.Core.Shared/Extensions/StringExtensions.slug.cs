@@ -17,12 +17,12 @@ namespace Catel
         /// <summary>
         /// The slug regex.
         /// </summary>
-        public static readonly Regex SlugRegex = new Regex(@"[^A-Za-z0-9_.]+", RegexOptions.Compiled);
+        public static readonly Regex SlugRegex = new Regex(@"[^A-Za-z0-9_.]+");
 
         /// <summary>
         /// The white space regex.
         /// </summary>
-        public static readonly Regex WhiteSpaceRegex = new Regex(@"[\s]+", RegexOptions.Compiled);
+        public static readonly Regex WhiteSpaceRegex = new Regex(@"[\s]+");
         #endregion
 
         #region Methods
@@ -39,7 +39,10 @@ namespace Catel
             Argument.IsNotNull("spaceReplacement", spaceReplacement);
             Argument.IsNotNull("dotReplacement", dotReplacement);
 
+#if NET
             input = input.RemoveDiacritics();
+#endif
+
             var output = WhiteSpaceRegex.Replace(input, spaceReplacement);
             output = SlugRegex.Replace(output, string.Empty).ToLowerInvariant();
 
@@ -48,6 +51,7 @@ namespace Catel
             return output;
         }
 
+#if NET
         /// <summary>
         /// Removes the diacritics (special characters) from the string.
         /// </summary>
@@ -69,6 +73,7 @@ namespace Catel
 
             return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
+#endif
         #endregion
     }
 }
