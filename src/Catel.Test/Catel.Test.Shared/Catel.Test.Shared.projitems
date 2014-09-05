@@ -108,6 +108,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Prism\Modules\NuGetBasedModuleCatalog_Facts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Prism\ServiceLocatorAdapterTests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Prism\UIVisualizerServiceExtensionsTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensionsFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Wcf.Server\InstanceProviderFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Wcf.Server\ServiceHostFactoryFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Wcf.Server\ServiceHostFacts.cs" />

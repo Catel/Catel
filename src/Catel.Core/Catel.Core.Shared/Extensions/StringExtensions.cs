@@ -10,7 +10,7 @@ namespace Catel
     /// <summary>
     /// The string extensions.
     /// </summary>
-    public static class StringExtensions
+    public static partial class StringExtensions
     {
         #region Methods
         /// <summary>
