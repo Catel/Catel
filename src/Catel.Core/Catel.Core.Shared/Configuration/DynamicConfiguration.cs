@@ -4,8 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || SILVERLIGHT
-
 namespace Catel.Configuration
 {
     using Data;
@@ -70,5 +68,3 @@ namespace Catel.Configuration
         #endregion
     }
 }
-
-#endif

@@ -4,8 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
-
 namespace Catel.Configuration
 {
     using Runtime.Serialization;
@@ -42,5 +40,3 @@ namespace Catel.Configuration
         }
     }
 }
-
-#endif
