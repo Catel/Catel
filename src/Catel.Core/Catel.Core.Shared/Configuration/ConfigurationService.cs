@@ -215,7 +215,6 @@ namespace Catel.Configuration
             if (!_configuration.IsConfigurationKeyAvailable(key))
             {
                 _configuration.RegisterConfigurationKey(key);
-                _serializationManager.Clear(_configuration.GetType());
             }
 
             _configuration.SetConfigurationValue(key, value);
