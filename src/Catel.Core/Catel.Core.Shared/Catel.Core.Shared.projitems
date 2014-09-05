@@ -59,6 +59,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\INotifyPropertyChanging.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\RunWorkerCompletedEventHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\ConfigurationService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\DynamicConfiguration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\DynamicConfigurationSerializerModifier.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\EventArgs\ConfigurationChangedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Extensions\ConfigurationExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Interfaces\IConfigurationService.cs" />
@@ -80,7 +82,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\Exceptions\PropertyNotRegisteredException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\IModelValidationExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\IParentExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\ModelBaseExtensions.serialization.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\ModelBaseExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\ModelBaseExtensions.validation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\ObservableObjectExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\ValidationExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Helpers\EditableObjectHelper.cs" />
@@ -140,6 +144,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\Policies\RetryPolicy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\MustBeImplementedException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\NotSupportedInPlatformException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ByteArrayExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Filtering\CompositeFilter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Filtering\CompositePredicate.cs" />

@@ -101,8 +101,8 @@ namespace Catel.Data
 
             lock (_propertyValuesLock)
             {
-                object oldValue = GetValueFast(property.Name);
-                bool areOldAndNewValuesEqual = ObjectHelper.AreEqualReferences(oldValue, value);
+                var oldValue = GetValueFast(property.Name);
+                var areOldAndNewValuesEqual = ObjectHelper.AreEqualReferences(oldValue, value);
 
                 if (notifyOnChange && (AlwaysInvokeNotifyChanged || !areOldAndNewValuesEqual) && !LeanAndMeanModel)
                 {

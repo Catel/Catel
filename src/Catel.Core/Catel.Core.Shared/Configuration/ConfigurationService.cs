@@ -8,6 +8,11 @@
 namespace Catel.Configuration
 {
     using System;
+    using System.IO;
+    using System.Runtime.Serialization;
+    using Data;
+    using Path = IO.Path;
+    using Catel.Logging;
 
 #if PCL
     // Not supported
@@ -28,6 +33,43 @@ namespace Catel.Configuration
     /// </summary>
     public class ConfigurationService : IConfigurationService
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+#if NET
+        private readonly DynamicConfiguration _configuration;
+        private readonly string _configFilePath;
+#endif
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConfigurationService"/> class.
+        /// </summary>
+        public ConfigurationService()
+        {
+#if NET
+            _configFilePath = Path.Combine(Path.GetApplicationDataDirectory(), "configuration.xml");
+
+            try
+            {
+                if (File.Exists(_configFilePath))
+                {
+                    using (var fileStream = new FileStream(_configFilePath, FileMode.Open))
+                    {
+                        _configuration = ModelBase.Load<DynamicConfiguration>(fileStream, SerializationMode.Xml);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to load configuration, using default settings");
+            }
+
+            if (_configuration == null)
+            {
+                _configuration = new DynamicConfiguration();
+            }
+#endif
+        }
+
         #region Events
         /// <summary>
         /// Occurs when the configuration has changed.
@@ -122,7 +164,7 @@ namespace Catel.Configuration
             var settings = IsolatedStorageSettings.ApplicationSettings;
             return settings.Contains(key);
 #else
-            return ConfigurationManager.AppSettings.AllKeys.Contains(key);
+            return _configuration.IsConfigurationKeyAvailable(key);
 #endif
         }
 
@@ -142,7 +184,7 @@ namespace Catel.Configuration
             var settings = IsolatedStorageSettings.ApplicationSettings;
             return (string)settings[key];
 #else
-            return ConfigurationManager.AppSettings[key];
+            return _configuration.GetConfigurationValue(key);
 #endif
         }
 
@@ -163,7 +205,8 @@ namespace Catel.Configuration
             settings[key] = value;
             settings.Save();
 #else
-            ConfigurationManager.AppSettings[key] = value;
+            _configuration.SetConfigurationValue(key, value);
+            _configuration.SaveAsXml(_configFilePath);
 #endif
         }
         #endregion
