@@ -39,7 +39,7 @@ namespace Catel.Configuration
         /// <returns><c>true</c> if the specified configuration key is available; otherwise, <c>false</c>.</returns>
         public bool IsConfigurationKeyAvailable(string name)
         {
-            return IsPropertyRegistered(typeof (DynamicConfiguration), name);
+            return IsPropertyRegistered(GetType(), name);
         }
 
         /// <summary>

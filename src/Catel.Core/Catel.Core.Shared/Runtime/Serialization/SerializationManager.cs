@@ -28,8 +28,7 @@ namespace Catel.Runtime.Serialization
 
         private readonly ITypeFactory _typeFactory = TypeFactory.Default;
 
-        private readonly ICacheStorage<Type, ISerializerModifier> _serializerModifierCache = new CacheStorage<Type, ISerializerModifier>();
-        private readonly ICacheStorage<Type, ISerializerModifier[]> _serializationModifiersPerTypeCache = new CacheStorage<Type, ISerializerModifier[]>();
+        private readonly object _lock = new object();
 
         private readonly ICacheStorage<Type, HashSet<string>> _fieldsToSerializeCache = new CacheStorage<Type, HashSet<string>>();
         private readonly ICacheStorage<Type, HashSet<string>> _propertiesToSerializeCache = new CacheStorage<Type, HashSet<string>>();
@@ -43,6 +42,14 @@ namespace Catel.Runtime.Serialization
         private readonly ICacheStorage<Type, HashSet<string>> _fieldNamesCache = new CacheStorage<Type, HashSet<string>>();
         private readonly ICacheStorage<Type, Dictionary<string, MemberMetadata>> _fieldsCache = new CacheStorage<Type, Dictionary<string, MemberMetadata>>();
 
+        private readonly ICacheStorage<Type, ISerializerModifier> _serializerModifierCache = new CacheStorage<Type, ISerializerModifier>();
+        private readonly ICacheStorage<Type, ISerializerModifier[]> _serializationModifiersPerTypeCache = new CacheStorage<Type, ISerializerModifier[]>();
+
+        /// <summary>
+        /// Occurs when the cache for a specific type has been invalidated.
+        /// </summary>
+        public event EventHandler<CacheInvalidatedEventArgs> CacheInvalidated;
+
         /// <summary>
         /// Warmups the specified type by calling all the methods for the specified type.
         /// </summary>
@@ -52,19 +59,52 @@ namespace Catel.Runtime.Serialization
         {
             Argument.IsNotNull("type", type);
 
-            GetFieldsToSerialize(type);
-            GetPropertiesToSerialize(type);
+            lock (_lock)
+            {
+                GetFieldsToSerialize(type);
+                GetPropertiesToSerialize(type);
 
-            GetCatelPropertyNames(type);
-            GetCatelProperties(type);
+                GetCatelPropertyNames(type);
+                GetCatelProperties(type);
 
-            GetRegularPropertyNames(type);
-            GetRegularProperties(type);
+                GetRegularPropertyNames(type);
+                GetRegularProperties(type);
 
-            GetFieldNames(type);
-            GetFields(type);
+                GetFieldNames(type);
+                GetFields(type);
 
-            GetSerializerModifiers(type);
+                GetSerializerModifiers(type);
+            }
+        }
+
+        /// <summary>
+        /// Clears the specified type from cache so it will be evaluated.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
+        public void Clear(Type type)
+        {
+            Argument.IsNotNull("type", type);
+
+            lock (_lock)
+            {
+                _fieldsToSerializeCache.Remove(type);
+                _propertiesToSerializeCache.Remove(type);
+
+                _catelPropertyNamesCache.Remove(type);
+                _catelPropertiesCache.Remove(type);
+
+                _regularPropertyNamesCache.Remove(type);
+                _regularPropertiesCache.Remove(type);
+
+                _fieldNamesCache.Remove(type);
+                _fieldsCache.Remove(type);
+
+                _serializerModifierCache.Remove(type);
+                _serializationModifiersPerTypeCache.Remove(type);
+            }
+
+            CacheInvalidated.SafeInvoke(this, new CacheInvalidatedEventArgs(type));
         }
 
         /// <summary>

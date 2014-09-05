@@ -292,6 +292,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\BinarySerialization\BinarySerializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\BinarySerialization\Interfaces\IBinarySerializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\BinarySerialization\RedirectDeserializationBinder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\EventArgs\CacheInvalidatedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\EventArgs\MemberSerializationEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\EventArgs\SerializationEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Helpers\SerializationContextHelper.cs" />

@@ -11,7 +11,6 @@ namespace Catel.Configuration
     using System.IO;
     using System.Runtime.Serialization;
     using Data;
-    using Path = IO.Path;
     using Catel.Logging;
 
 #if PCL
@@ -23,6 +22,8 @@ namespace Catel.Configuration
 #else
     using System.Configuration;
     using System.Linq;
+    using Runtime.Serialization;
+    using Path = IO.Path;
 #endif
 
     /// <summary>
@@ -36,16 +37,22 @@ namespace Catel.Configuration
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
 #if NET
+        private readonly ISerializationManager _serializationManager;
+
         private readonly DynamicConfiguration _configuration;
         private readonly string _configFilePath;
 #endif
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ConfigurationService"/> class.
-        /// </summary>
-        public ConfigurationService()
-        {
 #if NET
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConfigurationService" /> class.
+        /// </summary>
+        /// <param name="serializationManager">The serialization manager.</param>
+        public ConfigurationService(ISerializationManager serializationManager)
+        {
+            Argument.IsNotNull("serializationManager", serializationManager);
+
+            _serializationManager = serializationManager;
             _configFilePath = Path.Combine(Path.GetApplicationDataDirectory(), "configuration.xml");
 
             try
@@ -67,8 +74,8 @@ namespace Catel.Configuration
             {
                 _configuration = new DynamicConfiguration();
             }
-#endif
         }
+#endif
 
         #region Events
         /// <summary>
@@ -205,6 +212,12 @@ namespace Catel.Configuration
             settings[key] = value;
             settings.Save();
 #else
+            if (!_configuration.IsConfigurationKeyAvailable(key))
+            {
+                _configuration.RegisterConfigurationKey(key);
+                _serializationManager.Clear(_configuration.GetType());
+            }
+
             _configuration.SetConfigurationValue(key, value);
             _configuration.SaveAsXml(_configFilePath);
 #endif

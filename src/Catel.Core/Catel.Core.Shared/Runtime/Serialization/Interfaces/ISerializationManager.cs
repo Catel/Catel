@@ -16,11 +16,23 @@ namespace Catel.Runtime.Serialization
     public interface ISerializationManager
     {
         /// <summary>
+        /// Occurs when the cache for a specific type has been invalidated.
+        /// </summary>
+        event EventHandler<CacheInvalidatedEventArgs> CacheInvalidated;
+
+        /// <summary>
         /// Warmups the specified type by calling all the methods for the specified type.
         /// </summary>
         /// <param name="type">The type.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         void Warmup(Type type);
+
+        /// <summary>
+        /// Clears the specified type from cache so it will be evaluated.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
+        void Clear(Type type);
 
         /// <summary>
         /// Gets the fields to serialize for the specified object.
