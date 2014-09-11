@@ -782,6 +782,11 @@ namespace Catel.MVVM
             {
                 Validate();
             }
+
+            if (InvalidateCommandsOnPropertyChanged)
+            {
+                ViewModelCommandManager.InvalidateCommands();
+            }
         }
 
         /// <summary>
