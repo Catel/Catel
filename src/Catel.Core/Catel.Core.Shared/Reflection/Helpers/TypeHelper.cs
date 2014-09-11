@@ -348,7 +348,7 @@ namespace Catel.Reflection
 
             try
             {
-                int countIndex = type.IndexOf(InnerTypeCountStart);
+                var countIndex = type.IndexOf(InnerTypeCountStart);
                 if (countIndex == -1)
                 {
                     return innerTypes.ToArray();
@@ -362,7 +362,7 @@ namespace Catel.Reflection
 
                 // Get the number of inner types
                 int innerTypeCountEnd = -1;
-                foreach (char t in InnerTypeCountEnd)
+                foreach (var t in InnerTypeCountEnd)
                 {
                     int index = type.IndexOf(t);
                     if ((index != -1) && ((innerTypeCountEnd == -1) || (index < innerTypeCountEnd)))
@@ -372,7 +372,7 @@ namespace Catel.Reflection
                     }
                 }
 
-                int innerTypeCount = int.Parse(type.Substring(countIndex + 1, innerTypeCountEnd - countIndex - 1));
+                var innerTypeCount = int.Parse(type.Substring(countIndex + 1, innerTypeCountEnd - countIndex - 1));
 
                 // Remove all info until the first inner type
                 if (!type.Contains(InternalTypeStart.ToString()))

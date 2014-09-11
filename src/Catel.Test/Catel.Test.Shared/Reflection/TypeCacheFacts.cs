@@ -48,6 +48,15 @@ namespace Catel.Test.Reflection
                 var type2 = TypeCache.GetType("System.Collections.Generic.List`1[[System.Int32]]");
                 Assert.AreEqual(typeof(List<int>), type2);
             }
+
+            [TestCase("Catel.Test.Reflection.TypeCacheFacts[]", typeof(TypeCacheFacts[]))]
+            [TestCase("System.Collections.Generic.List`1[[Catel.Test.Reflection.TypeCacheFacts]]", typeof(List<TypeCacheFacts>))]
+            public void ReturnsRightType(string typeName, Type expectedType)
+            {
+                var type = TypeCache.GetType(typeName);
+
+                Assert.AreEqual(expectedType, type);
+            }
         }
     }
 }

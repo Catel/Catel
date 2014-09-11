@@ -137,6 +137,7 @@ Added/fixed:
 (*) CTL-524 Allow dynamic configuration for NET implementation of IConfigurationService. The implementation for NET no longer
     uses the ConfigurationManager.AppSettings but the DynamicConfiguration object so it's always reliable
 (*) CTL-529 ViewModel should invalidate Command and CanExecute when child view model property changes
+(*) CTL-530 Improve TypeCache so it can return array types
 (-) CTL-453 Remove CommandManager code from Command
 (x) CTL-327 ListCollectionView not supported in ChangeNotificationWrapper (causes InvalidCastException)
 (x) CTL-329 VisualStateManager doesn't change state in WP8 in UserControl => introduced option to transfer styles and

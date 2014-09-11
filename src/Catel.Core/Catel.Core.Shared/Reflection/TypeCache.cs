@@ -165,7 +165,7 @@ namespace Catel.Reflection
         /// Gets the evaluators used to determine whether a specific type should be ignored.
         /// </summary>
         /// <value>The should ignore assembly function.</value>
-        public static List<Func<Assembly, Type, bool>> ShouldIgnoreTypeEvaluators { get; private set; } 
+        public static List<Func<Assembly, Type, bool>> ShouldIgnoreTypeEvaluators { get; private set; }
 
         #region Events
         /// <summary>
@@ -270,7 +270,7 @@ namespace Catel.Reflection
                         return typesWithAssembly[typeName];
                     }
 
-                    var fallbackType = Type.GetType(typeName);
+                    var fallbackType = GetTypeBySplittingInternals(typeName);
                     if (fallbackType != null)
                     {
                         // Though it was not initially found, we still have found a new type, register it
@@ -337,6 +337,66 @@ namespace Catel.Reflection
                 }
             }
 
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the type by splitting internal types. This means that System.Collections.List`1[[MyCustomType.Item]] will be splitted
+        /// and resolved separately.
+        /// </summary>
+        /// <param name="typeWithInnerTypes">The type with inner types.</param>
+        /// <returns></returns>
+        private static Type GetTypeBySplittingInternals(string typeWithInnerTypes)
+        {
+            // Try fast method first
+            var fastType = Type.GetType(typeWithInnerTypes);
+            if (fastType != null)
+            {
+                return fastType;
+            }
+
+            if (typeWithInnerTypes.EndsWith("[]"))
+            {
+                // Array type
+                var arrayTypeElementString = typeWithInnerTypes.Replace("[]", string.Empty);
+                var arrayTypeElement = TypeCache.GetType(arrayTypeElementString);
+                if (arrayTypeElement != null)
+                {
+                    return arrayTypeElement.MakeArrayType();
+                }
+
+                return null;
+            }
+
+            var innerTypes = new List<Type>();
+            var innerTypesShortNames = TypeHelper.GetInnerTypes(typeWithInnerTypes);
+            if (innerTypesShortNames.Length > 0)
+            {
+                foreach (var innerTypesShortName in innerTypesShortNames)
+                {
+                    var innerType = TypeCache.GetType(innerTypesShortName);
+                    if (innerType == null)
+                    {
+                        return null;
+                    }
+
+                    innerTypes.Add(innerType);
+                }
+
+                var innerTypesNames = new List<string>();
+                foreach (var innerType in innerTypes)
+                {
+                    innerTypesNames.Add(innerType.AssemblyQualifiedName);
+                }
+
+                var firstBracketIndex = typeWithInnerTypes.IndexOf('[');
+                var typeWithImprovedInnerTypes = string.Format("{0}[{1}]", typeWithInnerTypes.Substring(0, firstBracketIndex), TypeHelper.FormatInnerTypes(innerTypesNames.ToArray()));
+
+                var fallbackType = Type.GetType(typeWithImprovedInnerTypes);
+                return fallbackType;
+            }
+
+            // This is not yet supported or type is really not available
             return null;
         }
 
