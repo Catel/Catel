@@ -613,7 +613,7 @@ namespace Catel.MVVM.Providers
         /// This method will call the <see cref="OnTargetViewLoaded"/> which can be overriden for custom 
         /// behavior. This method is required to protect from duplicate loaded events.
         /// </remarks>
-        private void OnTargetViewLoadedInternal(object sender, EventArgs e)
+        private async void OnTargetViewLoadedInternal(object sender, EventArgs e)
         {
             if (!CanLoad)
             {
@@ -642,28 +642,35 @@ namespace Catel.MVVM.Providers
 
             TargetView.Dispatch(() =>
             {
-                if (ViewModel != null)
-                {
-                    // Initialize the view model. The view model itself is responsible to prevent double initialization
-                    ViewModel.InitializeViewModel();
-
-                    // Revalidate since the control already initialized the view model before the control
-                    // was visible, therefore the WPF engine does not show warnings and errors
-                    var viewModelAsViewModelBase = ViewModel as ViewModelBase;
-                    if (viewModelAsViewModelBase != null)
-                    {
-                        viewModelAsViewModelBase.Validate(true, false);
-                    }
-                    else
-                    {
-                        ViewModel.ValidateViewModel(true, false);
-                    }
-
-                    _isFirstValidationAfterLoaded = true;
-                }
+#pragma warning disable 4014
+                InitializeViewModel();
+#pragma warning restore 4014
             });
 
             IsLoading = false;
+        }
+
+        private async Task InitializeViewModel()
+        {
+            if (ViewModel != null)
+            {
+                // Initialize the view model. The view model itself is responsible to prevent double initialization
+                await ViewModel.InitializeViewModel();
+
+                // Revalidate since the control already initialized the view model before the control
+                // was visible, therefore the WPF engine does not show warnings and errors
+                var viewModelAsViewModelBase = ViewModel as ViewModelBase;
+                if (viewModelAsViewModelBase != null)
+                {
+                    viewModelAsViewModelBase.Validate(true, false);
+                }
+                else
+                {
+                    ViewModel.ValidateViewModel(true, false);
+                }
+
+                _isFirstValidationAfterLoaded = true;
+            }
         }
 
         /// <summary>

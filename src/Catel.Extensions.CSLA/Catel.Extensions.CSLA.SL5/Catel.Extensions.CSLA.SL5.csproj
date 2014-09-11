@@ -38,6 +38,7 @@
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DocumentationFile>..\..\..\output\debug\SL5\Catel.Extensions.CSLA\Catel.Extensions.CSLA.XML</DocumentationFile>
+    <NoWarn>1998</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -50,6 +51,7 @@
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DocumentationFile>..\..\..\output\release\SL5\Catel.Extensions.CSLA\Catel.Extensions.CSLA.XML</DocumentationFile>
+    <NoWarn>1998</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Catel.Fody.Attributes">

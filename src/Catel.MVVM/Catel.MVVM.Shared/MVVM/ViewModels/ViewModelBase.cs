@@ -1403,14 +1403,13 @@ namespace Catel.MVVM
         /// <para />
         /// This method is called as soon as the associated UI element is loaded.
         /// </summary>
-        /// <remarks>
-        /// It's not recommended to implement the initialization of properties in this method. The initialization of properties
+        /// <returns>The task.</returns>
+        /// <remarks>It's not recommended to implement the initialization of properties in this method. The initialization of properties
         /// should be done in the constructor. This method should be used to start the retrieval of data from a web service or something
         /// similar.
         /// <para />
-        /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.
-        /// </remarks>
-        public void InitializeViewModel()
+        /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.</remarks>
+        public async Task InitializeViewModel()
         {
             if (!_isViewModelInitialized)
             {
@@ -1418,7 +1417,7 @@ namespace Catel.MVVM
 
                 //MessageMediatorHelper.SubscribeRecipient(this);
 
-                Initialize();
+                await Initialize();
 
                 Initialized.SafeInvoke(this);
             }
@@ -1437,7 +1436,7 @@ namespace Catel.MVVM
         /// <para />
         /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.
         /// </remarks>
-        protected virtual void Initialize()
+        protected virtual async Task Initialize()
         {
         }
 

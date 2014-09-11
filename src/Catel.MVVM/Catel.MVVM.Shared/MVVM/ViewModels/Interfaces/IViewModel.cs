@@ -105,7 +105,7 @@ namespace Catel.MVVM
         /// <para />
         /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.
         /// </remarks>
-        void InitializeViewModel();
+        Task InitializeViewModel();
 
         /// <summary>
         /// Validates the specified notify changed properties only.
@@ -125,9 +125,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Cancels the editing of the data.
         /// </summary>
-        /// <returns>
-        /// <c>true</c> if successful; otherwise <c>false</c>.
-        /// </returns>
+        /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
         Task<bool> CancelViewModel();
 
         /// <summary>

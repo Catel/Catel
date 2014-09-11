@@ -45,11 +45,11 @@ namespace Catel.Test.MVVM
             }            
 
             [TestCase]
-            public void RegisteredHandlerGetsCalled()
+            public async void RegisteredHandlerGetsCalled()
             {
                 var viewModel = new TestViewModel();
                 var viewModelCommandManager = ViewModelCommandManager.Create(viewModel);
-                viewModel.InitializeViewModel();
+                await viewModel.InitializeViewModel();
 
                 bool called = false;
 
