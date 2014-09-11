@@ -102,8 +102,20 @@ namespace Catel.Configuration
                 return defaultValue;
             }
 
-            var value = GetValueFromStore(key);
-            return (T)StringToObjectHelper.ToRightType(typeof(T), value);
+            try
+            {
+                var value = GetValueFromStore(key);
+                if (value == null)
+                {
+                    return defaultValue;
+                }
+
+                return (T) StringToObjectHelper.ToRightType(typeof (T), value);
+            }
+            catch (Exception)
+            {
+                return defaultValue;
+            }
         }
 
         /// <summary>
