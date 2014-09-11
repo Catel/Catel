@@ -129,15 +129,6 @@ namespace Catel.Reflection
                     InitializeTypes(false, assembly);
 
                     _loadedAssemblies.Add(assemblyName);
-
-                    var handler = AssemblyLoaded;
-                    if (handler != null)
-                    {
-                        var types = GetTypesOfAssembly(assembly);
-                        var eventArgs = new AssemblyLoadedEventArgs(assembly, types);
-
-                        handler(null, eventArgs);
-                    }
                 }
                 finally
                 {
@@ -150,6 +141,16 @@ namespace Catel.Reflection
                 {
                     _threadSafeAssemblyQueue.Enqueue(assembly);
                 }
+            }
+
+            // Important to do outside of the lock
+            var handler = AssemblyLoaded;
+            if (handler != null)
+            {
+                var types = GetTypesOfAssembly(assembly);
+                var eventArgs = new AssemblyLoadedEventArgs(assembly, types);
+
+                handler(null, eventArgs);
             }
         }
 #endif
