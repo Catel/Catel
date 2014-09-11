@@ -57,7 +57,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public void Warmup(Type type)
         {
-            Argument.IsNotNull("type", type);
+            Argument.IsNotNull(() =>  type);
 
             lock (_lock)
             {

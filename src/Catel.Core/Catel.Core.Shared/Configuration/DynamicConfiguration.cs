@@ -27,7 +27,7 @@ namespace Catel.Configuration
                 return;
             }
 
-            var propertyData = RegisterProperty(name, typeof (string));
+            var propertyData = RegisterProperty(name, typeof(object));
 
             InitializePropertyAfterConstruction(propertyData);
         }
@@ -47,11 +47,11 @@ namespace Catel.Configuration
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns>System.String.</returns>
-        public string GetConfigurationValue(string name)
+        public object GetConfigurationValue(string name)
         {
             RegisterConfigurationKey(name);
 
-            return GetValue<string>(name);
+            return GetValue<object>(name);
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Catel.Configuration
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="value">The value.</param>
-        public void SetConfigurationValue(string name, string value)
+        public void SetConfigurationValue(string name, object value)
         {
             RegisterConfigurationKey(name);
 

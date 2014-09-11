@@ -191,7 +191,7 @@ namespace Catel.Configuration
             var settings = IsolatedStorageSettings.ApplicationSettings;
             return (string)settings[key];
 #else
-            return _configuration.GetConfigurationValue(key);
+            return _configuration.GetConfigurationValue<string>(key);
 #endif
         }
 
