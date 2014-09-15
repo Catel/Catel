@@ -389,7 +389,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <value>The <see cref="ViewModelCommandManager"/>.</value>
         [ExcludeFromValidation]
-        protected IViewModelCommandManager ViewModelCommandManager { get; private set; }
+        protected internal IViewModelCommandManager ViewModelCommandManager { get; private set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the commands should automatically be invalidated on a property change.

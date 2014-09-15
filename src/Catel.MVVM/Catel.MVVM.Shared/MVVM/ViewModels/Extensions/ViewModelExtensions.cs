@@ -15,6 +15,19 @@ namespace Catel.MVVM
     public static class ViewModelExtensions
     {
         /// <summary>
+        /// Gets the view model command manager for the specified view model.
+        /// </summary>
+        /// <param name="viewModel">The view model.</param>
+        /// <returns>IViewModelCommandManager.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
+        public static IViewModelCommandManager GetViewModelCommandManager(this ViewModelBase viewModel)
+        {
+            Argument.IsNotNull("viewModel", viewModel);
+
+            return viewModel.ViewModelCommandManager;
+        }
+
+        /// <summary>
         /// Determines whether the specified validation summary is outdated by checking the last modified date/time on the validation context.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
