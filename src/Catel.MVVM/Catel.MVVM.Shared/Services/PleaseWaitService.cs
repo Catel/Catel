@@ -34,7 +34,7 @@ namespace Catel.Services
 
         partial void SetStatus(string status);
         partial void InitializeBusyIndicator();
-        partial void ShowBusyIndicator();
+        partial void ShowBusyIndicator(string status = "");
         partial void HideBusyIndicator();
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace Catel.Services
 
             UpdateStatus(status);
 
-            ShowBusyIndicator();
+            ShowBusyIndicator(status);
         }
 
         /// <summary>
