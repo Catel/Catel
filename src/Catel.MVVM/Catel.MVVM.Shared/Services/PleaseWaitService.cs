@@ -19,6 +19,7 @@ namespace Catel.Services
 
         private readonly ILanguageService _languageService;
 
+        private string _lastStatus = string.Empty;
         private int _showCounter;
 
         /// <summary>
@@ -83,6 +84,13 @@ namespace Catel.Services
         public void UpdateStatus(string status)
         {
             InitializeBusyIndicator();
+
+            if (status == null)
+            {
+                status = string.Empty;
+            }
+
+            _lastStatus = status;
 
             SetStatus(status);
         }

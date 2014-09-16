@@ -24,7 +24,7 @@ namespace Catel.Services
 
         partial void ShowBusyIndicator()
         {
-            PleaseWaitHelper.Show();
+            PleaseWaitHelper.Show(_lastStatus);
         }
 
         partial void HideBusyIndicator()
