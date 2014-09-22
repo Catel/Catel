@@ -306,5 +306,44 @@ namespace Catel.Collections
             return new ReadOnlyCollection<T>(collection);
         }
 #endif
+
+        /// <summary>
+        /// Synchronizes the collection by adding / removing items that are in the new set.
+        /// </summary>
+        /// <typeparam name="T">The type of the collection item.</typeparam>
+        /// <param name="existingSet">The existing set.</param>
+        /// <param name="newSet">The new set.</param>
+        /// <param name="updateExistingSet">if set to <c>true</c>, the existing set will be updated, otherwise a new collection will be created and the existing set will remain unchanged.</param>
+        /// <returns>IEnumerable&lt;T&gt;.</returns>
+        public static IEnumerable<T> SynchronizeCollection<T>(this IList<T> existingSet, IEnumerable<T> newSet, bool updateExistingSet = true)
+        {
+            var finalSet = updateExistingSet ? existingSet : new List<T>(existingSet);
+            var itemsToRemove = new List<T>(existingSet);
+            var itemsToAdd = new List<T>();
+
+            foreach (var newItem in newSet)
+            {
+                if (itemsToRemove.Contains(newItem))
+                {
+                    itemsToRemove.Remove(newItem);
+                }
+                else
+                {
+                    itemsToAdd.Add(newItem);
+                }
+            }
+
+            foreach (var itemToRemove in itemsToRemove)
+            {
+                finalSet.Remove(itemToRemove);
+            }
+
+            foreach (var itemToAdd in itemsToAdd)
+            {
+                finalSet.Add(itemToAdd);
+            }
+
+            return finalSet;
+        }
     }
 }
