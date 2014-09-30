@@ -4,9 +4,10 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-
 namespace Catel.Data
 {
+    using System;
+
     /// <summary>
     /// Extensions for model validation.
     /// </summary>
@@ -24,6 +25,65 @@ namespace Catel.Data
 
             return model.ValidationContext;
         }
+
+        #region Public Methods and Operators
+        /// <summary>
+        /// Adds the business rule validation result.
+        /// <para />
+        /// This method is great to add asynchronous validation.
+        /// </summary>
+        /// <param name="modelValidation">The model validation.</param>
+        /// <param name="businessRuleValidationResult">The business rule validation result.</param>
+        /// <param name="validate">if set to <c>true</c>, this method call will immediately force a call to validate the model.</param>
+        public static void AddBusinessRuleValidationResult(this IModelValidation modelValidation, IBusinessRuleValidationResult businessRuleValidationResult, bool validate = true)
+        {
+            Argument.IsNotNull(() => modelValidation);
+            Argument.IsNotNull(() => businessRuleValidationResult);
+
+            EventHandler<ValidationEventArgs> validating = null;
+            validating = (sender, e) =>
+            {
+                modelValidation.Validating -= validating;
+                e.ValidationContext.AddBusinessRuleValidationResult(businessRuleValidationResult);
+            };
+
+            modelValidation.Validating += validating;
+
+            if (validate)
+            {
+                modelValidation.Validate(true);
+            }
+        }
+
+        /// <summary>
+        /// Adds the field validation result.
+        /// <para />
+        /// This method is great to add asynchronous validation.
+        /// </summary>
+        /// <param name="modelValidation">The model validation.</param>
+        /// <param name="fieldValidationResult">The field validation result.</param>
+        /// <param name="validate">if set to <c>true</c>, this method call will immediately force a call to validate the model.</param>
+        public static void AddFieldValidationResult(this IModelValidation modelValidation, IFieldValidationResult fieldValidationResult, bool validate = true)
+        {
+            Argument.IsNotNull(() => modelValidation);
+            Argument.IsNotNull(() => fieldValidationResult);
+
+            EventHandler<ValidationEventArgs> validating = null;
+            validating = (sender, e) =>
+            {
+                modelValidation.Validating -= validating;
+                e.ValidationContext.AddFieldValidationResult(fieldValidationResult);
+            };
+
+            modelValidation.Validating += validating;
+
+            if (validate)
+            {
+                modelValidation.Validate(true);
+            }
+        }
+        #endregion
+
         #endregion
     }
 }
