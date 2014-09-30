@@ -141,7 +141,7 @@ namespace Catel.Windows.Data
         /// <param name="handler">The handler to subscribe.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="frameworkElement"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        public static void UnsubscribeToDataContextAndInheritedDataContext(this FrameworkElement frameworkElement, EventHandler<DependencyPropertyValueChangedEventArgs> handler)
+        public static void UnsubscribeFromDataContextAndInheritedDataContext(this FrameworkElement frameworkElement, EventHandler<DependencyPropertyValueChangedEventArgs> handler)
         {
             Argument.IsNotNull("frameworkElement", frameworkElement);
             Argument.IsNotNull("handler", handler);
