@@ -245,6 +245,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Logging\LogEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\LogListenerBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\LogManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\TimeDisplay.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\Attributes\MessageRecipientAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\Helpers\MessageMediatorHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\Interfaces\IMessageMediator.cs" />
