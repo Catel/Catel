@@ -60,6 +60,13 @@ namespace Catel.Logging
         bool IsErrorEnabled { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating what format of time to use.
+        /// <para />
+        /// This default value is <c>Time</c>.
+        /// </summary>
+        TimeDisplay TimeDisplay { get; set; }
+
+        /// <summary>
         /// Called when any message is written to the log.
         /// </summary>
         /// <param name="log">The log.</param>

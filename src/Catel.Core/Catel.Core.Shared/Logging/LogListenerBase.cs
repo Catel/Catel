@@ -43,6 +43,8 @@ namespace Catel.Logging
             IsErrorEnabled = true;
 
             IgnoreCatelLogging = ignoreCatelLogging;
+
+            TimeDisplay = TimeDisplay.Time;
         }
 
         /// <summary>
@@ -92,6 +94,13 @@ namespace Catel.Logging
         public bool IsErrorEnabled { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating what format of time to use.
+        /// <para />
+        /// This default value is <c>Time</c>.
+        /// </summary>
+        public TimeDisplay TimeDisplay { get; set; }
+
+        /// <summary>
         /// Occurs when a log message is written to one of the logs.
         /// </summary>
         public event EventHandler<LogMessageEventArgs> LogMessage;
@@ -124,7 +133,15 @@ namespace Catel.Logging
         /// <returns>The formatted log event.</returns>
         protected virtual string FormatLogEvent(ILog log, string message, LogEvent logEvent, object extraData, DateTime time)
         {
-            string logMessage = string.Format("{0} => [{1}] [{2}] {3}", time.ToString("hh:mm:ss:fff"), LogEventStrings[logEvent], log.TargetType.FullName, message);
+            var timeToString = time.ToString("hh:mm:ss:fff");
+            var formattedTime = timeToString;
+
+            if (TimeDisplay == TimeDisplay.DateTime)
+            {
+                formattedTime = string.Format("{0} {1}", time.ToString("d"), timeToString);
+            }
+
+            string logMessage = string.Format("{0} => [{1}] [{2}] {3}", formattedTime, LogEventStrings[logEvent], log.TargetType.FullName, message);
             return logMessage;
         }
 
