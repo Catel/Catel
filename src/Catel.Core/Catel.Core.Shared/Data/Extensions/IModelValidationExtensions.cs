@@ -35,7 +35,7 @@ namespace Catel.Data
         /// <param name="modelValidation">The model validation.</param>
         /// <param name="businessRuleValidationResult">The business rule validation result.</param>
         /// <param name="validate">if set to <c>true</c>, this method call will immediately force a call to validate the model.</param>
-        public static void AddBusinessRuleValidationResult(this IModelValidation modelValidation, IBusinessRuleValidationResult businessRuleValidationResult, bool validate = true)
+        public static void AddBusinessRuleValidationResult(this IModelValidation modelValidation, IBusinessRuleValidationResult businessRuleValidationResult, bool validate = false)
         {
             Argument.IsNotNull(() => modelValidation);
             Argument.IsNotNull(() => businessRuleValidationResult);
@@ -63,7 +63,7 @@ namespace Catel.Data
         /// <param name="modelValidation">The model validation.</param>
         /// <param name="fieldValidationResult">The field validation result.</param>
         /// <param name="validate">if set to <c>true</c>, this method call will immediately force a call to validate the model.</param>
-        public static void AddFieldValidationResult(this IModelValidation modelValidation, IFieldValidationResult fieldValidationResult, bool validate = true)
+        public static void AddFieldValidationResult(this IModelValidation modelValidation, IFieldValidationResult fieldValidationResult, bool validate = false)
         {
             Argument.IsNotNull(() => modelValidation);
             Argument.IsNotNull(() => fieldValidationResult);
