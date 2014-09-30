@@ -22,18 +22,13 @@
 	<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>
     
     <dependencies>
-        <!-- Even though Bcl.Async is only required for NET40 / SL5, all other packages need to reference this one -->
-        <dependency id="Microsoft.Bcl" version="1.1.9" />
-        <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
-        <dependency id="Microsoft.Bcl.Build" version="1.0.21" />    
-    
-<!--        
         <group targetFramework="net40">
           <dependency id="Microsoft.Bcl" version="1.1.9" />
           <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
           <dependency id="Microsoft.Bcl.Build" version="1.0.21" />
         </group>
         
+        <!-- Required to make sure NET45 doesn't pick up BCL dependency from NET40, see  -->
         <group targetFramework="net45">
         </group>        
         
@@ -41,8 +36,7 @@
           <dependency id="Microsoft.Bcl" version="1.1.9" />
           <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
           <dependency id="Microsoft.Bcl.Build" version="1.0.21" />
-        </group>     
--->    
+        </group>        
     </dependencies>      
   </metadata>
 </package>
