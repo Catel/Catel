@@ -11,19 +11,15 @@ namespace Catel.Windows
     using System;
     using System.Windows;
     using Data;
+
 #if NETFX_CORE
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Data;
-#else
-    using System.Windows.Data;
 #endif
 
     /// <summary>
-    /// Helper class to subscribe to the <c>DataContextChanged</c> event of UI elements in Silverlight.
+    /// Helper class to subscribe to the <c>DataContextChanged</c> event of UI elements.
     /// </summary>
-    /// <remarks>
-    /// This code is originally found at http://www.pochet.net/blog/2010/06/16/silverlight-datacontext-changed-event-and-trigger/.
-    /// </remarks>
     public static class DataContextChangedHelper
     {
         /// <summary>
