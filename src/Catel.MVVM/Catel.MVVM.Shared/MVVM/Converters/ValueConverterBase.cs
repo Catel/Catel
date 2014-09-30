@@ -23,10 +23,24 @@ namespace Catel.MVVM.Converters
     /// <summary>
     /// Base class for value converters which makes it compatible between .NET and WinRT.
     /// </summary>
+    public abstract class ValueConverterBase : ValueConverterBase<object>
+    {
+    }
+
+    /// <summary>
+    /// Base class for value converters which makes it compatible between .NET and WinRT.
+    /// </summary>
+    public abstract class ValueConverterBase<TInput> : ValueConverterBase<TInput, object>
+    {
+    }
+
+    /// <summary>
+    /// Base class for value converters which makes it compatible between .NET and WinRT.
+    /// </summary>
 #if NET || SL5
-    public abstract class ValueConverterBase : MarkupExtension, IValueConverter
+    public abstract class ValueConverterBase<TInput, TOutput> : MarkupExtension, IValueConverter
 #else
-    public abstract class ValueConverterBase : IValueConverter
+    public abstract class ValueConverterBase<TInput, TOutput> : IValueConverter
 #endif
     {
         /// <summary>
@@ -120,7 +134,7 @@ namespace Catel.MVVM.Converters
                 returnValue = Link.Convert(returnValue, OverrideType ?? targetType, parameter, cultureToUse);
             }
 
-            returnValue = Convert(returnValue, targetType, parameter);
+            returnValue = Convert((TInput)returnValue, targetType, parameter);
 
             return returnValue;
         }
@@ -140,7 +154,7 @@ namespace Catel.MVVM.Converters
             object returnValue = value;
 
             // Call ConvertBack first because we are doing this in reverse order
-            returnValue = ConvertBack(returnValue, targetType, parameter);
+            returnValue = ConvertBack((TOutput)returnValue, targetType, parameter);
 
             if (Link != null)
             {
@@ -163,7 +177,7 @@ namespace Catel.MVVM.Converters
         /// <param name="targetType">The <see cref="T:System.Type" /> of data expected by the target dependency property.</param>
         /// <param name="parameter">An optional parameter to be used in the converter logic.</param>
         /// <returns>The value to be passed to the target dependency property.</returns>
-        protected abstract object Convert(object value, Type targetType, object parameter);
+        protected abstract object Convert(TInput value, Type targetType, object parameter);
 
         /// <summary>
         /// Modifies the target data before passing it to the source object.
@@ -176,7 +190,7 @@ namespace Catel.MVVM.Converters
         /// By default, this method returns <see cref="ConverterHelper.UnsetValue"/>. This method only has
         /// to be overridden when it is actually used.
         /// </remarks>
-        protected virtual object ConvertBack(object value, Type targetType, object parameter)
+        protected virtual object ConvertBack(TOutput value, Type targetType, object parameter)
         {
             return ConverterHelper.UnsetValue;
         }
