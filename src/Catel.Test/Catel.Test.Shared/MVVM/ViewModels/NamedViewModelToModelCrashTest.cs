@@ -20,6 +20,7 @@
 
             /// <summary>Register the Id property so it is known in the class.</summary>
             public static readonly PropertyData IdProperty = RegisterProperty<Dummy, int>(model => model.Id);
+            public static readonly PropertyData CommentProperty = RegisterProperty<Dummy, string>(model => model.Comment);
 
             public Dummy(int I)
             {
@@ -37,6 +38,19 @@
                     SetValue(IdProperty, value);
                 }
             }
+
+            public string Comment
+            {
+                get
+                {
+                    return GetValue<string>(CommentProperty);
+                }
+                set
+                {
+                    SetValue(CommentProperty, value);
+                }
+            }
+
         }
 
 
@@ -98,6 +112,7 @@
 
             /// <summary>Register the Id property so it is known in the class.</summary>
             public static readonly PropertyData IdentifierProperty = RegisterProperty<MainWindowViewModel, int>(model => model.Identifier, 123);
+            public static readonly PropertyData CommentProperty = RegisterProperty<MainWindowViewModel, string>(model => model.Comment, "asd");
 
             [ViewModelToModel("CurrentDummy", "Id")]
             public int Identifier
@@ -109,6 +124,18 @@
                 set
                 {
                     SetValue(IdentifierProperty, value);
+                }
+            }
+           [ViewModelToModel("CurrentDummy")]
+            public string Comment
+            {
+                get
+                {
+                    return GetValue<string>(CommentProperty);
+                }
+                set
+                {
+                    SetValue(CommentProperty, value);
                 }
             }
 
@@ -152,6 +179,7 @@
             vm.Reset.Execute();
 
             Assert.AreEqual(123, vm.Identifier);
+            Assert.AreEqual("asd", vm.Comment);
         }
 
         #endregion
