@@ -199,6 +199,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Attributes\ViewModelToModelAttributeFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Extensions\ViewModelExtensionsFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ManagedViewModelTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\NamedViewModelToModelCrashTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\TestClasses\InterestedViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\TestClasses\InterestingViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\TestClasses\Person.cs" />

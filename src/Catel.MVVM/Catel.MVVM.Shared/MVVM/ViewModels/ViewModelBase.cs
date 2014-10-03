@@ -942,13 +942,9 @@ namespace Catel.MVVM
                             }
                             else
                             {
-                                // Always restore default value when a model becomes null
-                                for (var index = 0; index < mapping.ValueProperties.Length; index++)
-                                {
-                                    var property = mapping.ValueProperties[index];
-                                    var propertyData = GetPropertyData(property);
-                                    values[index] = propertyData.GetDefaultValue();
-                                }
+                                var property = mapping.ViewModelProperty;
+                                var propertyData = GetPropertyData(property);
+                                values[0] = propertyData.GetDefaultValue();
                             }
 
                             values[0] = converter.Convert(values, this);
