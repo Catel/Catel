@@ -74,6 +74,8 @@ namespace Catel.Reflection
         /// </summary>
         private static readonly HashSet<string> _loadedAssemblies = new HashSet<string>();
 
+        private static bool _isAlreadyInLoadingEvent = false;
+
         /// <summary>
         /// The lock object.
         /// </summary>
@@ -114,32 +116,47 @@ namespace Catel.Reflection
                 return;
             }
 
-            // Prevent deadlocks by checking whether this assembly might be loaded from a different thread:
-            // 1) 
-            if (Monitor.TryEnter(_lockObject))
-            {
-                try
-                {
-                    var assemblyName = assembly.FullName;
-                    if (_loadedAssemblies.Contains(assemblyName))
-                    {
-                        return;
-                    }
-
-                    InitializeTypes(false, assembly);
-
-                    _loadedAssemblies.Add(assemblyName);
-                }
-                finally
-                {
-                    Monitor.Exit(_lockObject);
-                }
-            }
-            else
+            // Prevent typeloading while already loading types from another loaded assembly
+            // In other case we will get recursion and can get troubles from CLR while
+            // handling typeload exception.
+            if (_isAlreadyInLoadingEvent)
             {
                 lock (_threadSafeAssemblyQueue)
                 {
                     _threadSafeAssemblyQueue.Enqueue(assembly);
+                }
+            }
+            else
+            {
+                // Prevent deadlocks by checking whether this assembly might be loaded from a different thread:
+                // 1) 
+                if (Monitor.TryEnter(_lockObject))
+                {
+                    _isAlreadyInLoadingEvent = true;
+                    try
+                    {
+                        var assemblyName = assembly.FullName;
+                        if (_loadedAssemblies.Contains(assemblyName))
+                        {
+                            return;
+                        }
+
+                        InitializeTypes(false, assembly);
+
+                        _loadedAssemblies.Add(assemblyName);
+                    }
+                    finally
+                    {
+                        Monitor.Exit(_lockObject);
+                        _isAlreadyInLoadingEvent = false;
+                    }
+                }
+                else
+                {
+                    lock (_threadSafeAssemblyQueue)
+                    {
+                        _threadSafeAssemblyQueue.Enqueue(assembly);
+                    }
                 }
             }
 
