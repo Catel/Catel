@@ -26,6 +26,11 @@ namespace Catel.Reflection
 
 #if NET
         private static readonly Queue<Assembly> _threadSafeAssemblyQueue = new Queue<Assembly>();
+
+        /// <summary>
+        /// Assemblies, loaded while Catel was processing AssemblyLoaded event.
+        /// </summary>
+        private static readonly Queue<Assembly> _onAssemblyLoadedDelayQueue = new Queue<Assembly>();
 #endif
 
         /// <summary>
@@ -74,6 +79,8 @@ namespace Catel.Reflection
         /// </summary>
         private static readonly HashSet<string> _loadedAssemblies = new HashSet<string>();
 
+        private static bool _isAlreadyInLoadingEvent = false;
+
         /// <summary>
         /// The lock object.
         /// </summary>
@@ -114,25 +121,55 @@ namespace Catel.Reflection
                 return;
             }
 
+
             // Prevent deadlocks by checking whether this assembly might be loaded from a different thread:
             // 1) 
             if (Monitor.TryEnter(_lockObject))
             {
-                try
+                var assemblyName = assembly.FullName;
+                if (_loadedAssemblies.Contains(assemblyName))
                 {
-                    var assemblyName = assembly.FullName;
-                    if (_loadedAssemblies.Contains(assemblyName))
-                    {
-                        return;
-                    }
-
-                    InitializeTypes(false, assembly);
-
-                    _loadedAssemblies.Add(assemblyName);
+                    return;
                 }
-                finally
+
+                // Fix for CTL-543
+                // General idea of fix - prevent to call GetTypes() method recursively.
+                // When type load will fail CLR will try to localize message, and on
+                // some OS's (i suspect on non english Windows and .NET) will try to load
+                // satellite assembly with localization, Catel will get event before CLR
+                // finishes handling process. Catel will try to initialize types. When another
+                // type won't load CLR will detect that it still trying to handle previous 
+                // type load problem and will crash whole process.
+
+                if (_isAlreadyInLoadingEvent)
                 {
-                    Monitor.Exit(_lockObject);
+                    // Will be proceed in finally block
+                    _onAssemblyLoadedDelayQueue.Enqueue(assembly);
+                }
+                else
+                {
+                    try
+                    {
+                        _isAlreadyInLoadingEvent = true;
+
+                        InitializeTypes(false, assembly);
+                        _loadedAssemblies.Add(assemblyName);
+                    }
+                    finally
+                    {
+                        while (_onAssemblyLoadedDelayQueue.Count > 0)
+                        {
+                            var delayedAssembly = _onAssemblyLoadedDelayQueue.Dequeue();
+
+                            // Copy/pasted assembly processing behaviour, like types were processed 
+                            // without any delay.
+                            InitializeTypes(false, delayedAssembly);
+                            _loadedAssemblies.Add(delayedAssembly.FullName);
+                        }
+
+                        _isAlreadyInLoadingEvent = false;
+                        Monitor.Exit(_lockObject);
+                    }
                 }
             }
             else
