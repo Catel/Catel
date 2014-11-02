@@ -22,7 +22,7 @@ namespace Catel.IoC
         /// <param name="requestedType">The requested type.</param>
         /// <param name="message">The message.</param>
         public TypeNotRegisteredException(Type requestedType, string message)
-            : base(string.Format("The specified type '{0}' is not registered. Please register type before using it. {1}", 
+            : base(string.Format("The specified type '{0}' is not registered or could not be constructed. Please register type before using it. {1}", 
             requestedType.GetSafeFullName(), message ?? string.Empty))
         {
             RequestedType = requestedType;

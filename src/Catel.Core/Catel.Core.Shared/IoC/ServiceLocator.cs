@@ -791,7 +791,7 @@ namespace Catel.IoC
             object instance = _typeFactory.CreateInstance(registration.ImplementingType);
             if (instance == null)
             {
-                ThrowTypeNotRegisteredException(registration.DeclaringType, "Failed to instantiate the type using the TypeFactory.");
+                ThrowTypeNotRegisteredException(registration.DeclaringType, "Failed to instantiate the type using the TypeFactory. Check if the required dependencies are registered as well or that the type has a valid constructor that can be used.");
             }
 
             var handler = TypeInstantiated;
