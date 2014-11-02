@@ -31,6 +31,11 @@ namespace Catel.Reflection
         /// Assemblies, loaded while Catel was processing AssemblyLoaded event.
         /// </summary>
         private static readonly Queue<Assembly> _onAssemblyLoadedDelayQueue = new Queue<Assembly>();
+
+        /// <summary>
+        /// The boolean specifying whether the type cache is already loading assemblies via the loaded event.
+        /// </summary>
+        private static bool _isAlreadyInLoadingEvent = false;
 #endif
 
         /// <summary>
@@ -79,8 +84,6 @@ namespace Catel.Reflection
         /// </summary>
         private static readonly HashSet<string> _loadedAssemblies = new HashSet<string>();
 
-        private static bool _isAlreadyInLoadingEvent = false;
-
         /// <summary>
         /// The lock object.
         /// </summary>
@@ -100,7 +103,7 @@ namespace Catel.Reflection
                 var assemblies = AppDomain.CurrentDomain.GetAssemblies();
                 foreach (var assembly in assemblies)
                 {
-                    InitializeTypes(false, assembly);
+                    InitializeTypes(assembly);
                 }
             }
 #endif
@@ -120,7 +123,6 @@ namespace Catel.Reflection
                 Log.Debug("Reflection '{0}' is on the list to be ignored (for example, ReflectionOnly is true), cannot use this assembly", assembly.FullName);
                 return;
             }
-
 
             // Prevent deadlocks by checking whether this assembly might be loaded from a different thread:
             // 1) 
@@ -152,8 +154,7 @@ namespace Catel.Reflection
                     {
                         _isAlreadyInLoadingEvent = true;
 
-                        InitializeTypes(false, assembly);
-                        _loadedAssemblies.Add(assemblyName);
+                        InitializeTypes(assembly);
                     }
                     finally
                     {
@@ -161,13 +162,12 @@ namespace Catel.Reflection
                         {
                             var delayedAssembly = _onAssemblyLoadedDelayQueue.Dequeue();
 
-                            // Copy/pasted assembly processing behaviour, like types were processed 
-                            // without any delay.
-                            InitializeTypes(false, delayedAssembly);
-                            _loadedAssemblies.Add(delayedAssembly.FullName);
+                            // Copy/pasted assembly processing behaviour, like types were processed without any delay
+                            InitializeTypes(delayedAssembly);
                         }
 
                         _isAlreadyInLoadingEvent = false;
+
                         Monitor.Exit(_lockObject);
                     }
                 }
@@ -280,7 +280,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNullOrWhitespace("typeName", typeName);
 
-            InitializeTypes(false);
+            InitializeTypes();
 
             lock (_lockObject)
             {
@@ -490,7 +490,7 @@ namespace Catel.Reflection
         /// <returns>System.Type[].</returns>
         private static Type[] GetTypesPrefilteredByAssembly(string assemblyName, Func<Type, bool> predicate)
         {
-            InitializeTypes(false);
+            InitializeTypes();
 
             lock (_lockObject)
             {
@@ -558,7 +558,7 @@ namespace Catel.Reflection
                     {
                         if (assembly.FullName.Contains(assemblyName))
                         {
-                            InitializeTypes(forceFullInitialization, assembly);
+                            InitializeTypes(assembly, forceFullInitialization);
                         }
                     }
                     catch (Exception ex)
@@ -577,7 +577,21 @@ namespace Catel.Reflection
         /// </summary>
         /// <param name="forceFullInitialization">If <c>true</c>, the types are initialized, even when the types are already initialized.</param>
         /// <param name="assembly">The assembly to initialize the types from. If <c>null</c>, all assemblies will be checked.</param>
+        [ObsoleteEx(Replacement = "InitializeTypes(Assembly, bool)", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
         public static void InitializeTypes(bool forceFullInitialization, Assembly assembly = null)
+        {
+            InitializeTypes(assembly, forceFullInitialization);
+        }
+
+        /// <summary>
+        /// Initializes the types in the specified assembly. It does this by looping through all loaded assemblies and
+        /// registering the type by type name and assembly name.
+        /// <para/>
+        /// The types initialized by this method are used by <see cref="object.GetType"/>.
+        /// </summary>
+        /// <param name="assembly">The assembly to initialize the types from. If <c>null</c>, all assemblies will be checked.</param>
+        /// <param name="forceFullInitialization">If <c>true</c>, the types are initialized, even when the types are already initialized.</param>
+        public static void InitializeTypes(Assembly assembly = null, bool forceFullInitialization = false)
         {
             bool checkSingleAssemblyOnly = assembly != null;
 
@@ -648,7 +662,8 @@ namespace Catel.Reflection
                     _typesWithoutAssemblyLowerCase = new Dictionary<string, string>();
                 }
 
-                InitializeAssemblies(AssemblyHelper.GetLoadedAssemblies());
+                var assembliesToInitialize = checkSingleAssemblyOnly ? new List<Assembly>(new[] {assembly}) : AssemblyHelper.GetLoadedAssemblies();
+                InitializeAssemblies(assembliesToInitialize);
             }
         }
 

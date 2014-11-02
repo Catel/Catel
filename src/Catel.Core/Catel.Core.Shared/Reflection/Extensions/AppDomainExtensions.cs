@@ -224,7 +224,7 @@ namespace Catel.Reflection
                     }
                 }
 
-                TypeCache.InitializeTypes(false, loadedAssembly);
+                TypeCache.InitializeTypes(loadedAssembly);
             }
             catch (Exception ex)
             {

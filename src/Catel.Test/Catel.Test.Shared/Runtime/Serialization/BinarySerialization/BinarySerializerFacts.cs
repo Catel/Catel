@@ -127,7 +127,7 @@ namespace Catel.Test.Runtime.Serialization
                     () => serializer.Warmup(typesToWarmup),
                     () =>
                     {
-                        TypeCache.InitializeTypes(false);
+                        TypeCache.InitializeTypes();
 
                         ConsoleHelper.Write("TypeCache contains {0} items", TypeCache.GetTypes().Count());
                         ConsoleHelper.Write("TypeCache contains {0} ModelBase items", TypeCache.GetTypes(x => typeof(ModelBase).IsAssignableFromEx(x)).Count());
@@ -146,7 +146,7 @@ namespace Catel.Test.Runtime.Serialization
                     () => serializer.Warmup(),
                     () =>
                     {
-                        TypeCache.InitializeTypes(false);
+                        TypeCache.InitializeTypes();
 
                         ConsoleHelper.Write("TypeCache contains {0} items", TypeCache.GetTypes().Count());
                         ConsoleHelper.Write("TypeCache contains {0} ModelBase items", TypeCache.GetTypes(x => typeof(ModelBase).IsAssignableFromEx(x)).Count());
