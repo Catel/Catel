@@ -129,48 +129,46 @@ namespace Catel.Reflection
             if (Monitor.TryEnter(_lockObject))
             {
                 var assemblyName = assembly.FullName;
-                if (_loadedAssemblies.Contains(assemblyName))
+                if (!_loadedAssemblies.Contains(assemblyName))
                 {
-                    return;
-                }
+                    // Fix for CTL-543
+                    // General idea of fix - prevent to call GetTypes() method recursively.
+                    // When type load will fail CLR will try to localize message, and on
+                    // some OS's (i suspect on non english Windows and .NET) will try to load
+                    // satellite assembly with localization, Catel will get event before CLR
+                    // finishes handling process. Catel will try to initialize types. When another
+                    // type won't load CLR will detect that it still trying to handle previous 
+                    // type load problem and will crash whole process.
 
-                // Fix for CTL-543
-                // General idea of fix - prevent to call GetTypes() method recursively.
-                // When type load will fail CLR will try to localize message, and on
-                // some OS's (i suspect on non english Windows and .NET) will try to load
-                // satellite assembly with localization, Catel will get event before CLR
-                // finishes handling process. Catel will try to initialize types. When another
-                // type won't load CLR will detect that it still trying to handle previous 
-                // type load problem and will crash whole process.
-
-                if (_isAlreadyInLoadingEvent)
-                {
-                    // Will be proceed in finally block
-                    _onAssemblyLoadedDelayQueue.Enqueue(assembly);
-                }
-                else
-                {
-                    try
+                    if (_isAlreadyInLoadingEvent)
                     {
-                        _isAlreadyInLoadingEvent = true;
-
-                        InitializeTypes(assembly);
+                        // Will be proceed in finally block
+                        _onAssemblyLoadedDelayQueue.Enqueue(assembly);
                     }
-                    finally
+                    else
                     {
-                        while (_onAssemblyLoadedDelayQueue.Count > 0)
+                        try
                         {
-                            var delayedAssembly = _onAssemblyLoadedDelayQueue.Dequeue();
+                            _isAlreadyInLoadingEvent = true;
 
-                            // Copy/pasted assembly processing behaviour, like types were processed without any delay
-                            InitializeTypes(delayedAssembly);
+                            InitializeTypes(assembly);
                         }
+                        finally
+                        {
+                            while (_onAssemblyLoadedDelayQueue.Count > 0)
+                            {
+                                var delayedAssembly = _onAssemblyLoadedDelayQueue.Dequeue();
 
-                        _isAlreadyInLoadingEvent = false;
+                                // Copy/pasted assembly processing behaviour, like types were processed without any delay
+                                InitializeTypes(delayedAssembly);
+                            }
 
-                        Monitor.Exit(_lockObject);
+                            _isAlreadyInLoadingEvent = false;
+                        }
                     }
                 }
+
+                Monitor.Exit(_lockObject);
             }
             else
             {
