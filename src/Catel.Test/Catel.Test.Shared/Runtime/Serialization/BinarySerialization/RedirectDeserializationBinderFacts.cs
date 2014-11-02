@@ -69,7 +69,7 @@ namespace Catel.Test.Runtime.Serialization
             {
                 TimeMeasureHelper.MeasureAction(5, "Multithreaded initialization", 
                     () => new RedirectDeserializationBinder(typesPerThread), 
-                    () => TypeCache.InitializeTypes(false));
+                    () => TypeCache.InitializeTypes());
             }
         }
     }
