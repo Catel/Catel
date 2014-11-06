@@ -9,10 +9,9 @@ namespace Catel.Threading
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
-#if !SILVERLIGHT
     using System.Threading.Tasks;
-#else
+
+#if SILVERLIGHT
     using System.Threading;
 #endif
 
