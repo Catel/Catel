@@ -490,10 +490,14 @@ namespace Catel.Reflection
         {
             InitializeTypes();
 
+            // IMPORTANT NOTE!!!! DON'T USE LOGGING IN THE CODE BELOW BECAUSE IT MIGHT CAUSE DEADLOCK (BatchLogListener will load
+            // async stuff which can deadlock). Keep it simple without calls to other code. Do any type initialization *outside* 
+            // the lock and make sure not to make calls to other methods
+
+            Dictionary<string, Type> typeSource = null;
+
             lock (_lockObject)
             {
-                Dictionary<string, Type> typeSource = null;
-
                 if (!string.IsNullOrWhiteSpace(assemblyName))
                 {
                     if (_typesByAssembly.ContainsKey(assemblyName))
@@ -525,14 +529,15 @@ namespace Catel.Reflection
 
                         return typeSource.Values.ToArray();
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        Log.Warning(ex, "Failed to get types, '{0}' retries left", retryCount);
                     }
                 }
 
                 return new Type[] { };
             }
+
+            // IMPORTANT NOTE: READ NOTE ABOVE BEFORE EDITING THIS METHOD!!!!
         }
 
         /// <summary>

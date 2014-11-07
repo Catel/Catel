@@ -42,7 +42,7 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("serviceType", serviceType);
 
-            lock (_serviceLocator.Lock)
+            lock (_serviceLocator)
             {
                 if (_serviceLocator.IsTypeRegistered(serviceType))
                 {

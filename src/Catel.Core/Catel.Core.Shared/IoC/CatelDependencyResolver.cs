@@ -100,7 +100,7 @@ namespace Catel.IoC
             int typeCount = types.Length;
             var resolvedTypes = new object[typeCount];
 
-            lock (_serviceLocator.Lock)
+            lock (_serviceLocator)
             {
                 for (int i = 0; i < typeCount; i++)
                 {

@@ -368,7 +368,7 @@ namespace Catel.IoC
 
             try
             {
-                lock (serviceLocator.Lock)
+                lock (serviceLocator)
                 {
                     if (serviceLocator.IsTypeRegistered(typeof (TService), tag))
                     {

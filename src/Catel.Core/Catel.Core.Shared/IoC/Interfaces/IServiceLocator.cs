@@ -65,14 +65,6 @@ namespace Catel.IoC
         /// By default, this value is <c>true</c>.
         /// </remarks>
         bool IgnoreRuntimeIncorrectUsageOfRegisterAttribute { get; set; }
-
-        /// <summary>
-        /// Gets the lock object that will be shared in the fixed set of ServiceLocator / TypeFactory / DependencyResolver.
-        /// <para />
-        /// Custom implementations of IoC components can use this lock to lock a set to prevent deadlocks.
-        /// </summary>
-        /// <value>The lock.</value>
-        object Lock { get; }
         #endregion
 
         #region Events

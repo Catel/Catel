@@ -10,6 +10,7 @@ namespace Catel.IoC
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using System.Threading;
     using ApiCop;
     using ApiCop.Rules;
     using Caching;
@@ -46,11 +47,6 @@ namespace Catel.IoC
         #endregion
 
         #region Fields
-        /// <summary>
-        /// Cache containing all last used constructors for a type.
-        /// </summary>
-        private readonly Dictionary<ConstructorCacheKey, ConstructorInfo> _constructorCache = new Dictionary<ConstructorCacheKey, ConstructorInfo>();
-
         /// <summary>
         /// Cache containing all last used constructors for a type without auto-completion.
         /// </summary>
@@ -166,7 +162,7 @@ namespace Catel.IoC
         /// <param name="typeRequestInfoForTypeJustConstructed">The type request info for type just constructed.</param>
         private void CloseCurrentTypeIfRequired(TypeRequestInfo typeRequestInfoForTypeJustConstructed)
         {
-            lock (_serviceLocator.Lock)
+            lock (_serviceLocator)
             {
                 if (_currentTypeRequestPath != null)
                 {
@@ -188,7 +184,7 @@ namespace Catel.IoC
         /// <param name="typeRequestInfoForTypeJustConstructed">The type request info.</param>
         private void CompleteTypeRequestPathIfRequired(TypeRequestInfo typeRequestInfoForTypeJustConstructed)
         {
-            lock (_serviceLocator.Lock)
+            lock (_serviceLocator)
             {
                 if (_currentTypeRequestPath != null)
                 {
@@ -273,7 +269,7 @@ namespace Catel.IoC
                 parameters = new object[] { };
             }
 
-            lock (_serviceLocator.Lock)
+            lock (_serviceLocator)
             {
                 TypeRequestInfo typeRequestInfo = null;
 
@@ -337,7 +333,7 @@ namespace Catel.IoC
                             constructorCache[constructorCacheKey] = constructor;
 
                             // Only update the rule when using a constructor for the first time, not when using it from the cache
-                            ApiCop.UpdateRule<TooManyDependenciesApiCopRule>("TypeFactory.LimitDependencyInjection", 
+                            ApiCop.UpdateRule<TooManyDependenciesApiCopRule>("TypeFactory.LimitDependencyInjection",
                                 x => x.SetNumberOfDependenciesInjected(typeToConstruct, constructor.GetParameters().Count()));
 
                             return instanceCreatedWithInjection;
@@ -393,7 +389,7 @@ namespace Catel.IoC
         /// <returns>The <see cref="TypeMetaData"/>.</returns>
         private TypeMetaData GetTypeMetaData(Type type)
         {
-            lock (_serviceLocator.Lock)
+            lock (_serviceLocator)
             {
                 if (!_typeConstructorsMetadata.ContainsKey(type))
                 {
@@ -596,14 +592,24 @@ namespace Catel.IoC
         /// </summary>
         public void ClearCache()
         {
-            lock (_serviceLocator.Lock)
-            {
-                // Note that we don't clear the constructor metadata cache, constructors on types normally don't change during an
-                // application lifetime
+            // Note that we don't clear the constructor metadata cache, constructors on types normally don't change during an
+            // application lifetime
 
-                _constructorCache.Clear();
-                _specificConstructorCacheWithoutAutoCompletion.Clear();
-                _specificConstructorCacheWithAutoCompletion.Clear();
+            // Clear cache isn't really that important, it's better to prevent deadlocks. How can a deadlock occur? If thread x is creating 
+            // a type and loads an assembly, but thread y is also loading an assembly. Thread x will lock because it's creating the type, 
+            // thread y will lock because it wants to clear the cache because new types were added. In that case ignore clearing the cache
+
+            if (Monitor.TryEnter(_serviceLocator))
+            {
+                try
+                {
+                    _specificConstructorCacheWithoutAutoCompletion.Clear();
+                    _specificConstructorCacheWithAutoCompletion.Clear();
+                }
+                finally
+                {
+                    Monitor.Exit(_serviceLocator);
+                }
             }
 
             //Log.Debug("Cleared type constructor cache");
@@ -787,14 +793,14 @@ namespace Catel.IoC
             foreach (var parameter in parameters)
             {
                 var parameterType = parameter.ParameterType;
-                if (parameterType == typeof (Object))
+                if (parameterType == typeof(Object))
                 {
                     counter++;
                     continue;
                 }
 
 #if !XAMARIN
-                if (parameterType == typeof (DynamicObject))
+                if (parameterType == typeof(DynamicObject))
                 {
                     counter++;
                     continue;
