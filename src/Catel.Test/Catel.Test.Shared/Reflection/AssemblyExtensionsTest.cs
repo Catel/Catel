@@ -20,9 +20,6 @@ namespace Catel.Test.Reflection
         private static readonly Assembly Assembly = typeof(AssemblyExtensionsTest).GetAssemblyEx();
 
         #region Methods
-        /// <summary>
-        /// Checks the title of the assembly automatically.
-        /// </summary>
         [TestCase]
         public void TitleAutomatic()
         {
@@ -33,9 +30,6 @@ namespace Catel.Test.Reflection
             Assert.AreEqual(expected, result);
         }
 
-        /// <summary>
-        /// Checks the version of the assembly automatically.
-        /// </summary>
         [TestCase]
         public void VersionAutomatic()
         {
@@ -46,9 +40,6 @@ namespace Catel.Test.Reflection
             Assert.AreEqual(expected, result);
         }
 
-        /// <summary>
-        /// Checks the version with a specified separator of the assembly automatically.
-        /// </summary>
         [TestCase]
         public void VersionWithSeparatorAutomatic()
         {
@@ -59,9 +50,6 @@ namespace Catel.Test.Reflection
             Assert.AreEqual(expected, result);
         }
 
-        /// <summary>
-        /// Checks the version with a specified separator of the assembly automatically.
-        /// </summary>
         [TestCase]
         public void VersionWithSeparatorAutomaticWhereSeparatorCountIsTooHigh()
         {
@@ -72,9 +60,6 @@ namespace Catel.Test.Reflection
             Assert.AreEqual(expected, result);
         }
 
-        ///// <summary>
-        ///// Checks the informational version of the assembly automatically.
-        ///// </summary>
         //[TestCase]
         //public void InformationalVersionAutomatic()
         //{
@@ -85,9 +70,6 @@ namespace Catel.Test.Reflection
         //    Assert.AreEqual(expected, result);
         //}
 
-        /// <summary>
-        /// Checks the description of the assembly automatically.
-        /// </summary>
         [TestCase]
         public void DescriptionAutomatic()
         {
@@ -98,9 +80,6 @@ namespace Catel.Test.Reflection
             Assert.AreEqual(expected, result);
         }
 
-        /// <summary>
-        /// Checks the product of the assembly automatically.
-        /// </summary>
         [TestCase]
         public void ProductAutomatic()
         {
@@ -111,9 +90,6 @@ namespace Catel.Test.Reflection
             Assert.AreEqual(expected, result);
         }
 
-        /// <summary>
-        /// Checks the copyright of the assembly automatically.
-        /// </summary>
         [TestCase]
         public void CopyrightAutomatic()
         {
@@ -124,9 +100,6 @@ namespace Catel.Test.Reflection
             Assert.AreEqual(expected, result);
         }
 
-        /// <summary>
-        /// Checks the company of the assembly automatically.
-        /// </summary>
         [TestCase]
         public void CompanyAutomatic()
         {
@@ -136,6 +109,15 @@ namespace Catel.Test.Reflection
 
             Assert.AreEqual(expected, result);
         }
+
+#if NET
+        [TestCase]
+        public void TheGetBuildDateTimeMethod()
+        {
+            // Just check if the call works
+            var dateTime = Assembly.GetBuildDateTime();
+        }
+#endif
         #endregion
     }
 }
