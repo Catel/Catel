@@ -111,7 +111,7 @@ namespace Catel.Windows
 #if SILVERLIGHT
         : ChildWindow, IDataWindow
 #else
-        : Window, IDataWindow
+        : System.Windows.Window, IDataWindow
 #endif
     {
         #region Constants

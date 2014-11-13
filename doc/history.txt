@@ -94,6 +94,7 @@ Added/fixed:
 (+) CTL-509 Added the EventLogListener
 (+) CTL-511 Add PlatformToBooleanConverter to know which platform is being used
 (+) CTL-515 Add model initialization and uninitialization members availale in ViewModelBase
+(+) CTL-552 Create catel:Window that derives from DataWindow with a customized features
 (*) CTL-326 Data annotation validation will no longer be invoked for properties with non-public getters to prevent
     first chance exceptions the first time such a property is being validated
 (*) CTL-334 ViewModelBase now respects SuspendValidation during saving, which means that even if there are validation 

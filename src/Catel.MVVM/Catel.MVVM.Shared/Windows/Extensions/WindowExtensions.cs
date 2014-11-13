@@ -19,6 +19,7 @@ namespace Catel.Windows
     using Reflection;
     using Threading;
     using Logging;
+    using SystemWindow = System.Windows.Window;
 
     /// <summary>
     /// Extensions for <see cref="System.Windows.Window"/>.
@@ -115,7 +116,7 @@ namespace Catel.Windows
         /// <param name="forceNewOwner">If true, the new owner will be forced. Otherwise, if the
         /// window currently has an owner, that owner will be respected (and thus not changed).</param>
         /// <param name="focusFirstControl">If true, the first control will automatically be focused.</param>
-        public static void SetOwnerWindow(this Window window, bool forceNewOwner = false, bool focusFirstControl = false)
+        public static void SetOwnerWindow(this SystemWindow window, bool forceNewOwner = false, bool focusFirstControl = false)
         {
             // Check active window first
             var activeWindow = Application.Current.GetActiveWindow();
@@ -143,7 +144,7 @@ namespace Catel.Windows
         /// <param name="window">Reference to the current window.</param>
         /// <param name="forceNewOwner">If true, the new owner will be forced. Otherwise, if the
         /// window currently has an owner, that owner will be respected (and thus not changed).</param>
-        public static void SetOwnerWindowAndFocus(this Window window, bool forceNewOwner = false)
+        public static void SetOwnerWindowAndFocus(this SystemWindow window, bool forceNewOwner = false)
         {
             SetOwnerWindow(window, forceNewOwner, true);
         }
@@ -157,7 +158,7 @@ namespace Catel.Windows
         /// <param name="owner">New owner window.</param>
         /// <param name="forceNewOwner">If true, the new owner will be forced. Otherwise, if the
         /// window currently has an owner, that owner will be respected (and thus not changed).</param>
-        public static void SetOwnerWindow(this Window window, Window owner, bool forceNewOwner = false)
+        public static void SetOwnerWindow(this SystemWindow window, SystemWindow owner, bool forceNewOwner = false)
         {
             SetOwnerWindowByWindow(window, owner, forceNewOwner, false);
         }
@@ -170,7 +171,7 @@ namespace Catel.Windows
         /// <param name="owner">New owner window.</param>
         /// <param name="forceNewOwner">If true, the new owner will be forced. Otherwise, if the
         /// window currently has an owner, that owner will be respected (and thus not changed).</param>
-        public static void SetOwnerWindowAndFocus(this Window window, Window owner, bool forceNewOwner = false)
+        public static void SetOwnerWindowAndFocus(this SystemWindow window, SystemWindow owner, bool forceNewOwner = false)
         {
             SetOwnerWindowByWindow(window, owner, forceNewOwner, true);
         }
@@ -183,7 +184,7 @@ namespace Catel.Windows
         /// <param name="forceNewOwner">If true, the new owner will be forced. Otherwise, if the
         /// window currently has an owner, that owner will be respected (and thus not changed).</param>
         /// <param name="focusFirstControl">If true, the first control will automatically be focused.</param>
-        private static void SetOwnerWindowByWindow(Window window, Window owner, bool forceNewOwner = false, bool focusFirstControl = true)
+        private static void SetOwnerWindowByWindow(SystemWindow window, SystemWindow owner, bool forceNewOwner = false, bool focusFirstControl = true)
         {
             SetOwnerWindow(window, owner, IntPtr.Zero, forceNewOwner, focusFirstControl);
         }
@@ -197,7 +198,7 @@ namespace Catel.Windows
         /// <param name="owner">New owner window.</param>
         /// <param name="forceNewOwner">If true, the new owner will be forced. Otherwise, if the
         /// window currently has an owner, that owner will be respected (and thus not changed).</param>
-        public static void SetOwnerWindow(this Window window, IntPtr owner, bool forceNewOwner = false)
+        public static void SetOwnerWindow(this SystemWindow window, IntPtr owner, bool forceNewOwner = false)
         {
             SetOwnerWindowByHandle(window, owner, forceNewOwner, false);
         }
@@ -210,7 +211,7 @@ namespace Catel.Windows
         /// <param name="owner">New owner window.</param>
         /// <param name="forceNewOwner">If true, the new owner will be forced. Otherwise, if the
         /// window currently has an owner, that owner will be respected (and thus not changed).</param>
-        public static void SetOwnerWindowAndFocus(this Window window, IntPtr owner, bool forceNewOwner = false)
+        public static void SetOwnerWindowAndFocus(this SystemWindow window, IntPtr owner, bool forceNewOwner = false)
         {
             SetOwnerWindowByHandle(window, owner, forceNewOwner, true);
         }
@@ -223,7 +224,7 @@ namespace Catel.Windows
         /// <param name="forceNewOwner">If true, the new owner will be forced. Otherwise, if the
         /// window currently has an owner, that owner will be respected (and thus not changed).</param>
         /// <param name="focusFirstControl">If true, the first control will automatically be focused.</param>
-        private static void SetOwnerWindowByHandle(Window window, IntPtr owner, bool forceNewOwner = false, bool focusFirstControl = true)
+        private static void SetOwnerWindowByHandle(SystemWindow window, IntPtr owner, bool forceNewOwner = false, bool focusFirstControl = true)
         {
             SetOwnerWindow(window, null, owner, forceNewOwner, focusFirstControl);
         }
@@ -234,7 +235,7 @@ namespace Catel.Windows
         /// </summary>
         /// <param name="window">The window to bring to top.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="window"/> is <c>null</c>.</exception>
-        public static void BringWindowToTop(this Window window)
+        public static void BringWindowToTop(this SystemWindow window)
         {
             Argument.IsNotNull("window", window);
 
@@ -253,7 +254,7 @@ namespace Catel.Windows
         /// <param name="forceNewOwner">If true, the new owner will be forced. Otherwise, if the
         /// window currently has an owner, that owner will be respected (and thus not changed).</param>
         /// <param name="focusFirstControl">If true, the first control will automatically be focused.</param>
-        private static void SetOwnerWindow(Window window, Window ownerWindow, IntPtr ownerHandle, bool forceNewOwner, bool focusFirstControl)
+        private static void SetOwnerWindow(SystemWindow window, SystemWindow ownerWindow, IntPtr ownerHandle, bool forceNewOwner, bool focusFirstControl)
         {
             if (focusFirstControl)
             {
@@ -317,7 +318,7 @@ namespace Catel.Windows
                             }
                         }
 
-                        ((Window)sender).Loaded -= onWindowLoaded;
+                        ((SystemWindow)sender).Loaded -= onWindowLoaded;
                     };
 
                     window.Loaded += onWindowLoaded;
@@ -349,7 +350,7 @@ namespace Catel.Windows
         /// <returns>
         /// True if the window has an owner, otherwise false.
         /// </returns>
-        private static bool HasOwner(Window window)
+        private static bool HasOwner(SystemWindow window)
         {
             return ((window.Owner != null) || (new WindowInteropHelper(window).Owner != IntPtr.Zero));
         }
@@ -358,7 +359,7 @@ namespace Catel.Windows
         /// Removes the icon from the window.
         /// </summary>
         /// <param name="window">The window.</param>
-        public static void RemoveIcon(this Window window)
+        public static void RemoveIcon(this SystemWindow window)
         {
             // Get the handle of the window
             var windowHandle = new WindowInteropHelper(window).Handle;
@@ -380,7 +381,7 @@ namespace Catel.Windows
         /// Applies the icon from the entry assembly (the application) to the window.
         /// </summary>
         /// <param name="window">The window.</param>
-        public static void ApplyIconFromApplication(this Window window)
+        public static void ApplyIconFromApplication(this SystemWindow window)
         {
             Argument.IsNotNull(() => window);
 

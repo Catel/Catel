@@ -397,5 +397,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Threading\Helpers\Dispatcherhelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Windows\DataWindow\DataWindow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Windows\DataWindow\DataWindowButton.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Windows\Window.cs" />
   </ItemGroup>
 </Project>
