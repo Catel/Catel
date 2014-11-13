@@ -24,7 +24,7 @@ namespace Catel
 #if SILVERLIGHT
         where TShell : UIElement
 #else
-        where TShell : Window
+        where TShell : System.Windows.Window
 #endif
     {
         /// <summary>
@@ -57,7 +57,7 @@ namespace Catel
 #if SILVERLIGHT
             Application.Current.RootVisual = (UIElement)Shell;
 #else
-            var shell = Shell as Window;
+            var shell = Shell as System.Windows.Window;
             if (shell != null)
             {
                 Application.Current.MainWindow = shell;
@@ -97,7 +97,7 @@ namespace Catel
 #if SILVERLIGHT
         where TShell : UIElement
 #else
-        where TShell : Window
+        where TShell : System.Windows.Window
 #endif
         where TModuleCatalog : class, IModuleCatalog, new()
     {
