@@ -25,7 +25,7 @@ namespace Catel.Windows.Interactivity
     /// <summary>
     /// Behavior base for all behaviors that should update a binding.
     /// </summary>
-    public class UpdateBindingBehaviorBase<T> : BehaviorBase<TextBox>
+    public class UpdateBindingBehaviorBase<T> : BehaviorBase<T>
         where T : FrameworkElement
     {
         #region Constructors
