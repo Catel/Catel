@@ -16,6 +16,34 @@ License:         http://www.catelproject.com/about/license
 **********************************************************
 
 ==================
+Version 4.1.0
+==================
+
+For an update guide, visit https://catelproject.atlassian.net/wiki/display/CTL/Update+guides
+
+Release date:
+=============
+2014/xx/xx
+
+Added/fixed (BREAKING CHANGES):
+===============================
+xxx
+
+Added/fixed:
+============
+xxx
+
+Roadmap:
+========
+See http://www.catelproject.com/support/issue-tracker
+
+Known issues:
+=============
+See http://www.catelproject.com/support/issue-tracker
+
+**********************************************************
+
+==================
 Version 4.0.0
 ==================
 
