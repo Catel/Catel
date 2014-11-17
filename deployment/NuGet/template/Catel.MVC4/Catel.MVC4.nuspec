@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>Catel.Mvc</id>
+    <version>[VERSION]</version>
+	<title>Catel.MVC 4</title>
+    <authors>GeertvanHorrik</authors>
+	
+	<description>
+	  Catel.MVC 4 library which includes the MVC 4 related features.
+	</description>
+	<summary>
+	</summary>
+	
+	<tags>mvc catel</tags>
+	
+	<language>en-US</language>
+	<projectUrl>http://www.catelproject.com</projectUrl>	
+	<licenseUrl>http://www.catelproject.com/license/</licenseUrl>
+		<!--<iconUrl>file://content/icon.png</iconUrl>-->
+	<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>
+	
+    <dependencies>
+          <dependency id="Catel.Core" version="[VERSION]" />
+          <dependency id="Microsoft.AspNet.Mvc" version="4.0.30506.0" />  
+    </dependencies>
+	
+  </metadata>
+</package>

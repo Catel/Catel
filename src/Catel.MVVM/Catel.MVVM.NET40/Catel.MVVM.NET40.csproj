@@ -17,7 +17,7 @@
     <WarningLevel>4</WarningLevel>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.18.0.0</FodyPath>
+    <NuGetPackageImportStamp>ab0a43e4</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -29,6 +29,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\..\..\output\debug\NET40\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>1998</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -39,18 +40,41 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\..\..\output\release\NET40\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>1998</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="ClassDiagrams\ViewModelBase.cd" />
-    <None Include="Fody.targets" />
+    <None Include="app.config" />
     <None Include="packages.config" />
+    <Reference Include="Catel.Fody.Attributes, Version=2.4.0.0, Culture=neutral, PublicKeyToken=1c8163524cbe02e6, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Catel.Fody.2.4.0-unstable0001\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks">
+      <HintPath>..\..\..\lib\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions">
+      <HintPath>..\..\..\lib\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop">
+      <HintPath>..\..\..\lib\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
+    </Reference>
     <Reference Include="Obsolete">
-      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.0.0\Lib\NET35\Obsolete.dll</HintPath>
+      <HintPath>..\..\..\lib\Obsolete.Fody.3.1.0.0\Lib\NET35\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO">
+      <HintPath>..\..\..\lib\Microsoft.Bcl.1.1.9\lib\net40\System.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net" />
+    <Reference Include="System.Runtime">
+      <HintPath>..\..\..\lib\Microsoft.Bcl.1.1.9\lib\net40\System.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks">
+      <HintPath>..\..\..\lib\Microsoft.Bcl.1.1.9\lib\net40\System.Threading.Tasks.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -73,158 +97,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Catel.Core\Catel.Core.NET40\Catel.Core.NET40.csproj">
-      <Project>{43147A1A-C8A0-4645-824D-0E7CAF0293FC}</Project>
-      <Name>Catel.Core.NET40</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\SolutionAssemblyInfo.cs">
-      <Link>Properties\SolutionAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="Collections\FastObservableCollection.cs" />
-    <Compile Include="Data\DispatcherObservableObject.cs" />
-    <Compile Include="Environment.cs" />
-    <Compile Include="MVVMModule.cs" />
-    <Compile Include="Extensions\NavigationEventArgsExtensions.cs" />
-    <Compile Include="ModuleInitializer.cs" />
-    <Compile Include="MVVM\Auditing\AuditingManager.cs" />
-    <Compile Include="MVVM\Auditing\AuditorBase.cs" />
-    <Compile Include="MVVM\Auditing\Helpers\AuditingHelper.cs" />
-    <Compile Include="MVVM\Auditing\Interfaces\IAuditor.cs" />
-    <Compile Include="MVVM\Commands\AsynchronousCommand.cs" />
-    <Compile Include="MVVM\Commands\Command.cs" />
-    <Compile Include="MVVM\Commands\CommandManager.cs" />
-    <Compile Include="MVVM\Commands\CompositeCommand.cs" />
-    <Compile Include="MVVM\Commands\EventArgs\CommandCanceledEventArgs.cs" />
-    <Compile Include="MVVM\Commands\EventArgs\CommandEventArgs.cs" />
-    <Compile Include="MVVM\Commands\EventArgs\CommandExecutedEventArgs.cs" />
-    <Compile Include="MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs" />
-    <Compile Include="MVVM\Commands\Helpers\CommandHelper.cs" />
-    <Compile Include="Windows\Data\Converters\CollectionToCountConverter.cs" />
-    <Compile Include="Windows\Data\Converters\TextToLowerCaseConverter.cs" />
-    <Compile Include="Windows\Data\Converters\TextToUpperCaseConverter.cs" />
-    <Compile Include="Windows\Input\InputGesture.cs" />
-    <Compile Include="MVVM\Commands\Interfaces\ICompositeCommand.cs" />
-    <Compile Include="MVVM\Commands\Interfaces\IAuthenticationProvider.cs" />
-    <Compile Include="MVVM\Commands\Interfaces\ICatelCommand.cs" />
-    <Compile Include="MVVM\Commands\Interfaces\ICatelTaskCommand.cs" />
-    <Compile Include="MVVM\Commands\Interfaces\ICommandManager.cs" />
-    <Compile Include="MVVM\Commands\Interfaces\ITaskProgressReport.cs" />
-    <Compile Include="MVVM\Commands\Interfaces\IViewModelCommandManager.cs" />
-    <Compile Include="MVVM\Commands\TaskCommand.cs" />
-    <Compile Include="MVVM\Commands\ViewModelCommandManager.cs" />
-    <Compile Include="MVVM\Exceptions\InvalidViewModelException.cs" />
-    <Compile Include="MVVM\Exceptions\ModelNotRegisteredException.cs" />
-    <Compile Include="MVVM\Exceptions\PropertyNotFoundInModelException.cs" />
-    <Compile Include="MVVM\Exceptions\ViewModelNotRegisteredException.cs" />
-    <Compile Include="MVVM\Exceptions\WrongViewModelTypeException.cs" />
-    <Compile Include="MVVM\Helpers\ViewHelper.cs" />
-    <Compile Include="MVVM\Helpers\ViewModelServiceHelper.cs" />
-    <Compile Include="MVVM\Locators\Interfaces\ILocator.cs" />
-    <Compile Include="MVVM\Locators\Interfaces\IUrlLocator.cs" />
-    <Compile Include="MVVM\Locators\Interfaces\IViewLocator.cs" />
-    <Compile Include="MVVM\Locators\Interfaces\IViewModelLocator.cs" />
-    <Compile Include="MVVM\Locators\LocatorBase.cs" />
-    <Compile Include="MVVM\Locators\UrlLocator.cs" />
-    <Compile Include="MVVM\Locators\ViewLocator.cs" />
-    <Compile Include="MVVM\Locators\ViewModelLocator.cs" />
-    <Compile Include="MVVM\Services\DispatcherService.cs" />
-    <Compile Include="MVVM\Services\EventArgs\AccelerometerValueChangedEventArgs.cs" />
-    <Compile Include="MVVM\Services\EventArgs\ApplicationClosingEventArgs.cs" />
-    <Compile Include="MVVM\Services\EventArgs\CameraOperationCompletedEventArgs.cs" />
-    <Compile Include="MVVM\Services\EventArgs\ContentReadyEventArgs.cs" />
-    <Compile Include="MVVM\Services\EventArgs\LocationChangedEventArgs.cs" />
-    <Compile Include="MVVM\Services\EventArgs\UICompletedEventArgs.cs" />
-    <Compile Include="MVVM\Services\Exceptions\PageNotRegisteredException.cs" />
-    <Compile Include="MVVM\Services\Exceptions\WindowNotRegisteredException.cs" />
-    <Compile Include="MVVM\Services\FileServiceBase.cs" />
-    <Compile Include="MVVM\Services\Interfaces\IAccelerometerService.cs" />
-    <Compile Include="MVVM\Services\Interfaces\IAccelerometerValue.cs" />
-    <Compile Include="MVVM\Services\Interfaces\ICameraService.cs" />
-    <Compile Include="MVVM\Services\Interfaces\IDispatcherService.cs" />
-    <Compile Include="MVVM\Services\Interfaces\IFileSupport.cs" />
-    <Compile Include="MVVM\Services\Interfaces\ILocation.cs" />
-    <Compile Include="MVVM\Services\Interfaces\ILocationService.cs" />
-    <Compile Include="MVVM\Services\Interfaces\IMessageService.cs" />
-    <Compile Include="MVVM\Services\Interfaces\INavigationService.cs" />
-    <Compile Include="MVVM\Services\Interfaces\IOpenFileService.cs" />
-    <Compile Include="MVVM\Services\Interfaces\IPleaseWaitService.cs" />
-    <Compile Include="MVVM\Services\Interfaces\IProcessService.cs" />
-    <Compile Include="MVVM\Services\Interfaces\ISaveFileService.cs" />
-    <Compile Include="MVVM\Services\Interfaces\ISelectDirectoryService.cs" />
-    <Compile Include="MVVM\Services\Interfaces\ISensorService.cs" />
-    <Compile Include="MVVM\Services\Interfaces\ISplashScreenService.cs" />
-    <Compile Include="MVVM\Services\Interfaces\IStartUpInfoProvider.cs" />
-    <Compile Include="MVVM\Services\Interfaces\IUIVisualizerService.cs" />
-    <Compile Include="MVVM\Services\Interfaces\IVibrateService.cs" />
-    <Compile Include="MVVM\Services\Interfaces\IViewExportService.cs" />
-    <Compile Include="MVVM\Services\Interfaces\IViewModelService.cs" />
-    <Compile Include="MVVM\Services\Interfaces\ISchedulerService.cs" />
-    <Compile Include="MVVM\Services\MessageService.cs" />
-    <Compile Include="MVVM\Services\NamingConvention.cs" />
-    <Compile Include="MVVM\Services\NavigationService.cs" />
-    <Compile Include="MVVM\Services\OpenFileService.cs" />
-    <Compile Include="MVVM\Services\PleaseWaitService.cs" />
-    <Compile Include="MVVM\Services\ProcessService.cs" />
-    <Compile Include="MVVM\Services\SaveFileService.cs" />
-    <Compile Include="MVVM\Services\SchedulerService.cs" />
-    <Compile Include="MVVM\Services\SelectDirectoryService.cs" />
-    <Compile Include="MVVM\Services\SplashScreenService.cs" />
-    <Compile Include="MVVM\Services\StartUpInfoProvider.cs" />
-    <Compile Include="MVVM\Services\Test\MessageService.cs" />
-    <Compile Include="MVVM\Services\Test\OpenFileService.cs" />
-    <Compile Include="MVVM\Services\Test\PleaseWaitService.cs" />
-    <Compile Include="MVVM\Services\Test\ProcessService.cs" />
-    <Compile Include="MVVM\Services\Test\SaveFileService.cs" />
-    <Compile Include="MVVM\Services\Test\UIVisualizerService.cs" />
-    <Compile Include="MVVM\Services\UIVisualizerService.cs" />
-    <Compile Include="MVVM\Services\ViewExportService.cs" />
-    <Compile Include="MVVM\Services\ViewModelServiceBase.cs" />
-    <Compile Include="MVVM\Tasks\ActionTask.cs" />
-    <Compile Include="MVVM\Tasks\Interfaces\ITask.cs" />
-    <Compile Include="MVVM\Tasks\Interfaces\ITaskProgressTracker.cs" />
-    <Compile Include="MVVM\Tasks\TaskBase.cs" />
-    <Compile Include="MVVM\ViewModels\Attributes\ExposeAttribute.cs" />
-    <Compile Include="MVVM\ViewModels\Attributes\InterestedInAttribute.cs" />
-    <Compile Include="MVVM\ViewModels\Attributes\ModelAttribute.cs" />
-    <Compile Include="MVVM\ViewModels\Attributes\ValidationToViewModelAttribute.cs" />
-    <Compile Include="MVVM\ViewModels\Attributes\ViewModelToModelAttribute.cs" />
-    <Compile Include="MVVM\ViewModels\EventArgs\CancelingEventArgs.cs" />
-    <Compile Include="MVVM\ViewModels\EventArgs\CancellableEventArgs.cs" />
-    <Compile Include="MVVM\ViewModels\EventArgs\SavingEventArgs.cs" />
-    <Compile Include="MVVM\ViewModels\EventArgs\ViewModelClosedEventArgs.cs" />
-    <Compile Include="MVVM\ViewModels\Extensions\ViewModelExtensions.cs" />
-    <Compile Include="MVVM\ViewModels\Extensions\ViewModelManagerExtensions.cs" />
-    <Compile Include="MVVM\ViewModels\Interfaces\INotifyableViewModel.cs" />
-    <Compile Include="MVVM\ViewModels\Interfaces\IProgressNotifyableViewModel.cs" />
-    <Compile Include="MVVM\ViewModels\Interfaces\IRelationalViewModel.cs" />
-    <Compile Include="MVVM\ViewModels\Interfaces\IViewModel.cs" />
-    <Compile Include="MVVM\ViewModels\Interfaces\IViewModelContainer.cs" />
-    <Compile Include="MVVM\ViewModels\Interfaces\IViewModelFactory.cs" />
-    <Compile Include="MVVM\ViewModels\Interfaces\IViewModelManager.cs" />
-    <Compile Include="MVVM\ViewModels\ManagedViewModel.cs" />
-    <Compile Include="MVVM\ViewModels\ModelErrorInfo.cs" />
-    <Compile Include="MVVM\ViewModels\ModelInfo.cs" />
-    <Compile Include="MVVM\ViewModels\NavigationViewModelBase.cs" />
-    <Compile Include="MVVM\ViewModels\ProgressNotifyableViewModel.cs" />
-    <Compile Include="MVVM\ViewModels\ViewModelBase.cs" />
-    <Compile Include="MVVM\ViewModels\ViewModelBase.customtypedescriptor.cs" />
-    <Compile Include="MVVM\ViewModels\ViewModelBase.navigation.cs" />
-    <Compile Include="MVVM\ViewModels\ViewModelBase.validation.cs" />
-    <Compile Include="MVVM\ViewModels\ViewModelFactory.cs" />
-    <Compile Include="MVVM\ViewModels\ViewModelManager.cs" />
-    <Compile Include="MVVM\ViewModels\ViewModelMetadata.cs" />
-    <Compile Include="MVVM\ViewModels\ViewModelPropertyDescriptor.cs" />
-    <Compile Include="MVVM\ViewModels\ViewModelPropertyDescriptorFactory.cs" />
-    <Compile Include="MVVM\ViewModels\ViewModelToModelMapping.cs" />
-    <Compile Include="MVVM\Views\Attributes\ViewToViewModelAttribute.cs" />
-    <Compile Include="MVVM\Views\Helpers\ViewToViewModelMappingHelper.cs" />
-    <Compile Include="MVVM\Views\Interfaces\IViewManager.cs" />
-    <Compile Include="MVVM\Views\ViewManager.cs" />
-    <Compile Include="MVVM\Views\ViewToViewModelMapping.cs" />
-    <Compile Include="MVVM\Views\ViewToViewModelMappingContainer.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Exceptions.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -273,120 +145,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.zh-Hans.resx</DependentUpon>
     </Compile>
-    <Compile Include="Windows\Controls\InfoBarMessageControl\InfoBarMessageControl.cs" />
-    <Compile Include="Windows\Controls\InfoBarMessageControl\InfoBarMessageControlVisibilityConverter.cs" />
-    <Compile Include="Windows\Controls\Interfaces\IPage.cs" />
-    <Compile Include="Windows\Controls\Interfaces\IUIElement.cs" />
-    <Compile Include="Windows\Controls\Interfaces\IUserControl.cs" />
-    <Compile Include="Windows\Controls\Interfaces\IView.cs" />
-    <Compile Include="Windows\Data\Converters\StringToTypeConverter.cs" />
-    <Compile Include="Windows\DependencyPropertySelector.cs" />
-    <Compile Include="Windows\Helpers\CommandLineHelper.cs" />
-    <Compile Include="Windows\Input\Helpers\KeyboardHelper.cs" />
-    <Compile Include="Windows\Markup\CommandManagerBinding.cs" />
-    <Compile Include="Windows\Markup\LanguageBinding.cs" />
-    <Compile Include="Windows\Threading\Extensions\DispatcherExtensions.cs" />
-    <Compile Include="Windows\Interfaces\IDependencyPropertySelector.cs" />
-    <Compile Include="Windows\Controls\MVVMProviders\Logic\EventArgs\DetermineViewModelInstanceEventArgs.cs" />
-    <Compile Include="Windows\Controls\MVVMProviders\Logic\EventArgs\DetermineViewModelTypeEventArgs.cs" />
-    <Compile Include="Windows\Controls\MVVMProviders\Logic\Extensions\LogicExtensions.cs" />
-    <Compile Include="Windows\Controls\MVVMProviders\Logic\LogicBase.cs" />
-    <Compile Include="Windows\Controls\MVVMProviders\Logic\NavigationLogicBase.cs" />
-    <Compile Include="Windows\Controls\MVVMProviders\Logic\NavigationPageLogic.cs" />
-    <Compile Include="Windows\Controls\MVVMProviders\Logic\UserControlLogic.cs" />
-    <Compile Include="Windows\Controls\MVVMProviders\Logic\WindowLogic.cs" />
-    <Compile Include="Windows\Controls\MVVMProviders\MVVMBehaviorBase.cs" />
-    <Compile Include="Windows\Controls\MVVMProviders\NavigationPageBehavior.cs" />
-    <Compile Include="Windows\Controls\MVVMProviders\UserControlBehavior.cs" />
-    <Compile Include="Windows\Controls\MVVMProviders\WindowBehavior.cs" />
-    <Compile Include="Windows\Controls\Page.cs" />
-    <Compile Include="Windows\Controls\Page.generic.cs" />
-    <Compile Include="Windows\Controls\UserControl.cs" />
-    <Compile Include="Windows\Controls\UserControl.generic.cs" />
-    <Compile Include="Windows\Controls\VisualWrapper.cs" />
-    <Compile Include="Windows\Controls\WarningAndErrorValidator.cs" />
-    <Compile Include="Windows\Data\BindingEvaluator.cs" />
-    <Compile Include="Windows\Data\BindingWithValidation.cs" />
-    <Compile Include="Windows\Data\Converters\AreEqualMultiValueConverter.cs" />
-    <Compile Include="Windows\Data\Converters\BooleanToGrayscaleConverter.cs" />
-    <Compile Include="Windows\Data\Converters\BooleanToOppositeBooleanConverter.cs" />
-    <Compile Include="Windows\Data\Converters\BooleanToTextConverter.cs" />
-    <Compile Include="Windows\Data\Converters\BooleanToVisibilityConverter.cs" />
-    <Compile Include="Windows\Data\Converters\ColorToBrushConverter.cs" />
-    <Compile Include="Windows\Data\Converters\ContainsItemsConverter.cs" />
-    <Compile Include="Windows\Data\Converters\CountVisibilityConverter.cs" />
-    <Compile Include="Windows\Data\Converters\DebugConverter.cs" />
-    <Compile Include="Windows\Data\Converters\EmptyStringToVisibilityConverter.cs" />
-    <Compile Include="Windows\Data\Converters\FormattingConverter.cs" />
-    <Compile Include="Windows\Data\Converters\GetFirstValidationErrorConverter.cs" />
-    <Compile Include="Windows\Data\Converters\Helpers\ConverterHelper.cs" />
-    <Compile Include="Windows\Data\Converters\IntToStringConverter.cs" />
-    <Compile Include="Windows\Data\Converters\IsSelectedConverter.cs" />
-    <Compile Include="Windows\Data\Converters\IsSelectedValueConverter.cs" />
-    <Compile Include="Windows\Data\Converters\MethodToValueConverter.cs" />
-    <Compile Include="Windows\Data\Converters\MultiplyConverter.cs" />
-    <Compile Include="Windows\Data\Converters\NullableValueConverter.cs" />
-    <Compile Include="Windows\Data\Converters\ReferenceToBooleanConverter.cs" />
-    <Compile Include="Windows\Data\Converters\ReferenceToVisibilityConverter.cs" />
-    <Compile Include="Windows\Data\Converters\ShortDateFormattingConverter.cs" />
-    <Compile Include="Windows\Data\Converters\StringToIntConverter.cs" />
-    <Compile Include="Windows\Data\Converters\ValueConverterBase.cs" />
-    <Compile Include="Windows\Data\Converters\ValueConverterGroup.cs" />
-    <Compile Include="Windows\Data\Converters\ViewModelToViewConverter.cs" />
-    <Compile Include="Windows\Data\Converters\VisibilityConverterBase.cs" />
-    <Compile Include="Windows\Data\DataResource.cs" />
-    <Compile Include="Windows\Data\EventArgs\DependencyPropertyValueChangedEventArgs.cs" />
-    <Compile Include="Windows\Data\Helpers\BindingHelper.cs" />
-    <Compile Include="Windows\Data\Helpers\DependencyPropertyChangedHelper.cs" />
-    <Compile Include="Windows\Data\Helpers\DependencyPropertyHelper.cs" />
-    <Compile Include="Windows\Data\Helpers\DependencyPropertyInfo.cs" />
-    <Compile Include="Windows\Extensions\ApplicationExtensions.cs" />
-    <Compile Include="Windows\Extensions\DependencyObjectExtensions.cs" />
-    <Compile Include="Windows\Extensions\FrameworkElementExtensions.cs" />
-    <Compile Include="Windows\Extensions\UIElementExtensions.cs" />
-    <Compile Include="Windows\Extensions\VisualExtensions.cs" />
-    <Compile Include="Windows\Extensions\WindowExtensions.cs" />
-    <Compile Include="Windows\Helpers\AutoDisposeHelper.cs" />
-    <Compile Include="Windows\Helpers\EffectsHelper.cs" />
-    <Compile Include="Windows\Helpers\PopupHelper.cs" />
-    <Compile Include="Windows\Helpers\ResourceHelper.cs" />
-    <Compile Include="Windows\Helpers\VisualTargetPresentationSource.cs" />
-    <Compile Include="Windows\Helpers\WrapControlHelper.cs" />
-    <Compile Include="Windows\Interactivity\Authentication.cs" />
-    <Compile Include="Windows\Interactivity\BehaviorBase.cs" />
-    <Compile Include="Windows\Interactivity\CommandBehaviorBase.cs" />
-    <Compile Include="Windows\Interactivity\CommandEventTriggerBase.cs" />
-    <Compile Include="Windows\Interactivity\CommandTriggerActionBase.cs" />
-    <Compile Include="Windows\Interactivity\CommandTriggerBase.cs" />
-    <Compile Include="Windows\Interactivity\DelayBindingUpdate.cs" />
-    <Compile Include="Windows\Interactivity\DoubleClickToCommand.cs" />
-    <Compile Include="Windows\Interactivity\DragDrop.cs" />
-    <Compile Include="Windows\Interactivity\DragDropHelpers\DragAdorner.cs" />
-    <Compile Include="Windows\Interactivity\DragDropHelpers\DropAdorner.cs" />
-    <Compile Include="Windows\Interactivity\DragDropHelpers\EnumerableExtensions.cs" />
-    <Compile Include="Windows\Interactivity\DragDropHelpers\UIHelpers.cs" />
-    <Compile Include="Windows\Interactivity\EventToCommand.cs" />
-    <Compile Include="Windows\Interactivity\EventTriggerBase.cs" />
-    <Compile Include="Windows\Interactivity\Focus.cs" />
-    <Compile Include="Windows\Interactivity\FocusFirstControl.cs" />
-    <Compile Include="Windows\Interactivity\KeyPressToCommand.cs" />
-    <Compile Include="Windows\Interactivity\MouseInfo.cs" />
-    <Compile Include="Windows\Interactivity\Navigate.cs" />
-    <Compile Include="Windows\Interactivity\NumericTextBox.cs" />
-    <Compile Include="Windows\Interactivity\RoutedEventTrigger.cs" />
-    <Compile Include="Windows\Interactivity\SelectTextOnFocus.cs" />
-    <Compile Include="Windows\Interactivity\TriggerActionBase.cs" />
-    <Compile Include="Windows\Interactivity\TriggerBase.cs" />
-    <Compile Include="Windows\Interactivity\UpdateBindingBehaviorBase.cs" />
-    <Compile Include="Windows\Interactivity\UpdateBindingOnPasswordChanged.cs" />
-    <Compile Include="Windows\Interactivity\UpdateBindingOnTextChanged.cs" />
-    <Compile Include="Windows\Interactivity\WindowEventToCommand.cs" />
-    <Compile Include="Windows\Markup\ServiceDependencyExtension.cs" />
-    <Compile Include="Windows\Threading\Helpers\Dispatcherhelper.cs" />
-    <Compile Include="Windows\Windows\DataWindow\DataWindow.cs" />
-    <Compile Include="Windows\Windows\DataWindow\DataWindow.generic.cs" />
-    <Compile Include="Windows\Windows\DataWindow\DataWindowButton.cs" />
-    <Compile Include="Windows\Windows\Interfaces\IDataWindow.cs" />
     <Compile Include="Windows\Windows\LoaderAnimation.xaml.cs">
       <DependentUpon>LoaderAnimation.xaml</DependentUpon>
     </Compile>
@@ -469,7 +227,13 @@
     <Resource Include="Resources\Images\Error.png" />
     <Resource Include="Resources\Images\Warning.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Catel.Core\Catel.Core.NET40\Catel.Core.NET40.csproj">
+      <Project>{43147a1a-c8a0-4645-824d-0e7caf0293fc}</Project>
+      <Name>Catel.Core.NET40</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="..\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets. -->
@@ -477,6 +241,13 @@
   </Target>
   <Target Name="AfterBuild">
   </Target>
-  <Import Project="$(ProjectPath)\..\..\..\..\Tools\Pepita\PepitaGet.targets" />
-  <Import Project="Fody.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\lib\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
+    <Error Condition="!Exists('..\..\..\lib\Fody.1.26.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.1.26.1\build\Fody.targets'))" />
+  </Target>
+  <Import Project="..\..\..\lib\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\lib\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <Import Project="..\..\..\lib\Fody.1.26.1\build\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.26.1\build\Fody.targets')" />
 </Project>

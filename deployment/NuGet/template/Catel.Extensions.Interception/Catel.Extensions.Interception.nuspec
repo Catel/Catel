@@ -21,8 +21,8 @@
 	<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>
 	
     <dependencies>
-      <dependency id="Catel.Core" version="[VERSION]" />
-	  <dependency id="Castle.Core" version="3.2.0" />
+          <dependency id="Catel.Core" version="[VERSION]" />
+          <dependency id="Castle.Core" version="3.2.0" />
     </dependencies>
 	
   </metadata>

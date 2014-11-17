@@ -6,7 +6,12 @@
 namespace Catel.Data
 {
     using System;
+
+#if EF5
     using System.Data.EntityClient;
+#else
+    using System.Data.Entity.Core.EntityClient;
+#endif
 
     /// <summary>
     /// The entity framework connection string helper.

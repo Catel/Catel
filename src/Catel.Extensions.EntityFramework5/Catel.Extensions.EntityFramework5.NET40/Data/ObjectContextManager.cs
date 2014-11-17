@@ -7,7 +7,12 @@
 namespace Catel.Data
 {
     using System;
+
+#if EF5
     using System.Data.Objects;
+#else
+    using System.Data.Entity.Core.Objects;
+#endif
 
     /// <summary>
     /// Provides an automated way to reuse Entity Framework ObjectContext objects within the context of a single data portal operation.

@@ -7,12 +7,14 @@
     <authors>GeertvanHorrik</authors>
 	
 	<description>
-	  Catel.MVVM library which includes the MVVM Framework for WPF and user controls.
+	  Catel.MVVM library which contains the MVVM framework available in Catel. This MVVM framework solves actual
+	  real-life development problems when using MVVM for professional applications written in any XAML language
+	  such as WPF, Silverlight, Windows Phone and WinRT.
 	</description>
 	<summary>
 	</summary>
 	
-	<tags>mvvm data object wpf windows</tags>
+	<tags>mvvm data object wpf windows winrt windows phone wp8 wp sl silverlight view model viewmodel</tags>
 	
 	<language>en-US</language>
 	<projectUrl>http://www.catelproject.com</projectUrl>	
@@ -21,7 +23,7 @@
 	<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>
 	
     <dependencies>
-      <dependency id="Catel.Core" version="[VERSION]" />
+          <dependency id="Catel.Core" version="[VERSION]" />
     </dependencies>
 	
   </metadata>

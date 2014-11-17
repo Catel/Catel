@@ -19,7 +19,7 @@
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.18.0.0</FodyPath>
+    <NuGetPackageImportStamp>1c1128ab</NuGetPackageImportStamp>
   </PropertyGroup>
   <!-- This property group is only here to support building this project using the 
        MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
@@ -53,6 +53,9 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Catel.Fody.Attributes">
+      <HintPath>..\..\..\lib\Catel.Fody.2.4.0-unstable0001\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Expression.Interactions, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\lib\Prism.4.1.0.0\lib\SL5\Microsoft.Expression.Interactions.dll</HintPath>
     </Reference>
@@ -65,14 +68,32 @@
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\..\lib\CommonServiceLocator.1.0\lib\SL30\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Threading.Tasks">
+      <HintPath>..\..\..\lib\Microsoft.Bcl.Async.1.0.168\lib\sl4\Microsoft.Threading.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions">
+      <HintPath>..\..\..\lib\Microsoft.Bcl.Async.1.0.168\lib\sl4\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions.Silverlight">
+      <HintPath>..\..\..\lib\Microsoft.Bcl.Async.1.0.168\lib\sl4\Microsoft.Threading.Tasks.Extensions.Silverlight.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Obsolete">
-      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.0.0\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
+      <HintPath>..\..\..\lib\Obsolete.Fody.3.1.0.0\Lib\portable-net4+sl4+wp8+win8+wpa81+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="system" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO">
+      <HintPath>..\..\..\lib\Microsoft.Bcl.1.1.9\lib\sl5\System.IO.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net" />
+    <Reference Include="System.Runtime">
+      <HintPath>..\..\..\lib\Microsoft.Bcl.1.1.9\lib\sl5\System.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks">
+      <HintPath>..\..\..\lib\Microsoft.Bcl.1.1.9\lib\sl5\System.Threading.Tasks.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Interactivity, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\lib\Prism.4.1.0.0\lib\SL5\System.Windows.Interactivity.dll</HintPath>
@@ -90,81 +111,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\SolutionAssemblyInfo.cs">
-      <Link>Properties\SolutionAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Prism.NET40\BootstrapperBase.cs">
-      <Link>BootstrapperBase.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Prism.NET40\BootstrapperBase.generic.cs">
-      <Link>BootstrapperBase.generic.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Prism.NET40\ExtensionsPrismModule.cs">
-      <Link>ExtensionsPrismModule.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Prism.NET40\Extensions\DependencyObjectExtensions.cs">
-      <Link>Extensions\DependencyObjectExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Prism.NET40\Extensions\ILogExtensions.cs">
-      <Link>Extensions\ILogExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Prism.NET40\Extensions\IRegionManagerExtensions.cs">
-      <Link>Extensions\IRegionManagerExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Prism.NET40\Extensions\IUIVisualizerServiceExtensions.cs">
-      <Link>Extensions\IUIVisualizerServiceExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Prism.NET40\Extensions\ISplashScreenServiceExtensions.cs">
-      <Link>Extensions\ISplashScreenServiceExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Prism.NET40\Interfaces\IModuleTracker.cs">
-      <Link>Interfaces\IModuleTracker.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Prism.NET40\Interfaces\IRegionInfo.cs">
-      <Link>Interfaces\IRegionInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Prism.NET40\Interfaces\IViewInfo.cs">
-      <Link>Interfaces\IViewInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Prism.NET40\ModuleInitializer.cs">
-      <Link>ModuleInitializer.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\CompositeModuleCatalog.cs">
-      <Link>Modules\CompositeModuleCatalog.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\ModuleCatalog.cs">
-      <Link>Modules\ModuleCatalog.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\ModuleBase.cs">
-      <Link>Modules\ModuleBase.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Prism.NET40\Modules\ModuleBase.generic.cs">
-      <Link>Modules\ModuleBase.generic.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Prism.NET40\Properties\AssemblyInfo.cs">
-      <Link>Properties\AssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Prism.NET40\ServiceLocatorAdapter.cs">
-      <Link>ServiceLocatorAdapter.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Prism.NET40\Tasks\BootstrapperTaskFactory.cs">
-      <Link>Tasks\BootstrapperTaskFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Prism.NET40\Tasks\Interfaces\IBootstrapperTaskFactory.cs">
-      <Link>Tasks\Interfaces\IBootstrapperTaskFactory.cs</Link>
-    </Compile>
-    <Compile Include="Helpers\HostHelper.cs" />
-    <Compile Include="Modules\DownloadingModuleCatalog.cs" />
-    <Compile Include="Modules\EventArgs\ModuleEventArgs.cs" />
-    <Compile Include="Modules\Interfaces\IDownloadingModuleCatalog.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Fody.targets" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="..\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems')" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
@@ -179,6 +134,13 @@
   </Target>
   <Target Name="AfterBuild">
   </Target>
-  <Import Project="$(ProjectPath)\..\..\..\..\Tools\Pepita\PepitaGet.targets" />
-  <Import Project="Fody.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\lib\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
+    <Error Condition="!Exists('..\..\..\lib\Fody.1.26.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.1.26.1\build\Fody.targets'))" />
+  </Target>
+  <Import Project="..\..\..\lib\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\lib\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <Import Project="..\..\..\lib\Fody.1.26.1\build\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.26.1\build\Fody.targets')" />
 </Project>

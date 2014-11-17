@@ -11,7 +11,7 @@
     <AssemblyName>Catel.Extensions.Memento</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <FodyPath>..\..\..\lib\Fody.1.18.0.0</FodyPath>
+    <NuGetPackageImportStamp>ce501cf7</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,8 +35,12 @@
     <DocumentationFile>..\..\..\output\release\NET45\Catel.Extensions.Memento\Catel.Extensions.Memento.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Catel.Fody.Attributes, Version=2.4.0.0, Culture=neutral, PublicKeyToken=1c8163524cbe02e6, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Catel.Fody.2.4.0-unstable0001\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
+    </Reference>
     <Reference Include="Obsolete">
-      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.0.0\Lib\NET35\Obsolete.dll</HintPath>
+      <HintPath>..\..\..\lib\Obsolete.Fody.3.1.0.0\Lib\NET35\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -47,7 +51,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Catel.Core\Catel.Core.NET45\Catel.Core.NET45.csproj">
       <Project>{d748be60-bad6-4d1b-be5a-c24943a56594}</Project>
@@ -55,69 +61,20 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FodyWeavers.xml" />
+    <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Fody.targets" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\SolutionAssemblyInfo.cs">
-      <Link>Properties\SolutionAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Memento.NET40\ActionUndo.cs">
-      <Link>ActionUndo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Memento.NET40\Attributes\IgnoreMementoSupportAttribute.cs">
-      <Link>Attributes\IgnoreMementoSupportAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Memento.NET40\Batch.cs">
-      <Link>Batch.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Memento.NET40\CollectionChangeUndo.cs">
-      <Link>CollectionChangeUndo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Memento.NET40\CollectionObserver.cs">
-      <Link>CollectionObserver.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Memento.NET40\ExtensionsMementoModule.cs">
-      <Link>ExtensionsMementoModule.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Memento.NET40\Interfaces\IMementoBatch.cs">
-      <Link>Interfaces\IMementoBatch.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Memento.NET40\Interfaces\IMementoService.cs">
-      <Link>Interfaces\IMementoService.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Memento.NET40\Interfaces\IMementoSupport.cs">
-      <Link>Interfaces\IMementoSupport.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Memento.NET40\MementoService.cs">
-      <Link>MementoService.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Memento.NET40\ModuleInitializer.cs">
-      <Link>ModuleInitializer.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Memento.NET40\ObjectObserver.cs">
-      <Link>ObjectObserver.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Memento.NET40\ObserverBase.cs">
-      <Link>ObserverBase.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Memento.NET40\OperationSet.cs">
-      <Link>OperationSet.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Memento.NET40\Properties\AssemblyInfo.cs">
-      <Link>Properties\AssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Memento.NET40\PropertyChangeUndo.cs">
-      <Link>PropertyChangeUndo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Memento.NET40\UndoBase.cs">
-      <Link>UndoBase.cs</Link>
-    </Compile>
-  </ItemGroup>
+  <Import Project="..\Catel.Extensions.Memento.Shared\Catel.Extensions.Memento.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Extensions.Memento.Shared\Catel.Extensions.Memento.Shared.projitems')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\..\..\lib\Fody.1.26.1\build\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.26.1\build\Fody.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\lib\Fody.1.26.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.1.26.1\build\Fody.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
@@ -125,6 +82,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <Import Project="$(ProjectDir)\..\..\..\Tools\Pepita\PepitaGet.targets" />
-  <Import Project="Fody.targets" />
 </Project>

@@ -2,13 +2,13 @@
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
     <Identity Id="Catel.ProjectTemplates.WindowsPhone.Application..bf4b52d6-432c-4e07-bb97-b5075c6a60e5" Version="1.0" Language="en-US" Publisher="Geert van Horrik" />
-    <DisplayName>Windows Phone application using Catel</DisplayName>
+    <DisplayName>Windows Phone 8.0 application using Catel</DisplayName>
     <Description xml:space="preserve">Project template to create an MVVM-based application for Windows Phone using Catel.</Description>
     <MoreInfo>http://www.catelproject.com</MoreInfo>
     <GettingStartedGuide>http://www.catelproject.com</GettingStartedGuide>
     <Icon>__Templateicon.ico</Icon>
     <PreviewImage>__Catel_logo_large.png</PreviewImage>
-    <Tags>catel;mvvm;application;wp;wp7;wp8;windows;phone</Tags>
+    <Tags>catel;mvvm;application;wp;wp7;wp8;wp80;wp81;windows;phone</Tags>
   </Metadata>
   <Installation>
     <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[11.0,)" />
@@ -18,6 +18,6 @@
   <Dependencies>
   </Dependencies>
   <Assets>
-    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\CSharp\Windows Phone\Catel.WP8.Application.zip" />
+    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\CSharp\Windows Phone\Catel.WP80.Application.zip" />
   </Assets>
 </PackageManifest>

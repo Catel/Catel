@@ -5,6 +5,7 @@
 *.suo
 *.user
 *.sln.docstates
+*.g.cs
 
 # Build results
 [Bb]in/
@@ -18,9 +19,13 @@ obj
 [Ll]ib/
 *_i.c
 *_p.c
+*.chk
+*.ide
 *.ilk
+*.jrs
 *.meta
 *.obj
+*.orig
 *.pch
 *.pdb
 *.pgc
@@ -49,6 +54,9 @@ ipch/
 # ReSharper is a .NET coding add-in
 _ReSharper*
 *.resharper.user
+
+# Catel
+CatelLogging.txt
 
 # Dotcover
 *.dotCover
@@ -111,3 +119,4 @@ Desktop.ini
 
 # mstest test results
 TestResults
+src/UpgradeLog.htm

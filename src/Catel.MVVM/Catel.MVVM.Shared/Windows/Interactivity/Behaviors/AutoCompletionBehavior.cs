@@ -1,0 +1,415 @@
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="AutoCompleteBehavior.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+#if NET || SL5 || (NETFX_CORE && !WIN80)
+
+namespace Catel.Windows.Interactivity
+{
+    using System.Collections;
+    using IoC;
+    using Services;
+    using Input;
+
+#if NETFX_CORE
+    using global::Windows.Foundation;
+    using global::Windows.UI;
+    using global::Windows.UI.Xaml;
+    using global::Windows.UI.Xaml.Controls;
+    using global::Windows.UI.Xaml.Controls.Primitives;
+    using global::Windows.UI.Xaml.Input;
+    using global::Windows.UI.Xaml.Media;
+
+    using KeyEventArgs = global::Windows.UI.Xaml.Input.KeyRoutedEventArgs;
+    using Key = global::Windows.System.VirtualKey;
+    using ModifierKeys = global::Windows.System.VirtualKeyModifiers;
+#else
+    using System;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Controls.Primitives;
+    using System.Windows.Input;
+#endif
+
+    /// <summary>
+    /// Auto complete behavior to support auto complete on a <c>TextBox</c> control.
+    /// </summary>
+    [ObsoleteEx(Replacement = "AutoCompletion", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
+    public class AutoCompletionBehavior : BehaviorBase<TextBox>
+    {
+        #region Fields
+        private readonly IAutoCompletionService _autoCompletionService;
+        private readonly ListBox _suggestionListBox;
+        private readonly Popup _popup;
+
+        private bool _isUpdatingAssociatedObject;
+
+        private bool _subscribed;
+        private string _valueAtSuggestionBoxOpen;
+        private string[] _availableSuggestions;
+        #endregion
+
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AutoCompletionBehavior"/> class.
+        /// </summary>
+        public AutoCompletionBehavior()
+        {
+            var dependencyResolver = this.GetDependencyResolver();
+            _autoCompletionService = dependencyResolver.Resolve<IAutoCompletionService>();
+
+            _suggestionListBox = new ListBox();
+
+#if NETFX_CORE
+            _suggestionListBox.Background = new SolidColorBrush(Colors.Gainsboro);
+#endif
+
+            _popup = new Popup();
+            _popup.Child = _suggestionListBox;
+
+#if NET
+            _popup.StaysOpen = false;
+#elif NETFX_CORE
+            _popup.IsLightDismissEnabled = true;
+#else
+            // To determine
+#endif
+        }
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets or sets whether the auto completion functionality is enabled.
+        /// </summary>
+        /// <value>The is enabled.</value>
+        public bool IsEnabled
+        {
+            get { return (bool)GetValue(IsEnabledProperty); }
+            set { SetValue(IsEnabledProperty, value); }
+        }
+
+        /// <summary>
+        /// The is enabled property.
+        /// </summary>
+        public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.Register("IsEnabled", typeof(bool),
+            typeof(AutoCompletionBehavior), new PropertyMetadata(true, (sender, e) => ((AutoCompletionBehavior)sender).OnIsEnabledChanged()));
+
+        /// <summary>
+        /// Gets or sets the name of the property.
+        /// </summary>
+        /// <value>The name of the property.</value>
+        public string PropertyName
+        {
+            get { return (string)GetValue(PropertyNameProperty); }
+            set { SetValue(PropertyNameProperty, value); }
+        }
+
+        /// <summary>
+        /// The property name property.
+        /// </summary>
+        public static readonly DependencyProperty PropertyNameProperty = DependencyProperty.Register("PropertyName", typeof(string),
+            typeof(AutoCompletionBehavior), new PropertyMetadata(string.Empty, (sender, e) => ((AutoCompletionBehavior)sender).OnPropertyNameChanged()));
+
+        /// <summary>
+        /// Gets or sets the items source.
+        /// </summary>
+        /// <value>The items source.</value>
+        public IEnumerable ItemsSource
+        {
+            get { return (IEnumerable)GetValue(ItemsSourceProperty); }
+            set { SetValue(ItemsSourceProperty, value); }
+        }
+
+        /// <summary>
+        /// The items source property.
+        /// </summary>
+        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(IEnumerable),
+            typeof(AutoCompletionBehavior), new PropertyMetadata(null, (sender, e) => ((AutoCompletionBehavior)sender).OnItemsSourceChanged()));
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// Called when the associated object is loaded.
+        /// </summary>
+        protected override void OnAssociatedObjectLoaded()
+        {
+            base.OnAssociatedObjectLoaded();
+
+            SubscribeEvents();
+        }
+
+        /// <summary>
+        /// Called when the associated object is unloaded.
+        /// </summary>
+        protected override void OnAssociatedObjectUnloaded()
+        {
+            UnsubscribeEvents();
+
+            base.OnAssociatedObjectUnloaded();
+        }
+
+        private void SubscribeEvents()
+        {
+            if (!IsEnabled || _subscribed)
+            {
+                return;
+            }
+
+            var associatedObject = AssociatedObject;
+            if (associatedObject != null)
+            {
+                _subscribed = true;
+
+                associatedObject.TextChanged += OnTextChanged;
+
+#if NET
+                associatedObject.PreviewKeyDown += OnPreviewKeyDown;
+#else
+                associatedObject.KeyDown += OnPreviewKeyDown;
+#endif
+
+                _suggestionListBox.SelectionChanged += OnSuggestionListBoxSelectionChanged;
+
+#if NETFX_CORE
+                _suggestionListBox.Tapped += OnSuggestionListBoxTapped;
+#else
+                _suggestionListBox.MouseLeftButtonUp += OnSuggestionListBoxMouseLeftButtonUp;
+#endif
+
+                UpdateSuggestionBox(false);
+            }
+        }
+
+        private void UnsubscribeEvents()
+        {
+            if (!_subscribed)
+            {
+                return;
+            }
+
+            var associatedObject = AssociatedObject;
+            if (associatedObject != null)
+            {
+                associatedObject.TextChanged -= OnTextChanged;
+
+#if NET
+                associatedObject.PreviewKeyDown -= OnPreviewKeyDown;
+#else
+                associatedObject.KeyDown -= OnPreviewKeyDown;
+#endif
+
+                _suggestionListBox.SelectionChanged -= OnSuggestionListBoxSelectionChanged;
+
+#if NETFX_CORE
+                _suggestionListBox.Tapped -= OnSuggestionListBoxTapped;
+#else
+                _suggestionListBox.MouseLeftButtonUp -= OnSuggestionListBoxMouseLeftButtonUp;
+#endif
+
+                _subscribed = false;
+            }
+        }
+
+        private void UpdateSuggestionBox(bool isVisible)
+        {
+            var textBox = AssociatedObject;
+
+            if (isVisible && !_popup.IsOpen)
+            {
+                _valueAtSuggestionBoxOpen = textBox.Text;
+            }
+
+            _popup.Width = textBox.ActualWidth;
+
+#if NET
+            _popup.PlacementTarget = textBox;
+            _popup.Placement = PlacementMode.Bottom;
+#elif NETFX_CORE
+            var offset = CalculateOffset(AssociatedObject, new Point(0, 0));
+
+            _popup.HorizontalOffset = offset.X;
+            _popup.VerticalOffset = offset.Y;
+            _popup.Width = AssociatedObject.ActualWidth;
+
+#else
+            // TODO: Determine
+#endif
+
+            _popup.IsOpen = isVisible;
+
+#if NETFX_CORE
+            AssociatedObject.Focus(FocusState.Programmatic);
+#endif
+        }
+
+#if NETFX_CORE
+        private static Point CalculateOffset(FrameworkElement element, Point offset)
+        {
+            var transform = element.TransformToVisual(Window.Current.Content);
+            var point = transform.TransformPoint(offset);
+
+            point.Y += element.ActualHeight;
+
+            return point;
+        }
+#endif
+
+        private void UpdateSuggestions()
+        {
+            if (!IsEnabled)
+            {
+                return;
+            }
+
+            var associatedObject = AssociatedObject;
+            if (associatedObject == null)
+            {
+                return;
+            }
+
+            var text = AssociatedObject.Text;
+            string[] availableSuggestions = null;
+
+            if (ItemsSource != null)
+            {
+                availableSuggestions = _autoCompletionService.GetAutoCompleteValues(PropertyName, text, ItemsSource);
+            }
+
+            _availableSuggestions = availableSuggestions;
+            _suggestionListBox.ItemsSource = _availableSuggestions;
+        }
+
+        private void OnPropertyNameChanged()
+        {
+            UpdateSuggestions();
+        }
+
+        private void OnItemsSourceChanged()
+        {
+            UpdateSuggestions();
+        }
+
+        private void OnIsEnabledChanged()
+        {
+            if (IsEnabled)
+            {
+                SubscribeEvents();
+            }
+            else
+            {
+                UnsubscribeEvents();
+            }
+        }
+
+        private void OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (_isUpdatingAssociatedObject)
+            {
+                _isUpdatingAssociatedObject = false;
+                return;
+            }
+
+            UpdateSuggestions();
+
+            if (_availableSuggestions == null || _availableSuggestions.Length == 0)
+            {
+                UpdateSuggestionBox(false);
+            }
+            else
+            {
+                UpdateSuggestionBox(true);
+            }
+        }
+
+        private void OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Space)
+            {
+                if (KeyboardHelper.AreKeyboardModifiersPressed(ModifierKeys.Control))
+                {
+                    UpdateSuggestionBox(true);
+                    e.Handled = true;
+                }
+            }
+
+            if (e.Key == Key.Down)
+            {
+                if (_suggestionListBox.SelectedIndex < _suggestionListBox.Items.Count)
+                {
+                    _suggestionListBox.SelectedIndex = _suggestionListBox.SelectedIndex + 1;
+                }
+            }
+
+            if (e.Key == Key.Up)
+            {
+                if (_suggestionListBox.SelectedIndex > -1)
+                {
+                    _suggestionListBox.SelectedIndex = _suggestionListBox.SelectedIndex - 1;
+                }
+            }
+
+            if (e.Key == Key.Enter || e.Key == Key.Tab)
+            {
+                // Commit the selection
+                UpdateSuggestionBox(false);
+                e.Handled = (e.Key == Key.Enter);
+
+                var binding = AssociatedObject.GetBindingExpression(TextBox.TextProperty);
+                if (binding != null)
+                {
+                    binding.UpdateSource();
+                }
+            }
+
+            if (e.Key == Key.Escape)
+            {
+                if (_popup.IsOpen)
+                {
+                    // Cancel the selection
+                    UpdateSuggestionBox(false);
+
+                    _isUpdatingAssociatedObject = true;
+
+                    AssociatedObject.Text = _valueAtSuggestionBoxOpen;
+                    e.Handled = true;
+                }
+            }
+        }
+
+#if NETFX_CORE
+        private void OnSuggestionListBoxTapped(object sender, TappedRoutedEventArgs e)
+        {
+            UpdateSuggestionBox(false);
+        }
+#else
+        private void OnSuggestionListBoxMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            UpdateSuggestionBox(false);
+        }
+#endif
+
+        private void OnSuggestionListBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var textBox = AssociatedObject;
+
+            if (_suggestionListBox.ItemsSource != null)
+            {
+                textBox.TextChanged -= OnTextChanged;
+
+                if (_suggestionListBox.SelectedIndex != -1)
+                {
+                    _isUpdatingAssociatedObject = true;
+
+                    textBox.Text = _suggestionListBox.SelectedItem.ToString();
+                }
+
+                textBox.TextChanged += OnTextChanged;
+            }
+        }
+        #endregion
+    }
+}
+
+#endif

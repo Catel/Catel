@@ -49,7 +49,7 @@ namespace Catel.Windows
 
         private Thread _thread;
 
-        private readonly List<FrameworkElement> _dimmedElements = new List<FrameworkElement>();
+        private readonly HashSet<FrameworkElement> _dimmedElements = new HashSet<FrameworkElement>();
         #endregion
 
         #region Constructors
@@ -263,11 +263,7 @@ namespace Catel.Windows
         {
             if (!dimm)
             {
-                Action action = () =>
-                {
-                    UpdateLayout(); 
-                    Close();
-                };
+                Action action = () => { UpdateLayout(); Close(); };
 
                 foreach (var element in _dimmedElements)
                 {
@@ -288,8 +284,6 @@ namespace Catel.Windows
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
-
-                    element.IsHitTestVisible = true;
                 }
 
                 _dimmedElements.Clear();
@@ -322,8 +316,6 @@ namespace Catel.Windows
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
-
-                    element.IsHitTestVisible = false;
 
                     if (!_dimmedElements.Contains(element))
                     {

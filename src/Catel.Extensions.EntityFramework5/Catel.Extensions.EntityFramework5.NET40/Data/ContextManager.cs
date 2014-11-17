@@ -8,10 +8,15 @@ namespace Catel.Data
     using System;
     using System.Collections.Generic;
     using System.Data.Entity.Infrastructure;
-    using System.Data.Objects;
     using System.Threading;
     using IoC;
     using Logging;
+
+#if EF5
+    using System.Data.Objects;
+#else
+    using System.Data.Entity.Core.Objects;
+#endif
 
     /// <summary>
     /// Provides an automated way to reuse Entity Framework context objects within the context of a single data portal operation.
@@ -60,7 +65,7 @@ namespace Catel.Data
             // Option to override or late-bind connection string
             if (string.IsNullOrEmpty(databaseNameOrConnectionStringName))
             {
-                var connectionStringManager = dependencyResolver.Resolve<IConnectionStringManager>();
+                var connectionStringManager = dependencyResolver.TryResolve<IConnectionStringManager>();
                 if (connectionStringManager != null)
                 {
                     databaseNameOrConnectionStringName = connectionStringManager.GetConnectionString(typeof(TContext), databaseNameOrConnectionStringName, label);

@@ -11,7 +11,7 @@ namespace Catel
     using Catel.IoC;
 
     /// <summary>
-    /// Extensions.EntityFramework5 module which allows the registration of default services in the service locator.
+    /// Extensions.EntityFramework6 module which allows the registration of default services in the service locator.
     /// </summary>
     public class ExtensionsEntityFramework6Module : IServiceLocatorInitializer
     {

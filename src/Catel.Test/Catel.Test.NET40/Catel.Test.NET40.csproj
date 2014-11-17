@@ -16,14 +16,14 @@
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <FodyPath>..\..\..\lib\Fody.1.18.0.0</FodyPath>
+    <NuGetPackageImportStamp>b8fd75ac</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\..\output\debug\NET40\Test\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET; NET40</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET; NET40; TEST</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
@@ -32,7 +32,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\..\output\release\NET40\Test\</OutputPath>
-    <DefineConstants>TRACE;NET; NET40</DefineConstants>
+    <DefineConstants>TRACE;NET; NET40; TEST</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
@@ -45,9 +45,9 @@
     <Reference Include="EntityFramework">
       <HintPath>..\..\..\lib\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="FluentValidation, Version=5.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="FluentValidation, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\FluentValidation.5.0.0.1\lib\Net40\FluentValidation.dll</HintPath>
+      <HintPath>..\..\..\lib\FluentValidation.5.1.0.0\lib\Net40\FluentValidation.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -62,25 +62,33 @@
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\..\lib\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="Microsoft.Web.XmlTransform, Version=1.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Microsoft.Web.Xdt.1.0.0\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
+    <Reference Include="Microsoft.Threading.Tasks">
+      <HintPath>..\..\..\lib\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions">
+      <HintPath>..\..\..\lib\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop">
+      <HintPath>..\..\..\lib\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Moq, Version=4.1.1309.1617, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Moq.4.1.1309.1617\lib\net40\Moq.dll</HintPath>
+      <HintPath>..\..\..\lib\Moq.4.2.1402.2112\lib\net40\Moq.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Newtonsoft.Json.6.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NuGet.Core, Version=1.6.30117.9648, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="NuGet.Core, Version=2.8.50320.36, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\NuGet.Core.2.7.2\lib\net40-Client\NuGet.Core.dll</HintPath>
+      <HintPath>..\..\..\lib\NuGet.Core.2.8.1\lib\net40-Client\NuGet.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\..\lib\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="Obsolete">
-      <HintPath>..\..\..\lib\Obsolete.Fody.3.0.0.0\Lib\NET35\Obsolete.dll</HintPath>
+      <HintPath>..\..\..\lib\Obsolete.Fody.3.1.0.0\Lib\NET35\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="PresentationCore" />
@@ -94,8 +102,21 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.IO">
+      <HintPath>..\..\..\lib\Microsoft.Bcl.1.1.9\lib\net40\System.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net" />
+    <Reference Include="System.Runtime">
+      <HintPath>..\..\..\lib\Microsoft.Bcl.1.1.9\lib\net40\System.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Activation" />
+    <Reference Include="System.Threading.Tasks">
+      <HintPath>..\..\..\lib\Microsoft.Bcl.1.1.9\lib\net40\System.Threading.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\lib\Prism.4.1.0.0\lib\NET40\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -106,7 +127,6 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Fody.targets" />
     <None Include="FodyWeavers.xml">
       <SubType>Designer</SubType>
     </None>
@@ -120,235 +140,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ArgumentFacts.cs" />
-    <Compile Include="Caching\CacheStorageFacts.cs" />
-    <Compile Include="Caching\CacheStorageValueInfoFacts.cs" />
-    <Compile Include="Caching\Policies\AbsoluteExpirationPolicyFacts.cs" />
-    <Compile Include="Caching\Policies\CompositeExpirationPolicyFacts.cs" />
-    <Compile Include="Caching\Policies\CustomExpirationPolicyFacts.cs" />
-    <Compile Include="Caching\Policies\DurationExpirationPolicyFacts.cs" />
-    <Compile Include="Caching\Policies\ExpirationPolicyFacts.cs" />
-    <Compile Include="Caching\Policies\SlidingExpirationPolicyFacts.cs" />
-    <Compile Include="Collections\CollectionExtensionsFacts.cs" />
-    <Compile Include="Collections\CollectionHelperFacts.cs" />
-    <Compile Include="Collections\FastObservableCollectionFacts.cs" />
-    <Compile Include="ArgumentFacts.expression.cs" />
-    <Compile Include="ComponentModel\PropertyChangedEventArgsExtensionsFacts.cs" />
-    <Compile Include="Configuration\ConfigurationServiceFacts.cs" />
-    <Compile Include="Data\ChangeNotificationWrapperFacts.cs" />
-    <Compile Include="Data\CompositeValidatorProviderFacts.cs" />
-    <Compile Include="Data\CompositeValidatorFacts.cs" />
-    <Compile Include="Data\Extensions\ObservableObjectExtensionsFacts.cs" />
-    <Compile Include="Data\Helpers\SerializationTestHelper.cs" />
-    <Compile Include="Data\ModelBaseFacts.cs" />
-    <Compile Include="Data\ModelBaseFacts.editableobject.cs" />
-    <Compile Include="Data\ModelBaseFacts.serialization.cs" />
-    <Compile Include="Data\ModelBaseFacts.validation.cs" />
-    <Compile Include="Data\ModelBaseTest.cs" />
-    <Compile Include="Data\ModelBaseTestHelper.cs" />
-    <Compile Include="Data\EventArgs\AdvancedPropertyChangedEventArgsFacts.cs" />
-    <Compile Include="Data\EventArgs\AdvancedPropertyChangingEventArgsFacts.cs" />
-    <Compile Include="Data\Exceptions\InvalidPropertyExceptionFacts.cs" />
-    <Compile Include="Data\Exceptions\InvalidPropertyValueExceptionFacts.cs" />
-    <Compile Include="Data\Exceptions\PropertyAlreadyRegisteredExceptionFacts.cs" />
-    <Compile Include="Data\Exceptions\PropertyNotNullableExceptionFacts.cs" />
-    <Compile Include="Data\Exceptions\PropertyNotRegisteredExceptionFacts.cs" />
-    <Compile Include="Data\Helpers\EditableObjectHelperFacts.cs" />
-    <Compile Include="Data\Helpers\ValidationContextHelperFacts.cs" />
-    <Compile Include="Data\PropertyBagFacts.cs" />
-    <Compile Include="Data\PropertyDataManagerFacts.cs" />
-    <Compile Include="Data\PropertyDataFacts.cs" />
-    <Compile Include="Data\CatelTypeInfoFacts.cs" />
-    <Compile Include="Data\SavableModelBaseTest.cs" />
-    <Compile Include="Data\TestClasses\ComplexSerializationHierarchy.cs" />
-    <Compile Include="Data\ValidationContextFacts.cs" />
-    <Compile Include="Data\ValidationResultFacts.cs" />
-    <Compile Include="Data\ValidationSummaryFacts.cs" />
-    <Compile Include="EnumFacts.cs" />
-    <Compile Include="ExceptionHandling\ExceptionExtensionsTests.cs" />
-    <Compile Include="ExceptionHandling\ExceptionHandlerFacts.cs" />
-    <Compile Include="ExceptionHandling\ExceptionServiceFacts.cs" />
-    <Compile Include="Extensions\Data\Repositories\CachedRepositoryBaseFacts.cs" />
-    <Compile Include="Extensions\Data\Specifications\AndSpecificationFacts.cs" />
-    <Compile Include="Extensions\Data\Specifications\CompositeSpecificationFacts.cs" />
-    <Compile Include="Extensions\Data\Specifications\OrSpecificationFacts.cs" />
-    <Compile Include="Extensions\Data\Specifications\SpecificationTestData.cs" />
-    <Compile Include="Extensions\DynamicObjects\DynamicModelBaseFacts.cs" />
-    <Compile Include="Extensions\EntityFramework5\Data\ConnectionStringManagerFacts.cs" />
-    <Compile Include="Extensions\EntityFramework5\Data\ContextManagerFacts.cs" />
-    <Compile Include="Extensions\EntityFramework5\Data\DbContextManagerFacts.cs" />
-    <Compile Include="Extensions\EntityFramework5\Data\Helpers\ConnectionStringHelperFacts.cs" />
-    <Compile Include="Extensions\EntityFramework5\Data\Helpers\EfConnectionStringHelperFacts.cs" />
-    <Compile Include="Extensions\EntityFramework5\Data\ObjectContextManagerFacts.cs" />
-    <Compile Include="Extensions\EntityFramework5\Data\UnitOfWorkFacts.cs" />
-    <Compile Include="Extensions\EntityFramework5\Extensions\DbContextExtensionsFacts.cs" />
-    <Compile Include="Extensions\EntityFramework5\Extensions\QueryableExtensionsFacts.cs" />
-    <Compile Include="Extensions\EntityFramework5\Helpers\EFTestHelper.cs" />
-    <Compile Include="Extensions\EntityFramework5\Helpers\IsolationHelperFacts.cs" />
-    <Compile Include="Extensions\EntityFramework5\Repositories\EntityRepositoryFacts.cs" />
-    <Compile Include="Extensions\EntityFramework5\TestClasses\TestConnectionStrings.cs" />
-    <Compile Include="Extensions\FluentValidation\Attributes\DisplayNameAttributeFacts.cs" />
-    <Compile Include="Extensions\FluentValidation\FluentValidatorToCatelValidatorAdapterFacts.cs" />
-    <Compile Include="Extensions\FluentValidation\Models\Person.cs" />
-    <Compile Include="Extensions\FluentValidation\Validators\PersonModelValidator.cs" />
-    <Compile Include="Extensions\FluentValidation\Validators\PersonViewModelWithModelValidator.cs" />
-    <Compile Include="Extensions\FluentValidation\ViewModels\PersonViewModel.cs" />
-    <Compile Include="Extensions\FluentValidation\FluentValidatorProviderFacts.cs" />
-    <Compile Include="Extensions\FluentValidation\Validators\PersonViewModelValidator.cs" />
-    <Compile Include="Extensions\FluentValidation\ViewModels\NoFluentValidatorViewModel.cs" />
-    <Compile Include="Extensions\FluentValidation\ViewModels\PersonViewModelWithModel.cs" />
-    <Compile Include="Extensions\Prism\BootstrapperBaseTests.cs" />
-    <Compile Include="Extensions\Prism\CompositeModuleCatalogFacts.cs" />
-    <Compile Include="Extensions\Prism\LogExtensionsTests.cs" />
-    <Compile Include="Extensions\Prism\Modules\Extensions\ModuleInfoExtensions_Facts.cs" />
-    <Compile Include="Extensions\Prism\Modules\NuGetBasedModuleCatalogParentChildBehavior_Facts.cs" />
-    <Compile Include="Extensions\Prism\Modules\NuGetBasedModuleCatalog_Facts.cs" />
-    <Compile Include="Extensions\Prism\ServiceLocatorAdapterTests.cs" />
-    <Compile Include="Extensions\Prism\UIVisualizerServiceExtensionsTests.cs" />
-    <Compile Include="GlobalInitialization.cs" />
-    <Compile Include="Helpers\ConsoleHelper.cs" />
-    <Compile Include="Helpers\ObjectHelperFacts.cs" />
-    <Compile Include="Helpers\ObjectToStringHelperFacts.cs" />
-    <Compile Include="Helpers\StringToObjectHelperFacts.cs" />
-    <Compile Include="Extensions\Interception\MethodInterceptionTests.cs" />
-    <Compile Include="Extensions\Interception\PropertyInterceptionTests.cs" />
-    <Compile Include="Extensions\Interception\TestClasses\ITestService.cs" />
-    <Compile Include="Extensions\Interception\TestClasses\TestService.cs" />
-    <Compile Include="Helpers\TimeMeasureHelper.cs" />
-    <Compile Include="IoC\CatelDependencyResolverFacts.cs" />
-    <Compile Include="IoC\DependencyResolverManagerFacts.cs" />
-    <Compile Include="IoC\Exceptions\CircularDependencyExceptionFacts.cs" />
-    <Compile Include="IoC\Extensions\ObjectExtensionsFacts.cs" />
-    <Compile Include="IoC\ServiceLocatorFacts.features.cs" />
-    <Compile Include="IoC\ServiceLocatorRegistrationFacts.cs" />
-    <Compile Include="IoC\ServiceLocatorRegistrationGroupFacts.cs" />
-    <Compile Include="IoC\TypeFactoryFacts.cs" />
-    <Compile Include="IoC\TypeRequestInfoFacts.cs" />
-    <Compile Include="IoC\TypeRequestPathFacts.cs" />
-    <Compile Include="Extensions\Memento\BatchFacts.cs" />
-    <Compile Include="Extensions\Memento\OperationSetFacts.cs" />
-    <Compile Include="Logging\Configuration\LoggingConfigurationSectionFacts.cs" />
-    <Compile Include="Messaging\MessageMediatorHelperFacts.cs" />
-    <Compile Include="ModuleInitializer.cs" />
-    <Compile Include="MVVM\Commands\CommandManagerFacts.cs" />
-    <Compile Include="MVVM\Commands\CompositeCommandFacts.cs" />
-    <Compile Include="MVVM\Commands\CompositeCommandViewModel.cs" />
-    <Compile Include="MVVM\Commands\ViewModelCommandManagerFacts.cs" />
-    <Compile Include="Helpers\UrlHelperFacts.cs" />
-    <Compile Include="MVVM\Services\SplashScreenServiceTest.cs" />
-    <Compile Include="MVVM\ViewModels\Extensions\ViewModelExtensionsFacts.cs" />
-    <Compile Include="Reflection\AttributeHelperFacts.cs" />
-    <Compile Include="Helpers\ExpressionHelperFacts.cs" />
-    <Compile Include="Helpers\FilesHelper.cs" />
-    <Compile Include="Helpers\TagHelperFacts.cs" />
-    <Compile Include="Reflection\PropertyHelperFacts.expression.cs" />
-    <Compile Include="Reflection\ReflectionExtensionsFacts.assembly.cs" />
-    <Compile Include="Reflection\ReflectionExtensionsFacts.methodinfo.cs" />
-    <Compile Include="Reflection\ReflectionExtensionsFacts.propertyinfo.cs" />
-    <Compile Include="Reflection\ReflectionExtensionsFacts.type.cs" />
-    <Compile Include="Reflection\TypeCacheFacts.cs" />
-    <Compile Include="Reflection\TypeHelperFacts.cs" />
-    <Compile Include="Helpers\WindowHelper.cs" />
-    <Compile Include="IoC\Configuration\IoCConfigurationSectionTests.cs" />
-    <Compile Include="IoC\EventArgs\MissingTypeEventArgsFacts.cs" />
-    <Compile Include="IoC\Exceptions\ExternalContainerNotSupportedExceptionTest.cs" />
-    <Compile Include="IoC\ServiceLocatorFacts.cs" />
-    <Compile Include="IoC\TestClasses.cs" />
-    <Compile Include="IO\PathTest.cs" />
-    <Compile Include="Logging\EventArgs\LogMessageEventArgsTest.cs" />
-    <Compile Include="Logging\LogManagerTest.cs" />
-    <Compile Include="Logging\LogFacts.cs" />
-    <Compile Include="Extensions\Memento\ActionUndoFacts.cs" />
-    <Compile Include="Extensions\Memento\CollectionChangeUndoFacts.cs" />
-    <Compile Include="Extensions\Memento\CollectionObserverFacts.cs" />
-    <Compile Include="Extensions\Memento\MementoServiceFacts.cs" />
-    <Compile Include="Extensions\Memento\Mocks\MockModel.cs" />
-    <Compile Include="Extensions\Memento\Mocks\MockUndo.cs" />
-    <Compile Include="Extensions\Memento\ObjectObserverFacts.cs" />
-    <Compile Include="Extensions\Memento\PropertyChangeUndoFacts.cs" />
-    <Compile Include="Messaging\MessageBaseFacts.cs" />
-    <Compile Include="Messaging\MessageMediatorFacts.cs" />
-    <Compile Include="MVVM\Auditing\AuditingManagerTest.cs" />
-    <Compile Include="MVVM\Auditing\AuditorTest.cs" />
-    <Compile Include="MVVM\Auditing\TestAuditor.cs" />
-    <Compile Include="MVVM\Auditing\TestViewModel.cs" />
-    <Compile Include="MVVM\Exceptions\InvalidViewModelExceptionFacts.cs" />
-    <Compile Include="MVVM\Exceptions\ModelNotRegisteredExceptionTest.cs" />
-    <Compile Include="MVVM\Exceptions\PropertyNotFoundInModelExceptionTest.cs" />
-    <Compile Include="MVVM\Exceptions\ViewModelNotRegisteredExceptionTest.cs" />
-    <Compile Include="MVVM\Exceptions\WrongViewModelTypeExceptionTest.cs" />
-    <Compile Include="MVVM\Locators\UrlLocatorTest.cs" />
-    <Compile Include="MVVM\Locators\TestClasses.cs" />
-    <Compile Include="MVVM\Locators\ViewLocatorTest.cs" />
-    <Compile Include="MVVM\Services\EventArgs\UICompletedEventArgsTest.cs" />
-    <Compile Include="MVVM\Services\Exceptions\WindowNotRegisteredExceptionTest.cs" />
-    <Compile Include="MVVM\Services\NamingConventionTest.cs" />
-    <Compile Include="MVVM\Services\ViewModelServiceBaseTest.cs" />
-    <Compile Include="MVVM\Views\Attributes\ViewToViewModelAttributeTest.cs" />
-    <Compile Include="MVVM\Views\ViewToViewModelMappingContainerTest.cs" />
-    <Compile Include="MVVM\Views\Helpers\ViewToViewModelMappingHelperTest.cs" />
-    <Compile Include="MVVM\Views\ViewToViewModelMappingTest.cs" />
-    <Compile Include="MVVM\ViewModels\ViewModelFactoryFacts.cs" />
-    <Compile Include="MVVM\ViewModels\Attributes\InterestedInAttributeFacts.cs" />
-    <Compile Include="MVVM\ViewModels\Attributes\ModelAttributeFacts.cs" />
-    <Compile Include="MVVM\ViewModels\Attributes\ViewModelToModelAttributeFacts.cs" />
-    <Compile Include="MVVM\ViewModels\ManagedViewModelTest.cs" />
-    <Compile Include="MVVM\ViewModels\TestClasses\InterestedViewModel.cs" />
-    <Compile Include="MVVM\ViewModels\TestClasses\InterestingViewModel.cs" />
-    <Compile Include="MVVM\ViewModels\TestClasses\Person.cs" />
-    <Compile Include="MVVM\ViewModels\TestClasses\SpecialValidationModel.cs" />
-    <Compile Include="MVVM\ViewModels\TestClasses\TestViewModel.cs" />
-    <Compile Include="MVVM\ViewModels\TestClasses\ViewModelWithInvalidMappings.cs" />
-    <Compile Include="MVVM\ViewModels\ViewModelBaseTest.cs" />
-    <Compile Include="MVVM\Locators\ViewModelLocatorTest.cs" />
-    <Compile Include="MVVM\ViewModels\ViewModelManagerTest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reflection\AppDomainExtensionsTest.cs" />
-    <Compile Include="Reflection\AssemblyExtensionsTest.cs" />
-    <Compile Include="Reflection\PropertyHelperFacts.cs" />
-    <Compile Include="Runtime\ReferenceManagerFacts.cs" />
-    <Compile Include="Runtime\Serialization\Attributes\RedirectTypeAttributeTest.cs" />
-    <Compile Include="Runtime\Serialization\BinarySerialization\BinarySerializerFacts.cs" />
-    <Compile Include="Runtime\Serialization\BinarySerialization\RedirectDeserializationBinderFacts.cs" />
-    <Compile Include="Runtime\Serialization\Helpers\SerializationTestHelper.cs" />
-    <Compile Include="Runtime\Serialization\SerializationManagerFacts.cs" />
-    <Compile Include="Runtime\Serialization\SerializationObjectFacts.cs" />
-    <Compile Include="Runtime\Serialization\SerializerModifierFacts.cs" />
-    <Compile Include="Runtime\Serialization\TestModels\CircularTestModel.cs" />
-    <Compile Include="Runtime\Serialization\TestModels\SerializerModifierModels.cs" />
-    <Compile Include="Runtime\Serialization\TestModels\TestModel.cs" />
-    <Compile Include="Runtime\Serialization\XmlSerialization\KnownTypesSerializationFacts.cs" />
-    <Compile Include="Runtime\Serialization\XmlSerialization\XmlSerializationFacts.cs" />
-    <Compile Include="Scoping\ScopeManagerFacts.cs" />
-    <Compile Include="Services\LanguageServiceFacts.cs" />
-    <Compile Include="Text\StringBuilderExtensionFacts.cs" />
-    <Compile Include="Threading\SynchronizationContextFacts.cs" />
-    <Compile Include="Threading\TaskHelperFacts.cs" />
-    <Compile Include="WeakReferences\WeakActionTest.cs" />
-    <Compile Include="WeakReferences\WeakEventListenerFacts.cs" />
-    <Compile Include="Windows\Data\Converters\AreEqualMultiValueConverterTest.cs" />
-    <Compile Include="Windows\Data\Converters\BooleanToGrayscaleConverterTest.cs" />
-    <Compile Include="Windows\Data\Converters\BooleanToOppositeBooleanConverterTest.cs" />
-    <Compile Include="Windows\Data\Converters\BooleanToTextConverterTest.cs" />
-    <Compile Include="Windows\Data\Converters\BooleanToVisibilityConverterTest.cs" />
-    <Compile Include="Windows\Data\Converters\ColorToBrushConverterTest.cs" />
-    <Compile Include="Windows\Data\Converters\ContainsItemsConverterTest.cs" />
-    <Compile Include="Windows\Data\Converters\CountVisibilityConverterTest.cs" />
-    <Compile Include="Windows\Data\Converters\EmptyStringToVisibilityConverterTest.cs" />
-    <Compile Include="Windows\Data\Converters\FormattingConverterTest.cs" />
-    <Compile Include="Windows\Data\Converters\GetFirstValidationErrorConverterTest.cs" />
-    <Compile Include="Windows\Data\Converters\IsSelectedConverterTest.cs" />
-    <Compile Include="Windows\Data\Converters\IsSelectedValueConverterTest.cs" />
-    <Compile Include="Windows\Data\Converters\TextToUpperCaseConverterFacts.cs" />
-    <Compile Include="Windows\Data\Converters\TextToLowerCaseConverterFacts.cs" />
-    <Compile Include="Windows\Data\Converters\MethodToValueConverterTest.cs" />
-    <Compile Include="Windows\Data\Converters\MultiplyConverterTest.cs" />
-    <Compile Include="Windows\Data\Converters\ReferenceToBooleanConverterTest.cs" />
-    <Compile Include="Windows\Data\Converters\ReferenceToCollapsingVisibilityConverterTest.cs" />
-    <Compile Include="Windows\Data\Converters\ShortDateFormattingConverterTest.cs" />
-    <Compile Include="Windows\Helpers\CommandLineHelperFacts.cs" />
-    <Compile Include="Windows\Helpers\ResourceHelperFacts.cs" />
-    <Compile Include="Windows\Input\InputGestureFacts.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Catel.Core\Catel.Core.NET40\Catel.Core.NET40.csproj">
@@ -411,8 +202,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Extensions\Wcf.Server\" />
-    <Folder Include="Logging\Extensions\" />
+    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
@@ -422,6 +212,7 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <Import Project="..\Catel.Test.Shared\Catel.Test.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Test.Shared\Catel.Test.Shared.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets. -->
@@ -429,6 +220,13 @@
   </Target>
   <Target Name="AfterBuild">
   </Target>
-  <Import Project="$(ProjectPath)\..\..\..\..\Tools\Pepita\PepitaGet.targets" />
-  <Import Project="Fody.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\lib\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
+    <Error Condition="!Exists('..\..\..\lib\Fody.1.26.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.1.26.1\build\Fody.targets'))" />
+  </Target>
+  <Import Project="..\..\..\lib\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\lib\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <Import Project="..\..\..\lib\Fody.1.26.1\build\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.26.1\build\Fody.targets')" />
 </Project>
