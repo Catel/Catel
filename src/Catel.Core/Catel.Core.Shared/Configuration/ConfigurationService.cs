@@ -43,6 +43,9 @@ namespace Catel.Configuration
         private readonly string _configFilePath;
 #endif
 
+        private bool _suspendNotifications = false;
+        private bool _hasPendingNotifications = false;
+
 #if NET
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigurationService" /> class.
@@ -85,6 +88,15 @@ namespace Catel.Configuration
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Suspends the notifications of this service until the returned object is disposed.
+        /// </summary>
+        /// <returns>IDisposable.</returns>
+        public IDisposable SuspendNotifications()
+        {
+            return new SuspendNotificationsToken(this);
+        }
+
         /// <summary>
         /// Gets the configuration value.
         /// </summary>
@@ -131,11 +143,7 @@ namespace Catel.Configuration
             var stringValue = ObjectToStringHelper.ToString(value);
             SetValueToStore(key, stringValue);
 
-            var handler = ConfigurationChanged;
-            if (handler != null)
-            {
-                handler.Invoke(this, new ConfigurationChangedEventArgs(key, value));
-            }
+            RaiseConfigurationChanged(key, value);
         }
 
         /// <summary>
@@ -233,6 +241,55 @@ namespace Catel.Configuration
             _configuration.SaveAsXml(_configFilePath);
 #endif
         }
+
+        private void RaiseConfigurationChanged(string key, object value)
+        {
+            if (_suspendNotifications)
+            {
+                _hasPendingNotifications = true;
+                return;
+            }
+
+            var handler = ConfigurationChanged;
+            if (handler != null)
+            {
+                handler.Invoke(this, new ConfigurationChangedEventArgs(key, value));
+            }
+        }
         #endregion
+
+        private class SuspendNotificationsToken : IDisposable
+        {
+            #region Fields
+            private ConfigurationService _configurationService;
+            #endregion
+
+            #region Constructors
+            public SuspendNotificationsToken(ConfigurationService configurationService)
+            {
+                Argument.IsNotNull("configurationService", configurationService);
+
+                _configurationService = configurationService;
+                configurationService._suspendNotifications = true;
+            }
+            #endregion
+
+            #region IDisposable Members
+            public void Dispose()
+            {
+                if (_configurationService != null)
+                {
+                    _configurationService._suspendNotifications = false;
+                    if (_configurationService._hasPendingNotifications)
+                    {
+                        _configurationService.RaiseConfigurationChanged(string.Empty, string.Empty);
+                        _configurationService._hasPendingNotifications = false;
+                    }
+
+                    _configurationService = null;
+                }
+            }
+            #endregion
+        }
     }
 }

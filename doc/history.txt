@@ -31,7 +31,7 @@ xxx
 
 Added/fixed:
 ============
-xxx
+(+) CTL-554 Allow suspension of notifications in ConfigurationService
 
 Roadmap:
 ========

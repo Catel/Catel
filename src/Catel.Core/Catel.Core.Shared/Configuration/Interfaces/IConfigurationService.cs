@@ -21,6 +21,12 @@ namespace Catel.Configuration
         event EventHandler<ConfigurationChangedEventArgs> ConfigurationChanged;
 
         /// <summary>
+        /// Suspends the notifications of this service until the returned object is disposed.
+        /// </summary>
+        /// <returns>IDisposable.</returns>
+        IDisposable SuspendNotifications();
+
+        /// <summary>
         /// Gets the configuration value.
         /// </summary>
         /// <typeparam name="T">The type of the value to retrieve.</typeparam>
