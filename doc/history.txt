@@ -31,7 +31,9 @@ xxx
 
 Added/fixed:
 ============
+(+) CTL-556 Add support for SharpDevelop XAML visual designer
 (+) CTL-554 Allow suspension of notifications in ConfigurationService
+
 
 Roadmap:
 ========
