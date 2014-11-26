@@ -29,13 +29,9 @@ namespace Catel.IoC
         /// </summary>
         /// <param name="obj">The object.</param>
         /// <returns>The <see cref="IServiceLocator"/> used to create this object.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="obj"/> is <c>null</c>.</exception>
         public static IServiceLocator GetServiceLocator(this object obj)
         {
-            Argument.IsNotNull("obj", obj);
-
-            var dependencyResolverManager = DependencyResolverManager.Default;
-            var dependencyResolver = dependencyResolverManager.GetDependencyResolverForInstance(obj);
+            var dependencyResolver = GetDependencyResolver(obj);
             var serviceLocator = dependencyResolver.Resolve<IServiceLocator>();
 
             return serviceLocator;
@@ -56,13 +52,9 @@ namespace Catel.IoC
         /// </summary>
         /// <param name="obj">The object.</param>
         /// <returns>The <see cref="ITypeFactory"/> used to create this object.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="obj"/> is <c>null</c>.</exception>
         public static ITypeFactory GetTypeFactory(this object obj)
         {
-            Argument.IsNotNull("obj", obj);
-
-            var dependencyResolverManager = DependencyResolverManager.Default;
-            var dependencyResolver = dependencyResolverManager.GetDependencyResolverForInstance(obj);
+            var dependencyResolver = GetDependencyResolver(obj);
             var typeFactory = dependencyResolver.Resolve<ITypeFactory>();
 
             return typeFactory;
@@ -82,13 +74,15 @@ namespace Catel.IoC
         /// </summary>
         /// <param name="obj">The object.</param>
         /// <returns>The <see cref="IDependencyResolver"/> for this object.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="obj"/> is <c>null</c>.</exception>
         public static IDependencyResolver GetDependencyResolver(this object obj)
         {
-            Argument.IsNotNull("obj", obj);
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
 
-            var dependencyResolverManager = DependencyResolverManager.Default;
-            var dependencyResolver = dependencyResolverManager.GetDependencyResolverForInstance(obj);
+            if (obj != null)
+            {
+                var dependencyResolverManager = DependencyResolverManager.Default;
+                dependencyResolver = dependencyResolverManager.GetDependencyResolverForInstance(obj);
+            }
 
             return dependencyResolver;
         }

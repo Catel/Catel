@@ -35,6 +35,7 @@ Added/fixed:
 (+) CTL-554 Allow suspension of notifications in ConfigurationService
 (*) CTL-558 Use LayoutRounding and SnapToDevicePixels in DataWindow and UserControl to prevent 
     blurriness. Also available as extension method FrameworkElement.FixBlurriness()
+(*) CTL-559 IoC ObjectExtensions DefaultDependencyResolver improvement
 
 Roadmap:
 ========
