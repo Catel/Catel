@@ -18,7 +18,7 @@ namespace Catel.Windows
     /// <summary>
     /// Extensions for <see cref="UIElement"/>.
     /// </summary>
-    public static class UIElementExtensions
+    public static partial class UIElementExtensions
     {
         #region Win32 imports
         [StructLayout(LayoutKind.Sequential)]

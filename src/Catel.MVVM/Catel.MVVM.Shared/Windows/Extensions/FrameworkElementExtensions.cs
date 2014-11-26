@@ -47,7 +47,7 @@ namespace Catel.Windows
     /// <summary>
     /// Extensions for <see cref="FrameworkElement"/>.
     /// </summary>
-    public static class FrameworkElementExtensions
+    public static partial class FrameworkElementExtensions
     {
 #if NET
         #region Win32

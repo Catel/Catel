@@ -218,13 +218,13 @@ namespace Catel.Windows
                 return;
             }
 
+            this.FixBlurriness();
+
 #if NET
             SizeToContent = SizeToContent.WidthAndHeight;
             ShowInTaskbar = false;
             ResizeMode = ResizeMode.NoResize;
             WindowStartupLocation = WindowStartupLocation.CenterOwner;
-
-            SnapsToDevicePixels = true;
 
             this.ApplyIconFromApplication();
 #endif

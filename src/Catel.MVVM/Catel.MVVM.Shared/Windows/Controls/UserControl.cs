@@ -74,6 +74,8 @@ namespace Catel.Windows.Controls
                 return;
             }
 
+            this.FixBlurriness();
+
             _logic = new UserControlLogic(this, null, viewModel);
 
             _logic.TargetViewPropertyChanged += (sender, e) =>
