@@ -17,12 +17,6 @@ namespace Catel.Test.IoC
         public class TheGetTypeFactoryMethod
         {
             [TestCase]
-            public void ThrowsArgumentNullExceptionForNullObject()
-            {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ObjectExtensions.GetTypeFactory(null));
-            }
-
-            [TestCase]
             public void ReturnsDefaultTypeFactoryForObjectNotCreatedWithTypeFactory()
             {
                 var obj = new object();
@@ -48,12 +42,6 @@ namespace Catel.Test.IoC
         [TestFixture]
         public class TheGetDependencyResolverMethod
         {
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullObject()
-            {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ObjectExtensions.GetDependencyResolver(null));
-            }
-
             [TestCase]
             public void ReturnsDefaultDependencyResolverForObjectNotCreatedWithTypeFactory()
             {
