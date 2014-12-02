@@ -844,5 +844,34 @@ namespace Catel.IoC
             return ResolveType(serviceType);
         }
         #endregion
+
+        #region IDisposable interface
+        /// <summary>
+        /// Disposes this instance and all registered instances.
+        /// </summary>
+        public void Dispose()
+        {
+            lock (this)
+            {
+                foreach (var registeredInstance in _registeredInstances)
+                {
+                    var instance = registeredInstance.Value.ImplementingInstance;
+                    if (ReferenceEquals(this, instance))
+                    {
+                        continue;
+                    }
+
+                    var disposable = instance as IDisposable;
+                    if (disposable != null)
+                    {
+                        disposable.Dispose();
+                    }
+                }
+
+                _registeredInstances.Clear();
+                _registeredTypes.Clear();
+            }
+        }
+        #endregion
     }
 }
