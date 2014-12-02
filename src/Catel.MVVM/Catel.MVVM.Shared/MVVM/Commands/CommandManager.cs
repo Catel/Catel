@@ -263,7 +263,7 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CreateCommand"/> method.</exception>
-        public void RegisterCommand(string commandName, ICatelCommand command, IViewModel viewModel = null)
+        public void RegisterCommand(string commandName, ICommand command, IViewModel viewModel = null)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
             Argument.IsNotNull("command", command);
@@ -368,7 +368,7 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CreateCommand"/> method.</exception>
-        public void UnregisterCommand(string commandName, ICatelCommand command)
+        public void UnregisterCommand(string commandName, ICommand command)
         {
             Argument.IsNotNullOrWhitespace("commandName", commandName);
             Argument.IsNotNull("command", command);

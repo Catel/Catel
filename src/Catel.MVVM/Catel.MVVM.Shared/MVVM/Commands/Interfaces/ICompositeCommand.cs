@@ -8,6 +8,7 @@
 namespace Catel.MVVM
 {
     using System;
+    using System.Windows.Input;
 
     /// <summary>
     /// Composite command which allows several commands inside a single command being exposed to a view.
@@ -23,7 +24,7 @@ namespace Catel.MVVM
         /// <remarks>
         /// Note that if the view model is not specified, the command must be unregistered manually in order to prevent memory leaks.
         /// </remarks>
-        void RegisterCommand(ICatelCommand command, IViewModel viewModel = null);
+        void RegisterCommand(ICommand command, IViewModel viewModel = null);
 
         /// <summary>
         /// Registers the specified action.
@@ -37,7 +38,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="command">The command.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
-        void UnregisterCommand(ICatelCommand command);
+        void UnregisterCommand(ICommand command);
 
         /// <summary>
         /// Unregisters the specified action.

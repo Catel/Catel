@@ -11,6 +11,7 @@ namespace Catel.MVVM
     using System.Collections.Generic;
     using System.Linq;
     using Logging;
+    using System.Windows.Input;
 
     /// <summary>
     /// Composite command which allows several commands inside a single command being exposed to a view.
@@ -160,7 +161,7 @@ namespace Catel.MVVM
         /// <remarks>
         /// Note that if the view model is not specified, the command must be unregistered manually in order to prevent memory leaks.
         /// </remarks>
-        public void RegisterCommand(ICatelCommand command, IViewModel viewModel = null)
+        public void RegisterCommand(ICommand command, IViewModel viewModel = null)
         {
             Argument.IsNotNull(() => command);
 
@@ -214,7 +215,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="command">The command.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
-        public void UnregisterCommand(ICatelCommand command)
+        public void UnregisterCommand(ICommand command)
         {
             Argument.IsNotNull("command", command);
 
@@ -293,7 +294,7 @@ namespace Catel.MVVM
             private readonly CompositeCommand _compositeCommand;
 
             #region Constructors
-            public CommandInfo(CompositeCommand compositeCommand, ICatelCommand command, IViewModel viewModel)
+            public CommandInfo(CompositeCommand compositeCommand, ICommand command, IViewModel viewModel)
             {
                 _compositeCommand = compositeCommand;
 
@@ -308,7 +309,7 @@ namespace Catel.MVVM
             #endregion
 
             #region Properties
-            public ICatelCommand Command { get; private set; }
+            public ICommand Command { get; private set; }
             public IViewModel ViewModel { get; private set; }
             #endregion
 
