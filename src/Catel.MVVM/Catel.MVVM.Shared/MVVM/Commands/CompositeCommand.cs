@@ -141,8 +141,14 @@ namespace Catel.MVVM
             {
                 if (AtLeastOneMustBeExecutable)
                 {
+                    if (_actions.Count > 0 || _actionsWithParameter.Count > 0)
+                    {
+                        return true;
+                    }
+
                     var commands = (from commandInfo in _commandInfo
                                     select commandInfo.Command).ToList();
+
                     foreach (var command in commands)
                     {
                         if (command != null)
