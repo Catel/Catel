@@ -36,6 +36,7 @@ namespace Catel.MVVM
             : base(null)
         {
             AllowPartialExecution = false;
+            AtLeastOneMustBeExecutable = true;
 
             InitializeActions(ExecuteCompositeCommand, null, CanExecuteCompositeCommand, null);
         }
@@ -63,6 +64,15 @@ namespace Catel.MVVM
         /// </summary>
         /// <value><c>true</c> if partial execution is allowed; otherwise, <c>false</c>.</value>
         public bool AllowPartialExecution { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether at least one command must be executable. This will prevent the command to be 
+        /// executed without any commands.
+        /// <para />
+        /// The default value is <c>true</c>.
+        /// </summary>
+        /// <value><c>true</c> if at least one command must be executed; otherwise, <c>false</c>.</value>
+        public bool AtLeastOneMustBeExecutable { get; set; }
         #endregion
 
         #region Methods
@@ -129,6 +139,24 @@ namespace Catel.MVVM
         {
             lock (_lock)
             {
+                if (AtLeastOneMustBeExecutable)
+                {
+                    var commands = (from commandInfo in _commandInfo
+                                    select commandInfo.Command).ToList();
+                    foreach (var command in commands)
+                    {
+                        if (command != null)
+                        {
+                            if (command.CanExecute(parameter))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+
+                    return false;
+                }
+
                 if (!AllowPartialExecution)
                 {
                     var commands = (from commandInfo in _commandInfo

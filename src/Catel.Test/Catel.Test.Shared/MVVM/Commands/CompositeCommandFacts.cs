@@ -14,6 +14,20 @@ namespace Catel.Test.MVVM
     public class CompositeCommandFacts
     {
         [TestFixture]
+        public class TheCanExecuteState
+        {
+            [TestCase(false, true)]
+            [TestCase(true, false)]
+            public void CanExecuteEmptyCommandWithAtLeastOneMustBeExecutable(bool atLeastOneMustBeExecutable, bool expectedValue)
+            {
+                var compositeCommand = new CompositeCommand();
+                compositeCommand.AtLeastOneMustBeExecutable = atLeastOneMustBeExecutable;
+
+                Assert.AreEqual(expectedValue, ((ICatelCommand)compositeCommand).CanExecute(null));
+            }
+        }
+
+        [TestFixture]
         public class TheRegisterCommandMethod
         {
             [TestCase]
