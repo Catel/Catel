@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{BE079DB6-FD92-4167-8DF4-CACB2E1422FC}"
 	ProjectSection(SolutionItems) = preProject
@@ -239,10 +239,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Controls.NET40", "Catel.Extensions.Controls\Catel.Extensions.Controls.NET40\Catel.Extensions.Controls.NET40.csproj", "{27EA5DBF-C871-4F2A-A5A0-5DB0F148E6D8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Controls.SL5", "Catel.Extensions.Controls\Catel.Extensions.Controls.SL5\Catel.Extensions.Controls.SL5.csproj", "{2F07E89E-EB4C-4987-8021-8125ABB274DC}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Test.SL5", "Catel.Test\Catel.Test.SL5\Catel.Test.SL5.csproj", "{8A06B835-2476-497F-895C-929C94D5B99D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Test.SL5.Web", "Catel.Test\Catel.Test.SL5.Web\Catel.Test.SL5.Web.csproj", "{BEF2C500-F2AF-40C5-A802-73C43F38C234}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.FluentValidation.NET40", "Catel.Extensions.FluentValidation\Catel.Extensions.FluentValidation.NET40\Catel.Extensions.FluentValidation.NET40.csproj", "{135E7F2B-1FE8-44E1-B1AD-0C80B972459E}"
 EndProject
@@ -491,7 +487,6 @@ Global
 		Catel.Core\Catel.Core.Shared\Catel.Core.Shared.projitems*{c35d5dc5-7149-4e56-9f0c-90d8f6a1c495}*SharedItemsImports = 4
 		Catel.Core\Catel.Core.Shared\Catel.Core.Shared.projitems*{c022232f-d54e-4c23-9f16-360f9812a53e}*SharedItemsImports = 4
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{2d2f7284-7844-439a-bbdb-638608198895}*SharedItemsImports = 4
-		Catel.Test\Catel.Test.Shared\Catel.Test.Shared.projitems*{8a06b835-2476-497f-895c-929c94d5b99d}*SharedItemsImports = 4
 		Catel.Extensions.Prism\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems*{5f51a610-215c-49c0-a214-433fd769e37c}*SharedItemsImports = 13
 		Catel.Test\Catel.Test.Shared\Catel.Test.Shared.projitems*{e7d45c75-2bc2-417f-b797-f1b0b56c0b7b}*SharedItemsImports = 4
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{d9112d3c-62d2-401e-8ea1-86ac28a71c22}*SharedItemsImports = 4
@@ -597,24 +592,6 @@ Global
 		{2F07E89E-EB4C-4987-8021-8125ABB274DC}.Release|ARM.ActiveCfg = Release|Any CPU
 		{2F07E89E-EB4C-4987-8021-8125ABB274DC}.Release|x64.ActiveCfg = Release|Any CPU
 		{2F07E89E-EB4C-4987-8021-8125ABB274DC}.Release|x86.ActiveCfg = Release|Any CPU
-		{8A06B835-2476-497F-895C-929C94D5B99D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8A06B835-2476-497F-895C-929C94D5B99D}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{8A06B835-2476-497F-895C-929C94D5B99D}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{8A06B835-2476-497F-895C-929C94D5B99D}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{8A06B835-2476-497F-895C-929C94D5B99D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8A06B835-2476-497F-895C-929C94D5B99D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8A06B835-2476-497F-895C-929C94D5B99D}.Release|ARM.ActiveCfg = Release|Any CPU
-		{8A06B835-2476-497F-895C-929C94D5B99D}.Release|x64.ActiveCfg = Release|Any CPU
-		{8A06B835-2476-497F-895C-929C94D5B99D}.Release|x86.ActiveCfg = Release|Any CPU
-		{BEF2C500-F2AF-40C5-A802-73C43F38C234}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BEF2C500-F2AF-40C5-A802-73C43F38C234}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{BEF2C500-F2AF-40C5-A802-73C43F38C234}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{BEF2C500-F2AF-40C5-A802-73C43F38C234}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{BEF2C500-F2AF-40C5-A802-73C43F38C234}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BEF2C500-F2AF-40C5-A802-73C43F38C234}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BEF2C500-F2AF-40C5-A802-73C43F38C234}.Release|ARM.ActiveCfg = Release|Any CPU
-		{BEF2C500-F2AF-40C5-A802-73C43F38C234}.Release|x64.ActiveCfg = Release|Any CPU
-		{BEF2C500-F2AF-40C5-A802-73C43F38C234}.Release|x86.ActiveCfg = Release|Any CPU
 		{135E7F2B-1FE8-44E1-B1AD-0C80B972459E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{135E7F2B-1FE8-44E1-B1AD-0C80B972459E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{135E7F2B-1FE8-44E1-B1AD-0C80B972459E}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -1545,8 +1522,6 @@ Global
 		{5E382C94-510F-4943-8F9E-E6EC3F139E8E} = {162DE45B-B7A2-4D4A-B90D-F1762133C31C}
 		{27EA5DBF-C871-4F2A-A5A0-5DB0F148E6D8} = {1F4484D6-CE9B-428E-B640-FB777F260F97}
 		{2F07E89E-EB4C-4987-8021-8125ABB274DC} = {1F4484D6-CE9B-428E-B640-FB777F260F97}
-		{8A06B835-2476-497F-895C-929C94D5B99D} = {8C3710FE-B6C7-4261-81B6-897F4B286B2B}
-		{BEF2C500-F2AF-40C5-A802-73C43F38C234} = {8C3710FE-B6C7-4261-81B6-897F4B286B2B}
 		{135E7F2B-1FE8-44E1-B1AD-0C80B972459E} = {DA48A112-2316-4576-84F7-2665282C75BE}
 		{8FB35D65-3E80-483D-B38A-F4DE1AB08D71} = {DA48A112-2316-4576-84F7-2665282C75BE}
 		{C9EAD437-56BA-45BB-A982-845AD72FE1C8} = {6270F84B-38B3-4602-803C-EAE9E8C924C6}
