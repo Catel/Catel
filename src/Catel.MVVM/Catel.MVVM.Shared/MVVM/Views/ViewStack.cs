@@ -128,9 +128,14 @@ namespace Catel.MVVM.Views
         {
             MarkAsLoaded();
 
+            CheckForOutdatedChildren();
+
             foreach (var child in _children)
             {
-                child.NotifyThatParentIsReadyToAcceptLoadedMessages();
+                if (!child.IsOutdated)
+                {
+                    child.NotifyThatParentIsReadyToAcceptLoadedMessages();
+                }
             }
         }
 
