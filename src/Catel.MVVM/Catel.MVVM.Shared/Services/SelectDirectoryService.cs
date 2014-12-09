@@ -28,7 +28,7 @@ namespace Catel.Services
         /// Gets the directory name.
         /// </summary>
         /// <value>The name of the directory.</value>
-        public string DirectoryName { get; private set; }
+        public string DirectoryName { get; protected set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to show the new folder button to be able to create new folders while browsing.
