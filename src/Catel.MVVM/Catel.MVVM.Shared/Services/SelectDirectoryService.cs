@@ -71,9 +71,7 @@ namespace Catel.Services
         /// no changes will occur to the data of this object.
         /// </remarks>
         public virtual bool DetermineDirectory()
-        {
-            string initialDirectory = string.Empty;
-            
+        {          
             var browserDialog = new FolderBrowserDialog();
             browserDialog.Description = Title;
             browserDialog.ShowNewFolderButton = ShowNewFolderButton;
