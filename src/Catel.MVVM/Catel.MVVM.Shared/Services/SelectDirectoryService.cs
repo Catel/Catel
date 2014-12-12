@@ -80,8 +80,7 @@ namespace Catel.Services
 
             var browserDialog = new FolderBrowserDialog();
 
-            browserDialog.Description = Title;
-            browserDialog.RootFolder = System.Environment.SpecialFolder.MyComputer;
+            browserDialog.Description = Title;            
             browserDialog.SelectedPath = initialDirectory;
             browserDialog.ShowNewFolderButton = ShowNewFolderButton;
 
