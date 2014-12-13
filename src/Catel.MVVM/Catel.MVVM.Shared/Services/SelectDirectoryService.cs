@@ -71,19 +71,21 @@ namespace Catel.Services
         /// no changes will occur to the data of this object.
         /// </remarks>
         public virtual bool DetermineDirectory()
-        {
-            string initialDirectory = string.Empty;
-            if (!string.IsNullOrEmpty(InitialDirectory))
-            {
-                initialDirectory = IO.Path.AppendTrailingSlash(InitialDirectory);
-            }
-
+        {   
             var browserDialog = new FolderBrowserDialog();
-
             browserDialog.Description = Title;
-            browserDialog.RootFolder = System.Environment.SpecialFolder.MyComputer;
-            browserDialog.SelectedPath = initialDirectory;
             browserDialog.ShowNewFolderButton = ShowNewFolderButton;
+
+            var initialDirectory = InitialDirectory;
+
+            if (!string.IsNullOrEmpty(initialDirectory))
+            {
+                browserDialog.SelectedPath = IO.Path.AppendTrailingSlash(initialDirectory);
+            }
+            else
+            {
+                browserDialog.RootFolder = System.Environment.SpecialFolder.MyComputer;
+            }
 
             bool result = browserDialog.ShowDialog() == DialogResult.OK;
             if (result)
