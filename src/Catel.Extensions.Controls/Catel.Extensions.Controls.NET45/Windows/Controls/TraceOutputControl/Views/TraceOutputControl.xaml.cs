@@ -19,6 +19,15 @@ namespace Catel.Windows.Controls
     {
         #region Constructors
         /// <summary>
+        /// Initializes static members of the <see cref="TraceOutputControl"/> class.
+        /// </summary>
+        /// <remarks>This method is required for design time support.</remarks>
+        static TraceOutputControl()
+        {
+            typeof(TraceOutputControl).AutoDetectViewPropertiesToSubscribe();
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="TraceOutputControl"/> class.
         /// </summary>
         public TraceOutputControl()

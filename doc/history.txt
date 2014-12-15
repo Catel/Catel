@@ -40,6 +40,7 @@ Added/fixed:
 (*) CTL-560 Allow ICommand to be added to CompositeCommand
 (x) CTL-551 Memory leak with Behaviours caused by InteractivityManager. The InteractivityManager is
     now marked obsolete and will be removed in 5.0, logic has already been removed from the codebase
+(x) CTL-561 Changing TraceOutputControl.SelectedLevel doesn't work
 (x) CTL-562 DirectoryService.InitialDirectory doesn't work correctly
 (x) CTL-563 InputGestures accepts key gesture with modifiers when Modifiers == ModifierKeys.None,
     now the check is strict and only works if all the modifiers match
