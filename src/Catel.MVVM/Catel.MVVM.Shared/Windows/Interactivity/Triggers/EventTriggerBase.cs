@@ -34,20 +34,7 @@ namespace Catel.Windows.Interactivity
  where T : FrameworkElement
     {
         #region Fields
-        private static readonly IInteractivityManager InteractivityManager;
-
         private bool _isClean = true;
-        #endregion
-
-        #region Constructors
-        /// <summary>
-        /// Constructs the event trigger base.
-        /// </summary>
-        static EventTriggerBase()
-        {
-            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-            InteractivityManager = dependencyResolver.TryResolve<IInteractivityManager>();
-        }
         #endregion
 
         #region Properties
@@ -104,11 +91,6 @@ namespace Catel.Windows.Interactivity
             ValidateRequiredProperties();
 
             Initialize();
-
-            if (InteractivityManager != null)
-            {
-                InteractivityManager.RegisterTrigger(this);
-            }
         }
 
         /// <summary>
@@ -233,11 +215,6 @@ namespace Catel.Windows.Interactivity
             }
 
             Uninitialize();
-
-            if (InteractivityManager != null)
-            {
-                InteractivityManager.UnregisterTrigger(this);
-            }
         }
         #endregion
     }

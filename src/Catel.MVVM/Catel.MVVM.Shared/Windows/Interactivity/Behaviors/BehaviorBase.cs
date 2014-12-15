@@ -33,21 +33,8 @@ namespace Catel.Windows.Interactivity
         where T : FrameworkElement
     {
         #region Fields
-        private static readonly IInteractivityManager InteractivityManager;
-
         private bool _isClean = true;
         private int _loadCounter;
-        #endregion
-
-        #region Constructors
-        /// <summary>
-        /// Constructs the behavior base.
-        /// </summary>
-        static BehaviorBase()
-        {
-            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-            InteractivityManager = dependencyResolver.TryResolve<IInteractivityManager>();
-        }
         #endregion
 
         #region Properties
@@ -89,11 +76,6 @@ namespace Catel.Windows.Interactivity
             ValidateRequiredProperties();
 
             Initialize();
-
-            if (InteractivityManager != null)
-            {
-                InteractivityManager.RegisterBehavior(this);
-            }
         }
 
         /// <summary>
@@ -219,11 +201,6 @@ namespace Catel.Windows.Interactivity
             }
 
             Uninitialize();
-
-            if (InteractivityManager != null)
-            {
-                InteractivityManager.UnregisterBehavior(this);
-            }
         }
         #endregion
     }

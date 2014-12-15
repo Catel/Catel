@@ -14,6 +14,7 @@ namespace Catel.Windows.Interactivity
     /// <summary>
     /// Interactivity manager to manage interactivity classes.
     /// </summary>
+    [ObsoleteEx(Message = "Unused feature, will be removed", TreatAsErrorFromVersion = "4.1", RemoveInVersion = "5.0")]
     public interface IInteractivityManager
     {
         /// <summary>
