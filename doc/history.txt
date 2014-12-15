@@ -39,6 +39,8 @@ Added/fixed:
 (*) CTL-559 IoC ObjectExtensions DefaultDependencyResolver improvement
 (*) CTL-560 Allow ICommand to be added to CompositeCommand
 (x) CTL-562 DirectoryService.InitialDirectory doesn't work correctly
+(x) CTL-563 InputGestures accepts key gesture with modifiers when Modifiers == ModifierKeys.None,
+    now the check is strict and only works if all the modifiers match
 
 Roadmap:
 ========
