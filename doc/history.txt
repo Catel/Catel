@@ -33,6 +33,8 @@ Added/fixed:
 ============
 (+) CTL-556 Add support for SharpDevelop XAML visual designer
 (+) CTL-554 Allow suspension of notifications in ConfigurationService
+(+) CTL-564 Add DisposableToken class that makes it possible to easily suspend objects temporarily using
+    an IDisposable token that can initalize / dispose the object automatically
 (*) CTL-557 ServiceLocator should support IDisposable
 (*) CTL-558 Use LayoutRounding and SnapToDevicePixels in DataWindow and UserControl to prevent 
     blurriness. Also available as extension method FrameworkElement.FixBlurriness()

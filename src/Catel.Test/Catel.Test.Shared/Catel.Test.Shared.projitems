@@ -53,6 +53,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\ValidationContextFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ValidationResultFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ValidationSummaryFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DisposableTokenFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EnumFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\ExceptionExtensionsTests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\ExceptionHandlerFacts.cs" />

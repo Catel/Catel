@@ -94,7 +94,20 @@ namespace Catel.Configuration
         /// <returns>IDisposable.</returns>
         public IDisposable SuspendNotifications()
         {
-            return new SuspendNotificationsToken(this);
+            return new DisposableToken<ConfigurationService>(this,
+                x =>
+                {
+                    x.Instance._suspendNotifications = true;
+                },
+                x =>
+                {
+                    x.Instance._suspendNotifications = false;
+                    if (x.Instance._hasPendingNotifications)
+                    {
+                        x.Instance.RaiseConfigurationChanged(string.Empty, string.Empty);
+                        x.Instance._hasPendingNotifications = false;
+                    }
+                });
         }
 
         /// <summary>
@@ -257,39 +270,5 @@ namespace Catel.Configuration
             }
         }
         #endregion
-
-        private class SuspendNotificationsToken : IDisposable
-        {
-            #region Fields
-            private ConfigurationService _configurationService;
-            #endregion
-
-            #region Constructors
-            public SuspendNotificationsToken(ConfigurationService configurationService)
-            {
-                Argument.IsNotNull("configurationService", configurationService);
-
-                _configurationService = configurationService;
-                configurationService._suspendNotifications = true;
-            }
-            #endregion
-
-            #region IDisposable Members
-            public void Dispose()
-            {
-                if (_configurationService != null)
-                {
-                    _configurationService._suspendNotifications = false;
-                    if (_configurationService._hasPendingNotifications)
-                    {
-                        _configurationService.RaiseConfigurationChanged(string.Empty, string.Empty);
-                        _configurationService._hasPendingNotifications = false;
-                    }
-
-                    _configurationService = null;
-                }
-            }
-            #endregion
-        }
     }
 }

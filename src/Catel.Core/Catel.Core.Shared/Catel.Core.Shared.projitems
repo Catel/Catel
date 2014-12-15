@@ -126,6 +126,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\ValidationSummary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ValidatorBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ValidatorProviderBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DisposableToken.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DynamicEventListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EventHandlerExtensions.cs" />
@@ -166,6 +167,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\TagHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\UniqueIdentifierHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\UrlHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IDisposableToken.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IUniqueIdentifyable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\Attributes\InjectAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\Attributes\InjectionConstructorAttribute.cs" />
