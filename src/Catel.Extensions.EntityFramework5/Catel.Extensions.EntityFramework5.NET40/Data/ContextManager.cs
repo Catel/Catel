@@ -207,7 +207,7 @@ namespace Catel.Data
         {
             Argument.IsNotNullOrWhitespace("label", label);
 
-            var threadId = Thread.CurrentThread.ManagedThreadId;
+            var threadId = ThreadHelper.GetCurrentThreadId();
             return string.Format("__ctx:{0}-{1}-{2}", databaseNameOrConnectionStringName ?? "database", label, threadId);
         }
 

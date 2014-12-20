@@ -49,7 +49,7 @@ namespace Catel.Test.Caching
                             var randomGuid = _randomGuids[random.Next(0, 9)];
                             cacheStorage.GetFromCacheOrFetch(randomGuid, () =>
                             {
-                                var threadId = Thread.CurrentThread.ManagedThreadId;
+                                var threadId = ThreadHelper.GetCurrentThreadId();
                                 Log.Info("Key '{0}' is now controlled by thread '{1}'", randomGuid, threadId);
                                 return threadId;
                             });

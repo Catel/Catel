@@ -249,7 +249,7 @@ namespace Catel.Logging
         /// <returns>The formatted log event.</returns>
         protected virtual string FormatLogEvent(ILog log, string message, LogEvent logEvent, object extraData, DateTime time)
         {
-            string logMessage = string.Format("{0} => [{1}] [{2}] {3}", time.ToString(_timeFormat), LogEventStrings[logEvent], log.TargetType.FullName, message);
+            string logMessage = string.Format("{0} => [{1}] [{2}] [{3}] {4}", ThreadHelper.GetCurrentThreadId(), time.ToString(_timeFormat), LogEventStrings[logEvent], log.TargetType.FullName, message);
             return logMessage;
         }
 
