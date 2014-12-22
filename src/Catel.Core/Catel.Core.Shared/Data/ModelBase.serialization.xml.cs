@@ -41,7 +41,9 @@ namespace Catel.Data
             }
 
             var serializer = SerializationFactory.GetXmlSerializer();
-            serializer.Deserialize(this, new XmlSerializationContextInfo(reader, this));
+            var contextInfo = new XmlSerializationContextInfo(reader, this);
+
+            serializer.Deserialize(this, contextInfo);
         }
 
         /// <summary>

@@ -164,7 +164,7 @@ namespace Catel.Data
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         /// <returns>The value of the property.</returns>
-        internal object GetValueFast(string propertyName)
+        private object GetValueFast(string propertyName)
         {
             return _propertyBag.GetPropertyValue<object>(propertyName);
         }
@@ -270,6 +270,33 @@ namespace Catel.Data
         void IModelEditor.SetValue(string propertyName, object value)
         {
             SetValue(propertyName, value);
+        }
+
+        /// <summary>
+        /// Gets the value in the fastest way possible without doing sanity checks.
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <returns>The value.</returns>
+        /// <remarks>
+        /// Note that this method does not do any sanity checks. Use at your own risk!
+        /// </remarks>
+        object IModelEditor.GetValueFastButUnsecure(string propertyName)
+        {
+            return GetValueFast(propertyName);
+        }
+
+        /// <summary>
+        /// Sets the value in the fastest way possible without doing sanity checks.
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>The value.</returns>
+        /// <remarks>
+        /// Note that this method does not do any sanity checks. Use at your own risk!
+        /// </remarks>
+        void IModelEditor.SetValueFastButUnsecure(string propertyName, object value)
+        {
+            SetValueFast(propertyName, value);
         }
 
         /// <summary>

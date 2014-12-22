@@ -16,6 +16,7 @@ namespace Catel.Runtime.Serialization.Xml
     using Catel.Data;
     using Catel.Logging;
     using Catel.Reflection;
+    using IoC;
 
     /// <summary>
     /// Default implementation of the <see cref="IDataContractSerializerFactory" /> interface.
@@ -149,7 +150,7 @@ namespace Catel.Runtime.Serialization.Xml
             Argument.IsNotNull("typeToSerialize", typeToSerialize);
             Argument.IsNotNullOrWhitespace("xmlName", xmlName);
 
-            string key = string.Format("{0}|{1}", typeToSerialize.GetSafeFullName(), xmlName);
+            var key = string.Format("{0}|{1}", typeToSerialize.GetSafeFullName(), xmlName);
 
             return _dataContractSerializersCache.GetFromCacheOrFetch(key, () =>
             {

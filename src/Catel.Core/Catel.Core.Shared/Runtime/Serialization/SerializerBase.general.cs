@@ -120,12 +120,13 @@ namespace Catel.Runtime.Serialization
 
                 try
                 {
-                    Log.Debug("Adding property '{0}' to list of objects to serialize", propertyName);
+                    //Log.Debug("Adding property '{0}' to list of objects to serialize", propertyName);
 
-                    if (modelInfo.CatelPropertyNames.Contains(propertyName))
+                    var modelEditor = model as IModelEditor;
+                    if (modelEditor != null && modelInfo.CatelPropertyNames.Contains(propertyName))
                     {
                         var propertyData = modelInfo.CatelPropertiesByName[propertyName];
-                        var actualPropertyValue = model.GetValueFast(propertyName);
+                        var actualPropertyValue = modelEditor.GetValueFastButUnsecure(propertyName);
                         var propertyValue = new MemberValue(SerializationMemberGroup.CatelProperty, modelType, propertyData.Type, propertyData.Name, actualPropertyValue);
 
                         listToSerialize.Add(propertyValue);
@@ -339,9 +340,10 @@ namespace Catel.Runtime.Serialization
             {
                 try
                 {
-                    if (modelInfo.CatelPropertyNames.Contains(member.Name))
+                    var modelEditor = model as IModelEditor;
+                    if (modelEditor != null && modelInfo.CatelPropertyNames.Contains(member.Name))
                     {
-                        model.SetValue(member.Name, member.Value);
+                        modelEditor.SetValueFastButUnsecure(member.Name, member.Value);
                     }
                     else if (modelInfo.PropertyNames.Contains(member.Name))
                     {
