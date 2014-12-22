@@ -212,7 +212,7 @@ namespace Catel.Windows.Controls
 
         private void OnLogMessage(object sender, LogMessageEventArgs e)
         {
-            _dispatcherService.Invoke(() =>
+            _dispatcherService.BeginInvoke(() =>
             {
                 var traceEntries = TraceEntries;
                 if (traceEntries != null)
