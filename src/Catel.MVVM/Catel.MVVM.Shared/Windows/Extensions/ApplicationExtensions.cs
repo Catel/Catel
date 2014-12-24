@@ -46,6 +46,11 @@ namespace Catel.Windows
                 {
                     activeWindow = windowList[0];
                 }
+
+                if (activeWindow == null)
+                {
+                    activeWindow = windowList[windowList.Count - 1];
+                }
             }
 
             return activeWindow;

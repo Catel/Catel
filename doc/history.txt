@@ -47,6 +47,7 @@ Added/fixed:
 (x) CTL-562 DirectoryService.InitialDirectory doesn't work correctly
 (x) CTL-563 InputGestures accepts key gesture with modifiers when Modifiers == ModifierKeys.None,
     now the check is strict and only works if all the modifiers match
+(x) CTL-568 MessageBox in WPF does not set owner correctly when application is not activated
 
 Roadmap:
 ========
