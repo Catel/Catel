@@ -23,7 +23,7 @@ For an update guide, visit https://catelproject.atlassian.net/wiki/display/CTL/U
 
 Release date:
 =============
-2014/xx/xx
+2015/xx/xx
 
 Added/fixed (BREAKING CHANGES):
 ===============================
