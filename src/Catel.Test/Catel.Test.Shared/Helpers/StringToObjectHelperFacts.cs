@@ -15,6 +15,19 @@ namespace Catel.Test
         // TODO: Write unit tests
 
         [TestFixture]
+        public class TheGetValueAsTimeSpanMethod
+        {
+            [TestCase]
+            public void ReturnsRightValueForValidValue()
+            {
+                var timespanValue = StringToObjectHelper.ToTimeSpan("1.23:12:21");
+                var expectedTimespan = new TimeSpan(1, 23, 12, 21);
+
+                Assert.AreEqual(expectedTimespan, timespanValue);
+            }
+        }
+
+        [TestFixture]
         public class TheGetValueAsEnumMethod
         {
             public enum TestEnum

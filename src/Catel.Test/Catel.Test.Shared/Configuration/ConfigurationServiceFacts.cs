@@ -12,16 +12,13 @@ namespace Catel.Test.Configuration
 
     using NUnit.Framework;
     using Catel.Runtime.Serialization;
+    using Catel.Services;
 
     public class ConfigurationServiceFacts
     {
         private static ConfigurationService GetConfigurationService()
         {
-#if NET
-            return new ConfigurationService(new SerializationManager());
-#else
-            return new ConfigurationService();
-#endif
+            return new ConfigurationService(new SerializationManager(), new ObjectConverterService());
         }
 
         [TestFixture]

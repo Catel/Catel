@@ -52,6 +52,8 @@ namespace Catel
             serviceLocator.RegisterType<IModelEqualityComparer, ModelEqualityComparer>();
             serviceLocator.RegisterType<IConfigurationService, ConfigurationService>();
 
+            serviceLocator.RegisterType<IObjectConverterService, ObjectConverterService>();
+
             serviceLocator.RegisterType<IRollingInMemoryLogService, RollingInMemoryLogService>();
         }
     }

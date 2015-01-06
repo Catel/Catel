@@ -7,6 +7,8 @@
 
 namespace Catel.Configuration
 {
+    using Runtime.Serialization;
+    using Services;
     using System;
     using System.IO;
     using System.Runtime.Serialization;
@@ -22,7 +24,6 @@ namespace Catel.Configuration
 #else
     using System.Configuration;
     using System.Linq;
-    using Runtime.Serialization;
     using Path = IO.Path;
 #endif
 
@@ -30,15 +31,16 @@ namespace Catel.Configuration
     /// Configuration service implementation that allows customization how configuration values
     /// are being used inside an application.
     /// <para />
-    /// This default implementation writes to the 
+    /// This default implementation writes to the
     /// </summary>
     public class ConfigurationService : IConfigurationService
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-#if NET
         private readonly ISerializationManager _serializationManager;
+        private readonly IObjectConverterService _objectConverterService;
 
+#if NET
         private readonly DynamicConfiguration _configuration;
         private readonly string _configFilePath;
 #endif
@@ -46,16 +48,20 @@ namespace Catel.Configuration
         private bool _suspendNotifications = false;
         private bool _hasPendingNotifications = false;
 
-#if NET
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigurationService" /> class.
         /// </summary>
         /// <param name="serializationManager">The serialization manager.</param>
-        public ConfigurationService(ISerializationManager serializationManager)
+        /// <param name="objectConverterService">The object converter service.</param>
+        public ConfigurationService(ISerializationManager serializationManager, IObjectConverterService objectConverterService)
         {
-            Argument.IsNotNull("serializationManager", serializationManager);
+            Argument.IsNotNull(() => serializationManager);
+            Argument.IsNotNull(() => objectConverterService);
 
             _serializationManager = serializationManager;
+            _objectConverterService = objectConverterService;
+
+#if NET
             _configFilePath = Path.Combine(Path.GetApplicationDataDirectory(), "configuration.xml");
 
             try
@@ -77,8 +83,8 @@ namespace Catel.Configuration
             {
                 _configuration = new DynamicConfiguration();
             }
-        }
 #endif
+        }
 
         #region Events
         /// <summary>
@@ -135,7 +141,7 @@ namespace Catel.Configuration
                     return defaultValue;
                 }
 
-                return (T) StringToObjectHelper.ToRightType(typeof (T), value);
+                return (T) _objectConverterService.ConvertFromStringToObject(value, typeof (T));
             }
             catch (Exception)
             {

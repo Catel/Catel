@@ -68,6 +68,20 @@ namespace Catel
         }
 
         /// <summary>
+        /// Converts a string to a timespan.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The timespan value of the string.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="value"/> is <c>null</c> or whitespace.</exception>
+        public static TimeSpan ToTimeSpan(string value)
+        {
+            Argument.IsNotNullOrWhitespace("value", value);
+            value = CleanString(value);
+
+            return TimeSpan.Parse(value);
+        }
+
+        /// <summary>
         /// Converts a string to a decimal.
         /// </summary>
         /// <param name="value">The value.</param>
@@ -203,6 +217,16 @@ namespace Catel
             if (targetType == typeof(DateTime?))
             {
                 return ToDateTime(value);
+            }
+
+            if (targetType == typeof(TimeSpan))
+            {
+                return ToTimeSpan(value);
+            }
+
+            if (targetType == typeof(TimeSpan?))
+            {
+                return ToTimeSpan(value);
             }
 
             if (targetType == typeof(decimal))
