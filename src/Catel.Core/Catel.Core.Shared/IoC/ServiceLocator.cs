@@ -731,7 +731,7 @@ namespace Catel.IoC
 
             lock (this)
             {
-                var typeRequestInfo = new TypeRequestInfo(serviceType);
+                var typeRequestInfo = new TypeRequestInfo(serviceType, tag);
                 if (_currentTypeRequestPath == null)
                 {
                     _currentTypeRequestPath = new TypeRequestPath(typeRequestInfo, name: "ServiceLocator");
