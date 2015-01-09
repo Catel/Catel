@@ -99,9 +99,12 @@ namespace Catel.Data
                 }
             }
 
+            var notify = false;
+            object oldValue = null;
+
             lock (_propertyValuesLock)
             {
-                var oldValue = GetValueFast(property.Name);
+                oldValue = GetValueFast(property.Name);
                 var areOldAndNewValuesEqual = ObjectHelper.AreEqualReferences(oldValue, value);
 
                 if (notifyOnChange && (AlwaysInvokeNotifyChanged || !areOldAndNewValuesEqual) && !LeanAndMeanModel)
@@ -127,10 +130,13 @@ namespace Catel.Data
                     SetValueFast(property.Name, value);
                 }
 
-                if (notifyOnChange && (AlwaysInvokeNotifyChanged || !areOldAndNewValuesEqual) && !LeanAndMeanModel)
-                {
-                    RaisePropertyChanged(property.Name, oldValue, value);
-                }
+                notify = (notifyOnChange && (AlwaysInvokeNotifyChanged || !areOldAndNewValuesEqual) && !LeanAndMeanModel);
+            }
+
+            // Notify outside lock
+            if (notify)
+            {
+                RaisePropertyChanged(property.Name, oldValue, value);
             }
         }
 

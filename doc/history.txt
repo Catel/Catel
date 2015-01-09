@@ -50,6 +50,7 @@ Added/fixed:
     now the check is strict and only works if all the modifiers match
 (x) CTL-568 MessageBox in WPF does not set owner correctly when application is not activated
 (x) CTL-573 Property injection with same type and different tag not working
+(x) CTL-574 Possible deadlock when mapping properties from VM to M in multithreaded scenarios
 
 Roadmap:
 ========

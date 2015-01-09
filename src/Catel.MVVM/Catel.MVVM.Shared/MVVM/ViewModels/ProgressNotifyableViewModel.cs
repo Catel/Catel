@@ -180,22 +180,13 @@ namespace Catel.MVVM
             }
         }
 
-
         /// <summary>
         /// The update status.
         /// </summary>
-        /// <param name="currentItem">
-        /// The current item.
-        /// </param>
-        /// <param name="totalItems">
-        /// The total items.
-        /// </param>
-        /// <param name="task">
-        /// The task
-        /// </param>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="task"/> is <c>null</c>. 
-        /// </exception>
+        /// <param name="currentItem">The current item.</param>
+        /// <param name="totalItems">The total items.</param>
+        /// <param name="task">The task</param>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="task" /> is <c>null</c>.</exception>
         public void UpdateStatus(int currentItem, int totalItems, ITask task)
         {
             Argument.IsNotNull(() => task);
