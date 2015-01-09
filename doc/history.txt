@@ -51,6 +51,7 @@ Added/fixed:
 (x) CTL-568 MessageBox in WPF does not set owner correctly when application is not activated
 (x) CTL-573 Property injection with same type and different tag not working
 (x) CTL-574 Possible deadlock when mapping properties from VM to M in multithreaded scenarios
+(x) CTL-575 XmlSchemaHelper does not check for duplicate type entries
 
 Roadmap:
 ========
