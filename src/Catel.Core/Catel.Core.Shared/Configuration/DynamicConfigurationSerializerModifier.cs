@@ -60,6 +60,8 @@ namespace Catel.Configuration
                     var elementName = childElement.Name.LocalName;
 
                     dynamicConfiguration.RegisterConfigurationKey(elementName);
+
+                    dynamicConfiguration.MarkPropertyAsSet(elementName);
                 }
             }
         }

@@ -6,6 +6,7 @@
 
 namespace Catel.Configuration
 {
+    using System.Collections.Generic;
     using Data;
     using Runtime.Serialization;
 
@@ -15,6 +16,8 @@ namespace Catel.Configuration
     [SerializerModifier(typeof(DynamicConfigurationSerializerModifier))]
     public class DynamicConfiguration : ModelBase
     {
+        private readonly HashSet<string> _propertiesSetAtLeastOnce = new HashSet<string>();
+
         #region Methods
         /// <summary>
         /// Registers the configuration key.
@@ -64,6 +67,37 @@ namespace Catel.Configuration
             RegisterConfigurationKey(name);
 
             SetValue(name, value);
+
+            MarkPropertyAsSet(name);
+        }
+
+        /// <summary>
+        /// Determines whether the specified property is set. If not, a default value should be returned.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns><c>true</c> if the property is set; otherwise, <c>false</c>.</returns>
+        public bool IsPropertySet(string name)
+        {
+            Argument.IsNotNull("name", name);
+
+            lock (_propertiesSetAtLeastOnce)
+            {
+                return _propertiesSetAtLeastOnce.Contains(name);
+            }
+        }
+
+        /// <summary>
+        /// Marks the property as set at least once so it doesn't have a default value.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        public void MarkPropertyAsSet(string name)
+        {
+            Argument.IsNotNull("name", name);
+
+            lock (_propertiesSetAtLeastOnce)
+            {
+                _propertiesSetAtLeastOnce.Add(name);
+            }
         }
         #endregion
     }

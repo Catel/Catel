@@ -22,6 +22,7 @@ namespace Catel.Test.Configuration
     {
         private const string ExpectedXml = "﻿<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" +
 "<DynamicConfiguration graphid=\"1\" xmlns:ctl=\"http://catel.codeplex.com\">\r\n" +
+"  <ComplexSetting IsNull=\"true\" />\r\n" +
 "  <KeyX type=\"System.String\">Value X</KeyX>\r\n" +
 "  <KeyY type=\"System.String\">Value Y</KeyY>\r\n" +
 "  <KeyZ.SomeAddition type=\"System.String\">Value Z</KeyZ.SomeAddition>\r\n" +
@@ -81,6 +82,40 @@ namespace Catel.Test.Configuration
             /// Register the LastName property so it is known in the class.
             /// </summary>
             public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof(string), string.Empty);
+        }
+
+        [TestCase]
+        public void KnowsWhatPropertiesAreSetUsingSetConfigurationValue()
+        {
+            var configuration = new DynamicConfiguration();
+
+            configuration.SetConfigurationValue("A", "1");
+            configuration.SetConfigurationValue("B", "2");
+
+            Assert.IsTrue(configuration.IsPropertySet("A"));
+            Assert.IsTrue(configuration.IsPropertySet("B"));
+            Assert.IsFalse(configuration.IsPropertySet("C"));
+        }
+
+        [TestCase]
+        public void KnowsWhatPropertiesAreSetUsingDeserialization()
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                using (var streamWriter = new StreamWriter(memoryStream))
+                {
+                    streamWriter.Write(ExpectedXml);
+                    streamWriter.Flush();
+
+                    memoryStream.Position = 0L;
+
+                    var configuration = ModelBase.Load<DynamicConfiguration>(memoryStream, SerializationMode.Xml);
+
+                    Assert.IsTrue(configuration.IsPropertySet("KeyX"));
+                    Assert.IsTrue(configuration.IsPropertySet("KeyY"));
+                    Assert.IsFalse(configuration.IsPropertySet("C"));
+                }
+            }
         }
 
         [TestCase]
