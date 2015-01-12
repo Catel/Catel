@@ -92,9 +92,9 @@ namespace Catel.Test.Configuration
             configuration.SetConfigurationValue("A", "1");
             configuration.SetConfigurationValue("B", "2");
 
-            Assert.IsTrue(configuration.IsPropertySet("A"));
-            Assert.IsTrue(configuration.IsPropertySet("B"));
-            Assert.IsFalse(configuration.IsPropertySet("C"));
+            Assert.IsTrue(configuration.IsConfigurationValueSet("A"));
+            Assert.IsTrue(configuration.IsConfigurationValueSet("B"));
+            Assert.IsFalse(configuration.IsConfigurationValueSet("C"));
         }
 
         [TestCase]
@@ -111,9 +111,9 @@ namespace Catel.Test.Configuration
 
                     var configuration = ModelBase.Load<DynamicConfiguration>(memoryStream, SerializationMode.Xml);
 
-                    Assert.IsTrue(configuration.IsPropertySet("KeyX"));
-                    Assert.IsTrue(configuration.IsPropertySet("KeyY"));
-                    Assert.IsFalse(configuration.IsPropertySet("C"));
+                    Assert.IsTrue(configuration.IsConfigurationValueSet("KeyX"));
+                    Assert.IsTrue(configuration.IsConfigurationValueSet("KeyY"));
+                    Assert.IsFalse(configuration.IsConfigurationValueSet("C"));
                 }
             }
         }
@@ -132,8 +132,8 @@ namespace Catel.Test.Configuration
 
                     var configuration = ModelBase.Load<DynamicConfiguration>(memoryStream, SerializationMode.Xml);
 
-                    Assert.IsTrue(configuration.IsConfigurationKeyAvailable("KeyX"));
-                    Assert.IsTrue(configuration.IsConfigurationKeyAvailable("KeyY"));
+                    Assert.IsTrue(configuration.IsConfigurationValueSet("KeyX"));
+                    Assert.IsTrue(configuration.IsConfigurationValueSet("KeyY"));
 
                     Assert.AreEqual("Value X", configuration.GetConfigurationValue("KeyX"));
                     Assert.AreEqual("Value Y", configuration.GetConfigurationValue("KeyY"));

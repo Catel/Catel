@@ -61,7 +61,7 @@ namespace Catel.Configuration
 
                     dynamicConfiguration.RegisterConfigurationKey(elementName);
 
-                    dynamicConfiguration.MarkPropertyAsSet(elementName);
+                    dynamicConfiguration.MarkConfigurationValueAsSet(elementName);
                 }
             }
         }

@@ -40,6 +40,7 @@ namespace Catel.Configuration
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns><c>true</c> if the specified configuration key is available; otherwise, <c>false</c>.</returns>
+        [ObsoleteEx(Replacement = "IsConfigurationValueSet", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         public bool IsConfigurationKeyAvailable(string name)
         {
             return IsPropertyRegistered(GetType(), name);
@@ -68,7 +69,7 @@ namespace Catel.Configuration
 
             SetValue(name, value);
 
-            MarkPropertyAsSet(name);
+            MarkConfigurationValueAsSet(name);
         }
 
         /// <summary>
@@ -76,9 +77,14 @@ namespace Catel.Configuration
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns><c>true</c> if the property is set; otherwise, <c>false</c>.</returns>
-        public bool IsPropertySet(string name)
+        public bool IsConfigurationValueSet(string name)
         {
             Argument.IsNotNull("name", name);
+
+            if (!IsPropertyRegistered(GetType(), name))
+            {
+                return false;
+            }
 
             lock (_propertiesSetAtLeastOnce)
             {
@@ -90,7 +96,7 @@ namespace Catel.Configuration
         /// Marks the property as set at least once so it doesn't have a default value.
         /// </summary>
         /// <param name="name">The name.</param>
-        public void MarkPropertyAsSet(string name)
+        public void MarkConfigurationValueAsSet(string name)
         {
             Argument.IsNotNull("name", name);
 
