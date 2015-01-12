@@ -10,6 +10,7 @@ namespace Catel.Test.MVVM
     using Catel.MVVM;
     using ViewModels.TestClasses;
     using NUnit.Framework;
+    using System.Threading.Tasks;
 
     public class ViewModelCommandManagerFacts
     {
@@ -45,7 +46,7 @@ namespace Catel.Test.MVVM
             }            
 
             [TestCase]
-            public async void RegisteredHandlerGetsCalled()
+            public async Task RegisteredHandlerGetsCalled()
             {
                 var viewModel = new TestViewModel();
                 var viewModelCommandManager = ViewModelCommandManager.Create(viewModel);

@@ -9,6 +9,7 @@ namespace Catel.Test.Threading
     using System;
     using Catel.Threading;
     using NUnit.Framework;
+    using System.Threading.Tasks;
 
     public class TaskHelperFacts
     {
@@ -45,7 +46,7 @@ namespace Catel.Test.Threading
             }
 
             [TestCase]
-            public async void CorrectlyWaitsForAllTasksToBeCompletedAsync()
+            public async Task CorrectlyWaitsForAllTasksToBeCompletedAsync()
             {
                 var a = false;
                 var b = false;

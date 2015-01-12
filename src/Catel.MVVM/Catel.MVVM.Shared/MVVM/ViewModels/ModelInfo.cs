@@ -43,5 +43,11 @@ namespace Catel.MVVM
         /// 	<c>true</c> if the <see cref="IEditableObject"/> interface should be used on the model if possible; otherwise, <c>false</c>.
         /// </value>
         public bool SupportIEditableObject { get; private set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this model is canceling.
+        /// </summary>
+        /// <value><c>true</c> if this model is canceling; otherwise, <c>false</c>.</value>
+        public bool IsCanceling { get; set; }
     }
 }

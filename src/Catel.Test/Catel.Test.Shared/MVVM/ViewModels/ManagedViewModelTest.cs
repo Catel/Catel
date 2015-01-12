@@ -12,6 +12,7 @@ namespace Catel.Test.MVVM.ViewModels
     using TestClasses;
 
     using NUnit.Framework;
+    using System.Threading.Tasks;
 
     [TestFixture]
     public class ManagedViewModelTest
@@ -115,7 +116,7 @@ namespace Catel.Test.MVVM.ViewModels
         }
 
         [TestCase]
-        public async void InterestingViewModelPropertyChanged()
+        public async Task InterestingViewModelPropertyChanged()
         {
             ViewModelManager.ClearAll();
 
@@ -135,7 +136,7 @@ namespace Catel.Test.MVVM.ViewModels
         }
 
         [TestCase]
-        public async void InterestingViewModelCommandExecuted()
+        public async Task InterestingViewModelCommandExecuted()
         {
             ViewModelManager.ClearAll();
 
@@ -157,7 +158,7 @@ namespace Catel.Test.MVVM.ViewModels
         }
 
         [TestCase]
-        public async void InterestingViewModelCommandExecutedWithCommandParameter()
+        public async Task InterestingViewModelCommandExecutedWithCommandParameter()
         {
             ViewModelManager.ClearAll();
 
@@ -178,7 +179,7 @@ namespace Catel.Test.MVVM.ViewModels
         }
 
         [TestCase]
-        public async void InterestedViewModelAutomaticallyBeingRemovedWhenClosed()
+        public async Task InterestedViewModelAutomaticallyBeingRemovedWhenClosed()
         {
             ViewModelManager.ClearAll();
 
@@ -204,7 +205,7 @@ namespace Catel.Test.MVVM.ViewModels
         }
 
         [TestCase]
-        public async void InterestingViewModel_Event_SavingAndSaved()
+        public async Task InterestingViewModel_Event_SavingAndSaved()
         {
             ViewModelManager.ClearAll();
 
@@ -222,7 +223,7 @@ namespace Catel.Test.MVVM.ViewModels
         }
 
         [TestCase]
-        public async void InterestingViewModel_Event_CancelingAndCanceled()
+        public async Task InterestingViewModel_Event_CancelingAndCanceled()
         {
             ViewModelManager.ClearAll();
 
@@ -240,7 +241,7 @@ namespace Catel.Test.MVVM.ViewModels
         }
 
         [TestCase]
-        public async void InterestingViewModel_Event_Closed()
+        public async Task InterestingViewModel_Event_Closed()
         {
             ViewModelManager.ClearAll();
 

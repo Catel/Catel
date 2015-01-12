@@ -104,6 +104,7 @@ namespace System.Threading
         /// </summary>
         /// <param name="dueTime">The due time.</param>
         /// <param name="interval">The interval.</param>
+        // NOTE: async void by purpose
         public async void Change(TimeSpan dueTime, TimeSpan interval)
         {
             if (_isTimerRunning)
@@ -134,6 +135,7 @@ namespace System.Threading
         /// <summary>
         /// Starts the timer.
         /// </summary>
+        // NOTE: async void by purpose
         private async void Start()
         {
             _isTimerRunning = true;

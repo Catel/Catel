@@ -10,6 +10,7 @@ namespace Catel.Test.MVVM
     using System;
     using Catel.MVVM;
     using NUnit.Framework;
+    using System.Threading.Tasks;
 
     public class CompositeCommandFacts
     {
@@ -139,7 +140,7 @@ namespace Catel.Test.MVVM
         public class TheAutoUnsubscribeFunctionality
         {
             [TestCase]
-            public async void AutomaticallyUnsubscribesCommandOnViewModelClosed()
+            public async Task AutomaticallyUnsubscribesCommandOnViewModelClosed()
             {
                 var vm = new CompositeCommandViewModel();
                 var compositeCommand = new CompositeCommand();
