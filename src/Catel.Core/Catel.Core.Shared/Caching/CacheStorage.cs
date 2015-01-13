@@ -268,9 +268,9 @@ namespace Catel.Caching
         /// <returns>The instance initialized by the <paramref name="code" />.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
-        public Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<TValue> code, ExpirationPolicy expirationPolicy, bool @override = false)
+        public async Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<TValue> code, ExpirationPolicy expirationPolicy, bool @override = false)
         {
-            return Task.Factory.StartNew(() => GetFromCacheOrFetch(key, code, expirationPolicy, @override));
+            return await Task.Factory.StartNew(() => GetFromCacheOrFetch(key, code, expirationPolicy, @override));
         }
 
         /// <summary>
@@ -285,9 +285,9 @@ namespace Catel.Caching
         /// <returns>The instance initialized by the <paramref name="code" />.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
-        public Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<TValue> code, bool @override = false, TimeSpan expiration = default(TimeSpan))
+        public async Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<TValue> code, bool @override = false, TimeSpan expiration = default(TimeSpan))
         {
-            return Task.Factory.StartNew(() => GetFromCacheOrFetch(key, code, @override, expiration));
+            return await Task.Factory.StartNew(() => GetFromCacheOrFetch(key, code, @override, expiration));
         }
 
         /// <summary>

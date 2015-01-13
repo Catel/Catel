@@ -378,9 +378,9 @@ namespace Catel.Services
         /// <param name="window">The window.</param>
         /// <param name="showModal">If <c>true</c>, the window should be shown as modal.</param>
         /// <returns><c>true</c> if the window is closed with success; otherwise <c>false</c> or <c>null</c>.</returns>
-        protected virtual Task<bool?> ShowWindow(FrameworkElement window, bool showModal)
+        protected virtual async Task<bool?> ShowWindow(FrameworkElement window, bool showModal)
         {
-            return Task<bool?>.Factory.StartNew(() =>
+            return await Task<bool?>.Factory.StartNew(() =>
             {
                 if (showModal)
                 {
@@ -389,7 +389,20 @@ namespace Catel.Services
                     {
                         // Child window does not have a ShowDialog, so not null is allowed
                         bool? result = null;
-                        window.Dispatcher.Invoke(() => result = showDialogMethodInfo.Invoke(window, null) as bool?);
+
+                        window.Dispatcher.Invoke(() =>
+                        {
+                            // Safety net to prevent crashes when this is the main window
+                            try
+                            {
+                                result = showDialogMethodInfo.Invoke(window, null) as bool?;
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.Warning(ex, "An error occurred, returning null since we don't know the result");
+                            }
+                        });
+
                         return result;
                     }
 
@@ -399,7 +412,7 @@ namespace Catel.Services
                 var showMethodInfo = window.GetType().GetMethodEx("Show");
                 if (showMethodInfo == null)
                 {
-                    string error = string.Format("Method 'Show' not found on '{0}', cannot show the window", window.GetType().Name);
+                    var error = string.Format("Method 'Show' not found on '{0}', cannot show the window", window.GetType().Name);
                     Log.Error(error);
 
                     throw new NotSupportedException(error);

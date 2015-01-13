@@ -423,18 +423,14 @@ namespace Catel.ExceptionHandling
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-#if NET40 || SL5 || PCL
-        public Task ProcessAsync(Action action, CancellationToken cancellationToken = default(CancellationToken))
-#else
         public async Task ProcessAsync(Action action, CancellationToken cancellationToken = default(CancellationToken))
-#endif
         {
             Argument.IsNotNull("action", action);
 
             try
             {
 #if NET40 || SL5 || PCL
-                Task.Factory.StartNew(action, cancellationToken).Wait(cancellationToken);
+                await Task.Factory.StartNew(action, cancellationToken);
 #else
                 await Task.Run(action, cancellationToken);
 #endif
@@ -446,10 +442,6 @@ namespace Catel.ExceptionHandling
                     throw;
                 }
             }
-
-#if NET40 || SL5 || PCL
-            return default(Task);
-#endif
         }
 
         /// <summary>
@@ -495,18 +487,14 @@ namespace Catel.ExceptionHandling
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-#if NET40 || SL5 || PCL
-        public Task<TResult> ProcessAsync<TResult>(Func<TResult> action, CancellationToken cancellationToken = default(CancellationToken))
-#else
         public async Task<TResult> ProcessAsync<TResult>(Func<TResult> action, CancellationToken cancellationToken = default(CancellationToken))
-#endif
         {
             Argument.IsNotNull("action", action);
 
             try
             {
 #if NET40 || SL5 || PCL
-                return Task.Factory.StartNew(action, cancellationToken);
+                return await Task.Factory.StartNew(action, cancellationToken);
 #else
                 return await Task.Run(action, cancellationToken);
 #endif
@@ -519,11 +507,7 @@ namespace Catel.ExceptionHandling
                 }
             }
 
-#if NET40 || SL5 || PCL
-            return default(Task<TResult>);
-#else
             return default(TResult);
-#endif
         }
 
         /// <summary>
@@ -533,21 +517,13 @@ namespace Catel.ExceptionHandling
         /// <param name="action">The action.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-#if NET40 || SL5 || PCL
-        public Task<TResult> ProcessAsync<TResult>(Func<Task<TResult>> action)
-#else
         public async Task<TResult> ProcessAsync<TResult>(Func<Task<TResult>> action)
-#endif
         {
             Argument.IsNotNull("action", action);
 
             try
             {
-#if NET40 || SL5 || PCL
-                return action();
-#else
                 return await action();
-#endif
             }
             catch (Exception exception)
             {
@@ -557,11 +533,7 @@ namespace Catel.ExceptionHandling
                 }
             }
 
-#if NET40 || SL5 || PCL
-            return default(Task<TResult>);
-#else
             return default(TResult);
-#endif
         }
         #endregion
 

@@ -293,9 +293,9 @@ namespace Catel.MVVM.CSLA
         /// <summary>
         /// Cancels the editing of the data.
         /// </summary>
-        Task<bool> MVVM.IViewModel.CancelViewModel()
+        async Task<bool> MVVM.IViewModel.CancelViewModel()
         {
-            return Task.Factory.StartNew(() =>
+            return await Task.Factory.StartNew(() =>
             {
                 if (IsClosed)
                 {
@@ -347,9 +347,9 @@ namespace Catel.MVVM.CSLA
         /// <returns>
         /// <c>true</c> if successful; otherwise <c>false</c>.
         /// </returns>
-        Task<bool> MVVM.IViewModel.SaveViewModel()
+        async Task<bool> MVVM.IViewModel.SaveViewModel()
         {
-            return Task.Factory.StartNew(() =>
+            return await Task.Factory.StartNew(() =>
             {
                 if (IsClosed)
                 {
@@ -404,9 +404,9 @@ namespace Catel.MVVM.CSLA
         /// Closes this instance. Always called after the <see cref="M:Catel.MVVM.IViewModel.CancelViewModel"/> of <see cref="M:Catel.MVVM.IViewModel.SaveViewModel"/> method.
         /// </summary>
         /// <param name="result">The result to pass to the view. This will, for example, be used as <c>DialogResult</c>.</param>
-        Task MVVM.IViewModel.CloseViewModel(bool? result)
+        async Task MVVM.IViewModel.CloseViewModel(bool? result)
         {
-            return Task.Factory.StartNew(() =>
+            await Task.Factory.StartNew(() =>
             {
                 if (IsClosed)
                 {

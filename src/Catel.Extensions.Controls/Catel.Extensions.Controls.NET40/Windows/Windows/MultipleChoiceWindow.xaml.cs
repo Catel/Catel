@@ -189,20 +189,24 @@ namespace Catel.Windows
         /// Applies all changes made by this window.
         /// </summary>
         /// <returns>True if successful, otherwise false.</returns>
-        protected override Task<bool> ApplyChanges()
+#pragma warning disable 1998
+        protected override async Task<bool> ApplyChanges()
+#pragma warning restore 1998
         {
-            return Task.Factory.StartNew<bool>(() => true);
+            return true;
         }
 
         /// <summary>
         /// Discards all changes made by this window.
         /// </summary>
         /// <returns>True if successful, otherwise false.</returns>
-        protected override Task<bool> DiscardChanges()
+#pragma warning disable 1998
+        protected override async Task<bool> DiscardChanges()
+#pragma warning restore 1998
         {
             Choice = string.Empty;
 
-            return Task.Factory.StartNew<bool>(() => true);
+            return true;
         }
         #endregion
     }
