@@ -42,6 +42,7 @@ Added/fixed:
     blurriness. Also available as extension method FrameworkElement.FixBlurriness()
 (*) CTL-559 IoC ObjectExtensions DefaultDependencyResolver improvement
 (*) CTL-560 Allow ICommand to be added to CompositeCommand
+(*) CTL-579 Use Application.Shutdown instead of MainWindow.Close in NavigationService::CloseApplication
 (x) CTL-551 Memory leak with Behaviours caused by InteractivityManager. The InteractivityManager is
     now marked obsolete and will be removed in 5.0, logic has already been removed from the codebase
 (x) CTL-561 Changing TraceOutputControl.SelectedLevel doesn't work

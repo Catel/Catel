@@ -133,7 +133,12 @@ namespace Catel.Services
 
             if (!_appClosingByMainWindow)
             {
+#if NET
+                var app = Application.Current;
+                app.Shutdown();
+#else
                 mainWindow.Close();
+#endif
             }
 #else
             Log.Error("Closing an application is not possible in '{0}'", Platforms.CurrentPlatform);
