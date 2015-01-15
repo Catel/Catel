@@ -149,14 +149,21 @@ namespace Catel.Data
         {
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
 
+            var raisePropertyChanged = false;
+
             lock (_lockObject)
             {
                 if (!_properties.ContainsKey(propertyName) || !ObjectHelper.AreEqualReferences(_properties[propertyName], value))
                 {
                     _properties[propertyName] = value;
 
-                    RaisePropertyChanged(propertyName);
+                    raisePropertyChanged = true;
                 }
+            }
+
+            if (raisePropertyChanged)
+            {
+                RaisePropertyChanged(propertyName);
             }
         }
 
