@@ -126,6 +126,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\ValidationSummary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ValidatorBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ValidatorProviderBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Disposable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DisposableToken.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DynamicEventListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enum.cs" />
@@ -134,7 +135,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\EventArgs\RetryingEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\ExceptionHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\ExceptionService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\Extensions\ExceptionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\Extensions\ExceptionHandlerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\Interfaces\IBufferPolicy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\Interfaces\IExceptionHandler.cs" />
@@ -147,6 +147,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\MustBeImplementedException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\NotSupportedInPlatformException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ByteArrayExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ExceptionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.slug.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Filtering\CompositeFilter.cs" />

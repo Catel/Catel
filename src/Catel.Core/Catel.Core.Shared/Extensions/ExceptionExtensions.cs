@@ -4,6 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+
 namespace Catel
 {
     using System;
@@ -11,13 +12,45 @@ namespace Catel
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using System.Threading;
     using System.Xml.Linq;
 
     /// <summary>
-    /// Exception extensions.
+    /// Extension methods for the <see cref="Exception"/> class.
     /// </summary>
     public static class ExceptionExtensions
     {
+        #region Public Methods and Operators
+        /// <summary>
+        /// Determines whether the specified exception is critical (meaning the application should shut down).
+        /// </summary>
+        /// <param name="ex">The exception.</param>
+        /// <returns><c>true</c> if the specified exception is critical; otherwise, <c>false</c>.</returns>
+        public static bool IsCritical(this Exception ex)
+        {
+            while (ex != null)
+            {
+                if (ex is OutOfMemoryException || 
+                    ex is BadImageFormatException
+
+#if NET || SILVERLIGHT || XAMARIN
+                    || ex is AppDomainUnloadedException || 
+                    ex is CannotUnloadAppDomainException || 
+                    ex is InvalidProgramException || 
+                    ex is ThreadAbortException || 
+                    ex is StackOverflowException
+#endif
+                    )
+                {
+                    return true;
+                }
+
+                ex = ex.InnerException;
+            }
+
+            return false;
+        }
+
         #region Methods
         /// <summary>
         /// Gets the lowest inner exception of specified exception.
@@ -158,8 +191,7 @@ namespace Catel
                         from entry in
                             exception.Data.Cast<DictionaryEntry>()
                         let key = entry.Key.ToString()
-                        let value = (ObjectHelper.IsNull(entry.Value)) ?
-                            "null" : entry.Value.ToString()
+                        let value = (ObjectHelper.IsNull(entry.Value)) ? "null" : entry.Value.ToString()
                         select new XElement(key, value))
                 );
             }
@@ -174,6 +206,7 @@ namespace Catel
 
             return new XDocument(root);
         }
+        #endregion
         #endregion
     }
 }
