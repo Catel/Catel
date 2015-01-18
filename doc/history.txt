@@ -38,6 +38,7 @@ Added/fixed:
 (+) CTL-565 Add thread id to default FormatLogEvent in LogListenerBase
 (+) CTL-571 Add ObjectConverterService to allow customization of conversions
 (+) CTL-580 Add base class for disposable objects
+(+) CTL-583 Enable TaskCommands and ProgressiveTaskCommands in SL and NET40
 (*) CTL-557 ServiceLocator should support IDisposable
 (*) CTL-558 Use LayoutRounding and SnapToDevicePixels in DataWindow and UserControl to prevent 
     blurriness. Also available as extension method FrameworkElement.FixBlurriness()
