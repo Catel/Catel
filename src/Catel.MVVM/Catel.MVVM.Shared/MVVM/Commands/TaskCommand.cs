@@ -4,13 +4,15 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if !NET40 && !SILVERLIGHT
-
 namespace Catel.MVVM
 {
     using System;
     using System.Threading;
     using System.Threading.Tasks;
+
+#if NET40 || SILVERLIGHT
+    using Microsoft;
+#endif
 
     using Catel.Logging;
 
@@ -417,5 +419,3 @@ namespace Catel.MVVM
         #endregion
     }
 }
-
-#endif

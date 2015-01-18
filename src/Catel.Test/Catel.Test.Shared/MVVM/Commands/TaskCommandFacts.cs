@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET45
+#if NET45 || NET40
 
 namespace Catel.Test.MVVM.Commands
 {
@@ -35,11 +35,19 @@ namespace Catel.Test.MVVM.Commands
             taskCommand.Execute();
 
             Assert.IsTrue(taskCommand.IsExecuting);
+#if NET40
+            await TaskEx.Delay(TimeSpan.FromSeconds(1));
+#else
             await Task.Delay(TimeSpan.FromSeconds(1));
+#endif
 
             taskCommand.Cancel();
 
+#if NET40
+            await TaskEx.Delay(TimeSpan.FromSeconds(1));
+#else
             await Task.Delay(TimeSpan.FromSeconds(1));
+#endif
             Assert.IsFalse(taskCommand.IsExecuting);
             Assert.IsFalse(taskCommand.IsCancellationRequested);
         }
@@ -48,7 +56,11 @@ namespace Catel.Test.MVVM.Commands
         {
             cancellationToken.ThrowIfCancellationRequested();
 
+#if NET40
+            await TaskEx.Delay(TaskDelay, cancellationToken);
+#else
             await Task.Delay(TaskDelay, cancellationToken);
+#endif
 
             cancellationToken.ThrowIfCancellationRequested();
         }

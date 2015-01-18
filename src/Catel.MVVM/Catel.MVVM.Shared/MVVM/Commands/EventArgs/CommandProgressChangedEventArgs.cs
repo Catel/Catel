@@ -4,8 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if !NET40 && !SILVERLIGHT
-
 namespace Catel.MVVM
 {
     using System;
@@ -30,5 +28,3 @@ namespace Catel.MVVM
         public TProgress Progress { get; set; }
     }
 }
-
-#endif
