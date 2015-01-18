@@ -4,8 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if !NET40 && !SILVERLIGHT
-
 namespace Catel.MVVM
 {
     using System;
@@ -62,5 +60,3 @@ namespace Catel.MVVM
         event EventHandler<CommandProgressChangedEventArgs<TProgress>> ProgressChanged;
     }
 }
-
-#endif

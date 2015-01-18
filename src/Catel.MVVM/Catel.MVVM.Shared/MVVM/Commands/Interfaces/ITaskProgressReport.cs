@@ -4,8 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if !NET40 && !SILVERLIGHT
-
 namespace Catel.MVVM
 {
     /// <summary>
@@ -22,5 +20,3 @@ namespace Catel.MVVM
         #endregion
     }
 }
-
-#endif

@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET45
+#if NET
 
 namespace Catel.Test.MVVM.Commands
 {
@@ -13,6 +13,7 @@ namespace Catel.Test.MVVM.Commands
     using System.Threading.Tasks;
 
     using Catel.MVVM;
+    using Catel.Threading;
 
     using NUnit.Framework;
 
@@ -25,7 +26,7 @@ namespace Catel.Test.MVVM.Commands
 
         #region Methods
         [TestCase]
-        public async Task TestCommandCancellation()
+        public void TestCommandCancellation()
         {
             var taskCommand = new TaskCommand(TestExecute);
 
@@ -35,11 +36,13 @@ namespace Catel.Test.MVVM.Commands
             taskCommand.Execute();
 
             Assert.IsTrue(taskCommand.IsExecuting);
-            await Task.Delay(TimeSpan.FromSeconds(1));
+
+            ThreadHelper.Sleep(1000);
 
             taskCommand.Cancel();
 
-            await Task.Delay(TimeSpan.FromSeconds(1));
+            ThreadHelper.Sleep(1000);
+
             Assert.IsFalse(taskCommand.IsExecuting);
             Assert.IsFalse(taskCommand.IsCancellationRequested);
         }
@@ -48,7 +51,11 @@ namespace Catel.Test.MVVM.Commands
         {
             cancellationToken.ThrowIfCancellationRequested();
 
+#if NET40
+            await TaskEx.Delay(TaskDelay, cancellationToken);
+#else
             await Task.Delay(TaskDelay, cancellationToken);
+#endif
 
             cancellationToken.ThrowIfCancellationRequested();
         }
