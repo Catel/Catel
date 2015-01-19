@@ -345,5 +345,42 @@ namespace Catel.Collections
 
             return finalSet;
         }
+
+        /// <summary>
+        /// Sorts the specified existing set.
+        /// </summary>
+        /// <typeparam name="T">The type of elements.</typeparam>
+        /// <param name="existingSet">The existing set.</param>
+        /// <param name="comparer">The comparer.</param>
+        public static void Sort<T>(this IList<T> existingSet, Func<T, T, int> comparer = null)
+        {
+            Argument.IsNotNull("existingSet", existingSet);
+
+            for (var i = existingSet.Count - 1; i >= 0; i--)
+            {
+                for (var j = 1; j <= i; j++)
+                {
+                    var o1 = existingSet[j - 1];
+                    var o2 = existingSet[j];
+
+                    bool reshuffle;
+
+                    if (comparer != null)
+                    {
+                        reshuffle = comparer(o1, o2) > 0;
+                    }
+                    else
+                    {
+                        reshuffle = ((IComparable) o1).CompareTo(o2) > 0;
+                    }
+
+                    if (reshuffle)
+                    {
+                        existingSet.Remove(o1);
+                        existingSet.Insert(j, o1);
+                    }
+                }
+            }
+        }
     }
 }
