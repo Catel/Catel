@@ -60,7 +60,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Called after the behavior is attached to an AssociatedObject.
         /// </summary>
-        protected sealed override void OnAttached()
+        protected override void OnAttached()
         {
             if (IsInDesignMode)
             {
@@ -81,7 +81,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Called when the behavior is being detached from its AssociatedObject, but before it has actually occurred.
         /// </summary>
-        protected sealed override void OnDetaching()
+        protected override void OnDetaching()
         {
             if (IsInDesignMode)
             {
