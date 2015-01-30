@@ -42,7 +42,7 @@ namespace Catel.Services
         protected override bool IsViewWrapped(IView view)
         {
             var content = GetContent(view) as FrameworkElement;
-            if (content == null || string.Equals(content.Name, InnerWrapperName))
+            if (content == null || content.Name.StartsWith(InnerWrapperName))
             {
                 return true;
             }
@@ -67,7 +67,7 @@ namespace Catel.Services
             _weakIsWrappingTable.Add(view, new object());
 
             var vmGrid = new Grid();
-            vmGrid.Name = InnerWrapperName;
+            vmGrid.Name = InnerWrapperName.GetUniqueControlName();
             vmGrid.SetBinding(FrameworkElement.DataContextProperty, new Binding { Path = new PropertyPath("ViewModel"), Source = viewModelSource });
 
 #if NET || SL5

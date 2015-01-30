@@ -15,6 +15,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\DispatcherObservableObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DesignTimeInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\INotifyPropertyChangedExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ThemeHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVMModule.cs" />

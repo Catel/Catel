@@ -108,7 +108,7 @@ namespace Catel.Windows
             var renderTransformOrigin = oldElement.RenderTransformOrigin;
 
             oldElement.RenderTransform = null;
-            oldElement.Name = "__dynamicReplacement";
+            oldElement.Name = "__dynamicReplacement".GetUniqueControlName();
 
             newElement.Name = name;
             newElement.RenderTransform = renderTransform;
