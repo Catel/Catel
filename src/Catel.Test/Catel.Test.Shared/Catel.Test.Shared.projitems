@@ -13,6 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ArgumentFacts.expression.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caching\CacheStorageFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caching\CacheStorageValueInfoFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\ListDictionaryFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caching\Policies\AbsoluteExpirationPolicyFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caching\Policies\CompositeExpirationPolicyFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caching\Policies\CustomExpirationPolicyFacts.cs" />

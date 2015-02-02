@@ -12,7 +12,7 @@ namespace Catel.Caching
     using System.Linq;
 
     /// <summary>
-    /// </summary>
+    /// Implements IDictionary using a singly linked list. Recommended for collections that typically include fewer than 10 items.</summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
     public class ListDictionary<TKey, TValue> : IDictionary<TKey, TValue>
