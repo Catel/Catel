@@ -41,6 +41,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Extensions\CollectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Extensions\DictionaryExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Helpers\CollectionHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Collections\ListDictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\BackgroundWorker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\EventArgs\BeginEditEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\EventArgs\CancelEditCompletedEventArgs.cs" />

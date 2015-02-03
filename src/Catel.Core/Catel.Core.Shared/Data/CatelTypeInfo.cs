@@ -11,8 +11,10 @@ namespace Catel.Data
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using Caching;
     using Catel.Logging;
     using Catel.Reflection;
+    using Collections;
 
     /// <summary>
     /// Class containing all information about a Catel type (such as properties).
@@ -29,8 +31,8 @@ namespace Catel.Data
         #region Fields
         private readonly object _lockObject = new object();
 
-        private readonly Dictionary<string, PropertyData> _catelProperties = new Dictionary<string, PropertyData>();
-        private readonly Dictionary<string, CachedPropertyInfo> _nonCatelProperties = new Dictionary<string, CachedPropertyInfo>();
+        private readonly IDictionary<string, PropertyData> _catelProperties = new ListDictionary<string, PropertyData>();
+        private readonly IDictionary<string, CachedPropertyInfo> _nonCatelProperties = new ListDictionary<string, CachedPropertyInfo>();
         #endregion
 
         #region Constructors
@@ -68,7 +70,7 @@ namespace Catel.Data
         /// Gets the Catel properties.
         /// </summary>
         /// <returns>Dictionary containing the Catel properties.</returns>
-        public Dictionary<string, PropertyData> GetCatelProperties()
+        public IDictionary<string, PropertyData> GetCatelProperties()
         {
             // TODO: Clone or not to clone? For performance reasons decided not to
             return _catelProperties;
@@ -78,7 +80,7 @@ namespace Catel.Data
         /// Gets the non-Catel properties.
         /// </summary>
         /// <returns>Dictionary containing the non-Catel properties.</returns>
-        public Dictionary<string, CachedPropertyInfo> GetNonCatelProperties()
+        public IDictionary<string, CachedPropertyInfo> GetNonCatelProperties()
         {
             // TODO: Clone or not to clone? For performance reasons decided not to
             return _nonCatelProperties;
