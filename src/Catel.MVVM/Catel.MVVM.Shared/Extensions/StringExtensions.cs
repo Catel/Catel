@@ -23,7 +23,10 @@ namespace Catel
         /// <returns>System.String.</returns>
         public static string GetUniqueControlName(this string controlName)
         {
-            var name = string.Format("{0}_{1}", controlName, Guid.NewGuid());
+            var random = Guid.NewGuid().ToString();
+            random = random.Replace("-", string.Empty);
+
+            var name = string.Format("{0}_{1}", controlName, random);
             return name;
         }
     }
