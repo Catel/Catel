@@ -10,6 +10,7 @@ namespace Catel.Test.Caching
     using System.Collections.Generic;
     using System.Linq;
     using Catel.Caching;
+    using Catel.Collections;
     using NUnit.Framework;
 
     public class ListDictionaryFacts

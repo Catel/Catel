@@ -32,7 +32,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Caching\CacheStorage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caching\CacheStorageValueInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caching\Interfaces\ICacheStorage.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Caching\ListDictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caching\Policies\AbsoluteExpirationPolicy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caching\Policies\CompositeExpirationPolicy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caching\Policies\CustomExpirationPolicy.cs" />
@@ -42,6 +41,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Extensions\CollectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Extensions\DictionaryExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Helpers\CollectionHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Collections\ListDictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\BackgroundWorker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\EventArgs\BeginEditEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\EventArgs\CancelEditCompletedEventArgs.cs" />

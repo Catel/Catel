@@ -14,6 +14,7 @@ namespace Catel.Data
     using Caching;
     using Catel.Logging;
     using Catel.Reflection;
+    using Collections;
 
     /// <summary>
     /// Class containing all information about a Catel type (such as properties).
