@@ -105,14 +105,18 @@ namespace Catel.Windows.Data
         /// </summary>
         /// <param name="frameworkElement">The framework element.</param>
         /// <param name="handler">The handler to subscribe.</param>
+        /// <param name="inherited">if set to <c>true</c>, check inherited data context as well.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="frameworkElement"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        public static void SubscribeToDataContextAndInheritedDataContext(this FrameworkElement frameworkElement, EventHandler<DependencyPropertyValueChangedEventArgs> handler)
+        public static void SubscribeToDataContext(this FrameworkElement frameworkElement, EventHandler<DependencyPropertyValueChangedEventArgs> handler,
+            bool inherited)
         {
             Argument.IsNotNull("frameworkElement", frameworkElement);
             Argument.IsNotNull("handler", handler);
 
-            SubscribeToDependencyProperty(frameworkElement, InheritedDataContextName, handler);
+            var propertyName = inherited ? InheritedDataContextName : "DataContext";
+
+            SubscribeToDependencyProperty(frameworkElement, propertyName, handler);
         }
 
         /// <summary>
@@ -139,14 +143,17 @@ namespace Catel.Windows.Data
         /// </summary>
         /// <param name="frameworkElement">The framework element.</param>
         /// <param name="handler">The handler to subscribe.</param>
+        /// <param name="inherited">if set to <c>true</c>, check inherited data context as well.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="frameworkElement"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        public static void UnsubscribeFromDataContextAndInheritedDataContext(this FrameworkElement frameworkElement, EventHandler<DependencyPropertyValueChangedEventArgs> handler)
+        public static void UnsubscribeFromDataContext(this FrameworkElement frameworkElement, EventHandler<DependencyPropertyValueChangedEventArgs> handler, bool inherited)
         {
             Argument.IsNotNull("frameworkElement", frameworkElement);
             Argument.IsNotNull("handler", handler);
 
-            SubscribeToDependencyProperty(frameworkElement, InheritedDataContextName, handler);
+            var propertyName = inherited ? InheritedDataContextName : "DataContext";
+
+            UnsubscribeFromDependencyProperty(frameworkElement, propertyName, handler);
         }
 
         /// <summary>

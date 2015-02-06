@@ -477,7 +477,6 @@ namespace Catel.MVVM.Providers
             base.OnTargetViewDataContextChanged(sender, e);
 
             var dataContext = TargetView.DataContext;
-
             if (dataContext.IsSentinelBindingObject())
             {
                 return;

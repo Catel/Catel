@@ -214,6 +214,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\CameraService.winrt.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\CameraService.wpsl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\CameraServiceBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\DataContextSubscriptionService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\DispatcherService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\EventArgs\AccelerometerValueChangedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\EventArgs\ApplicationClosingEventArgs.cs" />
@@ -230,6 +231,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IAccelerometerValue.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IAutoCompletionService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ICameraService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IDataContextSubscriptionService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IDispatcherService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IFileSupport.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ILocation.cs" />

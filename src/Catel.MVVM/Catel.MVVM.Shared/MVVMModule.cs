@@ -28,6 +28,7 @@ namespace Catel
         {
             Argument.IsNotNull(() => serviceLocator);
 
+            serviceLocator.RegisterTypeIfNotYetRegistered<IDataContextSubscriptionService, DataContextSubscriptionService>();
             serviceLocator.RegisterTypeIfNotYetRegistered<ICommandManager, CommandManager>();
             serviceLocator.RegisterTypeIfNotYetRegistered<IViewLoadManager, ViewLoadManager>();
             serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelWrapperService, ViewModelWrapperService>();
