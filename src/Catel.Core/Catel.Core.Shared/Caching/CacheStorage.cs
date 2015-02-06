@@ -9,7 +9,6 @@ namespace Catel.Caching
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
-    using System.Runtime.InteropServices;
     using System.Threading;
     using System.Threading.Tasks;
     using Policies;
@@ -66,9 +65,23 @@ namespace Catel.Caching
         /// </summary>
         /// <param name="defaultExpirationPolicyInitCode">The default expiration policy initialization code.</param>
         /// <param name="storeNullValues">Allow store null values on the cache.</param>
-        public CacheStorage(Func<ExpirationPolicy> defaultExpirationPolicyInitCode = null, bool storeNullValues = false)
+        [ObsoleteEx(Message = "Use other ctor, this is kept to not introduce breaking changes", 
+            Replacement = "ctor(Func<ExpirationPolicy>, bool, IEqualityComparer<TKey>)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
+        public CacheStorage(Func<ExpirationPolicy> defaultExpirationPolicyInitCode, bool storeNullValues)
+            : this(defaultExpirationPolicyInitCode, storeNullValues, null)
         {
-            _dictionary = new Dictionary<TKey, CacheStorageValueInfo<TValue>>();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CacheStorage{TKey,TValue}" /> class.
+        /// </summary>
+        /// <param name="defaultExpirationPolicyInitCode">The default expiration policy initialization code.</param>
+        /// <param name="storeNullValues">Allow store null values on the cache.</param>
+        /// <param name="equalityComparer">The equality comparer.</param>
+        public CacheStorage(Func<ExpirationPolicy> defaultExpirationPolicyInitCode = null, bool storeNullValues = false, 
+            IEqualityComparer<TKey> equalityComparer = null)
+        {
+            _dictionary = new Dictionary<TKey, CacheStorageValueInfo<TValue>>(equalityComparer);
             _storeNullValues = storeNullValues;
             _defaultExpirationPolicyInitCode = defaultExpirationPolicyInitCode;
 

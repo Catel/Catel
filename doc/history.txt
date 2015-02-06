@@ -31,6 +31,7 @@ xxx
 
 Added/fixed:
 ============
+(+) CTL-394 CacheStorage Constructor with IEqualityComparer parameter support for Dictionary
 (+) CTL-556 Add support for SharpDevelop XAML visual designer
 (+) CTL-554 Allow suspension of notifications in ConfigurationService
 (+) CTL-564 Add DisposableToken class that makes it possible to easily suspend objects temporarily using
