@@ -89,7 +89,7 @@ namespace Catel.Services
             }
         }
 
-        partial void ShowBusyIndicator()
+        partial void ShowBusyIndicator(bool indeterminate)
         {
             // If equal and already visible, just exit
             if (_containerPopup.IsOpen)
@@ -99,7 +99,7 @@ namespace Catel.Services
 
             _containerPopup.IsOpen = true;
 
-            PropertyHelper.TrySetPropertyValue(_busyIndicator, "IsIndeterminate", true);
+            PropertyHelper.TrySetPropertyValue(_busyIndicator, "IsIndeterminate", indeterminate);
             _busyIndicator.Visibility = Visibility.Visible;
 
             var rootVisual = (FrameworkElement)Application.Current.RootVisual;

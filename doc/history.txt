@@ -57,6 +57,7 @@ Added/fixed:
 (x) CTL-575 XmlSchemaHelper does not check for duplicate type entries
 (x) CTL-578 CancelViewModel with model mappings allows corrupt model
 (x) CTL-589 Nested user controls with same name might cause unhandled exception in Silverlight
+(x) CTL-593 PleaseWaitService implementation missing from Silverlight
 
 Roadmap:
 ========

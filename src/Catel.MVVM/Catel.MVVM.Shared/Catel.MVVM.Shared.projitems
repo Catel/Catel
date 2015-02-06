@@ -280,6 +280,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\PleaseWaitService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\PleaseWaitService.ios.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\PleaseWaitService.winrt.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\PleaseWaitService.sl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\PleaseWaitService.wpf.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\PleaseWaitService.wpsl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\ProcessService.cs" />

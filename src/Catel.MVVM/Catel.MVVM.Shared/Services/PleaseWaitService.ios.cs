@@ -20,7 +20,7 @@ namespace Catel.Services
             throw new MustBeImplementedException();
         }
 
-        partial void ShowBusyIndicator()
+        partial void ShowBusyIndicator(bool indeterminate)
         {
             throw new MustBeImplementedException();
         }

@@ -22,7 +22,7 @@ namespace Catel.Services
             // not required
         }
 
-        partial void ShowBusyIndicator()
+        partial void ShowBusyIndicator(bool indeterminate)
         {
             PleaseWaitHelper.Show(_lastStatus);
         }
