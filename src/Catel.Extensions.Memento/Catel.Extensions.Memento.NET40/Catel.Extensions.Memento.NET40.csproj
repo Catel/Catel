@@ -35,9 +35,9 @@
     <DocumentationFile>..\..\..\output\release\NET40\Catel.Extensions.Memento\Catel.Extensions.Memento.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Catel.Fody.Attributes, Version=2.4.0.0, Culture=neutral, PublicKeyToken=1c8163524cbe02e6, processorArchitecture=MSIL">
+    <Reference Include="Catel.Fody.Attributes, Version=2.5.0.0, Culture=neutral, PublicKeyToken=1c8163524cbe02e6, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Catel.Fody.2.4.0-unstable0001\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
+      <HintPath>..\..\..\lib\Catel.Fody.2.5.0-unstable0001\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks">
       <HintPath>..\..\..\lib\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
