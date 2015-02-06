@@ -134,6 +134,13 @@ namespace Catel.MVVM
             namingConventions.Add(string.Format("{0}.UI.Activities.{1}Activity", NamingConvention.Assembly, NamingConvention.ViewModelName));
             namingConventions.Add(string.Format("{0}.UI.Activities.{1}Fragment", NamingConvention.Assembly, NamingConvention.ViewModelName));
 
+            namingConventions.Add(string.Format("{0}.{1}View", NamingConvention.Current, NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("{0}.{1}Control", NamingConvention.Current, NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("{0}.{1}Page", NamingConvention.Current, NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("{0}.{1}Window", NamingConvention.Current, NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("{0}.{1}Activity", NamingConvention.Current, NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("{0}.{1}Fragment", NamingConvention.Current, NamingConvention.ViewModelName));
+
             return namingConventions;
         }
     }

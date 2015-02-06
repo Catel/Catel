@@ -10,7 +10,6 @@ namespace Catel.Test.MVVM
     using Catel.MVVM;
     using SpecialTest;
     using Test.Views;
-    using Views;
     using Test.ViewModels;
 
     using NUnit.Framework;
@@ -69,27 +68,24 @@ namespace Catel.Test.MVVM
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewLocator.ResolveView(null));
             }
 
-            [TestCase]
-            public void ReturnsViewForViewEndingWithViewModel()
+            [TestCase(typeof(PersonViewModel), typeof(PersonView), null)]
+            [TestCase(typeof(PersonViewModel), typeof(PersonView), "[UP].Views.[VM]View")]
+            [TestCase(typeof(SameNamespacePersonViewModel), typeof(SameNamespacePersonView), null)]
+            [TestCase(typeof(SameNamespacePersonViewModel), typeof(SameNamespacePersonView), "[CURRENT].[VM]View")]
+            public void ReturnsViewForViewModel(Type viewModelType, Type viewType, string convention)
             {
                 var viewLocator = new ViewLocator();
-                var resolvedType = viewLocator.ResolveView(typeof(PersonViewModel));
+
+                if (!string.IsNullOrEmpty(convention))
+                {
+                    viewLocator.NamingConventions.Clear();
+                    viewLocator.NamingConventions.Add(convention);
+                }
+
+                var resolvedType = viewLocator.ResolveView(viewModelType);
 
                 Assert.IsNotNull(resolvedType);
-                Assert.AreEqual(typeof(PersonView), resolvedType);
-            }
-
-            [TestCase]
-            public void ReturnsViewForNamingConventionWithUp()
-            {
-                var viewLocator = new ViewLocator();
-                viewLocator.NamingConventions.Clear();
-                viewLocator.NamingConventions.Add("[UP].Views.[VM]View");
-
-                var resolvedType = viewLocator.ResolveView(typeof(PersonViewModel));
-
-                Assert.IsNotNull(resolvedType);
-                Assert.AreEqual(typeof(PersonView), resolvedType);
+                Assert.AreEqual(viewType, resolvedType);
             }
 
             [TestCase]

@@ -188,9 +188,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Exceptions\ViewModelNotRegisteredExceptionTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Exceptions\WrongViewModelTypeExceptionTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\TestClasses.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\UrlLocatorTest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\ViewLocatorTest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\ViewModelLocatorTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\UrlLocatorFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\ViewLocatorFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\ViewModelLocatorFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Services\EventArgs\UICompletedEventArgsTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Services\Exceptions\WindowNotRegisteredExceptionTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Services\NamingConventionTest.cs" />

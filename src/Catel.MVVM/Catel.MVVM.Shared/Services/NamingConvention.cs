@@ -54,7 +54,7 @@ namespace Catel.Services
         public const string Assembly = "[AS]";
 
         /// <summary>
-        /// The assembly constant that will be replaced by the naming convention. This constant will be
+        /// The up constant that will be replaced by the naming convention. This constant will be
         /// move up one step in the type namespace tree.
         /// <para />
         /// For example, the following naming convention:
@@ -64,6 +64,17 @@ namespace Catel.Services
         ///   <c>Catel.Views.ExampleView.xaml</c>
         /// </summary>
         public const string Up = "[UP]";
+
+        /// <summary>
+        /// The current constant that will keep the convention in the current namespace.
+        /// <para />
+        /// For example, the following naming convention:
+        ///   <c>[CURRENT].[VM]View</c>
+        /// <para />
+        /// will result in the following view for <c>Catel.ExampleViewModel</c>:
+        ///   <c>Catel.ExampleView.xaml</c>
+        /// </summary>
+        public const string Current = "[CURRENT]";
 
         #region Methods
         /// <summary>
@@ -89,11 +100,12 @@ namespace Catel.Services
             Argument.IsNotNullOrWhitespace("fullViewModelName", fullViewModelName);
             Argument.IsNotNullOrWhitespace("conventionToUse", conventionToUse);
 
-            string viewModelWithoutViewModel = TypeHelper.GetTypeNameWithoutNamespace(fullViewModelName);
+            var viewModelWithoutViewModel = TypeHelper.GetTypeNameWithoutNamespace(fullViewModelName);
             viewModelWithoutViewModel = RemoveAllPostfixes(viewModelWithoutViewModel, new[] { "ViewModel" });
 
             var constantsWithValues = new Dictionary<string, string>();
             constantsWithValues.Add(Assembly, assembly);
+            constantsWithValues.Add(Current, TypeHelper.GetTypeNamespace(fullViewModelName));
             constantsWithValues.Add(ViewModelName, viewModelWithoutViewModel);
 
             return ResolveNamingConvention(constantsWithValues, conventionToUse, fullViewModelName); 
@@ -122,11 +134,12 @@ namespace Catel.Services
             Argument.IsNotNullOrWhitespace("fullViewName", fullViewName);
             Argument.IsNotNullOrWhitespace("conventionToUse", conventionToUse);
 
-            string viewWithoutView = TypeHelper.GetTypeNameWithoutNamespace(fullViewName);
+            var viewWithoutView = TypeHelper.GetTypeNameWithoutNamespace(fullViewName);
             viewWithoutView = RemoveAllPostfixes(viewWithoutView, new[] { "View", "Control", "UserControl", "Window", "Page", "Activity" });
 
             var constantsWithValues = new Dictionary<string, string>();
             constantsWithValues.Add(Assembly, assembly);
+            constantsWithValues.Add(Current, TypeHelper.GetTypeNamespace(fullViewName));
             constantsWithValues.Add(ViewName, viewWithoutView);
 
             return ResolveNamingConvention(constantsWithValues, conventionToUse, fullViewName);
@@ -175,8 +188,8 @@ namespace Catel.Services
 
             var occurrences = Regex.Matches(conventionToUse, "UP", RegexOptions.IgnoreCase).Count;
 
-            string prefix = string.Empty;
-            for (int i = 0; i < namespaces.Count - occurrences; i++)
+            var prefix = string.Empty;
+            for (var i = 0; i < namespaces.Count - occurrences; i++)
             {
                 if (i > 0)
                 {
@@ -186,9 +199,9 @@ namespace Catel.Services
                 prefix += namespaces[i];
             }
 
-            string result = conventionToUse;
+            var result = conventionToUse;
 
-            int lastIndex = conventionToUse.LastIndexOf(Up);
+            var lastIndex = conventionToUse.LastIndexOf(Up);
             if (lastIndex != -1)
             {
                 result = string.Format("{0}{1}", prefix, conventionToUse.Substring(lastIndex + Up.Length));
@@ -290,11 +303,11 @@ namespace Catel.Services
             Argument.IsNotNull("value", value);
             Argument.IsNotNullOrEmptyArray("postfixesToRemove", postfixesToRemove);
 
-            foreach (string postfix in postfixesToRemove)
+            foreach (var postfix in postfixesToRemove)
             {
                 if (value.EndsWith(postfix))
                 {
-                    int lastIndex = value.LastIndexOf(postfix, StringComparison.CurrentCultureIgnoreCase);
+                    var lastIndex = value.LastIndexOf(postfix, StringComparison.CurrentCultureIgnoreCase);
                     value = value.Remove(lastIndex, postfix.Length);
                     break;
                 }
