@@ -147,6 +147,11 @@ namespace Catel.MVVM
 
             lock (_lock)
             {
+                if (_viewModel == null)
+                {
+                    return;
+                }
+
                 if (_commands.Count > 0)
                 {
                     if (!force)
@@ -199,7 +204,10 @@ namespace Catel.MVVM
         {
             Argument.IsNotNull("handler", handler);
 
-            _commandHandlers.Add(handler);
+            lock (_lock)
+            {
+                _commandHandlers.Add(handler);
+            }
         }
 
         /// <summary>
@@ -274,16 +282,19 @@ namespace Catel.MVVM
 
         private void OnViewModelClosed(object sender, EventArgs e)
         {
-            _instances.Remove(_viewModel.UniqueIdentifier);
+            lock (_lock)
+            {
+                _instances.Remove(_viewModel.UniqueIdentifier);
 
-            _commandHandlers.Clear();
+                _commandHandlers.Clear();
 
-            UnregisterCommands();
+                UnregisterCommands();
 
-            _viewModel.Initialized -= OnViewModelInitialized;
-            _viewModel.PropertyChanged -= OnViewModelPropertyChanged;
-            _viewModel.Closed -= OnViewModelClosed;
-            _viewModel = null;
+                _viewModel.Initialized -= OnViewModelInitialized;
+                _viewModel.PropertyChanged -= OnViewModelPropertyChanged;
+                _viewModel.Closed -= OnViewModelClosed;
+                _viewModel = null;
+            }
         }
         #endregion
     }

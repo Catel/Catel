@@ -58,6 +58,7 @@ Added/fixed:
 (x) CTL-578 CancelViewModel with model mappings allows corrupt model
 (x) CTL-589 Nested user controls with same name might cause unhandled exception in Silverlight
 (x) CTL-593 PleaseWaitService implementation missing from Silverlight
+(x) CTL-594 ViewModelCommandManager might throw NullReferenceException for closed view models
 
 Roadmap:
 ========
