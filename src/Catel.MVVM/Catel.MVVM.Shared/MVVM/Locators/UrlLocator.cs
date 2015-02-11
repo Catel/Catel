@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="UrlLocator.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -150,6 +150,11 @@ namespace Catel.MVVM
             namingConventions.Add(string.Format("/UI.Pages/{0}Page.xaml", NamingConvention.ViewModelName));
             namingConventions.Add(string.Format("/UI.Windows/{0}.xaml", NamingConvention.ViewModelName));
             namingConventions.Add(string.Format("/UI.Windows/{0}Window.xaml", NamingConvention.ViewModelName));
+
+            namingConventions.Add(string.Format("/{0}.xaml", NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("/{0}Control.xaml", NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("/{0}Page.xaml", NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("/{0}Window.xaml", NamingConvention.ViewModelName));
 
             return namingConventions;
         }

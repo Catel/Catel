@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PleaseWaitService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -22,7 +22,7 @@ namespace Catel.Services
             // not required
         }
 
-        partial void ShowBusyIndicator()
+        partial void ShowBusyIndicator(bool indeterminate)
         {
             PleaseWaitHelper.Show(_lastStatus);
         }

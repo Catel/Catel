@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="UpdateBindingOnTextChanged.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -25,7 +25,7 @@ namespace Catel.Windows.Interactivity
     /// <summary>
     /// Behavior base for all behaviors that should update a binding.
     /// </summary>
-    public class UpdateBindingBehaviorBase<T> : BehaviorBase<TextBox>
+    public class UpdateBindingBehaviorBase<T> : BehaviorBase<T>
         where T : FrameworkElement
     {
         #region Constructors

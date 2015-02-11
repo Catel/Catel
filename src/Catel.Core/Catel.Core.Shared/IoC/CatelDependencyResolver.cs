@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CatelDependencyResolver.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -100,7 +100,7 @@ namespace Catel.IoC
             int typeCount = types.Length;
             var resolvedTypes = new object[typeCount];
 
-            lock (_serviceLocator.Lock)
+            lock (_serviceLocator)
             {
                 for (int i = 0; i < typeCount; i++)
                 {

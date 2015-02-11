@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CacheStorage.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -9,7 +9,6 @@ namespace Catel.Caching
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
-    using System.Runtime.InteropServices;
     using System.Threading;
     using System.Threading.Tasks;
     using Policies;
@@ -66,9 +65,23 @@ namespace Catel.Caching
         /// </summary>
         /// <param name="defaultExpirationPolicyInitCode">The default expiration policy initialization code.</param>
         /// <param name="storeNullValues">Allow store null values on the cache.</param>
-        public CacheStorage(Func<ExpirationPolicy> defaultExpirationPolicyInitCode = null, bool storeNullValues = false)
+        [ObsoleteEx(Message = "Use other ctor, this is kept to not introduce breaking changes", 
+            Replacement = "ctor(Func<ExpirationPolicy>, bool, IEqualityComparer<TKey>)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
+        public CacheStorage(Func<ExpirationPolicy> defaultExpirationPolicyInitCode, bool storeNullValues)
+            : this(defaultExpirationPolicyInitCode, storeNullValues, null)
         {
-            _dictionary = new Dictionary<TKey, CacheStorageValueInfo<TValue>>();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CacheStorage{TKey,TValue}" /> class.
+        /// </summary>
+        /// <param name="defaultExpirationPolicyInitCode">The default expiration policy initialization code.</param>
+        /// <param name="storeNullValues">Allow store null values on the cache.</param>
+        /// <param name="equalityComparer">The equality comparer.</param>
+        public CacheStorage(Func<ExpirationPolicy> defaultExpirationPolicyInitCode = null, bool storeNullValues = false, 
+            IEqualityComparer<TKey> equalityComparer = null)
+        {
+            _dictionary = new Dictionary<TKey, CacheStorageValueInfo<TValue>>(equalityComparer);
             _storeNullValues = storeNullValues;
             _defaultExpirationPolicyInitCode = defaultExpirationPolicyInitCode;
 
@@ -268,9 +281,9 @@ namespace Catel.Caching
         /// <returns>The instance initialized by the <paramref name="code" />.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
-        public Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<TValue> code, ExpirationPolicy expirationPolicy, bool @override = false)
+        public async Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<TValue> code, ExpirationPolicy expirationPolicy, bool @override = false)
         {
-            return Task.Factory.StartNew(() => GetFromCacheOrFetch(key, code, expirationPolicy, @override));
+            return await Task.Factory.StartNew(() => GetFromCacheOrFetch(key, code, expirationPolicy, @override));
         }
 
         /// <summary>
@@ -285,9 +298,9 @@ namespace Catel.Caching
         /// <returns>The instance initialized by the <paramref name="code" />.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
-        public Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<TValue> code, bool @override = false, TimeSpan expiration = default(TimeSpan))
+        public async Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<TValue> code, bool @override = false, TimeSpan expiration = default(TimeSpan))
         {
-            return Task.Factory.StartNew(() => GetFromCacheOrFetch(key, code, @override, expiration));
+            return await Task.Factory.StartNew(() => GetFromCacheOrFetch(key, code, @override, expiration));
         }
 
         /// <summary>

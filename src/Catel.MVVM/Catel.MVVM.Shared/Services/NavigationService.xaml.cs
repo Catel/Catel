@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="NavigationService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -133,7 +133,12 @@ namespace Catel.Services
 
             if (!_appClosingByMainWindow)
             {
+#if NET
+                var app = Application.Current;
+                app.Shutdown();
+#else
                 mainWindow.Close();
+#endif
             }
 #else
             Log.Error("Closing an application is not possible in '{0}'", Platforms.CurrentPlatform);

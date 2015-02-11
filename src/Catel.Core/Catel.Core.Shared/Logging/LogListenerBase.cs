@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="LogListenerBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -55,6 +55,13 @@ namespace Catel.Logging
 
             TimeDisplay = TimeDisplay.Time;
         }
+        #endregion
+
+        #region Events
+        /// <summary>
+        /// Occurs when a log message is written to one of the logs.
+        /// </summary>
+        public event EventHandler<LogMessageEventArgs> LogMessage;
         #endregion
 
         #region ILogListener Members
@@ -146,6 +153,11 @@ namespace Catel.Logging
                 return;
             }
 
+            if (ShouldIgnoreLogMessage(log, message, logEvent, extraData, time))
+            {
+                return;
+            }
+
             Write(log, message, logEvent, extraData, time);
 
             RaiseLogMessage(log, message, logEvent, extraData, time);
@@ -161,6 +173,11 @@ namespace Catel.Logging
         void ILogListener.Debug(ILog log, string message, object extraData, DateTime time)
         {
             if (IgnoreCatelLogging && log.IsCatelLogging)
+            {
+                return;
+            }
+
+            if (ShouldIgnoreLogMessage(log, message, LogEvent.Debug, extraData, time))
             {
                 return;
             }
@@ -182,6 +199,11 @@ namespace Catel.Logging
                 return;
             }
 
+            if (ShouldIgnoreLogMessage(log, message, LogEvent.Info, extraData, time))
+            {
+                return;
+            }
+
             Info(log, message, extraData, time);
         }
 
@@ -195,6 +217,11 @@ namespace Catel.Logging
         void ILogListener.Warning(ILog log, string message, object extraData, DateTime time)
         {
             if (IgnoreCatelLogging && log.IsCatelLogging)
+            {
+                return;
+            }
+
+            if (ShouldIgnoreLogMessage(log, message, LogEvent.Warning, extraData, time))
             {
                 return;
             }
@@ -216,11 +243,30 @@ namespace Catel.Logging
                 return;
             }
 
+            if (ShouldIgnoreLogMessage(log, message, LogEvent.Error, extraData, time))
+            {
+                return;
+            }
+
             Error(log, message, extraData, time);
         }
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Returns whether the log message should be ignored
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="logEvent">The log event.</param>
+        /// <param name="extraData">The extra data.</param>
+        /// <param name="time">The time.</param>
+        /// <returns><c>true</c> if the message should be ignored, <c>false</c> otherwise.</returns>
+        protected bool ShouldIgnoreLogMessage(ILog log, string message, LogEvent logEvent, object extraData, DateTime time)
+        {
+            return false;
+        }
+
         /// <summary>
         /// Raises the <see cref="LogMessage" /> event.
         /// </summary>
@@ -249,7 +295,7 @@ namespace Catel.Logging
         /// <returns>The formatted log event.</returns>
         protected virtual string FormatLogEvent(ILog log, string message, LogEvent logEvent, object extraData, DateTime time)
         {
-            string logMessage = string.Format("{0} => [{1}] [{2}] {3}", time.ToString(_timeFormat), LogEventStrings[logEvent], log.TargetType.FullName, message);
+            string logMessage = string.Format("{0} => [{1}] [{2}] [{3}] {4}", time.ToString(_timeFormat), LogEventStrings[logEvent], log.TargetType.FullName, ThreadHelper.GetCurrentThreadId(), message);
             return logMessage;
         }
 
@@ -314,10 +360,5 @@ namespace Catel.Logging
             // Empty by default
         }
         #endregion
-
-        /// <summary>
-        /// Occurs when a log message is written to one of the logs.
-        /// </summary>
-        public event EventHandler<LogMessageEventArgs> LogMessage;
     }
 }

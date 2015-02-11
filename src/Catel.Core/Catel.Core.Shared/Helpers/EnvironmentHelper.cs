@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="EnvironmentHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -20,6 +20,7 @@ namespace Catel
     public static class EnvironmentHelper
     {
         private static readonly Lazy<bool> _hostedByVisualStudio = new Lazy<bool>(IsProcessCurrentlyHostedByVisualStudio);
+        private static readonly Lazy<bool> _hostedBySharpDevelop = new Lazy<bool>(IsProcessCurrentlyHostedBySharpDevelop);
         private static readonly Lazy<bool> _hostedByExpressionBlend = new Lazy<bool>(IsProcessCurrentlyHostedByExpressionBlend);
 
         /// <summary>
@@ -37,6 +38,24 @@ namespace Catel
                 }
 
                 return _hostedByVisualStudio.Value;
+            }
+        }
+
+        /// <summary>
+        /// Determines whether the process is hosted by sharp develop.
+        /// </summary>
+        /// <returns><c>true</c> if the process is hosted by sharp develop; otherwise, <c>false</c>.</returns>
+        public static bool IsProcessHostedBySharpDevelop
+        {
+            get
+            {
+                // This is required because the logging checks for this when creating the Lazy class
+                if (_hostedBySharpDevelop == null)
+                {
+                    return false;
+                }
+
+                return _hostedBySharpDevelop.Value;
             }
         }
 
@@ -78,6 +97,26 @@ namespace Catel
         {
 #if NET
             return Process.GetCurrentProcess().ProcessName.StartsWith("devenv", StringComparison.OrdinalIgnoreCase);
+#elif XAMARIN || PCL
+            return false;
+#elif NETFX_CORE
+            return global::Windows.ApplicationModel.DesignMode.DesignModeEnabled;
+#else
+            return DesignerProperties.IsInDesignTool;
+#endif
+        }
+
+        /// <summary>
+        /// Determines whether the process is hosted by sharp develop.
+        /// <para />
+        /// This methods executes the logic every time it is called. To get a cached value, use the 
+        /// <see cref="IsProcessHostedByExpressionBlend"/> instead.
+        /// </summary>
+        /// <returns><c>true</c> if the process is hosted by sharp develop; otherwise, <c>false</c>.</returns>
+        public static bool IsProcessCurrentlyHostedBySharpDevelop()
+        {
+#if NET
+            return Process.GetCurrentProcess().ProcessName.StartsWith("sharpdevelop", StringComparison.OrdinalIgnoreCase);
 #elif XAMARIN || PCL
             return false;
 #elif NETFX_CORE

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ViewModelLocatorTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -12,7 +12,6 @@ namespace Catel.Test.MVVM
     using Test.ViewModels;
     using Test.Views;
     using ViewModels;
-    using Views;
 
     using NUnit.Framework;
 
@@ -80,44 +79,18 @@ namespace Catel.Test.MVVM
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewModelLocator.ResolveViewModel(null));
             }
 
-            [TestCase]
-            public void ReturnsViewModelForViewEndingWithView()
+            [TestCase(typeof(PersonView), typeof(PersonViewModel))]
+            [TestCase(typeof(Controls.PersonControl), typeof(PersonViewModel))]
+            [TestCase(typeof(Pages.PersonPage), typeof(PersonViewModel))]
+            [TestCase(typeof(Windows.PersonWindow), typeof(PersonViewModel))]
+            [TestCase(typeof(SameNamespacePersonView), typeof(SameNamespacePersonViewModel))]
+            public void ReturnsViewModelForView(Type viewType, Type viewModelType)
             {
                 var viewModelLocator = new ViewModelLocator();
-                var resolvedType = viewModelLocator.ResolveViewModel(typeof(PersonView));
+                var resolvedType = viewModelLocator.ResolveViewModel(viewType);
 
                 Assert.IsNotNull(resolvedType);
-                Assert.AreEqual(typeof(PersonViewModel), resolvedType);
-            }
-
-            [TestCase]
-            public void ReturnsViewModelForViewEndingWithControl()
-            {
-                var viewModelLocator = new ViewModelLocator();
-                var resolvedType = viewModelLocator.ResolveViewModel(typeof(Controls.PersonControl));
-
-                Assert.IsNotNull(resolvedType);
-                Assert.AreEqual(typeof(PersonViewModel), resolvedType);
-            }
-
-            [TestCase]
-            public void ReturnsViewModelForViewEndingWithWindow()
-            {
-                var viewModelLocator = new ViewModelLocator();
-                var resolvedType = viewModelLocator.ResolveViewModel(typeof(Windows.PersonWindow));
-
-                Assert.IsNotNull(resolvedType);
-                Assert.AreEqual(typeof(PersonViewModel), resolvedType);
-            }
-
-            [TestCase]
-            public void ReturnsViewModelForViewEndingWithPage()
-            {
-                var viewModelLocator = new ViewModelLocator();
-                var resolvedType = viewModelLocator.ResolveViewModel(typeof(Pages.PersonPage));
-
-                Assert.IsNotNull(resolvedType);
-                Assert.AreEqual(typeof(PersonViewModel), resolvedType);
+                Assert.AreEqual(viewModelType, resolvedType);
             }
 
             [TestCase]
@@ -155,7 +128,7 @@ namespace Catel.Test.MVVM
             public void ResolvesMyNameViewerViewModelFromMyNameViewer()
             {
                 var viewModelLocator = new ViewModelLocator();
-                var resolvedType = viewModelLocator.ResolveViewModel(typeof(MyNameViewer));
+                var resolvedType = viewModelLocator.ResolveViewModel(typeof(Catel.Test.MVVM.Views.MyNameViewer));
 
                 Assert.IsNotNull(resolvedType);
                 Assert.AreEqual(typeof(MyNameViewerViewModel), resolvedType);

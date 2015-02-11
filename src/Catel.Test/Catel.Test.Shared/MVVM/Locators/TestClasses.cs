@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="TestClasses.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -39,6 +39,33 @@ namespace Catel.Test.ViewModels
         /// Register the Name property so it is known in the class.
         /// </summary>
         public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+    }
+}
+
+namespace Catel.Test
+{
+    using Catel.Data;
+    using Catel.MVVM;
+
+    public class SameNamespacePersonViewModel : ViewModelBase
+    {
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        public string Name
+        {
+            get { return GetValue<string>(NameProperty); }
+            set { SetValue(NameProperty, value); }
+        }
+
+        /// <summary>
+        /// Register the Name property so it is known in the class.
+        /// </summary>
+        public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+    }
+
+    public class SameNamespacePersonView
+    {
     }
 }
 

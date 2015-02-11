@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="TraceOutputControl.xaml.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -18,6 +18,15 @@ namespace Catel.Windows.Controls
     public partial class TraceOutputControl : UserControl
     {
         #region Constructors
+        /// <summary>
+        /// Initializes static members of the <see cref="TraceOutputControl"/> class.
+        /// </summary>
+        /// <remarks>This method is required for design time support.</remarks>
+        static TraceOutputControl()
+        {
+            typeof(TraceOutputControl).AutoDetectViewPropertiesToSubscribe();
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TraceOutputControl"/> class.
         /// </summary>
@@ -40,7 +49,7 @@ namespace Catel.Windows.Controls
         /// <summary>
         /// Gets or sets whether the Catel logging should be ignored.
         /// </summary>
-        [ViewToViewModel(MappingType = ViewToViewModelMappingType.TwoWayViewModelWins)]
+        [ViewToViewModel(MappingType = ViewToViewModelMappingType.TwoWayViewWins)]
         public bool IgnoreCatelLogging
         {
             get { return (bool)GetValue(IgnoreCatelLoggingProperty); }
@@ -57,7 +66,7 @@ namespace Catel.Windows.Controls
         /// Gets or sets the selected level.
         /// </summary>
         /// <value>The selected level.</value>
-        [ViewToViewModel(MappingType = ViewToViewModelMappingType.TwoWayViewModelWins)]
+        [ViewToViewModel(MappingType = ViewToViewModelMappingType.TwoWayViewWins)]
         public LogEvent SelectedLevel
         {
             get { return (LogEvent)GetValue(SelectedLevelProperty); }

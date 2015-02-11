@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SolutionAssemblyInfo.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -35,8 +35,8 @@ using System.Runtime.CompilerServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("4.0")]
-[assembly: AssemblyInformationalVersion("4.0, manually built in Visual Studio")]
+[assembly: AssemblyVersion("4.1")]
+[assembly: AssemblyInformationalVersion("4.1, manually built in Visual Studio")]
 
 #if DEBUG
 

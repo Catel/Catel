@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ModelBase.serialization.xml.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -41,7 +41,9 @@ namespace Catel.Data
             }
 
             var serializer = SerializationFactory.GetXmlSerializer();
-            serializer.Deserialize(this, new XmlSerializationContextInfo(reader, this));
+            var contextInfo = new XmlSerializationContextInfo(reader, this);
+
+            serializer.Deserialize(this, contextInfo);
         }
 
         /// <summary>

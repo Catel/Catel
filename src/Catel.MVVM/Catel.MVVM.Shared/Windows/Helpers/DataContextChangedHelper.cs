@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DataContextChangedHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -11,6 +11,8 @@ namespace Catel.Windows
     using System;
     using System.Windows;
     using Data;
+    using IoC;
+    using MVVM;
 
 #if NETFX_CORE
     using global::Windows.UI.Xaml;
@@ -27,11 +29,13 @@ namespace Catel.Windows
         /// </summary>
         /// <param name="element">Element to which the handler is added.</param>
         /// <param name="handler">The handler to add.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="element"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="element" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="handler" /> is <c>null</c>.</exception>
         public static void AddDataContextChangedHandler(this FrameworkElement element, EventHandler<DependencyPropertyValueChangedEventArgs> handler)
         {
-            element.SubscribeToDataContextAndInheritedDataContext(handler);
+            var subscriptionMode = GetDataContextSubscriptionMode(element);
+
+            element.SubscribeToDataContext(handler, subscriptionMode == DataContextSubscriptionMode.InheritedDataContext);
         }
 
         /// <summary>
@@ -43,7 +47,17 @@ namespace Catel.Windows
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
         public static void RemoveDataContextChangedHandler(this FrameworkElement element, EventHandler<DependencyPropertyValueChangedEventArgs> handler)
         {
-            element.UnsubscribeFromDataContextAndInheritedDataContext(handler);
+            var subscriptionMode = GetDataContextSubscriptionMode(element);
+
+            element.UnsubscribeFromDataContext(handler, subscriptionMode == DataContextSubscriptionMode.InheritedDataContext);
+        }
+
+        private static DataContextSubscriptionMode GetDataContextSubscriptionMode(FrameworkElement element)
+        {
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+            var dataContextSubscriptionService = dependencyResolver.Resolve<IDataContextSubscriptionService>();
+
+            return dataContextSubscriptionService.GetDataContextSubscriptionMode(element.GetType());
         }
     }
 }

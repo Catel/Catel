@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="LocatorBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -88,15 +88,15 @@ namespace Catel.MVVM
                 {
                     return _cache[valueToResolve];
                 }
-
+                
                 Type resolvedType = null;
 
-                string assembly = TypeHelper.GetAssemblyName(valueToResolve);
-                string typeToResolveName = TypeHelper.GetTypeName(valueToResolve);
+                var assembly = TypeHelper.GetAssemblyName(valueToResolve);
+                var typeToResolveName = TypeHelper.GetTypeName(valueToResolve);
 
                 foreach (string namingConvention in NamingConventions)
                 {
-                    string resolvedTypeName = ResolveNamingConvention(assembly, typeToResolveName, namingConvention);
+                    var resolvedTypeName = ResolveNamingConvention(assembly, typeToResolveName, namingConvention);
 
                     // First try to retrieve the type without assembly (this allows types in other assemblies)
                     resolvedType = TypeCache.GetTypeWithoutAssembly(resolvedTypeName);
@@ -114,7 +114,7 @@ namespace Catel.MVVM
                     }
                 }
 
-                string fullResolvedTypeName = (resolvedType != null) ? TypeHelper.GetTypeNameWithAssembly(resolvedType.AssemblyQualifiedName) : null;
+                var fullResolvedTypeName = (resolvedType != null) ? TypeHelper.GetTypeNameWithAssembly(resolvedType.AssemblyQualifiedName) : null;
 
                 Log.Debug("Resolved type '{0}' for type '{1}'", fullResolvedTypeName, valueToResolve);
                 _cache.Add(valueToResolve, fullResolvedTypeName);

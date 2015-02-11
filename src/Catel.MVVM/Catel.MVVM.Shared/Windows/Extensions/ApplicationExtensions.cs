@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ApplicationExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -45,6 +45,11 @@ namespace Catel.Windows
                 if (activeWindow == null && windowList.Count == 1 && windowList[0].Topmost)
                 {
                     activeWindow = windowList[0];
+                }
+
+                if (activeWindow == null)
+                {
+                    activeWindow = windowList[windowList.Count - 1];
                 }
             }
 

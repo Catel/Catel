@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="FastObservableCollection.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -247,8 +247,20 @@ namespace Catel.Collections
         /// <returns>IDisposable.</returns>
         public IDisposable SuspendChangeNotifications()
         {
-            //Contract.Ensures(Contract.Result<IDisposable>() != null);
-            return new SuspendChangeNotificationsToken(this);
+            return new DisposableToken<FastObservableCollection<T>>(this, 
+                x =>
+                {
+                    x.Instance._suspendChangeNotifications = true;
+                },
+                x =>
+                {
+                    x.Instance._suspendChangeNotifications = (bool) x.Tag;
+                    if (x.Instance.IsDirty && !x.Instance._suspendChangeNotifications)
+                    {
+                        x.Instance.IsDirty = false;
+                        x.Instance.NotifyChanges();
+                    }
+                }, _suspendChangeNotifications);
         }
 
         /// <summary>
@@ -301,45 +313,6 @@ namespace Catel.Collections
                     base.OnPropertyChanged(e);
                 }
             }
-        }
-        #endregion
-
-        #region Nested type: SuspendChangeNotificationsToken
-        private class SuspendChangeNotificationsToken : IDisposable
-        {
-            #region Fields
-            private readonly bool _oldSuspendChangeNotifications;
-
-            private FastObservableCollection<T> _collection;
-            #endregion
-
-            #region Constructors
-            public SuspendChangeNotificationsToken(FastObservableCollection<T> collection)
-            {
-                Argument.IsNotNull("collection", collection);
-
-                _collection = collection;
-                _oldSuspendChangeNotifications = _collection._suspendChangeNotifications;
-                _collection._suspendChangeNotifications = true;
-            }
-            #endregion
-
-            #region IDisposable Members
-            public void Dispose()
-            {
-                if (_collection != null)
-                {
-                    _collection._suspendChangeNotifications = _oldSuspendChangeNotifications;
-                    if (_collection.IsDirty && !_collection._suspendChangeNotifications)
-                    {
-                        _collection.IsDirty = false;
-                        _collection.NotifyChanges();
-                    }
-					
-                    _collection = null;
-                }
-            }
-            #endregion
         }
         #endregion
     }

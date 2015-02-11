@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="TaskHelperFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -9,6 +9,7 @@ namespace Catel.Test.Threading
     using System;
     using Catel.Threading;
     using NUnit.Framework;
+    using System.Threading.Tasks;
 
     public class TaskHelperFacts
     {
@@ -18,9 +19,9 @@ namespace Catel.Test.Threading
             [TestCase]
             public void CorrectlyWaitsForAllTasksToBeCompleted()
             {
-                bool a = false;
-                bool b = false;
-                bool c = false;
+                var a = false;
+                var b = false;
+                var c = false;
 
                 Action taskA = () =>
                 {
@@ -38,6 +39,35 @@ namespace Catel.Test.Threading
                 };
 
                 TaskHelper.RunAndWait(new [] { taskA, taskB, taskC });
+
+                Assert.IsTrue(a);
+                Assert.IsTrue(b);
+                Assert.IsTrue(c);
+            }
+
+            [TestCase]
+            public async Task CorrectlyWaitsForAllTasksToBeCompletedAsync()
+            {
+                var a = false;
+                var b = false;
+                var c = false;
+
+                Action taskA = () =>
+                {
+                    a = true;
+                };
+                Action taskB = () =>
+                {
+                    ThreadHelper.Sleep(100);
+                    b = true;
+                };
+                Action taskC = () =>
+                {
+                    ThreadHelper.Sleep(200);
+                    c = true;
+                };
+
+                await TaskHelper.RunAndWaitAsync(new[] { taskA, taskB, taskC });
 
                 Assert.IsTrue(a);
                 Assert.IsTrue(b);

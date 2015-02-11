@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ServiceLocatorFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -20,6 +20,36 @@ namespace Catel.Test.IoC
 
     public partial class ServiceLocatorFacts
     {
+        [TestFixture]
+        public class IDisposableImplementation
+        {
+            private class Disposable : IDisposable
+            {
+                public event EventHandler<System.EventArgs> Disposed;
+
+                public void Dispose()
+                {
+                    Disposed.SafeInvoke(this);
+                }
+            }
+
+            [Test]
+            public void DisposesAllDisposableInstances()
+            {
+                var isDisposed = false;
+
+                var disposable = new Disposable();
+                disposable.Disposed += (sender, e) => isDisposed = true;
+
+                var serviceLocator = new ServiceLocator();
+                serviceLocator.RegisterInstance(typeof(Disposable), disposable);
+
+                serviceLocator.Dispose();
+
+                Assert.IsTrue(isDisposed);
+            }
+        }
+
         [TestFixture]
         public class TheDeadLockPrevention
         {

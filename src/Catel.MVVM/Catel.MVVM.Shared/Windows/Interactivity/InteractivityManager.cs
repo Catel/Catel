@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="InteractivityManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -15,10 +15,11 @@ namespace Catel.Windows.Interactivity
     /// <summary>
     /// Interactivity manager to manage interactivity classes.
     /// </summary>
+    [ObsoleteEx(Message = "Unused feature, will be removed", TreatAsErrorFromVersion = "4.1", RemoveInVersion = "5.0")]
     public class InteractivityManager : IInteractivityManager
     {
-        private readonly HashSet<IBehavior> _behaviors = new HashSet<IBehavior>();
-        private readonly HashSet<ITrigger> _triggers = new HashSet<ITrigger>();
+        //private readonly HashSet<IBehavior> _behaviors = new HashSet<IBehavior>();
+        //private readonly HashSet<ITrigger> _triggers = new HashSet<ITrigger>();
 
         #region Events
         /// <summary>
@@ -52,7 +53,7 @@ namespace Catel.Windows.Interactivity
         {
             Argument.IsNotNull("behavior", behavior);
 
-            _behaviors.Add(behavior);
+            //_behaviors.Add(behavior);
 
             BehaviorLoaded.SafeInvoke(this, new BehaviorEventArgs(behavior));
         }
@@ -66,7 +67,7 @@ namespace Catel.Windows.Interactivity
         {
             Argument.IsNotNull("behavior", behavior);
 
-            _behaviors.Remove(behavior);
+            //_behaviors.Remove(behavior);
 
             BehaviorUnloaded.SafeInvoke(this, new BehaviorEventArgs(behavior));
         }
@@ -80,7 +81,7 @@ namespace Catel.Windows.Interactivity
         {
             Argument.IsNotNull("trigger", trigger);
 
-            _triggers.Add(trigger);
+            //_triggers.Add(trigger);
 
             TriggerLoaded.SafeInvoke(this, new TriggerEventArgs(trigger));
         }
@@ -94,7 +95,7 @@ namespace Catel.Windows.Interactivity
         {
             Argument.IsNotNull("trigger", trigger);
 
-            _triggers.Remove(trigger);
+            //_triggers.Remove(trigger);
 
             TriggerUnloaded.SafeInvoke(this, new TriggerEventArgs(trigger));
         }
@@ -105,7 +106,7 @@ namespace Catel.Windows.Interactivity
         /// <returns>All the behaviors.</returns>
         public IEnumerable<IBehavior> GetBehaviors()
         {
-            return _behaviors.ToArray();
+            return new IBehavior[] {};
         }
 
         /// <summary>
@@ -114,7 +115,7 @@ namespace Catel.Windows.Interactivity
         /// <returns>All the triggers.</returns>
         public IEnumerable<ITrigger> GetTriggers()
         {
-            return _triggers.ToArray();
+            return new ITrigger[] { };
         }
         #endregion
     }

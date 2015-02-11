@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="AssemblyExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -15,6 +15,20 @@ namespace Catel.Reflection
     /// </summary>
     public static class AssemblyExtensions
     {
+#if NET
+        /// <summary>
+        /// Gets the build date time of the assembly.
+        /// </summary>
+        /// <param name="assembly">The assembly.</param>
+        /// <returns>DateTime.</returns>
+        public static DateTime GetBuildDateTime(this Assembly assembly)
+        {
+            Argument.IsNotNull(() => assembly);
+
+            return AssemblyHelper.GetLinkerTimestamp(assembly.Location);
+        }
+#endif
+
         /// <summary>
         /// Gets the title of a specific assembly.
         /// </summary>
