@@ -166,6 +166,20 @@ namespace Catel
         }
 
         /// <summary>
+        /// Converts a string to a Type.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The Type value of the string.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="value"/> is <c>null</c> or whitespace.</exception>
+        public static Type ToType(string value)
+        {
+            Argument.IsNotNullOrWhitespace("value", value);
+            value = CleanString(value);
+
+            return Type.GetType(value);
+        }
+
+        /// <summary>
         /// Converts a string to a string.
         /// </summary>
         /// <param name="value">The value.</param>
@@ -287,6 +301,11 @@ namespace Catel
             if (targetType == typeof(long?))
             {
                 return ToLong(value);
+            }
+            
+            if (targetType == typeof(Type))
+            {
+                return ToType(value);
             }
 
             throw new NotSupportedException(string.Format("Type '{0}' is not yet supported", targetType.FullName));
