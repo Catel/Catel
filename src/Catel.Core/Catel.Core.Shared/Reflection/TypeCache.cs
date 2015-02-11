@@ -31,6 +31,11 @@ namespace Catel.Reflection
         /// Assemblies, loaded while Catel was processing AssemblyLoaded event.
         /// </summary>
         private static readonly Queue<Assembly> _onAssemblyLoadedDelayQueue = new Queue<Assembly>();
+
+        /// <summary>
+        /// The boolean specifying whether the type cache is already loading assemblies via the loaded event.
+        /// </summary>
+        private static bool _isAlreadyInLoadingEvent = false;
 #endif
 
         /// <summary>
@@ -79,8 +84,6 @@ namespace Catel.Reflection
         /// </summary>
         private static readonly HashSet<string> _loadedAssemblies = new HashSet<string>();
 
-        private static bool _isAlreadyInLoadingEvent = false;
-
         /// <summary>
         /// The lock object.
         /// </summary>
@@ -100,7 +103,7 @@ namespace Catel.Reflection
                 var assemblies = AppDomain.CurrentDomain.GetAssemblies();
                 foreach (var assembly in assemblies)
                 {
-                    InitializeTypes(false, assembly);
+                    InitializeTypes(assembly);
                 }
             }
 #endif
@@ -121,56 +124,51 @@ namespace Catel.Reflection
                 return;
             }
 
-
             // Prevent deadlocks by checking whether this assembly might be loaded from a different thread:
             // 1) 
             if (Monitor.TryEnter(_lockObject))
             {
                 var assemblyName = assembly.FullName;
-                if (_loadedAssemblies.Contains(assemblyName))
+                if (!_loadedAssemblies.Contains(assemblyName))
                 {
-                    return;
-                }
+                    // Fix for CTL-543
+                    // General idea of fix - prevent to call GetTypes() method recursively.
+                    // When type load will fail CLR will try to localize message, and on
+                    // some OS's (i suspect on non english Windows and .NET) will try to load
+                    // satellite assembly with localization, Catel will get event before CLR
+                    // finishes handling process. Catel will try to initialize types. When another
+                    // type won't load CLR will detect that it still trying to handle previous 
+                    // type load problem and will crash whole process.
 
-                // Fix for CTL-543
-                // General idea of fix - prevent to call GetTypes() method recursively.
-                // When type load will fail CLR will try to localize message, and on
-                // some OS's (i suspect on non english Windows and .NET) will try to load
-                // satellite assembly with localization, Catel will get event before CLR
-                // finishes handling process. Catel will try to initialize types. When another
-                // type won't load CLR will detect that it still trying to handle previous 
-                // type load problem and will crash whole process.
-
-                if (_isAlreadyInLoadingEvent)
-                {
-                    // Will be proceed in finally block
-                    _onAssemblyLoadedDelayQueue.Enqueue(assembly);
-                }
-                else
-                {
-                    try
+                    if (_isAlreadyInLoadingEvent)
                     {
-                        _isAlreadyInLoadingEvent = true;
-
-                        InitializeTypes(false, assembly);
-                        _loadedAssemblies.Add(assemblyName);
+                        // Will be proceed in finally block
+                        _onAssemblyLoadedDelayQueue.Enqueue(assembly);
                     }
-                    finally
+                    else
                     {
-                        while (_onAssemblyLoadedDelayQueue.Count > 0)
+                        try
                         {
-                            var delayedAssembly = _onAssemblyLoadedDelayQueue.Dequeue();
+                            _isAlreadyInLoadingEvent = true;
 
-                            // Copy/pasted assembly processing behaviour, like types were processed 
-                            // without any delay.
-                            InitializeTypes(false, delayedAssembly);
-                            _loadedAssemblies.Add(delayedAssembly.FullName);
+                            InitializeTypes(assembly);
                         }
+                        finally
+                        {
+                            while (_onAssemblyLoadedDelayQueue.Count > 0)
+                            {
+                                var delayedAssembly = _onAssemblyLoadedDelayQueue.Dequeue();
 
-                        _isAlreadyInLoadingEvent = false;
-                        Monitor.Exit(_lockObject);
+                                // Copy/pasted assembly processing behaviour, like types were processed without any delay
+                                InitializeTypes(delayedAssembly);
+                            }
+
+                            _isAlreadyInLoadingEvent = false;
+                        }
                     }
                 }
+
+                Monitor.Exit(_lockObject);
             }
             else
             {
@@ -280,7 +278,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNullOrWhitespace("typeName", typeName);
 
-            InitializeTypes(false);
+            InitializeTypes();
 
             lock (_lockObject)
             {
@@ -490,7 +488,7 @@ namespace Catel.Reflection
         /// <returns>System.Type[].</returns>
         private static Type[] GetTypesPrefilteredByAssembly(string assemblyName, Func<Type, bool> predicate)
         {
-            InitializeTypes(false);
+            InitializeTypes();
 
             lock (_lockObject)
             {
@@ -558,7 +556,7 @@ namespace Catel.Reflection
                     {
                         if (assembly.FullName.Contains(assemblyName))
                         {
-                            InitializeTypes(forceFullInitialization, assembly);
+                            InitializeTypes(assembly, forceFullInitialization);
                         }
                     }
                     catch (Exception ex)
@@ -577,7 +575,21 @@ namespace Catel.Reflection
         /// </summary>
         /// <param name="forceFullInitialization">If <c>true</c>, the types are initialized, even when the types are already initialized.</param>
         /// <param name="assembly">The assembly to initialize the types from. If <c>null</c>, all assemblies will be checked.</param>
+        [ObsoleteEx(Replacement = "InitializeTypes(Assembly, bool)", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
         public static void InitializeTypes(bool forceFullInitialization, Assembly assembly = null)
+        {
+            InitializeTypes(assembly, forceFullInitialization);
+        }
+
+        /// <summary>
+        /// Initializes the types in the specified assembly. It does this by looping through all loaded assemblies and
+        /// registering the type by type name and assembly name.
+        /// <para/>
+        /// The types initialized by this method are used by <see cref="object.GetType"/>.
+        /// </summary>
+        /// <param name="assembly">The assembly to initialize the types from. If <c>null</c>, all assemblies will be checked.</param>
+        /// <param name="forceFullInitialization">If <c>true</c>, the types are initialized, even when the types are already initialized.</param>
+        public static void InitializeTypes(Assembly assembly = null, bool forceFullInitialization = false)
         {
             bool checkSingleAssemblyOnly = assembly != null;
 
@@ -648,7 +660,8 @@ namespace Catel.Reflection
                     _typesWithoutAssemblyLowerCase = new Dictionary<string, string>();
                 }
 
-                InitializeAssemblies(AssemblyHelper.GetLoadedAssemblies());
+                var assembliesToInitialize = checkSingleAssemblyOnly ? new List<Assembly>(new[] {assembly}) : AssemblyHelper.GetLoadedAssemblies();
+                InitializeAssemblies(assembliesToInitialize);
             }
         }
 
