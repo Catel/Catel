@@ -9,30 +9,26 @@ namespace Catel.Test.Data
     using System;
     using Catel.Data;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class ValidationSummaryFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheConstructor
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullValidationContextWithoutTag()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new ValidationSummary(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullValidationContextWithTag()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new ValidationSummary(null, "tag"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsCorrectSummaryWithoutTag()
             {
                 var context = ValidationContextFacts.CreateValidationContext();
@@ -45,7 +41,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(2, summary.BusinessRuleErrors.Count);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsCorrectSummaryWithTag()
             {
                 var context = ValidationContextFacts.CreateValidationContext();

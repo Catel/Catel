@@ -116,7 +116,7 @@ namespace Catel.Windows.Interactivity
         {
             return _triggers.ToArray();
         }
-    #endregion
+        #endregion
     }
 }
 

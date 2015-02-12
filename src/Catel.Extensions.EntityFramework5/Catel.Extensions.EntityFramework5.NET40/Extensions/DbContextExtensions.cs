@@ -10,6 +10,7 @@ namespace Catel.Data
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     using System.Linq;
+    using System.Management.Instrumentation;
     using System.Text.RegularExpressions;
 
     using Caching;
@@ -121,7 +122,21 @@ namespace Catel.Data
             var entitySetName = _entitySetNameCache.GetFromCacheOrFetch(new Tuple<Type, Type>(dbContext.GetType(), entityType), () =>
             {
                 var objectContext = dbContext.GetObjectContext();
-                return objectContext.MetadataWorkspace.GetEntityContainer(objectContext.DefaultContainerName, DataSpace.CSpace).BaseEntitySets.First(bes => bes.ElementType.Name == entityType.Name).Name;
+                var entitySet = objectContext.MetadataWorkspace.GetEntityContainer(objectContext.DefaultContainerName, DataSpace.CSpace)
+                    .BaseEntitySets.FirstOrDefault(bes => bes.ElementType.Name == entityType.Name);
+
+                if (entitySet == null && entityType.BaseType != null)
+                {
+                    // recursive method call, should be no problem as the compiler wont allow circular base class dependencies
+                    return dbContext.GetEntitySetName(entityType.BaseType);
+                }
+
+                if (entitySet == null)
+                {
+                    throw new InstanceNotFoundException(String.Format("No EntitySet has been found for the provided Type '{0}'", entityType));
+                }
+
+                return entitySet.Name;
             });
 
             return entitySetName;

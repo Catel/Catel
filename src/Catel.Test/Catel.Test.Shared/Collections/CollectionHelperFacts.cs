@@ -9,18 +9,14 @@ namespace Catel.Test.Collections
     using System.Collections.ObjectModel;
     using Catel.Collections;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class CollectionHelperFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheIsEqualToMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForDifferentCollections()
             {
                 var collectionA = new Collection<int> {1};
@@ -29,7 +25,7 @@ namespace Catel.Test.Collections
                 Assert.IsFalse(CollectionHelper.IsEqualTo(collectionA, collectionB));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForDifferentCollectionsWithEqualCount()
             {
                 var collectionA = new Collection<int> { 1, 2, 4 };
@@ -38,7 +34,7 @@ namespace Catel.Test.Collections
                 Assert.IsFalse(CollectionHelper.IsEqualTo(collectionA, collectionB));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForEqualCollections()
             {
                 var collectionA = new Collection<int> {1};
@@ -47,7 +43,7 @@ namespace Catel.Test.Collections
                 Assert.IsTrue(CollectionHelper.IsEqualTo(collectionA, collectionB));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForEqualCollectionsWithSameObjectReferences()
             {
                 var obj = new { Name = "test" };
@@ -58,7 +54,7 @@ namespace Catel.Test.Collections
                 Assert.IsTrue(CollectionHelper.IsEqualTo(collection1, collection2));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForEqualObjects()
             {
                 var collection = new Collection<int> {1};
@@ -66,7 +62,7 @@ namespace Catel.Test.Collections
                 Assert.IsTrue(CollectionHelper.IsEqualTo(collection, collection));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForNullFirstCollection()
             {
                 Collection<int> collectionA = null;
@@ -75,7 +71,7 @@ namespace Catel.Test.Collections
                 Assert.IsFalse(CollectionHelper.IsEqualTo(collectionA, collectionB));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForNullSecondCollection()
             {
                 var collectionA = new Collection<int> {1};

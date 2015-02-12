@@ -10,42 +10,38 @@ namespace Catel.Test.Data
 
     using Catel.Data;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class FieldValidationResultFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheConstructor
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsNullReferenceExceptionForNullProperty()
             {
                 ExceptionTester.CallMethodAndExpectException<NullReferenceException>(() => new FieldValidationResult((PropertyData)null, ValidationResultType.Error, "message"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullPropertyName()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new FieldValidationResult((string)null, ValidationResultType.Error, "message"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForEmptyPropertyName()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new FieldValidationResult(string.Empty, ValidationResultType.Error, "message"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullMessage()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new FieldValidationResult("myProperty", ValidationResultType.Error, null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsValuesCorrectlyUsingEmptyMessage()
             {
                 var validationResult = new FieldValidationResult("myProperty", ValidationResultType.Error, string.Empty);
@@ -55,7 +51,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(string.Empty, validationResult.Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsValuesCorrectlyUsingNormalMessage()
             {
                 var validationResult = new FieldValidationResult("myProperty", ValidationResultType.Error, "my message");
@@ -65,7 +61,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual("my message", validationResult.Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsValuesCorrectlyUsingFormattedMessage()
             {
                 var validationResult = new FieldValidationResult("myProperty", ValidationResultType.Error, "my message with {0}", "format");
@@ -76,10 +72,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheCreateWarningMethod
         {
-            [TestMethod]
+            [TestCase]
             public void SetsValuesCorrectlyUsingNormalMessage()
             {
                 var validationResult = FieldValidationResult.CreateWarning("myProperty", "my message");
@@ -89,7 +85,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual("my message", validationResult.Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsValuesCorrectlyUsingFormattedMessage()
             {
                 var validationResult = FieldValidationResult.CreateWarning("myProperty", "my message with {0}", "format");
@@ -100,10 +96,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheCreateErrorMethod
         {
-            [TestMethod]
+            [TestCase]
             public void SetsValuesCorrectlyUsingNormalMessage()
             {
                 var validationResult = FieldValidationResult.CreateError("myProperty", "my message");
@@ -113,7 +109,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual("my message", validationResult.Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsValuesCorrectlyUsingFormattedMessage()
             {
                 var validationResult = FieldValidationResult.CreateError("myProperty", "my message with {0}", "format");
@@ -127,16 +123,16 @@ namespace Catel.Test.Data
 
     public class BusinessRuleValidationResultFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheConstructor
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullMessage()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new BusinessRuleValidationResult(ValidationResultType.Error, null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsValuesCorrectlyUsingEmptyMessage()
             {
                 var validationResult = new BusinessRuleValidationResult(ValidationResultType.Error, string.Empty);
@@ -145,7 +141,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(string.Empty, validationResult.Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsValuesCorrectlyUsingNormalMessage()
             {
                 var validationResult = new BusinessRuleValidationResult(ValidationResultType.Error, "my message");
@@ -154,7 +150,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual("my message", validationResult.Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsValuesCorrectlyUsingFormattedMessage()
             {
                 var validationResult = new BusinessRuleValidationResult(ValidationResultType.Error, "my message with {0}", "format");
@@ -164,10 +160,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheCreateWarningMethod
         {
-            [TestMethod]
+            [TestCase]
             public void SetsValuesCorrectlyUsingNormalMessage()
             {
                 var validationResult = BusinessRuleValidationResult.CreateWarning("my message");
@@ -176,7 +172,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual("my message", validationResult.Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsValuesCorrectlyUsingFormattedMessage()
             {
                 var validationResult = BusinessRuleValidationResult.CreateWarning("my message with {0}", "format");
@@ -186,10 +182,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheCreateErrorMethod
         {
-            [TestMethod]
+            [TestCase]
             public void SetsValuesCorrectlyUsingNormalMessage()
             {
                 var validationResult = BusinessRuleValidationResult.CreateError("my message");
@@ -198,7 +194,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual("my message", validationResult.Message);
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsValuesCorrectlyUsingFormattedMessage()
             {
                 var validationResult = BusinessRuleValidationResult.CreateError("my message with {0}", "format");

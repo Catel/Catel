@@ -7,19 +7,14 @@ namespace Catel.Test.IoC.Exceptions
 {
     using System;
     using Catel.IoC;
-
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class CircularDependencyExceptionFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheConstructor
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullTypePath()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new CircularDependencyException(null, string.Empty));

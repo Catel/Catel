@@ -78,9 +78,12 @@ namespace Catel.Android.App
             get { return _dataContext; }
             set
             {
+                var oldValue = _dataContext;
+                var newValue = value;
+
                 _dataContext = value;
 
-                DataContextChanged.SafeInvoke(this);
+                DataContextChanged.SafeInvoke(this, new DataContextChangedEventArgs(oldValue, newValue));
             }
         }
 
@@ -221,7 +224,7 @@ namespace Catel.Android.App
         /// <summary>
         /// Occurs when the data context has changed.
         /// </summary>
-        public event EventHandler<EventArgs> DataContextChanged;
+        public event EventHandler<DataContextChangedEventArgs> DataContextChanged;
         #endregion
 
         #region Methods

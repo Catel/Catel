@@ -227,7 +227,7 @@ namespace Catel.Windows
 
                 foreach (string key in keys)
                 {
-                    Style style = sourceResources[key] as Style;
+                    var style = sourceResources[key] as Style;
                     if (style != null)
                     {
                         Type targetType = style.TargetType;

@@ -12,19 +12,19 @@ namespace Catel.Test.Extensions.Prism.Modules
 
     using Catel.Modules;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using Moq;
 
-    [TestClass]
+    [TestFixture]
     public class NuGetBasedModuleCatalogParentChildBehavior_Facts
     {
         #region Nested type: The_AllowPrereleaseVersions_Property
-        [TestClass]
+        [TestFixture]
         public class The_AllowPrereleaseVersions_Property
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void Returns_The_Parent_Value()
             {
                 var mock = new Mock<INuGetBasedModuleCatalog>();
@@ -35,7 +35,7 @@ namespace Catel.Test.Extensions.Prism.Modules
                 Assert.IsTrue(nuGetBasedModuleCatalogParentChildBehavior.AllowPrereleaseVersions);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Returns_Its_Own_Value()
             {
                 var mock = new Mock<INuGetBasedModuleCatalog>();
@@ -48,17 +48,17 @@ namespace Catel.Test.Extensions.Prism.Modules
         #endregion
 
         #region Nested type: The_Constructor
-        [TestClass]
+        [TestFixture]
         public class The_Constructor
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void Throws_ArgumentNullException_If_ModuleCatalog_Argument_Is_Null()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new NuGetBasedModuleCatalogParentChildBehavior(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void Succeeds_If_ModuleCatalog_Argument_Is_Not_Null()
             {
                 var mock = new Mock<INuGetBasedModuleCatalog>();
@@ -69,11 +69,11 @@ namespace Catel.Test.Extensions.Prism.Modules
         #endregion
 
         #region Nested type: The_IgnoreDependencies_Property
-        [TestClass]
+        [TestFixture]
         public class The_IgnoreDependencies_Property
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void Returns_The_Parent_Value()
             {
                 var mock = new Mock<INuGetBasedModuleCatalog>();
@@ -84,7 +84,7 @@ namespace Catel.Test.Extensions.Prism.Modules
                 Assert.IsFalse(nuGetBasedModuleCatalogParentChildBehavior.IgnoreDependencies);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Returns_Its_Own_Value()
             {
                 var mock = new Mock<INuGetBasedModuleCatalog>();
@@ -97,11 +97,11 @@ namespace Catel.Test.Extensions.Prism.Modules
         #endregion
 
         #region Nested type: The_OutputDirectory_Property
-        [TestClass]
+        [TestFixture]
         public class The_OutputDirectory_Property
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void Returns_The_Parent_Value()
             {
                 var mock = new Mock<INuGetBasedModuleCatalog>();
@@ -112,7 +112,7 @@ namespace Catel.Test.Extensions.Prism.Modules
                 Assert.AreEqual("packages", nuGetBasedModuleCatalogParentChildBehavior.OutputDirectory);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Returns_Its_Own_Value()
             {
                 var mock = new Mock<INuGetBasedModuleCatalog>();
@@ -125,11 +125,11 @@ namespace Catel.Test.Extensions.Prism.Modules
         #endregion
 
         #region Nested type: The_PackagedModuleIdFilterExpression_Property
-        [TestClass]
+        [TestFixture]
         public class The_PackagedModuleIdFilterExpression_Property
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void Returns_The_Parent_Value()
             {
                 var mock = new Mock<INuGetBasedModuleCatalog>();
@@ -140,7 +140,7 @@ namespace Catel.Test.Extensions.Prism.Modules
                 Assert.AreEqual("Orchestra.Modules", nuGetBasedModuleCatalogParentChildBehavior.PackagedModuleIdFilterExpression);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Returns_Its_Own_Value()
             {
                 var mock = new Mock<INuGetBasedModuleCatalog>();

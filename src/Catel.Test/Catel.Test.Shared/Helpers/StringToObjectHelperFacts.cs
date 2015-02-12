@@ -8,17 +8,13 @@ namespace Catel.Test
 {
     using System;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class StringToObjectHelperFacts
     {
         // TODO: Write unit tests
 
-        [TestClass]
+        [TestFixture]
         public class TheGetValueAsEnumMethod
         {
             public enum TestEnum
@@ -30,7 +26,7 @@ namespace Catel.Test
                 Value3
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsDefaultValueForInvalidValue()
             {
                 var enumValue = StringToObjectHelper.ToEnum("bla", TestEnum.Value3);
@@ -38,7 +34,7 @@ namespace Catel.Test
                 Assert.AreEqual(TestEnum.Value3, enumValue);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValueForValidValue()
             {
                 var enumValue = StringToObjectHelper.ToEnum("Value2", TestEnum.Value3);

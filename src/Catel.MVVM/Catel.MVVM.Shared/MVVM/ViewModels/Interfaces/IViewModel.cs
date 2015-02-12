@@ -8,6 +8,7 @@ namespace Catel.MVVM
 {
     using System;
     using System.ComponentModel;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// View model interface.
@@ -15,22 +16,6 @@ namespace Catel.MVVM
     public interface IViewModel : INotifyPropertyChanged
     {
         #region Properties
-        /// <summary>
-        /// Gets a value indicating whether this instance has errors.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance has errors; otherwise, <c>false</c>.
-        /// </value>
-        bool HasErrors { get; }
-
-        /// <summary>
-        /// Gets a value indicating whether this instance has warnings.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance has warnings; otherwise, <c>false</c>.
-        /// </value>
-        bool HasWarnings { get; }
-
         /// <summary>
         /// Gets a value indicating whether this instance has a dirty model.
         /// </summary>
@@ -120,7 +105,7 @@ namespace Catel.MVVM
         /// <para />
         /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.
         /// </remarks>
-        void InitializeViewModel();
+        Task InitializeViewModel();
 
         /// <summary>
         /// Validates the specified notify changed properties only.
@@ -140,10 +125,8 @@ namespace Catel.MVVM
         /// <summary>
         /// Cancels the editing of the data.
         /// </summary>
-        /// <returns>
-        /// <c>true</c> if successful; otherwise <c>false</c>.
-        /// </returns>
-        bool CancelViewModel();
+        /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
+        Task<bool> CancelViewModel();
 
         /// <summary>
         /// Cancels the editing of the data, but also closes the view model in the same call.
@@ -151,7 +134,7 @@ namespace Catel.MVVM
         /// <returns>
         /// <c>true</c> if successful; otherwise <c>false</c>.
         /// </returns>
-        bool CancelAndCloseViewModel();
+        Task<bool> CancelAndCloseViewModel();
 
         /// <summary>
         /// Saves the data.
@@ -159,7 +142,7 @@ namespace Catel.MVVM
         /// <returns>
         /// <c>true</c> if successful; otherwise <c>false</c>.
         /// </returns>
-        bool SaveViewModel();
+        Task<bool> SaveViewModel();
 
         /// <summary>
         /// Saves the data, but also closes the view model in the same call if the save succeeds.
@@ -167,13 +150,13 @@ namespace Catel.MVVM
         /// <returns>
         /// <c>true</c> if successful; otherwise <c>false</c>.
         /// </returns>
-        bool SaveAndCloseViewModel();
+        Task<bool> SaveAndCloseViewModel();
 
         /// <summary>
         /// Closes this instance. Always called after the <see cref="CancelViewModel"/> of <see cref="SaveViewModel"/> method.
         /// </summary>
         /// <param name="result">The result to pass to the view. This will, for example, be used as <c>DialogResult</c>.</param>
-        void CloseViewModel(bool? result);
+        Task CloseViewModel(bool? result);
         #endregion
     }
 }

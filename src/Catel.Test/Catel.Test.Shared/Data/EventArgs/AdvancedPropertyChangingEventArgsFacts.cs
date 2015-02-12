@@ -8,19 +8,15 @@ namespace Catel.Test.Data
 {
     using Catel.Data;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class AdvancedPropertyChangingEventArgsFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheConstructor
         {
-            [TestMethod]
+            [TestCase]
             public void SetsPropertyNameCorrectly()
             {
                 var e = new AdvancedPropertyChangingEventArgs("test");
@@ -28,7 +24,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual("test", e.PropertyName);
             }
 
-            [TestMethod]
+            [TestCase]
             public void DefaultsCancelToFalse()
             {
                 var e = new AdvancedPropertyChangingEventArgs("test");

@@ -8,6 +8,7 @@ namespace Catel.IO
 {
     using System;
     using System.IO;
+    using System.Text;
 
     /// <summary>
     /// Extensions for the <see cref="Stream"/> class.
@@ -26,12 +27,37 @@ namespace Catel.IO
 
             stream.Position = 0L;
 
-            int length = (int) stream.Length;
+            var length = (int)stream.Length;
             var buffer = new byte[length];
 
             stream.Read(buffer, 0, length);
 
             return buffer;
+        }
+
+        /// <summary>
+        /// Gets the UTF8 string from the stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <returns>System.String.</returns>
+        public static string GetUtf8String(this Stream stream)
+        {
+            return stream.GetString(Encoding.UTF8);
+        }
+
+        /// <summary>
+        /// Gets the string from the stream using the specified encoding.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <param name="encoding">The encoding.</param>
+        /// <returns>System.String.</returns>
+        public static string GetString(this Stream stream, Encoding encoding)
+        {
+            Argument.IsNotNull("stream", stream);
+            Argument.IsNotNull("encoding", encoding);
+
+            var data = stream.ToByteArray();
+            return encoding.GetString(data, 0, data.Length);
         }
     }
 }

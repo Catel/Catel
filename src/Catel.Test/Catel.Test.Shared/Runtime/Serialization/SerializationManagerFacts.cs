@@ -12,18 +12,14 @@ namespace Catel.Test.Runtime.Serialization
     using Catel.Data;
     using Catel.Runtime.Serialization;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class SerializationManagerFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheGetSerializerModifiersMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
                 var serializationManager = new SerializationManager();
@@ -31,7 +27,7 @@ namespace Catel.Test.Runtime.Serialization
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.GetSerializerModifiers(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightModifiersInRightOrderForInheritedClasses()
             {
                 var serializationManager = new SerializationManager();
@@ -45,10 +41,10 @@ namespace Catel.Test.Runtime.Serialization
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetFieldsToSerializeMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
                 var serializationManager = new SerializationManager();
@@ -56,7 +52,7 @@ namespace Catel.Test.Runtime.Serialization
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.GetFieldsToSerialize(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsCorrectFields()
             {
                 var serializationManager = new SerializationManager();
@@ -68,10 +64,10 @@ namespace Catel.Test.Runtime.Serialization
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetPropertiesToSerializeMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
                 var serializationManager = new SerializationManager();
@@ -79,7 +75,7 @@ namespace Catel.Test.Runtime.Serialization
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.GetPropertiesToSerialize(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsCorrectProperties()
             {
                 var serializationManager = new SerializationManager();
@@ -92,10 +88,10 @@ namespace Catel.Test.Runtime.Serialization
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetCatelPropertyNamesMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
                 var serializationManager = new SerializationManager();
@@ -103,7 +99,7 @@ namespace Catel.Test.Runtime.Serialization
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.GetCatelPropertyNames(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsCorrectValue()
             {
                 var serializationManager = new SerializationManager();
@@ -117,10 +113,10 @@ namespace Catel.Test.Runtime.Serialization
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetCatelPropertiesMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
                 var serializationManager = new SerializationManager();
@@ -128,7 +124,7 @@ namespace Catel.Test.Runtime.Serialization
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.GetCatelProperties(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsCorrectValue()
             {
                 var serializationManager = new SerializationManager();
@@ -147,10 +143,10 @@ namespace Catel.Test.Runtime.Serialization
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetRegularPropertyNamesMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
                 var serializationManager = new SerializationManager();
@@ -158,7 +154,7 @@ namespace Catel.Test.Runtime.Serialization
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.GetRegularPropertyNames(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsCorrectValue()
             {
                 var serializationManager = new SerializationManager();
@@ -170,10 +166,10 @@ namespace Catel.Test.Runtime.Serialization
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetRegularPropertiesMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
                 var serializationManager = new SerializationManager();
@@ -181,7 +177,7 @@ namespace Catel.Test.Runtime.Serialization
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.GetRegularProperties(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsCorrectValue()
             {
                 var serializationManager = new SerializationManager();
@@ -194,10 +190,10 @@ namespace Catel.Test.Runtime.Serialization
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetFieldNamesMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
                 var serializationManager = new SerializationManager();
@@ -206,7 +202,7 @@ namespace Catel.Test.Runtime.Serialization
             }
 
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsCorrectValue()
             {
                 var serializationManager = new SerializationManager();
@@ -218,10 +214,10 @@ namespace Catel.Test.Runtime.Serialization
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetFieldsMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
                 var serializationManager = new SerializationManager();
@@ -229,7 +225,7 @@ namespace Catel.Test.Runtime.Serialization
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.GetFields(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsCorrectValue()
             {
                 var serializationManager = new SerializationManager();

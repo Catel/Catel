@@ -8,23 +8,18 @@ namespace Catel.Test.Threading
 {
     using System;
     using System.Threading;
-
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     using SynchronizationContext = Catel.Threading.SynchronizationContext;
 
     public class SynchronizationContextFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheAcquireMethod
         {
             #region Public Methods and Operators
 
-            [TestMethod]
+            [TestCase]
             public void SetsIsLockAquiredToTrue()
             {
                 var context = new SynchronizationContext();
@@ -36,12 +31,12 @@ namespace Catel.Test.Threading
             #endregion
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheExecuteMethod
         {
             #region Public Methods and Operators
 
-            [TestMethod]
+            [TestCase]
             public void AdquiresTheLockDuringTheExecutionAndReleaseItAtTheEnd()
             {
                 var context = new SynchronizationContext();
@@ -50,7 +45,7 @@ namespace Catel.Test.Threading
                 Assert.IsFalse(context.IsLockAcquired);
             }
 
-            [TestMethod]
+            [TestCase]
             public void AdquiresTheLockDuringTheExecutionAndReleaseItAtTheEndAndReturnAValue()
             {
                 var context = new SynchronizationContext();
@@ -65,7 +60,7 @@ namespace Catel.Test.Threading
                 Assert.AreEqual(expected, result);
             }
 
-            [TestMethod]
+            [TestCase]
             public void NestedExecuteCallAreAllowed()
             {
                 var context = new SynchronizationContext();
@@ -89,12 +84,12 @@ namespace Catel.Test.Threading
             #endregion
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheReleaseMethod
         {
             #region Public Methods and Operators
 
-            [TestMethod]
+            [TestCase]
             public void KeepsIsLockAquiredInFalse()
             {
                 var context = new SynchronizationContext();

@@ -125,30 +125,6 @@ namespace Catel.Data
         }
 
         /// <summary>
-        /// Registers a property for a specific type.
-        /// </summary>
-        /// <param name="name">The name of the property.</param>
-        /// <param name="propertyData">The property data.</param>
-        /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="propertyData"/> is <c>null</c>.</exception>
-        /// <exception cref="PropertyAlreadyRegisteredException">A property with the same name is already registered.</exception>
-        public void RegisterProperty(string name, PropertyData propertyData)
-        {
-            Argument.IsNotNullOrWhitespace("name", name);
-            Argument.IsNotNull("propertyData", propertyData);
-
-            lock (_lockObject)
-            {
-                if (_catelProperties.ContainsKey(name))
-                {
-                    throw new PropertyAlreadyRegisteredException(name, Type);
-                }
-
-                _catelProperties.Add(name, propertyData);
-            }
-        }
-
-        /// <summary>
         /// Registers all the properties for the specified type.
         /// <para/>
         /// This method can only be called once per type. The <see cref="PropertyDataManager"/> caches
@@ -179,6 +155,48 @@ namespace Catel.Data
                 }
 
                 IsRegisterPropertiesCalled = true;
+            }
+        }
+
+        /// <summary>
+        /// Registers a property for a specific type.
+        /// </summary>
+        /// <param name="name">The name of the property.</param>
+        /// <param name="propertyData">The property data.</param>
+        /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="propertyData"/> is <c>null</c>.</exception>
+        /// <exception cref="PropertyAlreadyRegisteredException">A property with the same name is already registered.</exception>
+        public void RegisterProperty(string name, PropertyData propertyData)
+        {
+            Argument.IsNotNullOrWhitespace("name", name);
+            Argument.IsNotNull("propertyData", propertyData);
+
+            lock (_lockObject)
+            {
+                if (_catelProperties.ContainsKey(name))
+                {
+                    throw new PropertyAlreadyRegisteredException(name, Type);
+                }
+
+                _catelProperties.Add(name, propertyData);
+            }
+        }
+
+        /// <summary>
+        /// Unregisters a property for a specific type.
+        /// </summary>
+        /// <param name="name">The name of the property.</param>
+        /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
+        public void UnregisterProperty(string name)
+        {
+            Argument.IsNotNullOrWhitespace("name", name);
+
+            lock (_lockObject)
+            {
+                if (_catelProperties.ContainsKey(name))
+                {
+                    _catelProperties.Remove(name);
+                }
             }
         }
 

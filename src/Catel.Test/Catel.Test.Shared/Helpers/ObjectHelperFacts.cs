@@ -6,19 +6,18 @@
 
 namespace Catel.Test
 {
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
+    using NUnit.Framework;
+
+#if !NETFX_CORE
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
 #endif
 
     public class ObjectHelperFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheAreEqualMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForBoxedEqualIntegers()
             {
                 object obj1 = 5;
@@ -28,7 +27,7 @@ namespace Catel.Test
                 Assert.IsTrue(ObjectHelper.AreEqual(obj2, obj1));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForBoxedDifferentIntegers()
             {
                 object obj1 = 5;
@@ -38,7 +37,7 @@ namespace Catel.Test
                 Assert.IsFalse(ObjectHelper.AreEqual(obj2, obj1));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForTwoNullValues()
             {
                 object obj1 = null;
@@ -49,7 +48,7 @@ namespace Catel.Test
             }
 
 #if NET
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForTwoDbNullValues()
             {
                 object obj1 = DBNull.Value;
@@ -60,7 +59,7 @@ namespace Catel.Test
             }
 #endif
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForOneNullValue()
             {
                 object obj1 = 5;
@@ -71,10 +70,10 @@ namespace Catel.Test
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheAreEqualReferencesMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForBoxedEqualIntegers()
             {
                 object obj1 = 5;
@@ -84,7 +83,7 @@ namespace Catel.Test
                 Assert.IsTrue(ObjectHelper.AreEqualReferences(obj2, obj1));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForBoxedDifferentIntegers()
             {
                 object obj1 = 5;
@@ -94,7 +93,7 @@ namespace Catel.Test
                 Assert.IsFalse(ObjectHelper.AreEqualReferences(obj2, obj1));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForTwoNullValues()
             {
                 object obj1 = null;
@@ -104,7 +103,7 @@ namespace Catel.Test
                 Assert.IsTrue(ObjectHelper.AreEqualReferences(obj2, obj1));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForOneNullValue()
             {
                 object obj1 = 5;
@@ -114,7 +113,7 @@ namespace Catel.Test
                 Assert.IsFalse(ObjectHelper.AreEqualReferences(obj2, obj1));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForDifferentReferenceTypes()
             {
                 object obj1 = new { Id = "test" };

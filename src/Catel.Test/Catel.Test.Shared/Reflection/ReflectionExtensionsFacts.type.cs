@@ -10,16 +10,11 @@ namespace Catel.Test.Reflection
     using System.Collections.Generic;
     using System.Runtime.InteropServices;
     using Catel.Reflection;
-
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public partial class ReflectionExtensionsFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheImplementsInterfaceExMethod
         {
             public interface ISomeInterface
@@ -37,7 +32,7 @@ namespace Catel.Test.Reflection
                 
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForTypeDirectImplementingInterface()
             {
                 var type = typeof(A);
@@ -45,7 +40,7 @@ namespace Catel.Test.Reflection
                 Assert.IsTrue(type.ImplementsInterfaceEx<ISomeInterface>());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForTypeDerivetiveImplementingInterface()
             {
                 var type = typeof (B);
@@ -54,22 +49,22 @@ namespace Catel.Test.Reflection
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheIsInstanceOfTypeExMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ReflectionExtensions.IsInstanceOfTypeEx(null, new object()));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullObjectToCheck()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ReflectionExtensions.IsInstanceOfTypeEx(typeof(object), null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForEqualReferenceType()
             {
                 var type = typeof (InvalidOperationException);
@@ -78,7 +73,7 @@ namespace Catel.Test.Reflection
                 Assert.IsTrue(type.IsInstanceOfTypeEx(instance));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForInheritingReferenceType()
             {
                 var type = typeof(Exception);
@@ -87,7 +82,7 @@ namespace Catel.Test.Reflection
                 Assert.IsTrue(type.IsInstanceOfTypeEx(instance));              
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForNonInheritingReferenceType()
             {
                 var type = typeof(Exception);
@@ -96,7 +91,7 @@ namespace Catel.Test.Reflection
                 Assert.IsFalse(type.IsInstanceOfTypeEx(instance));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForEqualValueType()
             {
                 var type = typeof(int);
@@ -105,7 +100,7 @@ namespace Catel.Test.Reflection
                 Assert.IsTrue(type.IsInstanceOfTypeEx(instance));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForSpecialValueTypes()
             {
                 var type = typeof(Int64);
@@ -114,7 +109,7 @@ namespace Catel.Test.Reflection
                 Assert.IsTrue(type.IsInstanceOfTypeEx(instance));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForNonInheritingValueType()
             {
                 var type = typeof(bool);
@@ -122,6 +117,41 @@ namespace Catel.Test.Reflection
 
                 Assert.IsFalse(type.IsInstanceOfTypeEx(instance));
             }            
+        }
+
+        [TestFixture]
+        public class TheGetPropertyExMethod
+        {
+            public interface IPerson : INameProvider
+            {
+                
+            }
+
+            public interface INameProvider
+            {
+                string FirstName { get; }
+            }
+
+            public class Person : IPerson
+            {
+                string INameProvider.FirstName { get { return "John"; } }
+            }
+
+            [TestCase]
+            public void ReturnsNoExplicitInterfacePropertiesWhenDisabled()
+            {
+                var propertyInfo = typeof (Person).GetPropertyEx("FirstName", allowExplicitInterfaceProperties: false);
+
+                Assert.IsNull(propertyInfo);
+            }
+
+            [TestCase]
+            public void ReturnsExplicitInterfacePropertiesWhenEnabled()
+            {
+                var propertyInfo = typeof(Person).GetPropertyEx("FirstName", allowExplicitInterfaceProperties: true);
+
+                Assert.IsNotNull(propertyInfo);
+            }
         }
     }
 }

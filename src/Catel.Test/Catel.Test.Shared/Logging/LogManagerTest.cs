@@ -11,18 +11,13 @@ namespace Catel.Test.Logging
     using System.Linq;
 
     using Catel.Logging;
-
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     ///<summary>
     ///  This is a test class for LogManagerTest and is intended
     ///  to contain all LogManagerTest Unit Tests
     ///</summary>
-    [TestClass]
+    [TestFixture]
     public class LogManagerTest
     {
         #region Test classes
@@ -38,7 +33,7 @@ namespace Catel.Test.Logging
 
             public int ErrorCount { get; private set; }
 
-            protected override void Write(ILog log, string message, LogEvent logEvent, object extraData)
+            protected override void Write(ILog log, string message, LogEvent logEvent, object extraData, DateTime time)
             {
                 if (log.TargetType != typeof(TestLogListener))
                 {
@@ -67,7 +62,7 @@ namespace Catel.Test.Logging
         }
         #endregion
 
-        [TestMethod]
+        [TestCase]
         public void LogMessageEvent()
         {
             LogManager.ClearListeners();
@@ -87,7 +82,7 @@ namespace Catel.Test.Logging
             Assert.AreEqual("hello there", eventArgs.Message);
         }
 
-        [TestMethod]
+        [TestCase]
         public void GetListeners()
         {
             LogManager.ClearListeners();
@@ -104,13 +99,13 @@ namespace Catel.Test.Logging
             Assert.AreEqual(listener2, ((List<ILogListener>)listeners)[1]);
         }
 
-        [TestMethod]
+        [TestCase]
         public void IsListenerRegistered_Null()
         {
             ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => LogManager.IsListenerRegistered(null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void IsListenerRegistered_UnregisteredListener()
         {
             LogManager.ClearListeners();
@@ -119,7 +114,7 @@ namespace Catel.Test.Logging
             Assert.IsFalse(LogManager.IsListenerRegistered(listener));
         }
 
-        [TestMethod]
+        [TestCase]
         public void IsListenerRegistered_RegisteredListener()
         {
             LogManager.ClearListeners();
@@ -129,13 +124,13 @@ namespace Catel.Test.Logging
             Assert.IsTrue(LogManager.IsListenerRegistered(listener));
         }
 
-        [TestMethod]
+        [TestCase]
         public void AddListener_Null()
         {
             ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => LogManager.AddListener(null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void AddListener_UnregisteredListener()
         {
             LogManager.ClearListeners();
@@ -146,7 +141,7 @@ namespace Catel.Test.Logging
             Assert.AreEqual(1, LogManager.GetListeners().Count());
         }
 
-        [TestMethod]
+        [TestCase]
         public void AddListener_RegisteredListener()
         {
             LogManager.ClearListeners();
@@ -161,13 +156,13 @@ namespace Catel.Test.Logging
             Assert.AreEqual(2, LogManager.GetListeners().Count());
         }
 
-        [TestMethod]
+        [TestCase]
         public void RemoveListener_Null()
         {
             ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => LogManager.RemoveListener(null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void RemoveListener_UnregisteredListener()
         {
             LogManager.ClearListeners();
@@ -176,7 +171,7 @@ namespace Catel.Test.Logging
             LogManager.RemoveListener(listener);
         }
 
-        [TestMethod]
+        [TestCase]
         public void RemoveListener_RegisteredListener()
         {
             LogManager.ClearListeners();
@@ -189,7 +184,7 @@ namespace Catel.Test.Logging
             Assert.IsFalse(LogManager.IsListenerRegistered(listener));
         }
 
-        [TestMethod]
+        [TestCase]
         public void ClearListeners()
         {
             var listener = new DebugLogListener();
@@ -202,7 +197,7 @@ namespace Catel.Test.Logging
             Assert.AreEqual(0, LogManager.GetListeners().Count());
         }
 
-        [TestMethod]
+        [TestCase]
         public void GetCurrentClassLogger()
         {
             var logger = LogManager.GetCurrentClassLogger();
@@ -210,13 +205,13 @@ namespace Catel.Test.Logging
             Assert.AreEqual(GetType(), logger.TargetType);
         }
 
-        [TestMethod]
+        [TestCase]
         public void GetLogger_Null()
         {
             ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => LogManager.GetLogger(null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void GetLogger_CheckIfSameLogIsReturned()
         {
             var log1 = LogManager.GetLogger(typeof(int));
@@ -225,7 +220,7 @@ namespace Catel.Test.Logging
             Assert.IsTrue(ReferenceEquals(log1, log2));
         }
 
-        [TestMethod]
+        [TestCase]
         public void Log_DefaultIsEnabledValues()
         {
             var listener = new TestLogListener();
@@ -252,7 +247,7 @@ namespace Catel.Test.Logging
             LogManager.RemoveListener(listener);
         }
 
-        [TestMethod]
+        [TestCase]
         public void Log_DebugNotEnabled()
         {
             var listener = new TestLogListener();
@@ -276,7 +271,7 @@ namespace Catel.Test.Logging
             LogManager.RemoveListener(listener);
         }
 
-        [TestMethod]
+        [TestCase]
         public void Log_InfoNotEnabled()
         {
             var listener = new TestLogListener();
@@ -300,7 +295,7 @@ namespace Catel.Test.Logging
             LogManager.RemoveListener(listener);
         }
 
-        [TestMethod]
+        [TestCase]
         public void Log_WarningNotEnabled()
         {
             var listener = new TestLogListener();
@@ -324,7 +319,7 @@ namespace Catel.Test.Logging
             LogManager.RemoveListener(listener);
         }
 
-        [TestMethod]
+        [TestCase]
         public void Log_ErrorNotEnabled()
         {
             var listener = new TestLogListener();

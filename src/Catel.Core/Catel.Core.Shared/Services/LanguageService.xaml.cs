@@ -68,9 +68,9 @@ namespace Catel.Services
             {
                 try
                 {
-#if NETFX_CORE && !WIN81
+#if NETFX_CORE && WIN80
                     var resourceLoader = new ResourceManager(source);
-#elif WIN81
+#elif NETFX_CORE
                     var resourceLoader = ResourceManager.GetForCurrentView(source);
 #else
                     var splittedString = source.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);

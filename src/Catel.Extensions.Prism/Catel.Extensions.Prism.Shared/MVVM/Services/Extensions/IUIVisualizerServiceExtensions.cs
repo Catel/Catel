@@ -102,21 +102,21 @@ namespace Catel.Services
         /// <exception cref="System.ArgumentNullException">The <paramref name="this" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel" /> is <c>null</c>.</exception>
         /// <exception cref="ViewModelNotRegisteredException">The <paramref name="viewModel" /> is not registered by the
-        /// <see cref="IUIVisualizerService.Register(System.Type,System.Type)" />
+        /// <see cref="IUIVisualizerService.Register(string,System.Type,bool)" />
         /// method first.</exception>
         /// <remarks>If the <see cref="IViewManager.GetViewsOfViewModel" /> method returns no active views for the <paramref name="viewModel" /> in the expected <paramref name="timeOutInMilliseconds" /> time
         /// then this method will assume that the view is actually opened and invokes <paramref name="openedProc" /> anyway.</remarks>
         [CLSCompliant(false)]
-        public static Task<bool> Show(this IUIVisualizerService @this, IViewModel viewModel, Action openedProc = null, EventHandler<UICompletedEventArgs> completedProc = null, uint timeOutInMilliseconds = 10000)
+        public static Task<bool?> Show(this IUIVisualizerService @this, IViewModel viewModel, Action openedProc = null, EventHandler<UICompletedEventArgs> completedProc = null, uint timeOutInMilliseconds = 10000)
         {
             Argument.IsNotNull("@this", @this);
 
-            return new Task<bool>(() =>
+            return new Task<bool?>(() =>
             {
                 var innerTask = @this.Show(viewModel, completedProc);
                 return innerTask.ContinueWith(t =>
                 {
-                    if (t.Result && openedProc != null)
+                    if ((t.Result ?? false) && openedProc != null)
                     {
                         var startTime = DateTime.Now;
                         ThreadPool.QueueUserWorkItem(state =>

@@ -11,13 +11,9 @@ namespace Catel.Test.Data
     using System.Linq;
     using Catel.Data;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class CatelTypeInfoFacts
     {
         public class CatelTypeInfoTestModel : ModelBase
@@ -39,7 +35,7 @@ namespace Catel.Test.Data
             public static readonly PropertyData CatelPropertyProperty = RegisterProperty("CatelProperty", typeof(string), null);
         }
 
-        [TestMethod]
+        [TestCase]
         public void CorrectlyRegistersCatelProperties()
         {
             var catelTypeInfo = new CatelTypeInfo(typeof (CatelTypeInfoTestModel));
@@ -49,7 +45,7 @@ namespace Catel.Test.Data
             Assert.IsTrue(properties.Keys.Contains("CatelProperty"));
         }
 
-        [TestMethod]
+        [TestCase]
         public void CorrectlyRegistersNonCatelProperties()
         {
             var catelTypeInfo = new CatelTypeInfo(typeof(CatelTypeInfoTestModel));

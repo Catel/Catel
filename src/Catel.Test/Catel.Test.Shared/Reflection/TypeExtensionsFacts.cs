@@ -12,37 +12,33 @@ namespace Catel.Test.Reflection
     using Catel.Reflection;
     using Catel.Test.Runtime.Serialization;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class TypeExtensionsFacts
     {
         #region Nested type: TheIsBasicTypeMethod
-        [TestClass]
+        [TestFixture]
         public class TheIsBasicTypeMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsNullExceptionForNullType()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => TypeExtensions.IsBasicType(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForIntType()
             {
                 Assert.IsTrue(typeof(int).IsBasicType());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForNullableIntType()
             {
                 Assert.IsTrue(typeof(int?).IsBasicType());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForFastObservableCollectionType()
             {
                 Assert.IsFalse(typeof(FastObservableCollection<TestModel>).IsBasicType());
@@ -51,29 +47,29 @@ namespace Catel.Test.Reflection
         #endregion
 
         #region Nested type: TheIsClassTypeMethod
-        [TestClass]
+        [TestFixture]
         public class TheIsClassTypeMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForNullType()
             {
                 Assert.IsFalse(TypeExtensions.IsClassType(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForValueType()
             {
                 Assert.IsFalse(TypeExtensions.IsClassType(typeof(int)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForStringType()
             {
                 Assert.IsFalse(TypeExtensions.IsClassType(typeof(string)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForClassType()
             {
                 Assert.IsTrue(TypeExtensions.IsClassType(typeof(TypeHelper)));
@@ -83,29 +79,29 @@ namespace Catel.Test.Reflection
         #endregion
 
         #region Nested type: TheIsTypeNullableMethod
-        [TestClass]
+        [TestFixture]
         public class TheIsNullableTypeMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForReferenceType()
             {
                 Assert.IsTrue(TypeExtensions.IsNullableType(typeof(object)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForValueType()
             {
                 Assert.IsFalse(TypeExtensions.IsNullableType(typeof(int)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForNullType()
             {
                 Assert.IsFalse(TypeExtensions.IsNullableType(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForNullableValueType()
             {
                 Assert.IsTrue(TypeExtensions.IsNullableType(typeof(bool?)));

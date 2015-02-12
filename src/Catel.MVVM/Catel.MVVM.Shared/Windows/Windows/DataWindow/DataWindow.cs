@@ -13,6 +13,7 @@ namespace Catel.Windows
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Linq;
+    using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
@@ -110,7 +111,7 @@ namespace Catel.Windows
 #if SILVERLIGHT
         : ChildWindow, IDataWindow
 #else
-        : Window, IDataWindow
+        : System.Windows.Window, IDataWindow
 #endif
     {
         #region Constants
@@ -142,7 +143,7 @@ namespace Catel.Windows
 
         private event EventHandler<EventArgs> _viewLoaded;
         private event EventHandler<EventArgs> _viewUnloaded;
-        private event EventHandler<EventArgs> _viewDataContextChanged;
+        private event EventHandler<DataContextChangedEventArgs> _viewDataContextChanged;
         #endregion
 
         #region Constructors
@@ -288,7 +289,7 @@ namespace Catel.Windows
 
             Loaded += (sender, e) => Initialize();
             Closing += OnDataWindowClosing;
-            DataContextChanged += (sender, e) => _viewDataContextChanged.SafeInvoke(this);
+            DataContextChanged += (sender, e) => _viewDataContextChanged.SafeInvoke(this, new DataContextChangedEventArgs(e.OldValue, e.NewValue));
 
 #if NET
             if (setOwnerAndFocus)
@@ -477,9 +478,9 @@ namespace Catel.Windows
         /// <summary>
         /// Handled when the user invokes the OK command.
         /// </summary>
-        protected void OnOkExecute()
+        protected async void OnOkExecute()
         {
-            if (!ApplyChanges())
+            if (!await ApplyChanges())
             {
                 return;
             }
@@ -511,9 +512,9 @@ namespace Catel.Windows
         /// <summary>
         /// Handled when the user invokes the Cancel command.
         /// </summary>
-        protected void OnCancelExecute()
+        protected async void OnCancelExecute()
         {
-            if (!DiscardChanges())
+            if (!await DiscardChanges())
             {
                 return;
             }
@@ -548,9 +549,9 @@ namespace Catel.Windows
         /// <summary>
         /// Handled when the user invokes the Apply command.
         /// </summary>
-        protected void OnApplyExcute()
+        protected async void OnApplyExcute()
         {
-            ApplyChanges();
+            await ApplyChanges();
         }
 
         /// <summary>
@@ -623,7 +624,7 @@ namespace Catel.Windows
         /// <summary>
         /// Occurs when the data context has changed.
         /// </summary>
-        event EventHandler<EventArgs> IView.DataContextChanged
+        event EventHandler<DataContextChangedEventArgs> IView.DataContextChanged
         {
             add { _viewDataContextChanged += value; }
             remove { _viewDataContextChanged -= value; }
@@ -944,11 +945,11 @@ namespace Catel.Windows
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="args">The <see cref="System.ComponentModel.CancelEventArgs"/> instance containing the event data.</param>
-        private void OnDataWindowClosing(object sender, CancelEventArgs args)
+        private async void OnDataWindowClosing(object sender, CancelEventArgs args)
         {
             if (!ClosedByButton)
             {
-                DiscardChanges();
+                await DiscardChanges();
             }
         }
 
@@ -973,17 +974,17 @@ namespace Catel.Windows
         /// Applies all changes made by this window.
         /// </summary>
         /// <returns>True if successful, otherwise false.</returns>
-        protected virtual bool ApplyChanges()
+        protected async virtual Task<bool> ApplyChanges()
         {
-            return _logic.SaveViewModel();
+            return await _logic.SaveViewModel();
         }
 
         /// <summary>
         /// Discards all changes made by this window.
         /// </summary>
-        protected virtual bool DiscardChanges()
+        protected async virtual Task<bool> DiscardChanges()
         {
-            return _logic.CancelViewModel();
+            return await _logic.CancelViewModel();
         }
 
         /// <summary>

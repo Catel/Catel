@@ -9,19 +9,14 @@ namespace Catel.Test.MVVM
 {
     using System;
     using Catel.MVVM;
-
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class CompositeCommandFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheRegisterCommandMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullCommand()
             {
                 var compositeCommand = new CompositeCommand();
@@ -29,7 +24,7 @@ namespace Catel.Test.MVVM
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => compositeCommand.RegisterCommand(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void RegistersCommandForExecution()
             {
                 var vm = new CompositeCommandViewModel();
@@ -43,10 +38,10 @@ namespace Catel.Test.MVVM
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheUnregisterCommandMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullCommand()
             {
                 var compositeCommand = new CompositeCommand();
@@ -54,7 +49,7 @@ namespace Catel.Test.MVVM
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => compositeCommand.UnregisterCommand(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void UnregistersCommandForExecution()
             {
                 var vm = new CompositeCommandViewModel();
@@ -72,10 +67,10 @@ namespace Catel.Test.MVVM
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheRegisterGenericActionMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullAction()
             {
                 var compositeCommand = new CompositeCommand();
@@ -83,7 +78,7 @@ namespace Catel.Test.MVVM
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => compositeCommand.RegisterAction((Action<object>)null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void RegistersActionForExecution()
             {
                 var compositeCommand = new CompositeCommand();
@@ -98,10 +93,10 @@ namespace Catel.Test.MVVM
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheUnregisterGenericActionMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullAction()
             {
                 var compositeCommand = new CompositeCommand();
@@ -109,7 +104,7 @@ namespace Catel.Test.MVVM
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => compositeCommand.UnregisterAction((Action<object>)null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void UnregistersCommandForExecution()
             {
                 var compositeCommand = new CompositeCommand();
@@ -126,11 +121,11 @@ namespace Catel.Test.MVVM
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheAutoUnsubscribeFunctionality
         {
-            [TestMethod]
-            public void AutomaticallyUnsubscribesCommandOnViewModelClosed()
+            [TestCase]
+            public async void AutomaticallyUnsubscribesCommandOnViewModelClosed()
             {
                 var vm = new CompositeCommandViewModel();
                 var compositeCommand = new CompositeCommand();
@@ -139,7 +134,7 @@ namespace Catel.Test.MVVM
 
                 Assert.IsFalse(vm.IsTestCommand1Executed);
 
-                vm.CloseViewModel(false);
+                await vm.CloseViewModel(false);
 
                 compositeCommand.Execute();
 

@@ -13,11 +13,7 @@ namespace Catel.Test.Data
 
     using Catel.Data;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     using Moq;
 
@@ -28,10 +24,10 @@ namespace Catel.Test.Data
     public class CompositeValidatorFacts
     {
 #if NET
-        [TestClass]
+        [TestFixture]
         public class TheValidationSequenceIsThreadSafe
         {
-            [TestMethod]
+            [TestCase]
             public void CompositeValidatorModificationMustWaitUntilTheEnd()
             {
                 var validatorMock = new Mock<IValidator>();
@@ -102,10 +98,10 @@ namespace Catel.Test.Data
         }
 #endif
 
-        [TestClass]
+        [TestFixture]
         public class TheAddMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullValidator()
             {
                 var compositeValidator = new CompositeValidator();
@@ -113,7 +109,7 @@ namespace Catel.Test.Data
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => compositeValidator.Add(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void AddsNonExistingValidator()
             {
                 var compositeValidator = new CompositeValidator();
@@ -126,7 +122,7 @@ namespace Catel.Test.Data
                 Assert.IsTrue(compositeValidator.Contains(validator));
             }
 
-            [TestMethod]
+            [TestCase]
             public void PreventsAddingDuplicateValidator()
             {
                 var compositeValidator = new CompositeValidator();
@@ -148,10 +144,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheRemoveMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullValidator()
             {
                 var compositeValidator = new CompositeValidator();
@@ -159,7 +155,7 @@ namespace Catel.Test.Data
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => compositeValidator.Remove(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void RemovesExistingValidator()
             {
                 var compositeValidator = new CompositeValidator();
@@ -176,7 +172,7 @@ namespace Catel.Test.Data
                 Assert.IsFalse(compositeValidator.Contains(validator));
             }
 
-            [TestMethod]
+            [TestCase]
             public void DoesNotRemoveNonExistingValidator()
             {
                 var compositeValidator = new CompositeValidator();
@@ -192,10 +188,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheContainsMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullValidator()
             {
                 var compositeValidator = new CompositeValidator();
@@ -203,7 +199,7 @@ namespace Catel.Test.Data
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => compositeValidator.Contains(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForExistingValidator()
             {
                 var compositeValidator = new CompositeValidator();
@@ -216,7 +212,7 @@ namespace Catel.Test.Data
                 Assert.IsTrue(compositeValidator.Contains(validator));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForNonExistingValidator()
             {
                 var compositeValidator = new CompositeValidator();
@@ -228,17 +224,17 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheBeforeValidationMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsExceptionIfAnyValidatorDoes()
             {
                 var compositeValidator = new CompositeValidator();
                 TestCompositeRethrowException<ArgumentNullException>(compositeValidator, validator => validator.BeforeValidation(null, null, null), () => compositeValidator.BeforeValidation(null, null, null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void CallsMethodOnRegisteredValidatorsCorrectly()
             {
                 var compositeValidator = new CompositeValidator();
@@ -248,18 +244,18 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheBeforeValidateFieldsMethod
         {
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsExceptionIfAnyValidatorDoes()
             {
                 var compositeValidator = new CompositeValidator();
                 TestCompositeRethrowException<ArgumentNullException>(compositeValidator, validator => validator.BeforeValidateFields(null, null), () => compositeValidator.BeforeValidateFields(null, null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void CallsMethodOnRegisteredValidatorsCorrectly()
             {
                 var compositeValidator = new CompositeValidator();
@@ -269,17 +265,17 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheBeforeValidateBusinessRulesMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsExceptionIfAnyValidatorDoes()
             {
                 var compositeValidator = new CompositeValidator();
                 TestCompositeRethrowException<ArgumentNullException>(compositeValidator, validator => validator.BeforeValidateBusinessRules(null, null), () => compositeValidator.BeforeValidateBusinessRules(null, null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void CallsMethodOnRegisteredValidatorsCorrectly()
             {
                 var compositeValidator = new CompositeValidator();
@@ -289,17 +285,17 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheValidateFieldsMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsExceptionIfAnyValidatorDoes()
             {
                 var compositeValidator = new CompositeValidator();
                 TestCompositeRethrowException<ArgumentNullException>(compositeValidator, validator => validator.ValidateFields(null, null), () => compositeValidator.ValidateFields(null, null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void CallsMethodOnRegisteredValidatorsCorrectly()
             {
                 var compositeValidator = new CompositeValidator();
@@ -309,10 +305,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheValidateBusinessRulesMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsExceptionIfAnyValidatorDoes()
             {
                 var compositeValidator = new CompositeValidator();
@@ -320,7 +316,7 @@ namespace Catel.Test.Data
             }
 
 
-            [TestMethod]
+            [TestCase]
             public void CallsMethodOnRegisteredValidatorsCorrectly()
             {
                 var compositeValidator = new CompositeValidator();
@@ -330,17 +326,17 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheAfterValidateFieldsMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsExceptionIfAnyValidatorDoes()
             {
                 var compositeValidator = new CompositeValidator();
                 TestCompositeRethrowException<ArgumentNullException>(compositeValidator, validator => validator.AfterValidateFields(null, null), () => compositeValidator.AfterValidateFields(null, null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void CallsMethodOnRegisteredValidatorsCorrectly()
             {
                 var compositeValidator = new CompositeValidator();
@@ -350,17 +346,17 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheAfterValidateBusinessRulesMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsExceptionIfAnyValidatorDoes()
             {
                 var compositeValidator = new CompositeValidator();
                 TestCompositeRethrowException<ArgumentNullException>(compositeValidator, validator => validator.AfterValidateBusinessRules(null, null), () => compositeValidator.AfterValidateBusinessRules(null, null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void CallsMethodOnRegisteredValidatorsCorrectly()
             {
                 var compositeValidator = new CompositeValidator();
@@ -370,17 +366,17 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheAfterValidationMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsExceptionIfAnyValidatorDoes()
             {
                 var compositeValidator = new CompositeValidator();
                 TestCompositeRethrowException<ArgumentNullException>(compositeValidator, validator => validator.AfterValidation(null, null, null), () => compositeValidator.AfterValidation(null, null, null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void CallsMethodOnRegisteredValidatorsCorrectly()
             {
                 var compositeValidator = new CompositeValidator();

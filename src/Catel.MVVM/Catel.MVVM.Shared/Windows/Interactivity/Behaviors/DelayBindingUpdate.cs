@@ -160,9 +160,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Called when the <see cref="Behavior{T}.AssociatedObject"/> has been loaded.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnAssociatedObjectLoaded(object sender, UIEventArgs e)
+        protected override void OnAssociatedObjectLoaded()
         {
             var dependencyProperty = GetDependencyProperty();
             var bindingExpression = AssociatedObject.GetBindingExpression(dependencyProperty);
@@ -193,9 +191,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Called when the <see cref="Behavior{T}.AssociatedObject"/> has been unloaded.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnAssociatedObjectUnloaded(object sender, UIEventArgs e)
+        protected override void OnAssociatedObjectUnloaded()
         {
             var dependencyProperty = GetDependencyProperty();
 

@@ -8,18 +8,14 @@ namespace Catel.Test.MVVM.ViewModels.Attributes
 {
     using Catel.MVVM;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class ModelAttributeFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheConstructor
         {
-            [TestMethod]
+            [TestCase]
             public void CorrectlySetsDefaultValues()
             {
                 var modelAttribute = new ModelAttribute();

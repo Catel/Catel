@@ -9,31 +9,26 @@ namespace Catel.Test.Scoping
 {
     using System;
     using Catel.Scoping;
-
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     internal class ScopeManagerFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheScopeExistsMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullScopeName()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ScopeManager<string>.ScopeExists(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForNonExistingScope()
             {
                 Assert.IsFalse(ScopeManager<string>.ScopeExists());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForExistignScope()
             {
                 Assert.IsFalse(ScopeManager<string>.ScopeExists());
@@ -48,11 +43,11 @@ namespace Catel.Test.Scoping
         }
 
         #region Nested type: ScopingTest
-        [TestClass]
+        [TestFixture]
         public class ScopingTest
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void SingleLevelScoping()
             {
                 ScopeManager<object> scopeManager = null;
@@ -65,7 +60,7 @@ namespace Catel.Test.Scoping
                 Assert.AreEqual(0, scopeManager.RefCount);
             }
 
-            [TestMethod]
+            [TestCase]
             public void MultipleLevelScoping()
             {
                 ScopeManager<object> scopeManager = null;
@@ -92,7 +87,7 @@ namespace Catel.Test.Scoping
                 Assert.AreEqual(0, scopeManager.RefCount);
             }
 
-            [TestMethod]
+            [TestCase]
             public void CustomScopeCreationTest()
             {
                 var obj1 = "15";

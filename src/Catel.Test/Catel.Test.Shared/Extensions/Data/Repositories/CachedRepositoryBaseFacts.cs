@@ -12,11 +12,10 @@ namespace Catel.Test.Extensions.Data.Repositories
     using Catel.Data;
     using Catel.Data.Repositories;
 
+    using NUnit.Framework;
+
 #if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
     using System.Threading.Tasks;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
 #endif
 
     public class CachedRepositoryBaseFacts
@@ -68,10 +67,10 @@ namespace Catel.Test.Extensions.Data.Repositories
             #endregion
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheDataLoadedTimestampProperty
         {
-            [TestMethod]
+            [TestCase]
             public void IsValidWhenDataIsLoaded()
             {
                 var completion = new ManualResetEvent(false);
@@ -89,10 +88,10 @@ namespace Catel.Test.Extensions.Data.Repositories
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheDataProperty
         {
-            [TestMethod]
+            [TestCase]
             public void IsNotNullWhenDataIsLoaded()
             {
                 var completion = new ManualResetEvent(false);
@@ -106,10 +105,10 @@ namespace Catel.Test.Extensions.Data.Repositories
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheExpirationProperty
         {
-            [TestMethod]
+            [TestCase]
             public void ExpiresTheLoadedDataCorrectly()
             {
                 var completion = new ManualResetEvent(false);
@@ -131,10 +130,10 @@ namespace Catel.Test.Extensions.Data.Repositories
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetDataMethod
         {
-            [TestMethod]
+            [TestCase]
             public void CallsCompletedAfterDataLoading()
             {
                 var completion = new ManualResetEvent(false);
@@ -148,7 +147,7 @@ namespace Catel.Test.Extensions.Data.Repositories
                 Assert.AreEqual(1, completedCallCount);
             }
 
-            [TestMethod]
+            [TestCase]
             public void QueuesCompletedDuringDataLoading()
             {
                 var completion = new ManualResetEvent(false);
@@ -169,10 +168,10 @@ namespace Catel.Test.Extensions.Data.Repositories
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheIsDataLoadedProperty
         {
-            [TestMethod]
+            [TestCase]
             public void IsSetToTrueAfterDataHasBeenLoaded()
             {
                 var completion = new ManualResetEvent(false);
@@ -189,10 +188,10 @@ namespace Catel.Test.Extensions.Data.Repositories
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheIsLoadingDataProperty
         {
-            [TestMethod]
+            [TestCase]
             public void IsToggledDuringDataLoading()
             {
                 var completion = new ManualResetEvent(false);

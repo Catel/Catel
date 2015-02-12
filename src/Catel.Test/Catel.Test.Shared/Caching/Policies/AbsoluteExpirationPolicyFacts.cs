@@ -9,11 +9,7 @@ namespace Catel.Test.Caching.Policies
 
     using Catel.Caching.Policies;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     /// <summary>
     /// The absolute expiration policy facts.
@@ -25,7 +21,7 @@ namespace Catel.Test.Caching.Policies
         /// <summary>
         /// The can reset property.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class TheCanResetProperty
         {
             #region Methods
@@ -33,7 +29,7 @@ namespace Catel.Test.Caching.Policies
             /// <summary>
             /// The returns false.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalse()
             {
                 Assert.IsFalse(new AbsoluteExpirationPolicy(DateTime.Now.AddDays(1)).CanReset);
@@ -48,7 +44,7 @@ namespace Catel.Test.Caching.Policies
         /// <summary>
         /// The the is expired property.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class TheIsExpiredProperty
         {
             #region Methods
@@ -56,7 +52,7 @@ namespace Catel.Test.Caching.Policies
             /// <summary>
             /// The returns true if the expiration date time is the pass.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueIfTheExpirationDateTimeIsThePass()
             {
                 Assert.IsTrue(new AbsoluteExpirationPolicy(DateTime.Now.AddDays(-1)).IsExpired);
@@ -65,7 +61,7 @@ namespace Catel.Test.Caching.Policies
             /// <summary>
             /// The returns false if the expiration date time is the future.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseIfTheExpirationDateTimeIsTheFuture()
             {
                 Assert.IsFalse(new AbsoluteExpirationPolicy(DateTime.Now.AddDays(1)).IsExpired);
@@ -80,7 +76,7 @@ namespace Catel.Test.Caching.Policies
         /// <summary>
         /// The can reset property.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class TheResetMethod
         {
             #region Methods
@@ -88,7 +84,7 @@ namespace Catel.Test.Caching.Policies
             /// <summary>
             /// The throws invalid operation exception.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ThrowsInvalidOperationException()
             {
                 ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => new AbsoluteExpirationPolicy(DateTime.Now.AddDays(1)).Reset());

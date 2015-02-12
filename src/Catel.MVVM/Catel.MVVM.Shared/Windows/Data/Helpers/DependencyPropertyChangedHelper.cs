@@ -58,7 +58,9 @@ namespace Catel.Windows.Data
             Argument.IsNotNull("frameworkElement", frameworkElement);
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
 
-            string key = DependencyPropertyHelper.GetDependencyPropertyCacheKey(frameworkElement, propertyName);
+            var type = frameworkElement.GetType();
+
+            string key = DependencyPropertyHelper.GetDependencyPropertyCacheKey(type, propertyName);
 
             if (!_realDependencyPropertiesCache.ContainsKey(key))
             {
@@ -68,7 +70,7 @@ namespace Catel.Windows.Data
                 {
                     isRealDependencyProperty = false;
                 }
-                else if (propertyName.Contains(DependencyPropertyHelper.GetDependencyPropertyCacheKeyPrefix(frameworkElement)))
+                else if (propertyName.Contains(DependencyPropertyHelper.GetDependencyPropertyCacheKeyPrefix(type)))
                 {
                     isRealDependencyProperty = false;
                 }
@@ -139,7 +141,7 @@ namespace Catel.Windows.Data
         /// <param name="handler">The handler to subscribe.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="frameworkElement"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        public static void UnsubscribeToDataContextAndInheritedDataContext(this FrameworkElement frameworkElement, EventHandler<DependencyPropertyValueChangedEventArgs> handler)
+        public static void UnsubscribeFromDataContextAndInheritedDataContext(this FrameworkElement frameworkElement, EventHandler<DependencyPropertyValueChangedEventArgs> handler)
         {
             Argument.IsNotNull("frameworkElement", frameworkElement);
             Argument.IsNotNull("handler", handler);
@@ -273,7 +275,8 @@ namespace Catel.Windows.Data
         /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
         private static DependencyProperty GetDependencyProperty<T>(FrameworkElement frameworkElement, string propertyName)
         {
-            var key = DependencyPropertyHelper.GetDependencyPropertyCacheKey(frameworkElement, propertyName);
+            var viewType = frameworkElement.GetType();
+            var key = DependencyPropertyHelper.GetDependencyPropertyCacheKey(viewType, propertyName);
 
             if (!_dependencyProperties.ContainsKey(key))
             {
@@ -281,7 +284,7 @@ namespace Catel.Windows.Data
                 // on which we subscribe for changess. Otherwise this is the dependency property containing the actual
                 // handlers to call when the property changes.
                 var dependencyPropertyMetaData = typeof(T) == typeof(object) ? new PropertyMetadata(default(T), OnDependencyPropertyChanged) : null;
-                var dependencyProperty = DependencyProperty.RegisterAttached(key, typeof(T), frameworkElement.GetType(), dependencyPropertyMetaData);
+                var dependencyProperty = DependencyProperty.RegisterAttached(key, typeof(T), viewType, dependencyPropertyMetaData);
 
                 _dependencyProperties[key] = dependencyProperty;
                 _wrapperDependencyProperties[dependencyProperty] = propertyName;

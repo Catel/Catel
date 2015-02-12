@@ -4,20 +4,23 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || SILVERLIGHT
+#if !XAMARIN
 
 namespace Catel.Windows.Markup
 {
     using System;
     using System.Reflection;
+
+#if !NETFX_CORE
     using System.Threading;
     using System.Windows;
     using System.Windows.Threading;
     using Catel.Windows.Threading;
-
-#if !NETFX_CORE
     using System.Windows.Data;
     using System.Windows.Markup;
+#else
+    using global::Windows.UI.Core;
+    using global::Windows.UI.Xaml;
 #endif
 
     /// <summary>
@@ -65,7 +68,7 @@ namespace Catel.Windows.Markup
         /// <returns>The object value to set on the property where the extension is applied.</returns>
         public override sealed object ProvideValue(IServiceProvider serviceProvider)
         {
-#if WINDOWS_PHONE
+#if WINDOWS_PHONE || NETFX_CORE
             _targetObject = null;
             _targetProperty = null;
 #else
@@ -75,8 +78,12 @@ namespace Catel.Windows.Markup
                 _targetObject = target.TargetObject;
                 _targetProperty = target.TargetProperty;
 
-                var frameworkElement = _targetObject as FrameworkElement;
-                if (frameworkElement != null)
+                FrameworkElement frameworkElement;
+#if !SILVERLIGHT && !NETFX_CORE
+                FrameworkContentElement frameworkContentElement;
+#endif
+
+                if ((frameworkElement = _targetObject as FrameworkElement) != null) 
                 {
 #if NET
                     _isFrameworkElementLoaded = frameworkElement.IsLoaded;
@@ -85,6 +92,15 @@ namespace Catel.Windows.Markup
                     frameworkElement.Loaded += OnTargetObjectLoadedInternal;
                     frameworkElement.Unloaded += OnTargetObjectUnloadedInternal;
                 }
+#if !SILVERLIGHT && !NETFX_CORE
+                else if ((frameworkContentElement = _targetObject as FrameworkContentElement) != null)
+                {
+                    _isFrameworkElementLoaded = frameworkContentElement.IsLoaded;
+
+                    frameworkContentElement.Loaded += OnTargetObjectLoadedInternal;
+                    frameworkContentElement.Unloaded += OnTargetObjectUnloadedInternal;
+                }
+#endif
             }
 #endif
 
@@ -153,6 +169,16 @@ namespace Catel.Windows.Markup
 
                     Action updateAction = () => obj.SetValue(targetPropertyAsDependencyProperty, value);
 
+#if NETFX_CORE
+                    if (obj.Dispatcher.HasThreadAccess)
+                    {
+                        UpdateValue();
+                    }
+                    else
+                    {
+                        obj.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => updateAction());
+                    }
+#else
                     if (obj.CheckAccess())
                     {
                         updateAction();
@@ -161,6 +187,7 @@ namespace Catel.Windows.Markup
                     {
                         obj.Dispatcher.Invoke(updateAction);
                     }
+#endif
                 }
                 else
                 {

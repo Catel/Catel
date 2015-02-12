@@ -15,7 +15,6 @@ namespace Catel.Data
 
     public partial class ModelBase
     {
-#if !NETFX_CORE
         /// <summary>
         /// Registers a property that will be automatically handled by this object.
         /// </summary>
@@ -39,7 +38,7 @@ namespace Catel.Data
 
             var memberExpression = (MemberExpression)propertyExpression.Body;
 
-#if !PCL
+#if !PCL && !NETFX_CORE
             if (memberExpression.Member.MemberType != MemberTypes.Property)
             {
                 throw new ArgumentException("The member type of the body of the property expression should be a property");
@@ -80,7 +79,7 @@ namespace Catel.Data
 
             var memberExpression = (MemberExpression)propertyExpression.Body;
 
-#if !PCL
+#if !PCL && !NETFX_CORE
             if (memberExpression.Member.MemberType != MemberTypes.Property)
             {
                 throw new ArgumentException("The member type of the body of the property expression should be a property");
@@ -102,7 +101,6 @@ namespace Catel.Data
                 }
             }, includeInSerialization, includeInBackup, setParent);
         }
-#endif
 
         /// <summary>
         /// Registers a property that will be automatically handled by this object.
@@ -229,6 +227,22 @@ namespace Catel.Data
             var property = new PropertyData(name, type, createDefaultValue, setParent, propertyChangedEventHandler, isSerializable,
                 includeInSerialization, includeInBackup, isModelBaseProperty, false);
             return property;
+        }
+
+        /// <summary>
+        /// Unregisters the property.
+        /// <para />
+        /// Note that the unregistration of a property applies to all models of the same type. It is not possible to 
+        /// unregister a property for a single instance of a type.
+        /// </summary>
+        /// <param name="modelType">Type of the model, required because it cannot be retrieved in a static context.</param>
+        /// <param name="name">The name.</param>
+        protected internal static void UnregisterProperty(Type modelType, string name)
+        {
+            Argument.IsNotNull("modelType", modelType);
+            Argument.IsNotNullOrWhitespace("name", name);
+
+            PropertyDataManager.UnregisterProperty(modelType, name);
         }
 
         /// <summary>

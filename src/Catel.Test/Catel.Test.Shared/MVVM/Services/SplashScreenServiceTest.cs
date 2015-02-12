@@ -15,7 +15,7 @@ namespace Catel.Test.Services
     //using Catel.Services.Test;
     //using Catel.MVVM.Tasks;
 
-    //using Microsoft.VisualStudio.TestTools.UnitTesting;
+    //using NUnit.Framework;
 
     //using Moq;
 
@@ -24,7 +24,7 @@ namespace Catel.Test.Services
     ///// <summary>
     ///// The splash screen service test.
     ///// </summary>
-    //[TestClass]
+    //[TestFixture]
     //public class SplashScreenServiceTest
     //{
     //    #region Methods
@@ -42,7 +42,7 @@ namespace Catel.Test.Services
     //    /// <summary>
     //    /// The progress notification through i please wait service.
     //    /// </summary>
-    //    [TestMethod]
+    //    [TestCase]
     //    public void ProgressNotificationThroughIPleaseWaitService()
     //    {
     //        var pleaseWaitServiceMock = new Mock<IPleaseWaitService>();
@@ -69,7 +69,7 @@ namespace Catel.Test.Services
     //    /// <summary>
     //    /// The invalid operation exception is raised if there are not task registered.
     //    /// </summary>
-    //    [TestMethod]
+    //    [TestCase]
     //    public void InvalidOperationExceptionIsRaisedIfThereAreNotTaskRegisteredCommiting()
     //    {
     //        var splashScreenService = CreateSplashScreenService(new Catel.Services.Test.MessageService());
@@ -79,7 +79,7 @@ namespace Catel.Test.Services
     //    /// <summary>
     //    /// The invalid operation exception is raised if there are not task registered.
     //    /// </summary>
-    //    [TestMethod]
+    //    [TestCase]
     //    public void InvalidOperationExceptionIsRaisedIfThereAreNotTaskRegisteredWhenCommitingAsycn()
     //    {
     //        var splashScreenService = CreateSplashScreenService(new Catel.Services.Test.MessageService());
@@ -89,7 +89,7 @@ namespace Catel.Test.Services
     //    /// <summary>
     //    /// The invalid operation exception is raised if is commited during an execution.
     //    /// </summary>
-    //    [TestMethod]
+    //    [TestCase]
     //    public void InvalidOperationExceptionIsRaisedIfIsCommitedWhenIsRunning()
     //    {
     //        var pleaseWaitServiceMock = new Mock<IPleaseWaitService>();
@@ -125,7 +125,7 @@ namespace Catel.Test.Services
     //    /// <summary>
     //    /// The invalid operation exception is raised if is commited async when is running.
     //    /// </summary>
-    //    [TestMethod]
+    //    [TestCase]
     //    public void InvalidOperationExceptionIsRaisedIfIsCommitedAsyncWhenIsRunning()
     //    {
     //        var pleaseWaitServiceMock = new Mock<IPleaseWaitService>();
@@ -161,7 +161,7 @@ namespace Catel.Test.Services
     //    /// <summary>
     //    /// The invalid operation exception is raised if is enqueue during an execution.
     //    /// </summary>
-    //    [TestMethod]
+    //    [TestCase]
     //    public void InvalidOperationExceptionIsRaisedIfTaskIsEnqueueWhenIsRunning()
     //    {
     //        var pleaseWaitServiceMock = new Mock<IPleaseWaitService>();
@@ -197,7 +197,7 @@ namespace Catel.Test.Services
     //    /// <summary>
     //    /// The invalid operation exception is raised if task is enqueue when is commiting.
     //    /// </summary>
-    //    [TestMethod]
+    //    [TestCase]
     //    public void InvalidOperationExceptionIsRaisedIfTaskIsEnqueueWhenIsCommiting()
     //    {
     //        var pleaseWaitServiceMock = new Mock<IPleaseWaitService>();
@@ -227,7 +227,7 @@ namespace Catel.Test.Services
     //    /// <summary>
     //    /// The interation throught i message service and notify progress of execution and rollback throught i please wait service.
     //    /// </summary>
-    //    [TestMethod]
+    //    [TestCase]
     //    public void InterationThroughtIMessageServiceAndNotifyProgressOfExecutionAndRollbackThroughtIPleaseWaitService()
     //    {
     //        var pleaseWaitServiceMock = new Mock<IPleaseWaitService>();

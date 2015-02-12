@@ -13,6 +13,9 @@ which ensures a safe bet by professional companies and developers.
 Besides the core of Catel, lots of extensions are available so developers can pick whatever they need for their applications 
 to be built. Among these extensions are support for Dynamic Objects, Entity Framework, Fluent Validation, Memento patterns and Prism.
 
+<a href="https://pledgie.com/campaigns/26956"><img alt="Click here to lend your support to: Catel and make a donation at pledgie.com !" src="https://pledgie.com/campaigns/26956.png?skin_name=chrome" border="0" /></a>
+
+
 ## Official website
 
 The official website can be found at http://www.catelproject.com

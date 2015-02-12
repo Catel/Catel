@@ -51,9 +51,9 @@ namespace Catel.Services.Test
         /// </summary>
         /// <param name="exception">The exception.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
-        public Task<MessageResult> ShowError(Exception exception)
+        public async Task<MessageResult> ShowError(Exception exception)
         {
-            return new Task<MessageResult>(() => MessageResult.None);
+            return MessageResult.None;
         }
 
         /// <summary>
@@ -63,9 +63,9 @@ namespace Catel.Services.Test
         /// <param name="caption">The caption.</param>
         /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentException">The <paramref name="caption"/> is <c>null</c> or whitespace.</exception>
-        public Task<MessageResult> ShowError(string message, string caption = "")
+        public async Task<MessageResult> ShowError(string message, string caption = "")
         {
-            return new Task<MessageResult>(() => MessageResult.None);
+            return MessageResult.None;
         }
 
         /// <summary>
@@ -75,9 +75,9 @@ namespace Catel.Services.Test
         /// <param name="caption">The caption.</param>
         /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentException">The <paramref name="caption"/> is <c>null</c> or whitespace.</exception>
-        public Task<MessageResult> ShowWarning(string message, string caption = "")
+        public async Task<MessageResult> ShowWarning(string message, string caption = "")
         {
-            return new Task<MessageResult>(() => MessageResult.None);
+            return MessageResult.None;
         }
 
         /// <summary>
@@ -87,9 +87,9 @@ namespace Catel.Services.Test
         /// <param name="caption">The caption.</param>
         /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentException">The <paramref name="caption"/> is <c>null</c> or whitespace.</exception>
-        public Task<MessageResult> ShowInformation(string message, string caption = "")
+        public async Task<MessageResult> ShowInformation(string message, string caption = "")
         {
-            return new Task<MessageResult>(() => MessageResult.None);
+            return MessageResult.None;
         }
 
         /// <summary>
@@ -102,14 +102,14 @@ namespace Catel.Services.Test
         /// <returns>The <see cref="MessageResult"/>.</returns>
         /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentException">The <paramref name="caption"/> is <c>null</c> or whitespace.</exception>
-        public Task<MessageResult> Show(string message, string caption = "", MessageButton button = MessageButton.OK, MessageImage icon = MessageImage.None)
+        public async Task<MessageResult> Show(string message, string caption = "", MessageButton button = MessageButton.OK, MessageImage icon = MessageImage.None)
         {
             if (ExpectedResults.Count == 0)
             {
                 throw new Exception(ResourceHelper.GetString("NoExpectedResultsInQueueForUnitTest"));
             }
 
-            return new Task<MessageResult>(()=> ExpectedResults.Dequeue());
+            return ExpectedResults.Dequeue();
         }
         #endregion
     }

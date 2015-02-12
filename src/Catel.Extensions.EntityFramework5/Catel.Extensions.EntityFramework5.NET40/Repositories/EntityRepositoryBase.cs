@@ -149,6 +149,17 @@ namespace Catel.Data.Repositories
         }
 
         /// <summary>
+        /// Gets an new entity instance, which may be a proxy if the entity meets the proxy requirements and the underlying context is configured to create proxies.
+        /// <para />
+        /// Note that the returned proxy entity is NOT added or attached to the set.
+        /// </summary>
+        /// <returns>The proxy entity</returns>
+        public virtual TEntity Create()
+        {
+            return _dbContext.Set<TEntity>().Create();
+        }
+
+        /// <summary>
         /// Adds the specified entity to the repository.
         /// </summary>
         /// <param name="entity">The entity to add.</param>

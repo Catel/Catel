@@ -159,10 +159,21 @@ namespace Catel.MVVM.Providers
             }
 #endif
 
-            if ((_closeInitiatedByViewModel ?? false) && (_closeInitiatedByViewModelResult != null))
+            if (_closeInitiatedByViewModelResult != null)
             {
+                bool result;
+                try
+                {
+                    result = PropertyHelper.TrySetPropertyValue(TargetWindow, "DialogResult", _closeInitiatedByViewModelResult);
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning("Failed to set the 'DialogResult' exception: {0}", ex);
+                    result = false;
+                }
+
                 // Support all windows (even those that do not derive from ChildWindow)
-                if (!PropertyHelper.TrySetPropertyValue(TargetWindow, "DialogResult", _closeInitiatedByViewModelResult))
+                if (!result)
                 {
                     Log.Warning("Failed to set the 'DialogResult' property of window type '{0}', closing window via method", TargetWindow.GetType().Name);
 
@@ -186,7 +197,7 @@ namespace Catel.MVVM.Providers
         /// Public to allow the generated ILGenerator to access this method.
         /// </remarks>
         // ReSharper disable UnusedMember.Local
-        public void OnTargetWindowClosed()
+        public async void OnTargetWindowClosed()
         // ReSharper restore UnusedMember.Local
         {
 #if SILVERLIGHT
@@ -212,7 +223,7 @@ namespace Catel.MVVM.Providers
                     Log.Warning("Failed to get the 'DialogResult' property of window type '{0}', using 'null' as dialog result", TargetWindow.GetType().Name);
                 }
 
-                CloseViewModel(dialogResult);
+                await CloseViewModel(dialogResult);
             }
 
             _dynamicEventListener.UnsubscribeFromEvent();

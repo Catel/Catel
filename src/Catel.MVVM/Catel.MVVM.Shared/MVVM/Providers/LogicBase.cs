@@ -9,7 +9,7 @@ namespace Catel.MVVM.Providers
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
-
+    using System.Threading.Tasks;
     using Caching;
     using Data;
     using IoC;
@@ -59,7 +59,7 @@ namespace Catel.MVVM.Providers
     /// Base implementation of the behaviors, which defines all the different possible situations
     /// a behavior must implement / support to be a valid MVVM provider behavior.
     /// </summary>
-    public abstract class LogicBase : ObservableObject, IViewLoadState
+    public abstract class LogicBase : ObservableObject, IViewLoadState, IUniqueIdentifyable
     {
         #region Fields
         /// <summary>
@@ -86,11 +86,6 @@ namespace Catel.MVVM.Providers
         /// The view property selector.
         /// </summary>
         private static readonly IViewPropertySelector _viewPropertySelector;
-
-        /// <summary>
-        /// A list of dependency properties to subscribe to per type.
-        /// </summary>
-        private static readonly ICacheStorage<Type, List<string>> _viewPropertiesToSubscribe = new CacheStorage<Type, List<string>>();
 
         /// <summary>
         /// The view model instances currently held by this provider. This value should only be used
@@ -142,7 +137,7 @@ namespace Catel.MVVM.Providers
                 viewModelType = (viewModel != null) ? viewModel.GetType() : _viewModelLocator.ResolveViewModel(targetView.GetType());
                 if (viewModelType == null)
                 {
-                    string error = string.Format("The view model of the view '{0}' could not be resolved. Make sure to customize the IViewModelLocator or register the view and view model manually", targetView.GetType().GetSafeFullName());
+                    var error = string.Format("The view model of the view '{0}' could not be resolved. Make sure to customize the IViewModelLocator or register the view and view model manually", targetView.GetType().GetSafeFullName());
                     Log.Error(error);
                     throw new NotSupportedException(error);
                 }
@@ -173,7 +168,8 @@ namespace Catel.MVVM.Providers
                 return;
             }
 
-            // Use a weak event for loading to prevent memory leaks
+            Log.Debug("Subscribing to view events");
+
             ViewLoadManager.AddView(this);
             this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewLoading", OnViewLoadedManagerLoading);
             this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewLoaded", OnViewLoadedManagerLoaded);
@@ -185,6 +181,8 @@ namespace Catel.MVVM.Providers
             targetView.Unloaded += (sender, e) => Unloaded.SafeInvoke(this);
 
             TargetView.DataContextChanged += OnTargetViewDataContextChanged;
+
+            Log.Debug("Subscribing to view properties");
 
             // This also subscribes to DataContextChanged, don't double subscribe
             var viewPropertiesToSubscribe = DetermineInterestingViewProperties();
@@ -403,7 +401,7 @@ namespace Catel.MVVM.Providers
         /// <summary>
         /// The view.
         /// </summary>
-        IView IViewLoadState.View 
+        IView IViewLoadState.View
         {
             get { return TargetView; }
         }
@@ -472,34 +470,31 @@ namespace Catel.MVVM.Providers
         {
             var targetViewType = TargetViewType;
 
-            return _viewPropertiesToSubscribe.GetFromCacheOrFetch(targetViewType, () =>
+            var finalProperties = new List<string>();
+
+            if ((_viewPropertySelector == null) || (_viewPropertySelector.MustSubscribeToAllViewProperties(targetViewType)))
             {
                 var viewProperties = TargetView.GetProperties();
-                var finalProperties = new List<string>();
-
-                if ((_viewPropertySelector == null) || (_viewPropertySelector.MustSubscribeToAllViewProperties(targetViewType)))
+                finalProperties.AddRange(viewProperties);
+            }
+            else
+            {
+                var propertiesToSubscribe = new HashSet<string>(_viewPropertySelector.GetViewPropertiesToSubscribeTo(targetViewType));
+                if (!propertiesToSubscribe.Contains("DataContext"))
                 {
-                    finalProperties.AddRange(viewProperties);
-                }
-                else
-                {
-                    var propertiesToSubscribe = _viewPropertySelector.GetViewPropertiesToSubscribeTo(targetViewType);
-                    if (!propertiesToSubscribe.Contains("DataContext"))
-                    {
-                        propertiesToSubscribe.Add("DataContext");
-                    }
-
-                    foreach (var gatheredViewProperty in viewProperties)
-                    {
-                        if (propertiesToSubscribe.Contains(gatheredViewProperty))
-                        {
-                            finalProperties.Add(gatheredViewProperty);
-                        }
-                    }
+                    propertiesToSubscribe.Add("DataContext");
                 }
 
-                return finalProperties;
-            });
+                foreach (var propertyToSubscribe in propertiesToSubscribe)
+                {
+                    if (propertiesToSubscribe.Contains(propertyToSubscribe))
+                    {
+                        finalProperties.Add(propertyToSubscribe);
+                    }
+                }
+            }
+
+            return finalProperties;
         }
 
         /// <summary>
@@ -618,7 +613,7 @@ namespace Catel.MVVM.Providers
         /// This method will call the <see cref="OnTargetViewLoaded"/> which can be overriden for custom 
         /// behavior. This method is required to protect from duplicate loaded events.
         /// </remarks>
-        private void OnTargetViewLoadedInternal(object sender, EventArgs e)
+        private async void OnTargetViewLoadedInternal(object sender, EventArgs e)
         {
             if (!CanLoad)
             {
@@ -647,28 +642,35 @@ namespace Catel.MVVM.Providers
 
             TargetView.Dispatch(() =>
             {
-                if (ViewModel != null)
-                {
-                    // Initialize the view model. The view model itself is responsible to prevent double initialization
-                    ViewModel.InitializeViewModel();
-
-                    // Revalidate since the control already initialized the view model before the control
-                    // was visible, therefore the WPF engine does not show warnings and errors
-                    var viewModelAsViewModelBase = ViewModel as ViewModelBase;
-                    if (viewModelAsViewModelBase != null)
-                    {
-                        viewModelAsViewModelBase.Validate(true, false);
-                    }
-                    else
-                    {
-                        ViewModel.ValidateViewModel(true, false);
-                    }
-
-                    _isFirstValidationAfterLoaded = true;
-                }
+#pragma warning disable 4014
+                InitializeViewModel();
+#pragma warning restore 4014
             });
 
             IsLoading = false;
+        }
+
+        private async Task InitializeViewModel()
+        {
+            if (ViewModel != null)
+            {
+                // Initialize the view model. The view model itself is responsible to prevent double initialization
+                await ViewModel.InitializeViewModel();
+
+                // Revalidate since the control already initialized the view model before the control
+                // was visible, therefore the WPF engine does not show warnings and errors
+                var viewModelAsViewModelBase = ViewModel as ViewModelBase;
+                if (viewModelAsViewModelBase != null)
+                {
+                    viewModelAsViewModelBase.Validate(true, false);
+                }
+                else
+                {
+                    ViewModel.ValidateViewModel(true, false);
+                }
+
+                _isFirstValidationAfterLoaded = true;
+            }
         }
 
         /// <summary>
@@ -755,8 +757,13 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        public virtual void OnTargetViewDataContextChanged(object sender, EventArgs e)
+        public virtual void OnTargetViewDataContextChanged(object sender, DataContextChangedEventArgs e)
         {
+            if (e.AreEqual)
+            {
+                return;
+            }
+
             Log.Debug("DataContext of TargetView '{0}' has changed to '{1}'", TargetView.GetType().Name, ObjectToStringHelper.ToTypeString(TargetView.DataContext));
 
             var dataContext = TargetView.DataContext;
@@ -864,29 +871,29 @@ namespace Catel.MVVM.Providers
         /// Cancels the view model.
         /// </summary>
         /// <returns><c>true</c> if the view model is successfully canceled; otherwise <c>false</c>.</returns>
-        public virtual bool CancelViewModel()
+        public async virtual Task<bool> CancelViewModel()
         {
             if (ViewModel == null)
             {
                 return false;
             }
 
-            return ViewModel.CancelViewModel();
+            return await ViewModel.CancelViewModel();
         }
 
         /// <summary>
         /// Cancels and closes the view model.
         /// </summary>
         /// <returns><c>true</c> if the view model is successfully canceled; otherwise <c>false</c>.</returns>
-        public bool CancelAndCloseViewModel()
+        public async Task<bool> CancelAndCloseViewModel()
         {
-            bool result = CancelViewModel();
+            var result = await CancelViewModel();
             if (!result)
             {
                 return result;
             }
 
-            CloseViewModel(result);
+            await CloseViewModel(result);
 
             return result;
         }
@@ -895,29 +902,29 @@ namespace Catel.MVVM.Providers
         /// Saves the view model.
         /// </summary>
         /// <returns><c>true</c> if the view model is successfully saved; otherwise <c>false</c>.</returns>
-        public virtual bool SaveViewModel()
+        public async virtual Task<bool> SaveViewModel()
         {
             if (ViewModel == null)
             {
                 return false;
             }
 
-            return ViewModel.SaveViewModel();
+            return await ViewModel.SaveViewModel();
         }
 
         /// <summary>
         /// Saves and closes the view model. If the saving fails, the view model is not closed.
         /// </summary>
         /// <returns><c>true</c> if the view model is successfully saved; otherwise <c>false</c>.</returns>
-        public bool SaveAndCloseViewModel()
+        public async Task<bool> SaveAndCloseViewModel()
         {
-            bool result = SaveViewModel();
+            var result = await SaveViewModel();
             if (!result)
             {
                 return result;
             }
 
-            CloseViewModel(result);
+            await CloseViewModel(result);
 
             return result;
         }
@@ -925,11 +932,11 @@ namespace Catel.MVVM.Providers
         /// <summary>
         /// Closes the view model.
         /// </summary>
-        public virtual void CloseViewModel(bool? result)
+        public async virtual Task CloseViewModel(bool? result)
         {
             if (ViewModel != null)
             {
-                ViewModel.CloseViewModel(result);
+                await ViewModel.CloseViewModel(result);
                 ViewModel = null;
             }
         }

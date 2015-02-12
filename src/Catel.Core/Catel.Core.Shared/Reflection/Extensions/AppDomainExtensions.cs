@@ -68,7 +68,7 @@ namespace Catel.Reflection
             Log.Info("Preloading assemblies from AppDomain");
             Log.Indent();
 
-            var loadedAssemblies = new List<string>();
+            var loadedAssemblies = new HashSet<string>();
 
             var currentAssemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach (var assembly in currentAssemblies)
@@ -107,7 +107,7 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentException">The <paramref name="assemblyFilename" /> is <c>null</c> or whitespace.</exception>
         public static void LoadAssemblyIntoAppDomain(this AppDomain appDomain, string assemblyFilename, bool includeReferencedAssemblies = true)
         {
-            LoadAssemblyIntoAppDomain(appDomain, assemblyFilename, includeReferencedAssemblies, new List<string>());
+            LoadAssemblyIntoAppDomain(appDomain, assemblyFilename, includeReferencedAssemblies, new HashSet<string>());
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentNullException">The <paramref name="appDomain" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="assemblyFilename" /> is <c>null</c> or whitespace.</exception>
         private static void LoadAssemblyIntoAppDomain(this AppDomain appDomain, string assemblyFilename, bool includeReferencedAssemblies,
-            List<string> alreadyLoadedAssemblies)
+            HashSet<string> alreadyLoadedAssemblies)
         {
             Argument.IsNotNull("appDomain", appDomain);
             Argument.IsNotNullOrWhitespace("assemblyFilename", assemblyFilename);
@@ -145,7 +145,7 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentNullException">The <paramref name="assembly"/> is <c>null</c>.</exception>
         public static void LoadAssemblyIntoAppDomain(this AppDomain appDomain, Assembly assembly, bool includeReferencedAssemblies = true)
         {
-            LoadAssemblyIntoAppDomain(appDomain, assembly.GetName(), includeReferencedAssemblies, new List<string>());
+            LoadAssemblyIntoAppDomain(appDomain, assembly.GetName(), includeReferencedAssemblies, new HashSet<string>());
         }
 
         /// <summary>
@@ -158,7 +158,7 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentNullException">The <paramref name="appDomain" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="assembly" /> is <c>null</c>.</exception>
         public static void LoadAssemblyIntoAppDomain(this AppDomain appDomain, Assembly assembly, bool includeReferencedAssemblies,
-            List<string> alreadyLoadedAssemblies)
+            HashSet<string> alreadyLoadedAssemblies)
         {
             LoadAssemblyIntoAppDomain(appDomain, assembly.GetName(), includeReferencedAssemblies, alreadyLoadedAssemblies);
         }
@@ -173,7 +173,7 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentNullException">The <paramref name="assemblyName"/> is <c>null</c>.</exception>
         public static void LoadAssemblyIntoAppDomain(this AppDomain appDomain, AssemblyName assemblyName, bool includeReferencedAssemblies = true)
         {
-            LoadAssemblyIntoAppDomain(appDomain, assemblyName, includeReferencedAssemblies, new List<string>());
+            LoadAssemblyIntoAppDomain(appDomain, assemblyName, includeReferencedAssemblies, new HashSet<string>());
         }
 
         /// <summary>
@@ -186,7 +186,7 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentNullException">The <paramref name="appDomain" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="assemblyName" /> is <c>null</c>.</exception>
         private static void LoadAssemblyIntoAppDomain(this AppDomain appDomain, AssemblyName assemblyName, bool includeReferencedAssemblies,
-            List<string> alreadyLoadedAssemblies)
+            HashSet<string> alreadyLoadedAssemblies)
         {
             Argument.IsNotNull("appDomain", appDomain);
             Argument.IsNotNull("assemblyName", assemblyName);
@@ -224,7 +224,7 @@ namespace Catel.Reflection
                     }
                 }
 
-                TypeCache.InitializeTypes(false, loadedAssembly);
+                TypeCache.InitializeTypes(loadedAssembly);
             }
             catch (Exception ex)
             {

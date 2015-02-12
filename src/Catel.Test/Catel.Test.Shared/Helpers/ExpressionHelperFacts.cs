@@ -9,24 +9,20 @@ namespace Catel.Test
     using System;
     using Data;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class ExpressionHelperFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheGetPropertyNameMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullPropertyExpression()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ExpressionHelper.GetPropertyName<object>(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightPropertyNameUsingExpression()
             {
                 var iniEntry = new IniEntry();
@@ -37,28 +33,37 @@ namespace Catel.Test
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetOwnerMethod
         {
             public class TestModel
             {
+                public TestModel()
+                {
+                    InnerModel = new InnerTestModel();
+                }
+
                 public string StringProperty { get; set; }
 
                 public int IntProperty { get; set; }
+
+                public InnerTestModel InnerModel { get; private set; }
             }
 
-            /// <summary>
-            ///   Test property to test owner.
-            /// </summary>
+            public class InnerTestModel
+            {
+                public string InnerProperty { get; set; }
+            }
+
             public string MyProperty { get; set; }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullPropertyExpression()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ExpressionHelper.GetOwner<object>(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightOwnerUsingExpression()
             {
                 var owner = ExpressionHelper.GetOwner(() => MyProperty);
@@ -66,8 +71,8 @@ namespace Catel.Test
                 Assert.IsTrue(ReferenceEquals(this, owner));
             }
 
-            [TestMethod]
-            public void ReturnsRightOwnerWhenUsingAdditionalParentWithStringProperty()
+            [TestCase]
+            public void ReturnsRightOwnerWhenUsingAdditionalParent()
             {
                 var testModel = new TestModel();
                 var owner = ExpressionHelper.GetOwner(() => testModel.StringProperty);
@@ -75,13 +80,22 @@ namespace Catel.Test
                 Assert.IsTrue(ReferenceEquals(testModel, owner));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightOwnerWhenUsingAdditionalParentWithIntProperty()
             {
                 var testModel = new TestModel();
                 var owner = ExpressionHelper.GetOwner(() => testModel.IntProperty);
 
                 Assert.IsTrue(ReferenceEquals(testModel, owner));
+            }
+
+            [TestCase]
+            public void ReturnsRightOwnerWhenUsingInnerModel()
+            {
+                var testModel = new TestModel();
+                var owner = ExpressionHelper.GetOwner(() => testModel.InnerModel.InnerProperty);
+
+                Assert.IsTrue(ReferenceEquals(testModel.InnerModel, owner));
             }
         }
     }

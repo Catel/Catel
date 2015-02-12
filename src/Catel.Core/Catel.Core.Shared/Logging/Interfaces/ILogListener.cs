@@ -6,6 +6,8 @@
 
 namespace Catel.Logging
 {
+    using System;
+
     /// <summary>
     /// Interface allowing external subscribers for the logging.
     /// </summary>
@@ -58,13 +60,21 @@ namespace Catel.Logging
         bool IsErrorEnabled { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating what format of time to use.
+        /// <para />
+        /// This default value is <c>Time</c>.
+        /// </summary>
+        TimeDisplay TimeDisplay { get; set; }
+
+        /// <summary>
         /// Called when any message is written to the log.
         /// </summary>
         /// <param name="log">The log.</param>
         /// <param name="message">The message.</param>
         /// <param name="logEvent">The log event.</param>
         /// <param name="extraData">The additional data.</param>
-        void Write(ILog log, string message, LogEvent logEvent, object extraData);
+        /// <param name="time">The time.</param>
+        void Write(ILog log, string message, LogEvent logEvent, object extraData, DateTime time);
 
         /// <summary>
         /// Called when a <see cref="LogEvent.Debug" /> message is written to the log.
@@ -72,7 +82,8 @@ namespace Catel.Logging
         /// <param name="log">The log.</param>
         /// <param name="message">The message.</param>
         /// <param name="extraData">The additional data.</param>
-        void Debug(ILog log, string message, object extraData);
+        /// <param name="time">The time.</param>
+        void Debug(ILog log, string message, object extraData, DateTime time);
 
         /// <summary>
         /// Called when a <see cref="LogEvent.Info" /> message is written to the log.
@@ -80,7 +91,8 @@ namespace Catel.Logging
         /// <param name="log">The log.</param>
         /// <param name="message">The message.</param>
         /// <param name="extraData">The additional data.</param>
-        void Info(ILog log, string message, object extraData);
+        /// <param name="time">The time.</param>
+        void Info(ILog log, string message, object extraData, DateTime time);
 
         /// <summary>
         /// Called when a <see cref="LogEvent.Warning" /> message is written to the log.
@@ -88,7 +100,8 @@ namespace Catel.Logging
         /// <param name="log">The log.</param>
         /// <param name="message">The message.</param>
         /// <param name="extraData">The additional data.</param>
-        void Warning(ILog log, string message, object extraData);
+        /// <param name="time">The time.</param>
+        void Warning(ILog log, string message, object extraData, DateTime time);
 
         /// <summary>
         /// Called when a <see cref="LogEvent.Error" /> message is written to the log.
@@ -96,6 +109,7 @@ namespace Catel.Logging
         /// <param name="log">The log.</param>
         /// <param name="message">The message.</param>
         /// <param name="extraData">The additional data.</param>
-        void Error(ILog log, string message, object extraData);
+        /// <param name="time">The time.</param>
+        void Error(ILog log, string message, object extraData, DateTime time);
     }
 }

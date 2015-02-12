@@ -6,6 +6,7 @@
 
 namespace Catel.Data
 {
+    using System.Net;
     using System.Xml;
     using System.Xml.Linq;
     using System.Xml.Schema;
@@ -39,20 +40,8 @@ namespace Catel.Data
                 return;
             }
 
-            var type = GetType();
-
-            reader.MoveToContent();
-            var nodeContent = reader.ReadOuterXml();
-
-            var document = XElement.Parse(nodeContent);
-            if (document == null)
-            {
-                Log.Error("Cannot retrieve xml document from the xml reader for type '{0}'", type.FullName);
-                return;
-            }
-
             var serializer = SerializationFactory.GetXmlSerializer();
-            serializer.Deserialize(this, new XmlSerializationContextInfo(document, this));
+            serializer.Deserialize(this, new XmlSerializationContextInfo(reader, this));
         }
 
         /// <summary>

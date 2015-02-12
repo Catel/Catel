@@ -97,9 +97,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Called when the <see cref="Behavior{T}.AssociatedObject"/> is loaded.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnAssociatedObjectLoaded(object sender, EventArgs e)
+        protected override void OnAssociatedObjectLoaded()
         {
             AssociatedObject.SubscribeToDependencyProperty("ItemsSource", OnItemsSourceChanged);
 
@@ -111,21 +109,19 @@ namespace Catel.Windows.Interactivity
                 _scrollViewer.ScrollChanged += OnScrollChanged;
             }
 
-            base.OnAssociatedObjectLoaded(sender, e);
+            base.OnAssociatedObjectLoaded();
         }
 
         /// <summary>
         /// Called when the <see cref="Behavior{T}.AssociatedObject"/> is loaded.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnAssociatedObjectUnloaded(object sender, EventArgs e)
+        protected override void OnAssociatedObjectUnloaded()
         {
             AssociatedObject.UnsubscribeFromDependencyProperty("ItemsSource", OnItemsSourceChanged);
 
             UnsubscribeFromCollection();
 
-            base.OnAssociatedObjectUnloaded(sender, e);
+            base.OnAssociatedObjectUnloaded();
         }
 
         private void OnItemsSourceChanged(object sender, DependencyPropertyValueChangedEventArgs e)
@@ -162,17 +158,19 @@ namespace Catel.Windows.Interactivity
 
         private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (_scrollViewer != null)
+            if (_isScrollbarAtEnd)
             {
-                if (_isScrollbarAtEnd)
-                {
-                    ScrollToEnd();
-                }
+                ScrollToEnd();
             }
         }
 
         private void ScrollToEnd()
         {
+            if (_scrollViewer == null)
+            {
+                return;
+            }
+
             switch (ScrollDirection)
             {
                 case ScrollDirection.Top:

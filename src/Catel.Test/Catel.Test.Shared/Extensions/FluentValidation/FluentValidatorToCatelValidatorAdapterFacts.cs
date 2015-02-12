@@ -14,11 +14,7 @@ namespace Catel.Test.Extensions.FluentValidation
     using Catel.Data;
     using Catel.Test.Extensions.FluentValidation.Validators;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     /// <summary>
     /// The fluent validator to catel validator adapter test.
@@ -28,7 +24,7 @@ namespace Catel.Test.Extensions.FluentValidation
         /// <summary>
         /// The the from generic method.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class TheFromGenericMethod
         {
             #region Public Methods and Operators
@@ -36,11 +32,11 @@ namespace Catel.Test.Extensions.FluentValidation
             /// <summary>
             /// The creates the adapter validator from a collection with a single validator type.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void CreatesTheAdapterValidatorFromACollectionWithASingleValidatorType()
             {
                 IValidator validator = FluentValidatorToCatelValidatorAdapter.From<PersonViewModelValidatorWarnings>();
-                Assert.IsInstanceOfType(validator, typeof(FluentValidatorToCatelValidatorAdapter));
+                Assert.IsInstanceOf(typeof(FluentValidatorToCatelValidatorAdapter), validator);
             }
 
             #endregion
@@ -49,7 +45,7 @@ namespace Catel.Test.Extensions.FluentValidation
         /// <summary>
         /// The the from method.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class TheFromMethod
         {
             #region Public Methods and Operators
@@ -57,31 +53,31 @@ namespace Catel.Test.Extensions.FluentValidation
             /// <summary>
             /// The from helper method creates validator from a collection with a single validator type element.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void CreatesACompositeValidatorFromACollectionOfValidatorType()
             {
                 IValidator validator =
                     FluentValidatorToCatelValidatorAdapter.From(
                         new List<Type> { typeof(PersonViewModelValidatorWarnings), typeof(PersonViewModelValidator) });
-                Assert.IsInstanceOfType(validator, typeof(CompositeValidator));
+                Assert.IsInstanceOf(typeof(CompositeValidator), validator);
             }
 
             /// <summary>
             /// The from helper method creates validator from a collection with a single validator type element.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void CreatesTheAdapterValidatorFromACollectionWithASingleValidatorType()
             {
                 IValidator validator =
                     FluentValidatorToCatelValidatorAdapter.From(
                         new List<Type> { typeof(PersonViewModelValidatorWarnings) });
-                Assert.IsInstanceOfType(validator, typeof(FluentValidatorToCatelValidatorAdapter));
+                Assert.IsInstanceOf(typeof(FluentValidatorToCatelValidatorAdapter), validator);
             }
 
             /// <summary>
             /// The from helper method must throw argument exception if the list is empty.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionIfTheListIsEmpty()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => FluentValidatorToCatelValidatorAdapter.From(new List<Type>()));

@@ -56,6 +56,8 @@ namespace Catel.Windows.Controls
 #if NET
             Focusable = false;
 #endif
+
+            Grid.SetColumnSpan(this, 1);
         }
         #endregion
     }

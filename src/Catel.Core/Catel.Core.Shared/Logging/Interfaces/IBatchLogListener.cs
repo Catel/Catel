@@ -7,6 +7,8 @@
 
 namespace Catel.Logging
 {
+    using System.Threading.Tasks;
+
     /// <summary>
     /// Log listener base which allows to write log files in batches.
     /// </summary>
@@ -14,9 +16,10 @@ namespace Catel.Logging
     {
         #region Methods
         /// <summary>
-        /// Flushes the current queue.
+        /// Flushes the current queue asynchronous.
         /// </summary>
-        void Flush();
+        /// <returns>Task so it can be awaited.</returns>
+        Task Flush();
         #endregion
     }
 }

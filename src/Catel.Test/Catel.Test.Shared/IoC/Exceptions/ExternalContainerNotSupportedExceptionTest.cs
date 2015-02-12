@@ -7,18 +7,13 @@
 namespace Catel.Test.IoC.Exceptions
 {
     using Catel.IoC;
-    
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class ExternalContainerNotSupportedExceptionTest
     {
         #region Methods
-        [TestMethod]
+        [TestCase]
         public void FormatMessage_SupportedContainers()
         {
             string expectedString = @"The specified container is not supported. Please use one of the following:

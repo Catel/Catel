@@ -4,9 +4,12 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+
 namespace Catel.Test.MVVM.ViewModels.TestClasses
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Catel.Data;
     using Catel.IoC;
     using Catel.MVVM;
@@ -61,7 +64,7 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         /// <param name="specialValidationModel">The special validation model.</param>
         /// <param name="validateModelsOnInitialization">if set to <c>true</c>, the view model will validate on initialization.</param>
         private TestViewModel(IServiceLocator serviceLocator, IPerson person, SpecialValidationModel specialValidationModel,
-                              bool validateModelsOnInitialization = true)
+            bool validateModelsOnInitialization = true)
             : base(serviceLocator)
         {
             ValidateModelsOnInitialization = validateModelsOnInitialization;
@@ -160,6 +163,15 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         /// Register the BusinessRuleWarningWhenEmpty property so it is known in the class.
         /// </summary>
         public static readonly PropertyData BusinessRuleWarningWhenEmptyProperty = RegisterProperty("BusinessRuleWarningWhenEmpty", typeof (string));
+
+        /// <summary>Register the FullName property so it is known in the class.</summary>
+        public static readonly PropertyData FullNameProperty = RegisterProperty<TestViewModel, string>(model => model.FullName);
+
+        /// <summary>Register the Age property so it is known in the class.</summary>
+        public static readonly PropertyData AgeProperty = RegisterProperty<TestViewModel, string>(model => model.Age);
+
+        /// <summary>Register the FullNameWithCustomSeparator property so it is known in the class.</summary>
+        public static readonly PropertyData FullNameWithCustomSeparatorProperty = RegisterProperty<TestViewModel, string>(model => model.FullNameWithCustomSeparator);
         #endregion
 
         #region Properties
@@ -191,6 +203,34 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         {
             get { return GetValue<string>(LastNameProperty); }
             set { SetValue(LastNameProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the full name.
+        /// </summary>
+        [ViewModelToModel("Person", "FirstName", AdditionalPropertiesToWatch = new[] {"LastName"}, ConverterType = typeof (CollapsMapping))]
+        public string FullName
+        {
+            get { return GetValue<string>(FullNameProperty); }
+            set { SetValue(FullNameProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the full name with separated names with ';'.
+        /// </summary>
+        [ViewModelToModel("Person", "FirstName", AdditionalPropertiesToWatch = new[] {"LastName"}, ConverterType = typeof (CollapsMapping),
+            AdditionalConstructorArgs = new object[] {';'})]
+        public string FullNameWithCustomSeparator
+        {
+            get { return GetValue<string>(FullNameWithCustomSeparatorProperty); }
+            set { SetValue(FullNameWithCustomSeparatorProperty, value); }
+        }
+
+        [ViewModelToModel("Person", ConverterType = typeof (UIntToStringMapping))]
+        public string Age
+        {
+            get { return GetValue<string>(AgeProperty); }
+            set { SetValue(AgeProperty, value); }
         }
 
         /// <summary>
@@ -580,6 +620,89 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         {
             get { return GetValue<string>(EmailProperty); }
             set { SetValue(EmailProperty, value); }
+        }
+        #endregion
+    }
+
+    public class CollapsMapping : DefaultViewModelToModelMappingConverter
+    {
+        #region Fields
+        private readonly char _separator;
+        #endregion
+
+        #region Constructors
+        public CollapsMapping(string[] propertyNames)
+            : this(propertyNames, ' ')
+        {
+        }
+
+        public CollapsMapping(string[] propertyNames, char separator = ' ')
+            : base(propertyNames)
+        {
+            _separator = separator;
+        }
+        #endregion
+
+        #region Properties
+        public char Separator
+        {
+            get { return _separator; }
+        }
+        #endregion
+
+        #region Methods
+        public override bool CanConvert(Type[] types, Type outType, Type viewModelType)
+        {
+            return types.All(x => x == typeof (string)) && outType == typeof (string);
+        }
+
+        public override object Convert(object[] values, IViewModel viewModel)
+        {
+            return string.Join(Separator.ToString(), values.Where(x => !string.IsNullOrWhiteSpace((string) x)));
+        }
+
+        public override bool CanConvertBack(Type inType, Type[] outTypes, Type viewModelType)
+        {
+            return outTypes.All(x => x == typeof (string)) && inType == typeof (string);
+        }
+
+        public override object[] ConvertBack(object value, IViewModel viewModel)
+        {
+            return ((string) value).Split(Separator);
+        }
+        #endregion
+    }
+
+    public class UIntToStringMapping : DefaultViewModelToModelMappingConverter
+    {
+        #region Constructors
+        public UIntToStringMapping(string[] propertyNames)
+            : base(propertyNames)
+        {
+        }
+        #endregion
+
+        #region Methods
+        public override bool CanConvert(Type[] types, Type outType, Type viewModelType)
+        {
+            return types.Length == 1 && types[0] == typeof (uint) && outType == typeof (string);
+        }
+
+        public override object Convert(object[] values, IViewModel viewModel)
+        {
+            return ((uint) values[0]).ToString();
+        }
+
+        public override bool CanConvertBack(Type inType, Type[] outTypes, Type viewModelType)
+        {
+            return outTypes.Length == 1 && outTypes[0] == typeof (uint) && inType == typeof (string);
+        }
+
+        public override object[] ConvertBack(object value, IViewModel viewModel)
+        {
+            uint res = 0;
+            uint.TryParse((string) value, out res);
+            return new object[] {res};
         }
         #endregion
     }

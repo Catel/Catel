@@ -10,26 +10,22 @@ namespace Catel.Test.Memento
     using System.Linq;
     using Catel.Memento;
     using Mocks;
-    
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+
+    using NUnit.Framework;
 
     public class MementoServiceFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheConstructor
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForNegativeParameter()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => new MementoService(-1));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ExpectDefaultMaximumSupportedActionsValue()
             {
                 var mementoService = new MementoService();
@@ -38,11 +34,11 @@ namespace Catel.Test.Memento
             #endregion
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheMaximumSupportedProperty
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void MaximumSupportedOperationsTest()
             {
                 var mementoService = new MementoService(5);
@@ -77,10 +73,10 @@ namespace Catel.Test.Memento
             #endregion
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheIsEnabledProperty
         {
-            [TestMethod]
+            [TestCase]
             public void IsTrueByDefault()
             {
                 var mementoService = new MementoService();
@@ -88,7 +84,7 @@ namespace Catel.Test.Memento
                 Assert.IsTrue(mementoService.IsEnabled);
             }
 
-            [TestMethod]
+            [TestCase]
             public void PreventsAdditionsWhenDisabled()
             {
                 var mementoService = new MementoService();
@@ -101,10 +97,10 @@ namespace Catel.Test.Memento
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheBeginBatchMethod
         {
-            [TestMethod]
+            [TestCase]
             public void BeginsNewBatchWhenThereAlreadyIsABatch()
             {
                 var mementoService = new MementoService();
@@ -124,10 +120,10 @@ namespace Catel.Test.Memento
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheEndBatchMethod
         {
-            [TestMethod]
+            [TestCase]
             public void EndsBatchWhenThereAlreadyIsABatch()
             {
                 var mementoService = new MementoService();
@@ -146,11 +142,11 @@ namespace Catel.Test.Memento
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheRedoMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void RedoTest()
             {
                 var mementoService = new MementoService();
@@ -167,7 +163,7 @@ namespace Catel.Test.Memento
                 Assert.IsFalse(mementoService.CanRedo);
             }
 
-            [TestMethod]
+            [TestCase]
             public void HandlesDoubleRedo()
             {
                 var obj = new MockModel {Value = "value1"};
@@ -190,7 +186,7 @@ namespace Catel.Test.Memento
                 Assert.AreEqual("value3", obj.Value);
             }
 
-            [TestMethod]
+            [TestCase]
             public void CanRedoTest()
             {
                 var mementoService = new MementoService();
@@ -216,11 +212,11 @@ namespace Catel.Test.Memento
             #endregion
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheUndoMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void UndoTest()
             {
                 var mementoService = new MementoService();
@@ -236,7 +232,7 @@ namespace Catel.Test.Memento
                 Assert.IsTrue(mementoService.CanUndo);
             }
 
-            [TestMethod]
+            [TestCase]
             public void HandlesDoubleUndo()
             {
                 var obj = new MockModel {Value = "value1"};
@@ -254,7 +250,7 @@ namespace Catel.Test.Memento
                 Assert.AreEqual("value1", obj.Value);
             }
 
-            [TestMethod]
+            [TestCase]
             public void CanUndoTest()
             {
                 var mementoService = new MementoService();
@@ -269,11 +265,11 @@ namespace Catel.Test.Memento
             #endregion
         }
         
-        [TestClass]
+        [TestFixture]
         public class TheUnregisterObjectMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullInstance()
             {
                 var service = new MementoService();
@@ -281,7 +277,7 @@ namespace Catel.Test.Memento
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => service.UnregisterObject(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void CancelsSubscriptionForInstance()
             {
                 var obj = new MockModel {Value = "value1"};
@@ -295,7 +291,7 @@ namespace Catel.Test.Memento
                 Assert.IsFalse(service.CanUndo);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ClearsCurrentUndoRedoStackForInstance()
             {
                 var obj = new MockModel {Value = "value1"};

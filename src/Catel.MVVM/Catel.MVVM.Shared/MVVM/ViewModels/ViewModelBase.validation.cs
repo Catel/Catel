@@ -122,9 +122,10 @@ namespace Catel.MVVM
         /// <summary>
         /// Called when the object is validating.
         /// </summary>
-        protected override void OnValidating()
+        /// <param name="validationContext">The validation context.</param>
+        protected override void OnValidating(IValidationContext validationContext)
         {
-            base.OnValidating();
+            base.OnValidating(validationContext);
 
             lock (_modelLock)
             {
@@ -135,7 +136,7 @@ namespace Catel.MVVM
                         continue;
                     }
 
-                    var modelValueAsModelBaseBase = model.Value as ModelBase;
+                    var modelValueAsModelBaseBase = model.Value as IModelValidation;
                     if (modelValueAsModelBaseBase != null)
                     {
                         modelValueAsModelBaseBase.Validate();
@@ -150,10 +151,10 @@ namespace Catel.MVVM
                 _childViewModelsHaveErrors = false;
 
                 var childViewModels = ChildViewModels.ToArray();
-                foreach (IViewModel childViewModel in childViewModels)
+                foreach (var childViewModel in childViewModels)
                 {
                     childViewModel.ValidateViewModel();
-                    if (childViewModel.HasErrors)
+                    if (((INotifyDataErrorInfo)childViewModel).HasErrors)
                     {
                         _childViewModelsHaveErrors = true;
                         RaisePropertyChanged(() => HasErrors);
@@ -170,69 +171,73 @@ namespace Catel.MVVM
         /// <summary>
         /// Called when the object is validating the fields.
         /// </summary>
-        protected override void OnValidatingFields()
+        /// <param name="validationContext">The validation context.</param>
+        protected override void OnValidatingFields(IValidationContext validationContext)
         {
-            base.OnValidatingFields();
+            base.OnValidatingFields(validationContext);
 
             // Map all field errors and warnings from the model to this viewmodel
-            foreach (KeyValuePair<string, ViewModelToModelMapping> viewModelToModelMap in _viewModelToModelMap)
+            foreach (var viewModelToModelMap in _viewModelToModelMap)
             {
-                ViewModelToModelMapping mapping = viewModelToModelMap.Value;
+                var mapping = viewModelToModelMap.Value;
                 var model = GetValue(mapping.ModelProperty);
-                string modelProperty = mapping.ValueProperty;
+                string[] modelProperties = mapping.ValueProperties;
 
-                bool hasSetFieldError = false;
-                bool hasSetFieldWarning = false;
-
-                // IDataErrorInfo
-                var dataErrorInfo = model as IDataErrorInfo;
-                if (dataErrorInfo != null)
+                foreach (var modelProperty in modelProperties)
                 {
-                    if (!string.IsNullOrEmpty(dataErrorInfo[modelProperty]))
+                    bool hasSetFieldError = false;
+                    bool hasSetFieldWarning = false;
+
+                    // IDataErrorInfo
+                    var dataErrorInfo = model as IDataErrorInfo;
+                    if (dataErrorInfo != null)
                     {
-                        SetFieldValidationResult(FieldValidationResult.CreateError(mapping.ViewModelProperty, dataErrorInfo[modelProperty]));
-
-                        hasSetFieldError = true;
-                    }
-                }
-
-                // IDataWarningInfo
-                var dataWarningInfo = model as IDataWarningInfo;
-                if (dataWarningInfo != null)
-                {
-                    if (!string.IsNullOrEmpty(dataWarningInfo[modelProperty]))
-                    {
-                        SetFieldValidationResult(FieldValidationResult.CreateWarning(mapping.ViewModelProperty, dataWarningInfo[modelProperty]));
-
-                        hasSetFieldWarning = true;
-                    }
-                }
-
-                // INotifyDataErrorInfo & INotifyDataWarningInfo
-                if (_modelErrorInfo.ContainsKey(mapping.ModelProperty))
-                {
-                    var modelErrorInfo = _modelErrorInfo[mapping.ModelProperty];
-
-                    if (!hasSetFieldError)
-                    {
-                        foreach (string error in modelErrorInfo.GetErrors(modelProperty))
+                        if (!string.IsNullOrEmpty(dataErrorInfo[modelProperty]))
                         {
-                            if (!string.IsNullOrEmpty(error))
-                            {
-                                SetFieldValidationResult(FieldValidationResult.CreateError(mapping.ViewModelProperty, error));
-                                break;
-                            }
+                        validationContext.AddFieldValidationResult(FieldValidationResult.CreateError(mapping.ViewModelProperty, dataErrorInfo[modelProperty]));
+
+                            hasSetFieldError = true;
                         }
                     }
 
-                    if (!hasSetFieldWarning)
+                    // IDataWarningInfo
+                    var dataWarningInfo = model as IDataWarningInfo;
+                    if (dataWarningInfo != null)
                     {
-                        foreach (string warning in modelErrorInfo.GetWarnings(modelProperty))
+                        if (!string.IsNullOrEmpty(dataWarningInfo[modelProperty]))
                         {
-                            if (!string.IsNullOrEmpty(warning))
+                        validationContext.AddFieldValidationResult(FieldValidationResult.CreateWarning(mapping.ViewModelProperty, dataWarningInfo[modelProperty]));
+
+                            hasSetFieldWarning = true;
+                        }
+                    }
+
+                    // INotifyDataErrorInfo & INotifyDataWarningInfo
+                    if (_modelErrorInfo.ContainsKey(mapping.ModelProperty))
+                    {
+                        var modelErrorInfo = _modelErrorInfo[mapping.ModelProperty];
+
+                        if (!hasSetFieldError)
+                        {
+                            foreach (string error in modelErrorInfo.GetErrors(modelProperty))
                             {
-                                SetFieldValidationResult(FieldValidationResult.CreateWarning(mapping.ViewModelProperty, warning));
-                                break;
+                                if (!string.IsNullOrEmpty(error))
+                                {
+                                validationContext.AddFieldValidationResult(FieldValidationResult.CreateError(mapping.ViewModelProperty, error));
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!hasSetFieldWarning)
+                        {
+                            foreach (string warning in modelErrorInfo.GetWarnings(modelProperty))
+                            {
+                                if (!string.IsNullOrEmpty(warning))
+                                {
+                                validationContext.AddFieldValidationResult(FieldValidationResult.CreateWarning(mapping.ViewModelProperty, warning));
+                                    break;
+                                }
                             }
                         }
                     }
@@ -243,26 +248,27 @@ namespace Catel.MVVM
         /// <summary>
         /// Called when the object is validating the business rules.
         /// </summary>
-        protected override void OnValidatingBusinessRules()
+        /// <param name="validationContext">The validation context.</param>
+        protected override void OnValidatingBusinessRules(IValidationContext validationContext)
         {
-            base.OnValidatingBusinessRules();
+            base.OnValidatingBusinessRules(validationContext);
 
             lock (_modelLock)
             {
-                foreach (KeyValuePair<string, object> modelObject in _modelObjects)
+                foreach (var modelObject in _modelObjects)
                 {
                     // IDataErrorInfo
                     var dataErrorInfo = modelObject.Value as IDataErrorInfo;
                     if ((dataErrorInfo != null) && !string.IsNullOrEmpty(dataErrorInfo.Error))
                     {
-                        SetBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError(dataErrorInfo.Error));
+                        validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError(dataErrorInfo.Error));
                     }
 
                     // IDataWarningInfo
                     var dataWarningInfo = modelObject.Value as IDataWarningInfo;
                     if ((dataWarningInfo != null) && !string.IsNullOrEmpty(dataWarningInfo.Warning))
                     {
-                        SetBusinessRuleValidationResult(BusinessRuleValidationResult.CreateWarning(dataWarningInfo.Warning));
+                        validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateWarning(dataWarningInfo.Warning));
                     }
 
                     // INotifyDataErrorInfo & INotifyDataWarningInfo
@@ -270,14 +276,14 @@ namespace Catel.MVVM
                     {
                         var modelErrorInfo = _modelErrorInfo[modelObject.Key];
 
-                        foreach (string error in modelErrorInfo.GetErrors(string.Empty))
+                        foreach (var error in modelErrorInfo.GetErrors(string.Empty))
                         {
-                            SetBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError(error));
+                            validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError(error));
                         }
 
-                        foreach (string warning in modelErrorInfo.GetWarnings(string.Empty))
+                        foreach (var warning in modelErrorInfo.GetWarnings(string.Empty))
                         {
-                            SetBusinessRuleValidationResult(BusinessRuleValidationResult.CreateWarning(warning));
+                            validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateWarning(warning));
                         }
                     }
                 }
@@ -287,7 +293,8 @@ namespace Catel.MVVM
         /// <summary>
         /// Called when the object is validated.
         /// </summary>
-        protected override void OnValidated()
+        /// <param name="validationContext">The validation context.</param>
+        protected override void OnValidated(IValidationContext validationContext)
         {
             bool updatedValidationSummaries = false;
 
@@ -323,7 +330,7 @@ namespace Catel.MVVM
                 ViewModelCommandManager.InvalidateCommands();
             }
 
-            base.OnValidated();
+            base.OnValidated(validationContext);
         }
         #endregion
     }

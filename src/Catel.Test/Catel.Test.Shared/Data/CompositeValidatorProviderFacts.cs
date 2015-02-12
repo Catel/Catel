@@ -13,19 +13,14 @@ namespace Catel.Test.Data
     using Catel.Data;
     using Catel.MVVM;
 
-
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class CompositeValidatorProviderFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheAddMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullValidator()
             {
                 var compositeValidatorProvider = new CompositeValidatorProvider();
@@ -35,10 +30,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheRemoveMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullValidator()
             {
                 var compositeValidatorProvider = new CompositeValidatorProvider();
@@ -47,7 +42,7 @@ namespace Catel.Test.Data
                     () => compositeValidatorProvider.Remove(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void EliminatesAnAlreadyAddedValidator()
             {
                 var compositeValidatorProvider = new CompositeValidatorProvider();
@@ -62,7 +57,7 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class GetValidatorGenericMethod
         {
             public class FooViewModel : ViewModelBase
@@ -70,7 +65,7 @@ namespace Catel.Test.Data
                  
             }
 
-            [TestMethod]
+            [TestCase]
             public void RetrieveTheRightValidatorComposition()
             {
                 var compositeValidatorProvider = new CompositeValidatorProvider();
@@ -88,12 +83,12 @@ namespace Catel.Test.Data
 
                 IValidator validator = (compositeValidatorProvider as IValidatorProvider).GetValidator<FooViewModel>();
 
-                Assert.IsInstanceOfType(validator, typeof(CompositeValidator));
+                Assert.IsInstanceOf(typeof(CompositeValidator), validator);
                 ((CompositeValidator)validator).Contains(validatorMock1.Object);
                 ((CompositeValidator)validator).Contains(validatorMock2.Object);
             }
 
-            [TestMethod]
+            [TestCase]
             public void RetrieveTheRightSingleValidator()
             {
                 var compositeValidatorProvider = new CompositeValidatorProvider();
@@ -114,7 +109,7 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class GetValidatorMethod
         {
             public class FooViewModel : ViewModelBase
@@ -122,7 +117,7 @@ namespace Catel.Test.Data
 
             }
 
-            [TestMethod]
+            [TestCase]
             public void RetrieveTheRightValidatorComposition()
             {
                 var compositeValidatorProvider = new CompositeValidatorProvider();
@@ -139,13 +134,13 @@ namespace Catel.Test.Data
                 compositeValidatorProvider.Add(validatorProviderMock2.Object);
 
                 IValidator validator = (compositeValidatorProvider as IValidatorProvider).GetValidator(typeof(FooViewModel));
-                
-                Assert.IsInstanceOfType(validator, typeof(CompositeValidator));
+
+                Assert.IsInstanceOf(typeof(CompositeValidator), validator);
                 ((CompositeValidator)validator).Contains(validatorMock1.Object);
                 ((CompositeValidator)validator).Contains(validatorMock2.Object);
             }
 
-            [TestMethod]
+            [TestCase]
             public void RetrieveTheRightSingleValidator()
             {
                 var compositeValidatorProvider = new CompositeValidatorProvider();

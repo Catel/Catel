@@ -133,7 +133,7 @@ namespace Catel.Windows.Controls
                     if (_bitmap == null)
                     {
                         // Get entry assembly
-                        assemblyToSearch = Assembly.GetEntryAssembly();
+                        assemblyToSearch = Catel.Reflection.AssemblyHelper.GetEntryAssembly();
                         _bitmap = GetBitmapResourceFromAssembly(assemblyToSearch);
                         if (_bitmap == null)
                         {

@@ -41,9 +41,11 @@ namespace Catel.Services
         {
             Argument.IsNotNullOrWhitespace("message", message);
 
-            return new Task<MessageResult>(() =>
+            var tcs = new TaskCompletionSource<MessageResult>();
+
+            _dispatcherService.BeginInvoke(() =>
             {
-                var result = MessageBoxResult.None;
+                MessageBoxResult result;
                 var messageBoxButton = TranslateMessageButton(button);
                 var messageBoxImage = TranslateMessageImage(icon);
 
@@ -57,8 +59,10 @@ namespace Catel.Services
                     result = MessageBox.Show(message, caption, messageBoxButton, messageBoxImage);
                 }
 
-                return TranslateMessageBoxResult(result);
+                tcs.SetResult(TranslateMessageBoxResult(result));
             });
+
+            return tcs.Task;
         }
     }
 }

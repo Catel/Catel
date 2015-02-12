@@ -319,7 +319,8 @@ namespace Catel.MVVM.Providers
                 // NOTE: Beginning invoke (running async) because setting of TargetControl Content property causes memory faults
                 // when this method called by TargetControlContentChanged handler.
 #if NETFX_CORE
-                ((FrameworkElement)TargetView).Dispatcher.RunAsync(CoreDispatcherPriority.High, () => { action(); });
+                var dispatcher = ((FrameworkElement)TargetView).Dispatcher;
+                dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { action(); });
 #else
                 action();
 #endif
@@ -451,8 +452,18 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        public override void OnTargetViewDataContextChanged(object sender, EventArgs e)
+        public override void OnTargetViewDataContextChanged(object sender, Catel.MVVM.Views.DataContextChangedEventArgs e)
         {
+            if (e.AreEqual)
+            {
+                return;
+            }
+
+            if (!IsTargetViewLoaded && !IsLoading)
+            {
+                return;
+            }
+
             // Fix in WinRT to make sure inner grid is created
             CreateViewModelWrapper();
 
@@ -781,7 +792,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="CancelingEventArgs"/> instance containing the event data.</param>
-        private void OnParentViewModelCanceling(object sender, CancelingEventArgs e)
+        private async void OnParentViewModelCanceling(object sender, CancelingEventArgs e)
         {
             // The parent view model is canceled, cancel our view model as well
             if (ViewModel != null)
@@ -802,7 +813,7 @@ namespace Catel.MVVM.Providers
 
                 if (!ViewModel.IsClosed)
                 {
-                    e.Cancel = !ViewModel.CancelViewModel();
+                    e.Cancel = !await ViewModel.CancelViewModel();
                 }
             }
         }
@@ -812,7 +823,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="SavingEventArgs"/> instance containing the event data.</param>
-        private void OnParentViewModelSaving(object sender, SavingEventArgs e)
+        private async void OnParentViewModelSaving(object sender, SavingEventArgs e)
         {
             // The parent view model is saved, save our view model as well
             if (ViewModel != null)
@@ -833,7 +844,7 @@ namespace Catel.MVVM.Providers
 
                 if (!ViewModel.IsClosed)
                 {
-                    e.Cancel = !ViewModel.SaveViewModel();
+                    e.Cancel = !await ViewModel.SaveViewModel();
                 }
             }
         }

@@ -14,14 +14,14 @@ namespace Catel.Test.Extensions.EntityFramework5.Data
     using Catel.Test.EntityFramework5.DbContextTest;
     using Catel.Test.EntityFramework5.DbContextTest.Repositories;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     public class UnitOfWorkFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheIsInTransactionProperty
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueWhenInTransaction()
             {
                 using (var uow = new UnitOfWork<TestDbContextContainer>())
@@ -39,10 +39,10 @@ namespace Catel.Test.Extensions.EntityFramework5.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheBeginTransactionMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsInvalidOperationExceptionWhenCalledWhenAlreadyInTransaction()
             {
                 using (var uow = new UnitOfWork<TestDbContextContainer>())
@@ -54,10 +54,10 @@ namespace Catel.Test.Extensions.EntityFramework5.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheRollbackTransactionMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsInvalidOperationExceptionWhenCalledWhenNotInTransaction()
             {
                 using (var uow = new UnitOfWork<TestDbContextContainer>())
@@ -69,10 +69,10 @@ namespace Catel.Test.Extensions.EntityFramework5.Data
             // TODO: Check if this item can correctly rollback transactions
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheCommitTransactionMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsInvalidOperationExceptionWhenCalledWhenNotInTransaction()
             {
                 using (var uow = new UnitOfWork<TestDbContextContainer>())
@@ -81,7 +81,7 @@ namespace Catel.Test.Extensions.EntityFramework5.Data
                 }
             }
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlyCommitsTransaction()
             {
                 using (var uow = new UnitOfWork<TestDbContextContainer>())
@@ -121,7 +121,7 @@ namespace Catel.Test.Extensions.EntityFramework5.Data
                 }
             }
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlyRollbacksTransactionWhenAnErrorOccursWhileSaving()
             {
                 using (var uow = new UnitOfWork<TestDbContextContainer>())
@@ -147,10 +147,10 @@ namespace Catel.Test.Extensions.EntityFramework5.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheSaveChangesMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsInvalidOperationExceptionWhenCalledInsideTransaction()
             {
                 using (var uow = new UnitOfWork<TestDbContextContainer>())
@@ -161,7 +161,7 @@ namespace Catel.Test.Extensions.EntityFramework5.Data
                 }
             }
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlySavesChangesWhenNotInTransaction()
             {
                 using (var uow = new UnitOfWork<TestDbContextContainer>())

@@ -46,7 +46,7 @@ namespace Catel.Runtime.Serialization.Xml
         #endregion
 
         #region Fields
-        private readonly CacheStorage<Type, List<string>> _ignoredMembersCache = new CacheStorage<Type, List<string>>();
+        private readonly CacheStorage<Type, HashSet<string>> _ignoredMembersCache = new CacheStorage<Type, HashSet<string>>();
         private readonly CacheStorage<Type, string> _rootNameCache = new CacheStorage<Type, string>();
         private readonly IDataContractSerializerFactory _dataContractSerializerFactory;
         private readonly IXmlNamespaceManager _xmlNamespaceManager;
@@ -304,7 +304,7 @@ namespace Catel.Runtime.Serialization.Xml
             var ignoredMembers = _ignoredMembersCache.GetFromCacheOrFetch(model.GetType(), () =>
             {
                 var modelType = model.GetType();
-                var ignoredProperties = new List<string>();
+                var ignoredProperties = new HashSet<string>();
 
                 var properties = modelType.GetPropertiesEx();
                 foreach (var property in properties)

@@ -17,7 +17,7 @@ namespace Catel.Reflection
     /// </summary>
     public static partial class PropertyHelper
     {
-        private static ICacheStorage<string, string> _expressionNameCache = new CacheStorage<string, string>(); 
+        private static readonly ICacheStorage<string, string> _expressionNameCache = new CacheStorage<string, string>(); 
 
         /// <summary>
         /// Gets the name of the property based on the expression.

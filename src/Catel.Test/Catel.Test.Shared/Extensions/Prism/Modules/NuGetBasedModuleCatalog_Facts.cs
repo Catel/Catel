@@ -10,16 +10,16 @@ namespace Catel.Test.Extensions.Prism.Modules
 {
     using Catel.Modules;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class NuGetBasedModuleCatalog_Facts
     {
         #region Nested type: The_GetPackageRepository_Method
-        [TestClass]
+        [TestFixture]
         public class The_GetPackageRepository_Method
         {
-            [TestMethod]
+            [TestCase]
             public void Returns_Null_If_The_PackageSource_Is_Empty()
             {
                 var nuGetBasedModuleCatalog = new NuGetBasedModuleCatalog { PackageSource = string.Empty };
@@ -27,7 +27,7 @@ namespace Catel.Test.Extensions.Prism.Modules
                 Assert.IsNull(packageRepository);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Returns_Null_If_The_PackageSource_Has_Incorrect_Format()
             {
                 var nuGetBasedModuleCatalog = new NuGetBasedModuleCatalog { PackageSource = "2344:2345982345:" };

@@ -13,16 +13,12 @@ namespace Catel.Test.Caching
     using Catel.Caching.Policies;
     using Catel.Logging;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class CacheStorageFacts
     {
 #if NET
-        [TestClass]
+        [TestFixture]
         public class TheThreadSafeFunctionality
         {
             private static readonly ILog Log = LogManager.GetCurrentClassLogger();
@@ -36,7 +32,7 @@ namespace Catel.Test.Caching
                 }
             }
 
-            [TestMethod]
+            [TestCase]
             public void RunMultipleThreadsWithRandomAccessCalls()
             {
                 var cacheStorage = new CacheStorage<Guid, int>(() => ExpirationPolicy.Duration(TimeSpan.FromMilliseconds(500)));
@@ -90,10 +86,10 @@ namespace Catel.Test.Caching
         }
 #endif
 
-        [TestClass]
+        [TestFixture]
         public class TheIndexerProperty
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullKey()
             {
                 var cache = new CacheStorage<string, int>();
@@ -105,7 +101,7 @@ namespace Catel.Test.Caching
                 });
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValueForExistingKey()
             {
                 var cache = new CacheStorage<string, int>();
@@ -116,10 +112,10 @@ namespace Catel.Test.Caching
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullKey()
             {
                 var cache = new CacheStorage<string, int>();
@@ -131,7 +127,7 @@ namespace Catel.Test.Caching
                 });
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRightValueForExistingKey()
             {
                 var cache = new CacheStorage<string, int>();
@@ -142,10 +138,10 @@ namespace Catel.Test.Caching
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheContainsMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullKey()
             {
                 var cache = new CacheStorage<string, int>();
@@ -153,7 +149,7 @@ namespace Catel.Test.Caching
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => cache.Contains(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForNonExistingKey()
             {
                 var cache = new CacheStorage<string, int>();
@@ -163,7 +159,7 @@ namespace Catel.Test.Caching
                 Assert.IsFalse(cache.Contains("3"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForExistingKey()
             {
                 var cache = new CacheStorage<string, int>();
@@ -174,10 +170,10 @@ namespace Catel.Test.Caching
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetFromCacheOrFetchMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullKey()
             {
                 var cache = new CacheStorage<string, int>();
@@ -185,7 +181,7 @@ namespace Catel.Test.Caching
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => cache.GetFromCacheOrFetch(null, () => 1));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullFunction()
             {
                 var cache = new CacheStorage<string, int>();
@@ -193,7 +189,7 @@ namespace Catel.Test.Caching
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => cache.GetFromCacheOrFetch("1", null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void AddsItemToCacheAndReturnsIt()
             {
                 var cache = new CacheStorage<string, int>();
@@ -205,7 +201,7 @@ namespace Catel.Test.Caching
                 Assert.AreEqual(1, value);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsCachedItem()
             {
                 var cache = new CacheStorage<string, int>();
@@ -218,7 +214,7 @@ namespace Catel.Test.Caching
                 Assert.AreEqual(1, value);
             }
 
-            [TestMethod]
+            [TestCase]
             public void AddsItemToCacheWithOverrideAndReturnsIt()
             {
                 var cache = new CacheStorage<string, int>();
@@ -232,10 +228,10 @@ namespace Catel.Test.Caching
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheAddMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullKey()
             {
                 var cache = new CacheStorage<string, int>();
@@ -243,7 +239,7 @@ namespace Catel.Test.Caching
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => cache.Add(null, 1));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullValueIfNotAllowNullValues()
             {
                 var cache = new CacheStorage<string, object>();
@@ -251,7 +247,7 @@ namespace Catel.Test.Caching
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => cache.Add(null, null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void AddsNonExistingValue()
             {
                 var cache = new CacheStorage<string, int>();
@@ -260,7 +256,7 @@ namespace Catel.Test.Caching
                 Assert.AreEqual(1, cache["1"]);
             }
 
-            [TestMethod]
+            [TestCase]
             public void AddsNonExistingValueForTrueOverride()
             {
                 var cache = new CacheStorage<string, int>();
@@ -270,7 +266,7 @@ namespace Catel.Test.Caching
                 Assert.AreEqual(2, cache["1"]);
             }
 
-            [TestMethod]
+            [TestCase]
             public void DoesNotAddExistingValueForFalseOverride()
             {
                 var cache = new CacheStorage<string, int>();
@@ -281,10 +277,10 @@ namespace Catel.Test.Caching
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheRemoveMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullKey()
             {
                 var cache = new CacheStorage<string, int>();
@@ -292,7 +288,7 @@ namespace Catel.Test.Caching
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => cache.Remove(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void RemovesExistingValue()
             {
                 var cache = new CacheStorage<string, int>();
@@ -305,7 +301,7 @@ namespace Catel.Test.Caching
                 Assert.IsFalse(cache.Contains("1"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void RemovesNonExistingValue()
             {
                 var cache = new CacheStorage<string, int>();
@@ -313,10 +309,10 @@ namespace Catel.Test.Caching
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheAutoExpireFunctionality
         {
-            [TestMethod]
+            [TestCase]
             public void IsAutomaticallyEnabledWhenStartedDisabledButAddingItemWithCustomExpirationPolicy()
             {
                 var cache = new CacheStorage<string, int>();
@@ -331,7 +327,7 @@ namespace Catel.Test.Caching
                 Assert.IsFalse(cache.Contains("1"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void AutomaticallyRemovesExpiredItems()
             {
                 var cache = new CacheStorage<string, int>();
@@ -346,7 +342,7 @@ namespace Catel.Test.Caching
                 Assert.IsFalse(cache.Contains("1"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void AutomaticallyRemovesExpiredItemsOfACacheStorageWithDefaultExpirationPolicyInitializationCode()
             {
                 var cache = new CacheStorage<string, int>(() => ExpirationPolicy.Duration(TimeSpan.FromMilliseconds(250)));
@@ -361,7 +357,7 @@ namespace Catel.Test.Caching
                 Assert.IsFalse(cache.Contains("1"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void AddsAndExpiresSeveralItems()
             {
                 var cache = new CacheStorage<string, int>();

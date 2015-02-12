@@ -9,30 +9,26 @@ namespace Catel.Test.ExceptionHandling
     using System;
     using System.Linq;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     /// <summary>
     /// The exception extensions test.
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public class ExceptionExtensionsFacts
     {
         #region Nested type: TheFindMethod
         /// <summary>
         /// The find method.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class TheFindMethod
         {
             #region Methods
             /// <summary>
             /// Shoulds the find the specified exception.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ShouldFindTheSpecifiedException()
             {
                 var formatException = new FormatException();
@@ -42,13 +38,13 @@ namespace Catel.Test.ExceptionHandling
                 var foundException = exception.Find<ArgumentNullException>();
 
                 Assert.IsNotNull(foundException);
-                Assert.IsInstanceOfType(foundException, typeof (ArgumentNullException));
+                Assert.IsInstanceOf(typeof(ArgumentNullException), foundException);
             }
 
             /// <summary>
             /// Shoulds the not find the specified exception.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ShouldNotFindTheSpecifiedException()
             {
                 var exception = new Exception();
@@ -65,14 +61,14 @@ namespace Catel.Test.ExceptionHandling
         /// <summary>
         /// The flatten method.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class TheFlattenMethod
         {
             #region Methods
             /// <summary>
             /// Shoulds flatten the exception.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ShouldFlattenTheException()
             {
                 var formatException = new FormatException("FormatException Message");
@@ -92,14 +88,14 @@ namespace Catel.Test.ExceptionHandling
         /// <summary>
         /// The getAllInnerExceptions method.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class TheGetAllInnerExceptionsMethod
         {
             #region Methods
             /// <summary>
             /// Shoulds the get all inner exceptions.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ShouldGetAllInnerExceptions()
             {
                 var formatException = new FormatException();
@@ -117,7 +113,7 @@ namespace Catel.Test.ExceptionHandling
             /// <summary>
             /// Shoulds not get any inner exceptions.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ShouldNotGetAllInnerExceptions()
             {
                 var exception = new Exception();
@@ -135,14 +131,14 @@ namespace Catel.Test.ExceptionHandling
         /// <summary>
         /// The getLowestInnerException method.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class TheGetLowestInnerExceptionMethod
         {
             #region Methods
             /// <summary>
             /// Shoulds the get the lowest exception.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ShouldGetTheLowestException()
             {
                 var formatException = new FormatException();
@@ -152,13 +148,13 @@ namespace Catel.Test.ExceptionHandling
                 var lowsetException = exception.GetLowestInnerException();
 
                 Assert.IsNotNull(lowsetException);
-                Assert.IsInstanceOfType(lowsetException, typeof (FormatException));
+                Assert.IsInstanceOf(typeof(FormatException), lowsetException);
             }
 
             /// <summary>
             /// Shoulds not get the lowest exception.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ShouldNotGetTheLowestException()
             {
                 var exception = new Exception();
@@ -167,18 +163,18 @@ namespace Catel.Test.ExceptionHandling
 
                 Assert.IsNotNull(lowsetException);
 
-                Assert.IsInstanceOfType(lowsetException, typeof (Exception));
+                Assert.IsInstanceOf(typeof(Exception), lowsetException);
             }
             #endregion
         }
         #endregion
 
         #region Nested type: TheToXmlMethod
-        [TestClass]
+        [TestFixture]
         public class TheToXmlMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ShouldConvertLikeExpected()
             {
                 var formatException = new FormatException("FormatException Message");

@@ -7,6 +7,8 @@
 
 namespace Catel.Logging
 {
+    using System;
+
     /// <summary>
     /// Represents a log entry inside a batch.
     /// </summary>
@@ -19,8 +21,9 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="logEvent">The log event.</param>
         /// <param name="extraData">The extra data.</param>
-        public LogBatchEntry(ILog log, string message, LogEvent logEvent, object extraData)
-            : base(log, message, logEvent, extraData)
+        /// <param name="time">The time.</param>
+        public LogBatchEntry(ILog log, string message, LogEvent logEvent, object extraData, DateTime time)
+            : base(log, message, logEvent, extraData, time)
         {
         }
     }

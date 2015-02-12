@@ -7,17 +7,17 @@
 namespace Catel.Services
 {
     /// <summary>
-	/// Base class for services.
-	/// </summary>
+    /// Base class for services.
+    /// </summary>
     public abstract class ServiceBase : IService
-	{
-		#region Fields
-		#endregion
+    {
+        #region Fields
+        #endregion
 
-		#region Constructors
-		#endregion
+        #region Constructors
+        #endregion
 
-		#region Properties
+        #region Properties
         /// <summary>
         /// Gets the name of the service.
         /// </summary>
@@ -27,5 +27,5 @@ namespace Catel.Services
             get { return GetType().Name; }
         }
         #endregion
-	}
+    }
 }

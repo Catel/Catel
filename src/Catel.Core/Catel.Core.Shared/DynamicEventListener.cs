@@ -26,7 +26,7 @@ namespace Catel
     /// <para />
     /// http://stackoverflow.com/questions/8122085/calling-an-instance-method-when-event-occurs/8122242#8122242.
     /// </remarks>
-    public class DynamicEventListener
+    public class DynamicEventListener : IUniqueIdentifyable
     {
         #region Classes
         /// <summary>

@@ -10,21 +10,16 @@ namespace Catel.Test.MVVM.Converters
     using System.Globalization;
     using Catel.MVVM.Converters;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-#endif
+    using NUnit.Framework;
 
     public class TextToUpperCaseConverterFacts
     {
         #region Nested type: TheConvertMethod
-        [TestClass]
+        [TestFixture]
         public class TheConvertMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ReturnsUpperCaseString()
             {
                 var converter = new TextToUpperCaseConverter();
@@ -32,7 +27,7 @@ namespace Catel.Test.MVVM.Converters
                 Assert.AreEqual("UPPERCASE", converter.Convert("UpPeRcAsE", typeof(string), null, (CultureInfo)null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsNullForNullValue()
             {
                 var converter = new TextToUpperCaseConverter();

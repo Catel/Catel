@@ -26,7 +26,7 @@ namespace Catel.Reflection
         /// <summary>
         /// A list of microsoft public key tokens.
         /// </summary>
-        private static readonly List<string> _microsoftPublicKeyTokens;
+        private static readonly HashSet<string> _microsoftPublicKeyTokens;
         #endregion
 
         #region Constructors
@@ -35,7 +35,7 @@ namespace Catel.Reflection
         /// </summary>
         static TypeHelper()
         {
-            _microsoftPublicKeyTokens = new List<string>();
+            _microsoftPublicKeyTokens = new HashSet<string>();
             _microsoftPublicKeyTokens.Add("b77a5c561934e089");
             _microsoftPublicKeyTokens.Add("b03f5f7f11d50a3a");
             _microsoftPublicKeyTokens.Add("31bf3856ad364e35");
@@ -137,8 +137,13 @@ namespace Catel.Reflection
         {
             Argument.IsNotNullOrWhitespace("fullTypeName", fullTypeName);
 
-            int splitterPos = fullTypeName.IndexOf(", ", StringComparison.Ordinal);
+            var lastGenericIndex = fullTypeName.LastIndexOf("]]", StringComparison.Ordinal);
+            if (lastGenericIndex != -1)
+            {
+                fullTypeName = fullTypeName.Substring(lastGenericIndex + 2);
+            }
 
+            var splitterPos = fullTypeName.IndexOf(", ", StringComparison.Ordinal);
             var assemblyName = (splitterPos != -1) ? fullTypeName.Substring(splitterPos + 1).Trim() : null;
             return assemblyName;
         }
@@ -343,7 +348,7 @@ namespace Catel.Reflection
 
             try
             {
-                int countIndex = type.IndexOf(InnerTypeCountStart);
+                var countIndex = type.IndexOf(InnerTypeCountStart);
                 if (countIndex == -1)
                 {
                     return innerTypes.ToArray();
@@ -357,7 +362,7 @@ namespace Catel.Reflection
 
                 // Get the number of inner types
                 int innerTypeCountEnd = -1;
-                foreach (char t in InnerTypeCountEnd)
+                foreach (var t in InnerTypeCountEnd)
                 {
                     int index = type.IndexOf(t);
                     if ((index != -1) && ((innerTypeCountEnd == -1) || (index < innerTypeCountEnd)))
@@ -367,7 +372,7 @@ namespace Catel.Reflection
                     }
                 }
 
-                int innerTypeCount = int.Parse(type.Substring(countIndex + 1, innerTypeCountEnd - countIndex - 1));
+                var innerTypeCount = int.Parse(type.Substring(countIndex + 1, innerTypeCountEnd - countIndex - 1));
 
                 // Remove all info until the first inner type
                 if (!type.Contains(InternalTypeStart.ToString()))

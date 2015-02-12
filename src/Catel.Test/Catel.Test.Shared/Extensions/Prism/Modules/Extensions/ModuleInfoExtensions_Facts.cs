@@ -12,13 +12,13 @@ namespace Catel.Test.Extensions.Prism.Modules.Extensions
     using Catel.Modules;
 
     using Microsoft.Practices.Prism.Modularity;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class ModuleInfoExtensions_Facts
     {
         #region Nested type: The_GetPackageName_Method
-        [TestClass]
+        [TestFixture]
         public class The_GetPackageName_Method
         {
             #region Constants
@@ -28,14 +28,14 @@ namespace Catel.Test.Extensions.Prism.Modules.Extensions
             #endregion
 
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void Throws_ArgumentNullException_If_Self_Reference_IsNull()
             {
                 ModuleInfo moduleInfo = null;
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => moduleInfo.GetPackageName());
             }
 
-            [TestMethod]
+            [TestCase]
             public void Returns_The_PackageName_If_A_Valid_Ref_Value_Is_Specified_On_ModuleInfo_Property()
             {
                 var moduleInfo = new ModuleInfo { Ref = PackageId };
@@ -43,7 +43,7 @@ namespace Catel.Test.Extensions.Prism.Modules.Extensions
                 Assert.IsNotNull(packageName);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Returns_The_PackageName_With_The_Id_Specified_On_The_Ref_ModuleInfo_Property()
             {
                 var moduleInfo = new ModuleInfo { Ref = PackageId };
@@ -52,7 +52,7 @@ namespace Catel.Test.Extensions.Prism.Modules.Extensions
             }
 
 
-            [TestMethod]
+            [TestCase]
             public void Returns_The_PackageName_With_The_Id_Specified_On_The_Ref_ModuleInfo_Property_2()
             {
                 var moduleInfo = new ModuleInfo { Ref = string.Format("{0}, {1}", PackageId, Version) };
@@ -60,7 +60,7 @@ namespace Catel.Test.Extensions.Prism.Modules.Extensions
                 Assert.AreEqual(packageName.Id, PackageId);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Returns_Null_If_The_Version_Number_Is_Specified_Incorrectly()
             {
                 var moduleInfo = new ModuleInfo { Ref = "&#$%2435.234.5, asdfhalksdfhas" };
@@ -68,7 +68,7 @@ namespace Catel.Test.Extensions.Prism.Modules.Extensions
                 Assert.IsNull(packageName);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Returns_Null_If_The_Ref_Value_Is_Empty()
             {
                 var moduleInfo = new ModuleInfo { Ref = string.Empty };
@@ -76,7 +76,7 @@ namespace Catel.Test.Extensions.Prism.Modules.Extensions
                 Assert.IsNull(packageName);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Returns_The_PackageName_With_The_Version_Specified_On_The_Ref_ModuleInfo_Property()
             {
                 var moduleInfo = new ModuleInfo { Ref = string.Format("{0}, {1}", PackageId, Version) };
@@ -84,7 +84,7 @@ namespace Catel.Test.Extensions.Prism.Modules.Extensions
                 Assert.AreEqual(packageName.Version.ToString(), Version);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Returns_The_PackageName_With_Version_As_Null_If_The_Version_Number_Is_Not_Specified_In_The_Ref_ModuleInfo_Property()
             {
                 var moduleInfo = new ModuleInfo { Ref = PackageId };

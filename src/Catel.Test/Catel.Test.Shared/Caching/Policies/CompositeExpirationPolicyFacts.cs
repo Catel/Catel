@@ -10,11 +10,7 @@ namespace Catel.Test.Caching.Policies
 
     using Catel.Caching.Policies;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class CompositeExpirationPolicyFacts
     {
@@ -23,7 +19,7 @@ namespace Catel.Test.Caching.Policies
         /// <summary>
         /// The can reset property.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class TheCanResetProperty
         {
             #region Methods
@@ -31,7 +27,7 @@ namespace Catel.Test.Caching.Policies
             /// <summary>
             /// Returns true if any policy can be reset.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueIfAnyPolicyCanBeReset()
             {
                 Assert.IsTrue(new CompositeExpirationPolicy().Add(new CustomExpirationPolicy(() => true, () => ThreadHelper.Sleep(0))).Add(new CustomExpirationPolicy(() => true)).CanReset);
@@ -40,7 +36,7 @@ namespace Catel.Test.Caching.Policies
             /// <summary>
             /// Returns false if all policy can not be reset.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseIfAllPolicyCanNotBeReset()
             {
                 Assert.IsFalse(new CompositeExpirationPolicy().Add(new CustomExpirationPolicy(() => true)).Add(new CustomExpirationPolicy(() => true)).CanReset);
@@ -48,7 +44,7 @@ namespace Catel.Test.Caching.Policies
 
 #if NET 
             
-            [TestMethod]
+            [TestCase]
             public void DoesNotCauseDeathLock()
             {
                 CompositeExpirationPolicy policy = new CompositeExpirationPolicy().Add(new CustomExpirationPolicy(() => true)).Add(new CustomExpirationPolicy(() => true));
@@ -83,38 +79,38 @@ namespace Catel.Test.Caching.Policies
         /// <summary>
         /// The the is expired property.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class TheIsExpiredProperty
         {
             #region Methods
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueIfAnyPolicyExpires()
             {
                 Assert.IsTrue(new CompositeExpirationPolicy().Add(new CustomExpirationPolicy(() => false)).Add(new CustomExpirationPolicy(() => true)).IsExpired);
             }
 
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseIfAnyPolicyExpiresButWasConfiguredToExpireOnlyIfAllPolicyExpires()
             {
                 Assert.IsFalse(new CompositeExpirationPolicy(true).Add(new CustomExpirationPolicy(() => false)).Add(new CustomExpirationPolicy(() => true)).IsExpired);
             }
 
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueIfAllPolicyExpiresButWasConfiguredToExpireOnlyIfAllPolicyExpires()
             {
                 Assert.IsTrue(new CompositeExpirationPolicy(true).Add(new CustomExpirationPolicy(() => true)).Add(new CustomExpirationPolicy(() => true)).IsExpired);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseIfAllPolicyNonExpiresWasConfiguredToExpireOnlyIfAllPolicyExpires()
             {
                 Assert.IsFalse(new CompositeExpirationPolicy(true).Add(new CustomExpirationPolicy(() => false)).Add(new CustomExpirationPolicy(() => false)).IsExpired);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseIfAllPolicyNonExpires()
             {
                 Assert.IsFalse(new CompositeExpirationPolicy().Add(new CustomExpirationPolicy(() => false)).Add(new CustomExpirationPolicy(() => false)).IsExpired);
@@ -129,7 +125,7 @@ namespace Catel.Test.Caching.Policies
         /// <summary>
         /// The can reset property.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class TheResetMethod
         {
             #region Methods
@@ -138,7 +134,7 @@ namespace Catel.Test.Caching.Policies
             /// <summary>
             /// Invokes the action.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void InvokesTheResetActions()
             {
                 bool actionInvoked1 = false;
@@ -152,7 +148,7 @@ namespace Catel.Test.Caching.Policies
 
 #if NET
 
-            [TestMethod]
+            [TestCase]
             public void DoesNotCauseDeathLockIfPolicyCanNotBeResetAndThrowsInvalidOperationException()
             {
                 var events = new[] { new AutoResetEvent(false), new AutoResetEvent(false) };

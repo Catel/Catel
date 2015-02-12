@@ -13,7 +13,7 @@ namespace Catel.Test.Extensions.Prism
     using Catel.Modules;
 
     using Microsoft.Practices.Prism.Modularity;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using ModuleCatalog = Catel.Modules.ModuleCatalog;
 
@@ -28,7 +28,7 @@ namespace Catel.Test.Extensions.Prism
         /// <summary>
         /// The add module method or items property.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class AddModuleMethod
         {
             #region Methods
@@ -36,7 +36,7 @@ namespace Catel.Test.Extensions.Prism
             /// <summary>
             /// The are actualy synchronized.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void IsSynchronizedWithTheItemsPropertyIfItemsPropertyIsAccessedFromTheCompositeCatalogType()
             {
                 var catalog = new CompositeModuleCatalog();
@@ -156,7 +156,7 @@ namespace Catel.Test.Extensions.Prism
         /// <summary>
         /// The the add method.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class TheAddMethod
         {
             #region Methods
@@ -164,7 +164,7 @@ namespace Catel.Test.Extensions.Prism
             /// <summary>
             /// The must throw argument null exception if is called with null argument.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void MustThrowArgumentNullExceptionIfIsCalledWithNullArgument()
             {
                 var catalog = new CompositeModuleCatalog();
@@ -180,7 +180,7 @@ namespace Catel.Test.Extensions.Prism
         /// <summary>
         /// The the initialize method.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class TheInitializeMethod
         {
             #region Methods
@@ -188,7 +188,7 @@ namespace Catel.Test.Extensions.Prism
             /// <summary>
             /// The add duplicate module.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void MustThrowDuplicateModuleExceptionIfTheModuleIsRegisteredInMoreThanOnceCatalog()
             {
                 var catalog = new CompositeModuleCatalog();
@@ -204,7 +204,7 @@ namespace Catel.Test.Extensions.Prism
             /// <summary>
             /// The if.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void CallsTheInitializedMethodOfAllRegisteredCatalogs()
             {
                 var catalog = new CompositeModuleCatalog();

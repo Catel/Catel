@@ -63,6 +63,7 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("serializationManager", serializationManager);
 
             SerializationManager = serializationManager;
+            SerializationManager.CacheInvalidated += OnSerializationManagerCacheInvalidated;
         }
         #endregion
 
@@ -100,7 +101,7 @@ namespace Catel.Runtime.Serialization
             });
 
             var listToSerialize = new List<MemberValue>();
-            var checkedMemberNames = new List<string>();
+            var checkedMemberNames = new HashSet<string>();
 
             foreach (var propertyName in modelInfo.PropertiesByName.Keys)
             {
@@ -177,6 +178,16 @@ namespace Catel.Runtime.Serialization
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Handles the <see cref="E:SerializationManagerCacheInvalidated" /> event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="CacheInvalidatedEventArgs"/> instance containing the event data.</param>
+        private void OnSerializationManagerCacheInvalidated(object sender, CacheInvalidatedEventArgs e)
+        {
+            _serializationModelCache.Remove(e.Type);
+        }
+
         /// <summary>
         /// Warms up the specified types. If the <paramref name="types" /> is <c>null</c>, all types known
         /// in the <see cref="TypeCache" /> will be initialized.

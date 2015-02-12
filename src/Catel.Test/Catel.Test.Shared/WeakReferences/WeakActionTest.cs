@@ -7,14 +7,9 @@
 namespace Catel.Test
 {
     using System;
+    using NUnit.Framework;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
-
-    [TestClass]
+    [TestFixture]
     public class WeakActionTest
     {
         #region Test classes
@@ -55,7 +50,7 @@ namespace Catel.Test
         #endregion
 
         #region Methods
-        [TestMethod]
+        [TestCase]
         public void MemoryLeakFreeWithNoInvocation()
         {
             var target = new ActionTarget();
@@ -67,7 +62,7 @@ namespace Catel.Test
             Assert.IsFalse(weakAction.IsTargetAlive);
         }
 
-        [TestMethod]
+        [TestCase]
         public void NonGeneric_PublicMethod()
         {
             var target = new ActionTarget();
@@ -83,7 +78,7 @@ namespace Catel.Test
             Assert.IsFalse(weakAction.IsTargetAlive);
         }
 
-        [TestMethod]
+        [TestCase]
         public void NonGeneric_AnonymousDelegate()
         {
             int count = 0;
@@ -95,7 +90,7 @@ namespace Catel.Test
             //Assert.AreEqual(1, count);
         }
 
-        [TestMethod]
+        [TestCase]
         public void Generic_PublicMethod()
         {
             var target = new ActionTarget();
@@ -111,7 +106,7 @@ namespace Catel.Test
             Assert.IsFalse(weakAction.IsTargetAlive);
         }
 
-        [TestMethod]
+        [TestCase]
         public void Generic_AnonymousDelegate()
         {
             int count = 0;

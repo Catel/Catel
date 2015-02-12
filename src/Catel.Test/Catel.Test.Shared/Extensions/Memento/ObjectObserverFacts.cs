@@ -9,24 +9,20 @@ namespace Catel.Test.Memento
     using System;
     using Catel.Memento;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class ObjectObserverFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheConstructor
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullPropertyChanged()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new ObjectObserver(null, null, new MementoService()));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsValuesCorrectly()
             {
                 var obj = new Mocks.MockModel();

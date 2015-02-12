@@ -9,18 +9,14 @@ namespace Catel.Test.IoC
 {
     using System;
     using Catel.IoC;
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class DependencyResolverManagerFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheRegisterDependencyResolverForInstanceMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullInstance()
             {
                 var dependencyResolverManager = new DependencyResolverManager();
@@ -29,7 +25,7 @@ namespace Catel.Test.IoC
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => dependencyResolverManager.RegisterDependencyResolverForInstance(null, dependencyResolver));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullDependencyResolver()
             {
                 var dependencyResolverManager = new DependencyResolverManager();
@@ -38,10 +34,10 @@ namespace Catel.Test.IoC
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetDependencyResolverForInstanceMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullInstance()
             {
                 var dependencyResolverManager = new DependencyResolverManager();
@@ -49,7 +45,7 @@ namespace Catel.Test.IoC
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => dependencyResolverManager.GetDependencyResolverForInstance(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRegisteredDependencyResolverForRegisteredInstance()
             {
                 var dependencyResolverManager = new DependencyResolverManager();
@@ -63,7 +59,7 @@ namespace Catel.Test.IoC
                 Assert.IsTrue(ReferenceEquals(dependencyResolver, resolvedDependencyResolver));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRegisteredDependencyResolverForRegisteredType()
             {
                 var dependencyResolverManager = new DependencyResolverManager();
@@ -77,7 +73,7 @@ namespace Catel.Test.IoC
                 Assert.IsTrue(ReferenceEquals(dependencyResolver, resolvedDependencyResolver));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsDefaultDependencyResolverForNonRegisteredInstance()
             {
                 var dependencyResolverManager = new DependencyResolverManager();
@@ -89,10 +85,10 @@ namespace Catel.Test.IoC
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheRegisterDependencyResolverForTypeMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullInstance()
             {
                 var dependencyResolverManager = new DependencyResolverManager();
@@ -101,7 +97,7 @@ namespace Catel.Test.IoC
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => dependencyResolverManager.RegisterDependencyResolverForType(null, dependencyResolver));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullDependencyResolver()
             {
                 var dependencyResolverManager = new DependencyResolverManager();
@@ -110,10 +106,10 @@ namespace Catel.Test.IoC
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetDependencyResolverForTypeMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
                 var dependencyResolverManager = new DependencyResolverManager();
@@ -121,7 +117,7 @@ namespace Catel.Test.IoC
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => dependencyResolverManager.GetDependencyResolverForType(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsRegisteredDependencyResolverForRegisteredType()
             {
                 var dependencyResolverManager = new DependencyResolverManager();
@@ -134,7 +130,7 @@ namespace Catel.Test.IoC
                 Assert.IsTrue(ReferenceEquals(dependencyResolver, resolvedDependencyResolver));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsDefaultDependencyResolverForNonRegisteredType()
             {
                 var dependencyResolverManager = new DependencyResolverManager();
@@ -144,14 +140,14 @@ namespace Catel.Test.IoC
                 Assert.IsTrue(ReferenceEquals(dependencyResolverManager.DefaultDependencyResolver, resolvedDependencyResolver));
             }
 
-            [TestClass]
+            [TestFixture]
             public class TheResolveMissingType
             {
                 interface IDummy
                 {
 
                 }
-                [TestMethod]
+                [TestCase]
                 public void ThrowsTypeNotRegisteredException()
                 {
                     var dependencyResolverManager = new DependencyResolverManager();

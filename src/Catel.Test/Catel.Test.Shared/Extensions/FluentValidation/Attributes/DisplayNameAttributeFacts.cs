@@ -10,30 +10,26 @@ namespace Catel.Test.Extensions.FluentValidation.Attributes
 {
     using System;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class DisplayNameAttributeFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheConstructor
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullDisplayName()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new DisplayNameAttribute(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForEmptyDisplayName()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new DisplayNameAttribute(string.Empty));
             }
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlySetsValues()
             {
                 var displayNameAttribute = new DisplayNameAttribute("FirstName");

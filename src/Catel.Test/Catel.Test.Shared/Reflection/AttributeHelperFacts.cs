@@ -10,11 +10,7 @@ namespace Catel.Test.Reflection
     using System.Reflection;
     using Catel.Reflection;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     /// <summary>
     /// The attribute helper facts.
@@ -24,7 +20,7 @@ namespace Catel.Test.Reflection
         /// <summary>
         /// The the try get attribute method.
         /// </summary>
-        [TestClass]
+        [TestFixture]
         public class TheTryGetAttributeMethod
         {
             #region Public Methods and Operators
@@ -32,7 +28,7 @@ namespace Catel.Test.Reflection
             /// <summary>
             /// The throws argument null exception for null property info.
             /// </summary>
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullPropertyInfo()
             {
                 ObsoleteAttribute attribute;

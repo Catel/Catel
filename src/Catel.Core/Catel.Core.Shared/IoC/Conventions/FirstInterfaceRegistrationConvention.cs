@@ -32,7 +32,8 @@ namespace Catel.IoC
         /// </summary>
         /// <param name="serviceLocator">The service locator.</param>
         /// <param name="registrationType">Type of the registration.</param>
-        public FirstInterfaceRegistrationConvention(IServiceLocator serviceLocator, RegistrationType registrationType = RegistrationType.Singleton) : base(serviceLocator, registrationType)
+        public FirstInterfaceRegistrationConvention(IServiceLocator serviceLocator, RegistrationType registrationType = RegistrationType.Singleton) 
+            : base(serviceLocator, registrationType)
         {
         }
         #endregion
@@ -62,13 +63,12 @@ namespace Catel.IoC
                         return;
                     }
 
-                    foreach (var type1 in enumerable)
+                    foreach (var implementingType in enumerable)
                     {
-                        var firstInterface = type1.GetInterfacesEx().FirstOrDefault();
-
+                        var firstInterface = implementingType.GetInterfacesEx().FirstOrDefault();
                         if (firstInterface != null)
                         {
-                            Container.RegisterType(firstInterface, type1, registrationType: RegistrationType);
+                            Container.RegisterTypeIfNotYetRegistered(firstInterface, implementingType, RegistrationType);
                         }
                     }
                 }
@@ -82,12 +82,7 @@ namespace Catel.IoC
                         return;
                     }
 
-                    if (Container.IsTypeRegistered(firstInterface))
-                    {
-                        Container.RemoveType(firstInterface);
-                    }
-
-                    Container.RegisterType(firstInterface, implementationType, registrationType: RegistrationType);
+                    Container.RegisterTypeIfNotYetRegistered(firstInterface, implementationType, RegistrationType);
                 }
             });
         }

@@ -11,33 +11,29 @@ namespace Catel.Test.Data
     using System.ComponentModel;
     using Catel.Data;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     using Moq;
 
     public class EditableObjectHelperFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheBeginEditObjectMethod
         {
-            [TestMethod]
+            [TestCase]
             public void DoesNotCallBeginEditOnNullObject()
             {
                 EditableObjectHelper.BeginEditObject(null);
             }
 
-            [TestMethod]
+            [TestCase]
             public void DoesNotCallBeginEditOnNonEditableObject()
             {
                 var objectMock = new Mock<object>();
                 EditableObjectHelper.BeginEditObject(objectMock.Object);                
             }
 
-            [TestMethod]
+            [TestCase]
             public void CallsBeginEditOnEditableObject()
             {
                 var editableObjectMock = new Mock<IEditableObject>();
@@ -48,23 +44,23 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheEndEditObjectMethod
         {
-            [TestMethod]
+            [TestCase]
             public void DoesNotCallEndEditOnNullObject()
             {
                 EditableObjectHelper.BeginEditObject(null);
             }
 
-            [TestMethod]
+            [TestCase]
             public void DoesNotCallEndEditOnNonEditableObject()
             {
                 var objectMock = new Mock<object>();
                 EditableObjectHelper.EndEditObject(objectMock.Object);
             }
 
-            [TestMethod]
+            [TestCase]
             public void CallsEndEditOnEditableObject()
             {
                 var editableObjectMock = new Mock<IEditableObject>();
@@ -75,23 +71,23 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheCancelEditObjectMethod
         {
-            [TestMethod]
+            [TestCase]
             public void DoesNotCallCancelEditOnNullObject()
             {
                 EditableObjectHelper.CancelEditObject(null);
             }
 
-            [TestMethod]
+            [TestCase]
             public void DoesNotCallCancelEditOnNonEditableObject()
             {
                 var objectMock = new Mock<object>();
                 EditableObjectHelper.CancelEditObject(objectMock.Object);
             }
 
-            [TestMethod]
+            [TestCase]
             public void CallsCancelEditOnEditableObject()
             {
                 var editableObjectMock = new Mock<IEditableObject>();

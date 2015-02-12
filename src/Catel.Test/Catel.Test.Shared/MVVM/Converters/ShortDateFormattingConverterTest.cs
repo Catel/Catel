@@ -10,42 +10,38 @@ namespace Catel.Test.MVVM.Converters
     using System.Globalization;
     using Catel.MVVM.Converters;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     /// <summary>
     ///This is a test class for ShortDateFormattingConverterTest and is intended
     ///to contain all ShortDateFormattingConverterTest Unit Tests
     ///</summary>
-    [TestClass]
+    [TestFixture]
     public class ShortDateFormattingConverterTest
     {
         #region Methods
-        [TestMethod]
+        [TestCase]
         public void Convert_Null_NoFormatting()
         {
             var converter = new ShortDateFormattingConverter();
             Assert.AreEqual(string.Empty, converter.Convert(null, typeof (string), null, new CultureInfo("nl-NL")));
         }
 
-        [TestMethod]
+        [TestCase]
         public void Convert_Null_Formatting()
         {
             var converter = new ShortDateFormattingConverter();
             Assert.AreEqual(string.Empty, converter.Convert(null, typeof (string), "d", new CultureInfo("nl-NL")));
         }
 
-        [TestMethod]
+        [TestCase]
         public void Convert_Date_NoFormatting()
         {
             var converter = new ShortDateFormattingConverter();
             Assert.AreEqual("16-12-2010", converter.Convert(new DateTime(2010, 12, 16), typeof (string), null, new CultureInfo("nl-NL")));
         }
 
-        [TestMethod]
+        [TestCase]
         public void Convert_Date_Formatting()
         {
             var converter = new ShortDateFormattingConverter();
@@ -65,28 +61,28 @@ namespace Catel.Test.MVVM.Converters
             }
         }
 
-        [TestMethod]
+        [TestCase]
         public void ConvertBack_Null_NoFormatting()
         {
             var converter = new ShortDateFormattingConverter();
             Assert.AreEqual(ConverterHelper.UnsetValue, converter.ConvertBack(null, typeof (DateTime), null, new CultureInfo("nl-NL")));
         }
 
-        [TestMethod]
+        [TestCase]
         public void ConvertBack_Null_Formatting()
         {
             var converter = new ShortDateFormattingConverter();
             Assert.AreEqual(ConverterHelper.UnsetValue, converter.ConvertBack(null, typeof (DateTime), "G", new CultureInfo("nl-NL")));
         }
 
-        [TestMethod]
+        [TestCase]
         public void ConvertBack_Date_NoFormatting()
         {
             var converter = new ShortDateFormattingConverter();
             Assert.AreEqual(new DateTime(2010, 12, 16), converter.ConvertBack("16-12-2010", typeof (DateTime), null, new CultureInfo("nl-NL")));
         }
 
-        [TestMethod]
+        [TestCase]
         public void ConvertBack_Date_Formatting()
         {
             var converter = new ShortDateFormattingConverter();

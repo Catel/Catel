@@ -11,24 +11,22 @@ namespace Catel.Test.Windows.Input
     using Catel.Runtime.Serialization;
     using InputGesture = Catel.Windows.Input.InputGesture;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+    using NUnit.Framework;
 
+#if NETFX_CORE
     using ModifierKeys = global::Windows.System.VirtualKeyModifiers;
     using Key = global::Windows.System.VirtualKey;
 #else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-
     using System.Windows.Input;
     using ModifierKeys = System.Windows.Input.ModifierKeys;
 #endif
 
     public class InputGestureFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheSerializationFunctionality
         {
-            [TestMethod]
+            [TestCase]
             public void CorrectlySerializesAndDeserializes()
             {
                 var inputGesture = new InputGesture(Key.A, ModifierKeys.Control | ModifierKeys.Shift);
@@ -47,10 +45,10 @@ namespace Catel.Test.Windows.Input
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheToStringMethod
         {
-            [TestMethod]
+            [TestCase]
             public void CorrectlyReturnsStringWithoutModifiers()
             {
                 var inputGesture = new InputGesture(Key.A, ModifierKeys.None);
@@ -58,7 +56,7 @@ namespace Catel.Test.Windows.Input
                 Assert.AreEqual("A", inputGesture.ToString());
             }
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlyReturnsStringWithSingleModifier()
             {
                 var inputGesture = new InputGesture(Key.A, ModifierKeys.Control);
@@ -66,7 +64,7 @@ namespace Catel.Test.Windows.Input
                 Assert.AreEqual("Control + A", inputGesture.ToString());
             }
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlyReturnsStringWithMultipleModifier()
             {
                 var inputGesture = new InputGesture(Key.A, ModifierKeys.Control | ModifierKeys.Shift);

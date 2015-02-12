@@ -10,45 +10,41 @@ namespace Catel.Test.MVVM.Converters
     using System.Globalization;
     using Catel.MVVM.Converters;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class FormattingConverterTest
     {
         #region Methods
-        [TestMethod]
+        [TestCase]
         public void Convert_Null_NoFormatting()
         {
             var converter = new FormattingConverter();
             Assert.AreEqual(string.Empty, converter.Convert(null, typeof (string), null, (CultureInfo)null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void Convert_Null_Formatting()
         {
             var converter = new FormattingConverter();
             Assert.AreEqual(string.Empty, converter.Convert(null, typeof (string), "d", (CultureInfo)null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void Convert_Integer_NoFormatting()
         {
             var converter = new FormattingConverter();
             Assert.AreEqual("5", converter.Convert(5, typeof (string), null, (CultureInfo)null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void Convert_Integer_Formatting()
         {
             var converter = new FormattingConverter();
             Assert.AreEqual("5", converter.Convert(5, typeof (string), "d", (CultureInfo)null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void Convert_Date_NoFormatting()
         {
             var converter = new FormattingConverter();
@@ -68,7 +64,7 @@ namespace Catel.Test.MVVM.Converters
             }
         }
 
-        [TestMethod]
+        [TestCase]
         public void Convert_Date_Formatting()
         {
             var converter = new FormattingConverter();
@@ -88,7 +84,7 @@ namespace Catel.Test.MVVM.Converters
             }
         }
 
-        [TestMethod]
+        [TestCase]
         public void ConvertBack()
         {
             var converter = new FormattingConverter();

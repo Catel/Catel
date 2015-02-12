@@ -50,7 +50,7 @@ namespace Catel.MVVM
         /// <summary>
         /// List of field that were initialized with an error.
         /// </summary>
-        private readonly List<string> _initialErrorFields = new List<string>();
+        private readonly HashSet<string> _initialErrorFields = new HashSet<string>();
 #endif
         #endregion
 

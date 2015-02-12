@@ -42,14 +42,17 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("serviceType", serviceType);
 
-            if (_serviceLocator.IsTypeRegistered(serviceType))
+            lock (_serviceLocator)
             {
-                return _serviceLocator.ResolveType(serviceType);
-            }
+                if (_serviceLocator.IsTypeRegistered(serviceType))
+                {
+                    return _serviceLocator.ResolveType(serviceType);
+                }
 
-            if (!serviceType.IsInterface && !serviceType.IsAbstract)
-            {
-                return _typeFactory.CreateInstance(serviceType);
+                if (!serviceType.IsInterface && !serviceType.IsAbstract)
+                {
+                    return _typeFactory.CreateInstance(serviceType);
+                }
             }
 
             return null;

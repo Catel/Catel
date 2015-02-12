@@ -9,17 +9,12 @@ namespace Catel.Test.Logging
     using System;
 
     using Catel.Logging;
+    using NUnit.Framework;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
-
-    [TestClass]
+    [TestFixture]
     public class LogMessageEventArgsTest
     {
-        [TestMethod]
+        [TestCase]
         public void Constructor_AutomaticDateTime()
         {
             var log = new Log(GetType());
@@ -32,7 +27,7 @@ namespace Catel.Test.Logging
             Assert.AreEqual(0, (int)DateTime.Now.Subtract(eventArgs.Time).TotalSeconds);
         }
 
-        [TestMethod]
+        [TestCase]
         public void Constructor_ManualDateTime()
         {
             var log = new Log(GetType());

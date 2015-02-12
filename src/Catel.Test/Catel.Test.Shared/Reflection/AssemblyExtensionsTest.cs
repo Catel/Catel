@@ -9,25 +9,18 @@ namespace Catel.Test.Reflection
     using System.Reflection;
     using Catel.Reflection;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     /// <summary>
     /// Summary description for AssemblyInfoTest
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public class AssemblyExtensionsTest
     {
         private static readonly Assembly Assembly = typeof(AssemblyExtensionsTest).GetAssemblyEx();
 
         #region Methods
-        /// <summary>
-        /// Checks the title of the assembly automatically.
-        /// </summary>
-        [TestMethod]
+        [TestCase]
         public void TitleAutomatic()
         {
             string expected = "Catel.Test";
@@ -37,10 +30,7 @@ namespace Catel.Test.Reflection
             Assert.AreEqual(expected, result);
         }
 
-        /// <summary>
-        /// Checks the version of the assembly automatically.
-        /// </summary>
-        [TestMethod]
+        [TestCase]
         public void VersionAutomatic()
         {
             string expected = "4.0.0.0";
@@ -50,10 +40,7 @@ namespace Catel.Test.Reflection
             Assert.AreEqual(expected, result);
         }
 
-        /// <summary>
-        /// Checks the version with a specified separator of the assembly automatically.
-        /// </summary>
-        [TestMethod]
+        [TestCase]
         public void VersionWithSeparatorAutomatic()
         {
             string expected = "4.0";
@@ -63,10 +50,7 @@ namespace Catel.Test.Reflection
             Assert.AreEqual(expected, result);
         }
 
-        /// <summary>
-        /// Checks the version with a specified separator of the assembly automatically.
-        /// </summary>
-        [TestMethod]
+        [TestCase]
         public void VersionWithSeparatorAutomaticWhereSeparatorCountIsTooHigh()
         {
             string expected = "4.0.0.0";
@@ -76,10 +60,7 @@ namespace Catel.Test.Reflection
             Assert.AreEqual(expected, result);
         }
 
-        ///// <summary>
-        ///// Checks the informational version of the assembly automatically.
-        ///// </summary>
-        //[TestMethod]
+        //[TestCase]
         //public void InformationalVersionAutomatic()
         //{
         //    var expected = "4.0, manually built in Visual Studio";
@@ -89,10 +70,7 @@ namespace Catel.Test.Reflection
         //    Assert.AreEqual(expected, result);
         //}
 
-        /// <summary>
-        /// Checks the description of the assembly automatically.
-        /// </summary>
-        [TestMethod]
+        [TestCase]
         public void DescriptionAutomatic()
         {
             string expected = "Catel test library";
@@ -102,10 +80,7 @@ namespace Catel.Test.Reflection
             Assert.AreEqual(expected, result);
         }
 
-        /// <summary>
-        /// Checks the product of the assembly automatically.
-        /// </summary>
-        [TestMethod]
+        [TestCase]
         public void ProductAutomatic()
         {
             string expected = "Catel.Test";
@@ -115,10 +90,7 @@ namespace Catel.Test.Reflection
             Assert.AreEqual(expected, result);
         }
 
-        /// <summary>
-        /// Checks the copyright of the assembly automatically.
-        /// </summary>
-        [TestMethod]
+        [TestCase]
         public void CopyrightAutomatic()
         {
             string expected = "Copyright © CatenaLogic 2010 - 2014";
@@ -128,10 +100,7 @@ namespace Catel.Test.Reflection
             Assert.AreEqual(expected, result);
         }
 
-        /// <summary>
-        /// Checks the company of the assembly automatically.
-        /// </summary>
-        [TestMethod]
+        [TestCase]
         public void CompanyAutomatic()
         {
             string expected = "CatenaLogic";
@@ -140,6 +109,15 @@ namespace Catel.Test.Reflection
 
             Assert.AreEqual(expected, result);
         }
+
+#if NET
+        [TestCase]
+        public void TheGetBuildDateTimeMethod()
+        {
+            // Just check if the call works
+            var dateTime = Assembly.GetBuildDateTime();
+        }
+#endif
         #endregion
     }
 }

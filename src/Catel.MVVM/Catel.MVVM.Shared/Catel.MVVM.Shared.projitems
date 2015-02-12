@@ -36,6 +36,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\CommandManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\CompositeCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\EventArgs\CommandCanceledEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\EventArgs\CommandCreatedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\EventArgs\CommandEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\EventArgs\CommandExecutedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\BooleanToTextConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\CollectionToCountConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\CollectionToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\ColorToBrushConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\ContainsItemsConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\CountVisibilityConverter.cs" />
@@ -70,6 +72,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\MethodToValueConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\MultiplyConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\NullableValueConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\PlatformToBooleanConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\ReferenceToBooleanConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\ReferenceToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\ShortDateFormattingConverter.cs" />
@@ -131,7 +134,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Attributes\InterestedInAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Attributes\ModelAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Attributes\ValidationToViewModelAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Attributes\ViewModelToModelAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\EventArgs\CancelingEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\EventArgs\CancellableEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\EventArgs\SavingEventArgs.cs" />
@@ -146,6 +148,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Interfaces\IViewModelFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Interfaces\IViewModelManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ManagedViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Mappings\Attributes\ViewModelToModelAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Mappings\DefaultViewModelToModelMappingConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Mappings\Interfaces\IViewModelToModelConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Mappings\ViewModelToModelConverterBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Mappings\ViewModelToModelMapping.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ModelErrorInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ModelInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\NavigationViewModelBase.cs" />
@@ -158,9 +165,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelMetadata.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelToModelMapping.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Attributes\ViewToViewModelAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\EventArgs\DataContextChangedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\EventArgs\ViewLoadEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\EventArgs\ViewStackPartEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Extensions\ViewExtensions.android.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Extensions\ViewExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Extensions\ViewExtensions.dispatching.cs" />
@@ -188,6 +196,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\ViewPropertySelector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\ViewToViewModelMapping.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\ViewToViewModelMappingContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\ViewStack.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\WeakViewInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Phone\PhoneApplicationPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
@@ -335,6 +344,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Input\Helpers\KeyboardHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Input\InputGesture.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\Authentication.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\AutoCompletion.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\AutoCompletionBehavior.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\Behavior.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\BehaviorBase.cs" />
@@ -348,6 +358,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\DragDropHelpers\UIHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\Focus.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\FocusFirstControl.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\HideUntilViewModelLoaded.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\Interfaces\IBehavior.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\KeyPressToCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\MouseInfo.cs" />
@@ -386,5 +397,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Threading\Helpers\Dispatcherhelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Windows\DataWindow\DataWindow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Windows\DataWindow\DataWindowButton.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Windows\Window.cs" />
   </ItemGroup>
 </Project>

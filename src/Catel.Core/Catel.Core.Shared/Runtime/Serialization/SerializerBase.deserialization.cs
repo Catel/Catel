@@ -10,11 +10,11 @@ namespace Catel.Runtime.Serialization
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using Catel.ApiCop.Rules;
-    using Catel.Logging;
-    using Catel.Reflection;
-    using Data;
+    using ApiCop.Rules;
     using IoC;
+    using Logging;
+    using Data;
+    using Reflection;
 
     /// <summary>
     /// Base class for all serializers.

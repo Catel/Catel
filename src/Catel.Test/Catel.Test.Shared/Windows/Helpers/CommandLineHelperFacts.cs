@@ -12,45 +12,45 @@ namespace Catel.Test.Windows.Helpers
 
     using Catel.Windows;
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class CommandLineHelper_Facts
     {
         #region Nested type: TheParseMethod
-        [TestClass]
+        [TestFixture]
         public class The_Parse_Method
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void Ignores_The_Starting_Spaces()
             {
                 var arguments = CommandLineHelper.Parse("   install \"c:\\Users\\alexander.fernandez\\Documents\\Visual Studio 2012\\Projects\\Catel\\src\\Catel.sln\" -outputDirectory \"c:\\Users\\alexander.fernandez\\Documents\\Visual Studio 2012\\Projects\\Catel\\lib\" -source https://nuget.org/api/v2/");
                 Assert.AreEqual("install", arguments[0]);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Ignores_The_Trailing_Spaces()
             {
                 var arguments = CommandLineHelper.Parse("   install \"c:\\Users\\alexander.fernandez\\Documents\\Visual Studio 2012\\Projects\\Catel\\src\\Catel.sln\" -outputDirectory \"c:\\Users\\alexander.fernandez\\Documents\\Visual Studio 2012\\Projects\\Catel\\lib\" -source https://nuget.org/api/v2/      ");
                 Assert.AreEqual("https://nuget.org/api/v2/", arguments[5]);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Parse_Quoted_Arguments()
             {
                 var arguments = CommandLineHelper.Parse("install \"c:\\Users\\alexander.fernandez\\Documents\\Visual Studio 2012\\Projects\\Catel\\src\\Catel.sln\" -outputDirectory \"c:\\Users\\alexander.fernandez\\Documents\\Visual Studio 2012\\Projects\\Catel\\lib\" -source https://nuget.org/api/v2/");
                 Assert.AreEqual("c:\\Users\\alexander.fernandez\\Documents\\Visual Studio 2012\\Projects\\Catel\\src\\Catel.sln", arguments[1]);
             }
             
-            [TestMethod]
+            [TestCase]
             public void Parse_The_Last_Quoted_Argument_Even_When_The_Quote_Mark_Is_Not_Closed()
             {
                 var arguments = CommandLineHelper.Parse("install \"c:\\Users\\alexander.fernandez\\Documents\\Visual Studio 2012\\Projects\\Catel\\src\\Catel.sln");
                 Assert.AreEqual("c:\\Users\\alexander.fernandez\\Documents\\Visual Studio 2012\\Projects\\Catel\\src\\Catel.sln", arguments[1]);
             }
 
-            [TestMethod]
+            [TestCase]
             public void Parse_The_Right_Count_Of_Arguments()
             {
                 var arguments = CommandLineHelper.Parse("install \"c:\\Users\\alexander.fernandez\\Documents\\Visual Studio 2012\\Projects\\Catel\\src\\Catel.sln\" -outputDirectory \"c:\\Users\\alexander.fernandez\\Documents\\Visual Studio 2012\\Projects\\Catel\\lib\" -source https://nuget.org/api/v2/");

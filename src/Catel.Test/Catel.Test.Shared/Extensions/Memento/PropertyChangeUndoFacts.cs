@@ -10,24 +10,20 @@ namespace Catel.Test.Memento
     using Catel.Memento;
     using Mocks;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class PropertyChangeUndoFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheConstructor
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullInstance()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new PropertyChangeUndo(null, "PropertyName", null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullPropertyName()
             {
                 var obj = new object();
@@ -36,7 +32,7 @@ namespace Catel.Test.Memento
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new PropertyChangeUndo(obj, string.Empty, null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsValuesCorrectly()
             {
                 var obj = new { MyProperty = "currentValue" };
@@ -51,10 +47,10 @@ namespace Catel.Test.Memento
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheUndoMethod
         {
-            [TestMethod]
+            [TestCase]
             public void SetsOldValue()
             {
                 var obj = new MockModel { Value = "currentValue" };
@@ -66,10 +62,10 @@ namespace Catel.Test.Memento
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheRedoMethod
         {
-            [TestMethod]
+            [TestCase]
             public void SetsNewValue()
             {
                 var obj = new MockModel { Value = "currentValue" };

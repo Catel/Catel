@@ -8,21 +8,17 @@ namespace Catel.Test.Data
 {
     using Catel.Data;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class AdvancedPropertyChangedEventArgsFacts
     {
         #region Nested type: TheConstructor
-        [TestClass]
+        [TestFixture]
         public class TheConstructor
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void SetsValuesCorrectlyForNullPropertyName()
             {
                 var iniEntry = new IniEntry();
@@ -31,7 +27,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(null, nullEventArgs.PropertyName);
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsValuesCorrectlyForEmptyPropertyName()
             {
                 var iniEntry = new IniEntry();
@@ -40,7 +36,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(string.Empty, nullEventArgs.PropertyName);
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsValuesCorrectlyWithTwoArguments()
             {
                 var iniEntry = new IniEntry();
@@ -55,7 +51,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual("PropertyName", eventArgs.PropertyName);
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsValuesCorrectlyWithTheeArgumentsExceptOldValue()
             {
                 var iniEntry = new IniEntry();
@@ -71,7 +67,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(true, eventArgs.IsNewValueMeaningful);
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsValuesCorrectlyWithAllARguments()
             {
                 var iniEntry = new IniEntry();
@@ -87,7 +83,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(true, eventArgs.IsNewValueMeaningful);
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetsValuesCorrectlyWithPropertyNameOnly()
             {
                 var iniEntry = new IniEntry();
@@ -104,7 +100,7 @@ namespace Catel.Test.Data
                 Assert.AreEqual(false, eventArgs.IsNewValueMeaningful);
             }
 
-            [TestMethod]
+            [TestCase]
             public void CanAutomaticallyDetectNewValue()
             {
                 var iniEntry = new IniEntry();

@@ -4,6 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+
 namespace Catel.MVVM
 {
     using System;
@@ -11,16 +12,14 @@ namespace Catel.MVVM
     using System.ComponentModel;
     using System.Linq;
     using System.Reflection;
-
-    using Catel.Services;
-
+    using System.Threading.Tasks;
+    using Auditing;
     using Collections;
     using Data;
     using IoC;
-    using Auditing;
     using Logging;
-    using Messaging;
     using Reflection;
+    using Services;
 
     #region Enums
     /// <summary>
@@ -77,7 +76,7 @@ namespace Catel.MVVM
     /// </summary>
     /// <remarks>This view model base does not add any services. The technique specific implementation should take care of that
     /// (such as WPF, Silverlight, etc).</remarks>
-    public abstract partial class ViewModelBase : ModelBase, IViewModel, INotifyableViewModel, IRelationalViewModel
+    public abstract partial class ViewModelBase : ModelBase, IViewModel, INotifyableViewModel, IRelationalViewModel, IUniqueIdentifyable
     {
         #region Fields
         /// <summary>
@@ -207,14 +206,6 @@ namespace Catel.MVVM
         [field: NonSerialized]
 #endif
         private string _title;
-
-#if NET
-        /// <summary>
-        /// The view model properties by type.
-        /// </summary>
-        [field: NonSerialized]
-        private static readonly Dictionary<Type, HashSet<string>> _viewModelPropertiesByType = new Dictionary<Type, HashSet<string>>();
-#endif
         #endregion
 
         #region Constructors
@@ -250,7 +241,9 @@ namespace Catel.MVVM
         /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
         /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
         protected ViewModelBase(bool supportIEditableObject, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false)
-            : this(null, supportIEditableObject, ignoreMultipleModelsWarning, skipViewModelAttributesInitialization) { }
+            : this(null, supportIEditableObject, ignoreMultipleModelsWarning, skipViewModelAttributesInitialization)
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
@@ -278,16 +271,6 @@ namespace Catel.MVVM
             AuditingHelper.RegisterViewModel(this);
 
             Log.Debug("Creating view model of type '{0}' with unique identifier {1}", GetType().Name, UniqueIdentifier);
-
-#if NET
-            var viewModelType = GetType();
-            if (!_viewModelPropertiesByType.ContainsKey(viewModelType))
-            {
-                var properties = (from property in viewModelType.GetPropertiesEx()
-                                  select property.Name);
-                _viewModelPropertiesByType[viewModelType] = new HashSet<string>(properties);
-            }
-#endif
 
             _ignoreMultipleModelsWarning = ignoreMultipleModelsWarning;
 
@@ -341,7 +324,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Occurs when the view model has been initialized.
         /// </summary>
-        public new event EventHandler<EventArgs> Initialized;
+        public event EventHandler<EventArgs> Initialized;
 
         /// <summary>
         /// Occurs when a command on the view model has been executed.
@@ -406,7 +389,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <value>The <see cref="ViewModelCommandManager"/>.</value>
         [ExcludeFromValidation]
-        protected IViewModelCommandManager ViewModelCommandManager { get; private set; }
+        protected internal IViewModelCommandManager ViewModelCommandManager { get; private set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the commands should automatically be invalidated on a property change.
@@ -451,10 +434,7 @@ namespace Catel.MVVM
         [ExcludeFromValidation]
         public virtual string Title
         {
-            get
-            {
-                return _title;
-            }
+            get { return _title; }
             protected set
             {
                 _title = value;
@@ -470,9 +450,9 @@ namespace Catel.MVVM
         /// <c>true</c> if this instance has errors; otherwise, <c>false</c>.
         /// </value>
         [ExcludeFromValidation]
-        public new bool HasErrors
+        public bool HasErrors
         {
-            get { return base.HasErrors || _childViewModelsHaveErrors; }
+            get { return ((INotifyDataErrorInfo)this).HasErrors || _childViewModelsHaveErrors; }
         }
 
         /// <summary>
@@ -633,23 +613,29 @@ namespace Catel.MVVM
 
                 var viewModelPropertyType = GetPropertyData(mapping.ViewModelProperty).Type;
                 var modelPropertyType = GetPropertyData(mapping.ModelProperty).Type;
+                var modelPropertyPropertyTypes = new List<Type>(mapping.ValueProperties.Length);
 
-                var modelPropertyPropertyInfo = modelPropertyType.GetPropertyEx(mapping.ValueProperty);
-                if (modelPropertyPropertyInfo == null)
+                foreach (var valueProperty in mapping.ValueProperties)
                 {
-                    Log.Warning("Mapped viewmodel property '{0}' to model property '{1}' is invalid because property '{1}' is not found on the model '{2}'.\n\n" +
-                        "If the property is defined in a sub-interface, reflection does not return it as a valid property. If this is the case, you can safely ignore this warning",
-                        mapping.ViewModelProperty, mapping.ValueProperty, mapping.ModelProperty);
-                    //throw new PropertyNotFoundInModelException(mapping.ViewModelProperty, mapping.ModelProperty, mapping.ValueProperty);
-                    // Disabled because a property defined in an interface is not detected by FlattenHierarchy
-                }
-                else
-                {
-                    if (viewModelPropertyType != modelPropertyPropertyInfo.PropertyType)
+                    var modelPropertyPropertyInfo = modelPropertyType.GetPropertyEx(valueProperty);
+                    if (modelPropertyPropertyInfo == null)
                     {
-                        Log.Warning("Property '{0}' mapped on model property '{1}' is of the wrong type ('{2}'), should be '{3}'",
-                            mapping.ViewModelProperty, mapping.ValueProperty, viewModelPropertyType, modelPropertyPropertyInfo.PropertyType);
+                        Log.Warning("Mapped viewmodel property '{0}' to model property '{1}' is invalid because property '{1}' is not found on the model '{2}'.\n\n" +
+                                "If the property is defined in a sub-interface, reflection does not return it as a valid property. If this is the case, you can safely ignore this warning",
+                            mapping.ViewModelProperty, valueProperty, mapping.ModelProperty);
+                        //throw new PropertyNotFoundInModelException(mapping.ViewModelProperty, mapping.ModelProperty, mapping.ValueProperty);
+                        // Disabled because a property defined in an interface is not detected by FlattenHierarchy
                     }
+                    else
+                    {
+                        modelPropertyPropertyTypes.Add(modelPropertyPropertyInfo.PropertyType);
+                    }
+                }
+
+                if (!mapping.Converter.CanConvert(modelPropertyPropertyTypes.ToArray(), viewModelPropertyType, GetType()))
+                {
+                    Log.Warning("Property '{0}' mapped on model properties '{1}' cannot be converted via given converter '{2}'",
+                        mapping.ViewModelProperty, string.Join(", ", mapping.ValueProperties), mapping.ConverterType);
                 }
             }
         }
@@ -693,7 +679,7 @@ namespace Catel.MVVM
                     {
                         if (_modelObjectsInfo[modelKeyValuePair.Key].SupportIEditableObject)
                         {
-                            var modelKeyValuePairValueAsModelBaseBase = modelKeyValuePair.Value as ModelBase;
+                            var modelKeyValuePairValueAsModelBaseBase = modelKeyValuePair.Value as IModel;
                             if ((modelKeyValuePairValueAsModelBaseBase == null) || !modelKeyValuePairValueAsModelBaseBase.IsInEditSession)
                             {
                                 EditableObjectHelper.BeginEditObject(modelKeyValuePair.Value);
@@ -712,7 +698,7 @@ namespace Catel.MVVM
                     if (_modelObjects.Count > 1)
                     {
                         Log.Warning("The view model {0} implements {1} models.\n\n" +
-                            "Normally, a view model only implements 1 model so make sure you are using the Model attribute correctly. If the Model attribute is used correctly (on models only), this warning can be ignored by using a constructor overload.",
+                                    "Normally, a view model only implements 1 model so make sure you are using the Model attribute correctly. If the Model attribute is used correctly (on models only), this warning can be ignored by using a constructor overload.",
                             GetType().Name, _modelObjects.Count);
                     }
                 }
@@ -760,7 +746,25 @@ namespace Catel.MVVM
                     childViewModel.Closed += OnChildViewModelClosed;
                 }
 
-                if (childViewModel.HasErrors || childViewModel.HasWarnings)
+                var validate = false;
+
+                // The ViewModelBase.HasErrors has a diff implementation than IModelValidation, this might (or should) be changed
+                // but this is the easiest and most reliable way to make it work now
+                var viewModelBase = childViewModel as ViewModelBase;
+                if (viewModelBase != null && viewModelBase.HasErrors)
+                {
+                    validate = true;
+                }
+                else
+                {
+                    var validationContext = ((IModelValidation)childViewModel).ValidationContext;
+                    if (validationContext.HasErrors || validationContext.HasWarnings)
+                    {
+                        validate = true;
+                    }
+                }
+
+                if (validate)
                 {
                     Validate();
                 }
@@ -774,9 +778,14 @@ namespace Catel.MVVM
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         private void OnChildViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if ((e.PropertyName == "HasErrors") || (e.PropertyName == "HasWarnings"))
+            if ((e.PropertyName == "INotifyDataErrorInfo.HasErrors") || (e.PropertyName == "INotifyDataWarningInfo.HasWarnings"))
             {
                 Validate();
+            }
+
+            if (InvalidateCommandsOnPropertyChanged)
+            {
+                ViewModelCommandManager.InvalidateCommands();
             }
         }
 
@@ -856,14 +865,17 @@ namespace Catel.MVVM
                 if (model != null)
                 {
                     object value = GetValue(mapping.ViewModelProperty);
-
-                    if (PropertyHelper.TrySetPropertyValue(model, mapping.ValueProperty, value))
+                    var modelValues = mapping.Converter.ConvertBack(value, this);
+                    for (int i = 0; i < mapping.ValueProperties.Length; i++)
                     {
-                        Log.Debug("Updated property '{0}' on model type '{1}' to '{2}'", mapping.ValueProperty, model.GetType().Name, ObjectToStringHelper.ToString(value));
-                    }
-                    else
-                    {
-                        Log.Warning("Failed to set property '{0}' on model type '{1}'", mapping.ValueProperty, model.GetType().Name);
+                        if (PropertyHelper.TrySetPropertyValue(model, mapping.ValueProperties[i], modelValues[i]))
+                        {
+                            Log.Debug("Updated property '{0}' on model type '{1}' to '{2}'", mapping.ValueProperties, model.GetType().Name, ObjectToStringHelper.ToString(value));
+                        }
+                        else
+                        {
+                            Log.Warning("Failed to set property '{0}' on model type '{1}'", mapping.ValueProperties, model.GetType().Name);
+                        }
                     }
                 }
             }
@@ -895,7 +907,7 @@ namespace Catel.MVVM
                     var oldModelValue = _modelObjects[e.PropertyName];
                     if (oldModelValue != null)
                     {
-                        UninitializeModel(e.PropertyName, oldModelValue, ModelCleanUpMode.CancelEdit);
+                        UninitializeModelInternal(e.PropertyName, oldModelValue, ModelCleanUpMode.CancelEdit);
                     }
 
                     var newModelValue = GetValue(e.PropertyName);
@@ -903,31 +915,41 @@ namespace Catel.MVVM
 
                     if (newModelValue != null)
                     {
-                        InitializeModel(e.PropertyName, newModelValue);
+                        InitializeModelInternal(e.PropertyName, newModelValue);
                     }
 
                     // Since the model has been changed, copy all values from the model to the view model
                     foreach (KeyValuePair<string, ViewModelToModelMapping> viewModelToModelMap in _viewModelToModelMap)
                     {
                         ViewModelToModelMapping mapping = viewModelToModelMap.Value;
+                        IViewModelToModelConverter converter = mapping.Converter;
                         if (string.CompareOrdinal(mapping.ModelProperty, e.PropertyName) == 0)
                         {
+                            var values = new object[mapping.ValueProperties.Length];
                             if (newModelValue != null)
                             {
                                 // We have a new model, ignore OneWayToSource
-                                if (mapping.Mode != ViewModelToModelMode.OneWayToSource)
+                                if (mapping.Mode == ViewModelToModelMode.OneWayToSource)
                                 {
-                                    var value = PropertyHelper.GetPropertyValue(newModelValue, mapping.ValueProperty);
-                                    SetValue(mapping.ViewModelProperty, value, true, ValidateModelsOnInitialization);
+                                    continue;
+                                }
+
+                                for (var index = 0; index < mapping.ValueProperties.Length; index++)
+                                {
+                                    var property = mapping.ValueProperties[index];
+                                    values[index] = PropertyHelper.GetPropertyValue(newModelValue, property);
                                 }
                             }
                             else
                             {
-                                // Always restore default value when a model becomes null
-                                var propertyData = GetPropertyData(mapping.ViewModelProperty);
-                                var value = propertyData.GetDefaultValue();
-                                SetValue(mapping.ViewModelProperty, value, true, ValidateModelsOnInitialization);
+                                var property = mapping.ViewModelProperty;
+                                var propertyData = GetPropertyData(property);
+                                values[0] = propertyData.GetDefaultValue();
                             }
+
+                            values[0] = converter.Convert(values, this);
+
+                            SetValue(mapping.ViewModelProperty, values[0], true, ValidateModelsOnInitialization);
                         }
                     }
                 }
@@ -944,30 +966,34 @@ namespace Catel.MVVM
                         object model = _modelObjects[mapping.ModelProperty];
                         if (model != null)
                         {
-                            object viewModelValue = GetValue(e.PropertyName);
-                            object modelValue = PropertyHelper.GetPropertyValue(model, mapping.ValueProperty);
-                            if (!ObjectHelper.AreEqualReferences(viewModelValue, modelValue))
-                            {
-                                object valueToSet = viewModelValue;
-                                string propertyToSet = mapping.ValueProperty;
+                            var viewModelValue = GetValue(e.PropertyName);
+                            string[] propertiesToSet = mapping.ValueProperties;
 
 #if !WINDOWS_PHONE && !NET35
-                                if (_modelErrorInfo.ContainsKey(mapping.ModelProperty))
-                                {
-                                    _modelErrorInfo[mapping.ModelProperty].ClearDefaultErrors(mapping.ValueProperty);
-                                }
+                            if (_modelErrorInfo.ContainsKey(mapping.ModelProperty))
+                            {
+                                mapping.ValueProperties.ForEach(_modelErrorInfo[mapping.ModelProperty].ClearDefaultErrors);
+                            }
 #endif
 
-                                // Only TwoWay or OneWayToSource mappings should be mapped
-                                if ((mapping.Mode == ViewModelToModelMode.TwoWay) || (mapping.Mode == ViewModelToModelMode.OneWayToSource))
+                            // Only TwoWay or OneWayToSource mappings should be mapped
+                            if ((mapping.Mode == ViewModelToModelMode.TwoWay) || (mapping.Mode == ViewModelToModelMode.OneWayToSource))
+                            {
+                                var valuesToSet = mapping.Converter.ConvertBack(viewModelValue, this);
+                                if (propertiesToSet.Length != valuesToSet.Length)
                                 {
-                                    if (PropertyHelper.TrySetPropertyValue(model, propertyToSet, valueToSet))
+                                    Log.Error("Properties - values count mismatch, properties '{0}', values '{1}'",
+                                        string.Join(", ", propertiesToSet), string.Join(", ", valuesToSet));
+                                }
+                                for (int index = 0; index < propertiesToSet.Length && index < valuesToSet.Length; index++)
+                                {
+                                    if (PropertyHelper.TrySetPropertyValue(model, propertiesToSet[index], valuesToSet[index]))
                                     {
-                                        Log.Debug("Updated property '{0}' on model type '{1}' to '{2}'", propertyToSet, model.GetType().Name, ObjectToStringHelper.ToString(valueToSet));
+                                        Log.Debug("Updated property '{0}' on model type '{1}' to '{2}'", propertiesToSet[index], model.GetType().Name, ObjectToStringHelper.ToString(valuesToSet[index]));
                                     }
                                     else
                                     {
-                                        Log.Warning("Failed to set property '{0}' on model type '{1}'", propertyToSet, model.GetType().Name);
+                                        Log.Warning("Failed to set property '{0}' on model type '{1}'", propertiesToSet[index], model.GetType().Name);
                                     }
                                 }
                             }
@@ -1092,10 +1118,11 @@ namespace Catel.MVVM
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         private void OnModelPropertyChangedInternal(object sender, PropertyChangedEventArgs e)
         {
-            foreach (KeyValuePair<string, ViewModelToModelMapping> map in _viewModelToModelMap)
+            foreach (var map in _viewModelToModelMap)
             {
-                ViewModelToModelMapping mapping = map.Value;
-                if (string.CompareOrdinal(mapping.ValueProperty, e.PropertyName) == 0)
+                var mapping = map.Value;
+                IViewModelToModelConverter converter = mapping.Converter;
+                if (converter.ShouldConvert(e.PropertyName))
                 {
                     // Check if this is the right model (duplicate mappings might exist)
                     if (_modelObjects[mapping.ModelProperty] == sender)
@@ -1103,12 +1130,15 @@ namespace Catel.MVVM
                         // Only map properties in TwoWay or OneWay mode
                         if ((mapping.Mode == ViewModelToModelMode.TwoWay) || (mapping.Mode == ViewModelToModelMode.OneWay))
                         {
-                            object viewModelValue = GetValue(mapping.ViewModelProperty);
-                            object modelValue = PropertyHelper.GetPropertyValue(sender, e.PropertyName);
-                            if (!ObjectHelper.AreEqualReferences(viewModelValue, modelValue))
+                            var values = new object[mapping.ValueProperties.Length];
+                            for (var index = 0; index < mapping.ValueProperties.Length; index++)
                             {
-                                SetValue(mapping.ViewModelProperty, modelValue);
+                                var property = mapping.ValueProperties[index];
+                                values[index] = PropertyHelper.GetPropertyValue(sender, property);
                             }
+
+                            var convertedValue = mapping.Converter.Convert(values, this);
+                            SetValue(mapping.ViewModelProperty, convertedValue);
                         }
                     }
                 }
@@ -1141,8 +1171,8 @@ namespace Catel.MVVM
 
             var model = GetValue(modelProperty);
 
-            UninitializeModel(modelProperty, model, modelCleanUpMode);
-            InitializeModel(modelProperty, model);
+            UninitializeModelInternal(modelProperty, model, modelCleanUpMode);
+            InitializeModelInternal(modelProperty, model);
         }
 
         /// <summary>
@@ -1150,7 +1180,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="modelProperty">The name of the model property.</param>
         /// <param name="model">The model.</param>
-        private void InitializeModel(string modelProperty, object model)
+        private void InitializeModelInternal(string modelProperty, object model)
         {
             if (model != null)
             {
@@ -1188,6 +1218,16 @@ namespace Catel.MVVM
                 _modelErrorInfo[modelProperty].InitializeDefaultErrors(validationResults);
             }
 #endif
+            InitializeModel(modelProperty, model);
+        }
+
+        /// <summary>
+        /// Called when a model initialized.
+        /// </summary>
+        /// <param name="modelProperty">The name of the model property.</param>
+        /// <param name="model">The model.</param>
+        protected virtual void InitializeModel(string modelProperty, object model)
+        {
         }
 
         /// <summary>
@@ -1196,7 +1236,7 @@ namespace Catel.MVVM
         /// <param name="modelProperty">The name of the model property.</param>
         /// <param name="model">The model.</param>
         /// <param name="modelCleanUpMode">The model clean up mode.</param>
-        private void UninitializeModel(string modelProperty, object model, ModelCleanUpMode modelCleanUpMode)
+        private void UninitializeModelInternal(string modelProperty, object model, ModelCleanUpMode modelCleanUpMode)
         {
             if (model != null)
             {
@@ -1248,6 +1288,18 @@ namespace Catel.MVVM
             {
                 modelAsINotifyPropertyChanged.PropertyChanged -= OnModelPropertyChangedInternal;
             }
+
+            UninitializeModel(modelProperty, model, modelCleanUpMode);
+        }
+
+        /// <summary>
+        /// Called when a model uninitialized.
+        /// </summary>
+        /// <param name="modelProperty">The name of the model property.</param>
+        /// <param name="model">The model.</param>
+        /// <param name="modelCleanUpMode">The model clean up mode.</param>
+        protected virtual void UninitializeModel(string modelProperty, object model, ModelCleanUpMode modelCleanUpMode)
+        {
         }
 
         /// <summary>
@@ -1266,7 +1318,10 @@ namespace Catel.MVVM
         /// <returns>
         ///	<c>true</c> if successful; otherwise <c>false</c>.
         /// </returns>
-        protected virtual bool Cancel() { return true; }
+        protected virtual async Task<bool> Cancel()
+        {
+            return true;
+        }
 
         /// <summary>
         /// Saves the data.
@@ -1274,7 +1329,10 @@ namespace Catel.MVVM
         /// <returns>
         /// <c>true</c> if successful; otherwise <c>false</c>.
         /// </returns>
-        protected virtual bool Save() { return true; }
+        protected virtual async Task<bool> Save()
+        {
+            return true;
+        }
 
         /// <summary>
         /// Called when the view model is about to be closed.
@@ -1289,7 +1347,9 @@ namespace Catel.MVVM
         /// <summary>
         /// Closes this instance. Always called after the <see cref="Cancel"/> of <see cref="Save"/> method.
         /// </summary>
-        protected virtual void Close() { }
+        protected virtual async Task Close()
+        {
+        }
 
         /// <summary>
         /// Called when the view model has just been closed.
@@ -1339,14 +1399,13 @@ namespace Catel.MVVM
         /// <para />
         /// This method is called as soon as the associated UI element is loaded.
         /// </summary>
-        /// <remarks>
-        /// It's not recommended to implement the initialization of properties in this method. The initialization of properties
+        /// <returns>The task.</returns>
+        /// <remarks>It's not recommended to implement the initialization of properties in this method. The initialization of properties
         /// should be done in the constructor. This method should be used to start the retrieval of data from a web service or something
         /// similar.
         /// <para />
-        /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.
-        /// </remarks>
-        public void InitializeViewModel()
+        /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.</remarks>
+        public async Task InitializeViewModel()
         {
             if (!_isViewModelInitialized)
             {
@@ -1354,7 +1413,7 @@ namespace Catel.MVVM
 
                 //MessageMediatorHelper.SubscribeRecipient(this);
 
-                Initialize();
+                await Initialize();
 
                 Initialized.SafeInvoke(this);
             }
@@ -1373,13 +1432,15 @@ namespace Catel.MVVM
         /// <para />
         /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.
         /// </remarks>
-        protected virtual void Initialize() { }
+        protected virtual async Task Initialize()
+        {
+        }
 
         /// <summary>
         /// Cancels the editing of the data.
         /// </summary>
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
-        public bool CancelViewModel()
+        public async Task<bool> CancelViewModel()
         {
             if (IsClosed)
             {
@@ -1395,7 +1456,7 @@ namespace Catel.MVVM
                 return false;
             }
 
-            bool cancel = Cancel();
+            var cancel = await Cancel();
 
             Log.Info(cancel ? "Canceled view model '{0}'" : "Failed to cancel view model '{0}'", GetType());
             if (!cancel)
@@ -1407,7 +1468,7 @@ namespace Catel.MVVM
             {
                 foreach (KeyValuePair<string, object> modelKeyValuePair in _modelObjects)
                 {
-                    UninitializeModel(modelKeyValuePair.Key, modelKeyValuePair.Value, ModelCleanUpMode.CancelEdit);
+                    UninitializeModelInternal(modelKeyValuePair.Key, modelKeyValuePair.Value, ModelCleanUpMode.CancelEdit);
                 }
             }
 
@@ -1422,12 +1483,12 @@ namespace Catel.MVVM
         /// Cancels the editing of the data, but also closes the view model in the same call.
         /// </summary>
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
-        public bool CancelAndCloseViewModel()
+        public async Task<bool> CancelAndCloseViewModel()
         {
-            bool result = CancelViewModel();
+            var result = await CancelViewModel();
             if (result)
             {
-                CloseViewModel(false);
+                await CloseViewModel(false);
             }
 
             return result;
@@ -1437,7 +1498,7 @@ namespace Catel.MVVM
         /// Saves the data.
         /// </summary>
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
-        public bool SaveViewModel()
+        public async Task<bool> SaveViewModel()
         {
             if (IsClosed)
             {
@@ -1470,7 +1531,7 @@ namespace Catel.MVVM
                 return false;
             }
 
-            bool saved = Save();
+            var saved = await Save();
 
             Log.Info(saved ? "Saved view model '{0}'" : "Failed to save view model '{0}'", GetType());
 
@@ -1480,7 +1541,7 @@ namespace Catel.MVVM
                 {
                     foreach (KeyValuePair<string, object> modelKeyValuePair in _modelObjects)
                     {
-                        UninitializeModel(modelKeyValuePair.Key, modelKeyValuePair.Value, ModelCleanUpMode.EndEdit);
+                        UninitializeModelInternal(modelKeyValuePair.Key, modelKeyValuePair.Value, ModelCleanUpMode.EndEdit);
                     }
                 }
 
@@ -1496,12 +1557,12 @@ namespace Catel.MVVM
         /// Saves the data, but also closes the view model in the same call if the save succeeds.
         /// </summary>
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
-        public bool SaveAndCloseViewModel()
+        public async Task<bool> SaveAndCloseViewModel()
         {
-            bool result = SaveViewModel();
+            bool result = await SaveViewModel();
             if (result)
             {
-                CloseViewModel(true);
+                await CloseViewModel(true);
             }
 
             return result;
@@ -1511,7 +1572,7 @@ namespace Catel.MVVM
         /// Closes this instance. Always called after the <see cref="Cancel"/> of <see cref="Save"/> method.
         /// </summary>
         /// <param name="result">The result to pass to the view. This will, for example, be used as <c>DialogResult</c>.</param>
-        public void CloseViewModel(bool? result)
+        public async Task CloseViewModel(bool? result)
         {
             if (IsClosed)
             {
@@ -1524,7 +1585,7 @@ namespace Catel.MVVM
 
             ViewModelManager.UnregisterAllModels(this);
 
-            Close();
+            await Close();
 
             SuspendValidation = true;
 

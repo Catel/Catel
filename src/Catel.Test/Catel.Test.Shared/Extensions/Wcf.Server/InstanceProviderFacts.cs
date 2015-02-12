@@ -9,7 +9,7 @@
 namespace Catel.Test.Extensions.Wcf.Server
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using ServiceModel.Dispatching;
     using Services;
     using Catel.IoC;
@@ -17,23 +17,23 @@ namespace Catel.Test.Extensions.Wcf.Server
     public class InstanceProviderFacts
     {
         #region Nested type: TheConstructorMethod
-        [TestClass]
+        [TestFixture]
         public class TheConstructorMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ShouldThrowArgumentNullExceptionForNullAsServiceLocator()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new InstanceProvider(null, typeof (ITestService), typeof (TestService)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ShouldThrowArgumentNullExceptionForNullAsContractType()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new InstanceProvider(ServiceLocator.Default, null, typeof (TestService)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ShouldThrowArgumentNullExceptionForNullAsServiceType()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new InstanceProvider(ServiceLocator.Default, typeof (ITestService), null));
@@ -43,11 +43,11 @@ namespace Catel.Test.Extensions.Wcf.Server
         #endregion
 
         #region Nested type: TheGetInstanceMethod
-        [TestClass]
+        [TestFixture]
         public class TheGetInstanceMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ShouldThrowArgumentNullExceptionForNullAsInstanceContext()
             {
                 var instanceProvider = new InstanceProvider(ServiceLocator.Default, typeof (ITestService), typeof (TestService));
@@ -59,11 +59,11 @@ namespace Catel.Test.Extensions.Wcf.Server
         #endregion
 
         #region Nested type: TheReleaseInstanceMethod
-        [TestClass]
+        [TestFixture]
         public class TheReleaseInstanceMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ShouldThrowArgumentNullExceptionForNullAsInstanceContext()
             {
                 var instanceProvider = new InstanceProvider(ServiceLocator.Default, typeof (ITestService), typeof (TestService));

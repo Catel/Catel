@@ -36,12 +36,12 @@ namespace Catel.IoC
         /// <summary>
         /// The assemblies
         /// </summary>
-        private readonly IList<Assembly> _assemblies;
+        private readonly HashSet<Assembly> _assemblies;
 
         /// <summary>
         /// The registered conventions
         /// </summary>
-        private readonly IList<IRegistrationConvention> _registeredConventions = new List<IRegistrationConvention>();
+        private readonly HashSet<IRegistrationConvention> _registeredConventions = new HashSet<IRegistrationConvention>();
 
         /// <summary>
         /// The service locator
@@ -56,7 +56,7 @@ namespace Catel.IoC
         /// <summary>
         /// The retrieved types
         /// </summary>
-        private IList<Type> _retrievedTypes;
+        private HashSet<Type> _retrievedTypes;
         #endregion
 
         #region Constructors
@@ -73,7 +73,7 @@ namespace Catel.IoC
             TypeFilter = new CompositeFilter<Type>();
             AssemblyFilter = new CompositeFilter<Assembly>();
 
-            _assemblies = AssemblyHelper.GetLoadedAssemblies();
+            _assemblies = new HashSet<Assembly>(AssemblyHelper.GetLoadedAssemblies());
 
             AssemblyFilter.Excludes += assembly =>
             {
@@ -180,7 +180,7 @@ namespace Catel.IoC
 
                 var typesToHandle = types.Where(type => TypeFilter.Matches(type));
 
-                _retrievedTypes = new List<Type>(typesToHandle);
+                _retrievedTypes = new HashSet<Type>(typesToHandle);
 
                 if (!_retrievedTypes.Any())
                 {

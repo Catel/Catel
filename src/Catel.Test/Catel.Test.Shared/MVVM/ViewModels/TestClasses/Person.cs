@@ -4,6 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+
 namespace Catel.Test.MVVM.ViewModels.TestClasses
 {
     using System;
@@ -14,18 +15,24 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
 
     public interface IPerson
     {
+        #region Properties
         string FirstName { get; set; }
         string MiddleName { get; set; }
         string LastName { get; set; }
 
+        uint Age { get; set; }
+
         IContactInfo ContactInfo { get; set; }
+        #endregion
     }
 
     public interface IContactInfo
     {
+        #region Properties
         string Street { get; set; }
         string City { get; set; }
         string Email { get; set; }
+        #endregion
     }
 
     /// <summary>
@@ -127,6 +134,15 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
             set { SetValue(ContactInfoProperty, value); }
         }
 
+        /// <summary>Register the Age property so it is known in the class.</summary>
+        public static readonly PropertyData AgeProperty = RegisterProperty<Person, uint>(model => model.Age);
+
+        public uint Age
+        {
+            get { return GetValue<uint>(AgeProperty); }
+            set { SetValue(AgeProperty, value); }
+        }
+
         /// <summary>
         /// Register the ContactInfo property so it is known in the class.
         /// </summary>
@@ -134,6 +150,11 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         #endregion
 
         #region Methods
+        public void ClearIsDirty()
+        {
+            IsDirty = false;
+        }
+
         protected override void ValidateFields(List<IFieldValidationResult> validationResults)
         {
             if (string.IsNullOrEmpty(FirstName))
@@ -237,10 +258,19 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
             set { SetValue(LastNameProperty, value); }
         }
 
+        /// <summary>Register the Age property so it is known in the class.</summary>
+        public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof(string), string.Empty);
+
+        public uint Age
+        {
+            get { return GetValue<uint>(AgeProperty); }
+            set { SetValue(AgeProperty, value); }
+        }
+
         /// <summary>
         /// Register the LastName property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof (string), string.Empty);
+        public static readonly PropertyData AgeProperty = RegisterProperty<PersonWithDataAnnotations, uint>(model => model.Age);
 
         /// <summary>
         /// Gets or sets the contact info.

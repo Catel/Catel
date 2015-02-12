@@ -368,12 +368,20 @@ namespace Catel.IoC
 
             try
             {
-                return (TService)serviceLocator.ResolveType(typeof(TService), tag);
+                lock (serviceLocator)
+                {
+                    if (serviceLocator.IsTypeRegistered(typeof (TService), tag))
+                    {
+                        return (TService) serviceLocator.ResolveType(typeof (TService), tag);
+                    }
+                }
             }
             catch (Exception)
             {
-                return default(TService);
+                // ignore
             }
+
+            return default(TService);
         }
 
         /// <summary>
@@ -403,6 +411,37 @@ namespace Catel.IoC
             Argument.IsNotNull("serviceLocator", serviceLocator);
 
             serviceLocator.RemoveType(typeof(TService), tag);
+        }
+
+        /// <summary>
+        /// Registers a service where the implementation type is the same as the registered type and immediately instantiates the type using the type factory.
+        /// </summary>
+        /// <typeparam name="TServiceImplementation">The type of the service definition and implementation.</typeparam>
+        /// <param name="serviceLocator">The service locator.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
+        /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
+        public static TServiceImplementation RegisterTypeAndInstantiate<TServiceImplementation>(this IServiceLocator serviceLocator)
+        {
+            return RegisterTypeAndInstantiate<TServiceImplementation, TServiceImplementation>(serviceLocator);
+        }
+
+        /// <summary>
+        /// Registers a service where the implementation type is the same as the registered type and immediately instantiates the type using the type factory.
+        /// </summary>
+        /// <typeparam name="TService">The type of the service.</typeparam>
+        /// <typeparam name="TServiceImplementation">The type of the service definition and implementation.</typeparam>
+        /// <param name="serviceLocator">The service locator.</param>
+        /// <returns>TService.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator" /> is <c>null</c>.</exception>
+        /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
+        public static TService RegisterTypeAndInstantiate<TService, TServiceImplementation>(this IServiceLocator serviceLocator)
+            where TServiceImplementation : TService
+        {
+            object tag = null;
+
+            RegisterTypeWithTag<TService, TServiceImplementation>(serviceLocator, tag, RegistrationType.Singleton);
+
+            return ResolveType<TService>(serviceLocator, tag);
         }
     }
 }

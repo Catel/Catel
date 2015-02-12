@@ -14,21 +14,21 @@ namespace Catel.Test.Extensions.EntityFramework5
     using System.Data.Objects;
 
     using Catel.Data;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using Test.EntityFramework5.DbContextTest;
 
     public class DbContextExtensionsFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheGetObjectContextMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullDbContext()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => DbContextExtensions.GetObjectContext(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsObjectContextForDbContext()
             {
                 var dbContext = new TestDbContextContainer();
@@ -39,16 +39,16 @@ namespace Catel.Test.Extensions.EntityFramework5
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetEntityKeyMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullDbContext()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => DbContextExtensions.GetEntityKey(null, typeof(DbContextProduct), 1));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNulEntityType()
             {
                 var dbContext = new TestDbContextContainer();
@@ -56,7 +56,7 @@ namespace Catel.Test.Extensions.EntityFramework5
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => dbContext.GetEntityKey(null, 1));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsCorrectKeyValue()
             {
                 var dbContext = new TestDbContextContainer();
@@ -68,16 +68,16 @@ namespace Catel.Test.Extensions.EntityFramework5
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetEntitySetNameMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullDbContext()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => DbContextExtensions.GetEntitySetName(null, typeof(DbContextProduct)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsCorrectEntitySetName()
             {
                 var dbContext = new TestDbContextContainer();
@@ -88,16 +88,16 @@ namespace Catel.Test.Extensions.EntityFramework5
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetFullEntitySetNameMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullDbContext()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => DbContextExtensions.GetFullEntitySetName(null, typeof(DbContextProduct)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsCorrectEntitySetName()
             {
                 var dbContext = new TestDbContextContainer();
@@ -108,16 +108,16 @@ namespace Catel.Test.Extensions.EntityFramework5
             }   
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetTableNameMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullContext()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => DbContextExtensions.GetTableName((ObjectContext)null, typeof(DbContextProduct)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
                 var dbContext = new TestDbContextContainer();
@@ -125,7 +125,7 @@ namespace Catel.Test.Extensions.EntityFramework5
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => dbContext.GetTableName(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTableNameIncludingSchemaForType()
             {
                 var dbContext = new TestDbContextContainer();
@@ -135,10 +135,10 @@ namespace Catel.Test.Extensions.EntityFramework5
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheSetTransactionLevelMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullDbContext()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => DbContextExtensions.SetTransactionLevel(null, IsolationLevel.ReadUncommitted));

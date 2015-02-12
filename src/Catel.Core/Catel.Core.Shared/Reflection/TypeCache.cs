@@ -26,6 +26,16 @@ namespace Catel.Reflection
 
 #if NET
         private static readonly Queue<Assembly> _threadSafeAssemblyQueue = new Queue<Assembly>();
+
+        /// <summary>
+        /// Assemblies, loaded while Catel was processing AssemblyLoaded event.
+        /// </summary>
+        private static readonly Queue<Assembly> _onAssemblyLoadedDelayQueue = new Queue<Assembly>();
+
+        /// <summary>
+        /// The boolean specifying whether the type cache is already loading assemblies via the loaded event.
+        /// </summary>
+        private static bool _isAlreadyInLoadingEvent = false;
 #endif
 
         /// <summary>
@@ -93,7 +103,7 @@ namespace Catel.Reflection
                 var assemblies = AppDomain.CurrentDomain.GetAssemblies();
                 foreach (var assembly in assemblies)
                 {
-                    InitializeTypes(false, assembly);
+                    InitializeTypes(assembly);
                 }
             }
 #endif
@@ -118,31 +128,47 @@ namespace Catel.Reflection
             // 1) 
             if (Monitor.TryEnter(_lockObject))
             {
-                try
+                var assemblyName = assembly.FullName;
+                if (!_loadedAssemblies.Contains(assemblyName))
                 {
-                    var assemblyName = assembly.FullName;
-                    if (_loadedAssemblies.Contains(assemblyName))
+                    // Fix for CTL-543
+                    // General idea of fix - prevent to call GetTypes() method recursively.
+                    // When type load will fail CLR will try to localize message, and on
+                    // some OS's (i suspect on non english Windows and .NET) will try to load
+                    // satellite assembly with localization, Catel will get event before CLR
+                    // finishes handling process. Catel will try to initialize types. When another
+                    // type won't load CLR will detect that it still trying to handle previous 
+                    // type load problem and will crash whole process.
+
+                    if (_isAlreadyInLoadingEvent)
                     {
-                        return;
+                        // Will be proceed in finally block
+                        _onAssemblyLoadedDelayQueue.Enqueue(assembly);
                     }
-
-                    InitializeTypes(false, assembly);
-
-                    _loadedAssemblies.Add(assemblyName);
-
-                    var handler = AssemblyLoaded;
-                    if (handler != null)
+                    else
                     {
-                        var types = GetTypesOfAssembly(assembly);
-                        var eventArgs = new AssemblyLoadedEventArgs(assembly, types);
+                        try
+                        {
+                            _isAlreadyInLoadingEvent = true;
 
-                        handler(null, eventArgs);
+                            InitializeTypes(assembly);
+                        }
+                        finally
+                        {
+                            while (_onAssemblyLoadedDelayQueue.Count > 0)
+                            {
+                                var delayedAssembly = _onAssemblyLoadedDelayQueue.Dequeue();
+
+                                // Copy/pasted assembly processing behaviour, like types were processed without any delay
+                                InitializeTypes(delayedAssembly);
+                            }
+
+                            _isAlreadyInLoadingEvent = false;
+                        }
                     }
                 }
-                finally
-                {
-                    Monitor.Exit(_lockObject);
-                }
+
+                Monitor.Exit(_lockObject);
             }
             else
             {
@@ -150,6 +176,16 @@ namespace Catel.Reflection
                 {
                     _threadSafeAssemblyQueue.Enqueue(assembly);
                 }
+            }
+
+            // Important to do outside of the lock
+            var handler = AssemblyLoaded;
+            if (handler != null)
+            {
+                var types = GetTypesOfAssembly(assembly);
+                var eventArgs = new AssemblyLoadedEventArgs(assembly, types);
+
+                handler(null, eventArgs);
             }
         }
 #endif
@@ -164,7 +200,7 @@ namespace Catel.Reflection
         /// Gets the evaluators used to determine whether a specific type should be ignored.
         /// </summary>
         /// <value>The should ignore assembly function.</value>
-        public static List<Func<Assembly, Type, bool>> ShouldIgnoreTypeEvaluators { get; private set; } 
+        public static List<Func<Assembly, Type, bool>> ShouldIgnoreTypeEvaluators { get; private set; }
 
         #region Events
         /// <summary>
@@ -242,7 +278,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNullOrWhitespace("typeName", typeName);
 
-            InitializeTypes(false);
+            InitializeTypes();
 
             lock (_lockObject)
             {
@@ -269,7 +305,7 @@ namespace Catel.Reflection
                         return typesWithAssembly[typeName];
                     }
 
-                    var fallbackType = Type.GetType(typeName);
+                    var fallbackType = GetTypeBySplittingInternals(typeName);
                     if (fallbackType != null)
                     {
                         // Though it was not initially found, we still have found a new type, register it
@@ -340,6 +376,66 @@ namespace Catel.Reflection
         }
 
         /// <summary>
+        /// Gets the type by splitting internal types. This means that System.Collections.List`1[[MyCustomType.Item]] will be splitted
+        /// and resolved separately.
+        /// </summary>
+        /// <param name="typeWithInnerTypes">The type with inner types.</param>
+        /// <returns></returns>
+        private static Type GetTypeBySplittingInternals(string typeWithInnerTypes)
+        {
+            // Try fast method first
+            var fastType = Type.GetType(typeWithInnerTypes);
+            if (fastType != null)
+            {
+                return fastType;
+            }
+
+            if (typeWithInnerTypes.EndsWith("[]"))
+            {
+                // Array type
+                var arrayTypeElementString = typeWithInnerTypes.Replace("[]", string.Empty);
+                var arrayTypeElement = TypeCache.GetType(arrayTypeElementString);
+                if (arrayTypeElement != null)
+                {
+                    return arrayTypeElement.MakeArrayType();
+                }
+
+                return null;
+            }
+
+            var innerTypes = new List<Type>();
+            var innerTypesShortNames = TypeHelper.GetInnerTypes(typeWithInnerTypes);
+            if (innerTypesShortNames.Length > 0)
+            {
+                foreach (var innerTypesShortName in innerTypesShortNames)
+                {
+                    var innerType = TypeCache.GetType(innerTypesShortName);
+                    if (innerType == null)
+                    {
+                        return null;
+                    }
+
+                    innerTypes.Add(innerType);
+                }
+
+                var innerTypesNames = new List<string>();
+                foreach (var innerType in innerTypes)
+                {
+                    innerTypesNames.Add(innerType.AssemblyQualifiedName);
+                }
+
+                var firstBracketIndex = typeWithInnerTypes.IndexOf('[');
+                var typeWithImprovedInnerTypes = string.Format("{0}[{1}]", typeWithInnerTypes.Substring(0, firstBracketIndex), TypeHelper.FormatInnerTypes(innerTypesNames.ToArray()));
+
+                var fallbackType = Type.GetType(typeWithImprovedInnerTypes);
+                return fallbackType;
+            }
+
+            // This is not yet supported or type is really not available
+            return null;
+        }
+
+        /// <summary>
         /// Gets the types implementing the specified interface.
         /// </summary>
         /// <param name="interfaceType">Type of the interface.</param>
@@ -392,12 +488,16 @@ namespace Catel.Reflection
         /// <returns>System.Type[].</returns>
         private static Type[] GetTypesPrefilteredByAssembly(string assemblyName, Func<Type, bool> predicate)
         {
-            InitializeTypes(false);
+            InitializeTypes();
+
+            // IMPORTANT NOTE!!!! DON'T USE LOGGING IN THE CODE BELOW BECAUSE IT MIGHT CAUSE DEADLOCK (BatchLogListener will load
+            // async stuff which can deadlock). Keep it simple without calls to other code. Do any type initialization *outside* 
+            // the lock and make sure not to make calls to other methods
+
+            Dictionary<string, Type> typeSource = null;
 
             lock (_lockObject)
             {
-                Dictionary<string, Type> typeSource = null;
-
                 if (!string.IsNullOrWhiteSpace(assemblyName))
                 {
                     if (_typesByAssembly.ContainsKey(assemblyName))
@@ -429,14 +529,15 @@ namespace Catel.Reflection
 
                         return typeSource.Values.ToArray();
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        Log.Warning(ex, "Failed to get types, '{0}' retries left", retryCount);
                     }
                 }
 
                 return new Type[] { };
             }
+
+            // IMPORTANT NOTE: READ NOTE ABOVE BEFORE EDITING THIS METHOD!!!!
         }
 
         /// <summary>
@@ -460,7 +561,7 @@ namespace Catel.Reflection
                     {
                         if (assembly.FullName.Contains(assemblyName))
                         {
-                            InitializeTypes(forceFullInitialization, assembly);
+                            InitializeTypes(assembly, forceFullInitialization);
                         }
                     }
                     catch (Exception ex)
@@ -479,7 +580,21 @@ namespace Catel.Reflection
         /// </summary>
         /// <param name="forceFullInitialization">If <c>true</c>, the types are initialized, even when the types are already initialized.</param>
         /// <param name="assembly">The assembly to initialize the types from. If <c>null</c>, all assemblies will be checked.</param>
+        [ObsoleteEx(Replacement = "InitializeTypes(Assembly, bool)", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
         public static void InitializeTypes(bool forceFullInitialization, Assembly assembly = null)
+        {
+            InitializeTypes(assembly, forceFullInitialization);
+        }
+
+        /// <summary>
+        /// Initializes the types in the specified assembly. It does this by looping through all loaded assemblies and
+        /// registering the type by type name and assembly name.
+        /// <para/>
+        /// The types initialized by this method are used by <see cref="object.GetType"/>.
+        /// </summary>
+        /// <param name="assembly">The assembly to initialize the types from. If <c>null</c>, all assemblies will be checked.</param>
+        /// <param name="forceFullInitialization">If <c>true</c>, the types are initialized, even when the types are already initialized.</param>
+        public static void InitializeTypes(Assembly assembly = null, bool forceFullInitialization = false)
         {
             bool checkSingleAssemblyOnly = assembly != null;
 
@@ -550,7 +665,8 @@ namespace Catel.Reflection
                     _typesWithoutAssemblyLowerCase = new Dictionary<string, string>();
                 }
 
-                InitializeAssemblies(AssemblyHelper.GetLoadedAssemblies());
+                var assembliesToInitialize = checkSingleAssemblyOnly ? new List<Assembly>(new[] {assembly}) : AssemblyHelper.GetLoadedAssemblies();
+                InitializeAssemblies(assembliesToInitialize);
             }
         }
 

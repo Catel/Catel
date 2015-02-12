@@ -8,13 +8,13 @@ namespace Catel.Services
 {
     using System;
     using System.Threading.Tasks;
+
 #if ANDROID
     using Android.App;
 #elif IOS
 
 #elif NETFX_CORE
     using global::Windows.UI.Popups;
-    using global::System.Threading.Tasks;
 #else
     using System.Windows;
     using Windows;
@@ -25,6 +25,20 @@ namespace Catel.Services
     /// </summary>
     public partial class MessageService : ViewModelServiceBase, IMessageService
     {
+        private readonly IDispatcherService _dispatcherService;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MessageService"/> class.
+        /// </summary>
+        /// <param name="dispatcherService">The dispatcher service.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="dispatcherService"/> is <c>null</c>.</exception>
+        public MessageService(IDispatcherService dispatcherService)
+        {
+            Argument.IsNotNull(() => dispatcherService);
+
+            _dispatcherService = dispatcherService;
+        }
+
         #region Methods
 #if !XAMARIN
         /// <summary>

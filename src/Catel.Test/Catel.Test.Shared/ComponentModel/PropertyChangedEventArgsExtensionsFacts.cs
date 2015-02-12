@@ -10,24 +10,20 @@ namespace Catel.Test.ComponentModel
     using System.ComponentModel;
     using System.Linq.Expressions;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class PropertyChangedEventArgsExtensionsFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheAllPropertiesChangedMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullPropertyChangedArguments()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => PropertyChangedEventArgsExtensions.AllPropertiesChanged(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForNullPropertyName()
             {
                 var propertyChangedEventArgs = new PropertyChangedEventArgs(null);
@@ -35,7 +31,7 @@ namespace Catel.Test.ComponentModel
                 Assert.IsTrue(propertyChangedEventArgs.AllPropertiesChanged());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForEmptyPropertyName()
             {
                 var propertyChangedEventArgs = new PropertyChangedEventArgs(string.Empty);
@@ -43,7 +39,7 @@ namespace Catel.Test.ComponentModel
                 Assert.IsTrue(propertyChangedEventArgs.AllPropertiesChanged());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForNonEmptyPropertyName()
             {
                 var propertyChangedEventArgs = new PropertyChangedEventArgs("MyProperty");
@@ -52,18 +48,18 @@ namespace Catel.Test.ComponentModel
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheHasPropertyChangedMethod
         {
             public string TestProperty { get; set; }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullPropertyChangedArguments()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => PropertyChangedEventArgsExtensions.HasPropertyChanged(null, () => TestProperty));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullPropertyExpressionArguments()
             {
                 var propertyChangedEventArgs = new PropertyChangedEventArgs("TestProperty");
@@ -71,7 +67,7 @@ namespace Catel.Test.ComponentModel
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => propertyChangedEventArgs.HasPropertyChanged((Expression<Func<string>>)null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForSamePropertyName()
             {
                 var propertyChangedEventArgs = new PropertyChangedEventArgs("TestProperty");
@@ -79,7 +75,7 @@ namespace Catel.Test.ComponentModel
                 Assert.IsTrue(propertyChangedEventArgs.HasPropertyChanged(() => TestProperty));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForDifferentPropertyName()
             {
                 var propertyChangedEventArgs = new PropertyChangedEventArgs("TestPropertyNotExisting");

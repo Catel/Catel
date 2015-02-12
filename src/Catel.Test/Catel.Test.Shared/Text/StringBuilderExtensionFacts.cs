@@ -8,19 +8,14 @@ namespace Catel.Test.Text
 {
     using Catel.Text;
     using System.Text;
-
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class StringBuilderExtensionFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheAppendLineMethod
         {
-            [TestMethod]
+            [TestCase]
             public void CorrectlyAppendsLineWithFormatting()
             {
                 var stringBuilder = new StringBuilder();

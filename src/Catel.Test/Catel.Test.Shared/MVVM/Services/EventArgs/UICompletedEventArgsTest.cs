@@ -8,17 +8,13 @@ namespace Catel.Test.Services.EventArgs
 {
     using Catel.Services;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class UICompletedEventArgsTest
     {
         #region Methods
-        [TestMethod]
+        [TestCase]
         public void UICompletedEventArgs_Constructor()
         {
             UICompletedEventArgs completedEventArgs = new UICompletedEventArgs(15, true);

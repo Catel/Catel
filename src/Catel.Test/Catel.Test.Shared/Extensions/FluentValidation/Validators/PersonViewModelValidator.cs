@@ -14,11 +14,7 @@ namespace Catel.Test.Extensions.FluentValidation.Validators
 
     using ViewModels;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     /// <summary>
     /// The person view model validator.

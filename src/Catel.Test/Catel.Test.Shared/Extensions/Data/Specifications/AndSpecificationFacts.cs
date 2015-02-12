@@ -9,13 +9,9 @@ namespace Catel.Test.Extensions.Data.Specifications
     using System.Linq;
     using Catel.Data.Specifications;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class AndSpecificationFacts
     {
         public class DeletedAndOutofStockSpecification : AndSpecification<Product>
@@ -26,7 +22,7 @@ namespace Catel.Test.Extensions.Data.Specifications
             }
         }
 
-        [TestMethod]
+        [TestCase]
         public void WorksCorrectly()
         {
             var allProducts = SpecificationTestData.CreateDefaultCollection();

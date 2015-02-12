@@ -9,9 +9,9 @@
 namespace Catel.Test.Interception
 {
     using Catel.IoC;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class PropertyInterceptionTests
     {
         #region Fields
@@ -19,13 +19,13 @@ namespace Catel.Test.Interception
         #endregion
 
         #region Methods
-        [TestInitialize]
-        public void Initialization()
+        [SetUp]
+        public void SetUp()
         {
             _serviceLocator = ServiceLocator.Default;
         }
 
-        [TestMethod]
+        [TestCase]
         public void ShouldInterceptGetter()
         {
             var index = 0;
@@ -45,7 +45,7 @@ namespace Catel.Test.Interception
             Assert.AreEqual(1, index);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ShouldInterceptSetter()
         {
             var index = 0;
@@ -65,7 +65,7 @@ namespace Catel.Test.Interception
             Assert.AreEqual(1, index);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ShouldInterceptAllSetters()
         {
             var index = 0;
@@ -83,7 +83,7 @@ namespace Catel.Test.Interception
             Assert.AreEqual(2, index);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ShouldInterceptAllGetters()
         {
             var index = 0;

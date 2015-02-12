@@ -10,28 +10,24 @@ namespace Catel.Test.IoC
     using System;
     using Catel.IoC;
     using Catel.Services;
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class CatelDependencyResolverFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheConstructor
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNulServiceLocator()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new CatelDependencyResolver(null));
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheCanResolveMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -40,7 +36,7 @@ namespace Catel.Test.IoC
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => dependencyResolver.CanResolve(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForNonRegisteredType()
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -49,7 +45,7 @@ namespace Catel.Test.IoC
                 Assert.IsFalse(dependencyResolver.CanResolve(typeof(ITestInterface)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForRegisteredType()
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -60,10 +56,10 @@ namespace Catel.Test.IoC
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheCanResolveAllMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullTypes()
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -72,7 +68,7 @@ namespace Catel.Test.IoC
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => dependencyResolver.CanResolveAll(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForEmptyArray()
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -81,7 +77,7 @@ namespace Catel.Test.IoC
                 Assert.IsTrue(dependencyResolver.CanResolveAll(new Type[] { }));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseWhenNotAllTypesCanBeResolved()
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -93,7 +89,7 @@ namespace Catel.Test.IoC
                 Assert.IsFalse(dependencyResolver.CanResolveAll(typesToResolve));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueWhenAllTypesCanBeResolved()
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -106,10 +102,10 @@ namespace Catel.Test.IoC
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheResolveMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -118,7 +114,7 @@ namespace Catel.Test.IoC
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => dependencyResolver.Resolve(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsTypeNotRegisteredForNonRegisteredType()
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -127,7 +123,7 @@ namespace Catel.Test.IoC
                 ExceptionTester.CallMethodAndExpectException<TypeNotRegisteredException>(() => dependencyResolver.Resolve(typeof(ITestInterface)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsInstanceForRegisteredType()
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -138,10 +134,10 @@ namespace Catel.Test.IoC
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheResolveAllMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNullTypes()
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -150,7 +146,7 @@ namespace Catel.Test.IoC
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => dependencyResolver.ResolveAll(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsEmptyArrayForEmptyArray()
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -160,7 +156,7 @@ namespace Catel.Test.IoC
                 Assert.AreEqual(0, resolvedObjects.Length);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsArrayWithNullValuesForNonRegisteredTypes()
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -175,7 +171,7 @@ namespace Catel.Test.IoC
                 Assert.IsNotNull(resolvedTypes[2] as ITypeFactory);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsArrayWithAllValuesForRegisteredTypes()
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();

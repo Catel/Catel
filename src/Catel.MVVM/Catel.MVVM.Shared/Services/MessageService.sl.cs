@@ -4,8 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-
-
 #if SL5
 
 namespace Catel.Services
@@ -13,6 +11,7 @@ namespace Catel.Services
     using System;
     using System.Threading.Tasks;
     using System.Windows;
+    using Windows;
 
     public partial class MessageService
     {
@@ -29,13 +28,19 @@ namespace Catel.Services
         {
             Argument.IsNotNullOrWhitespace("message", message);
 
-            return new Task<MessageResult>(() =>
-            {
-                var messageBoxButton = TranslateMessageButton(button);
-                var result = MessageBox.Show(message, caption, messageBoxButton);
+            var tcs = new TaskCompletionSource<MessageResult>();
 
-                return TranslateMessageBoxResult(result);
+            _dispatcherService.BeginInvoke(() =>
+            {
+                MessageBoxResult result;
+                var messageBoxButton = TranslateMessageButton(button);
+
+                result = MessageBox.Show(message, caption, messageBoxButton);
+
+                tcs.SetResult(TranslateMessageBoxResult(result));
             });
+
+            return tcs.Task;
         }
     }
 }

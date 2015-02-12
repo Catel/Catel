@@ -9,15 +9,15 @@
 namespace Catel.Test.Extensions.EntityFramework5.Data
 {
     using Catel.Data;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using Test.EntityFramework5.DbContextTest;
 
     public class DbContextManagerFacts
     {
-        [TestClass]
+        [TestFixture]
         public class ScopingTest
         {
-            [TestMethod]
+            [TestCase]
             public void SingleLevelScoping()
             {
                 DbContextManager<TestDbContextContainer> manager = null;
@@ -30,7 +30,7 @@ namespace Catel.Test.Extensions.EntityFramework5.Data
                 Assert.AreEqual(0, manager.RefCount);
             }
 
-            [TestMethod]
+            [TestCase]
             public void MultipleLevelScoping()
             {
                 DbContextManager<TestDbContextContainer> manager = null;

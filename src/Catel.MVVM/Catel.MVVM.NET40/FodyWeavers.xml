@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Weavers>
-  <ModuleInit />
-  <Obsolete />
+  <ModuleInit/>
+  <Obsolete/>
+  <Catel WeaveProperties="false" WeaveArguments="false" />
 </Weavers>

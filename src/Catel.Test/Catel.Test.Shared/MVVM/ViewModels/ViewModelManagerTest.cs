@@ -12,19 +12,15 @@ namespace Catel.Test.MVVM.ViewModels
     using Test.ViewModels;
     using TestClasses;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class ViewModelManagerTest
     {
-        [TestClass]
+        [TestFixture]
         public class TheRegisterModelMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullViewModel()
             {
                 var model = new Person();
@@ -33,7 +29,7 @@ namespace Catel.Test.MVVM.ViewModels
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => vmManager.RegisterModel(null, model));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullModel()
             {
                 var model = new Person();
@@ -43,7 +39,7 @@ namespace Catel.Test.MVVM.ViewModels
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => vmManager.RegisterModel(vm, null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void RegistersModelForViewModel()
             {
                 var model = new Person();
@@ -59,10 +55,10 @@ namespace Catel.Test.MVVM.ViewModels
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheUnregisterModelMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullViewModel()
             {
                 var model = new Person();
@@ -71,7 +67,7 @@ namespace Catel.Test.MVVM.ViewModels
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => vmManager.UnregisterModel(null, model));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullModel()
             {
                 var model = new Person();
@@ -81,7 +77,7 @@ namespace Catel.Test.MVVM.ViewModels
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => vmManager.UnregisterModel(vm, null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void UnregistersModelForViewModel()
             {
                 var model = new Person();
@@ -103,10 +99,10 @@ namespace Catel.Test.MVVM.ViewModels
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheUnregisterAllModelsMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullViewModel()
             {
                 var vmManager = new ViewModelManager();
@@ -114,7 +110,7 @@ namespace Catel.Test.MVVM.ViewModels
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => vmManager.UnregisterAllModels(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void UnregistersAllModelForViewModel()
             {
                 var model = new Person();
@@ -136,10 +132,10 @@ namespace Catel.Test.MVVM.ViewModels
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetViewModelsOfModelMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsNullForUnregisteredModel()
             {
                 var model = new Person();
@@ -150,7 +146,7 @@ namespace Catel.Test.MVVM.ViewModels
                 Assert.IsNull(foundVm);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsViewModelOfRegisteredModel()
             {
                 var model = new Person();
@@ -166,10 +162,10 @@ namespace Catel.Test.MVVM.ViewModels
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetViewModelMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsNullForUnregisteredViewModel()
             {
                 var vmManager = new ViewModelManager();
@@ -179,7 +175,7 @@ namespace Catel.Test.MVVM.ViewModels
                 Assert.IsNull(foundvm);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsViewModelForRegisteredViewModel()
             {
                 var vm = new TestViewModel();
@@ -192,10 +188,10 @@ namespace Catel.Test.MVVM.ViewModels
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetChildViewModelsMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsNullForUnregisteredChildViewModels()
             {
                 var viewModelManager = new ViewModelManager();
@@ -205,7 +201,7 @@ namespace Catel.Test.MVVM.ViewModels
                 Assert.AreEqual(0, foundViewModels.Count());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsChildViewModelsUsingParentInstance()
             {
                 var parentViewModel = new TestViewModel() as IRelationalViewModel;
@@ -225,10 +221,10 @@ namespace Catel.Test.MVVM.ViewModels
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetFirstOrDefaultInstanceMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsNullForUnregisteredViewModel()
             {
                 var vmManager = new ViewModelManager();
@@ -238,7 +234,7 @@ namespace Catel.Test.MVVM.ViewModels
                 Assert.IsNull(foundvm);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsViewModelForRegisteredViewModel()
             {
                 var vm = new TestViewModel();
@@ -250,7 +246,7 @@ namespace Catel.Test.MVVM.ViewModels
                 Assert.AreEqual(vm, foundvm);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsViewModelForMultiRegisteredViewModel()
             {
                 var firstvm = new TestViewModel(){FirstName = "Rajiv", LastName = "Mounguengue"};
@@ -264,7 +260,7 @@ namespace Catel.Test.MVVM.ViewModels
                 Assert.AreEqual(firstvm, foundvm);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ShouldFailsDueToANonIViewModelType()
             {
                 var viewModelManager = new ViewModelManager();
@@ -273,10 +269,10 @@ namespace Catel.Test.MVVM.ViewModels
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheActiveViewModelsMethod
         {
-            [TestMethod]
+            [TestCase]
             public void MustBeNotNullAfterConstructed()
             {
                 var vmManager = new ViewModelManager();
@@ -284,7 +280,7 @@ namespace Catel.Test.MVVM.ViewModels
                 Assert.IsNotNull(vmManager.ActiveViewModels);
             }
 
-            [TestMethod]
+            [TestCase]
             public void MustExistsForRegisteredViewModels()
             {
                 var firstvm = new TestViewModel();
@@ -301,7 +297,7 @@ namespace Catel.Test.MVVM.ViewModels
             }
         }
 
-        [TestMethod]
+        [TestCase]
         public void RegisterViewModelInstance_Null()
         {
             var manager = new ViewModelManager();
@@ -309,14 +305,14 @@ namespace Catel.Test.MVVM.ViewModels
             ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => manager.RegisterViewModelInstance(null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void RegisterViewModelInstance_ViewModel()
         {
             var manager = new ViewModelManager();
             manager.RegisterViewModelInstance(new InterestingViewModel());
         }
 
-        [TestMethod]
+        [TestCase]
         public void UnregisterViewModelInstance_Null()
         {
             var manager = new ViewModelManager();
@@ -324,7 +320,7 @@ namespace Catel.Test.MVVM.ViewModels
             ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => manager.UnregisterViewModelInstance(null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void UnregisterViewModelInstance_ExistingViewModel()
         {
             var manager = new ViewModelManager();
@@ -334,14 +330,14 @@ namespace Catel.Test.MVVM.ViewModels
             manager.UnregisterViewModelInstance(viewModel);
         }
 
-        [TestMethod]
+        [TestCase]
         public void UnregisterViewModelInstance_NotExistingViewModel()
         {
             var manager = new ViewModelManager();
             manager.UnregisterViewModelInstance(new InterestingViewModel());
         }
 
-        [TestMethod]
+        [TestCase]
         public void AddInterestedViewModelInstance_FirstArgumentNull()
         {
             var manager = new ViewModelManager();
@@ -349,7 +345,7 @@ namespace Catel.Test.MVVM.ViewModels
             ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => manager.AddInterestedViewModelInstance(null, null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void AddInterestedViewModelInstance_SecondArgumentNull()
         {
             var manager = new ViewModelManager();
@@ -357,7 +353,7 @@ namespace Catel.Test.MVVM.ViewModels
             ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => manager.AddInterestedViewModelInstance(typeof(InterestingViewModel), null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void AddInterestedViewModelInstance_ViewModelForExistingInterestedInViewModel()
         {
             var manager = new ViewModelManager();
@@ -369,7 +365,7 @@ namespace Catel.Test.MVVM.ViewModels
             manager.AddInterestedViewModelInstance(typeof(InterestingViewModel), interestedViewModel);
         }
 
-        [TestMethod]
+        [TestCase]
         public void AddInterestedViewModelInstance_ViewModelForNotExistingInterestedInViewModel()
         {
             var manager = new ViewModelManager();
@@ -379,7 +375,7 @@ namespace Catel.Test.MVVM.ViewModels
             manager.AddInterestedViewModelInstance(typeof(InterestingViewModel), interestedViewModel);
         }
 
-        [TestMethod]
+        [TestCase]
         public void RemoveInterestedViewModelInstance_FirstArgumentNull()
         {
             var manager = new ViewModelManager();
@@ -387,7 +383,7 @@ namespace Catel.Test.MVVM.ViewModels
             ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => manager.RemoveInterestedViewModelInstance(null, null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void RemoveInterestedViewModelInstance_SecondArgumentNull()
         {
             var manager = new ViewModelManager();
@@ -395,7 +391,7 @@ namespace Catel.Test.MVVM.ViewModels
             ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => manager.RemoveInterestedViewModelInstance(typeof(InterestingViewModel), null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void RemoveInterestedViewModelInstance_ViewModelForExistingInterestedInViewModel()
         {
             var manager = new ViewModelManager();
@@ -408,7 +404,7 @@ namespace Catel.Test.MVVM.ViewModels
             manager.RemoveInterestedViewModelInstance(typeof(InterestingViewModel), interestedViewModel);
         }
 
-        [TestMethod]
+        [TestCase]
         public void RemoveInterestedViewModelInstance_ViewModelForNotExistingInterestedInViewModel()
         {
             var manager = new ViewModelManager();
@@ -419,7 +415,7 @@ namespace Catel.Test.MVVM.ViewModels
             manager.RemoveInterestedViewModelInstance(typeof(InterestingViewModel), interestedViewModel);
         }
 
-        [TestMethod]
+        [TestCase]
         public void RemoveInterestedViewModelInstance_ViewModelForNotRegisteredInterestedInViewModel()
         {
             var manager = new ViewModelManager();

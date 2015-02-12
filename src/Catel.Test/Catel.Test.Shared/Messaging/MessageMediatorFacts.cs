@@ -8,12 +8,7 @@ namespace Catel.Test.Messaging
 {
     using System;
     using Catel.Messaging;
-    
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     #region Classes
     public class MessageSender
@@ -85,11 +80,11 @@ namespace Catel.Test.Messaging
     public class MessageMediatorFacts
     {
         #region Nested type: TheCleanUpMethod
-        [TestClass]
+        [TestFixture]
         public class TheCleanUpMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void CleanUpWorksWhenNoHandlersRegistered()
             {
                 var mediator = new MessageMediator();
@@ -97,7 +92,7 @@ namespace Catel.Test.Messaging
                 mediator.CleanUp();
             }
 
-            [TestMethod]
+            [TestCase]
             public void CleanUpKeepsNonGarbageCollectedHandlersRegistered()
             {
                 var mediator = new MessageMediator();
@@ -110,7 +105,7 @@ namespace Catel.Test.Messaging
                 Assert.IsTrue(mediator.IsRegistered<string>(recipient, recipient.OnMessage));
             }
 
-            [TestMethod]
+            [TestCase]
             public void CleanUpClearsGarbageCollectedHandlers()
             {
                 var mediator = new MessageMediator();
@@ -130,11 +125,11 @@ namespace Catel.Test.Messaging
         #endregion
 
         #region Nested type: TheIsMessageRegisteredMethod
-        [TestClass]
+        [TestFixture]
         public class TheIsMessageRegisteredMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ReturnsArgumentNullException()
             {
                 var mediator = new MessageMediator();
@@ -143,7 +138,7 @@ namespace Catel.Test.Messaging
             }
 
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseWhenNotRegistered()
             {
                 var mediator = new MessageMediator();
@@ -151,7 +146,7 @@ namespace Catel.Test.Messaging
                 Assert.IsFalse(mediator.IsMessageRegistered(typeof (string)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueWhenRegistered()
             {
                 var mediator = new MessageMediator();
@@ -162,7 +157,7 @@ namespace Catel.Test.Messaging
                 Assert.IsTrue(mediator.IsMessageRegistered(typeof (string)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseWhenNotRegisteredWithTag()
             {
                 var mediator = new MessageMediator();
@@ -173,7 +168,7 @@ namespace Catel.Test.Messaging
                 Assert.IsFalse(mediator.IsMessageRegistered(typeof (string), "myTag"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueWhenRegisteredWithTag()
             {
                 var mediator = new MessageMediator();
@@ -184,7 +179,7 @@ namespace Catel.Test.Messaging
                 Assert.IsTrue(mediator.IsMessageRegistered(typeof (string), "myTag"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseWhenRegisteredWithTagButNotProvided()
             {
                 var mediator = new MessageMediator();
@@ -195,7 +190,7 @@ namespace Catel.Test.Messaging
                 Assert.IsFalse(mediator.IsMessageRegistered(typeof(string)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueWhenRegisteredWithAndWithoutTag()
             {
                 var mediator = new MessageMediator();
@@ -211,11 +206,11 @@ namespace Catel.Test.Messaging
         #endregion
 
         #region Nested type: TheRegisterMethod
-        [TestClass]
+        [TestFixture]
         public class TheRegisterMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void RegistersHandler()
             {
                 var mediator = new MessageMediator();
@@ -228,7 +223,7 @@ namespace Catel.Test.Messaging
                 Assert.IsTrue(mediator.IsRegistered<string>(recipient, recipient.OnMessage));
             }
 
-            [TestMethod]
+            [TestCase]
             public void RegistersHandlerWithTag()
             {
                 var mediator = new MessageMediator();
@@ -242,7 +237,7 @@ namespace Catel.Test.Messaging
                 Assert.IsFalse(mediator.IsRegistered<string>(recipient, recipient.OnMessage, "anotherTag"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalsForDoubleRegistration()
             {
                 var mediator = new MessageMediator();
@@ -256,11 +251,11 @@ namespace Catel.Test.Messaging
         #endregion
 
         #region Nested type: TheSendMessageMethod
-        [TestClass]
+        [TestFixture]
         public class TheSendMessageMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForUnregisteredHandlers()
             {
                 var mediator = new MessageMediator();
@@ -269,7 +264,7 @@ namespace Catel.Test.Messaging
                 Assert.IsFalse(sender.SendMessage(mediator, "test"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForUnregisteredHandlersWithTag()
             {
                 var mediator = new MessageMediator();
@@ -281,7 +276,7 @@ namespace Catel.Test.Messaging
                 Assert.IsFalse(sender.SendMessage(mediator, "test", "myTag"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForRegisteredHandlers()
             {
                 var mediator = new MessageMediator();
@@ -294,7 +289,7 @@ namespace Catel.Test.Messaging
                 Assert.AreEqual(1, recipient.MessagesReceived);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForRegisteredHandlersWithTag()
             {
                 var mediator = new MessageMediator();
@@ -309,7 +304,7 @@ namespace Catel.Test.Messaging
                 Assert.AreEqual(1, recipient.MessagesReceived);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForHandlersClearedByGarbageCollector()
             {
                 var mediator = new MessageMediator();
@@ -329,11 +324,11 @@ namespace Catel.Test.Messaging
         #endregion
 
         #region Nested type: TheUnregisterMethod
-        [TestClass]
+        [TestFixture]
         public class TheUnregisterMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void UnregistersRegisteredHandler()
             {
                 var mediator = new MessageMediator();
@@ -346,7 +341,7 @@ namespace Catel.Test.Messaging
                 Assert.IsFalse(mediator.IsRegistered<string>(recipient, recipient.OnMessage));
             }
 
-            [TestMethod]
+            [TestCase]
             public void UnregistersRegisteredHandlerWithTag()
             {
                 var mediator = new MessageMediator();
@@ -359,7 +354,7 @@ namespace Catel.Test.Messaging
                 Assert.IsFalse(mediator.IsRegistered<string>(recipient, recipient.OnMessage, "myTag"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForUnregisteredHandler()
             {
                 var mediator = new MessageMediator();
@@ -369,7 +364,7 @@ namespace Catel.Test.Messaging
                 Assert.IsFalse(mediator.Unregister<string>(recipient, recipient.OnMessage));
             }
 
-            [TestMethod]
+            [TestCase]
             public void UnregistersAllMethodsOfRecipient()
             {
                 var mediator = new MessageMediator();

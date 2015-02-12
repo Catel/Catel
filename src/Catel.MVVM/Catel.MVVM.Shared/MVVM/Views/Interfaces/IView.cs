@@ -52,7 +52,7 @@ namespace Catel.MVVM.Views
         /// <summary>
         /// Occurs when the data context has changed.
         /// </summary>
-        event EventHandler<EventArgs> DataContextChanged;
+        event EventHandler<DataContextChangedEventArgs> DataContextChanged;
         #endregion
     }
 }

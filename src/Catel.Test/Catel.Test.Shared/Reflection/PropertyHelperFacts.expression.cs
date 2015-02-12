@@ -8,16 +8,11 @@ namespace Catel.Test.Reflection
 {
     using System;
     using Catel.Reflection;
-
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public partial class PropertyHelperFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheGetPropertyNameWithExpressionMethod
         {
             #region TestClasses
@@ -57,19 +52,19 @@ namespace Catel.Test.Reflection
             }
             #endregion
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullExpression()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => PropertyHelper.GetPropertyName<int>(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsNotSupportedExceptionForNoMemberAccessExpression()
             {
                 ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => PropertyHelper.GetPropertyName(() => SomeMethod()));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsPropertyNameForMemberExpressionWithoutNestedPropertiesWithoutAllowingNestedProperties()
             {
                 var propertyName = PropertyHelper.GetPropertyName(() => TestProperty, false);
@@ -77,7 +72,7 @@ namespace Catel.Test.Reflection
                 Assert.AreEqual("TestProperty", propertyName);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsPropertyNameForMemberExpressionWithNestedPropertiesWithoutAllowingNestedProperties()
             {
                 var propertyName = PropertyHelper.GetPropertyName(() => TestProperty.SubClass.Id, false);
@@ -85,7 +80,7 @@ namespace Catel.Test.Reflection
                 Assert.AreEqual("Id", propertyName);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsPropertyNameForMemberExpressionWithoutNestedPropertiesWithAllowingNestedProperties()
             {
                 var propertyName = PropertyHelper.GetPropertyName(() => TestProperty, true);
@@ -93,7 +88,7 @@ namespace Catel.Test.Reflection
                 Assert.AreEqual("TestProperty", propertyName);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsPropertyNameForMemberExpressionWithNestedPropertiesWithAllowingNestedProperties()
             {
                 var propertyName = PropertyHelper.GetPropertyName(() => TestProperty.SubClass.Id, true);

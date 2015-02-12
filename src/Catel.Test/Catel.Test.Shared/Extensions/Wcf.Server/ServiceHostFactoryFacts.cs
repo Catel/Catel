@@ -11,20 +11,20 @@ namespace Catel.Test.Extensions.Wcf.Server
     using System;
     using System.ServiceModel;
     using System.Web.Hosting;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using ServiceModel;
     using Services;
     using ServiceHost = System.ServiceModel.ServiceHost;
 
     public class ServiceHostFactoryFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheCreateServiceHostMethod
         {
 #if NET45
             private readonly Uri[] _endpoints = { new Uri("http://localhost") };
 
-            [TestInitialize]
+            [SetUp]
             public void SetUp()
             {
                 if (HostingEnvironment.IsHosted)
@@ -39,7 +39,7 @@ namespace Catel.Test.Extensions.Wcf.Server
 
             }
 
-            [TestMethod]
+            [TestCase]
             public void ShouldTrowArgumentExceptionForNullValueAsConstructorString()
             {
                 var serviceHostFactory = new ServiceHostFactory();
@@ -49,7 +49,7 @@ namespace Catel.Test.Extensions.Wcf.Server
                 Assert.AreEqual(exception.ParamName, "constructorString");
             }
 
-            [TestMethod]
+            [TestCase]
             public void ShouldTrowArgumentExceptionForNullValueAsEndPoints()
             {
                 var serviceHostFactory = new ServiceHostFactory();
@@ -59,7 +59,7 @@ namespace Catel.Test.Extensions.Wcf.Server
                 Assert.AreEqual(exception.ParamName, "baseAddresses");
             }
 
-            [TestMethod]
+            [TestCase]
             public void ShouldTrowArgumentExceptionForEmptyValueAsConstructorString()
             {
                 var serviceHostFactory = new ServiceHostFactory();
@@ -69,7 +69,7 @@ namespace Catel.Test.Extensions.Wcf.Server
                 Assert.AreEqual(exception.ParamName, "constructorString");
             }
 
-            [TestMethod]
+            [TestCase]
             public void ShouldSucceedToCreateServiceHostInstanceWithAssemblyQualifiedNameOfATypeAsConstructorString()
             {
                 var serviceHostFactory = new ServiceHostFactory();
@@ -80,11 +80,11 @@ namespace Catel.Test.Extensions.Wcf.Server
 
                 var serviceHost = serviceHostFactory.CreateServiceHost(constructorString, _endpoints);
 
-                Assert.IsInstanceOfType(serviceHost, typeof(ServiceHost));
+                Assert.IsInstanceOf(typeof(ServiceHost), serviceHost);
                 Assert.AreEqual(sertviceType, serviceHost.Description.ServiceType);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ShoulFailToCreateServiceHostInstanceWithFullNameOfATypeAsConstructorString()
             {
                 var serviceHostFactory = new ServiceHostFactory();
@@ -95,7 +95,7 @@ namespace Catel.Test.Extensions.Wcf.Server
 
                 var serviceHost = serviceHostFactory.CreateServiceHost(constructorString, _endpoints);
 
-                Assert.IsInstanceOfType(serviceHost, typeof(ServiceHost));
+                Assert.IsInstanceOf(typeof(ServiceHost), serviceHost);
                 Assert.AreEqual(sertviceType, serviceHost.Description.ServiceType);
             }
 #endif

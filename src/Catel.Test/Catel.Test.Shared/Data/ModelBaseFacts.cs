@@ -13,12 +13,10 @@ namespace Catel.Test.Data
     using System.ComponentModel.DataAnnotations;
     using Catel.Data;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Catel.MVVM;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
+#if !NETFX_CORE
+    using Catel.MVVM;
     using System.Windows.Data;
 #endif
 
@@ -92,6 +90,11 @@ namespace Catel.Test.Data
             public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), string.Empty);
         }
 
+        public class ModelWithRuntimeProperties : ModelBase
+        {
+            
+        }
+
         public class TestModel : ModelBase
         {
             public TestModel()
@@ -129,24 +132,25 @@ namespace Catel.Test.Data
             public static readonly PropertyData CollectionModelProperty = RegisterProperty("CollectionModel", typeof(ObservableCollection<LeanAndMeanModel>), null);
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheLeanAndMeanModelProperty
         {
-            [TestMethod]
+            [TestCase]
             public void SuspendsValidation()
             {
                 var model = new LeanAndMeanModel();
+                var validation = model as IModelValidation;
 
                 model.LeanAndMeanModelWrapper = true;
 
-                Assert.IsFalse(model.HasErrors);
+                Assert.IsFalse(validation.HasErrors);
 
                 model.FirstName = null;
 
-                Assert.IsFalse(model.HasErrors);
+                Assert.IsFalse(validation.HasErrors);
             }
 
-            [TestMethod]
+            [TestCase]
             public void SuspendsChangeNotifications()
             {
                 var counter = 0;
@@ -161,10 +165,28 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
+        public class TheUnregisterPropertyMethod
+        {
+            [TestCase]
+            public void CanUnregisterRuntimeProperty()
+            {
+                var model = new ModelWithRuntimeProperties();
+                var property = ModelBase.RegisterProperty("RuntimePropertyBeingUnregistered", typeof (string));
+                model.InitializePropertyAfterConstruction(property);
+
+                Assert.IsTrue(PropertyDataManager.Default.IsPropertyRegistered(typeof(ModelWithRuntimeProperties), "RuntimePropertyBeingUnregistered"));
+
+                ModelBase.UnregisterProperty(typeof (ModelWithRuntimeProperties), "RuntimePropertyBeingUnregistered");
+
+                Assert.IsFalse(PropertyDataManager.Default.IsPropertyRegistered(typeof(ModelWithRuntimeProperties), "RuntimePropertyBeingUnregistered"));
+            }
+        }
+
+        [TestFixture]
         public class TheMemoryLeakChecks
         {
-            [TestMethod]
+            [TestCase]
             public void DoesNotLeakForModelBaseWithPropertiesThatSupportPropertyChanged()
             {
                 var model = new TestModel();
@@ -180,7 +202,7 @@ namespace Catel.Test.Data
         }
 
 #if NET
-        [TestClass]
+        [TestFixture]
         public class TheCalculatedPropertiesChecks
         {
             [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
@@ -234,13 +256,14 @@ namespace Catel.Test.Data
                 }
             }
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlyHandlesLateRegistrationOfCalculatedProperties()
             {
                 var model = new LatePropertyRegistrationModel();
+                var validation = model as IModelValidation;
 
-                model.Validate(true);
-                Assert.IsFalse(model.HasErrors);
+                validation.Validate(true);
+                Assert.IsFalse(validation.HasErrors);
 
                 var propertyData = PropertyDataManager.Default.GetPropertyData(typeof(LatePropertyRegistrationModel), "CanSave");
                 Assert.IsTrue(propertyData.IsCalculatedProperty);
@@ -248,7 +271,7 @@ namespace Catel.Test.Data
         }
 #endif
 
-        [TestClass]
+        [TestFixture]
         public class ThePropertiesWithEventSubscriptionsChecks
         {
             public class ModelWithObservableCollection : ModelBase
@@ -301,7 +324,7 @@ namespace Catel.Test.Data
             }
 #endif
 
-            [TestMethod]
+            [TestCase]
             public void AllowsRegistrationOfObservableCollection()
             {
                 var model = new ModelWithObservableCollection();
@@ -313,7 +336,7 @@ namespace Catel.Test.Data
             }
 
 #if NET
-            [TestMethod]
+            [TestCase]
             public void AllowsRegistrationOfCollectionViewSource()
             {
                 var model = new ModelWithCollectionViewSource();
@@ -321,7 +344,7 @@ namespace Catel.Test.Data
             }
 #endif
 
-            [TestMethod]
+            [TestCase]
             public void RegistersChangeNotificationsOfDefaultValues()
             {
                 var model = new ModelWithObservableCollection();
@@ -332,7 +355,7 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheEqualsChecks
         {
             public interface ITestModel
@@ -353,7 +376,7 @@ namespace Catel.Test.Data
                 }
             }
 
-            //[TestMethod]
+            //[TestCase]
             //public void EqualsWorksWithoutProperties()
             //{
             //    var collection = new ObservableCollection<ITestModel>();
@@ -368,7 +391,7 @@ namespace Catel.Test.Data
             //    Assert.IsTrue(collection.Contains(b));
             //}
 
-            [TestMethod]
+            [TestCase]
             public void EqualsWorksWithoutPropertiesOverridingEqualsMethod()
             {
                 //Solution1: overide the Equal Method of myclass 
@@ -383,7 +406,7 @@ namespace Catel.Test.Data
                 Assert.IsTrue(collection.Contains(b));
             }
 
-            [TestMethod]
+            [TestCase]
             public void EqualsWorksWithoutPropertiesCustomizingAddMethod()
             {
                 //Solution2:not using  the default Contains methord of ICollection<T>

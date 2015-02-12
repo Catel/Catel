@@ -9,25 +9,20 @@ namespace Catel.Test.MVVM
     using System;
     using Catel.MVVM;
     using ViewModels.TestClasses;
-
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class ViewModelCommandManagerFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheCreateMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullViewModel()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ViewModelCommandManager.Create(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsViewModelCommandManagerForViewModel()
             {
                 var viewModel = new TestViewModel();
@@ -37,10 +32,10 @@ namespace Catel.Test.MVVM
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheAddHandlerMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullHandler()
             {
                 var viewModel = new TestViewModel();
@@ -49,12 +44,12 @@ namespace Catel.Test.MVVM
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewModelCommandManager.AddHandler(null));
             }            
 
-            [TestMethod]
-            public void RegisteredHandlerGetsCalled()
+            [TestCase]
+            public async void RegisteredHandlerGetsCalled()
             {
                 var viewModel = new TestViewModel();
                 var viewModelCommandManager = ViewModelCommandManager.Create(viewModel);
-                viewModel.InitializeViewModel();
+                await viewModel.InitializeViewModel();
 
                 bool called = false;
 

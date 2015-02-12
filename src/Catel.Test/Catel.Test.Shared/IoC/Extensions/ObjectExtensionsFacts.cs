@@ -9,25 +9,20 @@ namespace Catel.Test.IoC
 {
     using System;
     using Catel.IoC;
-
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class ObjectExtensionsFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheGetTypeFactoryMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullObject()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ObjectExtensions.GetTypeFactory(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsDefaultTypeFactoryForObjectNotCreatedWithTypeFactory()
             {
                 var obj = new object();
@@ -37,7 +32,7 @@ namespace Catel.Test.IoC
                 Assert.IsTrue(ReferenceEquals(defaultTypeFactory, usedTypeFactory));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTypeFactoryUsedToCreateObject()
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -50,16 +45,16 @@ namespace Catel.Test.IoC
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetDependencyResolverMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullObject()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ObjectExtensions.GetDependencyResolver(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsDefaultDependencyResolverForObjectNotCreatedWithTypeFactory()
             {
                 var obj = new object();
@@ -69,7 +64,7 @@ namespace Catel.Test.IoC
                 Assert.IsTrue(ReferenceEquals(defaultDependencyResolver, dependencyResolver));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsDependencyResolverUsedToCreateObject()
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();

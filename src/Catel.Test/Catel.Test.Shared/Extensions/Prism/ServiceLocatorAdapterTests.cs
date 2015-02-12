@@ -14,14 +14,14 @@ namespace Catel.Test.Extensions.Prism
 
     using Microsoft.Practices.Prism.Regions;
     using Microsoft.Practices.Prism.Regions.Behaviors;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
 
     using IServiceLocator = Microsoft.Practices.ServiceLocation.IServiceLocator;
 
     /// <summary>
     /// The service locator adapter tests.
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public class ServiceLocatorAdapterTests
     {
         #region Methods
@@ -29,7 +29,7 @@ namespace Catel.Test.Extensions.Prism
         /// <summary>
         /// The get all instance just returns empty collection if the type is non registered.
         /// </summary>
-        [TestMethod]
+        [TestCase]
         public void GetAllInstanceJustReturnsEmptyCollectionIfTheTypeIsNonRegistered()
         {
             var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -41,7 +41,7 @@ namespace Catel.Test.Extensions.Prism
         /// <summary>
         /// The get all instance just returns collection of with onyl one resolved instance if the type is registered.
         /// </summary>
-        [TestMethod]
+        [TestCase]
         public void GetAllInstanceJustReturnsCollectionOfWithOnylOneResolvedInstanceIfTheTypeIsRegistered()
         {
             var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -54,7 +54,7 @@ namespace Catel.Test.Extensions.Prism
         /// <summary>
         /// The get all instance just returns collection of with onyl one resolved instance of non registered non abstract classes.
         /// </summary>
-        [TestMethod]
+        [TestCase]
         public void GetAllInstanceJustReturnsCollectionOfWithOnylOneResolvedInstanceOfNonRegisteredNonAbstractClasses()
         {
             var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -66,7 +66,7 @@ namespace Catel.Test.Extensions.Prism
         /// <summary>
         /// Returns null if type is not registered.
         /// </summary>
-        [TestMethod]
+        [TestCase]
         public void ReturnsNullIfTypeIsNotRegistered()
         {
             var adapter = new ServiceLocatorAdapter(new ServiceLocator());
@@ -76,7 +76,7 @@ namespace Catel.Test.Extensions.Prism
         /// <summary>
         /// The get instance of non registered and non abstract class returns always a new instance.
         /// </summary>
-        [TestMethod]
+        [TestCase]
         public void GetInstanceOfNonRegisteredAndNonAbstractClassReturnsAlwaysANewInstance()
         {
             var adapter = new ServiceLocatorAdapter(IoCFactory.CreateServiceLocator());
@@ -85,7 +85,7 @@ namespace Catel.Test.Extensions.Prism
             Assert.AreNotSame(nonAbstractClassInstance1, nonAbstractClassInstance2);
         }
         
-        [TestMethod]
+        [TestCase]
         public void GetInstanceOfNonRegisteredAndNonAbstractClassReturnsAlwaysANewInstanceWithCanResolveNonAbstractTypesWithoutRegistrationInFalse()
         {
         	var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -100,7 +100,7 @@ namespace Catel.Test.Extensions.Prism
         /// <summary>
         /// The get instance of singleton registered non abstract class always the same instance.
         /// </summary>
-        [TestMethod]
+        [TestCase]
         public void GetInstanceOfSingletonRegisteredNonAbstractClassAlwaysTheSameInstance()
         {
             var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -116,7 +116,7 @@ namespace Catel.Test.Extensions.Prism
         /// <summary>
         /// The in the default service locator region adapter mappings is registered as singleton.
         /// </summary>
-        [TestMethod]
+        [TestCase]
         public void InTheDefaultServiceLocatorRegionAdapterMappingsIsRegisteredAsSingleton()
         {
             var adapter = new ServiceLocatorAdapter();
@@ -130,7 +130,7 @@ namespace Catel.Test.Extensions.Prism
         /// <summary>
         /// The get instance of auto populate region behavior returns always a new one.
         /// </summary>
-        [TestMethod]
+        [TestCase]
         public void GetInstanceOfAutoPopulateRegionBehaviorReturnsAlwaysANewOne()
         {
             var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -148,7 +148,7 @@ namespace Catel.Test.Extensions.Prism
         /// <summary>
         /// The get instance of auto delayed region creation behavior returns always a new one.
         /// </summary>
-        [TestMethod]
+        [TestCase]
         public void GetInstanceOfAutoDelayedRegionCreationBehaviorReturnsAlwaysANewOne()
         {
             var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -165,7 +165,7 @@ namespace Catel.Test.Extensions.Prism
         /// <summary>
         /// The get instance o region member lifetime behavior returns always a new one.
         /// </summary>
-        [TestMethod]
+        [TestCase]
         public void GetInstanceOfRegionMemberLifetimeBehaviorReturnsAlwaysANewOne()
         {
             var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -180,7 +180,7 @@ namespace Catel.Test.Extensions.Prism
         /// <summary>
         /// The get instance of bind region context to dependency object behavior returns always a new one.
         /// </summary>
-        [TestMethod]
+        [TestCase]
         public void GetInstanceOfBindRegionContextToDependencyObjectBehaviorReturnsAlwaysANewOne()
         {
             var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -196,7 +196,7 @@ namespace Catel.Test.Extensions.Prism
         /// <summary>
         /// The get instance of region active aware behavior returns always a new one.
         /// </summary>
-        [TestMethod]
+        [TestCase]
         public void GetInstanceOfRegionActiveAwareBehaviorReturnsAlwaysANewOne()
         {
             var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -212,7 +212,7 @@ namespace Catel.Test.Extensions.Prism
         /// <summary>
         /// The get instance of selector items source sync behavior returns always a new one.
         /// </summary>
-        [TestMethod]
+        [TestCase]
         public void GetInstanceOfSelectorItemsSourceSyncBehaviorReturnsAlwaysANewOne()
         {
             var serviceLocator = IoCFactory.CreateServiceLocator();
@@ -227,7 +227,7 @@ namespace Catel.Test.Extensions.Prism
         /// <summary>
         /// The get instance of sync region context with host behavior returns always a new one.
         /// </summary>
-        [TestMethod]
+        [TestCase]
         public void GetInstanceOfSyncRegionContextWithHostBehaviorReturnsAlwaysANewOne()
         {
             var serviceLocator = IoCFactory.CreateServiceLocator();

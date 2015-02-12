@@ -18,11 +18,7 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
     using Catel.Data;
     using Catel.Runtime.Serialization.Xml;
     using Catel.Test.Data;
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public interface IParams
     {
@@ -125,10 +121,10 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
         public static readonly PropertyData ValuesProperty = RegisterProperty("Values", typeof(Dictionary<string, object>), new Dictionary<string, object>());
     }
 
-    [TestClass]
+    [TestFixture]
     public class Serialization
     {
-        [TestMethod]
+        [TestCase]
         public void DictionaryWithKnownTypes()
         {
             var dictionary = new DictionaryTestClass();
@@ -165,7 +161,7 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
             }
         }
 
-        [TestMethod]
+        [TestCase]
         public void EnumerableOfInterfacesViaKnownTypes_SameNameDifferentNamespaces_SaveLoadRoundTrip()
         {
             var c = new ContainerInterfaces();
@@ -187,7 +183,7 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
             }
         }
 
-        [TestMethod]
+        [TestCase]
         public void EnumerableOfAbstractClassesViaKnownTypes_SameNameDifferentNamespaces_SaveLoadRoundTrip()
         {
             var c = new ContainerAbstractClasses();
@@ -211,7 +207,7 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
         }
 
 
-        [TestMethod]
+        [TestCase]
         public void DataContractSerializerFactory_NoInstanceTest()
         {
             var typeList = new[]
@@ -232,7 +228,7 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
             }
         }
 
-        [TestMethod]
+        [TestCase]
         public void DataContractSerializerFactory_InstanceTest()
         {
             var itemList = new IParams[] {new PluginA.Params {SettingA = "TestA"}, new PluginB.Params {SettingB = "TestB"}};

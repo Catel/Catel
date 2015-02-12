@@ -8,18 +8,14 @@ namespace Catel.Test.MVVM.ViewModels.Attributes
 {
     using Catel.MVVM;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class ViewModelToModelAttributeFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheConstructor
         {
-            [TestMethod]
+            [TestCase]
             public void CorrectlySetsValueWithOneConstructorArgument()
             {
                 var viewModelToModelAttribute = new ViewModelToModelAttribute("model");
@@ -28,7 +24,7 @@ namespace Catel.Test.MVVM.ViewModels.Attributes
                 Assert.AreEqual(string.Empty, viewModelToModelAttribute.Property);
             }
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlySetsValueWithTwoConstructorArguments()
             {
                 var viewModelToModelAttribute = new ViewModelToModelAttribute("model", "property");

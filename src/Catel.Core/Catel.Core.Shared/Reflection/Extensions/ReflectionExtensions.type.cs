@@ -75,17 +75,17 @@ namespace Catel.Reflection
         /// <summary>
         /// Dictionary containing all possible implicit conversions of system types.
         /// </summary>
-        private static readonly Dictionary<Type, List<Type>> _convertableDictionary = new Dictionary<Type, List<Type>>
+        private static readonly Dictionary<Type, HashSet<Type>> _convertableDictionary = new Dictionary<Type, HashSet<Type>>
             {
-                {typeof (decimal), new List<Type> {typeof (sbyte), typeof (byte), typeof (short), typeof (ushort), typeof (int), typeof (uint), typeof (long), typeof (ulong), typeof (char)}},
-                {typeof (double), new List<Type> {typeof (sbyte), typeof (byte), typeof (short), typeof (ushort), typeof (int), typeof (uint), typeof (long), typeof (ulong), typeof (char), typeof (float)}},
-                {typeof (float), new List<Type> {typeof (sbyte), typeof (byte), typeof (short), typeof (ushort), typeof (int), typeof (uint), typeof (long), typeof (ulong), typeof (char), typeof (float)}},
-                {typeof (ulong), new List<Type> {typeof (byte), typeof (ushort), typeof (uint), typeof (char)}},
-                {typeof (long), new List<Type> {typeof (sbyte), typeof (byte), typeof (short), typeof (ushort), typeof (int), typeof (uint), typeof (char)}},
-                {typeof (uint), new List<Type> {typeof (byte), typeof (ushort), typeof (char)}},
-                {typeof (int), new List<Type> {typeof (sbyte), typeof (byte), typeof (short), typeof (ushort), typeof (char)}},
-                {typeof (ushort), new List<Type> {typeof (byte), typeof (char)}},
-                {typeof (short), new List<Type> {typeof (byte)}}
+                {typeof (decimal), new HashSet<Type> {typeof (sbyte), typeof (byte), typeof (short), typeof (ushort), typeof (int), typeof (uint), typeof (long), typeof (ulong), typeof (char)}},
+                {typeof (double), new HashSet<Type> {typeof (sbyte), typeof (byte), typeof (short), typeof (ushort), typeof (int), typeof (uint), typeof (long), typeof (ulong), typeof (char), typeof (float)}},
+                {typeof (float), new HashSet<Type> {typeof (sbyte), typeof (byte), typeof (short), typeof (ushort), typeof (int), typeof (uint), typeof (long), typeof (ulong), typeof (char), typeof (float)}},
+                {typeof (ulong), new HashSet<Type> {typeof (byte), typeof (ushort), typeof (uint), typeof (char)}},
+                {typeof (long), new HashSet<Type> {typeof (sbyte), typeof (byte), typeof (short), typeof (ushort), typeof (int), typeof (uint), typeof (char)}},
+                {typeof (uint), new HashSet<Type> {typeof (byte), typeof (ushort), typeof (char)}},
+                {typeof (int), new HashSet<Type> {typeof (sbyte), typeof (byte), typeof (short), typeof (ushort), typeof (char)}},
+                {typeof (ushort), new HashSet<Type> {typeof (byte), typeof (char)}},
+                {typeof (short), new HashSet<Type> {typeof (byte)}}
             };
 
         /// <summary>
@@ -775,13 +775,15 @@ namespace Catel.Reflection
         /// <param name="name">The name.</param>
         /// <param name="flattenHierarchy">The flatten hierarchy.</param>
         /// <param name="allowStaticMembers">The allow static members.</param>
+        /// <param name="allowExplicitInterfaceProperties">if set to <c>true</c>, this method will check for explicit interface implementations when the property is not found.</param>
         /// <returns>PropertyInfo.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
-        public static PropertyInfo GetPropertyEx(this Type type, string name, bool flattenHierarchy = true, bool allowStaticMembers = false)
+        public static PropertyInfo GetPropertyEx(this Type type, string name, bool flattenHierarchy = true, bool allowStaticMembers = false,
+            bool allowExplicitInterfaceProperties = true)
         {
             BindingFlags bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(flattenHierarchy, allowStaticMembers);
-            return GetPropertyEx(type, name, bindingFlags);
+            return GetPropertyEx(type, name, bindingFlags, allowExplicitInterfaceProperties);
         }
 
         /// <summary>
@@ -790,20 +792,40 @@ namespace Catel.Reflection
         /// <param name="type">The type.</param>
         /// <param name="name">The name.</param>
         /// <param name="bindingFlags">The binding Flags.</param>
+        /// <param name="allowExplicitInterfaceProperties">if set to <c>true</c>, this method will check for explicit interface implementations when the property is not found.</param>
         /// <returns>PropertyInfo.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
-        public static PropertyInfo GetPropertyEx(this Type type, string name, BindingFlags bindingFlags)
+        public static PropertyInfo GetPropertyEx(this Type type, string name, BindingFlags bindingFlags, bool allowExplicitInterfaceProperties = true)
         {
             Argument.IsNotNull("type", type);
             Argument.IsNotNullOrWhitespace("name", name);
 
+            PropertyInfo propertyInfo = null;
+
 #if ENABLE_CACHE
             var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Property, bindingFlags, name);
-            return _propertyCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetProperty(name, bindingFlags));
+            propertyInfo = _propertyCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetProperty(name, bindingFlags));
 #else
-            return type.GetTypeInfo().GetProperty(name, bindingFlags);
+            propertyInfo = type.GetTypeInfo().GetProperty(name, bindingFlags);
 #endif
+
+            if (propertyInfo == null)
+            {
+                if (allowExplicitInterfaceProperties)
+                {
+                    foreach (var iface in type.GetInterfacesEx())
+                    {
+                        propertyInfo = iface.GetPropertyEx(name, bindingFlags, false);
+                        if (propertyInfo != null)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return propertyInfo;
         }
 
         /// <summary>

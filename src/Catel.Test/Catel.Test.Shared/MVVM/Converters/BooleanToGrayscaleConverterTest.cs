@@ -8,46 +8,41 @@ namespace Catel.Test.MVVM.Converters
 {
     using System.Globalization;
     using Catel.MVVM.Converters;
+    using NUnit.Framework;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
-
-    [TestClass]
+    [TestFixture]
     public class BooleanToGrayscaleConverterTest
     {
         #region Methods
-        [TestMethod]
+        [TestCase]
         public void Convert_Null()
         {
             var converter = new BooleanToGrayscaleConverter();
             Assert.AreEqual(1d, converter.Convert(null, typeof (double), null, (CultureInfo)null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void Convert_NonBooleanValue()
         {
             var converter = new BooleanToGrayscaleConverter();
             Assert.AreEqual(1d, converter.Convert("string", typeof (double), null, (CultureInfo)null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void Convert_True()
         {
             var converter = new BooleanToGrayscaleConverter();
             Assert.AreEqual(1d, converter.Convert(true, typeof (double), null, (CultureInfo)null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void Convert_False()
         {
             var converter = new BooleanToGrayscaleConverter();
             Assert.AreEqual(0d, converter.Convert(false, typeof (double), null, (CultureInfo)null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void ConvertBack()
         {
             var converter = new BooleanToGrayscaleConverter();

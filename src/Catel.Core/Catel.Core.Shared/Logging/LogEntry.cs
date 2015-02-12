@@ -6,6 +6,8 @@
 
 namespace Catel.Logging
 {
+    using System;
+
     /// <summary>
     /// Log entry class.
     /// </summary>
@@ -18,7 +20,7 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="eventArgs">The event args.</param>
         public LogEntry(LogMessageEventArgs eventArgs)
-            : this(eventArgs.Log, eventArgs.Message, eventArgs.LogEvent, eventArgs.ExtraData)
+            : this(eventArgs.Log, eventArgs.Message, eventArgs.LogEvent, eventArgs.ExtraData, eventArgs.Time)
         {
         }
 
@@ -29,8 +31,10 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="logEvent">The log event.</param>
         /// <param name="extraData">The extra data.</param>
-        public LogEntry(ILog log, string message, LogEvent logEvent, object extraData)
+        /// <param name="time">The time.</param>
+        public LogEntry(ILog log, string message, LogEvent logEvent, object extraData, DateTime time)
         {
+            Time = time;
             Log = log;
             Message = message;
             LogEvent = logEvent;
@@ -40,6 +44,12 @@ namespace Catel.Logging
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        /// Gets the time.
+        /// </summary>
+        /// <value>The time.</value>
+        public DateTime Time { get; private set; }
 
         /// <summary>
         /// Gets the extra data.

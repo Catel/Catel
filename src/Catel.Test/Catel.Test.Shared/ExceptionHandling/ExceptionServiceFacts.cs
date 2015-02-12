@@ -12,20 +12,16 @@ namespace Catel.Test.ExceptionHandling
     using System.Linq;
     using Catel.ExceptionHandling;
     using System.Threading.Tasks;
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
     
     public class ExceptionServiceFacts
     {
         #region Nested type: TheConstructor
-        [TestClass]
+        [TestFixture]
         public class TheConstructor
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ChecksIfTheExceptionHandlersHasAnyItems()
             {
                 var exceptionService = new ExceptionService();
@@ -37,18 +33,18 @@ namespace Catel.Test.ExceptionHandling
         #endregion
 
         #region Nested type: TheGenericProcessMethod
-        [TestClass]
+        [TestFixture]
         public class TheGenericProcessMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullParameterInGeneric()
             {
                 var exceptionService = new ExceptionService();
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => exceptionService.Process<int>(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ProceedToSucceed()
             {
                 var exceptionService = new ExceptionService();
@@ -64,7 +60,7 @@ namespace Catel.Test.ExceptionHandling
                 Assert.AreEqual("achieved", value);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ProceedToFail()
             {
                 var exceptionService = new ExceptionService();
@@ -80,13 +76,13 @@ namespace Catel.Test.ExceptionHandling
         #endregion
 
         #region Nested type: TheGenericProcessAsyncMethod
-        [TestClass]
+        [TestFixture]
         public class TheGenericProcessAsyncMethod
         {
             #region Methods
 
          
-            [TestMethod]
+            [TestCase]
 #if NET40 || SL5 || PCL
             public void ProceedActionToSucceed()
 #else
@@ -115,7 +111,7 @@ namespace Catel.Test.ExceptionHandling
                 Assert.AreEqual("achieved", value);
             }
 
-            [TestMethod]
+            [TestCase]
 #if NET40 || SL5 || PCL
             public void ProceedTaskToSucceed()
 #else
@@ -144,7 +140,7 @@ namespace Catel.Test.ExceptionHandling
                 Assert.AreEqual("achieved", value);
             }
 
-            [TestMethod]
+            [TestCase]
 #if NET40 || SL5 || PCL
             public void ProceedActionToFail()
 #else
@@ -164,7 +160,7 @@ namespace Catel.Test.ExceptionHandling
                 Assert.AreNotEqual("achieved", value);
             }
 
-            [TestMethod]
+            [TestCase]
 #if NET40 || SL5 || PCL
             public void ProceedTaskToFail()
 #else
@@ -189,11 +185,11 @@ namespace Catel.Test.ExceptionHandling
         #endregion
 
         #region Nested type: TheGetHandlerMethod
-        [TestClass]
+        [TestFixture]
         public class TheGetHandlerMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ReturnsArgumentNullException()
             {
                 var exceptionService = new ExceptionService();
@@ -201,7 +197,7 @@ namespace Catel.Test.ExceptionHandling
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => exceptionService.GetHandler(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsNullWhenNotRegistered()
             {
                 var exceptionService = new ExceptionService();
@@ -211,7 +207,7 @@ namespace Catel.Test.ExceptionHandling
                 Assert.IsNull(exceptionService.GetHandler(typeof (Exception)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsNullWhenNotRegisteredUsingGeneric()
             {
                 var exceptionService = new ExceptionService();
@@ -221,7 +217,7 @@ namespace Catel.Test.ExceptionHandling
                 Assert.IsNull(exceptionService.GetHandler<Exception>());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsHandlerWhenRegistered()
             {
                 var exceptionService = new ExceptionService();
@@ -236,7 +232,7 @@ namespace Catel.Test.ExceptionHandling
                 Assert.AreEqual(typeof (ArgumentNullException), handler.ExceptionType);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsHandlerWhenRegisteredUsingGeneric()
             {
                 var exceptionService = new ExceptionService();
@@ -255,18 +251,18 @@ namespace Catel.Test.ExceptionHandling
         #endregion
 
         #region Nested type: TheHandleExceptionMethod
-        [TestClass]
+        [TestFixture]
         public class TheHandleExceptionMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullParameter()
             {
                 var exceptionService = new ExceptionService();
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => exceptionService.HandleException(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void PerformsHandleForNotRegisteredTypeViaInheritance()
             {
                 var exceptionService = new ExceptionService();
@@ -283,11 +279,11 @@ namespace Catel.Test.ExceptionHandling
         #endregion
 
         #region Nested type: TheIsExceptionRegisteredMethod
-        [TestClass]
+        [TestFixture]
         public class TheIsExceptionRegisteredMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ReturnsArgumentNullException()
             {
                 var exceptionService = new ExceptionService();
@@ -295,7 +291,7 @@ namespace Catel.Test.ExceptionHandling
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => exceptionService.IsExceptionRegistered(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseWhenNotRegistered()
             {
                 var exceptionService = new ExceptionService();
@@ -305,7 +301,7 @@ namespace Catel.Test.ExceptionHandling
                 Assert.IsFalse(exceptionService.IsExceptionRegistered(typeof (Exception)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseWhenNotRegisteredUsingGeneric()
             {
                 var exceptionService = new ExceptionService();
@@ -315,7 +311,7 @@ namespace Catel.Test.ExceptionHandling
                 Assert.IsFalse(exceptionService.IsExceptionRegistered<Exception>());
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueWhenRegistered()
             {
                 var exceptionService = new ExceptionService();
@@ -327,7 +323,7 @@ namespace Catel.Test.ExceptionHandling
                 Assert.IsTrue(exceptionService.IsExceptionRegistered(typeof (ArgumentNullException)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueWhenRegisteredUsingGeneric()
             {
                 var exceptionService = new ExceptionService();
@@ -343,18 +339,18 @@ namespace Catel.Test.ExceptionHandling
         #endregion
 
         #region Nested type: TheNonGenericProcessMethod
-        [TestClass]
+        [TestFixture]
         public class TheNonGenericProcessMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullParameterInNonGeneric()
             {
                 var exceptionService = new ExceptionService();
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => exceptionService.Process(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ProceedToSucceed()
             {
                 var exceptionService = new ExceptionService();
@@ -366,7 +362,7 @@ namespace Catel.Test.ExceptionHandling
                 Assert.AreEqual("achieved", value);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ProceedToFail()
             {
                 var exceptionService = new ExceptionService();
@@ -382,12 +378,12 @@ namespace Catel.Test.ExceptionHandling
         #endregion
 
         #region Nested type: TheNonGenericProcessAsyncMethod
-        [TestClass]
+        [TestFixture]
         public class TheNonGenericProcessAsyncMethod
         {
             #region Methods
 
-            [TestMethod]
+            [TestCase]
 #if NET40 || SL5 || PCL
             public void ProceedActionToSucceed()
 #else
@@ -407,7 +403,7 @@ namespace Catel.Test.ExceptionHandling
                 Assert.AreEqual("achieved", value);
             }
 
-            [TestMethod]
+            [TestCase]
 #if NET40 || SL5 || PCL
             public void ProceedTaskToSucceed()
 #else
@@ -427,7 +423,7 @@ namespace Catel.Test.ExceptionHandling
                 Assert.AreEqual("achieved", value);
             }
 
-            [TestMethod]
+            [TestCase]
 #if NET40 || SL5 || PCL
             public void ProceedActionToFail()
 #else
@@ -447,7 +443,7 @@ namespace Catel.Test.ExceptionHandling
                 Assert.AreNotEqual("achieved", value);
             }
 
-            [TestMethod]
+            [TestCase]
 #if NET40 || SL5 || PCL
             public void ProceedTaskToFail()
 #else
@@ -471,11 +467,11 @@ namespace Catel.Test.ExceptionHandling
         #endregion
 
         #region Nested type: TheOnErrorRetryImmediatelyMethod
-        [TestClass]
+        [TestFixture]
         public class TheOnErrorRetryImmediatelyMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ChecksIfRetryActionEventRegistrationWorks()
             {
                 const int attemptsCount = 1;
@@ -491,7 +487,7 @@ namespace Catel.Test.ExceptionHandling
                 exceptionService.ProcessWithRetry(() => { throw new DivideByZeroException(); });
             }
 
-            [TestMethod]
+            [TestCase]
             public void ShouldRetryTwice()
             {
                 var attemptsCount = 0;
@@ -511,7 +507,7 @@ namespace Catel.Test.ExceptionHandling
                 Assert.AreEqual(2, attemptsCount);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ShouldNotRetryWhenAnotherExceptionTypeIsThrown()
             {
                 var exceptionService = new ExceptionService();
@@ -529,7 +525,7 @@ namespace Catel.Test.ExceptionHandling
                 }));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ShouldNotRetryWhenNotAnyExceptionIsThrown()
             {
                 var attemptsCount = 0;
@@ -547,7 +543,7 @@ namespace Catel.Test.ExceptionHandling
                 Assert.AreEqual(0, attemptsCount);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ShouldNotRetryAndReturnsResult()
             {
                 var attemptsCount = 0;
@@ -570,11 +566,11 @@ namespace Catel.Test.ExceptionHandling
         #endregion
 
         #region Nested type: TheOnErrorRetryMethod
-        [TestClass]
+        [TestFixture]
         public class TheOnErrorRetryMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ShouldRetryWithDelay()
             {
                 var interval = TimeSpan.FromMilliseconds(10);
@@ -594,11 +590,11 @@ namespace Catel.Test.ExceptionHandling
         #endregion
 
         #region Nested type: TheRegisterMethod
-        [TestClass]
+        [TestFixture]
         public class TheRegisterMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void RegistersException()
             {
                 var exceptionService = new ExceptionService();
@@ -611,7 +607,7 @@ namespace Catel.Test.ExceptionHandling
                 Assert.AreEqual(exceptionService.ExceptionHandlers.Count(), 1);
             }
 
-            [TestMethod]
+            [TestCase]
             public void RegistersExceptionForDoubleRegistration()
             {
                 var exceptionService = new ExceptionService();
@@ -629,11 +625,11 @@ namespace Catel.Test.ExceptionHandling
         #endregion
 
         #region Nested type: TheUnregisterMethod
-        [TestClass]
+        [TestFixture]
         public class TheUnregisterMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void UnregistersException()
             {
                 var exceptionService = new ExceptionService();
@@ -649,7 +645,7 @@ namespace Catel.Test.ExceptionHandling
                 Assert.AreEqual(exceptionService.ExceptionHandlers.Count(), 0);
             }
 
-            [TestMethod]
+            [TestCase]
             public void UnregistersExceptionForDoubleUnregistration()
             {
                 var exceptionService = new ExceptionService();
@@ -670,11 +666,11 @@ namespace Catel.Test.ExceptionHandling
         #endregion
 
         #region Nested type: TheUsingToleranceMethod
-        [TestClass]
+        [TestFixture]
         public class TheUsingToleranceMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void MultipleExceptionsOfSameTypeThrownTooManyTimesProducesOnlyOneException()
             {
                 var exceptionService = new ExceptionService();
@@ -695,7 +691,7 @@ namespace Catel.Test.ExceptionHandling
                 Assert.AreEqual(10, index);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ChecksIfTheBufferedEventRegistrationWorks()
             {
                 var buffercount = 0;
@@ -704,7 +700,7 @@ namespace Catel.Test.ExceptionHandling
 
                 exceptionService.ExceptionBuffered += (sender, args) =>
                 {
-                    Assert.IsInstanceOfType(args.BufferedException, typeof (DivideByZeroException));
+                    Assert.IsInstanceOf(typeof(DivideByZeroException), args.BufferedException);
                     buffercount++;
                 };
 

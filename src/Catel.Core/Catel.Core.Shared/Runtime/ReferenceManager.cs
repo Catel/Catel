@@ -46,7 +46,7 @@ namespace Catel.Runtime
         /// <summary>
         /// The hashset containing the used ids.
         /// </summary>
-        private HashSet<int> _usedIds = new HashSet<int>(); 
+        private readonly HashSet<int> _usedIds = new HashSet<int>(); 
         #endregion
 
         #region Constructors
@@ -161,26 +161,36 @@ namespace Catel.Runtime
             }
         }
 
-        private void AddReferenceInfo(ReferenceInfo referenceInfo)
+        private bool AddReferenceInfo(ReferenceInfo referenceInfo)
         {
             lock (_lock)
             {
+                if (_referenceInfoByInstance.ContainsKey(referenceInfo) || _usedIds.Contains(referenceInfo.Id))
+                {
+                    return false;
+                }
+
                 _referenceInfoByInstance.Add(referenceInfo.Instance, referenceInfo);
                 _referenceInfoById.Add(referenceInfo.Id, referenceInfo);
 
                 _usedIds.Add(referenceInfo.Id);
+
+                return true;
             }
         }
 
         private int GetNextId()
         {
-            int id = _counter++;
-            while (_usedIds.Contains(id))
+            lock (_lock)
             {
-                id = _counter++;
-            }
+                var id = _counter++;
+                while (_usedIds.Contains(id))
+                {
+                    id = _counter++;
+                }
 
-            return id;
+                return id;
+            }
         }
         #endregion
     }

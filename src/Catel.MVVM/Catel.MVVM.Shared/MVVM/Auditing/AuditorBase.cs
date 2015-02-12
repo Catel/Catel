@@ -24,7 +24,7 @@ namespace Catel.MVVM.Auditing
         /// </summary>
         protected AuditorBase()
         {
-            PropertiesToIgnore = new List<string>();
+            PropertiesToIgnore = new HashSet<string>();
 
             PropertiesToIgnore.Add("IsDirty");
             PropertiesToIgnore.Add("IsEditable");
@@ -39,7 +39,7 @@ namespace Catel.MVVM.Auditing
         /// Gets a list of properties that should be ignored.
         /// </summary>
         /// <value>The list of properties to ignore.</value>
-        public List<string> PropertiesToIgnore { get; private set; }
+        public HashSet<string> PropertiesToIgnore { get; private set; }
         #endregion
 
         #region Methods

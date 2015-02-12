@@ -21,30 +21,12 @@ namespace Catel.Services
         /// Registers the specified view model and the window type. This way, Catel knowns what
         /// window to show when a specific view model window is requested.
         /// </summary>
-        /// <param name="viewModelType">Type of the view model.</param>
-        /// <param name="windowType">Type of the window.</param>
-        /// <exception cref="ArgumentException">The <paramref name="viewModelType"/> does not implement <see cref="IViewModel"/>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="windowType"/> is not of the right type.</exception>
-        void Register(Type viewModelType, Type windowType);
-
-        /// <summary>
-        /// Registers the specified view model and the window type. This way, Catel knowns what
-        /// window to show when a specific view model window is requested.
-        /// </summary>
         /// <param name="name">Name of the registered window.</param>
         /// <param name="windowType">Type of the window.</param>
-        /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="windowType"/> is not of the right type.</exception>
-        void Register(string name, Type windowType);
-
-        /// <summary>
-        /// This unregisters the specified view model.
-        /// </summary>
-        /// <param name="viewModelType">Type of the view model to unregister.</param>
-        /// <returns>
-        /// 	<c>true</c> if the view model is unregistered; otherwise <c>false</c>.
-        /// </returns>
-        bool Unregister(Type viewModelType);
+        /// <param name="throwExceptionIfExists">if set to <c>true</c>, this method will throw an exception when already registered.</param>
+        /// <exception cref="ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="windowType" /> is not of the right type.</exception>
+        void Register(string name, Type windowType, bool throwExceptionIfExists = true);
 
         /// <summary>
         /// This unregisters the specified view model.
@@ -64,8 +46,8 @@ namespace Catel.Services
         /// 	<c>true</c> if the popup window is successfully opened; otherwise <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
-        /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type)"/> method first.</exception>
-        Task<bool> Show(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null);
+        /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
+        Task<bool?> Show(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null);
 
         /// <summary>
         /// Shows a window that is registered with the specified view model in a non-modal state.
@@ -77,8 +59,8 @@ namespace Catel.Services
         /// 	<c>true</c> if the popup window is successfully opened; otherwise <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type)"/> method first.</exception>
-        Task<bool> Show(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null);
+        /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
+        Task<bool?> Show(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null);
 
         /// <summary>
         /// Shows a window that is registered with the specified view model in a modal state.
@@ -89,7 +71,7 @@ namespace Catel.Services
         /// Nullable boolean representing the dialog result.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
-        /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type)"/> method first.</exception>
+        /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
         Task<bool?> ShowDialog(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null);
 
         /// <summary>
@@ -102,8 +84,16 @@ namespace Catel.Services
         /// Nullable boolean representing the dialog result.
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type)"/> method first.</exception>
+        /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
         Task<bool?> ShowDialog(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null);
         #endregion
+
+        /// <summary>
+        /// Determines whether the specified name is registered.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns><c>true</c> if the specified name is registered; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
+        bool IsRegistered(string name);
     }
 }

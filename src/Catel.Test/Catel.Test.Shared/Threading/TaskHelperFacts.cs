@@ -8,24 +8,19 @@ namespace Catel.Test.Threading
 {
     using System;
     using Catel.Threading;
-
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class TaskHelperFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheRunAndWaitMethod
         {
-            [TestMethod]
+            [TestCase]
             public void CorrectlyWaitsForAllTasksToBeCompleted()
             {
-                bool a = false;
-                bool b = false;
-                bool c = false;
+                var a = false;
+                var b = false;
+                var c = false;
 
                 Action taskA = () =>
                 {
@@ -43,6 +38,35 @@ namespace Catel.Test.Threading
                 };
 
                 TaskHelper.RunAndWait(new [] { taskA, taskB, taskC });
+
+                Assert.IsTrue(a);
+                Assert.IsTrue(b);
+                Assert.IsTrue(c);
+            }
+
+            [TestCase]
+            public async void CorrectlyWaitsForAllTasksToBeCompletedAsync()
+            {
+                var a = false;
+                var b = false;
+                var c = false;
+
+                Action taskA = () =>
+                {
+                    a = true;
+                };
+                Action taskB = () =>
+                {
+                    ThreadHelper.Sleep(100);
+                    b = true;
+                };
+                Action taskC = () =>
+                {
+                    ThreadHelper.Sleep(200);
+                    c = true;
+                };
+
+                await TaskHelper.RunAndWaitAsync(new[] { taskA, taskB, taskC });
 
                 Assert.IsTrue(a);
                 Assert.IsTrue(b);

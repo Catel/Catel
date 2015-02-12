@@ -9,18 +9,14 @@ namespace Catel.Test.Memento
     using Catel.Memento;
     using Mocks;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class OperationSetFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheOperationSetUndoMethod
         {
-            [TestMethod]
+            [TestCase]
             public void UndoTest()
             {
                 var mock1 = new MockUndo(true);
@@ -36,7 +32,7 @@ namespace Catel.Test.Memento
                 Assert.IsTrue(mock2.UndoCalled);
             }
 
-            [TestMethod]
+            [TestCase]
             public void UndoOrderTest()
             {
                 var finalValue = 0;
@@ -54,10 +50,10 @@ namespace Catel.Test.Memento
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class ThePropertyRedoMethod
         {
-            [TestMethod()]
+            [TestCase]
             public void CanRedoOk()
             {
                 var mock1 = new MockUndo(true);
@@ -70,7 +66,7 @@ namespace Catel.Test.Memento
                 Assert.IsTrue(operationSet.CanRedo);
             }
 
-            [TestMethod()]
+            [TestCase]
             public void CanRedoNak()
             {
                 var mock1 = new MockUndo(true);
@@ -83,8 +79,7 @@ namespace Catel.Test.Memento
                 Assert.IsFalse(operationSet.CanRedo);
             }
 
-
-            [TestMethod()]
+            [TestCase]
             public void RedoTest()
             {
                 var mock1 = new MockUndo(true);

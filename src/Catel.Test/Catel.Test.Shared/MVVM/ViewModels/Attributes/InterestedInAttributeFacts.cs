@@ -9,24 +9,20 @@ namespace Catel.Test.MVVM.ViewModels.Attributes
     using System;
     using Catel.MVVM;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class InterestedInAttributeFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheConstructor
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new InterestedInAttribute(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlySetsViewModelType()
             {
                 var interestedInAttribute = new InterestedInAttribute(typeof(ViewModelBase));

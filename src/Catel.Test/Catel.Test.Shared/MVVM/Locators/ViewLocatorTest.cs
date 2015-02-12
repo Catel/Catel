@@ -13,32 +13,28 @@ namespace Catel.Test.MVVM
     using Views;
     using Test.ViewModels;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class ViewLocatorFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheRegisterMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullTypeToResolve()
             {
                 var viewLocator = new ViewLocator();
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewLocator.Register(null, typeof(FollowingNoNamingConventionView)));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullResolvedType()
             {
                 var viewLocator = new ViewLocator();
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewLocator.Register(typeof(NoNamingConventionViewModel), null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void RegistersNonExistingViewType()
             {
                 var viewLocator = new ViewLocator();
@@ -51,7 +47,7 @@ namespace Catel.Test.MVVM
                 Assert.AreEqual(typeof(NoNamingConventionViewModel), resolvedView);
             }
 
-            [TestMethod]
+            [TestCase]
             public void OverwritesExistingViewType()
             {
                 var viewLocator = new ViewLocator();
@@ -63,17 +59,17 @@ namespace Catel.Test.MVVM
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheResolveViewMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullViewType()
             {
                 var viewLocator = new ViewLocator();
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewLocator.ResolveView(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsViewForViewEndingWithViewModel()
             {
                 var viewLocator = new ViewLocator();
@@ -83,7 +79,7 @@ namespace Catel.Test.MVVM
                 Assert.AreEqual(typeof(PersonView), resolvedType);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsViewForNamingConventionWithUp()
             {
                 var viewLocator = new ViewLocator();
@@ -96,7 +92,7 @@ namespace Catel.Test.MVVM
                 Assert.AreEqual(typeof(PersonView), resolvedType);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ResolvesViewFromCache()
             {
                 var viewLocator = new ViewLocator();
@@ -115,10 +111,10 @@ namespace Catel.Test.MVVM
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheClearCacheMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ClearsTheCache()
             {
                 var viewLocator = new ViewLocator();

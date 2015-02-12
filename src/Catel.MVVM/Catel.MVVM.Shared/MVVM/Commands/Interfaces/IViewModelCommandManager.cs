@@ -1,3 +1,10 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="IViewModelCommandManager.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+
 namespace Catel.MVVM
 {
     using System;
@@ -8,6 +15,7 @@ namespace Catel.MVVM
     /// </summary>
     public interface IViewModelCommandManager
     {
+        #region Methods
         /// <summary>
         /// Adds a new handler when a command is executed on the specified view model.
         /// </summary>
@@ -20,5 +28,6 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="force">If <c>true</c>, the commands are re-initialized. The default value is <c>false</c>.</param>
         void InvalidateCommands(bool force = false);
+        #endregion
     }
 }

@@ -10,11 +10,7 @@ namespace Catel.Test.Data
     using System.Collections.ObjectModel;
     using Catel.Data;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class ChangeNotificationWrapperFacts
     {
@@ -35,20 +31,20 @@ namespace Catel.Test.Data
             public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), null);
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheConstructor
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullValue()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new ChangeNotificationWrapper(null));
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheSupportsNotifyPropertyChangedProperty
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForPropertyChangedItem()
             {
                 var model = new TestModel();
@@ -57,7 +53,7 @@ namespace Catel.Test.Data
                 Assert.IsTrue(wrapper.SupportsNotifyPropertyChanged);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForNonPropertyChangedItem()
             {
                 var model = new object();
@@ -67,10 +63,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheSupportsNotifyCollectionChangedProperty
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForCollectionChangedItem()
             {
                 var collection = new ObservableCollection<int>();
@@ -79,7 +75,7 @@ namespace Catel.Test.Data
                 Assert.IsTrue(wrapper.SupportsNotifyCollectionChanged);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForNonCollectionChangedItem()
             {
                 var collection = new List<int>();
@@ -89,32 +85,32 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheIsUsefulForObjectMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForNullObject()
             {
                 Assert.IsFalse(ChangeNotificationWrapper.IsUsefulForObject(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForObjectNotImplementingINotifyPropertyChanged()
             {
                 Assert.IsFalse(ChangeNotificationWrapper.IsUsefulForObject(15));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForObjectImplementingINotifyPropertyChanged()
             {
                 Assert.IsTrue(ChangeNotificationWrapper.IsUsefulForObject(new TestModel()));
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheUnsubscribeFromAllEventsMethod
         {
-            [TestMethod]
+            [TestCase]
             public void UnsubscribesFromPropertyChangedEvents()
             {
                 var testModel = new TestModel();
@@ -131,7 +127,7 @@ namespace Catel.Test.Data
                 Assert.IsFalse(eventRaised);
             }
 
-            [TestMethod]
+            [TestCase]
             public void UnsubscribesFromCollectionChangedEvents()
             {
                 var collection = new ObservableCollection<TestModel>();
@@ -147,7 +143,7 @@ namespace Catel.Test.Data
                 Assert.IsFalse(eventRaised);
             }
 
-            [TestMethod]
+            [TestCase]
             public void UnsubscribesFromCollectionItemPropertyChangedEvents()
             {
                 var testModel = new TestModel();
@@ -166,10 +162,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class ThePropertyChangesLogic 
         {
-            [TestMethod]
+            [TestCase]
             public void HandlesPropertyChangesCorrectly()
             {
                 var model = new TestModel();
@@ -185,10 +181,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheCollectionChangesLogic
         {
-            [TestMethod]
+            [TestCase]
             public void HandlesCollectionChangesCorrectly()
             {
                 var collection = new ObservableCollection<TestModel>();
@@ -219,7 +215,7 @@ namespace Catel.Test.Data
                 Assert.IsTrue(itemsRemoved);
             }
 
-            [TestMethod]
+            [TestCase]
             public void HandlesCollectionItemPropertyChangesCorrectly()
             {
                 var collection = new ObservableCollection<TestModel>();
@@ -237,7 +233,7 @@ namespace Catel.Test.Data
                 Assert.IsTrue(collectionItemPropertyChanged);
             }
 
-            [TestMethod]
+            [TestCase]
             public void HandlesCollectionResetsCorrectly()
             {
                 var collection = new ObservableCollection<TestModel>();
@@ -265,10 +261,10 @@ namespace Catel.Test.Data
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheMemoryLeakChecks
         {
-            [TestMethod]
+            [TestCase]
             public void DoesNotLeakForPropertyChanged()
             {
                 var model = new TestModel();
@@ -282,7 +278,7 @@ namespace Catel.Test.Data
                 Assert.IsFalse(wrapper.IsObjectAlive);
             }
 
-            [TestMethod]
+            [TestCase]
             public void DoesNotLeakForCollectionChanged()
             {
                 var model = new TestModel();

@@ -13,37 +13,13 @@
 
     using TestViewModel = TestClasses.TestViewModel;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class ViewModelBaseTest
     {
-        [TestClass]
-        public class TheHasDirtyModelsProperty
-        {
-            [TestMethod]
-            public void IsModelRegistered_ExistingModel()
-            {
-                var person = new Person();
-                person.FirstName = "first name";
-                person.LastName = "last name";
-
-                var viewModel = new TestViewModel(person);
-
-                Assert.IsFalse(viewModel.HasDirtyModel);
-
-                person.FirstName = "new first name";
-
-                Assert.IsTrue(viewModel.HasDirtyModel);
-            }            
-        }
-
         #region ViewModelToModel mappings
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_DoubleModels()
         {
             var firstPerson = new Person();
@@ -73,11 +49,13 @@
             Assert.AreEqual("Another email", viewModel.Email);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_PropertyChanges()
         {
             const string FirstName = "first name";
             const string LastName = "last name";
+            const uint Age1 = 1;
+            const uint Age2 = 2;
 
             var person = new Person();
             var viewModel = new TestViewModel(person);
@@ -87,19 +65,35 @@
             Assert.AreEqual(string.Empty, person.LastName);
             Assert.AreEqual(string.Empty, viewModel.LastName);
 
+            Assert.AreEqual(string.Empty, viewModel.FullName);
+
+            Assert.AreEqual(0, person.Age);
+            Assert.AreEqual("0", viewModel.Age);
+
             // Model to view model mapping
             person.FirstName = FirstName;
             Assert.AreEqual(FirstName, person.FirstName);
             Assert.AreEqual(FirstName, viewModel.FirstName);
+            Assert.AreEqual(FirstName, viewModel.FullName);
 
             // View model to model mapping
             viewModel.LastName = LastName;
             Assert.AreEqual(LastName, person.LastName);
             Assert.AreEqual(LastName, viewModel.LastName);
+            Assert.AreEqual(FirstName + " " + LastName, viewModel.FullName);
+            Assert.AreEqual(FirstName + ";" + LastName, viewModel.FullNameWithCustomSeparator);
+
+            person.Age = Age1;
+            Assert.AreEqual(Age1, person.Age);
+            Assert.AreEqual(Age1.ToString(), viewModel.Age);
+
+            viewModel.Age = Age2.ToString();
+            Assert.AreEqual(Age2, person.Age);
+            Assert.AreEqual(Age2.ToString(), viewModel.Age);
         }
 
 #if !WINDOWS_PHONE
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_FieldErrors()
         {
             var person = new Person();
@@ -119,7 +113,7 @@
             Assert.AreNotEqual(string.Empty, viewModelAsError[TestViewModel.FirstNameProperty.Name]);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_FieldWarnings()
         {
             var person = new Person();
@@ -131,20 +125,22 @@
             person.FirstName = "first name";
             person.LastName = "last name";
 
-            Assert.IsFalse(viewModel.HasErrors);
-            Assert.IsTrue(viewModel.HasWarnings);
+            var validation = viewModel as IModelValidation;
+
+            Assert.IsFalse(validation.HasErrors);
+            Assert.IsTrue(validation.HasWarnings);
             Assert.AreNotEqual(string.Empty, personAsWarning[Person.MiddleNameProperty.Name]);
             Assert.AreNotEqual(string.Empty, viewModelAsWarning[TestViewModel.MiddleNameProperty.Name]);
 
             person.MiddleName = "middle name";
 
-            Assert.IsFalse(viewModel.HasErrors);
-            Assert.IsFalse(viewModel.HasWarnings);
+            Assert.IsFalse(validation.HasErrors);
+            Assert.IsFalse(validation.HasWarnings);
             Assert.AreEqual(string.Empty, personAsWarning[Person.MiddleNameProperty.Name]);
             Assert.AreEqual(string.Empty, viewModelAsWarning[TestViewModel.MiddleNameProperty.Name]);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_BusinessErrors()
         {
             var person = new Person();
@@ -165,7 +161,7 @@
             Assert.AreNotEqual(string.Empty, viewModelAsError.Error);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_BusinessWarnings()
         {
             var person = new Person();
@@ -186,48 +182,50 @@
             Assert.AreEqual(string.Empty, viewModelAsWarning.Warning);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_ValidateModelsOnInitialization()
         {
             var person = new PersonWithDataAnnotations();
             var viewModel = new TestViewModel(person, true);
 
-            Assert.AreNotEqual(0, viewModel.ValidationContext.GetValidationCount());
+            ((IModelValidation)person).Validate(true);
+
+            Assert.AreNotEqual(0, viewModel.GetValidationContext().GetValidationCount());
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_DoNotValidateModelsOnInitialization_UpdateViaViewModel()
         {
             var person = new PersonWithDataAnnotations();
             var viewModel = new TestViewModel(person, false);
 
-            Assert.AreEqual(0, person.ValidationContext.GetValidationCount());
-            Assert.AreEqual(0, viewModel.ValidationContext.GetValidationCount());
+            Assert.AreEqual(0, person.GetValidationContext().GetValidationCount());
+            Assert.AreEqual(0, viewModel.GetValidationContext().GetValidationCount());
 
             viewModel.FirstName = null;
 
-            Assert.AreNotEqual(0, person.ValidationContext.GetValidationCount());
-            Assert.AreNotEqual(0, viewModel.ValidationContext.GetValidationCount());
+            Assert.AreNotEqual(0, person.GetValidationContext().GetValidationCount());
+            Assert.AreNotEqual(0, viewModel.GetValidationContext().GetValidationCount());
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_DoNotValidateModelsOnInitialization_UpdateViaModel()
         {
             var person = new PersonWithDataAnnotations();
             var viewModel = new TestViewModel(person, false);
 
-            Assert.AreEqual(0, person.ValidationContext.GetValidationCount());
-            Assert.AreEqual(0, viewModel.ValidationContext.GetValidationCount());
+            Assert.AreEqual(0, person.GetValidationContext().GetValidationCount());
+            Assert.AreEqual(0, viewModel.GetValidationContext().GetValidationCount());
 
             person.FirstName = null;
 
-            Assert.AreNotEqual(0, person.ValidationContext.GetValidationCount());
-            Assert.AreNotEqual(0, viewModel.ValidationContext.GetValidationCount());
+            Assert.AreNotEqual(0, person.GetValidationContext().GetValidationCount());
+            Assert.AreNotEqual(0, viewModel.GetValidationContext().GetValidationCount());
         }
 #endif
 
-        [TestMethod]
-        public void ViewModelWithViewModelToModelMappings_DoNotMapWhenViewModelIsClosed()
+        [TestCase]
+        public async void ViewModelWithViewModelToModelMappings_DoNotMapWhenViewModelIsClosed()
         {
             var person = new Person();
             var viewModel = new TestViewModel(person, true);
@@ -236,13 +234,13 @@
             viewModel.FirstName = "test1";
             Assert.AreEqual("test1", person.FirstName);
 
-            viewModel.CloseViewModel(true);
+            await viewModel.CloseViewModel(true);
             viewModel.FirstName = "test2";
 
             Assert.AreEqual("test1", person.FirstName);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_TwoWay_InitiatedFromModel()
         {
             var person = new Person();
@@ -258,7 +256,7 @@
             Assert.AreEqual(person.FirstName, viewModel.FirstNameAsTwoWay);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_TwoWay_InitiatedFromViewModel()
         {
             var person = new Person();
@@ -274,7 +272,7 @@
             Assert.AreEqual(person.FirstName, viewModel.FirstNameAsTwoWay);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_OneWay_InitiatedFromModel()
         {
             var person = new Person();
@@ -290,7 +288,7 @@
             Assert.AreEqual(person.FirstName, viewModel.FirstNameAsOneWay);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_OneWay_InitiatedFromViewModel()
         {
             var person = new Person();
@@ -306,7 +304,7 @@
             Assert.AreNotEqual(person.FirstName, viewModel.FirstNameAsOneWay);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_OneWayToSource_InitiatedFromModel()
         {
             var person = new Person();
@@ -322,7 +320,7 @@
             Assert.AreNotEqual(person.FirstName, viewModel.FirstNameAsOneWayToSource);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_OneWayToSource_InitiatedFromViewModel()
         {
             var person = new Person();
@@ -338,7 +336,7 @@
             Assert.AreEqual(person.FirstName, viewModel.FirstNameAsOneWayToSource);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_Explicit_InitiatedFromModel()
         {
             var person = new Person();
@@ -354,7 +352,7 @@
             Assert.AreNotEqual(person.FirstName, viewModel.FirstNameAsExplicit);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_Explicit_InitiatedFromViewModel()
         {
             var person = new Person();
@@ -370,7 +368,7 @@
             Assert.AreNotEqual(person.FirstName, viewModel.FirstNameAsExplicit);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_Explicit_InitiatedManually()
         {
             var person = new Person();
@@ -389,7 +387,7 @@
         #endregion
 
         #region Child view models
-        [TestMethod]
+        [TestCase]
         public void SetParentviewModel()
         {
             var viewModel = new TestViewModel();
@@ -400,7 +398,7 @@
             Assert.AreEqual(parentViewModel, viewModel.GetParentViewModelForTest());
         }
 
-        [TestMethod]
+        [TestCase]
         public void RegisterChildViewModel_Null()
         {
             var viewModel = new TestViewModel();
@@ -412,13 +410,13 @@
         /// Checks whether a child view model is correctly subscribed by making sure the parent view model is also
         /// being validated. Then, it unsubscribes the child view model by closing it.
         /// </summary>
-        [TestMethod]
-        public void RegisterChildViewModel_RemovedViaClosingChildViewModel()
+        [TestCase]
+        public async void RegisterChildViewModel_RemovedViaClosingChildViewModel()
         {
             bool validationTriggered = false;
-            ManualResetEvent validatedEvent = new ManualResetEvent(false);
+            var validatedEvent = new ManualResetEvent(false);
 
-            Person person = new Person();
+            var person = new Person();
             person.FirstName = "first name";
             person.LastName = "last name";
 
@@ -428,11 +426,11 @@
             Assert.IsFalse(childViewModel.HasErrors);
 
             ((IRelationalViewModel)viewModel).RegisterChildViewModel(childViewModel);
-            viewModel.Validating += delegate
-                                        {
-                                            validationTriggered = true;
-                                            validatedEvent.Set();
-                                        };
+            ((IModelValidation)viewModel).Validating += delegate
+            {
+                validationTriggered = true;
+                validatedEvent.Set();
+            };
 
             childViewModel.FirstName = string.Empty;
 
@@ -443,7 +441,7 @@
 #endif
             Assert.IsTrue(validationTriggered, "Validating event is not triggered");
 
-            childViewModel.CloseViewModel(null);
+            await childViewModel.CloseViewModel(null);
 
             validationTriggered = false;
             validatedEvent.Reset();
@@ -460,15 +458,15 @@
         /// Checks whether a child view model is correctly subscribed by making sure the parent view model is also
         /// being validated. Then, it unsubscribes the child view model by calling UnregisterChildViewModel.
         /// </summary>
-        [TestMethod]
+        [TestCase]
         public void RegisterChildViewModel_RemovedViaUnregisterChildViewModel()
         {
             bool validationTriggered = false;
             ManualResetEvent validatedEvent = new ManualResetEvent(false);
 
             Person person = new Person();
-            person.FirstName = "first name";
-            person.LastName = "last name";
+            person.FirstName = "first_name";
+            person.LastName = "last_name";
 
             var viewModel = new TestViewModel();
             var childViewModel = new TestViewModel(person);
@@ -476,7 +474,7 @@
             Assert.IsFalse(childViewModel.HasErrors);
 
             ((IRelationalViewModel)viewModel).RegisterChildViewModel(childViewModel);
-            viewModel.Validating += delegate
+            ((IModelValidation)viewModel).Validating += delegate
             {
                 validationTriggered = true;
                 validatedEvent.Set();
@@ -504,11 +502,11 @@
             Assert.IsFalse(validationTriggered, "Validating event should not be triggered because child view model is removed");
         }
 
-        [TestMethod]
+        [TestCase]
         public void ChildViewModelUpdatesValidation()
         {
-            Person person = new Person();
-            person.LastName = "last name";
+            var person = new Person();
+            person.FirstName = "first_name";
 
             var viewModel = new TestViewModel();
             var childViewModel = new TestViewModel(person);
@@ -518,24 +516,24 @@
             Assert.IsTrue(viewModel.HasErrors);
             Assert.IsTrue(childViewModel.HasErrors);
 
-            person.FirstName = "first name";
+            person.LastName = "last_name";
 
             Assert.IsFalse(viewModel.HasErrors);
             Assert.IsFalse(childViewModel.HasErrors);
 
-            person.FirstName = string.Empty;
+            person.LastName = string.Empty;
 
             Assert.IsTrue(viewModel.HasErrors);
             Assert.IsTrue(childViewModel.HasErrors);
         }
         #endregion
 
-        [TestMethod]
+        [TestCase]
         public void GetAllModels()
         {
-            Person person = new Person();
-            person.FirstName = "first name";
-            person.LastName = "last name";
+            var person = new Person();
+            person.FirstName = "first_name";
+            person.LastName = "last_name";
 
             var viewModel = new TestViewModel(person);
 
@@ -544,46 +542,48 @@
             Assert.AreEqual(person, models[0]);
         }
 
-        [TestMethod]
-        public void ModelsSavedBySave()
+        [TestCase]
+        public async void ModelsSavedBySave()
         {
-            Person person = new Person();
+            var person = new Person();
             person.FirstName = "first name";
             person.LastName = "last name";
 
+            var model = person as IModel;
             var viewModel = new TestViewModel(person);
-            Assert.IsTrue(person.IsInEditSession);
+            Assert.IsTrue(model.IsInEditSession);
 
             viewModel.FirstName = "new first name";
 
-            viewModel.SaveAndCloseViewModel();
+            await viewModel.SaveAndCloseViewModel();
 
-            Assert.IsFalse(person.IsInEditSession);
+            Assert.IsFalse(model.IsInEditSession);
             Assert.AreEqual("new first name", person.FirstName);
         }
 
-        [TestMethod]
-        public void ModelsCanceledByCancel()
+        [TestCase]
+        public async void ModelsCanceledByCancel()
         {
-            Person person = new Person();
+            var person = new Person();
             person.FirstName = "first name";
             person.LastName = "last name";
 
+            var model = person as IModel;
             var viewModel = new TestViewModel(person);
-            Assert.IsTrue(person.IsInEditSession);
+            Assert.IsTrue(model.IsInEditSession);
 
             viewModel.FirstName = "new first name";
 
-            viewModel.CancelAndCloseViewModel();
+            await viewModel.CancelAndCloseViewModel();
 
-            Assert.IsFalse(person.IsInEditSession);
+            Assert.IsFalse(model.IsInEditSession);
             Assert.AreEqual("first name", person.FirstName);            
         }
 
-        [TestMethod]
+        [TestCase]
         public void IsModelRegistered_ExistingModel()
         {
-            Person person = new Person();
+            var person = new Person();
             person.FirstName = "first name";
             person.LastName = "last name";
 
@@ -592,23 +592,23 @@
             Assert.IsTrue(viewModel.IsModelRegisteredForTest("Person"));
         }
 
-        [TestMethod]
+        [TestCase]
         public void IsModelRegistered_NonExistingModel()
         {
-            Person person = new Person();
-            person.FirstName = "first name";
-            person.LastName = "last name";
+            var person = new Person();
+            person.FirstName = "first_name";
+            person.LastName = "last_name";
 
             var viewModel = new TestViewModel(person);
 
             Assert.IsFalse(viewModel.IsModelRegisteredForTest("SecondPerson"));
         }
 
-        [TestMethod]
+        [TestCase]
         public void InvalidateCommands_Manual()
         {
             bool canExecuteChangedTriggered = false;
-            ManualResetEvent canExecuteChangedEvent = new ManualResetEvent(false);
+            var canExecuteChangedEvent = new ManualResetEvent(false);
 
             var viewModel = new TestViewModel();
             viewModel.SetInvalidateCommandsOnPropertyChanged(false);
@@ -634,7 +634,7 @@
             Assert.IsFalse(canExecuteChangedTriggered);
         }
 
-        [TestMethod]
+        [TestCase]
         public void InvalidateCommands_AutomaticByPropertyChange()
         {
             bool canExecuteChangedTriggered = false;
@@ -665,7 +665,7 @@
         }
 
         #region Validation
-        //[TestMethod]
+        //[TestCase]
         //public void DeferredValidation()
         //{
         //    var viewModel = new TestViewModelWithDeferredValidation();
@@ -679,7 +679,7 @@
         //}
 
 #if !WINDOWS_PHONE
-        [TestMethod]
+        [TestCase]
         public void ModelValidation_NotifyDataErrorInfo_FieldErrors()
         {
             var testViewModel = new TestViewModel();
@@ -700,7 +700,7 @@
             Assert.IsFalse(testViewModel.HasErrors);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ModelValidation_NotifyDataErrorInfo_BusinessErrors()
         {
             var testViewModel = new TestViewModel();
@@ -721,50 +721,52 @@
             Assert.IsFalse(testViewModel.HasErrors);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ModelValidation_NotifyDataWarningInfo_FieldWarnings()
         {
             var testViewModel = new TestViewModel();
+            var validation = testViewModel as IModelValidation;
 
-            Assert.IsFalse(testViewModel.HasWarnings);
+            Assert.IsFalse(validation.HasWarnings);
 
             testViewModel.SpecialValidationModel = new SpecialValidationModel();
 
-            Assert.IsFalse(testViewModel.HasWarnings);
+            Assert.IsFalse(validation.HasWarnings);
 
             testViewModel.SpecialValidationModel.FieldWarningWhenEmpty = string.Empty;
 
-            Assert.IsTrue(testViewModel.HasWarnings);
+            Assert.IsTrue(validation.HasWarnings);
             Assert.AreNotEqual(string.Empty, ((IDataWarningInfo)testViewModel)["FieldWarningWhenEmpty"]);
 
             testViewModel.SpecialValidationModel.FieldWarningWhenEmpty = "no warning";
 
-            Assert.IsFalse(testViewModel.HasWarnings);
+            Assert.IsFalse(validation.HasWarnings);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ModelValidation_NotifyDataWarningInfo_BusinessWarnings()
         {
             var testViewModel = new TestViewModel();
+            var validation = testViewModel as IModelValidation;
 
-            Assert.IsFalse(testViewModel.HasWarnings);
+            Assert.IsFalse(validation.HasWarnings);
 
             testViewModel.SpecialValidationModel = new SpecialValidationModel();
 
-            Assert.IsFalse(testViewModel.HasWarnings);
+            Assert.IsFalse(validation.HasWarnings);
 
             testViewModel.SpecialValidationModel.BusinessRuleWarningWhenEmpty = string.Empty;
 
-            Assert.IsTrue(testViewModel.HasWarnings);
+            Assert.IsTrue(validation.HasWarnings);
             Assert.AreNotEqual(string.Empty, ((IDataWarningInfo)testViewModel).Warning);
 
             testViewModel.SpecialValidationModel.BusinessRuleWarningWhenEmpty = "no warning";
 
-            Assert.IsFalse(testViewModel.HasWarnings);
+            Assert.IsFalse(validation.HasWarnings);
         }
 #endif
 
-        [TestMethod]
+        [TestCase]
         public void ValidationToViewModel_WithoutTagFiltering()
         {
             var viewModel = new TestViewModelWithValidationTags();
@@ -777,7 +779,7 @@
             Assert.AreEqual(2, summary.FieldErrors.Count);
         }
 
-        [TestMethod]
+        [TestCase]
         public void ValidationToViewModel_NullTag()
         {
             var viewModel = new TestViewModelWithValidationTags();
@@ -790,7 +792,7 @@
             Assert.AreEqual(0, summary.FieldErrors.Count);  
         }
 
-        [TestMethod]
+        [TestCase]
         public void ValidationToViewModel_NonExistingTag()
         {
             var viewModel = new TestViewModelWithValidationTags();
@@ -803,7 +805,7 @@
             Assert.AreEqual(0, summary.FieldErrors.Count);  
         }
 
-        [TestMethod]
+        [TestCase]
         public void ValidationToViewModel_ExistingTag()
         {
             var viewModel = new TestViewModelWithValidationTags();
@@ -817,8 +819,8 @@
         }
         #endregion
 
-        [TestMethod]
-        public void CancelAfterCloseProtection()
+        [TestCase]
+        public async void CancelAfterCloseProtection()
         {
             var auditor = new TestAuditor();
             AuditingManager.RegisterAuditor(auditor);
@@ -828,7 +830,7 @@
             Assert.AreEqual(false, auditor.OnViewModelCanceledCalled);
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
 
-            vm.CancelAndCloseViewModel();
+            await vm.CancelAndCloseViewModel();
 
             Assert.AreEqual(true, auditor.OnViewModelCanceledCalled);
             Assert.AreEqual(true, auditor.OnViewModelClosedCalled);
@@ -836,14 +838,14 @@
             auditor.OnViewModelCanceledCalled = false;
             auditor.OnViewModelClosedCalled = false;
 
-            vm.CancelAndCloseViewModel();
+            await vm.CancelAndCloseViewModel();
 
             Assert.AreEqual(false, auditor.OnViewModelCanceledCalled);
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
         }
 
-        [TestMethod]
-        public void SaveAfterCloseProtection()
+        [TestCase]
+        public async void SaveAfterCloseProtection()
         {
             var auditor = new TestAuditor();
             AuditingManager.RegisterAuditor(auditor);
@@ -853,7 +855,7 @@
             Assert.AreEqual(false, auditor.OnViewModelSavedCalled);
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
 
-            vm.SaveAndCloseViewModel();
+            await vm.SaveAndCloseViewModel();
 
             Assert.AreEqual(true, auditor.OnViewModelSavedCalled);
             Assert.AreEqual(true, auditor.OnViewModelClosedCalled);
@@ -861,14 +863,14 @@
             auditor.OnViewModelSavedCalled = false;
             auditor.OnViewModelClosedCalled = false;
 
-            vm.SaveAndCloseViewModel();
+            await vm.SaveAndCloseViewModel();
 
             Assert.AreEqual(false, auditor.OnViewModelSavedCalled);
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
         }
 
-        [TestMethod]
-        public void CloseAfterCloseProtection()
+        [TestCase]
+        public async void CloseAfterCloseProtection()
         {
             var auditor = new TestAuditor();
             AuditingManager.RegisterAuditor(auditor);
@@ -877,19 +879,19 @@
 
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
 
-            vm.CloseViewModel(null);
+            await vm.CloseViewModel(null);
 
             Assert.AreEqual(true, auditor.OnViewModelClosedCalled);
 
             auditor.OnViewModelClosedCalled = false;
 
-            vm.CloseViewModel(null);
+            await vm.CloseViewModel(null);
 
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
         }
 
 #if WINDOWS_PHONE
-        [TestMethod]
+        [TestCase]
         public void Tombstoning_AutomaticRecovery()
         {
             var vm = new TestViewModel();

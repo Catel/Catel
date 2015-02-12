@@ -8,38 +8,34 @@ namespace Catel.Test
 {
     using System;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class ObjectToStringHelperFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheToStringMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsNullStringForNullInstance()
             {
                 Assert.AreEqual("null", ObjectToStringHelper.ToString(null));
             }
 
 #if !NETFX_CORE
-            [TestMethod]
+            [TestCase]
             public void ReturnsDbNullStringForDbNullInstance()
             {
                 Assert.AreEqual("dbnull", ObjectToStringHelper.ToString(DBNull.Value));
             }
 #endif
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsValueForInt()
             {
                 Assert.AreEqual("42", ObjectToStringHelper.ToString(42));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsInvariantValueForDateTime()
             {
                 var input = new DateTime(1984, 08, 01, 9, 42, 00);
@@ -49,48 +45,48 @@ namespace Catel.Test
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheToTypeStringMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsNullStringForNullInstance()
             {
                 Assert.AreEqual("null", ObjectToStringHelper.ToTypeString(null));
             }
 
 #if !NETFX_CORE
-            [TestMethod]
+            [TestCase]
             public void ReturnsDbNullStringForDbNullInstance()
             {
                 Assert.AreEqual("DBNull", ObjectToStringHelper.ToTypeString(DBNull.Value));
             }
 #endif
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTypeNameForInt()
             {
                 Assert.AreEqual("Int32", ObjectToStringHelper.ToTypeString(42));
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheToFullTypeStringMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsNullStringForNullInstance()
             {
                 Assert.AreEqual("null", ObjectToStringHelper.ToFullTypeString(null));
             }
 
 #if !NETFX_CORE
-            [TestMethod]
+            [TestCase]
             public void ReturnsDbNullStringForDbNullInstance()
             {
                 Assert.AreEqual("System.DBNull", ObjectToStringHelper.ToFullTypeString(DBNull.Value));
             }
 #endif
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTypeNameForInt()
             {
                 Assert.AreEqual("System.Int32", ObjectToStringHelper.ToFullTypeString(42));

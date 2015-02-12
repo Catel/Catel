@@ -8,6 +8,10 @@
 namespace Catel.Configuration
 {
     using System;
+    using System.IO;
+    using System.Runtime.Serialization;
+    using Data;
+    using Catel.Logging;
 
 #if PCL
     // Not supported
@@ -18,6 +22,8 @@ namespace Catel.Configuration
 #else
     using System.Configuration;
     using System.Linq;
+    using Runtime.Serialization;
+    using Path = IO.Path;
 #endif
 
     /// <summary>
@@ -28,6 +34,49 @@ namespace Catel.Configuration
     /// </summary>
     public class ConfigurationService : IConfigurationService
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+#if NET
+        private readonly ISerializationManager _serializationManager;
+
+        private readonly DynamicConfiguration _configuration;
+        private readonly string _configFilePath;
+#endif
+
+#if NET
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConfigurationService" /> class.
+        /// </summary>
+        /// <param name="serializationManager">The serialization manager.</param>
+        public ConfigurationService(ISerializationManager serializationManager)
+        {
+            Argument.IsNotNull("serializationManager", serializationManager);
+
+            _serializationManager = serializationManager;
+            _configFilePath = Path.Combine(Path.GetApplicationDataDirectory(), "configuration.xml");
+
+            try
+            {
+                if (File.Exists(_configFilePath))
+                {
+                    using (var fileStream = new FileStream(_configFilePath, FileMode.Open))
+                    {
+                        _configuration = ModelBase.Load<DynamicConfiguration>(fileStream, SerializationMode.Xml);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to load configuration, using default settings");
+            }
+
+            if (_configuration == null)
+            {
+                _configuration = new DynamicConfiguration();
+            }
+        }
+#endif
+
         #region Events
         /// <summary>
         /// Occurs when the configuration has changed.
@@ -53,8 +102,20 @@ namespace Catel.Configuration
                 return defaultValue;
             }
 
-            var value = GetValueFromStore(key);
-            return (T)StringToObjectHelper.ToRightType(typeof(T), value);
+            try
+            {
+                var value = GetValueFromStore(key);
+                if (value == null)
+                {
+                    return defaultValue;
+                }
+
+                return (T) StringToObjectHelper.ToRightType(typeof (T), value);
+            }
+            catch (Exception)
+            {
+                return defaultValue;
+            }
         }
 
         /// <summary>
@@ -78,6 +139,35 @@ namespace Catel.Configuration
         }
 
         /// <summary>
+        /// Determines whether the specified value is available.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns><c>true</c> if the specified value is available; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="key"/> is <c>null</c> or whitespace.</exception>
+        public bool IsValueAvailable(string key)
+        {
+            Argument.IsNotNullOrWhitespace("key", key);
+
+            return ValueExists(key);
+        }
+
+        /// <summary>
+        /// Initializes the value by setting the value to the <paramref name="defaultValue" /> if the value does not yet exist.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="defaultValue">The default value.</param>
+        /// <exception cref="ArgumentException">The <paramref name="key"/> is <c>null</c> or whitespace.</exception>
+        public void InitializeValue(string key, object defaultValue)
+        {
+            Argument.IsNotNullOrWhitespace("key", key);
+
+            if (!IsValueAvailable(key))
+            {
+                SetValue(key, defaultValue);
+            }
+        }
+
+        /// <summary>
         /// Determines whether the specified key value exists in the configuration.
         /// </summary>
         /// <param name="key">The key.</param>
@@ -87,13 +177,13 @@ namespace Catel.Configuration
 #if PCL || XAMARIN
             throw new NotSupportedInPlatformException();
 #elif NETFX_CORE
-            var settings = ApplicationData.Current.LocalSettings;
+            var settings = ApplicationData.Current.RoamingSettings;
             return settings.Values.ContainsKey(key);
 #elif WINDOWS_PHONE || SILVERLIGHT
             var settings = IsolatedStorageSettings.ApplicationSettings;
             return settings.Contains(key);
 #else
-            return ConfigurationManager.AppSettings.AllKeys.Contains(key);
+            return _configuration.IsConfigurationKeyAvailable(key);
 #endif
         }
 
@@ -107,13 +197,13 @@ namespace Catel.Configuration
 #if PCL || XAMARIN
             throw new NotSupportedInPlatformException();
 #elif NETFX_CORE
-            var settings = ApplicationData.Current.LocalSettings;
+            var settings = ApplicationData.Current.RoamingSettings;
             return (string)settings.Values[key];
 #elif WINDOWS_PHONE || SILVERLIGHT
             var settings = IsolatedStorageSettings.ApplicationSettings;
             return (string)settings[key];
 #else
-            return ConfigurationManager.AppSettings[key];
+            return _configuration.GetConfigurationValue<string>(key);
 #endif
         }
 
@@ -127,14 +217,20 @@ namespace Catel.Configuration
 #if PCL || XAMARIN
             throw new NotSupportedInPlatformException();
 #elif NETFX_CORE
-            var settings = ApplicationData.Current.LocalSettings;
+            var settings = ApplicationData.Current.RoamingSettings;
             settings.Values[key] = value;
 #elif WINDOWS_PHONE || SILVERLIGHT
             var settings = IsolatedStorageSettings.ApplicationSettings;
             settings[key] = value;
             settings.Save();
 #else
-            ConfigurationManager.AppSettings[key] = value;
+            if (!_configuration.IsConfigurationKeyAvailable(key))
+            {
+                _configuration.RegisterConfigurationKey(key);
+            }
+
+            _configuration.SetConfigurationValue(key, value);
+            _configuration.SaveAsXml(_configFilePath);
 #endif
         }
         #endregion

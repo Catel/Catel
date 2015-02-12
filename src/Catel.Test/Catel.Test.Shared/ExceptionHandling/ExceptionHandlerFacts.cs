@@ -9,32 +9,28 @@ namespace Catel.Test.ExceptionHandling
     using System;
     using Catel.ExceptionHandling;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class ExceptionHandlerFacts
     {
         #region Nested type: TheConstructor
-        [TestClass]
+        [TestFixture]
         public class TheConstructor
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForExceptionTypeNullParameter()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new ExceptionHandler(null, exception => { }));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForActionNullParameter()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new ExceptionHandler(typeof (Exception), null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SetTypeValueInExceptionProperty()
             {
                 var type = typeof (Exception);
@@ -46,18 +42,18 @@ namespace Catel.Test.ExceptionHandling
         #endregion
 
         #region Nested type: TheHandleMethod
-        [TestClass]
+        [TestFixture]
         public class TheHandleMethod
         {
             #region Methods
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForHandleNullParameter()
             {
                 var handler = new ExceptionHandler(typeof (Exception), exception => { });
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => handler.Handle(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void PerformsHandle()
             {
                 var originalException = new ArgumentException("achieved");

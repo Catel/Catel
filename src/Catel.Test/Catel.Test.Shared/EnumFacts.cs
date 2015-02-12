@@ -8,11 +8,7 @@ namespace Catel.Test
 {
     using System;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class EnumFacts
     {
@@ -29,10 +25,10 @@ namespace Catel.Test
             MyValue = 0
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheClearFlagsMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsEnumWithClearedFlagsForEnumWithoutFlagSet()
             {
                 var flags = Enum1.MyValue;
@@ -42,7 +38,7 @@ namespace Catel.Test
                 Assert.AreEqual(expectedFlags, clearedFlags);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsEnumWithClearedFlagsForEnumWithFlagSet()
             {
                 var flags = Enum1.MyValue | Enum1.MySecondValue;
@@ -53,38 +49,38 @@ namespace Catel.Test
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheConvertFromOtherEnumValueMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullEnumValue()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Enum<Enum2>.ConvertFromOtherEnumValue(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForNonEnumValue()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Enum<Enum2>.ConvertFromOtherEnumValue(new object()));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentExceptionForWrongEnumValue()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Enum<Enum2>.ConvertFromOtherEnumValue(Enum1.MySecondValue));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsConvertedEnumValue()
             {
                 Assert.AreEqual(Enum2.MyValue, Enum<Enum2>.ConvertFromOtherEnumValue(Enum1.MyValue));
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheGetNameMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsNameForIntEnumValue()
             {
                 var name = Enum<Enum1>.GetName(2);
@@ -93,10 +89,10 @@ namespace Catel.Test
             }
         }
         
-        [TestClass]
+        [TestFixture]
         public class TheGetNamesMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsNamesForEnum()
             {
                 var names = Enum<Enum1>.GetNames();
@@ -107,10 +103,10 @@ namespace Catel.Test
             }
         }
         
-        [TestClass]
+        [TestFixture]
         public class TheGetValuesMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsValuesForEnum()
             {
                 var values = Enum<Enum1>.GetValues();
@@ -121,10 +117,10 @@ namespace Catel.Test
             }
         }
        
-        [TestClass]
+        [TestFixture]
         public class TheIsFlagSetMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalsForEnumWithoutFlagSet()
             {
                 var flags = Enum1.MyValue;
@@ -132,7 +128,7 @@ namespace Catel.Test
                 Assert.IsFalse(Enum<Enum1>.Flags.IsFlagSet(flags, Enum1.MySecondValue));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForEnumWithFlagSet()
             {
                 var flags = Enum1.MyValue | Enum1.MySecondValue;
@@ -141,10 +137,10 @@ namespace Catel.Test
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheSetFlagMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsUpdatedFlagsForEnumWithoutFlagSet()
             {
                 var flags = Enum1.MyValue;
@@ -154,7 +150,7 @@ namespace Catel.Test
                 Assert.AreEqual(expectedFlags, actualFlags);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsUpdatedFlagsForEnumWithFlagSet()
             {
                 var flags = Enum1.MyValue | Enum1.MySecondValue;
@@ -165,10 +161,10 @@ namespace Catel.Test
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheSwapFlagMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsUpdatedFlagsForEnumWithoutFlagSet()
             {
                 var flags = Enum1.MyValue;
@@ -178,7 +174,7 @@ namespace Catel.Test
                 Assert.AreEqual(expectedFlags, actualFlags);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsUpdatedFlagsForEnumWithFlagSet()
             {
                 var flags = Enum1.MyValue | Enum1.MySecondValue;
@@ -189,10 +185,10 @@ namespace Catel.Test
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheToListMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsListForEnum()
             {
                 var list = Enum<Enum1>.ToList();
@@ -203,26 +199,26 @@ namespace Catel.Test
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheParseMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsExceptionForInvalidValue()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Enum<Enum1>.Parse("hi there"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForValidValue()
             {
                 Assert.AreEqual(Enum1.MySecondValue, Enum<Enum1>.Parse("MySecondValue"));
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheTryParseMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForInvalidValue()
             {
                 Enum1 result;
@@ -230,7 +226,7 @@ namespace Catel.Test
                 Assert.IsFalse(Enum<Enum1>.TryParse("hi there", out result));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForValidValue()
             {
                 Enum1 result;

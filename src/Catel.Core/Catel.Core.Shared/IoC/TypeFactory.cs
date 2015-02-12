@@ -10,6 +10,7 @@ namespace Catel.IoC
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using System.Threading;
     using ApiCop;
     using ApiCop.Rules;
     using Caching;
@@ -47,11 +48,6 @@ namespace Catel.IoC
 
         #region Fields
         /// <summary>
-        /// Cache containing all last used constructors for a type.
-        /// </summary>
-        private readonly Dictionary<ConstructorCacheKey, ConstructorInfo> _constructorCache = new Dictionary<ConstructorCacheKey, ConstructorInfo>();
-
-        /// <summary>
         /// Cache containing all last used constructors for a type without auto-completion.
         /// </summary>
         private readonly Dictionary<ConstructorCacheKey, ConstructorInfo> _specificConstructorCacheWithoutAutoCompletion = new Dictionary<ConstructorCacheKey, ConstructorInfo>();
@@ -67,24 +63,14 @@ namespace Catel.IoC
         private readonly Dictionary<Type, TypeMetaData> _typeConstructorsMetadata = new Dictionary<Type, TypeMetaData>();
 
         /// <summary>
-        /// Cache containing whether a type can be created using <c>Activator.CreateInstance</c>.
+        /// The service locator.
         /// </summary>
-        private readonly Dictionary<Type, bool> _canUseActivatorCache = new Dictionary<Type, bool>();
-
-        /// <summary>
-        /// The dependency resolver.
-        /// </summary>
-        private readonly IDependencyResolver _dependencyResolver;
+        private readonly IServiceLocator _serviceLocator;
 
         /// <summary>
         /// The current type request path.
         /// </summary>
         private TypeRequestPath _currentTypeRequestPath;
-
-        /// <summary>
-        /// The lock object.
-        /// </summary>
-        private readonly object _lockObject = new object();
         #endregion
 
         #region Constructors
@@ -96,18 +82,14 @@ namespace Catel.IoC
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeFactory" /> class.
         /// </summary>
-        /// <param name="dependencyResolver">The dependency resolver.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="dependencyResolver"/> is <c>null</c>.</exception>
-        public TypeFactory(IDependencyResolver dependencyResolver)
+        /// <param name="serviceLocator">The service locator.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="serviceLocator"/> is <c>null</c>.</exception>
+        public TypeFactory(IServiceLocator serviceLocator)
         {
-            Argument.IsNotNull("dependencyResolver", dependencyResolver);
+            Argument.IsNotNull("serviceLocator", serviceLocator);
 
-            _dependencyResolver = dependencyResolver;
-            var serviceLocator = _dependencyResolver.TryResolve<IServiceLocator>();
-            if (serviceLocator != null)
-            {
-                serviceLocator.TypeRegistered += OnServiceLocatorTypeRegistered;
-            }
+            _serviceLocator = serviceLocator;
+            _serviceLocator.TypeRegistered += OnServiceLocatorTypeRegistered;
 
             // Note: this will cause memory leaks (TypeCache will keep this class alive), but it's an acceptable "loss"
             TypeCache.AssemblyLoaded += OnAssemblyLoaded;
@@ -180,7 +162,7 @@ namespace Catel.IoC
         /// <param name="typeRequestInfoForTypeJustConstructed">The type request info for type just constructed.</param>
         private void CloseCurrentTypeIfRequired(TypeRequestInfo typeRequestInfoForTypeJustConstructed)
         {
-            lock (_lockObject)
+            lock (_serviceLocator)
             {
                 if (_currentTypeRequestPath != null)
                 {
@@ -202,7 +184,7 @@ namespace Catel.IoC
         /// <param name="typeRequestInfoForTypeJustConstructed">The type request info.</param>
         private void CompleteTypeRequestPathIfRequired(TypeRequestInfo typeRequestInfoForTypeJustConstructed)
         {
-            lock (_lockObject)
+            lock (_serviceLocator)
             {
                 if (_currentTypeRequestPath != null)
                 {
@@ -234,8 +216,10 @@ namespace Catel.IoC
 
             Log.Debug("Initializing type '{0}' after construction", objectType);
 
+            // TODO: Consider to cache for performance
             var dependencyResolverManager = DependencyResolverManager.Default;
-            dependencyResolverManager.RegisterDependencyResolverForInstance(obj, _dependencyResolver);
+            var dependencyResolver = _serviceLocator.ResolveType<IDependencyResolver>();
+            dependencyResolverManager.RegisterDependencyResolverForInstance(obj, dependencyResolver);
 
             Log.Debug("Injecting properties into type '{0}' after construction", objectType);
 
@@ -248,7 +232,7 @@ namespace Catel.IoC
 
                 try
                 {
-                    var dependency = _dependencyResolver.Resolve(injectAttribute.Type, injectAttribute.Tag);
+                    var dependency = _serviceLocator.ResolveType(injectAttribute.Type, injectAttribute.Tag);
                     propertyInfo.SetValue(obj, dependency, null);
                 }
                 catch (Exception ex)
@@ -285,7 +269,7 @@ namespace Catel.IoC
                 parameters = new object[] { };
             }
 
-            lock (_lockObject)
+            lock (_serviceLocator)
             {
                 TypeRequestInfo typeRequestInfo = null;
 
@@ -349,7 +333,7 @@ namespace Catel.IoC
                             constructorCache[constructorCacheKey] = constructor;
 
                             // Only update the rule when using a constructor for the first time, not when using it from the cache
-                            ApiCop.UpdateRule<TooManyDependenciesApiCopRule>("TypeFactory.LimitDependencyInjection", 
+                            ApiCop.UpdateRule<TooManyDependenciesApiCopRule>("TypeFactory.LimitDependencyInjection",
                                 x => x.SetNumberOfDependenciesInjected(typeToConstruct, constructor.GetParameters().Count()));
 
                             return instanceCreatedWithInjection;
@@ -405,7 +389,7 @@ namespace Catel.IoC
         /// <returns>The <see cref="TypeMetaData"/>.</returns>
         private TypeMetaData GetTypeMetaData(Type type)
         {
-            lock (_lockObject)
+            lock (_serviceLocator)
             {
                 if (!_typeConstructorsMetadata.ContainsKey(type))
                 {
@@ -461,7 +445,7 @@ namespace Catel.IoC
                         var parameterToResolve = ctorParameters[j];
                         var parameterTypeToResolve = parameterToResolve.ParameterType;
 
-                        if (!_dependencyResolver.CanResolve(parameterTypeToResolve))
+                        if (!_serviceLocator.IsTypeRegistered(parameterTypeToResolve))
                         {
                             Log.Debug("Constructor is not valid because parameter '{0}' cannot be resolved from the dependency resolver", parameterToResolve.Name);
 
@@ -553,7 +537,7 @@ namespace Catel.IoC
                 var ctorParameters = constructor.GetParameters();
                 for (int i = parameters.Length; i < ctorParameters.Length; i++)
                 {
-                    var ctorParameterValue = _dependencyResolver.Resolve(ctorParameters[i].ParameterType);
+                    var ctorParameterValue = _serviceLocator.ResolveType(ctorParameters[i].ParameterType);
                     finalParameters.Add(ctorParameterValue);
                 }
 
@@ -591,7 +575,7 @@ namespace Catel.IoC
             {
                 // Real exceptions bubble up, otherwise return null
                 Log.Error(ex, "Failed to instantiate type '{0}', but this was an unexpected error", typeToConstruct.FullName);
-                throw ex.InnerException ?? ex;
+                throw;
             }
 
             Log.Debug("Failed to create instance using dependency injection for type '{0}' using constructor '{1}'",
@@ -608,14 +592,24 @@ namespace Catel.IoC
         /// </summary>
         public void ClearCache()
         {
-            lock (_lockObject)
-            {
-                // Note that we don't clear the constructor metadata cache, constructors on types normally don't change during an
-                // application lifetime
+            // Note that we don't clear the constructor metadata cache, constructors on types normally don't change during an
+            // application lifetime
 
-                _constructorCache.Clear();
-                _specificConstructorCacheWithoutAutoCompletion.Clear();
-                _specificConstructorCacheWithAutoCompletion.Clear();
+            // Clear cache isn't really that important, it's better to prevent deadlocks. How can a deadlock occur? If thread x is creating 
+            // a type and loads an assembly, but thread y is also loading an assembly. Thread x will lock because it's creating the type, 
+            // thread y will lock because it wants to clear the cache because new types were added. In that case ignore clearing the cache
+
+            if (Monitor.TryEnter(_serviceLocator))
+            {
+                try
+                {
+                    _specificConstructorCacheWithoutAutoCompletion.Clear();
+                    _specificConstructorCacheWithAutoCompletion.Clear();
+                }
+                finally
+                {
+                    Monitor.Exit(_serviceLocator);
+                }
             }
 
             //Log.Debug("Cleared type constructor cache");
@@ -799,14 +793,14 @@ namespace Catel.IoC
             foreach (var parameter in parameters)
             {
                 var parameterType = parameter.ParameterType;
-                if (parameterType == typeof (Object))
+                if (parameterType == typeof(Object))
                 {
                     counter++;
                     continue;
                 }
 
 #if !XAMARIN
-                if (parameterType == typeof (DynamicObject))
+                if (parameterType == typeof(DynamicObject))
                 {
                     counter++;
                     continue;

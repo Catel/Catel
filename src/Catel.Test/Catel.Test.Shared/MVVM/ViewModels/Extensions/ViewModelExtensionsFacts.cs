@@ -11,15 +11,11 @@ namespace Catel.Test.MVVM.ViewModels
     using Catel.Data;
     using Catel.MVVM;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class ViewModelExtensionsFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheIsValidationSummaryOutdatedMethod
         {
             public class ValidatingViewModel : ViewModelBase
@@ -34,7 +30,7 @@ namespace Catel.Test.MVVM.ViewModels
                 public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), null);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsFalseForNotOutdatedValidationContext()
             {
                 var vm = new ValidatingViewModel();
@@ -51,14 +47,15 @@ namespace Catel.Test.MVVM.ViewModels
 #endif
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsTrueForOutdatedValidationContext()
             {
                 var vm = new ValidatingViewModel();
 
                 vm.FirstName = "some value";
 
-                var lastUpdated = vm.ValidationContext.LastModifiedTicks;
+                var validation = vm as IModelValidation;
+                var lastUpdated = validation.ValidationContext.LastModifiedTicks;
 
                 vm.FirstName = null;
 

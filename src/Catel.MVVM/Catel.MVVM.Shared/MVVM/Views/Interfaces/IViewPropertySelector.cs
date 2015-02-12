@@ -21,6 +21,13 @@ namespace Catel.MVVM.Views
     public interface IViewPropertySelector
     {
         /// <summary>
+        /// Adds the property to subscribe to.
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <param name="targetViewType">Type of the target view. If <c>null</c>, all target views will subscribe to this property.</param>
+        void AddPropertyToSubscribe(string propertyName, Type targetViewType);
+
+        /// <summary>
         /// Determines whether all view properties must be subscribed for this type.
         /// </summary>
         /// <param name="targetViewType">Type of the target view.</param>

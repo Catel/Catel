@@ -18,18 +18,14 @@ namespace Catel.Test.Runtime.Serialization
     using Catel.Runtime.Serialization;
     using Catel.Runtime.Serialization.Xml;
     using Catel.Test.Data;
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class XmlSerializerFacts
     {
-        [TestClass]
+        [TestFixture]
         public class BasicSerializationFacts
         {
-            [TestMethod]
+            [TestCase]
             public void XmlSerializationLevel1()
             {
                 var originalObject = ModelBaseTestHelper.CreateIniEntryObject();
@@ -38,7 +34,7 @@ namespace Catel.Test.Runtime.Serialization
                 Assert.AreEqual(originalObject, clonedObject);
             }
 
-            [TestMethod]
+            [TestCase]
             public void XmlSerializationLevel2()
             {
                 var originalObject = ModelBaseTestHelper.CreateIniFileObject();
@@ -47,7 +43,7 @@ namespace Catel.Test.Runtime.Serialization
                 Assert.AreEqual(originalObject, clonedObject);
             }
 
-            [TestMethod]
+            [TestCase]
             public void XmlSerializationLevel3()
             {
                 var originalObject = ModelBaseTestHelper.CreateComputerSettingsObject();
@@ -56,7 +52,7 @@ namespace Catel.Test.Runtime.Serialization
                 Assert.AreEqual(originalObject, clonedObject);
             }
 
-            [TestMethod]
+            [TestCase]
             public void XmlSerializationComplexGraphWithInheritance()
             {
                 var originalObject = ModelBaseTestHelper.CreateHierarchicalGraphWithInheritance();
@@ -65,7 +61,7 @@ namespace Catel.Test.Runtime.Serialization
                 Assert.AreEqual(originalObject, clonedObject);
             }
 
-            [TestMethod]
+            [TestCase]
             public void XmlSerializationWithXmlIgnore()
             {
                 var obj = new ObjectWithXmlMappings();
@@ -75,7 +71,7 @@ namespace Catel.Test.Runtime.Serialization
                 Assert.IsFalse(xml.Contains("IgnoredProperty"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void XmlSerializationWithXmlMappings()
             {
                 var originalObject = ModelBaseTestHelper.CreateComputerSettingsWithXmlMappingsObject();
@@ -84,7 +80,7 @@ namespace Catel.Test.Runtime.Serialization
                 Assert.AreEqual(originalObject, clonedObject);
             }
 
-            [TestMethod]
+            [TestCase]
             public void XmlSerializationWithCustomTypes()
             {
                 // Create object
@@ -99,7 +95,7 @@ namespace Catel.Test.Runtime.Serialization
             }
 
 #if NET
-            [TestMethod]
+            [TestCase]
             public void XmlSerializationWithPrivateMembers()
             {
                 var originalObject = new ObjectWithPrivateMembers("My private member");
@@ -111,7 +107,7 @@ namespace Catel.Test.Runtime.Serialization
             }
 #endif
 
-            [TestMethod]
+            [TestCase]
             public void ReadXml()
             {
                 // Should always return null
@@ -119,7 +115,7 @@ namespace Catel.Test.Runtime.Serialization
                 Assert.AreEqual(null, ((IXmlSerializable)iniFile).GetSchema());
             }
 
-            [TestMethod]
+            [TestCase]
             public void RespectsTheXmlRootAndXmlElementAttribute()
             {
                 var person = new ModelBaseFacts.Person("Geert", "van", "Horrik", 42);
@@ -146,7 +142,7 @@ namespace Catel.Test.Runtime.Serialization
                 Assert.AreEqual("Horrik", deserializedPerson.LastName);
             }
 
-            [TestMethod]
+            [TestCase]
             public void RespectsTheXmlAttributeAttribute()
             {
                 var person = new ModelBaseFacts.Person("Geert", "van", "Horrik", 42);
@@ -163,7 +159,7 @@ namespace Catel.Test.Runtime.Serialization
                 Assert.AreEqual(42, deserializedPerson.Age);
             }
 
-            [TestMethod]
+            [TestCase]
             public void RespectsTheXmlIgnoreAttribute()
             {
                 var person = new ModelBaseFacts.Person("Geert", "van", "Horrik", 42);
@@ -175,7 +171,7 @@ namespace Catel.Test.Runtime.Serialization
                 Assert.IsNull(personElement.Element("FullName"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void SupportsNestedHierarchySerialization()
             {
                 LogManager.AddDebugListener();
@@ -202,7 +198,7 @@ namespace Catel.Test.Runtime.Serialization
                 Assert.AreEqual("myChild", newRoot.Items[0].Name);
             }
 
-            [TestMethod]
+            [TestCase]
             public void CanSerializeAndDeserializeComplexHierarchies()
             {
                 var complexHierarchy = ComplexSerializationHierarchy.CreateComplexHierarchy();
@@ -213,7 +209,7 @@ namespace Catel.Test.Runtime.Serialization
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class AdvancedSerializationFacts
         {
             public abstract class AbstractBase : ModelBase
@@ -259,7 +255,7 @@ namespace Catel.Test.Runtime.Serialization
                 public static readonly PropertyData ItemsProperty = RegisterProperty("Items", typeof(ObservableCollection<AbstractBase>), null);
             }
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlySerializesCustomizedModels()
             {
                 var testModel = new TestModel();
@@ -289,7 +285,7 @@ namespace Catel.Test.Runtime.Serialization
                 Assert.AreEqual(null, clonedModel.GetValue(TestModel.ExcludedProtectedCatelPropertyProperty.Name));
             }
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlySerializesToXmlString()
             {
                 var testModel = new TestModel();
@@ -308,7 +304,7 @@ namespace Catel.Test.Runtime.Serialization
                 Assert.IsFalse(xml.Contains("Excluded"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlyHandlesSerializationOfCollectionsWithAbstractClasses()
             {
                 var collection = new ContainerClass();
@@ -319,7 +315,7 @@ namespace Catel.Test.Runtime.Serialization
                 Assert.AreEqual(collection, clonedGraph);
             }
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlyHandlesNullValues()
             {
                 var testModel = new TestModel();
@@ -337,7 +333,7 @@ namespace Catel.Test.Runtime.Serialization
             }
 
             // Note: Disabled because it has too much impact on other tests
-            //[TestMethod]
+            //[TestCase]
             //public void CorrectlyHandlesCustomizedValuesDuringSerialization()
             //{
             //    var testModel = new TestModel();
@@ -383,7 +379,7 @@ namespace Catel.Test.Runtime.Serialization
             //    Assert.AreEqual("AfterDeserializedMember", clonedModel.IncludedCatelProperty);
             //}
 
-            [TestMethod]
+            [TestCase]
             public void CorrectlyHandlesSameInstancesInGraph()
             {
                 var graph = SerializationTestHelper.CreateComplexCircularTestModelGraph();
@@ -395,10 +391,10 @@ namespace Catel.Test.Runtime.Serialization
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheWarmupMethod
         {
-            [TestMethod]
+            [TestCase]
             public void WarmsUpSpecificTypes()
             {
                 var typesToWarmup = new Type[] { typeof(CircularTestModel), typeof(TestModel) };
@@ -409,7 +405,7 @@ namespace Catel.Test.Runtime.Serialization
                     () => serializer.Warmup(typesToWarmup),
                     () =>
                     {
-                        TypeCache.InitializeTypes(false);
+                        TypeCache.InitializeTypes();
 
                         ConsoleHelper.Write("TypeCache contains {0} items", TypeCache.GetTypes().Count());
                         ConsoleHelper.Write("TypeCache contains {0} ModelBase items", TypeCache.GetTypes(x => typeof(ModelBase).IsAssignableFromEx(x)).Count());
@@ -419,7 +415,7 @@ namespace Catel.Test.Runtime.Serialization
                 // This unit test is written to easily test this functionality though.
             }
 
-            [TestMethod]
+            [TestCase]
             public void WarmsUpAllTypes()
             {
                 var serializer = SerializationFactory.GetXmlSerializer();
@@ -428,7 +424,7 @@ namespace Catel.Test.Runtime.Serialization
                     () => serializer.Warmup(),
                     () =>
                     {
-                        TypeCache.InitializeTypes(false);
+                        TypeCache.InitializeTypes();
 
                         ConsoleHelper.Write("TypeCache contains {0} items", TypeCache.GetTypes().Count());
                         ConsoleHelper.Write("TypeCache contains {0} ModelBase items", TypeCache.GetTypes(x => typeof(ModelBase).IsAssignableFromEx(x)).Count());

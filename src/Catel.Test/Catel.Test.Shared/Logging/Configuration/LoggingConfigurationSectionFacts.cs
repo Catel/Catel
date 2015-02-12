@@ -9,22 +9,19 @@
 namespace Catel.Test.Logging.Configuration
 {
     using System.Configuration;
+    using System.IO;
     using System.Linq;
     using Catel.Configuration;
     using Catel.IoC;
     using Catel.Logging;
+    using Catel.Reflection;
+    using NUnit.Framework;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
-
-    [TestClass]
+    [TestFixture]
     public class IoLoggingConfigurationSectionFacts
     {
         #region Methods
-        [TestMethod]
+        [TestCase]
         public void LoadSectionFromConfigurationFileTest()
         {
             var openExeConfiguration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
@@ -34,7 +31,7 @@ namespace Catel.Test.Logging.Configuration
             Assert.AreNotEqual(0, configurationSection.LogListenerConfigurationCollection.Count);
         }
 
-        [TestMethod]
+        [TestCase]
         public void InitializeLogListenersFromConfiguration()
         {
             var openExeConfiguration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
@@ -51,7 +48,10 @@ namespace Catel.Test.Logging.Configuration
             Assert.IsTrue(fileLogListener.IsInfoEnabled);
             Assert.IsTrue(fileLogListener.IsWarningEnabled);
             Assert.IsTrue(fileLogListener.IsErrorEnabled);
-            Assert.AreEqual(fileLogListener.FilePath, "CatelLogging.txt");
+
+            var assembly = typeof(FileLogListener).Assembly;
+            var appDataDirectory = Catel.IO.Path.GetApplicationDataDirectory(assembly.Company(), assembly.Product());
+            Assert.AreEqual(fileLogListener.FilePath, Path.Combine(appDataDirectory, "CatelLogging.txt.log"));
         }
         #endregion
     }

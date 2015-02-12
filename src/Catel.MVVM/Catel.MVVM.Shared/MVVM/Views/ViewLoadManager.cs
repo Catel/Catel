@@ -10,11 +10,7 @@ namespace Catel.MVVM.Views
     using System.Collections.Generic;
     using System.Threading;
 
-#if NETFX_CORE
-    using global::Windows.UI.Xaml;
-#endif
-
-#if !NET && !XAMARIN
+#if SILVERLIGHT
     using System.Windows;
 #endif
 
@@ -72,16 +68,23 @@ namespace Catel.MVVM.Views
     ///   <item><description>LayoutUpdated (UC 3).</description></item>
     /// </list>
     /// </summary>
+    /// <remarks>
+    /// To get the best performance, this class will only execute logic on silverlight systems. All other systems correctly
+    /// support the loaded event.
+    /// </remarks>
     public class ViewLoadManager : IViewLoadManager
     {
         #region Fields
-        private readonly List<WeakViewInfo> _viewElements = new List<WeakViewInfo>();
-        private readonly Stack<WeakViewInfo> _loadedStack = new Stack<WeakViewInfo>();
+#if SILVERLIGHT
+        private readonly List<ViewStack> _viewStacks = new List<ViewStack>();
+        private readonly Dictionary<FrameworkElement, UninitializedViewInfo> _uninitializedViews = new Dictionary<FrameworkElement, UninitializedViewInfo>();
+#else
+        private readonly List<WeakViewInfo> _views = new List<WeakViewInfo>();
+#endif
 
         private ViewLoadStateEvent _lastInvokedViewLoadStateEvent;
 
         private readonly Timer _cleanUpTimer;
-        private readonly object _lock = new object();
         #endregion
 
         #region Constructors
@@ -94,53 +97,7 @@ namespace Catel.MVVM.Views
         }
         #endregion
 
-        #region IViewLoadedManager Members
-        /// <summary>
-        /// Adds the view load state.
-        /// </summary>
-        /// <param name="viewLoadState">The view load state.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewLoadState" /> is <c>null</c>.</exception>
-        public void AddView(IViewLoadState viewLoadState)
-        {
-            Argument.IsNotNull("viewLoadState", viewLoadState);
-
-            var elementInfo = new WeakViewInfo(viewLoadState);
-
-            elementInfo.Loaded += OnViewLoaded;
-            elementInfo.Unloaded += OnViewUnloaded;
-
-            lock (_lock)
-            {
-                _viewElements.Add(elementInfo);
-            }
-        }
-
-        /// <summary>
-        /// Cleans up the dead links.
-        /// </summary>
-        public void CleanUp()
-        {
-            lock (_lock)
-            {
-                for (int i = 0; i < _viewElements.Count; i++)
-                {
-                    var viewInfo = _viewElements[i];
-                    if (!viewInfo.IsAlive)
-                    {
-                        viewInfo.Loaded -= OnViewLoaded;
-                        viewInfo.Unloaded -= OnViewUnloaded;
-
-#if NETFX_CORE || SILVERLIGHT
-                        // Note: always unsubscribe LayoutUpdated
-                        viewInfo.LayoutUpdated -= OnViewLayoutUpdated;
-#endif
-
-                        _viewElements.RemoveAt(i--);
-                    }
-                }
-            }
-        }
-
+        #region Events
         /// <summary>
         /// Occurs when any of the subscribed views are about to be loaded.
         /// </summary>
@@ -163,82 +120,183 @@ namespace Catel.MVVM.Views
         #endregion
 
         #region Methods
-        private void OnViewLoaded(object sender, EventArgs e)
+        /// <summary>
+        /// Adds the view load state.
+        /// </summary>
+        /// <param name="viewLoadState">The view load state.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewLoadState" /> is <c>null</c>.</exception>
+        public void AddView(IViewLoadState viewLoadState)
         {
-            var viewInfo = (WeakViewInfo)sender;
+            Argument.IsNotNull("viewLoadState", viewLoadState);
 
-#if NETFX_CORE || SILVERLIGHT
-            viewInfo.LayoutUpdated += OnViewLayoutUpdated;
-#endif
-
-            // Loaded is always called first on the inner child, add it to the stack
-            lock (_loadedStack)
+#if SILVERLIGHT
+            var frameworkElement = viewLoadState.View as FrameworkElement;
+            if (frameworkElement != null)
             {
-                var view = viewInfo.View;
+                _uninitializedViews[frameworkElement] = new UninitializedViewInfo(viewLoadState);
 
-                _loadedStack.Push(viewInfo);
-
-#if NETFX_CORE || SILVERLIGHT
-                view.Dispatch(() => ((FrameworkElement)view).InvalidateMeasure());
+                frameworkElement.Loaded += OnFrameworkElementLoaded;
+            }
 #else
-                // In WPF, handle view as loaded immediately
-                HandleViewLoaded(view);
+            var viewInfo = new WeakViewInfo(viewLoadState.View);
+            viewInfo.Loaded += OnViewInfoLoaded;
+            viewInfo.Unloaded += OnViewInfoUnloaded;
+
+            _views.Add(viewInfo);
 #endif
-            }
         }
 
-        private void OnViewUnloaded(object sender, EventArgs e)
+#if SILVERLIGHT
+        private void OnFrameworkElementLoaded(object sender, EventArgs e)
         {
-            var viewInfo = (WeakViewInfo)sender;
+            var frameworkElement = (FrameworkElement)sender;
 
-            // Loaded is always called first on the inner child, add it to the stack
-            lock (_loadedStack)
+            frameworkElement.Loaded -= OnFrameworkElementLoaded;
+
+            var uninitializedViewInfo = _uninitializedViews[frameworkElement];
+
+            AddViewAfterLoaded(uninitializedViewInfo);
+
+            _uninitializedViews.Remove(frameworkElement);
+        }
+
+        private void AddViewAfterLoaded(UninitializedViewInfo uninitializedViewInfo)
+        {
+            var isTopViewStack = true;
+
+            var viewLoadState = uninitializedViewInfo.ViewLoadState;
+            var view = viewLoadState.View;
+            ViewStack viewStack = null;
+
+            var parent = view.FindParentByPredicate(x => x is IView) as FrameworkElement;
+            if (parent != null)
             {
-                var view = viewInfo.View;
-
-                _loadedStack.Push(viewInfo);
-
-                // Yes, invoke events right after each other
-                InvokeViewLoadEvent(view, ViewLoadStateEvent.Unloading);
-                InvokeViewLoadEvent(view, ViewLoadStateEvent.Unloaded);
-            }
-        }
-
-#if NETFX_CORE || SILVERLIGHT
-        private void OnViewLayoutUpdated(object sender, EventArgs e)
-        {
-            var viewInfo = (WeakViewInfo)sender;
-
-            HandleViewLoaded(viewInfo.View);
-        }
-#endif
-
-        private void HandleViewLoaded(IView view)
-        {
-            lock (_lock)
-            {
-                if (_loadedStack.Count > 0)
+                if (_uninitializedViews.ContainsKey(parent))
                 {
-                    var lastLoadedViewInfo = _loadedStack.Peek();
-                    if (ReferenceEquals(view, lastLoadedViewInfo.View))
+                    // We have a different uninitialized view that is the parent
+                    var uninitializedParent = _uninitializedViews[parent];
+                    uninitializedParent.ViewStack.AddChild(uninitializedViewInfo.ViewStack, uninitializedParent.ViewStack);
+
+                    isTopViewStack = false;
+                }
+                else
+                {
+                    // We are now listed to be added to the visual tree
+                    foreach (var existingViewStack in _viewStacks)
                     {
-                        // We have reach the top control, now iterate the stack
-                        while (_loadedStack.Count > 0)
+                        if (existingViewStack.ContainsView((IView)parent))
                         {
-                            var innerViewInfo = _loadedStack.Pop();
-                            var innerView = innerViewInfo.View;
+                            var viewAsFrameworkElement = view as FrameworkElement;
+                            if (viewAsFrameworkElement != null && _uninitializedViews.ContainsKey(viewAsFrameworkElement))
+                            {
+                                // This happens when we are called from OnFrameworkElementLoaded but out parent wasn't updated yet
+                                existingViewStack.AddChild(_uninitializedViews[viewAsFrameworkElement].ViewStack, existingViewStack);
+                            }
+                            else
+                            {
+                                existingViewStack.AddChild(view, existingViewStack);
+                            }
+                            
 
-#if NETFX_CORE || SILVERLIGHT
-                            innerViewInfo.LayoutUpdated -= OnViewLayoutUpdated;
-#endif
-
-                            // Yes, invoke events right after each other
-                            InvokeViewLoadEvent(innerView, ViewLoadStateEvent.Loading);
-                            InvokeViewLoadEvent(innerView, ViewLoadStateEvent.Loaded);
+                            viewStack = existingViewStack;
+                            isTopViewStack = false;
+                            break;
                         }
                     }
                 }
             }
+
+            if (isTopViewStack)
+            {
+                var topViewStack = uninitializedViewInfo.ViewStack;
+
+                topViewStack.ViewStackLoaded += OnViewStackLoaded;
+                topViewStack.ViewStackUnloaded += OnViewStackUnloaded;
+
+                _viewStacks.Add(topViewStack);
+
+                viewStack = topViewStack;
+            }
+
+            if (viewStack != null)
+            {
+                viewStack.NotifyThatParentIsReadyToAcceptLoadedMessages();
+            }
+        }
+
+        private void OnViewStackLoaded(object sender, ViewStackPartEventArgs e)
+        {
+            RaiseLoaded(e.View);
+        }
+
+        private void OnViewStackUnloaded(object sender, ViewStackPartEventArgs e)
+        {
+            RaiseUnloaded(e.View);
+        }
+#else
+        private void OnViewInfoLoaded(object sender, EventArgs e)
+        {
+            // Just forward
+            RaiseLoaded(((WeakViewInfo)sender).View);
+        }
+
+        private void OnViewInfoUnloaded(object sender, EventArgs e)
+        {
+            // Just forward
+            RaiseUnloaded(((WeakViewInfo)sender).View);
+        }
+#endif
+
+        /// <summary>
+        /// Cleans up the dead links.
+        /// </summary>
+        public void CleanUp()
+        {
+#if SILVERLIGHT
+            for (int i = 0; i < _viewStacks.Count; i++)
+            {
+                var viewStack = _viewStacks[i];
+                if (viewStack.IsOutdated)
+                {
+                    viewStack.ViewStackLoaded -= OnViewStackLoaded;
+                    viewStack.ViewStackUnloaded -= OnViewStackUnloaded;
+
+                    viewStack.Dispose();
+
+                    _viewStacks.RemoveAt(i--);
+                }
+                else
+                {
+                    viewStack.CheckForOutdatedChildren();
+                }
+            }
+#else
+            for (int i = 0; i < _views.Count; i++)
+            {
+                var view = _views[i];
+                if (!view.IsAlive)
+                {
+                    view.Loaded -= OnViewInfoLoaded;
+                    view.Unloaded -= OnViewInfoUnloaded;
+
+                    _views.RemoveAt(i--);
+                }
+            }
+#endif
+        }
+
+        private void RaiseLoaded(IView view)
+        {
+            // Yes, invoke events right after each other
+            InvokeViewLoadEvent(view, ViewLoadStateEvent.Loading);
+            InvokeViewLoadEvent(view, ViewLoadStateEvent.Loaded);
+        }
+
+        private void RaiseUnloaded(IView view)
+        {
+            // Yes, invoke events right after each other
+            InvokeViewLoadEvent(view, ViewLoadStateEvent.Unloading);
+            InvokeViewLoadEvent(view, ViewLoadStateEvent.Unloaded);
         }
 
         /// <summary>
@@ -259,7 +317,7 @@ namespace Catel.MVVM.Views
                 return;
             }
 
-            EventHandler<ViewLoadEventArgs> handler = null;
+            EventHandler<ViewLoadEventArgs> handler;
 
             switch (viewLoadStateEvent)
             {
@@ -291,5 +349,21 @@ namespace Catel.MVVM.Views
             _lastInvokedViewLoadStateEvent = viewLoadStateEvent;
         }
         #endregion
+
+#if SILVERLIGHT
+        private class UninitializedViewInfo
+        {
+            public UninitializedViewInfo(IViewLoadState viewLoadState)
+            {
+                ViewLoadState = viewLoadState;
+
+                ViewStack = new ViewStack(viewLoadState.View, false);
+            }
+
+            public IViewLoadState ViewLoadState { get; private set; }
+
+            public ViewStack ViewStack { get; private set; }
+        }
+#endif
     }
 }

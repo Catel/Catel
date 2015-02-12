@@ -31,7 +31,7 @@ namespace Catel.ApiCop
         /// </summary>
         static ApiCopManager()
         {
-            IgnoredRules = new List<string>();
+            IgnoredRules = new HashSet<string>();
 
             IsEnabled = Debugger.IsAttached;
         }
@@ -47,7 +47,7 @@ namespace Catel.ApiCop
         /// Gets the ignored rules.
         /// </summary>
         /// <value>The ignored rules.</value>
-        public static List<string> IgnoredRules { get; private set; }
+        public static HashSet<string> IgnoredRules { get; private set; }
         #endregion
 
         #region Methods

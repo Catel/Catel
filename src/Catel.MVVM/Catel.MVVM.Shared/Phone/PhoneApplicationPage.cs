@@ -26,7 +26,7 @@ namespace Catel.Phone.Controls
 
         private event EventHandler<EventArgs> _viewLoaded;
         private event EventHandler<EventArgs> _viewUnloaded;
-        private event EventHandler<EventArgs> _viewDataContextChanged;
+        private event EventHandler<DataContextChangedEventArgs> _viewDataContextChanged;
         #endregion
 
         #region Constructors
@@ -75,7 +75,7 @@ namespace Catel.Phone.Controls
                 OnUnloaded(e);
             };
 
-            this.AddDataContextChangedHandler((sender, e) => _viewDataContextChanged.SafeInvoke(this));
+            this.AddDataContextChangedHandler((sender, e) => _viewDataContextChanged.SafeInvoke(this, new DataContextChangedEventArgs(e.OldValue, e.NewValue)));
         }
         #endregion
 
@@ -152,7 +152,7 @@ namespace Catel.Phone.Controls
         /// <summary>
         /// Occurs when the data context has changed.
         /// </summary>
-        event EventHandler<EventArgs> IView.DataContextChanged
+        event EventHandler<DataContextChangedEventArgs> IView.DataContextChanged
         {
             add { _viewDataContextChanged += value; }
             remove { _viewDataContextChanged -= value; }

@@ -10,6 +10,7 @@
 
 namespace System.Reflection
 {
+    [Flags]
     public enum BindingFlags
     {
         CreateInstance = 0x200,

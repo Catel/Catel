@@ -12,25 +12,21 @@ namespace Catel.Test.MVVM
     using Views;
     using Test.ViewModels;
 
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
     public class UrlLocatorFacts
     {
-        [TestClass]
+        [TestFixture]
         public class TheRegisterMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullTypeToResolve()
             {
                 var urlLocator = new UrlLocator();
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => urlLocator.Register(null, "/Views/PersonView.xaml"));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullResolvedType()
             {
                 var urlLocator = new UrlLocator();
@@ -38,7 +34,7 @@ namespace Catel.Test.MVVM
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => urlLocator.Register(typeof(NoNamingConventionViewModel), string.Empty));
             }
 
-            [TestMethod]
+            [TestCase]
             public void RegistersNonExistingViewType()
             {
                 var urlLocator = new UrlLocator();
@@ -51,7 +47,7 @@ namespace Catel.Test.MVVM
                 Assert.AreEqual("/App.xaml", resolvedUri);
             }
 
-            [TestMethod]
+            [TestCase]
             public void OverwritesExistingViewType()
             {
                 var urlLocator = new UrlLocator();
@@ -63,17 +59,17 @@ namespace Catel.Test.MVVM
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheResolveUrlMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ThrowsArgumentNullExceptionForNullViewType()
             {
                 var urlLocator = new UrlLocator();
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => urlLocator.ResolveUrl(null));
             }
 
-            [TestMethod]
+            [TestCase]
             public void ReturnsViewForViewEndingWithViewModel()
             {
                 var urlLocator = new UrlLocator();
@@ -83,7 +79,7 @@ namespace Catel.Test.MVVM
                 Assert.AreEqual("/Views/Person.xaml", resolvedType);
             }
 
-            [TestMethod]
+            [TestCase]
             public void ResolvesViewFromCache()
             {
                 var urlLocator = new UrlLocator();
@@ -102,10 +98,10 @@ namespace Catel.Test.MVVM
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TheClearCacheMethod
         {
-            [TestMethod]
+            [TestCase]
             public void ClearsTheCache()
             {
                 var urlLocator = new UrlLocator();

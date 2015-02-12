@@ -147,9 +147,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Called when the associated object is loaded.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnAssociatedObjectLoaded(object sender, EventArgs e)
+        protected override void OnAssociatedObjectLoaded()
         {
             AssociatedObject.AddHandler(UIElement.MouseLeftButtonDownEvent, new MouseButtonEventHandler(OnMouseButtonDown), true);
 
@@ -179,9 +177,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Called when the associated object is unloaded.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnAssociatedObjectUnloaded(object sender, EventArgs e)
+        protected override void OnAssociatedObjectUnloaded()
         {
             AssociatedObject.RemoveHandler(UIElement.MouseLeftButtonDownEvent, new MouseButtonEventHandler(OnMouseButtonDown));
 

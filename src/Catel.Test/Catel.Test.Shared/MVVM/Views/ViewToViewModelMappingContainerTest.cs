@@ -6,13 +6,9 @@
 
 namespace Catel.Test.MVVM.Views
 {
-#if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class ViewToViewModelMappingContainerTest
     {
         // TODO: Add

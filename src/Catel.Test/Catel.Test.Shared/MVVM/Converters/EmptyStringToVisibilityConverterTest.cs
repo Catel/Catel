@@ -9,68 +9,68 @@ namespace Catel.Test.MVVM.Converters
     using System.Globalization;
     using Catel.MVVM.Converters;
 
+    using NUnit.Framework;
+
 #if NETFX_CORE
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
     using global::Windows.UI.Xaml;
 #else
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
     using System.Windows;
 #endif
 
-    [TestClass]
+    [TestFixture]
     public class EmptyStringToVisibilityConverterTest
     {
         #region Methods
-        [TestMethod]
+        [TestCase]
         public void Convert_Null()
         {
             var converter = new EmptyStringToCollapsingVisibilityConverter();
             Assert.AreEqual(Visibility.Collapsed, converter.Convert(null, typeof (Visibility), null, (CultureInfo)null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void Convert_EmptyString()
         {
             var converter = new EmptyStringToCollapsingVisibilityConverter();
             Assert.AreEqual(Visibility.Collapsed, converter.Convert(string.Empty, typeof (Visibility), null, (CultureInfo)null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void Convert_EmptyString_ParameterTrue()
         {
             var converter = new EmptyStringToCollapsingVisibilityConverter();
             Assert.AreEqual(Visibility.Visible, converter.Convert(string.Empty, typeof (Visibility), true, (CultureInfo)null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void Convert_EmptyString_ParameterFalse()
         {
             var converter = new EmptyStringToCollapsingVisibilityConverter();
             Assert.AreEqual(Visibility.Collapsed, converter.Convert(string.Empty, typeof (Visibility), false, (CultureInfo)null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void Convert_String()
         {
             var converter = new EmptyStringToCollapsingVisibilityConverter();
             Assert.AreEqual(Visibility.Visible, converter.Convert("filledstring", typeof (Visibility), null, (CultureInfo)null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void Convert_String_ParameterTrue()
         {
             var converter = new EmptyStringToCollapsingVisibilityConverter();
             Assert.AreEqual(Visibility.Collapsed, converter.Convert("filledstring", typeof (Visibility), true, (CultureInfo)null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void Convert_String_ParameterFalse()
         {
             var converter = new EmptyStringToCollapsingVisibilityConverter();
             Assert.AreEqual(Visibility.Visible, converter.Convert("filledstring", typeof (Visibility), false, (CultureInfo)null));
         }
 
-        [TestMethod]
+        [TestCase]
         public void ConvertBack()
         {
             var converter = new EmptyStringToCollapsingVisibilityConverter();
