@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="TriggerBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -11,6 +11,7 @@ namespace Catel.Windows.Interactivity
     using System;
     using System.Windows;
     using IoC;
+
 #if NETFX_CORE
     using global::Windows.UI.Xaml;
     using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
@@ -31,20 +32,7 @@ namespace Catel.Windows.Interactivity
         where T : FrameworkElement
     {
         #region Fields
-        private static readonly IInteractivityManager InteractivityManager;
-
         private bool _isClean = true;
-        #endregion
-
-        #region Constructors
-        /// <summary>
-        /// Constructs the trigger base.
-        /// </summary>
-        static TriggerBase()
-        {
-            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-            InteractivityManager = dependencyResolver.TryResolve<IInteractivityManager>();
-        }
         #endregion
 
         #region Properties
@@ -70,7 +58,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Called after the action is attached to an AssociatedObject.
         /// </summary>
-        protected sealed override void OnAttached()
+        protected override void OnAttached()
         {
             if (IsInDesignMode)
             {
@@ -87,17 +75,12 @@ namespace Catel.Windows.Interactivity
             ValidateRequiredProperties();
 
             Initialize();
-
-            if (InteractivityManager != null)
-            {
-                InteractivityManager.RegisterTrigger(this);
-            }
         }
 
         /// <summary>
         /// Called when the action is being detached from its AssociatedObject, but before it has actually occurred.
         /// </summary>
-        protected sealed override void OnDetaching()
+        protected override void OnDetaching()
         {
             if (IsInDesignMode)
             {
@@ -219,11 +202,6 @@ namespace Catel.Windows.Interactivity
             }
 
             Uninitialize();
-
-            if (InteractivityManager != null)
-            {
-                InteractivityManager.UnregisterTrigger(this);
-            }
         }
         #endregion
     }

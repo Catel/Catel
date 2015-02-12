@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="IInteractivityManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -14,6 +14,7 @@ namespace Catel.Windows.Interactivity
     /// <summary>
     /// Interactivity manager to manage interactivity classes.
     /// </summary>
+    [ObsoleteEx(Message = "Unused feature, will be removed", TreatAsErrorFromVersion = "4.1", RemoveInVersion = "5.0")]
     public interface IInteractivityManager
     {
         /// <summary>

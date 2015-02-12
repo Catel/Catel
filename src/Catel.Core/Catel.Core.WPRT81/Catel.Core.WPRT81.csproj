@@ -16,7 +16,7 @@
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <NuGetPackageImportStamp>eb44a4b0</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>573e1386</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -114,12 +114,12 @@
   </PropertyGroup>
   <Import Project="..\Catel.Core.Shared\Catel.Core.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Core.Shared\Catel.Core.Shared.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
-  <Import Project="..\..\..\lib\Fody.1.26.1\build\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.26.1\build\Fody.targets')" />
+  <Import Project="..\..\..\lib\Fody.1.27.0-beta01\build\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.27.0-beta01\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\lib\Fody.1.26.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.1.26.1\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\..\..\lib\Fody.1.27.0-beta01\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.1.27.0-beta01\build\Fody.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

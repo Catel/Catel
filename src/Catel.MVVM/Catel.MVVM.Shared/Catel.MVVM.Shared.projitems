@@ -15,6 +15,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\DispatcherObservableObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DesignTimeInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\INotifyPropertyChangedExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ThemeHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVMModule.cs" />
@@ -213,6 +214,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\CameraService.winrt.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\CameraService.wpsl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\CameraServiceBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\DataContextSubscriptionService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\DispatcherService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\EventArgs\AccelerometerValueChangedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\EventArgs\ApplicationClosingEventArgs.cs" />
@@ -229,6 +231,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IAccelerometerValue.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IAutoCompletionService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ICameraService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IDataContextSubscriptionService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IDispatcherService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IFileSupport.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ILocation.cs" />
@@ -279,6 +282,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\PleaseWaitService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\PleaseWaitService.ios.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\PleaseWaitService.winrt.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\PleaseWaitService.sl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\PleaseWaitService.wpf.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\PleaseWaitService.wpsl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\ProcessService.cs" />
@@ -331,6 +335,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Extensions\ApplicationExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Extensions\DependencyObjectExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Extensions\FrameworkElementExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Extensions\FrameworkElementExtensions.layout.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Extensions\UIElementExtensions.focus.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Extensions\WindowExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Helpers\CommandLineHelper.cs" />

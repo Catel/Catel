@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ConfigurationServiceFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -12,16 +12,13 @@ namespace Catel.Test.Configuration
 
     using NUnit.Framework;
     using Catel.Runtime.Serialization;
+    using Catel.Services;
 
     public class ConfigurationServiceFacts
     {
         private static ConfigurationService GetConfigurationService()
         {
-#if NET
-            return new ConfigurationService(new SerializationManager());
-#else
-            return new ConfigurationService();
-#endif
+            return new ConfigurationService(new SerializationManager(), new ObjectConverterService());
         }
 
         [TestFixture]

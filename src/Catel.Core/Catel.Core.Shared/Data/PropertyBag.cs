@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PropertyBag.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 namespace Catel.Data
@@ -149,14 +149,21 @@ namespace Catel.Data
         {
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
 
+            var raisePropertyChanged = false;
+
             lock (_lockObject)
             {
                 if (!_properties.ContainsKey(propertyName) || !ObjectHelper.AreEqualReferences(_properties[propertyName], value))
                 {
                     _properties[propertyName] = value;
 
-                    RaisePropertyChanged(propertyName);
+                    raisePropertyChanged = true;
                 }
+            }
+
+            if (raisePropertyChanged)
+            {
+                RaisePropertyChanged(propertyName);
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DynamicConfigurationExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -19,10 +19,30 @@ namespace Catel.Configuration
         /// <param name="dynamicConfiguration">The dynamic configuration.</param>
         /// <param name="name">The name.</param>
         /// <returns>System.String.</returns>
+        [ObsoleteEx(Message = "Overload will be removed in next major release", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
         public static TValue GetConfigurationValue<TValue>(this DynamicConfiguration dynamicConfiguration, string name)
         {
-            var value = (TValue)dynamicConfiguration.GetConfigurationValue(name);
-            return value;
+            return GetConfigurationValue(dynamicConfiguration, name, default(TValue));
+        }
+
+        /// <summary>
+        /// Gets the configuration value.
+        /// </summary>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        /// <param name="dynamicConfiguration">The dynamic configuration.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="defaultValue">The default value if the configuration value is not of type TValue.</param>
+        /// <returns>System.String.</returns>
+        public static TValue GetConfigurationValue<TValue>(this DynamicConfiguration dynamicConfiguration, string name, TValue defaultValue)
+        {
+            var value = dynamicConfiguration.GetConfigurationValue(name);
+
+            if (value is TValue)
+            {
+                return (TValue) value;
+            }
+
+            return defaultValue;
         }
     }
 }

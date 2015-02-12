@@ -1,10 +1,8 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ITaskProgressReport.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-
-#if !NET40 && !SILVERLIGHT
 
 namespace Catel.MVVM
 {
@@ -22,5 +20,3 @@ namespace Catel.MVVM
         #endregion
     }
 }
-
-#endif

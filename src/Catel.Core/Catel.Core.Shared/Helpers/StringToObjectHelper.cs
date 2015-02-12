@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="StringToObjectHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -65,6 +65,20 @@ namespace Catel
             value = CleanString(value);
 
             return DateTime.Parse(value);
+        }
+
+        /// <summary>
+        /// Converts a string to a timespan.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The timespan value of the string.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="value"/> is <c>null</c> or whitespace.</exception>
+        public static TimeSpan ToTimeSpan(string value)
+        {
+            Argument.IsNotNullOrWhitespace("value", value);
+            value = CleanString(value);
+
+            return TimeSpan.Parse(value);
         }
 
         /// <summary>
@@ -152,6 +166,20 @@ namespace Catel
         }
 
         /// <summary>
+        /// Converts a string to a Type.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The Type value of the string.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="value"/> is <c>null</c> or whitespace.</exception>
+        public static Type ToType(string value)
+        {
+            Argument.IsNotNullOrWhitespace("value", value);
+            value = CleanString(value);
+
+            return Type.GetType(value);
+        }
+
+        /// <summary>
         /// Converts a string to a string.
         /// </summary>
         /// <param name="value">The value.</param>
@@ -203,6 +231,16 @@ namespace Catel
             if (targetType == typeof(DateTime?))
             {
                 return ToDateTime(value);
+            }
+
+            if (targetType == typeof(TimeSpan))
+            {
+                return ToTimeSpan(value);
+            }
+
+            if (targetType == typeof(TimeSpan?))
+            {
+                return ToTimeSpan(value);
             }
 
             if (targetType == typeof(decimal))
@@ -263,6 +301,11 @@ namespace Catel
             if (targetType == typeof(long?))
             {
                 return ToLong(value);
+            }
+            
+            if (targetType == typeof(Type))
+            {
+                return ToType(value);
             }
 
             throw new NotSupportedException(string.Format("Type '{0}' is not yet supported", targetType.FullName));

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ServiceLocator.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -731,7 +731,7 @@ namespace Catel.IoC
 
             lock (this)
             {
-                var typeRequestInfo = new TypeRequestInfo(serviceType);
+                var typeRequestInfo = new TypeRequestInfo(serviceType, tag);
                 if (_currentTypeRequestPath == null)
                 {
                     _currentTypeRequestPath = new TypeRequestPath(typeRequestInfo, name: "ServiceLocator");
@@ -842,6 +842,35 @@ namespace Catel.IoC
         object IServiceProvider.GetService(Type serviceType)
         {
             return ResolveType(serviceType);
+        }
+        #endregion
+
+        #region IDisposable interface
+        /// <summary>
+        /// Disposes this instance and all registered instances.
+        /// </summary>
+        public void Dispose()
+        {
+            lock (this)
+            {
+                foreach (var registeredInstance in _registeredInstances)
+                {
+                    var instance = registeredInstance.Value.ImplementingInstance;
+                    if (ReferenceEquals(this, instance))
+                    {
+                        continue;
+                    }
+
+                    var disposable = instance as IDisposable;
+                    if (disposable != null)
+                    {
+                        disposable.Dispose();
+                    }
+                }
+
+                _registeredInstances.Clear();
+                _registeredTypes.Clear();
+            }
         }
         #endregion
     }

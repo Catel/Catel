@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DynamicConfigurationFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -22,6 +22,7 @@ namespace Catel.Test.Configuration
     {
         private const string ExpectedXml = "﻿<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" +
 "<DynamicConfiguration graphid=\"1\" xmlns:ctl=\"http://catel.codeplex.com\">\r\n" +
+"  <ComplexSetting IsNull=\"true\" />\r\n" +
 "  <KeyX type=\"System.String\">Value X</KeyX>\r\n" +
 "  <KeyY type=\"System.String\">Value Y</KeyY>\r\n" +
 "  <KeyZ.SomeAddition type=\"System.String\">Value Z</KeyZ.SomeAddition>\r\n" +
@@ -84,6 +85,40 @@ namespace Catel.Test.Configuration
         }
 
         [TestCase]
+        public void KnowsWhatPropertiesAreSetUsingSetConfigurationValue()
+        {
+            var configuration = new DynamicConfiguration();
+
+            configuration.SetConfigurationValue("A", "1");
+            configuration.SetConfigurationValue("B", "2");
+
+            Assert.IsTrue(configuration.IsConfigurationValueSet("A"));
+            Assert.IsTrue(configuration.IsConfigurationValueSet("B"));
+            Assert.IsFalse(configuration.IsConfigurationValueSet("C"));
+        }
+
+        [TestCase]
+        public void KnowsWhatPropertiesAreSetUsingDeserialization()
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                using (var streamWriter = new StreamWriter(memoryStream))
+                {
+                    streamWriter.Write(ExpectedXml);
+                    streamWriter.Flush();
+
+                    memoryStream.Position = 0L;
+
+                    var configuration = ModelBase.Load<DynamicConfiguration>(memoryStream, SerializationMode.Xml);
+
+                    Assert.IsTrue(configuration.IsConfigurationValueSet("KeyX"));
+                    Assert.IsTrue(configuration.IsConfigurationValueSet("KeyY"));
+                    Assert.IsFalse(configuration.IsConfigurationValueSet("C"));
+                }
+            }
+        }
+
+        [TestCase]
         public void RegistersPropertiesFromSerialization()
         {
             using (var memoryStream = new MemoryStream())
@@ -97,8 +132,8 @@ namespace Catel.Test.Configuration
 
                     var configuration = ModelBase.Load<DynamicConfiguration>(memoryStream, SerializationMode.Xml);
 
-                    Assert.IsTrue(configuration.IsConfigurationKeyAvailable("KeyX"));
-                    Assert.IsTrue(configuration.IsConfigurationKeyAvailable("KeyY"));
+                    Assert.IsTrue(configuration.IsConfigurationValueSet("KeyX"));
+                    Assert.IsTrue(configuration.IsConfigurationValueSet("KeyY"));
 
                     Assert.AreEqual("Value X", configuration.GetConfigurationValue("KeyX"));
                     Assert.AreEqual("Value Y", configuration.GetConfigurationValue("KeyY"));

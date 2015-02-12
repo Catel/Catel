@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DataWindow.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -218,13 +218,13 @@ namespace Catel.Windows
                 return;
             }
 
+            this.FixBlurriness();
+
 #if NET
             SizeToContent = SizeToContent.WidthAndHeight;
             ShowInTaskbar = false;
             ResizeMode = ResizeMode.NoResize;
             WindowStartupLocation = WindowStartupLocation.CenterOwner;
-
-            SnapsToDevicePixels = true;
 
             this.ApplyIconFromApplication();
 #endif

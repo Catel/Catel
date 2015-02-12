@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="UrlLocatorTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -69,14 +69,14 @@ namespace Catel.Test.MVVM
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => urlLocator.ResolveUrl(null));
             }
 
-            [TestCase]
-            public void ReturnsViewForViewEndingWithViewModel()
+            [TestCase(typeof(PersonViewModel), "/Views/Person.xaml")]
+            public void ReturnsViewForViewEndingWithViewModel(Type viewModelType, string expectedValue)
             {
                 var urlLocator = new UrlLocator();
-                var resolvedType = urlLocator.ResolveUrl(typeof(PersonViewModel), false);
+                var resolvedType = urlLocator.ResolveUrl(viewModelType, false);
 
                 Assert.IsNotNull(resolvedType);
-                Assert.AreEqual("/Views/Person.xaml", resolvedType);
+                Assert.AreEqual(expectedValue, resolvedType);
             }
 
             [TestCase]

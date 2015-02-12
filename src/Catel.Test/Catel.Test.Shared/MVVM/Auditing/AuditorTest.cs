@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="AuditorTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace Catel.Test.MVVM.Auditing
 {
+    using System.Threading.Tasks;
     using Catel.MVVM.Auditing;
     using NUnit.Framework;
 
@@ -113,7 +114,7 @@ namespace Catel.Test.MVVM.Auditing
         }
 
         [TestCase]
-        public async void OnViewModelSaving()
+        public async Task OnViewModelSaving()
         {
             AuditingManager.Clear();
 
@@ -128,7 +129,7 @@ namespace Catel.Test.MVVM.Auditing
         }
 
         [TestCase]
-        public async void OnViewModelSaved()
+        public async Task OnViewModelSaved()
         {
             AuditingManager.Clear();
 
@@ -143,7 +144,7 @@ namespace Catel.Test.MVVM.Auditing
         }
 
         [TestCase]
-        public async void OnViewModelCanceling()
+        public async Task OnViewModelCanceling()
         {
             AuditingManager.Clear();
 
@@ -158,7 +159,7 @@ namespace Catel.Test.MVVM.Auditing
         }
 
         [TestCase]
-        public async void OnViewModelCanceled()
+        public async Task OnViewModelCanceled()
         {
             AuditingManager.Clear();
 
@@ -173,7 +174,7 @@ namespace Catel.Test.MVVM.Auditing
         }
 
         [TestCase]
-        public async void OnViewModelClosing()
+        public async Task OnViewModelClosing()
         {
             AuditingManager.Clear();
 
@@ -188,7 +189,7 @@ namespace Catel.Test.MVVM.Auditing
         }
 
         [TestCase]
-        public async void OnViewModelClosed()
+        public async Task OnViewModelClosed()
         {
             AuditingManager.Clear();
 

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="NuGetBasedModuleCatalog.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -79,7 +79,7 @@ namespace Catel.Modules
         /// <summary>
         /// Packaged module search cache storage.
         /// </summary>
-        private readonly CacheStorage<string, IEnumerable<ModuleInfo>> _packagedModulesFilteredSearchCacheStorage = new CacheStorage<string, IEnumerable<ModuleInfo>>(() => ExpirationPolicy.Duration(TimeSpan.FromMinutes(2)), true);
+        private readonly CacheStorage<string, IEnumerable<ModuleInfo>> _packagedModulesFilteredSearchCacheStorage = new CacheStorage<string, IEnumerable<ModuleInfo>>(() => ExpirationPolicy.Duration(TimeSpan.FromMinutes(2)), true, null);
 
         /// <summary>
         /// The nuget based module catalog parent child behavior
@@ -89,7 +89,7 @@ namespace Catel.Modules
         /// <summary>
         ///  NuGet like framework name identifier string, for instance <c>NET40</c> or <c>NET45</c>.
         /// </summary>
-        private string _frameworkNameIdentifier;
+        private readonly string _frameworkNameIdentifier;
 
         #endregion
 

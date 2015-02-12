@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ObjectExtensionsFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -16,12 +16,6 @@ namespace Catel.Test.IoC
         [TestFixture]
         public class TheGetTypeFactoryMethod
         {
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullObject()
-            {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ObjectExtensions.GetTypeFactory(null));
-            }
-
             [TestCase]
             public void ReturnsDefaultTypeFactoryForObjectNotCreatedWithTypeFactory()
             {
@@ -48,12 +42,6 @@ namespace Catel.Test.IoC
         [TestFixture]
         public class TheGetDependencyResolverMethod
         {
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullObject()
-            {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ObjectExtensions.GetDependencyResolver(null));
-            }
-
             [TestCase]
             public void ReturnsDefaultDependencyResolverForObjectNotCreatedWithTypeFactory()
             {

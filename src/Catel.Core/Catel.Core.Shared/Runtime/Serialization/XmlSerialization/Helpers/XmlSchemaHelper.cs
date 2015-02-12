@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="XmlSchemaHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -67,7 +67,7 @@ namespace Catel.Runtime.Serialization.Xml
             var schema = GetOrCreateSchema(typeNs, schemaSet, serializationManager);
 
             // Check if it already exists
-            string typeName = GetTypeNameForSchema(type);
+            var typeName = GetTypeNameForSchema(type);
             var existingType = (from x in schema.Items.Cast<object>()
                                 where x is XmlSchemaComplexType && ((XmlSchemaComplexType)x).Name == typeName
                                 select (XmlSchemaComplexType)x).FirstOrDefault();
@@ -165,8 +165,50 @@ namespace Catel.Runtime.Serialization.Xml
                     propertySchemaElement.IsNillable = memberType.IsNullableType();
                     propertySchemaElement.MinOccurs = 0;
 
+                    var alreadyAdded = false;
+
+                    foreach (XmlSchema xmlSchema in schemaSet.Schemas())
+                    {
+                        foreach (var item in xmlSchema.Items)
+                        {
+                            var simpleType = item as XmlSchemaSimpleType;
+                            if (simpleType != null)
+                            {
+                                if (string.Equals(simpleType.Name, memberType.Name))
+                                {
+                                    alreadyAdded = true;
+                                }
+                            }
+
+                            var complexType = item as XmlSchemaComplexType;
+                            if (complexType != null)
+                            {
+                                if (string.Equals(complexType.Name, memberType.Name))
+                                {
+                                    alreadyAdded = true;
+                                }
+                            }
+
+                            var xmlSchemaElement = item as XmlSchemaElement;
+                            if (xmlSchemaElement != null)
+                            {
+                                if (string.Equals(xmlSchemaElement.Name, memberType.Name))
+                                {
+                                    alreadyAdded = true;
+                                }
+                            }
+                        }
+                    }
+
                     var exporter = new XsdDataContractExporter(schemaSet);
-                    exporter.Export(memberType);
+
+                    if (!alreadyAdded)
+                    {
+                        if (exporter.CanExport(memberType))
+                        {
+                            exporter.Export(memberType);
+                        }
+                    }
 
                     propertySchemaElement.SchemaType = exporter.GetSchemaType(memberType);
                     propertySchemaElement.SchemaTypeName = exporter.GetSchemaTypeName(memberType);

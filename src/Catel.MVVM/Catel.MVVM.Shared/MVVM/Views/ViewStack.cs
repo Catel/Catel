@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ViewStack.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -128,9 +128,14 @@ namespace Catel.MVVM.Views
         {
             MarkAsLoaded();
 
+            CheckForOutdatedChildren();
+
             foreach (var child in _children)
             {
-                child.NotifyThatParentIsReadyToAcceptLoadedMessages();
+                if (!child.IsOutdated)
+                {
+                    child.NotifyThatParentIsReadyToAcceptLoadedMessages();
+                }
             }
         }
 

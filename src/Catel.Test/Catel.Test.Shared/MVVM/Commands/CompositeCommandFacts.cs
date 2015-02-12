@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CompositeCommandFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -10,9 +10,24 @@ namespace Catel.Test.MVVM
     using System;
     using Catel.MVVM;
     using NUnit.Framework;
+    using System.Threading.Tasks;
 
     public class CompositeCommandFacts
     {
+        [TestFixture]
+        public class TheCanExecuteState
+        {
+            [TestCase(false, true)]
+            [TestCase(true, false)]
+            public void CanExecuteEmptyCommandWithAtLeastOneMustBeExecutable(bool atLeastOneMustBeExecutable, bool expectedValue)
+            {
+                var compositeCommand = new CompositeCommand();
+                compositeCommand.AtLeastOneMustBeExecutable = atLeastOneMustBeExecutable;
+
+                Assert.AreEqual(expectedValue, ((ICatelCommand)compositeCommand).CanExecute(null));
+            }
+        }
+
         [TestFixture]
         public class TheRegisterCommandMethod
         {
@@ -125,7 +140,7 @@ namespace Catel.Test.MVVM
         public class TheAutoUnsubscribeFunctionality
         {
             [TestCase]
-            public async void AutomaticallyUnsubscribesCommandOnViewModelClosed()
+            public async Task AutomaticallyUnsubscribesCommandOnViewModelClosed()
             {
                 var vm = new CompositeCommandViewModel();
                 var compositeCommand = new CompositeCommand();
