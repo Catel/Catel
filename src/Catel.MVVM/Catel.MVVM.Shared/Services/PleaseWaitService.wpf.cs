@@ -22,9 +22,9 @@ namespace Catel.Services
             // not required
         }
 
-        partial void ShowBusyIndicator(string status)
+        partial void ShowBusyIndicator()
         {
-            PleaseWaitHelper.Show(status);
+            PleaseWaitHelper.Show();
         }
 
         partial void HideBusyIndicator()
