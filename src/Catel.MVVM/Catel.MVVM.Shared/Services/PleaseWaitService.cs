@@ -47,6 +47,8 @@ namespace Catel.Services
         /// </remarks>
         public void Show(string status = "")
         {
+            _showCounter = 1;
+            
             if (string.IsNullOrEmpty(status))
             {
                 status = _languageService.GetString("PleaseWait");
@@ -150,14 +152,15 @@ namespace Catel.Services
         /// <remarks></remarks>
         public void Push(string status = "")
         {
-            UpdateStatus(status);
-
-            _showCounter++;
-
-            if (_showCounter > 0)
+            if (_showCounter <= 0)
             {
-                Show();
+                Show(status);
             }
+            else
+            {
+                _showCounter++;
+                UpdateStatus(status);
+            }       
         }
 
         /// <summary>
