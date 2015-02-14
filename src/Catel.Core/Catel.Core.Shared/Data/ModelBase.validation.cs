@@ -296,6 +296,11 @@ namespace Catel.Data
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the validation should not try to process data annotations.
+        /// </summary>
+        protected bool ValidateUsingDataAnnotations { get; set; }
+
+        /// <summary>
         /// Gets or sets a value for the <see cref="SuspendValidation"/> for each model.
         /// <para />
         /// By default, this value is <c>false</c>.
@@ -310,6 +315,11 @@ namespace Catel.Data
         /// </summary>
         /// <value><c>true</c> if validation should be suspended for all models; otherwise, <c>false</c>.</value>
         public static bool SuspendValidationForAllModels { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the validation should not try to process data annotations.
+        /// </summary>
+        public static bool DefaultValidateUsingDataAnnotationsValue { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the validation results should be hidden. This means that 
@@ -721,7 +731,7 @@ namespace Catel.Data
         /// </remarks>
         protected void Validate(bool force = false)
         {
-            Validate(force, true);
+            Validate(force, ValidateUsingDataAnnotations);
         }
 
         /// <summary>
