@@ -225,6 +225,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\Exceptions\PageNotRegisteredException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Exceptions\SplashScreenException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Exceptions\WindowNotRegisteredException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IDispatcherServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IUIVisualizerServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\FileServiceBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IAccelerometerService.cs" />

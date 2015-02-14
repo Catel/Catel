@@ -15,6 +15,7 @@ namespace Catel.MVVM
 #endif
 
     using Catel.Logging;
+    using Services;
 
     /// <summary>
     /// Class to implement asynchronous task commands in the <see cref="ViewModelBase" />.
