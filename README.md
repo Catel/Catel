@@ -1,6 +1,8 @@
 Catel
 =====
 
+[![Join the chat at https://gitter.im/Catel/Catel](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Catel/Catel?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Catel is an application development platform with the focus on MVVM ((WPF, Silverlight, Windows Phone, WinRT, Xamarin.Android
 and Xamarin.iOS) and MVC (ASP.NET MVC). 
 The goal of Catel is to provide a complete set of modular functionality for Line of Business applications written in any .NET 
