@@ -64,6 +64,7 @@ Added/fixed:
 (x) CTL-589 Nested user controls with same name might cause unhandled exception in Silverlight
 (x) CTL-593 PleaseWaitService implementation missing from Silverlight
 (x) CTL-594 ViewModelCommandManager might throw NullReferenceException for closed view models
+(x) CTL-599 / CTL-600 Bugfixes in PleaseWaitService when using Push and Pop
 
 Roadmap:
 ========
