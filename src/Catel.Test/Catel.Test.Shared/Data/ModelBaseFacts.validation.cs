@@ -630,16 +630,15 @@ namespace Catel.Test.Data
                     ValidateUsingDataAnnotations = value;
                 }
 
-                public void Validate(bool Force, bool useAnnotations)
+                public void Validate(bool force, bool useAnnotations)
                 {
-                    base.Validate(Force, useAnnotations);
+                    base.Validate(force, useAnnotations);
                 }
 
-                public void Validate(bool Force)
+                public void Validate(bool force)
                 {
-                    base.Validate(Force);
+                    base.Validate(force);
                 }
-
             }
 
             [TestCase]
@@ -681,7 +680,6 @@ namespace Catel.Test.Data
 
                 Assert.AreEqual(0, model.Counter);
             }
-
 
             [TestCase]
             public void ByDefaultValidateDataAnnotation()
