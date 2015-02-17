@@ -43,6 +43,7 @@ Added/fixed:
 (+) CTL-580 Add base class for disposable objects
 (+) CTL-583 Enable TaskCommands and ProgressiveTaskCommands in SL and NET40
 (+) CTL-591 Add more naming conventions to locators so views and view models can be located in same namespace
+(+) CTL-597 Add ability to turn DataAnnotation validation off
 (+) CTL-601 Add Additional methods on IExceptionService
 (*) CTL-557 ServiceLocator should support IDisposable
 (*) CTL-558 Use LayoutRounding and SnapToDevicePixels in DataWindow and UserControl to prevent 

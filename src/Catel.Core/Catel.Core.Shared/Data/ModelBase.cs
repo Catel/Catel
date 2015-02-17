@@ -156,6 +156,7 @@ namespace Catel.Data
         static ModelBase()
         {
             PropertyDataManager = PropertyDataManager.Default;
+            DefaultValidateUsingDataAnnotationsValue = true;
         }
 
 #if !NET
@@ -531,6 +532,7 @@ namespace Catel.Data
         private void Initialize()
         {
             SuspendValidation = DefaultSuspendValidationValue;
+            ValidateUsingDataAnnotations = DefaultValidateUsingDataAnnotationsValue;
             DeserializationSucceeded = false;
             HandlePropertyAndCollectionChanges = true;
             AlwaysInvokeNotifyChanged = false;

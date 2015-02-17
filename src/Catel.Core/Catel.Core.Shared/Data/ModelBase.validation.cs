@@ -304,6 +304,16 @@ namespace Catel.Data
         public static bool DefaultSuspendValidationValue { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the validation should not try to process data annotations.
+        /// </summary>
+        protected bool ValidateUsingDataAnnotations { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the validation should not try to process data annotations.
+        /// </summary>
+        public static bool DefaultValidateUsingDataAnnotationsValue { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the validation for all classes deriving from <see cref="ModelBase"/> should be suspended.
         /// <para />
         /// This is a good way to improve performance for a specific operation where validation only causes overhead.
@@ -721,7 +731,7 @@ namespace Catel.Data
         /// </remarks>
         protected void Validate(bool force = false)
         {
-            Validate(force, true);
+            Validate(force, ValidateUsingDataAnnotations);
         }
 
         /// <summary>
