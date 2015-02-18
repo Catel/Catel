@@ -137,6 +137,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\ExceptionHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\ExceptionService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\Extensions\ExceptionHandlerExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\Extensions\ExceptionServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\Interfaces\IBufferPolicy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\Interfaces\IExceptionHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\Interfaces\IExceptionService.cs" />

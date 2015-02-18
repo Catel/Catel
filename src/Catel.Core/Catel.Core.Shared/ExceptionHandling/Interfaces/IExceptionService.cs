@@ -104,15 +104,6 @@ namespace Catel.ExceptionHandling
         bool HandleException(Exception exception);
 
         /// <summary>
-        /// Handles asynchounously the specified exception if possible.
-        /// </summary>
-        /// <param name="exception">The exception to handle.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
-        /// <returns><c>true</c> if the exception is handled; otherwise <c>false</c>.</returns>
-        Task<bool> HandleExceptionAsync(Exception exception, CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
         /// Processes the specified action.
         /// </summary>
         /// <param name="action">The action.</param>
@@ -175,37 +166,6 @@ namespace Catel.ExceptionHandling
         /// <summary>
         /// Processes the specified action with possibilty to retry on error.
         /// </summary>
-        /// <param name="action">The action.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        void ProcessWithRetry(Action action);
-
-        /// <summary>
-        /// Processes asynchrounously the specified action with possibilty to retry on error.
-        /// </summary>
-        /// <param name="action">The action.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        Task ProcessWithRetryAsync(Task action);
-
-        /// <summary>
-        /// Processes asynchrounously the specified action with possibilty to retry on error.
-        /// </summary>
-        /// <param name="action">The action.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        Task ProcessWithRetryAsync(Action action, CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
-        /// Processes asynchrounously the specified action with possibilty to retry on error.
-        /// </summary>
-        /// <typeparam name="TResult">The result type.</typeparam>
-        /// <param name="action">The action.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        Task ProcessWithRetryAsync<TResult>(Func<Task> action);
-
-        /// <summary>
-        /// Processes the specified action with possibilty to retry on error.
-        /// </summary>
         /// <typeparam name="TResult">The result type.</typeparam>
         /// <param name="action">The action.</param>
         /// <returns></returns>
@@ -220,16 +180,6 @@ namespace Catel.ExceptionHandling
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         Task<TResult> ProcessWithRetryAsync<TResult>(Func<Task<TResult>> action);
-
-        /// <summary>
-        /// Processes asynchrounously the specified action with possibilty to retry on error.
-        /// </summary>
-        /// <typeparam name="TResult">The result type.</typeparam>
-        /// <param name="action">The action.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        Task<TResult> ProcessWithRetryAsync<TResult>(Func<TResult> action, CancellationToken cancellationToken = default(CancellationToken));
         #endregion
     }
 }

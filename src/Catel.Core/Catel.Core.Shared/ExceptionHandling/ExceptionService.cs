@@ -279,22 +279,6 @@ namespace Catel.ExceptionHandling
         }
 
         /// <summary>
-        /// Handles asynchounously the specified exception if possible.
-        /// </summary>
-        /// <param name="exception">The exception to handle.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
-        /// <returns><c>true</c> if the exception is handled; otherwise <c>false</c>.</returns>
-        public async Task<bool> HandleExceptionAsync(Exception exception, CancellationToken cancellationToken = new CancellationToken())
-        {
-#if NET40 || SL5 || PCL
-            return await Task.Factory.StartNew(() => HandleException(exception), cancellationToken).ConfigureAwait(false);
-#else
-            return await Task.Run(() => HandleException(exception), cancellationToken).ConfigureAwait(false);
-#endif
-        }
-
-        /// <summary>
         /// Processes the specified action.
         /// <para />
         /// If the exception could not be handled safely by this service, it will throw the exception.
@@ -344,59 +328,6 @@ namespace Catel.ExceptionHandling
             }
 
             return default(TResult);
-        }
-
-        /// <summary>
-        /// Processes the specified action with possibilty to retry on error.
-        /// </summary>
-        /// <param name="action">The action.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public void ProcessWithRetry(Action action)
-        {
-            Argument.IsNotNull("action", action);
-
-            ProcessWithRetry(() => { action(); return default(object); });
-        }
-
-        /// <summary>
-        /// Processes asynchrounously the specified action with possibilty to retry on error.
-        /// </summary>
-        /// <param name="action">The action.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public Task ProcessWithRetryAsync(Task action)
-        {
-            Argument.IsNotNull("action", action);
-
-            return ProcessWithRetryAsync(async () => { await action.ConfigureAwait(false); return default(object); });
-        }
-
-        /// <summary>
-        /// Processes asynchrounously the specified action with possibilty to retry on error.
-        /// </summary>
-        /// <param name="action">The action.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public async Task ProcessWithRetryAsync(Action action, CancellationToken cancellationToken = new CancellationToken())
-        {
-#if NET40 || SL5 || PCL
-            await Task.Factory.StartNew(() => ProcessWithRetry(action), cancellationToken).ConfigureAwait(false);
-#else
-            await Task.Run(() => ProcessWithRetry(action), cancellationToken).ConfigureAwait(false);
-#endif
-        }
-
-        /// <summary>
-        /// Processes asynchrounously the specified action with possibilty to retry on error.
-        /// </summary>
-        /// <typeparam name="TResult">The result type.</typeparam>
-        /// <param name="action">The action.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public Task ProcessWithRetryAsync<TResult>(Func<Task> action)
-        {
-            Argument.IsNotNull("action", action);
-
-            return ProcessWithRetryAsync(async () => { await action().ConfigureAwait(false); return default(object); });
         }
 
         /// <summary>
@@ -545,23 +476,6 @@ namespace Catel.ExceptionHandling
 
                 ThreadHelper.Sleep((int)interval.TotalMilliseconds);
             }
-        }
-
-        /// <summary>
-        /// Processes asynchrounously the specified action with possibilty to retry on error.
-        /// </summary>
-        /// <typeparam name="TResult">The result type.</typeparam>
-        /// <param name="action">The action.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public async Task<TResult> ProcessWithRetryAsync<TResult>(Func<TResult> action, CancellationToken cancellationToken = new CancellationToken())
-        {
-#if NET40 || SL5 || PCL
-            return await Task.Factory.StartNew(() => ProcessWithRetry(action), cancellationToken).ConfigureAwait(false);
-#else
-            return await Task.Run(() => ProcessWithRetry(action), cancellationToken).ConfigureAwait(false);
-#endif
         }
 
         /// <summary>
