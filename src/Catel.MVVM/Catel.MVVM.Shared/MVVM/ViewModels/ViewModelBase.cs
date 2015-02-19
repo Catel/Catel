@@ -289,12 +289,11 @@ namespace Catel.MVVM
             ValidateModelsOnInitialization = true;
 #endif
 
-            InvalidateCommandsOnPropertyChanged = true;
-
             ViewModelCommandManager = MVVM.ViewModelCommandManager.Create(this);
             ViewModelCommandManager.AddHandler((viewModel, propertyName, command, commandParameter) =>
                 CommandExecuted.SafeInvoke(this, new CommandExecutedEventArgs((ICatelCommand)command, commandParameter, propertyName)));
 
+            InvalidateCommandsOnPropertyChanged = true;
             SupportIEditableObject = supportIEditableObject;
 
             // Temporarily suspend validation, will be enabled at the end of constructor again

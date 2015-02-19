@@ -66,6 +66,7 @@ Added/fixed:
 (x) CTL-593 PleaseWaitService implementation missing from Silverlight
 (x) CTL-594 ViewModelCommandManager might throw NullReferenceException for closed view models
 (x) CTL-599 / CTL-600 Bugfixes in PleaseWaitService when using Push and Pop
+(x) CTL-603 ViewModelCommandManager is null in very rare cases
 
 Roadmap:
 ========
