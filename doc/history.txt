@@ -67,6 +67,7 @@ Added/fixed:
 (x) CTL-594 ViewModelCommandManager might throw NullReferenceException for closed view models
 (x) CTL-599 / CTL-600 Bugfixes in PleaseWaitService when using Push and Pop
 (x) CTL-603 ViewModelCommandManager is null in very rare cases
+(x) CTL-606 UpdateBindingBehaviorBase NullReferenceExcepton
 
 Roadmap:
 ========

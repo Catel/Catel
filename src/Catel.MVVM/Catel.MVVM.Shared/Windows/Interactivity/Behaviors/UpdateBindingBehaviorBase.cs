@@ -64,7 +64,10 @@ namespace Catel.Windows.Interactivity
         protected void UpdateBinding()
         {
             var binding = AssociatedObject.GetBindingExpression(DependencyProperty);
-            binding.UpdateSource();
+            if (binding != null)
+            {
+                binding.UpdateSource();
+            }
         }
         #endregion
     }
