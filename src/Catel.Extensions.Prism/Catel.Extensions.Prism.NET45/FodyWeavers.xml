@@ -1,10 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Weavers>
-  <Obsolete />
-  <ModuleInit />
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Weavers VerifyAssembly="true">
+  <Obsolete/>
+  <ModuleInit/>
   <Costura>
     <IncludeAssemblies>
       NuGet.Core
     </IncludeAssemblies>
   </Costura>
+  <Catel/>
 </Weavers>

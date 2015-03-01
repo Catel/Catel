@@ -14,6 +14,7 @@
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <NuGetPackageImportStamp>76d8d0f8</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -112,62 +113,30 @@
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\SolutionAssemblyInfo.cs">
-      <Link>Properties\SolutionAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Data.NET40\Expressions\Extensions\ExpressionExtensions.cs">
-      <Link>Expressions\Extensions\ExpressionExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Data.NET40\Expressions\ParameterRebinder.cs">
-      <Link>Expressions\ParameterRebinder.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Data.NET40\ExtensionsDataModule.cs">
-      <Link>ExtensionsDataModule.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Data.NET40\ModuleInitializer.cs">
-      <Link>ModuleInitializer.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Data.NET40\Properties\AssemblyInfo.cs">
-      <Link>Properties\AssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Data.NET40\Repositories\CachedRepositoryBase.cs">
-      <Link>Repositories\CachedRepositoryBase.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Data.NET40\Repositories\Interfaces\ICachedRepository.cs">
-      <Link>Repositories\Interfaces\ICachedRepository.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Data.NET40\Repositories\Interfaces\IRepository.cs">
-      <Link>Repositories\Interfaces\IRepository.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Data.NET40\Repositories\RepositoryBase.cs">
-      <Link>Repositories\RepositoryBase.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Data.NET40\Specifications\AndSpecification.cs">
-      <Link>Specifications\AndSpecification.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Data.NET40\Specifications\CompositeSpecification.cs">
-      <Link>Specifications\CompositeSpecification.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Data.NET40\Specifications\Interfaces\ISpecification.cs">
-      <Link>Specifications\Interfaces\ISpecification.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Data.NET40\Specifications\OrSpecification.cs">
-      <Link>Specifications\OrSpecification.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Data.NET40\Specifications\Specification.cs">
-      <Link>Specifications\Specification.cs</Link>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
+    <Reference Include="Catel.Fody.Attributes, Version=2.5.0.0, Culture=neutral, PublicKeyToken=1c8163524cbe02e6, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Catel.Fody.2.5.0-unstable0001\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
+    </Reference>
     <Reference Include="Obsolete">
       <HintPath>..\..\..\lib\Obsolete.Fody.3.1.0.0\Lib\portable-net4+sl4+wp8+win8+wpa81+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>
   </PropertyGroup>
+  <Import Project="..\Catel.Extensions.Data.Shared\Catel.Extensions.Data.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Extensions.Data.Shared\Catel.Extensions.Data.Shared.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <Import Project="..\..\..\lib\Fody.1.27.0-beta01\build\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.27.0-beta01\build\Fody.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\lib\Fody.1.27.0-beta01\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.1.27.0-beta01\build\Fody.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
@@ -175,12 +144,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <Import Project="$(ProjectPath)\..\..\..\..\Tools\Pepita\PepitaGet.targets" />
-  <Import Project="..\..\..\lib\Fody.1.22.1\build\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.22.1\build\Fody.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\lib\Fody.1.22.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.1.22.1\build\Fody.targets'))" />
-  </Target>
 </Project>

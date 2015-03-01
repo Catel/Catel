@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ContextManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 namespace Catel.Data
@@ -65,7 +65,7 @@ namespace Catel.Data
             // Option to override or late-bind connection string
             if (string.IsNullOrEmpty(databaseNameOrConnectionStringName))
             {
-                var connectionStringManager = dependencyResolver.Resolve<IConnectionStringManager>();
+                var connectionStringManager = dependencyResolver.TryResolve<IConnectionStringManager>();
                 if (connectionStringManager != null)
                 {
                     databaseNameOrConnectionStringName = connectionStringManager.GetConnectionString(typeof(TContext), databaseNameOrConnectionStringName, label);
@@ -207,7 +207,7 @@ namespace Catel.Data
         {
             Argument.IsNotNullOrWhitespace("label", label);
 
-            var threadId = Thread.CurrentThread.ManagedThreadId;
+            var threadId = ThreadHelper.GetCurrentThreadId();
             return string.Format("__ctx:{0}-{1}-{2}", databaseNameOrConnectionStringName ?? "database", label, threadId);
         }
 

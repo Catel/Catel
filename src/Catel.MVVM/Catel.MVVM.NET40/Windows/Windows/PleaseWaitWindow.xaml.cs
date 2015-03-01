@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PleaseWaitWindow.xaml.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -49,7 +49,7 @@ namespace Catel.Windows
 
         private Thread _thread;
 
-        private readonly List<FrameworkElement> _dimmedElements = new List<FrameworkElement>();
+        private readonly HashSet<FrameworkElement> _dimmedElements = new HashSet<FrameworkElement>();
         #endregion
 
         #region Constructors

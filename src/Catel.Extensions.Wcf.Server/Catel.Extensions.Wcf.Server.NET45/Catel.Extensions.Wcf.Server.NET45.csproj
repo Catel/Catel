@@ -11,6 +11,7 @@
     <AssemblyName>Catel.Extensions.Wcf.Server</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>8f44d7dd</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,6 +35,10 @@
     <DocumentationFile>..\..\..\output\release\NET45\Catel.Extensions.Wcf.Server\Catel.Extensions.Wcf.Server.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Catel.Fody.Attributes, Version=2.5.0.0, Culture=neutral, PublicKeyToken=1c8163524cbe02e6, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Catel.Fody.2.5.0-unstable0001\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
+    </Reference>
     <Reference Include="Obsolete">
       <HintPath>..\..\..\lib\Obsolete.Fody.3.1.0.0\Lib\NET35\Obsolete.dll</HintPath>
       <Private>False</Private>
@@ -50,68 +55,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FodyWeavers.xml">
+    <None Include="FodyWeavers.xml">
       <SubType>Designer</SubType>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\SolutionAssemblyInfo.cs">
-      <Link>Properties\SolutionAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Activation\ServiceHostFactory.cs">
-      <Link>Activation\ServiceHostFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\ContractBehavior.cs">
-      <Link>ContractBehavior.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\DataType.cs">
-      <Link>DataType.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Dispatcher\InstanceContextInitializer.cs">
-      <Link>Dispatcher\InstanceContextInitializer.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Extensions\InstanceContextExtension.cs">
-      <Link>Extensions\InstanceContextExtension.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\IoC\Attributes\DependencyInjectionBehaviorAttribute.cs">
-      <Link>IoC\Attributes\DependencyInjectionBehaviorAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\IoC\InstanceProvider.cs">
-      <Link>IoC\InstanceProvider.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\ModuleInitializer.cs">
-      <Link>ModuleInitializer.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Properties\AssemblyInfo.cs">
-      <Link>Properties\AssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Serialization\Attributes\ShouldUseBinarySerializationForDataContractsAttribute.cs">
-      <Link>Serialization\Attributes\ShouldUseBinarySerializationForDataContractsAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Serialization\Attributes\ShouldUseJsonSerializationForDataContractsAttribute.cs">
-      <Link>Serialization\Attributes\ShouldUseJsonSerializationForDataContractsAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Serialization\BinarySerializerOperationBehavior.cs">
-      <Link>Serialization\BinarySerializerOperationBehavior.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Serialization\Helpers\BinarySerializerHelper.cs">
-      <Link>Serialization\Helpers\BinarySerializerHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Serialization\Interfaces\IObjectMetaData.cs">
-      <Link>Serialization\Interfaces\IObjectMetaData.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Serialization\JsonSerializerOperationBehavior.cs">
-      <Link>Serialization\JsonSerializerOperationBehavior.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Serialization\ObjectMetaData.cs">
-      <Link>Serialization\ObjectMetaData.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\Serialization\Serializers\BinarySerializer.cs">
-      <Link>Serialization\Serializers\BinarySerializer.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Wcf.Server.NET40\ServiceHost.cs">
-      <Link>ServiceHost.cs</Link>
-    </Compile>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -122,7 +68,18 @@
       <Name>Catel.Core.NET45</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="..\Catel.Extensions.Wcf.Server.Shared\Catel.Extensions.Wcf.Server.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Extensions.Wcf.Server.Shared\Catel.Extensions.Wcf.Server.Shared.projitems')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\..\..\lib\Fody.1.27.0-beta01\build\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.27.0-beta01\build\Fody.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\lib\Fody.1.27.0-beta01\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.1.27.0-beta01\build\Fody.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
@@ -130,12 +87,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <Import Project="$(ProjectDir)\..\..\..\Tools\Pepita\PepitaGet.targets" />
-  <Import Project="..\..\..\lib\Fody.1.22.1\build\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.22.1\build\Fody.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\lib\Fody.1.22.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.1.22.1\build\Fody.targets'))" />
-  </Target>
 </Project>

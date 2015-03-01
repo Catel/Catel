@@ -20,5 +20,23 @@
 	<licenseUrl>http://www.catelproject.com/license/</licenseUrl>
 	<!--<iconUrl>file://content/icon.png</iconUrl>-->
 	<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>
+    
+    <dependencies>
+        <group targetFramework="net40">
+          <dependency id="Microsoft.Bcl" version="1.1.9" />
+          <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
+          <dependency id="Microsoft.Bcl.Build" version="1.0.21" />
+        </group>
+        
+        <!-- Required to make sure NET45 doesn't pick up BCL dependency from NET40, see  -->
+        <group targetFramework="net45">
+        </group>        
+        
+        <group targetFramework="sl50">
+          <dependency id="Microsoft.Bcl" version="1.1.9" />
+          <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
+          <dependency id="Microsoft.Bcl.Build" version="1.0.21" />
+        </group>        
+    </dependencies>      
   </metadata>
 </package>

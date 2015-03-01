@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="EntityRepositoryBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -146,6 +146,17 @@ namespace Catel.Data.Repositories
             predicate = EnsureValidatePredicate(predicate);
 
             return query.FirstOrDefault(predicate);
+        }
+
+        /// <summary>
+        /// Gets an new entity instance, which may be a proxy if the entity meets the proxy requirements and the underlying context is configured to create proxies.
+        /// <para />
+        /// Note that the returned proxy entity is NOT added or attached to the set.
+        /// </summary>
+        /// <returns>The proxy entity</returns>
+        public virtual TEntity Create()
+        {
+            return _dbContext.Set<TEntity>().Create();
         }
 
         /// <summary>

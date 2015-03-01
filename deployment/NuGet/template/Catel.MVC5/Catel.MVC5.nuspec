@@ -21,8 +21,8 @@
 	<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>
 	
     <dependencies>
-      <dependency id="Catel.Core" version="[VERSION]" />
-	  <dependency id="Microsoft.AspNet.Mvc" version="5.1.1" />
+          <dependency id="Catel.Core" version="[VERSION]" />
+          <dependency id="Microsoft.AspNet.Mvc" version="5.1.1" />            
     </dependencies>
 	
   </metadata>

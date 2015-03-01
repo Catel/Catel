@@ -1,8 +1,10 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="GrayscaleEffect.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+
+#if NET || SL5
 
 namespace Catel.Windows.Media.Effects
 {
@@ -109,3 +111,5 @@ namespace Catel.Windows.Media.Effects
         #endregion
     }
 }
+
+#endif

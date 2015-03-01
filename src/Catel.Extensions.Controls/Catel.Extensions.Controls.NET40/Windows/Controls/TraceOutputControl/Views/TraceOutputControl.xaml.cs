@@ -1,17 +1,16 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="TraceOutputControl.xaml.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+
 namespace Catel.Windows.Controls
 {
-    using System;
-    using System.Collections.Specialized;
     using System.Linq;
-    using System.Windows.Controls;
-    using IoC;
-    using MVVM;
+    using System.Windows;
+    using MVVM.Views;
+    using Logging;
 
     /// <summary>
     /// Interaction logic for TraceOutputControl.xaml
@@ -19,6 +18,15 @@ namespace Catel.Windows.Controls
     public partial class TraceOutputControl : UserControl
     {
         #region Constructors
+        /// <summary>
+        /// Initializes static members of the <see cref="TraceOutputControl"/> class.
+        /// </summary>
+        /// <remarks>This method is required for design time support.</remarks>
+        static TraceOutputControl()
+        {
+            typeof(TraceOutputControl).AutoDetectViewPropertiesToSubscribe();
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TraceOutputControl"/> class.
         /// </summary>
@@ -28,9 +36,10 @@ namespace Catel.Windows.Controls
 
             logListView.SelectionChanged += (sender, args) =>
             {
-                if (ViewModel != null)
+                var vm = ViewModel as TraceOutputViewModel;
+                if (vm != null)
                 {
-                    ViewModel.SelectedTraceEntryCollection = logListView.SelectedItems.Cast<TraceEntry>().ToList();
+                    vm.SelectedTraceEntries = logListView.SelectedItems.Cast<TraceEntry>().ToList();
                 }
             };
         }
@@ -38,70 +47,49 @@ namespace Catel.Windows.Controls
 
         #region Properties
         /// <summary>
-        /// Gets the view model that is contained by the container.
+        /// Gets or sets whether the Catel logging should be ignored.
         /// </summary>
-        /// <value>The view model.</value>
-        public new TraceOutputViewModel ViewModel
+        [ViewToViewModel(MappingType = ViewToViewModelMappingType.TwoWayViewWins)]
+        public bool IgnoreCatelLogging
         {
-            get { return (TraceOutputViewModel)base.ViewModel; }
+            get { return (bool)GetValue(IgnoreCatelLoggingProperty); }
+            set { SetValue(IgnoreCatelLoggingProperty, value); }
         }
+
+        /// <summary>
+        /// Using a DependencyProperty as the backing store for IgnoreCatelLogging.  This enables animation, styling, binding, etc...
+        /// </summary>
+        public static readonly DependencyProperty IgnoreCatelLoggingProperty =
+            DependencyProperty.Register("IgnoreCatelLogging", typeof(bool), typeof(TraceOutputControl), new PropertyMetadata(true));
+
+        /// <summary>
+        /// Gets or sets the selected level.
+        /// </summary>
+        /// <value>The selected level.</value>
+        [ViewToViewModel(MappingType = ViewToViewModelMappingType.TwoWayViewWins)]
+        public LogEvent SelectedLevel
+        {
+            get { return (LogEvent)GetValue(SelectedLevelProperty); }
+            set { SetValue(SelectedLevelProperty, value); }
+        }
+
+        /// <summary>
+        /// Using a DependencyProperty as the backing store for SelectedLevel.  This enables animation, styling, binding, etc...
+        /// </summary>
+        public static readonly DependencyProperty SelectedLevelProperty =
+            DependencyProperty.Register("SelectedLevel", typeof(LogEvent), typeof(TraceOutputControl), new PropertyMetadata(LogEvent.Debug));
         #endregion
 
         #region Methods
         /// <summary>
-        /// Gets the type of the view model. If this method returns <c>null</c>, the view model type will be retrieved by naming
-        /// convention using the <see cref="IViewModelLocator"/> registered in the <see cref="IServiceLocator"/>.
+        /// Clears all messages from the control.
         /// </summary>
-        /// <returns>The type of the view model or <c>null</c> in case it should be auto determined.</returns>
-        /// <remarks></remarks>
-        protected override Type GetViewModelType()
+        public void Clear()
         {
-            return typeof(TraceOutputViewModel);
-        }
-
-        /// <summary>
-        /// Called when the <see cref="UserControl.ViewModel"/> has changed.
-        /// </summary>
-        /// <remarks></remarks>
-        protected override void OnViewModelChanged()
-        {
-            if (ViewModel != null)
+            var vm = ViewModel as TraceOutputViewModel;
+            if (vm != null)
             {
-                this.SubscribeToWeakCollectionChangedEvent(ViewModel.TraceEntryCollection, OnTraceEntryCollectionChanged);
-            }
-        }
-
-        private void OnTraceEntryCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            ScrollToBottom();
-        }
-
-        /// <summary>
-        /// Moves the cursor down so the latest output is visible.
-        /// </summary>
-        private void ScrollToBottom()
-        {
-            bool scroll = logListView.SelectedItems.Count == 0;
-
-            if (scroll)
-            {
-                if (logListView.IsVisible)
-                {
-                    // Get the border of the listview (first child of a listview)
-                    var scrollViewer = logListView.FindVisualDescendantByType<ScrollViewer>();
-                    scrollViewer.ScrollToBottom();
-                }
-                else
-                {
-                    if (ViewModel != null)
-                    {
-                        var lastEntry = ViewModel.TraceEntryCollection.LastOrDefault();
-                        if (lastEntry != null)
-                        {
-                            logListView.ScrollIntoView(lastEntry);
-                        }
-                    }
-                }
+                vm.ClearOutput.Execute();
             }
         }
         #endregion

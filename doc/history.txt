@@ -16,14 +16,78 @@ License:         http://www.catelproject.com/about/license
 **********************************************************
 
 ==================
-Version 4.0.0
+Version 4.1.0
 ==================
 
-For an upgrade guide, visit https://catelproject.atlassian.net/wiki/display/CTL/Catel+4.0.0
+For an update guide, visit https://catelproject.atlassian.net/wiki/display/CTL/Update+guides
 
 Release date:
 =============
-2014/xx/xx
+2015/xx/xx
+
+Added/fixed (BREAKING CHANGES):
+===============================
+xxx
+
+Added/fixed:
+============
+(+) CTL-394 CacheStorage Constructor with IEqualityComparer parameter support for Dictionary
+(+) CTL-545 Added IDataContextSubscriptionService to allow customization of DataContext subscriptions to
+    be direct (element.DataContext only) or inherited
+(+) CTL-556 Add support for SharpDevelop XAML visual designer
+(+) CTL-554 Allow suspension of notifications in ConfigurationService
+(+) CTL-564 Add DisposableToken class that makes it possible to easily suspend objects temporarily using
+    an IDisposable token that can initalize / dispose the object automatically
+(+) CTL-565 Add thread id to default FormatLogEvent in LogListenerBase
+(+) CTL-571 Add ObjectConverterService to allow customization of conversions
+(+) CTL-580 Add base class for disposable objects
+(+) CTL-583 Enable TaskCommands and ProgressiveTaskCommands in SL and NET40
+(+) CTL-591 Add more naming conventions to locators so views and view models can be located in same namespace
+(+) CTL-597 Add ability to turn DataAnnotation validation off
+(+) CTL-601 Add Additional methods on IExceptionService
+(*) CTL-557 ServiceLocator should support IDisposable
+(*) CTL-558 Use LayoutRounding and SnapToDevicePixels in DataWindow and UserControl to prevent 
+    blurriness. Also available as extension method FrameworkElement.FixBlurriness()
+(*) CTL-559 IoC ObjectExtensions DefaultDependencyResolver improvement
+(*) CTL-560 Allow ICommand to be added to CompositeCommand
+(*) CTL-579 Use Application.Shutdown instead of MainWindow.Close in NavigationService::CloseApplication
+(x) CTL-551 Memory leak with Behaviours caused by InteractivityManager. The InteractivityManager is
+    now marked obsolete and will be removed in 5.0, logic has already been removed from the codebase
+(x) CTL-561 Changing TraceOutputControl.SelectedLevel doesn't work
+(x) CTL-562 DirectoryService.InitialDirectory doesn't work correctly
+(x) CTL-563 InputGestures accepts key gesture with modifiers when Modifiers == ModifierKeys.None,
+    now the check is strict and only works if all the modifiers match
+(x) CTL-568 MessageBox in WPF does not set owner correctly when application is not activated
+(x) CTL-573 Property injection with same type and different tag not working
+(x) CTL-574 Possible deadlock when mapping properties from VM to M in multithreaded scenarios
+(x) CTL-575 XmlSchemaHelper does not check for duplicate type entries
+(x) CTL-578 CancelViewModel with model mappings allows corrupt model
+(x) CTL-589 Nested user controls with same name might cause unhandled exception in Silverlight
+(x) CTL-593 PleaseWaitService implementation missing from Silverlight
+(x) CTL-594 ViewModelCommandManager might throw NullReferenceException for closed view models
+(x) CTL-599 / CTL-600 Bugfixes in PleaseWaitService when using Push and Pop
+(x) CTL-603 ViewModelCommandManager is null in very rare cases
+(x) CTL-606 UpdateBindingBehaviorBase NullReferenceExcepton
+
+Roadmap:
+========
+See http://www.catelproject.com/support/issue-tracker
+
+Known issues:
+=============
+See http://www.catelproject.com/support/issue-tracker
+
+**********************************************************
+
+==================
+Version 4.0.0
+==================
+
+For an update guide, visit https://catelproject.atlassian.net/wiki/display/CTL/Update+guides
+
+Release date:
+=============
+2014/11/17
 
 Added/fixed (BREAKING CHANGES):
 ===============================
@@ -43,6 +107,25 @@ Added/fixed (BREAKING CHANGES):
     provide a back stack. This is to make the navigation the same on all platforms. If there is a need to keep state,
     the developer will be responsible to implement that
 (*) CTL-419 Changed license to MIT instead of Ms-PL
+(*) CTL-444 Remove Activator.CreateInstance from TypeFactory (it will automatically determine what to use now)
+(*) CTL-449 Convert all methods in the IMessageService to async so it works the same on all platforms. Note that this is
+    a breaking change and users should use await or Task.ContinueWith to await the result
+(*) CTL-451 Convert IUIVisualizerService to async implementation
+(*) CTL-452 Make it simple to use Catel on 3rd party controls (major changes internally, but it is now much easier
+    to use Catel on other views)
+(*) CTL-461 Change default value of CompositeCommand.AllowPartialExecution to false
+(*) CTL-483 UIVisualizerService improvements (moved some methods to extension methods)
+(*) CTL-486 Add time to all log listeners. This is a breaking change for classes implementing ILogListener
+(*) CTL-488 Convert IViewModel interface to support full async
+(*) CTL-506 BatchLogListenerBase.WriteBatch is now async so it won't block any UI
+(*) CTL-507 Use FastViewPropertySelector as default for major performance boost. This is a breaking change if the controls
+    use the ViewToViewModel mappings. If so, register the ViewPropertySelector class at application startup to get old
+    behavior
+(*) CTL-515 Implement validation members explicitly on ModelBase so clean up most rarely used members
+(-) CTL-454 Removed the RemoveInstance methods from the IServiceLocator interface. Use IServiceLocator.RemoveType instead
+(-) CTL-458 Removed usage of ICloneable. If one wants to clone an object, simply serialize / deserialize it
+(-) CTL-490 Remove parameters from BehaviorBase.OnAssociatedObjectLoaded. This is only a breaking change if there are 
+    custom behaviors
 
 Added/fixed:
 ============
@@ -65,6 +148,18 @@ Added/fixed:
 (+) CTL-406 Added support for Windows Phone 8.1
 (+) CTL-410 Add SingleUnloadOthers to TabControl so only a single view model lives in a tabcontrol
 (+) CTL-436 Add generic ICatelCommand interfaces
+(+) CTL-445 Support command parameters with application-wide commands
+(+) CTL-446 Create InteractivityManager to allow events when behaviors are created
+(+) CTL-459 Add AutoScroll behavior to automatically scroll ItemsControl lists
+(+) CTL-469 Add async methods to the ICacheStorage 
+(+) CTL-485 Create RollingInMemoryLogListener to be able to query the latest log messages
+(+) CTL-489 Allow property unregistration via ModelBase.UnregisterProperty
+(+) CTL-505 Allow to stamp LogEntries with date time
+(+) CTL-508 Added the SeqLogListener
+(+) CTL-509 Added the EventLogListener
+(+) CTL-511 Add PlatformToBooleanConverter to know which platform is being used
+(+) CTL-515 Add model initialization and uninitialization members availale in ViewModelBase
+(+) CTL-552 Create catel:Window that derives from DataWindow with a customized features
 (*) CTL-326 Data annotation validation will no longer be invoked for properties with non-public getters to prevent
     first chance exceptions the first time such a property is being validated
 (*) CTL-334 ViewModelBase now respects SuspendValidation during saving, which means that even if there are validation 
@@ -97,6 +192,20 @@ Added/fixed:
     has been canceled (was it canceled at all)
 (*) CTL-426 DataWindow automatically use application icon if no icon specified
 (*) CTL-440 Support nested view models (parent / child relations) when views are in ContentPresenter
+(*) CTL-456 Allow DoubleClickToCommand timeout specific and default to 500ms
+(*) CTL-460 Improve TraceOutputControl so it uses Catel logging system
+(*) CTL-470 Naming conventions should not strip multiple postfixes
+(*) CTL-473 Improve the way loaded views are handled
+(*) CTL-479 Make IDataErrorInfo/IDataWarningInfo methods customizable in ModelBase
+(*) CTL-481 Share lock for ServiceLocator / TypeFactory / DependencyResolver to prevent memory leaks
+(*) CTL-512 FileLogListener should create directory if it doesn't exist
+(*) CTL-521 Catel is now able to handle entities derived from a base class
+(*) CTL-522 On exception within constructor of type created with TypeFacotry, information about lines with exception is lost
+(*) CTL-524 Allow dynamic configuration for NET implementation of IConfigurationService. The implementation for NET no longer
+    uses the ConfigurationManager.AppSettings but the DynamicConfiguration object so it's always reliable
+(*) CTL-529 ViewModel should invalidate Command and CanExecute when child view model property changes
+(*) CTL-530 Improve TypeCache so it can return array types
+(-) CTL-453 Remove CommandManager code from Command
 (x) CTL-327 ListCollectionView not supported in ChangeNotificationWrapper (causes InvalidCastException)
 (x) CTL-329 VisualStateManager doesn't change state in WP8 in UserControl => introduced option to transfer styles and
     transitions: UserControl.TransferStylesAndTransitionsToViewModelGrid (default value is true)
@@ -120,6 +229,7 @@ Added/fixed:
 (x) CTL-381 LanguageService.GetResourceManager() method retrieves wrong assembly and therefore cannot find resource
 (x) CTL-384 WarningAndErrorValidator should hide ValidationAdorner
 (x) CTL-385 XmlAttribute values are not respected without explicit name
+(x) CTL-395 IValidationSummary property is null and this prevents command execution in case there are no errors
 (x) CTL-405 NullReferenceException is thrown in AutoCompletionBehavior when _availableSuggestions is null
 (x) CTL-409 Fixed SplashScreenService implementation to be used in the Application.OnStartup method context
 (x) CTL-416 Checking for for a binding IsSentinalBindingObject doesn't check for '{DisconnectedItem}'
@@ -129,6 +239,22 @@ Added/fixed:
 (x) CTL-429 Call to StyleHelper.CreateStyleForwardersForDefaultStyles(); leads to exception
 (x) CTL-437 Possible deadlock in ServiceLocator.ResolveType
 (x) CTL-439 Catch up of property validation validates the same propery multiple times
+(x) CTL-443 PleaseWaitService Displays "Please wait" instead of the message
+(x) CTL-447 TabControl LoadItems="AllOnStartup" not working
+(x) CTL-462 Memory Leaks using Language Binding
+(x) CTL-463 Its not possible to register a CustomViewModelFactory
+(x) CTL-464 Fixed SplashScreenService (due to Asynchronisity of UIVisualizerService)
+(x) CTL-465 DebugLogListener SL throws InvalidOperationException on disabled html bridge
+(x) CTL-466 Catel and Microsoft Fakes does not work because of reflection on explicit interface properties
+(x) CTL-467 Async MessageService does not show MessageBox (Task gets never started)
+(x) CTL-476 Exception in BootstrapperBase.RunWithSplashScreen<>()
+(x) CTL-478 InfoBarMessageControl does not respect Horizontal/Vertical- (Content)Alignment
+(x) CTL-487 TypeHelper doesn't always return the right typename / assemblyname
+(x) CTL-504 Catel.Fody GenerateXmlSchema and WeaveProperties Bug where web service models were not being
+    deserialized correctly
+(x) CTL-512 Closing a window via CloseViewModel in the view model does not work
+(x) CTL-517 Fixed possible NullReferenceException in AutoScroll behavior
+(x) CTL-543 App crash on startup with CLR Assert Failure - mscorlib recursive resource lookup bug ReflectionTypeLoad_LoadFailed
 
 Roadmap:
 ========

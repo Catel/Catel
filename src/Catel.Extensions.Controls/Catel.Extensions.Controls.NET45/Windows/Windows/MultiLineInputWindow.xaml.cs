@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="MultiLineInputWindow.xaml.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -24,8 +24,8 @@ namespace Catel.Windows
         public MultiLineInputWindow()
             : base(DataWindowMode.OkCancel)
         {
-            Title = Extensions.Controls.Properties.Resources.MultiLineInputWindowChangeText;
-            Explanation = Extensions.Controls.Properties.Resources.MultiLineInputWindowExplanation;
+            Title = "Change text";
+            Explanation = "Change the text below";
 
             InitializeComponent();
 

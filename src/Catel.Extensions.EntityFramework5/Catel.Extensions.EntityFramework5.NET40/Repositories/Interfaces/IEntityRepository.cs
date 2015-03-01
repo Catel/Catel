@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="IEntityRepository.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -66,6 +66,14 @@ namespace Catel.Data.Repositories
         /// <param name="predicate">The predicate.</param>
         /// <returns>The entity or <c>null</c> if no entity matches the criteria.</returns>
         TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate = null);
+
+        /// <summary>
+        /// Gets an new entity instance, which may be a proxy if the entity meets the proxy requirements and the underlying context is configured to create proxies.
+        /// <para />
+        /// Note that the returned proxy entity is NOT added or attached to the set.
+        /// </summary>
+        /// <returns>The proxy entity</returns>
+        TEntity Create();
 
         /// <summary>
         /// Adds the specified entity to the repository.

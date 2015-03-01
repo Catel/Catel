@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="Catel.ItemTemplates.WPF.UserControl..8fe638ab-9d4a-4d86-9099-50ba996cccbc" Version="1.0" Language="en-US" Publisher="Geert van Horrik" />
+    <Identity Id="Catel.ItemTemplates.WPF.UserControl..8fe638ab-9d4a-4d86-9099-50ba996cccbc" Version="1.3" Language="en-US" Publisher="Geert van Horrik" />
     <DisplayName>WPF UserControl using Catel</DisplayName>
     <Description xml:space="preserve">Item template to create a WPF UserControl using Catel.</Description>
     <MoreInfo>http://www.catelproject.com</MoreInfo>

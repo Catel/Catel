@@ -21,8 +21,8 @@
 	<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>
 	
     <dependencies>
-      <dependency id="Catel.MVVM" version="[VERSION]" />
-	  <dependency id="Prism" version="4.1.0.0" />
+          <dependency id="Catel.MVVM" version="[VERSION]" />
+          <dependency id="Prism" version="4.1.0.0" />                  
     </dependencies>
 	
   </metadata>

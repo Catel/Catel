@@ -1,12 +1,13 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="MultipleChoiceWindow.xaml.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace Catel.Windows
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using System.Windows;
 
     /// <summary>
@@ -34,8 +35,9 @@ namespace Catel.Windows
         {
             InitializeComponent();
 
-            ChoiceSpecify = Extensions.Controls.Properties.Resources.ChoiceSpecify;
-            Title = Extensions.Controls.Properties.Resources.MultipleChoiceWindowTitle;
+            Title = "Make a choice";
+            ChoiceSpecify = "Specify";
+            
             AllowSpecify = allowSpecify;
             ChoiceCollection = new List<Choice>();
             ChoiceCollection.AddRange(choiceCollection);
@@ -123,7 +125,7 @@ namespace Catel.Windows
         /// <param name="e">The event data.</param>
         private static void OnChoiceSpecifyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            MultipleChoiceWindow typedSender = sender as MultipleChoiceWindow;
+            var typedSender = sender as MultipleChoiceWindow;
             if (typedSender != null)
             {
                 typedSender.UpdateChoices();
@@ -137,10 +139,10 @@ namespace Catel.Windows
         /// <param name="e">The event data.</param>
         private static void OnSelectedChoiceChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            MultipleChoiceWindow typedSender = sender as MultipleChoiceWindow;
+            var typedSender = sender as MultipleChoiceWindow;
             if (typedSender != null)
             {
-                Choice newValue = e.NewValue as Choice;
+                var newValue = e.NewValue as Choice;
                 typedSender.Choice = (newValue != null) ? newValue.Explanation : string.Empty;
             }
         }
@@ -157,7 +159,7 @@ namespace Catel.Windows
 
             if (AllowSpecify)
             {
-                Choice specifyChoice = new Choice(ChoiceSpecify, string.Empty, true);
+                var specifyChoice = new Choice(ChoiceSpecify, string.Empty, true);
                 ChoiceCollection.Add(specifyChoice);
 
                 if (SelectedChoice == null)
@@ -187,20 +189,20 @@ namespace Catel.Windows
         /// Applies all changes made by this window.
         /// </summary>
         /// <returns>True if successful, otherwise false.</returns>
-        protected override bool ApplyChanges()
+        protected override Task<bool> ApplyChanges()
         {
-            return true;
+            return Task.Run<bool>(() => true);
         }
 
         /// <summary>
         /// Discards all changes made by this window.
         /// </summary>
         /// <returns>True if successful, otherwise false.</returns>
-        protected override bool DiscardChanges()
+        protected override Task<bool> DiscardChanges()
         {
             Choice = string.Empty;
 
-            return true;
+            return Task.Run<bool>(() => true);
         }
         #endregion
     }
