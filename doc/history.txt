@@ -31,6 +31,7 @@ xxx
 
 Added/fixed:
 ============
+(+) CTL-427 Added Catel.Extensions.Prism5 with full support for Prism 5
 (+) CTL-394 CacheStorage Constructor with IEqualityComparer parameter support for Dictionary
 (+) CTL-545 Added IDataContextSubscriptionService to allow customization of DataContext subscriptions to
     be direct (element.DataContext only) or inherited
