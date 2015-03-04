@@ -22,7 +22,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\..\output\debug\NET40\Catel.Extensions.Prism4\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET; NET40</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET; NET40;PRISM4</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\..\..\output\debug\NET40\Catel.Extensions.Prism4\Catel.Extensions.Prism.XML</DocumentationFile>
@@ -32,7 +32,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\..\output\release\NET40\Catel.Extensions.Prism4\</OutputPath>
-    <DefineConstants>TRACE;NET; NET40</DefineConstants>
+    <DefineConstants>TRACE;NET; NET40; PRISM4</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\..\..\output\release\NET40\Catel.Extensions.Prism4\Catel.Extensions.Prism.XML</DocumentationFile>
@@ -122,6 +122,7 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="..\Catel.Extensions.Prism4.Shared\Catel.Extensions.Prism4.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems')" />
+  <Import Project="..\Catel.Extensions.Prism4.Shared\Catel.Extensions.Prism4.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Extensions.Prism4.Shared\Catel.Extensions.Prism4.Shared.projitems')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets. -->

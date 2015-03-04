@@ -32,7 +32,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\..\output\debug\SL5\Catel.Extensions.Prism4\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;SILVERLIGHT; SL5</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT; SL5; PRISM4</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -44,7 +44,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\..\output\release\SL5\Catel.Extensions.Prism4\</OutputPath>
-    <DefineConstants>TRACE;SILVERLIGHT; SL5</DefineConstants>
+    <DefineConstants>TRACE;SILVERLIGHT; SL5; PRISM4</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -120,6 +120,7 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="..\Catel.Extensions.Prism4.Shared\Catel.Extensions.Prism4.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems')" />
+  <Import Project="..\Catel.Extensions.Prism4.Shared\Catel.Extensions.Prism4.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Extensions.Prism4.Shared\Catel.Extensions.Prism4.Shared.projitems')" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
