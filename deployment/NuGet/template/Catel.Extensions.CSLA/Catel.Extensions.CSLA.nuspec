@@ -23,23 +23,23 @@
 	<dependencies>		
 		<group targetFramework="net40">
 		  <dependency id="Catel.MVVM" version="[VERSION]" />
-		  <dependency id="CSLA-WPF" version="4.5.20" />
+		  <dependency id="CSLA-WPF" version="[replaced]" />
 		</group>	
 		
 		<group targetFramework="net45">
 		  <dependency id="Catel.MVVM" version="[VERSION]" />
-		  <dependency id="CSLA-WPF" version="4.5.20" />
+		  <dependency id="CSLA-WPF" version="[replaced]" />
 		</group>		
 
 		<group targetFramework="sl50">
 		  <dependency id="Catel.MVVM" version="[VERSION]" />
-		  <dependency id="CSLA-Silverlight" version="4.5.20" />
+		  <dependency id="CSLA-Silverlight" version="[replaced]" />
 		</group>	
 		
-		<group targetFramework="wp71">
+		<!--<group targetFramework="wp71">
 		  <dependency id="Catel.MVVM" version="[VERSION]" />
-		  <dependency id="CSLA-WindowsPhone" version="4.5.20" />
-		</group>	
+		  <dependency id="CSLA-WindowsPhone" version="[replaced]" />
+		</group>-->
 
 		<!-- TODO: Add WP8 and WinRT -->
 		
