@@ -31,81 +31,81 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\output\debug\SL5\Catel.Extensions.Prism4\</OutputPath>
+    <OutputPath>..\..\..\..\output\debug\SL5\Catel.Extensions.Prism4\</OutputPath>
     <DefineConstants>TRACE;DEBUG;SILVERLIGHT; SL5; PRISM4</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\..\output\debug\SL5\Catel.Extensions.Prism4\Catel.Extensions.Prism.XML</DocumentationFile>
+    <DocumentationFile>..\..\..\..\output\debug\SL5\Catel.Extensions.Prism4\Catel.Extensions.Prism.XML</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\output\release\SL5\Catel.Extensions.Prism4\</OutputPath>
+    <OutputPath>..\..\..\..\output\release\SL5\Catel.Extensions.Prism4\</OutputPath>
     <DefineConstants>TRACE;SILVERLIGHT; SL5; PRISM4</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\..\output\release\SL5\Catel.Extensions.Prism4\Catel.Extensions.Prism.XML</DocumentationFile>
+    <DocumentationFile>..\..\..\..\output\release\SL5\Catel.Extensions.Prism4\Catel.Extensions.Prism.XML</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Catel.Fody.Attributes">
-      <HintPath>..\..\..\lib\Catel.Fody.2.5.0\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
+      <HintPath>..\..\..\..\lib\Catel.Fody.2.5.0\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Expression.Interactions, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\lib\Prism.4.1.0.0\lib\SL5\Microsoft.Expression.Interactions.dll</HintPath>
+      <HintPath>..\..\..\..\lib\Prism.4.1.0.0\lib\SL5\Microsoft.Expression.Interactions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Prism">
-      <HintPath>..\..\..\lib\Prism.4.1.0.0\lib\SL5\Microsoft.Practices.Prism.dll</HintPath>
+      <HintPath>..\..\..\..\lib\Prism.4.1.0.0\lib\SL5\Microsoft.Practices.Prism.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Prism.Interactivity">
-      <HintPath>..\..\..\lib\Prism.4.1.0.0\lib\SL5\Microsoft.Practices.Prism.Interactivity.dll</HintPath>
+      <HintPath>..\..\..\..\lib\Prism.4.1.0.0\lib\SL5\Microsoft.Practices.Prism.Interactivity.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
-      <HintPath>..\..\..\lib\CommonServiceLocator.1.0\lib\SL30\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <HintPath>..\..\..\..\lib\CommonServiceLocator.1.0\lib\SL30\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks">
-      <HintPath>..\..\..\lib\Microsoft.Bcl.Async.1.0.168\lib\sl4\Microsoft.Threading.Tasks.dll</HintPath>
+      <HintPath>..\..\..\..\lib\Microsoft.Bcl.Async.1.0.168\lib\sl4\Microsoft.Threading.Tasks.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks.Extensions">
-      <HintPath>..\..\..\lib\Microsoft.Bcl.Async.1.0.168\lib\sl4\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+      <HintPath>..\..\..\..\lib\Microsoft.Bcl.Async.1.0.168\lib\sl4\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks.Extensions.Silverlight">
-      <HintPath>..\..\..\lib\Microsoft.Bcl.Async.1.0.168\lib\sl4\Microsoft.Threading.Tasks.Extensions.Silverlight.dll</HintPath>
+      <HintPath>..\..\..\..\lib\Microsoft.Bcl.Async.1.0.168\lib\sl4\Microsoft.Threading.Tasks.Extensions.Silverlight.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Obsolete">
-      <HintPath>..\..\..\lib\Obsolete.Fody.3.1.0.0\Lib\portable-net4+sl4+wp8+win8+wpa81+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
+      <HintPath>..\..\..\..\lib\Obsolete.Fody.3.1.0.0\Lib\portable-net4+sl4+wp8+win8+wpa81+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="system" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO">
-      <HintPath>..\..\..\lib\Microsoft.Bcl.1.1.10\lib\sl5\System.IO.dll</HintPath>
+      <HintPath>..\..\..\..\lib\Microsoft.Bcl.1.1.10\lib\sl5\System.IO.dll</HintPath>
     </Reference>
     <Reference Include="System.Net" />
     <Reference Include="System.Runtime">
-      <HintPath>..\..\..\lib\Microsoft.Bcl.1.1.10\lib\sl5\System.Runtime.dll</HintPath>
+      <HintPath>..\..\..\..\lib\Microsoft.Bcl.1.1.10\lib\sl5\System.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="System.Threading.Tasks">
-      <HintPath>..\..\..\lib\Microsoft.Bcl.1.1.10\lib\sl5\System.Threading.Tasks.dll</HintPath>
+      <HintPath>..\..\..\..\lib\Microsoft.Bcl.1.1.10\lib\sl5\System.Threading.Tasks.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Interactivity, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\lib\Prism.4.1.0.0\lib\SL5\System.Windows.Interactivity.dll</HintPath>
+      <HintPath>..\..\..\..\lib\Prism.4.1.0.0\lib\SL5\System.Windows.Interactivity.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Catel.Core\Catel.Core.SL5\Catel.Core.SL5.csproj">
+    <ProjectReference Include="..\..\..\Catel.Core\Catel.Core.SL5\Catel.Core.SL5.csproj">
       <Project>{2B6DB2B2-C289-4779-97C1-507BC779BA25}</Project>
       <Name>Catel.Core.SL5</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Catel.MVVM\Catel.MVVM.SL5\Catel.MVVM.SL5.csproj">
+    <ProjectReference Include="..\..\..\Catel.MVVM\Catel.MVVM.SL5\Catel.MVVM.SL5.csproj">
       <Project>{5E382C94-510F-4943-8F9E-E6EC3F139E8E}</Project>
       <Name>Catel.MVVM.SL5</Name>
     </ProjectReference>
@@ -139,9 +139,9 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\lib\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
-    <Error Condition="!Exists('..\..\..\lib\Fody.1.27.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.1.27.1\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\..\..\..\lib\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\lib\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
+    <Error Condition="!Exists('..\..\..\..\lib\Fody.1.27.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\lib\Fody.1.27.1\build\Fody.targets'))" />
   </Target>
-  <Import Project="..\..\..\lib\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\lib\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
-  <Import Project="..\..\..\lib\Fody.1.27.1\build\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.27.1\build\Fody.targets')" />
+  <Import Project="..\..\..\..\lib\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\lib\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <Import Project="..\..\..\..\lib\Fody.1.27.1\build\Fody.targets" Condition="Exists('..\..\..\..\lib\Fody.1.27.1\build\Fody.targets')" />
 </Project>

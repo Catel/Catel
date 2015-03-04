@@ -177,7 +177,7 @@
       <Project>{918b3e4e-eda7-44d0-99ca-d1f40cd59e9d}</Project>
       <Name>Catel.Extensions.Memento.NET40</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Catel.Extensions.Prism4\Catel.Extensions.Prism4.NET40\Catel.Extensions.Prism4.NET40.csproj">
+    <ProjectReference Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism4\Catel.Extensions.Prism4.NET40\Catel.Extensions.Prism4.NET40.csproj">
       <Project>{C9EAD437-56BA-45BB-A982-845AD72FE1C8}</Project>
       <Name>Catel.Extensions.Prism4.NET40</Name>
     </ProjectReference>

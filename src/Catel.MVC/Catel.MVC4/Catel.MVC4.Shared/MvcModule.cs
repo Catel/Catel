@@ -7,22 +7,15 @@
 
 namespace Catel
 {
-    using Catel.IoC;
-
     /// <summary>
     /// Mvc module which allows the registration of default services in the service locator.
     /// </summary>
-    public class MvcModule : IServiceLocatorInitializer
+    public partial class MvcModule
     {
-        /// <summary>
-        /// Initializes the specified service locator.
-        /// </summary>
-        /// <param name="serviceLocator">The service locator.</param>
-        public void Initialize(IServiceLocator serviceLocator)
+        #region Methods
+        partial void InitializePlatform()
         {
-            Argument.IsNotNull(() => serviceLocator);
-
-            // Register services here
         }
+        #endregion
     }
 }

@@ -18,54 +18,54 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\output\debug\NET45\Catel.Extensions.Prism5\</OutputPath>
+    <OutputPath>..\..\..\..\output\debug\NET45\Catel.Extensions.Prism5\</OutputPath>
     <DefineConstants>TRACE;DEBUG;NET; NET45; PRISM5</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>..\..\..\output\debug\NET45\Catel.Extensions.Prism5\Catel.Extensions.Prism.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\..\output\debug\NET45\Catel.Extensions.Prism5\Catel.Extensions.Prism.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\output\release\NET45\Catel.Extensions.Prism5\</OutputPath>
+    <OutputPath>..\..\..\..\output\release\NET45\Catel.Extensions.Prism5\</OutputPath>
     <DefineConstants>TRACE;NET; NET45; PRISM5</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>..\..\..\output\release\NET45\Catel.Extensions.Prism\Catel.Extensions.Prism5.XML</DocumentationFile>
+    <DocumentationFile>..\..\..\..\output\release\NET45\Catel.Extensions.Prism\Catel.Extensions.Prism5.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Practices.Prism.Composition">
-      <HintPath>..\..\..\lib\Prism.Composition.5.0.0\lib\NET45\Microsoft.Practices.Prism.Composition.dll</HintPath>
+      <HintPath>..\..\..\..\lib\Prism.Composition.5.0.0\lib\NET45\Microsoft.Practices.Prism.Composition.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Prism.Interactivity">
-      <HintPath>..\..\..\lib\Prism.Interactivity.5.0.0\lib\NET45\Microsoft.Practices.Prism.Interactivity.dll</HintPath>
+      <HintPath>..\..\..\..\lib\Prism.Interactivity.5.0.0\lib\NET45\Microsoft.Practices.Prism.Interactivity.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Prism.Mvvm">
-      <HintPath>..\..\..\lib\Prism.Mvvm.1.0.0\lib\net45\Microsoft.Practices.Prism.Mvvm.dll</HintPath>
+      <HintPath>..\..\..\..\lib\Prism.Mvvm.1.0.0\lib\net45\Microsoft.Practices.Prism.Mvvm.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Prism.Mvvm.Desktop">
-      <HintPath>..\..\..\lib\Prism.Mvvm.1.0.0\lib\net45\Microsoft.Practices.Prism.Mvvm.Desktop.dll</HintPath>
+      <HintPath>..\..\..\..\lib\Prism.Mvvm.1.0.0\lib\net45\Microsoft.Practices.Prism.Mvvm.Desktop.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Prism.PubSubEvents">
-      <HintPath>..\..\..\lib\Prism.PubSubEvents.1.0.0\lib\portable-sl4+wp7+windows8+net40\Microsoft.Practices.Prism.PubSubEvents.dll</HintPath>
+      <HintPath>..\..\..\..\lib\Prism.PubSubEvents.1.0.0\lib\portable-sl4+wp7+windows8+net40\Microsoft.Practices.Prism.PubSubEvents.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Prism.SharedInterfaces">
-      <HintPath>..\..\..\lib\Prism.Mvvm.1.0.0\lib\net45\Microsoft.Practices.Prism.SharedInterfaces.dll</HintPath>
+      <HintPath>..\..\..\..\lib\Prism.Mvvm.1.0.0\lib\net45\Microsoft.Practices.Prism.SharedInterfaces.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
-      <HintPath>..\..\..\lib\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <HintPath>..\..\..\..\lib\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.XmlTransform">
-      <HintPath>..\..\..\lib\Microsoft.Web.Xdt.1.0.0\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
+      <HintPath>..\..\..\..\lib\Microsoft.Web.Xdt.1.0.0\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
     </Reference>
     <Reference Include="NuGet.Core, Version=2.8.50320.36, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\NuGet.Core.2.8.1\lib\net40-Client\NuGet.Core.dll</HintPath>
+      <HintPath>..\..\..\..\lib\NuGet.Core.2.8.1\lib\net40-Client\NuGet.Core.dll</HintPath>
     </Reference>
     <Reference Include="Obsolete">
-      <HintPath>..\..\..\lib\Obsolete.Fody.3.1.0.0\Lib\NET35\Obsolete.dll</HintPath>
+      <HintPath>..\..\..\..\lib\Obsolete.Fody.3.1.0.0\Lib\NET35\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="PresentationCore" />
@@ -87,11 +87,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Catel.Core\Catel.Core.NET45\Catel.Core.NET45.csproj">
+    <ProjectReference Include="..\..\..\Catel.Core\Catel.Core.NET45\Catel.Core.NET45.csproj">
       <Project>{d748be60-bad6-4d1b-be5a-c24943a56594}</Project>
       <Name>Catel.Core.NET45</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Catel.MVVM\Catel.MVVM.NET45\Catel.MVVM.NET45.csproj">
+    <ProjectReference Include="..\..\..\Catel.MVVM\Catel.MVVM.NET45\Catel.MVVM.NET45.csproj">
       <Project>{bedeb2cb-51ab-4af6-85f9-6a596b4603bb}</Project>
       <Name>Catel.MVVM.NET45</Name>
     </ProjectReference>
@@ -111,11 +111,11 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <Import Project="..\..\..\lib\Fody.1.22.1\build\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.22.1\build\Fody.targets')" />
+  <Import Project="..\..\..\..\lib\Fody.1.22.1\build\Fody.targets" Condition="Exists('..\..\..\..\lib\Fody.1.22.1\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\lib\Fody.1.22.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.1.22.1\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\..\..\..\lib\Fody.1.22.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\lib\Fody.1.22.1\build\Fody.targets'))" />
   </Target>
 </Project>

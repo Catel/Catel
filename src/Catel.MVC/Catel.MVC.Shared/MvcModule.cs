@@ -12,7 +12,7 @@ namespace Catel
     /// <summary>
     /// Mvc module which allows the registration of default services in the service locator.
     /// </summary>
-    public class MvcModule : IServiceLocatorInitializer
+    public partial class MvcModule : IServiceLocatorInitializer
     {
         /// <summary>
         /// Initializes the specified service locator.
@@ -24,5 +24,7 @@ namespace Catel
 
             // Register services here
         }
+
+        partial void InitializePlatform();
     }
 }
