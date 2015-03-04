@@ -9,42 +9,7 @@
     <Import_RootNamespace>Catel</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)BootstrapperBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)BootstrapperBase.generic.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExtensionsPrismModule.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\DependencyObjectExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ILogExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\IRegionManagerExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\HostHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IModuleTracker.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRegionInfo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IViewInfo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Modules\CompositeModuleCatalog.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Modules\CompositeNuGetBasedModuleCatalog.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Modules\CompositePackageRepository.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Modules\DownloadingModuleCatalog.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Modules\EventArgs\ModuleEventArgs.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Modules\Extensions\ModuleInfoExtensions.NuGet.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Modules\Interfaces\IDownloadingModuleCatalog.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Modules\Interfaces\INuGetBasedModuleCatalog.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Modules\ModuleBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Modules\ModuleBase.generic.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Modules\ModuleCatalog.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Modules\NuGetBasedModuleCatalog.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Modules\NuGetBasedModuleCatalogParentChildBehavior.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Modules\NuGet\InstallPackageRequest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Modules\NuGet\NuGetModuleTypeLoader.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Modules\NuGet\RemoteInstallPackageRequest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Modules\SafeDirectoryModuleCatalog.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Services\Extensions\ISplashScreenServiceExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Services\Extensions\IUIVisualizerServiceExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Services\Interfaces\IUICompositionService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Services\UICompositionService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ServiceLocatorAdapter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Tasks\BootstrapperTaskFactory.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Tasks\Interfaces\IBootstrapperTaskFactory.cs" />
   </ItemGroup>
 </Project>

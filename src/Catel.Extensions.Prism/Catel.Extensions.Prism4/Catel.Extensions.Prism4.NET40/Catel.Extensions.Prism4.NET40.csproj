@@ -123,6 +123,7 @@
   </ItemGroup>
   <Import Project="..\Catel.Extensions.Prism4.Shared\Catel.Extensions.Prism4.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems')" />
   <Import Project="..\Catel.Extensions.Prism4.Shared\Catel.Extensions.Prism4.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Extensions.Prism4.Shared\Catel.Extensions.Prism4.Shared.projitems')" />
+  <Import Project="..\..\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems" Label="Shared" Condition="Exists('..\..\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets. -->

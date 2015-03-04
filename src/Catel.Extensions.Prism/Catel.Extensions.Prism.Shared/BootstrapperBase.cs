@@ -21,6 +21,10 @@ namespace Catel
     using Microsoft.Practices.Prism.Modularity;
     using Microsoft.Practices.Prism.Regions;
 
+#if PRISM5
+    using Microsoft.Practices.Prism.PubSubEvents;
+#endif
+
     using MVVM;
     using Services;
     using MVVM.Tasks;
