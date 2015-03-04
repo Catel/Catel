@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
+    <!-- NOTE: DO NOT CHANGE ID ALTHOUGH IT DOESN'T CONTAIN PRISM4 -->
     <id>Catel.Extensions.Prism</id>
     <version>[VERSION]</version>
-	<title>Catel.Extensions.Prism</title>
+	<title>Catel.Extensions.Prism4</title>
     <authors>GeertvanHorrik</authors>
 	
 	<description>
-	  Catel.Extensions.Prism library which contains helper classes for prism.
+	  Catel.Extensions.Prism4 library which contains helper classes for prism.
 	</description>
 	<summary>
 	</summary>
