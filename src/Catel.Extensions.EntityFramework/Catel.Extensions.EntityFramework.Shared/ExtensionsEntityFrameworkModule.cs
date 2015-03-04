@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ExtensionsEntityFramework6Module.cs" company="Catel development team">
+// <copyright file="ExtensionsEntityFrameworkModule.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -11,9 +11,9 @@ namespace Catel
     using Catel.IoC;
 
     /// <summary>
-    /// Extensions.EntityFramework6 module which allows the registration of default services in the service locator.
+    /// Extensions.EntityFramework module which allows the registration of default services in the service locator.
     /// </summary>
-    public class ExtensionsEntityFramework6Module : IServiceLocatorInitializer
+    public partial class ExtensionsEntityFrameworkModule : IServiceLocatorInitializer
     {
         /// <summary>
         /// Initializes the specified service locator.
@@ -26,5 +26,7 @@ namespace Catel
             serviceLocator.RegisterTypeIfNotYetRegistered<IConnectionStringManager, ConnectionStringManager>();
             serviceLocator.RegisterTypeIfNotYetRegistered<IContextFactory, ContextFactory>();
         }
+
+        partial void InitializePlatform();
     }
 }
