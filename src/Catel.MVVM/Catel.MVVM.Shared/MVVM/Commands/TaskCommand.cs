@@ -231,7 +231,8 @@ namespace Catel.MVVM
 
             RaiseCanExecuteChanged();
 
-            Task executionTask = _execute(parameter, _cancellationTokenSource.Token, _progress);
+            var executionTask = _execute(parameter, _cancellationTokenSource.Token, _progress);
+
             try
             {
                 Log.Info("Executing task command...");

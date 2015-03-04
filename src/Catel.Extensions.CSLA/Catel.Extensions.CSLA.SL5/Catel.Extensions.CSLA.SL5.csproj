@@ -19,7 +19,7 @@
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <NuGetPackageImportStamp>be890d5e</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>21eec7bd</NuGetPackageImportStamp>
   </PropertyGroup>
   <!-- This property group is only here to support building this project using the 
        MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
@@ -56,15 +56,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Catel.Fody.Attributes">
-      <HintPath>..\..\..\lib\Catel.Fody.2.5.0-unstable0001\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
+      <HintPath>..\..\..\lib\Catel.Fody.2.5.0\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
     </Reference>
-    <Reference Include="Csla, Version=4.5.501.0, Culture=neutral, PublicKeyToken=93be5fdc093e4c30, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\CSLA-Core.4.5.501\lib\sl50\Csla.dll</HintPath>
+    <Reference Include="Csla">
+      <HintPath>..\..\..\lib\CSLA-Core.4.5.700\lib\sl50\Csla.dll</HintPath>
     </Reference>
-    <Reference Include="Csla.Xaml, Version=4.5.501.0, Culture=neutral, PublicKeyToken=93be5fdc093e4c30, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\CSLA-Silverlight.4.5.501\lib\sl50\Csla.Xaml.dll</HintPath>
+    <Reference Include="Csla.Xaml">
+      <HintPath>..\..\..\lib\CSLA-Silverlight.4.5.700\lib\sl50\Csla.Xaml.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks">
       <HintPath>..\..\..\lib\Microsoft.Bcl.Async.1.0.168\lib\sl4\Microsoft.Threading.Tasks.dll</HintPath>
@@ -84,13 +82,23 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System.IO">
-      <HintPath>..\..\..\lib\Microsoft.Bcl.1.1.9\lib\sl5\System.IO.dll</HintPath>
+      <HintPath>..\..\..\lib\Microsoft.Bcl.1.1.10\lib\sl5\System.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+      <HintPath>..\..\..\lib\Microsoft.Net.Http.2.2.28\lib\portable-net40+sl4+win8+wp71+wpa81\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Extensions">
+      <HintPath>..\..\..\lib\Microsoft.Net.Http.2.2.28\lib\portable-net40+sl4+win8+wp71+wpa81\System.Net.Http.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives">
+      <HintPath>..\..\..\lib\Microsoft.Net.Http.2.2.28\lib\portable-net40+sl4+win8+wp71+wpa81\System.Net.Http.Primitives.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime">
-      <HintPath>..\..\..\lib\Microsoft.Bcl.1.1.9\lib\sl5\System.Runtime.dll</HintPath>
+      <HintPath>..\..\..\lib\Microsoft.Bcl.1.1.10\lib\sl5\System.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="System.Threading.Tasks">
-      <HintPath>..\..\..\lib\Microsoft.Bcl.1.1.9\lib\sl5\System.Threading.Tasks.dll</HintPath>
+      <HintPath>..\..\..\lib\Microsoft.Bcl.1.1.10\lib\sl5\System.Threading.Tasks.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="system" />
@@ -140,8 +148,8 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\..\..\lib\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
-    <Error Condition="!Exists('..\..\..\lib\Fody.1.27.0-beta01\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.1.27.0-beta01\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\..\..\lib\Fody.1.27.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.1.27.1\build\Fody.targets'))" />
   </Target>
   <Import Project="..\..\..\lib\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\lib\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
-  <Import Project="..\..\..\lib\Fody.1.27.0-beta01\build\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.27.0-beta01\build\Fody.targets')" />
+  <Import Project="..\..\..\lib\Fody.1.27.1\build\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.27.1\build\Fody.targets')" />
 </Project>
