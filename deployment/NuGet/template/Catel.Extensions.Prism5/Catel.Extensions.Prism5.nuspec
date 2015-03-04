@@ -22,7 +22,11 @@
 	
     <dependencies>
       <dependency id="Catel.MVVM" version="[VERSION]" />
-      <dependency id="Prism" version="5.0.0" />
+      <dependency id="Prism" version="[replaced]" />
+      <dependency id="Prism.Composition" version="[replaced]" />
+      <dependency id="Prism.Interactivity" version="[replaced]" />
+      <dependency id="Prism.Mvvm" version="[replaced]" />
+      <dependency id="Prism.PubSubEvents" version="[replaced]" />
     </dependencies>
 	
   </metadata>
