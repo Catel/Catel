@@ -57,6 +57,16 @@ namespace Catel.Test.Configuration
 
                 Assert.AreEqual("nonExistingValue", configurationService.GetValue("nonExistingKey", "nonExistingValue"));
             }
+
+            [TestCase]
+            public void ReturnsValueForKeyWithSpecialCharacters()
+            {
+                var configurationService = GetConfigurationService();
+
+                configurationService.SetValue("key with special chars", "myValue");
+
+                Assert.AreEqual("myValue", configurationService.GetValue("key with special chars", "nonExistingValue"));
+            }
         }
 
         [TestFixture]
@@ -86,6 +96,16 @@ namespace Catel.Test.Configuration
                 configurationService.SetValue("myKey", "myValue");
 
                 Assert.AreEqual("myValue", configurationService.GetValue<string>("myKey"));
+            }
+
+            [TestCase]
+            public void SetsValueCorrectlyForKeyWithSpecialCharacters()
+            {
+                var configurationService = GetConfigurationService();
+
+                configurationService.SetValue("key with special chars", "myValue");
+
+                Assert.AreEqual("myValue", configurationService.GetValue<string>("key with special chars"));
             }
         }
 

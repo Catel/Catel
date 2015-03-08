@@ -128,6 +128,8 @@ namespace Catel.Configuration
         {
             Argument.IsNotNullOrWhitespace("key", key);
 
+            key = GetFinalKey(key);
+
             if (!ValueExists(key))
             {
                 return defaultValue;
@@ -159,10 +161,13 @@ namespace Catel.Configuration
         {
             Argument.IsNotNullOrWhitespace("key", key);
 
+            var originalKey = key;
+            key = GetFinalKey(key);
+
             var stringValue = ObjectToStringHelper.ToString(value);
             SetValueToStore(key, stringValue);
 
-            RaiseConfigurationChanged(key, value);
+            RaiseConfigurationChanged(originalKey, value);
         }
 
         /// <summary>
@@ -174,6 +179,8 @@ namespace Catel.Configuration
         public bool IsValueAvailable(string key)
         {
             Argument.IsNotNullOrWhitespace("key", key);
+
+            key = GetFinalKey(key);
 
             return ValueExists(key);
         }
@@ -259,6 +266,18 @@ namespace Catel.Configuration
             _configuration.SetConfigurationValue(key, value);
             _configuration.SaveAsXml(_configFilePath);
 #endif
+        }
+
+        /// <summary>
+        /// Gets the final key. This method allows customization of the key.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string GetFinalKey(string key)
+        {
+            key = key.Replace(" ", "_");
+
+            return key;
         }
 
         private void RaiseConfigurationChanged(string key, object value)

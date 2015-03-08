@@ -87,6 +87,6 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="action">The action.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        void UnregisterAction(Action<object> action);
+        void UnregisterAction(Action<object> action);        
     }
 }
