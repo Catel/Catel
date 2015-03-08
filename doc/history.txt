@@ -70,6 +70,7 @@ Added/fixed:
 (x) CTL-599 / CTL-600 Bugfixes in PleaseWaitService when using Push and Pop
 (x) CTL-603 ViewModelCommandManager is null in very rare cases
 (x) CTL-606 UpdateBindingBehaviorBase NullReferenceExcepton
+(x) CTL-609 XmlSchemaHelper should recognize duplicate schema types
 
 Roadmap:
 ========
