@@ -27,8 +27,8 @@ Release date:
 
 Added/fixed (BREAKING CHANGES):
 ===============================
-(*) IUIVisualizerService now has both sync and async methods. For < 4.0, this is a non-breaking change. For 
-    4.0 users, this is a breaking change. To keep using async, append Async (e.g. ShowDialogAsync) to the
+(*) CTL-610 IUIVisualizerService now has both sync and async methods. For < 4.0, this is a non-breaking change. 
+    For 4.0 users, this is a breaking change. To keep using async, append Async (e.g. ShowDialogAsync) to the
     calls of the IUIVisualizerService
 
 Added/fixed:
