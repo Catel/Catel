@@ -376,6 +376,10 @@ namespace Catel.IoC
                     }
                 }
             }
+            catch (TypeNotRegisteredException)
+            {
+                // Prevent first chance exceptions
+            }
             catch (Exception)
             {
                 // ignore
