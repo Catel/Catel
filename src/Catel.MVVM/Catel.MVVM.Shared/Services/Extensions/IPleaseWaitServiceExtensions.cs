@@ -30,7 +30,10 @@ namespace Catel.Services
                 {
                     for (var i = 0; i < showCounter; i++)
                     {
-                        x.Instance.Push();
+                        if (x.Instance.ShowCounter < showCounter)
+                        {
+                            x.Instance.Push();
+                        }
                     }
                 });
         }
