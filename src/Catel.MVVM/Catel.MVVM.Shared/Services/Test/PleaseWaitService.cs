@@ -13,6 +13,12 @@ namespace Catel.Services.Test
     /// </summary>
     public class PleaseWaitService : IPleaseWaitService
     {
+        /// <summary>
+        /// Gets or sets the show counter.
+        /// </summary>
+        /// <value>The show counter.</value>
+        public int ShowCounter { get; private set; }
+
         #region Methods
         /// <summary>
         /// Shows the please wait window with the specified status text.

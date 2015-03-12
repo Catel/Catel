@@ -87,5 +87,13 @@ namespace Catel.Services
         /// </summary>
         void Pop();
         #endregion
+
+        /// <summary>
+        /// Gets the show counter.
+        /// <para />
+        /// This property can be used to get the current show counter if the please wait window should be hidden for a moment.
+        /// </summary>
+        /// <value>The show counter.</value>
+        int ShowCounter { get; }
     }
 }

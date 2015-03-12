@@ -20,7 +20,6 @@ namespace Catel.Services
         private readonly ILanguageService _languageService;
 
         private string _lastStatus = string.Empty;
-        private int _showCounter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PleaseWaitService"/> class.
@@ -32,6 +31,14 @@ namespace Catel.Services
 
             _languageService = languageService;
         }
+
+        /// <summary>
+        /// Gets the show counter.
+        /// <para />
+        /// This property can be used to get the current show counter if the please wait window should be hidden for a moment.
+        /// </summary>
+        /// <value>The show counter.</value>
+        public int ShowCounter { get; private set; }
 
         partial void SetStatus(string status);
         partial void InitializeBusyIndicator();
@@ -47,8 +54,8 @@ namespace Catel.Services
         /// </remarks>
         public void Show(string status = "")
         {
-            _showCounter = 1;
-            
+            ShowCounter = 1;
+
             if (string.IsNullOrEmpty(status))
             {
                 status = _languageService.GetString("PleaseWait");
@@ -135,7 +142,7 @@ namespace Catel.Services
 
             HideBusyIndicator();
 
-            _showCounter = 0;
+            ShowCounter = 0;
         }
 
         /// <summary>
@@ -152,15 +159,15 @@ namespace Catel.Services
         /// <remarks></remarks>
         public void Push(string status = "")
         {
-            if (_showCounter <= 0)
+            if (ShowCounter <= 0)
             {
                 Show(status);
             }
             else
             {
-                _showCounter++;
+                ShowCounter++;
                 UpdateStatus(status);
-            }       
+            }
         }
 
         /// <summary>
@@ -176,12 +183,12 @@ namespace Catel.Services
         /// <remarks></remarks>
         public void Pop()
         {
-            if (_showCounter > 0)
+            if (ShowCounter > 0)
             {
-                _showCounter--;
+                ShowCounter--;
             }
 
-            if (_showCounter <= 0)
+            if (ShowCounter <= 0)
             {
                 Hide();
             }
