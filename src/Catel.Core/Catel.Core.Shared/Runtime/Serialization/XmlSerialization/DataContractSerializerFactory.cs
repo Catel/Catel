@@ -85,7 +85,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <exception cref="ArgumentException">The <paramref name="xmlName" /> is <c>null</c> or whitespace.</exception>
         [ObsoleteEx(RemoveInVersion = "5.0", TreatAsErrorFromVersion = "4.2",
             Replacement = "IDataContractSerializerFactory.GetDataContractSerializer(serializingType, typeToSerialize, xmlName, rootNamespace, additionalKnownTypes)")]
-        public virtual DataContractSerializer GetDataContractSerializer(Type serializingType, Type typeToSerialize, string xmlName, string rootNamespace = null, object serializingObject = null, List<Type> additionalKnownTypes = null)
+        public virtual DataContractSerializer GetDataContractSerializer(Type serializingType, Type typeToSerialize, string xmlName, string rootNamespace, object serializingObject, List<Type> additionalKnownTypes = null)
         {
             Argument.IsNotNull("serializingType", serializingType);
             Argument.IsNotNull("typeToSerialize", typeToSerialize);
