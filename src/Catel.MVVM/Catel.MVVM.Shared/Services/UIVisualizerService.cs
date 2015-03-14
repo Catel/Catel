@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="UIVisualizerService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -77,10 +77,7 @@ namespace Catel.Services
         /// </value>
         protected virtual Type WindowType
         {
-            get
-            {
-                return typeof(ContentControl);
-            }
+            get { return typeof(ContentControl); }
         }
         #endregion
 
@@ -144,7 +141,7 @@ namespace Catel.Services
         {
             lock (RegisteredWindows)
             {
-                bool result = RegisteredWindows.Remove(name);
+                var result = RegisteredWindows.Remove(name);
                 if (result)
                 {
                     Log.Debug("Unregistered view model '{0}' in UIVisualizerService", name);
@@ -164,22 +161,38 @@ namespace Catel.Services
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         /// <exception cref="ViewModelNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
-        public virtual async Task<bool?> Show(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
+        public virtual bool? Show(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             Argument.IsNotNull("viewModel", viewModel);
 
-            string viewModelTypeName = viewModel.GetType().FullName;
+            var viewModelType = viewModel.GetType();
+            var viewModelTypeName = viewModelType.FullName;
 
-            if (!RegisteredWindows.ContainsKey(viewModelTypeName))
-            {
-                var viewType = _viewLocator.ResolveView(viewModel.GetType());
-                if (viewType != null)
-                {
-                    this.Register(viewModel.GetType(), viewType);
-                }
-            }
+            RegisterViewForViewModelIfRequired(viewModelType);
 
-            return await Show(viewModelTypeName, viewModel, completedProc);
+            return Show(viewModelTypeName, viewModel, completedProc);
+        }
+
+        /// <summary>
+        /// Shows a window that is registered with the specified view model in a non-modal state.
+        /// </summary>
+        /// <param name="viewModel">The view model.</param>
+        /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
+        /// <returns>
+        /// <c>true</c> if the popup window is successfully opened; otherwise <c>false</c>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
+        /// <exception cref="ViewModelNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
+        public virtual async Task<bool?> ShowAsync(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
+        {
+            Argument.IsNotNull("viewModel", viewModel);
+
+            var viewModelType = viewModel.GetType();
+            var viewModelTypeName = viewModelType.FullName;
+
+            RegisterViewForViewModelIfRequired(viewModelType);
+
+            return await ShowAsync(viewModelTypeName, viewModel, completedProc);
         }
 
         /// <summary>
@@ -193,22 +206,42 @@ namespace Catel.Services
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type, bool)"/> method first.</exception>
-        public virtual async Task<bool?> Show(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
+        public virtual bool? Show(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             Argument.IsNotNullOrWhitespace("name", name);
 
-            lock (RegisteredWindows)
-            {
-                if (!RegisteredWindows.ContainsKey(name))
-                {
-                    throw new WindowNotRegisteredException(name);
-                }
-            }
+            EnsureViewIsRegistered(name);
 
             var window = CreateWindow(name, data, completedProc, false);
             if (window != null)
             {
-                return await ShowWindow(window, false);
+                return ShowWindow(window, false);
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Shows a window that is registered with the specified view model in a non-modal state.
+        /// </summary>
+        /// <param name="name">The name that the window is registered with.</param>
+        /// <param name="data">The data to set as data context. If <c>null</c>, the data context will be untouched.</param>
+        /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
+        /// <returns>
+        /// <c>true</c> if the popup window is successfully opened; otherwise <c>false</c>.
+        /// </returns>
+        /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type, bool)"/> method first.</exception>
+        public virtual async Task<bool?> ShowAsync(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
+        {
+            Argument.IsNotNullOrWhitespace("name", name);
+
+            EnsureViewIsRegistered(name);
+
+            var window = CreateWindow(name, data, completedProc, false);
+            if (window != null)
+            {
+                return await ShowWindowAsync(window, false);
             }
 
             return false;
@@ -224,22 +257,62 @@ namespace Catel.Services
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
-        public virtual async Task<bool?> ShowDialog(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
+        public virtual bool? ShowDialog(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             Argument.IsNotNull("viewModel", viewModel);
 
-            string viewModelTypeName = viewModel.GetType().FullName;
+            var viewModelType = viewModel.GetType();
+            var viewModelTypeName = viewModelType.FullName;
 
-            if (!RegisteredWindows.ContainsKey(viewModelTypeName))
+            RegisterViewForViewModelIfRequired(viewModelType);
+
+            return ShowDialog(viewModelTypeName, viewModel, completedProc);
+        }
+
+        /// <summary>
+        /// Shows a window that is registered with the specified view model in a modal state.
+        /// </summary>
+        /// <param name="viewModel">The view model.</param>
+        /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
+        /// <returns>
+        /// Nullable boolean representing the dialog result.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
+        /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
+        public virtual async Task<bool?> ShowDialogAsync(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
+        {
+            Argument.IsNotNull("viewModel", viewModel);
+
+            var viewModelType = viewModel.GetType();
+            var viewModelTypeName = viewModelType.FullName;
+
+            RegisterViewForViewModelIfRequired(viewModelType);
+
+            return await ShowDialogAsync(viewModelTypeName, viewModel, completedProc);
+        }
+
+        /// <summary>
+        /// Shows a window that is registered with the specified view model in a modal state.
+        /// </summary>
+        /// <param name="name">The name that the window is registered with.</param>
+        /// <param name="data">The data to set as data context. If <c>null</c>, the data context will be untouched.</param>
+        /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
+        /// <returns>Nullable boolean representing the dialog result.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="WindowNotRegisteredException">The <paramref name="name" /> is not registered by the <see cref="Register(string,System.Type,bool)" /> method first.</exception>
+        public virtual bool? ShowDialog(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
+        {
+            Argument.IsNotNullOrWhitespace("name", name);
+
+            EnsureViewIsRegistered(name);
+
+            var window = CreateWindow(name, data, completedProc, true);
+            if (window != null)
             {
-                var viewType = _viewLocator.ResolveView(viewModel.GetType());
-                if (viewType != null)
-                {
-                    this.Register(viewModel.GetType(), viewType);
-                }
+                return ShowWindow(window, true);
             }
 
-            return await ShowDialog(viewModelTypeName, viewModel, completedProc);
+            return false;
         }
 
         /// <summary>
@@ -253,22 +326,16 @@ namespace Catel.Services
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
-        public virtual async Task<bool?> ShowDialog(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
+        public virtual async Task<bool?> ShowDialogAsync(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             Argument.IsNotNullOrWhitespace("name", name);
 
-            lock (RegisteredWindows)
-            {
-                if (!RegisteredWindows.ContainsKey(name))
-                {
-                    throw new WindowNotRegisteredException(name);
-                }
-            }
+            EnsureViewIsRegistered(name);
 
             var window = CreateWindow(name, data, completedProc, true);
             if (window != null)
             {
-                return await ShowWindow(window, true);
+                return await ShowWindowAsync(window, true);
             }
 
             return false;
@@ -288,6 +355,41 @@ namespace Catel.Services
 #endif
 
         /// <summary>
+        /// Ensures that the specified view is registered.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <exception cref="WindowNotRegisteredException"></exception>
+        protected virtual void EnsureViewIsRegistered(string name)
+        {
+            lock (RegisteredWindows)
+            {
+                if (!RegisteredWindows.ContainsKey(name))
+                {
+                    throw new WindowNotRegisteredException(name);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Registers the view for the specified view model if required.
+        /// </summary>
+        /// <param name="viewModelType">Type of the view model.</param>
+        protected virtual void RegisterViewForViewModelIfRequired(Type viewModelType)
+        {
+            lock (RegisteredWindows)
+            {
+                if (!RegisteredWindows.ContainsKey(viewModelType.FullName))
+                {
+                    var viewType = _viewLocator.ResolveView(viewModelType);
+                    if (viewType != null)
+                    {
+                        this.Register(viewModelType, viewType);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// This creates the window from a key.
         /// </summary>
         /// <param name="name">The name that the window is registered with.</param>
@@ -298,6 +400,7 @@ namespace Catel.Services
         protected virtual FrameworkElement CreateWindow(string name, object data, EventHandler<UICompletedEventArgs> completedProc, bool isModal)
         {
             Type windowType;
+
             lock (RegisteredWindows)
             {
                 if (!RegisteredWindows.TryGetValue(name, out windowType))
@@ -378,36 +481,57 @@ namespace Catel.Services
         /// <param name="window">The window.</param>
         /// <param name="showModal">If <c>true</c>, the window should be shown as modal.</param>
         /// <returns><c>true</c> if the window is closed with success; otherwise <c>false</c> or <c>null</c>.</returns>
-        protected virtual Task<bool?> ShowWindow(FrameworkElement window, bool showModal)
+        protected virtual bool? ShowWindow(FrameworkElement window, bool showModal)
         {
-            return Task<bool?>.Factory.StartNew(() =>
+            if (showModal)
             {
-                if (showModal)
+                var showDialogMethodInfo = window.GetType().GetMethodEx("ShowDialog");
+                if (showDialogMethodInfo != null)
                 {
-                    var showDialogMethodInfo = window.GetType().GetMethodEx("ShowDialog");
-                    if (showDialogMethodInfo != null)
+                    // Child window does not have a ShowDialog, so not null is allowed
+                    bool? result = null;
+
+                    window.Dispatcher.Invoke(() =>
                     {
-                        // Child window does not have a ShowDialog, so not null is allowed
-                        bool? result = null;
-                        window.Dispatcher.Invoke(() => result = showDialogMethodInfo.Invoke(window, null) as bool?);
-                        return result;
-                    }
+                        // Safety net to prevent crashes when this is the main window
+                        try
+                        {
+                            result = showDialogMethodInfo.Invoke(window, null) as bool?;
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Warning(ex, "An error occurred, returning null since we don't know the result");
+                        }
+                    });
 
-                    Log.Warning("Method 'ShowDialog' not found on '{0}', falling back to 'Show'", window.GetType().Name);
+                    return result;
                 }
 
-                var showMethodInfo = window.GetType().GetMethodEx("Show");
-                if (showMethodInfo == null)
-                {
-                    string error = string.Format("Method 'Show' not found on '{0}', cannot show the window", window.GetType().Name);
-                    Log.Error(error);
+                Log.Warning("Method 'ShowDialog' not found on '{0}', falling back to 'Show'", window.GetType().Name);
+            }
 
-                    throw new NotSupportedException(error);
-                }
+            var showMethodInfo = window.GetType().GetMethodEx("Show");
+            if (showMethodInfo == null)
+            {
+                var error = string.Format("Method 'Show' not found on '{0}', cannot show the window", window.GetType().Name);
+                Log.Error(error);
 
-                window.Dispatcher.Invoke(() => showMethodInfo.Invoke(window, null));
-                return null;
-            });
+                throw new NotSupportedException(error);
+            }
+
+            window.Dispatcher.Invoke(() => showMethodInfo.Invoke(window, null));
+            return null;
+        }
+
+        /// <summary>
+        /// Shows the window.
+        /// </summary>
+        /// <param name="window">The window.</param>
+        /// <param name="showModal">If <c>true</c>, the window should be shown as modal.</param>
+        /// <returns><c>true</c> if the window is closed with success; otherwise <c>false</c> or <c>null</c>.</returns>
+        protected virtual async Task<bool?> ShowWindowAsync(FrameworkElement window, bool showModal)
+        {
+            return await Task<bool?>.Factory.StartNew(() => ShowWindow(window, showModal));
         }
         #endregion
     }

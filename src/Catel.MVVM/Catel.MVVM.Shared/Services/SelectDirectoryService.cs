@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SelectDirectoryService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -28,7 +28,7 @@ namespace Catel.Services
         /// Gets the directory name.
         /// </summary>
         /// <value>The name of the directory.</value>
-        public string DirectoryName { get; private set; }
+        public string DirectoryName { get; protected set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to show the new folder button to be able to create new folders while browsing.
@@ -71,19 +71,21 @@ namespace Catel.Services
         /// no changes will occur to the data of this object.
         /// </remarks>
         public virtual bool DetermineDirectory()
-        {
-            string initialDirectory = string.Empty;
-            if (!string.IsNullOrEmpty(InitialDirectory))
-            {
-                initialDirectory = IO.Path.AppendTrailingSlash(InitialDirectory);
-            }
-
+        {   
             var browserDialog = new FolderBrowserDialog();
-
             browserDialog.Description = Title;
-            browserDialog.RootFolder = System.Environment.SpecialFolder.MyComputer;
-            browserDialog.SelectedPath = initialDirectory;
             browserDialog.ShowNewFolderButton = ShowNewFolderButton;
+
+            var initialDirectory = InitialDirectory;
+
+            if (!string.IsNullOrEmpty(initialDirectory))
+            {
+                browserDialog.SelectedPath = IO.Path.AppendTrailingSlash(initialDirectory);
+            }
+            else
+            {
+                browserDialog.RootFolder = System.Environment.SpecialFolder.MyComputer;
+            }
 
             bool result = browserDialog.ShowDialog() == DialogResult.OK;
             if (result)

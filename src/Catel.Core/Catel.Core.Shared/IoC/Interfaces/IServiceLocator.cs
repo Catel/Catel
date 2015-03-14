@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="IServiceLocator.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -42,7 +42,7 @@ namespace Catel.IoC
     /// the type the service locator is looking for. By setting the <see cref="MissingTypeEventArgs.ImplementingInstance"/> or 
     /// <see cref="MissingTypeEventArgs.ImplementingType"/> in the handler, the service locator will resolve the type.
     /// </summary>
-    public interface IServiceLocator : IServiceProvider
+    public interface IServiceLocator : IServiceProvider, IDisposable
     {
         #region Properties
         /// <summary>

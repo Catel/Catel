@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="AutoCompleteBehavior.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -8,6 +8,7 @@
 
 namespace Catel.Windows.Interactivity
 {
+    using System.Collections.Generic;
     using System.Collections;
     using IoC;
     using Services;
@@ -127,6 +128,28 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(IEnumerable),
             typeof(AutoCompletion), new PropertyMetadata(null, (sender, e) => ((AutoCompletion)sender).OnItemsSourceChanged()));
+
+
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this behavior should use the auto completion service to filter the items source.
+        /// <para />
+        /// If this value is set to <c>false</c>, it will show the <see cref="ItemsSource"/> as auto completion source without filtering.
+        /// <para />
+        /// The default value is <c>true</c>.
+        /// </summary>
+        /// <value><c>true</c> if this behavior should use the auto completion service; otherwise, <c>false</c>.</value>
+        public bool UseAutoCompletionService
+        {
+            get { return (bool)GetValue(UseAutoCompletionServiceProperty); }
+            set { SetValue(UseAutoCompletionServiceProperty, value); }
+        }
+
+        /// <summary>
+        /// The use automatic completion service property.
+        /// </summary>
+        public static readonly DependencyProperty UseAutoCompletionServiceProperty =
+            DependencyProperty.Register("UseAutoCompletionService", typeof(bool), typeof(AutoCompletion), new PropertyMetadata(true));
         #endregion
 
         #region Methods
@@ -274,7 +297,24 @@ namespace Catel.Windows.Interactivity
 
             if (ItemsSource != null)
             {
-                availableSuggestions = _autoCompletionService.GetAutoCompleteValues(PropertyName, text, ItemsSource);
+                if (UseAutoCompletionService)
+                {
+                    availableSuggestions = _autoCompletionService.GetAutoCompleteValues(PropertyName, text, ItemsSource);
+                }
+                else
+                {
+                    var items = new List<string>();
+                    foreach (var item in ItemsSource)
+                    {
+                        var itemAsString = item as string;
+                        if (!string.IsNullOrWhiteSpace(itemAsString))
+                        {
+                            items.Add(itemAsString);
+                        }
+                    }
+
+                    availableSuggestions = items.ToArray();
+                }
             }
 
             _availableSuggestions = availableSuggestions;

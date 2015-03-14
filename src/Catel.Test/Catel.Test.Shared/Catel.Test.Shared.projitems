@@ -13,6 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ArgumentFacts.expression.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caching\CacheStorageFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caching\CacheStorageValueInfoFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\ListDictionaryFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caching\Policies\AbsoluteExpirationPolicyFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caching\Policies\CompositeExpirationPolicyFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caching\Policies\CustomExpirationPolicyFacts.cs" />
@@ -53,6 +54,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\ValidationContextFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ValidationResultFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ValidationSummaryFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DisposableTokenFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EnumFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\ExceptionExtensionsTests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\ExceptionHandlerFacts.cs" />
@@ -186,9 +188,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Exceptions\ViewModelNotRegisteredExceptionTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Exceptions\WrongViewModelTypeExceptionTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\TestClasses.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\UrlLocatorTest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\ViewLocatorTest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\ViewModelLocatorTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\UrlLocatorFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\ViewLocatorFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\ViewModelLocatorFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Services\EventArgs\UICompletedEventArgsTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Services\Exceptions\WindowNotRegisteredExceptionTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Services\NamingConventionTest.cs" />

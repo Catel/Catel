@@ -11,7 +11,7 @@
     <AssemblyName>Catel.Test.EntityFramework5.DbContextTest</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>c2776642</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>9b06c109</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -55,16 +55,16 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.IO">
-      <HintPath>..\..\..\lib\Microsoft.Bcl.1.1.9\lib\net40\System.IO.dll</HintPath>
+      <HintPath>..\..\..\lib\Microsoft.Bcl.1.1.10\lib\net40\System.IO.dll</HintPath>
     </Reference>
     <Reference Include="System.Net" />
     <Reference Include="System.Runtime">
-      <HintPath>..\..\..\lib\Microsoft.Bcl.1.1.9\lib\net40\System.Runtime.dll</HintPath>
+      <HintPath>..\..\..\lib\Microsoft.Bcl.1.1.10\lib\net40\System.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Threading.Tasks">
-      <HintPath>..\..\..\lib\Microsoft.Bcl.1.1.9\lib\net40\System.Threading.Tasks.dll</HintPath>
+      <HintPath>..\..\..\lib\Microsoft.Bcl.1.1.10\lib\net40\System.Threading.Tasks.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -138,7 +138,7 @@
       <Project>{43147a1a-c8a0-4645-824d-0e7caf0293fc}</Project>
       <Name>Catel.Core.NET40</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Catel.Extensions.EntityFramework5\Catel.Extensions.EntityFramework5.NET40\Catel.Extensions.EntityFramework5.NET40.csproj">
+    <ProjectReference Include="..\..\Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework5\Catel.Extensions.EntityFramework5.NET40\Catel.Extensions.EntityFramework5.NET40.csproj">
       <Project>{2a4af4d2-e74c-4a8a-947b-1b7ce5bdb67a}</Project>
       <Name>Catel.Extensions.EntityFramework5.NET40</Name>
     </ProjectReference>
@@ -156,8 +156,8 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\..\..\lib\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
-    <Error Condition="!Exists('..\..\..\lib\Fody.1.26.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.1.26.1\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\..\..\lib\Fody.1.27.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.1.27.1\build\Fody.targets'))" />
   </Target>
   <Import Project="..\..\..\lib\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\lib\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
-  <Import Project="..\..\..\lib\Fody.1.26.1\build\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.26.1\build\Fody.targets')" />
+  <Import Project="..\..\..\lib\Fody.1.27.1\build\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.27.1\build\Fody.targets')" />
 </Project>

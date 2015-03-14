@@ -111,5 +111,10 @@ namespace Catel.Logging
         /// <param name="extraData">The additional data.</param>
         /// <param name="time">The time.</param>
         void Error(ILog log, string message, object extraData, DateTime time);
+
+        /// <summary>
+        /// Occurs when a log message is written to one of the logs.
+        /// </summary>
+        event EventHandler<LogMessageEventArgs> LogMessage;
     }
 }

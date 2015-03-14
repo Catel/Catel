@@ -16,6 +16,75 @@ License:         http://www.catelproject.com/about/license
 **********************************************************
 
 ==================
+Version 4.1.0
+==================
+
+For an update guide, visit https://catelproject.atlassian.net/wiki/display/CTL/Update+guides
+
+Release date:
+=============
+2015/03/14
+
+Added/fixed (BREAKING CHANGES):
+===============================
+(*) CTL-610 IUIVisualizerService now has both sync and async methods. For < 4.0, this is a non-breaking change. 
+    For 4.0 users, this is a breaking change. To keep using async, append Async (e.g. ShowDialogAsync) to the
+    calls of the IUIVisualizerService
+
+Added/fixed:
+============
+(+) CTL-427 Added Catel.Extensions.Prism5 with full support for Prism 5
+(+) CTL-394 CacheStorage Constructor with IEqualityComparer parameter support for Dictionary
+(+) CTL-545 Added IDataContextSubscriptionService to allow customization of DataContext subscriptions to
+    be direct (element.DataContext only) or inherited
+(+) CTL-556 Add support for SharpDevelop XAML visual designer
+(+) CTL-554 Allow suspension of notifications in ConfigurationService
+(+) CTL-564 Add DisposableToken class that makes it possible to easily suspend objects temporarily using
+    an IDisposable token that can initalize / dispose the object automatically
+(+) CTL-565 Add thread id to default FormatLogEvent in LogListenerBase
+(+) CTL-571 Add ObjectConverterService to allow customization of conversions
+(+) CTL-580 Add base class for disposable objects
+(+) CTL-583 Enable TaskCommands and ProgressiveTaskCommands in SL and NET40
+(+) CTL-591 Add more naming conventions to locators so views and view models can be located in same namespace
+(+) CTL-597 Add ability to turn DataAnnotation validation off
+(+) CTL-601 Add Additional methods on IExceptionService
+(*) CTL-557 ServiceLocator should support IDisposable
+(*) CTL-558 Use LayoutRounding and SnapToDevicePixels in DataWindow and UserControl to prevent 
+    blurriness. Also available as extension method FrameworkElement.FixBlurriness()
+(*) CTL-559 IoC ObjectExtensions DefaultDependencyResolver improvement
+(*) CTL-560 Allow ICommand to be added to CompositeCommand
+(*) CTL-579 Use Application.Shutdown instead of MainWindow.Close in NavigationService::CloseApplication
+(*) CTL-608 Replace special characters such as spaces in configuration key values
+(x) CTL-551 Memory leak with Behaviours caused by InteractivityManager. The InteractivityManager is
+    now marked obsolete and will be removed in 5.0, logic has already been removed from the codebase
+(x) CTL-561 Changing TraceOutputControl.SelectedLevel doesn't work
+(x) CTL-562 DirectoryService.InitialDirectory doesn't work correctly
+(x) CTL-563 InputGestures accepts key gesture with modifiers when Modifiers == ModifierKeys.None,
+    now the check is strict and only works if all the modifiers match
+(x) CTL-568 MessageBox in WPF does not set owner correctly when application is not activated
+(x) CTL-573 Property injection with same type and different tag not working
+(x) CTL-574 Possible deadlock when mapping properties from VM to M in multithreaded scenarios
+(x) CTL-575 XmlSchemaHelper does not check for duplicate type entries
+(x) CTL-578 CancelViewModel with model mappings allows corrupt model
+(x) CTL-589 Nested user controls with same name might cause unhandled exception in Silverlight
+(x) CTL-593 PleaseWaitService implementation missing from Silverlight
+(x) CTL-594 ViewModelCommandManager might throw NullReferenceException for closed view models
+(x) CTL-599 / CTL-600 Bugfixes in PleaseWaitService when using Push and Pop
+(x) CTL-603 ViewModelCommandManager is null in very rare cases
+(x) CTL-606 UpdateBindingBehaviorBase NullReferenceExcepton
+(x) CTL-609 XmlSchemaHelper should recognize duplicate schema types
+
+Roadmap:
+========
+See http://www.catelproject.com/support/issue-tracker
+
+Known issues:
+=============
+See http://www.catelproject.com/support/issue-tracker
+
+**********************************************************
+
+==================
 Version 4.0.0
 ==================
 
@@ -30,6 +99,7 @@ Added/fixed (BREAKING CHANGES):
 (+) CTL-354 Introduced UserControl.UnloadBehavior to specify the behavior which will be handled when the view is
     being unloaded or the data context changes. This defaults to SaveAndCloseViewModel. If other logic is required,
     make sure to set the value on the UserControl
+(+) CTL-427 Added support for Prism5 in a new extension (Catel.Extensions.Prism5)
 (*) CTL-309 Moved Catel.MVVM.Services to Catel.Services namespace so all services in all extensions will now be put
     into the same namespace
 (*) CTL-328 Fully abstracted away the MVVM logic so they can be used in Xamarin as well. Therefore all view elements

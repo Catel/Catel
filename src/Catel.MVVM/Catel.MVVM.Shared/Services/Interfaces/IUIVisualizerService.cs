@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="IUIVisualizerService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -38,62 +38,112 @@ namespace Catel.Services
         bool Unregister(string name);
 
         /// <summary>
-        /// Shows a window that is registered with the specified view model in a non-modal state.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
-        /// <returns>
-        /// 	<c>true</c> if the popup window is successfully opened; otherwise <c>false</c>.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
-        /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
-        Task<bool?> Show(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null);
-
-        /// <summary>
-        /// Shows a window that is registered with the specified view model in a non-modal state.
-        /// </summary>
-        /// <param name="name">The name that the window is registered with.</param>
-        /// <param name="data">The data to set as data context. If <c>null</c>, the data context will be untouched.</param>
-        /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
-        /// <returns>
-        /// 	<c>true</c> if the popup window is successfully opened; otherwise <c>false</c>.
-        /// </returns>
-        /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
-        Task<bool?> Show(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null);
-
-        /// <summary>
-        /// Shows a window that is registered with the specified view model in a modal state.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
-        /// <returns>
-        /// Nullable boolean representing the dialog result.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
-        /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
-        Task<bool?> ShowDialog(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null);
-
-        /// <summary>
-        /// Shows a window that is registered with the specified view model in a modal state.
-        /// </summary>
-        /// <param name="name">The name that the window is registered with.</param>
-        /// <param name="data">The data to set as data context. If <c>null</c>, the data context will be untouched.</param>
-        /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
-        /// <returns>
-        /// Nullable boolean representing the dialog result.
-        /// </returns>
-        /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
-        Task<bool?> ShowDialog(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null);
-        #endregion
-
-        /// <summary>
         /// Determines whether the specified name is registered.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns><c>true</c> if the specified name is registered; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         bool IsRegistered(string name);
+
+        /// <summary>
+        /// Shows a window that is registered with the specified view model in a non-modal state.
+        /// </summary>
+        /// <param name="viewModel">The view model.</param>
+        /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
+        /// <returns>
+        /// 	<c>true</c> if the popup window is successfully opened; otherwise <c>false</c>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
+        /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
+        bool? Show(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null);
+
+        /// <summary>
+        /// Shows a window that is registered with the specified view model in a non-modal state.
+        /// </summary>
+        /// <param name="viewModel">The view model.</param>
+        /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
+        /// <returns>
+        /// 	<c>true</c> if the popup window is successfully opened; otherwise <c>false</c>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
+        /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
+        Task<bool?> ShowAsync(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null);
+
+        /// <summary>
+        /// Shows a window that is registered with the specified view model in a non-modal state.
+        /// </summary>
+        /// <param name="name">The name that the window is registered with.</param>
+        /// <param name="data">The data to set as data context. If <c>null</c>, the data context will be untouched.</param>
+        /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
+        /// <returns>
+        /// 	<c>true</c> if the popup window is successfully opened; otherwise <c>false</c>.
+        /// </returns>
+        /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
+        bool? Show(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null);
+
+        /// <summary>
+        /// Shows a window that is registered with the specified view model in a non-modal state.
+        /// </summary>
+        /// <param name="name">The name that the window is registered with.</param>
+        /// <param name="data">The data to set as data context. If <c>null</c>, the data context will be untouched.</param>
+        /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
+        /// <returns>
+        /// 	<c>true</c> if the popup window is successfully opened; otherwise <c>false</c>.
+        /// </returns>
+        /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
+        Task<bool?> ShowAsync(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null);
+
+        /// <summary>
+        /// Shows a window that is registered with the specified view model in a modal state.
+        /// </summary>
+        /// <param name="viewModel">The view model.</param>
+        /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
+        /// <returns>
+        /// Nullable boolean representing the dialog result.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
+        /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
+        bool? ShowDialog(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null);
+
+        /// <summary>
+        /// Shows a window that is registered with the specified view model in a modal state.
+        /// </summary>
+        /// <param name="viewModel">The view model.</param>
+        /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
+        /// <returns>
+        /// Nullable boolean representing the dialog result.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
+        /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
+        Task<bool?> ShowDialogAsync(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null);
+
+        /// <summary>
+        /// Shows a window that is registered with the specified view model in a modal state.
+        /// </summary>
+        /// <param name="name">The name that the window is registered with.</param>
+        /// <param name="data">The data to set as data context. If <c>null</c>, the data context will be untouched.</param>
+        /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
+        /// <returns>
+        /// Nullable boolean representing the dialog result.
+        /// </returns>
+        /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
+        bool? ShowDialog(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null);
+
+        /// <summary>
+        /// Shows a window that is registered with the specified view model in a modal state.
+        /// </summary>
+        /// <param name="name">The name that the window is registered with.</param>
+        /// <param name="data">The data to set as data context. If <c>null</c>, the data context will be untouched.</param>
+        /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
+        /// <returns>
+        /// Nullable boolean representing the dialog result.
+        /// </returns>
+        /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
+        Task<bool?> ShowDialogAsync(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null);
+        #endregion
     }
 }

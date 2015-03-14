@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="TraceOutputControl.xaml.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -18,6 +18,15 @@ namespace Catel.Windows.Controls
     public partial class TraceOutputControl : UserControl
     {
         #region Constructors
+        /// <summary>
+        /// Initializes static members of the <see cref="TraceOutputControl"/> class.
+        /// </summary>
+        /// <remarks>This method is required for design time support.</remarks>
+        static TraceOutputControl()
+        {
+            typeof(TraceOutputControl).AutoDetectViewPropertiesToSubscribe();
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TraceOutputControl"/> class.
         /// </summary>

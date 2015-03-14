@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ModelBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -156,6 +156,7 @@ namespace Catel.Data
         static ModelBase()
         {
             PropertyDataManager = PropertyDataManager.Default;
+            DefaultValidateUsingDataAnnotationsValue = true;
         }
 
 #if !NET
@@ -531,6 +532,7 @@ namespace Catel.Data
         private void Initialize()
         {
             SuspendValidation = DefaultSuspendValidationValue;
+            ValidateUsingDataAnnotations = DefaultValidateUsingDataAnnotationsValue;
             DeserializationSucceeded = false;
             HandlePropertyAndCollectionChanges = true;
             AlwaysInvokeNotifyChanged = false;

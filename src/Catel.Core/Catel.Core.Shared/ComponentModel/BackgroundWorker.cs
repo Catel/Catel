@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="BackgroundWorker.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -74,6 +74,7 @@ namespace System.ComponentModel
         /// </summary>
         /// <param name="percentProgress">Percent complete.</param>
         /// <param name="userState">User state value.</param>
+        // NOTE: async void by purpose
 #if NETFX_CORE
         public async void ReportProgress(int percentProgress, object userState)
 #else
@@ -136,16 +137,17 @@ namespace System.ComponentModel
         /// <summary>
         /// Starts the background task by raising the DoWork event.
         /// </summary>
-        public void RunWorkerAsync()
+        /// NOTE: async void by purpose
+        public async void RunWorkerAsync()
         {
-            RunWorkerAsync(null);
+            await RunWorkerAsync(null);
         }
 
         /// <summary>
         /// Starts the background task by raising the DoWork event.
         /// </summary>
         /// <param name="userState">User state value.</param>
-        public async void RunWorkerAsync(object userState)
+        public async Task RunWorkerAsync(object userState)
         {
             if (DoWork != null)
             {

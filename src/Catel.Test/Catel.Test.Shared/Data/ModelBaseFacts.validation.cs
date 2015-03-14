@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ModelBaseFacts.validation.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -608,6 +608,88 @@ namespace Catel.Test.Data
 
                 Assert.AreEqual(1, errors.Count);
                 Assert.AreEqual("Weight", ((FieldValidationResult)errors[0]).PropertyName);
+            }
+        }
+
+        [TestFixture]
+        public class IgnoreDataAnnotationValidation
+        {
+            /// <summary>
+            /// On each property access increment counter - way to check 
+            /// how many times property was requested to check annotation validation,
+            /// because every annotation validation get property value.
+            /// </summary>
+            public class ModelWithoutAnnotation : ModelBase
+            {
+                int _counter;
+
+                public int Counter { get { return _counter++; } }
+
+                public void SetValidateUsingDataAnnotations(bool value)
+                {
+                    ValidateUsingDataAnnotations = value;
+                }
+
+                public void Validate(bool force, bool useAnnotations)
+                {
+                    base.Validate(force, useAnnotations);
+                }
+
+                public void Validate(bool force)
+                {
+                    base.Validate(force);
+                }
+            }
+
+            [TestCase]
+            public void OnMethodParamIgnoreDataAnnotationSkipAnnotationValidation()
+            {
+                var model = new ModelWithoutAnnotation();
+
+                // validate model without data annotations
+                model.Validate(true, false);
+
+                Assert.AreEqual(0, model.Counter);
+            }
+
+            [TestCase]
+            public void OnInstancePropertyIgnoreDataAnnotationSkipAnnotationValidation()
+            {
+                // Set intance property to skip data annotations validation
+                var model = new ModelWithoutAnnotation();
+                model.SetValidateUsingDataAnnotations(false);
+
+                model.Validate(true);
+
+                Assert.AreEqual(0, model.Counter);
+            }
+
+            [TestCase]
+            public void OnStaticPropertyIgnoreDataAnnotationSkipAnnotationValidation()
+            {
+                // store original value
+                var oldValue = ModelBase.DefaultValidateUsingDataAnnotationsValue;
+
+                ModelBase.DefaultValidateUsingDataAnnotationsValue = false;
+                var model = new ModelWithoutAnnotation();
+
+                model.Validate(true);
+
+                // store original value
+                ModelBase.DefaultValidateUsingDataAnnotationsValue = oldValue;
+
+                Assert.AreEqual(0, model.Counter);
+            }
+
+            [TestCase]
+            public void ByDefaultValidateDataAnnotation()
+            {
+                // By default instance property set to check annotation validation
+                var model = new ModelWithoutAnnotation();
+
+                model.Validate(true);
+
+                Assert.AreEqual(1, model.Counter);
             }
         }
 #endif

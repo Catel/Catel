@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="BehaviorBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -33,21 +33,8 @@ namespace Catel.Windows.Interactivity
         where T : FrameworkElement
     {
         #region Fields
-        private static readonly IInteractivityManager InteractivityManager;
-
         private bool _isClean = true;
         private int _loadCounter;
-        #endregion
-
-        #region Constructors
-        /// <summary>
-        /// Constructs the behavior base.
-        /// </summary>
-        static BehaviorBase()
-        {
-            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-            InteractivityManager = dependencyResolver.TryResolve<IInteractivityManager>();
-        }
         #endregion
 
         #region Properties
@@ -73,7 +60,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Called after the behavior is attached to an AssociatedObject.
         /// </summary>
-        protected sealed override void OnAttached()
+        protected override void OnAttached()
         {
             if (IsInDesignMode)
             {
@@ -89,17 +76,12 @@ namespace Catel.Windows.Interactivity
             ValidateRequiredProperties();
 
             Initialize();
-
-            if (InteractivityManager != null)
-            {
-                InteractivityManager.RegisterBehavior(this);
-            }
         }
 
         /// <summary>
         /// Called when the behavior is being detached from its AssociatedObject, but before it has actually occurred.
         /// </summary>
-        protected sealed override void OnDetaching()
+        protected override void OnDetaching()
         {
             if (IsInDesignMode)
             {
@@ -219,11 +201,6 @@ namespace Catel.Windows.Interactivity
             }
 
             Uninitialize();
-
-            if (InteractivityManager != null)
-            {
-                InteractivityManager.UnregisterBehavior(this);
-            }
         }
         #endregion
     }

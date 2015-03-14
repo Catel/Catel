@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ModelBase.validation.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -302,6 +302,16 @@ namespace Catel.Data
         /// </summary>
         /// <value><c>true</c> if the validation must be suspended by default; otherwise, <c>false</c>.</value>
         public static bool DefaultSuspendValidationValue { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the validation should not try to process data annotations.
+        /// </summary>
+        protected bool ValidateUsingDataAnnotations { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the validation should not try to process data annotations.
+        /// </summary>
+        public static bool DefaultValidateUsingDataAnnotationsValue { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the validation for all classes deriving from <see cref="ModelBase"/> should be suspended.
@@ -721,7 +731,7 @@ namespace Catel.Data
         /// </remarks>
         protected void Validate(bool force = false)
         {
-            Validate(force, true);
+            Validate(force, ValidateUsingDataAnnotations);
         }
 
         /// <summary>

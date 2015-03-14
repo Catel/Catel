@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ViewLocator.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -133,6 +133,13 @@ namespace Catel.MVVM
             namingConventions.Add(string.Format("{0}.UI.Activities.{1}", NamingConvention.Assembly, NamingConvention.ViewModelName));
             namingConventions.Add(string.Format("{0}.UI.Activities.{1}Activity", NamingConvention.Assembly, NamingConvention.ViewModelName));
             namingConventions.Add(string.Format("{0}.UI.Activities.{1}Fragment", NamingConvention.Assembly, NamingConvention.ViewModelName));
+
+            namingConventions.Add(string.Format("{0}.{1}View", NamingConvention.Current, NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("{0}.{1}Control", NamingConvention.Current, NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("{0}.{1}Page", NamingConvention.Current, NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("{0}.{1}Window", NamingConvention.Current, NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("{0}.{1}Activity", NamingConvention.Current, NamingConvention.ViewModelName));
+            namingConventions.Add(string.Format("{0}.{1}Fragment", NamingConvention.Current, NamingConvention.ViewModelName));
 
             return namingConventions;
         }

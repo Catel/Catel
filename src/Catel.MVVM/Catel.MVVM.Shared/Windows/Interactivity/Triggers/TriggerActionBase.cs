@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="TriggerActionBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -51,7 +51,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Called after the action is attached to an AssociatedObject.
         /// </summary>
-        protected sealed override void OnAttached()
+        protected override void OnAttached()
         {
             base.OnAttached();
 
@@ -68,7 +68,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Called when the action is being detached from its AssociatedObject, but before it has actually occurred.
         /// </summary>
-        protected sealed override void OnDetaching()
+        protected override void OnDetaching()
         {
             CleanUp();
 

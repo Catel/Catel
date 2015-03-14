@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="AssemblyExtensionsTest.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -33,7 +33,7 @@ namespace Catel.Test.Reflection
         [TestCase]
         public void VersionAutomatic()
         {
-            string expected = "4.0.0.0";
+            string expected = "4.1.0.0";
 
             var result = Assembly.Version();
 
@@ -43,7 +43,7 @@ namespace Catel.Test.Reflection
         [TestCase]
         public void VersionWithSeparatorAutomatic()
         {
-            string expected = "4.0";
+            string expected = "4.1";
 
             var result = Assembly.Version(1);
 
@@ -53,7 +53,7 @@ namespace Catel.Test.Reflection
         [TestCase]
         public void VersionWithSeparatorAutomaticWhereSeparatorCountIsTooHigh()
         {
-            string expected = "4.0.0.0";
+            string expected = "4.1.0.0";
 
             var result = Assembly.Version(8);
 
@@ -63,7 +63,7 @@ namespace Catel.Test.Reflection
         //[TestCase]
         //public void InformationalVersionAutomatic()
         //{
-        //    var expected = "4.0, manually built in Visual Studio";
+        //    var expected = "4.1, manually built in Visual Studio";
 
         //    var result = Assembly.InformationalVersion();
 

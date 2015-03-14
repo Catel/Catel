@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CacheStorageFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -9,6 +9,7 @@ namespace Catel.Test.Caching
     using System;
     using System.Collections.Generic;
     using System.Threading;
+    using System.Threading.Tasks;
     using Catel.Caching;
     using Catel.Caching.Policies;
     using Catel.Logging;
@@ -26,33 +27,57 @@ namespace Catel.Test.Caching
 
             public TheThreadSafeFunctionality()
             {
-                for (int i = 0; i < 10; i++)
+                for (var i = 0; i < 10; i++)
                 {
                     _randomGuids.Add(Guid.NewGuid());
                 }
             }
 
             [TestCase]
-            public void RunMultipleThreadsWithRandomAccessCalls()
+            public void RunMultipleThreadsUsingGetFromCacheOrFetch()
             {
-                var cacheStorage = new CacheStorage<Guid, int>(() => ExpirationPolicy.Duration(TimeSpan.FromMilliseconds(500)));
+                RunMultipleThreadsWithRandomAccessCalls((cache, key) =>
+                {
+                    return cache.GetFromCacheOrFetch(key, () =>
+                    {
+                        var threadId = ThreadHelper.GetCurrentThreadId();
+                        //Log.Info("Key '{0}' is now controlled by thread '{1}'", key, threadId);
+                        return threadId;
+                    });
+                });
+            }
+
+            [TestCase]
+            public void RunMultipleThreadsUsingAddAndGet()
+            {
+                RunMultipleThreadsWithRandomAccessCalls((cache, key) =>
+                {
+                    var threadId = ThreadHelper.GetCurrentThreadId();
+
+                    cache.Add(key, threadId);
+
+                    //Log.Info("Key '{0}' is now controlled by thread '{1}'", key, threadId);
+
+                    return cache.Get(key);
+                });
+            }
+
+            private void RunMultipleThreadsWithRandomAccessCalls(Func<ICacheStorage<Guid, int>, Guid, int> retrievalFunc)
+            {
+                var cacheStorage = new CacheStorage<Guid, int>(() => ExpirationPolicy.Duration(TimeSpan.FromMilliseconds(250)));
 
                 var threads = new List<Thread>();
-                for (int i = 0; i < 25; i++)
+                for (var i = 0; i < 50; i++)
                 {
                     var thread = new Thread(() =>
                     {
                         var random = new Random();
 
-                        for (int j = 0; j < 1000; j++)
+                        for (var j = 0; j < 1000; j++)
                         {
                             var randomGuid = _randomGuids[random.Next(0, 9)];
-                            cacheStorage.GetFromCacheOrFetch(randomGuid, () =>
-                            {
-                                var threadId = Thread.CurrentThread.ManagedThreadId;
-                                Log.Info("Key '{0}' is now controlled by thread '{1}'", randomGuid, threadId);
-                                return threadId;
-                            });
+
+                            retrievalFunc(cacheStorage, randomGuid);
 
                             ThreadHelper.Sleep(10);
                         }
@@ -64,7 +89,7 @@ namespace Catel.Test.Caching
 
                 while (true)
                 {
-                    bool anyThreadAlive = false;
+                    var anyThreadAlive = false;
 
                     foreach (var thread in threads)
                     {

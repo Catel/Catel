@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ICommandManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -66,7 +66,7 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CommandManager.CreateCommand"/> method.</exception>
-        void RegisterCommand(string commandName, ICatelCommand command, IViewModel viewModel = null);
+        void RegisterCommand(string commandName, ICommand command, IViewModel viewModel = null);
 
         /// <summary>
         /// Unregisters a command with the specified command name.
@@ -76,7 +76,7 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentException">The <paramref name="commandName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The specified command is not created using the <see cref="CommandManager.CreateCommand"/> method.</exception>
-        void UnregisterCommand(string commandName, ICatelCommand command);
+        void UnregisterCommand(string commandName, ICommand command);
 
         /// <summary>
         /// Executes the command.

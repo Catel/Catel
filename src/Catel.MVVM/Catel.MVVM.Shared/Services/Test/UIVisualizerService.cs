@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="UIVisualizerService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -96,9 +96,24 @@ namespace Catel.Services.Test
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
-        public async Task<bool?> Show(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
+        public bool? Show(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
         {
-            return await Show(viewModel.GetType().FullName, viewModel, completedProc);
+            return Show(viewModel.GetType().FullName, viewModel, completedProc);
+        }
+
+        /// <summary>
+        /// Shows a window that is registered with the specified view model in a non-modal state.
+        /// </summary>
+        /// <param name="viewModel">The view model.</param>
+        /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
+        /// <returns>
+        /// 	<c>true</c> if the popup window is successfully opened; otherwise <c>false</c>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
+        /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
+        public async Task<bool?> ShowAsync(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
+        {
+            return await ShowAsync(viewModel.GetType().FullName, viewModel, completedProc);
         }
 
         /// <summary>
@@ -112,7 +127,28 @@ namespace Catel.Services.Test
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
-        public async Task<bool?> Show(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
+        public bool? Show(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
+        {
+            if (ExpectedShowResults.Count == 0)
+            {
+                throw new Exception(ResourceHelper.GetString("NoExpectedResultsInQueueForUnitTest"));
+            }
+
+            return ExpectedShowResults.Dequeue().Invoke();
+        }
+
+        /// <summary>
+        /// Shows a window that is registered with the specified view model in a non-modal state.
+        /// </summary>
+        /// <param name="name">The name that the window is registered with.</param>
+        /// <param name="data">The data to set as data context. If <c>null</c>, the data context will be untouched.</param>
+        /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
+        /// <returns>
+        /// 	<c>true</c> if the popup window is successfully opened; otherwise <c>false</c>.
+        /// </returns>
+        /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
+        public async Task<bool?> ShowAsync(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             if (ExpectedShowResults.Count == 0)
             {
@@ -132,9 +168,24 @@ namespace Catel.Services.Test
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
-        public async Task<bool?> ShowDialog(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
+        public bool? ShowDialog(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
         {
-            return await ShowDialog(viewModel.GetType().FullName, viewModel, completedProc);
+            return ShowDialog(viewModel.GetType().FullName, viewModel, completedProc);
+        }
+
+        /// <summary>
+        /// Shows a window that is registered with the specified view model in a modal state.
+        /// </summary>
+        /// <param name="viewModel">The view model.</param>
+        /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
+        /// <returns>
+        /// Nullable boolean representing the dialog result.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
+        /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
+        public async Task<bool?> ShowDialogAsync(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
+        {
+            return await ShowDialogAsync(viewModel.GetType().FullName, viewModel, completedProc);
         }
 
         /// <summary>
@@ -148,7 +199,28 @@ namespace Catel.Services.Test
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
-        public async Task<bool?> ShowDialog(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
+        public bool? ShowDialog(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
+        {
+            if (ExpectedShowDialogResults.Count == 0)
+            {
+                throw new Exception(ResourceHelper.GetString("NoExpectedResultsInQueueForUnitTest"));
+            }
+
+            return ExpectedShowDialogResults.Dequeue().Invoke();
+        }
+
+        /// <summary>
+        /// Shows a window that is registered with the specified view model in a modal state.
+        /// </summary>
+        /// <param name="name">The name that the window is registered with.</param>
+        /// <param name="data">The data to set as data context. If <c>null</c>, the data context will be untouched.</param>
+        /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
+        /// <returns>
+        /// Nullable boolean representing the dialog result.
+        /// </returns>
+        /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
+        public async Task<bool?> ShowDialogAsync(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             if (ExpectedShowDialogResults.Count == 0)
             {

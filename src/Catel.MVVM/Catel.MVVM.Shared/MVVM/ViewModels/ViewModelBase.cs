@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ViewModelBase.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -289,12 +289,11 @@ namespace Catel.MVVM
             ValidateModelsOnInitialization = true;
 #endif
 
-            InvalidateCommandsOnPropertyChanged = true;
-
             ViewModelCommandManager = MVVM.ViewModelCommandManager.Create(this);
             ViewModelCommandManager.AddHandler((viewModel, propertyName, command, commandParameter) =>
                 CommandExecuted.SafeInvoke(this, new CommandExecutedEventArgs((ICatelCommand)command, commandParameter, propertyName)));
 
+            InvalidateCommandsOnPropertyChanged = true;
             SupportIEditableObject = supportIEditableObject;
 
             // Temporarily suspend validation, will be enabled at the end of constructor again
@@ -962,38 +961,42 @@ namespace Catel.MVVM
                 {
                     lock (_modelLock)
                     {
-                        ViewModelToModelMapping mapping = _viewModelToModelMap[e.PropertyName];
-                        object model = _modelObjects[mapping.ModelProperty];
+                        var mapping = _viewModelToModelMap[e.PropertyName];
+                        var model = _modelObjects[mapping.ModelProperty];
                         if (model != null)
                         {
-                            var viewModelValue = GetValue(e.PropertyName);
-                            string[] propertiesToSet = mapping.ValueProperties;
+                            var modelInfo = _modelObjectsInfo[mapping.ModelProperty];
+                            if (!modelInfo.IsCanceling)
+                            {
+                                var viewModelValue = GetValue(e.PropertyName);
+                                var propertiesToSet = mapping.ValueProperties;
 
 #if !WINDOWS_PHONE && !NET35
-                            if (_modelErrorInfo.ContainsKey(mapping.ModelProperty))
-                            {
-                                mapping.ValueProperties.ForEach(_modelErrorInfo[mapping.ModelProperty].ClearDefaultErrors);
-                            }
+                                if (_modelErrorInfo.ContainsKey(mapping.ModelProperty))
+                                {
+                                    mapping.ValueProperties.ForEach(_modelErrorInfo[mapping.ModelProperty].ClearDefaultErrors);
+                                }
 #endif
 
-                            // Only TwoWay or OneWayToSource mappings should be mapped
-                            if ((mapping.Mode == ViewModelToModelMode.TwoWay) || (mapping.Mode == ViewModelToModelMode.OneWayToSource))
-                            {
-                                var valuesToSet = mapping.Converter.ConvertBack(viewModelValue, this);
-                                if (propertiesToSet.Length != valuesToSet.Length)
+                                // Only TwoWay or OneWayToSource mappings should be mapped
+                                if ((mapping.Mode == ViewModelToModelMode.TwoWay) || (mapping.Mode == ViewModelToModelMode.OneWayToSource))
                                 {
-                                    Log.Error("Properties - values count mismatch, properties '{0}', values '{1}'",
-                                        string.Join(", ", propertiesToSet), string.Join(", ", valuesToSet));
-                                }
-                                for (int index = 0; index < propertiesToSet.Length && index < valuesToSet.Length; index++)
-                                {
-                                    if (PropertyHelper.TrySetPropertyValue(model, propertiesToSet[index], valuesToSet[index]))
+                                    var valuesToSet = mapping.Converter.ConvertBack(viewModelValue, this);
+                                    if (propertiesToSet.Length != valuesToSet.Length)
                                     {
-                                        Log.Debug("Updated property '{0}' on model type '{1}' to '{2}'", propertiesToSet[index], model.GetType().Name, ObjectToStringHelper.ToString(valuesToSet[index]));
+                                        Log.Error("Properties - values count mismatch, properties '{0}', values '{1}'",
+                                            string.Join(", ", propertiesToSet), string.Join(", ", valuesToSet));
                                     }
-                                    else
+                                    for (int index = 0; index < propertiesToSet.Length && index < valuesToSet.Length; index++)
                                     {
-                                        Log.Warning("Failed to set property '{0}' on model type '{1}'", propertiesToSet[index], model.GetType().Name);
+                                        if (PropertyHelper.TrySetPropertyValue(model, propertiesToSet[index], valuesToSet[index]))
+                                        {
+                                            Log.Debug("Updated property '{0}' on model type '{1}' to '{2}'", propertiesToSet[index], model.GetType().Name, ObjectToStringHelper.ToString(valuesToSet[index]));
+                                        }
+                                        else
+                                        {
+                                            Log.Warning("Failed to set property '{0}' on model type '{1}'", propertiesToSet[index], model.GetType().Name);
+                                        }
                                     }
                                 }
                             }
@@ -1254,18 +1257,25 @@ namespace Catel.MVVM
 
             if (SupportIEditableObject)
             {
-                if (_modelObjectsInfo[modelProperty].SupportIEditableObject)
+                var modelInfo = _modelObjectsInfo[modelProperty];
+                if (modelInfo.SupportIEditableObject)
                 {
                     switch (modelCleanUpMode)
                     {
                         case ModelCleanUpMode.CancelEdit:
                             try
                             {
+                                modelInfo.IsCanceling = true;
+
                                 EditableObjectHelper.CancelEditObject(model);
                             }
                             catch (Exception ex)
                             {
                                 Log.Warning(ex, "Failed to cancel the edit of object for model '{0}'", modelProperty);
+                            }
+                            finally
+                            {
+                                modelInfo.IsCanceling = false;
                             }
                             break;
 

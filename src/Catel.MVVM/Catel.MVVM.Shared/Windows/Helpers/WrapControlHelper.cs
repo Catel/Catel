@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="WrapControlHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -110,9 +110,12 @@ namespace Catel.Windows
                 return false;
             }
 
-            if (string.Equals(frameworkElement.Name, MainContentHolderName))
+            if (!string.IsNullOrWhiteSpace(frameworkElement.Name))
             {
-                return false;
+                if (frameworkElement.Name.StartsWith(MainContentHolderName))
+                {
+                    return false;
+                }
             }
 
             return true;
@@ -158,9 +161,12 @@ namespace Catel.Windows
             Argument.IsNotNull("frameworkElement", frameworkElement);
             Argument.IsNotNull("buttons", buttons);
 
-            if (string.Equals(frameworkElement.Name, MainContentHolderName))
+            if (!string.IsNullOrWhiteSpace(frameworkElement.Name))
             {
-                return (Grid)frameworkElement;
+                if (frameworkElement.Name.StartsWith(MainContentHolderName))
+                {
+                    return (Grid)frameworkElement;
+                }
             }
 
 #if SILVERLIGHT
@@ -183,7 +189,7 @@ namespace Catel.Windows
 
             // Create the outside grid, so the inner grid is never the same as the main content holder
             var outsideGrid = new Grid();
-            outsideGrid.Name = MainContentHolderName;
+            outsideGrid.Name = MainContentHolderName.GetUniqueControlName();
 
             if (Application.Current != null)
             {
@@ -194,7 +200,7 @@ namespace Catel.Windows
 #endif
             }
 
-            #region Generate buttons
+#region Generate buttons
 #if !NETFX_CORE
             if (buttons.Length > 0)
             {
@@ -253,9 +259,9 @@ namespace Catel.Windows
                 mainContent = subDockPanel;
             }
 #endif
-            #endregion
+#endregion
 
-            #region Generate internal grid
+#region Generate internal grid
             // Create grid
             var internalGrid = new Grid();
             internalGrid.Name = InternalGridName;
@@ -263,9 +269,9 @@ namespace Catel.Windows
 
             // Grid is now the main content
             mainContent = internalGrid;
-            #endregion
+#endregion
 
-            #region Generate WarningAndErrorValidator
+#region Generate WarningAndErrorValidator
             if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.GenerateWarningAndErrorValidatorForDataContext))
             {
                 // Create warning and error validator
@@ -276,9 +282,9 @@ namespace Catel.Windows
                 // Add to grid
                 internalGrid.Children.Add(warningAndErrorValidator);
             }
-            #endregion
+#endregion
 
-            #region Generate InfoBarMessageControl
+#region Generate InfoBarMessageControl
 #if !NETFX_CORE
             if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.GenerateInlineInfoBarMessageControl) ||
                 Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.GenerateOverlayInfoBarMessageControl))
@@ -297,7 +303,7 @@ namespace Catel.Windows
                 mainContent = infoBarMessageControl;
             }
 #endif
-            #endregion
+#endregion
 
             // Set content of the outside grid
             outsideGrid.Children.Add(mainContent);

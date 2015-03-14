@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="WindowExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -231,6 +231,19 @@ namespace Catel.Windows
         #endregion
 
         /// <summary>
+        /// Gets the window handle of the specified window.
+        /// </summary>
+        /// <param name="window">The window.</param>
+        /// <returns>IntPtr.</returns>
+        public static IntPtr GetWindowHandle(this SystemWindow window)
+        {
+            Argument.IsNotNull(() => window);
+
+            var interopHelper = new WindowInteropHelper(window);
+            return interopHelper.Handle;
+        }
+
+        /// <summary>
         /// Brings to specified window to top.
         /// </summary>
         /// <param name="window">The window to bring to top.</param>
@@ -239,8 +252,8 @@ namespace Catel.Windows
         {
             Argument.IsNotNull("window", window);
 
-            var interopHelper = new WindowInteropHelper(window);
-            BringWindowToTop(interopHelper.Handle);
+            var windowHandle = window.GetWindowHandle();
+            BringWindowToTop(windowHandle);
         }
 
         /// <summary>

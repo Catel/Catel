@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ObjectToStringHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -16,6 +16,20 @@ namespace Catel
     public static class ObjectToStringHelper
     {
         /// <summary>
+        /// Initializes static members of the <see cref="StringToObjectHelper"/> class.
+        /// </summary>
+        static ObjectToStringHelper()
+        {
+            DefaultCulture = CultureInfo.InvariantCulture;
+        }
+
+        /// <summary>
+        /// Gets or sets the default culture to use for parsing.
+        /// </summary>
+        /// <value>The default culture.</value>
+        public static CultureInfo DefaultCulture { get; set; }
+
+        /// <summary>
         /// Returns a <see cref="string"/> that represents the instance.
         /// <para />
         /// If the <paramref name="instance"/> is <c>null</c>, this method will return "null". This
@@ -24,6 +38,20 @@ namespace Catel
         /// <param name="instance">The instance, can be <c>null</c>.</param>
         /// <returns>A <see cref="string"/> that represents the instance.</returns>
         public static string ToString(object instance)
+        {
+            return ToString(instance, DefaultCulture);
+        }
+
+        /// <summary>
+        /// Returns a <see cref="string" /> that represents the instance.
+        /// <para />
+        /// If the <paramref name="instance" /> is <c>null</c>, this method will return "null". This
+        /// method is great when the value of a property must be logged.
+        /// </summary>
+        /// <param name="instance">The instance, can be <c>null</c>.</param>
+        /// <param name="cultureInfo">The culture information.</param>
+        /// <returns>A <see cref="string" /> that represents the instance.</returns>
+        public static string ToString(object instance, CultureInfo cultureInfo)
         {
             if (instance == null)
             {
@@ -45,7 +73,7 @@ namespace Catel
             var toStringMethod = instanceType.GetMethodEx("ToString", new[] {typeof (IFormatProvider)});
             if (toStringMethod != null)
             {
-                return (string)toStringMethod.Invoke(instance, new object[] { CultureInfo.InvariantCulture });
+                return (string)toStringMethod.Invoke(instance, new object[] { cultureInfo });
             }
 #endif
 

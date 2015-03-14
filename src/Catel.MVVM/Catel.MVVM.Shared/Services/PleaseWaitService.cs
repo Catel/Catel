@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PleaseWaitService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -20,7 +20,6 @@ namespace Catel.Services
         private readonly ILanguageService _languageService;
 
         private string _lastStatus = string.Empty;
-        private int _showCounter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PleaseWaitService"/> class.
@@ -33,9 +32,17 @@ namespace Catel.Services
             _languageService = languageService;
         }
 
+        /// <summary>
+        /// Gets the show counter.
+        /// <para />
+        /// This property can be used to get the current show counter if the please wait window should be hidden for a moment.
+        /// </summary>
+        /// <value>The show counter.</value>
+        public int ShowCounter { get; private set; }
+
         partial void SetStatus(string status);
         partial void InitializeBusyIndicator();
-        partial void ShowBusyIndicator();
+        partial void ShowBusyIndicator(bool indeterminate);
         partial void HideBusyIndicator();
 
         /// <summary>
@@ -47,6 +54,8 @@ namespace Catel.Services
         /// </remarks>
         public void Show(string status = "")
         {
+            ShowCounter = 1;
+
             if (string.IsNullOrEmpty(status))
             {
                 status = _languageService.GetString("PleaseWait");
@@ -54,7 +63,7 @@ namespace Catel.Services
 
             UpdateStatus(status);
 
-            ShowBusyIndicator();
+            ShowBusyIndicator(true);
         }
 
         /// <summary>
@@ -121,7 +130,7 @@ namespace Catel.Services
 
             UpdateStatus(string.Format(statusFormat, currentItem, totalItems));
 
-            ShowBusyIndicator();
+            ShowBusyIndicator(false);
         }
 
         /// <summary>
@@ -133,7 +142,7 @@ namespace Catel.Services
 
             HideBusyIndicator();
 
-            _showCounter = 0;
+            ShowCounter = 0;
         }
 
         /// <summary>
@@ -150,13 +159,14 @@ namespace Catel.Services
         /// <remarks></remarks>
         public void Push(string status = "")
         {
-            UpdateStatus(status);
-
-            _showCounter++;
-
-            if (_showCounter > 0)
+            if (ShowCounter <= 0)
             {
-                Show();
+                Show(status);
+            }
+            else
+            {
+                ShowCounter++;
+                UpdateStatus(status);
             }
         }
 
@@ -173,12 +183,12 @@ namespace Catel.Services
         /// <remarks></remarks>
         public void Pop()
         {
-            if (_showCounter > 0)
+            if (ShowCounter > 0)
             {
-                _showCounter--;
+                ShowCounter--;
             }
 
-            if (_showCounter <= 0)
+            if (ShowCounter <= 0)
             {
                 Hide();
             }

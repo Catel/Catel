@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ModelBase.editing.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -99,9 +99,12 @@ namespace Catel.Data
                 }
             }
 
+            var notify = false;
+            object oldValue = null;
+
             lock (_propertyValuesLock)
             {
-                var oldValue = GetValueFast(property.Name);
+                oldValue = GetValueFast(property.Name);
                 var areOldAndNewValuesEqual = ObjectHelper.AreEqualReferences(oldValue, value);
 
                 if (notifyOnChange && (AlwaysInvokeNotifyChanged || !areOldAndNewValuesEqual) && !LeanAndMeanModel)
@@ -127,10 +130,13 @@ namespace Catel.Data
                     SetValueFast(property.Name, value);
                 }
 
-                if (notifyOnChange && (AlwaysInvokeNotifyChanged || !areOldAndNewValuesEqual) && !LeanAndMeanModel)
-                {
-                    RaisePropertyChanged(property.Name, oldValue, value);
-                }
+                notify = (notifyOnChange && (AlwaysInvokeNotifyChanged || !areOldAndNewValuesEqual) && !LeanAndMeanModel);
+            }
+
+            // Notify outside lock
+            if (notify)
+            {
+                RaisePropertyChanged(property.Name, oldValue, value);
             }
         }
 
@@ -164,7 +170,7 @@ namespace Catel.Data
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         /// <returns>The value of the property.</returns>
-        internal object GetValueFast(string propertyName)
+        private object GetValueFast(string propertyName)
         {
             return _propertyBag.GetPropertyValue<object>(propertyName);
         }
@@ -270,6 +276,33 @@ namespace Catel.Data
         void IModelEditor.SetValue(string propertyName, object value)
         {
             SetValue(propertyName, value);
+        }
+
+        /// <summary>
+        /// Gets the value in the fastest way possible without doing sanity checks.
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <returns>The value.</returns>
+        /// <remarks>
+        /// Note that this method does not do any sanity checks. Use at your own risk!
+        /// </remarks>
+        object IModelEditor.GetValueFastButUnsecure(string propertyName)
+        {
+            return GetValueFast(propertyName);
+        }
+
+        /// <summary>
+        /// Sets the value in the fastest way possible without doing sanity checks.
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>The value.</returns>
+        /// <remarks>
+        /// Note that this method does not do any sanity checks. Use at your own risk!
+        /// </remarks>
+        void IModelEditor.SetValueFastButUnsecure(string propertyName, object value)
+        {
+            SetValueFast(propertyName, value);
         }
 
         /// <summary>

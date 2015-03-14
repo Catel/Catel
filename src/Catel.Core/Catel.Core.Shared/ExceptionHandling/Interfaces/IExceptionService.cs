@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="IExceptionService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -36,6 +36,7 @@ namespace Catel.ExceptionHandling
         #endregion
 
         #region Methods
+
         /// <summary>
         /// Determines whether the specified exception type is registered.
         /// </summary>
@@ -112,6 +113,14 @@ namespace Catel.ExceptionHandling
         /// <summary>
         /// Processes the specified action.
         /// </summary>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        Task ProcessAsync(Task action);
+
+        /// <summary>
+        /// Processes the specified action.
+        /// </summary>
         /// <typeparam name="TResult">The result type.</typeparam>
         /// <param name="action">The action.</param>
         /// <returns></returns>
@@ -119,20 +128,13 @@ namespace Catel.ExceptionHandling
         TResult Process<TResult>(Func<TResult> action);
 
         /// <summary>
-        /// Processes the specified action with possibilty to retry on error.
-        /// </summary>
-        /// <param name="action">The action.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        void ProcessWithRetry(Action action);
-
-        /// <summary>
-        /// Processes the specified action with possibilty to retry on error.
+        /// Processes the specified action.
         /// </summary>
         /// <typeparam name="TResult">The result type.</typeparam>
         /// <param name="action">The action.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        TResult ProcessWithRetry<TResult>(Func<TResult> action);
+        Task<TResult> ProcessAsync<TResult>(Func<Task<TResult>> action);
 
         /// <summary>
         /// Processes the specified action. The action will be executed asynchrounously.
@@ -160,15 +162,24 @@ namespace Catel.ExceptionHandling
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
         Task<TResult> ProcessAsync<TResult>(Func<TResult> action, CancellationToken cancellationToken = default(CancellationToken));
-
+        
         /// <summary>
-        /// Processes the specified action.
+        /// Processes the specified action with possibilty to retry on error.
         /// </summary>
         /// <typeparam name="TResult">The result type.</typeparam>
         /// <param name="action">The action.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        Task<TResult> ProcessAsync<TResult>(Func<Task<TResult>> action);
+        TResult ProcessWithRetry<TResult>(Func<TResult> action);
+
+        /// <summary>
+        /// Processes asynchrounously the specified action with possibilty to retry on error.
+        /// </summary>
+        /// <typeparam name="TResult">The result type.</typeparam>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        Task<TResult> ProcessWithRetryAsync<TResult>(Func<Task<TResult>> action);
         #endregion
     }
 }

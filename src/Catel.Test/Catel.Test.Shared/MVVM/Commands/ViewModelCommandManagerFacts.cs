@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ViewModelCommandManagerFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -10,6 +10,7 @@ namespace Catel.Test.MVVM
     using Catel.MVVM;
     using ViewModels.TestClasses;
     using NUnit.Framework;
+    using System.Threading.Tasks;
 
     public class ViewModelCommandManagerFacts
     {
@@ -45,7 +46,7 @@ namespace Catel.Test.MVVM
             }            
 
             [TestCase]
-            public async void RegisteredHandlerGetsCalled()
+            public async Task RegisteredHandlerGetsCalled()
             {
                 var viewModel = new TestViewModel();
                 var viewModelCommandManager = ViewModelCommandManager.Create(viewModel);

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="InputGesture.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -79,6 +79,58 @@ namespace Catel.Windows.Input
         /// Register the Modifiers property so it is known in the class.
         /// </summary>
         public static readonly PropertyData ModifiersProperty = RegisterProperty("Modifiers", typeof(ModifierKeys));
+
+        /// <summary>
+        /// Determines whether the specified <see cref="System.Object" /> is equal to this instance.
+        /// </summary>
+        /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
+        /// <returns><c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
+        public override bool Equals(object obj)
+        {
+            // Keep this check to prevent == comparison troubles on the same object
+            if (!(obj is InputGesture))
+            {
+                return false;
+            }
+
+            return Equals((InputGesture) obj);
+        }
+
+        /// <summary>
+        /// Equalses the specified other.
+        /// </summary>
+        /// <param name="other">The other.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <exception cref="System.NotImplementedException"></exception>
+        protected bool Equals(InputGesture other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+
+            if (Key != other.Key)
+            {
+                return false;
+            }
+
+            if (Modifiers != other.Modifiers)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
+        /// <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.</returns>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
 
         /// <summary>
         /// Checks whether this input gesture matches the specified event args.

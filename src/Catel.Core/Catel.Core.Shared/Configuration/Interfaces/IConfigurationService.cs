@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="IConfigurationService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -19,6 +19,12 @@ namespace Catel.Configuration
         /// Occurs when the configuration has changed.
         /// </summary>
         event EventHandler<ConfigurationChangedEventArgs> ConfigurationChanged;
+
+        /// <summary>
+        /// Suspends the notifications of this service until the returned object is disposed.
+        /// </summary>
+        /// <returns>IDisposable.</returns>
+        IDisposable SuspendNotifications();
 
         /// <summary>
         /// Gets the configuration value.

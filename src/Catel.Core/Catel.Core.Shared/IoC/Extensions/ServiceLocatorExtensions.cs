@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ServiceLocatorExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -375,6 +375,10 @@ namespace Catel.IoC
                         return (TService) serviceLocator.ResolveType(typeof (TService), tag);
                     }
                 }
+            }
+            catch (TypeNotRegisteredException)
+            {
+                // Prevent first chance exceptions
             }
             catch (Exception)
             {

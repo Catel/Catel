@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="UIElementExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -18,7 +18,7 @@ namespace Catel.Windows
     /// <summary>
     /// Extensions for <see cref="UIElement"/>.
     /// </summary>
-    public static class UIElementExtensions
+    public static partial class UIElementExtensions
     {
         #region Win32 imports
         [StructLayout(LayoutKind.Sequential)]

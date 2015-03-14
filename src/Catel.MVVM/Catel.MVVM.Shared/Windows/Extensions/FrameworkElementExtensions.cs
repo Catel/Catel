@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="FrameworkElementExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -47,7 +47,7 @@ namespace Catel.Windows
     /// <summary>
     /// Extensions for <see cref="FrameworkElement"/>.
     /// </summary>
-    public static class FrameworkElementExtensions
+    public static partial class FrameworkElementExtensions
     {
 #if NET
         #region Win32
@@ -108,7 +108,7 @@ namespace Catel.Windows
             var renderTransformOrigin = oldElement.RenderTransformOrigin;
 
             oldElement.RenderTransform = null;
-            oldElement.Name = "__dynamicReplacement";
+            oldElement.Name = "__dynamicReplacement".GetUniqueControlName();
 
             newElement.Name = name;
             newElement.RenderTransform = renderTransform;

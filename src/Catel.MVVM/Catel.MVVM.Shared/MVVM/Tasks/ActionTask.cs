@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ActionTask.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -64,9 +64,7 @@ namespace Catel.MVVM.Tasks
             /// <summary>
             /// Initializes a new instance of the <see cref="ActionTaskTaskProgressTracker" /> class.
             /// </summary>
-            /// <param name="actionTask">
-            /// The action task.
-            /// </param>
+            /// <param name="actionTask">The action task.</param>
             public ActionTaskTaskProgressTracker(ActionTask actionTask)
             {
                 _actionTask = actionTask;
@@ -77,12 +75,8 @@ namespace Catel.MVVM.Tasks
             /// <summary>
             /// Update the task status.
             /// </summary>
-            /// <param name="message">
-            /// The message.
-            /// </param>
-            /// <param name="percentage">
-            /// The percentage.
-            /// </param>
+            /// <param name="message">The message.</param>
+            /// <param name="percentage">The percentage.</param>
             public void UpdateStatus(string message, int percentage)
             {
                 UpdateStatus(message);
@@ -92,9 +86,7 @@ namespace Catel.MVVM.Tasks
             /// <summary>
             /// Update the task status.
             /// </summary>
-            /// <param name="message">
-            /// The message.
-            /// </param>
+            /// <param name="message">The message.</param>
             public void UpdateStatus(string message)
             {
                 _actionTask.Message = message;
@@ -103,12 +95,8 @@ namespace Catel.MVVM.Tasks
             /// <summary>
             /// Update the task status.
             /// </summary>
-            /// <param name="message">
-            /// The message.
-            /// </param>
-            /// <param name="indeterminate">
-            /// The indeterminate state.
-            /// </param>
+            /// <param name="message">The message.</param>
+            /// <param name="indeterminate">The indeterminate state.</param>
             public void UpdateStatus(string message, bool indeterminate)
             {
                 UpdateStatus(message);

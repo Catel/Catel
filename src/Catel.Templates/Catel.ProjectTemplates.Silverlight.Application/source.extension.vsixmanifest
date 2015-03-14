@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="Catel.ProjectTemplates.Silverlight.Application..c761af7b-b2d9-4beb-af0a-e54b5e470f57" Version="1.0" Language="en-US" Publisher="Geert van Horrik" />
+    <Identity Id="Catel.ProjectTemplates.Silverlight.Application..c761af7b-b2d9-4beb-af0a-e54b5e470f57" Version="1.3" Language="en-US" Publisher="Geert van Horrik" />
     <DisplayName>Silverlight application using Catel</DisplayName>
     <Description xml:space="preserve">Project template to create an MVVM-based application for Silverlight using Catel.</Description>
     <MoreInfo>http://www.catelproject.com</MoreInfo>

@@ -14,6 +14,7 @@
     using TestViewModel = TestClasses.TestViewModel;
 
     using NUnit.Framework;
+    using System.Threading.Tasks;
 
     [TestFixture]
     public class ViewModelBaseTest
@@ -225,7 +226,7 @@
 #endif
 
         [TestCase]
-        public async void ViewModelWithViewModelToModelMappings_DoNotMapWhenViewModelIsClosed()
+        public async Task ViewModelWithViewModelToModelMappings_DoNotMapWhenViewModelIsClosed()
         {
             var person = new Person();
             var viewModel = new TestViewModel(person, true);
@@ -411,7 +412,7 @@
         /// being validated. Then, it unsubscribes the child view model by closing it.
         /// </summary>
         [TestCase]
-        public async void RegisterChildViewModel_RemovedViaClosingChildViewModel()
+        public async Task RegisterChildViewModel_RemovedViaClosingChildViewModel()
         {
             bool validationTriggered = false;
             var validatedEvent = new ManualResetEvent(false);
@@ -543,7 +544,7 @@
         }
 
         [TestCase]
-        public async void ModelsSavedBySave()
+        public async Task ModelsSavedBySave()
         {
             var person = new Person();
             person.FirstName = "first name";
@@ -553,16 +554,16 @@
             var viewModel = new TestViewModel(person);
             Assert.IsTrue(model.IsInEditSession);
 
-            viewModel.FirstName = "new first name";
+            viewModel.FirstName = "new";
 
             await viewModel.SaveAndCloseViewModel();
 
             Assert.IsFalse(model.IsInEditSession);
-            Assert.AreEqual("new first name", person.FirstName);
+            Assert.AreEqual("new", person.FirstName);
         }
 
         [TestCase]
-        public async void ModelsCanceledByCancel()
+        public async Task ModelsCanceledByCancel()
         {
             var person = new Person();
             person.FirstName = "first name";
@@ -820,7 +821,7 @@
         #endregion
 
         [TestCase]
-        public async void CancelAfterCloseProtection()
+        public async Task CancelAfterCloseProtection()
         {
             var auditor = new TestAuditor();
             AuditingManager.RegisterAuditor(auditor);
@@ -845,7 +846,7 @@
         }
 
         [TestCase]
-        public async void SaveAfterCloseProtection()
+        public async Task SaveAfterCloseProtection()
         {
             var auditor = new TestAuditor();
             AuditingManager.RegisterAuditor(auditor);
@@ -870,7 +871,7 @@
         }
 
         [TestCase]
-        public async void CloseAfterCloseProtection()
+        public async Task CloseAfterCloseProtection()
         {
             var auditor = new TestAuditor();
             AuditingManager.RegisterAuditor(auditor);

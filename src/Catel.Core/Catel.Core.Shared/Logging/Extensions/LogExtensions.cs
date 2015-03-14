@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="LogExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -92,6 +92,15 @@ namespace Catel.Logging
         }
 
         /// <summary>
+        /// Writes an empty line as debug message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        public static void Debug(this ILog log)
+        {
+            Write(log, LogEvent.Debug, string.Empty);
+        }
+
+        /// <summary>
         /// Writes the specified message as debug message.
         /// </summary>
         /// <param name="log">The log.</param>
@@ -124,6 +133,15 @@ namespace Catel.Logging
         public static void Debug(this ILog log, Exception exception, string messageFormat, params object[] args)
         {
             Write(log, LogEvent.Debug, exception, messageFormat, args);
+        }
+
+        /// <summary>
+        /// Writes an empty line as info message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        public static void Info(this ILog log)
+        {
+            Write(log, LogEvent.Info, string.Empty);
         }
 
         /// <summary>
@@ -162,6 +180,15 @@ namespace Catel.Logging
         }
 
         /// <summary>
+        /// Writes an empty line as warning message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        public static void Warning(this ILog log)
+        {
+            Write(log, LogEvent.Warning, string.Empty);
+        }
+
+        /// <summary>
         /// Writes the specified message as warning message.
         /// </summary>
         /// <param name="log">The log.</param>
@@ -194,6 +221,15 @@ namespace Catel.Logging
         public static void Warning(this ILog log, Exception exception, string messageFormat, params object[] args)
         {
             Write(log, LogEvent.Warning, exception, messageFormat, args);
+        }
+
+        /// <summary>
+        /// Writes an empty line as error message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        public static void Error(this ILog log)
+        {
+            Write(log, LogEvent.Error, string.Empty);
         }
 
         /// <summary>

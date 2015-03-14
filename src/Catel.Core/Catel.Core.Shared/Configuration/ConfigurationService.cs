@@ -1,12 +1,14 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ConfigurationService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 
 namespace Catel.Configuration
 {
+    using Runtime.Serialization;
+    using Services;
     using System;
     using System.IO;
     using System.Runtime.Serialization;
@@ -22,7 +24,6 @@ namespace Catel.Configuration
 #else
     using System.Configuration;
     using System.Linq;
-    using Runtime.Serialization;
     using Path = IO.Path;
 #endif
 
@@ -30,29 +31,37 @@ namespace Catel.Configuration
     /// Configuration service implementation that allows customization how configuration values
     /// are being used inside an application.
     /// <para />
-    /// This default implementation writes to the 
+    /// This default implementation writes to the
     /// </summary>
     public class ConfigurationService : IConfigurationService
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-#if NET
         private readonly ISerializationManager _serializationManager;
+        private readonly IObjectConverterService _objectConverterService;
 
+#if NET
         private readonly DynamicConfiguration _configuration;
         private readonly string _configFilePath;
 #endif
 
-#if NET
+        private bool _suspendNotifications = false;
+        private bool _hasPendingNotifications = false;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigurationService" /> class.
         /// </summary>
         /// <param name="serializationManager">The serialization manager.</param>
-        public ConfigurationService(ISerializationManager serializationManager)
+        /// <param name="objectConverterService">The object converter service.</param>
+        public ConfigurationService(ISerializationManager serializationManager, IObjectConverterService objectConverterService)
         {
-            Argument.IsNotNull("serializationManager", serializationManager);
+            Argument.IsNotNull(() => serializationManager);
+            Argument.IsNotNull(() => objectConverterService);
 
             _serializationManager = serializationManager;
+            _objectConverterService = objectConverterService;
+
+#if NET
             _configFilePath = Path.Combine(Path.GetApplicationDataDirectory(), "configuration.xml");
 
             try
@@ -74,8 +83,8 @@ namespace Catel.Configuration
             {
                 _configuration = new DynamicConfiguration();
             }
-        }
 #endif
+        }
 
         #region Events
         /// <summary>
@@ -85,6 +94,28 @@ namespace Catel.Configuration
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Suspends the notifications of this service until the returned object is disposed.
+        /// </summary>
+        /// <returns>IDisposable.</returns>
+        public IDisposable SuspendNotifications()
+        {
+            return new DisposableToken<ConfigurationService>(this,
+                x =>
+                {
+                    x.Instance._suspendNotifications = true;
+                },
+                x =>
+                {
+                    x.Instance._suspendNotifications = false;
+                    if (x.Instance._hasPendingNotifications)
+                    {
+                        x.Instance.RaiseConfigurationChanged(string.Empty, string.Empty);
+                        x.Instance._hasPendingNotifications = false;
+                    }
+                });
+        }
+
         /// <summary>
         /// Gets the configuration value.
         /// </summary>
@@ -96,6 +127,8 @@ namespace Catel.Configuration
         public T GetValue<T>(string key, T defaultValue = default(T))
         {
             Argument.IsNotNullOrWhitespace("key", key);
+
+            key = GetFinalKey(key);
 
             if (!ValueExists(key))
             {
@@ -110,7 +143,7 @@ namespace Catel.Configuration
                     return defaultValue;
                 }
 
-                return (T) StringToObjectHelper.ToRightType(typeof (T), value);
+                return (T) _objectConverterService.ConvertFromStringToObject(value, typeof (T));
             }
             catch (Exception)
             {
@@ -128,14 +161,13 @@ namespace Catel.Configuration
         {
             Argument.IsNotNullOrWhitespace("key", key);
 
+            var originalKey = key;
+            key = GetFinalKey(key);
+
             var stringValue = ObjectToStringHelper.ToString(value);
             SetValueToStore(key, stringValue);
 
-            var handler = ConfigurationChanged;
-            if (handler != null)
-            {
-                handler.Invoke(this, new ConfigurationChangedEventArgs(key, value));
-            }
+            RaiseConfigurationChanged(originalKey, value);
         }
 
         /// <summary>
@@ -147,6 +179,8 @@ namespace Catel.Configuration
         public bool IsValueAvailable(string key)
         {
             Argument.IsNotNullOrWhitespace("key", key);
+
+            key = GetFinalKey(key);
 
             return ValueExists(key);
         }
@@ -232,6 +266,33 @@ namespace Catel.Configuration
             _configuration.SetConfigurationValue(key, value);
             _configuration.SaveAsXml(_configFilePath);
 #endif
+        }
+
+        /// <summary>
+        /// Gets the final key. This method allows customization of the key.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string GetFinalKey(string key)
+        {
+            key = key.Replace(" ", "_");
+
+            return key;
+        }
+
+        private void RaiseConfigurationChanged(string key, object value)
+        {
+            if (_suspendNotifications)
+            {
+                _hasPendingNotifications = true;
+                return;
+            }
+
+            var handler = ConfigurationChanged;
+            if (handler != null)
+            {
+                handler.Invoke(this, new ConfigurationChangedEventArgs(key, value));
+            }
         }
         #endregion
     }

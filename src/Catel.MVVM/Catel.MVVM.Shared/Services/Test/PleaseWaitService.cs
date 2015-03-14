@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PleaseWaitService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -13,6 +13,12 @@ namespace Catel.Services.Test
     /// </summary>
     public class PleaseWaitService : IPleaseWaitService
     {
+        /// <summary>
+        /// Gets or sets the show counter.
+        /// </summary>
+        /// <value>The show counter.</value>
+        public int ShowCounter { get; private set; }
+
         #region Methods
         /// <summary>
         /// Shows the please wait window with the specified status text.

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ExtensionsPrismModule.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -16,7 +16,7 @@ namespace Catel
     /// <summary>
     /// Extensions.Prism module which allows the registration of default services in the service locator.
     /// </summary>
-    public class ExtensionsPrismModule : IServiceLocatorInitializer
+    public partial class ExtensionsPrismModule : IServiceLocatorInitializer
     {
         /// <summary>
         /// Initializes the specified service locator.
@@ -31,5 +31,7 @@ namespace Catel
             serviceLocator.RegisterType<RegionAdapterMappings, RegionAdapterMappings>();
             serviceLocator.RegisterType<IUICompositionService, UICompositionService>();
         }
+
+        partial void InitializePlatform();
     }
 }

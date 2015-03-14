@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="TaskHelperFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -9,6 +9,7 @@ namespace Catel.Test.Threading
     using System;
     using Catel.Threading;
     using NUnit.Framework;
+    using System.Threading.Tasks;
 
     public class TaskHelperFacts
     {
@@ -45,7 +46,7 @@ namespace Catel.Test.Threading
             }
 
             [TestCase]
-            public async void CorrectlyWaitsForAllTasksToBeCompletedAsync()
+            public async Task CorrectlyWaitsForAllTasksToBeCompletedAsync()
             {
                 var a = false;
                 var b = false;
