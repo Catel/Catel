@@ -917,8 +917,7 @@ namespace Catel.Test.Logging
 
                 var logData = eventArgs.LogData;
 
-                Assert.IsNotNull(logData);
-                Assert.AreEqual(0, logData.Count);
+                Assert.IsNull(logData);
             }
 
             [TestCase]
@@ -932,8 +931,9 @@ namespace Catel.Test.Logging
 
                 var threadId = ThreadHelper.GetCurrentThreadId();
 
-                log.InfoWithData("log message", new [] {
-                    new KeyValuePair<string, object>("ThreadId", threadId) 
+                log.InfoWithData("log message", new LogData
+                {
+                    { "ThreadId", threadId }
                 });
 
                 Assert.IsNotNull(eventArgs);

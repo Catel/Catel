@@ -19,7 +19,6 @@ namespace Catel.Logging
         /// Initializes a new instance of the <see cref="LogData"/> class.
         /// </summary>
         public LogData()
-            : this(null)
         {
         }
 

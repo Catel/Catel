@@ -73,7 +73,7 @@ namespace Catel.Logging
         /// <param name="log">The log.</param>
         /// <param name="message">The message.</param>
         /// <param name="logData">The log data.</param>
-        public static void WarningWithData(this ILog log, string message, IEnumerable<KeyValuePair<string, object>> logData)
+        public static void WarningWithData(this ILog log, string message, LogData logData)
         {
             log.WriteWithData(message, logData, LogEvent.Warning);
         }
