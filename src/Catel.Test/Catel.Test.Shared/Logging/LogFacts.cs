@@ -871,7 +871,7 @@ namespace Catel.Test.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof (int));
 
-                log.ErrorAndThrowException<InvalidOperationException>(null);
+                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => log.ErrorAndThrowException<InvalidOperationException>(null));
             }
 
             [TestCase]

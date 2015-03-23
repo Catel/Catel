@@ -226,6 +226,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Configuration\LogListenerConfigurationCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\EventArgs\LogMessageEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Extensions\LogExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\Extensions\LogExtensions.debug.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\Extensions\LogExtensions.error.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\Extensions\LogExtensions.warning.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\Extensions\LogExtensions.info.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Formatters\Interfaces\IJsonLogFormatter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Formatters\JsonLogFormatter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Interfaces\IBatchLogListener.cs" />

@@ -125,6 +125,8 @@ namespace Catel.Logging
 
             var assemblyName = type.GetAssemblyFullNameEx();
 
+            // TODO: can we get better performance with a hashset on types?
+
             return assemblyName.StartsWith("Catel.Core") ||
                 assemblyName.StartsWith("Catel.Mvc") || 
                 assemblyName.StartsWith("Catel.MVVM") ||
@@ -136,7 +138,6 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
         public void DebugWithData(string message, object extraData = null)
         {
             if (!LogManager.LogInfo.IsDebugEnabled)
@@ -149,8 +150,6 @@ namespace Catel.Logging
                 return;
             }
 
-            Argument.IsNotNull("message", message);
-
             WriteMessage(message, extraData, LogEvent.Debug);
         }
 
@@ -161,23 +160,10 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="exception" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
+        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public void DebugWithData(Exception exception, string message, object extraData = null)
         {
-            if (!LogManager.LogInfo.IsDebugEnabled)
-            {
-                return;
-            }
-
-            if (LogManager.LogInfo.IgnoreCatelLogging && IsCatelLogging)
-            {
-                return;
-            }
-
-            Argument.IsNotNull("exception", exception);
-            Argument.IsNotNull("message", message);
-
-            DebugWithData(FormatException(exception, message), extraData);
+            LogExtensions.DebugWithData(this, exception, message, extraData);
         }
 
         /// <summary>
@@ -185,7 +171,6 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
         public void InfoWithData(string message, object extraData = null)
         {
             if (!LogManager.LogInfo.IsInfoEnabled)
@@ -198,8 +183,6 @@ namespace Catel.Logging
                 return;
             }
 
-            Argument.IsNotNull("message", message);
-
             WriteMessage(message, extraData, LogEvent.Info);
         }
 
@@ -210,23 +193,10 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="exception" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
+        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public void InfoWithData(Exception exception, string message, object extraData = null)
         {
-            if (!LogManager.LogInfo.IsInfoEnabled)
-            {
-                return;
-            }
-
-            if (LogManager.LogInfo.IgnoreCatelLogging && IsCatelLogging)
-            {
-                return;
-            }
-
-            Argument.IsNotNull("exception", exception);
-            Argument.IsNotNull("message", message);
-
-            InfoWithData(FormatException(exception, message), extraData);
+            LogExtensions.InfoWithData(this, exception, message, extraData);
         }
 
         /// <summary>
@@ -234,7 +204,6 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
         public void WarningWithData(string message, object extraData = null)
         {
             if (!LogManager.LogInfo.IsWarningEnabled)
@@ -247,8 +216,6 @@ namespace Catel.Logging
                 return;
             }
 
-            Argument.IsNotNull("message", message);
-
             WriteMessage(message, extraData, LogEvent.Warning);
         }
 
@@ -259,23 +226,10 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="exception" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
+        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public void WarningWithData(Exception exception, string message, object extraData = null)
         {
-            if (!LogManager.LogInfo.IsWarningEnabled)
-            {
-                return;
-            }
-
-            if (LogManager.LogInfo.IgnoreCatelLogging && IsCatelLogging)
-            {
-                return;
-            }
-
-            Argument.IsNotNull("exception", exception);
-            Argument.IsNotNull("message", message);
-
-            WarningWithData(FormatException(exception, message), extraData);
+            LogExtensions.WarningWithData(this, exception, message, extraData);
         }
 
         /// <summary>
@@ -283,7 +237,6 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
         public void ErrorWithData(string message, object extraData = null)
         {
             if (!LogManager.LogInfo.IsErrorEnabled)
@@ -296,8 +249,6 @@ namespace Catel.Logging
                 return;
             }
 
-            Argument.IsNotNull("message", message);
-
             WriteMessage(message, extraData, LogEvent.Error);
         }
 
@@ -308,23 +259,10 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="exception" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
+        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public void ErrorWithData(Exception exception, string message, object extraData = null)
         {
-            if (!LogManager.LogInfo.IsErrorEnabled)
-            {
-                return;
-            }
-
-            if (LogManager.LogInfo.IgnoreCatelLogging && IsCatelLogging)
-            {
-                return;
-            }
-
-            Argument.IsNotNull("exception", exception);
-            Argument.IsNotNull("message", message);
-
-            ErrorWithData(FormatException(exception, message), extraData);
+            LogExtensions.ErrorWithData(this, exception, message, extraData);
         }
 
         /// <summary>
@@ -333,7 +271,6 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
         /// <param name="logEvent">The log event.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
         public void WriteWithData(string message, object extraData, LogEvent logEvent)
         {
             if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
@@ -345,8 +282,6 @@ namespace Catel.Logging
             {
                 return;
             }
-
-            Argument.IsNotNull("message", message);
 
             WriteMessage(message, extraData, logEvent);
         }
@@ -360,44 +295,10 @@ namespace Catel.Logging
         /// <param name="logEvent">The log event.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="exception" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="exception" /> is <c>null</c>.</exception>
+        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public void WriteWithData(Exception exception, string message, object extraData, LogEvent logEvent)
         {
-            if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
-            {
-                return;
-            }
-
-            if (LogManager.LogInfo.IgnoreCatelLogging && IsCatelLogging)
-            {
-                return;
-            }
-
-            Argument.IsNotNull("exception", exception);
-            Argument.IsNotNull("message", message);
-
-            WriteWithData(FormatException(exception, message), extraData, logEvent);
-        }
-
-        /// <summary>
-        /// Formats the exception for logging with an additional message.
-        /// </summary>
-        /// <param name="exception">The exception.</param>
-        /// <param name="message">The message.</param>
-        /// <returns>Formatted string.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="message"/> is <c>null</c>.</exception>
-        private static string FormatException(Exception exception, string message)
-        {
-            Argument.IsNotNull("exception", exception);
-            Argument.IsNotNull("message", message);
-
-            var formattedException = string.Format("[{0}] {1}", exception.GetType().Name, exception);
-            if (string.IsNullOrEmpty(message))
-            {
-                return formattedException;
-            }
-
-            return string.Format("{0} | {1}", message, formattedException);
+            LogExtensions.WriteWithData(this, exception, message, extraData, logEvent);
         }
 
         /// <summary>
@@ -406,13 +307,12 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
         /// <param name="logEvent">The log event.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
         private void WriteMessage(string message, object extraData, LogEvent logEvent)
         {
             var logMessage = LogMessage;
             if (logMessage != null)
             {
-                var eventArgs = new LogMessageEventArgs(this, string.Format("{0}{1}", new string(' ', IndentLevel * IndentSize), message), extraData, logEvent, DateTime.Now);
+                var eventArgs = new LogMessageEventArgs(this, string.Format("{0}{1}", new string(' ', IndentLevel * IndentSize), message ?? string.Empty), extraData, logEvent, DateTime.Now);
                 logMessage(this, eventArgs);
             }
         }
