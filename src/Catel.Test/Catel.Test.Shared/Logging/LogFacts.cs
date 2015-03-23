@@ -7,7 +7,7 @@
 namespace Catel.Test.Logging
 {
     using System;
-
+    using System.Collections.Generic;
     using Catel.Logging;
     using NUnit.Framework;
 
@@ -31,7 +31,7 @@ namespace Catel.Test.Logging
             [TestCase]
             public void LoggingPerformance()
             {
-                var log = LogManager.GetLogger(typeof (ThePerformance));
+                var log = LogManager.GetLogger(typeof(ThePerformance));
 
                 var averageDuration = TimeMeasureHelper.MeasureAction(10000, "Log.Write", () => log.WriteWithData("this is a test", null, LogEvent.Error));
 
@@ -46,7 +46,7 @@ namespace Catel.Test.Logging
             public void IncreasesIndentLevel()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 Assert.AreEqual(0, log.IndentLevel);
 
@@ -59,7 +59,7 @@ namespace Catel.Test.Logging
             public void WritesMessagesWithIndent()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 LogMessageEventArgs eventArgs = null;
                 log.LogMessage += (sender, e) => eventArgs = e;
@@ -81,7 +81,7 @@ namespace Catel.Test.Logging
             public void DecreasesIndentLevel()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int)) {IndentLevel = 2};
+                var log = new Log(typeof(int)) { IndentLevel = 2 };
 
                 Assert.AreEqual(2, log.IndentLevel);
 
@@ -94,7 +94,7 @@ namespace Catel.Test.Logging
             public void WriteMessagesWithUnIndent()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 LogMessageEventArgs eventArgs = null;
                 log.LogMessage += (sender, e) => eventArgs = e;
@@ -118,7 +118,7 @@ namespace Catel.Test.Logging
             public void DefaultsToZero()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 Assert.AreEqual(0, log.IndentLevel);
             }
@@ -127,7 +127,7 @@ namespace Catel.Test.Logging
             public void SetsPositiveValue()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int)) {IndentSize = 5};
+                var log = new Log(typeof(int)) { IndentSize = 5 };
 
                 Assert.AreEqual(5, log.IndentSize);
             }
@@ -136,7 +136,7 @@ namespace Catel.Test.Logging
             public void ThrowsArgumentOutOfRangeForNegativeValue()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 // TODO: IndentLevel should be settable
                 ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => log.IndentLevel = -1);
@@ -150,7 +150,7 @@ namespace Catel.Test.Logging
             public void DefaultsToTwo()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 Assert.AreEqual(2, log.IndentSize);
             }
@@ -159,7 +159,7 @@ namespace Catel.Test.Logging
             public void SetsPositiveValue()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int)) {IndentSize = 5};
+                var log = new Log(typeof(int)) { IndentSize = 5 };
 
                 Assert.AreEqual(5, log.IndentSize);
             }
@@ -168,7 +168,7 @@ namespace Catel.Test.Logging
             public void ThrowsArgumentOutOfRangeForNegativeValue()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 // TODO: IndentSize should be settable
                 ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => log.IndentSize = -1);
@@ -188,9 +188,9 @@ namespace Catel.Test.Logging
             public void CreatesLogForType()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
-                Assert.AreEqual(typeof (int), log.TargetType);
+                Assert.AreEqual(typeof(int), log.TargetType);
             }
         }
 
@@ -210,16 +210,16 @@ namespace Catel.Test.Logging
             public void Debug_Message_Null()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
-                log.Debug((string) null);
+                log.Debug((string)null);
             }
 
             [TestCase]
             public void Debug_Message()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 LogMessageEventArgs eventArgs = null;
                 log.LogMessage += (sender, e) => eventArgs = e;
@@ -236,16 +236,16 @@ namespace Catel.Test.Logging
             public void Debug_MessageFormat_Null()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
-                log.Debug((string) null, null);
+                log.Debug((string)null, null);
             }
 
             [TestCase]
             public void Debug_MessageFormat()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 LogMessageEventArgs eventArgs = null;
                 log.LogMessage += (sender, e) => eventArgs = e;
@@ -262,16 +262,16 @@ namespace Catel.Test.Logging
             public void Debug_Exception_Null()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Debug((Exception) null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Debug((Exception)null));
             }
 
             [TestCase]
             public void Debug_Exception()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 LogMessageEventArgs eventArgs = null;
                 log.LogMessage += (sender, e) => eventArgs = e;
@@ -289,7 +289,7 @@ namespace Catel.Test.Logging
             public void Debug_ExceptionWithMessage_ExceptionNull()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Debug(null, string.Empty));
             }
@@ -298,7 +298,7 @@ namespace Catel.Test.Logging
             public void Debug_ExceptionWithMessage_MessageNull()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 var exception = new ArgumentNullException("log test");
 
@@ -309,7 +309,7 @@ namespace Catel.Test.Logging
             public void Debug_ExceptionWithMessage()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 LogMessageEventArgs eventArgs = null;
                 log.LogMessage += (sender, e) => eventArgs = e;
@@ -327,7 +327,7 @@ namespace Catel.Test.Logging
             public void Debug_ExceptionWithMessageFormat_ExceptionNull()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Debug(null, "additional message", 1));
             }
@@ -336,7 +336,7 @@ namespace Catel.Test.Logging
             public void Debug_ExceptionWithMessageFormat_MessageFormatNull()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 var exception = new ArgumentNullException("log test");
 
@@ -347,7 +347,7 @@ namespace Catel.Test.Logging
             public void Debug_ExceptionWithMessageFormat()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 LogMessageEventArgs eventArgs = null;
                 log.LogMessage += (sender, e) => eventArgs = e;
@@ -378,16 +378,16 @@ namespace Catel.Test.Logging
             public void Info_Message_Null()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
-                log.Info((string) null);
+                log.Info((string)null);
             }
 
             [TestCase]
             public void Info_Message()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 LogMessageEventArgs eventArgs = null;
                 log.LogMessage += (sender, e) => eventArgs = e;
@@ -404,16 +404,16 @@ namespace Catel.Test.Logging
             public void Info_MessageFormat_Null()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
-                log.Info((string) null, null);
+                log.Info((string)null, null);
             }
 
             [TestCase]
             public void Info_MessageFormat()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 LogMessageEventArgs eventArgs = null;
                 log.LogMessage += (sender, e) => eventArgs = e;
@@ -430,16 +430,16 @@ namespace Catel.Test.Logging
             public void Info_Exception_Null()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Info((Exception) null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Info((Exception)null));
             }
 
             [TestCase]
             public void Info_Exception()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 LogMessageEventArgs eventArgs = null;
                 log.LogMessage += (sender, e) => eventArgs = e;
@@ -457,7 +457,7 @@ namespace Catel.Test.Logging
             public void Info_ExceptionWithMessage_ExceptionNull()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Info(null, string.Empty));
             }
@@ -466,7 +466,7 @@ namespace Catel.Test.Logging
             public void Info_ExceptionWithMessage_MessageNull()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 var exception = new ArgumentNullException("log test");
 
@@ -477,7 +477,7 @@ namespace Catel.Test.Logging
             public void Info_ExceptionWithMessage()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 LogMessageEventArgs eventArgs = null;
                 log.LogMessage += (sender, e) => eventArgs = e;
@@ -495,7 +495,7 @@ namespace Catel.Test.Logging
             public void Info_ExceptionWithMessageFormat_ExceptionNull()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Info(null, "additional message", 1));
             }
@@ -504,7 +504,7 @@ namespace Catel.Test.Logging
             public void Info_ExceptionWithMessageFormat_MessageFormatNull()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 var exception = new ArgumentNullException("log test");
 
@@ -515,7 +515,7 @@ namespace Catel.Test.Logging
             public void Info_ExceptionWithMessageFormat()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 LogMessageEventArgs eventArgs = null;
                 log.LogMessage += (sender, e) => eventArgs = e;
@@ -546,16 +546,16 @@ namespace Catel.Test.Logging
             public void Warning_Message_Null()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
-                log.Warning((string) null);
+                log.Warning((string)null);
             }
 
             [TestCase]
             public void Warning_Message()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 LogMessageEventArgs eventArgs = null;
                 log.LogMessage += (sender, e) => eventArgs = e;
@@ -572,16 +572,16 @@ namespace Catel.Test.Logging
             public void Warning_MessageFormat_Null()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
-                log.Warning((string) null, null);
+                log.Warning((string)null, null);
             }
 
             [TestCase]
             public void Warning_MessageFormat()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 LogMessageEventArgs eventArgs = null;
                 log.LogMessage += (sender, e) => eventArgs = e;
@@ -598,16 +598,16 @@ namespace Catel.Test.Logging
             public void Warning_Exception_Null()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Warning((Exception) null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Warning((Exception)null));
             }
 
             [TestCase]
             public void Warning_Exception()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 LogMessageEventArgs eventArgs = null;
                 log.LogMessage += (sender, e) => eventArgs = e;
@@ -625,7 +625,7 @@ namespace Catel.Test.Logging
             public void Warning_ExceptionWithMessage_ExceptionNull()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Warning(null, string.Empty));
             }
@@ -634,7 +634,7 @@ namespace Catel.Test.Logging
             public void Warning_ExceptionWithMessage_MessageNull()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 var exception = new ArgumentNullException("log test");
 
@@ -645,7 +645,7 @@ namespace Catel.Test.Logging
             public void Warning_ExceptionWithMessage()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 LogMessageEventArgs eventArgs = null;
                 log.LogMessage += (sender, e) => eventArgs = e;
@@ -663,7 +663,7 @@ namespace Catel.Test.Logging
             public void Warning_ExceptionWithMessageFormat_ExceptionNull()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Warning(null, "additional message", 1));
             }
@@ -672,7 +672,7 @@ namespace Catel.Test.Logging
             public void Warning_ExceptionWithMessageFormat_MessageFormatNull()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 var exception = new ArgumentNullException("log test");
 
@@ -683,7 +683,7 @@ namespace Catel.Test.Logging
             public void Warning_ExceptionWithMessageFormat()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 LogMessageEventArgs eventArgs = null;
                 log.LogMessage += (sender, e) => eventArgs = e;
@@ -714,16 +714,16 @@ namespace Catel.Test.Logging
             public void Error_Message_Null()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
-                log.Error((string) null);
+                log.Error((string)null);
             }
 
             [TestCase]
             public void Error_Message()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 LogMessageEventArgs eventArgs = null;
                 log.LogMessage += (sender, e) => eventArgs = e;
@@ -740,16 +740,16 @@ namespace Catel.Test.Logging
             public void Error_MessageFormat_Null()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
-                log.Error((string) null, null);
+                log.Error((string)null, null);
             }
 
             [TestCase]
             public void Error_MessageFormat()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 LogMessageEventArgs eventArgs = null;
                 log.LogMessage += (sender, e) => eventArgs = e;
@@ -766,16 +766,16 @@ namespace Catel.Test.Logging
             public void Error_Exception_Null()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Error((Exception) null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Error((Exception)null));
             }
 
             [TestCase]
             public void Error_Exception()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 LogMessageEventArgs eventArgs = null;
                 log.LogMessage += (sender, e) => eventArgs = e;
@@ -793,7 +793,7 @@ namespace Catel.Test.Logging
             public void Error_ExceptionWithMessage_ExceptionNull()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Error(null, string.Empty));
             }
@@ -802,7 +802,7 @@ namespace Catel.Test.Logging
             public void Error_ExceptionWithMessage_MessageNull()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 var exception = new ArgumentNullException("log test");
 
@@ -813,7 +813,7 @@ namespace Catel.Test.Logging
             public void Error_ExceptionWithMessage()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 LogMessageEventArgs eventArgs = null;
                 log.LogMessage += (sender, e) => eventArgs = e;
@@ -831,7 +831,7 @@ namespace Catel.Test.Logging
             public void Error_ExceptionWithMessageFormat_ExceptionNull()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Error(null, "additional message", 1));
             }
@@ -840,7 +840,7 @@ namespace Catel.Test.Logging
             public void Error_ExceptionWithMessageFormat_MessageFormatNull()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 var exception = new ArgumentNullException("log test");
 
@@ -851,7 +851,7 @@ namespace Catel.Test.Logging
             public void Error_ExceptionWithMessageFormat()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 LogMessageEventArgs eventArgs = null;
                 log.LogMessage += (sender, e) => eventArgs = e;
@@ -869,7 +869,7 @@ namespace Catel.Test.Logging
             public void ErrorAndThrowException_NullInput()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => log.ErrorAndThrowException<InvalidOperationException>(null));
             }
@@ -878,7 +878,7 @@ namespace Catel.Test.Logging
             public void ErrorAndThrowException_ExceptionWithoutMessageConstructor()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => log.ErrorAndThrowException<ExceptionWithoutStringConstructor>("exception test"));
             }
@@ -887,12 +887,64 @@ namespace Catel.Test.Logging
             public void ErrorAndThrowException_ExceptionWithMessageConstructor()
             {
                 LogManager.AddDebugListener();
-                var log = new Log(typeof (int));
+                var log = new Log(typeof(int));
 
                 // Several tests to make sure we are not testing the NotSupportedException of the class itself
                 ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => log.ErrorAndThrowException<InvalidOperationException>("exception test"));
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.ErrorAndThrowException<ArgumentNullException>("exception test"));
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => log.ErrorAndThrowException<ArgumentException>("exception test"));
+            }
+        }
+
+        [TestFixture]
+        public class TheLogDataFunctionality
+        {
+            [TestCase]
+            public void WorksWithoutData()
+            {
+                LogManager.AddDebugListener();
+                var log = new Log(typeof(int));
+
+                LogMessageEventArgs eventArgs = null;
+                log.LogMessage += (sender, e) => eventArgs = e;
+
+                log.InfoWithData("log message", null);
+
+                Assert.IsNotNull(eventArgs);
+                Assert.AreEqual(log, eventArgs.Log);
+                Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
+                Assert.AreEqual("log message", eventArgs.Message);
+
+                var logData = eventArgs.LogData;
+
+                Assert.IsNotNull(logData);
+                Assert.AreEqual(0, logData.Count);
+            }
+
+            [TestCase]
+            public void WorksWithData()
+            {
+                LogManager.AddDebugListener();
+                var log = new Log(typeof(int));
+
+                LogMessageEventArgs eventArgs = null;
+                log.LogMessage += (sender, e) => eventArgs = e;
+
+                var threadId = ThreadHelper.GetCurrentThreadId();
+
+                log.InfoWithData("log message", new [] {
+                    new KeyValuePair<string, object>("ThreadId", threadId) 
+                });
+
+                Assert.IsNotNull(eventArgs);
+                Assert.AreEqual(log, eventArgs.Log);
+                Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
+                Assert.AreEqual("log message", eventArgs.Message);
+
+                var logData = eventArgs.LogData;
+
+                Assert.IsNotNull(logData);
+                Assert.IsTrue(ObjectHelper.AreEqual(logData["ThreadId"], threadId));
             }
         }
     }

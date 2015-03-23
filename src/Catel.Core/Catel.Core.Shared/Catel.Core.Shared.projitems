@@ -250,6 +250,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\SeqLogListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Log.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\LogBatchEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\LogData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\LogEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\LogEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\LogListenerBase.cs" />

@@ -18,7 +18,7 @@ namespace Catel.Test.Logging
         public void Constructor_AutomaticDateTime()
         {
             var log = new Log(GetType());
-            var eventArgs = new LogMessageEventArgs(log, "log message", 42, LogEvent.Error);
+            var eventArgs = new LogMessageEventArgs(log, "log message", 42, null, LogEvent.Error);
 
             Assert.AreEqual(log, eventArgs.Log);
             Assert.AreEqual("log message", eventArgs.Message);
@@ -31,7 +31,7 @@ namespace Catel.Test.Logging
         public void Constructor_ManualDateTime()
         {
             var log = new Log(GetType());
-            var eventArgs = new LogMessageEventArgs(log, "log message", 42, LogEvent.Warning, DateTime.Today);
+            var eventArgs = new LogMessageEventArgs(log, "log message", 42, null, LogEvent.Warning, DateTime.Today);
 
             Assert.AreEqual(log, eventArgs.Log);
             Assert.AreEqual("log message", eventArgs.Message);

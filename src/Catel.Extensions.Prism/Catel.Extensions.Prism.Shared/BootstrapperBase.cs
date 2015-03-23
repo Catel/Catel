@@ -606,8 +606,9 @@ namespace Catel
             /// <param name="log">The log.</param>
             /// <param name="message">The message.</param>
             /// <param name="extraData">The additional data.</param>
+            /// <param name="logData">The log data.</param>
             /// <param name="time">The time.</param>
-            protected override void Debug(ILog log, string message, object extraData, DateTime time)
+            protected override void Debug(ILog log, string message, object extraData, LogData logData, DateTime time)
             {
                 RelayLogMessageToLoggerFacadeIfRequired(message, Category.Debug);
             }
@@ -618,8 +619,9 @@ namespace Catel
             /// <param name="log">The log.</param>
             /// <param name="message">The message.</param>
             /// <param name="extraData">The additional data.</param>
+            /// <param name="logData">The log data.</param>
             /// <param name="time">The time.</param>
-            protected override void Info(ILog log, string message, object extraData, DateTime time)
+            protected override void Info(ILog log, string message, object extraData, LogData logData, DateTime time)
             {
                 RelayLogMessageToLoggerFacadeIfRequired(message, Category.Info);
             }
@@ -630,8 +632,9 @@ namespace Catel
             /// <param name="log">The log.</param>
             /// <param name="message">The message.</param>
             /// <param name="extraData">The additional data.</param>
+            /// <param name="logData">The log data.</param>
             /// <param name="time">The time.</param>
-            protected override void Warning(ILog log, string message, object extraData, DateTime time)
+            protected override void Warning(ILog log, string message, object extraData, LogData logData, DateTime time)
             {
                 RelayLogMessageToLoggerFacadeIfRequired(message, Category.Warn);
             }
@@ -642,8 +645,9 @@ namespace Catel
             /// <param name="log">The log.</param>
             /// <param name="message">The message.</param>
             /// <param name="extraData">The additional data.</param>
+            /// <param name="logData">The log data.</param>
             /// <param name="time">The time.</param>
-            protected override void Error(ILog log, string message, object extraData, DateTime time)
+            protected override void Error(ILog log, string message, object extraData, LogData logData, DateTime time)
             {
                 RelayLogMessageToLoggerFacadeIfRequired(message, Category.Exception);
             }

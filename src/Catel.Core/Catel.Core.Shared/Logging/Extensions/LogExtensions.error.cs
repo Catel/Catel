@@ -8,6 +8,7 @@
 namespace Catel.Logging
 {
     using System;
+    using System.Collections.Generic;
 
     public static partial class LogExtensions
     {
@@ -53,6 +54,28 @@ namespace Catel.Logging
         public static void Error(this ILog log, Exception exception, string messageFormat, params object[] args)
         {
             Write(log, LogEvent.Error, exception, messageFormat, args);
+        }
+
+        /// <summary>
+        /// Writes the specified message as error message with extra data.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="extraData">The extra data.</param>
+        public static void ErrorWithData(this ILog log, string message, object extraData = null)
+        {
+            log.WriteWithData(message, extraData, LogEvent.Error);
+        }
+
+        /// <summary>
+        /// Writes the specified message as error message with log data.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="logData">The log data.</param>
+        public static void ErrorWithData(this ILog log, string message, IEnumerable<KeyValuePair<string, object>> logData)
+        {
+            log.WriteWithData(message, logData, LogEvent.Error);
         }
 
         /// <summary>

@@ -67,6 +67,11 @@ namespace Catel.Logging
         TimeDisplay TimeDisplay { get; set; }
 
         /// <summary>
+        /// Occurs when a log message is written to one of the logs.
+        /// </summary>
+        event EventHandler<LogMessageEventArgs> LogMessage;
+
+        /// <summary>
         /// Called when any message is written to the log.
         /// </summary>
         /// <param name="log">The log.</param>
@@ -74,7 +79,19 @@ namespace Catel.Logging
         /// <param name="logEvent">The log event.</param>
         /// <param name="extraData">The additional data.</param>
         /// <param name="time">The time.</param>
+        [ObsoleteEx(Replacement = "Use overload with logData", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         void Write(ILog log, string message, LogEvent logEvent, object extraData, DateTime time);
+
+        /// <summary>
+        /// Called when any message is written to the log.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="logEvent">The log event.</param>
+        /// <param name="extraData">The additional data.</param>
+        /// <param name="logData">The log data.</param>
+        /// <param name="time">The time.</param>
+        void Write(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time);
 
         /// <summary>
         /// Called when a <see cref="LogEvent.Debug" /> message is written to the log.
@@ -83,7 +100,18 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="extraData">The additional data.</param>
         /// <param name="time">The time.</param>
+        [ObsoleteEx(Replacement = "Use overload with logData", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         void Debug(ILog log, string message, object extraData, DateTime time);
+
+        /// <summary>
+        /// Called when a <see cref="LogEvent.Debug" /> message is written to the log.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="extraData">The additional data.</param>
+        /// <param name="logData">The log data.</param>
+        /// <param name="time">The time.</param>
+        void Debug(ILog log, string message, object extraData, LogData logData, DateTime time);
 
         /// <summary>
         /// Called when a <see cref="LogEvent.Info" /> message is written to the log.
@@ -92,7 +120,18 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="extraData">The additional data.</param>
         /// <param name="time">The time.</param>
+        [ObsoleteEx(Replacement = "Use overload with logData", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         void Info(ILog log, string message, object extraData, DateTime time);
+
+        /// <summary>
+        /// Called when a <see cref="LogEvent.Info" /> message is written to the log.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="extraData">The additional data.</param>
+        /// <param name="logData">The log data.</param>
+        /// <param name="time">The time.</param>
+        void Info(ILog log, string message, object extraData, LogData logData, DateTime time);
 
         /// <summary>
         /// Called when a <see cref="LogEvent.Warning" /> message is written to the log.
@@ -101,7 +140,18 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="extraData">The additional data.</param>
         /// <param name="time">The time.</param>
+        [ObsoleteEx(Replacement = "Use overload with logData", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         void Warning(ILog log, string message, object extraData, DateTime time);
+
+        /// <summary>
+        /// Called when a <see cref="LogEvent.Warning" /> message is written to the log.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="extraData">The additional data.</param>
+        /// <param name="logData">The log data.</param>
+        /// <param name="time">The time.</param>
+        void Warning(ILog log, string message, object extraData, LogData logData, DateTime time);
 
         /// <summary>
         /// Called when a <see cref="LogEvent.Error" /> message is written to the log.
@@ -110,11 +160,17 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="extraData">The additional data.</param>
         /// <param name="time">The time.</param>
+        [ObsoleteEx(Replacement = "Use overload with logData", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         void Error(ILog log, string message, object extraData, DateTime time);
 
         /// <summary>
-        /// Occurs when a log message is written to one of the logs.
+        /// Called when a <see cref="LogEvent.Error" /> message is written to the log.
         /// </summary>
-        event EventHandler<LogMessageEventArgs> LogMessage;
+        /// <param name="log">The log.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="extraData">The additional data.</param>
+        /// <param name="logData">The log data.</param>
+        /// <param name="time">The time.</param>
+        void Error(ILog log, string message, object extraData, LogData logData, DateTime time);
     }
 }

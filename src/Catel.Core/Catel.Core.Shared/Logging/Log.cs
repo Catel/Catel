@@ -7,6 +7,7 @@
 namespace Catel.Logging
 {
     using System;
+    using System.Collections.Generic;
     using Reflection;
 
     /// <summary>
@@ -32,7 +33,7 @@ namespace Catel.Logging
             TargetType = targetType;
             Tag = targetType.FullName;
 
-            IsCatelLogging = IsCatelType(targetType);
+            IsCatelLogging = targetType.IsCatelType();
         }
         #endregion
 
@@ -112,45 +113,25 @@ namespace Catel.Logging
 
         #region Methods
         /// <summary>
-        /// Determines whether the specified type is a Catel type.
-        /// </summary>
-        /// <param name="type">Type of the target.</param>
-        /// <returns>
-        /// 	<c>true</c> if the specified type is a Catel type; otherwise, <c>false</c>.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        private static bool IsCatelType(Type type)
-        {
-            Argument.IsNotNull("type", type);
-
-            var assemblyName = type.GetAssemblyFullNameEx();
-
-            // TODO: can we get better performance with a hashset on types?
-
-            return assemblyName.StartsWith("Catel.Core") ||
-                assemblyName.StartsWith("Catel.Mvc") || 
-                assemblyName.StartsWith("Catel.MVVM") ||
-                assemblyName.StartsWith("Catel.Extensions");
-        }
-
-        /// <summary>
         /// Writes the specified message as debug message with extra data.
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
+        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public void DebugWithData(string message, object extraData = null)
         {
-            if (!LogManager.LogInfo.IsDebugEnabled)
-            {
-                return;
-            }
+            LogExtensions.DebugWithData(this, message, extraData);
+        }
 
-            if (LogManager.LogInfo.IgnoreCatelLogging && IsCatelLogging)
-            {
-                return;
-            }
-
-            WriteMessage(message, extraData, LogEvent.Debug);
+        /// <summary>
+        /// Writes the specified message as debug message with log data.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="logData">The log data.</param>
+        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        public void DebugWithData(string message, IEnumerable<KeyValuePair<string, object>> logData)
+        {
+            LogExtensions.DebugWithData(this, message, logData);
         }
 
         /// <summary>
@@ -171,19 +152,21 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
+        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public void InfoWithData(string message, object extraData = null)
         {
-            if (!LogManager.LogInfo.IsInfoEnabled)
-            {
-                return;
-            }
+            LogExtensions.InfoWithData(this, message, extraData);
+        }
 
-            if (LogManager.LogInfo.IgnoreCatelLogging && IsCatelLogging)
-            {
-                return;
-            }
-
-            WriteMessage(message, extraData, LogEvent.Info);
+        /// <summary>
+        /// Writes the specified message as info message with log data.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="logData">The log data.</param>
+        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        public void InfoWithData(string message, IEnumerable<KeyValuePair<string, object>> logData)
+        {
+            LogExtensions.InfoWithData(this, message, logData);
         }
 
         /// <summary>
@@ -204,19 +187,21 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
+        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public void WarningWithData(string message, object extraData = null)
         {
-            if (!LogManager.LogInfo.IsWarningEnabled)
-            {
-                return;
-            }
+            LogExtensions.WarningWithData(this, message, extraData);
+        }
 
-            if (LogManager.LogInfo.IgnoreCatelLogging && IsCatelLogging)
-            {
-                return;
-            }
-
-            WriteMessage(message, extraData, LogEvent.Warning);
+        /// <summary>
+        /// Writes the specified message as warning message with log data.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="logData">The log data.</param>
+        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        public void WarningWithData(string message, IEnumerable<KeyValuePair<string, object>> logData)
+        {
+            LogExtensions.WarningWithData(this, message, logData);
         }
 
         /// <summary>
@@ -237,19 +222,21 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
+        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public void ErrorWithData(string message, object extraData = null)
         {
-            if (!LogManager.LogInfo.IsErrorEnabled)
-            {
-                return;
-            }
+            LogExtensions.ErrorWithData(this, message, extraData);
+        }
 
-            if (LogManager.LogInfo.IgnoreCatelLogging && IsCatelLogging)
-            {
-                return;
-            }
-
-            WriteMessage(message, extraData, LogEvent.Error);
+        /// <summary>
+        /// Writes the specified message as error message with log data.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="logData">The log data.</param>
+        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        public void ErrorWithData(string message, IEnumerable<KeyValuePair<string, object>> logData)
+        {
+            LogExtensions.ErrorWithData(this, message, logData);
         }
 
         /// <summary>
@@ -283,7 +270,28 @@ namespace Catel.Logging
                 return;
             }
 
-            WriteMessage(message, extraData, logEvent);
+            WriteMessage(message, extraData, null, logEvent);
+        }
+
+        /// <summary>
+        /// Writes the specified message as error message with log data.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="logData">The log data.</param>
+        /// <param name="logEvent">The log event.</param>
+        public void WriteWithData(string message, LogData logData, LogEvent logEvent)
+        {
+            if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
+            {
+                return;
+            }
+
+            if (LogManager.LogInfo.IgnoreCatelLogging && IsCatelLogging)
+            {
+                return;
+            }
+
+            WriteMessage(message, null, logData, logEvent);
         }
 
         /// <summary>
@@ -306,13 +314,14 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
+        /// <param name="logData">The log data.</param>
         /// <param name="logEvent">The log event.</param>
-        private void WriteMessage(string message, object extraData, LogEvent logEvent)
+        private void WriteMessage(string message, object extraData, LogData logData, LogEvent logEvent)
         {
             var logMessage = LogMessage;
             if (logMessage != null)
             {
-                var eventArgs = new LogMessageEventArgs(this, string.Format("{0}{1}", new string(' ', IndentLevel * IndentSize), message ?? string.Empty), extraData, logEvent, DateTime.Now);
+                var eventArgs = new LogMessageEventArgs(this, string.Format("{0}{1}", new string(' ', IndentLevel * IndentSize), message ?? string.Empty), extraData, logData, logEvent, DateTime.Now);
                 logMessage(this, eventArgs);
             }
         }

@@ -7,6 +7,7 @@
 namespace Catel.Logging
 {
     using System;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Log interface.
@@ -145,6 +146,15 @@ namespace Catel.Logging
         /// <param name="logEvent">The log event.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
         void WriteWithData(string message, object extraData, LogEvent logEvent);
+
+        /// <summary>
+        /// Writes the specified message as specified log event with extra data.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="logData">The log data.</param>
+        /// <param name="logEvent">The log event.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
+        void WriteWithData(string message, LogData logData, LogEvent logEvent);
 
         /// <summary>
         /// Writes the specified message as specified log event with extra data.

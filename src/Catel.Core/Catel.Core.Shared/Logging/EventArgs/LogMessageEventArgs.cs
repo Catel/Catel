@@ -19,9 +19,10 @@ namespace Catel.Logging
         /// <param name="log">The log.</param>
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
+        /// <param name="logData">The log data.</param>
         /// <param name="logEvent">The log event.</param>
-        public LogMessageEventArgs(ILog log, string message, object extraData, LogEvent logEvent)
-            : this(log, message, extraData, logEvent, DateTime.Now) { }
+        public LogMessageEventArgs(ILog log, string message, object extraData, LogData logData, LogEvent logEvent)
+            : this(log, message, extraData, logData, logEvent, DateTime.Now) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LogMessageEventArgs" /> class.
@@ -29,15 +30,17 @@ namespace Catel.Logging
         /// <param name="log">The log.</param>
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
+        /// <param name="logData">The log data.</param>
         /// <param name="logEvent">The log event.</param>
         /// <param name="time">The time.</param>
-        public LogMessageEventArgs(ILog log, string message, object extraData, LogEvent logEvent, DateTime time)
+        public LogMessageEventArgs(ILog log, string message, object extraData, LogData logData, LogEvent logEvent, DateTime time)
         {
             Log = log;
             Time = time;
             Message = message;
             ExtraData = extraData;
             LogEvent = logEvent;
+            LogData = logData;
         }
 
         /// <summary>
@@ -63,6 +66,12 @@ namespace Catel.Logging
         /// </summary>
         /// <value>The extra data.</value>
         public object ExtraData { get; private set; }
+
+        /// <summary>
+        /// Gets the log data attached to this log entry.
+        /// </summary>
+        /// <value>The data.</value>
+        public LogData LogData { get; private set; }
 
         /// <summary>
         ///   Gets the log event.

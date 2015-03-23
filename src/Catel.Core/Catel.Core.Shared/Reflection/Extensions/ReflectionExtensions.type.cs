@@ -89,6 +89,26 @@ namespace Catel.Reflection
             };
 
         /// <summary>
+        /// Determines whether the specified type is a Catel type.
+        /// </summary>
+        /// <param name="type">Type of the target.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified type is a Catel type; otherwise, <c>false</c>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
+        public static bool IsCatelType(this Type type)
+        {
+            Argument.IsNotNull("type", type);
+
+            var assemblyName = type.GetAssemblyFullNameEx();
+
+            return assemblyName.StartsWith("Catel.Core") ||
+                assemblyName.StartsWith("Catel.Mvc") ||
+                assemblyName.StartsWith("Catel.MVVM") ||
+                assemblyName.StartsWith("Catel.Extensions");
+        }
+
+        /// <summary>
         /// Gets the parent types.
         /// </summary>
         /// <param name="type">The type.</param>
