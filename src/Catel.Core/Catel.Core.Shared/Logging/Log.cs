@@ -124,6 +124,17 @@ namespace Catel.Logging
         }
 
         /// <summary>
+        /// Writes the specified message as debug message with log data.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="logData">The log data.</param>
+        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        public void DebugWithData(string message, LogData logData)
+        {
+            LogExtensions.DebugWithData(this, message, logData);
+        }
+
+        /// <summary>
         /// Writes the specified message as debug message with extra data.
         /// </summary>
         /// <param name="exception">The exception.</param>
@@ -145,6 +156,17 @@ namespace Catel.Logging
         public void InfoWithData(string message, object extraData = null)
         {
             LogExtensions.InfoWithData(this, message, extraData);
+        }
+
+        /// <summary>
+        /// Writes the specified message as info message with log data.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="logData">The log data.</param>
+        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        public void InfoWithData(string message, LogData logData)
+        {
+            LogExtensions.InfoWithData(this, message, logData);
         }
 
         /// <summary>
@@ -172,6 +194,17 @@ namespace Catel.Logging
         }
 
         /// <summary>
+        /// Writes the specified message as warning message with log data.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="logData">The log data.</param>
+        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        public void WarningWithData(string message, LogData logData)
+        {
+            LogExtensions.WarningWithData(this, message, logData);
+        }
+
+        /// <summary>
         /// Writes the specified message as warning message with extra data.
         /// </summary>
         /// <param name="exception">The exception.</param>
@@ -193,6 +226,17 @@ namespace Catel.Logging
         public void ErrorWithData(string message, object extraData = null)
         {
             LogExtensions.ErrorWithData(this, message, extraData);
+        }
+
+        /// <summary>
+        /// Writes the specified message as error message with log data.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="logData">The log data.</param>
+        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        public void ErrorWithData(string message, LogData logData)
+        {
+            LogExtensions.ErrorWithData(this, message, logData);
         }
 
         /// <summary>
