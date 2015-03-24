@@ -341,7 +341,7 @@ namespace Catel.Logging
         /// <param name="time">The time.</param>
         /// <returns><c>true</c> if the message should be ignored, <c>false</c> otherwise.</returns>
         [ObsoleteEx(Replacement = "Overload with logData parameter", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        protected bool ShouldIgnoreLogMessage(ILog log, string message, LogEvent logEvent, object extraData, DateTime time)
+        protected virtual bool ShouldIgnoreLogMessage(ILog log, string message, LogEvent logEvent, object extraData, DateTime time)
         {
             return false;
         }
@@ -356,7 +356,7 @@ namespace Catel.Logging
         /// <param name="logData">The log data.</param>
         /// <param name="time">The time.</param>
         /// <returns><c>true</c> if the message should be ignored, <c>false</c> otherwise.</returns>
-        protected bool ShouldIgnoreLogMessage(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
+        protected virtual bool ShouldIgnoreLogMessage(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
         {
             // Should be removed in v6
             if (ShouldIgnoreLogMessage(log, message, logEvent, extraData, time))
