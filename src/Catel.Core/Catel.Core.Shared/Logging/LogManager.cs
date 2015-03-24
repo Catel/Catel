@@ -592,28 +592,23 @@ namespace Catel.Logging
                 {
                     if (IsListenerInterested(listener, e.LogEvent))
                     {
-                        listener.Write(e.Log, e.Message, e.LogEvent, e.ExtraData, e.Time);
                         listener.Write(e.Log, e.Message, e.LogEvent, e.ExtraData, e.LogData, e.Time);
 
                         switch (e.LogEvent)
                         {
                             case LogEvent.Debug:
-                                listener.Debug(e.Log, e.Message, e.ExtraData, e.Time);
                                 listener.Debug(e.Log, e.Message, e.ExtraData, e.LogData, e.Time);
                                 break;
 
                             case LogEvent.Info:
-                                listener.Info(e.Log, e.Message, e.ExtraData, e.Time);
                                 listener.Info(e.Log, e.Message, e.ExtraData, e.LogData, e.Time);
                                 break;
 
                             case LogEvent.Warning:
-                                listener.Warning(e.Log, e.Message, e.ExtraData, e.Time);
                                 listener.Warning(e.Log, e.Message, e.ExtraData, e.LogData, e.Time);
                                 break;
 
                             case LogEvent.Error:
-                                listener.Error(e.Log, e.Message, e.ExtraData, e.Time);
                                 listener.Error(e.Log, e.Message, e.ExtraData, e.LogData, e.Time);
                                 break;
 
