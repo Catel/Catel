@@ -23,7 +23,9 @@ namespace Catel.MVVM
     /// <typeparam name="TExecuteParameter">The type of the execute parameter.</typeparam>
     /// <typeparam name="TCanExecuteParameter">The type of the can execute parameter.</typeparam>
     /// <typeparam name="TProgress">The type of the progress report value.</typeparam>
+#if !XAMARIN
     [CLSCompliant(false)]
+#endif
     public class TaskCommand<TExecuteParameter, TCanExecuteParameter, TProgress> : Command<TExecuteParameter, TCanExecuteParameter>, ICatelTaskCommand<TProgress>
         where TProgress : ITaskProgressReport
     {
@@ -316,7 +318,9 @@ namespace Catel.MVVM
     /// <typeparamref name="TExecuteParameter" /> as generic type.
     /// </summary>
     /// <typeparam name="TExecuteParameter">The type of the execute parameter.</typeparam>
+#if !XAMARIN
     [CLSCompliant(false)]
+#endif
     public class TaskCommand<TExecuteParameter> : TaskCommand<TExecuteParameter, TExecuteParameter, ITaskProgressReport>
     {
         #region Constructors
@@ -348,7 +352,9 @@ namespace Catel.MVVM
     /// Implements the <see cref="TaskCommand{TExecuteParameter,TCanExecuteParameter,TProgress}" /> class with
     /// <see cref="Object" /> as generic types.
     /// </summary>
+#if !XAMARIN
     [CLSCompliant(false)]
+#endif
     public class TaskCommand : TaskCommand<object, object, ITaskProgressReport>
     {
         #region Constructors
@@ -383,7 +389,9 @@ namespace Catel.MVVM
     /// </summary>
     /// <typeparam name="TProgress">Type of the progress change info.</typeparam>
     /// <typeparam name="TExecuteParameter">The type of the execute parameter.</typeparam>
+#if !XAMARIN
     [CLSCompliant(false)]
+#endif
     public class ProgressiveTaskCommand<TProgress, TExecuteParameter> : TaskCommand<TExecuteParameter, TExecuteParameter, TProgress>
         where TProgress : ITaskProgressReport
     {
@@ -407,7 +415,9 @@ namespace Catel.MVVM
     /// <typeparamref name="TProgress" /> as generic type.
     /// </summary>
     /// <typeparam name="TProgress">Type of the progress change info.</typeparam>
+#if !XAMARIN
     [CLSCompliant(false)]
+#endif
     public class ProgressiveTaskCommand<TProgress> : TaskCommand<object, object, TProgress>
         where TProgress : ITaskProgressReport
     {
