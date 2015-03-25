@@ -27,7 +27,7 @@ Release date:
 
 Added/fixed (BREAKING CHANGES):
 ===============================
-(-) Removed Windows 8.0 projects (no longer supported in Visual Studio 2015). Upgrade your projects
+(-) CTL-613 Removed Windows 8.0 projects (no longer supported in Visual Studio 2015). Upgrade your projects
     to 8.1 instead
 
 Added/fixed:
