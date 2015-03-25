@@ -4,10 +4,11 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if NETFX_CORE || PCL || (NET && !NET40)
+
 namespace Catel.Reflection
 {
     using System.Collections.Generic;
-#if NETFX_CORE || NET45 || PCL
     using System;
     using System.Linq;
     using System.Reflection;
@@ -295,5 +296,6 @@ namespace Catel.Reflection
         }
         #endregion
     }
-#endif
 }
+
+#endif
