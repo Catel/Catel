@@ -313,15 +313,15 @@ namespace Catel.Reflection
             Argument.IsNotNull("baseType", baseType);
             Argument.IsOfType("obj", obj, baseType);
 
-            const BindingFlags BindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-            PropertyInfo propertyInfo = baseType.GetPropertyEx(property, BindingFlags);
+            var bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+            var propertyInfo = baseType.GetPropertyEx(property, bindingFlags);
             if (propertyInfo == null)
             {
                 Log.Error("Hidden property '{0}' is not found on the base type '{1}'", property, baseType.GetType().Name);
                 throw new PropertyNotFoundException(property);
             }
 
-            return (TValue)propertyInfo.GetValue(obj, BindingFlags, null, new object[] { }, CultureInfo.InvariantCulture);
+            return (TValue)propertyInfo.GetValue(obj, bindingFlags, null, new object[] { }, CultureInfo.InvariantCulture);
         }
 
 #endif
