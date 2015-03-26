@@ -26,7 +26,7 @@ namespace Catel.Windows.Interactivity
 
     /// <summary>
     /// Behavior base class that handles a safe unsubscribe and clean up because the default
-    /// behavior class does not always call <see cref="Behavior.OnDetaching"/>.
+    /// behavior class does not always call <c>OnDetaching</c>.
     /// <para />
     /// This class extends the <see cref="BehaviorBase{T}"/> class by adding supports for commands.
     /// </summary>

@@ -118,31 +118,31 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <PRIResource Include="..\Catel.MVVM.WIN80\Strings\de\Resources.resw">
+    <PRIResource Include="..\Catel.MVVM.Shared\Strings\de\Resources.resw">
       <Link>Strings\de\Resources.resw</Link>
     </PRIResource>
-    <PRIResource Include="..\Catel.MVVM.WIN80\Strings\en-US\Exceptions.resw">
+    <PRIResource Include="..\Catel.MVVM.Shared\Strings\en-US\Exceptions.resw">
       <Link>Strings\en-US\Exceptions.resw</Link>
     </PRIResource>
-    <PRIResource Include="..\Catel.MVVM.WIN80\Strings\en-US\Resources.resw">
+    <PRIResource Include="..\Catel.MVVM.Shared\Strings\en-US\Resources.resw">
       <Link>Strings\en-US\Resources.resw</Link>
     </PRIResource>
-    <PRIResource Include="..\Catel.MVVM.WIN80\Strings\es\Resources.resw">
+    <PRIResource Include="..\Catel.MVVM.Shared\Strings\es\Resources.resw">
       <Link>Strings\es\Resources.resw</Link>
     </PRIResource>
-    <PRIResource Include="..\Catel.MVVM.WIN80\Strings\fr\Resources.resw">
+    <PRIResource Include="..\Catel.MVVM.Shared\Strings\fr\Resources.resw">
       <Link>Strings\fr\Resources.resw</Link>
     </PRIResource>
-    <PRIResource Include="..\Catel.MVVM.WIN80\Strings\it\Resources.resw">
+    <PRIResource Include="..\Catel.MVVM.Shared\Strings\it\Resources.resw">
       <Link>Strings\it\Resources.resw</Link>
     </PRIResource>
-    <PRIResource Include="..\Catel.MVVM.WIN80\Strings\nl\Resources.resw">
+    <PRIResource Include="..\Catel.MVVM.Shared\Strings\nl\Resources.resw">
       <Link>Strings\nl\Resources.resw</Link>
     </PRIResource>
-    <PRIResource Include="..\Catel.MVVM.WIN80\Strings\tr\Resources.resw">
+    <PRIResource Include="..\Catel.MVVM.Shared\Strings\tr\Resources.resw">
       <Link>Strings\tr\Resources.resw</Link>
     </PRIResource>
-    <PRIResource Include="..\Catel.MVVM.WIN80\Strings\zh-Hans\Resources.resw">
+    <PRIResource Include="..\Catel.MVVM.Shared\Strings\zh-Hans\Resources.resw">
       <Link>Strings\zh-Hans\Resources.resw</Link>
     </PRIResource>
     <None Include="packages.config" />

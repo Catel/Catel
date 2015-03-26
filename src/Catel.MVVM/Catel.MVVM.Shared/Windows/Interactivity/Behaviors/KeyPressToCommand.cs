@@ -71,7 +71,7 @@ namespace Catel.Windows.Interactivity
         /// Called when the specified key is pressed.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.Windows.Input.KeyEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The key event args instance containing the event data.</param>
         private void OnKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key)

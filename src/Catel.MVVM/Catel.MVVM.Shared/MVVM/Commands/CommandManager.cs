@@ -42,7 +42,7 @@ namespace Catel.MVVM
 #if NET
         private bool _subscribedToApplicationActivedEvent;
         private readonly ConditionalWeakTable<Window, object> _subscribedWindows = new ConditionalWeakTable<Window, object>(); 
-#else
+#elif SILVERLIGHT
         private bool _subscribedToKeyboardEvent;
 #endif
 
@@ -561,7 +561,7 @@ namespace Catel.MVVM
         /// </summary>
         public void SubscribeToKeyboardEvents()
         {
-#if !NET
+#if SL5
             if (_subscribedToKeyboardEvent)
             {
                 return;

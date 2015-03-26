@@ -176,7 +176,9 @@ namespace Catel.Windows.Markup
                     }
                     else
                     {
+#pragma warning disable 4014
                         obj.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => updateAction());
+#pragma warning restore 4014
                     }
 #else
                     if (obj.CheckAccess())

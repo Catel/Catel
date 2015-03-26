@@ -128,7 +128,49 @@
     <Content Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
+    <PRIResource Include="..\Catel.MVVM.Shared\Strings\de\Resources.resw">
+      <Link>Strings\de\Resources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\Catel.MVVM.Shared\Strings\en-US\Exceptions.resw">
+      <Link>Strings\en-US\Exceptions.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\Catel.MVVM.Shared\Strings\en-US\Resources.resw">
+      <Link>Strings\en-US\Resources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\Catel.MVVM.Shared\Strings\es\Resources.resw">
+      <Link>Strings\es\Resources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\Catel.MVVM.Shared\Strings\fr\Resources.resw">
+      <Link>Strings\fr\Resources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\Catel.MVVM.Shared\Strings\it\Resources.resw">
+      <Link>Strings\it\Resources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\Catel.MVVM.Shared\Strings\nl\Resources.resw">
+      <Link>Strings\nl\Resources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\Catel.MVVM.Shared\Strings\tr\Resources.resw">
+      <Link>Strings\tr\Resources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\Catel.MVVM.Shared\Strings\zh-Hans\Resources.resw">
+      <Link>Strings\zh-Hans\Resources.resw</Link>
+    </PRIResource>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Catel.Fody.Attributes">
+      <HintPath>..\..\..\lib\Catel.Fody.2.5.0\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Obsolete">
+      <HintPath>..\..\..\lib\Obsolete.Fody.3.1.0.0\Lib\portable-net4+sl4+wp8+win8+wpa81+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0">
+      <Name>Behaviors SDK %28XAML%29</Name>
+    </SDKReference>
   </ItemGroup>
   <Import Project="..\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

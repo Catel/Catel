@@ -317,10 +317,12 @@ namespace Catel.MVVM.Providers
                 Action action = () => viewModelWrapperService.Wrap(targetView, this, wrapOptions);
 
                 // NOTE: Beginning invoke (running async) because setting of TargetControl Content property causes memory faults
-                // when this method called by TargetControlContentChanged handler.
+                // when this method called by TargetControlContentChanged handler. No need to await though.
 #if NETFX_CORE
                 var dispatcher = ((FrameworkElement)TargetView).Dispatcher;
+#pragma warning disable 4014
                 dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { action(); });
+#pragma warning restore 4014
 #else
                 action();
 #endif

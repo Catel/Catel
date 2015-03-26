@@ -56,7 +56,9 @@ namespace Catel.Windows.Threading
             Argument.IsNotNull("dispatcher", dispatcher);
             Argument.IsNotNull("action", action);
 
+#pragma warning disable 4014
             dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => action());
+#pragma warning restore 4014
         }
 #endif
 

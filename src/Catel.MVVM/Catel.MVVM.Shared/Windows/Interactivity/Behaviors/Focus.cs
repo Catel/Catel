@@ -222,7 +222,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Called when the source has changed.
         /// </summary>
-        /// <param name="e">The <see cref="System.Windows.DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private void OnSourceChanged(DependencyPropertyChangedEventArgs e)
         {
             if (e.OldValue != null)
