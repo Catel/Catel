@@ -39,6 +39,8 @@ Added/fixed:
     Orc.Controls NuGet package instead
 (*) CTL-618 Marked DropDownButton as obsolete, will be removed in 5.0. Use DropDownButton from the 
     Orc.Controls NuGet package instead
+(*) CTL-619 Marked WatermarkTextBox as obsolete, will be removed in 5.0. Use WatermarkTextBox from the 
+    Orc.Controls NuGet package instead
 
 Roadmap:
 ========
