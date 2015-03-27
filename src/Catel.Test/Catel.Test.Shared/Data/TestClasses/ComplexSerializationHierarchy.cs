@@ -9,7 +9,7 @@ namespace Catel.Test.Data
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
-
+    using System.Runtime.Serialization;
     using Catel.Data;
 
     public enum SortDirection
@@ -95,6 +95,16 @@ namespace Catel.Test.Data
 #endif
     public class ScheduleAssistantSettings : SavableModelBase<ScheduleAssistantSettings>
     {
+        public ScheduleAssistantSettings()
+        {
+
+        }
+
+#if NET
+        protected ScheduleAssistantSettings(SerializationInfo info, StreamingContext context)
+            : base(info, context) { }
+#endif
+
         #region SelectedResource property
 
         /// <summary>
@@ -173,6 +183,16 @@ namespace Catel.Test.Data
 #endif
     public class GridSettings : ModelBase
     {
+        public GridSettings()
+        {
+
+        }
+
+#if NET
+        protected GridSettings(SerializationInfo info, StreamingContext context)
+            : base(info, context) { }
+#endif
+
         #region SortSettings property
 
         /// <summary>
