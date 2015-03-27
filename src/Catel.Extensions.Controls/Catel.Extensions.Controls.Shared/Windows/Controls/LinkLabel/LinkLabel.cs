@@ -23,6 +23,7 @@ namespace Catel.Windows.Controls
     /// <summary>
     /// A label looking like the known hyperlink.
     /// </summary>
+    [ObsoleteEx(Replacement = "Orc.Controls, see https://github.com/wildgums/orc.controls", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
     [TemplatePart(Name = "PART_InnerHyperlink", Type = typeof(Hyperlink))]
     public class LinkLabel : Label
     {

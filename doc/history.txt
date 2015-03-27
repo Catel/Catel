@@ -41,6 +41,8 @@ Added/fixed:
     Orc.Controls NuGet package instead
 (*) CTL-619 Marked WatermarkTextBox as obsolete, will be removed in 5.0. Use WatermarkTextBox from the 
     Orc.Controls NuGet package instead
+(*) CTL-619 Marked LinkLabel as obsolete, will be removed in 5.0. Use LinkLabel from the 
+    Orc.Controls NuGet package instead
 
 Roadmap:
 ========
