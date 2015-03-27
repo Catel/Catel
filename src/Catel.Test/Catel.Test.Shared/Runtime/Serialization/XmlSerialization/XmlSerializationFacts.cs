@@ -11,6 +11,7 @@ namespace Catel.Test.Runtime.Serialization
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Linq;
+    using System.Windows.Media;
     using System.Xml.Serialization;
     using Catel.Data;
     using Catel.Logging;
@@ -283,6 +284,17 @@ namespace Catel.Test.Runtime.Serialization
                 Assert.AreEqual("included", clonedModel.IncludedCatelProperty);
 
                 Assert.AreEqual(null, clonedModel.GetValue(TestModel.ExcludedProtectedCatelPropertyProperty.Name));
+            }
+
+            [TestCase]
+            public void CorrectlyIncludesNonSerializablePropertiesIncludedWithAttributes()
+            {
+                var testModel = new TestModel();
+                testModel.NonSerializableProperty = Colors.Red;
+
+                var clonedModel = SerializationTestHelper.SerializeAndDeserialize(testModel, SerializationFactory.GetXmlSerializer());
+
+                Assert.AreEqual(Colors.Red, clonedModel.NonSerializableProperty);
             }
 
             [TestCase]

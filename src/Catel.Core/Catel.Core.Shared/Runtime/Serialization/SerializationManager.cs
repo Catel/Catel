@@ -156,9 +156,20 @@ namespace Catel.Runtime.Serialization
                 {
                     var propertyData = modelProperty.Value;
 
-                    if (!typeof(ModelBase).IsAssignableFromEx(propertyData.Type) && !propertyData.IsSerializable)
+                    bool isSerializable = typeof(ModelBase).IsAssignableFromEx(propertyData.Type) || propertyData.IsSerializable;
+                    if (!isSerializable)
                     {
-                        Log.Warning("Property '{0}' is not serializable, so will be excluded from the serialization", propertyData.Name);
+                        // CTL-550
+                        var cachedPropertyInfo = propertyData.GetPropertyInfo(type);
+                        if (AttributeHelper.IsDecoratedWithAttribute<IncludeInSerializationAttribute>(cachedPropertyInfo.PropertyInfo))
+                        {
+                            isSerializable = true;
+                        }
+                    }
+
+                    if (!isSerializable)
+                    {
+                        Log.Warning("Property '{0}' is not serializable, so will be excluded from the serialization. If this property needs to be included, use the 'IncludeInSerializationAttribute'", propertyData.Name);
                         continue;
                     }
 
