@@ -26,6 +26,7 @@ namespace Catel.Windows.Controls
     /// <summary>
     /// TraceOutput view model.
     /// </summary>
+    [ObsoleteEx(Replacement = "Orc.Controls, see https://github.com/wildgums/orc.controls", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
     public class TraceOutputViewModel : ViewModelBase
     {
         private readonly OutputLogListener _outputLogListener;
