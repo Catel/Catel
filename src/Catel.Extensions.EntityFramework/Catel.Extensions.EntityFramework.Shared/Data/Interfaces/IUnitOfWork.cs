@@ -6,7 +6,6 @@
 
 namespace Catel.Data
 {
-    using System.Data.Objects;
     using System;
     using System.Collections;
     using System.Data;
@@ -16,8 +15,10 @@ namespace Catel.Data
 
 #if EF5
     using SaveOptions = System.Data.Objects.SaveOptions;
+    using System.Data.Objects;
 #else
     using SaveOptions = System.Data.Entity.Core.Objects.SaveOptions;
+    using System.Data.Entity.Core.Objects;
 #endif
 
     /// <summary>
