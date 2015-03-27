@@ -151,11 +151,13 @@ namespace Catel.MVVM
             lock (_lock)
             {
                 viewModel.PropertyChanged -= OnViewModelPropertyChanged;
+
                 var viewModelBase = viewModel as ViewModelBase;
                 if (viewModelBase != null)
                 {
                     viewModelBase.CommandExecuted -= OnViewModelCommandExecuted;
                 }
+
                 viewModel.Saving -= OnViewModelSaving;
                 viewModel.Saved -= OnViewModelSaved;
                 viewModel.Canceling -= OnViewModelCanceling;
@@ -227,7 +229,7 @@ namespace Catel.MVVM
             lock (_lock)
             {
                 var viewModels = (from viewModel in _interestedViewModels
-                                  select viewModel.Value);
+                                  select viewModel.Value).ToList();
 
                 foreach (var viewModel in viewModels)
                 {
@@ -257,7 +259,7 @@ namespace Catel.MVVM
             lock (_lock)
             {
                 var viewModels = (from viewModel in _interestedViewModels
-                                  select viewModel.Value);
+                                  select viewModel.Value).ToList();
 
                 foreach (var viewModel in viewModels)
                 {
@@ -353,7 +355,7 @@ namespace Catel.MVVM
             lock (_lock)
             {
                 var viewModels = (from viewModelKeyValuePair in _interestedViewModels
-                                  select viewModelKeyValuePair.Value);
+                                  select viewModelKeyValuePair.Value).ToList();
 
                 foreach (var vm in viewModels)
                 {
