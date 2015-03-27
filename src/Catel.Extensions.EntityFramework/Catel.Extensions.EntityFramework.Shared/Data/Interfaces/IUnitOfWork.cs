@@ -6,7 +6,9 @@
 
 namespace Catel.Data
 {
+    using System.Data.Objects;
     using System;
+    using System.Collections;
     using System.Data;
     using System.Data.Entity;
     using IoC;
@@ -55,6 +57,20 @@ namespace Catel.Data
         /// <exception cref="NotSupportedException">The specified repository type cannot be found.</exception>
         TEntityRepository GetRepository<TEntityRepository>()
             where TEntityRepository : IEntityRepository;
+
+        /// <summary>
+        /// Refreshes the collection inside the unit of work.
+        /// </summary>
+        /// <param name="refreshMode">The refresh mode.</param>
+        /// <param name="collection">The collection.</param>
+        void Refresh(RefreshMode refreshMode, IEnumerable collection);
+
+        /// <summary>
+        /// Refreshes the entity inside the unit of work.
+        /// </summary>
+        /// <param name="refreshMode">The refresh mode.</param>
+        /// <param name="entity">The entity.</param>
+        void Refresh(RefreshMode refreshMode, object entity);
 
         /// <summary>
         /// Saves the changes inside the unit of work.

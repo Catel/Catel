@@ -6,6 +6,7 @@
 
 namespace Catel.Data
 {
+    using System.Data.Objects;
     using System;
     using System.Data;
     using System.Data.Common;
@@ -17,6 +18,7 @@ namespace Catel.Data
 
 #if EF5
     using SaveOptions = System.Data.Objects.SaveOptions;
+    using System.Collections;
 #else
     using SaveOptions = System.Data.Entity.Core.Objects.SaveOptions;
 #endif
@@ -207,6 +209,36 @@ namespace Catel.Data
 
             var repository = _typeFactory.CreateInstanceWithParameters(registrationInfo.ImplementingType, DbContext);
             return (TEntityRepository)repository;
+        }
+
+        /// <summary>
+        /// Refreshes the collection inside the unit of work.
+        /// </summary>
+        /// <param name="refreshMode">The refresh mode.</param>
+        /// <param name="collection">The collection.</param>
+        public virtual void Refresh(RefreshMode refreshMode, IEnumerable collection)
+        {
+            Log.Debug("Refreshing collection | {0}", Tag);
+
+            var objectContext = DbContext.GetObjectContext();
+            objectContext.Refresh(refreshMode, collection);
+
+            Log.Debug("Refreshed collection | {0}", Tag);
+        }
+
+        /// <summary>
+        /// Refreshes the entity inside the unit of work.
+        /// </summary>
+        /// <param name="refreshMode">The refresh mode.</param>
+        /// <param name="entity">The entity.</param>
+        public virtual void Refresh(RefreshMode refreshMode, object entity)
+        {
+            Log.Debug("Refreshing entity | {0}", Tag);
+
+            var objectContext = DbContext.GetObjectContext();
+            objectContext.Refresh(refreshMode, entity);
+
+            Log.Debug("Refreshed entity | {0}", Tag);
         }
 
         /// <summary>
