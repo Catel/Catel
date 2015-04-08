@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.EventHandlers
+namespace Catel
 {
     using System;
     using System.Threading.Tasks;
