@@ -36,6 +36,7 @@ Added/fixed:
 (+) CTL-611 Added IPleaseWaitService.PushInScope extension method
 (+) CTL-612 Allow custom log data in log entries by introducing the LogData class
 (+) CTL-614 Support Windows 10 Universal App Project
+(+) CTL-624 Add AsyncEventHandler and extension for safe invocation
 (*) CTL-550 Non Serializable properties tagged with [IncludeInSerialization] should attempt to serialize and 
     complain if they are not serialized
 (*) CTL-617 Marked TraceOutputControl as obsolete, will be removed in 5.0. Use LogViewerControl from the 
