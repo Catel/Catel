@@ -48,6 +48,7 @@ Added/fixed:
 (*) CTL-619 Marked LinkLabel as obsolete, will be removed in 5.0. Use LinkLabel from the  Orc.Controls NuGet 
     package instead
 (x) CTL-621 ManagedViewModel might throw exception when enumerating interested view models
+(x) CTL-625 LogListeners are created twice when defined in config when using vshost
 
 Roadmap:
 ========

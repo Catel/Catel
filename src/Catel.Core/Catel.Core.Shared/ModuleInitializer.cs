@@ -93,6 +93,10 @@ namespace Catel.Core
                 Log.Debug("Application is living in an application context, loading application configuration");
 
                 config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                if (ContainsVsHost(config.FilePath))
+                {
+                    return null;
+                }
             }
 
             return config;
@@ -106,13 +110,34 @@ namespace Catel.Core
                 return null;
             }
 
-            var configFile = entryAssembly.Location + ".config";
+            var entryAssemblyLocation = entryAssembly.Location;
+            if (string.IsNullOrWhiteSpace(entryAssemblyLocation))
+            {
+                return null;
+            }
+
+            if (ContainsVsHost(entryAssemblyLocation))
+            {
+                return null;
+            }
+
+            var configFile = entryAssemblyLocation + ".config";
             var map = new ExeConfigurationFileMap
             {
                 ExeConfigFilename = configFile
             };
 
             return ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
+        }
+
+        private static bool ContainsVsHost(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return false;
+            }
+
+            return value.ToLower().Contains(".vshost.");
         }
 #endif
     }
