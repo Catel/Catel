@@ -126,15 +126,15 @@ namespace Catel.Logging
                 switch (_timeDisplay)
                 {
                     case TimeDisplay.Time:
-                        _timeFormat = "HH:mm:ss:fff";
+                        _timeFormat = "hh:mm:ss:fff";
                         break;
 
                     case TimeDisplay.DateTime:
-                        _timeFormat = "yyyy-MM-dd HH:mm:ss:fff";
+                        _timeFormat = "yyyy-MM-dd hh:mm:ss:fff";
                         break;
 
                     default:
-                        _timeFormat = "HH:mm:ss:fff";
+                        _timeFormat = "hh:mm:ss:fff";
                         break;
                 }
             }
