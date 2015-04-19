@@ -96,7 +96,7 @@ namespace Catel
         public static bool IsProcessCurrentlyHostedByVisualStudio()
         {
 #if NET
-            return Process.GetCurrentProcess().ProcessName.StartsWith("devenv", StringComparison.OrdinalIgnoreCase);
+            return IsHostedByProcess("devenv");
 #elif XAMARIN || PCL
             return false;
 #elif NETFX_CORE
@@ -116,7 +116,7 @@ namespace Catel
         public static bool IsProcessCurrentlyHostedBySharpDevelop()
         {
 #if NET
-            return Process.GetCurrentProcess().ProcessName.StartsWith("sharpdevelop", StringComparison.OrdinalIgnoreCase);
+            return IsHostedByProcess("sharpdevelop");
 #elif XAMARIN || PCL
             return false;
 #elif NETFX_CORE
@@ -136,7 +136,7 @@ namespace Catel
         public static bool IsProcessCurrentlyHostedByExpressionBlend()
         {
 #if NET
-            return Process.GetCurrentProcess().ProcessName.StartsWith("blend", StringComparison.OrdinalIgnoreCase);
+            return IsHostedByProcess("blend");
 #elif XAMARIN || PCL
             return false;
 #elif NETFX_CORE
@@ -167,5 +167,31 @@ namespace Catel
 
             return false;
         }
+
+#if NET
+        private static bool IsHostedByProcess(string processName)
+        {
+            var currentProcess = Process.GetCurrentProcess();
+            if (currentProcess == null)
+            {
+                return false;
+            }
+
+            var currentProcessName = currentProcess.ProcessName.ToLower();
+            if (currentProcessName.Contains("vshost"))
+            {
+                currentProcess = currentProcess.GetParent();
+                if (currentProcess == null)
+                {
+                    return false;
+                }
+
+                currentProcessName = currentProcess.ProcessName.ToLower();
+            }
+
+            var isHosted = currentProcessName.StartsWith(processName, StringComparison.OrdinalIgnoreCase);
+            return isHosted;
+        }
+#endif
     }
 }

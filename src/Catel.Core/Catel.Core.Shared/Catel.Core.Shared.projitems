@@ -152,6 +152,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\NotSupportedInPlatformException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ByteArrayExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ExceptionExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ProcessExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.slug.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Filtering\CompositeFilter.cs" />
