@@ -19,9 +19,9 @@ namespace Catel
     /// </summary>
     public static class EnvironmentHelper
     {
-        private static readonly Lazy<bool> _hostedByVisualStudio = new Lazy<bool>(IsProcessCurrentlyHostedByVisualStudio);
-        private static readonly Lazy<bool> _hostedBySharpDevelop = new Lazy<bool>(IsProcessCurrentlyHostedBySharpDevelop);
-        private static readonly Lazy<bool> _hostedByExpressionBlend = new Lazy<bool>(IsProcessCurrentlyHostedByExpressionBlend);
+        private static readonly Lazy<bool> _hostedByVisualStudio = new Lazy<bool>(() => IsProcessCurrentlyHostedByVisualStudio(false));
+        private static readonly Lazy<bool> _hostedBySharpDevelop = new Lazy<bool>(() => IsProcessCurrentlyHostedBySharpDevelop(false));
+        private static readonly Lazy<bool> _hostedByExpressionBlend = new Lazy<bool>(() => IsProcessCurrentlyHostedByExpressionBlend(false));
 
         /// <summary>
         /// Determines whether the process is hosted by visual studio.
@@ -89,14 +89,15 @@ namespace Catel
         /// <summary>
         /// Determines whether the process is hosted by visual studio.
         /// <para />
-        /// This methods executes the logic every time it is called. To get a cached value, use the 
-        /// <see cref="IsProcessHostedByVisualStudio"/> instead.
+        /// This methods executes the logic every time it is called. To get a cached value, use the
+        /// <see cref="IsProcessHostedByVisualStudio" /> instead.
         /// </summary>
+        /// <param name="checkParentProcesses">if set to <c>true</c>, the parent processes will also be checked.</param>
         /// <returns><c>true</c> if the process is hosted by visual studio; otherwise, <c>false</c>.</returns>
-        public static bool IsProcessCurrentlyHostedByVisualStudio()
+        public static bool IsProcessCurrentlyHostedByVisualStudio(bool checkParentProcesses = false)
         {
 #if NET
-            return IsHostedByProcess("devenv");
+            return IsHostedByProcess("devenv", checkParentProcesses);
 #elif XAMARIN || PCL
             return false;
 #elif NETFX_CORE
@@ -109,14 +110,15 @@ namespace Catel
         /// <summary>
         /// Determines whether the process is hosted by sharp develop.
         /// <para />
-        /// This methods executes the logic every time it is called. To get a cached value, use the 
-        /// <see cref="IsProcessHostedByExpressionBlend"/> instead.
+        /// This methods executes the logic every time it is called. To get a cached value, use the
+        /// <see cref="IsProcessHostedByExpressionBlend" /> instead.
         /// </summary>
+        /// <param name="checkParentProcesses">if set to <c>true</c>, the parent processes will also be checked.</param>
         /// <returns><c>true</c> if the process is hosted by sharp develop; otherwise, <c>false</c>.</returns>
-        public static bool IsProcessCurrentlyHostedBySharpDevelop()
+        public static bool IsProcessCurrentlyHostedBySharpDevelop(bool checkParentProcesses = false)
         {
 #if NET
-            return IsHostedByProcess("sharpdevelop");
+            return IsHostedByProcess("sharpdevelop", checkParentProcesses);
 #elif XAMARIN || PCL
             return false;
 #elif NETFX_CORE
@@ -129,14 +131,15 @@ namespace Catel
         /// <summary>
         /// Determines whether the process is hosted by expression blend.
         /// <para />
-        /// This methods executes the logic every time it is called. To get a cached value, use the 
-        /// <see cref="IsProcessHostedByExpressionBlend"/> instead.
+        /// This methods executes the logic every time it is called. To get a cached value, use the
+        /// <see cref="IsProcessHostedByExpressionBlend" /> instead.
         /// </summary>
+        /// <param name="checkParentProcesses">if set to <c>true</c>, the parent processes will also be checked.</param>
         /// <returns><c>true</c> if the process is hosted by expression blend; otherwise, <c>false</c>.</returns>
-        public static bool IsProcessCurrentlyHostedByExpressionBlend()
+        public static bool IsProcessCurrentlyHostedByExpressionBlend(bool checkParentProcesses = false)
         {
 #if NET
-            return IsHostedByProcess("blend");
+            return IsHostedByProcess("blend", checkParentProcesses);
 #elif XAMARIN || PCL
             return false;
 #elif NETFX_CORE
@@ -149,18 +152,24 @@ namespace Catel
         /// <summary>
         /// Determines whether the process is hosted by any tool, such as visual studio or blend.
         /// <para />
-        /// This methods executes the logic every time it is called. To get a cached value, use the 
-        /// <see cref="IsProcessHostedByTool"/> instead.
+        /// This methods executes the logic every time it is called. To get a cached value, use the
+        /// <see cref="IsProcessHostedByTool" /> instead.
         /// </summary>
+        /// <param name="checkParentProcesses">if set to <c>true</c>, the parent processes will also be checked.</param>
         /// <returns><c>true</c> if the current process is hosted by any tool; otherwise, <c>false</c>.</returns>
-        public static bool IsProcessCurrentlyHostedByTool()
+        public static bool IsProcessCurrentlyHostedByTool(bool checkParentProcesses = false)
         {
-            if (IsProcessCurrentlyHostedByVisualStudio())
+            if (IsProcessCurrentlyHostedByVisualStudio(checkParentProcesses))
             {
                 return true;
             }
 
-            if (IsProcessCurrentlyHostedByExpressionBlend())
+            if (IsProcessCurrentlyHostedBySharpDevelop(checkParentProcesses))
+            {
+                return true;
+            }
+
+            if (IsProcessCurrentlyHostedByExpressionBlend(checkParentProcesses))
             {
                 return true;
             }
@@ -169,7 +178,7 @@ namespace Catel
         }
 
 #if NET
-        private static bool IsHostedByProcess(string processName)
+        private static bool IsHostedByProcess(string processName, bool supportParentProcesses = false)
         {
             var currentProcess = Process.GetCurrentProcess();
             if (currentProcess == null)
@@ -178,15 +187,18 @@ namespace Catel
             }
 
             var currentProcessName = currentProcess.ProcessName.ToLower();
-            if (currentProcessName.Contains("vshost"))
+            if (supportParentProcesses)
             {
-                currentProcess = currentProcess.GetParent();
-                if (currentProcess == null)
+                if (currentProcessName.Contains("vshost"))
                 {
-                    return false;
-                }
+                    currentProcess = currentProcess.GetParent();
+                    if (currentProcess == null)
+                    {
+                        return false;
+                    }
 
-                currentProcessName = currentProcess.ProcessName.ToLower();
+                    currentProcessName = currentProcess.ProcessName.ToLower();
+                }
             }
 
             var isHosted = currentProcessName.StartsWith(processName, StringComparison.OrdinalIgnoreCase);
