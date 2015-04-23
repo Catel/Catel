@@ -6,7 +6,7 @@
 
 
 
-#if NET || SL5
+#if NET
 
 namespace Catel.Services
 {
