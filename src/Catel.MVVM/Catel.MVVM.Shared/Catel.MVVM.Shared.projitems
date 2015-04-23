@@ -227,6 +227,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\Exceptions\WindowNotRegisteredException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IDispatcherServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IPleaseWaitServiceExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IStartUpInfoProviderExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IUIVisualizerServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\FileServiceBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IAccelerometerService.cs" />

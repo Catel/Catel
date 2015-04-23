@@ -191,11 +191,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\UrlLocatorFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\ViewLocatorFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\ViewModelLocatorFacts.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Services\EventArgs\UICompletedEventArgsTest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Services\Exceptions\WindowNotRegisteredExceptionTest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Services\NamingConventionTest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Services\SplashScreenServiceTest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Services\ViewModelServiceBaseTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Attributes\InterestedInAttributeFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Attributes\ModelAttributeFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Attributes\ViewModelToModelAttributeFacts.cs" />
@@ -245,7 +240,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\KnownTypesSerializationFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\XmlSerializationFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scoping\ScopeManagerFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\EventArgs\UICompletedEventArgsTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Exceptions\WindowNotRegisteredExceptionTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IStartupInfoProviderExtensionsFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Fixtures\StartupInfoProviderFixture.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\LanguageServiceFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\NamingConventionTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\SplashScreenServiceTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\ViewModelServiceBaseTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Text\StringBuilderExtensionFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\SynchronizationContextFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\TaskHelperFacts.cs" />
