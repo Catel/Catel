@@ -237,6 +237,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\TestModels\CircularTestModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\TestModels\SerializerModifierModels.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\TestModels\TestModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\TestModels\TestModelWithKeyValuePair.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\KnownTypesSerializationFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\XmlSerializationFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scoping\ScopeManagerFacts.cs" />

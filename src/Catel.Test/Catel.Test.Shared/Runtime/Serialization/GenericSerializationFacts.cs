@@ -323,6 +323,24 @@ namespace Catel.Test.Runtime.Serialization
             }
         }
 
+        [TestFixture]
+        public class TheKeyValuePairSerializerModifier
+        {
+            [TestCase]
+            public void SerializesAndDeserializesKeyValuePairs()
+            {
+                var originalObject = new TestModelWithKeyValuePair();
+
+                TestSerializationOnAllSerializers(serializer =>
+                {
+                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
+
+                    Assert.AreEqual(originalObject.KeyValuePair, clonedObject.KeyValuePair);
+                    Assert.AreEqual(originalObject.KeyValuePairAsObject, clonedObject.KeyValuePairAsObject);
+                });
+            }
+        }
+
         private static void TestSerializationOnAllSerializers(Action<IModelBaseSerializer> action)
         {
             var serializers = new List<IModelBaseSerializer>();

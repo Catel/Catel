@@ -318,6 +318,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\ISerializerModifier.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\MemberMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\MemberValue.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Modifiers\KeyValuePairSerializerModifier.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\SerializationContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\SerializationFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\SerializationManager.cs" />
