@@ -13,7 +13,7 @@ namespace Catel.Reflection
     using Logging;
 
     /// <summary>
-    /// 	<see cref="Type"/> helper class.
+    /// <see cref="Type"/> helper class.
     /// </summary>
     public static class TypeHelper
     {

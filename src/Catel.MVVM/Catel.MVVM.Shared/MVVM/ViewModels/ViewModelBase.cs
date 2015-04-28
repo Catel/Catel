@@ -978,7 +978,7 @@ namespace Catel.MVVM
                                 }
 #endif
 
-                                // Only TwoWay or OneWayToSource mappings should be mapped
+                                // Only TwoWay, OneWayToSource mappings should be mapped
                                 if ((mapping.Mode == ViewModelToModelMode.TwoWay) || (mapping.Mode == ViewModelToModelMode.OneWayToSource))
                                 {
                                     var valuesToSet = mapping.Converter.ConvertBack(viewModelValue, this);
@@ -1130,8 +1130,9 @@ namespace Catel.MVVM
                     // Check if this is the right model (duplicate mappings might exist)
                     if (_modelObjects[mapping.ModelProperty] == sender)
                     {
-                        // Only map properties in TwoWay or OneWay mode
-                        if ((mapping.Mode == ViewModelToModelMode.TwoWay) || (mapping.Mode == ViewModelToModelMode.OneWay))
+                        // Only OneWay, TwoWay or Explicit (yes, only VM => M is explicit) should be mapped
+                        if ((mapping.Mode == ViewModelToModelMode.TwoWay) || (mapping.Mode == ViewModelToModelMode.OneWay) || 
+                            (mapping.Mode == ViewModelToModelMode.Explicit))
                         {
                             var values = new object[mapping.ValueProperties.Length];
                             for (var index = 0; index < mapping.ValueProperties.Length; index++)

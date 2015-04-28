@@ -35,7 +35,7 @@
             secondPerson.LastName = "Person";
             secondPerson.ContactInfo.Street = "Another street";
             secondPerson.ContactInfo.City = "Another city";
-            secondPerson.ContactInfo.Email = "Another email";            
+            secondPerson.ContactInfo.Email = "Another email";
 
             var viewModel = new MultipleModelMappingsViewModel(firstPerson);
 
@@ -348,9 +348,9 @@
 
             person.FirstName = "geert";
 
-            // Only model must have changed
+            // When initiated from model => VM should change
             Assert.AreEqual("geert", person.FirstName);
-            Assert.AreNotEqual(person.FirstName, viewModel.FirstNameAsExplicit);
+            Assert.AreEqual(person.FirstName, viewModel.FirstNameAsExplicit);
         }
 
         [TestCase]
@@ -364,7 +364,7 @@
 
             viewModel.FirstNameAsExplicit = "geert";
 
-            // Only view model model must have changed
+            // When initiated from VM => nothing should change
             Assert.AreEqual("geert", viewModel.FirstNameAsExplicit);
             Assert.AreNotEqual(person.FirstName, viewModel.FirstNameAsExplicit);
         }
@@ -578,7 +578,7 @@
             await viewModel.CancelAndCloseViewModel();
 
             Assert.IsFalse(model.IsInEditSession);
-            Assert.AreEqual("first name", person.FirstName);            
+            Assert.AreEqual("first name", person.FirstName);
         }
 
         [TestCase]
@@ -790,7 +790,7 @@
 
             Assert.IsTrue(viewModel.HasErrors);
             Assert.IsNotNull(summary);
-            Assert.AreEqual(0, summary.FieldErrors.Count);  
+            Assert.AreEqual(0, summary.FieldErrors.Count);
         }
 
         [TestCase]
@@ -803,7 +803,7 @@
 
             Assert.IsTrue(viewModel.HasErrors);
             Assert.IsNotNull(summary);
-            Assert.AreEqual(0, summary.FieldErrors.Count);  
+            Assert.AreEqual(0, summary.FieldErrors.Count);
         }
 
         [TestCase]
@@ -816,7 +816,7 @@
 
             Assert.IsTrue(viewModel.HasErrors);
             Assert.IsNotNull(summary);
-            Assert.AreEqual(2, summary.FieldErrors.Count);  
+            Assert.AreEqual(2, summary.FieldErrors.Count);
         }
         #endregion
 
@@ -827,7 +827,7 @@
             AuditingManager.RegisterAuditor(auditor);
 
             var vm = new TestViewModel();
-            
+
             Assert.AreEqual(false, auditor.OnViewModelCanceledCalled);
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
 

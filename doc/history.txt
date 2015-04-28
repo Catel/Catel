@@ -52,6 +52,7 @@ Added/fixed:
 (x) CTL-621 ManagedViewModel might throw exception when enumerating interested view models
 (x) CTL-625 LogListeners are created twice when defined in config when using vshost
 (x) CTL-626 EnvironmentHelper.IsProcessCurrentlyHostedByXXX functions are checking current instead parent (host) process
+(x) CTL-634 Model to ViewModel mappings don't work in explicit mode
 
 Roadmap:
 ========
