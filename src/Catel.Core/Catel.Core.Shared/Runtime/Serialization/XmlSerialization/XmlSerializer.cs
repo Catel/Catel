@@ -542,6 +542,10 @@ namespace Catel.Runtime.Serialization.Xml
             xmlWriterSettings.ConformanceLevel = ConformanceLevel.Fragment;
             xmlWriterSettings.NamespaceHandling = NamespaceHandling.OmitDuplicates;
 
+#if XAMARIN
+            var defaultNamespace = "http://www.w3.org/2000/xmlns/";
+#endif
+
             using (var xmlWriter = XmlWriter.Create(stringBuilder, xmlWriterSettings))
             {
                 var memberTypeToSerialize = memberValue.Value != null ? memberValue.Value.GetType() : typeof(object);
@@ -550,6 +554,11 @@ namespace Catel.Runtime.Serialization.Xml
                 if (memberValue.Value == null)
                 {
                     xmlWriter.WriteStartElement(elementName);
+
+#if XAMARIN
+                    xmlWriter.WriteAttributeString("xmlns", namespacePrefix, defaultNamespace, "http://catel.codeplex.com"); 
+#endif
+
                     xmlWriter.WriteAttributeString(namespacePrefix, "IsNull", null, "true");
                     xmlWriter.WriteEndElement();
                 }
