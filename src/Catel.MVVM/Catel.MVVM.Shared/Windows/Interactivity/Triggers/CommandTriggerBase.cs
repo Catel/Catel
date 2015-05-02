@@ -237,14 +237,6 @@ namespace Catel.Windows.Interactivity
                 return false;
             }
 
-            if (Modifiers != ModifierKeys.None)
-            {
-                if (!KeyboardHelper.AreKeyboardModifiersPressed(Modifiers))
-                {
-                    return false;
-                }
-            }
-
             return command.CanExecute(parameter);
         }
 
@@ -264,6 +256,15 @@ namespace Catel.Windows.Interactivity
         /// <param name="parameter">The parameter that will override the <see cref="CommandParameter"/>.</param>
         protected virtual void ExecuteCommand(object parameter)
         {
+            // CTL-638
+            if (Modifiers != ModifierKeys.None)
+            {
+                if (!KeyboardHelper.AreKeyboardModifiersPressed(Modifiers))
+                {
+                    return;
+                }
+            }
+
             if (CanExecuteCommand(parameter))
             {
                 _command.Execute(parameter);

@@ -89,7 +89,7 @@ namespace Catel.Windows.Interactivity
                 (sender, e) => ((EventToCommand)sender).OnDisableAssociatedObjectOnCannotExecuteChanged((bool)e.NewValue)));
         #endregion
 
-#region Methods
+        #region Methods
         /// <summary>
         /// Called when the <see cref="DisableAssociatedObjectOnCannotExecute"/> property has changed.
         /// </summary>
