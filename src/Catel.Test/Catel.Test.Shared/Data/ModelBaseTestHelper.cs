@@ -1848,7 +1848,10 @@ namespace Catel.Test.Data
         /// <returns>New <see cref = "IniEntry" />.</returns>
         public static IniEntry CreateIniEntryObject()
         {
-            return CreateIniEntryObject("MyGroup", "MyKey", "MyValue");
+            var iniEntryObject = CreateIniEntryObject("MyGroup", "MyKey", "MyValue");
+            iniEntryObject.IniEntryType = IniEntryType.Private;
+
+            return iniEntryObject;
         }
 
         /// <summary>

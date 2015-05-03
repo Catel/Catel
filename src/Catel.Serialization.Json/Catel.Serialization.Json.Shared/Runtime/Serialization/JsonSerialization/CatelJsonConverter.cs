@@ -53,7 +53,8 @@ namespace Catel.Runtime.Serialization.JsonSerialization
         /// <exception cref="System.NotImplementedException"></exception>
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            return _jsonSerializer.Deserialize(objectType, reader);
+            var obj = _jsonSerializer.Deserialize(objectType, reader);
+            return obj;
         }
 
         /// <summary>
@@ -63,7 +64,8 @@ namespace Catel.Runtime.Serialization.JsonSerialization
         /// <returns><c>true</c> if this instance can convert the specified object type; otherwise, <c>false</c>.</returns>
         public override bool CanConvert(Type objectType)
         {
-            return typeof (ModelBase).IsAssignableFromEx(objectType);
+            var canConvert = typeof (ModelBase).IsAssignableFromEx(objectType);
+            return canConvert;
         }
     }
 }

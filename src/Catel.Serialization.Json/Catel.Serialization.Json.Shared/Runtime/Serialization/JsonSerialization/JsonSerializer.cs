@@ -7,12 +7,16 @@
 namespace Catel.Runtime.Serialization.Json
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using Data;
     using IoC;
     using JsonSerialization;
     using Logging;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
+    using Reflection;
 
     /// <summary>
     /// The binary serializer.
@@ -24,9 +28,34 @@ namespace Catel.Runtime.Serialization.Json
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        private static readonly List<Type> SimpleTypes = new List<Type>(); 
         #endregion
 
         #region Constructors
+        static JsonSerializer()
+        {
+            SimpleTypes.Add(typeof(Boolean));
+            SimpleTypes.Add(typeof(Byte));
+            SimpleTypes.Add(typeof(Char));
+            SimpleTypes.Add(typeof(DateTime));
+            SimpleTypes.Add(typeof(DateTimeOffset));
+            SimpleTypes.Add(typeof(Decimal));
+            SimpleTypes.Add(typeof(Double));
+            SimpleTypes.Add(typeof(Guid));
+            SimpleTypes.Add(typeof(Int16));
+            SimpleTypes.Add(typeof(Int32));
+            SimpleTypes.Add(typeof(Int64));
+            SimpleTypes.Add(typeof(SByte));
+            SimpleTypes.Add(typeof(Single));
+            SimpleTypes.Add(typeof(String));
+            SimpleTypes.Add(typeof(TimeSpan));
+            SimpleTypes.Add(typeof(UInt16));
+            SimpleTypes.Add(typeof(UInt32));
+            SimpleTypes.Add(typeof(UInt64));
+            SimpleTypes.Add(typeof(Uri));
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="JsonSerializer" /> class.
         /// </summary>
@@ -127,7 +156,8 @@ namespace Catel.Runtime.Serialization.Json
         /// <param name="context">The context.</param>
         protected override void BeforeDeserialization(ISerializationContext<JsonSerializationContextInfo> context)
         {
-            // TODO: read everything into memory
+            var jsonObject = JObject.Load(context.Context.JsonReader);
+            context.Context.JsonProperties = jsonObject.Properties().ToList();
 
             base.BeforeDeserialization(context);
         }
@@ -141,12 +171,36 @@ namespace Catel.Runtime.Serialization.Json
         protected override SerializationObject DeserializeMember(ISerializationContext<JsonSerializationContextInfo> context, MemberValue memberValue)
         {
             var serializationContext = context.Context;
-            var jsonReader = serializationContext.JsonReader;
+            var jsonProperties = serializationContext.JsonProperties;
 
-            var finalMembervalue = jsonReader.ReadAsInt32();
-            if (finalMembervalue != null)
+            var jsonProperty = jsonProperties.FirstOrDefault(x => string.Equals(x.Name, memberValue.Name));
+            if (jsonProperty != null)
             {
-                return SerializationObject.SucceededToDeserialize(context.ModelType, memberValue.MemberGroup, memberValue.Name, finalMembervalue);
+                var jsonValue = jsonProperty.Value;
+                if (jsonValue != null)
+                {
+                    object finalMemberValue = null;
+                    var valueType = memberValue.Type;
+
+                    if (memberValue.Type.IsEnumEx())
+                    {
+                        var enumName = Enum.GetName(valueType, (int)jsonValue);
+                        if (!string.IsNullOrWhiteSpace(enumName))
+                        {
+                            finalMemberValue = Enum.Parse(valueType, enumName, false);
+                        }
+                    }
+                    // TODO: support other types?
+                    else
+                    {
+                        finalMemberValue = jsonValue.ToObject(valueType, serializationContext.JsonSerializer);
+                    }
+
+                    if (finalMemberValue != null)
+                    {
+                        return SerializationObject.SucceededToDeserialize(context.ModelType, memberValue.MemberGroup, memberValue.Name, finalMemberValue);
+                    }
+                }
             }
 
             return SerializationObject.FailedToDeserialize(context.ModelType, memberValue.MemberGroup, memberValue.Name);
