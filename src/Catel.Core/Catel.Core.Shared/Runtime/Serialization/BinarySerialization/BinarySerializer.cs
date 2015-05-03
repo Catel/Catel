@@ -62,6 +62,29 @@ namespace Catel.Runtime.Serialization.Binary
 
         #region IBinarySerializer Members
         /// <summary>
+        /// Deserializes the specified model type.
+        /// </summary>
+        /// <remarks>
+        /// When deserializing a stream, the binary serializer must use the <see cref="BinaryFormatter"/> because this will
+        /// inject the right <see cref="SerializationInfo"/> into a new serializer.
+        /// </remarks>
+        /// <param name="modelType">Type of the model.</param>
+        /// <param name="stream">The stream.</param>
+        /// <returns>ModelBase.</returns>
+        public override ModelBase Deserialize(Type modelType, Stream stream)
+        {
+            Argument.IsNotNull("modelType", modelType);
+
+            // Note: although this looks like an unnecessary overload, it's required to prevent duplicate scopes
+
+            var model = (ModelBase)TypeFactory.CreateInstance(modelType);
+
+            Deserialize(model, stream);
+
+            return model;
+        }
+
+        /// <summary>
         /// Deserializes the specified model.
         /// </summary>
         /// <remarks>

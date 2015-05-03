@@ -281,10 +281,17 @@ namespace Catel.Runtime.Serialization.Json
                             finalMemberValue = Enum.Parse(valueType, enumName, false);
                         }
                     }
-                    // TODO: support other types?
                     else
                     {
-                        finalMemberValue = jsonValue.ToObject(valueType, serializationContext.JsonSerializer);
+                        try
+                        {
+                            finalMemberValue = jsonValue.ToObject(valueType, serializationContext.JsonSerializer);
+                        }
+                        catch (Exception)
+                        {
+                            // As a fallback, interpret as a string
+                            finalMemberValue = (string) jsonValue;
+                        }
                     }
 
                     if (finalMemberValue != null)

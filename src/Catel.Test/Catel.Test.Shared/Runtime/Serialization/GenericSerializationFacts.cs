@@ -347,8 +347,8 @@ namespace Catel.Test.Runtime.Serialization
         {
             var serializers = new List<IModelBaseSerializer>();
 
-            //serializers.Add(SerializationFactory.GetXmlSerializer());
-            //serializers.Add(SerializationFactory.GetBinarySerializer());
+            serializers.Add(SerializationFactory.GetXmlSerializer());
+            serializers.Add(SerializationFactory.GetBinarySerializer());
             serializers.Add(new JsonSerializer(new SerializationManager(), TypeFactory.Default));
 
             foreach (var serializer in serializers)
