@@ -10,6 +10,7 @@ namespace Catel.Runtime.Serialization.Json
     using System.IO;
     using Data;
     using IoC;
+    using JsonSerialization;
     using Logging;
     using Newtonsoft.Json;
 
@@ -40,12 +41,69 @@ namespace Catel.Runtime.Serialization.Json
 
         #region Methods
         /// <summary>
+        /// Serializes the specified model to the json writer.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="jsonWriter">The json writer.</param>
+        public void Serialize(ModelBase model, JsonWriter jsonWriter)
+        {
+            using (var context = GetContext(model, null, jsonWriter, SerializationContextMode.Serialization))
+            {
+                base.Serialize(model, context.Context);
+            }
+        }
+
+        /// <summary>
+        /// Deserializes the specified model from the json reader.
+        /// </summary>
+        /// <param name="modelType">Type of the model.</param>
+        /// <param name="jsonReader">The json reader.</param>
+        /// <returns>ModelBase.</returns>
+        public ModelBase Deserialize(Type modelType, JsonReader jsonReader)
+        {
+            // TODO: check if null
+
+            var model = (ModelBase)TypeFactory.CreateInstance(modelType);
+
+            using (var context = GetContext(model, jsonReader, null, SerializationContextMode.Deserialization))
+            {
+                base.Deserialize(model, context.Context);
+            }
+
+            return model;
+        }
+
+        /// <summary>
         /// Warms up the specified type.
         /// </summary>
         /// <param name="type">The type to warmup.</param>
         protected override void Warmup(Type type)
         {
             // No additional warmup required by the json serializer
+        }
+
+        /// <summary>
+        /// Befores the serialization.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        protected override void BeforeSerialization(ISerializationContext<JsonSerializationContextInfo> context)
+        {
+            var jsonWriter = context.Context.JsonWriter;
+            jsonWriter.WriteStartObject();
+
+            base.BeforeSerialization(context);
+        }
+
+        /// <summary>
+        /// Afters the serialization.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        protected override void AfterSerialization(ISerializationContext<JsonSerializationContextInfo> context)
+        {
+            base.AfterSerialization(context);
+
+            var jsonWriter = context.Context.JsonWriter;
+            jsonWriter.WriteEndObject();
         }
 
         /// <summary>
@@ -56,10 +114,22 @@ namespace Catel.Runtime.Serialization.Json
         protected override void SerializeMember(ISerializationContext<JsonSerializationContextInfo> context, MemberValue memberValue)
         {
             var serializationContext = context.Context;
+            var jsonSerializer = serializationContext.JsonSerializer;
             var jsonWriter = serializationContext.JsonWriter;
 
             jsonWriter.WritePropertyName(memberValue.Name);
-            jsonWriter.WriteValue(memberValue.Value);
+            jsonSerializer.Serialize(jsonWriter, memberValue.Value);
+        }
+
+        /// <summary>
+        /// Befores the deserialization.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        protected override void BeforeDeserialization(ISerializationContext<JsonSerializationContextInfo> context)
+        {
+            // TODO: read everything into memory
+
+            base.BeforeDeserialization(context);
         }
 
         /// <summary>
@@ -91,8 +161,6 @@ namespace Catel.Runtime.Serialization.Json
         /// <returns>ISerializationContext{SerializationInfo}.</returns>
         protected override ISerializationContext<JsonSerializationContextInfo> GetContext(ModelBase model, Stream stream, SerializationContextMode contextMode)
         {
-            var jsonSerializer = new Newtonsoft.Json.JsonSerializer();
-
             JsonReader jsonReader = null;
             JsonWriter jsonWriter = null;
 
@@ -110,6 +178,23 @@ namespace Catel.Runtime.Serialization.Json
                     throw new ArgumentOutOfRangeException("contextMode");
             }
 
+            return GetContext(model, jsonReader, jsonWriter, contextMode);
+        }
+
+        /// <summary>
+        /// Gets the context.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="jsonReader">The json reader.</param>
+        /// <param name="jsonWriter">The json writer.</param>
+        /// <param name="contextMode">The context mode.</param>
+        /// <returns>ISerializationContext&lt;JsonSerializationContextInfo&gt;.</returns>
+        protected virtual ISerializationContext<JsonSerializationContextInfo> GetContext(ModelBase model, JsonReader jsonReader, JsonWriter jsonWriter, SerializationContextMode contextMode)
+        {
+            var jsonSerializer = new Newtonsoft.Json.JsonSerializer();
+            jsonSerializer.ContractResolver = new CatelJsonContractResolver();
+            jsonSerializer.Converters.Add(new CatelJsonConverter(this));
+
             var contextInfo = new JsonSerializationContextInfo(jsonSerializer, jsonReader, jsonWriter);
 
             return new SerializationContext<JsonSerializationContextInfo>(model, contextInfo, contextMode);
@@ -122,7 +207,11 @@ namespace Catel.Runtime.Serialization.Json
         /// <param name="stream">The stream.</param>
         protected override void AppendContextToStream(ISerializationContext<JsonSerializationContextInfo> context, Stream stream)
         {
-            // Not required
+            var jsonWriter = context.Context.JsonWriter;
+            if (jsonWriter != null)
+            {
+                jsonWriter.Flush();
+            }
         }
         #endregion
     }
