@@ -16,7 +16,6 @@ namespace Catel.Runtime.Serialization.Json
     using Logging;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
-    using Newtonsoft.Json.Serialization;
     using Reflection;
     using Scoping;
 
@@ -40,6 +39,11 @@ namespace Catel.Runtime.Serialization.Json
         /// The graph reference identifier.
         /// </summary>
         public const string GraphRefId = "$graphrefid";
+
+        /// <summary>
+        /// The type name.
+        /// </summary>
+        public const string TypeName = "$typename";
         #endregion
 
         #region Constructors
@@ -52,7 +56,25 @@ namespace Catel.Runtime.Serialization.Json
         public JsonSerializer(ISerializationManager serializationManager, ITypeFactory typeFactory)
             : base(serializationManager, typeFactory)
         {
+            SupportCircularReferences = true;
+            WriteTypeInfo = true;
         }
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets or sets a value indicating whether circular references should be supported.
+        /// <para />
+        /// This will add additional <c>$graphid</c> and <c>$graphrefid</c> properties to each json object.
+        /// </summary>
+        /// <value><c>true</c> if circular references should be supported; otherwise, <c>false</c>.</value>
+        public bool SupportCircularReferences { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether type information should be written to the json output.
+        /// </summary>
+        /// <value><c>true</c> if type info should be written; otherwise, <c>false</c>.</value>
+        public bool WriteTypeInfo { get; set; }
         #endregion
 
         #region Methods
@@ -80,23 +102,43 @@ namespace Catel.Runtime.Serialization.Json
             var jsonObject = JObject.Load(jsonReader);
             var jsonProperties = jsonObject.Properties().ToList();
 
-            var graphRefIdProperty = (from property in jsonProperties
-                                      where string.Equals(property.Name, GraphRefId)
-                                      select property).FirstOrDefault();
-            if (graphRefIdProperty != null)
+            if (SupportCircularReferences)
             {
-                var graphId = (int)graphRefIdProperty.Value;
-
-                var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
-                using (var scopeManager = ScopeManager<ReferenceManager>.GetScopeManager(scopeName))
+                var graphRefIdProperty = (from property in jsonProperties
+                                          where string.Equals(property.Name, GraphRefId)
+                                          select property).FirstOrDefault();
+                if (graphRefIdProperty != null)
                 {
-                    var referenceManager = scopeManager.ScopeObject;
+                    var graphId = (int)graphRefIdProperty.Value;
 
-                    var referenceInfo = referenceManager.GetInfoById(graphId);
-                    if (referenceInfo != null)
+                    var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
+                    using (var scopeManager = ScopeManager<ReferenceManager>.GetScopeManager(scopeName))
                     {
-                        return (ModelBase)referenceInfo.Instance;
+                        var referenceManager = scopeManager.ScopeObject;
+
+                        var referenceInfo = referenceManager.GetInfoById(graphId);
+                        if (referenceInfo != null)
+                        {
+                            return (ModelBase)referenceInfo.Instance;
+                        }
                     }
+                }
+            }
+
+            var typeNameProperty = (from property in jsonProperties
+                                    where string.Equals(property.Name, TypeName)
+                                    select property).FirstOrDefault();
+            if (typeNameProperty != null)
+            {
+                var modelTypeOverrideValue = (string) typeNameProperty.Value;
+                var modelTypeOverride = TypeCache.GetTypeWithoutAssembly(modelTypeOverrideValue);
+                if (modelTypeOverride == null)
+                {
+                    Log.Warning("Object was serialized as '{0}', but the type is not available. Using original type '{1}'", modelTypeOverrideValue, modelType.GetSafeFullName());
+                }
+                else
+                {
+                    modelType = modelTypeOverride;
                 }
             }
 
@@ -128,11 +170,20 @@ namespace Catel.Runtime.Serialization.Json
             var jsonWriter = context.Context.JsonWriter;
             jsonWriter.WriteStartObject();
 
-            var referenceManager = context.ReferenceManager;
-            var referenceInfo = referenceManager.GetInfo(context.Model);
+            if (SupportCircularReferences)
+            {
+                var referenceManager = context.ReferenceManager;
+                var referenceInfo = referenceManager.GetInfo(context.Model);
 
-            jsonWriter.WritePropertyName(GraphId);
-            jsonWriter.WriteValue(referenceInfo.Id);
+                jsonWriter.WritePropertyName(GraphId);
+                jsonWriter.WriteValue(referenceInfo.Id);
+            }
+
+            if (WriteTypeInfo)
+            {
+                jsonWriter.WritePropertyName(TypeName);
+                jsonWriter.WriteValue(context.ModelType.GetSafeFullName());
+            }
 
             base.BeforeSerialization(context);
         }
@@ -177,23 +228,26 @@ namespace Catel.Runtime.Serialization.Json
                 context.Context.JsonProperties = jsonObject.Properties().ToList();
             }
 
-            var properties = serializationContext.JsonProperties;
-            var graphIdProperty = (from property in properties
-                                   where string.Equals(property.Name, GraphId)
-                                   select property).FirstOrDefault();
-            if (graphIdProperty != null)
+            if (SupportCircularReferences)
             {
-                var graphId = (int)graphIdProperty.Value;
-
-                var referenceManager = context.ReferenceManager;
-                var referenceInfo = referenceManager.GetInfoById(graphId);
-                if (referenceInfo != null)
+                var properties = serializationContext.JsonProperties;
+                var graphIdProperty = (from property in properties
+                                       where string.Equals(property.Name, GraphId)
+                                       select property).FirstOrDefault();
+                if (graphIdProperty != null)
                 {
-                    Log.Warning("Trying to register custom object in graph with graph id '{0}', but it seems it is already registered", graphId);
-                    return;
-                }
+                    var graphId = (int)graphIdProperty.Value;
 
-                referenceManager.RegisterManually(graphId, context.Model);
+                    var referenceManager = context.ReferenceManager;
+                    var referenceInfo = referenceManager.GetInfoById(graphId);
+                    if (referenceInfo != null)
+                    {
+                        Log.Warning("Trying to register custom object in graph with graph id '{0}', but it seems it is already registered", graphId);
+                        return;
+                    }
+
+                    referenceManager.RegisterManually(graphId, context.Model);
+                }
             }
 
             base.BeforeDeserialization(context);

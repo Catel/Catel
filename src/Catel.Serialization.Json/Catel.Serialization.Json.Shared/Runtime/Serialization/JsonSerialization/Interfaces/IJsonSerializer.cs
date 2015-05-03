@@ -17,6 +17,20 @@ namespace Catel.Runtime.Serialization.Json
     public interface IJsonSerializer : IModelBaseSerializer<JsonSerializationContextInfo>
     {
         /// <summary>
+        /// Gets or sets a value indicating whether circular references should be supported.
+        /// <para />
+        /// This will add additional <c>$graphid</c> and <c>$graphrefid</c> properties to each json object.
+        /// </summary>
+        /// <value><c>true</c> if circular references should be supported; otherwise, <c>false</c>.</value>
+        bool SupportCircularReferences { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether type information should be written to the json output.
+        /// </summary>
+        /// <value><c>true</c> if type info should be written; otherwise, <c>false</c>.</value>
+        bool WriteTypeInfo { get; set; }
+
+        /// <summary>
         /// Serializes the specified model to the json writer.
         /// </summary>
         /// <param name="model">The model.</param>

@@ -13,7 +13,6 @@ namespace Catel.Runtime.Serialization.JsonSerialization
     using IoC;
     using Json;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
     using Reflection;
     using Scoping;
     using JsonSerializer = Newtonsoft.Json.JsonSerializer;
@@ -42,23 +41,31 @@ namespace Catel.Runtime.Serialization.JsonSerialization
         /// <param name="serializer">The serializer.</param>
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
-            using (var scopeManager = ScopeManager<ReferenceManager>.GetScopeManager(scopeName))
-            {
-                var referenceManager = scopeManager.ScopeObject;
+            var serialize = true;
 
-                var referenceInfo = referenceManager.GetInfo(value);
-                if (referenceInfo != null && !referenceInfo.IsFirstUsage)
+            if (_jsonSerializer.SupportCircularReferences)
+            {
+                var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
+                using (var scopeManager = ScopeManager<ReferenceManager>.GetScopeManager(scopeName))
                 {
-                    writer.WriteStartObject();
-                    writer.WritePropertyName(Json.JsonSerializer.GraphRefId);
-                    writer.WriteValue(referenceInfo.Id);
-                    writer.WriteEndObject();
+                    var referenceManager = scopeManager.ScopeObject;
+
+                    var referenceInfo = referenceManager.GetInfo(value);
+                    if (referenceInfo != null && !referenceInfo.IsFirstUsage)
+                    {
+                        writer.WriteStartObject();
+                        writer.WritePropertyName(Json.JsonSerializer.GraphRefId);
+                        writer.WriteValue(referenceInfo.Id);
+                        writer.WriteEndObject();
+
+                        serialize = false;
+                    }
                 }
-                else
-                {
-                    _jsonSerializer.Serialize((ModelBase)value, writer);
-                }
+            }
+
+            if (serialize)
+            {
+                _jsonSerializer.Serialize((ModelBase)value, writer);
             }
         }
 
