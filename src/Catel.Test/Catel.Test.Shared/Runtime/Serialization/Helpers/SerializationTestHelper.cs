@@ -7,11 +7,13 @@
 
 namespace Catel.Test.Runtime.Serialization
 {
+    using System;
     using System.IO;
     using System.Xml;
     using System.Xml.Linq;
     using Catel.Data;
     using Catel.Runtime.Serialization;
+    using Catel.Runtime.Serialization.Binary;
 
     public static class SerializationTestHelper
     {
@@ -30,6 +32,16 @@ namespace Catel.Test.Runtime.Serialization
                 serializer.Serialize(model, memoryStream);
 
                 memoryStream.Position = 0L;
+
+                if (!(serializer is BinarySerializer))
+                {
+                    var streamReader = new StreamReader(memoryStream);
+                    var streamAsText = streamReader.ReadToEnd();
+
+                    Console.WriteLine(streamAsText);
+
+                    memoryStream.Position = 0L;
+                }
 
                 return (TModel)serializer.Deserialize(typeof (TModel), memoryStream);
             }

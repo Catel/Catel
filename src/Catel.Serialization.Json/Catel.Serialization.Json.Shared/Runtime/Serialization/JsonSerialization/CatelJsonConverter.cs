@@ -8,11 +8,14 @@
 namespace Catel.Runtime.Serialization.JsonSerialization
 {
     using System;
+    using System.Linq;
     using Data;
     using IoC;
     using Json;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
     using Reflection;
+    using Scoping;
     using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
     /// <summary>
@@ -39,7 +42,24 @@ namespace Catel.Runtime.Serialization.JsonSerialization
         /// <param name="serializer">The serializer.</param>
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            _jsonSerializer.Serialize((ModelBase)value, writer);
+            var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
+            using (var scopeManager = ScopeManager<ReferenceManager>.GetScopeManager(scopeName))
+            {
+                var referenceManager = scopeManager.ScopeObject;
+
+                var referenceInfo = referenceManager.GetInfo(value);
+                if (referenceInfo != null && !referenceInfo.IsFirstUsage)
+                {
+                    writer.WriteStartObject();
+                    writer.WritePropertyName(Json.JsonSerializer.GraphRefId);
+                    writer.WriteValue(referenceInfo.Id);
+                    writer.WriteEndObject();
+                }
+                else
+                {
+                    _jsonSerializer.Serialize((ModelBase)value, writer);
+                }
+            }
         }
 
         /// <summary>
@@ -50,7 +70,6 @@ namespace Catel.Runtime.Serialization.JsonSerialization
         /// <param name="existingValue">The existing value.</param>
         /// <param name="serializer">The serializer.</param>
         /// <returns>System.Object.</returns>
-        /// <exception cref="System.NotImplementedException"></exception>
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             var obj = _jsonSerializer.Deserialize(objectType, reader);
@@ -64,7 +83,7 @@ namespace Catel.Runtime.Serialization.JsonSerialization
         /// <returns><c>true</c> if this instance can convert the specified object type; otherwise, <c>false</c>.</returns>
         public override bool CanConvert(Type objectType)
         {
-            var canConvert = typeof (ModelBase).IsAssignableFromEx(objectType);
+            var canConvert = typeof(ModelBase).IsAssignableFromEx(objectType);
             return canConvert;
         }
     }
