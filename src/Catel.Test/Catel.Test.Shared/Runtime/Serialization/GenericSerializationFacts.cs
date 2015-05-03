@@ -15,8 +15,10 @@ namespace Catel.Test.Runtime.Serialization
     using System.Runtime.Serialization;
     using System.Windows.Media;
     using Catel.Data;
+    using Catel.IoC;
     using Catel.Reflection;
     using Catel.Runtime.Serialization;
+    using Catel.Runtime.Serialization.Json;
     using Data;
     using NUnit.Framework;
     using TestModels;
@@ -347,6 +349,7 @@ namespace Catel.Test.Runtime.Serialization
 
             serializers.Add(SerializationFactory.GetXmlSerializer());
             serializers.Add(SerializationFactory.GetBinarySerializer());
+            serializers.Add(new JsonSerializer(new SerializationManager(), TypeFactory.Default));
 
             foreach (var serializer in serializers)
             {

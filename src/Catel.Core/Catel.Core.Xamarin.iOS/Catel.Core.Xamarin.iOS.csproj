@@ -18,7 +18,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\..\output\debug\Xamarin.iOS\Catel.Core\</OutputPath>
-    <DefineConstants>DEBUG;__IOS__;__MOBILE__;XAMARIN;IOS</DefineConstants>
+    <DefineConstants>DEBUG;__MOBILE__;__IOS__;XAMARIN;IOS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -37,7 +37,7 @@
     <ConsolePause>false</ConsolePause>
     <CodesignKey>iPhone Developer</CodesignKey>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DefineConstants>__IOS__;__MOBILE__;XAMARIN;IOS</DefineConstants>
+    <DefineConstants>__MOBILE__;__IOS__;XAMARIN;IOS</DefineConstants>
     <DocumentationFile>..\..\..\output\release\Xamarin.iOS\Catel.Core\Catel.Core.XML</DocumentationFile>
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <DebugSymbols>true</DebugSymbols>

@@ -231,6 +231,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\BinarySerialization\RedirectDeserializationBinderFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\GenericSerializationFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Helpers\SerializationTestHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\JsonSerialization\JsonSerializationFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\SerializationManagerFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\SerializationObjectFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\SerializerModifierFacts.cs" />

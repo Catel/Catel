@@ -54,15 +54,18 @@ namespace Catel.Runtime.Serialization
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SerializerBase{TSerializationContext}"/> class.
+        /// Initializes a new instance of the <see cref="SerializerBase{TSerializationContext}" /> class.
         /// </summary>
         /// <param name="serializationManager">The serialization manager.</param>
+        /// <param name="typeFactory">The type factory.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationManager" /> is <c>null</c>.</exception>
-        protected SerializerBase(ISerializationManager serializationManager)
+        protected SerializerBase(ISerializationManager serializationManager, ITypeFactory typeFactory)
         {
             Argument.IsNotNull("serializationManager", serializationManager);
+            Argument.IsNotNull("typeFactory", typeFactory);
 
             SerializationManager = serializationManager;
+            TypeFactory = typeFactory;
             SerializationManager.CacheInvalidated += OnSerializationManagerCacheInvalidated;
         }
         #endregion
@@ -73,6 +76,12 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <value>The serialization manager.</value>
         protected ISerializationManager SerializationManager { get; private set; }
+
+        /// <summary>
+        /// Gets the type factory.
+        /// </summary>
+        /// <value>The type factory.</value>
+        protected ITypeFactory TypeFactory { get; private set; }
         #endregion
 
         #region IModelBaseSerializer<TSerializationContext> Members
@@ -253,7 +262,7 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("context", context);
 
-            var model = (ModelBase)TypeFactory.Default.CreateInstance(modelType);
+            var model = (ModelBase)TypeFactory.CreateInstance(modelType);
             return GetContext(model, context, contextMode);
         }
 
@@ -273,7 +282,7 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("stream", stream);
 
-            var model = (ModelBase)TypeFactory.Default.CreateInstance(modelType);
+            var model = (ModelBase)TypeFactory.CreateInstance(modelType);
             return GetContext(model, stream, contextMode);
         }
 

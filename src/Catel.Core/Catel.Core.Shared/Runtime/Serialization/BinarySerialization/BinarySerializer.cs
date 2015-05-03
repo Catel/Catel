@@ -51,9 +51,10 @@ namespace Catel.Runtime.Serialization.Binary
         /// Initializes a new instance of the <see cref="BinarySerializer" /> class.
         /// </summary>
         /// <param name="serializationManager">The serialization manager.</param>
+        /// <param name="typeFactory">The type factory.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationManager" /> is <c>null</c>.</exception>
-        public BinarySerializer(ISerializationManager serializationManager)
-            : base(serializationManager)
+        public BinarySerializer(ISerializationManager serializationManager, ITypeFactory typeFactory)
+            : base(serializationManager, typeFactory)
         {
             DeserializationBinder = new RedirectDeserializationBinder();
         }
@@ -74,7 +75,9 @@ namespace Catel.Runtime.Serialization.Binary
         {
             Argument.IsNotNull("modelType", modelType);
 
-            var model = (ModelBase)TypeFactory.Default.CreateInstance(modelType);
+            // Note: although this looks like an unnecessary overload, it's required to prevent duplicate scopes
+
+            var model = (ModelBase)TypeFactory.CreateInstance(modelType);
 
             Deserialize(model, stream);
 

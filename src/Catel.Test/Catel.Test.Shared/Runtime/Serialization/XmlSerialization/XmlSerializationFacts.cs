@@ -7,20 +7,12 @@
 
 namespace Catel.Test.Runtime.Serialization
 {
-    using System;
     using System.Collections.ObjectModel;
-    using System.ComponentModel;
-    using System.Linq;
-    using System.Windows.Media;
     using System.Xml.Serialization;
-    using Catel.Data;
     using Catel.Logging;
-    using Catel.Reflection;
     using Catel.Runtime.Serialization;
-    using Catel.Runtime.Serialization.Xml;
-    using Catel.Test.Data;
+    using Data;
     using NUnit.Framework;
-    using TestModels;
 
     public class XmlSerializerFacts
     {
