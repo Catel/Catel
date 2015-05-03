@@ -79,8 +79,8 @@
       <HintPath>..\..\..\lib\Moq.4.2.1502.0911\lib\net40\Moq.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Newtonsoft.Json.6.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\lib\Newtonsoft.Json.6.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NuGet.Core, Version=2.8.50926.602, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -188,6 +188,10 @@
     <ProjectReference Include="..\..\Catel.MVVM\Catel.MVVM.NET40\Catel.MVVM.NET40.csproj">
       <Project>{D9112D3C-62D2-401E-8EA1-86AC28A71C22}</Project>
       <Name>Catel.MVVM.NET40</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Catel.Serialization.Json\Catel.Serialization.Json.NET40\Catel.Serialization.Json.NET40.csproj">
+      <Project>{0753484a-6936-4628-9f03-e1614d674544}</Project>
+      <Name>Catel.Serialization.Json.NET40</Name>
     </ProjectReference>
     <ProjectReference Include="..\Catel.Test.EntityFramework5.DbContextTest.NET40\Catel.Test.EntityFramework5.DbContextTest.NET40.csproj">
       <Project>{ea3ba85b-4c5f-4140-8ff9-40c98af2dfed}</Project>

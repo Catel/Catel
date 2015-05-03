@@ -22,7 +22,7 @@
     
     <dependencies>
         <dependency id="Catel.Core" version="[VERSION]" />
-        <dependency id="Json.net" version="[replaced]" />        
+        <dependency id="Newtonsoft.Json" version="[replaced]" />        
     </dependencies>      
   </metadata>
 </package>

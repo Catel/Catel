@@ -188,7 +188,7 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("context", serializationContext);
 
-            var model = (ModelBase)TypeFactory.Default.CreateInstance(modelType);
+            var model = (ModelBase)TypeFactory.CreateInstance(modelType);
 
             Deserialize(model, serializationContext);
 

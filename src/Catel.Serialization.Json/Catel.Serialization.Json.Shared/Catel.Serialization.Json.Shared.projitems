@@ -12,5 +12,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\JsonSerialization\Extensions\JsonExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\JsonSerialization\Interfaces\IJsonSerializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\JsonSerialization\JsonSerializationContextInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\JsonSerialization\JsonSerializer.cs" />
   </ItemGroup>
 </Project>

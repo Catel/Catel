@@ -51,36 +51,16 @@ namespace Catel.Runtime.Serialization.Binary
         /// Initializes a new instance of the <see cref="BinarySerializer" /> class.
         /// </summary>
         /// <param name="serializationManager">The serialization manager.</param>
+        /// <param name="typeFactory">The type factory.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationManager" /> is <c>null</c>.</exception>
-        public BinarySerializer(ISerializationManager serializationManager)
-            : base(serializationManager)
+        public BinarySerializer(ISerializationManager serializationManager, ITypeFactory typeFactory)
+            : base(serializationManager, typeFactory)
         {
             DeserializationBinder = new RedirectDeserializationBinder();
         }
         #endregion
 
         #region IBinarySerializer Members
-        /// <summary>
-        /// Deserializes the specified model type.
-        /// </summary>
-        /// <remarks>
-        /// When deserializing a stream, the binary serializer must use the <see cref="BinaryFormatter"/> because this will
-        /// inject the right <see cref="SerializationInfo"/> into a new serializer.
-        /// </remarks>
-        /// <param name="modelType">Type of the model.</param>
-        /// <param name="stream">The stream.</param>
-        /// <returns>ModelBase.</returns>
-        public override ModelBase Deserialize(Type modelType, Stream stream)
-        {
-            Argument.IsNotNull("modelType", modelType);
-
-            var model = (ModelBase)TypeFactory.Default.CreateInstance(modelType);
-
-            Deserialize(model, stream);
-
-            return model;
-        }
-
         /// <summary>
         /// Deserializes the specified model.
         /// </summary>
