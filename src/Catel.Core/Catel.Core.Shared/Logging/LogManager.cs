@@ -448,15 +448,6 @@ namespace Catel.Logging
         /// </summary>
         public static void FlushAll()
         {
-            TaskHelper.RunAndWait(() => FlushAllAsync().Wait());
-        }
-
-        /// <summary>
-        /// Flushes all listeners that implement the <see cref="IBatchLogListener" /> by calling <see cref="IBatchLogListener.Flush" />.
-        /// </summary>
-        /// <returns>Task so it can be awaited.</returns>
-        public static async Task FlushAllAsync()
-        {
             var logListenersToFlush = new List<IBatchLogListener>();
 
             lock (_logListeners)
@@ -473,8 +464,17 @@ namespace Catel.Logging
 
             foreach (var logListenerToFlush in logListenersToFlush)
             {
-                await logListenerToFlush.Flush();
+                logListenerToFlush.Flush();
             }
+        }
+
+        /// <summary>
+        /// Flushes all listeners that implement the <see cref="IBatchLogListener" /> by calling <see cref="IBatchLogListener.Flush" />.
+        /// </summary>
+        /// <returns>Task so it can be awaited.</returns>
+        public static async Task FlushAllAsync()
+        {
+            await Task.Factory.StartNew(() => FlushAll());
         }
 
         /// <summary>

@@ -53,6 +53,9 @@ Added/fixed:
 (*) CTL-619 Marked LinkLabel as obsolete, will be removed in 5.0. Use LinkLabel from the  Orc.Controls NuGet 
     package instead
 (*) CTL-640 Convert iOS projects to new iOS project structure (remove classic API)
+(*) CTL-643 Change async logging flush calls to sync and add async extensions. This means that all flushing will now be
+    done on the same thread by default. To flush async, call FlushAsync(). The final signature change (breaking) will be
+    applied to Catel v5
 (x) CTL-621 ManagedViewModel might throw exception when enumerating interested view models
 (x) CTL-625 LogListeners are created twice when defined in config when using vshost
 (x) CTL-626 EnvironmentHelper.IsProcessCurrentlyHostedByXXX functions are checking current instead parent (host) process

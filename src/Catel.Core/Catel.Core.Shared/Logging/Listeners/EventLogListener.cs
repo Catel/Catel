@@ -88,18 +88,14 @@ namespace Catel.Logging
         /// <exception cref="ArgumentNullException">The <paramref name="batchEntries"/> is <c>null</c>.</exception>
         protected override async Task WriteBatch(List<LogBatchEntry> batchEntries)
         {
-            Argument.IsNotNull("batchEntries", batchEntries);
-
             try
             {
                 foreach (var batchEntry in batchEntries)
                 {
                     var type = ChooseEventLogEntryType(batchEntry.LogEvent);
-
                     var message = FormatLogEvent(batchEntry.Log, batchEntry.Message, batchEntry.LogEvent, batchEntry.ExtraData, batchEntry.Time);
 
-                    var entry = batchEntry;
-                    await Task.Factory.StartNew(() => EventLog.WriteEntry(Source, message, type, (int) entry.LogEvent));
+                    EventLog.WriteEntry(Source, message, type, (int) batchEntry.LogEvent);
                 }
             }
             catch (Exception)
