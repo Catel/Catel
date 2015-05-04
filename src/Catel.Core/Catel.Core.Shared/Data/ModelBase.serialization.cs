@@ -51,6 +51,20 @@ namespace Catel.Data
         private event EventHandler<EventArgs> _deserialized;
         #endregion
 
+        #region Properties
+        /// <summary>
+        /// Gets or sets the serializer used for internal model serialization (such as backups).
+        /// </summary>
+        /// <value>The serializer.</value>
+        protected IModelBaseSerializer Serializer { get; set; }
+
+        /// <summary>
+        /// Gets or sets the default serializer that will be used for the <see cref="Serializer"/> property.
+        /// </summary>
+        /// <value>The default serializer.</value>
+        public static IModelBaseSerializer DefaultSerializer { get; set; }
+        #endregion
+
         #region Events
         /// <summary>
         /// Occurs when the object is deserialized.

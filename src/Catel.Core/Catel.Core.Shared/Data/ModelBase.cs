@@ -156,7 +156,9 @@ namespace Catel.Data
         static ModelBase()
         {
             PropertyDataManager = PropertyDataManager.Default;
+
             DefaultValidateUsingDataAnnotationsValue = true;
+            DefaultSerializer = IoCConfiguration.DefaultDependencyResolver.Resolve<IModelBaseSerializer>();
         }
 
 #if !NET
@@ -531,6 +533,7 @@ namespace Catel.Data
         /// </summary>
         private void Initialize()
         {
+            Serializer = DefaultSerializer;
             SuspendValidation = DefaultSuspendValidationValue;
             ValidateUsingDataAnnotations = DefaultValidateUsingDataAnnotationsValue;
             DeserializationSucceeded = false;
