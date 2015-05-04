@@ -36,7 +36,7 @@ namespace Catel.Windows.Interactivity
     /// <summary>
     /// Auto complete behavior to support auto complete on a <c>TextBox</c> control.
     /// </summary>
-    [ObsoleteEx(Replacement = "AutoCompletion", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
+    [ObsoleteEx(ReplacementTypeOrMember = "AutoCompletion", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
     public class AutoCompletionBehavior : BehaviorBase<TextBox>
     {
         #region Fields

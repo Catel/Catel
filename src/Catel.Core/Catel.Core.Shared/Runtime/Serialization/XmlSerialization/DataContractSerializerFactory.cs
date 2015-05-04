@@ -84,7 +84,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <exception cref="ArgumentNullException">The <paramref name="typeToSerialize" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="xmlName" /> is <c>null</c> or whitespace.</exception>
         [ObsoleteEx(RemoveInVersion = "5.0", TreatAsErrorFromVersion = "4.2",
-            Replacement = "IDataContractSerializerFactory.GetDataContractSerializer(serializingType, typeToSerialize, xmlName, rootNamespace, additionalKnownTypes)")]
+            ReplacementTypeOrMember = "IDataContractSerializerFactory.GetDataContractSerializer(serializingType, typeToSerialize, xmlName, rootNamespace, additionalKnownTypes)")]
         public virtual DataContractSerializer GetDataContractSerializer(Type serializingType, Type typeToSerialize, string xmlName, string rootNamespace, object serializingObject, List<Type> additionalKnownTypes = null)
         {
             Argument.IsNotNull("serializingType", serializingType);
@@ -188,7 +188,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <param name="serializerTypeInfo">The serializer type info.</param>
         /// <returns>Array of <see cref="Type"/> that are found in the object instance.</returns>
          [ObsoleteEx(RemoveInVersion = "5.0", TreatAsErrorFromVersion = "4.2",
-             Replacement = "DataContractSerializerFactory.GetKnownTypes(type, serializerTypeInfo)")]
+             ReplacementTypeOrMember = "DataContractSerializerFactory.GetKnownTypes(type, serializerTypeInfo)")]
          protected virtual void GetKnownTypesForInstance(object obj, XmlSerializerTypeInfo serializerTypeInfo)
         {
             if (obj == null)
@@ -364,8 +364,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <param name="serializerTypeInfo">The serializer type info.</param>
         /// <returns>Array of <see cref="Type"/> that are found in the object type.</returns>  
         [ObsoleteEx(RemoveInVersion = "5.0", TreatAsErrorFromVersion = "4.2",
-             Replacement = "DataContractSerializerFactory.GetKnownTypesForItems(type, serializerTypeInfo)")]
-     
+             ReplacementTypeOrMember = "DataContractSerializerFactory.GetKnownTypesForItems(type, serializerTypeInfo)")]
         private void GetKnownTypesForItemsInstance(object obj, XmlSerializerTypeInfo serializerTypeInfo)
         {
             var ienumerable = obj as IEnumerable;

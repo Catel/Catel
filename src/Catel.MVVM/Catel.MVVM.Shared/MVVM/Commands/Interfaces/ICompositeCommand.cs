@@ -22,7 +22,7 @@ namespace Catel.MVVM
         /// there is a requirement to allow partial invocation, set this property to false.
         /// </summary>
         /// <value>The check can execute of all commands to determine can execute for composite command.</value>
-        [ObsoleteEx(Replacement = "AllowPartialExecution (inverted!)", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "AllowPartialExecution (inverted!)", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
         bool CheckCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand { get; set; }
 
         /// <summary>

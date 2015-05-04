@@ -15,7 +15,7 @@ namespace Catel.Windows.Controls
     /// <summary>
     /// Interaction logic for TraceOutputControl.xaml
     /// </summary>
-    [ObsoleteEx(Replacement = "Orc.Controls, see https://github.com/wildgums/orc.controls", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
+    [ObsoleteEx(ReplacementTypeOrMember = "Orc.Controls, see https://github.com/wildgums/orc.controls", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
     public partial class TraceOutputControl : UserControl
     {
         #region Constructors

@@ -65,8 +65,8 @@ namespace Catel.Caching
         /// </summary>
         /// <param name="defaultExpirationPolicyInitCode">The default expiration policy initialization code.</param>
         /// <param name="storeNullValues">Allow store null values on the cache.</param>
-        [ObsoleteEx(Message = "Use other ctor, this is kept to not introduce breaking changes", 
-            Replacement = "ctor(Func<ExpirationPolicy>, bool, IEqualityComparer<TKey>)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
+        [ObsoleteEx(Message = "Use other ctor, this is kept to not introduce breaking changes",
+            ReplacementTypeOrMember = "ctor(Func<ExpirationPolicy>, bool, IEqualityComparer<TKey>)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
         public CacheStorage(Func<ExpirationPolicy> defaultExpirationPolicyInitCode, bool storeNullValues)
             : this(defaultExpirationPolicyInitCode, storeNullValues, null)
         {

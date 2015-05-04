@@ -117,7 +117,7 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
-        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public void DebugWithData(string message, object extraData = null)
         {
             LogExtensions.DebugWithData(this, message, extraData);
@@ -128,7 +128,7 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="logData">The log data.</param>
-        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public void DebugWithData(string message, LogData logData)
         {
             LogExtensions.DebugWithData(this, message, logData);
@@ -141,7 +141,7 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="exception" /> is <c>null</c>.</exception>
-        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public void DebugWithData(Exception exception, string message, object extraData = null)
         {
             LogExtensions.DebugWithData(this, exception, message, extraData);
@@ -152,7 +152,7 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
-        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public void InfoWithData(string message, object extraData = null)
         {
             LogExtensions.InfoWithData(this, message, extraData);
@@ -163,7 +163,7 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="logData">The log data.</param>
-        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public void InfoWithData(string message, LogData logData)
         {
             LogExtensions.InfoWithData(this, message, logData);
@@ -176,7 +176,7 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="exception" /> is <c>null</c>.</exception>
-        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public void InfoWithData(Exception exception, string message, object extraData = null)
         {
             LogExtensions.InfoWithData(this, exception, message, extraData);
@@ -187,7 +187,7 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
-        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public void WarningWithData(string message, object extraData = null)
         {
             LogExtensions.WarningWithData(this, message, extraData);
@@ -198,7 +198,7 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="logData">The log data.</param>
-        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public void WarningWithData(string message, LogData logData)
         {
             LogExtensions.WarningWithData(this, message, logData);
@@ -211,7 +211,7 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="exception" /> is <c>null</c>.</exception>
-        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public void WarningWithData(Exception exception, string message, object extraData = null)
         {
             LogExtensions.WarningWithData(this, exception, message, extraData);
@@ -222,7 +222,7 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
-        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public void ErrorWithData(string message, object extraData = null)
         {
             LogExtensions.ErrorWithData(this, message, extraData);
@@ -233,7 +233,7 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="logData">The log data.</param>
-        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public void ErrorWithData(string message, LogData logData)
         {
             LogExtensions.ErrorWithData(this, message, logData);
@@ -246,7 +246,7 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="exception" /> is <c>null</c>.</exception>
-        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public void ErrorWithData(Exception exception, string message, object extraData = null)
         {
             LogExtensions.ErrorWithData(this, exception, message, extraData);
@@ -303,7 +303,7 @@ namespace Catel.Logging
         /// <param name="logEvent">The log event.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="exception" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="exception" /> is <c>null</c>.</exception>
-        [ObsoleteEx(Replacement = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public void WriteWithData(Exception exception, string message, object extraData, LogEvent logEvent)
         {
             LogExtensions.WriteWithData(this, exception, message, extraData, logEvent);

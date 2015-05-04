@@ -155,7 +155,7 @@ namespace Catel.ServiceModel
     /// <summary>
     /// Attribute which allow dependency injection in the service implementation.
     /// </summary>
-    [ObsoleteEx(Replacement = "DependencyInjectionBehaviorAttribute", TreatAsErrorFromVersion = "4.1", RemoveInVersion = "5.0")]
+    [ObsoleteEx(ReplacementTypeOrMember = "DependencyInjectionBehaviorAttribute", TreatAsErrorFromVersion = "4.1", RemoveInVersion = "5.0")]
     [AttributeUsage(AttributeTargets.Class)]
     public class ServiceLocatorRegistrationBehaviorAttribute : DependencyInjectionBehaviorAttribute
     {

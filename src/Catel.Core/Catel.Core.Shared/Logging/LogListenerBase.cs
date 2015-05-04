@@ -148,7 +148,7 @@ namespace Catel.Logging
         /// <param name="logEvent">The log event.</param>
         /// <param name="extraData">The additional data.</param>
         /// <param name="time">The time.</param>
-        [ObsoleteEx(Replacement = "Use overload with logData", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "Use overload with logData", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         void ILogListener.Write(ILog log, string message, LogEvent logEvent, object extraData, DateTime time)
         {
             ((ILogListener)this).Write(log, message, logEvent, extraData, null, time);
@@ -188,7 +188,7 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="extraData">The additional data.</param>
         /// <param name="time">The time.</param>
-        [ObsoleteEx(Replacement = "Use overload with logData", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "Use overload with logData", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         void ILogListener.Debug(ILog log, string message, object extraData, DateTime time)
         {
             ((ILogListener)this).Debug(log, message, extraData, null, time);
@@ -225,7 +225,7 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="extraData">The additional data.</param>
         /// <param name="time">The time.</param>
-        [ObsoleteEx(Replacement = "Use overload with logData", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "Use overload with logData", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         void ILogListener.Info(ILog log, string message, object extraData, DateTime time)
         {
             ((ILogListener)this).Info(log, message, extraData, null, time);
@@ -262,7 +262,7 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="extraData">The additional data.</param>
         /// <param name="time">The time.</param>
-        [ObsoleteEx(Replacement = "Use overload with logData", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "Use overload with logData", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         void ILogListener.Warning(ILog log, string message, object extraData, DateTime time)
         {
             ((ILogListener)this).Warning(log, message, extraData, null, time);
@@ -299,7 +299,7 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="extraData">The additional data.</param>
         /// <param name="time">The time.</param>
-        [ObsoleteEx(Replacement = "Use overload with logData", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "Use overload with logData", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         void ILogListener.Error(ILog log, string message, object extraData, DateTime time)
         {
             ((ILogListener)this).Error(log, message, extraData, null, time);
@@ -340,7 +340,7 @@ namespace Catel.Logging
         /// <param name="extraData">The extra data.</param>
         /// <param name="time">The time.</param>
         /// <returns><c>true</c> if the message should be ignored, <c>false</c> otherwise.</returns>
-        [ObsoleteEx(Replacement = "Overload with logData parameter", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "Overload with logData parameter", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         protected virtual bool ShouldIgnoreLogMessage(ILog log, string message, LogEvent logEvent, object extraData, DateTime time)
         {
             return false;
@@ -375,7 +375,7 @@ namespace Catel.Logging
         /// <param name="extraData">The extra data.</param>
         /// <param name="logEvent">The log event.</param>
         /// <param name="time">The time.</param>
-        [ObsoleteEx(Replacement = "Overload with logData parameter", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "Overload with logData parameter", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         protected void RaiseLogMessage(ILog log, string message, LogEvent logEvent, object extraData, DateTime time)
         {
             RaiseLogMessage(log, message, logEvent, extraData, null, time);
@@ -408,7 +408,7 @@ namespace Catel.Logging
         /// <param name="extraData">The extra data.</param>
         /// <param name="time">The time.</param>
         /// <returns>The formatted log event.</returns>
-        [ObsoleteEx(Replacement = "Overload with logData parameter", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "Overload with logData parameter", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         protected virtual string FormatLogEvent(ILog log, string message, LogEvent logEvent, object extraData, DateTime time)
         {
             return FormatLogEvent(log, message, logEvent, extraData, null, time);
@@ -438,7 +438,7 @@ namespace Catel.Logging
         /// <param name="logEvent">The log event.</param>
         /// <param name="extraData">The additional data.</param>
         /// <param name="time">The time.</param>
-        [ObsoleteEx(Replacement = "Overload with logData parameter", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "Overload with logData parameter", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         protected virtual void Write(ILog log, string message, LogEvent logEvent, object extraData, DateTime time)
         {
             // Empty by default
@@ -465,7 +465,7 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="extraData">The additional data.</param>
         /// <param name="time">The time.</param>
-        [ObsoleteEx(Replacement = "Overload with logData parameter", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "Overload with logData parameter", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         protected virtual void Debug(ILog log, string message, object extraData, DateTime time)
         {
             // Empty by default
@@ -491,7 +491,7 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="extraData">The additional data.</param>
         /// <param name="time">The time.</param>
-        [ObsoleteEx(Replacement = "Overload with logData parameter", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "Overload with logData parameter", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         protected virtual void Info(ILog log, string message, object extraData, DateTime time)
         {
             // Empty by default
@@ -517,7 +517,7 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="extraData">The additional data.</param>
         /// <param name="time">The time.</param>
-        [ObsoleteEx(Replacement = "Overload with logData parameter", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "Overload with logData parameter", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         protected virtual void Warning(ILog log, string message, object extraData, DateTime time)
         {
             // Empty by default
@@ -543,7 +543,7 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="extraData">The additional data.</param>
         /// <param name="time">The time.</param>
-        [ObsoleteEx(Replacement = "Overload with logData parameter", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "Overload with logData parameter", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         protected virtual void Error(ILog log, string message, object extraData, DateTime time)
         {
             // Empty by default

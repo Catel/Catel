@@ -580,7 +580,7 @@ namespace Catel.Reflection
         /// </summary>
         /// <param name="forceFullInitialization">If <c>true</c>, the types are initialized, even when the types are already initialized.</param>
         /// <param name="assembly">The assembly to initialize the types from. If <c>null</c>, all assemblies will be checked.</param>
-        [ObsoleteEx(Replacement = "InitializeTypes(Assembly, bool)", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "InitializeTypes(Assembly, bool)", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
         public static void InitializeTypes(bool forceFullInitialization, Assembly assembly = null)
         {
             InitializeTypes(assembly, forceFullInitialization);

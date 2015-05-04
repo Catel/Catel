@@ -22,7 +22,7 @@ namespace Catel.Windows.Data.Converters
 #if NET
     [ValueConversion(typeof(LogEvent), typeof(Image))]
 #endif
-    [ObsoleteEx(Replacement = "Orc.Controls, see https://github.com/wildgums/orc.controls", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
+    [ObsoleteEx(ReplacementTypeOrMember = "Orc.Controls, see https://github.com/wildgums/orc.controls", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
     public class OutputTypeConverter : ValueConverterBase
     {
         #region Constants
