@@ -33,6 +33,7 @@ Added/fixed (BREAKING CHANGES):
 Added/fixed:
 ============
 (+) CTL-525 UnitOfWork should allow Refresh of Entities
+(+) CTL-602 Added methods to ICompositeCommand to retrieve the actual commands and actions registered to it
 (+) CTL-611 Added IPleaseWaitService.PushInScope extension method
 (+) CTL-612 Allow custom log data in log entries by introducing the LogData class
 (+) CTL-614 Support Windows 10 Universal App Project

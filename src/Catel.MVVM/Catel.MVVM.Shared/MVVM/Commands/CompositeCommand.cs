@@ -187,6 +187,45 @@ namespace Catel.MVVM
         }
 
         /// <summary>
+        /// Gets the commands currently registered to this composite command.
+        /// </summary>
+        /// <returns>IEnumerable.</returns>
+        public IEnumerable<ICommand> GetCommands()
+        {
+            lock (_lock)
+            {
+                return (from command in _commandInfo
+                        select command.Command).ToList();
+            }
+        }
+
+        /// <summary>
+        /// Gets the actions currently registered to this composite command.
+        /// </summary>
+        /// <returns>IEnumerable.</returns>
+        public IEnumerable<Action> GetActions()
+        {
+            lock (_lock)
+            {
+                return (from action in _actions
+                        select action).ToList();
+            }
+        }
+
+        /// <summary>
+        /// Gets the actions with parameters currently registered to this composite command.
+        /// </summary>
+        /// <returns>IEnumerable.</returns>
+        public IEnumerable<Action<object>> GetActionsWithParameter()
+        {
+            lock (_lock)
+            {
+                return (from action in _actionsWithParameter
+                        select action).ToList();
+            }
+        }
+
+        /// <summary>
         /// Registers the specified command.
         /// </summary>
         /// <param name="command">The command.</param>
