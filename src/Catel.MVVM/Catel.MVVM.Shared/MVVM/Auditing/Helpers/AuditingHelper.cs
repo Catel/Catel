@@ -7,6 +7,7 @@
 namespace Catel.MVVM.Auditing
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
     using Reflection;
 
@@ -16,6 +17,19 @@ namespace Catel.MVVM.Auditing
     /// </summary>
     public static class AuditingHelper
     {
+        private static readonly HashSet<string> KnownIgnoredPropertyNames = new HashSet<string>();
+
+        /// <summary>
+        /// Initializes static members of the <see cref="AuditingHelper"/> class.
+        /// </summary>
+        static AuditingHelper()
+        {
+            KnownIgnoredPropertyNames.Add("IDataWarningInfo.Warning");
+            KnownIgnoredPropertyNames.Add("INotifyDataWarningInfo.HasWarnings");
+            KnownIgnoredPropertyNames.Add("IDataErrorInfo.Error");
+            KnownIgnoredPropertyNames.Add("INotifyDataErrorInfo.HasErrors");
+        }
+
         /// <summary>
         /// Registers the view model to the <see cref="AuditingManager"/>.
         /// <para />
@@ -106,7 +120,7 @@ namespace Catel.MVVM.Auditing
             var viewModel = (IViewModel)sender;
 
             object propertyValue = null;
-            if (!string.IsNullOrEmpty(e.PropertyName))
+            if (!string.IsNullOrEmpty(e.PropertyName) && !KnownIgnoredPropertyNames.Contains(e.PropertyName))
             {
                 PropertyHelper.TryGetPropertyValue(viewModel, e.PropertyName, out propertyValue);
             }

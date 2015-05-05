@@ -60,6 +60,7 @@ Added/fixed:
 (x) CTL-621 ManagedViewModel might throw exception when enumerating interested view models
 (x) CTL-625 LogListeners are created twice when defined in config when using vshost
 (x) CTL-626 EnvironmentHelper.IsProcessCurrentlyHostedByXXX functions are checking current instead parent (host) process
+(x) CTL-627 ViewModel validation throws "property not found" errors
 (x) CTL-630 Xml serialization problem on Xamarin project
 (x) CTL-634 Model to ViewModel mappings don't work in explicit mode
 (x) CTL-636 UpdatableMarkupExtension in DataTemplate is not updatable
