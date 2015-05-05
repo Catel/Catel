@@ -59,6 +59,7 @@ Added/fixed:
     done on the same thread by default. To flush async, call FlushAsync(). The final signature change (breaking) will be
     applied to Catel v5
 (*) CTL-645 Only invoke auditor methods when at least 1 auditor is registered
+(x) CTL-555 Non Catel models with GraphId are not correctly deserialized using XmlSerializer and JsonSerializer
 (x) CTL-621 ManagedViewModel might throw exception when enumerating interested view models
 (x) CTL-625 LogListeners are created twice when defined in config when using vshost
 (x) CTL-626 EnvironmentHelper.IsProcessCurrentlyHostedByXXX functions are checking current instead parent (host) process

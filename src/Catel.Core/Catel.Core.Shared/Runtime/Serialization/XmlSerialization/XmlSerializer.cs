@@ -505,6 +505,16 @@ namespace Catel.Runtime.Serialization.Xml
                 value = serializer.ReadObject(xmlReader, false);
             }
 
+            // Fix for CTL-555
+            var graphIdAttribute = element.Attribute(GraphId);
+            if (graphIdAttribute != null)
+            {
+                var graphId = int.Parse(graphIdAttribute.Value);
+
+                var referenceManager = context.ReferenceManager;
+                referenceManager.RegisterManually(graphId, value);
+            }
+
             return value;
         }
 

@@ -43,7 +43,7 @@ namespace Catel.Runtime.Serialization.JsonSerialization
         {
             var serialize = true;
 
-            if (_jsonSerializer.SupportCircularReferences)
+            if (_jsonSerializer.PreserveReferences)
             {
                 var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
                 using (var scopeManager = ScopeManager<ReferenceManager>.GetScopeManager(scopeName))
