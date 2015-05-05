@@ -31,6 +31,12 @@ namespace Catel.MVVM.Auditing
 
         #region Properties
         /// <summary>
+        /// Gets a value indicating whether auditing is enabled. Auditing is enabled when at least 1 auditor is registered.
+        /// </summary>
+        /// <value><c>true</c> if auditing is enabled; otherwise, <c>false</c>.</value>
+        public static bool IsAuditingEnabled { get; private set; }
+
+        /// <summary>
         /// Gets the number of registered auditors.
         /// </summary>
         /// <value>The number of registered auditors.</value>
@@ -49,6 +55,8 @@ namespace Catel.MVVM.Auditing
             lock (_instance._auditors)
             {
                 _instance._auditors.Clear();
+
+                UpdateState();
             }
         }
 
@@ -80,6 +88,8 @@ namespace Catel.MVVM.Auditing
                 {
                     _instance._auditors.Add(auditor);
                 }
+
+                UpdateState();
             }
         }
 
@@ -96,6 +106,8 @@ namespace Catel.MVVM.Auditing
             lock (_instance._auditors)
             {
                 _instance._auditors.Remove(auditor);
+
+                UpdateState();
             }
         }
 
@@ -284,6 +296,17 @@ namespace Catel.MVVM.Auditing
                 {
                     auditor.OnViewModelClosed(viewModel);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Updates the state.
+        /// </summary>
+        private static void UpdateState()
+        {
+            lock (_instance._auditors)
+            {
+                IsAuditingEnabled = _instance._auditors.Count > 0;
             }
         }
         #endregion

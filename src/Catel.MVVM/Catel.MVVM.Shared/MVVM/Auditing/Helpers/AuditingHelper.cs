@@ -45,11 +45,18 @@ namespace Catel.MVVM.Auditing
         {
             Argument.IsNotNull("viewModel", viewModel);
 
-            AuditingManager.OnViewModelCreating(viewModel.GetType());
+            var isAuditingEnabled = AuditingManager.IsAuditingEnabled;
+            if (isAuditingEnabled)
+            {
+                AuditingManager.OnViewModelCreating(viewModel.GetType());
+            }
 
             SubscribeEvents(viewModel);
 
-            AuditingManager.OnViewModelCreated(viewModel);
+            if (isAuditingEnabled)
+            {
+                AuditingManager.OnViewModelCreated(viewModel);
+            }
         }
 
         /// <summary>
@@ -104,6 +111,11 @@ namespace Catel.MVVM.Auditing
 
         private static void OnViewModelPropertyChanging(object sender, PropertyChangingEventArgs e)
         {
+            if (!AuditingManager.IsAuditingEnabled)
+            {
+                return;
+            }
+
             var viewModel = (IViewModel)sender;
 
             object propertyValue = null;
@@ -117,6 +129,11 @@ namespace Catel.MVVM.Auditing
 
         private static void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            if (!AuditingManager.IsAuditingEnabled)
+            {
+                return;
+            }
+
             var viewModel = (IViewModel)sender;
 
             object propertyValue = null;
@@ -130,36 +147,71 @@ namespace Catel.MVVM.Auditing
 
         private static void OnViewModelCommandExecuted(object sender, CommandExecutedEventArgs e)
         {
+            if (!AuditingManager.IsAuditingEnabled)
+            {
+                return;
+            }
+
             AuditingManager.OnCommandExecuted((IViewModel)sender, e.CommandPropertyName, e.Command, e.CommandParameter);
         }
 
         private static void OnViewModelSaving(object sender, SavingEventArgs e)
         {
+            if (!AuditingManager.IsAuditingEnabled)
+            {
+                return;
+            }
+
             AuditingManager.OnViewModelSaving((IViewModel)sender);
         }
 
         private static void OnViewModelSaved(object sender, EventArgs e)
         {
+            if (!AuditingManager.IsAuditingEnabled)
+            {
+                return;
+            }
+
             AuditingManager.OnViewModelSaved((IViewModel)sender);
         }
 
         private static void OnViewModelCanceling(object sender, CancelingEventArgs e)
         {
+            if (!AuditingManager.IsAuditingEnabled)
+            {
+                return;
+            }
+
             AuditingManager.OnViewModelCanceling((IViewModel)sender);
         }
 
         private static void OnViewModelCanceled(object sender, EventArgs e)
         {
+            if (!AuditingManager.IsAuditingEnabled)
+            {
+                return;
+            }
+
             AuditingManager.OnViewModelCanceled((IViewModel)sender);
         }
 
         private static void OnViewModelClosing(object sender, EventArgs e)
         {
+            if (!AuditingManager.IsAuditingEnabled)
+            {
+                return;
+            }
+
             AuditingManager.OnViewModelClosing((IViewModel)sender);
         }
 
         private static void OnViewModelClosed(object sender, EventArgs e)
         {
+            if (!AuditingManager.IsAuditingEnabled)
+            {
+                return;
+            }
+
             var viewModel = (IViewModel) sender;
             AuditingManager.OnViewModelClosed(viewModel);
 
