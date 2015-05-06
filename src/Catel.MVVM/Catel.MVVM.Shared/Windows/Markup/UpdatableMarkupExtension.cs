@@ -79,8 +79,9 @@ namespace Catel.Windows.Markup
                 // In a template the TargetObject is a SharedDp (internal WPF class)
                 // In that case, the markup extension itself is returned to be re-evaluated later
                 var targetObjectType = target.TargetObject.GetType();
-                if (string.Equals(targetObjectType.FullName, "System.Windows.SharedDp") ||
-                    string.Equals(targetObjectType.FullName, "System.Windows.Setter"))
+                if (string.Equals(targetObjectType.FullName, "System.Windows.SharedDp")) 
+                    // Checking for setter crashes other extensions (such as FontImage in Orchestra)
+                    //string.Equals(targetObjectType.FullName, "System.Windows.Setter"))
                 {
                     return this;
                 }
