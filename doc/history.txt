@@ -68,6 +68,7 @@ Added/fixed:
 (x) CTL-634 Model to ViewModel mappings don't work in explicit mode
 (x) CTL-636 UpdatableMarkupExtension in DataTemplate is not updatable
 (x) CTL-638 Triggers don't work when combined with Modifiers
+(x) CTL-646 Prism and CompositeNuGetBasedModuleCatalog throw ModuleTypeLoaderNotFoundException
 
 Roadmap:
 ========

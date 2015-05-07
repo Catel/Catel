@@ -8,6 +8,7 @@ namespace Catel
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text.RegularExpressions;
 
     using Tasks;
@@ -20,7 +21,7 @@ namespace Catel
     using Microsoft.Practices.Prism.Logging;
     using Microsoft.Practices.Prism.Modularity;
     using Microsoft.Practices.Prism.Regions;
-
+    using Modules;
 #if PRISM5
     using Microsoft.Practices.Prism.PubSubEvents;
 #endif
@@ -441,7 +442,26 @@ namespace Catel
         {
             var moduleManager = Container.ResolveType<IModuleManager>();
 
-            int registeredModulesCount = 0;
+            var defaultModuleManager = moduleManager as ModuleManager;
+            if (defaultModuleManager != null)
+            {
+                var typeLoaders = new List<IModuleTypeLoader>();
+
+                var existingTypeLoaders = defaultModuleManager.ModuleTypeLoaders;
+                if (existingTypeLoaders != null)
+                {
+                    typeLoaders.AddRange(existingTypeLoaders);
+                }
+
+                if (!typeLoaders.Any(x => x is NuGetModuleTypeLoader))
+                {
+                    typeLoaders.Add(new NuGetModuleTypeLoader(ModuleCatalog));
+                }
+
+                defaultModuleManager.ModuleTypeLoaders = typeLoaders;
+            }
+
+            var registeredModulesCount = 0;
             Logger.Log("Registering currently available modules automatically", Category.Debug, Priority.Low);
 
             foreach (var module in ModuleCatalog.Modules)
