@@ -22,6 +22,7 @@ namespace Catel
     using Microsoft.Practices.Prism.Modularity;
     using Microsoft.Practices.Prism.Regions;
     using Modules;
+
 #if PRISM5
     using Microsoft.Practices.Prism.PubSubEvents;
 #endif
@@ -453,10 +454,12 @@ namespace Catel
                     typeLoaders.AddRange(existingTypeLoaders);
                 }
 
+#if !SL5
                 if (!typeLoaders.Any(x => x is NuGetModuleTypeLoader))
                 {
                     typeLoaders.Add(new NuGetModuleTypeLoader(ModuleCatalog));
                 }
+#endif
 
                 defaultModuleManager.ModuleTypeLoaders = typeLoaders;
             }
