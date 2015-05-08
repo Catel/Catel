@@ -142,7 +142,8 @@ namespace Catel.Services
         /// <param name="viewModel">The view model instance.</param>
         /// <param name="show">Indicates whether the view model will be shown. If the view model is <c>null</c> then this argument will be used with its default <c>true</c>.</param>
         /// <exception cref="InvalidOperationException">If the batch is already committed and the execution is in progress or committing via async way.</exception>
-        public void Commit<TViewModel>(TViewModel viewModel = default(TViewModel), bool show = true) where TViewModel : IProgressNotifyableViewModel
+        public void Commit<TViewModel>(TViewModel viewModel = default(TViewModel), bool show = true) 
+            where TViewModel : IProgressNotifyableViewModel
         {
             if (!ReferenceEquals(viewModel, default(TViewModel)))
             {
@@ -186,7 +187,8 @@ namespace Catel.Services
         /// <param name="viewModel">The view model instance.</param>
         /// <param name="show">Indicates whether the view model will be shown. If the view model is <c>null</c> then this argument will be ignored.</param>
         /// <exception cref="InvalidOperationException">If the batch is already committed and the execution is in progress or committing via async way.</exception>
-        public void CommitAsync<TViewModel>(Action completedCallback = null, TViewModel viewModel = default(TViewModel), bool show = true) where TViewModel : IProgressNotifyableViewModel
+        public void CommitAsync<TViewModel>(Action completedCallback = null, TViewModel viewModel = default(TViewModel), bool show = true) 
+            where TViewModel : IProgressNotifyableViewModel
         {
             if (!ReferenceEquals(viewModel, default(TViewModel)))
             {
