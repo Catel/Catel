@@ -6,7 +6,7 @@
     <SharedGUID>29ebe1ed-4e23-4da4-99d2-b991e69039ee</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Catel.Extensions.Prism.Shared</Import_RootNamespace>
+    <Import_RootNamespace>Catel</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
@@ -26,6 +26,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Modules\CompositePackageRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\DownloadingModuleCatalog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\EventArgs\ModuleEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Modules\Extensions\ModuleCatalogExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\Extensions\ModuleInfoExtensions.NuGet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\Interfaces\IDownloadingModuleCatalog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\Interfaces\INuGetBasedModuleCatalog.cs" />

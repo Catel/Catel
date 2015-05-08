@@ -34,7 +34,8 @@ namespace Catel.Modules
     /// ]]>
     ///  </code>
     /// </example>
-    public class CompositeModuleCatalog<TModuleCatalog> : ModuleCatalog where TModuleCatalog : IModuleCatalog
+    public class CompositeModuleCatalog<TModuleCatalog> : ModuleCatalog 
+        where TModuleCatalog : IModuleCatalog
     {
         #region Fields
 
@@ -125,12 +126,8 @@ namespace Catel.Modules
         /// <summary>
         /// Add a module catalog.
         /// </summary>
-        /// <param name="moduleCatalog">
-        /// The module catalog.
-        /// </param>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="moduleCatalog"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="moduleCatalog">The module catalog.</param>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="moduleCatalog" /> is <c>null</c>.</exception>
         public void Add(TModuleCatalog moduleCatalog)
         {
             Argument.IsNotNull("moduleCatalog", moduleCatalog);

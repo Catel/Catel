@@ -455,9 +455,13 @@ namespace Catel
                 }
 
 #if !SL5
-                if (!typeLoaders.Any(x => x is NuGetModuleTypeLoader))
+                // CTL-646
+                if (ModuleCatalog.IsCatalogType<INuGetBasedModuleCatalog>())
                 {
-                    typeLoaders.Add(new NuGetModuleTypeLoader(ModuleCatalog));
+                    if (!typeLoaders.Any(x => x is NuGetModuleTypeLoader))
+                    {
+                        typeLoaders.Add(new NuGetModuleTypeLoader(ModuleCatalog));
+                    }
                 }
 #endif
 

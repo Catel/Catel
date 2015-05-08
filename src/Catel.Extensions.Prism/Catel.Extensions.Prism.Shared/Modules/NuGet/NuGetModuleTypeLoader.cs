@@ -68,9 +68,7 @@ namespace Catel.Modules
 
             if (_moduleCatalogs == null || _moduleCatalogs.Count == 0)
             {
-                const string error = "There are no NuGet based module catalogs available";
-                Log.Error(error);
-                throw new InvalidOperationException(error);
+                Log.Warning("There are no NuGet based module catalogs available");
             }
         }
         #endregion
