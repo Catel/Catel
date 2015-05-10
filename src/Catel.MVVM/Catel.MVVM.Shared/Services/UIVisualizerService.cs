@@ -529,9 +529,19 @@ namespace Catel.Services
         /// <param name="window">The window.</param>
         /// <param name="showModal">If <c>true</c>, the window should be shown as modal.</param>
         /// <returns><c>true</c> if the window is closed with success; otherwise <c>false</c> or <c>null</c>.</returns>
-        protected virtual async Task<bool?> ShowWindowAsync(FrameworkElement window, bool showModal)
+        protected virtual Task<bool?> ShowWindowAsync(FrameworkElement window, bool showModal)
         {
-            return await Task<bool?>.Factory.StartNew(() => ShowWindow(window, showModal));
+            // Note: no async/await because we use a TaskCompletionSource
+
+            if (showModal)  // CTL-648 async modal fix
+            {
+                var tcs = new TaskCompletionSource<bool?>();
+                HandleCloseSubscription(window, null, (s, e) => tcs.SetResult(e.Result), true);   // complete the task with DialogResult when dialog is closed
+                ShowWindow(window, true);
+                return tcs.Task;
+            }
+
+            return Task<bool?>.Factory.StartNew(() => ShowWindow(window, showModal));
         }
         #endregion
     }
