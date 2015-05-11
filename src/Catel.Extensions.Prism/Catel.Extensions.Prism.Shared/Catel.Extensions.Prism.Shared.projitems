@@ -37,6 +37,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Modules\NuGetBasedModuleCatalogParentChildBehavior.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\NuGet\InstallPackageRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\NuGet\NuGetModuleTypeLoader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Modules\NuGet\NuGetPackageInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\NuGet\RemoteInstallPackageRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\SafeDirectoryModuleCatalog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Services\Extensions\ISplashScreenServiceExtensions.cs" />

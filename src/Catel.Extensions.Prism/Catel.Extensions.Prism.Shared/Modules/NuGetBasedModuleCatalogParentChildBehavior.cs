@@ -49,6 +49,7 @@ namespace Catel.Modules
         public NuGetBasedModuleCatalogParentChildBehavior(INuGetBasedModuleCatalog moduleCatalog)
         {
             Argument.IsNotNull(() => moduleCatalog);
+
             _moduleCatalog = moduleCatalog;
             
             OutputDirectory = "packages";

@@ -133,59 +133,62 @@ namespace Catel.Modules
             // ReSharper disable once ImplicitlyCapturedClosure
             Argument.IsNotNull(() => moduleInfo);
 
-            Dispatcher currentDispatcher = DispatcherHelper.CurrentDispatcher;
+            var currentDispatcher = DispatcherHelper.CurrentDispatcher;
 
             Log.Debug("Loading module type '{0}' from package '{1}'", moduleInfo.ModuleType, moduleInfo.Ref);
 
-            new Thread(() =>
+            var thread = new Thread(() =>
+            {
+                InstallPackageRequest installPackageRequest;
+                var packageName = moduleInfo.GetPackageName();
+                if (packageName != null && TryCreateInstallPackageRequest(moduleInfo, out installPackageRequest))
                 {
-                    InstallPackageRequest installPackageRequest;
-                    var packageName = moduleInfo.GetPackageName();
-                    if (packageName != null && this.TryCreateInstallPackageRequest(moduleInfo, out installPackageRequest))
+                    currentDispatcher.BeginInvoke(() => OnModuleDownloadProgressChanged(new ModuleDownloadProgressChangedEventArgs(moduleInfo, 0, 1)));
+
+                    var installed = false;
+
+                    try
                     {
-                        currentDispatcher.BeginInvoke(() => OnModuleDownloadProgressChanged(new ModuleDownloadProgressChangedEventArgs(moduleInfo, 0, 1)));
-
-                        bool installed = false;
-                        try
-                        {
-                            installPackageRequest.Execute();
-                            installed = true;
-                        }
-                        catch (Exception e)
-                        {
-                            currentDispatcher.BeginInvoke(() => OnLoadModuleCompleted(new LoadModuleCompletedEventArgs(moduleInfo, e)));
-                        }
-
-                        if (installed)
-                        {
-                            var fileModuleTypeLoader = new FileModuleTypeLoader();
-                            var fileModuleInfo = new ModuleInfo(moduleInfo.ModuleName, moduleInfo.ModuleType)
-                            {
-                                Ref = installPackageRequest.AssemblyFileRef,
-                                InitializationMode = moduleInfo.InitializationMode,
-                                DependsOn = moduleInfo.DependsOn
-                            };
-
-                            fileModuleTypeLoader.ModuleDownloadProgressChanged += (sender, args) =>
-                            {
-                                moduleInfo.State = args.ModuleInfo.State;
-                                currentDispatcher.BeginInvoke(() => OnModuleDownloadProgressChanged(new ModuleDownloadProgressChangedEventArgs(moduleInfo, args.BytesReceived, args.TotalBytesToReceive)));
-                            };
-
-                            fileModuleTypeLoader.LoadModuleCompleted += (sender, args) =>
-                            {
-                                moduleInfo.State = args.ModuleInfo.State;
-                                currentDispatcher.BeginInvoke(() => OnLoadModuleCompleted(new LoadModuleCompletedEventArgs(moduleInfo, args.Error)));
-                            };
-
-                            fileModuleTypeLoader.LoadModuleType(fileModuleInfo);
-                        }
+                        installPackageRequest.Execute();
+                        installed = true;
                     }
-                    else
+                    catch (Exception e)
                     {
-                        currentDispatcher.BeginInvoke(() => OnLoadModuleCompleted(new LoadModuleCompletedEventArgs(moduleInfo, new ModuleNotFoundException(moduleInfo.ModuleName, string.Format(CultureInfo.InvariantCulture, "The package '{0}' for module '{1}' was not found", moduleInfo.Ref, moduleInfo.ModuleName)))));
+                        currentDispatcher.BeginInvoke(() => OnLoadModuleCompleted(new LoadModuleCompletedEventArgs(moduleInfo, e)));
                     }
-                }).Start();
+
+                    if (installed)
+                    {
+                        var fileModuleTypeLoader = new FileModuleTypeLoader();
+                        var fileModuleInfo = new ModuleInfo(moduleInfo.ModuleName, moduleInfo.ModuleType)
+                        {
+                            Ref = installPackageRequest.AssemblyFileRef,
+                            InitializationMode = moduleInfo.InitializationMode,
+                            DependsOn = moduleInfo.DependsOn
+                        };
+
+                        fileModuleTypeLoader.ModuleDownloadProgressChanged += (sender, args) =>
+                        {
+                            moduleInfo.State = args.ModuleInfo.State;
+                            currentDispatcher.BeginInvoke(() => OnModuleDownloadProgressChanged(new ModuleDownloadProgressChangedEventArgs(moduleInfo, args.BytesReceived, args.TotalBytesToReceive)));
+                        };
+
+                        fileModuleTypeLoader.LoadModuleCompleted += (sender, args) =>
+                        {
+                            moduleInfo.State = args.ModuleInfo.State;
+                            currentDispatcher.BeginInvoke(() => OnLoadModuleCompleted(new LoadModuleCompletedEventArgs(moduleInfo, args.Error)));
+                        };
+
+                        fileModuleTypeLoader.LoadModuleType(fileModuleInfo);
+                    }
+                }
+                else
+                {
+                    currentDispatcher.BeginInvoke(() => OnLoadModuleCompleted(new LoadModuleCompletedEventArgs(moduleInfo, new ModuleNotFoundException(moduleInfo.ModuleName, string.Format(CultureInfo.InvariantCulture, "The package '{0}' for module '{1}' was not found", moduleInfo.Ref, moduleInfo.ModuleName)))));
+                }
+            });
+
+            thread.Start();
         }
 
         /// <summary>
@@ -193,10 +196,10 @@ namespace Catel.Modules
         /// </summary>
         /// <param name="moduleInfo">The module info</param>
         /// <param name="installPackageRequest">The install package request</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
         private bool TryCreateInstallPackageRequest(ModuleInfo moduleInfo, out InstallPackageRequest installPackageRequest)
         {
-            int i = 0;
+            var i = 0;
             installPackageRequest = null;
             while (i < _moduleCatalogs.Count && !_moduleCatalogs[i].TryCreateInstallPackageRequest(moduleInfo, out installPackageRequest))
             {

@@ -10,7 +10,7 @@ namespace Catel.Modules
 {
     using System.Collections.Generic;
     using System.Linq;
-
+    using System.Security.Cryptography.X509Certificates;
     using Catel.Logging;
 
     using Microsoft.Practices.Prism.Modularity;
@@ -54,9 +54,9 @@ namespace Catel.Modules
             get
             {
                 var moduleInfos = base.Modules.ToList();
-                
+
                 var rawModuleInfos = new List<ModuleInfo>();
-                foreach (INuGetBasedModuleCatalog moduleCatalog in ModuleCatalogs)
+                foreach (var moduleCatalog in ModuleCatalogs)
                 {
                     EnsureParentChildRelationship(moduleCatalog);
                     rawModuleInfos.AddRange(moduleCatalog.Modules);
@@ -147,16 +147,21 @@ namespace Catel.Modules
         /// Gets the package repository.
         /// </summary>
         /// <returns>The <see cref="IPackageRepository" />.</returns>
-        public IPackageRepository GetPackageRepository()
+        public IEnumerable<IPackageRepository> GetPackageRepositories()
         {
             var compositePackageRepository = new CompositePackageRepository();
+
             foreach (var moduleCatalog in ModuleCatalogs)
             {
                 EnsureParentChildRelationship(moduleCatalog);
-                compositePackageRepository.Add(moduleCatalog.GetPackageRepository());
+
+                foreach (var packageRepository in moduleCatalog.GetPackageRepositories())
+                {
+                    compositePackageRepository.Add(packageRepository);
+                }
             }
 
-            return compositePackageRepository;
+            return new[] { compositePackageRepository };
         }
         #endregion
 
