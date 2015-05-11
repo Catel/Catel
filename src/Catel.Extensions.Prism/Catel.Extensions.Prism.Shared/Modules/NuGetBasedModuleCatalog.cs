@@ -234,8 +234,8 @@ namespace Catel.Modules
             }
             else
             {
-                var repositories = GetPackageRepositories();
-                foreach (var repository in repositories)
+                var repository = GetPackageRepository();
+                if (repository != null)
                 {
                     Log.Debug("Looking for package '{0}' with version '{1}' on the repository '{2}'", packageName.Id, packageName.Version, PackageSource);
 
@@ -252,11 +252,6 @@ namespace Catel.Modules
 
                         installPackageRequest = new RemoteInstallPackageRequest(this, package, GetModuleAssemblyRef(moduleInfo, package.Version));
                     }
-
-                    if (installPackageRequest != null)
-                    {
-                        break;
-                    }
                 }
             }
 
@@ -267,11 +262,9 @@ namespace Catel.Modules
         /// Gets the package repository.
         /// </summary>
         /// <returns>The <see cref="IPackageRepository" />.</returns>
-        public virtual IEnumerable<IPackageRepository> GetPackageRepositories()
+        public virtual IPackageRepository GetPackageRepository()
         {
-            var packagesRepositories = new List<IPackageRepository>();
-
-            packagesRepositories.Add(PackageRepositoriesCache.GetFromCacheOrFetch(PackageSource, () =>
+            return PackageRepositoriesCache.GetFromCacheOrFetch(PackageSource, () =>
             {
                 IPackageRepository packageRepository = null;
                 try
@@ -280,15 +273,13 @@ namespace Catel.Modules
 
                     packageRepository = PackageRepositoryFactory.Default.CreateRepository(PackageSource);
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    Log.Error(e);
+                    Log.Error(ex);
                 }
 
                 return packageRepository;
-            }));
-
-            return packagesRepositories;
+            });
         }
         #endregion
 
@@ -420,7 +411,7 @@ namespace Catel.Modules
         /// <returns>The packaged modules.</returns>
         private IEnumerable<ModuleInfo> GetPackagedModules()
         {
-            var packageRepositories = GetPackageRepositories();
+            var packageRepositories = new List<IPackageRepository>(new [] { GetPackageRepository() });
 
             var moduleInfos = new List<ModuleInfo>();
 

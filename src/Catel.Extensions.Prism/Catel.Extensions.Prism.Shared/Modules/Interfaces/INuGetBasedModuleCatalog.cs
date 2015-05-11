@@ -63,10 +63,10 @@ namespace Catel.Modules
         INuGetBasedModuleCatalog Parent { get; set; }
 
         /// <summary>
-        /// Gets the package repositories.
+        /// Gets the package repository.
         /// </summary>
         /// <returns>The <see cref="IPackageRepository" />.</returns>
-        IEnumerable<IPackageRepository> GetPackageRepositories();
+        IPackageRepository GetPackageRepository();
     }
 }
 

@@ -147,21 +147,16 @@ namespace Catel.Modules
         /// Gets the package repository.
         /// </summary>
         /// <returns>The <see cref="IPackageRepository" />.</returns>
-        public IEnumerable<IPackageRepository> GetPackageRepositories()
+        public IPackageRepository GetPackageRepository()
         {
             var compositePackageRepository = new CompositePackageRepository();
-
             foreach (var moduleCatalog in ModuleCatalogs)
             {
                 EnsureParentChildRelationship(moduleCatalog);
-
-                foreach (var packageRepository in moduleCatalog.GetPackageRepositories())
-                {
-                    compositePackageRepository.Add(packageRepository);
-                }
+                compositePackageRepository.Add(moduleCatalog.GetPackageRepository());
             }
 
-            return new[] { compositePackageRepository };
+            return compositePackageRepository;
         }
         #endregion
 
