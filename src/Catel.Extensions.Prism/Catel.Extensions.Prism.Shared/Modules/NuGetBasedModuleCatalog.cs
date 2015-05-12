@@ -209,8 +209,27 @@ namespace Catel.Modules
             get
             {
                 var moduleInfos = base.Modules.ToList();
+                foreach (var packageModuleInfo in this.PackagedModules)
+                {
+                    var moduleInfo = moduleInfos.FirstOrDefault(info => info.ModuleName == packageModuleInfo.ModuleName);
+                    if (moduleInfo == null)
+                    {
+                        Log.Info("Adding module info for '{0}' module with type '{1}'", packageModuleInfo.ModuleName, packageModuleInfo.ModuleType);
 
-                moduleInfos.AddRange(PackagedModules);
+                        moduleInfos.Add(packageModuleInfo);
+                    }
+                    else if (moduleInfo.ModuleType == packageModuleInfo.ModuleType && (moduleInfo.Ref == null || !moduleInfo.Ref.Contains(',')))
+                    {
+                        Log.Info("Replacing module info for '{0}' module with type '{1}' to ensure load the lastest version from repository", moduleInfo.ModuleName, moduleInfo.ModuleType);
+
+                        packageModuleInfo.InitializationMode = moduleInfo.InitializationMode;
+                        moduleInfos[moduleInfos.IndexOf(moduleInfo)] = packageModuleInfo;
+                    }
+                    else
+                    {
+                        Log.Warning("Ignored module info for '{0}' module with type '{1}' because is already registered", moduleInfo.ModuleName, moduleInfo.ModuleType);
+                    }
+                }
 
                 return moduleInfos;
             }
