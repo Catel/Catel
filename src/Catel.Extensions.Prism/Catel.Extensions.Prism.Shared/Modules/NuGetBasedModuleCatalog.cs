@@ -209,8 +209,27 @@ namespace Catel.Modules
             get
             {
                 var moduleInfos = base.Modules.ToList();
+                foreach (var packageModuleInfo in this.PackagedModules)
+                {
+                    var moduleInfo = moduleInfos.FirstOrDefault(info => info.ModuleName == packageModuleInfo.ModuleName);
+                    if (moduleInfo == null)
+                    {
+                        Log.Info("Adding module info for '{0}' module with type '{1}'", packageModuleInfo.ModuleName, packageModuleInfo.ModuleType);
 
-                moduleInfos.AddRange(PackagedModules);
+                        moduleInfos.Add(packageModuleInfo);
+                    }
+                    else if (moduleInfo.ModuleType == packageModuleInfo.ModuleType && (moduleInfo.Ref == null || !moduleInfo.Ref.Contains(',')))
+                    {
+                        Log.Info("Replacing module info for '{0}' module with type '{1}' to ensure load the lastest version from repository", moduleInfo.ModuleName, moduleInfo.ModuleType);
+
+                        packageModuleInfo.InitializationMode = moduleInfo.InitializationMode;
+                        moduleInfos[moduleInfos.IndexOf(moduleInfo)] = packageModuleInfo;
+                    }
+                    else
+                    {
+                        Log.Warning("Ignored module info for '{0}' module with type '{1}' because is already registered", moduleInfo.ModuleName, moduleInfo.ModuleType);
+                    }
+                }
 
                 return moduleInfos;
             }
@@ -234,7 +253,7 @@ namespace Catel.Modules
             }
             else
             {
-                var repository = GetPackageRepository();
+                var repository = this.GetPackageRepository();
                 if (repository != null)
                 {
                     Log.Debug("Looking for package '{0}' with version '{1}' on the repository '{2}'", packageName.Id, packageName.Version, PackageSource);
@@ -243,12 +262,12 @@ namespace Catel.Modules
                     if (repository.TryFindPackage(packageName.Id, packageName.Version, out package))
                     {
                         /*
-                    IEnumerable<FrameworkName> supportedFrameworks = package.GetSupportedFrameworks();
-                    if (supportedFrameworks != null && supportedFrameworks.Any(name => FrameworkIdentifierConversionMap.ContainsKey(name.FullName) && FrameworkIdentifierConversionMap[name.FullName].Equals(_frameworkNameIdentifier)))
-                    {
-                        Log.Debug("Creating remote install package request for '{0}' from '{1}'", package.GetFullName(), PackageSource);
-                    }
-                    */
+                        IEnumerable<FrameworkName> supportedFrameworks = package.GetSupportedFrameworks();
+                        if (supportedFrameworks != null && supportedFrameworks.Any(name => FrameworkIdentifierConversionMap.ContainsKey(name.FullName) && FrameworkIdentifierConversionMap[name.FullName].Equals(_frameworkNameIdentifier)))
+                        {
+                            Log.Debug("Creating remote install package request for '{0}' from '{1}'", package.GetFullName(), PackageSource);
+                        }
+                        */
 
                         installPackageRequest = new RemoteInstallPackageRequest(this, package, GetModuleAssemblyRef(moduleInfo, package.Version));
                     }
@@ -262,7 +281,7 @@ namespace Catel.Modules
         /// Gets the package repository.
         /// </summary>
         /// <returns>The <see cref="IPackageRepository" />.</returns>
-        public virtual IPackageRepository GetPackageRepository()
+        public virtual IPackageRepository GetInnerPackageRepository()
         {
             return PackageRepositoriesCache.GetFromCacheOrFetch(PackageSource, () =>
             {
@@ -411,7 +430,7 @@ namespace Catel.Modules
         /// <returns>The packaged modules.</returns>
         private IEnumerable<ModuleInfo> GetPackagedModules()
         {
-            var packageRepositories = new List<IPackageRepository>(new [] { GetPackageRepository() });
+            var packageRepositories = new List<IPackageRepository>(new[] { this.GetPackageRepository() });
 
             var moduleInfos = new List<ModuleInfo>();
 
@@ -426,14 +445,7 @@ namespace Catel.Modules
 
                     foreach (var package in packages)
                     {
-                        var packageModule = _moduleInfoCacheStoreCacheStorage.GetFromCacheOrFetch(package.Id, () => CreatePackageModule(package));
-                        if (packageModule == null)
-                        {
-                            Log.Warning("Package '{0}' could not be converted into a valid package, ignoring...", package.Id);
-                            continue;
-                        }
-
-                        moduleInfos.Add(packageModule);
+                        moduleInfos.Add(_moduleInfoCacheStoreCacheStorage.GetFromCacheOrFetch(package.Id, () => CreatePackageModule(package)));
                     }
                 }
                 catch (Exception ex)
@@ -443,6 +455,17 @@ namespace Catel.Modules
             }
 
             return moduleInfos;
+        }
+
+        /// <summary>
+        /// Gets the package repository.
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        public IPackageRepository GetPackageRepository()
+        {
+            return _behavior.GetPackageRepository();
         }
         #endregion
     }

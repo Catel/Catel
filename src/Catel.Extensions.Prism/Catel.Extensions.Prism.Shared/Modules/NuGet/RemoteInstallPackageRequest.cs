@@ -3,16 +3,12 @@
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-
 #if NET
 
 namespace Catel.Modules
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Runtime.Versioning;
     using Catel.Logging;
+
     using NuGet;
 
     /// <summary>

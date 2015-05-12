@@ -3,7 +3,6 @@
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-
 #if NET
 
 namespace Catel.Modules
@@ -14,7 +13,6 @@ namespace Catel.Modules
     using System.Globalization;
     using System.Linq;
     using System.Threading;
-    using System.Windows.Threading;
 
     using Catel.Logging;
     using Catel.Windows.Threading;
@@ -162,8 +160,8 @@ namespace Catel.Modules
                         var fileModuleTypeLoader = new FileModuleTypeLoader();
                         var fileModuleInfo = new ModuleInfo(moduleInfo.ModuleName, moduleInfo.ModuleType)
                         {
-                            Ref = installPackageRequest.AssemblyFileRef,
-                            InitializationMode = moduleInfo.InitializationMode,
+                            Ref = installPackageRequest.AssemblyFileRef, 
+                            InitializationMode = moduleInfo.InitializationMode, 
                             DependsOn = moduleInfo.DependsOn
                         };
 
