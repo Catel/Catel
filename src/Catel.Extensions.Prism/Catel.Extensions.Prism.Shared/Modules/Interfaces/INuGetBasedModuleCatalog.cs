@@ -3,13 +3,10 @@
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-
 #if NET
 
 namespace Catel.Modules
 {
-    using System;
-    using System.Collections.Generic;
     using Microsoft.Practices.Prism.Modularity;
 
     using NuGet;
@@ -62,11 +59,18 @@ namespace Catel.Modules
         /// </summary>
         INuGetBasedModuleCatalog Parent { get; set; }
 
+
         /// <summary>
         /// Gets the package repository.
         /// </summary>
         /// <returns>The <see cref="IPackageRepository" />.</returns>
         IPackageRepository GetPackageRepository();
+
+        /// <summary>
+        /// Gets the package repository.
+        /// </summary>
+        /// <returns>The <see cref="IPackageRepository" />.</returns>
+        IPackageRepository GetInnerPackageRepository();
     }
 }
 

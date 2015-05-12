@@ -8,8 +8,10 @@
 
 namespace Catel.Modules
 {
+    using NuGet;
+
     /// <summary>
-    /// 
+    /// The NuGetBased Module Catalog Parent Child Behavior
     /// </summary>
     public class NuGetBasedModuleCatalogParentChildBehavior
     {
@@ -96,6 +98,17 @@ namespace Catel.Modules
             set { _packagedModuleIdFilterExpression = string.IsNullOrEmpty(value) ? string.Empty : value.Trim(); }
         }
         #endregion
+
+        /// <summary>
+        /// Gets the package repository.
+        /// </summary>
+        /// <returns>
+        /// The package repository.
+        /// </returns>
+        public IPackageRepository GetPackageRepository()
+        {
+            return _moduleCatalog.Parent != null ? _moduleCatalog.Parent.GetPackageRepository() : _moduleCatalog.GetInnerPackageRepository();
+        }
     }
 }
 

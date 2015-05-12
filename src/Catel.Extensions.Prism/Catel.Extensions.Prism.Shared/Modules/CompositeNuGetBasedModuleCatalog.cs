@@ -3,14 +3,13 @@
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-
 #if NET
 
 namespace Catel.Modules
 {
     using System.Collections.Generic;
     using System.Linq;
-    using System.Security.Cryptography.X509Certificates;
+
     using Catel.Logging;
 
     using Microsoft.Practices.Prism.Modularity;
@@ -147,17 +146,27 @@ namespace Catel.Modules
         /// Gets the package repository.
         /// </summary>
         /// <returns>The <see cref="IPackageRepository" />.</returns>
-        public IPackageRepository GetPackageRepository()
+        public IPackageRepository GetInnerPackageRepository()
         {
             var compositePackageRepository = new CompositePackageRepository();
             foreach (var moduleCatalog in ModuleCatalogs)
             {
                 EnsureParentChildRelationship(moduleCatalog);
-                compositePackageRepository.Add(moduleCatalog.GetPackageRepository());
+                compositePackageRepository.Add(moduleCatalog.GetInnerPackageRepository());
             }
 
             return compositePackageRepository;
         }
+
+        /// <summary>
+        /// Gets the package repository.
+        /// </summary>
+        /// <returns></returns>
+        public IPackageRepository GetPackageRepository()
+        {
+            return this._behavior.GetPackageRepository();
+        }
+
         #endregion
 
         #region Methods
