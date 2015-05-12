@@ -11,7 +11,9 @@ namespace Catel.Modules
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Globalization;
+    using System.IO;
     using System.Linq;
+    using System.Reflection;
     using System.Threading;
 
     using Catel.Logging;
@@ -68,6 +70,8 @@ namespace Catel.Modules
             {
                 Log.Warning("There are no NuGet based module catalogs available");
             }
+
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomainOnAssemblyResolve;
         }
         #endregion
 
@@ -187,6 +191,37 @@ namespace Catel.Modules
             });
 
             thread.Start();
+        }
+
+        /// <summary>
+        /// Raised when the resolution of an assembly fails.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        private Assembly CurrentDomainOnAssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            var requestingAssembly = args.RequestingAssembly;
+            if (args.RequestingAssembly == null && _moduleCatalogs.Count > 0)
+            {
+                #if NET40
+                const string FrameworkNameIdentifier = "NET40";
+                #else 
+                const string FrameworkNameIdentifier = "NET45";
+                #endif
+                
+                var frameworkIdentifierPath = string.Format("\\{0}\\", FrameworkNameIdentifier).ToLower();
+
+                var outputDirectoryFullPath = _moduleCatalogs[0].OutputDirectoryFullPath;
+                var assemblyName = args.Name.Split(',')[0].Trim();
+                var assemblyFile = Directory.EnumerateFiles(outputDirectoryFullPath, assemblyName + ".dll", SearchOption.AllDirectories).FirstOrDefault(s => s.ToLower().Contains(frameworkIdentifierPath)) ?? Directory.EnumerateFiles(outputDirectoryFullPath, assemblyName + ".dll", SearchOption.AllDirectories).FirstOrDefault();
+                if (assemblyFile != null)
+                {
+                    requestingAssembly = Assembly.LoadFile(assemblyFile);
+                }
+            }
+
+            return requestingAssembly;
         }
 
         /// <summary>
