@@ -426,7 +426,14 @@ namespace Catel.Modules
 
                     foreach (var package in packages)
                     {
-                        moduleInfos.Add(_moduleInfoCacheStoreCacheStorage.GetFromCacheOrFetch(package.Id, () => CreatePackageModule(package)));
+                        var packageModule = _moduleInfoCacheStoreCacheStorage.GetFromCacheOrFetch(package.Id, () => CreatePackageModule(package));
+                        if (packageModule == null)
+                        {
+                            Log.Warning("Package '{0}' could not be converted into a valid package, ignoring...", package.Id);
+                            continue;
+                        }
+
+                        moduleInfos.Add(packageModule);
                     }
                 }
                 catch (Exception ex)
