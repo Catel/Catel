@@ -8,6 +8,7 @@
 
 namespace Catel.Modules
 {
+    using System.Collections.Generic;
     using NuGet;
 
     /// <summary>
@@ -53,7 +54,7 @@ namespace Catel.Modules
             Argument.IsNotNull(() => moduleCatalog);
 
             _moduleCatalog = moduleCatalog;
-            
+
             OutputDirectory = "packages";
             PackagedModuleIdFilterExpression = string.Empty;
             AllowPrereleaseVersions = false;
@@ -98,17 +99,6 @@ namespace Catel.Modules
             set { _packagedModuleIdFilterExpression = string.IsNullOrEmpty(value) ? string.Empty : value.Trim(); }
         }
         #endregion
-
-        /// <summary>
-        /// Gets the package repository.
-        /// </summary>
-        /// <returns>
-        /// The package repository.
-        /// </returns>
-        public IPackageRepository GetPackageRepository()
-        {
-            return _moduleCatalog.Parent != null ? _moduleCatalog.Parent.GetPackageRepository() : _moduleCatalog.GetInnerPackageRepository();
-        }
     }
 }
 

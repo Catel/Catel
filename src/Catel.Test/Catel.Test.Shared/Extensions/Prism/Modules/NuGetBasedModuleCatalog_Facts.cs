@@ -24,7 +24,7 @@ namespace Catel.Test.Extensions.Prism.Modules
             public void Returns_Null_If_The_PackageSource_Is_Empty()
             {
                 var nuGetBasedModuleCatalog = new NuGetBasedModuleCatalog { PackageSource = string.Empty };
-                var packageRepository = nuGetBasedModuleCatalog.GetPackageRepository();
+                var packageRepository = nuGetBasedModuleCatalog.GetPackageRepositories().First();
 
                 Assert.IsNull(packageRepository);
             }
@@ -33,7 +33,7 @@ namespace Catel.Test.Extensions.Prism.Modules
             public void Returns_Null_If_The_PackageSource_Has_Incorrect_Format()
             {
                 var nuGetBasedModuleCatalog = new NuGetBasedModuleCatalog { PackageSource = "2344:2345982345:" };
-                var packageRepository = nuGetBasedModuleCatalog.GetPackageRepository();
+                var packageRepository = nuGetBasedModuleCatalog.GetPackageRepositories().First();
                 Assert.IsNull(packageRepository);
             }
         }

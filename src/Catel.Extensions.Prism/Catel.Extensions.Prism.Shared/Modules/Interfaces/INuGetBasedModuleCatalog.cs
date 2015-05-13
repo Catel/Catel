@@ -7,6 +7,7 @@
 
 namespace Catel.Modules
 {
+    using System.Collections.Generic;
     using Microsoft.Practices.Prism.Modularity;
 
     using NuGet;
@@ -59,18 +60,11 @@ namespace Catel.Modules
         /// </summary>
         INuGetBasedModuleCatalog Parent { get; set; }
 
-
         /// <summary>
         /// Gets the package repository.
         /// </summary>
         /// <returns>The <see cref="IPackageRepository" />.</returns>
-        IPackageRepository GetPackageRepository();
-
-        /// <summary>
-        /// Gets the package repository.
-        /// </summary>
-        /// <returns>The <see cref="IPackageRepository" />.</returns>
-        IPackageRepository GetInnerPackageRepository();
+        IEnumerable<IPackageRepository> GetPackageRepositories();
     }
 }
 

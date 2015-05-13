@@ -242,59 +242,38 @@ namespace Catel.Modules
             }
             else
             {
-                var repository = this.GetPackageRepository();
-                if (repository != null)
+                var repositories = GetPackageRepositories();
+                foreach (var repository in repositories)
                 {
-                    Log.Debug("Looking for package '{0}' with version '{1}' on the repository '{2}'", packageName.Id, packageName.Version, PackageSource);
-
-                    try
+                    if (repository != null)
                     {
-                        var package = repository.FindPackage(packageName.Id, packageName.Version);
-                        if (package != null)
+                        Log.Debug("Looking for package '{0}' with version '{1}' on the repository '{2}'", packageName.Id, packageName.Version, PackageSource);
+
+                        try
                         {
-                            /*
-                            IEnumerable<FrameworkName> supportedFrameworks = package.GetSupportedFrameworks();
-                            if (supportedFrameworks != null && supportedFrameworks.Any(name => FrameworkIdentifierConversionMap.ContainsKey(name.FullName) && FrameworkIdentifierConversionMap[name.FullName].Equals(Platforms.CurrentPlatform)))
+                            var package = repository.FindPackage(packageName.Id, packageName.Version);
+                            if (package != null)
                             {
-                                Log.Debug("Creating remote install package request for '{0}' from '{1}'", package.GetFullName(), PackageSource);
-                            }
-                            */
+                                /*
+                                IEnumerable<FrameworkName> supportedFrameworks = package.GetSupportedFrameworks();
+                                if (supportedFrameworks != null && supportedFrameworks.Any(name => FrameworkIdentifierConversionMap.ContainsKey(name.FullName) && FrameworkIdentifierConversionMap[name.FullName].Equals(Platforms.CurrentPlatform)))
+                                {
+                                    Log.Debug("Creating remote install package request for '{0}' from '{1}'", package.GetFullName(), PackageSource);
+                                }
+                                */
 
-                            installPackageRequest = new RemoteInstallPackageRequest(this, package, GetModuleAssemblyRef(moduleInfo, package.Version));
+                                installPackageRequest = new RemoteInstallPackageRequest(this, package, GetModuleAssemblyRef(moduleInfo, package.Version));
+                            }
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error(ex, "Failed to create install package request for package '{0}'", packageName.Id);
+                        catch (Exception ex)
+                        {
+                            Log.Error(ex, "Failed to create install package request for package '{0}'", packageName.Id);
+                        }
                     }
                 }
             }
 
             return installPackageRequest != null;
-        }
-
-        /// <summary>
-        /// Gets the package repository.
-        /// </summary>
-        /// <returns>The <see cref="IPackageRepository" />.</returns>
-        public virtual IPackageRepository GetInnerPackageRepository()
-        {
-            return PackageRepositoriesCache.GetFromCacheOrFetch(PackageSource, () =>
-            {
-                IPackageRepository packageRepository = null;
-                try
-                {
-                    Log.Debug("Creating package repository with source '{0}'", PackageSource);
-
-                    packageRepository = PackageRepositoryFactory.Default.CreateRepository(PackageSource);
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex);
-                }
-
-                return packageRepository;
-            });
         }
         #endregion
 
@@ -428,7 +407,7 @@ namespace Catel.Modules
         /// <returns>The packaged modules.</returns>
         private IEnumerable<ModuleInfo> GetPackagedModules()
         {
-            var packageRepositories = new List<IPackageRepository>(new[] { this.GetPackageRepository() });
+            var packageRepositories = new List<IPackageRepository>(this.GetAllPackageRepositories(false));
 
             var moduleInfos = new List<ModuleInfo>();
 
@@ -462,12 +441,30 @@ namespace Catel.Modules
         /// <summary>
         /// Gets the package repository.
         /// </summary>
-        /// <returns>
-        /// 
-        /// </returns>
-        public IPackageRepository GetPackageRepository()
+        /// <returns>IPackageRepository.</returns>
+        public IEnumerable<IPackageRepository> GetPackageRepositories()
         {
-            return _behavior.GetPackageRepository();
+            var packageRepositories = new List<IPackageRepository>();
+
+            packageRepositories.Add(PackageRepositoriesCache.GetFromCacheOrFetch(PackageSource, () =>
+            {
+                IPackageRepository packageRepository = null;
+
+                try
+                {
+                    Log.Debug("Creating package repository with source '{0}'", PackageSource);
+
+                    packageRepository = PackageRepositoryFactory.Default.CreateRepository(PackageSource);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex);
+                }
+
+                return packageRepository;
+            }));
+
+            return packageRepositories;
         }
         #endregion
     }
