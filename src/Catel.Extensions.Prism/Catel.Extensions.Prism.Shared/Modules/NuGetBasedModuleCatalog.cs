@@ -247,18 +247,25 @@ namespace Catel.Modules
                 {
                     Log.Debug("Looking for package '{0}' with version '{1}' on the repository '{2}'", packageName.Id, packageName.Version, PackageSource);
 
-                    IPackage package;
-                    if (repository.TryFindPackage(packageName.Id, packageName.Version, out package))
+                    try
                     {
-                        /*
-                        IEnumerable<FrameworkName> supportedFrameworks = package.GetSupportedFrameworks();
-                        if (supportedFrameworks != null && supportedFrameworks.Any(name => FrameworkIdentifierConversionMap.ContainsKey(name.FullName) && FrameworkIdentifierConversionMap[name.FullName].Equals(Platforms.CurrentPlatform)))
+                        IPackage package;
+                        if (repository.TryFindPackage(packageName.Id, packageName.Version, out package))
                         {
-                            Log.Debug("Creating remote install package request for '{0}' from '{1}'", package.GetFullName(), PackageSource);
-                        }
-                        */
+                            /*
+                            IEnumerable<FrameworkName> supportedFrameworks = package.GetSupportedFrameworks();
+                            if (supportedFrameworks != null && supportedFrameworks.Any(name => FrameworkIdentifierConversionMap.ContainsKey(name.FullName) && FrameworkIdentifierConversionMap[name.FullName].Equals(Platforms.CurrentPlatform)))
+                            {
+                                Log.Debug("Creating remote install package request for '{0}' from '{1}'", package.GetFullName(), PackageSource);
+                            }
+                            */
 
-                        installPackageRequest = new RemoteInstallPackageRequest(this, package, GetModuleAssemblyRef(moduleInfo, package.Version));
+                            installPackageRequest = new RemoteInstallPackageRequest(this, package, GetModuleAssemblyRef(moduleInfo, package.Version));
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, "Failed to create install package request for package '{0}'", packageName.Id);
                     }
                 }
             }
