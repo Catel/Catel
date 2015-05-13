@@ -27,7 +27,7 @@ namespace Catel.Modules
     public sealed class NuGetModuleTypeLoader : IModuleTypeLoader
     {
         #region Constants
-       
+
         /// <summary>
         /// The log.
         /// </summary>
@@ -35,7 +35,7 @@ namespace Catel.Modules
         #endregion
 
         #region Fields
-       
+
         /// <summary>
         /// The module catalogs.
         /// </summary>
@@ -62,7 +62,7 @@ namespace Catel.Modules
             if (moduleCatalog is CompositeModuleCatalog)
             {
                 var compositeModuleCatalog = moduleCatalog as CompositeModuleCatalog;
-                
+
                 _moduleCatalogs = compositeModuleCatalog.LeafCatalogs.OfType<INuGetBasedModuleCatalog>().ToList().AsReadOnly();
             }
 
@@ -164,8 +164,8 @@ namespace Catel.Modules
                         var fileModuleTypeLoader = new FileModuleTypeLoader();
                         var fileModuleInfo = new ModuleInfo(moduleInfo.ModuleName, moduleInfo.ModuleType)
                         {
-                            Ref = installPackageRequest.AssemblyFileRef, 
-                            InitializationMode = moduleInfo.InitializationMode, 
+                            Ref = installPackageRequest.AssemblyFileRef,
+                            InitializationMode = moduleInfo.InitializationMode,
                             DependsOn = moduleInfo.DependsOn
                         };
 
@@ -202,22 +202,55 @@ namespace Catel.Modules
         private Assembly CurrentDomainOnAssemblyResolve(object sender, ResolveEventArgs args)
         {
             var requestingAssembly = args.RequestingAssembly;
-            if (args.RequestingAssembly == null && _moduleCatalogs.Count > 0)
+            if (requestingAssembly == null && _moduleCatalogs.Count > 0)
             {
-                #if NET40
+#if NET40
                 const string FrameworkNameIdentifier = "NET40";
-                #else 
+#else
                 const string FrameworkNameIdentifier = "NET45";
-                #endif
-                
+#endif
+
+                Log.Debug("Trying to resolve '{0}'", args.Name);
+
                 var frameworkIdentifierPath = string.Format("\\{0}\\", FrameworkNameIdentifier).ToLower();
 
                 var outputDirectoryFullPath = _moduleCatalogs[0].OutputDirectoryFullPath;
-                var assemblyName = args.Name.Split(',')[0].Trim();
-                var assemblyFile = Directory.EnumerateFiles(outputDirectoryFullPath, assemblyName + ".dll", SearchOption.AllDirectories).FirstOrDefault(s => s.ToLower().Contains(frameworkIdentifierPath)) ?? Directory.EnumerateFiles(outputDirectoryFullPath, assemblyName + ".dll", SearchOption.AllDirectories).FirstOrDefault();
-                if (assemblyFile != null)
+                if (!Directory.Exists(outputDirectoryFullPath))
                 {
+                    Log.Debug("Directory '{0}' does not exist yet, creating...", outputDirectoryFullPath);
+
+                    Directory.CreateDirectory(outputDirectoryFullPath);
+                }
+
+                var assemblyName = args.Name.Split(',')[0].Trim();
+
+                var assemblyFile = string.Empty;
+
+                try
+                {
+                    var expectedAssemblyFileName = string.Format("{0}.dll", assemblyName);
+
+                    // Search with framework identifiers first
+                    assemblyFile = Directory.EnumerateFiles(outputDirectoryFullPath, expectedAssemblyFileName, SearchOption.AllDirectories).FirstOrDefault(s => s.ToLower().Contains(frameworkIdentifierPath.ToLower()));
+                    if (string.IsNullOrWhiteSpace(assemblyFile))
+                    {
+                        assemblyFile = Directory.EnumerateFiles(outputDirectoryFullPath, expectedAssemblyFileName, SearchOption.AllDirectories).FirstOrDefault();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Failed to search for assembly '{0}'", assemblyName);
+                }
+
+                if (!string.IsNullOrWhiteSpace(assemblyFile))
+                {
+                    Log.Warning("Resolved '{0}' at '{1}'", args.Name, assemblyFile);
+
                     requestingAssembly = Assembly.LoadFile(assemblyFile);
+                }
+                else
+                {
+                    Log.Warning("Could not resolve '{0}'", args.Name);
                 }
             }
 

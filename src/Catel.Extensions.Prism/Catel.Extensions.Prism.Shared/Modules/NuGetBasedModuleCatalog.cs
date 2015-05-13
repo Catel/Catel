@@ -445,7 +445,11 @@ namespace Catel.Modules
 
                     foreach (var package in packages)
                     {
-                        moduleInfos.Add(_moduleInfoCacheStoreCacheStorage.GetFromCacheOrFetch(package.Id, () => CreatePackageModule(package)));
+                        var module = _moduleInfoCacheStoreCacheStorage.GetFromCacheOrFetch(package.Id, () => CreatePackageModule(package));
+                        if (module != null)
+                        {
+                            moduleInfos.Add(module);
+                        }
                     }
                 }
                 catch (Exception ex)
