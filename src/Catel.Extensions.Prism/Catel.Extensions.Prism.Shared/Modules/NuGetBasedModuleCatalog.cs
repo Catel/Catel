@@ -249,8 +249,8 @@ namespace Catel.Modules
 
                     try
                     {
-                        IPackage package;
-                        if (repository.TryFindPackage(packageName.Id, packageName.Version, out package))
+                        var package = repository.FindPackage(packageName.Id, packageName.Version);
+                        if (package != null)
                         {
                             /*
                             IEnumerable<FrameworkName> supportedFrameworks = package.GetSupportedFrameworks();
