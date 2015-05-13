@@ -90,7 +90,15 @@ namespace Catel.Modules
             var package = Package;
             var packageRepositories = _moduleCatalog.GetAllPackageRepositories(true).ToList();
 
-            var packagesToDownload = ResolveDependencies(package.Id, packageRepositories);
+            var versionSpec = new VersionSpec
+            {
+                IsMinInclusive = true,
+                MinVersion = package.Version,
+                IsMaxInclusive = true,
+                MaxVersion = package.Version
+            };
+
+            var packagesToDownload = ResolveDependencies(package.Id, versionSpec, packageRepositories);
 
             foreach (var packageToDownload in packagesToDownload)
             {
@@ -101,7 +109,7 @@ namespace Catel.Modules
             }
         }
 
-        private List<NuGetPackageInfo> ResolveDependencies(string packageId, IEnumerable<IPackageRepository> packageRepositories)
+        private List<NuGetPackageInfo> ResolveDependencies(string packageId, IVersionSpec packageVersionSpec, IEnumerable<IPackageRepository> packageRepositories)
         {
             Log.Debug("Resolving dependencies for package '{0}'", packageId);
 
@@ -112,7 +120,29 @@ namespace Catel.Modules
             {
                 try
                 {
-                    packageToInstall = packageRepository.GetPackages().FirstOrDefault(x => x.Id == packageId);
+                    var query = packageRepository.GetPackages().Where(x => x.Id == packageId);
+
+                    // TODO: optimize performance here
+                    //if (packageVersionSpec.MinVersion != null)
+                    //{
+                    //    foreach (var version in x.Version.Get)
+
+                    //    query = query.Where(x => x.Version.GetComparableVersionStrings() >= packageVersionSpec.MinVersion.V);
+                    //}
+
+                    //if (packageVersionSpec.MaxVersion != null)
+                    //{
+                    //    query = query.Where(x => x.Version <= packageVersionSpec.MaxVersion);
+                    //}
+
+                    // Note: FirstOrDefault not supported on GetPackages()
+                    var possiblePackages = query.ToList().OrderBy(x => x.Version);
+
+                    packageToInstall = (from possiblePackage in possiblePackages
+                                        where (packageVersionSpec.MinVersion == null || possiblePackage.Version >= packageVersionSpec.MinVersion) &&
+                                              (packageVersionSpec.MaxVersion == null || possiblePackage.Version <= packageVersionSpec.MaxVersion)
+                                        select possiblePackage).FirstOrDefault();
+
                     if (packageToInstall != null)
                     {
                         packagesToRetrieve.Add(new NuGetPackageInfo(packageToInstall, packageRepository));
@@ -144,7 +174,7 @@ namespace Catel.Modules
 
                 foreach (var dependency in dependencySet.Dependencies)
                 {
-                    var resolvedDependencies = ResolveDependencies(dependency.Id, packageRepositories);
+                    var resolvedDependencies = ResolveDependencies(dependency.Id, dependency.VersionSpec, packageRepositories);
                     for (var i = resolvedDependencies.Count - 1; i >= 0; i--)
                     {
                         var resolvedDependency = resolvedDependencies[i];

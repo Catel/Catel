@@ -159,8 +159,8 @@ namespace Catel.Modules
         {
             get
             {
-                using (_synchronizationContext.AcquireScope())
-                {
+                //using (_synchronizationContext.AcquireScope())
+                //{
                     var moduleCatalogs = _moduleCatalogs;
                     foreach (var moduleCatalog in moduleCatalogs)
                     {
@@ -177,7 +177,7 @@ namespace Catel.Modules
                             yield return moduleCatalog;
                         }
                     }
-                }
+                //}
             }
         }
 

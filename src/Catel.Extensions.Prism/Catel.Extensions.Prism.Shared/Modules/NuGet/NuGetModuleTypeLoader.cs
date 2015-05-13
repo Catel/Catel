@@ -185,9 +185,9 @@ namespace Catel.Modules
                         installPackageRequest.Execute();
                         installed = true;
                     }
-                    catch (Exception e)
+                    catch (Exception ex)
                     {
-                        currentDispatcher.BeginInvoke(() => OnLoadModuleCompleted(new LoadModuleCompletedEventArgs(moduleInfo, e)));
+                        currentDispatcher.BeginInvoke(() => OnLoadModuleCompleted(new LoadModuleCompletedEventArgs(moduleInfo, ex)));
                     }
 
                     if (installed)
@@ -215,6 +215,8 @@ namespace Catel.Modules
                         };
 
                         fileModuleTypeLoader.LoadModuleType(fileModuleInfo);
+
+                        Log.Info("Module '{0}' is installed and loaded", moduleInfo.ModuleName);
                     }
                 }
                 else
@@ -254,7 +256,6 @@ namespace Catel.Modules
                     var outputDirectoryFullPath = outputDirectoryFullPaths[i++];
                     if (Directory.Exists(outputDirectoryFullPath))
                     {
-
                         var assemblyFilePath = string.Empty;
                         try
                         {
