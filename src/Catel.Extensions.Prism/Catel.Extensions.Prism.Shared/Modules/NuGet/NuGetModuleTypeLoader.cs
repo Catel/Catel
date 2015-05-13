@@ -46,7 +46,6 @@ namespace Catel.Modules
         /// </summary>
         private readonly object _syncObj = new object();
 
-        private List<ModuleInfo> _requestedModules;
         #endregion
 
         #region Properties
@@ -98,7 +97,6 @@ namespace Catel.Modules
             Argument.IsNotNull(() => moduleCatalog);
 
             _moduleCatalog = moduleCatalog;
-            _requestedModules = new List<ModuleInfo>();
 
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomainOnAssemblyResolve;
         }
@@ -163,8 +161,6 @@ namespace Catel.Modules
         {
             // ReSharper disable once ImplicitlyCapturedClosure
             Argument.IsNotNull(() => moduleInfo);
-
-            _requestedModules.Add(moduleInfo);
 
             var currentDispatcher = DispatcherHelper.CurrentDispatcher;
 
@@ -240,7 +236,7 @@ namespace Catel.Modules
 
             var moduleCatalogs = NuGetBasedModuleCatalogs;
 
-            if (!_requestedModules.Any(info => !string.IsNullOrWhiteSpace(info.Ref) && info.Ref.StartsWith(args.Name)) && (requestingAssembly == null && moduleCatalogs.Count > 0))
+            if (!_moduleCatalog.Modules.Any(info => !string.IsNullOrWhiteSpace(info.Ref) && info.Ref.StartsWith(args.Name)) && (requestingAssembly == null && moduleCatalogs.Count > 0))
             {
                 Log.Debug("Trying to resolve '{0}'", args.Name);
 
