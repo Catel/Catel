@@ -37,11 +37,50 @@ namespace Catel.Modules
         #region Fields
 
         /// <summary>
+        /// The module catalog
+        /// </summary>
+        private IModuleCatalog _moduleCatalog;
+
+        /// <summary>
+        /// The sync obj.
+        /// </summary>
+        private readonly object _syncObj = new object();
+
+        #endregion
+
+        #region Properties
+        /// <summary>
         /// The module catalogs.
         /// </summary>
-        private readonly ReadOnlyCollection<INuGetBasedModuleCatalog> _moduleCatalogs;
+        private ReadOnlyCollection<INuGetBasedModuleCatalog> NuGetBasedModuleCatalogs
+        {
+            get
+            {
+                lock (_syncObj)
+                {
+                    ReadOnlyCollection<INuGetBasedModuleCatalog> moduleCatalogs = null;
 
-        private IModuleCatalog _moduleCatalog;
+                    if (_moduleCatalog is INuGetBasedModuleCatalog)
+                    {
+                        moduleCatalogs = new List<INuGetBasedModuleCatalog> { _moduleCatalog as INuGetBasedModuleCatalog }.AsReadOnly();
+                    }
+
+                    if (_moduleCatalog is CompositeModuleCatalog)
+                    {
+                        var compositeModuleCatalog = _moduleCatalog as CompositeModuleCatalog;
+
+                        moduleCatalogs = compositeModuleCatalog.LeafCatalogs.OfType<INuGetBasedModuleCatalog>().ToList().AsReadOnly();
+                    }
+
+                    if (moduleCatalogs == null || moduleCatalogs.Count == 0)
+                    {
+                        Log.Warning("There are no NuGet based module catalogs available");
+                    }
+
+                    return moduleCatalogs;
+                }
+            }
+        }
 
         #endregion
 
@@ -59,23 +98,6 @@ namespace Catel.Modules
 
             _moduleCatalog = moduleCatalog;
 
-            if (moduleCatalog is INuGetBasedModuleCatalog)
-            {
-                _moduleCatalogs = new List<INuGetBasedModuleCatalog> { moduleCatalog as INuGetBasedModuleCatalog }.AsReadOnly();
-            }
-
-            if (moduleCatalog is CompositeModuleCatalog)
-            {
-                var compositeModuleCatalog = moduleCatalog as CompositeModuleCatalog;
-
-                _moduleCatalogs = compositeModuleCatalog.LeafCatalogs.OfType<INuGetBasedModuleCatalog>().ToList().AsReadOnly();
-            }
-
-            if (_moduleCatalogs == null || _moduleCatalogs.Count == 0)
-            {
-                Log.Warning("There are no NuGet based module catalogs available");
-            }
-            
 			AppDomain.CurrentDomain.AssemblyResolve += CurrentDomainOnAssemblyResolve;
         }
         #endregion
@@ -166,6 +188,8 @@ namespace Catel.Modules
 
                     if (installed)
                     {
+                        installPackageRequest.EnsureAssemblyFileRef();
+
                         var fileModuleTypeLoader = new FileModuleTypeLoader();
                         var fileModuleInfo = new ModuleInfo(moduleInfo.ModuleName, moduleInfo.ModuleType)
                         {
@@ -208,7 +232,9 @@ namespace Catel.Modules
         {
             var requestingAssembly = args.RequestingAssembly;
 
-            if (!_moduleCatalog.Modules.Any(info => !string.IsNullOrWhiteSpace(info.Ref) && info.Ref.StartsWith(args.Name)) && (requestingAssembly == null && _moduleCatalogs.Count > 0))
+            var moduleCatalogs = NuGetBasedModuleCatalogs;
+
+            if (!_moduleCatalog.Modules.Any(info => !string.IsNullOrWhiteSpace(info.Ref) && info.Ref.StartsWith(args.Name)) && (requestingAssembly == null && moduleCatalogs.Count > 0))
             {
                 Log.Debug("Trying to resolve '{0}'", args.Name);
 
@@ -216,7 +242,7 @@ namespace Catel.Modules
 
                 var assemblyName = args.Name.Split(',')[0].Trim();
 
-                var outputDirectoryFullPaths = _moduleCatalogs.Select(catalog => catalog.OutputDirectoryFullPath).Distinct(StringComparer.InvariantCultureIgnoreCase).ToArray();
+                var outputDirectoryFullPaths = moduleCatalogs.Select(catalog => catalog.OutputDirectoryFullPath).Distinct(StringComparer.InvariantCultureIgnoreCase).ToArray();
 
                 int i = 0;
                 while (requestingAssembly == null && i < outputDirectoryFullPaths.Length)
@@ -270,7 +296,8 @@ namespace Catel.Modules
         {
             var i = 0;
             installPackageRequest = null;
-            while (i < _moduleCatalogs.Count && !_moduleCatalogs[i].TryCreateInstallPackageRequest(moduleInfo, out installPackageRequest))
+            var moduleCatalogs = NuGetBasedModuleCatalogs;
+            while (i < moduleCatalogs.Count && !moduleCatalogs[i].TryCreateInstallPackageRequest(moduleInfo, out installPackageRequest))
             {
                 i++;
             }
