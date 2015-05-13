@@ -46,6 +46,7 @@ namespace Catel.Modules
         /// </summary>
         private readonly object _syncObj = new object();
 
+        private List<ModuleInfo> _requestedModules;
         #endregion
 
         #region Properties
@@ -97,6 +98,7 @@ namespace Catel.Modules
             Argument.IsNotNull(() => moduleCatalog);
 
             _moduleCatalog = moduleCatalog;
+            _requestedModules = new List<ModuleInfo>();
 
 			AppDomain.CurrentDomain.AssemblyResolve += CurrentDomainOnAssemblyResolve;
         }
@@ -161,6 +163,8 @@ namespace Catel.Modules
         {
             // ReSharper disable once ImplicitlyCapturedClosure
             Argument.IsNotNull(() => moduleInfo);
+
+            _requestedModules.Add(moduleInfo);
 
             var currentDispatcher = DispatcherHelper.CurrentDispatcher;
 
@@ -231,58 +235,61 @@ namespace Catel.Modules
         private Assembly CurrentDomainOnAssemblyResolve(object sender, ResolveEventArgs args)
         {
             var requestingAssembly = args.RequestingAssembly;
-
-            var moduleCatalogs = NuGetBasedModuleCatalogs;
-
-            if (!_moduleCatalog.Modules.Any(info => !string.IsNullOrWhiteSpace(info.Ref) && info.Ref.StartsWith(args.Name)) && (requestingAssembly == null && moduleCatalogs.Count > 0))
+            if (_requestedModules.Count > 0)
             {
-                Log.Debug("Trying to resolve '{0}'", args.Name);
+                var moduleCatalogs = NuGetBasedModuleCatalogs;
 
-                var frameworkIdentifierPath = string.Format("\\{0}\\", Platforms.CurrentPlatform).ToLower();
-
-                var assemblyName = args.Name.Split(',')[0].Trim();
-
-                var outputDirectoryFullPaths = moduleCatalogs.Select(catalog => catalog.OutputDirectoryFullPath).Distinct(StringComparer.InvariantCultureIgnoreCase).ToArray();
-
-                int i = 0;
-                while (requestingAssembly == null && i < outputDirectoryFullPaths.Length)
+                if (!_requestedModules.Any(info => !string.IsNullOrWhiteSpace(info.Ref) && info.Ref.StartsWith(args.Name)) && (requestingAssembly == null && moduleCatalogs.Count > 0))
                 {
-                    var outputDirectoryFullPath = outputDirectoryFullPaths[i++];
-                    if (Directory.Exists(outputDirectoryFullPath))
+                    Log.Debug("Trying to resolve '{0}'", args.Name);
+
+                    var frameworkIdentifierPath = string.Format("\\{0}\\", Platforms.CurrentPlatform).ToLower();
+
+                    var assemblyName = args.Name.Split(',')[0].Trim();
+
+                    var outputDirectoryFullPaths = moduleCatalogs.Select(catalog => catalog.OutputDirectoryFullPath).Distinct(StringComparer.InvariantCultureIgnoreCase).ToArray();
+
+                    int i = 0;
+                    while (requestingAssembly == null && i < outputDirectoryFullPaths.Length)
                     {
-
-                        var assemblyFilePath = string.Empty;
-                        try
+                        var outputDirectoryFullPath = outputDirectoryFullPaths[i++];
+                        if (Directory.Exists(outputDirectoryFullPath))
                         {
-                            var expectedAssemblyFileName = string.Format("{0}.dll", assemblyName);
 
-                            // Search with framework identifiers first
-                            assemblyFilePath = Directory.EnumerateFiles(outputDirectoryFullPath, expectedAssemblyFileName, SearchOption.AllDirectories).FirstOrDefault(path => path.ToLower().Contains(frameworkIdentifierPath));
-                            if (string.IsNullOrWhiteSpace(assemblyFilePath))
+                            var assemblyFilePath = string.Empty;
+                            try
                             {
-                                assemblyFilePath = Directory.EnumerateFiles(outputDirectoryFullPath, expectedAssemblyFileName, SearchOption.AllDirectories).FirstOrDefault();
+                                var expectedAssemblyFileName = string.Format("{0}.dll", assemblyName);
+
+                                // Search with framework identifiers first
+                                assemblyFilePath = Directory.EnumerateFiles(outputDirectoryFullPath, expectedAssemblyFileName, SearchOption.AllDirectories).FirstOrDefault(path => path.ToLower().Contains(frameworkIdentifierPath));
+                                if (string.IsNullOrWhiteSpace(assemblyFilePath))
+                                {
+                                    assemblyFilePath = Directory.EnumerateFiles(outputDirectoryFullPath, expectedAssemblyFileName, SearchOption.AllDirectories).FirstOrDefault();
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.Error(ex, "Failed to search for assembly '{0}'", assemblyName);
+                            }
+
+                            if (!string.IsNullOrWhiteSpace(assemblyFilePath))
+                            {
+                                Log.Warning("Resolved '{0}' at '{1}'", args.Name, assemblyFilePath);
+
+                                requestingAssembly = Assembly.LoadFile(assemblyFilePath);
+                            }
+                            else
+                            {
+                                Log.Warning("Could not resolve '{0}'", args.Name);
                             }
                         }
-                        catch (Exception ex)
-                        {
-                            Log.Error(ex, "Failed to search for assembly '{0}'", assemblyName);
-                        }
 
-                        if (!string.IsNullOrWhiteSpace(assemblyFilePath))
-                        {
-                            Log.Warning("Resolved '{0}' at '{1}'", args.Name, assemblyFilePath);
-
-                            requestingAssembly = Assembly.LoadFile(assemblyFilePath);
-                        }
-                        else
-                        {
-                            Log.Warning("Could not resolve '{0}'", args.Name);
-                        }
                     }
-
                 }
-            }
 
+
+            }
             return requestingAssembly;
         }
 

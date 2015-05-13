@@ -54,7 +54,7 @@ namespace Catel.Modules
         /// </summary>
         public void EnsureAssemblyFileRef()
         {
-            var path = AssemblyFileRef.Substring(7).Replace('/', '\\').ToLower();
+            var path = new Uri(AssemblyFileRef).LocalPath.ToLower();
             if (!File.Exists(path))
             {
                 var assemblyFileName = Path.GetFileName(path);

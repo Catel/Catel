@@ -309,6 +309,8 @@ namespace Catel.Modules
         {
             Argument.IsNotNull(() => moduleInfo);
 
+            // TODO: Improve this contition
+
             return !string.IsNullOrWhiteSpace(GetModuleAssemblyRef(moduleInfo)) && File.Exists(new Uri(GetModuleAssemblyRef(moduleInfo)).LocalPath);
         }
 
