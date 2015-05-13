@@ -40,6 +40,9 @@ namespace Catel.Modules
         /// The module catalogs.
         /// </summary>
         private readonly ReadOnlyCollection<INuGetBasedModuleCatalog> _moduleCatalogs;
+
+        private IModuleCatalog _moduleCatalog;
+
         #endregion
 
         #region Constructors
@@ -53,6 +56,8 @@ namespace Catel.Modules
         public NuGetModuleTypeLoader(IModuleCatalog moduleCatalog)
         {
             Argument.IsNotNull(() => moduleCatalog);
+
+            _moduleCatalog = moduleCatalog;
 
             if (moduleCatalog is INuGetBasedModuleCatalog)
             {
@@ -202,45 +207,53 @@ namespace Catel.Modules
         private Assembly CurrentDomainOnAssemblyResolve(object sender, ResolveEventArgs args)
         {
             var requestingAssembly = args.RequestingAssembly;
-            if (requestingAssembly == null && _moduleCatalogs.Count > 0)
+
+            if (!_moduleCatalog.Modules.Any(info => !string.IsNullOrWhiteSpace(info.Ref) && info.Ref.StartsWith(args.Name)) && (requestingAssembly == null && _moduleCatalogs.Count > 0))
             {
                 Log.Debug("Trying to resolve '{0}'", args.Name);
 
                 var frameworkIdentifierPath = string.Format("\\{0}\\", Platforms.CurrentPlatform).ToLower();
 
-                var outputDirectoryFullPath = _moduleCatalogs[0].OutputDirectoryFullPath;
-                if (Directory.Exists(outputDirectoryFullPath))
+                var assemblyName = args.Name.Split(',')[0].Trim();
+
+                var outputDirectoryFullPaths = _moduleCatalogs.Select(catalog => catalog.OutputDirectoryFullPath).Distinct(StringComparer.InvariantCultureIgnoreCase).ToArray();
+
+                int i = 0;
+                while (requestingAssembly == null && i < outputDirectoryFullPaths.Length)
                 {
-                    var assemblyName = args.Name.Split(',')[0].Trim();
-
-                    var assemblyFile = string.Empty;
-
-                    try
+                    var outputDirectoryFullPath = outputDirectoryFullPaths[i++];
+                    if (Directory.Exists(outputDirectoryFullPath))
                     {
-                        var expectedAssemblyFileName = string.Format("{0}.dll", assemblyName);
 
-                        // Search with framework identifiers first
-                        assemblyFile = Directory.EnumerateFiles(outputDirectoryFullPath, expectedAssemblyFileName, SearchOption.AllDirectories).FirstOrDefault(path => path.ToLower().Contains(frameworkIdentifierPath));
-                        if (string.IsNullOrWhiteSpace(assemblyFile))
+                        var assemblyFilePath = string.Empty;
+                        try
                         {
-                            assemblyFile = Directory.EnumerateFiles(outputDirectoryFullPath, expectedAssemblyFileName, SearchOption.AllDirectories).FirstOrDefault();
+                            var expectedAssemblyFileName = string.Format("{0}.dll", assemblyName);
+
+                            // Search with framework identifiers first
+                            assemblyFilePath = Directory.EnumerateFiles(outputDirectoryFullPath, expectedAssemblyFileName, SearchOption.AllDirectories).FirstOrDefault(path => path.ToLower().Contains(frameworkIdentifierPath));
+                            if (string.IsNullOrWhiteSpace(assemblyFilePath))
+                            {
+                                assemblyFilePath = Directory.EnumerateFiles(outputDirectoryFullPath, expectedAssemblyFileName, SearchOption.AllDirectories).FirstOrDefault();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error(ex, "Failed to search for assembly '{0}'", assemblyName);
+                        }
+
+                        if (!string.IsNullOrWhiteSpace(assemblyFilePath))
+                        {
+                            Log.Warning("Resolved '{0}' at '{1}'", args.Name, assemblyFilePath);
+
+                            requestingAssembly = Assembly.LoadFile(assemblyFilePath);
+                        }
+                        else
+                        {
+                            Log.Warning("Could not resolve '{0}'", args.Name);
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        Log.Error(ex, "Failed to search for assembly '{0}'", assemblyName);
-                    }
 
-                    if (!string.IsNullOrWhiteSpace(assemblyFile))
-                    {
-                        Log.Warning("Resolved '{0}' at '{1}'", args.Name, assemblyFile);
-
-                        requestingAssembly = Assembly.LoadFile(assemblyFile);
-                    }
-                    else
-                    {
-                        Log.Warning("Could not resolve '{0}'", args.Name);
-                    }
                 }
             }
 
