@@ -70,8 +70,8 @@ namespace Catel.Modules
             {
                 Log.Warning("There are no NuGet based module catalogs available");
             }
-
-            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomainOnAssemblyResolve;
+            
+			AppDomain.CurrentDomain.AssemblyResolve += CurrentDomainOnAssemblyResolve;
         }
         #endregion
 
@@ -204,53 +204,43 @@ namespace Catel.Modules
             var requestingAssembly = args.RequestingAssembly;
             if (requestingAssembly == null && _moduleCatalogs.Count > 0)
             {
-#if NET40
-                const string FrameworkNameIdentifier = "NET40";
-#else
-                const string FrameworkNameIdentifier = "NET45";
-#endif
-
                 Log.Debug("Trying to resolve '{0}'", args.Name);
 
-                var frameworkIdentifierPath = string.Format("\\{0}\\", FrameworkNameIdentifier).ToLower();
+                var frameworkIdentifierPath = string.Format("\\{0}\\", Platforms.CurrentPlatform).ToLower();
 
                 var outputDirectoryFullPath = _moduleCatalogs[0].OutputDirectoryFullPath;
-                if (!Directory.Exists(outputDirectoryFullPath))
+                if (Directory.Exists(outputDirectoryFullPath))
                 {
-                    Log.Debug("Directory '{0}' does not exist yet, creating...", outputDirectoryFullPath);
+                    var assemblyName = args.Name.Split(',')[0].Trim();
 
-                    Directory.CreateDirectory(outputDirectoryFullPath);
-                }
+                    var assemblyFile = string.Empty;
 
-                var assemblyName = args.Name.Split(',')[0].Trim();
-
-                var assemblyFile = string.Empty;
-
-                try
-                {
-                    var expectedAssemblyFileName = string.Format("{0}.dll", assemblyName);
-
-                    // Search with framework identifiers first
-                    assemblyFile = Directory.EnumerateFiles(outputDirectoryFullPath, expectedAssemblyFileName, SearchOption.AllDirectories).FirstOrDefault(s => s.ToLower().Contains(frameworkIdentifierPath.ToLower()));
-                    if (string.IsNullOrWhiteSpace(assemblyFile))
+                    try
                     {
-                        assemblyFile = Directory.EnumerateFiles(outputDirectoryFullPath, expectedAssemblyFileName, SearchOption.AllDirectories).FirstOrDefault();
+                        var expectedAssemblyFileName = string.Format("{0}.dll", assemblyName);
+
+                        // Search with framework identifiers first
+                        assemblyFile = Directory.EnumerateFiles(outputDirectoryFullPath, expectedAssemblyFileName, SearchOption.AllDirectories).FirstOrDefault(path => path.ToLower().Contains(frameworkIdentifierPath));
+                        if (string.IsNullOrWhiteSpace(assemblyFile))
+                        {
+                            assemblyFile = Directory.EnumerateFiles(outputDirectoryFullPath, expectedAssemblyFileName, SearchOption.AllDirectories).FirstOrDefault();
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex, "Failed to search for assembly '{0}'", assemblyName);
-                }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, "Failed to search for assembly '{0}'", assemblyName);
+                    }
 
-                if (!string.IsNullOrWhiteSpace(assemblyFile))
-                {
-                    Log.Warning("Resolved '{0}' at '{1}'", args.Name, assemblyFile);
+                    if (!string.IsNullOrWhiteSpace(assemblyFile))
+                    {
+                        Log.Warning("Resolved '{0}' at '{1}'", args.Name, assemblyFile);
 
-                    requestingAssembly = Assembly.LoadFile(assemblyFile);
-                }
-                else
-                {
-                    Log.Warning("Could not resolve '{0}'", args.Name);
+                        requestingAssembly = Assembly.LoadFile(assemblyFile);
+                    }
+                    else
+                    {
+                        Log.Warning("Could not resolve '{0}'", args.Name);
+                    }
                 }
             }
 

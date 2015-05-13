@@ -86,11 +86,6 @@ namespace Catel.Modules
         /// </summary>
         private readonly NuGetBasedModuleCatalogParentChildBehavior _behavior;
 
-        /// <summary>
-        ///  NuGet like framework name identifier string, for instance <c>NET40</c> or <c>NET45</c>.
-        /// </summary>
-        private readonly string _frameworkNameIdentifier;
-
         #endregion
 
         #region Constructors
@@ -101,12 +96,6 @@ namespace Catel.Modules
         {
             _behavior = new NuGetBasedModuleCatalogParentChildBehavior(this);
             PackageSource = "https://nuget.org/api/v2/";
-
-#if NET40
-            _frameworkNameIdentifier = "NET40";
-#else 
-            _frameworkNameIdentifier = "NET45";
-#endif
         }
         #endregion
 
@@ -263,7 +252,7 @@ namespace Catel.Modules
                     {
                         /*
                         IEnumerable<FrameworkName> supportedFrameworks = package.GetSupportedFrameworks();
-                        if (supportedFrameworks != null && supportedFrameworks.Any(name => FrameworkIdentifierConversionMap.ContainsKey(name.FullName) && FrameworkIdentifierConversionMap[name.FullName].Equals(_frameworkNameIdentifier)))
+                        if (supportedFrameworks != null && supportedFrameworks.Any(name => FrameworkIdentifierConversionMap.ContainsKey(name.FullName) && FrameworkIdentifierConversionMap[name.FullName].Equals(Platforms.CurrentPlatform)))
                         {
                             Log.Debug("Creating remote install package request for '{0}' from '{1}'", package.GetFullName(), PackageSource);
                         }
@@ -332,7 +321,7 @@ namespace Catel.Modules
                 var packageName = moduleInfo.GetPackageName();
                 var directoryName = packageName.ToString().Replace(' ', '.');
 
-                return string.Format(CultureInfo.InvariantCulture, RelativeUrlPattern, BaseUrl, directoryName, _frameworkNameIdentifier, moduleInfo.GetAssemblyName());
+                return string.Format(CultureInfo.InvariantCulture, RelativeUrlPattern, BaseUrl, directoryName, Platforms.CurrentPlatform, moduleInfo.GetAssemblyName());
             });
         }
 
