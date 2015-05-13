@@ -8,6 +8,11 @@
 
 namespace Catel.Modules
 {
+    using System;
+    using System.Globalization;
+    using System.IO;
+    using System.Linq;
+
     /// <summary>
     /// The install package request.
     /// </summary>
@@ -33,6 +38,7 @@ namespace Catel.Modules
         /// </summary>
         /// <value>The assembly file reference.</value>
         public string AssemblyFileRef { get; private set; }
+
         #endregion
 
         /// <summary>
@@ -41,6 +47,28 @@ namespace Catel.Modules
         public virtual void Execute()
         {
             // Do nothing
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void EnsureAssemblyFileRef()
+        {
+            var path = new Uri(AssemblyFileRef).LocalPath.ToLower();
+            if (!File.Exists(path))
+            {
+                var assemblyFileName = Path.GetFileName(path);
+                var idx = path.IndexOf(string.Format(CultureInfo.InvariantCulture, "\\{0}\\", Platforms.CurrentPlatform).ToLower(), StringComparison.InvariantCultureIgnoreCase);
+                if (idx != -1)
+                {
+                    var directory = path.Substring(0, idx);
+                    var assemblyFilePath = Directory.EnumerateFiles(directory, assemblyFileName, SearchOption.AllDirectories).FirstOrDefault();
+                    if (!string.IsNullOrWhiteSpace(assemblyFilePath))
+                    {
+                        AssemblyFileRef = string.Format("file://{0}", assemblyFilePath.Replace('\\', '/'));
+                    }
+                }
+            }
         }
     }
 }

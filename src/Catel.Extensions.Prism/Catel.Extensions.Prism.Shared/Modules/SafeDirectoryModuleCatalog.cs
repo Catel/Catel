@@ -43,7 +43,7 @@ namespace Catel.Modules
 
             if (!Directory.Exists(ModulePath))
             {
-                string error = string.Format("Directory '{0}' not found", ModulePath);
+                var error = string.Format("Directory '{0}' not found", ModulePath);
                 Log.Error(error);
                 throw new InvalidOperationException(error);
             }

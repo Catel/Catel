@@ -23,9 +23,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\CompositeModuleCatalog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\CompositeNuGetBasedModuleCatalog.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Modules\CompositePackageRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\DownloadingModuleCatalog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\EventArgs\ModuleEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Modules\Extensions\INuGetBasedModuleCatalogExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\Extensions\ModuleCatalogExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\Extensions\ModuleInfoExtensions.NuGet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\Interfaces\IDownloadingModuleCatalog.cs" />
@@ -37,6 +37,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Modules\NuGetBasedModuleCatalogParentChildBehavior.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\NuGet\InstallPackageRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\NuGet\NuGetModuleTypeLoader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Modules\NuGet\NuGetPackageInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\NuGet\RemoteInstallPackageRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\SafeDirectoryModuleCatalog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Services\Extensions\ISplashScreenServiceExtensions.cs" />

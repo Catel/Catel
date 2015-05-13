@@ -90,6 +90,7 @@ namespace Catel.Modules
             : this()
         {
             Argument.IsNotNull("modules", modules);
+
             foreach (var moduleInfo in modules)
             {
                 AddModule(moduleInfo);
