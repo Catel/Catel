@@ -39,11 +39,11 @@ namespace Catel.Modules
         /// </summary>
         /// <param name="moduleCatalog">The module catalog.</param>
         /// <param name="package">The package.</param>
-        /// <param name="assemblyFileRef"></param>
+        /// <param name="moduleAssemblyRef"></param>
         /// <exception cref="System.ArgumentNullException">The <paramref name="moduleCatalog" /> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="package" /> is <c>null</c>.</exception>
-        public RemoteInstallPackageRequest(INuGetBasedModuleCatalog moduleCatalog, IPackage package, string assemblyFileRef)
-            : base(assemblyFileRef)
+        public RemoteInstallPackageRequest(INuGetBasedModuleCatalog moduleCatalog, IPackage package, ModuleAssemblyRef moduleAssemblyRef)
+            : base(moduleAssemblyRef)
         {
             Argument.IsNotNull(() => moduleCatalog);
             Argument.IsNotNull(() => package);

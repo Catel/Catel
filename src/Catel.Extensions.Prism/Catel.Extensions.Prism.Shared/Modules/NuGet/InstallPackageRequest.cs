@@ -8,11 +8,6 @@
 
 namespace Catel.Modules
 {
-    using System;
-    using System.Globalization;
-    using System.IO;
-    using System.Linq;
-
     /// <summary>
     /// The install package request.
     /// </summary>
@@ -22,22 +17,22 @@ namespace Catel.Modules
         /// <summary>
         /// Initializes a new instance of the <see cref="InstallPackageRequest" /> class.
         /// </summary>
-        /// <param name="assemblyFileRef">The assembly file reference.</param>
-        /// <exception cref="System.ArgumentException">The <paramref name="assemblyFileRef" /> is <c>null</c> or whitespace.</exception>
-        public InstallPackageRequest(string assemblyFileRef)
+        /// <param name="moduleAssemblyRef">The assembly file reference.</param>
+        /// <exception cref="System.ArgumentException">The <paramref name="moduleAssemblyRef" /> is <c>null</c> or whitespace.</exception>
+        public InstallPackageRequest(ModuleAssemblyRef moduleAssemblyRef)
         {
-            Argument.IsNotNullOrWhitespace(() => assemblyFileRef);
+            Argument.IsNotNull(() => moduleAssemblyRef);
 
-            AssemblyFileRef = assemblyFileRef;
+            this.ModuleAssemblyRef = moduleAssemblyRef;
         }
         #endregion
 
         #region Properties
         /// <summary>
-        /// Tge assembly file reference.
+        /// Gets the module assembly reference.
         /// </summary>
         /// <value>The assembly file reference.</value>
-        public string AssemblyFileRef { get; private set; }
+        public ModuleAssemblyRef ModuleAssemblyRef { get; private set; }
 
         #endregion
 
@@ -47,28 +42,6 @@ namespace Catel.Modules
         public virtual void Execute()
         {
             // Do nothing
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void EnsureAssemblyFileRef()
-        {
-            var path = new Uri(AssemblyFileRef).LocalPath.ToLower();
-            if (!File.Exists(path))
-            {
-                var assemblyFileName = Path.GetFileName(path);
-                var idx = path.IndexOf(string.Format(CultureInfo.InvariantCulture, "\\{0}\\", Platforms.CurrentPlatform).ToLower(), StringComparison.InvariantCultureIgnoreCase);
-                if (idx != -1)
-                {
-                    var directory = path.Substring(0, idx);
-                    var assemblyFilePath = Directory.EnumerateFiles(directory, assemblyFileName, SearchOption.AllDirectories).FirstOrDefault();
-                    if (!string.IsNullOrWhiteSpace(assemblyFilePath))
-                    {
-                        AssemblyFileRef = string.Format("file://{0}", assemblyFilePath.Replace('\\', '/'));
-                    }
-                }
-            }
         }
     }
 }

@@ -188,12 +188,10 @@ namespace Catel.Modules
 
                     if (installed)
                     {
-                        installPackageRequest.EnsureAssemblyFileRef();
-
                         var fileModuleTypeLoader = new FileModuleTypeLoader();
                         var fileModuleInfo = new ModuleInfo(moduleInfo.ModuleName, moduleInfo.ModuleType)
                         {
-                            Ref = installPackageRequest.AssemblyFileRef,
+                            Ref = installPackageRequest.ModuleAssemblyRef.Ref,
                             InitializationMode = moduleInfo.InitializationMode,
                             DependsOn = moduleInfo.DependsOn
                         };

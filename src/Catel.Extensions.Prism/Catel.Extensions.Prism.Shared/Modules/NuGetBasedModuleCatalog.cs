@@ -32,10 +32,6 @@ namespace Catel.Modules
     public class NuGetBasedModuleCatalog : ModuleCatalog, INuGetBasedModuleCatalog
     {
         #region Constants
-        /// <summary>
-        /// The relative Url Pattern
-        /// </summary>
-        public const string RelativeUrlPattern = "{0}/{1}/lib/{2}/{3}";
 
         /// <summary>
         /// The module descriptor pattern.
@@ -66,10 +62,6 @@ namespace Catel.Modules
         #endregion
 
         #region Fields
-        /// <summary>
-        /// Assembly ref cache storage
-        /// </summary>
-        private readonly CacheStorage<ModuleInfo, string> _assemblyRefCacheStorage = new CacheStorage<ModuleInfo, string>(storeNullValues: true);
 
         /// <summary>
         /// Module info cache storage.
@@ -106,11 +98,14 @@ namespace Catel.Modules
         public string PackageSource { get; set; }
 
         /// <summary>
-        /// The output directory base Uri
+        /// The output directory Uri
         /// </summary>
-        private string BaseUrl
+        private string OutputDirectoryAbsoluteUri
         {
-            get { return "file://" + OutputDirectoryFullPath.Replace("\\", "/"); }
+            get
+            {
+                return new Uri(OutputDirectoryFullPath).AbsoluteUri;
+            }
         }
 
         /// <summary>
@@ -234,17 +229,22 @@ namespace Catel.Modules
         {
             installPackageRequest = null;
             var packageName = moduleInfo.GetPackageName();
-            if (packageName.Version != null && IsModuleAssemblyInstalled(moduleInfo))
+
+            ModuleAssemblyRef moduleAssemblyRef = moduleInfo.GetModuleAssemblyRef(OutputDirectoryAbsoluteUri);
+            if (packageName.Version != null && moduleAssemblyRef.IsInstalled)
             {
                 Log.Debug("Creating local install package request for '{0}'.", packageName.Name);
 
-                installPackageRequest = new InstallPackageRequest(GetModuleAssemblyRef(moduleInfo));
+                installPackageRequest = new InstallPackageRequest(moduleAssemblyRef);
             }
             else
             {
-                var repositories = GetPackageRepositories();
-                foreach (var repository in repositories)
+                var repositories = GetPackageRepositories().ToList();
+
+                int i = 0;
+                while (installPackageRequest == null && i < repositories.Count)
                 {
+                    var repository = repositories[i++];
                     if (repository != null)
                     {
                         Log.Debug("Looking for package '{0}' with version '{1}' on the repository '{2}'", packageName.Id, packageName.Version, PackageSource);
@@ -288,29 +288,7 @@ namespace Catel.Modules
         {
             Argument.IsNotNull(() => moduleInfo);
 
-            // TODO: Improve this contition
-
-            return !string.IsNullOrWhiteSpace(GetModuleAssemblyRef(moduleInfo)) && File.Exists(new Uri(GetModuleAssemblyRef(moduleInfo)).LocalPath);
-        }
-
-        /// <summary>
-        /// Gets the module assembly ref.
-        /// </summary>
-        /// <param name="moduleInfo">The module info</param>
-        /// <returns>The module assembly ref</returns>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="moduleInfo" /> is <c>null</c>.</exception>
-        private string GetModuleAssemblyRef(ModuleInfo moduleInfo)
-        {
-            // ReSharper disable once ImplicitlyCapturedClosure
-            Argument.IsNotNull(() => moduleInfo);
-
-            return _assemblyRefCacheStorage.GetFromCacheOrFetch(moduleInfo, () =>
-            {
-                var packageName = moduleInfo.GetPackageName();
-                var directoryName = packageName.ToString().Replace(' ', '.');
-
-                return string.Format(CultureInfo.InvariantCulture, RelativeUrlPattern, BaseUrl, directoryName, Platforms.CurrentPlatform, moduleInfo.GetAssemblyName());
-            });
+            return moduleInfo.GetModuleAssemblyRef(OutputDirectoryAbsoluteUri).IsInstalled;
         }
 
         /// <summary>
@@ -320,13 +298,14 @@ namespace Catel.Modules
         /// <param name="version">The version</param>
         /// <returns>The module assembly ref</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="moduleInfo" /> is <c>null</c>.</exception>
-        private string GetModuleAssemblyRef(ModuleInfo moduleInfo, SemanticVersion version)
+        private ModuleAssemblyRef GetModuleAssemblyRef(ModuleInfo moduleInfo, SemanticVersion version)
         {
-            // ReSharper disable once ImplicitlyCapturedClosure
             Argument.IsNotNull(() => moduleInfo);
 
-            var key = string.Format(CultureInfo.InvariantCulture, "ModuleName:{0}; ModuleType:{1}; Ref:{2}; Version:{3}", moduleInfo.ModuleName, moduleInfo.ModuleType, moduleInfo.Ref, version);
-            return GetModuleAssemblyRef(_moduleInfoCacheStoreCacheStorage.GetFromCacheOrFetch(key, () => new ModuleInfo(moduleInfo.ModuleName, moduleInfo.ModuleType) { Ref = string.Format("{0}, {1}", moduleInfo.GetPackageName().Id, version), DependsOn = moduleInfo.DependsOn }));
+            var moduleInfoKey = string.Format(CultureInfo.InvariantCulture, "ModuleName:{0}; ModuleType:{1}; Ref:{2}; Version:{3}", moduleInfo.ModuleName, moduleInfo.ModuleType, moduleInfo.Ref, version);
+            ModuleInfo moduleInfoFromCache = _moduleInfoCacheStoreCacheStorage.GetFromCacheOrFetch(moduleInfoKey, () => new ModuleInfo(moduleInfo.ModuleName, moduleInfo.ModuleType) { Ref = string.Format("{0}, {1}", moduleInfo.GetPackageName().Id, version), DependsOn = moduleInfo.DependsOn });
+
+            return moduleInfoFromCache.GetModuleAssemblyRef(OutputDirectoryAbsoluteUri);
         }
 
         /// <summary>
@@ -348,8 +327,7 @@ namespace Catel.Modules
                 filterExpression = package => (package.Description != null) && package.Description.StartsWith("ModuleName") && package.Description.Contains("ModuleType");
             }
 
-            var packages = queryablePackages.Where(filterExpression).ToList().GroupBy(package => package.Id).Select(packageGroup => packageGroup.ToList().OrderByDescending(package => package.Version).FirstOrDefault()).Where(package => package != null).ToList();
-            return packages;
+            return queryablePackages.Where(filterExpression).ToList().GroupBy(package => package.Id).Select(packageGroup => packageGroup.ToList().OrderByDescending(package => package.Version).FirstOrDefault()).Where(package => package != null).ToList();
         }
 
         /// <summary>
