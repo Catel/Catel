@@ -85,7 +85,7 @@ namespace Catel.Modules
                 if (!File.Exists(assemblyFilePath))
                 {
                     string assemblyFileName = Path.GetFileName(assemblyFilePath);
-                    int idx = assemblyFilePath.IndexOf(string.Format(CultureInfo.InvariantCulture, "\\{0}\\", Platforms.CurrentPlatform).ToLower(), StringComparison.InvariantCultureIgnoreCase);
+                    int idx = assemblyFilePath.LastIndexOf(string.Format(CultureInfo.InvariantCulture, "\\{0}\\", Platforms.CurrentPlatform).ToLower(), StringComparison.InvariantCultureIgnoreCase);
                     if (idx != -1)
                     {
                         string directoryPath = assemblyFilePath.Substring(0, idx);
