@@ -737,14 +737,14 @@ namespace Catel.Reflection
         }
 
         private static void InitializeType(Assembly assembly, Type type)
-        {
+        {  
             if (ShouldIgnoreType(assembly, type))
             {
                 return;
             }
 
             var newAssemblyName = TypeHelper.GetAssemblyNameWithoutOverhead(assembly.FullName);
-            string newFullType = TypeHelper.FormatType(newAssemblyName, type.FullName);
+            var newFullType = TypeHelper.FormatType(newAssemblyName, type.FullName);
 
             if (!_typesByAssembly.ContainsKey(newAssemblyName))
             {
@@ -826,6 +826,13 @@ namespace Catel.Reflection
             }
 
             var typeName = type.FullName;
+
+            // CTL-653
+            if (string.IsNullOrEmpty(typeName))
+            {
+                // Some types don't have a name (why?!), let's ignore these
+                return true;
+            }
 
             // Ignore useless types
             if (typeName.Contains("<PrivateImplementationDetails>") ||

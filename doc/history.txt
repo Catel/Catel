@@ -73,6 +73,7 @@ Added/fixed:
 (x) CTL-638 Triggers don't work when combined with Modifiers
 (x) CTL-646 Prism and CompositeNuGetBasedModuleCatalog throw ModuleTypeLoaderNotFoundException
 (x) CTL-650 ParallelHelper is not executing anything in parallel
+(x) CTL-653 The type initializer for 'Catel.IoC.IoCFactory' threw an exception for types where FullName is empty
 
 Roadmap:
 ========
