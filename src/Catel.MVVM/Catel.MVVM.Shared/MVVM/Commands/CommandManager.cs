@@ -610,7 +610,7 @@ namespace Catel.MVVM
             CommandManagerWrapper commandManagerWrapper = null;
             if (!_subscribedViews.TryGetValue(mainView, out commandManagerWrapper))
             {
-                _subscribedViews.Add(mainView, new CommandManagerWrapper(mainView));
+                _subscribedViews.Add(mainView, new CommandManagerWrapper(mainView, this));
             }
 #endif
         }
