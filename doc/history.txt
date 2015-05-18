@@ -45,6 +45,7 @@ Added/fixed:
 (+) CTL-642 Add Path.GetApplicationDataDirectoryForAllUsers which points to C:\ProgramData\
 (+) CTL-644 Allow specification of the serializer to be used for backup scenarios on ModelBase
 (+) CTL-649 Implement command containers for application-wide commands
+(+) CTL-652 Create a CommandManagerWrapper so every window can support application-wide commands
 (*) CTL-550 Non Serializable properties tagged with [IncludeInSerialization] should attempt to serialize and 
     complain if they are not serialized
 (*) CTL-617 Marked TraceOutputControl as obsolete, will be removed in 5.0. Use LogViewerControl from the 
