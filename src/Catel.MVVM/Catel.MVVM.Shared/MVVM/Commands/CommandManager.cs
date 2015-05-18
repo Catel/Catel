@@ -94,7 +94,7 @@ namespace Catel.MVVM
 
                 if (_commands.ContainsKey(commandName))
                 {
-                    string error = string.Format("Command '{0}' is already created using the CreateCommand method", commandName);
+                    var error = string.Format("Command '{0}' is already created using the CreateCommand method", commandName);
                     Log.Error(error);
 
                     if (throwExceptionWhenCommandIsAlreadyCreated)
@@ -140,7 +140,7 @@ namespace Catel.MVVM
 
                 if (_commands.ContainsKey(commandName))
                 {
-                    string error = string.Format("Command '{0}' is already created using the CreateCommand method", commandName);
+                    var error = string.Format("Command '{0}' is already created using the CreateCommand method", commandName);
                     Log.Error(error);
 
                     if (throwExceptionWhenCommandIsAlreadyCreated)
@@ -248,7 +248,7 @@ namespace Catel.MVVM
 
                 if (!_commands.ContainsKey(commandName))
                 {
-                    string error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    var error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
                     Log.Error(error);
                     throw new InvalidOperationException(error);
                 }
@@ -282,7 +282,7 @@ namespace Catel.MVVM
 
                 if (!_commands.ContainsKey(commandName))
                 {
-                    string error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    var error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
                     Log.Error(error);
                     throw new InvalidOperationException(error);
                 }
@@ -317,7 +317,7 @@ namespace Catel.MVVM
 
                 if (!_commands.ContainsKey(commandName))
                 {
-                    string error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    var error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
                     Log.Error(error);
                     throw new InvalidOperationException(error);
                 }
@@ -352,7 +352,7 @@ namespace Catel.MVVM
 
                 if (!_commands.ContainsKey(commandName))
                 {
-                    string error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    var error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
                     Log.Error(error);
                     throw new InvalidOperationException(error);
                 }
@@ -387,7 +387,7 @@ namespace Catel.MVVM
 
                 if (!_commands.ContainsKey(commandName))
                 {
-                    string error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    var error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
                     Log.Error(error);
                     throw new InvalidOperationException(error);
                 }
@@ -422,7 +422,7 @@ namespace Catel.MVVM
 
                 if (!_commands.ContainsKey(commandName))
                 {
-                    string error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    var error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
                     Log.Error(error);
                     throw new InvalidOperationException(error);
                 }
@@ -457,7 +457,7 @@ namespace Catel.MVVM
 
                 if (!_commands.ContainsKey(commandName))
                 {
-                    string error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    var error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
                     Log.Error(error);
                     throw new InvalidOperationException(error);
                 }
@@ -483,7 +483,7 @@ namespace Catel.MVVM
             {
                 if (!_commands.ContainsKey(commandName))
                 {
-                    string error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    var error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
                     Log.Error(error);
                     throw new InvalidOperationException(error);
                 }
@@ -506,7 +506,7 @@ namespace Catel.MVVM
             {
                 if (!_commands.ContainsKey(commandName))
                 {
-                    string error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    var error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
                     Log.Error(error);
                     throw new InvalidOperationException(error);
                 }
@@ -532,7 +532,7 @@ namespace Catel.MVVM
 
                 if (!_commands.ContainsKey(commandName))
                 {
-                    string error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    var error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
                     Log.Error(error);
                     throw new InvalidOperationException(error);
                 }

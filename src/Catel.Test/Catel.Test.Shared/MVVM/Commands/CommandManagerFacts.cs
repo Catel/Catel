@@ -240,5 +240,66 @@ namespace Catel.Test.MVVM
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => commandManager.RegisterCommand("MyCommand", null));
             }
         }
+
+        [TestFixture]
+        public class TheRegisterAndUnregisterActionFunctionality
+        {
+            [TestCase]
+            public void RegisteredActionsCanBeInvoked()
+            {
+                var invoked = false;
+                Action action = () => invoked = true;
+
+                var commandManager = new CommandManager();
+
+                commandManager.CreateCommand("TestAction");
+
+                commandManager.RegisterAction("TestAction", action);
+
+                commandManager.ExecuteCommand("TestAction");
+
+                Assert.IsTrue(invoked);
+            }
+
+            [TestCase]
+            public void RegisteredActionsCanBeUnregistered_DefinedAction()
+            {
+                var invoked = false;
+                Action action = () => invoked = true;
+
+                var commandManager = new CommandManager();
+
+                commandManager.CreateCommand("TestAction");
+
+                commandManager.RegisterAction("TestAction", action);
+                commandManager.UnregisterAction("TestAction", action);
+
+                commandManager.ExecuteCommand("TestAction");
+
+                Assert.IsFalse(invoked);
+            }
+
+            [TestCase]
+            public void RegisteredActionsCanBeUnregistered_DynamicAction()
+            {
+                var commandManager = new CommandManager();
+
+                commandManager.CreateCommand("TestAction");
+
+                commandManager.RegisterAction("TestAction", RegisteredActionsCanBeUnregistered_TestMethod);
+                commandManager.UnregisterAction("TestAction", RegisteredActionsCanBeUnregistered_TestMethod);
+
+                commandManager.ExecuteCommand("TestAction");
+
+                Assert.IsFalse(_registeredActionsCanBeUnregistered_TestValue);
+            }
+
+            private bool _registeredActionsCanBeUnregistered_TestValue = false;
+
+            private void RegisteredActionsCanBeUnregistered_TestMethod()
+            {
+                _registeredActionsCanBeUnregistered_TestValue = true;
+            }
+        }
     }
 }
