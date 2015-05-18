@@ -621,6 +621,12 @@ namespace Catel.MVVM
 
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
+			if (e.Handled)
+			{
+				// Don't get in the way of already handled KeyDown events
+				return;
+			}
+			
             lock (_lockObject)
             {
                 bool keyHandled = false;
