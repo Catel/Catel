@@ -70,10 +70,12 @@ namespace Catel
             else
             {
                 var actions = new List<Action>();
-                for (int i = 0; i < batches.Count; i++)
+                for (var i = 0; i < batches.Count; i++)
                 {
+                    var innerI = i;
                     var batch = batches[i];
-                    ExecuteBatch(taskName, i.ToString(), batch, actionToInvoke);
+                    
+                    actions.Add(() => ExecuteBatch(taskName, innerI.ToString(), batch, actionToInvoke));
                 }
 
                 TaskHelper.RunAndWait(actions.ToArray());

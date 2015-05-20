@@ -34,13 +34,16 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Bindings\Extensions\BindingPartyExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\AsynchronousCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\Command.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\CommandContainerBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\CommandManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\CommandManagerWrapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\CompositeCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\EventArgs\CommandCanceledEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\EventArgs\CommandCreatedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\EventArgs\CommandEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\EventArgs\CommandExecutedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\Extensions\ICommandManagerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\Helpers\CommandHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\Interfaces\IAuthenticationProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\Interfaces\ICatelCommand.cs" />
@@ -349,6 +352,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Helpers\SetterValueBindingHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Helpers\VisualTargetPresentationSource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Helpers\WrapControlHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Input\Extensions\InputGestureExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Input\Helpers\KeyboardHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Input\InputGesture.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\Authentication.cs" />
@@ -365,7 +369,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\DragDropHelpers\EnumerableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\DragDropHelpers\UIHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\Focus.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\FocusBehaviorBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\FocusFirstControl.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\FocusOnKeyPress.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\HideUntilViewModelLoaded.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\Interfaces\IBehavior.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\KeyPressToCommand.cs" />

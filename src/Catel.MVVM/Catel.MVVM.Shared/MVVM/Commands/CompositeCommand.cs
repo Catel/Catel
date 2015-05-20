@@ -294,7 +294,7 @@ namespace Catel.MVVM
 
             lock (_lock)
             {
-                for (int i = _commandInfo.Count - 1; i >= 0; i--)
+                for (var i = _commandInfo.Count - 1; i >= 0; i--)
                 {
                     var commandInfo = _commandInfo[i];
 
@@ -320,9 +320,10 @@ namespace Catel.MVVM
 
             lock (_lock)
             {
-                for (int i = _actions.Count - 1; i >= 0; i--)
+                for (var i = _actions.Count - 1; i >= 0; i--)
                 {
-                    if (ReferenceEquals(_actions[i], action))
+                    // Check for both ReferenceEquals (original implementation) and == (to fix CTL-654)
+                    if (ReferenceEquals(_actions[i], action) || _actions[i] == action)
                     {
                         _actions.RemoveAt(i);
 
@@ -343,7 +344,7 @@ namespace Catel.MVVM
 
             lock (_lock)
             {
-                for (int i = _actionsWithParameter.Count - 1; i >= 0; i--)
+                for (var i = _actionsWithParameter.Count - 1; i >= 0; i--)
                 {
                     if (ReferenceEquals(_actionsWithParameter[i], action))
                     {

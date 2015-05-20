@@ -43,7 +43,8 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Using a DependencyProperty as the backing store for Key.  This enables animation, styling, binding, etc...
         /// </summary>
-        public static readonly DependencyProperty KeyProperty = DependencyProperty.Register("Key", typeof(Key), typeof(KeyPressToCommand), new PropertyMetadata(Key.Enter));
+        public static readonly DependencyProperty KeyProperty = DependencyProperty.Register("Key", typeof(Key), 
+            typeof(KeyPressToCommand), new PropertyMetadata(Key.None));
         #endregion
 
         #region Methods
@@ -54,7 +55,7 @@ namespace Catel.Windows.Interactivity
         {
             base.OnAssociatedObjectLoaded();
 
-            AssociatedObject.KeyUp += OnKeyUp;
+            AssociatedObject.KeyDown += OnKeyDown;
         }
 
         /// <summary>
@@ -62,7 +63,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         protected override void OnAssociatedObjectUnloaded()
         {
-            AssociatedObject.KeyUp -= OnKeyUp;
+            AssociatedObject.KeyDown -= OnKeyDown;
 
             base.OnAssociatedObjectUnloaded();
         }
@@ -72,17 +73,20 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The key event args instance containing the event data.</param>
-        private void OnKeyUp(object sender, KeyEventArgs e)
+        private void OnKeyDown(object sender, KeyEventArgs e)
         {
+            if (e.Handled)
+            {
+                return;
+            }
+
             if (e.Key == Key)
             {
                 if (CanExecuteCommand())
                 {
                     ExecuteCommand();
 
-#if NET
                     e.Handled = true;
-#endif
                 }
             }
         }

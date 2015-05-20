@@ -1327,11 +1327,23 @@ namespace Catel.MVVM
         /// Cancels the editing of the data.
         /// </summary>
         /// <returns>
-        ///	<c>true</c> if successful; otherwise <c>false</c>.
+        /// <c>true</c> if successful; otherwise <c>false</c>.
         /// </returns>
         protected virtual async Task<bool> Cancel()
         {
             return true;
+        }
+
+        /// <summary>
+        /// Cancels the editing of the data.
+        /// </summary>
+        /// <returns>
+        /// <c>true</c> if successful; otherwise <c>false</c>.
+        /// </returns>
+        protected virtual async Task<bool> CancelAsync()
+        {
+            // Note: should be converted to a sync method in v5
+            return await Cancel();
         }
 
         /// <summary>
@@ -1343,6 +1355,18 @@ namespace Catel.MVVM
         protected virtual async Task<bool> Save()
         {
             return true;
+        }
+
+        /// <summary>
+        /// Saves the data.
+        /// </summary>
+        /// <returns>
+        /// <c>true</c> if successful; otherwise <c>false</c>.
+        /// </returns>
+        protected virtual async Task<bool> SaveAsync()
+        {
+            // Note: should be converted to a sync method in v5
+            return await Save();
         }
 
         /// <summary>
@@ -1360,6 +1384,15 @@ namespace Catel.MVVM
         /// </summary>
         protected virtual async Task Close()
         {
+        }
+
+        /// <summary>
+        /// Closes this instance. Always called after the <see cref="Cancel"/> of <see cref="Save"/> method.
+        /// </summary>
+        protected virtual async Task CloseAsync()
+        {
+            // Note: should be converted to a sync method in v5
+            await Close();
         }
 
         /// <summary>
@@ -1424,7 +1457,7 @@ namespace Catel.MVVM
 
                 //MessageMediatorHelper.SubscribeRecipient(this);
 
-                await Initialize();
+                await InitializeAsync();
 
                 Initialized.SafeInvoke(this);
             }
@@ -1448,6 +1481,25 @@ namespace Catel.MVVM
         }
 
         /// <summary>
+        /// Initializes the view model. Normally the initialization is done in the constructor, but sometimes this must be delayed
+        /// to a state where the associated UI element (user control, window, ...) is actually loaded.
+        /// <para />
+        /// This method is called as soon as the associated UI element is loaded.
+        /// </summary>
+        /// <remarks>
+        /// It's not recommended to implement the initialization of properties in this method. The initialization of properties
+        /// should be done in the constructor. This method should be used to start the retrieval of data from a web service or something
+        /// similar.
+        /// <para />
+        /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.
+        /// </remarks>
+        protected virtual async Task InitializeAsync()
+        {
+            // Note: should be converted to a sync method in v5
+            await Initialize();
+        }
+
+        /// <summary>
         /// Cancels the editing of the data.
         /// </summary>
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
@@ -1467,7 +1519,7 @@ namespace Catel.MVVM
                 return false;
             }
 
-            var cancel = await Cancel();
+            var cancel = await CancelAsync();
 
             Log.Info(cancel ? "Canceled view model '{0}'" : "Failed to cancel view model '{0}'", GetType());
             if (!cancel)
@@ -1542,7 +1594,7 @@ namespace Catel.MVVM
                 return false;
             }
 
-            var saved = await Save();
+            var saved = await SaveAsync();
 
             Log.Info(saved ? "Saved view model '{0}'" : "Failed to save view model '{0}'", GetType());
 
@@ -1570,7 +1622,7 @@ namespace Catel.MVVM
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
         public async Task<bool> SaveAndCloseViewModel()
         {
-            bool result = await SaveViewModel();
+            var result = await SaveViewModel();
             if (result)
             {
                 await CloseViewModel(true);
@@ -1596,7 +1648,7 @@ namespace Catel.MVVM
 
             ViewModelManager.UnregisterAllModels(this);
 
-            await Close();
+            await CloseAsync();
 
             SuspendValidation = true;
 
