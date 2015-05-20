@@ -181,7 +181,7 @@ namespace Catel.Windows
         /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
         public static DependencyObject FindLogicalRoot(this DependencyObject startElement)
         {
-            DependencyObject obj = null;
+            var obj = startElement;
             while (startElement != null)
             {
                 obj = startElement;

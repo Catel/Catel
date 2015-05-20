@@ -27,6 +27,7 @@ namespace Catel.Windows.Interactivity
     using System;
     using System.ComponentModel;
     using Logging;
+    using Reflection;
 
     /// <summary>
     /// Base class for focus behaviors.
@@ -95,6 +96,8 @@ namespace Catel.Windows.Interactivity
                 focusDelay = 5000;
             }
 
+            Log.Debug("Starting focus on element '{0}' with a delay of '{1}' ms", AssociatedObject.GetType().GetSafeFullName(), focusDelay);
+
             if (focusDelay > 25)
             {
                 _timer.Stop();
@@ -145,7 +148,7 @@ namespace Catel.Windows.Interactivity
             if (AssociatedObject.Focus())
 #endif
             {
-                Log.Debug("Focused '{0}'", AssociatedObject.GetType().Name);
+                Log.Debug("Focused '{0}'", AssociatedObject.GetType().GetSafeFullName());
 
                 var textBox = AssociatedObject as TextBox;
                 if (textBox != null)
@@ -155,6 +158,8 @@ namespace Catel.Windows.Interactivity
 
                 return true;
             }
+
+            Log.Debug("Failed to focus '{0}'", AssociatedObject.GetType().GetSafeFullName());
 
             return false;
         }

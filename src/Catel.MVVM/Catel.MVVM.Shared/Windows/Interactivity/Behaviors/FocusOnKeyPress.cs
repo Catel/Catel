@@ -22,12 +22,18 @@ namespace Catel.Windows.Interactivity
 #endif
 
     using Input;
+    using Logging;
+    using Reflection;
 
     /// <summary>
     /// Behavior to set the focus on a key press.
     /// </summary>
     public class FocusOnKeyPress : FocusBehaviorBase
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        private FrameworkElement _layoutRoot;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FocusOnKeyPress"/> class.
         /// </summary>
@@ -78,7 +84,7 @@ namespace Catel.Windows.Interactivity
         {
             base.OnAssociatedObjectLoaded();
 
-            AssociatedObject.KeyDown += OnKeyDown;
+            Subscribe();
         }
 
         /// <summary>
@@ -86,9 +92,31 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         protected override void OnAssociatedObjectUnloaded()
         {
-            AssociatedObject.KeyDown -= OnKeyDown;
+            Unsubscribe();
 
             base.OnAssociatedObjectUnloaded();
+        }
+
+        private void Subscribe()
+        {
+            Unsubscribe();
+
+            _layoutRoot = AssociatedObject.FindLogicalRoot() as FrameworkElement;
+            if (_layoutRoot != null)
+            {
+                Log.Debug("Found layout root '{0}', subscribing to KeyDown event", _layoutRoot.GetType().GetSafeFullName());
+
+                _layoutRoot.KeyDown += OnKeyDown;
+            }
+        }
+
+        private void Unsubscribe()
+        {
+            if (_layoutRoot != null)
+            {
+                _layoutRoot.KeyDown -= OnKeyDown;
+                _layoutRoot = null;
+            }
         }
 
         /// <summary>
@@ -98,6 +126,11 @@ namespace Catel.Windows.Interactivity
         /// <param name="e">The key event args instance containing the event data.</param>
         private void OnKeyDown(object sender, KeyDownEventArgs e)
         {
+            if (e.Handled)
+            {
+                return;
+            }
+
             if (KeyboardHelper.AreKeyboardModifiersPressed(Modifiers))
             {
                 if (e.Key == Key)
