@@ -120,7 +120,7 @@ namespace Catel.Modules
             {
                 try
                 {
-                    var query = packageRepository.GetPackages().Where(x => x.Id == packageId);
+					var query = packageRepository.GetPackages().Where(x => x.Id.Equals(packageId, StringComparison.CurrentCultureIgnoreCase));
 
                     // TODO: optimize performance here
                     //if (packageVersionSpec.MinVersion != null)
