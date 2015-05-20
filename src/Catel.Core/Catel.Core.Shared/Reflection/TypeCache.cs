@@ -830,7 +830,7 @@ namespace Catel.Reflection
             // CTL-653
             if (string.IsNullOrEmpty(typeName))
             {
-                // Some types don't have a name (why?!), let's ignore these
+                // Some types don't have a name (for example, after obfuscation), let's ignore these
                 return true;
             }
 
