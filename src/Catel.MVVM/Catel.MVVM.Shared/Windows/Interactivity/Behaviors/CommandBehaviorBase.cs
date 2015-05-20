@@ -54,8 +54,8 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Using a DependencyProperty as the backing store for Modifiers.  This enables animation, styling, binding, etc... 
         /// </summary>
-        public static readonly DependencyProperty ModifiersProperty = DependencyProperty.Register("Modifiers", typeof(ModifierKeys), typeof(CommandBehaviorBase<T>),
-            new PropertyMetadata(ModifierKeys.None));
+        public static readonly DependencyProperty ModifiersProperty = DependencyProperty.Register("Modifiers", typeof(ModifierKeys), 
+            typeof(CommandBehaviorBase<T>), new PropertyMetadata(ModifierKeys.None));
 
         /// <summary>
         /// Gets or sets the command to execute when the key is pressed.

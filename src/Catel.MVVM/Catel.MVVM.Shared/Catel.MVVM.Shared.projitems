@@ -369,7 +369,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\DragDropHelpers\EnumerableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\DragDropHelpers\UIHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\Focus.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\FocusBehaviorBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\FocusFirstControl.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\FocusOnKeyPress.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\HideUntilViewModelLoaded.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\Interfaces\IBehavior.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\KeyPressToCommand.cs" />

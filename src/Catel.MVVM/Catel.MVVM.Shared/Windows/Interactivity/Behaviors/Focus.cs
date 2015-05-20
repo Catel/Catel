@@ -9,18 +9,10 @@
 namespace Catel.Windows.Interactivity
 {
 #if NETFX_CORE
-    using Catel.Windows.Threading;
     using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
-    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
-    using TimerTickEventArgs = System.Object;
 #else
     using System.Windows;
-    using System.Windows.Controls;
     using System.Windows.Interactivity;
-    using System.Windows.Threading;
-    using UIEventArgs = System.EventArgs;
-    using TimerTickEventArgs = System.EventArgs;
 #endif
 
     using System;
@@ -53,22 +45,14 @@ namespace Catel.Windows.Interactivity
     /// only once on the first time the <see cref="Behavior{T}.AssociatedObject"/> is loaded.
     /// </summary>
     /// <remarks>In Silverlight, focusing a control seems very, very hard. Just calling Focus() isn't enough, so a timer is used to set the timer 500 milliseconds after the
-    /// user control has been loaded. This is customizable via the <see cref="FocusDelay"/> property.</remarks>
-#if NET
-    public class Focus : BehaviorBase<FrameworkElement>
-#else
-    public class Focus : BehaviorBase<Control>
-#endif
+    /// user control has been loaded. This is customizable via the <see cref="FocusBehaviorBase.FocusDelay"/> property.</remarks>
+    public class Focus : FocusBehaviorBase
     {
         #region Fields
         /// <summary>
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-        private readonly DispatcherTimer _timer = new DispatcherTimer(); 
-        
-        private bool _isFocusAlreadySet;
 
 #if !WINDOWS_PHONE && !NETFX_CORE
         private DynamicEventListener _dynamicEventListener;
@@ -80,34 +64,9 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         public Focus()
         {
-#if NET
-            FocusDelay = 0;
-#else
-            FocusDelay = 500;
-#endif
         }
 
         #region Properties
-        /// <summary>
-        /// Gets or sets the focus delay. If smaller than 25, no delay will be used. If larger than 5000, it will be set to 5000.
-        /// <para />
-        /// The default value in WPF is <c>0</c>. The default value in Silverlight is <c>500</c>.
-        /// </summary>
-        /// <value>The focus delay.</value>
-        /// <example>
-        /// </example>
-        public int FocusDelay
-        {
-            get { return (int)GetValue(FocusDelayProperty); }
-            set { SetValue(FocusDelayProperty, value); }
-        }
-
-        /// <summary>
-        /// Using a DependencyProperty as the backing store for FocusDelay.  This enables animation, styling, binding, etc...
-        /// </summary>
-        public static readonly DependencyProperty FocusDelayProperty =
-            DependencyProperty.Register("FocusDelay", typeof(int), typeof(Focus), new PropertyMetadata(0));
-
         /// <summary>
         /// Gets or sets the focus moment.
         /// <para />
@@ -190,7 +149,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         protected override void OnAssociatedObjectLoaded()
         {
-            if (!_isFocusAlreadySet && (FocusMoment == FocusMoment.Loaded))
+            if (!IsFocusAlreadySet && (FocusMoment == FocusMoment.Loaded))
             {
                 StartFocus();
             }
@@ -287,81 +246,6 @@ namespace Catel.Windows.Interactivity
                         break;
                 }
             }
-        }
-
-        /// <summary>
-        /// Starts the focus.
-        /// </summary>
-        private void StartFocus()
-        {
-            var focusDelay = FocusDelay;
-            if (focusDelay > 5000)
-            {
-                focusDelay = 5000;
-            }
-
-            if (focusDelay > 25)
-            {
-                _timer.Stop();
-                _timer.Tick -= OnTimerTick;
-
-                _timer.Interval = new TimeSpan(0, 0, 0, 0, focusDelay);
-                _timer.Tick += OnTimerTick;
-                _timer.Start();
-            }
-            else
-            {
-                if (SetFocus())
-                {
-                    _isFocusAlreadySet = true;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Called when the <see cref="DispatcherTimer.Tick" /> event occurs on the timer.
-        /// </summary>
-        private void OnTimerTick(object sender, TimerTickEventArgs e)
-        {
-            _isFocusAlreadySet = true;
-
-            _timer.Stop();
-            _timer.Tick -= OnTimerTick;
-
-#if NET
-            SetFocus();
-#else
-            AssociatedObject.Dispatcher.BeginInvoke(() => SetFocus());
-#endif
-        }
-
-        /// <summary>
-        /// Sets the focus to the assoicated object.
-        /// </summary>
-        private bool SetFocus()
-        {
-#if SL5
-            System.Windows.Browser.HtmlPage.Plugin.Focus();
-#endif
-
-#if NETFX_CORE
-            if (AssociatedObject.Focus(FocusState.Programmatic))
-#else
-            if (AssociatedObject.Focus())
-#endif
-            {
-                Log.Debug("Focused '{0}'", AssociatedObject.GetType().Name);
-
-                var textBox = AssociatedObject as TextBox;
-                if (textBox != null)
-                {
-                    textBox.SelectionStart = textBox.Text.Length;
-                }
-
-                return true;
-            }
-
-            return false;
         }
         #endregion
     }

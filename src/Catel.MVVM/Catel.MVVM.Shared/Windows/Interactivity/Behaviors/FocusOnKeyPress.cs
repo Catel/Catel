@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="KeyPressToCommand.cs" company="Catel development team">
-//   Copyright (c) 2011 - 2012 Catel development team. All rights reserved.
+// <copyright file="FocusOnKeyPress.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -8,28 +8,51 @@
 
 namespace Catel.Windows.Interactivity
 {
-    
 #if NETFX_CORE
     using global::Windows.UI.Core;
     using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Input;
     using Key = global::Windows.System.VirtualKey;
-    using KeyEventArgs = global::Windows.UI.Xaml.Input.KeyRoutedEventArgs;
-    using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
+    using ModifierKeys = global::Windows.System.VirtualKeyModifiers;
+    using KeyDownEventArgs = global::Windows.UI.Xaml.Input.KeyRoutedEventArgs;
 #else
     using System.Windows;
     using System.Windows.Input;
     using System.Windows.Interactivity;
-    using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-    using UIEventArgs = System.EventArgs;
+    using KeyDownEventArgs = System.Windows.Input.KeyEventArgs;
 #endif
 
+    using Input;
+
     /// <summary>
-    /// Behavior that converts a key press on a specific UI element to a command.
+    /// Behavior to set the focus on a key press.
     /// </summary>
-    public class KeyPressToCommand : CommandBehaviorBase<FrameworkElement>
+    public class FocusOnKeyPress : FocusBehaviorBase
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FocusOnKeyPress"/> class.
+        /// </summary>
+        public FocusOnKeyPress()
+        {
+            
+        }
+
         #region Properties
+        /// <summary>
+        /// Gets or sets the modifiers to check for.
+        /// </summary>
+        /// <value>The modifiers.</value>
+        public ModifierKeys Modifiers
+        {
+            get { return (ModifierKeys)GetValue(ModifiersProperty); }
+            set { SetValue(ModifiersProperty, value); }
+        }
+
+        /// <summary>
+        /// Using a DependencyProperty as the backing store for Modifiers.  This enables animation, styling, binding, etc... 
+        /// </summary>
+        public static readonly DependencyProperty ModifiersProperty = DependencyProperty.Register("Modifiers", typeof(ModifierKeys), 
+            typeof(FocusOnKeyPress), new PropertyMetadata(ModifierKeys.None));
+
         /// <summary>
         /// Gets or sets the key to which the behavior should respond.
         /// </summary>
@@ -44,7 +67,7 @@ namespace Catel.Windows.Interactivity
         /// Using a DependencyProperty as the backing store for Key.  This enables animation, styling, binding, etc...
         /// </summary>
         public static readonly DependencyProperty KeyProperty = DependencyProperty.Register("Key", typeof(Key), 
-            typeof(KeyPressToCommand), new PropertyMetadata(Key.None));
+            typeof(FocusOnKeyPress), new PropertyMetadata(Key.None));
         #endregion
 
         #region Methods
@@ -73,13 +96,13 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The key event args instance containing the event data.</param>
-        private void OnKeyDown(object sender, KeyEventArgs e)
+        private void OnKeyDown(object sender, KeyDownEventArgs e)
         {
-            if (e.Key == Key)
+            if (KeyboardHelper.AreKeyboardModifiersPressed(Modifiers))
             {
-                if (CanExecuteCommand())
+                if (e.Key == Key)
                 {
-                    ExecuteCommand();
+                    StartFocus();
 
                     e.Handled = true;
                 }

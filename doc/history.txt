@@ -47,6 +47,7 @@ Added/fixed:
 (+) CTL-649 Implement command containers for application-wide commands
 (+) CTL-652 Create a CommandManagerWrapper so every window can support application-wide commands
 (+) CTL-656 Added Async overloads in ViewModel to prepare for async and sync methods support in ViewModelBase in v5
+(+) CTL-657 Create FocusOnKeyPress behavior to allow to set the focus when a specific KeyDown event occurs
 (*) CTL-550 Non Serializable properties tagged with [IncludeInSerialization] should attempt to serialize and 
     complain if they are not serialized
 (*) CTL-617 Marked TraceOutputControl as obsolete, will be removed in 5.0. Use LogViewerControl from the 
