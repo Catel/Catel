@@ -58,7 +58,7 @@ namespace Catel.Modules
             OutputDirectory = "packages";
             PackagedModuleIdFilterExpression = string.Empty;
             AllowPrereleaseVersions = false;
-            IgnoreDependencies = true;
+            IgnoreDependencies = false;
         }
         #endregion
 
