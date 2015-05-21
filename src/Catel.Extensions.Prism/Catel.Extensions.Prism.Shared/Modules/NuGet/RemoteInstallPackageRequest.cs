@@ -178,7 +178,7 @@ namespace Catel.Modules
                     for (var i = resolvedDependencies.Count - 1; i >= 0; i--)
                     {
                         var resolvedDependency = resolvedDependencies[i];
-                        if (!packagesToRetrieve.Any(x => string.Equals(x.Package.Id, resolvedDependency.Package.Id)))
+                        if (!packagesToRetrieve.Any(x => x.Package.Id.Equals(resolvedDependency.Package.Id, StringComparison.CurrentCultureIgnoreCase)))
                         {
                             packagesToRetrieve.Insert(0, resolvedDependency);
                         }
