@@ -86,6 +86,11 @@ namespace Catel.Windows.Interactivity
         /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
         private void OnPasswordChanged(object sender, RoutedEventArgs e)
         {
+            if (!IsEnabled)
+            {
+                return;
+            }
+
 #if (NET || NETFX_CORE)
             Password = AssociatedObject.Password;
 #else

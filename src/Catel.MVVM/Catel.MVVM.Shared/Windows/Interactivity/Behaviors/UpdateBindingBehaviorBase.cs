@@ -61,8 +61,13 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         ///   Updates the binding value.
         /// </summary>
-        protected void UpdateBinding()
+        protected virtual void UpdateBinding()
         {
+            if (!IsEnabled)
+            {
+                return;
+            }
+
             var binding = AssociatedObject.GetBindingExpression(DependencyProperty);
             if (binding != null)
             {

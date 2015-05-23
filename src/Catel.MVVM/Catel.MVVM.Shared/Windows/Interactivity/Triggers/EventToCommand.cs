@@ -130,7 +130,7 @@ namespace Catel.Windows.Interactivity
                 return;
             }
 
-            object commandParameter = CommandParameter;
+            var commandParameter = CommandParameter;
             if ((commandParameter == null) && PassEventArgsToCommand)
             {
                 commandParameter = parameter;

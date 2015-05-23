@@ -171,6 +171,11 @@ namespace Catel.Windows.Interactivity
                 return;
             }
 
+            if (!IsEnabled)
+            {
+                return;
+            }
+
             switch (ScrollDirection)
             {
                 case ScrollDirection.Top:

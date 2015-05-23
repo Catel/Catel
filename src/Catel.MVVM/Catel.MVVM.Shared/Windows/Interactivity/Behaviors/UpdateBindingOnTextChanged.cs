@@ -90,6 +90,11 @@ namespace Catel.Windows.Interactivity
         /// <param name="e">The text change event args instance containing the event data.</param>
         private void OnAssociatedObjectTextChanged(object sender, TextChangedEventArgs e)
         {
+            if (!IsEnabled)
+            {
+                return;
+            }
+
             if (UpdateDelay < 50)
             {
                 UpdateBinding();

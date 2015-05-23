@@ -235,6 +235,11 @@ namespace Catel.Windows.Interactivity
                 return false;
             }
 
+            if (!IsEnabled)
+            {
+                return false;
+            }
+
             if (Modifiers != ModifierKeys.None)
             {
                 if (!KeyboardHelper.AreKeyboardModifiersPressed(Modifiers))

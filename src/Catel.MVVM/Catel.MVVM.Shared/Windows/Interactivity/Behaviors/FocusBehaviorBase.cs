@@ -138,6 +138,11 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         private bool SetFocus()
         {
+            if (!IsEnabled)
+            {
+                return false;
+            }
+
 #if SL5
             System.Windows.Browser.HtmlPage.Plugin.Focus();
 #endif

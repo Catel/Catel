@@ -81,22 +81,6 @@ namespace Catel.Windows.Interactivity
 
         #region Properties
         /// <summary>
-        /// Gets or sets whether the auto completion functionality is enabled.
-        /// </summary>
-        /// <value>The is enabled.</value>
-        public bool IsEnabled
-        {
-            get { return (bool)GetValue(IsEnabledProperty); }
-            set { SetValue(IsEnabledProperty, value); }
-        }
-
-        /// <summary>
-        /// The is enabled property.
-        /// </summary>
-        public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.Register("IsEnabled", typeof(bool),
-            typeof(AutoCompletionBehavior), new PropertyMetadata(true, (sender, e) => ((AutoCompletionBehavior)sender).OnIsEnabledChanged()));
-
-        /// <summary>
         /// Gets or sets the name of the property.
         /// </summary>
         /// <value>The name of the property.</value>
@@ -291,7 +275,10 @@ namespace Catel.Windows.Interactivity
             UpdateSuggestions();
         }
 
-        private void OnIsEnabledChanged()
+        /// <summary>
+        /// Called when the is enabled property has changed.
+        /// </summary>
+        protected override void OnIsEnabledChanged()
         {
             if (IsEnabled)
             {

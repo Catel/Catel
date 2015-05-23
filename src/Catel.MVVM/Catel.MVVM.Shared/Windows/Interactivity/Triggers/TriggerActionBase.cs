@@ -42,7 +42,7 @@ namespace Catel.Windows.Interactivity
         /// Gets a value indicating whether the <c>TriggerActionBase{T}.AssociatedObject</c> is loaded.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if the <c>TriggerActionBase{T}.AssociatedObject</c> is loaded; otherwise, <c>false</c>.
+        /// <c>true</c> if the <c>TriggerActionBase{T}.AssociatedObject</c> is loaded; otherwise, <c>false</c>.
         /// </value>
         public bool IsAssociatedObjectLoaded { get; private set; }
         #endregion

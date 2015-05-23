@@ -73,14 +73,14 @@ namespace Catel.Windows.Interactivity
 
         #region Properties
         /// <summary>
-        ///   Gets or sets the update delay. 
-        ///   <para />
-        ///   This is the value that is used between updates in milliseconds. The binding will be updated
-        ///   after the delay. When a new value becomes available, the timer is reset and starts all over.
-        ///   <para />
-        ///   The default value is <c>100</c>. If the value is smaller than <c>50</c>, the value
-        ///   will be ignored and there will be no delay between the value change and binding update. If the
-        ///   value is higher than <c>5000</c>, it will be set to <c>5000</c>.
+        /// Gets or sets the update delay. 
+        /// <para />
+        /// This is the value that is used between updates in milliseconds. The binding will be updated
+        /// after the delay. When a new value becomes available, the timer is reset and starts all over.
+        /// <para />
+        /// The default value is <c>100</c>. If the value is smaller than <c>50</c>, the value
+        /// will be ignored and there will be no delay between the value change and binding update. If the
+        /// value is higher than <c>5000</c>, it will be set to <c>5000</c>.
         /// </summary>
         /// <value>The update delay.</value>
         public int UpdateDelay { get; set; }
@@ -250,8 +250,14 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         private void UpdateBinding()
         {
+            if (!IsEnabled)
+            {
+                return;
+            }
+
             var dependencyProperty = GetDependencyProperty();
             var bindingExpression = AssociatedObject.GetBindingExpression(dependencyProperty);
+
             bindingExpression.UpdateSource();
         }
 

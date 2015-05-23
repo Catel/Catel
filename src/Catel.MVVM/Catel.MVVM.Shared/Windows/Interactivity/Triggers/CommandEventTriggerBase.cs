@@ -236,6 +236,11 @@ namespace Catel.Windows.Interactivity
                 return false;
             }
 
+            if (!IsEnabled)
+            {
+                return false;
+            }
+
             return command.CanExecute(parameter);
         }
 

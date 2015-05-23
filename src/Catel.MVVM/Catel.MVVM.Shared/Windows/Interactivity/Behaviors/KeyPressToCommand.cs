@@ -75,6 +75,11 @@ namespace Catel.Windows.Interactivity
         /// <param name="e">The key event args instance containing the event data.</param>
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
+            if (!IsEnabled)
+            {
+                return;
+            }
+
             if (e.Handled)
             {
                 return;
