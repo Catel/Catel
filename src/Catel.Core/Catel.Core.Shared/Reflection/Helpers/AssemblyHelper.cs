@@ -159,7 +159,7 @@ namespace Catel.Reflection
 #elif SILVERLIGHT
                 assembly = System.Windows.Application.Current.GetType().Assembly;
 #elif NETFX_CORE
-                assembly = global::Windows.ApplicationModel.Core.CoreApplication.MainView.GetType().GetAssemblyEx();
+                assembly = global::Windows.UI.Xaml.Application.Current.GetType().GetAssemblyEx();
 #else
                 assembly = typeof(AssemblyHelper).GetAssemblyEx();
 #endif
