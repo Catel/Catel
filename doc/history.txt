@@ -78,6 +78,7 @@ Added/fixed:
 (x) CTL-653 The type initializer for 'Catel.IoC.IoCFactory' threw an exception for types where FullName is empty
 (x) CTL-654 CompositeCommand.UnregisterAction doesn't work when directly passing in a method
 (x) CTL-658 LanguageService doesn't work for WinRT and resources inside the app itself
+(x) CTL-659 AssemblyHelper.GetEntryAssembly fails with Dynamic Assemblies
 
 Roadmap:
 ========

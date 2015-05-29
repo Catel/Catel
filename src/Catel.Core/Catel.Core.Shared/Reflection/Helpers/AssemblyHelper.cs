@@ -152,7 +152,7 @@ namespace Catel.Reflection
                     var setupInfo = appDomain.SetupInformation;
                     var assemblyPath = Path.Combine(setupInfo.ApplicationBase, setupInfo.ApplicationName);
 
-                    assembly = (from x in appDomain.GetAssemblies()
+                    assembly = (from x in appDomain.GetLoadedAssemblies(true)
                                 where string.Equals(x.Location, assemblyPath)
                                 select x).FirstOrDefault();
                 }
@@ -271,6 +271,19 @@ namespace Catel.Reflection
         /// <returns><see cref="List{Assembly}" /> of all loaded assemblies.</returns>
         public static List<Assembly> GetLoadedAssemblies(this AppDomain appDomain)
         {
+            return GetLoadedAssemblies(appDomain, false);
+        }
+
+        /// <summary>
+        /// Gets the loaded assemblies by using the right method. For Windows applications, it uses
+        /// <c>AppDomain.GetAssemblies()</c>. For Silverlight, it uses the assemblies
+        /// from the current application.
+        /// </summary>
+        /// <param name="appDomain">The app domain to search in.</param>
+        /// <param name="ignoreDynamicAssemblies">if set to <c>true</c>, dynamic assemblies are being ignored.</param>
+        /// <returns><see cref="List{Assembly}" /> of all loaded assemblies.</returns>
+        public static List<Assembly> GetLoadedAssemblies(this AppDomain appDomain, bool ignoreDynamicAssemblies)
+        {
             var assemblies = new List<Assembly>();
 
             assemblies.AddRange(appDomain.GetAssemblies());
@@ -314,16 +327,45 @@ namespace Catel.Reflection
 #endif
 #endif
 
-            // Make sure to prevent duplicates
-            assemblies = assemblies.Distinct().ToList();
+            var finalAssemblies = new List<Assembly>();
 
-            // Map all assemblies
-            foreach (var assembly in assemblies)
+            // Make sure to prevent duplicates
+            foreach (var assembly in assemblies.Distinct())
             {
+                if (ShouldIgnoreAssembly(assembly, ignoreDynamicAssemblies))
+                {
+                    continue;
+                }
+
+                finalAssemblies.Add(assembly);
+
                 RegisterAssemblyWithVersionInfo(assembly);
             }
 
-            return assemblies;
+            return finalAssemblies;
+        }
+
+        /// <summary>
+        /// Determines whether the specified assembly is a dynamic assembly.
+        /// </summary>
+        /// <param name="assembly"></param>
+        /// <returns><c>true</c> if the specified assembly is a dynamic assembly; otherwise, <c>false</c>.</returns>
+        public static bool IsDynamicAssembly(this Assembly assembly)
+        {
+            var isDynamicAssembly =
+#if NET || SL5
+                (assembly is System.Reflection.Emit.AssemblyBuilder) &&
+#endif
+                string.Equals(assembly.GetType().FullName, "System.Reflection.Emit.InternalAssemblyBuilder", StringComparison.Ordinal)
+#if NET
+                && !assembly.GlobalAssemblyCache
+                && ((Assembly.GetExecutingAssembly() != null)
+                && !string.Equals(assembly.CodeBase, Assembly.GetExecutingAssembly().CodeBase, StringComparison.OrdinalIgnoreCase))
+#endif
+                // Note: to make it the same for all platforms
+                && true;
+
+            return isDynamicAssembly;
         }
 
         private static void RegisterAssemblyWithVersionInfo(Assembly assembly)
@@ -343,6 +385,24 @@ namespace Catel.Reflection
                     Log.Warning(ex, "Failed to retrieve the information about assembly '{0}'", assembly);
                 }
             }
+        }
+
+        private static bool ShouldIgnoreAssembly(Assembly assembly, bool ignoreDynamicAssemblies)
+        {
+            if (assembly == null)
+            {
+                return true;
+            }
+
+            if (ignoreDynamicAssemblies)
+            {
+                if (assembly.IsDynamicAssembly())
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
 #if NET
