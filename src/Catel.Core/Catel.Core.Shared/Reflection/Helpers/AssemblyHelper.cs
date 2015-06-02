@@ -12,6 +12,7 @@ namespace Catel.Reflection
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using IoC;
     using Logging;
 
 #if NET
@@ -124,6 +125,17 @@ namespace Catel.Reflection
 
             try
             {
+                var serviceLocator = ServiceLocator.Default;
+                if (serviceLocator.IsTypeRegistered<IEntryAssemblyResolver>())
+                {
+                    var entryAssemblyResolver = serviceLocator.ResolveType<IEntryAssemblyResolver>();
+                    assembly = entryAssemblyResolver.Resolve();
+                    if (assembly != null)
+                    {
+                        return assembly;
+                    }
+                }
+
 #if NET
                 var httpApplication = HttpContextHelper.GetHttpApplicationInstance();
                 if (httpApplication != null)
