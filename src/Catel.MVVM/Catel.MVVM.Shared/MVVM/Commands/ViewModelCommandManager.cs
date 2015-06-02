@@ -124,7 +124,7 @@ namespace Catel.MVVM
 
             if (!_instances.ContainsKey(viewModel.UniqueIdentifier))
             {
-                _instances[viewModel.UniqueIdentifier] = new ViewModelCommandManager(viewModel);
+                _instances.Add(viewModel.UniqueIdentifier, new ViewModelCommandManager(viewModel));
             }
 
             return _instances[viewModel.UniqueIdentifier];
