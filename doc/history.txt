@@ -80,6 +80,7 @@ Added/fixed:
 (x) CTL-654 CompositeCommand.UnregisterAction doesn't work when directly passing in a method
 (x) CTL-658 LanguageService doesn't work for WinRT and resources inside the app itself
 (x) CTL-659 AssemblyHelper.GetEntryAssembly fails with Dynamic Assemblies
+(x) CTL-663 ViewModelManager sometimes throws KeyNotFoundException in multithreaded scenarios
 
 Roadmap:
 ========
