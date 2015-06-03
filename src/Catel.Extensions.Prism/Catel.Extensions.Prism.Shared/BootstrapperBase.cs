@@ -330,15 +330,15 @@ namespace Catel
                 Logger.Log("Creating the shell", Category.Debug, Priority.Low);
                 var dispatcherService = Container.ResolveType<IDispatcherService>();
 
-                dispatcherService.Invoke(() => Shell = CreateShell());
+                dispatcherService.Invoke(() => Shell = CreateShell(), true);
 
                 if (Shell != null)
                 {
                     Logger.Log("Setting the RegionManager", Category.Debug, Priority.Low);
-                    dispatcherService.Invoke(() => RegionManager.SetRegionManager(Shell, Container.ResolveType<IRegionManager>()));
+                    dispatcherService.Invoke(() => RegionManager.SetRegionManager(Shell, Container.ResolveType<IRegionManager>()), true);
 
                     Logger.Log("Updating Regions", Category.Debug, Priority.Low);
-                    dispatcherService.Invoke(RegionManager.UpdateRegions);
+                    dispatcherService.Invoke(RegionManager.UpdateRegions, true);
 
                     CreatedShell.SafeInvoke(this);
                 }
@@ -371,7 +371,7 @@ namespace Catel
                     Logger.Log("Initializing the shell", Category.Debug, Priority.Low);
 
                     var dispatcherService = Container.ResolveType<IDispatcherService>();
-                    dispatcherService.Invoke(InitializeShell);
+                    dispatcherService.Invoke(InitializeShell, true);
 
                     InitializedShell.SafeInvoke(this);
                 }

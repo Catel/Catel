@@ -29,6 +29,35 @@ namespace Catel.Services
         }
 
         /// <summary>
+        /// Executes the specified action asynchronously with the specified arguments on the thread that the Dispatcher was created on if required.
+        /// <para />
+        /// To check whether this is necessary, it will check whether the current thread has access to the dispatcher.
+        /// </summary>
+        /// <param name="dispatcherService">The dispatcher service.</param>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="action" /> is <c>null</c>.</exception>
+        public static void InvokeIfRequired(this IDispatcherService dispatcherService, Action action)
+        {
+            dispatcherService.Invoke(action, true);
+        }
+
+        /// <summary>
+        /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on if required.
+        /// <para />
+        /// To check whether this is necessary, it will check whether the current thread has access to the dispatcher.
+        /// </summary>
+        /// <param name="dispatcherService">The dispatcher service.</param>
+        /// <param name="method">A delegate to a method that takes parameters specified in args, which is pushed onto the Dispatcher event queue.</param>
+        /// <param name="args">An array of objects to pass as arguments to the given method. Can be <c>null</c>.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="method" /> is <c>null</c>.</exception>
+        public static void InvokeIfRequired(this IDispatcherService dispatcherService, Delegate method, params object[] args)
+        {
+            Argument.IsNotNull("method", method);
+
+            dispatcherService.Invoke(() => method.DynamicInvoke(args), true);
+        }
+
+        /// <summary>
         /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
         /// </summary>
         /// <param name="dispatcherService">The dispatcher service.</param>
