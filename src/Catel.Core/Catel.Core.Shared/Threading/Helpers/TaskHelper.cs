@@ -9,17 +9,70 @@ namespace Catel.Threading
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Threading.Tasks;
-
-#if SILVERLIGHT
     using System.Threading;
-#endif
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Helper class for tasks.
     /// </summary>
     public static class TaskHelper
     {
+        /// <summary>
+        /// Runs the specified action using Task.Run if available. If <c>Task.Run</c> is not available on the target platform,
+        /// it will use the right <c>Task.Factory.StartNew</c> usage.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <returns>Task.</returns>
+        public static Task Run(Action action)
+        {
+            return Run(action, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Runs the specified action using Task.Run if available. If <c>Task.Run</c> is not available on the target platform,
+        /// it will use the right <c>Task.Factory.StartNew</c> usage.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>Task.</returns>
+        public static Task Run(Action action, CancellationToken cancellationToken)
+        {
+#if NET40 || SL5
+            return Task.Factory.StartNew(action, cancellationToken, TaskCreationOptions.None, TaskScheduler.Default);
+#else
+            return Task.Run(action, cancellationToken);
+#endif
+        }
+
+        /// <summary>
+        /// Runs the specified function using Task.Run if available. If <c>Task.Run</c> is not available on the target platform,
+        /// it will use the right <c>Task.Factory.StartNew</c> usage.
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="func">The function.</param>
+        /// <returns>Task&lt;T&gt;.</returns>
+        public static Task<TResult> Run<TResult>(Func<TResult> func)
+        {
+            return Run(func, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Runs the specified function using Task.Run if available. If <c>Task.Run</c> is not available on the target platform,
+        /// it will use the right <c>Task.Factory.StartNew</c> usage.
+        /// </summary>
+        /// <typeparam name="TResult">Type of the result.</typeparam>
+        /// <param name="func">The function.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>Task&lt;T&gt;.</returns>
+        public static Task<TResult> Run<TResult>(Func<TResult> func, CancellationToken cancellationToken)
+        {
+#if NET40 || SL5
+            return Task.Factory.StartNew(func, cancellationToken, TaskCreationOptions.None, TaskScheduler.Default);
+#else
+            return Task.Run(func, cancellationToken);
+#endif
+        }
+
         /// <summary>
         /// Runs all the specified actions in separate threads and waits for the to complete.
         /// </summary>
@@ -45,7 +98,7 @@ namespace Catel.Threading
             Task.WaitAll(tasks.ToArray());
 #else
             var handles = new ManualResetEvent[list.Count];
-            for (int i = 0; i < list.Count; i++)
+            for (var i = 0; i < list.Count; i++)
             {
                 handles[i] = new ManualResetEvent(false);
 
@@ -78,9 +131,9 @@ namespace Catel.Threading
         /// </summary>
         /// <param name="actions">The actions to spawn in separate threads.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="actions"/> is <c>null</c>.</exception>
-        public static async Task RunAndWaitAsync(params Action[] actions)
+        public static Task RunAndWaitAsync(params Action[] actions)
         {
-            await Task.Factory.StartNew(() => TaskHelper.RunAndWait(actions));
+            return TaskHelper.Run(() => TaskHelper.RunAndWait(actions));
         }
 
         /// <summary>
@@ -90,7 +143,7 @@ namespace Catel.Threading
         /// </summary>
         /// <param name="actions">The actions to spawn in separate threads.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="actions"/> is <c>null</c>.</exception>
-        public static async Task RunAndWaitAsync(params Func<Task>[] actions)
+        public static Task RunAndWaitAsync(params Func<Task>[] actions)
         {
             Argument.IsNotNull("actions", actions);
 
@@ -102,7 +155,7 @@ namespace Catel.Threading
                 finalActions.Add(() => innerAction().Wait());
             }
 
-            await Task.Factory.StartNew(() => TaskHelper.RunAndWait(finalActions.ToArray()));
+            return RunAndWaitAsync(finalActions.ToArray());
         }
     }
 }
