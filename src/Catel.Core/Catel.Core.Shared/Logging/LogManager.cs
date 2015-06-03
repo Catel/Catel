@@ -470,9 +470,9 @@ namespace Catel.Logging
         /// Flushes all listeners that implement the <see cref="IBatchLogListener" /> by calling <see cref="IBatchLogListener.Flush" />.
         /// </summary>
         /// <returns>Task so it can be awaited.</returns>
-        public static async Task FlushAllAsync()
+        public static Task FlushAllAsync()
         {
-            await Task.Factory.StartNew(() => FlushAll());
+            return TaskHelper.Run(() => FlushAll());
         }
 
         /// <summary>
