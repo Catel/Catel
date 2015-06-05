@@ -334,9 +334,12 @@ namespace Catel.Data
                     SubscribeNotifyChangedEvent(collectionChangedValue, EventChangeType.Collection, parentCollection);
 
                     var collection = value as ICollection;
-                    foreach (var child in collection)
+                    if (collection != null)
                     {
-                        SubscribeNotifyChangedEvents(child, collection);
+                        foreach (var child in collection)
+                        {
+                            SubscribeNotifyChangedEvents(child, collection);
+                        }
                     }
                 }
 
