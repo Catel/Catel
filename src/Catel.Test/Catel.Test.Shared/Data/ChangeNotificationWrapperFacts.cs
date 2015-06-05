@@ -8,6 +8,8 @@ namespace Catel.Test.Data
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Collections.Specialized;
+    using Catel.Collections;
     using Catel.Data;
 
     using NUnit.Framework;
@@ -213,6 +215,47 @@ namespace Catel.Test.Data
 
                 collection.Remove(model);
                 Assert.IsTrue(itemsRemoved);
+            }
+
+            [TestCase]
+            public void HandlesCollectionChangesByResetCorrectly()
+            {
+                var collection = new FastObservableCollection<TestModel>();
+                var wrapper = new ChangeNotificationWrapper(collection);
+
+                var itemsReset = false;
+                var itemsAdded = false;
+                var itemsRemoved = false;
+
+                var model = new TestModel();
+                collection.Add(model);
+
+                wrapper.CollectionChanged += (sender, e) =>
+                {
+                    if (e.OldItems != null)
+                    {
+                        itemsRemoved = true;
+                    }
+
+                    if (e.Action == NotifyCollectionChangedAction.Reset)
+                    {
+                        itemsReset = true;
+                    }
+
+                    if (e.NewItems != null)
+                    {
+                        itemsAdded = true;
+                    }
+                };
+
+                using (collection.SuspendChangeNotifications())
+                {
+                    collection.ReplaceRange(new [] { new TestModel() });
+                }
+
+                Assert.IsFalse(itemsAdded);
+                Assert.IsFalse(itemsRemoved);
+                Assert.IsTrue(itemsReset);
             }
 
             [TestCase]
