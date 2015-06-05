@@ -277,7 +277,7 @@ namespace Catel.Collections
 
             if (AutomaticallyDispatchChangeNotifications)
             {
-                _dispatcherService.InvokeIfRequired(action);
+                _dispatcherService.BeginInvokeIfRequired(action);
             }
             else
             {
@@ -295,7 +295,7 @@ namespace Catel.Collections
             {
                 if (AutomaticallyDispatchChangeNotifications)
                 {
-                    _dispatcherService.InvokeIfRequired(() => base.OnCollectionChanged(e));
+                    _dispatcherService.BeginInvokeIfRequired(() => base.OnCollectionChanged(e));
                 }
                 else
                 {
