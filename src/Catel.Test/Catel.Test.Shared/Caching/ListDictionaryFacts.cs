@@ -69,5 +69,29 @@ namespace Catel.Test.Caching
 
            #endregion
         }
+
+        [TestFixture]
+        public class TheRemoveMethod
+        {
+            [TestCase(4)]
+            [TestCase(6)]
+            [TestCase(2)]
+            public void RemovedAllItems(int itemsCount)
+            {
+                var listDictionary = new ListDictionary<string, int>();
+
+                for (int i = 0; i < itemsCount; i++)
+                {
+                    listDictionary[i.ToString()] = i;
+                }
+
+                for (int i = 0; i < itemsCount; i++)
+                {
+                    listDictionary.Remove(i.ToString());
+                }
+
+                Assert.AreEqual(0, listDictionary.Count);
+            }
+        }
     }
 }
