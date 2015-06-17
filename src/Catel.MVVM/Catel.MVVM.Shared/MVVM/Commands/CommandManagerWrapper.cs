@@ -64,9 +64,11 @@ namespace Catel.MVVM
             {
                 return;
             }
-
+#if SL5
             View.KeyDown += OnKeyDown;
-
+#else
+            View.PreviewKeyDown += OnKeyDown;
+#endif
             _subscribed = true;
         }
 
@@ -77,7 +79,11 @@ namespace Catel.MVVM
                 return;
             }
 
+#if SL5
             View.KeyDown -= OnKeyDown;
+#else
+            View.PreviewKeyDown -= OnKeyDown;
+#endif
 
             _subscribed = false;
         }
