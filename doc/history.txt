@@ -81,6 +81,7 @@ Added/fixed:
 (x) CTL-658 LanguageService doesn't work for WinRT and resources inside the app itself
 (x) CTL-659 AssemblyHelper.GetEntryAssembly fails with Dynamic Assemblies
 (x) CTL-663 ViewModelManager sometimes throws KeyNotFoundException in multithreaded scenarios
+(x) CTL-664 EventToCommand doesn't initially call CanExecute on a command to determine the initial state
 
 Roadmap:
 ========
