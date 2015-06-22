@@ -93,7 +93,13 @@ namespace Catel.Data.Repositories
         public virtual IQueryable<TEntity> GetQuery(Expression<Func<TEntity, bool>> predicate)
         {
             var query = GetQuery();
-            return query.Where(predicate);
+
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
+
+            return query;
         }
 
         /// <summary>
@@ -101,12 +107,10 @@ namespace Catel.Data.Repositories
         /// </summary>
         /// <param name="predicate">The predicate.</param>
         /// <returns>The entity or <c>null</c> if no entity matches the criteria.</returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "Extension method", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public virtual TEntity Single(Expression<Func<TEntity, bool>> predicate = null)
         {
-            var query = GetQuery();
-            predicate = EnsureValidatePredicate(predicate);
-
-            return query.Single(predicate);
+            return IEntityRepositoryExtensions.Single(this, predicate);
         }
 
         /// <summary>
@@ -114,12 +118,10 @@ namespace Catel.Data.Repositories
         /// </summary>
         /// <param name="predicate">The predicate.</param>
         /// <returns>The entity or <c>null</c> if no entity matches the criteria.</returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "Extension method", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public virtual TEntity SingleOrDefault(Expression<Func<TEntity, bool>> predicate = null)
         {
-            var query = GetQuery();
-            predicate = EnsureValidatePredicate(predicate);
-
-            return query.SingleOrDefault(predicate);
+            return IEntityRepositoryExtensions.SingleOrDefault(this, predicate);
         }
 
         /// <summary>
@@ -127,12 +129,10 @@ namespace Catel.Data.Repositories
         /// </summary>
         /// <param name="predicate">The predicate.</param>
         /// <returns>The entity or <c>null</c> if no entity matches the criteria.</returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "Extension method", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public virtual TEntity First(Expression<Func<TEntity, bool>> predicate = null)
         {
-            var query = GetQuery();
-            predicate = EnsureValidatePredicate(predicate);
-
-            return query.First(predicate);
+            return IEntityRepositoryExtensions.First(this, predicate);
         }
 
         /// <summary>
@@ -140,12 +140,10 @@ namespace Catel.Data.Repositories
         /// </summary>
         /// <param name="predicate">The predicate.</param>
         /// <returns>The entity or <c>null</c> if no entity matches the criteria.</returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "Extension method", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public virtual TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate = null)
         {
-            var query = GetQuery();
-            predicate = EnsureValidatePredicate(predicate);
-
-            return query.FirstOrDefault(predicate);
+            return IEntityRepositoryExtensions.FirstOrDefault(this, predicate);
         }
 
         /// <summary>
@@ -200,16 +198,10 @@ namespace Catel.Data.Repositories
         /// </summary>
         /// <param name="predicate">The predicate.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="predicate" /> is <c>null</c>.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "Extension method", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public virtual void Delete(Expression<Func<TEntity, bool>> predicate)
         {
-            Argument.IsNotNull("predicate", predicate);
-
-            var entities = Find(predicate);
-
-            foreach (var entity in entities)
-            {
-                Delete(entity);
-            }
+            IEntityRepositoryExtensions.Delete(this, predicate);
         }
 
         /// <summary>
@@ -239,11 +231,10 @@ namespace Catel.Data.Repositories
         /// <param name="predicate">The predicate.</param>
         /// <returns>Enumerable of all matching entities.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="predicate" /> is <c>null</c>.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "Extension method", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public virtual IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
         {
-            predicate = EnsureValidatePredicate(predicate);
-
-            return GetQuery(predicate);
+            return IEntityRepositoryExtensions.Find(this, predicate);
         }
 
         /// <summary>
@@ -252,9 +243,10 @@ namespace Catel.Data.Repositories
         /// Not that this method executes the default query returned by <see cref="GetQuery()" />/.
         /// </summary>
         /// <returns>Enumerable of all entities.</returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "Extension method", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public virtual IQueryable<TEntity> GetAll()
         {
-            return GetQuery();
+            return IEntityRepositoryExtensions.GetAll(this);
         }
 
         /// <summary>
@@ -262,32 +254,14 @@ namespace Catel.Data.Repositories
         /// </summary>
         /// <param name="predicate">The predicate.</param>
         /// <returns>The number of entities that match the criteria.</returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "Extension method", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public virtual int Count(Expression<Func<TEntity, bool>> predicate = null)
         {
-            predicate = EnsureValidatePredicate(predicate);
-
-            return GetQuery().Count(predicate);
+            return IEntityRepositoryExtensions.Count(this, predicate);
         }
         #endregion
 
         #region Methods
-        /// <summary>
-        /// Ensures a validate predicate.
-        /// <para />
-        /// If the <paramref name="predicate"/> is <c>null</c>, this method will create a default predicate which
-        /// is always true.
-        /// </summary>
-        /// <param name="predicate">The predicate.</param>
-        /// <returns>The ensured valid predicate.</returns>
-        private Expression<Func<TEntity, bool>> EnsureValidatePredicate(Expression<Func<TEntity, bool>> predicate)
-        {
-            if (predicate == null)
-            {
-                predicate = x => true;
-            }
-
-            return predicate;
-        }
         #endregion
     }
 }

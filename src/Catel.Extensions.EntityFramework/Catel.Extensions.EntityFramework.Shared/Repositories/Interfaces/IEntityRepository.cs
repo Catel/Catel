@@ -7,7 +7,6 @@
 namespace Catel.Data.Repositories
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
 
@@ -44,6 +43,7 @@ namespace Catel.Data.Repositories
         /// </summary>
         /// <param name="predicate">The predicate.</param>
         /// <returns>The entity or <c>null</c> if no entity matches the criteria.</returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "Extension method", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         TEntity Single(Expression<Func<TEntity, bool>> predicate = null);
 
         /// <summary>
@@ -51,6 +51,7 @@ namespace Catel.Data.Repositories
         /// </summary>
         /// <param name="predicate">The predicate.</param>
         /// <returns>The entity or <c>null</c> if no entity matches the criteria.</returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "Extension method", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         TEntity SingleOrDefault(Expression<Func<TEntity, bool>> predicate = null);
 
         /// <summary>
@@ -58,6 +59,7 @@ namespace Catel.Data.Repositories
         /// </summary>
         /// <param name="predicate">The predicate.</param>
         /// <returns>The entity or <c>null</c> if no entity matches the criteria.</returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "Extension method", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         TEntity First(Expression<Func<TEntity, bool>> predicate = null);
 
         /// <summary>
@@ -65,6 +67,7 @@ namespace Catel.Data.Repositories
         /// </summary>
         /// <param name="predicate">The predicate.</param>
         /// <returns>The entity or <c>null</c> if no entity matches the criteria.</returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "Extension method", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate = null);
 
         /// <summary>
@@ -101,6 +104,7 @@ namespace Catel.Data.Repositories
         /// </summary>
         /// <param name="predicate">The predicate.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="predicate" /> is <c>null</c>.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "Extension method", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         void Delete(Expression<Func<TEntity, bool>> predicate);
 
         /// <summary>
@@ -118,6 +122,7 @@ namespace Catel.Data.Repositories
         /// <param name="predicate">The predicate.</param>
         /// <returns>Enumerable of all matching entities.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="predicate" /> is <c>null</c>.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "Extension method", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
 
         /// <summary>
@@ -126,6 +131,7 @@ namespace Catel.Data.Repositories
         /// Not that this method executes the default query returned by <see cref="GetQuery()" />/.
         /// </summary>
         /// <returns>Enumerable of all entities.</returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "Extension method", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         IQueryable<TEntity> GetAll();
 
         /// <summary>
@@ -133,6 +139,7 @@ namespace Catel.Data.Repositories
         /// </summary>
         /// <param name="predicate">The predicate.</param>
         /// <returns>The number of entities that match the criteria.</returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "Extension method", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         int Count(Expression<Func<TEntity, bool>> predicate = null);
         #endregion
     }

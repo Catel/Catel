@@ -6,7 +6,7 @@
     <SharedGUID>1740f946-266a-48c2-b4b4-6d3cb4d681e1</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Catel.Extensions.EntityFramework5.Shared</Import_RootNamespace>
+    <Import_RootNamespace>Catel</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ExtensionsEntityFrameworkModule.cs" />

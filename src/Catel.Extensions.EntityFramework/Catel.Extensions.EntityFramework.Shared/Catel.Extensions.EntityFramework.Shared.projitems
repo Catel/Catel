@@ -6,7 +6,7 @@
     <SharedGUID>1783efdc-8731-4e76-b92c-591a9a7c4ddf</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Catel.Extensions.EntityFramework.Shared</Import_RootNamespace>
+    <Import_RootNamespace>Catel</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
@@ -32,6 +32,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\IsolationHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Repositories\EntityRepositoryBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Repositories\Extensions\IEntityRepositoryExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Repositories\Interfaces\IEntityRepository.cs" />
   </ItemGroup>
 </Project>
