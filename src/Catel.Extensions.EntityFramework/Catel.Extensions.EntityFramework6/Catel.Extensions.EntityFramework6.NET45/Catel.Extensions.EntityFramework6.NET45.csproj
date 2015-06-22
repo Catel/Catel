@@ -18,7 +18,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\..\..\output\debug\NET45\Catel.Extensions.EntityFramework6\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET;NET45;EF6</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET;NET45;EF6;EF_ASYNC</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -28,7 +28,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\..\..\output\release\NET45\Catel.Extensions.EntityFramework6\</OutputPath>
-    <DefineConstants>TRACE;NET;NET45;EF6</DefineConstants>
+    <DefineConstants>TRACE;NET;NET45;EF6;EF_ASYNC</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\..\..\..\output\release\NET45\Catel.Extensions.EntityFramework6\Catel.Extensions.EntityFramework6.XML</DocumentationFile>
