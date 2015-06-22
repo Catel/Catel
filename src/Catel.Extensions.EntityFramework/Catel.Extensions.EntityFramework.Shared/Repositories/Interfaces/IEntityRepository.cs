@@ -39,38 +39,6 @@ namespace Catel.Data.Repositories
         IQueryable<TEntity> GetQuery(Expression<Func<TEntity, bool>> predicate);
 
         /// <summary>
-        /// Gets a single entity based on the matching criteria.
-        /// </summary>
-        /// <param name="predicate">The predicate.</param>
-        /// <returns>The entity or <c>null</c> if no entity matches the criteria.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "Extension method", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        TEntity Single(Expression<Func<TEntity, bool>> predicate = null);
-
-        /// <summary>
-        /// Gets a single entity based on the matching criteria.
-        /// </summary>
-        /// <param name="predicate">The predicate.</param>
-        /// <returns>The entity or <c>null</c> if no entity matches the criteria.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "Extension method", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        TEntity SingleOrDefault(Expression<Func<TEntity, bool>> predicate = null);
-
-        /// <summary>
-        /// Gets the first entity based on the matching criteria.
-        /// </summary>
-        /// <param name="predicate">The predicate.</param>
-        /// <returns>The entity or <c>null</c> if no entity matches the criteria.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "Extension method", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        TEntity First(Expression<Func<TEntity, bool>> predicate = null);
-
-        /// <summary>
-        /// Gets the first entity based on the matching criteria.
-        /// </summary>
-        /// <param name="predicate">The predicate.</param>
-        /// <returns>The entity or <c>null</c> if no entity matches the criteria.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "Extension method", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate = null);
-
-        /// <summary>
         /// Gets an new entity instance, which may be a proxy if the entity meets the proxy requirements and the underlying context is configured to create proxies.
         /// <para />
         /// Note that the returned proxy entity is NOT added or attached to the set.
@@ -100,14 +68,6 @@ namespace Catel.Data.Repositories
         void Delete(TEntity entity);
 
         /// <summary>
-        /// Deletes all entities that match the predicate.
-        /// </summary>
-        /// <param name="predicate">The predicate.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="predicate" /> is <c>null</c>.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "Extension method", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        void Delete(Expression<Func<TEntity, bool>> predicate);
-
-        /// <summary>
         /// Updates changes of the existing entity.
         /// <para />
         /// Note that this method does not actually call <c>SaveChanges</c>, but only updates the entity in the repository.
@@ -115,32 +75,6 @@ namespace Catel.Data.Repositories
         /// <param name="entity">The entity.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="entity" /> is <c>null</c>.</exception>
         void Update(TEntity entity);
-
-        /// <summary>
-        /// Finds entities based on provided criteria.
-        /// </summary>
-        /// <param name="predicate">The predicate.</param>
-        /// <returns>Enumerable of all matching entities.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="predicate" /> is <c>null</c>.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "Extension method", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
-
-        /// <summary>
-        /// Gets all entities available in the repository.
-        /// <para />
-        /// Not that this method executes the default query returned by <see cref="GetQuery()" />/.
-        /// </summary>
-        /// <returns>Enumerable of all entities.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "Extension method", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        IQueryable<TEntity> GetAll();
-
-        /// <summary>
-        /// Counts entities with the specified criteria.
-        /// </summary>
-        /// <param name="predicate">The predicate.</param>
-        /// <returns>The number of entities that match the criteria.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "Extension method", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        int Count(Expression<Func<TEntity, bool>> predicate = null);
         #endregion
     }
 
