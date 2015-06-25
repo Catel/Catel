@@ -30,6 +30,14 @@ Added/fixed (BREAKING CHANGES):
 (-) CTL-613 Removed Windows 8.0 projects (no longer supported in Visual Studio 2015). Upgrade your projects
     to 8.1 instead
 
+Classes marked as obsolete:
+===========================
+Our mission is to make Catel easier to maintain in the future. One way to achieve this is to remove unused
+features and components. We are actively removing features by marking them obsolete. If nobody complains,
+we will remove the features in the next major release.
+
+(*) CTL-671 Marked Catel.Extensions.CSLA as obsolete
+
 Added/fixed:
 ============
 (+) CTL-525 UnitOfWork should allow Refresh of Entities

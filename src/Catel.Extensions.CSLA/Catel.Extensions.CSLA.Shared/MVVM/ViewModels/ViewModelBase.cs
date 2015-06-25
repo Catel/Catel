@@ -19,6 +19,8 @@ namespace Catel.MVVM.CSLA
     /// </summary>
     /// <typeparam name="TModel">The type of the T model.</typeparam>
     [CLSCompliant(false)]
+    [ObsoleteEx(Message = "We are considering to remove CSLA support. See https://catelproject.atlassian.net/browse/CTL-671",
+        TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
     public abstract class ViewModelBase<TModel> : ViewModel<TModel>, IViewModel, IUniqueIdentifyable
     {
         #region Fields

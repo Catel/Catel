@@ -79,6 +79,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="mscorlib" />
+    <Reference Include="Obsolete">
+      <HintPath>..\..\..\lib\Obsolete.Fody.4.0.0\Lib\portable-net4+sl5+wp8+win8+wpa81+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
+    </Reference>
     <Reference Include="System.IO">
       <HintPath>..\..\..\lib\Microsoft.Bcl.1.1.10\lib\sl5\System.IO.dll</HintPath>
     </Reference>
