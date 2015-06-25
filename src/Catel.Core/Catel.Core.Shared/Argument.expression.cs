@@ -76,10 +76,25 @@ namespace Catel
         /// <exception cref="System.ArgumentException">The <paramref name="expression" /> body is not of type <see cref="MemberExpression" />.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="expression" /> is <c>null</c>.</exception>
         [DebuggerNonUserCode, DebuggerStepThrough]
+        [ObsoleteEx(ReplacementTypeOrMember = "IsNotEmpty(Expression<Func<Guid>> expression)", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         public static void IsNotNullOrEmpty(Expression<Func<Guid>> expression)
         {
             var parameterInfo = GetParameterInfo(expression);
-            IsNotNullOrEmpty(parameterInfo.Name, (Guid)parameterInfo.Value);
+            IsNotEmpty(parameterInfo.Name, (Guid)parameterInfo.Value);
+        }
+
+        /// <summary>
+        /// Determines whether the specified argument is not empty.
+        /// </summary>
+        /// <param name="expression">The expression.</param>
+        /// <exception cref="ArgumentException">If <paramref name="expression" /> value is <c>null</c> or empty.</exception>
+        /// <exception cref="System.ArgumentException">The <paramref name="expression" /> body is not of type <see cref="MemberExpression" />.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="expression" /> is <c>null</c>.</exception>
+        [DebuggerNonUserCode, DebuggerStepThrough]
+        public static void IsNotEmpty(Expression<Func<Guid>> expression)
+        {
+            var parameterInfo = GetParameterInfo(expression);
+            IsNotEmpty(parameterInfo.Name, (Guid)parameterInfo.Value);
         }
 
         /// <summary>

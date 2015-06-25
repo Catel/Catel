@@ -62,7 +62,7 @@ namespace Catel
         {
             if (string.IsNullOrEmpty(paramValue))
             {
-                string error = string.Format("Argument '{0}' cannot be null or empty", ObjectToStringHelper.ToString(paramName));
+                var error = string.Format("Argument '{0}' cannot be null or empty", ObjectToStringHelper.ToString(paramName));
 
                 Log.Error(error);
 
@@ -77,9 +77,29 @@ namespace Catel
         /// <param name="paramValue">Value of the parameter.</param>
         /// <exception cref="ArgumentException">If <paramref name="paramValue" /> is <c>null</c> or empty.</exception>
         [DebuggerNonUserCode, DebuggerStepThrough]
+        [ObsoleteEx(ReplacementTypeOrMember = "IsNotEmpty(string paramName, Guid paramValue)", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         public static void IsNotNullOrEmpty(string paramName, Guid paramValue)
         {
-            IsNotNullOrEmpty(paramName, (Guid?)paramValue);
+            IsNotEmpty(paramName, paramValue);
+        }
+
+        /// <summary>
+        /// Determines whether the specified argument is not empty.
+        /// </summary>
+        /// <param name="paramName">Name of the parameter.</param>
+        /// <param name="paramValue">Value of the parameter.</param>
+        /// <exception cref="ArgumentException">If <paramref name="paramValue" /> is <c>null</c> or empty.</exception>
+        [DebuggerNonUserCode, DebuggerStepThrough]
+        public static void IsNotEmpty(string paramName, Guid paramValue)
+        {
+            if (paramValue == Guid.Empty)
+            {
+                var error = string.Format("Argument '{0}' cannot be Guid.Empty", ObjectToStringHelper.ToString(paramName));
+
+                Log.Error(error);
+
+                throw new ArgumentException(error, paramName);
+            }
         }
 
         /// <summary>
@@ -94,7 +114,7 @@ namespace Catel
         {
             if (!paramValue.HasValue || paramValue.Value == Guid.Empty)
             {
-                string error = string.Format("Argument '{0}' cannot be null or Guid.Empty", ObjectToStringHelper.ToString(paramName));
+                var error = string.Format("Argument '{0}' cannot be null or Guid.Empty", ObjectToStringHelper.ToString(paramName));
 
                 Log.Error(error);
 
@@ -114,7 +134,7 @@ namespace Catel
         {
             if (string.IsNullOrEmpty(paramValue) || (string.CompareOrdinal(paramValue.Trim(), string.Empty) == 0))
             {
-                string error = string.Format("Argument '{0}' cannot be null or whitespace", ObjectToStringHelper.ToString(paramName));
+                var error = string.Format("Argument '{0}' cannot be null or whitespace", ObjectToStringHelper.ToString(paramName));
 
                 Log.Error(error);
 
@@ -134,7 +154,7 @@ namespace Catel
         {
             if ((paramValue == null) || (paramValue.Length == 0))
             {
-                string error = string.Format("Argument '{0}' cannot be null or an empty array", ObjectToStringHelper.ToString(paramName));
+                var error = string.Format("Argument '{0}' cannot be null or an empty array", ObjectToStringHelper.ToString(paramName));
 
                 Log.Error(error);
 
@@ -161,7 +181,7 @@ namespace Catel
 
             if (!validation(paramValue, minimumValue, maximumValue))
             {
-                string error = string.Format("Argument '{0}' should be between {1} and {2}", ObjectToStringHelper.ToString(paramName), minimumValue, maximumValue);
+                var error = string.Format("Argument '{0}' should be between {1} and {2}", ObjectToStringHelper.ToString(paramName), minimumValue, maximumValue);
 
                 Log.Error(error);
                 throw new ArgumentOutOfRangeException(paramName, error);
@@ -219,7 +239,7 @@ namespace Catel
 
             if (!validation(paramValue, minimumValue))
             {
-                string error = string.Format("Argument '{0}' should be minimal {1}", ObjectToStringHelper.ToString(paramName), minimumValue);
+                var error = string.Format("Argument '{0}' should be minimal {1}", ObjectToStringHelper.ToString(paramName), minimumValue);
 
                 Log.Error(error);
                 throw new ArgumentOutOfRangeException(paramName);
@@ -273,7 +293,7 @@ namespace Catel
         {
             if (!validation(paramValue, maximumValue))
             {
-                string error = string.Format("Argument '{0}' should be at maximum {1}", ObjectToStringHelper.ToString(paramName), maximumValue);
+                var error = string.Format("Argument '{0}' should be at maximum {1}", ObjectToStringHelper.ToString(paramName), maximumValue);
 
                 Log.Error(error);
                 throw new ArgumentOutOfRangeException(paramName, error);
@@ -448,7 +468,7 @@ namespace Catel
                 return;
             }
 
-            string error = string.Format("Type '{0}' should implement interface '{1}', but does not", type.Name, interfaceType.Name);
+            var error = string.Format("Type '{0}' should implement interface '{1}', but does not", type.Name, interfaceType.Name);
 
             Log.Error(error);
 
@@ -503,7 +523,7 @@ namespace Catel
                 errorBuilder.AppendLine("  * " + interfaceType.FullName);
             }
 
-            string error = errorBuilder.ToString();
+            var error = errorBuilder.ToString();
 
             Log.Error(error);
 
@@ -553,7 +573,7 @@ namespace Catel
                 return;
             }
 
-            string error = string.Format("Type '{0}' should be of type '{1}', but is not", type.Name, requiredType.Name);
+            var error = string.Format("Type '{0}' should be of type '{1}', but is not", type.Name, requiredType.Name);
 
             Log.Error(error);
 
@@ -613,7 +633,7 @@ namespace Catel
                 errorBuilder.AppendLine("  * " + requiredType.FullName);
             }
 
-            string error = errorBuilder.ToString();
+            var error = errorBuilder.ToString();
 
             Log.Error(error);
 
@@ -663,7 +683,7 @@ namespace Catel
                 return;
             }
 
-            string error = string.Format("Type '{0}' should not be of type '{1}', but is", type.Name, notRequiredType.Name);
+            var error = string.Format("Type '{0}' should not be of type '{1}', but is", type.Name, notRequiredType.Name);
 
             Log.Error(error);
 
@@ -712,7 +732,7 @@ namespace Catel
             {
                 if (notRequiredType.IsAssignableFromEx(type))
                 {
-                    string error = string.Format("Type '{0}' should not be of type '{1}', but is", type.Name, notRequiredType.Name);
+                    var error = string.Format("Type '{0}' should not be of type '{1}', but is", type.Name, notRequiredType.Name);
 
                     Log.Error(error);
 
@@ -739,7 +759,7 @@ namespace Catel
 
             if (Regex.IsMatch(paramValue, pattern, regexOptions))
             {
-                string error = string.Format("Argument '{0}' matches with pattern '{1}'", paramName, pattern);
+                var error = string.Format("Argument '{0}' matches with pattern '{1}'", paramName, pattern);
 
                 Log.Error(error);
 
@@ -765,7 +785,7 @@ namespace Catel
 
             if (!Regex.IsMatch(paramValue, pattern, regexOptions))
             {
-                string error = string.Format("Argument '{0}' doesn't match with pattern '{1}'", paramName, pattern);
+                var error = string.Format("Argument '{0}' doesn't match with pattern '{1}'", paramName, pattern);
 
                 Log.Error(error);
 
@@ -846,7 +866,7 @@ namespace Catel
 
            if (!validation)
            {
-               string error = string.Format("Argument '{0}' is not valid", ObjectToStringHelper.ToString(paramName));
+               var error = string.Format("Argument '{0}' is not valid", ObjectToStringHelper.ToString(paramName));
 
                Log.Error(error);
 
@@ -868,7 +888,7 @@ namespace Catel
 
             if (!isSupported)
             {
-                string error = string.Format(errorFormat, args);
+                var error = string.Format(errorFormat, args);
 
                 Log.Error(error);
 
