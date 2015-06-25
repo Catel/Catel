@@ -153,7 +153,6 @@ namespace Catel
         /// <exception cref="System.ArgumentNullException">The <paramref name="expression" /> is <c>null</c>.</exception>
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsNotOutOfRange<T>(Expression<Func<T>> expression, T minimumValue, T maximumValue, Func<T, T, T, bool> validation)
-            where T : IComparable
         {
             var parameterInfo = GetParameterInfo(expression);
             IsNotOutOfRange(parameterInfo.Name, (T)parameterInfo.Value, minimumValue, maximumValue, validation);
@@ -190,7 +189,6 @@ namespace Catel
         /// <exception cref="System.ArgumentNullException">The <paramref name="expression" /> is <c>null</c>.</exception>
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsMinimal<T>(Expression<Func<T>> expression, T minimumValue, Func<T, T, bool> validation)
-            where T : IComparable
         {
             var parameterInfo = GetParameterInfo(expression);
             IsMinimal(parameterInfo.Name, (T)parameterInfo.Value, minimumValue, validation);
@@ -226,7 +224,6 @@ namespace Catel
         /// <exception cref="System.ArgumentNullException">The <paramref name="expression" /> is <c>null</c>.</exception>
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsMaximum<T>(Expression<Func<T>> expression, T maximumValue, Func<T, T, bool> validation)
-            where T : IComparable
         {
             var parameterInfo = GetParameterInfo(expression);
             IsMaximum(parameterInfo.Name, (T)parameterInfo.Value, maximumValue, validation);

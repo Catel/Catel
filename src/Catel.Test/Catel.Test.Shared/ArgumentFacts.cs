@@ -87,6 +87,22 @@ namespace Catel.Test
         }
 
         [TestFixture]
+        public partial class TheIsNotEmptyMethod
+        {
+            [TestCase]
+            public void ThrowsArgumentExceptionForEmptyGuidParamValue()
+            {
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsNotEmpty("param", Guid.Empty));
+            }
+
+            [TestCase]
+            public void SucceedsForValidGuid()
+            {
+                Argument.IsNotEmpty("param", Guid.NewGuid());
+            }
+        }
+
+        [TestFixture]
         public partial class TheIsNotNullOrWhitespaceMethod
         {
             [TestCase]
