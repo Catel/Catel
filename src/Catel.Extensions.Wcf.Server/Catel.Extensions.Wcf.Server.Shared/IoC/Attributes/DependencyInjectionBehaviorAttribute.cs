@@ -22,6 +22,8 @@ namespace Catel.ServiceModel
     /// Attribute which allow dependency injection in the service implementation.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
+    [ObsoleteEx(Message = "We are considering to remove Wcf.Server support. See https://catelproject.atlassian.net/browse/CTL-672",
+        TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
     public class DependencyInjectionBehaviorAttribute : Attribute, IServiceBehavior
     {
         #region Fields

@@ -37,6 +37,7 @@ features and components. We are actively removing features by marking them obsol
 we will remove the features in the next major release.
 
 (*) CTL-671 Marked Catel.Extensions.CSLA as obsolete
+(*) CTL-672 Marked Catel.Extensions.Wcf.Server as obsolete
 
 Added/fixed:
 ============
