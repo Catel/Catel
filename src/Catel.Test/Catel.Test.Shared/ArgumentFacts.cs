@@ -62,12 +62,6 @@ namespace Catel.Test
             }
 
             [TestCase]
-            public void ThrowsArgumentExceptionForEmptyGuidParamValue()
-            {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsNotNullOrEmpty("param", Guid.Empty));
-            }
-
-            [TestCase]
             public void ThrowsArgumentExceptionForEmptyStringParamValue()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsNotNullOrEmpty("param", string.Empty));

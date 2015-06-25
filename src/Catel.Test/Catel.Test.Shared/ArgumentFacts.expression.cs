@@ -57,7 +57,6 @@ namespace Catel.Test
             public void ThrowsArgumentExceptionForNullExpression()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotNullOrEmpty((Expression<Func<string>>)null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotNullOrEmpty((Expression<Func<Guid>>)null));
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotNullOrEmpty((Expression<Func<Guid?>>)null));
             }
 
@@ -65,7 +64,6 @@ namespace Catel.Test
             public void ThrowsArgumentExceptionForNullOrEmptyParameterInvokation()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => IsNotNullInvokation(string.Empty));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => IsNotNullInvokation(Guid.Empty));
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => IsNotNullInvokation((string)null));
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => IsNotNullInvokation(null as Guid?));
                 Guid? param01 = Guid.Empty;
@@ -86,11 +84,6 @@ namespace Catel.Test
                 Argument.IsNotNullOrEmpty(() => param01);
             }
 
-            private void IsNotNullInvokation(Guid param01)
-            {
-                Argument.IsNotNullOrEmpty(() => param01);
-            }
-
             private void IsNotNullInvokation(Guid? param01)
             {
                 Argument.IsNotNullOrEmpty(() => param01);
@@ -103,7 +96,6 @@ namespace Catel.Test
             public void ThrowsArgumentExceptionForNullExpression()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotNullOrWhitespace(null));
-
             }
 
             [TestCase]
@@ -117,7 +109,6 @@ namespace Catel.Test
             {
                 IsNotNullOrWhitespaceInvokation("string");
             }
-
 
             private void IsNotNullOrWhitespaceInvokation(string param01)
             {
