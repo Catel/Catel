@@ -48,6 +48,7 @@ namespace Catel
         /// <exception cref="System.ArgumentNullException">The <paramref name="expression" /> is <c>null</c>.</exception>
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsNotNull<T>(Expression<Func<T>> expression)
+            where T : class
         {
             var parameterInfo = GetParameterInfo(expression);
             IsNotNull(parameterInfo.Name, parameterInfo.Value);
