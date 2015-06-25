@@ -159,8 +159,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Filtering\CompositePredicate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Filtering\Interfaces\ICompositeFilter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Fluent\Interfaces\IFluent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Generics\NullOp.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Generics\Operator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\EnvironmentHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ExpressionHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\HashHelper.cs" />

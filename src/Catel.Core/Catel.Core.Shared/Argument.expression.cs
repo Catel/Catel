@@ -158,8 +158,6 @@ namespace Catel
             IsNotOutOfRange(parameterInfo.Name, (T)parameterInfo.Value, minimumValue, maximumValue, validation);
         }
 
-#if NET
-
         /// <summary>
         /// Determines whether the specified argument is not out of range.
         /// </summary>
@@ -172,27 +170,10 @@ namespace Catel
         /// <exception cref="System.ArgumentNullException">The <paramref name="expression" /> is <c>null</c>.</exception>
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsNotOutOfRange<T>(Expression<Func<T>> expression, T minimumValue, T maximumValue)
+            where T : IComparable
         {
             var parameterInfo = GetParameterInfo(expression);
             IsNotOutOfRange(parameterInfo.Name, (T)parameterInfo.Value, minimumValue, maximumValue);
-        }
-
-#endif
-
-        /// <summary>
-        /// Determines whether the specified argument is not out of range.
-        /// </summary>
-        /// <param name="expression">The expression.</param>
-        /// <param name="minimumValue">The minimum value.</param>
-        /// <param name="maximumValue">The maximum value.</param>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="expression" /> value is out of range.</exception>
-        /// <exception cref="System.ArgumentException">The <paramref name="expression" /> body is not of type <see cref="MemberExpression" />.</exception>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="expression" /> is <c>null</c>.</exception>
-        [DebuggerNonUserCode, DebuggerStepThrough]
-        public static void IsNotOutOfRange(Expression<Func<int>> expression, int minimumValue, int maximumValue)
-        {
-            var parameterInfo = GetParameterInfo(expression);
-            IsNotOutOfRange(parameterInfo.Name, (int)parameterInfo.Value, minimumValue, maximumValue);
         }
 
         /// <summary>
@@ -213,8 +194,6 @@ namespace Catel
             IsMinimal(parameterInfo.Name, (T)parameterInfo.Value, minimumValue, validation);
         }
 
-#if NET
-
         /// <summary>
         /// Determines whether the specified argument has a minimum value.
         /// </summary>
@@ -226,26 +205,10 @@ namespace Catel
         /// <exception cref="System.ArgumentNullException">The <paramref name="expression" /> is <c>null</c>.</exception>
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsMinimal<T>(Expression<Func<T>> expression, T minimumValue)
+            where T : IComparable
         {
             var parameterInfo = GetParameterInfo(expression);
             IsMinimal(parameterInfo.Name, (T)parameterInfo.Value, minimumValue);
-        }
-
-#endif
-
-        /// <summary>
-        /// Determines whether the specified argument has a minimum value.
-        /// </summary>
-        /// <param name="expression">The expression.</param>
-        /// <param name="minimumValue">The minimum value.</param>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="expression" /> value is out of range.</exception>
-        /// <exception cref="System.ArgumentException">The <paramref name="expression" /> body is not of type <see cref="MemberExpression" />.</exception>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="expression" /> is <c>null</c>.</exception>
-        [DebuggerNonUserCode, DebuggerStepThrough]
-        public static void IsMinimal(Expression<Func<int>> expression, int minimumValue)
-        {
-            var parameterInfo = GetParameterInfo(expression);
-            IsMinimal(parameterInfo.Name, (int)parameterInfo.Value, minimumValue);
         }
 
         /// <summary>
@@ -266,8 +229,6 @@ namespace Catel
             IsMaximum(parameterInfo.Name, (T)parameterInfo.Value, maximumValue, validation);
         }
 
-#if NET
-
         /// <summary>
         /// Determines whether the specified argument has a maximum value.
         /// </summary>
@@ -279,26 +240,10 @@ namespace Catel
         /// <exception cref="System.ArgumentNullException">The <paramref name="expression" /> is <c>null</c>.</exception>
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsMaximum<T>(Expression<Func<T>> expression, T maximumValue)
+            where T : IComparable
         {
             var parameterInfo = GetParameterInfo(expression);
             IsMaximum(parameterInfo.Name, (T)parameterInfo.Value, maximumValue);
-        }
-
-#endif
-
-        /// <summary>
-        /// Determines whether the specified argument has a maximum value.
-        /// </summary>
-        /// <param name="expression">The expression.</param>
-        /// <param name="maximumValue">The maximum value.</param>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="expression" /> value is out of range.</exception>
-        /// <exception cref="System.ArgumentException">The <paramref name="expression" /> body is not of type <see cref="MemberExpression" />.</exception>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="expression" /> is <c>null</c>.</exception>
-        [DebuggerNonUserCode, DebuggerStepThrough]
-        public static void IsMaximum(Expression<Func<int>> expression, int maximumValue)
-        {
-            var parameterInfo = GetParameterInfo(expression);
-            IsMaximum(parameterInfo.Name, (int)parameterInfo.Value, maximumValue);
         }
 
         /// <summary>
@@ -313,7 +258,8 @@ namespace Catel
         /// <exception cref="System.ArgumentException">The <paramref name="expression" /> body is not of type <see cref="MemberExpression" />.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="expression" /> is <c>null</c>.</exception>
         [DebuggerNonUserCode, DebuggerStepThrough]
-        public static void ImplementsInterface<T>(Expression<Func<T>> expression, Type interfaceType) where T : class
+        public static void ImplementsInterface<T>(Expression<Func<T>> expression, Type interfaceType) 
+            where T : class
         {
             var parameterInfo = GetParameterInfo(expression);
             if (parameterInfo.Value is Type)
@@ -338,7 +284,8 @@ namespace Catel
         /// <exception cref="System.ArgumentException">The <paramref name="expression" /> body is not of type <see cref="MemberExpression" />.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="expression" /> is <c>null</c>.</exception>
         [DebuggerNonUserCode, DebuggerStepThrough]
-        public static void ImplementsOneOfTheInterfaces<T>(Expression<Func<T>> expression, Type[] interfaceTypes) where T : class
+        public static void ImplementsOneOfTheInterfaces<T>(Expression<Func<T>> expression, Type[] interfaceTypes) 
+            where T : class
         {
             var parameterInfo = GetParameterInfo(expression);
             if (parameterInfo.Value is Type)
@@ -362,7 +309,8 @@ namespace Catel
         /// <exception cref="ArgumentException">The <paramref name="expression" /> value is not of type <paramref name="requiredType" />.</exception>
         /// <exception cref="System.ArgumentException">The <paramref name="expression" /> body is not of type <see cref="MemberExpression" />.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="expression" /> is <c>null</c>.</exception>
-        public static void IsOfType<T>(Expression<Func<T>> expression, Type requiredType) where T : class
+        public static void IsOfType<T>(Expression<Func<T>> expression, Type requiredType) 
+            where T : class
         {
             var parameterInfo = GetParameterInfo(expression);
             if (parameterInfo.Value is Type)
@@ -386,7 +334,8 @@ namespace Catel
         /// <exception cref="System.ArgumentException">The <paramref name="expression" /> body is not of type <see cref="MemberExpression" />.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="expression" /> is <c>null</c>.</exception>
         [DebuggerNonUserCode, DebuggerStepThrough]
-        public static void IsOfOneOfTheTypes<T>(Expression<Func<T>> expression, Type[] requiredTypes) where T : class
+        public static void IsOfOneOfTheTypes<T>(Expression<Func<T>> expression, Type[] requiredTypes) 
+            where T : class
         {
             var parameterInfo = GetParameterInfo(expression);
             if (parameterInfo.Value is Type)
@@ -411,7 +360,8 @@ namespace Catel
         /// <exception cref="System.ArgumentException">The <paramref name="expression" /> body is not of type <see cref="MemberExpression" />.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="expression" /> is <c>null</c>.</exception>
         [DebuggerNonUserCode, DebuggerStepThrough]
-        public static void IsNotOfType<T>(Expression<Func<T>> expression, Type notRequiredType) where T : class
+        public static void IsNotOfType<T>(Expression<Func<T>> expression, Type notRequiredType) 
+            where T : class
         {
             var parameterInfo = GetParameterInfo(expression);
             if (parameterInfo.Value is Type)
@@ -436,7 +386,8 @@ namespace Catel
         /// <exception cref="System.ArgumentException">The <paramref name="expression" /> body is not of type <see cref="MemberExpression" />.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="expression" /> is <c>null</c>.</exception>
         [DebuggerNonUserCode, DebuggerStepThrough]
-        public static void IsNotOfOneOfTheTypes<T>(Expression<Func<T>> expression, Type[] notRequiredTypes) where T : class
+        public static void IsNotOfOneOfTheTypes<T>(Expression<Func<T>> expression, Type[] notRequiredTypes)
+            where T : class
         {
             var parameterInfo = GetParameterInfo(expression);
             if (parameterInfo.Value is Type)
@@ -562,9 +513,7 @@ namespace Catel
         /// </summary>
         private class ParameterInfo<T>
         {
-
             #region Constructors
-
             /// <summary>
             /// Initializes a new instance of the <see cref="ParameterInfo{T}" /> class.
             /// </summary>
@@ -575,11 +524,9 @@ namespace Catel
                 Name = name;
                 Value = value;
             }
-
             #endregion
 
             #region Properties
-
             /// <summary>
             /// Gets the value.
             /// </summary>
