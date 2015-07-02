@@ -130,6 +130,11 @@ namespace Catel.MVVM.Providers
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> does not implement interface <see cref="IViewModel"/>.</exception>
         protected LogicBase(IView targetView, Type viewModelType = null, IViewModel viewModel = null)
         {
+            if (CatelEnvironment.IsInDesignMode)
+            {
+                return;
+            }
+
             Argument.IsNotNull("targetView", targetView);
 
             if (viewModelType == null)
