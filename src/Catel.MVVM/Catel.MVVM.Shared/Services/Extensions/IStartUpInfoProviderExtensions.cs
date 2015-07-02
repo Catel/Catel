@@ -29,7 +29,7 @@ namespace Catel.Services
         {
             Argument.IsNotNull(() => startUpInfoProvider);
 
-            var commandLine = string.Join(" ", startUpInfoProvider.Arguments.Select(x => x.Contains(" ") ? string.Format("\"{0}\"", x) : x));
+            var commandLine = string.Join(" ", startUpInfoProvider.Arguments.Select(x => x.TrimStart().IndexOfAny(" -:".ToCharArray()) > 0 ? string.Format("\"{0}\"", x) : x));
             return commandLine;
         }
         #endregion
