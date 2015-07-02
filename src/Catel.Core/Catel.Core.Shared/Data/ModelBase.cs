@@ -967,11 +967,20 @@ namespace Catel.Data
         }
 
         /// <summary>
+        /// Determines whether a specific property change should update <c>IsDirty</c> to <c>true</c>.
+        /// </summary>
+        /// <returns><c>true</c> if <c>IsDirty</c> should be set to <c>true</c> when the specified property has changed, <c>false</c> otherwise.</returns>
+        protected virtual bool ShouldPropertyChangeUpdateIsDirty(string propertyName)
+        {
+            return true;
+        }
+
+        /// <summary>
         /// Sets the <see cref="IsDirty"/> property and automatically validate if required.
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="setDirtyAndAllowAutomaticValidation">If set to <c>true</c>, the <see cref="IsDirty"/> property is set and automatic validation is allowed.</param>
-        private void SetDirtyAndAutomaticallyValidate(string propertyName, bool setDirtyAndAllowAutomaticValidation)
+        protected virtual void SetDirtyAndAutomaticallyValidate(string propertyName, bool setDirtyAndAllowAutomaticValidation)
         {
             // Are we not validating or is this a warning or error message?
             if (setDirtyAndAllowAutomaticValidation && !IsValidating &&
@@ -980,7 +989,11 @@ namespace Catel.Data
                 (string.CompareOrdinal(propertyName, ErrorMessageProperty) != 0) &&
                 (string.CompareOrdinal(propertyName, HasErrorsMessageProperty) != 0))
             {
-                IsDirty = true;
+                if (ShouldPropertyChangeUpdateIsDirty(propertyName))
+                {
+                    IsDirty = true;
+                }
+
                 IsValidated = false;
             }
 
