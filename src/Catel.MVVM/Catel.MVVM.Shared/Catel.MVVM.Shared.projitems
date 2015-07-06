@@ -66,6 +66,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\CountVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\DebugConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\EmptyStringToVisibilityConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\EnumToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\FormattingConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\GetFirstValidationErrorConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\Helpers\ConverterHelper.cs" />

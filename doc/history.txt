@@ -59,6 +59,7 @@ Added/fixed:
 (+) CTL-657 Create FocusOnKeyPress behavior to allow to set the focus when a specific KeyDown event occurs
 (+) CTL-660 Allow AssemblyHelper.GetEntryAssembly with custom EntryAssembly resolver
 (+) CTL-667 Support async in Entity Framework 6 extension for unit of work and repositories (NET 4.5+ only)
+(+) CTL-675 Add EnumToCollapsingVisibilityConverter
 (*) CTL-550 Non Serializable properties tagged with [IncludeInSerialization] should attempt to serialize and 
     complain if they are not serialized
 (*) CTL-617 Marked TraceOutputControl as obsolete, will be removed in 5.0. Use LogViewerControl from the 
