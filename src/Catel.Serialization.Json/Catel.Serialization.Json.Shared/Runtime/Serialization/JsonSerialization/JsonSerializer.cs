@@ -52,9 +52,10 @@ namespace Catel.Runtime.Serialization.Json
         /// </summary>
         /// <param name="serializationManager">The serialization manager.</param>
         /// <param name="typeFactory">The type factory.</param>
+        /// <param name="objectAdapter">The object adapter.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationManager" /> is <c>null</c>.</exception>
-        public JsonSerializer(ISerializationManager serializationManager, ITypeFactory typeFactory)
-            : base(serializationManager, typeFactory)
+        public JsonSerializer(ISerializationManager serializationManager, ITypeFactory typeFactory, IObjectAdapter objectAdapter)
+            : base(serializationManager, typeFactory, objectAdapter)
         {
             PreserveReferences = true;
             WriteTypeInfo = true;

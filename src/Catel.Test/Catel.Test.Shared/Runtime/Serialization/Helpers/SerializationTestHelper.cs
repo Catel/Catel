@@ -25,7 +25,6 @@ namespace Catel.Test.Runtime.Serialization
         /// <param name="serializer">The serializer.</param>
         /// <returns>System.Object.</returns>
         public static TModel SerializeAndDeserialize<TModel>(TModel model, ISerializer serializer)
-            where TModel : ModelBase
         {
             using (var memoryStream = new MemoryStream())
             {

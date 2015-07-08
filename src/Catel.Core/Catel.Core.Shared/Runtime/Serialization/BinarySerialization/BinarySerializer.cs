@@ -52,9 +52,10 @@ namespace Catel.Runtime.Serialization.Binary
         /// </summary>
         /// <param name="serializationManager">The serialization manager.</param>
         /// <param name="typeFactory">The type factory.</param>
+        /// <param name="objectAdapter">The object adapter.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationManager" /> is <c>null</c>.</exception>
-        public BinarySerializer(ISerializationManager serializationManager, ITypeFactory typeFactory)
-            : base(serializationManager, typeFactory)
+        public BinarySerializer(ISerializationManager serializationManager, ITypeFactory typeFactory, IObjectAdapter objectAdapter)
+            : base(serializationManager, typeFactory, objectAdapter)
         {
             DeserializationBinder = new RedirectDeserializationBinder();
         }

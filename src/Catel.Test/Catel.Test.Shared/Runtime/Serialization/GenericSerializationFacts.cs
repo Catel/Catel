@@ -129,6 +129,64 @@ namespace Catel.Test.Runtime.Serialization
         }
 
         [TestFixture]
+        public class NonCatelModelSerializationFacts
+        {
+            [TestCase]
+            public void SerializeSimpleModels()
+            {
+                var originalObject = new NonCatelTestModel();
+                originalObject.FirstName = "Test";
+                originalObject.LastName = "Subject";
+
+                TestSerializationOnAllSerializers((serializer, description) =>
+                {
+                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
+
+                    Assert.AreEqual(originalObject.FirstName, clonedObject.FirstName, description);
+                    Assert.AreEqual(originalObject.LastName, clonedObject.LastName, description);
+                });
+            }
+
+            [TestCase]
+            public void SerializeWithIFieldSerializable()
+            {
+                var originalObject = new NonCatelTestModelWithIFieldSerializable();
+                originalObject.FirstName = "Test";
+                originalObject.LastName = "Subject";
+
+                TestSerializationOnAllSerializers((serializer, description) =>
+                {
+                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
+
+                    Assert.IsTrue(originalObject.GetViaInterface);
+                    Assert.IsTrue(clonedObject.SetViaInterface);
+
+                    Assert.AreEqual(originalObject.FirstName, clonedObject.FirstName, description);
+                    Assert.AreEqual(originalObject.LastName, clonedObject.LastName, description);
+                });
+            }
+
+            [TestCase]
+            public void SerializeWithIPropertySerializable()
+            {
+                var originalObject = new NonCatelTestModelWithIPropertySerializable();
+                originalObject.FirstName = "Test";
+                originalObject.LastName = "Subject";
+
+                TestSerializationOnAllSerializers((serializer, description) =>
+                {
+                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
+
+                    Assert.IsTrue(originalObject.GetViaInterface);
+                    Assert.IsTrue(clonedObject.SetViaInterface);
+
+                    Assert.AreEqual(originalObject.FirstName, clonedObject.FirstName, description);
+                    Assert.AreEqual(originalObject.LastName, clonedObject.LastName, description);
+                });
+            }
+        }
+
+        [TestFixture]
         public class AdvancedSerializationFacts
         {
             [Serializable]
@@ -371,7 +429,7 @@ namespace Catel.Test.Runtime.Serialization
 
             serializers.Add(SerializationFactory.GetXmlSerializer());
             serializers.Add(SerializationFactory.GetBinarySerializer());
-            serializers.Add(new JsonSerializer(new SerializationManager(), TypeFactory.Default));
+            serializers.Add(new JsonSerializer(new SerializationManager(), TypeFactory.Default, new ObjectAdapter()));
 
             foreach (var serializer in serializers)
             {

@@ -60,12 +60,13 @@ namespace Catel.Runtime.Serialization.Xml
         /// <param name="dataContractSerializerFactory">The data contract serializer factory.</param>
         /// <param name="xmlNamespaceManager">The XML namespace manager.</param>
         /// <param name="typeFactory">The type factory.</param>
+        /// <param name="objectAdapter">The object adapter.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationManager" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="dataContractSerializerFactory" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="xmlNamespaceManager" /> is <c>null</c>.</exception>
         public XmlSerializer(ISerializationManager serializationManager, IDataContractSerializerFactory dataContractSerializerFactory,
-            IXmlNamespaceManager xmlNamespaceManager, ITypeFactory typeFactory)
-            : base(serializationManager, typeFactory)
+            IXmlNamespaceManager xmlNamespaceManager, ITypeFactory typeFactory, IObjectAdapter objectAdapter)
+            : base(serializationManager, typeFactory, objectAdapter)
         {
             Argument.IsNotNull("dataContractSerializerFactory", dataContractSerializerFactory);
             Argument.IsNotNull("xmlNamespaceManager", xmlNamespaceManager);

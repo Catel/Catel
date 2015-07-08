@@ -58,14 +58,18 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="serializationManager">The serialization manager.</param>
         /// <param name="typeFactory">The type factory.</param>
+        /// <param name="objectAdapter">The object adapter.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationManager" /> is <c>null</c>.</exception>
-        protected SerializerBase(ISerializationManager serializationManager, ITypeFactory typeFactory)
+        protected SerializerBase(ISerializationManager serializationManager, ITypeFactory typeFactory, IObjectAdapter objectAdapter)
         {
             Argument.IsNotNull("serializationManager", serializationManager);
             Argument.IsNotNull("typeFactory", typeFactory);
+            Argument.IsNotNull("objectAdapter", objectAdapter);
 
             SerializationManager = serializationManager;
             TypeFactory = typeFactory;
+            ObjectAdapter = objectAdapter;
+
             SerializationManager.CacheInvalidated += OnSerializationManagerCacheInvalidated;
         }
         #endregion
@@ -82,6 +86,12 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <value>The type factory.</value>
         protected ITypeFactory TypeFactory { get; private set; }
+
+        /// <summary>
+        /// Gets the object adapter.
+        /// </summary>
+        /// <value>The object adapter.</value>
+        protected IObjectAdapter ObjectAdapter { get; private set; }
         #endregion
 
         #region ISerializer<TSerializationContext> Members
@@ -127,30 +137,10 @@ namespace Catel.Runtime.Serialization
                     continue;
                 }
 
-                try
+                var propertyValue = ObjectAdapter.GetMemberValue(model, propertyName, modelInfo);
+                if (propertyValue != null)
                 {
-                    //Log.Debug("Adding property '{0}' to list of objects to serialize", propertyName);
-
-                    var modelEditor = model as IModelEditor;
-                    if (modelEditor != null && modelInfo.CatelPropertyNames.Contains(propertyName))
-                    {
-                        var propertyData = modelInfo.CatelPropertiesByName[propertyName];
-                        var actualPropertyValue = modelEditor.GetValueFastButUnsecure(propertyName);
-                        var propertyValue = new MemberValue(SerializationMemberGroup.CatelProperty, modelType, propertyData.Type, propertyData.Name, actualPropertyValue);
-
-                        listToSerialize.Add(propertyValue);
-                    }
-                    else
-                    {
-                        var propertyInfo = modelInfo.PropertiesByName[propertyName];
-                        var propertyValue = new MemberValue(SerializationMemberGroup.RegularProperty, modelType, propertyInfo.PropertyType, propertyName, propertyInfo.GetValue(model, null));
-
-                        listToSerialize.Add(propertyValue);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Log.Warning(ex, "Failed to get value of member '{0}.{1}', skipping item during serialization", modelType.GetSafeFullName(), propertyName);
+                    listToSerialize.Add(propertyValue);
                 }
             }
 
@@ -169,17 +159,10 @@ namespace Catel.Runtime.Serialization
                     continue;
                 }
 
-                try
+                var fieldValue = ObjectAdapter.GetMemberValue(model, field.Name, modelInfo);
+                if (fieldValue != null)
                 {
-                    Log.Debug("Adding field '{0}' to list of objects to serialize", field.Name);
-
-                    var fieldValue = new MemberValue(SerializationMemberGroup.Field, modelType, field.FieldType, field.Name, field.GetValue(model));
-
                     listToSerialize.Add(fieldValue);
-                }
-                catch (Exception ex)
-                {
-                    Log.Warning(ex, "Failed to get value of member '{0}.{1}', skipping item during serialization", modelType.GetSafeFullName(), field.Name);
                 }
             }
 
@@ -347,42 +330,7 @@ namespace Catel.Runtime.Serialization
 
             foreach (var member in members)
             {
-                try
-                {
-                    var modelEditor = model as IModelEditor;
-                    if (modelEditor != null && modelInfo.CatelPropertyNames.Contains(member.Name))
-                    {
-                        modelEditor.SetValueFastButUnsecure(member.Name, member.Value);
-                    }
-                    else if (modelInfo.PropertyNames.Contains(member.Name))
-                    {
-                        var propertyInfo = modelInfo.PropertiesByName[member.Name];
-                        if (propertyInfo == null)
-                        {
-                            Log.Warning("Failed to set property '{0}.{1}' because the member cannot be found on the model", modelType.GetSafeFullName(), member.Name);
-                        }
-                        else
-                        {
-                            propertyInfo.SetValue(model, member.Value, null);
-                        }
-                    }
-                    else if (modelInfo.FieldNames.Contains(member.Name))
-                    {
-                        var fieldInfo = modelInfo.FieldsByName[member.Name];
-                        if (fieldInfo == null)
-                        {
-                            Log.Warning("Failed to set field '{0}.{1}' because the member cannot be found on the model", modelType.GetSafeFullName(), member.Name);
-                        }
-                        else
-                        {
-                            fieldInfo.SetValue(model, member.Value);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Log.Warning(ex, "Failed to populate '{0}.{1}', setting the member value threw an exception", modelType.GetSafeFullName(), member.Name);
-                }
+                ObjectAdapter.SetMemberValue(model, member, modelInfo);
             }
         }
 
