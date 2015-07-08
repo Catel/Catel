@@ -158,7 +158,7 @@ namespace Catel.Data
             PropertyDataManager = PropertyDataManager.Default;
 
             DefaultValidateUsingDataAnnotationsValue = true;
-            DefaultSerializer = IoCConfiguration.DefaultDependencyResolver.Resolve<IModelBaseSerializer>();
+            DefaultSerializer = IoCConfiguration.DefaultDependencyResolver.Resolve<ISerializer>();
         }
 
 #if !NET
@@ -521,14 +521,6 @@ namespace Catel.Data
         }
 
         /// <summary>
-        /// Called when the object is deserialized.
-        /// </summary>
-        protected virtual void OnDeserialized()
-        {
-            _deserialized.SafeInvoke(this);
-        }
-
-        /// <summary>
         /// Initializes the object by setting default values.
         /// </summary>
         private void Initialize()
@@ -571,23 +563,6 @@ namespace Catel.Data
             InitializeProperties();
 
             InitializeCustomProperties();
-        }
-
-        /// <summary>
-        /// Finishes the deserialization (both binary and xml)
-        /// </summary>
-        internal void FinishDeserialization()
-        {
-            Log.Debug("Finished deserialization of '{0}'", GetType().Name);
-
-            // Data is now considered deserialized
-            IsDeserialized = true;
-
-            FinishInitializationAfterConstructionOrDeserialization();
-
-            IsDirty = false;
-
-            OnDeserialized();
         }
 
         /// <summary>

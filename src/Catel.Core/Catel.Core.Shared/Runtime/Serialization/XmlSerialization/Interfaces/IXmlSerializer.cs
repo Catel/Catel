@@ -25,7 +25,7 @@ namespace Catel.Runtime.Serialization.Xml
     /// <summary>
     /// Interface for the xml serializer.
     /// </summary>
-    public interface IXmlSerializer : IModelBaseSerializer<XmlSerializationContextInfo>
+    public interface IXmlSerializer : ISerializer<XmlSerializationContextInfo>
     {
         /// <summary>
         /// Gets or sets the optimalization mode.

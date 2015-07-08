@@ -313,8 +313,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\EventArgs\SerializationEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Helpers\SerializationContextHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\IModelBaseSerializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\ISerializable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\ISerializationContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\ISerializationManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\ISerializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\ISerializerModifier.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\MemberMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\MemberValue.cs" />

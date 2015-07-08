@@ -365,9 +365,9 @@ namespace Catel.Test.Runtime.Serialization
             }
         }
 
-        private static void TestSerializationOnAllSerializers(Action<IModelBaseSerializer, string> action)
+        private static void TestSerializationOnAllSerializers(Action<ISerializer, string> action)
         {
-            var serializers = new List<IModelBaseSerializer>();
+            var serializers = new List<ISerializer>();
 
             serializers.Add(SerializationFactory.GetXmlSerializer());
             serializers.Add(SerializationFactory.GetBinarySerializer());

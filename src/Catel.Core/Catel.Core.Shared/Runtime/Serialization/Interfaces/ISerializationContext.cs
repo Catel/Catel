@@ -7,7 +7,6 @@
 namespace Catel.Runtime.Serialization
 {
     using System;
-    using Data;
 
     /// <summary>
     /// The mode in which a context is being used.
@@ -34,7 +33,7 @@ namespace Catel.Runtime.Serialization
         /// Gets the model that needs serialization or deserialization.
         /// </summary>
         /// <value>The model.</value>
-        ModelBase Model { get; }
+        object Model { get; }
 
         /// <summary>
         /// Gets the type of the model.

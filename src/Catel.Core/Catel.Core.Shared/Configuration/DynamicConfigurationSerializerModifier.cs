@@ -32,7 +32,7 @@ namespace Catel.Configuration
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="model">The model.</param>
-        public override void OnSerializing(ISerializationContext context, Data.IModel model)
+        public override void OnSerializing(ISerializationContext context, object model)
         {
             _serializationManager.Clear(model.GetType());
 
@@ -44,7 +44,7 @@ namespace Catel.Configuration
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="model">The model.</param>
-        public override void OnDeserializing(ISerializationContext context, Data.IModel model)
+        public override void OnDeserializing(ISerializationContext context, object model)
         {
             base.OnDeserializing(context, model);
 

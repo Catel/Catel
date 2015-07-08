@@ -40,13 +40,13 @@ namespace Catel.Runtime.Serialization
         public event EventHandler<SerializationEventArgs> Deserialized;
         #endregion
 
-        #region IModelBaseSerializer<TSerializationContext> Members
+        #region ISerializer<TSerializationContext> Members
         /// <summary>
         /// Serializes the specified model.
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="stream">The stream.</param>
-        public virtual void Serialize(ModelBase model, Stream stream)
+        public virtual void Serialize(object model, Stream stream)
         {
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("stream", stream);
@@ -64,7 +64,7 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="context">The context.</param>
-        public virtual void Serialize(ModelBase model, TSerializationContext context)
+        public virtual void Serialize(object model, TSerializationContext context)
         {
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("context", context);
@@ -106,7 +106,7 @@ namespace Catel.Runtime.Serialization
         /// <param name="model">The model.</param>
         /// <param name="stream">The stream.</param>
         /// <param name="membersToIgnore">The members to ignore.</param>
-        public virtual void SerializeMembers(ModelBase model, Stream stream, params string[] membersToIgnore)
+        public virtual void SerializeMembers(object model, Stream stream, params string[] membersToIgnore)
         {
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("stream", stream);

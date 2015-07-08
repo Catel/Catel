@@ -21,10 +21,10 @@ namespace Catel.Runtime.Serialization
     using Catel.Threading;
 
     /// <summary>
-    /// Base class for serializers that can serializer the <see cref="ModelBase" />.
+    /// Base class for serializers that can serialize any object.
     /// </summary>
     /// <typeparam name="TSerializationContext">The type of the T serialization context.</typeparam>
-    public abstract partial class SerializerBase<TSerializationContext> : IModelBaseSerializer<TSerializationContext>
+    public abstract partial class SerializerBase<TSerializationContext> : ISerializer<TSerializationContext>
         where TSerializationContext : class
     {
         #region Constants
@@ -84,7 +84,7 @@ namespace Catel.Runtime.Serialization
         protected ITypeFactory TypeFactory { get; private set; }
         #endregion
 
-        #region IModelBaseSerializer<TSerializationContext> Members
+        #region ISerializer<TSerializationContext> Members
         /// <summary>
         /// Gets the serializable members for the specified model.
         /// </summary>
@@ -92,7 +92,7 @@ namespace Catel.Runtime.Serialization
         /// <param name="membersToIgnore">The members to ignore.</param>
         /// <returns>The list of members to serialize.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
-        public virtual List<MemberValue> GetSerializableMembers(ModelBase model, params string[] membersToIgnore)
+        public virtual List<MemberValue> GetSerializableMembers(object model, params string[] membersToIgnore)
         {
             Argument.IsNotNull("model", model);
 
@@ -241,7 +241,7 @@ namespace Catel.Runtime.Serialization
         /// <param name="model">The model.</param>
         /// <param name="propertyName">Name of the member.</param>
         /// <returns><c>true</c> if the member should be ignored, <c>false</c> otherwise.</returns>
-        protected virtual bool ShouldIgnoreMember(ModelBase model, string propertyName)
+        protected virtual bool ShouldIgnoreMember(object model, string propertyName)
         {
             return false;
         }
@@ -262,7 +262,7 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("context", context);
 
-            var model = (ModelBase)TypeFactory.CreateInstance(modelType);
+            var model = TypeFactory.CreateInstance(modelType);
             return GetContext(model, context, contextMode);
         }
 
@@ -282,7 +282,7 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("stream", stream);
 
-            var model = (ModelBase)TypeFactory.CreateInstance(modelType);
+            var model = TypeFactory.CreateInstance(modelType);
             return GetContext(model, stream, contextMode);
         }
 
@@ -295,7 +295,7 @@ namespace Catel.Runtime.Serialization
         /// <returns>The serialization context.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="context" /> is <c>null</c>.</exception>
-        protected virtual ISerializationContext<TSerializationContext> GetContext(ModelBase model, TSerializationContext context, SerializationContextMode contextMode)
+        protected virtual ISerializationContext<TSerializationContext> GetContext(object model, TSerializationContext context, SerializationContextMode contextMode)
         {
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("context", context);
@@ -312,7 +312,7 @@ namespace Catel.Runtime.Serialization
         /// <returns>The serialization context.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="stream" /> is <c>null</c>.</exception>
-        protected abstract ISerializationContext<TSerializationContext> GetContext(ModelBase model, Stream stream, SerializationContextMode contextMode);
+        protected abstract ISerializationContext<TSerializationContext> GetContext(object model, Stream stream, SerializationContextMode contextMode);
 
         /// <summary>
         /// Appends the serialization context to the specified stream. This way each serializer can handle the serialization
@@ -329,7 +329,7 @@ namespace Catel.Runtime.Serialization
         /// <param name="members">The members.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="members"/> is <c>null</c>.</exception>
-        protected virtual void PopulateModel(ModelBase model, params MemberValue[] members)
+        protected virtual void PopulateModel(object model, params MemberValue[] members)
         {
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("properties", members);

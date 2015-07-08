@@ -29,7 +29,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <param name="model">The model.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="element" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
-        public XmlSerializationContextInfo(XElement element, ModelBase model)
+        public XmlSerializationContextInfo(XElement element, object model)
         {
             Argument.IsNotNull("element", element);
             Argument.IsNotNull("model", model);
@@ -95,15 +95,15 @@ namespace Catel.Runtime.Serialization.Xml
         /// Gets the model.
         /// </summary>
         /// <value>The model.</value>
-        public ModelBase Model { get; private set; }
+        public object Model { get; private set; }
 
         #region Methods
-        private void Initialize(string xmlContent, ModelBase model)
+        private void Initialize(string xmlContent, object model)
         {
             Initialize(XElement.Parse(xmlContent), model);
         }
 
-        private void Initialize(XElement element, ModelBase model)
+        private void Initialize(XElement element, object model)
         {
             Element = element;
             Model = model;

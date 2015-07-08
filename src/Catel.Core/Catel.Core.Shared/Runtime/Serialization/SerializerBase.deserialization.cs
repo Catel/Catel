@@ -91,7 +91,7 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="stream">The stream.</param>
-        public virtual void Deserialize(ModelBase model, Stream stream)
+        public virtual void Deserialize(object model, Stream stream)
         {
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("stream", stream);
@@ -107,20 +107,13 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="serializationContext">The serialization context.</param>
-        public virtual void Deserialize(ModelBase model, TSerializationContext serializationContext)
+        public virtual void Deserialize(object model, TSerializationContext serializationContext)
         {
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("context", serializationContext);
 
             using (var finalContext = GetContext(model, serializationContext, SerializationContextMode.Deserialization))
             {
-                bool? previousLeanAndMeanValue = null;
-                if (!ModelBase.GlobalLeanAndMeanModel)
-                {
-                    previousLeanAndMeanValue = model.LeanAndMeanModel;
-                    model.LeanAndMeanModel = true;
-                }
-
                 var serializerModifiers = SerializationManager.GetSerializerModifiers(finalContext.ModelType);
 
                 Log.Debug("Using '{0}' serializer modifiers to deserialize type '{1}'", serializerModifiers.Length, finalContext.ModelType.GetSafeFullName());
@@ -146,13 +139,6 @@ namespace Catel.Runtime.Serialization
                 }
 
                 Deserialized.SafeInvoke(this, serializingEventArgs);
-
-                model.FinishDeserialization();
-
-                if (previousLeanAndMeanValue.HasValue)
-                {
-                    model.LeanAndMeanModel = previousLeanAndMeanValue.Value;
-                }
             }
         }
 
@@ -161,8 +147,8 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="modelType">Type of the model.</param>
         /// <param name="stream">The stream.</param>
-        /// <returns>The deserialized <see cref="ModelBase"/>.</returns>
-        public virtual ModelBase Deserialize(Type modelType, Stream stream)
+        /// <returns>The deserialized <see cref="object"/>.</returns>
+        public virtual object Deserialize(Type modelType, Stream stream)
         {
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("stream", stream);
@@ -182,13 +168,13 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="modelType">Type of the model.</param>
         /// <param name="serializationContext">The serialization context.</param>
-        /// <returns>The deserialized <see cref="ModelBase"/>.</returns>
-        public virtual ModelBase Deserialize(Type modelType, TSerializationContext serializationContext)
+        /// <returns>The deserialized <see cref="object"/>.</returns>
+        public virtual object Deserialize(Type modelType, TSerializationContext serializationContext)
         {
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("context", serializationContext);
 
-            var model = (ModelBase)TypeFactory.CreateInstance(modelType);
+            var model = TypeFactory.CreateInstance(modelType);
 
             Deserialize(model, serializationContext);
 

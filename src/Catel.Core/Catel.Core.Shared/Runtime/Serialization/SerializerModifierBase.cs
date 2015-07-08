@@ -21,7 +21,7 @@ namespace Catel.Runtime.Serialization
         /// <param name="model">The model.</param>
         /// <param name="memberValue">The member value.</param>
         /// <returns><c>true</c> if the property should be ignored, <c>false</c> otherwise.</returns>
-        public virtual bool ShouldIgnoreMember(ISerializationContext context, IModel model, MemberValue memberValue)
+        public virtual bool ShouldIgnoreMember(ISerializationContext context, object model, MemberValue memberValue)
         {
             return false;
         }
@@ -31,7 +31,7 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="model">The model.</param>
-        public virtual void OnSerializing(ISerializationContext context, IModel model)
+        public virtual void OnSerializing(ISerializationContext context, object model)
         {
         }
 
@@ -49,7 +49,7 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="model">The model.</param>
-        public virtual void OnSerialized(ISerializationContext context, IModel model)
+        public virtual void OnSerialized(ISerializationContext context, object model)
         {
         }
 
@@ -58,7 +58,7 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="model">The model.</param>
-        public virtual void OnDeserializing(ISerializationContext context, IModel model)
+        public virtual void OnDeserializing(ISerializationContext context, object model)
         {
         }
 
@@ -77,7 +77,7 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="model">The model.</param>
-        public virtual void OnDeserialized(ISerializationContext context, IModel model)
+        public virtual void OnDeserialized(ISerializationContext context, object model)
         {
         }
     }

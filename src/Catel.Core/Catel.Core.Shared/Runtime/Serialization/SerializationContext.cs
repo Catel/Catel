@@ -8,7 +8,6 @@ namespace Catel.Runtime.Serialization
 {
     using System;
     using Catel.Scoping;
-    using Data;
 
     /// <summary>
     /// The serialization context used to serialize and deserialize models.
@@ -17,6 +16,7 @@ namespace Catel.Runtime.Serialization
     public class SerializationContext<TContext> : ISerializationContext<TContext>
         where TContext : class
     {
+        private IDisposable _serializableToken; 
         private ScopeManager<ReferenceManager> _referenceManagerScopeManager;
         private int? _depth;
 
@@ -28,7 +28,7 @@ namespace Catel.Runtime.Serialization
         /// <param name="contextMode">The context mode.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="context" /> is <c>null</c>.</exception>
-        public SerializationContext(ModelBase model, TContext context, SerializationContextMode contextMode)
+        public SerializationContext(object model, TContext context, SerializationContextMode contextMode)
         {
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("context", context);
@@ -42,13 +42,14 @@ namespace Catel.Runtime.Serialization
             _referenceManagerScopeManager = ScopeManager<ReferenceManager>.GetScopeManager(scopeName);
 
             ReferenceManager = _referenceManagerScopeManager.ScopeObject;
+            _serializableToken = CreateSerializableToken();
         }
 
         /// <summary>
         /// Gets the model that needs serialization or deserialization.
         /// </summary>
         /// <value>The model.</value>
-        public ModelBase Model { get; private set; }
+        public object Model { get; private set; }
 
         /// <summary>
         /// Gets the type of the model.
@@ -101,6 +102,57 @@ namespace Catel.Runtime.Serialization
                 _referenceManagerScopeManager.Dispose();
                 _referenceManagerScopeManager = null;
             }
+
+            if (_serializableToken != null)
+            {
+                _serializableToken.Dispose();
+                _serializableToken = null;
+            }
+        }
+
+        private IDisposable CreateSerializableToken()
+        {
+            return new DisposableToken<object>(Model,
+                x =>
+                {
+                    var serializable = x.Instance as ISerializable;
+                    if (serializable != null)
+                    {
+                        switch ((SerializationContextMode)x.Tag)
+                        {
+                            case SerializationContextMode.Serialization:
+                                serializable.StartSerialization();
+                                break;
+
+                            case SerializationContextMode.Deserialization:
+                                serializable.StartDeserialization();
+                                break;
+
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                    }
+                },
+                x =>
+                {
+                    var serializable = x.Instance as ISerializable;
+                    if (serializable != null)
+                    {
+                        switch ((SerializationContextMode)x.Tag)
+                        {
+                            case SerializationContextMode.Serialization:
+                                serializable.FinishSerialization();
+                                break;
+
+                            case SerializationContextMode.Deserialization:
+                                serializable.FinishDeserialization();
+                                break;
+
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                    }
+                }, ContextMode);
         }
     }
 }

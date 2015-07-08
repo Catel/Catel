@@ -22,7 +22,7 @@ namespace Catel.Runtime.Serialization.Xml
     using Catel.Reflection;
 
     /// <summary>
-    /// The xml serializer to serialize the <see cref="ModelBase"/> and derived classes.
+    /// The xml serializer.
     /// </summary>
     public class XmlSerializer : SerializerBase<XmlSerializationContextInfo>, IXmlSerializer
     {
@@ -300,7 +300,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <param name="model">The model.</param>
         /// <param name="propertyName">Name of the member.</param>
         /// <returns><c>true</c> if the member should be ignored, <c>false</c> otherwise.</returns>
-        protected override bool ShouldIgnoreMember(ModelBase model, string propertyName)
+        protected override bool ShouldIgnoreMember(object model, string propertyName)
         {
             var ignoredMembers = _ignoredMembersCache.GetFromCacheOrFetch(model.GetType(), () =>
             {
@@ -376,7 +376,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <param name="stream">The stream.</param>
         /// <param name="contextMode">The context mode.</param>
         /// <returns>The serialization context.</returns>
-        protected override ISerializationContext<XmlSerializationContextInfo> GetContext(ModelBase model, Stream stream, SerializationContextMode contextMode)
+        protected override ISerializationContext<XmlSerializationContextInfo> GetContext(object model, Stream stream, SerializationContextMode contextMode)
         {
             XDocument document = null;
 
@@ -643,7 +643,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <param name="context">The context.</param>
         /// <param name="element">The element.</param>
         /// <param name="model">The model.</param>
-        private void AddReferenceId(ISerializationContext context, XElement element, IModel model)
+        private void AddReferenceId(ISerializationContext context, XElement element, object model)
         {
             var referenceManager = context.ReferenceManager;
             var referenceInfo = referenceManager.GetInfo(model);
