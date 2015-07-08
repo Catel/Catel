@@ -31,9 +31,9 @@ namespace Catel.Test.Logging
             [TestCase]
             public void LoggingPerformance()
             {
-                var log = LogManager.GetLogger(typeof(ThePerformance));
+                var log = new Log(typeof (ThePerformance));
 
-                var averageDuration = TimeMeasureHelper.MeasureAction(10000, "Log.Write", () => log.WriteWithData("this is a test", null, LogEvent.Error));
+                var averageDuration = TimeMeasureHelper.MeasureAction(5000, "Log.Write", () => log.WriteWithData("this is a test", null, LogEvent.Error));
 
                 Assert.IsTrue(averageDuration < 1d);
             }
