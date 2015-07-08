@@ -29,7 +29,7 @@ namespace Catel.Test.Runtime.Serialization
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         [TestFixture]
-        public class BasicSerializationFacts
+        public class CatelModelBasicSerializationFacts
         {
             [TestCase]
             public void SerializationLevel1()
@@ -129,65 +129,7 @@ namespace Catel.Test.Runtime.Serialization
         }
 
         [TestFixture]
-        public class NonCatelModelSerializationFacts
-        {
-            [TestCase]
-            public void SerializeSimpleModels()
-            {
-                var originalObject = new NonCatelTestModel();
-                originalObject.FirstName = "Test";
-                originalObject.LastName = "Subject";
-
-                TestSerializationOnAllSerializers((serializer, description) =>
-                {
-                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
-
-                    Assert.AreEqual(originalObject.FirstName, clonedObject.FirstName, description);
-                    Assert.AreEqual(originalObject.LastName, clonedObject.LastName, description);
-                });
-            }
-
-            [TestCase]
-            public void SerializeWithIFieldSerializable()
-            {
-                var originalObject = new NonCatelTestModelWithIFieldSerializable();
-                originalObject.FirstName = "Test";
-                originalObject.LastName = "Subject";
-
-                TestSerializationOnAllSerializers((serializer, description) =>
-                {
-                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
-
-                    Assert.IsTrue(originalObject.GetViaInterface);
-                    Assert.IsTrue(clonedObject.SetViaInterface);
-
-                    Assert.AreEqual(originalObject.FirstName, clonedObject.FirstName, description);
-                    Assert.AreEqual(originalObject.LastName, clonedObject.LastName, description);
-                });
-            }
-
-            [TestCase]
-            public void SerializeWithIPropertySerializable()
-            {
-                var originalObject = new NonCatelTestModelWithIPropertySerializable();
-                originalObject.FirstName = "Test";
-                originalObject.LastName = "Subject";
-
-                TestSerializationOnAllSerializers((serializer, description) =>
-                {
-                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
-
-                    Assert.IsTrue(originalObject.GetViaInterface);
-                    Assert.IsTrue(clonedObject.SetViaInterface);
-
-                    Assert.AreEqual(originalObject.FirstName, clonedObject.FirstName, description);
-                    Assert.AreEqual(originalObject.LastName, clonedObject.LastName, description);
-                });
-            }
-        }
-
-        [TestFixture]
-        public class AdvancedSerializationFacts
+        public class CatelModelAdvancedSerializationFacts
         {
             [Serializable]
             public abstract class AbstractBase : ModelBase
@@ -199,7 +141,8 @@ namespace Catel.Test.Runtime.Serialization
 
 #if NET
                 protected AbstractBase(SerializationInfo info, StreamingContext context)
-                    : base(info, context) { }
+                    : base(info, context)
+                { }
 #endif
 
                 public string Name
@@ -221,7 +164,8 @@ namespace Catel.Test.Runtime.Serialization
 
 #if NET
                 protected DerivedClass(SerializationInfo info, StreamingContext context)
-                    : base(info, context) { }
+                    : base(info, context)
+                { }
 #endif
             }
 
@@ -235,7 +179,8 @@ namespace Catel.Test.Runtime.Serialization
 
 #if NET
                 protected ContainerClass(SerializationInfo info, StreamingContext context)
-                    : base(info, context) { }
+                    : base(info, context)
+                { }
 #endif
 
                 public ObservableCollection<AbstractBase> Items
@@ -357,6 +302,93 @@ namespace Catel.Test.Runtime.Serialization
                     Assert.IsTrue(ReferenceEquals(clonedGraph.Collection1, clonedGraph.Collection2), description);
                 });
             }
+        }
+
+        [TestFixture]
+        public class NonCatelModelBasicSerializationFacts
+        {
+            [TestCase]
+            public void SerializeSimpleModels()
+            {
+                var originalObject = new NonCatelTestModel();
+                originalObject.FirstName = "Test";
+                originalObject.LastName = "Subject";
+
+                TestSerializationOnAllSerializers((serializer, description) =>
+                {
+                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
+
+                    Assert.AreEqual(originalObject.FirstName, clonedObject.FirstName, description);
+                    Assert.AreEqual(originalObject.LastName, clonedObject.LastName, description);
+                });
+            }
+
+            [TestCase]
+            public void SerializeWithIFieldSerializable()
+            {
+                var originalObject = new NonCatelTestModelWithIFieldSerializable();
+                originalObject.FirstName = "Test";
+                originalObject.LastName = "Subject";
+
+                TestSerializationOnAllSerializers((serializer, description) =>
+                {
+                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
+
+                    Assert.IsTrue(originalObject.GetViaInterface, description);
+                    Assert.IsTrue(clonedObject.SetViaInterface, description);
+
+                    Assert.AreEqual(originalObject.FirstName, clonedObject.FirstName, description);
+                    Assert.AreEqual(originalObject.LastName, clonedObject.LastName, description);
+                });
+            }
+
+            [TestCase]
+            public void SerializeWithIPropertySerializable()
+            {
+                var originalObject = new NonCatelTestModelWithIPropertySerializable();
+                originalObject.FirstName = "Test";
+                originalObject.LastName = "Subject";
+
+                TestSerializationOnAllSerializers((serializer, description) =>
+                {
+                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
+
+                    Assert.IsTrue(originalObject.GetViaInterface, description);
+                    Assert.IsTrue(clonedObject.SetViaInterface, description);
+
+                    Assert.AreEqual(originalObject.FirstName, clonedObject.FirstName, description);
+                    Assert.AreEqual(originalObject.LastName, clonedObject.LastName, description);
+                });
+            }
+
+            [TestCase]
+            public void CanSerializeAndDeserializeComplexHierarchies()
+            {
+                var complexHierarchy = ComplexSerializationHierarchy.CreateComplexNonCatelHierarchy();
+
+                TestSerializationOnAllSerializers((serializer, description) =>
+                {
+                    var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(complexHierarchy, serializer);
+
+                    Assert.AreEqual(complexHierarchy.LastName, deserializedObject.LastName, description);
+                    Assert.AreEqual(complexHierarchy.Persons.Count, deserializedObject.Persons.Count, description);
+
+                    for (int i = 0; i < deserializedObject.Persons.Count; i++)
+                    {
+                        var expectedPerson = complexHierarchy.Persons[i];
+                        var actualPerson = complexHierarchy.Persons[i];
+
+                        Assert.AreEqual(expectedPerson.Gender, actualPerson.Gender, description);
+                        Assert.AreEqual(expectedPerson.FirstName, actualPerson.FirstName, description);
+                        Assert.AreEqual(expectedPerson.LastName, actualPerson.LastName, description);
+                    }
+                });
+            }
+        }
+
+        [TestFixture]
+        public class NonCatelModelAdvancedSerializationFacts
+        {
         }
 
         [TestFixture, Explicit]
