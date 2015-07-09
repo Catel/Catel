@@ -8,9 +8,7 @@
 namespace Catel.MVVM
 {
     using System.Threading.Tasks;
-    using System.Windows.Input;
-    using Catel;
-    using Catel.MVVM;
+    using Auditing;
 
     /// <summary>
     /// Container for application-wide commands.
@@ -79,7 +77,7 @@ namespace Catel.MVVM
         where TPogress : ITaskProgressReport
     {
         #region Fields
-        private readonly ICommand _command;
+        private readonly ICatelCommand _command;
         private readonly ICommandManager _commandManager;
         private readonly ICompositeCommand _compositeCommand;
         #endregion
@@ -99,7 +97,7 @@ namespace Catel.MVVM
             _commandManager = commandManager;
 
             _compositeCommand = (ICompositeCommand) _commandManager.GetCommand(commandName);
-            _command = new TaskCommand<TExecuteParameter, TCanExecuteParameter, TPogress>(ExecuteAsync, CanExecute);
+            _command = new TaskCommand<TExecuteParameter, TCanExecuteParameter, TPogress>(ExecuteAsyncInternal, CanExecute);
 
             _commandManager.RegisterCommand(commandName, _command);
         }
@@ -130,6 +128,18 @@ namespace Catel.MVVM
         protected virtual bool CanExecute(TCanExecuteParameter parameter)
         {
             return true;
+        }
+
+        /// <summary>
+        /// Executes the command.
+        /// </summary>
+        /// <param name="parameter">The parameter.</param>
+        /// <returns>Task.</returns>
+        private async Task ExecuteAsyncInternal(TExecuteParameter parameter)
+        {
+            await ExecuteAsync(parameter);
+
+            AuditingManager.OnCommandExecuted(null, CommandName, _command, parameter);
         }
 
         /// <summary>
