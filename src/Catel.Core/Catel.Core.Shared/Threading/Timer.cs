@@ -9,7 +9,6 @@
 namespace System.Threading
 {
     using Tasks;
-    using Catel;
 
     /// <summary>
     /// Timer callback delegate.
@@ -20,17 +19,26 @@ namespace System.Threading
     public delegate void TimerCallback(object state);
 
     /// <summary>
+    /// The timeout class.
+    /// </summary>
+    public static class Timeout
+    {
+        /// <summary>
+        /// A constant used to specify an infinite waiting period, for threading methods that accept an Int32 parameter.
+        /// </summary>
+        public const int Infinite = -1;
+    }
+
+    /// <summary>
     /// Timer for WinRT since WinRT only provides the DispatcherTimer which cannot be used outside the UI thread.
     /// </summary>
     public class Timer : IDisposable
     {
         #region Fields
-        private bool _isTimerRunning;
         private readonly TimerCallback _timerCallback;
         private readonly object _timerState;
 
-        private bool _isKillingTimer;
-        private bool _hasKilledTimer;
+        private CancellationTokenSource _cancellationTokenSource;
         #endregion
 
         #region Constructors
@@ -45,13 +53,19 @@ namespace System.Threading
         /// <summary>
         /// Initializes a new instance of the <see cref="Timer"/> class.
         /// </summary>
-        /// <param name="interval">
-        /// The interval in milliseconds.
-        /// </param>
+        /// <param name="interval">The interval in milliseconds.</param>
         public Timer(int interval)
         {
             Interval = interval;
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Timer"/> class.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        public Timer(TimerCallback callback)
+            : this(callback, null, Timeout.Infinite, Timeout.Infinite)
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Timer" /> class.
@@ -62,7 +76,8 @@ namespace System.Threading
         /// <param name="interval">The interval.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="callback" /> is <c>null</c>.</exception>
         public Timer(TimerCallback callback, object state, int dueTime, int interval)
-            : this(callback, state, TimeSpan.FromMilliseconds(dueTime), TimeSpan.FromMilliseconds(interval)) { }
+            : this(callback, state, TimeSpan.FromMilliseconds(dueTime), TimeSpan.FromMilliseconds(interval))
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Timer" /> class.
@@ -74,8 +89,6 @@ namespace System.Threading
         /// <exception cref="ArgumentNullException">The <paramref name="callback" /> is <c>null</c>.</exception>
         public Timer(TimerCallback callback, object state, TimeSpan dueTime, TimeSpan interval)
         {
-            Argument.IsNotNull("callback", callback);
-
             _timerCallback = callback;
             _timerState = state;
 
@@ -99,60 +112,67 @@ namespace System.Threading
         #endregion
 
         #region Methods
+
         /// <summary>
         /// Changes the specified interval.
         /// </summary>
         /// <param name="dueTime">The due time.</param>
         /// <param name="interval">The interval.</param>
-        // NOTE: async void by purpose
-        public async void Change(TimeSpan dueTime, TimeSpan interval)
+        public void Change(int dueTime, int interval)
         {
-            if (_isTimerRunning)
-            {
-                _isKillingTimer = true;
+            Change(TimeSpan.FromMilliseconds(dueTime), TimeSpan.FromMilliseconds(interval));
+        }
 
-                while (!_hasKilledTimer)
-                {
-                    await Task.Delay(10);
-                }
+        /// <summary>
+        /// Changes the specified interval.
+        /// </summary>
+        /// <param name="dueTime">The due time.</param>
+        /// <param name="interval">The interval.</param>
+        public void Change(TimeSpan dueTime, TimeSpan interval)
+        {
+            Stop();
 
-                _isKillingTimer = false;
-                _hasKilledTimer = false;
-                
-            }
+            _cancellationTokenSource = new CancellationTokenSource();
+            var cancellationToken = _cancellationTokenSource.Token;
 
             Interval = (int)interval.TotalMilliseconds;
 
-#pragma warning disable 4014
-            Task.Run(() =>
-#pragma warning restore 4014
+            if (dueTime < TimeSpan.Zero)
             {
-                Task.Delay(dueTime);
-                Start();
-            });
+                // Never invoke initial one
+            }
+            else if (dueTime == TimeSpan.Zero)
+            {
+                // Invoke immediately
+                TimerElapsed();
+
+                Start(cancellationToken);
+            }
+            else
+            {
+                // Invoke after due time
+                Task.Delay(dueTime, cancellationToken).ContinueWith(ContinueTimer, cancellationToken, cancellationToken);
+            }
         }
 
         /// <summary>
         /// Starts the timer.
         /// </summary>
-        // NOTE: async void by purpose
-        private async void Start()
+        /// <param name="cancellationToken">The cancellation token.</param>
+        private void Start(CancellationToken cancellationToken)
         {
-            _isTimerRunning = true;
-
-            while (_isTimerRunning)
+            if (Interval <= 0)
             {
-                if (_isKillingTimer)
-                {
-                    _hasKilledTimer = true;
-                    _isTimerRunning = false;
-                    break;
-                }
-
-                TimerElapsed();
-
-                await Task.Delay(Interval);
+                // Never start a timer
+                return;
             }
+
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+
+            Task.Delay(Interval, cancellationToken).ContinueWith(ContinueTimer, cancellationToken, cancellationToken);
         }
 
         /// <summary>
@@ -160,7 +180,32 @@ namespace System.Threading
         /// </summary>
         private void Stop()
         {
-            _isTimerRunning = false;
+            if (_cancellationTokenSource != null)
+            {
+                _cancellationTokenSource.Cancel();
+                _cancellationTokenSource = null;
+            }
+        }
+
+        /// <summary>
+        /// Continues the timer.
+        /// </summary>
+        /// <param name="t">The task.</param>
+        /// <param name="state">The state which must be the cancellation token.</param>
+        private void ContinueTimer(Task t, object state)
+        {
+            var cancellationToken = (CancellationToken)state;
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+
+            TimerElapsed();
+
+            if (!cancellationToken.IsCancellationRequested)
+            {
+                Start(cancellationToken);
+            }
         }
 
         /// <summary>
@@ -168,7 +213,11 @@ namespace System.Threading
         /// </summary>
         private void TimerElapsed()
         {
-            Elapsed.SafeInvoke(this);
+            var elapsed = Elapsed;
+            if (elapsed != null)
+            {
+                elapsed(this, EventArgs.Empty);
+            }
 
             if (_timerCallback != null)
             {

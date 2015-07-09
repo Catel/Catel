@@ -30,6 +30,15 @@ Added/fixed (BREAKING CHANGES):
 (-) CTL-613 Removed Windows 8.0 projects (no longer supported in Visual Studio 2015). Upgrade your projects
     to 8.1 instead
 
+Classes marked as obsolete:
+===========================
+Our mission is to make Catel easier to maintain in the future. One way to achieve this is to remove unused
+features and components. We are actively removing features by marking them obsolete. If nobody complains,
+we will remove the features in the next major release.
+
+(*) CTL-671 Marked Catel.Extensions.CSLA as obsolete
+(*) CTL-672 Marked Catel.Extensions.Wcf.Server as obsolete
+
 Added/fixed:
 ============
 (+) CTL-525 UnitOfWork should allow Refresh of Entities
@@ -48,6 +57,9 @@ Added/fixed:
 (+) CTL-652 Create a CommandManagerWrapper so every window can support application-wide commands
 (+) CTL-656 Added Async overloads in ViewModel to prepare for async and sync methods support in ViewModelBase in v5
 (+) CTL-657 Create FocusOnKeyPress behavior to allow to set the focus when a specific KeyDown event occurs
+(+) CTL-660 Allow AssemblyHelper.GetEntryAssembly with custom EntryAssembly resolver
+(+) CTL-667 Support async in Entity Framework 6 extension for unit of work and repositories (NET 4.5+ only)
+(+) CTL-675 Add EnumToCollapsingVisibilityConverter
 (*) CTL-550 Non Serializable properties tagged with [IncludeInSerialization] should attempt to serialize and 
     complain if they are not serialized
 (*) CTL-617 Marked TraceOutputControl as obsolete, will be removed in 5.0. Use LogViewerControl from the 
@@ -62,8 +74,14 @@ Added/fixed:
 (*) CTL-643 Change async logging flush calls to sync and add async extensions. This means that all flushing will now be
     done on the same thread by default. To flush async, call FlushAsync(). The final signature change (breaking) will be
     applied to Catel v5
+(*) Updated Entity Framework to 6.1.3 for Entity Framework 6 extension
+(*) Updated to FluentValidation 5.6.2
+(*) Updated NuGet to 2.8.5 for Prism extension
+(*) Updated AspNet.Mvc to 5.2.3 for Catel.MVC5
 (*) CTL-645 Only invoke auditor methods when at least 1 auditor is registered
 (*) CTL-648 Ensure ShowDialogAsync works the same (blocking) on all platforms
+(*) CTL-670 Improve Argument class for range and guid checks when using expressions
+(*) CTL-674 Allow control on IsDirty after a property has been changed
 (x) CTL-555 Non Catel models with GraphId are not correctly deserialized using XmlSerializer and JsonSerializer
 (x) CTL-621 ManagedViewModel might throw exception when enumerating interested view models
 (x) CTL-625 LogListeners are created twice when defined in config when using vshost
@@ -77,6 +95,10 @@ Added/fixed:
 (x) CTL-650 ParallelHelper is not executing anything in parallel
 (x) CTL-653 The type initializer for 'Catel.IoC.IoCFactory' threw an exception for types where FullName is empty
 (x) CTL-654 CompositeCommand.UnregisterAction doesn't work when directly passing in a method
+(x) CTL-658 LanguageService doesn't work for WinRT and resources inside the app itself
+(x) CTL-659 AssemblyHelper.GetEntryAssembly fails with Dynamic Assemblies
+(x) CTL-663 ViewModelManager sometimes throws KeyNotFoundException in multithreaded scenarios
+(x) CTL-664 EventToCommand doesn't initially call CanExecute on a command to determine the initial state
 
 Roadmap:
 ========

@@ -111,11 +111,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Prism\ServiceLocatorAdapterTests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Prism\UIVisualizerServiceExtensionsTests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensionsFacts.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Wcf.Server\InstanceProviderFacts.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Wcf.Server\ServiceHostFactoryFacts.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Wcf.Server\ServiceHostFacts.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Wcf.Server\Services\Interfaces\ITestService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Wcf.Server\Services\TestService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GlobalInitialization.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ConsoleHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ExpressionHelperFacts.cs" />
@@ -173,6 +168,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\ContainsItemsConverterTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\CountVisibilityConverterTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\EmptyStringToVisibilityConverterTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\EnumToVisibilityConverterFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\FormattingConverterTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\GetFirstValidationErrorConverterTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\IsSelectedConverterTest.cs" />

@@ -18,6 +18,8 @@ namespace Catel.Services
     /// </summary>
     public static class IStartUpInfoProviderExtensions
     {
+        private static readonly char[] ReplaceableCharacters = new[] {' ', '-', ':'};
+
         #region Methods
         /// <summary>
         /// Gets the command line as a string and quotes the values with a space.
@@ -29,7 +31,7 @@ namespace Catel.Services
         {
             Argument.IsNotNull(() => startUpInfoProvider);
 
-            var commandLine = string.Join(" ", startUpInfoProvider.Arguments.Select(x => x.Contains(" ") ? string.Format("\"{0}\"", x) : x));
+            var commandLine = string.Join(" ", startUpInfoProvider.Arguments.Select(x => x.TrimStart().IndexOfAny(ReplaceableCharacters) > 0 ? string.Format("\"{0}\"", x) : x));
             return commandLine;
         }
         #endregion

@@ -116,18 +116,23 @@ namespace Catel.MVVM
         {
             Argument.IsNotNull("viewModel", viewModel);
 
-            if (viewModel.IsClosed)
+            lock (_instances)
             {
-                Log.Warning("View model '{0}' with unique identifier '{1}' is already closed, cannot manage commands of a closed view model", viewModel.GetType().FullName, viewModel.UniqueIdentifier);
-                return null;
-            }
+                // Event the check for closed is done inside the lock. It might be that the lock has awaited the removal because the vm was being closed
+                // in the meantime
+                if (viewModel.IsClosed)
+                {
+                    Log.Warning("View model '{0}' with unique identifier '{1}' is already closed, cannot manage commands of a closed view model", viewModel.GetType().FullName, viewModel.UniqueIdentifier);
+                    return null;
+                }
 
-            if (!_instances.ContainsKey(viewModel.UniqueIdentifier))
-            {
-                _instances[viewModel.UniqueIdentifier] = new ViewModelCommandManager(viewModel);
-            }
+                if (!_instances.ContainsKey(viewModel.UniqueIdentifier))
+                {
+                    _instances[viewModel.UniqueIdentifier] = new ViewModelCommandManager(viewModel);
+                }
 
-            return _instances[viewModel.UniqueIdentifier];
+                return _instances[viewModel.UniqueIdentifier];
+            }
         }
 
         /// <summary>
@@ -284,7 +289,10 @@ namespace Catel.MVVM
         {
             lock (_lock)
             {
-                _instances.Remove(_viewModel.UniqueIdentifier);
+                lock (_instances)
+                {
+                    _instances.Remove(_viewModel.UniqueIdentifier);
+                }
 
                 _commandHandlers.Clear();
 

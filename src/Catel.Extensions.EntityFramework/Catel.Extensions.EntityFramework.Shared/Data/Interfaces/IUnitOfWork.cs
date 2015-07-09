@@ -13,6 +13,10 @@ namespace Catel.Data
     using IoC;
     using Repositories;
 
+#if EF_ASYNC
+    using System.Threading.Tasks;
+#endif
+
 #if EF5
     using SaveOptions = System.Data.Objects.SaveOptions;
     using System.Data.Objects;
@@ -66,6 +70,15 @@ namespace Catel.Data
         /// <param name="collection">The collection.</param>
         void Refresh(RefreshMode refreshMode, IEnumerable collection);
 
+#if EF_ASYNC
+        /// <summary>
+        /// Refreshes the collection inside the unit of work.
+        /// </summary>
+        /// <param name="refreshMode">The refresh mode.</param>
+        /// <param name="collection">The collection.</param>
+        Task RefreshAsync(RefreshMode refreshMode, IEnumerable collection);
+#endif
+
         /// <summary>
         /// Refreshes the entity inside the unit of work.
         /// </summary>
@@ -73,11 +86,28 @@ namespace Catel.Data
         /// <param name="entity">The entity.</param>
         void Refresh(RefreshMode refreshMode, object entity);
 
+#if EF_ASYNC
+        /// <summary>
+        /// Refreshes the entity inside the unit of work.
+        /// </summary>
+        /// <param name="refreshMode">The refresh mode.</param>
+        /// <param name="entity">The entity.</param>
+        Task RefreshAsync(RefreshMode refreshMode, object entity);
+#endif
+
         /// <summary>
         /// Saves the changes inside the unit of work.
         /// </summary>
         /// <param name="saveOptions">The save options.</param>
         void SaveChanges(SaveOptions saveOptions = SaveOptions.DetectChangesBeforeSave | SaveOptions.AcceptAllChangesAfterSave);
+
+#if EF_ASYNC
+        /// <summary>
+        /// Saves the changes inside the unit of work.
+        /// </summary>
+        /// <param name="saveOptions">The save options.</param>
+        Task SaveChangesAsync(SaveOptions saveOptions = SaveOptions.DetectChangesBeforeSave | SaveOptions.AcceptAllChangesAfterSave);
+#endif
 
         /// <summary>
         /// Begins a new transaction on the unit of work.
@@ -94,6 +124,13 @@ namespace Catel.Data
         /// Commits all the changes inside a transaction.
         /// </summary>
         void CommitTransaction();
+
+#if EF_ASYNC
+        /// <summary>
+        /// Commits all the changes inside a transaction.
+        /// </summary>
+        Task CommitTransactionAsync();
+#endif
         #endregion
     }
 }

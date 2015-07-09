@@ -7,6 +7,7 @@
 namespace Catel.Logging
 {
     using System.Threading.Tasks;
+    using Threading;
 
     /// <summary>
     /// IBatchLogListener extensions.
@@ -17,9 +18,9 @@ namespace Catel.Logging
         /// Flushes the current queue asynchronous.
         /// </summary>
         /// <returns>Task so it can be awaited.</returns>
-        public static async Task FlushAsync(this IBatchLogListener batchLogListener)
+        public static Task FlushAsync(this IBatchLogListener batchLogListener)
         {
-            await Task.Factory.StartNew(() => batchLogListener.Flush());
+            return TaskHelper.Run(() => batchLogListener.Flush());
         }
     }
 }

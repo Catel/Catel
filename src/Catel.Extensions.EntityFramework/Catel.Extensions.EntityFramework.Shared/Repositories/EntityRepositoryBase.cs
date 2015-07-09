@@ -93,59 +93,13 @@ namespace Catel.Data.Repositories
         public virtual IQueryable<TEntity> GetQuery(Expression<Func<TEntity, bool>> predicate)
         {
             var query = GetQuery();
-            return query.Where(predicate);
-        }
 
-        /// <summary>
-        /// Gets a single entity based on the matching criteria.
-        /// </summary>
-        /// <param name="predicate">The predicate.</param>
-        /// <returns>The entity or <c>null</c> if no entity matches the criteria.</returns>
-        public virtual TEntity Single(Expression<Func<TEntity, bool>> predicate = null)
-        {
-            var query = GetQuery();
-            predicate = EnsureValidatePredicate(predicate);
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
 
-            return query.Single(predicate);
-        }
-
-        /// <summary>
-        /// Gets a single entity based on the matching criteria.
-        /// </summary>
-        /// <param name="predicate">The predicate.</param>
-        /// <returns>The entity or <c>null</c> if no entity matches the criteria.</returns>
-        public virtual TEntity SingleOrDefault(Expression<Func<TEntity, bool>> predicate = null)
-        {
-            var query = GetQuery();
-            predicate = EnsureValidatePredicate(predicate);
-
-            return query.SingleOrDefault(predicate);
-        }
-
-        /// <summary>
-        /// Gets the first entity based on the matching criteria.
-        /// </summary>
-        /// <param name="predicate">The predicate.</param>
-        /// <returns>The entity or <c>null</c> if no entity matches the criteria.</returns>
-        public virtual TEntity First(Expression<Func<TEntity, bool>> predicate = null)
-        {
-            var query = GetQuery();
-            predicate = EnsureValidatePredicate(predicate);
-
-            return query.First(predicate);
-        }
-
-        /// <summary>
-        /// Gets the first entity based on the matching criteria.
-        /// </summary>
-        /// <param name="predicate">The predicate.</param>
-        /// <returns>The entity or <c>null</c> if no entity matches the criteria.</returns>
-        public virtual TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate = null)
-        {
-            var query = GetQuery();
-            predicate = EnsureValidatePredicate(predicate);
-
-            return query.FirstOrDefault(predicate);
+            return query;
         }
 
         /// <summary>
@@ -196,23 +150,6 @@ namespace Catel.Data.Repositories
         }
 
         /// <summary>
-        /// Deletes all entities that match the predicate.
-        /// </summary>
-        /// <param name="predicate">The predicate.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="predicate" /> is <c>null</c>.</exception>
-        public virtual void Delete(Expression<Func<TEntity, bool>> predicate)
-        {
-            Argument.IsNotNull("predicate", predicate);
-
-            var entities = Find(predicate);
-
-            foreach (var entity in entities)
-            {
-                Delete(entity);
-            }
-        }
-
-        /// <summary>
         /// Updates changes of the existing entity.
         /// <para />
         /// Note that this method does not actually call <c>SaveChanges</c>, but only updates the entity in the repository.
@@ -232,62 +169,9 @@ namespace Catel.Data.Repositories
                 objectContext.ApplyCurrentValues(key.EntitySetName, entity);
             }
         }
-
-        /// <summary>
-        /// Finds entities based on provided criteria.
-        /// </summary>
-        /// <param name="predicate">The predicate.</param>
-        /// <returns>Enumerable of all matching entities.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="predicate" /> is <c>null</c>.</exception>
-        public virtual IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
-        {
-            predicate = EnsureValidatePredicate(predicate);
-
-            return GetQuery(predicate);
-        }
-
-        /// <summary>
-        /// Gets all entities available in the repository.
-        /// <para />
-        /// Not that this method executes the default query returned by <see cref="GetQuery()" />/.
-        /// </summary>
-        /// <returns>Enumerable of all entities.</returns>
-        public virtual IQueryable<TEntity> GetAll()
-        {
-            return GetQuery();
-        }
-
-        /// <summary>
-        /// Counts entities with the specified criteria.
-        /// </summary>
-        /// <param name="predicate">The predicate.</param>
-        /// <returns>The number of entities that match the criteria.</returns>
-        public virtual int Count(Expression<Func<TEntity, bool>> predicate = null)
-        {
-            predicate = EnsureValidatePredicate(predicate);
-
-            return GetQuery().Count(predicate);
-        }
         #endregion
 
         #region Methods
-        /// <summary>
-        /// Ensures a validate predicate.
-        /// <para />
-        /// If the <paramref name="predicate"/> is <c>null</c>, this method will create a default predicate which
-        /// is always true.
-        /// </summary>
-        /// <param name="predicate">The predicate.</param>
-        /// <returns>The ensured valid predicate.</returns>
-        private Expression<Func<TEntity, bool>> EnsureValidatePredicate(Expression<Func<TEntity, bool>> predicate)
-        {
-            if (predicate == null)
-            {
-                predicate = x => true;
-            }
-
-            return predicate;
-        }
         #endregion
     }
 }

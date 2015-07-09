@@ -78,7 +78,7 @@ namespace Catel.Collections
         /// Gets a value indicating whether change notifications are suspended.
         /// </summary>
         /// <value>
-        /// 	<c>True</c> if notifications are suspended, otherwise, <c>false</c>.
+        /// <c>True</c> if notifications are suspended, otherwise, <c>false</c>.
         /// </value>
         public bool NotificationsSuspended
         {
@@ -178,7 +178,7 @@ namespace Catel.Collections
             {
                 foreach (var item in collection)
                 {
-                    ((IList) this).Add(item);
+                    ((IList)this).Add(item);
                 }
             }
         }
@@ -218,7 +218,7 @@ namespace Catel.Collections
             {
                 foreach (var item in collection)
                 {
-                    ((IList) this).Remove(item);
+                    ((IList)this).Remove(item);
                 }
             }
         }
@@ -247,14 +247,14 @@ namespace Catel.Collections
         /// <returns>IDisposable.</returns>
         public IDisposable SuspendChangeNotifications()
         {
-            return new DisposableToken<FastObservableCollection<T>>(this, 
+            return new DisposableToken<FastObservableCollection<T>>(this,
                 x =>
                 {
                     x.Instance._suspendChangeNotifications = true;
                 },
                 x =>
                 {
-                    x.Instance._suspendChangeNotifications = (bool) x.Tag;
+                    x.Instance._suspendChangeNotifications = (bool)x.Tag;
                     if (x.Instance.IsDirty && !x.Instance._suspendChangeNotifications)
                     {
                         x.Instance.IsDirty = false;
@@ -268,9 +268,21 @@ namespace Catel.Collections
         /// </summary>
         protected void NotifyChanges()
         {
-            OnPropertyChanged(new PropertyChangedEventArgs("Count"));
-            OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            Action action = () =>
+            {
+                OnPropertyChanged(new PropertyChangedEventArgs("Count"));
+                OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
+                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            };
+
+            if (AutomaticallyDispatchChangeNotifications)
+            {
+                _dispatcherService.BeginInvokeIfRequired(action);
+            }
+            else
+            {
+                action();
+            }
         }
 
         /// <summary>

@@ -124,7 +124,7 @@ namespace Catel.Services
                     }
 
                     var dispatcherService = ResolveTypeFromContainer<IDispatcherService>();
-                    dispatcherService.Invoke(openedProc);
+                    dispatcherService.Invoke(openedProc, true);
                 });
             }
 
@@ -169,7 +169,7 @@ namespace Catel.Services
                             }
 
                             var dispatcherService = ResolveTypeFromContainer<IDispatcherService>();
-                            dispatcherService.Invoke(openedProc);
+                            dispatcherService.Invoke(openedProc, true);
                         });
                     }
 

@@ -266,6 +266,7 @@ namespace Catel.Windows.Controls
 
                 case NotifyCollectionChangedAction.Add:
                 case NotifyCollectionChangedAction.Remove:
+                case NotifyCollectionChangedAction.Replace:
                     if (e.OldItems != null)
                     {
                         foreach (var item in e.OldItems)
@@ -281,9 +282,6 @@ namespace Catel.Windows.Controls
                     // don't do anything with new items because we don't want to
                     // create visuals that aren't being shown
                     break;
-
-                case NotifyCollectionChangedAction.Replace:
-                    throw new NotImplementedException("Replace not implemented yet");
             }
 
             InitializeItems();

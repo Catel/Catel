@@ -10,6 +10,7 @@ namespace Catel.ExceptionHandling
     using System;
     using System.Threading;
     using System.Threading.Tasks;
+    using Threading;
 
     /// <summary>
     /// The exception service extensions.
@@ -25,15 +26,11 @@ namespace Catel.ExceptionHandling
         /// <exception cref="ArgumentNullException">The <paramref name="exceptionService"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
         /// <returns><c>true</c> if the exception is handled; otherwise <c>false</c>.</returns>
-        public static async Task<bool> HandleExceptionAsync(this IExceptionService exceptionService, Exception exception, CancellationToken cancellationToken = default(CancellationToken))
+        public static Task<bool> HandleExceptionAsync(this IExceptionService exceptionService, Exception exception, CancellationToken cancellationToken = default(CancellationToken))
         {
             Argument.IsNotNull("exceptionService", exceptionService);
 
-#if NET40 || SL5 || PCL
-            return await Task.Factory.StartNew(() => exceptionService.HandleException(exception), cancellationToken).ConfigureAwait(false);
-#else
-            return await Task.Run(() => exceptionService.HandleException(exception), cancellationToken).ConfigureAwait(false);
-#endif
+            return TaskHelper.Run(() => exceptionService.HandleException(exception), cancellationToken);
         }
 
         /// <summary>
@@ -58,16 +55,12 @@ namespace Catel.ExceptionHandling
         /// <param name="action">The action.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public static async Task ProcessWithRetryAsync(this IExceptionService exceptionService, Action action, CancellationToken cancellationToken = new CancellationToken())
+        public static Task ProcessWithRetryAsync(this IExceptionService exceptionService, Action action, CancellationToken cancellationToken = new CancellationToken())
         {
             Argument.IsNotNull("exceptionService", exceptionService);
             Argument.IsNotNull("action", action);
 
-#if NET40 || SL5 || PCL
-            await Task.Factory.StartNew(() => exceptionService.ProcessWithRetry(action), cancellationToken).ConfigureAwait(false);
-#else
-            await Task.Run(() => exceptionService.ProcessWithRetry(action), cancellationToken).ConfigureAwait(false);
-#endif
+            return TaskHelper.Run(() => exceptionService.ProcessWithRetry(action), cancellationToken);
         }
 
         /// <summary>
@@ -79,16 +72,12 @@ namespace Catel.ExceptionHandling
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public static async Task<TResult> ProcessWithRetryAsync<TResult>(this IExceptionService exceptionService, Func<TResult> action, CancellationToken cancellationToken = new CancellationToken())
+        public static Task<TResult> ProcessWithRetryAsync<TResult>(this IExceptionService exceptionService, Func<TResult> action, CancellationToken cancellationToken = new CancellationToken())
         {
             Argument.IsNotNull("exceptionService", exceptionService);
             Argument.IsNotNull("action", action);
 
-#if NET40 || SL5 || PCL
-            return await Task.Factory.StartNew(() => exceptionService.ProcessWithRetry(action), cancellationToken).ConfigureAwait(false);
-#else
-            return await Task.Run(() => exceptionService.ProcessWithRetry(action), cancellationToken).ConfigureAwait(false);
-#endif
+            return TaskHelper.Run(() => exceptionService.ProcessWithRetry(action), cancellationToken);
         }
 
         /// <summary>

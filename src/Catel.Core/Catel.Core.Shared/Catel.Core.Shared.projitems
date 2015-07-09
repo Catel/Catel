@@ -159,8 +159,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Filtering\CompositePredicate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Filtering\Interfaces\ICompositeFilter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Fluent\Interfaces\IFluent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Generics\NullOp.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Generics\Operator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\EnvironmentHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ExpressionHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\HashHelper.cs" />
@@ -296,6 +294,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Helpers\PropertyHelper.expression.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Helpers\StaticHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Helpers\TypeHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Reflection\Interfaces\IEntryAssemblyResolver.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\TypeCache.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\TypeInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\ReferenceEqualityComparer.cs" />

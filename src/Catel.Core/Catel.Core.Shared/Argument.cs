@@ -12,7 +12,6 @@ namespace Catel
     using System.Text.RegularExpressions;
 
     using Data;
-    using Generics;
     using Logging;
     using Reflection;
 
@@ -62,7 +61,7 @@ namespace Catel
         {
             if (string.IsNullOrEmpty(paramValue))
             {
-                string error = string.Format("Argument '{0}' cannot be null or empty", ObjectToStringHelper.ToString(paramName));
+                var error = string.Format("Argument '{0}' cannot be null or empty", ObjectToStringHelper.ToString(paramName));
 
                 Log.Error(error);
 
@@ -77,9 +76,29 @@ namespace Catel
         /// <param name="paramValue">Value of the parameter.</param>
         /// <exception cref="ArgumentException">If <paramref name="paramValue" /> is <c>null</c> or empty.</exception>
         [DebuggerNonUserCode, DebuggerStepThrough]
+        [ObsoleteEx(ReplacementTypeOrMember = "IsNotEmpty(string paramName, Guid paramValue)", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         public static void IsNotNullOrEmpty(string paramName, Guid paramValue)
         {
-            IsNotNullOrEmpty(paramName, (Guid?)paramValue);
+            IsNotEmpty(paramName, paramValue);
+        }
+
+        /// <summary>
+        /// Determines whether the specified argument is not empty.
+        /// </summary>
+        /// <param name="paramName">Name of the parameter.</param>
+        /// <param name="paramValue">Value of the parameter.</param>
+        /// <exception cref="ArgumentException">If <paramref name="paramValue" /> is <c>null</c> or empty.</exception>
+        [DebuggerNonUserCode, DebuggerStepThrough]
+        public static void IsNotEmpty(string paramName, Guid paramValue)
+        {
+            if (paramValue == Guid.Empty)
+            {
+                var error = string.Format("Argument '{0}' cannot be Guid.Empty", ObjectToStringHelper.ToString(paramName));
+
+                Log.Error(error);
+
+                throw new ArgumentException(error, paramName);
+            }
         }
 
         /// <summary>
@@ -94,7 +113,7 @@ namespace Catel
         {
             if (!paramValue.HasValue || paramValue.Value == Guid.Empty)
             {
-                string error = string.Format("Argument '{0}' cannot be null or Guid.Empty", ObjectToStringHelper.ToString(paramName));
+                var error = string.Format("Argument '{0}' cannot be null or Guid.Empty", ObjectToStringHelper.ToString(paramName));
 
                 Log.Error(error);
 
@@ -114,7 +133,7 @@ namespace Catel
         {
             if (string.IsNullOrEmpty(paramValue) || (string.CompareOrdinal(paramValue.Trim(), string.Empty) == 0))
             {
-                string error = string.Format("Argument '{0}' cannot be null or whitespace", ObjectToStringHelper.ToString(paramName));
+                var error = string.Format("Argument '{0}' cannot be null or whitespace", ObjectToStringHelper.ToString(paramName));
 
                 Log.Error(error);
 
@@ -134,7 +153,7 @@ namespace Catel
         {
             if ((paramValue == null) || (paramValue.Length == 0))
             {
-                string error = string.Format("Argument '{0}' cannot be null or an empty array", ObjectToStringHelper.ToString(paramName));
+                var error = string.Format("Argument '{0}' cannot be null or an empty array", ObjectToStringHelper.ToString(paramName));
 
                 Log.Error(error);
 
@@ -161,28 +180,12 @@ namespace Catel
 
             if (!validation(paramValue, minimumValue, maximumValue))
             {
-                string error = string.Format("Argument '{0}' should be between {1} and {2}", ObjectToStringHelper.ToString(paramName), minimumValue, maximumValue);
+                var error = string.Format("Argument '{0}' should be between {1} and {2}", ObjectToStringHelper.ToString(paramName), minimumValue, maximumValue);
 
                 Log.Error(error);
                 throw new ArgumentOutOfRangeException(paramName, error);
             }
         }
-
-        /// <summary>
-        /// Determines whether the specified argument is not out of range.
-        /// </summary>
-        /// <param name="paramName">Name of the parameter.</param>
-        /// <param name="paramValue">Value of the parameter.</param>
-        /// <param name="minimumValue">The minimum value.</param>
-        /// <param name="maximumValue">The maximum value.</param>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="paramValue" /> is out of range.</exception>
-        [DebuggerNonUserCode, DebuggerStepThrough]
-        public static void IsNotOutOfRange(string paramName, int paramValue, int minimumValue, int maximumValue)
-        {
-            IsNotOutOfRange(paramName, paramValue, minimumValue, maximumValue, (innerParamValue, innerMinimalValue, innerMaximumValue) => innerParamValue >= innerMinimalValue && innerParamValue <= innerMaximumValue);
-        }
-
-#if NET
 
         /// <summary>
         /// Determines whether the specified argument is not out of range.
@@ -195,11 +198,11 @@ namespace Catel
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="paramValue" /> is out of range.</exception>
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsNotOutOfRange<T>(string paramName, T paramValue, T minimumValue, T maximumValue)
+            where T : IComparable
         {
-            IsNotOutOfRange(paramName, paramValue, minimumValue, maximumValue, (innerParamValue, innerMinimalValue, innerMaximumValue) => !Operator<T>.LessThan(innerParamValue, innerMinimalValue) && !Operator<T>.GreaterThan(innerParamValue, innerMaximumValue));
+            IsNotOutOfRange(paramName, paramValue, minimumValue, maximumValue, 
+                (innerParamValue, innerMinimumValue, innerMaximumValue) => innerParamValue.CompareTo(innerMinimumValue) >= 0 && innerParamValue.CompareTo(innerMaximumValue) <= 0);
         }
-
-#endif
 
         /// <summary>
         /// Determines whether the specified argument has a minimum value.
@@ -219,27 +222,12 @@ namespace Catel
 
             if (!validation(paramValue, minimumValue))
             {
-                string error = string.Format("Argument '{0}' should be minimal {1}", ObjectToStringHelper.ToString(paramName), minimumValue);
+                var error = string.Format("Argument '{0}' should be minimal {1}", ObjectToStringHelper.ToString(paramName), minimumValue);
 
                 Log.Error(error);
                 throw new ArgumentOutOfRangeException(paramName);
             }
         }
-
-        /// <summary>
-        /// Determines whether the specified argument has a minimum value.
-        /// </summary>
-        /// <param name="paramName">Name of the parameter.</param>
-        /// <param name="paramValue">Value of the parameter.</param>
-        /// <param name="minimumValue">The minimum value.</param>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="paramValue" /> is out of range.</exception>
-        [DebuggerNonUserCode, DebuggerStepThrough]
-        public static void IsMinimal(string paramName, int paramValue, int minimumValue)
-        {
-            IsMinimal(paramName, paramValue, minimumValue, (internalParamValue, internalMinimumValue) => internalParamValue >= internalMinimumValue);
-        }
-
-#if NET
 
         /// <summary>
         /// Determines whether the specified argument has a minimum value.
@@ -251,11 +239,11 @@ namespace Catel
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="paramValue" /> is out of range.</exception>
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsMinimal<T>(string paramName, T paramValue, T minimumValue)
+            where T : IComparable
         {
-            IsMinimal(paramName, paramValue, minimumValue, (internalParamValue, internalMinimumValue) => Operator<T>.GreaterThanOrEqual(internalParamValue, internalMinimumValue));
+            IsMinimal(paramName, paramValue, minimumValue, 
+                (innerParamValue, innerMinimumValue) => innerParamValue.CompareTo(innerMinimumValue) >= 0);
         }
-
-#endif
 
         /// <summary>
         /// Determines whether the specified argument has a maximum value.
@@ -273,35 +261,12 @@ namespace Catel
         {
             if (!validation(paramValue, maximumValue))
             {
-                string error = string.Format("Argument '{0}' should be at maximum {1}", ObjectToStringHelper.ToString(paramName), maximumValue);
+                var error = string.Format("Argument '{0}' should be at maximum {1}", ObjectToStringHelper.ToString(paramName), maximumValue);
 
                 Log.Error(error);
                 throw new ArgumentOutOfRangeException(paramName, error);
             }
         }
-
-        /// <summary>
-        /// Determines whether the specified argument has a maximum value.
-        /// </summary>
-        /// <param name="paramName">
-        /// Name of the parameter.
-        /// </param>
-        /// <param name="paramValue">
-        /// Value of the parameter.
-        /// </param>
-        /// <param name="maximumValue">
-        /// The maximum value.
-        /// </param>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// If <paramref name="paramValue"/> is out of range.
-        /// </exception>
-        [DebuggerNonUserCode, DebuggerStepThrough]
-        public static void IsMaximum(string paramName, int paramValue, int maximumValue)
-        {
-            IsMaximum(paramName, paramValue, maximumValue, (innerParamValue, innerMaximumValue) => innerParamValue <= maximumValue);
-        }
-
-#if NET
 
         /// <summary>
         /// Determines whether the specified argument has a maximum value.
@@ -313,11 +278,11 @@ namespace Catel
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="paramValue" /> is out of range.</exception>
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsMaximum<T>(string paramName, T paramValue, T maximumValue)
+            where T : IComparable
         {
-            IsMaximum(paramName, paramValue, maximumValue, (innerParamValue, innerMaximumValue) => Operator<T>.LessThanOrEqual(innerParamValue, innerMaximumValue));
+            IsMaximum(paramName, paramValue, maximumValue, 
+                (innerParamValue, innerMaximumValue) => innerParamValue.CompareTo(innerMaximumValue) <= 0);
         }
-
-#endif
 
         /// <summary>
         /// Checks whether the specified <paramref name="type" /> inherits from the <paramref name="baseType" />.
@@ -345,7 +310,7 @@ namespace Catel
                 }
 
                 // Prevent some endless while loops
-                if (runtimeBaseType == typeof (Object))
+                if (runtimeBaseType == typeof(Object))
                 {
                     // Break, no return because this should cause an exception
                     break;
@@ -386,10 +351,10 @@ namespace Catel
         /// <exception cref="ArgumentException">The <paramref name="paramName" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="instance" /> is <c>null</c>.</exception>
         [DebuggerNonUserCode, DebuggerStepThrough]
-        public static void InheritsFrom<TBase>(string paramName, object instance) 
+        public static void InheritsFrom<TBase>(string paramName, object instance)
             where TBase : class
         {
-            var baseType = typeof (TBase);
+            var baseType = typeof(TBase);
 
             InheritsFrom(paramName, instance, baseType);
         }
@@ -422,7 +387,7 @@ namespace Catel
         public static void ImplementsInterface<TInterface>(string paramName, object instance)
             where TInterface : class
         {
-            var interfaceType = typeof (TInterface);
+            var interfaceType = typeof(TInterface);
 
             ImplementsInterface(paramName, instance, interfaceType);
         }
@@ -448,7 +413,7 @@ namespace Catel
                 return;
             }
 
-            string error = string.Format("Type '{0}' should implement interface '{1}', but does not", type.Name, interfaceType.Name);
+            var error = string.Format("Type '{0}' should implement interface '{1}', but does not", type.Name, interfaceType.Name);
 
             Log.Error(error);
 
@@ -503,7 +468,7 @@ namespace Catel
                 errorBuilder.AppendLine("  * " + interfaceType.FullName);
             }
 
-            string error = errorBuilder.ToString();
+            var error = errorBuilder.ToString();
 
             Log.Error(error);
 
@@ -553,7 +518,7 @@ namespace Catel
                 return;
             }
 
-            string error = string.Format("Type '{0}' should be of type '{1}', but is not", type.Name, requiredType.Name);
+            var error = string.Format("Type '{0}' should be of type '{1}', but is not", type.Name, requiredType.Name);
 
             Log.Error(error);
 
@@ -613,7 +578,7 @@ namespace Catel
                 errorBuilder.AppendLine("  * " + requiredType.FullName);
             }
 
-            string error = errorBuilder.ToString();
+            var error = errorBuilder.ToString();
 
             Log.Error(error);
 
@@ -663,7 +628,7 @@ namespace Catel
                 return;
             }
 
-            string error = string.Format("Type '{0}' should not be of type '{1}', but is", type.Name, notRequiredType.Name);
+            var error = string.Format("Type '{0}' should not be of type '{1}', but is", type.Name, notRequiredType.Name);
 
             Log.Error(error);
 
@@ -712,7 +677,7 @@ namespace Catel
             {
                 if (notRequiredType.IsAssignableFromEx(type))
                 {
-                    string error = string.Format("Type '{0}' should not be of type '{1}', but is", type.Name, notRequiredType.Name);
+                    var error = string.Format("Type '{0}' should not be of type '{1}', but is", type.Name, notRequiredType.Name);
 
                     Log.Error(error);
 
@@ -739,7 +704,7 @@ namespace Catel
 
             if (Regex.IsMatch(paramValue, pattern, regexOptions))
             {
-                string error = string.Format("Argument '{0}' matches with pattern '{1}'", paramName, pattern);
+                var error = string.Format("Argument '{0}' matches with pattern '{1}'", paramName, pattern);
 
                 Log.Error(error);
 
@@ -765,7 +730,7 @@ namespace Catel
 
             if (!Regex.IsMatch(paramValue, pattern, regexOptions))
             {
-                string error = string.Format("Argument '{0}' doesn't match with pattern '{1}'", paramName, pattern);
+                var error = string.Format("Argument '{0}' doesn't match with pattern '{1}'", paramName, pattern);
 
                 Log.Error(error);
 
@@ -842,16 +807,16 @@ namespace Catel
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsValid<T>(string paramName, T paramValue, bool validation)
         {
-           Argument.IsNotNull("paramValue", paramValue);
+            Argument.IsNotNull("paramValue", paramValue);
 
-           if (!validation)
-           {
-               string error = string.Format("Argument '{0}' is not valid", ObjectToStringHelper.ToString(paramName));
+            if (!validation)
+            {
+                var error = string.Format("Argument '{0}' is not valid", ObjectToStringHelper.ToString(paramName));
 
-               Log.Error(error);
+                Log.Error(error);
 
-               throw new ArgumentException(error);
-           }
+                throw new ArgumentException(error);
+            }
         }
 
         /// <summary>
@@ -868,7 +833,7 @@ namespace Catel
 
             if (!isSupported)
             {
-                string error = string.Format(errorFormat, args);
+                var error = string.Format(errorFormat, args);
 
                 Log.Error(error);
 

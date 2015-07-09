@@ -196,6 +196,11 @@ namespace Catel.Windows
             DataWindowDefaultButton defaultButton = DataWindowDefaultButton.OK, bool setOwnerAndFocus = true,
             InfoBarMessageControlGenerationMode infoBarMessageControlGenerationMode = InfoBarMessageControlGenerationMode.Inline)
         {
+            if (CatelEnvironment.IsInDesignMode)
+            {
+                return;
+            }
+
             // Set window style (WPF doesn't allow styling on root elements of XAML files, too bad)
             // For more info, see http://social.msdn.microsoft.com/Forums/en-US/wpf/thread/3059c0e4-c372-4da2-b384-28f271feef05/
 #if SILVERLIGHT
@@ -212,11 +217,6 @@ namespace Catel.Windows
             Mode = mode;
             DefaultButton = defaultButton;
             _infoBarMessageControlGenerationMode = infoBarMessageControlGenerationMode;
-
-            if (CatelEnvironment.IsInDesignMode)
-            {
-                return;
-            }
 
             this.FixBlurriness();
 

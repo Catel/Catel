@@ -88,6 +88,11 @@ namespace Catel.MVVM.Providers
         public UserControlLogic(IView targetView, Type viewModelType = null, IViewModel viewModel = null)
             : base(targetView, viewModelType, viewModel)
         {
+            if (CatelEnvironment.IsInDesignMode)
+            {
+                return;
+            }
+
             SupportParentViewModelContainers = true;
             CloseViewModelOnUnloaded = true;
             UnloadBehavior = DefaultUnloadBehaviorValue;

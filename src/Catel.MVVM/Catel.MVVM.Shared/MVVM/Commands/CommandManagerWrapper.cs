@@ -65,7 +65,11 @@ namespace Catel.MVVM
                 return;
             }
 
+#if NET
+            View.PreviewKeyDown += OnKeyDown;
+#else
             View.KeyDown += OnKeyDown;
+#endif
 
             _subscribed = true;
         }
@@ -77,7 +81,11 @@ namespace Catel.MVVM
                 return;
             }
 
+#if NET
+            View.PreviewKeyDown -= OnKeyDown;
+#else
             View.KeyDown -= OnKeyDown;
+#endif
 
             _subscribed = false;
         }

@@ -204,7 +204,7 @@ namespace Catel.Collections
         public bool Remove(TKey key)
         {
             var index = RemoveAndGetIndex(key);
-            return index > 0;
+            return index >= 0;
         }
 
         /// <summary>
@@ -230,7 +230,7 @@ namespace Catel.Collections
         {
             var index = GetIndex(key);
 
-            if (index > 0)
+            if (index >= 0)
             {
                 _list.RemoveAt(index);
             }

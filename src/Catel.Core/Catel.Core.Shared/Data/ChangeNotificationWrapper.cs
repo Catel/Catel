@@ -84,7 +84,7 @@ namespace Catel.Data
                 SupportsNotifyPropertyChanged = true;
             }
 
-            SubscribeNotifyChangedEvents(value, false);
+            SubscribeNotifyChangedEvents(value, null);
         }
         #endregion
 
@@ -162,33 +162,37 @@ namespace Catel.Data
         /// </remarks>
         public void OnObjectCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (e.OldItems != null)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    UnsubscribeNotifyChangedEvents(item);
-                }
-            }
+            var collection = sender as ICollection;
 
-            // Reset requires our own logic
-            if (e.Action == NotifyCollectionChangedAction.Reset)
+            lock (_lockObject)
             {
-                var enumerable = sender as IEnumerable;
-                if (enumerable != null)
+                if (e.OldItems != null)
                 {
-                    UpdateCollectionSubscriptions(enumerable);
+                    foreach (var item in e.OldItems)
+                    {
+                        UnsubscribeNotifyChangedEvents(item, collection);
+                    }
                 }
-                else
-                {
-                    Log.Warning("Received NotifyCollectionChangedAction.Reset for '{0}', but the type does implement IEnumerable", sender.GetType().GetSafeFullName());
-                }
-            }
 
-            if (e.NewItems != null)
-            {
-                foreach (var item in e.NewItems)
+                // Reset requires our own logic
+                if (e.Action == NotifyCollectionChangedAction.Reset)
                 {
-                    SubscribeNotifyChangedEvents(item, true);
+                    if (collection != null)
+                    {
+                        UpdateCollectionSubscriptions(collection);
+                    }
+                    else
+                    {
+                        Log.Warning("Received NotifyCollectionChangedAction.Reset for '{0}', but the type does implement ICollection", sender.GetType().GetSafeFullName());
+                    }
+                }
+
+                if (e.NewItems != null)
+                {
+                    foreach (var item in e.NewItems)
+                    {
+                        SubscribeNotifyChangedEvents(item, collection);
+                    }
                 }
             }
 
@@ -243,32 +247,34 @@ namespace Catel.Data
         /// <para />
         /// This method is internally used when a notifiable collection raises the <see cref="NotifyCollectionChangedAction.Reset"/> event.
         /// </summary>
-        public void UpdateCollectionSubscriptions(IEnumerable collection)
+        public void UpdateCollectionSubscriptions(ICollection collection)
         {
-            if (collection != null)
+            if (collection == null)
             {
-                lock (_lockObject)
+                return;
+            }
+
+            lock (_lockObject)
+            {
+                List<WeakReference> collectionItems;
+                if (_collectionItems.TryGetValue(collection, out collectionItems))
                 {
-                    List<WeakReference> collectionItems;
-                    if (_collectionItems.TryGetValue(collection, out collectionItems))
+                    var oldItems = collectionItems.ToArray();
+                    foreach (var item in oldItems)
                     {
-                        var oldItems = collectionItems.ToArray();
-                        foreach (var item in oldItems)
+                        if (item.IsAlive)
                         {
-                            if (item.IsAlive)
-                            {
-                                var actualItem = item.Target;
-                                UnsubscribeNotifyChangedEvents(actualItem);
-                            }
+                            var actualItem = item.Target;
+                            UnsubscribeNotifyChangedEvents(actualItem, collection);
                         }
+                    }
 
-                        collectionItems.Clear();
+                    collectionItems.Clear();
 
-                        var newItems = collection.Cast<object>().ToArray();
-                        foreach (var item in newItems)
-                        {
-                            SubscribeNotifyChangedEvents(item, true);
-                        }
+                    var newItems = collection.Cast<object>().ToArray();
+                    foreach (var item in newItems)
+                    {
+                        SubscribeNotifyChangedEvents(item, collection);
                     }
                 }
             }
@@ -278,27 +284,31 @@ namespace Catel.Data
         /// Unsubscribes from the notify changed events.
         /// </summary>
         /// <param name="value">The object to unsubscribe from.</param>
-        /// <remarks>
-        /// No need to check for weak events, they are unsubscribed automatically.
-        /// </remarks>
-        public void UnsubscribeNotifyChangedEvents(object value)
+        /// <param name="parentCollection">The parent collection.</param>
+        /// <remarks>No need to check for weak events, they are unsubscribed automatically.</remarks>
+        public void UnsubscribeNotifyChangedEvents(object value, ICollection parentCollection)
         {
-            if (value != null)
+            if (value == null)
+            {
+                return;
+            }
+
+            lock (_lockObject)
             {
                 var propertyChangedValue = value as INotifyPropertyChanged;
                 if (propertyChangedValue != null)
                 {
-                    UnsubscribeNotifyChangedEvent(propertyChangedValue, EventChangeType.Property);
+                    UnsubscribeNotifyChangedEvent(propertyChangedValue, EventChangeType.Property, parentCollection);
                 }
 
                 var collectionChangedValue = value as INotifyCollectionChanged;
                 if (collectionChangedValue != null)
                 {
-                    UnsubscribeNotifyChangedEvent(collectionChangedValue, EventChangeType.Collection);
+                    UnsubscribeNotifyChangedEvent(collectionChangedValue, EventChangeType.Collection, parentCollection);
 
                     foreach (var child in (IEnumerable)value)
                     {
-                        UnsubscribeNotifyChangedEvents(child);
+                        UnsubscribeNotifyChangedEvents(child, parentCollection);
                     }
                 }
             }
@@ -308,19 +318,28 @@ namespace Catel.Data
         /// Subscribes to the notify changed events.
         /// </summary>
         /// <param name="value">The object to subscribe to.</param>
-        /// <param name="isCollectionItem">If set to <c>true</c>, this is a collection item which should use <see cref="OnObjectCollectionItemPropertyChanged"/>.</param>
-        public void SubscribeNotifyChangedEvents(object value, bool isCollectionItem)
+        /// <param name="parentCollection">If not <c>null</c>, this is a collection item which should use <see cref="OnObjectCollectionItemPropertyChanged"/>.</param>
+        public void SubscribeNotifyChangedEvents(object value, ICollection parentCollection)
         {
-            if (value != null)
+            if (value == null)
+            {
+                return;
+            }
+
+            lock (_lockObject)
             {
                 var collectionChangedValue = value as INotifyCollectionChanged;
                 if (collectionChangedValue != null)
                 {
-                    SubscribeNotifyChangedEvent(collectionChangedValue, EventChangeType.Collection, isCollectionItem);
+                    SubscribeNotifyChangedEvent(collectionChangedValue, EventChangeType.Collection, parentCollection);
 
-                    foreach (var child in (IEnumerable)value)
+                    var collection = value as ICollection;
+                    if (collection != null)
                     {
-                        SubscribeNotifyChangedEvents(child, true);
+                        foreach (var child in collection)
+                        {
+                            SubscribeNotifyChangedEvents(child, collection);
+                        }
                     }
                 }
 
@@ -331,7 +350,7 @@ namespace Catel.Data
                     // as Silverlight, Windows Phone and WinRT
                     try
                     {
-                        SubscribeNotifyChangedEvent(propertyChangedValue, EventChangeType.Property, isCollectionItem);
+                        SubscribeNotifyChangedEvent(propertyChangedValue, EventChangeType.Property, parentCollection);
                     }
                     catch (Exception ex)
                     {
@@ -341,7 +360,7 @@ namespace Catel.Data
             }
         }
 
-        private void SubscribeNotifyChangedEvent(object value, EventChangeType eventChangeType, bool isCollectionItem)
+        private void SubscribeNotifyChangedEvent(object value, EventChangeType eventChangeType, ICollection parentCollection)
         {
             if (value == null)
             {
@@ -407,9 +426,12 @@ namespace Catel.Data
                 switch (eventChangeType)
                 {
                     case EventChangeType.Property:
-                        if (isCollectionItem)
+                        if (parentCollection != null)
                         {
                             weakListener = this.SubscribeToWeakPropertyChangedEvent(value, OnObjectCollectionItemPropertyChanged);
+
+                            var collectionItems = _collectionItems.GetOrCreateValue(parentCollection);
+                            collectionItems.Add(weakListener.SourceWeakReference);
                         }
                         else
                         {
@@ -419,18 +441,6 @@ namespace Catel.Data
 
                     case EventChangeType.Collection:
                         weakListener = this.SubscribeToWeakCollectionChangedEvent(value, OnObjectCollectionChanged);
-
-                        var collection = value as ICollection;
-                        if (collection != null)
-                        {
-                            var collectionItems = new List<WeakReference>();
-                            foreach (var item in collection)
-                            {
-                                collectionItems.Add(new WeakReference(item));
-                            }
-
-                            _collectionItems.Add(value, collectionItems);
-                        }
                         break;
 
                     default:
@@ -442,7 +452,7 @@ namespace Catel.Data
             }
         }
 
-        private void UnsubscribeNotifyChangedEvent(object value, EventChangeType eventChangeType)
+        private void UnsubscribeNotifyChangedEvent(object value, EventChangeType eventChangeType, ICollection parentCollection)
         {
             if (value == null)
             {
@@ -459,6 +469,23 @@ namespace Catel.Data
                     case EventChangeType.Property:
                         eventsTable = _weakPropertyChangedListenersTable;
                         eventsList = _weakPropertyChangedListeners;
+
+                        if (parentCollection != null)
+                        {
+                            List<WeakReference> collectionItems;
+                            if (_collectionItems.TryGetValue(parentCollection, out collectionItems))
+                            {
+                                // TODO: Consider less costly way to determine this
+                                for (var i = 0; i < collectionItems.Count; i++)
+                                {
+                                    if (ReferenceEquals(collectionItems[i].Target, value))
+                                    {
+                                        collectionItems.RemoveAt(i--);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                         break;
 
                     case EventChangeType.Collection:
@@ -484,6 +511,15 @@ namespace Catel.Data
                     List<WeakReference> collectionItems;
                     if (_collectionItems.TryGetValue(value, out collectionItems))
                     {
+                        foreach (var item in collectionItems)
+                        {
+                            if (item.IsAlive)
+                            {
+                                var actualItem = item.Target;
+                                UnsubscribeNotifyChangedEvents(actualItem, parentCollection);
+                            }
+                        }
+
                         collectionItems.Clear();
                         _collectionItems.Remove(value);
                     }

@@ -15,6 +15,8 @@ namespace Catel.Test.Services
     {
         [TestCase(new[] { "-a", "testa", "-b", "testb" }, "-a testa -b testb")]
         [TestCase(new[] { "-a", "testa", "-b", "test with spaces" }, "-a testa -b \"test with spaces\"")]
+        [TestCase(new[] { "-a", "testa", "-b", "test:with:colons" }, "-a testa -b \"test:with:colons\"")]
+        [TestCase(new[] { "-a", "testa", "-b", "test-with-dashes" }, "-a testa -b \"test-with-dashes\"")]
         public void TheGetCommandLineMethod(string[] input, string expectedCommandLine)
         {
             var fixture = new StartUpInfoProviderFixture(input);

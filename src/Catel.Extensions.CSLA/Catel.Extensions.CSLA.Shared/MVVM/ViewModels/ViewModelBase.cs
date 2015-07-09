@@ -12,12 +12,15 @@ namespace Catel.MVVM.CSLA
     using Auditing;
     using Csla.Xaml;
     using IoC;
+    using Threading;
 
     /// <summary>
     /// View model base for CSLA view models with support for Catel.
     /// </summary>
     /// <typeparam name="TModel">The type of the T model.</typeparam>
     [CLSCompliant(false)]
+    [ObsoleteEx(Message = "We are considering to remove CSLA support. See https://catelproject.atlassian.net/browse/CTL-671",
+        TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
     public abstract class ViewModelBase<TModel> : ViewModel<TModel>, IViewModel, IUniqueIdentifyable
     {
         #region Fields
@@ -295,30 +298,27 @@ namespace Catel.MVVM.CSLA
         /// </summary>
         async Task<bool> MVVM.IViewModel.CancelViewModel()
         {
-            return await Task.Factory.StartNew(() =>
+            if (IsClosed)
             {
-                if (IsClosed)
-                {
-                    return false;
-                }
+                return false;
+            }
 
-                var cancelingEventArgs = new CancelingEventArgs();
-                _catelCanceling.SafeInvoke(this, cancelingEventArgs);
+            var cancelingEventArgs = new CancelingEventArgs();
+            _catelCanceling.SafeInvoke(this, cancelingEventArgs);
 
-                if (cancelingEventArgs.Cancel)
-                {
-                    return false;
-                }
+            if (cancelingEventArgs.Cancel)
+            {
+                return false;
+            }
 
-                if (base.CanCancel)
-                {
-                    base.DoCancel();
-                }
+            if (base.CanCancel)
+            {
+                base.DoCancel();
+            }
 
-                _catelCanceled.SafeInvoke(this);
+            _catelCanceled.SafeInvoke(this);
 
-                return true;
-            });
+            return true;
         }
 
         /// <summary>
@@ -349,33 +349,30 @@ namespace Catel.MVVM.CSLA
         /// </returns>
         async Task<bool> MVVM.IViewModel.SaveViewModel()
         {
-            return await Task.Factory.StartNew(() =>
+            if (IsClosed)
             {
-                if (IsClosed)
-                {
-                    return false;
-                }
+                return false;
+            }
 
-                if (!base.CanSave)
-                {
-                    return false;
-                }
+            if (!base.CanSave)
+            {
+                return false;
+            }
 
-                var e = new SavingEventArgs();
-                _catelSaving.SafeInvoke(this, e);
-                if (e.Cancel)
-                {
-                    return false;
-                }
+            var e = new SavingEventArgs();
+            _catelSaving.SafeInvoke(this, e);
+            if (e.Cancel)
+            {
+                return false;
+            }
 
-                base.Save(this, new ExecuteEventArgs());
+            base.Save(this, new ExecuteEventArgs());
 
-                _catelSaved.SafeInvoke(this);
+            _catelSaved.SafeInvoke(this);
 
-                // Was original call, but not supported in SL
-                //base.DoSave();
-                return true;
-            });
+            // Was original call, but not supported in SL
+            //base.DoSave();
+            return true;
         }
 
         /// <summary>
@@ -406,21 +403,18 @@ namespace Catel.MVVM.CSLA
         /// <param name="result">The result to pass to the view. This will, for example, be used as <c>DialogResult</c>.</param>
         async Task MVVM.IViewModel.CloseViewModel(bool? result)
         {
-            await Task.Factory.StartNew(() =>
+            if (IsClosed)
             {
-                if (IsClosed)
-                {
-                    return;
-                }
+                return;
+            }
 
-                _catelClosing.SafeInvoke(this);
+            _catelClosing.SafeInvoke(this);
 
-                IsClosed = true;
+            IsClosed = true;
 
-                ViewModelManager.UnregisterViewModelInstance(this);
+            ViewModelManager.UnregisterViewModelInstance(this);
 
-                _catelClosed.SafeInvoke(this, new ViewModelClosedEventArgs(this, result));
-            });
+            _catelClosed.SafeInvoke(this, new ViewModelClosedEventArgs(this, result));
         }
 
         /// <summary>

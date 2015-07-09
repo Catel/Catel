@@ -55,8 +55,10 @@
     <NoWarn>1998</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Catel.Fody.Attributes">
-      <HintPath>..\..\..\lib\Catel.Fody.2.5.0\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
+    <Reference Include="Catel.Fody.Attributes, Version=2.6.0.0, Culture=neutral, PublicKeyToken=1c8163524cbe02e6, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Catel.Fody.2.6.0\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Csla">
       <HintPath>..\..\..\lib\CSLA-Core.4.5.700\lib\sl50\Csla.dll</HintPath>
@@ -77,6 +79,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="mscorlib" />
+    <Reference Include="Obsolete">
+      <HintPath>..\..\..\lib\Obsolete.Fody.4.0.0\Lib\portable-net4+sl5+wp8+win8+wpa81+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
+    </Reference>
     <Reference Include="System.IO">
       <HintPath>..\..\..\lib\Microsoft.Bcl.1.1.10\lib\sl5\System.IO.dll</HintPath>
     </Reference>
@@ -108,6 +113,7 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Microsoft.Bcl.Build.targets" />
     <None Include="packages.config" />
   </ItemGroup>

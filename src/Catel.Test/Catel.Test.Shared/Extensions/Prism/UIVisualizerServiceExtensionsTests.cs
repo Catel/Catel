@@ -196,7 +196,7 @@ namespace Catel.Test.Extensions.Prism
                 _mainRegionMock = new Mock<IRegion>();
 
                 var dispatcherServiceMock = new Mock<IDispatcherService>();
-                dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>())).Callback((Action action) => action.Invoke());
+                dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>(), true)).Callback((Action action) => action.Invoke());
 
                 //_serviceLocator = IoCFactory.CreateServiceLocator(true);
                 _serviceLocator = ServiceLocator.Default;
@@ -548,7 +548,7 @@ namespace Catel.Test.Extensions.Prism
                 _mainRegionMock = new Mock<IRegion>();
 
                 var dispatcherServiceMock = new Mock<IDispatcherService>();
-                dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>())).Callback((Action action) => action.Invoke());
+                dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>(), true)).Callback((Action action) => action.Invoke());
 
                 _serviceLocator = ServiceLocator.Default;
                 _serviceLocator.RegisterInstance<IDispatcherService>(dispatcherServiceMock.Object);
@@ -643,7 +643,7 @@ namespace Catel.Test.Extensions.Prism
                 var fooViewModel = new FooViewModel(serviceLocator);
 
                 var dispatcherServiceMock = new Mock<IDispatcherService>();
-                dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>())).Callback((Action action) => action.Invoke());
+                dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>(), true)).Callback((Action action) => action.Invoke());
                 var visualizerServiceMock = new Mock<IUIVisualizerService>();
                 visualizerServiceMock.Setup(service => service.Show(It.Is<FooViewModel>(model => ReferenceEquals(model, fooViewModel)), null)).Returns(new Task<bool>(() => true));
                 var viewManagerMock = new Mock<IViewManager>();
@@ -669,7 +669,7 @@ namespace Catel.Test.Extensions.Prism
                 var fooViewModel = new FooViewModel(serviceLocator);
 
                 var dispatcherServiceMock = new Mock<IDispatcherService>();
-                dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>())).Callback((Action action) => action.Invoke());
+                dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>(), true)).Callback((Action action) => action.Invoke());
                 var visualizerServiceMock = new Mock<IUIVisualizerService>();
                 visualizerServiceMock.Setup(service => service.Show(It.Is<FooViewModel>(model => ReferenceEquals(model, fooViewModel)), null)).Returns(new Task<bool>(() => true));
                 var viewManagerMock = new Mock<IViewManager>();
@@ -699,7 +699,7 @@ namespace Catel.Test.Extensions.Prism
             //    var fooViewModel = new FooViewModel(serviceLocator);
 
             //    var dispatcherServiceMock = new Mock<IDispatcherService>();
-            //    dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>())).Callback((Action action) => action.Invoke());
+            //    dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>(), true)).Callback((Action action) => action.Invoke());
             //    var visualizerServiceMock = new Mock<IUIVisualizerService>();
             //    visualizerServiceMock.Setup(service => service.Show(It.Is<FooViewModel>(model => ReferenceEquals(model, fooViewModel)), null)).Returns(new Task<bool>(() => true));
             //    var viewManagerMock = new Mock<IViewManager>();
@@ -729,7 +729,7 @@ namespace Catel.Test.Extensions.Prism
             //    var fooViewModel = new FooViewModel(serviceLocator);
 
             //    var dispatcherServiceMock = new Mock<IDispatcherService>();
-            //    dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>())).Callback((Action action) => action.Invoke());
+            //    dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>(), true)).Callback((Action action) => action.Invoke());
             //    var visualizerServiceMock = new Mock<IUIVisualizerService>();
             //    visualizerServiceMock.Setup(service => service.Show(It.Is<FooViewModel>(model => ReferenceEquals(model, fooViewModel)), null)).Returns(new Task<bool>(() => true));
             //    var viewManagerMock = new Mock<IViewManager>();
