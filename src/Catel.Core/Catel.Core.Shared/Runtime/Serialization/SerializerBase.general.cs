@@ -21,10 +21,10 @@ namespace Catel.Runtime.Serialization
     using Catel.Threading;
 
     /// <summary>
-    /// Base class for serializers that can serializer the <see cref="ModelBase" />.
+    /// Base class for serializers that can serialize any object.
     /// </summary>
     /// <typeparam name="TSerializationContext">The type of the T serialization context.</typeparam>
-    public abstract partial class SerializerBase<TSerializationContext> : IModelBaseSerializer<TSerializationContext>
+    public abstract partial class SerializerBase<TSerializationContext> : ISerializer<TSerializationContext>
         where TSerializationContext : class
     {
         #region Constants
@@ -58,14 +58,18 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="serializationManager">The serialization manager.</param>
         /// <param name="typeFactory">The type factory.</param>
+        /// <param name="objectAdapter">The object adapter.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationManager" /> is <c>null</c>.</exception>
-        protected SerializerBase(ISerializationManager serializationManager, ITypeFactory typeFactory)
+        protected SerializerBase(ISerializationManager serializationManager, ITypeFactory typeFactory, IObjectAdapter objectAdapter)
         {
             Argument.IsNotNull("serializationManager", serializationManager);
             Argument.IsNotNull("typeFactory", typeFactory);
+            Argument.IsNotNull("objectAdapter", objectAdapter);
 
             SerializationManager = serializationManager;
             TypeFactory = typeFactory;
+            ObjectAdapter = objectAdapter;
+
             SerializationManager.CacheInvalidated += OnSerializationManagerCacheInvalidated;
         }
         #endregion
@@ -82,9 +86,15 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <value>The type factory.</value>
         protected ITypeFactory TypeFactory { get; private set; }
+
+        /// <summary>
+        /// Gets the object adapter.
+        /// </summary>
+        /// <value>The object adapter.</value>
+        protected IObjectAdapter ObjectAdapter { get; private set; }
         #endregion
 
-        #region IModelBaseSerializer<TSerializationContext> Members
+        #region ISerializer<TSerializationContext> Members
         /// <summary>
         /// Gets the serializable members for the specified model.
         /// </summary>
@@ -92,7 +102,7 @@ namespace Catel.Runtime.Serialization
         /// <param name="membersToIgnore">The members to ignore.</param>
         /// <returns>The list of members to serialize.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
-        public virtual List<MemberValue> GetSerializableMembers(ModelBase model, params string[] membersToIgnore)
+        public virtual List<MemberValue> GetSerializableMembers(object model, params string[] membersToIgnore)
         {
             Argument.IsNotNull("model", model);
 
@@ -127,30 +137,10 @@ namespace Catel.Runtime.Serialization
                     continue;
                 }
 
-                try
+                var propertyValue = ObjectAdapter.GetMemberValue(model, propertyName, modelInfo);
+                if (propertyValue != null)
                 {
-                    //Log.Debug("Adding property '{0}' to list of objects to serialize", propertyName);
-
-                    var modelEditor = model as IModelEditor;
-                    if (modelEditor != null && modelInfo.CatelPropertyNames.Contains(propertyName))
-                    {
-                        var propertyData = modelInfo.CatelPropertiesByName[propertyName];
-                        var actualPropertyValue = modelEditor.GetValueFastButUnsecure(propertyName);
-                        var propertyValue = new MemberValue(SerializationMemberGroup.CatelProperty, modelType, propertyData.Type, propertyData.Name, actualPropertyValue);
-
-                        listToSerialize.Add(propertyValue);
-                    }
-                    else
-                    {
-                        var propertyInfo = modelInfo.PropertiesByName[propertyName];
-                        var propertyValue = new MemberValue(SerializationMemberGroup.RegularProperty, modelType, propertyInfo.PropertyType, propertyName, propertyInfo.GetValue(model, null));
-
-                        listToSerialize.Add(propertyValue);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Log.Warning(ex, "Failed to get value of member '{0}.{1}', skipping item during serialization", modelType.GetSafeFullName(), propertyName);
+                    listToSerialize.Add(propertyValue);
                 }
             }
 
@@ -169,17 +159,10 @@ namespace Catel.Runtime.Serialization
                     continue;
                 }
 
-                try
+                var fieldValue = ObjectAdapter.GetMemberValue(model, field.Name, modelInfo);
+                if (fieldValue != null)
                 {
-                    Log.Debug("Adding field '{0}' to list of objects to serialize", field.Name);
-
-                    var fieldValue = new MemberValue(SerializationMemberGroup.Field, modelType, field.FieldType, field.Name, field.GetValue(model));
-
                     listToSerialize.Add(fieldValue);
-                }
-                catch (Exception ex)
-                {
-                    Log.Warning(ex, "Failed to get value of member '{0}.{1}', skipping item during serialization", modelType.GetSafeFullName(), field.Name);
                 }
             }
 
@@ -241,7 +224,7 @@ namespace Catel.Runtime.Serialization
         /// <param name="model">The model.</param>
         /// <param name="propertyName">Name of the member.</param>
         /// <returns><c>true</c> if the member should be ignored, <c>false</c> otherwise.</returns>
-        protected virtual bool ShouldIgnoreMember(ModelBase model, string propertyName)
+        protected virtual bool ShouldIgnoreMember(object model, string propertyName)
         {
             return false;
         }
@@ -262,7 +245,7 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("context", context);
 
-            var model = (ModelBase)TypeFactory.CreateInstance(modelType);
+            var model = TypeFactory.CreateInstance(modelType);
             return GetContext(model, context, contextMode);
         }
 
@@ -282,7 +265,7 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("stream", stream);
 
-            var model = (ModelBase)TypeFactory.CreateInstance(modelType);
+            var model = TypeFactory.CreateInstance(modelType);
             return GetContext(model, stream, contextMode);
         }
 
@@ -295,7 +278,7 @@ namespace Catel.Runtime.Serialization
         /// <returns>The serialization context.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="context" /> is <c>null</c>.</exception>
-        protected virtual ISerializationContext<TSerializationContext> GetContext(ModelBase model, TSerializationContext context, SerializationContextMode contextMode)
+        protected virtual ISerializationContext<TSerializationContext> GetContext(object model, TSerializationContext context, SerializationContextMode contextMode)
         {
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("context", context);
@@ -312,7 +295,7 @@ namespace Catel.Runtime.Serialization
         /// <returns>The serialization context.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="stream" /> is <c>null</c>.</exception>
-        protected abstract ISerializationContext<TSerializationContext> GetContext(ModelBase model, Stream stream, SerializationContextMode contextMode);
+        protected abstract ISerializationContext<TSerializationContext> GetContext(object model, Stream stream, SerializationContextMode contextMode);
 
         /// <summary>
         /// Appends the serialization context to the specified stream. This way each serializer can handle the serialization
@@ -329,7 +312,7 @@ namespace Catel.Runtime.Serialization
         /// <param name="members">The members.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="members"/> is <c>null</c>.</exception>
-        protected virtual void PopulateModel(ModelBase model, params MemberValue[] members)
+        protected virtual void PopulateModel(object model, params MemberValue[] members)
         {
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("properties", members);
@@ -347,42 +330,7 @@ namespace Catel.Runtime.Serialization
 
             foreach (var member in members)
             {
-                try
-                {
-                    var modelEditor = model as IModelEditor;
-                    if (modelEditor != null && modelInfo.CatelPropertyNames.Contains(member.Name))
-                    {
-                        modelEditor.SetValueFastButUnsecure(member.Name, member.Value);
-                    }
-                    else if (modelInfo.PropertyNames.Contains(member.Name))
-                    {
-                        var propertyInfo = modelInfo.PropertiesByName[member.Name];
-                        if (propertyInfo == null)
-                        {
-                            Log.Warning("Failed to set property '{0}.{1}' because the member cannot be found on the model", modelType.GetSafeFullName(), member.Name);
-                        }
-                        else
-                        {
-                            propertyInfo.SetValue(model, member.Value, null);
-                        }
-                    }
-                    else if (modelInfo.FieldNames.Contains(member.Name))
-                    {
-                        var fieldInfo = modelInfo.FieldsByName[member.Name];
-                        if (fieldInfo == null)
-                        {
-                            Log.Warning("Failed to set field '{0}.{1}' because the member cannot be found on the model", modelType.GetSafeFullName(), member.Name);
-                        }
-                        else
-                        {
-                            fieldInfo.SetValue(model, member.Value);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Log.Warning(ex, "Failed to populate '{0}.{1}', setting the member value threw an exception", modelType.GetSafeFullName(), member.Name);
-                }
+                ObjectAdapter.SetMemberValue(model, member, modelInfo);
             }
         }
 

@@ -14,7 +14,7 @@ namespace Catel.Runtime.Serialization.Json
     /// <summary>
     /// Interface for the binary serializer.
     /// </summary>
-    public interface IJsonSerializer : IModelBaseSerializer<JsonSerializationContextInfo>
+    public interface IJsonSerializer : ISerializer<JsonSerializationContextInfo>
     {
         /// <summary>
         /// Gets or sets a value indicating whether references should be preserved.
@@ -35,7 +35,7 @@ namespace Catel.Runtime.Serialization.Json
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="jsonWriter">The json writer.</param>
-        void Serialize(ModelBase model, JsonWriter jsonWriter);
+        void Serialize(object model, JsonWriter jsonWriter);
 
         /// <summary>
         /// Deserializes the specified model from the json reader.
@@ -43,6 +43,6 @@ namespace Catel.Runtime.Serialization.Json
         /// <param name="modelType">Type of the model.</param>
         /// <param name="jsonReader">The json reader.</param>
         /// <returns>ModelBase.</returns>
-        ModelBase Deserialize(Type modelType, JsonReader jsonReader);
+        object Deserialize(Type modelType, JsonReader jsonReader);
     }
 }

@@ -52,9 +52,10 @@ namespace Catel.Runtime.Serialization.Json
         /// </summary>
         /// <param name="serializationManager">The serialization manager.</param>
         /// <param name="typeFactory">The type factory.</param>
+        /// <param name="objectAdapter">The object adapter.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationManager" /> is <c>null</c>.</exception>
-        public JsonSerializer(ISerializationManager serializationManager, ITypeFactory typeFactory)
-            : base(serializationManager, typeFactory)
+        public JsonSerializer(ISerializationManager serializationManager, ITypeFactory typeFactory, IObjectAdapter objectAdapter)
+            : base(serializationManager, typeFactory, objectAdapter)
         {
             PreserveReferences = true;
             WriteTypeInfo = true;
@@ -83,7 +84,7 @@ namespace Catel.Runtime.Serialization.Json
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="jsonWriter">The json writer.</param>
-        public void Serialize(ModelBase model, JsonWriter jsonWriter)
+        public void Serialize(object model, JsonWriter jsonWriter)
         {
             using (var context = GetContext(model, null, jsonWriter, SerializationContextMode.Serialization, null))
             {
@@ -96,8 +97,8 @@ namespace Catel.Runtime.Serialization.Json
         /// </summary>
         /// <param name="modelType">Type of the model.</param>
         /// <param name="jsonReader">The json reader.</param>
-        /// <returns>ModelBase.</returns>
-        public ModelBase Deserialize(Type modelType, JsonReader jsonReader)
+        /// <returns>The model.</returns>
+        public object Deserialize(Type modelType, JsonReader jsonReader)
         {
             var jsonObject = JObject.Load(jsonReader);
             var jsonProperties = jsonObject.Properties().ToList();
@@ -119,7 +120,7 @@ namespace Catel.Runtime.Serialization.Json
                         var referenceInfo = referenceManager.GetInfoById(graphId);
                         if (referenceInfo != null)
                         {
-                            return (ModelBase)referenceInfo.Instance;
+                            return referenceInfo.Instance;
                         }
                     }
                 }
@@ -142,7 +143,7 @@ namespace Catel.Runtime.Serialization.Json
                 }
             }
 
-            var model = (ModelBase)TypeFactory.CreateInstance(modelType);
+            var model = TypeFactory.CreateInstance(modelType);
 
             using (var context = GetContext(model, jsonReader, null, SerializationContextMode.Deserialization, jsonProperties))
             {
@@ -364,7 +365,7 @@ namespace Catel.Runtime.Serialization.Json
         /// <param name="contextMode">The context mode.</param>
         /// <returns>ISerializationContext{SerializationInfo}.</returns>
         /// <exception cref="System.ArgumentOutOfRangeException">contextMode</exception>
-        protected override ISerializationContext<JsonSerializationContextInfo> GetContext(ModelBase model, Stream stream, SerializationContextMode contextMode)
+        protected override ISerializationContext<JsonSerializationContextInfo> GetContext(object model, Stream stream, SerializationContextMode contextMode)
         {
             JsonReader jsonReader = null;
             JsonWriter jsonWriter = null;
@@ -395,7 +396,7 @@ namespace Catel.Runtime.Serialization.Json
         /// <param name="contextMode">The context mode.</param>
         /// <param name="jsonProperties">The json properties.</param>
         /// <returns>ISerializationContext&lt;JsonSerializationContextInfo&gt;.</returns>
-        protected virtual ISerializationContext<JsonSerializationContextInfo> GetContext(ModelBase model, JsonReader jsonReader, JsonWriter jsonWriter, SerializationContextMode contextMode, IEnumerable<JProperty> jsonProperties)
+        protected virtual ISerializationContext<JsonSerializationContextInfo> GetContext(object model, JsonReader jsonReader, JsonWriter jsonWriter, SerializationContextMode contextMode, IEnumerable<JProperty> jsonProperties)
         {
             var jsonSerializer = new Newtonsoft.Json.JsonSerializer();
             jsonSerializer.ContractResolver = new CatelJsonContractResolver();

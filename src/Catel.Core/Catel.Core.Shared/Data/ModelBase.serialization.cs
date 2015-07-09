@@ -21,6 +21,7 @@ namespace Catel.Data
 
     using Runtime.Serialization;
     using Catel.Reflection;
+    using ISerializable = Catel.Runtime.Serialization.ISerializable;
 
 #if !NET
     using System.Reflection;
@@ -48,6 +49,11 @@ namespace Catel.Data
 #if NET
         [field: NonSerialized]
 #endif
+        private event EventHandler<EventArgs> _serialized;
+
+#if NET
+        [field: NonSerialized]
+#endif
         private event EventHandler<EventArgs> _deserialized;
         #endregion
 
@@ -56,23 +62,113 @@ namespace Catel.Data
         /// Gets or sets the serializer used for internal model serialization (such as backups).
         /// </summary>
         /// <value>The serializer.</value>
-        protected IModelBaseSerializer Serializer { get; set; }
+        protected ISerializer Serializer { get; set; }
 
         /// <summary>
         /// Gets or sets the default serializer that will be used for the <see cref="Serializer"/> property.
         /// </summary>
         /// <value>The default serializer.</value>
-        public static IModelBaseSerializer DefaultSerializer { get; set; }
+        public static ISerializer DefaultSerializer { get; set; }
         #endregion
 
         #region Events
         /// <summary>
+        /// Occurs when the object is serialized.
+        /// </summary>
+        event EventHandler<EventArgs> ISerializable.Serialized
+        {
+            add { _serialized += value; }
+            remove { _serialized -= value; }
+        }
+
+        /// <summary>
         /// Occurs when the object is deserialized.
         /// </summary>
-        event EventHandler<EventArgs> IModelSerialization.Deserialized
+        event EventHandler<EventArgs> ISerializable.Deserialized
         {
             add { _deserialized += value; }
             remove { _deserialized -= value; }
+        }
+        #endregion
+
+        #region Events
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// Called when the object is being serialized.
+        /// </summary>
+        protected virtual void OnSerializing()
+        {
+        }
+
+        /// <summary>
+        /// Called when the object has been serialized.
+        /// </summary>
+        protected virtual void OnSerialized()
+        {
+            _serialized.SafeInvoke(this);
+        }
+
+        /// <summary>
+        /// Starts the serialization.
+        /// </summary>
+        void ISerializable.StartSerialization()
+        {
+            OnSerializing();
+        }
+
+        /// <summary>
+        /// Finishes the serialization.
+        /// </summary>
+        void ISerializable.FinishSerialization()
+        {
+            OnSerialized();
+        }
+
+        /// <summary>
+        /// Called when the object is being deserialized.
+        /// </summary>
+        protected virtual void OnDeserializing()
+        {
+            LeanAndMeanModel = true;
+        }
+
+        /// <summary>
+        /// Called when the object is deserialized.
+        /// </summary>
+        protected virtual void OnDeserialized()
+        {
+            _deserialized.SafeInvoke(this);
+
+            // Data is now considered deserialized
+            IsDeserialized = true;
+
+            FinishInitializationAfterConstructionOrDeserialization();
+
+            IsDirty = false;
+
+            LeanAndMeanModel = false;
+        }
+
+        /// <summary>
+        /// Begins the deserialization.
+        /// </summary>
+        void ISerializable.StartDeserialization()
+        {
+            Log.Debug("Start deserialization of '{0}'", GetType().Name);
+
+            OnDeserializing();
+        }
+
+        /// <summary>
+        /// Finishes the deserialization.
+        /// </summary>
+        void ISerializable.FinishDeserialization()
+        {
+            Log.Debug("Finish deserialization of '{0}'", GetType().Name);
+
+            OnDeserialized();
         }
         #endregion
 

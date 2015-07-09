@@ -20,6 +20,7 @@ namespace Catel
     public static class JsonExtensions
     {
         private static readonly ISerializationManager SerializationManager = ServiceLocator.Default.ResolveType<ISerializationManager>();
+        private static readonly IObjectAdapter ObjectAdapter = ServiceLocator.Default.ResolveType<IObjectAdapter>();
 
         /// <summary>
         /// Converters the specified model to a json string.
@@ -28,7 +29,7 @@ namespace Catel
         /// <returns>System.String.</returns>
         public static string ToJson(this ModelBase model)
         {
-            var jsonSerializer = new JsonSerializer(SerializationManager, TypeFactory.Default);
+            var jsonSerializer = new JsonSerializer(SerializationManager, TypeFactory.Default, ObjectAdapter);
 
             using (var stream = new MemoryStream())
             {

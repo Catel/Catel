@@ -24,8 +24,7 @@ namespace Catel.Test.Runtime.Serialization
         /// <param name="model">The model.</param>
         /// <param name="serializer">The serializer.</param>
         /// <returns>System.Object.</returns>
-        public static TModel SerializeAndDeserialize<TModel>(TModel model, IModelBaseSerializer serializer)
-            where TModel : ModelBase
+        public static TModel SerializeAndDeserialize<TModel>(TModel model, ISerializer serializer)
         {
             using (var memoryStream = new MemoryStream())
             {
@@ -47,7 +46,7 @@ namespace Catel.Test.Runtime.Serialization
             }
         }
 
-        public static string ToXmlString(this ModelBase model)
+        public static string ToXmlString(this object model)
         {
             Argument.IsNotNull(() => model);
 

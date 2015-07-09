@@ -52,9 +52,10 @@ namespace Catel.Runtime.Serialization.Binary
         /// </summary>
         /// <param name="serializationManager">The serialization manager.</param>
         /// <param name="typeFactory">The type factory.</param>
+        /// <param name="objectAdapter">The object adapter.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationManager" /> is <c>null</c>.</exception>
-        public BinarySerializer(ISerializationManager serializationManager, ITypeFactory typeFactory)
-            : base(serializationManager, typeFactory)
+        public BinarySerializer(ISerializationManager serializationManager, ITypeFactory typeFactory, IObjectAdapter objectAdapter)
+            : base(serializationManager, typeFactory, objectAdapter)
         {
             DeserializationBinder = new RedirectDeserializationBinder();
         }
@@ -70,14 +71,14 @@ namespace Catel.Runtime.Serialization.Binary
         /// </remarks>
         /// <param name="modelType">Type of the model.</param>
         /// <param name="stream">The stream.</param>
-        /// <returns>ModelBase.</returns>
-        public override ModelBase Deserialize(Type modelType, Stream stream)
+        /// <returns>The serialized object.</returns>
+        public override object Deserialize(Type modelType, Stream stream)
         {
             Argument.IsNotNull("modelType", modelType);
 
             // Note: although this looks like an unnecessary overload, it's required to prevent duplicate scopes
 
-            var model = (ModelBase)TypeFactory.CreateInstance(modelType);
+            var model = TypeFactory.CreateInstance(modelType);
 
             Deserialize(model, stream);
 
@@ -93,7 +94,7 @@ namespace Catel.Runtime.Serialization.Binary
         /// </remarks>
         /// <param name="model">The model.</param>
         /// <param name="stream">The stream.</param>
-        public override void Deserialize(ModelBase model, Stream stream)
+        public override void Deserialize(object model, Stream stream)
         {
             Argument.IsNotNull("model", model);
 
@@ -170,7 +171,7 @@ namespace Catel.Runtime.Serialization.Binary
         /// <param name="stream">The stream.</param>
         /// <param name="contextMode">The context mode.</param>
         /// <returns>ISerializationContext{SerializationInfo}.</returns>
-        protected override ISerializationContext<BinarySerializationContextInfo> GetContext(ModelBase model, Stream stream, SerializationContextMode contextMode)
+        protected override ISerializationContext<BinarySerializationContextInfo> GetContext(object model, Stream stream, SerializationContextMode contextMode)
         {
             return GetContext(model, stream, contextMode, null);
         }
@@ -183,7 +184,7 @@ namespace Catel.Runtime.Serialization.Binary
         /// <param name="contextMode">The context mode.</param>
         /// <param name="memberValues">The member values.</param>
         /// <returns>The serialization context.</returns>
-        private ISerializationContext<BinarySerializationContextInfo> GetContext(ModelBase model, Stream stream, SerializationContextMode contextMode, List<MemberValue> memberValues)
+        private ISerializationContext<BinarySerializationContextInfo> GetContext(object model, Stream stream, SerializationContextMode contextMode, List<MemberValue> memberValues)
         {
             var serializationInfo = new SerializationInfo(model.GetType(), new FormatterConverter());
             var binaryFormatter = CreateBinaryFormatter(contextMode);

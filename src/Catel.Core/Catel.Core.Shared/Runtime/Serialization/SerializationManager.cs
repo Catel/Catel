@@ -124,7 +124,20 @@ namespace Catel.Runtime.Serialization
                 var typeFields = type.GetFieldsEx();
                 foreach (var typeField in typeFields)
                 {
+                    // Exclude fields by default
+                    var include = false;
+
                     if (AttributeHelper.IsDecoratedWithAttribute<IncludeInSerializationAttribute>(typeField))
+                    {
+                        include = true;
+                    }
+
+                    if (AttributeHelper.IsDecoratedWithAttribute<ExcludeFromSerializationAttribute>(typeField))
+                    {
+                        include = false;
+                    }
+
+                    if (include)
                     {
                         fields.Add(typeField.Name);
                     }
@@ -147,6 +160,8 @@ namespace Catel.Runtime.Serialization
             return _propertiesToSerializeCache.GetFromCacheOrFetch(type, () =>
             {
                 var properties = new HashSet<string>();
+
+                var isModelBase = typeof (ModelBase).IsAssignableFromEx(type);
 
                 var propertyDataManager = PropertyDataManager.Default;
                 var catelTypeInfo = propertyDataManager.GetCatelTypeInfo(type);
@@ -199,7 +214,20 @@ namespace Catel.Runtime.Serialization
                 {
                     if (!catelPropertyNames.Contains(typeProperty.Name))
                     {
+                        // If not a ModelBase, include by default
+                        var include = !isModelBase;
+
                         if (AttributeHelper.IsDecoratedWithAttribute<IncludeInSerializationAttribute>(typeProperty))
+                        {
+                            include = true;
+                        }
+
+                        if (AttributeHelper.IsDecoratedWithAttribute<ExcludeFromSerializationAttribute>(typeProperty))
+                        {
+                            include = false;
+                        }
+
+                        if (include)
                         {
                             properties.Add(typeProperty.Name);
                         }

@@ -107,7 +107,7 @@ namespace Catel.Test.Runtime.Serialization.TestModels
 
     public class ModelCSerializerModifier : SerializerModifierBase<ModelC>
     {
-        public override bool ShouldIgnoreMember(ISerializationContext context, IModel model, MemberValue memberValue)
+        public override bool ShouldIgnoreMember(ISerializationContext context, object model, MemberValue memberValue)
         {
             if (string.Equals(memberValue.Name, "IgnoredMember"))
             {
