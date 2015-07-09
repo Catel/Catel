@@ -24,6 +24,11 @@ namespace Catel.Modules
         /// The Log
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        
+        /// <summary>
+        /// The lock to ensure that all InstallPackage call will be serialized
+        /// </summary>
+		private static readonly Object _syncObj = new Object();
         #endregion
 
         #region Fields
@@ -105,7 +110,11 @@ namespace Catel.Modules
                 Log.Debug("Installing package '{0}' from source '{1}'", packageToDownload.Package.Id, packageToDownload.PackageRepository.Source);
 
                 var packageManager = new PackageManager(packageToDownload.PackageRepository, OutputDirectory);
-                packageManager.InstallPackage(packageToDownload.Package, IgnoreDependencies, AllowPrereleaseVersions);
+                
+                lock (_syncObj)
+                {
+                    packageManager.InstallPackage(packageToDownload.Package, IgnoreDependencies, AllowPrereleaseVersions);
+                }
             }
         }
 
