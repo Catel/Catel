@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>Catel.Extensions.EntityFramework7</id>
+    <version>[VERSION]</version>
+	<title>Catel.Extensions.EntityFramework7</title>
+    <authors>GeertvanHorrik</authors>
+	
+	<description>
+	  Catel.Extensions.EntityFramework7 library which provides data classes such as repositories, unit of work, DbContextManager and more.
+	</description>
+	<summary>
+	</summary>
+	
+	<tags>catel entity framework entityframework EF EF7 UnitOfWork unit of work DbContextManager repository repositories database</tags>
+	
+	<language>en-US</language>
+	<projectUrl>http://www.catelproject.com</projectUrl>	
+	<licenseUrl>http://www.catelproject.com/license/</licenseUrl>
+		<!--<iconUrl>file://content/icon.png</iconUrl>-->
+	<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>
+	
+	<dependencies>
+          <dependency id="Catel.Core" version="[VERSION]" />
+          <dependency id="EntityFramework" version="[replaced]" />                   
+	</dependencies>
+	
+  </metadata>
+</package>
