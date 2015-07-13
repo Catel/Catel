@@ -7,7 +7,7 @@
     <ProjectGuid>{2A4AF4D2-E74C-4A8A-947B-1B7CE5BDB67A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Catel.Data</RootNamespace>
+    <RootNamespace>Catel</RootNamespace>
     <AssemblyName>Catel.Extensions.EntityFramework5</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
