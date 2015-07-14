@@ -122,7 +122,7 @@ namespace Catel.MVVM.Converters
         {
             CurrentCulture = culture;
 
-            object returnValue = value;
+            var returnValue = value;
 
             if (Link != null)
             {
@@ -137,7 +137,10 @@ namespace Catel.MVVM.Converters
                 returnValue = Link.Convert(returnValue, OverrideType ?? targetType, parameter, cultureToUse);
             }
 
-            returnValue = Convert((TConvert)returnValue, targetType, parameter);
+            if (returnValue is TConvert)
+            {
+                returnValue = Convert((TConvert) returnValue, targetType, parameter);
+            }
 
             return returnValue;
         }
@@ -154,10 +157,13 @@ namespace Catel.MVVM.Converters
         {
             CurrentCulture = culture;
 
-            object returnValue = value;
+            var returnValue = value;
 
-            // Call ConvertBack first because we are doing this in reverse order
-            returnValue = ConvertBack((TConvertBack)returnValue, targetType, parameter);
+            if (returnValue is TConvertBack)
+            {
+                // Call ConvertBack first because we are doing this in reverse order
+                returnValue = ConvertBack((TConvertBack) returnValue, targetType, parameter);
+            }
 
             if (Link != null)
             {
