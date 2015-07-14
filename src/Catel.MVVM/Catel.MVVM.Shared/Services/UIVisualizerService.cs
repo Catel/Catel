@@ -18,7 +18,7 @@ namespace Catel.Services
     using MVVM.Properties;
     using Reflection;
     using Catel.Windows.Threading;
-
+    using Threading;
 #if NET
     using Windows;
 #endif
@@ -491,7 +491,7 @@ namespace Catel.Services
                     // Child window does not have a ShowDialog, so not null is allowed
                     bool? result = null;
 
-                    window.Dispatcher.Invoke(() =>
+                    window.Dispatcher.InvokeIfRequired(() =>
                     {
                         // Safety net to prevent crashes when this is the main window
                         try
@@ -519,7 +519,7 @@ namespace Catel.Services
                 throw new NotSupportedException(error);
             }
 
-            window.Dispatcher.Invoke(() => showMethodInfo.Invoke(window, null));
+            window.Dispatcher.InvokeIfRequired(() => showMethodInfo.Invoke(window, null));
             return null;
         }
 
@@ -541,7 +541,7 @@ namespace Catel.Services
                 return tcs.Task;
             }
 
-            return Task<bool?>.Factory.StartNew(() => ShowWindow(window, showModal));
+            return TaskHelper.Run(() => ShowWindow(window, showModal));
         }
         #endregion
     }
