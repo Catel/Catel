@@ -259,7 +259,7 @@ namespace Catel.Services
                         {
                             // TODO: Display smooth detailed progress using the PleasWaitService
 // ReSharper disable AccessToModifiedClosure
-                            _dispatcherService.Invoke(() => _pleaseWaitService.UpdateStatus(progress++, total, task.Name));
+                            _dispatcherService.BeginInvoke(() => _pleaseWaitService.UpdateStatus(progress++, total, task.Name));
 // ReSharper restore AccessToModifiedClosure
                         }
 
@@ -315,7 +315,7 @@ namespace Catel.Services
                             }
                             else
                             {
-                                _dispatcherService.Invoke(() => _pleaseWaitService.UpdateStatus(--progress, total, string.Format("Rollback '{0}'", task.Name)));
+                                _dispatcherService.BeginInvoke(() => _pleaseWaitService.UpdateStatus(--progress, total, string.Format("Rollback '{0}'", task.Name)));
                             }
                         }
                     }
