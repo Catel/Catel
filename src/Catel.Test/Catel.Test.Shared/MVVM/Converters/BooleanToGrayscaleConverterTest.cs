@@ -18,14 +18,14 @@ namespace Catel.Test.MVVM.Converters
         public void Convert_Null()
         {
             var converter = new BooleanToGrayscaleConverter();
-            Assert.AreEqual(1d, converter.Convert(null, typeof (double), null, (CultureInfo)null));
+            Assert.AreEqual(ConverterHelper.UnsetValue, converter.Convert(null, typeof (double), null, (CultureInfo)null));
         }
 
         [TestCase]
         public void Convert_NonBooleanValue()
         {
             var converter = new BooleanToGrayscaleConverter();
-            Assert.AreEqual(1d, converter.Convert("string", typeof (double), null, (CultureInfo)null));
+            Assert.AreEqual(ConverterHelper.UnsetValue, converter.Convert("string", typeof (double), null, (CultureInfo)null));
         }
 
         [TestCase]

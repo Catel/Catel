@@ -51,7 +51,7 @@ namespace Catel.MVVM.Converters
         {
             if (!(value is bool))
             {
-                return TrueResult;
+                return ConverterHelper.UnsetValue;
             }
 
             return ((bool)value) ? TrueResult : FalseResult;
