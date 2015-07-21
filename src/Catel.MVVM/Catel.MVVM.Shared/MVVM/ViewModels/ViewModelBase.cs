@@ -268,8 +268,6 @@ namespace Catel.MVVM
                 return;
             }
 
-            AuditingHelper.RegisterViewModel(this);
-
             Log.Debug("Creating view model of type '{0}' with unique identifier {1}", GetType().Name, UniqueIdentifier);
 
             _ignoreMultipleModelsWarning = ignoreMultipleModelsWarning;
@@ -316,6 +314,9 @@ namespace Catel.MVVM
 
             // Enable validation again like we promised some lines of code ago
             SuspendValidation = false;
+
+            // As a last step, enable the auditors (we don't need change notifications of previous properties, etc)
+            AuditingHelper.RegisterViewModel(this);
         }
         #endregion
 
