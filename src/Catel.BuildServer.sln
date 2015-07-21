@@ -3,80 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{BE079DB6-FD92-4167-8DF4-CACB2E1422FC}"
-	ProjectSection(SolutionItems) = preProject
-		..\lib\readme.txt = ..\lib\readme.txt
-		..\lib\repositories.config = ..\lib\repositories.config
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{58F62039-8645-499C-B264-66048F4F0F75}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{E0737FB3-1C66-4582-A076-F6DCD6504C48}"
-	ProjectSection(SolutionItems) = preProject
-		..\doc\catel rules.txt = ..\doc\catel rules.txt
-		..\doc\easy deployment.txt = ..\doc\easy deployment.txt
-		..\doc\faq.txt = ..\doc\faq.txt
-		..\doc\history.txt = ..\doc\history.txt
-		..\doc\projects explanation.txt = ..\doc\projects explanation.txt
-		..\doc\readme.txt = ..\doc\readme.txt
-		..\doc\release steps.txt = ..\doc\release steps.txt
-		..\doc\running custom tool.txt = ..\doc\running custom tool.txt
-		..\doc\translating resources.txt = ..\doc\translating resources.txt
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{EF395E12-0C90-4CE1-921A-A276AF0DC28A}"
-	ProjectSection(SolutionItems) = preProject
-		Catel.FxCop = Catel.FxCop
-		Catel.snk = Catel.snk
-		Catel.vsmdi = Catel.vsmdi
-		CustomDictionary.xml = CustomDictionary.xml
-		nuget.config = nuget.config
-		Settings.StyleCop = Settings.StyleCop
-		SolutionAssemblyInfo.cs = SolutionAssemblyInfo.cs
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "snippets", "snippets", "{0530FD4D-FB57-412E-877C-014B42413D0A}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{13F2B8D4-81FB-4645-AA6A-36FEB438642D}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SL5", "SL5", "{B0EED982-2D1D-4830-B616-1B8E46BB4C7A}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NET40", "NET40", "{80394EA6-3B1A-457A-A21E-EAE2CCEF6BA5}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interactivity", "Interactivity", "{1E51A52B-C52A-4883-95A2-0B15D81E83EF}"
-	ProjectSection(SolutionItems) = preProject
-		..\lib\NET40\Interactivity\System.Windows.Interactivity.dll = ..\lib\NET40\Interactivity\System.Windows.Interactivity.dll
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interactivity", "Interactivity", "{340E7DDE-6DB6-4B51-9F4B-9251C088944F}"
-	ProjectSection(SolutionItems) = preProject
-		..\lib\SL5\Interactivity\System.Windows.Interactivity.dll = ..\lib\SL5\Interactivity\System.Windows.Interactivity.dll
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NET45", "NET45", "{65417F3B-DCC0-490F-A13D-9EF48F6F5352}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interactivity", "Interactivity", "{A53512E9-0AA1-4623-9E28-E44693631341}"
-	ProjectSection(SolutionItems) = preProject
-		..\lib\NET45\Interactivity\System.Windows.Interactivity.dll = ..\lib\NET45\Interactivity\System.Windows.Interactivity.dll
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{DF031B6B-BD75-4D24-9411-2A691B7241D7}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "design", "design", "{4B5D5785-1151-4517-8157-3C094D8A3E1B}"
-	ProjectSection(SolutionItems) = preProject
-		..\design\Catel logo (silverlight).png = ..\design\Catel logo (silverlight).png
-		..\design\Catel logo (transparent).png = ..\design\Catel logo (transparent).png
-		..\design\Catel logo (windows phone 7).png = ..\design\Catel logo (windows phone 7).png
-		..\design\Catel logo (wpf).png = ..\design\Catel logo (wpf).png
-		..\design\Catel logo.ico = ..\design\Catel logo.ico
-		..\design\Catel logo.png = ..\design\Catel logo.png
-		..\design\logo_pcl.jpg = ..\design\logo_pcl.jpg
-		..\design\logo_plc_large.png = ..\design\logo_plc_large.png
-		..\design\logo_silverlight.jpg = ..\design\logo_silverlight.jpg
-		..\design\logo_windows8.jpg = ..\design\logo_windows8.jpg
-		..\design\logo_wp.jpg = ..\design\logo_wp.jpg
-		..\design\logo_wpf.jpg = ..\design\logo_wpf.jpg
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Core", "Catel.Core", "{3F661942-9946-4292-9FE7-6B576782D5F9}"
 EndProject
@@ -90,122 +17,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Extensions.Controls",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{8C3710FE-B6C7-4261-81B6-897F4B286B2B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSharp", "CSharp", "{0FF8A998-8E34-424B-9C36-41A111341EB0}"
-	ProjectSection(SolutionItems) = preProject
-		..\snippets\C#\dataobject.snippet = ..\snippets\C#\dataobject.snippet
-		..\snippets\C#\dataprop.snippet = ..\snippets\C#\dataprop.snippet
-		..\snippets\C#\datapropchanged.snippet = ..\snippets\C#\datapropchanged.snippet
-		..\snippets\C#\model.snippet = ..\snippets\C#\model.snippet
-		..\snippets\C#\modelprop.snippet = ..\snippets\C#\modelprop.snippet
-		..\snippets\C#\modelpropchanged.snippet = ..\snippets\C#\modelpropchanged.snippet
-		..\snippets\C#\vm.snippet = ..\snippets\C#\vm.snippet
-		..\snippets\C#\vmcommand.snippet = ..\snippets\C#\vmcommand.snippet
-		..\snippets\C#\vmcommandwithcanexecute.snippet = ..\snippets\C#\vmcommandwithcanexecute.snippet
-		..\snippets\C#\vmcommandwithvalidationsummary.snippet = ..\snippets\C#\vmcommandwithvalidationsummary.snippet
-		..\snippets\C#\vmprop.snippet = ..\snippets\C#\vmprop.snippet
-		..\snippets\C#\vmpropchanged.snippet = ..\snippets\C#\vmpropchanged.snippet
-		..\snippets\C#\vmpropmodel.snippet = ..\snippets\C#\vmpropmodel.snippet
-		..\snippets\C#\vmpropviewmodeltomodel.snippet = ..\snippets\C#\vmpropviewmodeltomodel.snippet
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VB.NET", "VB.NET", "{4B60DC07-ACC6-4EFA-BED6-22AA8F34DC24}"
-	ProjectSection(SolutionItems) = preProject
-		..\snippets\VB.NET\dataobject.snippet = ..\snippets\VB.NET\dataobject.snippet
-		..\snippets\VB.NET\dataprop.snippet = ..\snippets\VB.NET\dataprop.snippet
-		..\snippets\VB.NET\datapropchanged.snippet = ..\snippets\VB.NET\datapropchanged.snippet
-		..\snippets\VB.NET\model.snippet = ..\snippets\VB.NET\model.snippet
-		..\snippets\VB.NET\modelprop.snippet = ..\snippets\VB.NET\modelprop.snippet
-		..\snippets\VB.NET\modelpropchanged.snippet = ..\snippets\VB.NET\modelpropchanged.snippet
-		..\snippets\VB.NET\vm.snippet = ..\snippets\VB.NET\vm.snippet
-		..\snippets\VB.NET\vmcommand.snippet = ..\snippets\VB.NET\vmcommand.snippet
-		..\snippets\VB.NET\vmcommandwithcanexecute.snippet = ..\snippets\VB.NET\vmcommandwithcanexecute.snippet
-		..\snippets\VB.NET\vmcommandwithvalidationsummary.snippet = ..\snippets\VB.NET\vmcommandwithvalidationsummary.snippet
-		..\snippets\VB.NET\vmprop.snippet = ..\snippets\VB.NET\vmprop.snippet
-		..\snippets\VB.NET\vmpropchanged.snippet = ..\snippets\VB.NET\vmpropchanged.snippet
-		..\snippets\VB.NET\vmpropmodel.snippet = ..\snippets\VB.NET\vmpropmodel.snippet
-		..\snippets\VB.NET\vmpropviewmodeltomodel.snippet = ..\snippets\VB.NET\vmpropviewmodeltomodel.snippet
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSharp", "CSharp", "{39402137-1859-4B82-93BD-30ADFB183F06}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VB.NET", "VB.NET", "{2B9538EF-853C-4160-A546-5848444157B0}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ItemTemplates", "ItemTemplates", "{C436E4A5-3B2D-4E09-AE37-265F04D3FCCC}"
-	ProjectSection(SolutionItems) = preProject
-		..\templates\C#\ItemTemplates\Catel.Silverlight.DataWindow.zip = ..\templates\C#\ItemTemplates\Catel.Silverlight.DataWindow.zip
-		..\templates\C#\ItemTemplates\Catel.Silverlight.Page.zip = ..\templates\C#\ItemTemplates\Catel.Silverlight.Page.zip
-		..\templates\C#\ItemTemplates\Catel.Silverlight.UserControl.zip = ..\templates\C#\ItemTemplates\Catel.Silverlight.UserControl.zip
-		..\templates\C#\ItemTemplates\Catel.ViewModel.zip = ..\templates\C#\ItemTemplates\Catel.ViewModel.zip
-		..\templates\C#\ItemTemplates\Catel.WP.LandscapePage.zip = ..\templates\C#\ItemTemplates\Catel.WP.LandscapePage.zip
-		..\templates\C#\ItemTemplates\Catel.WP.PanoramaPage.zip = ..\templates\C#\ItemTemplates\Catel.WP.PanoramaPage.zip
-		..\templates\C#\ItemTemplates\Catel.WP.PivotPage.zip = ..\templates\C#\ItemTemplates\Catel.WP.PivotPage.zip
-		..\templates\C#\ItemTemplates\Catel.WP.PortraitPage.zip = ..\templates\C#\ItemTemplates\Catel.WP.PortraitPage.zip
-		..\templates\C#\ItemTemplates\Catel.WP.UserControl.zip = ..\templates\C#\ItemTemplates\Catel.WP.UserControl.zip
-		..\templates\C#\ItemTemplates\Catel.WPF.DataWindow.zip = ..\templates\C#\ItemTemplates\Catel.WPF.DataWindow.zip
-		..\templates\C#\ItemTemplates\Catel.WPF.Page.zip = ..\templates\C#\ItemTemplates\Catel.WPF.Page.zip
-		..\templates\C#\ItemTemplates\Catel.WPF.UserControl.zip = ..\templates\C#\ItemTemplates\Catel.WPF.UserControl.zip
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProjectTemplates", "ProjectTemplates", "{A4B19E44-FA3F-4718-A5D9-C096A57C65D5}"
-	ProjectSection(SolutionItems) = preProject
-		..\templates\C#\ProjectTemplates\Catel.Silverlight.Application.zip = ..\templates\C#\ProjectTemplates\Catel.Silverlight.Application.zip
-		..\templates\C#\ProjectTemplates\Catel.Silverlight.NavigationApplication.zip = ..\templates\C#\ProjectTemplates\Catel.Silverlight.NavigationApplication.zip
-		..\templates\C#\ProjectTemplates\Catel.WindowsStore.Application.zip = ..\templates\C#\ProjectTemplates\Catel.WindowsStore.Application.zip
-		..\templates\C#\ProjectTemplates\Catel.WP80.Application.zip = ..\templates\C#\ProjectTemplates\Catel.WP80.Application.zip
-		..\templates\C#\ProjectTemplates\Catel.WPF.Application.zip = ..\templates\C#\ProjectTemplates\Catel.WPF.Application.zip
-		..\templates\C#\ProjectTemplates\Catel.WPF.BrowserApplication.zip = ..\templates\C#\ProjectTemplates\Catel.WPF.BrowserApplication.zip
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ItemTemplates", "ItemTemplates", "{0F7F5211-C275-4A4A-9575-6EFB533F7F1D}"
-	ProjectSection(SolutionItems) = preProject
-		..\templates\VB.NET\ItemTemplates\Catel.Silverlight.DataWindow.zip = ..\templates\VB.NET\ItemTemplates\Catel.Silverlight.DataWindow.zip
-		..\templates\VB.NET\ItemTemplates\Catel.Silverlight.Page.zip = ..\templates\VB.NET\ItemTemplates\Catel.Silverlight.Page.zip
-		..\templates\VB.NET\ItemTemplates\Catel.Silverlight.UserControl.zip = ..\templates\VB.NET\ItemTemplates\Catel.Silverlight.UserControl.zip
-		..\templates\VB.NET\ItemTemplates\Catel.ViewModel.zip = ..\templates\VB.NET\ItemTemplates\Catel.ViewModel.zip
-		..\templates\VB.NET\ItemTemplates\Catel.WP.LandscapePage.zip = ..\templates\VB.NET\ItemTemplates\Catel.WP.LandscapePage.zip
-		..\templates\VB.NET\ItemTemplates\Catel.WP.PanoramaPage.zip = ..\templates\VB.NET\ItemTemplates\Catel.WP.PanoramaPage.zip
-		..\templates\VB.NET\ItemTemplates\Catel.WP.PivotPage.zip = ..\templates\VB.NET\ItemTemplates\Catel.WP.PivotPage.zip
-		..\templates\VB.NET\ItemTemplates\Catel.WP.PortraitPage.zip = ..\templates\VB.NET\ItemTemplates\Catel.WP.PortraitPage.zip
-		..\templates\VB.NET\ItemTemplates\Catel.WP.UserControl.zip = ..\templates\VB.NET\ItemTemplates\Catel.WP.UserControl.zip
-		..\templates\VB.NET\ItemTemplates\Catel.WPF.DataWindow.zip = ..\templates\VB.NET\ItemTemplates\Catel.WPF.DataWindow.zip
-		..\templates\VB.NET\ItemTemplates\Catel.WPF.Page.zip = ..\templates\VB.NET\ItemTemplates\Catel.WPF.Page.zip
-		..\templates\VB.NET\ItemTemplates\Catel.WPF.UserControl.zip = ..\templates\VB.NET\ItemTemplates\Catel.WPF.UserControl.zip
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProjectTemplates", "ProjectTemplates", "{6F5C52B2-96F2-478C-A662-3D8B7602C8EA}"
-	ProjectSection(SolutionItems) = preProject
-		..\templates\VB.NET\ProjectTemplates\Catel.Silverlight.Application.zip = ..\templates\VB.NET\ProjectTemplates\Catel.Silverlight.Application.zip
-		..\templates\VB.NET\ProjectTemplates\Catel.Silverlight.NavigationApplication.zip = ..\templates\VB.NET\ProjectTemplates\Catel.Silverlight.NavigationApplication.zip
-		..\templates\VB.NET\ProjectTemplates\Catel.WP80.Application.zip = ..\templates\VB.NET\ProjectTemplates\Catel.WP80.Application.zip
-		..\templates\VB.NET\ProjectTemplates\Catel.WPF.Application.zip = ..\templates\VB.NET\ProjectTemplates\Catel.WPF.Application.zip
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Toolkit", "Toolkit", "{7D3D71F1-1B3D-4B27-8216-86FC25C8CC91}"
-	ProjectSection(SolutionItems) = preProject
-		..\lib\SL5\Toolkit\System.Windows.Controls.Toolkit.dll = ..\lib\SL5\Toolkit\System.Windows.Controls.Toolkit.dll
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Extensions.CSLA", "Catel.Extensions.CSLA", "{A56117CB-EF5A-4EE5-ABD0-284F084637A0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WP80", "WP80", "{F63BBBF1-FC19-4F0A-81D7-2C4C27A1768A}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interactivity", "Interactivity", "{B5C5A548-D22B-4BF2-8E10-19F67DF5D0AD}"
-	ProjectSection(SolutionItems) = preProject
-		..\lib\WP80\Interactivity\System.Windows.Interactivity.dll = ..\lib\WP80\Interactivity\System.Windows.Interactivity.dll
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Silverlight testing", "Silverlight testing", "{F80CC0BE-3DA4-4889-A905-A0BE751C31E7}"
-	ProjectSection(SolutionItems) = preProject
-		..\lib\WP80\Silverlight testing\Microsoft.Silverlight.Testing.dll = ..\lib\WP80\Silverlight testing\Microsoft.Silverlight.Testing.dll
-		..\lib\WP80\Silverlight testing\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll = ..\lib\WP80\Silverlight testing\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Extensions.Data", "Catel.Extensions.Data", "{41BA68F9-3422-4FB0-B6DE-7097A22565E5}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{4C1D672F-892E-4AC7-84EA-FE5BE2046000}"
-	ProjectSection(SolutionItems) = preProject
-		..\tools\nuget\NuGet.exe = ..\tools\nuget\NuGet.exe
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EF5", "EF5", "{B08AF9A4-DD22-4ACF-9387-9C3600D487DE}"
 EndProject
@@ -476,10 +290,10 @@ Global
 		Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.Shared\Catel.Extensions.DynamicObjects.Shared.projitems*{a1b5d494-32d5-4dce-8dc1-00cecc821f58}*SharedItemsImports = 4
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{786d0298-2117-4b96-838d-c0e9458d06c2}*SharedItemsImports = 4
 		Catel.Extensions.Data\Catel.Extensions.Data.Shared\Catel.Extensions.Data.Shared.projitems*{3658ef5e-766f-4d36-b0fc-dfadae6547dd}*SharedItemsImports = 4
-		Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework.Shared\Catel.Extensions.EntityFramework.Shared.projitems*{2156065f-74f7-420c-a7c9-f40b4751e36a}*SharedItemsImports = 4
 		Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework5\Catel.Extensions.EntityFramework5.Shared\Catel.Extensions.EntityFramework5.Shared.projitems*{2156065f-74f7-420c-a7c9-f40b4751e36a}*SharedItemsImports = 4
-		Catel.Extensions.Prism\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems*{1dac9a4b-2572-446a-99b8-9e86c1d9254b}*SharedItemsImports = 4
+		Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework.Shared\Catel.Extensions.EntityFramework.Shared.projitems*{2156065f-74f7-420c-a7c9-f40b4751e36a}*SharedItemsImports = 4
 		Catel.Extensions.Prism\Catel.Extensions.Prism4\Catel.Extensions.Prism4.Shared\Catel.Extensions.Prism4.Shared.projitems*{1dac9a4b-2572-446a-99b8-9e86c1d9254b}*SharedItemsImports = 4
+		Catel.Extensions.Prism\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems*{1dac9a4b-2572-446a-99b8-9e86c1d9254b}*SharedItemsImports = 4
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{8c7eab82-554b-4761-b67e-7e9b9a306914}*SharedItemsImports = 13
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{5168abf4-2dcb-496b-8f76-db9b716acc4a}*SharedItemsImports = 4
 		Catel.Extensions.Memento\Catel.Extensions.Memento.Shared\Catel.Extensions.Memento.Shared.projitems*{918b3e4e-eda7-44d0-99ca-d1f40cd59e9d}*SharedItemsImports = 4
@@ -501,11 +315,11 @@ Global
 		Catel.Extensions.Memento\Catel.Extensions.Memento.Shared\Catel.Extensions.Memento.Shared.projitems*{9ff05999-2cd0-40c1-a5f1-6384c73402c3}*SharedItemsImports = 4
 		Catel.Extensions.Data\Catel.Extensions.Data.Shared\Catel.Extensions.Data.Shared.projitems*{db390685-297c-41d9-b4ac-201e58a8364c}*SharedItemsImports = 4
 		Catel.Extensions.Data\Catel.Extensions.Data.Shared\Catel.Extensions.Data.Shared.projitems*{9d908408-ca30-447a-bc47-85048e5a2999}*SharedItemsImports = 4
-		Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework.Shared\Catel.Extensions.EntityFramework.Shared.projitems*{2a4af4d2-e74c-4a8a-947b-1b7ce5bdb67a}*SharedItemsImports = 4
 		Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework5\Catel.Extensions.EntityFramework5.Shared\Catel.Extensions.EntityFramework5.Shared.projitems*{2a4af4d2-e74c-4a8a-947b-1b7ce5bdb67a}*SharedItemsImports = 4
+		Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework.Shared\Catel.Extensions.EntityFramework.Shared.projitems*{2a4af4d2-e74c-4a8a-947b-1b7ce5bdb67a}*SharedItemsImports = 4
 		Catel.Extensions.Controls\Catel.Extensions.Controls.Shared\Catel.Extensions.Controls.Shared.projitems*{6ed252b8-178a-4349-8940-afd2cb2b87e3}*SharedItemsImports = 13
-		Catel.Extensions.Prism\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems*{8127ebee-c5bb-4201-b899-9ca788688e83}*SharedItemsImports = 4
 		Catel.Extensions.Prism\Catel.Extensions.Prism4\Catel.Extensions.Prism4.Shared\Catel.Extensions.Prism4.Shared.projitems*{8127ebee-c5bb-4201-b899-9ca788688e83}*SharedItemsImports = 4
+		Catel.Extensions.Prism\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems*{8127ebee-c5bb-4201-b899-9ca788688e83}*SharedItemsImports = 4
 		Catel.Extensions.Prism\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems*{29ebe1ed-4e23-4da4-99d2-b991e69039ee}*SharedItemsImports = 13
 		Catel.Serialization.Json\Catel.Serialization.Json.Shared\Catel.Serialization.Json.Shared.projitems*{97e093e6-1cf9-4cff-9201-540a7681bc12}*SharedItemsImports = 4
 		Catel.Extensions.Controls\Catel.Extensions.Controls.Shared\Catel.Extensions.Controls.Shared.projitems*{7023e502-52a5-4b1d-9560-fd57afc917fd}*SharedItemsImports = 4
@@ -532,8 +346,8 @@ Global
 		Catel.Extensions.Prism\Catel.Extensions.Prism5\Catel.Extensions.Prism5.Shared\Catel.Extensions.Prism5.Shared.projitems*{3604ff18-b278-4508-aa83-88d34f6c026d}*SharedItemsImports = 4
 		Catel.Extensions.Prism\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems*{3604ff18-b278-4508-aa83-88d34f6c026d}*SharedItemsImports = 4
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{461e63d9-fd22-49bf-94ed-af5ac870c348}*SharedItemsImports = 4
-		Catel.Extensions.Prism\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems*{c9ead437-56ba-45bb-a982-845ad72fe1c8}*SharedItemsImports = 4
 		Catel.Extensions.Prism\Catel.Extensions.Prism4\Catel.Extensions.Prism4.Shared\Catel.Extensions.Prism4.Shared.projitems*{c9ead437-56ba-45bb-a982-845ad72fe1c8}*SharedItemsImports = 4
+		Catel.Extensions.Prism\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems*{c9ead437-56ba-45bb-a982-845ad72fe1c8}*SharedItemsImports = 4
 		Catel.Extensions.CSLA\Catel.Extensions.CSLA.Shared\Catel.Extensions.CSLA.Shared.projitems*{58e5120b-bf91-4d36-804f-fc294daf183e}*SharedItemsImports = 4
 		Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework6\Catel.Extensions.EntityFramework6.Shared\Catel.Extensions.EntityFramework6.Shared.projitems*{63025202-610a-4f75-92e7-1c622b5ab2e8}*SharedItemsImports = 4
 		Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework.Shared\Catel.Extensions.EntityFramework.Shared.projitems*{63025202-610a-4f75-92e7-1c622b5ab2e8}*SharedItemsImports = 4
@@ -557,10 +371,10 @@ Global
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{427247ba-c418-4004-a592-cea9eddea9df}*SharedItemsImports = 4
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{4f616501-99c8-480a-a7bf-9e4c7050fdc9}*SharedItemsImports = 4
 		Catel.Extensions.CSLA\Catel.Extensions.CSLA.Shared\Catel.Extensions.CSLA.Shared.projitems*{c848666a-bf2d-476f-ae4c-3ea40e475692}*SharedItemsImports = 13
-		Catel.MVC\Catel.MVC5\Catel.MVC5.Shared\Catel.MVC5.Shared.projitems*{62c00328-b780-48e4-88c1-9eea1a1d6277}*SharedItemsImports = 4
 		Catel.MVC\Catel.MVC.Shared\Catel.MVC.Shared.projitems*{62c00328-b780-48e4-88c1-9eea1a1d6277}*SharedItemsImports = 4
-		Catel.MVC\Catel.MVC.Shared\Catel.MVC.Shared.projitems*{5c9be8af-d2f1-4853-b683-c5d87aa0dbfc}*SharedItemsImports = 4
+		Catel.MVC\Catel.MVC5\Catel.MVC5.Shared\Catel.MVC5.Shared.projitems*{62c00328-b780-48e4-88c1-9eea1a1d6277}*SharedItemsImports = 4
 		Catel.MVC\Catel.MVC4\Catel.MVC4.Shared\Catel.MVC4.Shared.projitems*{5c9be8af-d2f1-4853-b683-c5d87aa0dbfc}*SharedItemsImports = 4
+		Catel.MVC\Catel.MVC.Shared\Catel.MVC.Shared.projitems*{5c9be8af-d2f1-4853-b683-c5d87aa0dbfc}*SharedItemsImports = 4
 		Catel.MVC\Catel.MVC4\Catel.MVC4.Shared\Catel.MVC4.Shared.projitems*{06b7664e-06dc-4d39-bf57-4c3f92ebc3ff}*SharedItemsImports = 13
 		Catel.Core\Catel.Core.Shared\Catel.Core.Shared.projitems*{f8073034-ce6c-41ad-9852-7aeece9536cc}*SharedItemsImports = 4
 		Catel.Extensions.Controls\Catel.Extensions.Controls.Shared\Catel.Extensions.Controls.Shared.projitems*{1e5d5bcc-0735-4fbd-974e-57c52d5d793a}*SharedItemsImports = 4
@@ -568,8 +382,8 @@ Global
 		Catel.Serialization.Json\Catel.Serialization.Json.Shared\Catel.Serialization.Json.Shared.projitems*{b28db9d5-dcab-4d54-b98f-3e8630908954}*SharedItemsImports = 4
 		Catel.Extensions.Controls\Catel.Extensions.Controls.Shared\Catel.Extensions.Controls.Shared.projitems*{c6abbf91-35b6-44aa-b769-a6a16228484d}*SharedItemsImports = 4
 		Catel.Serialization.Json\Catel.Serialization.Json.Shared\Catel.Serialization.Json.Shared.projitems*{ac44224a-c9c8-4ffe-8b17-32e315893bd4}*SharedItemsImports = 4
-		Catel.MVC\Catel.MVC.Shared\Catel.MVC.Shared.projitems*{4b51a018-816b-4336-81f4-9182b16d3a42}*SharedItemsImports = 4
 		Catel.MVC\Catel.MVC4\Catel.MVC4.Shared\Catel.MVC4.Shared.projitems*{4b51a018-816b-4336-81f4-9182b16d3a42}*SharedItemsImports = 4
+		Catel.MVC\Catel.MVC.Shared\Catel.MVC.Shared.projitems*{4b51a018-816b-4336-81f4-9182b16d3a42}*SharedItemsImports = 4
 		Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.Shared\Catel.Extensions.DynamicObjects.Shared.projitems*{f8820ae3-4021-4622-a0a9-e33876a471b4}*SharedItemsImports = 13
 		Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework5\Catel.Extensions.EntityFramework5.Shared\Catel.Extensions.EntityFramework5.Shared.projitems*{1740f946-266a-48c2-b4b4-6d3cb4d681e1}*SharedItemsImports = 13
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{dacc943d-decb-4638-b83b-59dd17237fb9}*SharedItemsImports = 4
@@ -1697,33 +1511,14 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{B0EED982-2D1D-4830-B616-1B8E46BB4C7A} = {BE079DB6-FD92-4167-8DF4-CACB2E1422FC}
-		{80394EA6-3B1A-457A-A21E-EAE2CCEF6BA5} = {BE079DB6-FD92-4167-8DF4-CACB2E1422FC}
-		{1E51A52B-C52A-4883-95A2-0B15D81E83EF} = {80394EA6-3B1A-457A-A21E-EAE2CCEF6BA5}
-		{340E7DDE-6DB6-4B51-9F4B-9251C088944F} = {B0EED982-2D1D-4830-B616-1B8E46BB4C7A}
-		{65417F3B-DCC0-490F-A13D-9EF48F6F5352} = {BE079DB6-FD92-4167-8DF4-CACB2E1422FC}
-		{A53512E9-0AA1-4623-9E28-E44693631341} = {65417F3B-DCC0-490F-A13D-9EF48F6F5352}
 		{3F661942-9946-4292-9FE7-6B576782D5F9} = {58F62039-8645-499C-B264-66048F4F0F75}
 		{162DE45B-B7A2-4D4A-B90D-F1762133C31C} = {58F62039-8645-499C-B264-66048F4F0F75}
 		{DA48A112-2316-4576-84F7-2665282C75BE} = {58F62039-8645-499C-B264-66048F4F0F75}
 		{6270F84B-38B3-4602-803C-EAE9E8C924C6} = {58F62039-8645-499C-B264-66048F4F0F75}
 		{1F4484D6-CE9B-428E-B640-FB777F260F97} = {58F62039-8645-499C-B264-66048F4F0F75}
 		{8C3710FE-B6C7-4261-81B6-897F4B286B2B} = {58F62039-8645-499C-B264-66048F4F0F75}
-		{0FF8A998-8E34-424B-9C36-41A111341EB0} = {0530FD4D-FB57-412E-877C-014B42413D0A}
-		{4B60DC07-ACC6-4EFA-BED6-22AA8F34DC24} = {0530FD4D-FB57-412E-877C-014B42413D0A}
-		{39402137-1859-4B82-93BD-30ADFB183F06} = {13F2B8D4-81FB-4645-AA6A-36FEB438642D}
-		{2B9538EF-853C-4160-A546-5848444157B0} = {13F2B8D4-81FB-4645-AA6A-36FEB438642D}
-		{C436E4A5-3B2D-4E09-AE37-265F04D3FCCC} = {39402137-1859-4B82-93BD-30ADFB183F06}
-		{A4B19E44-FA3F-4718-A5D9-C096A57C65D5} = {39402137-1859-4B82-93BD-30ADFB183F06}
-		{0F7F5211-C275-4A4A-9575-6EFB533F7F1D} = {2B9538EF-853C-4160-A546-5848444157B0}
-		{6F5C52B2-96F2-478C-A662-3D8B7602C8EA} = {2B9538EF-853C-4160-A546-5848444157B0}
-		{7D3D71F1-1B3D-4B27-8216-86FC25C8CC91} = {B0EED982-2D1D-4830-B616-1B8E46BB4C7A}
 		{A56117CB-EF5A-4EE5-ABD0-284F084637A0} = {58F62039-8645-499C-B264-66048F4F0F75}
-		{F63BBBF1-FC19-4F0A-81D7-2C4C27A1768A} = {BE079DB6-FD92-4167-8DF4-CACB2E1422FC}
-		{B5C5A548-D22B-4BF2-8E10-19F67DF5D0AD} = {F63BBBF1-FC19-4F0A-81D7-2C4C27A1768A}
-		{F80CC0BE-3DA4-4889-A905-A0BE751C31E7} = {F63BBBF1-FC19-4F0A-81D7-2C4C27A1768A}
 		{41BA68F9-3422-4FB0-B6DE-7097A22565E5} = {58F62039-8645-499C-B264-66048F4F0F75}
-		{4C1D672F-892E-4AC7-84EA-FE5BE2046000} = {DF031B6B-BD75-4D24-9411-2A691B7241D7}
 		{B08AF9A4-DD22-4ACF-9387-9C3600D487DE} = {04FB2E2C-C216-4270-B397-3C893D1E5CF2}
 		{4C91969A-ED94-4647-9816-D80254360B75} = {8C0BE8CA-0F38-4324-9B80-A1553ACB158C}
 		{A6B36C41-DB02-43BB-88CA-A5042D6B365B} = {8C3710FE-B6C7-4261-81B6-897F4B286B2B}
