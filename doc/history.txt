@@ -27,6 +27,13 @@ Release date:
 
 Added/fixed (BREAKING CHANGES):
 ===============================
+No breaking changes
+
+Platform support changes:
+=========================
+(+) CTL-614 Support Windows 10 Universal App Project
+(+) CTL-615 Support .NET 4.6
+(+) CTL-684 Added PCL projects for Catel.Extensions.Data / Catel.Extensions.DynamicObjects / Catel.Extensions.Memento
 (-) CTL-613 Removed Windows 8.0 projects (no longer supported in Visual Studio 2015). Upgrade your projects
     to 8.1 instead
 
@@ -45,7 +52,6 @@ Added/fixed:
 (+) CTL-602 Added methods to ICompositeCommand to retrieve the actual commands and actions registered to it
 (+) CTL-611 Added IPleaseWaitService.PushInScope extension method
 (+) CTL-612 Allow custom log data in log entries by introducing the LogData class
-(+) CTL-614 Support Windows 10 Universal App Project
 (+) CTL-624 Add AsyncEventHandler and extension for safe invocation
 (+) CTL-631 Create IStartupInfoProvider extension method to create a command line
 (+) CTL-632 Support KeyValuePair in serialization engine with KeyValuePairSerializerModifier
@@ -62,7 +68,6 @@ Added/fixed:
 (+) CTL-675 Add EnumToCollapsingVisibilityConverter
 (+) CTL-676 Support all objects in serialization engine
 (+) CTL-681 Added support of Android's ISharedPreferences in ConfigurationService
-(+) CTL-684 Added PCL projects for Catel.Extensions.Data / Catel.Extensions.DynamicObjects / Catel.Extensions.Memento
 (*) CTL-550 Non Serializable properties tagged with [IncludeInSerialization] should attempt to serialize and 
     complain if they are not serialized
 (*) CTL-617 Marked TraceOutputControl as obsolete, will be removed in 5.0. Use LogViewerControl from the 

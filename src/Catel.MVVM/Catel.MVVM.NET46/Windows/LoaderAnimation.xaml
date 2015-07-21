@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="Catel.Windows.LoaderAnimation"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Name="UserControl">
+    
+    <!-- Resources -->
+    <UserControl.Resources>
+        <Storyboard x:Key="Storyboard1">
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="path" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)" RepeatBehavior="Forever">
+                <SplineDoubleKeyFrame KeyTime="00:00:01" Value="360"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+    </UserControl.Resources>
+    
+    <!-- Triggers -->
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource Storyboard1}"/>
+        </EventTrigger>
+    </UserControl.Triggers>
+
+    <!-- Content -->
+    <Grid x:Name="LayoutRoot">
+        <Path Stretch="Fill" Stroke="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" Data="M95.5,35.999999 C62.639057,36 36,62.639057 35.999999,95.5 36,128.36094 62.639057,155 95.5,155 C128.36094,155 155,128.36094 155,95.5 C155,62.639057 128.36094,36 95.5,35.999999 z M95.5,0.5 C147.96705,0.5 190.5,43.032949 190.5,95.5 C190.5,147.96705 147.96705,190.5 95.5,190.5 43.032949,190.5 0.5,147.96705 0.5,95.5 0.5,43.032949 43.032949,0.5 95.5,0.5 z" RenderTransformOrigin="0.5,0.5" x:Name="path" StrokeThickness="1" Opacity="1">
+            <Path.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                    <SkewTransform AngleX="0" AngleY="0"/>
+                    <RotateTransform Angle="0"/>
+                    <TranslateTransform X="0" Y="0"/>
+                </TransformGroup>
+            </Path.RenderTransform>
+            <Path.Fill>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="{DynamicResource {x:Static SystemColors.ControlLightColorKey}}" Offset="0.429"/>
+                    <GradientStop Color="{DynamicResource {x:Static SystemColors.ControlDarkColorKey}}" Offset="1"/>
+                	<GradientStop Color="#FFFFFF" Offset="0.179"/>
+                </LinearGradientBrush>
+            </Path.Fill>
+        </Path>
+    </Grid>
+</UserControl>

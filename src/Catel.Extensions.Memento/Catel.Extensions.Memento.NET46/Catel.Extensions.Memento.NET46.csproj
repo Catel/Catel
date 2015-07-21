@@ -2,19 +2,15 @@
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3658EF5E-766F-4D36-B0FC-DFADAE6547DD}</ProjectGuid>
+    <ProjectGuid>{43D4D0A2-3227-4973-BA7F-97ECCB1B13E2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Catel</RootNamespace>
-    <AssemblyName>Catel.Extensions.Data</AssemblyName>
-    <DefaultLanguage>en-US</DefaultLanguage>
+    <AssemblyName>Catel.Extensions.Memento</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -22,41 +18,25 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\output\debug\PCL\Catel.Extensions.Data\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;PCL</DefineConstants>
+    <OutputPath>..\..\..\output\debug\NET46\Catel.Extensions.Memento\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET; NET46</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\..\output\debug\PCL\Catel.Extensions.Data\Catel.Extensions.Data.XML</DocumentationFile>
-    <NoWarn>1998</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>1998</NoWarn>
+    <DocumentationFile>..\..\..\output\debug\NET46\Catel.Extensions.Memento\Catel.Extensions.Memento.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\output\release\PCL\Catel.Extensions.Data\</OutputPath>
-    <DefineConstants>TRACE;PCL</DefineConstants>
+    <OutputPath>..\..\..\output\release\NET46\Catel.Extensions.Memento\</OutputPath>
+    <DefineConstants>TRACE;NET; NET46</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\..\output\release\PCL\Catel.Extensions.Data\Catel.Extensions.Data.XML</DocumentationFile>
-    <NoWarn>1998</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>1998</NoWarn>
+    <DocumentationFile>..\..\..\output\release\NET46\Catel.Extensions.Memento\Catel.Extensions.Memento.XML</DocumentationFile>
   </PropertyGroup>
-  <ItemGroup>
-    <!-- A reference to the entire .NET Framework is automatically included -->
-    <Folder Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Catel.Core\Catel.Core.PCL\Catel.Core.PCL.csproj">
-      <Project>{c35d5dc5-7149-4e56-9f0c-90d8f6a1c495}</Project>
-      <Name>Catel.Core.PCL</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="FodyWeavers.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
   <ItemGroup>
     <Reference Include="Catel.Fody.Attributes">
       <HintPath>..\..\..\lib\Catel.Fody.2.7.0\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
@@ -66,9 +46,32 @@
       <HintPath>..\..\..\lib\Obsolete.Fody.4.0.0\Lib\portable-net4+sl5+wp8+win8+wpa81+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
-  <Import Project="..\Catel.Extensions.Data.Shared\Catel.Extensions.Data.Shared.projitems" Label="Shared" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Catel.Core\Catel.Core.NET46\Catel.Core.NET46.csproj">
+      <Project>{2cc3b8f3-626e-4a7b-adc5-a25e28dc219e}</Project>
+      <Name>Catel.Core.NET46</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="FodyWeavers.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="..\Catel.Extensions.Memento.Shared\Catel.Extensions.Memento.Shared.projitems" Label="Shared" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\..\lib\Fody.1.29.0\build\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.29.0\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
