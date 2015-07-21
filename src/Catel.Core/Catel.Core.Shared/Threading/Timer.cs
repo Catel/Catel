@@ -18,6 +18,7 @@ namespace System.Threading
     /// </param>
     public delegate void TimerCallback(object state);
 
+#if !PCL
     /// <summary>
     /// The timeout class.
     /// </summary>
@@ -28,6 +29,7 @@ namespace System.Threading
         /// </summary>
         public const int Infinite = -1;
     }
+#endif
 
     /// <summary>
     /// Timer for WinRT since WinRT only provides the DispatcherTimer which cannot be used outside the UI thread.
