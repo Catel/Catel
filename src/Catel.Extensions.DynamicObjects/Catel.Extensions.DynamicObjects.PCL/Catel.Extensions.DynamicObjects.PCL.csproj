@@ -46,7 +46,7 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Catel.Core\Catel.Core.PCL\Catel.Core.PCL.csproj">
+    <ProjectReference Include="..\..\Catel.Core\Catel.Core.PCL\Catel.Core.PCL.csproj">
       <Project>{c35d5dc5-7149-4e56-9f0c-90d8f6a1c495}</Project>
       <Name>Catel.Core.PCL</Name>
     </ProjectReference>
@@ -59,22 +59,22 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Catel.Fody.Attributes">
-      <HintPath>..\..\..\..\lib\Catel.Fody.2.7.0\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
+      <HintPath>..\..\..\lib\Catel.Fody.2.7.0\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Obsolete">
-      <HintPath>..\..\..\..\lib\Obsolete.Fody.4.0.0\Lib\portable-net4+sl5+wp8+win8+wpa81+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
+      <HintPath>..\..\..\lib\Obsolete.Fody.4.0.0\Lib\portable-net4+sl5+wp8+win8+wpa81+MonoAndroid16+MonoTouch40\Obsolete.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
-  <Import Project="..\..\Catel.Extensions.DynamicObjects.Shared\Catel.Extensions.DynamicObjects.Shared.projitems" Label="Shared" />
+  <Import Project="..\Catel.Extensions.DynamicObjects.Shared\Catel.Extensions.DynamicObjects.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <Import Project="..\..\..\..\lib\Fody.1.29.0\build\Fody.targets" Condition="Exists('..\..\..\..\lib\Fody.1.29.0\build\Fody.targets')" />
+  <Import Project="..\..\..\lib\Fody.1.29.0\build\Fody.targets" Condition="Exists('..\..\..\..\lib\Fody.1.29.0\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\..\lib\Fody.1.29.0\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\lib\Fody.1.29.0\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\..\..\lib\Fody.1.29.0\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\lib\Fody.1.29.0\build\Fody.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
