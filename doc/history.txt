@@ -62,6 +62,7 @@ Added/fixed:
 (+) CTL-675 Add EnumToCollapsingVisibilityConverter
 (+) CTL-676 Support all objects in serialization engine
 (+) CTL-681 Added support of Android's ISharedPreferences in ConfigurationService
+(+) CTL-684 Added PCL projects for Catel.Extensions.Data / Catel.Extensions.DynamicObjects / Catel.Extensions.Memento
 (*) CTL-550 Non Serializable properties tagged with [IncludeInSerialization] should attempt to serialize and 
     complain if they are not serialized
 (*) CTL-617 Marked TraceOutputControl as obsolete, will be removed in 5.0. Use LogViewerControl from the 
