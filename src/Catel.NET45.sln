@@ -68,7 +68,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Extensions.Prism", "C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Extensions.Controls", "Catel.Extensions.Controls", "{1F4484D6-CE9B-428E-B640-FB777F260F97}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{8C3710FE-B6C7-4261-81B6-897F4B286B2B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8C3710FE-B6C7-4261-81B6-897F4B286B2B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Toolkit", "Toolkit", "{7D3D71F1-1B3D-4B27-8216-86FC25C8CC91}"
 	ProjectSection(SolutionItems) = preProject
