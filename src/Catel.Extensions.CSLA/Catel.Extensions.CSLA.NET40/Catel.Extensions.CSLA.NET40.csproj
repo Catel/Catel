@@ -133,7 +133,6 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="..\Catel.Extensions.CSLA.Shared\Catel.Extensions.CSLA.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Extensions.CSLA.Shared\Catel.Extensions.CSLA.Shared.projitems')" />
-  <Import Project="..\Catel.Extensions.CSLA.Shared\Catel.Extensions.CSLA.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Extensions.CSLA.Shared\Catel.Extensions.CSLA.Shared.projitems')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
