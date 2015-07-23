@@ -11,6 +11,9 @@ namespace Catel.Test.Runtime.Serialization
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+    using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Runtime.Serialization;
     using System.Windows.Media;
@@ -376,7 +379,7 @@ namespace Catel.Test.Runtime.Serialization
                     for (int i = 0; i < deserializedObject.Persons.Count; i++)
                     {
                         var expectedPerson = complexHierarchy.Persons[i];
-                        var actualPerson = complexHierarchy.Persons[i];
+                        var actualPerson = deserializedObject.Persons[i];
 
                         Assert.AreEqual(expectedPerson.Gender, actualPerson.Gender, description);
                         Assert.AreEqual(expectedPerson.FirstName, actualPerson.FirstName, description);
@@ -389,6 +392,177 @@ namespace Catel.Test.Runtime.Serialization
         [TestFixture]
         public class NonCatelModelAdvancedSerializationFacts
         {
+        }
+
+        [TestFixture]
+        public class CollectionSerializationFacts
+        {
+            [Serializable]
+            [Table("Countries")]
+            [KnownType(typeof(Country))]
+            public class Country : ModelBase
+            {
+                public Country()
+                {
+                }
+
+                protected Country(SerializationInfo info, StreamingContext context)
+                    : base(info, context)
+                {
+                }
+
+                [Key]
+                public Guid Id
+                {
+                    get { return this.GetValue<Guid>(IdProperty); }
+                    set { this.SetValue(IdProperty, value); }
+                }
+
+                public static readonly PropertyData IdProperty = RegisterProperty<Country, Guid>(o => o.Id, Guid.NewGuid);
+
+                [StringLength(256)]
+                public string IsoCode
+                {
+                    get { return this.GetValue<string>(IsoCodeProperty); }
+                    set { this.SetValue(IsoCodeProperty, value); }
+                }
+
+                public static readonly PropertyData IsoCodeProperty = RegisterProperty<Country, string>(o => o.IsoCode);
+
+                [StringLength(400)]
+                public string Description
+                {
+                    get { return this.GetValue<string>(DescriptionProperty); }
+                    set { this.SetValue(DescriptionProperty, value); }
+                }
+
+                public static readonly PropertyData DescriptionProperty = RegisterProperty<Country, string>(o => o.Description);
+
+                public DateTime CreateDate
+                {
+                    get { return this.GetValue<DateTime>(CreateDateProperty); }
+                    set { this.SetValue(CreateDateProperty, value); }
+                }
+
+                public static readonly PropertyData CreateDateProperty = RegisterProperty<Country, DateTime>(o => o.CreateDate);
+
+                public Guid CreateUserId
+                {
+                    get { return this.GetValue<Guid>(CreateUserIdProperty); }
+                    set { this.SetValue(CreateUserIdProperty, value); }
+                }
+
+                public static readonly PropertyData CreateUserIdProperty = RegisterProperty<Country, Guid>(o => o.CreateUserId);
+
+                public DateTime? DeleteDate
+                {
+                    get { return this.GetValue<DateTime?>(DeleteDateProperty); }
+                    set { this.SetValue(DeleteDateProperty, value); }
+                }
+
+                public static readonly PropertyData DeleteDateProperty = RegisterProperty<Country, DateTime?>(o => o.DeleteDate);
+
+                public Guid? DeleteUserId
+                {
+                    get { return this.GetValue<Guid?>(DeleteUserIdProperty); }
+                    set { this.SetValue(DeleteUserIdProperty, value); }
+                }
+
+                public static readonly PropertyData DeleteUserIdProperty = RegisterProperty<Country, Guid?>(o => o.DeleteUserId);
+
+                public bool IsDeleted
+                {
+                    get { return this.GetValue<bool>(IsDeletedProperty); }
+                    set { this.SetValue(IsDeletedProperty, value); }
+                }
+
+                public static readonly PropertyData IsDeletedProperty = RegisterProperty<Country, bool>(o => o.IsDeleted);
+
+                public byte[] TimeStamp
+                {
+                    get { return this.GetValue<byte[]>(TimeStampProperty); }
+                    set { this.SetValue(TimeStampProperty, value); }
+                }
+
+                public static readonly PropertyData TimeStampProperty = RegisterProperty<Country, byte[]>(o => o.TimeStamp);
+
+                public DateTime UpdateDate
+                {
+                    get { return this.GetValue<DateTime>(UpdateDateProperty); }
+                    set { this.SetValue(UpdateDateProperty, value); }
+                }
+
+                public static readonly PropertyData UpdateDateProperty = RegisterProperty<Country, DateTime>(o => o.UpdateDate);
+
+                public Guid UpdateUserId
+                {
+                    get { return this.GetValue<Guid>(UpdateUserIdProperty); }
+                    set { this.SetValue(UpdateUserIdProperty, value); }
+                }
+
+                public static readonly PropertyData UpdateUserIdProperty = RegisterProperty<Country, Guid>(o => o.UpdateUserId);
+
+                private static IEnumerable<Type> countryTypes;
+
+                private static IEnumerable<Type> GetKnownTypes()
+                {
+                    Contract.Ensures(Contract.Result<IEnumerable<Type>>() != null);
+
+                    if (countryTypes == null)
+                    {
+                        countryTypes = AppDomain.CurrentDomain.GetLoadedAssemblies(true)
+                                .SelectMany(a => a.GetTypes())
+                                .Where(t => typeof(Country).IsAssignableFrom(t))
+                                .ToList();
+                    }
+
+                    return countryTypes;
+                }
+            }
+
+            [TestCase]
+            public void CanSerializeCollection()
+            {
+                var countrylist = new List<Country>();
+                countrylist.Add(new Country { IsoCode = "AF", Description = "Afghanistan" });
+                countrylist.Add(new Country { IsoCode = "AG", Description = "Agypt" });
+
+                TestSerializationOnAllSerializers((serializer, description) =>
+                {
+                    var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(countrylist, serializer);
+
+                    Assert.AreEqual(countrylist.Count, deserializedObject.Count, description);
+
+                    for (int i = 0; i < deserializedObject.Count; i++)
+                    {
+                        var expectedItem = countrylist[i];
+                        var actualItem = deserializedObject[i];
+
+                        Assert.AreEqual(expectedItem.IsoCode, actualItem.IsoCode, description);
+                        Assert.AreEqual(expectedItem.Description, actualItem.Description, description);
+                    }
+                });
+            }
+
+            [TestCase]
+            public void CanSerializeDictionary()
+            {
+                var dictionary = new Dictionary<string, object>();
+                dictionary.Add("skip", 1);
+                dictionary.Add("take", 2);
+
+                TestSerializationOnAllSerializers((serializer, description) =>
+                {
+                    var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(dictionary, serializer);
+
+                    Assert.AreEqual(dictionary.Count, deserializedObject.Count, description);
+
+                    Assert.IsTrue(deserializedObject.ContainsKey("skip"));
+                    Assert.AreEqual(1, deserializedObject["skip"]);
+                    Assert.IsTrue(deserializedObject.ContainsKey("take"));
+                    Assert.AreEqual(2, deserializedObject["take"]);
+                });
+            }
         }
 
         [TestFixture, Explicit]

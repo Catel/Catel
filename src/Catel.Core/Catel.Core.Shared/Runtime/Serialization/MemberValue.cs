@@ -28,28 +28,35 @@ namespace Catel.Runtime.Serialization
         /// <summary>
         /// The member is a field.
         /// </summary>
-        Field
+        Field,
+
+        /// <summary>
+        /// The member is a collection.
+        /// </summary>
+        Collection
     }
 
     /// <summary>
     /// Member value which represents the serialization info of a specific member.
     /// </summary>
-    [DebuggerDisplay("{Name} => {Value}")]
+    [DebuggerDisplay("{Name} => {Value} ({ActualMemberType})")]
     public class MemberValue
     {
+        private object _value;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MemberValue" /> class.
         /// </summary>
         /// <param name="memberGroup">Group of the member.</param>
         /// <param name="modelType">Type of the model.</param>
-        /// <param name="type">The type.</param>
+        /// <param name="memberType">Type of the member.</param>
         /// <param name="name">The name.</param>
         /// <param name="value">The value.</param>
-        public MemberValue(SerializationMemberGroup memberGroup, Type modelType, Type type, string name, object value)
+        public MemberValue(SerializationMemberGroup memberGroup, Type modelType, Type memberType, string name, object value)
         {
             MemberGroup = memberGroup;
             ModelType = modelType;
-            Type = type;
+            MemberType = memberType;
             Name = name;
             Value = value;
         }
@@ -68,7 +75,13 @@ namespace Catel.Runtime.Serialization
         /// the <c>value.GetType()</c>.
         /// </summary>
         /// <value>The type.</value>
-        public Type Type { get; private set; }
+        public Type MemberType { get; private set; }
+
+        /// <summary>
+        /// Gets the actual type of the value.
+        /// </summary>
+        /// <value>The actual type of the value.</value>
+        public Type ActualMemberType { get; private set; }
 
         /// <summary>
         /// Gets the type of the model which this member value is a member of.
@@ -86,7 +99,16 @@ namespace Catel.Runtime.Serialization
         /// Gets or sets the value.
         /// </summary>
         /// <value>The value.</value>
-        public object Value { get; set; }
+        public object Value
+        {
+            get { return _value; }
+            set
+            {
+                _value = value;
+
+                ActualMemberType = (value != null) ? value.GetType() : null;
+            }
+        }
         #endregion
     }
 }

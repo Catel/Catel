@@ -57,7 +57,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public void Warmup(Type type)
         {
-            Argument.IsNotNull(() =>  type);
+            Argument.IsNotNull(() => type);
 
             lock (_lock)
             {
@@ -161,7 +161,7 @@ namespace Catel.Runtime.Serialization
             {
                 var properties = new HashSet<string>();
 
-                var isModelBase = typeof (ModelBase).IsAssignableFromEx(type);
+                var isModelBase = typeof(ModelBase).IsAssignableFromEx(type);
 
                 var propertyDataManager = PropertyDataManager.Default;
                 var catelTypeInfo = propertyDataManager.GetCatelTypeInfo(type);

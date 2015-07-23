@@ -7,6 +7,7 @@
 namespace Catel.Runtime.Serialization
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -242,7 +243,7 @@ namespace Catel.Runtime.Serialization
                 if (serializationObject.IsSuccessful)
                 {
                     // Note that we need to sync the member values every time
-                    var memberValue = new MemberValue(member.MemberGroup, member.ModelType, member.Type, member.Name, serializationObject.MemberValue);
+                    var memberValue = new MemberValue(member.MemberGroup, member.ModelType, member.MemberType, member.Name, serializationObject.MemberValue);
                     member.Value = memberValue.Value;
 
                     deserializedMemberValues.Add(memberValue);
@@ -263,7 +264,29 @@ namespace Catel.Runtime.Serialization
 
             if (deserializedMemberValues.Count > 0)
             {
-                PopulateModel(context.Model, deserializedMemberValues.ToArray());
+                var firstMember = deserializedMemberValues[0];
+                if (firstMember.MemberGroup == SerializationMemberGroup.Collection)
+                {
+                    var enumerable = firstMember.Value as IEnumerable;
+                    if (enumerable != null)
+                    {
+                        var targetCollection = context.Model as IList;
+                        if (targetCollection == null)
+                        {
+                            Log.ErrorAndThrowException<NotSupportedException>("'{0}' seems to be a collection, but target model cannot be updated because it does not implement IList",
+                                context.ModelType.GetSafeFullName());
+                        }
+
+                        foreach (var item in enumerable)
+                        {
+                            targetCollection.Add(item);
+                        }
+                    }
+                }
+                else
+                {
+                    PopulateModel(context.Model, deserializedMemberValues.ToArray());
+                }
             }
 
             return deserializedMemberValues;

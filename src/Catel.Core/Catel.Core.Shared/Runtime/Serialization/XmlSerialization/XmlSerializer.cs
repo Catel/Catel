@@ -250,6 +250,12 @@ namespace Catel.Runtime.Serialization.Xml
 
             try
             {
+                if (memberValue.MemberGroup == SerializationMemberGroup.Collection)
+                {
+                    var value = GetObjectFromXmlElement(context, element, memberValue, modelType);
+                    return SerializationObject.SucceededToDeserialize(modelType, memberValue.MemberGroup, memberValue.Name, value);
+                }
+
                 var propertyDataManager = PropertyDataManager.Default;
                 if (propertyDataManager.IsPropertyNameMappedToXmlAttribute(modelType, memberValue.Name))
                 {
@@ -268,7 +274,7 @@ namespace Catel.Runtime.Serialization.Xml
                 }
                 else
                 {
-                    string elementName = memberValue.Name;
+                    var elementName = memberValue.Name;
 
                     if (propertyDataManager.IsPropertyNameMappedToXmlElement(modelType, memberValue.Name))
                     {
@@ -341,6 +347,12 @@ namespace Catel.Runtime.Serialization.Xml
 
             OptimizeXDocument(document);
 
+            if (context.ModelType.IsCollection())
+            {
+                // Because we have 'Items\Items' for collections, remote the root
+                document = new XDocument(document.Root.FirstNode);
+            }
+
             document.Save(stream);
         }
 
@@ -393,7 +405,7 @@ namespace Catel.Runtime.Serialization.Xml
                 Log.Warning(ex, "Failed to load document from stream, falling back to empty document");
             }
 
-            bool isNewDocument = document == null;
+            var isNewDocument = document == null;
             if (isNewDocument)
             {
                 var rootName = "root";
@@ -402,15 +414,21 @@ namespace Catel.Runtime.Serialization.Xml
                     var modelType = model.GetType();
                     rootName = _rootNameCache.GetFromCacheOrFetch(modelType, () =>
                     {
+                        if (modelType.IsCollection())
+                        {
+                            return CollectionName;
+                        }
+
                         XmlRootAttribute xmlRootAttribute;
                         if (AttributeHelper.TryGetAttribute(modelType, out xmlRootAttribute))
                         {
                             return xmlRootAttribute.ElementName;
                         }
 
-                        return rootName = model.GetType().Name;
+                        return rootName = modelType.Name;
                     });
                 }
+
                 document = new XDocument(new XElement(rootName));
             }
 
@@ -438,7 +456,7 @@ namespace Catel.Runtime.Serialization.Xml
         {
             var value = attribute.Value;
 
-            return StringToObjectHelper.ToRightType(memberValue.Type, value);
+            return StringToObjectHelper.ToRightType(memberValue.MemberType, value);
         }
 
         /// <summary>
@@ -453,9 +471,9 @@ namespace Catel.Runtime.Serialization.Xml
         private object GetObjectFromXmlElement(ISerializationContext<XmlSerializationContextInfo> context, XElement element, MemberValue memberValue, Type modelType)
         {
             object value = null;
-            string xmlName = element.Name.LocalName;
+            var xmlName = element.Name.LocalName;
 
-            var propertyTypeToDeserialize = memberValue.Type;
+            var propertyTypeToDeserialize = memberValue.MemberType;
 
             var isNullAttribute = element.Attribute("IsNull");
             var isNull = (isNullAttribute != null) ? StringToObjectHelper.ToBool(isNullAttribute.Value) : false;
@@ -488,14 +506,14 @@ namespace Catel.Runtime.Serialization.Xml
                 if (typeToDeserialize != null && propertyTypeToDeserialize != typeToDeserialize)
                 {
                     Log.Debug("Property type for property '{0}' is '{1}' but found type info that it should be deserialized as '{2}'",
-                        memberValue.Name, memberValue.Type.FullName, attributeValue);
+                        memberValue.Name, memberValue.MemberType.FullName, attributeValue);
 
                     propertyTypeToDeserialize = typeToDeserialize;
                 }
                 else
                 {
                     Log.Warning("Property type for property '{0}' is '{1}' but found type info that it should be deserialized as '{2}'. Unfortunately the type cannot be found so the deserialization will probably fail.",
-                        memberValue.Name, memberValue.Type.FullName, attributeValue);
+                        memberValue.Name, memberValue.MemberType.FullName, attributeValue);
                 }
             }
 
@@ -560,9 +578,6 @@ namespace Catel.Runtime.Serialization.Xml
 
             using (var xmlWriter = XmlWriter.Create(stringBuilder, xmlWriterSettings))
             {
-                var memberTypeToSerialize = memberValue.Value != null ? memberValue.Value.GetType() : typeof(object);
-                var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, memberTypeToSerialize, elementName, null, memberValue.Value);
-
                 if (memberValue.Value == null)
                 {
                     xmlWriter.WriteStartElement(elementName);
@@ -576,27 +591,34 @@ namespace Catel.Runtime.Serialization.Xml
                 }
                 else
                 {
+                    var memberTypeToSerialize = memberValue.ActualMemberType;
+                    var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, memberTypeToSerialize, elementName, null, null);
+
                     ReferenceInfo referenceInfo = null;
-                    bool serializeElement = true;
-                    var isClassType = memberTypeToSerialize.IsClassType();
-                    if (isClassType)
+                    var serializeElement = true;
+
+                    if (memberValue.MemberGroup != SerializationMemberGroup.Collection)
                     {
-                        var referenceManager = context.ReferenceManager;
-                        referenceInfo = referenceManager.GetInfo(memberValue.Value);
-
-                        if (!referenceInfo.IsFirstUsage)
+                        var isClassType = memberTypeToSerialize.IsClassType();
+                        if (isClassType)
                         {
-                            Log.Debug("Existing reference detected for element type '{0}' with id '{1}', only storing id", memberTypeToSerialize.GetSafeFullName(), referenceInfo.Id);
+                            var referenceManager = context.ReferenceManager;
+                            referenceInfo = referenceManager.GetInfo(memberValue.Value);
 
-                            //serializer.WriteStartObject(xmlWriter, memberValue.Value);
-                            xmlWriter.WriteStartElement(elementName);
+                            if (!referenceInfo.IsFirstUsage)
+                            {
+                                Log.Debug("Existing reference detected for element type '{0}' with id '{1}', only storing id", memberTypeToSerialize.GetSafeFullName(), referenceInfo.Id);
 
-                            xmlWriter.WriteAttributeString(namespacePrefix, GraphRefId, null, referenceInfo.Id.ToString());
+                                //serializer.WriteStartObject(xmlWriter, memberValue.Value);
+                                xmlWriter.WriteStartElement(elementName);
 
-                            //serializer.WriteEndObject(xmlWriter);
-                            xmlWriter.WriteEndElement();
+                                xmlWriter.WriteAttributeString(namespacePrefix, GraphRefId, null, referenceInfo.Id.ToString());
 
-                            serializeElement = false;
+                                //serializer.WriteEndObject(xmlWriter);
+                                xmlWriter.WriteEndElement();
+
+                                serializeElement = false;
+                            }
                         }
                     }
 
@@ -618,7 +640,7 @@ namespace Catel.Runtime.Serialization.Xml
                             xmlWriter.WriteAttributeString(namespacePrefix, GraphId, null, referenceInfo.Id.ToString());
                         }
 
-                        if (memberTypeToSerialize != memberValue.Type)
+                        if (memberTypeToSerialize != memberValue.MemberType)
                         {
                             var memberTypeToSerializerName = TypeHelper.GetTypeName(memberTypeToSerialize.FullName);
                             xmlWriter.WriteAttributeString(namespacePrefix, "type", null, memberTypeToSerializerName);

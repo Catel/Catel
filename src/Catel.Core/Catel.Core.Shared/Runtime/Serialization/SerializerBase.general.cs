@@ -8,6 +8,7 @@
 namespace Catel.Runtime.Serialization
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -37,6 +38,16 @@ namespace Catel.Runtime.Serialization
         /// The API cop.
         /// </summary>
         private static readonly IApiCop ApiCop = ApiCopManager.GetCurrentClassApiCop();
+
+        /// <summary>
+        /// The collection name.
+        /// </summary>
+        protected const string CollectionName = "Items";
+
+        /// <summary>
+        /// The dictionary name.
+        /// </summary>
+        protected const string DictionaryName = "Pairs";
         #endregion
 
         #region Fields
@@ -106,9 +117,18 @@ namespace Catel.Runtime.Serialization
         {
             Argument.IsNotNull("model", model);
 
+            var listToSerialize = new List<MemberValue>();
+            var checkedMemberNames = new HashSet<string>();
             var membersToIgnoreHashSet = new HashSet<string>(membersToIgnore);
 
             var modelType = model.GetType();
+
+            // CTL-688 Support collections and dictionaries
+            if (modelType.IsCollection())
+            {
+                listToSerialize.Add(new MemberValue(SerializationMemberGroup.Collection, modelType, modelType, CollectionName, model));
+                return listToSerialize;
+            }
 
             var modelInfo = _serializationModelCache.GetFromCacheOrFetch(modelType, () =>
             {
@@ -118,9 +138,6 @@ namespace Catel.Runtime.Serialization
 
                 return new SerializationModelInfo(modelType, catelPropertyNames, fieldsToSerialize, propertiesToSerialize);
             });
-
-            var listToSerialize = new List<MemberValue>();
-            var checkedMemberNames = new HashSet<string>();
 
             foreach (var propertyName in modelInfo.PropertiesByName.Keys)
             {

@@ -6,7 +6,6 @@
 
 #if NET
 
-
 namespace Catel.Runtime.Serialization.Binary
 {
     using System;
@@ -253,10 +252,19 @@ namespace Catel.Runtime.Serialization.Binary
 
             try
             {
-                // NOTE: this will deserialize a list of PropertyValue objects to maintain backwards compatibility!
-                var propertyValues = (List<PropertyValue>)serializationInfo.GetValue(PropertyValuesKey, typeof(List<PropertyValue>));
-                var memberValues = ConvertPropertyValuesToMemberValues(context, context.ModelType, propertyValues);
-                serializationContext.MemberValues.AddRange(memberValues);
+                if (context.ModelType.IsCollection())
+                {
+                    var collection = serializationInfo.GetValue(CollectionName, context.ModelType);
+                    var memberValue = new MemberValue(SerializationMemberGroup.Collection, context.ModelType, context.ModelType, CollectionName, collection);
+                    serializationContext.MemberValues.Add(memberValue);
+                }
+                else
+                {
+                    // NOTE: this will deserialize a list of PropertyValue objects to maintain backwards compatibility!
+                    var propertyValues = (List<PropertyValue>)serializationInfo.GetValue(PropertyValuesKey, typeof(List<PropertyValue>));
+                    var memberValues = ConvertPropertyValuesToMemberValues(context, context.ModelType, propertyValues);
+                    serializationContext.MemberValues.AddRange(memberValues);
+                }
             }
             catch (Exception ex)
             {
@@ -338,8 +346,7 @@ namespace Catel.Runtime.Serialization.Binary
                 if (memberValue.Value != null && memberValue.Value.GetType().IsClassType())
                 {
                     var referenceInfo = referenceManager.GetInfo(memberValue.Value);
-
-                    if (referenceInfo.IsFirstUsage)
+                    if (referenceInfo.IsFirstUsage || memberValue.MemberGroup == SerializationMemberGroup.Collection)
                     {
                         propertyValue.GraphId = referenceInfo.Id;
                     }
