@@ -55,6 +55,9 @@
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Catel.Test.EntityFramework5.DbContextTest.NET40\ModuleInitializer.cs">
+      <Link>ModuleInitializer.cs</Link>
+    </Compile>
     <Compile Include="..\Catel.Test.EntityFramework5.DbContextTest.NET40\Repositories\DbContextCustomerRepository.cs">
       <Link>Repositories\DbContextCustomerRepository.cs</Link>
     </Compile>
@@ -73,7 +76,6 @@
     <Compile Include="DbContextProduct.cs">
       <DependentUpon>TestDbContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="ModuleInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestDbContext.Context.cs">
       <DependentUpon>TestDbContext.Context.tt</DependentUpon>
