@@ -82,6 +82,7 @@ Added/fixed:
 (*) CTL-643 Change async logging flush calls to sync and add async extensions. This means that all flushing will now be
     done on the same thread by default. To flush async, call FlushAsync(). The final signature change (breaking) will be
     applied to Catel v5
+(*) CTL-687 ApplicationExtensions.GetActiveWindowForApplication should ignore created (but not yet visible) windows
 (*) Updated Entity Framework to 6.1.3 for Entity Framework 6 extension
 (*) Updated to FluentValidation 5.6.2
 (*) Updated NuGet to 2.8.5 for Prism extension
