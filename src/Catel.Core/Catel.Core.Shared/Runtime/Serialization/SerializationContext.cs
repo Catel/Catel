@@ -4,6 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Runtime.Serialization;
+
 namespace Catel.Runtime.Serialization
 {
     using System;
@@ -91,6 +93,14 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <value>The reference manager.</value>
         public ReferenceManager ReferenceManager { get; private set; }
+
+#if NET
+        /// <summary>
+        /// Gets or sets the serialization information.
+        /// </summary>
+        /// <value>The serialization information.</value>
+        public SerializationInfo SerializationInfo { get; set; }
+#endif
 
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.

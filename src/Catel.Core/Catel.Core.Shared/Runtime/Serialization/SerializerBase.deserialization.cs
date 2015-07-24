@@ -108,6 +108,16 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="serializationContext">The serialization context.</param>
+        public void Deserialize(object model, ISerializationContextInfo serializationContext)
+        {
+            Deserialize(model, (TSerializationContext)serializationContext);
+        }
+
+        /// <summary>
+        /// Deserializes the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="serializationContext">The serialization context.</param>
         public virtual void Deserialize(object model, TSerializationContext serializationContext)
         {
             Argument.IsNotNull("model", model);
@@ -170,6 +180,17 @@ namespace Catel.Runtime.Serialization
         /// <param name="modelType">Type of the model.</param>
         /// <param name="serializationContext">The serialization context.</param>
         /// <returns>The deserialized <see cref="object"/>.</returns>
+        public object Deserialize(Type modelType, ISerializationContextInfo serializationContext)
+        {
+            return Deserialize(modelType, (TSerializationContext) serializationContext);
+        }
+
+        /// <summary>
+        /// Deserializes the specified model type.
+        /// </summary>
+        /// <param name="modelType">Type of the model.</param>
+        /// <param name="serializationContext">The serialization context.</param>
+        /// <returns>The deserialized <see cref="object"/>.</returns>
         public virtual object Deserialize(Type modelType, TSerializationContext serializationContext)
         {
             Argument.IsNotNull("modelType", modelType);
@@ -197,6 +218,17 @@ namespace Catel.Runtime.Serialization
             {
                 return DeserializeMembers(context);
             }
+        }
+
+        /// <summary>
+        /// Deserializes the members.
+        /// </summary>
+        /// <param name="modelType">Type of the model.</param>
+        /// <param name="serializedContext">The serialized context.</param>
+        /// <returns>The deserialized list of member values.</returns>
+        public List<MemberValue> DeserializeMembers(Type modelType, ISerializationContextInfo serializedContext)
+        {
+            return DeserializeMembers(modelType, (TSerializationContext) serializedContext);
         }
 
         /// <summary>

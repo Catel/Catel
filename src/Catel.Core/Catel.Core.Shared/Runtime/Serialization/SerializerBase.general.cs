@@ -8,7 +8,6 @@
 namespace Catel.Runtime.Serialization
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -25,7 +24,7 @@ namespace Catel.Runtime.Serialization
     /// Base class for serializers that can serialize any object.
     /// </summary>
     /// <typeparam name="TSerializationContext">The type of the T serialization context.</typeparam>
-    public abstract partial class SerializerBase<TSerializationContext> : ISerializer<TSerializationContext>
+    public abstract partial class SerializerBase<TSerializationContext> : ISerializer
         where TSerializationContext : class
     {
         #region Constants

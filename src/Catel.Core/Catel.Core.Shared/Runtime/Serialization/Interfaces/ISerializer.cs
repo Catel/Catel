@@ -79,6 +79,15 @@ namespace Catel.Runtime.Serialization
         void Serialize(object model, Stream stream);
 
         /// <summary>
+        /// Serializes the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="serializationContext">The serialization context.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="serializationContext"/> is <c>null</c>.</exception>
+        void Serialize(object model, ISerializationContextInfo serializationContext);
+
+        /// <summary>
         /// Serializes the members.
         /// </summary>
         /// <param name="model">The model.</param>
@@ -106,6 +115,15 @@ namespace Catel.Runtime.Serialization
         void Deserialize(object model, Stream stream);
 
         /// <summary>
+        /// Deserializes the specified model. The deserialized values will be set in the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="serializationContext">The context.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="serializationContext"/> is <c>null</c>.</exception>
+        void Deserialize(object model, ISerializationContextInfo serializationContext);
+
+        /// <summary>
         /// Deserializes the specified model type.
         /// </summary>
         /// <param name="modelType">Type of the model.</param>
@@ -116,39 +134,6 @@ namespace Catel.Runtime.Serialization
         object Deserialize(Type modelType, Stream stream);
 
         /// <summary>
-        /// Deserializes the members of the specified model.
-        /// </summary>
-        /// <param name="modelType">Type of the model.</param>
-        /// <param name="stream">The stream.</param>
-        /// <returns>The list of members that have been deserialized.</returns>
-        List<MemberValue> DeserializeMembers(Type modelType, Stream stream);
-    }
-
-    /// <summary>
-    /// Interface definition to serialize the <see cref="IModel"/>.
-    /// </summary>
-    public interface ISerializer<TSerializationContext> : ISerializer
-        where TSerializationContext : class
-    {
-        /// <summary>
-        /// Serializes the specified model.
-        /// </summary>
-        /// <param name="model">The model.</param>
-        /// <param name="serializationContext">The serialization context.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="serializationContext"/> is <c>null</c>.</exception>
-        void Serialize(object model, TSerializationContext serializationContext);
-
-        /// <summary>
-        /// Deserializes the specified model. The deserialized values will be set in the specified model.
-        /// </summary>
-        /// <param name="model">The model.</param>
-        /// <param name="serializationContext">The context.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="serializationContext"/> is <c>null</c>.</exception>
-        void Deserialize(object model, TSerializationContext serializationContext);
-
-        /// <summary>
         /// Deserializes the specified model type.
         /// </summary>
         /// <param name="modelType">Type of the model.</param>
@@ -156,7 +141,15 @@ namespace Catel.Runtime.Serialization
         /// <returns>The deserialized model.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="modelType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationContext"/> is <c>null</c>.</exception>
-        object Deserialize(Type modelType, TSerializationContext serializationContext);
+        object Deserialize(Type modelType, ISerializationContextInfo serializationContext);
+
+        /// <summary>
+        /// Deserializes the members of the specified model.
+        /// </summary>
+        /// <param name="modelType">Type of the model.</param>
+        /// <param name="stream">The stream.</param>
+        /// <returns>The list of members that have been deserialized.</returns>
+        List<MemberValue> DeserializeMembers(Type modelType, Stream stream);
 
         /// <summary>
         /// Deserializes the members of the specified model.
@@ -166,6 +159,6 @@ namespace Catel.Runtime.Serialization
         /// <returns>The list of members that have been deserialized.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="modelType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationContext"/> is <c>null</c>.</exception>
-        List<MemberValue> DeserializeMembers(Type modelType, TSerializationContext serializationContext);
+        List<MemberValue> DeserializeMembers(Type modelType, ISerializationContextInfo serializationContext);
     }
 }
