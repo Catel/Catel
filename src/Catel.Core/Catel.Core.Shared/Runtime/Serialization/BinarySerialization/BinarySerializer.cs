@@ -193,7 +193,7 @@ namespace Catel.Runtime.Serialization.Binary
                 memberValues = new List<MemberValue>();
             }
 
-            var contextInfo = new BinarySerializationContextInfo(serializationInfo, binaryFormatter, memberValues);
+            var contextInfo = new BinarySerializationContextInfo(serializationInfo, memberValues, binaryFormatter);
 
             return new SerializationContext<BinarySerializationContextInfo>(model, contextInfo, contextMode);
         }

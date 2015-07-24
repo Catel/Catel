@@ -12,10 +12,14 @@ namespace Catel.Runtime.Serialization.Json
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
 
+#if NET
+    using System.Runtime.Serialization;
+#endif
+
     /// <summary>
     /// Class containing all information about the Json serialization context.
     /// </summary>
-    public class JsonSerializationContextInfo
+    public class JsonSerializationContextInfo : ISerializationContextInfo
     {
         #region Constructors
         /// <summary>
@@ -55,10 +59,16 @@ namespace Catel.Runtime.Serialization.Json
         public JsonWriter JsonWriter { get; private set; }
 
         /// <summary>
+        /// Gets or sets the json array.
+        /// </summary>
+        /// <value>The json array.</value>
+        public JArray JsonArray { get; set; }
+
+        /// <summary>
         /// Gets or sets the json properties used during deserialization.
         /// </summary>
         /// <value>The json object.</value>
-        public List<JProperty> JsonProperties { get; set; }
+        public Dictionary<string, JProperty> JsonProperties { get; set; }
         #endregion
     }
 }

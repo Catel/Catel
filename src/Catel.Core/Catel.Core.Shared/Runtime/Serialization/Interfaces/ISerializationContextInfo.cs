@@ -1,20 +1,16 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IBinarySerializer.cs" company="Catel development team">
+// <copyright file="ISerializationContext.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
 
-
-namespace Catel.Runtime.Serialization.Binary
+namespace Catel.Runtime.Serialization
 {
     /// <summary>
-    /// Interface for the binary serializer.
+    /// Serialization context info.
     /// </summary>
-    public interface IBinarySerializer : ISerializer
+    public interface ISerializationContextInfo
     {
     }
 }
-
-#endif

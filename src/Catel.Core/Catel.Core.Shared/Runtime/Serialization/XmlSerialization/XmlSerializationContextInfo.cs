@@ -16,7 +16,7 @@ namespace Catel.Runtime.Serialization.Xml
     /// <summary>
     /// Class containing all information about the binary serialization context.
     /// </summary>
-    public class XmlSerializationContextInfo
+    public class XmlSerializationContextInfo : ISerializationContextInfo
     {
         private readonly object _lockObject = new object();
         //private DataContractSerializer _dataContractSerializer;

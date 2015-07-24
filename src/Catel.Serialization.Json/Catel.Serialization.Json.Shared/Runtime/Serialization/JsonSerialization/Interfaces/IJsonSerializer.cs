@@ -14,7 +14,7 @@ namespace Catel.Runtime.Serialization.Json
     /// <summary>
     /// Interface for the binary serializer.
     /// </summary>
-    public interface IJsonSerializer : ISerializer<JsonSerializationContextInfo>
+    public interface IJsonSerializer : ISerializer
     {
         /// <summary>
         /// Gets or sets a value indicating whether references should be preserved.

@@ -4,6 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Catel.IoC;
+
 #if NET
 
 namespace Catel.Data
@@ -56,14 +58,21 @@ namespace Catel.Data
                 {
                     var referenceManager = scopeManager.ScopeObject;
 
+                    int? graphId = null;
+
                     try
                     {
-                        var graphId = (int)info.GetValue("GraphId", typeof (int));
-                        referenceManager.RegisterManually(graphId, this);
+                        // Binary
+                        graphId = (int)info.GetValue("GraphId", typeof (int));
                     }
                     catch (Exception)
                     {
                         // Swallow
+                    }
+
+                    if (graphId.HasValue)
+                    {
+                        referenceManager.RegisterManually(graphId.Value, this);
                     }
                 }
             }
@@ -82,10 +91,17 @@ namespace Catel.Data
         [SecurityCritical]
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            var binarySerializer = SerializationFactory.GetBinarySerializer();
-            var binarySerializationContext = new BinarySerializationContextInfo(info);
+            var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
+            using (var scopeManager = ScopeManager<ISerializer>.GetScopeManager(scopeName, SerializationFactory.GetBinarySerializer))
+            {
+                var serializer = scopeManager.ScopeObject;
 
-            binarySerializer.Serialize(this, binarySerializationContext);
+                var dependencyResolver = this.GetDependencyResolver();
+                var serializationContextInfoFactory = dependencyResolver.Resolve<ISerializationContextInfoFactory>(serializer.GetType());
+
+                var serializationContext = serializationContextInfoFactory.GetSerializationContextInfo(serializer, this, info);
+                serializer.Serialize(this, serializationContext);
+            }
         }
 
         /// <summary>
@@ -103,10 +119,17 @@ namespace Catel.Data
                 return;
             }
 
-            var binarySerializer = SerializationFactory.GetBinarySerializer();
-            var binarySerializationContext = new BinarySerializationContextInfo(_serializationInfo);
+            var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
+            using (var scopeManager = ScopeManager<ISerializer>.GetScopeManager(scopeName, SerializationFactory.GetBinarySerializer))
+            {
+                var serializer = scopeManager.ScopeObject;
 
-            binarySerializer.Deserialize(this, binarySerializationContext);
+                var dependencyResolver = this.GetDependencyResolver();
+                var serializationContextInfoFactory = dependencyResolver.Resolve<ISerializationContextInfoFactory>(serializer.GetType());
+
+                var serializationContext = serializationContextInfoFactory.GetSerializationContextInfo(serializer, this, _serializationInfo);
+                serializer.Deserialize(this, serializationContext);
+            }
 
             DeserializationSucceeded = true;
         }
