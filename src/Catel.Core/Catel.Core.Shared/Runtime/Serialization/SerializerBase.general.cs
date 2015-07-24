@@ -401,6 +401,54 @@ namespace Catel.Runtime.Serialization
 
             return null;
         }
+
+        /// <summary>
+        /// Returns whether the member value should be serialized as collection.
+        /// </summary>
+        /// <param name="memberValue">The member value.</param>
+        /// <returns><c>true</c> if the member value should be serialized as collection, <c>false</c> otherwise.</returns>
+        protected virtual bool ShouldSerializeAsCollection(MemberValue memberValue)
+        {
+            if (memberValue.MemberGroup == SerializationMemberGroup.Collection)
+            {
+                return true;
+            }
+
+            if (memberValue.MemberType.IsCollection())
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Returns whether json.net should handle the member.
+        /// <para />
+        /// By default it only handles non-class types.
+        /// </summary>
+        /// <param name="memberValue">The member value.</param>
+        /// <returns><c>true</c> if json.net should handle the type, <c>false</c> otherwise.</returns>
+        protected virtual bool ShouldExternalSerializerHandleMember(MemberValue memberValue)
+        {
+            if (!memberValue.MemberType.IsClassType())
+            {
+                return true;
+            }
+
+            if (memberValue.MemberType == typeof(byte[]))
+            {
+                return true;
+            }
+
+            var actualMemberType = memberValue.ActualMemberType;
+            if (!actualMemberType.IsClassType())
+            {
+                return true;
+            }
+
+            return false;
+        }
         #endregion
     }
 }

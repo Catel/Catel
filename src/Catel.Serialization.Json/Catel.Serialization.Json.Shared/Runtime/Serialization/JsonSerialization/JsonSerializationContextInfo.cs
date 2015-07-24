@@ -68,7 +68,7 @@ namespace Catel.Runtime.Serialization.Json
         /// Gets or sets the json properties used during deserialization.
         /// </summary>
         /// <value>The json object.</value>
-        public List<JProperty> JsonProperties { get; set; }
+        public Dictionary<string, JProperty> JsonProperties { get; set; }
         #endregion
     }
 }

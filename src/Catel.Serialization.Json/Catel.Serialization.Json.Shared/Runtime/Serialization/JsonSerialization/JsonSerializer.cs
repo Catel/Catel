@@ -87,7 +87,7 @@ namespace Catel.Runtime.Serialization.Json
         /// <param name="jsonWriter">The json writer.</param>
         public void Serialize(object model, JsonWriter jsonWriter)
         {
-            using (var context = GetContext(model, null, jsonWriter, SerializationContextMode.Serialization, null))
+            using (var context = GetContext(model, null, jsonWriter, SerializationContextMode.Serialization, null, null))
             {
                 base.Serialize(model, context.Context);
             }
@@ -101,52 +101,62 @@ namespace Catel.Runtime.Serialization.Json
         /// <returns>The model.</returns>
         public object Deserialize(Type modelType, JsonReader jsonReader)
         {
-            var jsonObject = JObject.Load(jsonReader);
-            var jsonProperties = jsonObject.Properties().ToList();
+            List<JProperty> jsonProperties = null;
+            JArray jsonArray = null;
 
-            if (PreserveReferences)
+            if (modelType.IsCollection())
             {
-                var graphRefIdProperty = (from property in jsonProperties
-                                          where string.Equals(property.Name, GraphRefId)
-                                          select property).FirstOrDefault();
-                if (graphRefIdProperty != null)
+                jsonArray = JArray.Load(jsonReader);
+            }
+            else
+            {
+                var jsonObject = JObject.Load(jsonReader);
+                jsonProperties = jsonObject.Properties().ToList();
+
+                if (PreserveReferences)
                 {
-                    var graphId = (int)graphRefIdProperty.Value;
-
-                    var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
-                    using (var scopeManager = ScopeManager<ReferenceManager>.GetScopeManager(scopeName))
+                    var graphRefIdProperty = (from property in jsonProperties
+                                              where string.Equals(property.Name, GraphRefId)
+                                              select property).FirstOrDefault();
+                    if (graphRefIdProperty != null)
                     {
-                        var referenceManager = scopeManager.ScopeObject;
+                        var graphId = (int)graphRefIdProperty.Value;
 
-                        var referenceInfo = referenceManager.GetInfoById(graphId);
-                        if (referenceInfo != null)
+                        var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
+                        using (var scopeManager = ScopeManager<ReferenceManager>.GetScopeManager(scopeName))
                         {
-                            return referenceInfo.Instance;
+                            var referenceManager = scopeManager.ScopeObject;
+
+                            var referenceInfo = referenceManager.GetInfoById(graphId);
+                            if (referenceInfo != null)
+                            {
+                                return referenceInfo.Instance;
+                            }
                         }
                     }
                 }
-            }
 
-            var typeNameProperty = (from property in jsonProperties
-                                    where string.Equals(property.Name, TypeName)
-                                    select property).FirstOrDefault();
-            if (typeNameProperty != null)
-            {
-                var modelTypeOverrideValue = (string)typeNameProperty.Value;
-                var modelTypeOverride = TypeCache.GetTypeWithoutAssembly(modelTypeOverrideValue);
-                if (modelTypeOverride == null)
+                var typeNameProperty = (from property in jsonProperties
+                                        where string.Equals(property.Name, TypeName)
+                                        select property).FirstOrDefault();
+                if (typeNameProperty != null)
                 {
-                    Log.Warning("Object was serialized as '{0}', but the type is not available. Using original type '{1}'", modelTypeOverrideValue, modelType.GetSafeFullName());
-                }
-                else
-                {
-                    modelType = modelTypeOverride;
+                    var modelTypeOverrideValue = (string)typeNameProperty.Value;
+                    var modelTypeOverride = TypeCache.GetTypeWithoutAssembly(modelTypeOverrideValue);
+                    if (modelTypeOverride == null)
+                    {
+                        Log.Warning("Object was serialized as '{0}', but the type is not available. Using original type '{1}'", modelTypeOverrideValue, modelType.GetSafeFullName());
+                    }
+                    else
+                    {
+                        modelType = modelTypeOverride;
+                    }
                 }
             }
 
             var model = TypeFactory.CreateInstance(modelType);
 
-            using (var context = GetContext(model, jsonReader, null, SerializationContextMode.Deserialization, jsonProperties))
+            using (var context = GetContext(model, jsonReader, null, SerializationContextMode.Deserialization, jsonProperties, jsonArray))
             {
                 base.Deserialize(model, context.Context);
             }
@@ -169,13 +179,14 @@ namespace Catel.Runtime.Serialization.Json
         /// <param name="context">The context.</param>
         protected override void BeforeSerialization(ISerializationContext<JsonSerializationContextInfo> context)
         {
+            var jsonWriter = context.Context.JsonWriter;
+
             if (context.ModelType.IsCollection())
             {
-                // Don't write anything yourself
+                // Nothing required
             }
             else
             {
-                var jsonWriter = context.Context.JsonWriter;
                 jsonWriter.WriteStartObject();
 
                 if (PreserveReferences)
@@ -205,13 +216,14 @@ namespace Catel.Runtime.Serialization.Json
         {
             base.AfterSerialization(context);
 
+            var jsonWriter = context.Context.JsonWriter;
+
             if (context.ModelType.IsCollection())
             {
-                // Don't write anything yourself
+                // Nothing required
             }
             else
             {
-                var jsonWriter = context.Context.JsonWriter;
                 jsonWriter.WriteEndObject();
             }
         }
@@ -227,11 +239,22 @@ namespace Catel.Runtime.Serialization.Json
             var jsonSerializer = serializationContext.JsonSerializer;
             var jsonWriter = serializationContext.JsonWriter;
 
-            if (memberValue.MemberGroup == SerializationMemberGroup.Collection)
+            // Only write property names when this is not the root and not a collection
+            var isRootCollection = (context.Depth == 0 && ShouldSerializeAsCollection(memberValue));
+            if (!isRootCollection)
+            {
+                jsonWriter.WritePropertyName(memberValue.Name);
+            }
+
+            if (ReferenceEquals(memberValue.Value, null) || ShouldExternalSerializerHandleMember(memberValue))
+            {
+                jsonSerializer.Serialize(jsonWriter, memberValue.Value);
+            }
+            else if (ShouldSerializeAsCollection(memberValue))
             {
                 jsonWriter.WriteStartArray();
 
-                foreach (var item in (IList) memberValue.Value)
+                foreach (var item in (IList)memberValue.Value)
                 {
                     Serialize(item, jsonWriter);
                 }
@@ -240,17 +263,11 @@ namespace Catel.Runtime.Serialization.Json
             }
             else
             {
-                jsonWriter.WritePropertyName(memberValue.Name);
+                Serialize(memberValue.Value, jsonWriter);
+            }
 
-                if (ReferenceEquals(memberValue.Value, null) || ShouldJsonNetHandleMember(memberValue))
-                {
-                    jsonSerializer.Serialize(jsonWriter, memberValue.Value);
-                }
-                else
-                {
-                    Serialize(memberValue.Value, jsonWriter);
-                }
-
+            if (!isRootCollection)
+            {
                 if (PreserveReferences)
                 {
                     var value = memberValue.Value;
@@ -258,7 +275,7 @@ namespace Catel.Runtime.Serialization.Json
                     {
                         // Ignore basic types (value types, strings, etc) and ModelBase (already gets the graph id written)
                         var valueType = value.GetType();
-                        if (!valueType.IsBasicType())// && !(value is ModelBase))
+                        if (!valueType.IsBasicType()) // && !(value is ModelBase))
                         {
                             var referenceManager = context.ReferenceManager;
                             var referenceInfo = referenceManager.GetInfo(memberValue.Value);
@@ -284,36 +301,40 @@ namespace Catel.Runtime.Serialization.Json
             {
                 if (context.ModelType.IsCollection())
                 {
-                    var jsonArray = JArray.Load(context.Context.JsonReader);
-                    context.Context.JsonArray = jsonArray;
+                    if (context.Context.JsonArray == null)
+                    {
+                        var jsonArray = JArray.Load(context.Context.JsonReader);
+                        context.Context.JsonArray = jsonArray;
+                    }
                 }
                 else
                 {
                     if (serializationContext.JsonProperties == null)
                     {
                         var jsonObject = JObject.Load(context.Context.JsonReader);
-                        context.Context.JsonProperties = jsonObject.Properties().ToList();
+                        context.Context.JsonProperties = jsonObject.Properties().ToDictionary(x => x.Name, x => x);
                     }
 
                     if (PreserveReferences)
                     {
                         var properties = serializationContext.JsonProperties;
-                        var graphIdProperty = (from property in properties
-                                               where string.Equals(property.Name, GraphId)
-                                               select property).FirstOrDefault();
-                        if (graphIdProperty != null)
+                        if (properties.ContainsKey(GraphId))
                         {
-                            var graphId = (int)graphIdProperty.Value;
-
-                            var referenceManager = context.ReferenceManager;
-                            var referenceInfo = referenceManager.GetInfoById(graphId);
-                            if (referenceInfo != null)
+                            var graphIdProperty = properties[GraphId];
+                            if (graphIdProperty != null)
                             {
-                                Log.Warning("Trying to register custom object in graph with graph id '{0}', but it seems it is already registered", graphId);
-                                return;
-                            }
+                                var graphId = (int)graphIdProperty.Value;
 
-                            referenceManager.RegisterManually(graphId, context.Model);
+                                var referenceManager = context.ReferenceManager;
+                                var referenceInfo = referenceManager.GetInfoById(graphId);
+                                if (referenceInfo != null)
+                                {
+                                    Log.Warning("Trying to register custom object in graph with graph id '{0}', but it seems it is already registered", graphId);
+                                    return;
+                                }
+
+                                referenceManager.RegisterManually(graphId, context.Model);
+                            }
                         }
                     }
                 }
@@ -331,9 +352,90 @@ namespace Catel.Runtime.Serialization.Json
         protected override SerializationObject DeserializeMember(ISerializationContext<JsonSerializationContextInfo> context, MemberValue memberValue)
         {
             var serializationContext = context.Context;
-            var jsonProperties = serializationContext.JsonProperties;
 
-            if (memberValue.MemberGroup == SerializationMemberGroup.Collection)
+            var jsonProperties = serializationContext.JsonProperties;
+            if (jsonProperties != null)
+            {
+                if (PreserveReferences)
+                {
+                    var graphRefIdPropertyName = string.Format("${0}_{1}", memberValue.Name, GraphRefId);
+                    if (jsonProperties.ContainsKey(graphRefIdPropertyName))
+                    {
+                        var graphId = (int) jsonProperties[graphRefIdPropertyName].Value;
+                        var referenceManager = context.ReferenceManager;
+                        var referenceInfo = referenceManager.GetInfoById(graphId);
+                        if (referenceInfo == null)
+                        {
+                            Log.Error("Expected to find graph object with id '{0}' in ReferenceManager, but it was not found. Defaulting value for member '{1}' to null", graphId, memberValue.Name);
+                            return null;
+                        }
+
+                        return SerializationObject.SucceededToDeserialize(context.ModelType, memberValue.MemberGroup, memberValue.Name, referenceInfo.Instance);
+                    }
+                }
+
+                if (jsonProperties.ContainsKey(memberValue.Name))
+                {
+                    var jsonProperty = jsonProperties[memberValue.Name];
+                    var jsonValue = jsonProperty.Value;
+                    if (jsonValue != null)
+                    {
+                        object finalMemberValue = null;
+                        var valueType = memberValue.MemberType;
+                        if (valueType.IsEnumEx())
+                        {
+                            var enumName = Enum.GetName(valueType, (int) jsonValue);
+                            if (!string.IsNullOrWhiteSpace(enumName))
+                            {
+                                finalMemberValue = Enum.Parse(valueType, enumName, false);
+                            }
+                        }
+                        else
+                        {
+                            try
+                            {
+                                if (ShouldExternalSerializerHandleMember(memberValue))
+                                {
+                                    finalMemberValue = jsonValue.ToObject(valueType, serializationContext.JsonSerializer);
+                                }
+                                else if (ShouldSerializeAsCollection(memberValue))
+                                {
+                                    finalMemberValue = Deserialize(valueType, jsonProperty.Value.CreateReader());
+                                }
+                                else
+                                {
+                                    // Serialize ourselves
+                                    finalMemberValue = Deserialize(valueType, serializationContext.JsonReader);
+                                }
+                            }
+                            catch (Exception)
+                            {
+                                // As a fallback, interpret as a string (might be a modifier)
+                                finalMemberValue = (string) jsonValue;
+                            }
+                        }
+
+                        if (finalMemberValue != null)
+                        {
+                            if (PreserveReferences)
+                            {
+                                var graphIdPropertyName = string.Format("${0}_{1}", memberValue.Name, GraphId);
+                                if (jsonProperties.ContainsKey(graphIdPropertyName))
+                                {
+                                    var graphId = (int) jsonProperties[graphIdPropertyName].Value;
+
+                                    var referenceManager = context.ReferenceManager;
+                                    referenceManager.RegisterManually(graphId, finalMemberValue);
+                                }
+                            }
+
+                            return SerializationObject.SucceededToDeserialize(context.ModelType, memberValue.MemberGroup, memberValue.Name, finalMemberValue);
+                        }
+                    }
+                }
+            }
+
+            if (ShouldSerializeAsCollection(memberValue))
             {
                 var collection = (IList)Activator.CreateInstance(memberValue.MemberType);
 
@@ -352,82 +454,6 @@ namespace Catel.Runtime.Serialization.Json
                 }
 
                 return SerializationObject.SucceededToDeserialize(context.ModelType, memberValue.MemberGroup, memberValue.Name, collection);
-            }
-
-            if (PreserveReferences)
-            {
-                var graphRefIdPropertyName = string.Format("${0}_{1}", memberValue.Name, GraphRefId);
-                var graphRefIdProperty = jsonProperties.FirstOrDefault(x => string.Equals(x.Name, graphRefIdPropertyName));
-                if (graphRefIdProperty != null)
-                {
-                    var graphId = (int)graphRefIdProperty.Value;
-                    var referenceManager = context.ReferenceManager;
-                    var referenceInfo = referenceManager.GetInfoById(graphId);
-                    if (referenceInfo == null)
-                    {
-                        Log.Error("Expected to find graph object with id '{0}' in ReferenceManager, but it was not found. Defaulting value for member '{1}' to null", graphId, memberValue.Name);
-                        return null;
-                    }
-
-                    return SerializationObject.SucceededToDeserialize(context.ModelType, memberValue.MemberGroup, memberValue.Name, referenceInfo.Instance);
-                }
-            }
-
-            var jsonProperty = jsonProperties.FirstOrDefault(x => string.Equals(x.Name, memberValue.Name));
-            if (jsonProperty != null)
-            {
-                var jsonValue = jsonProperty.Value;
-                if (jsonValue != null)
-                {
-                    object finalMemberValue = null;
-                    var valueType = memberValue.MemberType;
-                    if (valueType.IsEnumEx())
-                    {
-                        var enumName = Enum.GetName(valueType, (int)jsonValue);
-                        if (!string.IsNullOrWhiteSpace(enumName))
-                        {
-                            finalMemberValue = Enum.Parse(valueType, enumName, false);
-                        }
-                    }
-                    else
-                    {
-                        try
-                        {
-                            if (ShouldJsonNetHandleMember(memberValue))
-                            {
-                                finalMemberValue = jsonValue.ToObject(valueType, serializationContext.JsonSerializer);
-                            }
-                            else
-                            {
-                                // Serialize ourselves
-                                finalMemberValue = Deserialize(valueType, serializationContext.JsonReader);
-                            }
-                        }
-                        catch (Exception)
-                        {
-                            // As a fallback, interpret as a string
-                            finalMemberValue = (string)jsonValue;
-                        }
-                    }
-
-                    if (finalMemberValue != null)
-                    {
-                        if (PreserveReferences)
-                        {
-                            var graphIdPropertyName = string.Format("${0}_{1}", memberValue.Name, GraphId);
-                            var graphIdProperty = jsonProperties.FirstOrDefault(x => string.Equals(x.Name, graphIdPropertyName));
-                            if (graphIdProperty != null)
-                            {
-                                var graphId = (int)graphIdProperty.Value;
-
-                                var referenceManager = context.ReferenceManager;
-                                referenceManager.RegisterManually(graphId, finalMemberValue);
-                            }
-                        }
-
-                        return SerializationObject.SucceededToDeserialize(context.ModelType, memberValue.MemberGroup, memberValue.Name, finalMemberValue);
-                    }
-                }
             }
 
             return SerializationObject.FailedToDeserialize(context.ModelType, memberValue.MemberGroup, memberValue.Name);
@@ -460,7 +486,7 @@ namespace Catel.Runtime.Serialization.Json
                     throw new ArgumentOutOfRangeException("contextMode");
             }
 
-            return GetContext(model, jsonReader, jsonWriter, contextMode, null);
+            return GetContext(model, jsonReader, jsonWriter, contextMode, null, null);
         }
 
         /// <summary>
@@ -471,9 +497,10 @@ namespace Catel.Runtime.Serialization.Json
         /// <param name="jsonWriter">The json writer.</param>
         /// <param name="contextMode">The context mode.</param>
         /// <param name="jsonProperties">The json properties.</param>
+        /// <param name="jsonArray">The json array.</param>
         /// <returns>ISerializationContext&lt;JsonSerializationContextInfo&gt;.</returns>
-        protected virtual ISerializationContext<JsonSerializationContextInfo> GetContext(object model, JsonReader jsonReader, JsonWriter jsonWriter, SerializationContextMode contextMode, 
-            IEnumerable<JProperty> jsonProperties)
+        protected virtual ISerializationContext<JsonSerializationContextInfo> GetContext(object model, JsonReader jsonReader, JsonWriter jsonWriter, SerializationContextMode contextMode,
+            IEnumerable<JProperty> jsonProperties, JArray jsonArray)
         {
             var jsonSerializer = new Newtonsoft.Json.JsonSerializer();
             jsonSerializer.ContractResolver = new CatelJsonContractResolver();
@@ -482,7 +509,12 @@ namespace Catel.Runtime.Serialization.Json
             var contextInfo = new JsonSerializationContextInfo(jsonSerializer, jsonReader, jsonWriter);
             if (jsonProperties != null)
             {
-                contextInfo.JsonProperties = jsonProperties.ToList();
+                contextInfo.JsonProperties = jsonProperties.ToDictionary(x => x.Name, x => x);
+            }
+
+            if (jsonArray != null)
+            {
+                contextInfo.JsonArray = jsonArray;
             }
 
             var context = new SerializationContext<JsonSerializationContextInfo>(model, contextInfo, contextMode);
@@ -501,28 +533,6 @@ namespace Catel.Runtime.Serialization.Json
             {
                 jsonWriter.Flush();
             }
-        }
-
-        /// <summary>
-        /// Returns whether json.net should handle the member.
-        /// <para />
-        /// By default it only handles non-class types.
-        /// </summary>
-        /// <param name="memberValue">The member value.</param>
-        /// <returns><c>true</c> if json.net should handle the type, <c>false</c> otherwise.</returns>
-        protected virtual bool ShouldJsonNetHandleMember(MemberValue memberValue)
-        {
-            if (!memberValue.MemberType.IsClassType())
-            {
-                return true;
-            }
-
-            if (memberValue.MemberType == typeof (byte[]))
-            {
-                return true;
-            }
-
-            return false;
         }
         #endregion
     }
