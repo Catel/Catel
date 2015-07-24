@@ -11,6 +11,7 @@ namespace Catel.Runtime.Serialization
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
     using Catel.ApiCop;
     using Catel.ApiCop.Rules;
     using Catel.Caching;
@@ -407,19 +408,30 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="memberValue">The member value.</param>
         /// <returns><c>true</c> if the member value should be serialized as collection, <c>false</c> otherwise.</returns>
-        protected virtual bool ShouldSerializeAsCollection(MemberValue memberValue)
+        protected bool ShouldSerializeAsCollection(MemberValue memberValue)
         {
             if (memberValue.MemberGroup == SerializationMemberGroup.Collection)
             {
                 return true;
             }
 
-            if (memberValue.MemberType == typeof(byte[]))
+            return ShouldSerializeAsCollection(memberValue.ActualMemberType ?? memberValue.MemberType, memberValue.Value);
+        }
+
+        /// <summary>
+        /// Returns whether the member value should be serialized as collection.
+        /// </summary>
+        /// <param name="memberType">Type of the member.</param>
+        /// <param name="memberValue">The member value.</param>
+        /// <returns><c>true</c> if the member value should be serialized as collection, <c>false</c> otherwise.</returns>
+        protected virtual bool ShouldSerializeAsCollection(Type memberType, object memberValue)
+        {
+            if (memberType == typeof(byte[]))
             {
                 return false;
             }
 
-            if (memberValue.MemberType.IsCollection())
+            if (memberType.IsCollection())
             {
                 return true;
             }
@@ -436,18 +448,30 @@ namespace Catel.Runtime.Serialization
         /// <returns><c>true</c> if json.net should handle the type, <c>false</c> otherwise.</returns>
         protected virtual bool ShouldExternalSerializerHandleMember(MemberValue memberValue)
         {
-            if (!memberValue.MemberType.IsClassType())
+            if (memberValue.MemberGroup == SerializationMemberGroup.Collection)
+            {
+                return false;
+            }
+
+            return ShouldExternalSerializerHandleMember(memberValue.ActualMemberType ?? memberValue.MemberType, memberValue.Value);
+        }
+
+        /// <summary>
+        /// Returns whether json.net should handle the member.
+        /// <para />
+        /// By default it only handles non-class types.
+        /// </summary>
+        /// <param name="memberType">Type of the member.</param>
+        /// <param name="memberValue">The member value.</param>
+        /// <returns><c>true</c> if json.net should handle the type, <c>false</c> otherwise.</returns>
+        protected virtual bool ShouldExternalSerializerHandleMember(Type memberType, object memberValue)
+        {
+            if (!memberType.IsClassType())
             {
                 return true;
             }
 
-            if (memberValue.MemberType == typeof(byte[]))
-            {
-                return true;
-            }
-
-            var actualMemberType = memberValue.ActualMemberType;
-            if (!actualMemberType.IsClassType())
+            if (memberType == typeof(byte[]))
             {
                 return true;
             }

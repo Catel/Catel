@@ -276,7 +276,19 @@ namespace Catel.Runtime.Serialization.Json
 
                 foreach (var item in (IList)memberValue.Value)
                 {
-                    Serialize(item, jsonWriter);
+                    // Note: we don't support null values for now
+                    if (item != null)
+                    {
+                        var itemType = item.GetType();
+                        if (ShouldExternalSerializerHandleMember(itemType, null))
+                        {
+                            jsonSerializer.Serialize(jsonWriter, item);
+                        }
+                        else
+                        {
+                            Serialize(item, jsonWriter);
+                        }
+                    }
                 }
 
                 jsonWriter.WriteEndArray();
@@ -411,7 +423,7 @@ namespace Catel.Runtime.Serialization.Json
 
                         if (finalMemberValue != null)
                         {
-                            if (PreserveReferences)
+                            if (PreserveReferences && finalMemberValue.GetType().IsClassType())
                             {
                                 var graphIdPropertyName = string.Format("${0}_{1}", memberValue.Name, GraphId);
                                 if (jsonProperties.ContainsKey(graphIdPropertyName))
@@ -437,10 +449,21 @@ namespace Catel.Runtime.Serialization.Json
                 if (jArray != null)
                 {
                     var collectionItemType = memberValue.MemberType.GetGenericArgumentsEx()[0];
+                    var shouldBeHandledByExternalSerializer = ShouldExternalSerializerHandleMember(collectionItemType, null);
 
                     foreach (var item in jArray.Children())
                     {
-                        var deserializedItem = Deserialize(collectionItemType, item.CreateReader());
+                        object deserializedItem = null;
+
+                        if (shouldBeHandledByExternalSerializer)
+                        {
+                            deserializedItem = item.ToObject(collectionItemType, serializationContext.JsonSerializer);
+                        }
+                        else
+                        {
+                            deserializedItem = Deserialize(collectionItemType, item.CreateReader());
+                        }
+
                         collection.Add(deserializedItem);
                     }
 
