@@ -411,7 +411,7 @@ namespace Catel.Runtime.Serialization.Json
                                 else
                                 {
                                     // Serialize ourselves
-                                    finalMemberValue = Deserialize(valueType, serializationContext.JsonReader);
+                                    finalMemberValue = Deserialize(valueType, jsonValue.CreateReader());
                                 }
                             }
                             catch (Exception)
