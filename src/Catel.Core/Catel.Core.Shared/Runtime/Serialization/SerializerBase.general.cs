@@ -414,6 +414,11 @@ namespace Catel.Runtime.Serialization
                 return true;
             }
 
+            if (memberValue.MemberType == typeof(byte[]))
+            {
+                return false;
+            }
+
             if (memberValue.MemberType.IsCollection())
             {
                 return true;
