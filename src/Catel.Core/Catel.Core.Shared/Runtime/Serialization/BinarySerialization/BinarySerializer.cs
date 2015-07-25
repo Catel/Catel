@@ -252,7 +252,7 @@ namespace Catel.Runtime.Serialization.Binary
 
             try
             {
-                if (context.ModelType.IsCollection())
+                if (ShouldSerializeAsCollection(context.ModelType, context.Model))
                 {
                     var collection = serializationInfo.GetValue(CollectionName, context.ModelType);
                     var memberValue = new MemberValue(SerializationMemberGroup.Collection, context.ModelType, context.ModelType, CollectionName, collection);

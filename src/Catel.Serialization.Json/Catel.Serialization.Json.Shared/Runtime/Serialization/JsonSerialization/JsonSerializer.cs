@@ -104,7 +104,7 @@ namespace Catel.Runtime.Serialization.Json
             Dictionary<string, JProperty> jsonProperties = null;
             JArray jsonArray = null;
 
-            if (modelType.IsCollection())
+            if (ShouldSerializeAsCollection(modelType, null))
             {
                 jsonArray = JArray.Load(jsonReader);
             }
@@ -175,7 +175,7 @@ namespace Catel.Runtime.Serialization.Json
         {
             var jsonWriter = context.Context.JsonWriter;
 
-            if (context.ModelType.IsCollection())
+            if (ShouldSerializeAsCollection(context.ModelType, context.Model))
             {
                 // Nothing required
             }
@@ -212,7 +212,7 @@ namespace Catel.Runtime.Serialization.Json
 
             var jsonWriter = context.Context.JsonWriter;
 
-            if (context.ModelType.IsCollection())
+            if (ShouldSerializeAsCollection(context.ModelType, context.Model))
             {
                 // Nothing required
             }
@@ -316,7 +316,7 @@ namespace Catel.Runtime.Serialization.Json
         protected override void BeforeDeserialization(ISerializationContext<JsonSerializationContextInfo> context)
         {
             var serializationContext = context.Context;
-            if (context.ModelType.IsCollection())
+            if (ShouldSerializeAsCollection(context.ModelType, context.Model))
             {
                 if (serializationContext.JsonArray == null)
                 {

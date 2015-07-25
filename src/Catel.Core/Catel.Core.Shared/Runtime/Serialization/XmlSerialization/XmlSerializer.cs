@@ -347,7 +347,7 @@ namespace Catel.Runtime.Serialization.Xml
 
             OptimizeXDocument(document);
 
-            if (context.ModelType.IsCollection())
+            if (ShouldSerializeAsCollection(context.ModelType, context.Model))
             {
                 // Because we have 'Items\Items' for collections, remote the root
                 document = new XDocument(document.Root.FirstNode);
@@ -414,7 +414,7 @@ namespace Catel.Runtime.Serialization.Xml
                     var modelType = model.GetType();
                     rootName = _rootNameCache.GetFromCacheOrFetch(modelType, () =>
                     {
-                        if (modelType.IsCollection())
+                        if (ShouldSerializeAsCollection(modelType, model))
                         {
                             return CollectionName;
                         }

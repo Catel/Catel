@@ -126,13 +126,13 @@ namespace Catel.Runtime.Serialization
             var modelType = model.GetType();
 
             // CTL-688 Support collections and dictionaries
-            if (modelType.IsDictionary())
+            if (ShouldSerializeAsDictionary(modelType, model))
             {
                 listToSerialize.Add(new MemberValue(SerializationMemberGroup.Dictionary, modelType, modelType, CollectionName, model));
                 return listToSerialize;
             }
 
-            if (modelType.IsCollection())
+            if (ShouldSerializeAsCollection(modelType, model))
             {
                 listToSerialize.Add(new MemberValue(SerializationMemberGroup.Collection, modelType, modelType, CollectionName, model));
                 return listToSerialize;
@@ -477,6 +477,12 @@ namespace Catel.Runtime.Serialization
         /// <returns><c>true</c> if the member value should be serialized as dictionary, <c>false</c> otherwise.</returns>
         protected bool ShouldSerializeAsDictionary(MemberValue memberValue)
         {
+            // CTL-688: only support json for now
+            if (GetType().Name != "JsonSerializer")
+            {
+                return false;
+            }
+
             if (memberValue.MemberGroup == SerializationMemberGroup.Dictionary)
             {
                 return true;
@@ -493,6 +499,12 @@ namespace Catel.Runtime.Serialization
         /// <returns><c>true</c> if the member value should be serialized as dictionary, <c>false</c> otherwise.</returns>
         protected virtual bool ShouldSerializeAsDictionary(Type memberType, object memberValue)
         {
+            // CTL-688: only support json for now
+            if (GetType().Name != "JsonSerializer")
+            {
+                return false;
+            }
+
             if (memberType.IsDictionary())
             {
                 return true;
