@@ -14,6 +14,7 @@ namespace Catel.Test.Runtime.Serialization
     using Catel.Data;
     using Catel.Runtime.Serialization;
     using Catel.Runtime.Serialization.Binary;
+    using System.Diagnostics;
 
     public static class SerializationTestHelper
     {
@@ -32,17 +33,20 @@ namespace Catel.Test.Runtime.Serialization
 
                 memoryStream.Position = 0L;
 
-                if (!(serializer is BinarySerializer))
+                if (Debugger.IsAttached)
                 {
-                    var streamReader = new StreamReader(memoryStream);
-                    var streamAsText = streamReader.ReadToEnd();
+                    if (!(serializer is BinarySerializer))
+                    {
+                        var streamReader = new StreamReader(memoryStream);
+                        var streamAsText = streamReader.ReadToEnd();
 
-                    Console.WriteLine(streamAsText);
+                        Console.WriteLine(streamAsText);
 
-                    memoryStream.Position = 0L;
+                        memoryStream.Position = 0L;
+                    }
                 }
 
-                return (TModel)serializer.Deserialize(typeof (TModel), memoryStream);
+                return (TModel)serializer.Deserialize(typeof(TModel), memoryStream);
             }
         }
 
@@ -63,7 +67,7 @@ namespace Catel.Test.Runtime.Serialization
             }
         }
 
-        public static T FromXmlString<T>(this string xml) 
+        public static T FromXmlString<T>(this string xml)
             where T : ModelBase
         {
             Argument.IsNotNullOrWhitespace(() => xml);
