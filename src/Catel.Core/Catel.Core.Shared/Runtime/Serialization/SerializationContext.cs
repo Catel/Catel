@@ -9,6 +9,7 @@ using System.Runtime.Serialization;
 namespace Catel.Runtime.Serialization
 {
     using System;
+    using System.Collections.Generic;
     using Catel.Scoping;
 
     /// <summary>
@@ -18,7 +19,8 @@ namespace Catel.Runtime.Serialization
     public class SerializationContext<TContext> : ISerializationContext<TContext>
         where TContext : class
     {
-        private IDisposable _serializableToken; 
+        private IDisposable _serializableToken;
+        private ScopeManager<Stack<Type>> _typeStackScopeManager;
         private ScopeManager<ReferenceManager> _referenceManagerScopeManager;
         private int? _depth;
 
@@ -39,11 +41,16 @@ namespace Catel.Runtime.Serialization
             ModelType = model.GetType();
             Context = context;
             ContextMode = contextMode;
+            TypeStack = new Stack<Type>();
 
             var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
-            _referenceManagerScopeManager = ScopeManager<ReferenceManager>.GetScopeManager(scopeName);
 
+            _typeStackScopeManager = ScopeManager<Stack<Type>>.GetScopeManager(scopeName, () => new Stack<Type>());
+            TypeStack = _typeStackScopeManager.ScopeObject;
+
+            _referenceManagerScopeManager = ScopeManager<ReferenceManager>.GetScopeManager(scopeName);
             ReferenceManager = _referenceManagerScopeManager.ScopeObject;
+
             _serializableToken = CreateSerializableToken();
         }
 
@@ -77,6 +84,11 @@ namespace Catel.Runtime.Serialization
         }
 
         /// <summary>
+        /// Gets the type stack inside the current scope.
+        /// </summary>
+        public Stack<Type> TypeStack { get; private set; } 
+
+        /// <summary>
         /// Gets the context mode.
         /// </summary>
         /// <value>The context mode.</value>
@@ -107,6 +119,12 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         public void Dispose()
         {
+            if (_typeStackScopeManager != null)
+            {
+                _typeStackScopeManager.Dispose();
+                _typeStackScopeManager = null;
+            }
+
             if (_referenceManagerScopeManager != null)
             {
                 _referenceManagerScopeManager.Dispose();
@@ -122,10 +140,12 @@ namespace Catel.Runtime.Serialization
 
         private IDisposable CreateSerializableToken()
         {
-            return new DisposableToken<object>(Model,
+            return new DisposableToken<SerializationContext<TContext>>(this,
                 x =>
                 {
-                    var serializable = x.Instance as ISerializable;
+                    x.Instance.TypeStack.Push(x.Instance.ModelType);
+
+                    var serializable = x.Instance.Model as ISerializable;
                     if (serializable != null)
                     {
                         switch ((SerializationContextMode)x.Tag)
@@ -145,7 +165,7 @@ namespace Catel.Runtime.Serialization
                 },
                 x =>
                 {
-                    var serializable = x.Instance as ISerializable;
+                    var serializable = x.Instance.Model as ISerializable;
                     if (serializable != null)
                     {
                         switch ((SerializationContextMode)x.Tag)
@@ -162,6 +182,8 @@ namespace Catel.Runtime.Serialization
                                 throw new ArgumentOutOfRangeException();
                         }
                     }
+
+                    x.Instance.TypeStack.Pop();
                 }, ContextMode);
         }
     }

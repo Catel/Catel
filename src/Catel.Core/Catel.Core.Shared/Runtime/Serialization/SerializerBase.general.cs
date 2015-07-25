@@ -8,6 +8,7 @@
 namespace Catel.Runtime.Serialization
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -109,11 +110,12 @@ namespace Catel.Runtime.Serialization
         /// <summary>
         /// Gets the serializable members for the specified model.
         /// </summary>
+        /// <param name="context">The serialization context.</param>
         /// <param name="model">The model.</param>
         /// <param name="membersToIgnore">The members to ignore.</param>
         /// <returns>The list of members to serialize.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
-        public virtual List<MemberValue> GetSerializableMembers(object model, params string[] membersToIgnore)
+        public virtual List<MemberValue> GetSerializableMembers(ISerializationContext<TSerializationContext> context, object model, params string[] membersToIgnore)
         {
             Argument.IsNotNull("model", model);
 
@@ -124,9 +126,38 @@ namespace Catel.Runtime.Serialization
             var modelType = model.GetType();
 
             // CTL-688 Support collections and dictionaries
+            if (modelType.IsDictionary())
+            {
+                listToSerialize.Add(new MemberValue(SerializationMemberGroup.Dictionary, modelType, modelType, CollectionName, model));
+                return listToSerialize;
+            }
+
             if (modelType.IsCollection())
             {
                 listToSerialize.Add(new MemberValue(SerializationMemberGroup.Collection, modelType, modelType, CollectionName, model));
+                return listToSerialize;
+            }
+
+            if (modelType == typeof(SerializableKeyValuePair))
+            {
+                var keyValuePair = (SerializableKeyValuePair) model;
+
+                var keyType = typeof(object);
+                var valueType = typeof(object);
+
+                // Search max 2 levels deep, if not found, then we failed
+                var parentDictionary = context.FindParentType(x => x.IsDictionary(), 2);
+                if (parentDictionary != null)
+                {
+                    var genericTypeDefinition = parentDictionary.GetGenericArgumentsEx();
+
+                    keyType = genericTypeDefinition[0];
+                    valueType = genericTypeDefinition[1];
+                }
+
+                listToSerialize.Add(new MemberValue(SerializationMemberGroup.RegularProperty, modelType, keyType, "Key", keyValuePair.Key));
+                listToSerialize.Add(new MemberValue(SerializationMemberGroup.RegularProperty, modelType, valueType, "Value", keyValuePair.Value));
+
                 return listToSerialize;
             }
 
@@ -437,6 +468,91 @@ namespace Catel.Runtime.Serialization
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Returns whether the member value should be serialized as dictionary.
+        /// </summary>
+        /// <param name="memberValue">The member value.</param>
+        /// <returns><c>true</c> if the member value should be serialized as dictionary, <c>false</c> otherwise.</returns>
+        protected bool ShouldSerializeAsDictionary(MemberValue memberValue)
+        {
+            if (memberValue.MemberGroup == SerializationMemberGroup.Dictionary)
+            {
+                return true;
+            }
+
+            return ShouldSerializeAsDictionary(memberValue.ActualMemberType ?? memberValue.MemberType, memberValue.Value);
+        }
+
+        /// <summary>
+        /// Returns whether the member value should be serialized as dictionary.
+        /// </summary>
+        /// <param name="memberType">Type of the member.</param>
+        /// <param name="memberValue">The member value.</param>
+        /// <returns><c>true</c> if the member value should be serialized as dictionary, <c>false</c> otherwise.</returns>
+        protected virtual bool ShouldSerializeAsDictionary(Type memberType, object memberValue)
+        {
+            if (memberType.IsDictionary())
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Converts a dictionary into a serializable collection.
+        /// </summary>
+        /// <param name="memberValue">The member value.</param>
+        /// <returns>The list of serializable key value pairs.</returns>
+        protected List<SerializableKeyValuePair> ConvertDictionaryToCollection(object memberValue)
+        {
+            var collection = new List<SerializableKeyValuePair>();
+
+            var dictionary = memberValue as IDictionary;
+            if (dictionary != null)
+            {
+                var genericArguments = memberValue.GetType().GetGenericArgumentsEx();
+                var keyType = genericArguments[0];
+                var valueType = genericArguments[1];
+
+                foreach (var key in dictionary.Keys)
+                {
+                    var serializableKeyValuePair = new SerializableKeyValuePair
+                    {
+                        Key = key,
+                        KeyType = keyType,
+                        Value = dictionary[key],
+                        ValueType = valueType
+                    };
+
+                    collection.Add(serializableKeyValuePair);
+                }
+            }
+
+            return collection;
+        }
+
+        /// <summary>
+        /// Converts a serializable collection into a dictionary.
+        /// </summary>
+        /// <param name="memberValue">The member value.</param>
+        /// <param name="collection">The list of serializable key value pairs.</param>
+        /// <returns>The dictionary.</returns>
+        protected IDictionary ConvertCollectionToDictionary(MemberValue memberValue, List<SerializableKeyValuePair> collection)
+        {
+            var dictionary = (IDictionary)TypeFactory.CreateInstance(memberValue.MemberType);
+
+            if (collection.Count != 0)
+            {
+                foreach (var keyValuePair in collection)
+                {
+                    dictionary.Add(keyValuePair.Key, keyValuePair.Value);
+                }
+            }
+
+            return dictionary;
         }
 
         /// <summary>

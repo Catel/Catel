@@ -192,7 +192,7 @@ namespace Catel.Runtime.Serialization.Json
                     jsonWriter.WriteValue(referenceInfo.Id);
                 }
 
-                if (WriteTypeInfo)
+                if (WriteTypeInfo && context.ModelType != typeof(SerializableKeyValuePair))
                 {
                     jsonWriter.WritePropertyName(TypeName);
                     jsonWriter.WriteValue(context.ModelType.GetSafeFullName());
@@ -234,8 +234,10 @@ namespace Catel.Runtime.Serialization.Json
             var jsonWriter = serializationContext.JsonWriter;
 
             // Only write property names when this is not the root and not a collection
+            var isRootDictionary = (context.Depth == 0 && ShouldSerializeAsDictionary(memberValue));
             var isRootCollection = (context.Depth == 0 && ShouldSerializeAsCollection(memberValue));
-            if (!isRootCollection)
+
+            if (!isRootDictionary && !isRootCollection)
             {
                 // Write reference id *before* serializing, otherwise we might get into a circular loop
                 if (PreserveReferences)
@@ -270,6 +272,14 @@ namespace Catel.Runtime.Serialization.Json
             {
                 jsonSerializer.Serialize(jsonWriter, memberValue.Value);
             }
+            //else if (ShouldSerializeAsDictionary(memberValue))
+            //{
+            //    var collection = ConvertDictionaryToCollection(memberValue.Value);
+            //    if (collection != null)
+            //    {
+            //        Serialize(collection, jsonWriter);
+            //    }
+            //}
             else if (ShouldSerializeAsCollection(memberValue))
             {
                 jsonWriter.WriteStartArray();
@@ -441,14 +451,17 @@ namespace Catel.Runtime.Serialization.Json
                 }
             }
 
-            if (ShouldSerializeAsCollection(memberValue))
+            var shouldSerializeAsDictionary = ShouldSerializeAsDictionary(memberValue);
+            var shouldSerializeAsCollection = ShouldSerializeAsCollection(memberValue);
+
+            if (shouldSerializeAsDictionary || shouldSerializeAsCollection)
             {
-                var collection = (IList)Activator.CreateInstance(memberValue.MemberType);
+                var collection = shouldSerializeAsDictionary ? new List<SerializableKeyValuePair>() : (IList) Activator.CreateInstance(memberValue.MemberType);
 
                 var jArray = context.Context.JsonArray;
                 if (jArray != null)
                 {
-                    var collectionItemType = memberValue.MemberType.GetGenericArgumentsEx()[0];
+                    var collectionItemType = shouldSerializeAsDictionary ? typeof(SerializableKeyValuePair) : memberValue.MemberType.GetGenericArgumentsEx()[0];
                     var shouldBeHandledByExternalSerializer = ShouldExternalSerializerHandleMember(collectionItemType, null);
 
                     foreach (var item in jArray.Children())

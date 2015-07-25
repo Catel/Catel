@@ -99,7 +99,7 @@ namespace Catel.Runtime.Serialization
 
             using (var context = GetContext(model, stream, SerializationContextMode.Deserialization))
             {
-                Deserialize(model, context.Context);
+                Deserialize(model, context);
             }
         }
 
@@ -125,32 +125,45 @@ namespace Catel.Runtime.Serialization
 
             using (var finalContext = GetContext(model, serializationContext, SerializationContextMode.Deserialization))
             {
-                var serializerModifiers = SerializationManager.GetSerializerModifiers(finalContext.ModelType);
-
-                Log.Debug("Using '{0}' serializer modifiers to deserialize type '{1}'", serializerModifiers.Length, finalContext.ModelType.GetSafeFullName());
-
-                var serializingEventArgs = new SerializationEventArgs(finalContext);
-
-                Deserializing.SafeInvoke(this, serializingEventArgs);
-
-                foreach (var serializerModifier in serializerModifiers)
-                {
-                    serializerModifier.OnDeserializing(finalContext, model);
-                }
-
-                BeforeDeserialization(finalContext);
-
-                DeserializeMembers(finalContext);
-
-                AfterDeserialization(finalContext);
-
-                foreach (var serializerModifier in serializerModifiers)
-                {
-                    serializerModifier.OnDeserialized(finalContext, model);
-                }
-
-                Deserialized.SafeInvoke(this, serializingEventArgs);
+                Deserialize(model, finalContext);
             }
+        }
+
+        /// <summary>
+        /// Deserializes the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="context">The serialization context.</param>
+        protected virtual void Deserialize(object model, ISerializationContext<TSerializationContext> context)
+        {
+            Argument.IsNotNull("model", model);
+            Argument.IsNotNull("context", context);
+
+            var serializerModifiers = SerializationManager.GetSerializerModifiers(context.ModelType);
+
+            Log.Debug("Using '{0}' serializer modifiers to deserialize type '{1}'", serializerModifiers.Length, context.ModelType.GetSafeFullName());
+
+            var serializingEventArgs = new SerializationEventArgs(context);
+
+            Deserializing.SafeInvoke(this, serializingEventArgs);
+
+            foreach (var serializerModifier in serializerModifiers)
+            {
+                serializerModifier.OnDeserializing(context, model);
+            }
+
+            BeforeDeserialization(context);
+
+            DeserializeMembers(context);
+
+            AfterDeserialization(context);
+
+            foreach (var serializerModifier in serializerModifiers)
+            {
+                serializerModifier.OnDeserialized(context, model);
+            }
+
+            Deserialized.SafeInvoke(this, serializingEventArgs);
         }
 
         /// <summary>
@@ -262,7 +275,7 @@ namespace Catel.Runtime.Serialization
 
             var serializerModifiers = SerializationManager.GetSerializerModifiers(context.ModelType).Reverse();
 
-            var membersToDeserialize = GetSerializableMembers(context.Model);
+            var membersToDeserialize = GetSerializableMembers(context, context.Model);
             foreach (var member in membersToDeserialize)
             {
                 var memberSerializationEventArgs = new MemberSerializationEventArgs(context, member);
@@ -297,7 +310,25 @@ namespace Catel.Runtime.Serialization
             if (deserializedMemberValues.Count > 0)
             {
                 var firstMember = deserializedMemberValues[0];
-                if (firstMember.MemberGroup == SerializationMemberGroup.Collection)
+                if (firstMember.MemberGroup == SerializationMemberGroup.Dictionary)
+                {
+                    var enumerable = firstMember.Value as List<SerializableKeyValuePair>;
+                    if (enumerable != null)
+                    {
+                        var targetDictionary = context.Model as IDictionary;
+                        if (targetDictionary == null)
+                        {
+                            Log.ErrorAndThrowException<NotSupportedException>("'{0}' seems to be a dictionary, but target model cannot be updated because it does not implement IDictionary",
+                                context.ModelType.GetSafeFullName());
+                        }
+
+                        foreach (var item in enumerable)
+                        {
+                            targetDictionary.Add(item.Key, item.Value);
+                        }
+                    }
+                }
+                else if (firstMember.MemberGroup == SerializationMemberGroup.Collection)
                 {
                     var enumerable = firstMember.Value as IEnumerable;
                     if (enumerable != null)

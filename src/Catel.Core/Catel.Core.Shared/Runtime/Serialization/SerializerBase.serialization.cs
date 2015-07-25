@@ -56,7 +56,7 @@ namespace Catel.Runtime.Serialization
 
             using (var context = GetContext(model, stream, SerializationContextMode.Serialization))
             {
-                Serialize(model, context.Context);
+                Serialize(model, context);
 
                 AppendContextToStream(context, stream);
             }
@@ -87,35 +87,48 @@ namespace Catel.Runtime.Serialization
             { 
                 using (var finalContext = GetContext(model, context, SerializationContextMode.Serialization))
                 {
-                    var serializerModifiers = SerializationManager.GetSerializerModifiers(finalContext.ModelType);
-
-                    Log.Debug("Using '{0}' serializer modifiers to deserialize type '{1}'", serializerModifiers.Length, 
-                        finalContext.ModelType.GetSafeFullName());
-
-                    var serializingEventArgs = new SerializationEventArgs(finalContext);
-
-                    Serializing.SafeInvoke(this, serializingEventArgs);
-
-                    foreach (var serializerModifier in serializerModifiers)
-                    {
-                        serializerModifier.OnSerializing(finalContext, model);
-                    }
-
-                    BeforeSerialization(finalContext);
-
-                    var members = GetSerializableMembers(model);
-                    SerializeMembers(finalContext, members);
-
-                    AfterSerialization(finalContext);
-
-                    foreach (var serializerModifier in serializerModifiers)
-                    {
-                        serializerModifier.OnSerialized(finalContext, model);
-                    }
-
-                    Serialized.SafeInvoke(this, serializingEventArgs);
+                    Serialize(model, finalContext);
                 }
             }
+        }
+
+        /// <summary>
+        /// Serializes the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="context">The context.</param>
+        protected virtual void Serialize(object model, ISerializationContext<TSerializationContext> context)
+        {
+            Argument.IsNotNull("model", model);
+            Argument.IsNotNull("context", context);
+
+            var serializerModifiers = SerializationManager.GetSerializerModifiers(context.ModelType);
+
+            Log.Debug("Using '{0}' serializer modifiers to deserialize type '{1}'", serializerModifiers.Length,
+                context.ModelType.GetSafeFullName());
+
+            var serializingEventArgs = new SerializationEventArgs(context);
+
+            Serializing.SafeInvoke(this, serializingEventArgs);
+
+            foreach (var serializerModifier in serializerModifiers)
+            {
+                serializerModifier.OnSerializing(context, model);
+            }
+
+            BeforeSerialization(context);
+
+            var members = GetSerializableMembers(context, model);
+            SerializeMembers(context, members);
+
+            AfterSerialization(context);
+
+            foreach (var serializerModifier in serializerModifiers)
+            {
+                serializerModifier.OnSerialized(context, model);
+            }
+
+            Serialized.SafeInvoke(this, serializingEventArgs);
         }
 
         /// <summary>
@@ -129,14 +142,14 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("stream", stream);
 
-            var members = GetSerializableMembers(model, membersToIgnore);
-            if (members.Count == 0)
-            {
-                return;
-            }
-
             using (var context = GetContext(model, stream, SerializationContextMode.Serialization))
             {
+                var members = GetSerializableMembers(context, model, membersToIgnore);
+                if (members.Count == 0)
+                {
+                    return;
+                }
+
                 SerializeMembers(context, members);
 
                 AppendContextToStream(context, stream);
@@ -230,7 +243,18 @@ namespace Catel.Runtime.Serialization
                         serializerModifier.SerializeMember(context, member);
                     }
 
-                    SerializeMember(context, member);
+                    if (ShouldSerializeAsDictionary(member))
+                    {
+                        var collection = ConvertDictionaryToCollection(member.Value);
+                        if (collection != null)
+                        {
+                            Serialize(collection, context.Context);
+                        }
+                    }
+                    else
+                    {
+                        SerializeMember(context, member);
+                    }
 
                     AfterSerializeMember(context, member);
 

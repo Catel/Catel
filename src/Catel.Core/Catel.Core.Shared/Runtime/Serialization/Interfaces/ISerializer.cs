@@ -98,14 +98,6 @@ namespace Catel.Runtime.Serialization
         void SerializeMembers(object model, Stream stream, params string[] membersToIgnore);
 
         /// <summary>
-        /// Gets the serializable members for the specified model.
-        /// </summary>
-        /// <param name="model">The model.</param>
-        /// <param name="membersToIgnore">The members to ignore.</param>
-        /// <returns>The list of members to serialize.</returns>
-        List<MemberValue> GetSerializableMembers(object model, params string[] membersToIgnore);
-
-        /// <summary>
         /// Deserializes the specified model. The deserialized values will be set in the specified model.
         /// </summary>
         /// <param name="model">The model.</param>

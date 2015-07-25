@@ -33,7 +33,12 @@ namespace Catel.Runtime.Serialization
         /// <summary>
         /// The member is a collection.
         /// </summary>
-        Collection
+        Collection,
+
+        /// <summary>
+        /// The member is a dictionary.
+        /// </summary>
+        Dictionary
     }
 
     /// <summary>

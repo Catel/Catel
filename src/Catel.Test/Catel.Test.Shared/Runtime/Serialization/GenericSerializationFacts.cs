@@ -22,7 +22,9 @@ namespace Catel.Test.Runtime.Serialization
     using Catel.Logging;
     using Catel.Reflection;
     using Catel.Runtime.Serialization;
+    using Catel.Runtime.Serialization.Binary;
     using Catel.Runtime.Serialization.Json;
+    using Catel.Runtime.Serialization.Xml;
     using Data;
     using NUnit.Framework;
     using TestModels;
@@ -546,25 +548,37 @@ namespace Catel.Test.Runtime.Serialization
                 });
             }
 
-            //[TestCase]
-            //public void CanSerializeDictionary()
-            //{
-            //    var dictionary = new Dictionary<string, object>();
-            //    dictionary.Add("skip", 1);
-            //    dictionary.Add("take", 2);
+            [TestCase]
+            public void CanSerializeDictionary()
+            {
+                var dictionary = new Dictionary<string, int>();
+                dictionary.Add("skip", 1);
+                dictionary.Add("take", 2);
 
-            //    TestSerializationOnAllSerializers((serializer, description) =>
-            //    {
-            //        var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(dictionary, serializer);
+                var serializer = GetJsonSerializer();
 
-            //        Assert.AreEqual(dictionary.Count, deserializedObject.Count, description);
+                var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(dictionary, serializer);
 
-            //        Assert.IsTrue(deserializedObject.ContainsKey("skip"));
-            //        Assert.AreEqual(1, deserializedObject["skip"]);
-            //        Assert.IsTrue(deserializedObject.ContainsKey("take"));
-            //        Assert.AreEqual(2, deserializedObject["take"]);
-            //    });
-            //}
+                Assert.AreEqual(dictionary.Count, deserializedObject.Count, "test");
+
+                Assert.IsTrue(deserializedObject.ContainsKey("skip"));
+                Assert.AreEqual(1, deserializedObject["skip"]);
+                Assert.IsTrue(deserializedObject.ContainsKey("take"));
+                Assert.AreEqual(2, deserializedObject["take"]);
+
+                // TODO: enable on all serializers again
+                //TestSerializationOnAllSerializers((serializer, description) =>
+                //{
+                //    var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(dictionary, serializer);
+
+                //    Assert.AreEqual(dictionary.Count, deserializedObject.Count, description);
+
+                //    Assert.IsTrue(deserializedObject.ContainsKey("skip"));
+                //    Assert.AreEqual(1, deserializedObject["skip"]);
+                //    Assert.IsTrue(deserializedObject.ContainsKey("take"));
+                //    Assert.AreEqual(2, deserializedObject["take"]);
+                //});
+            }
         }
 
         [TestFixture, Explicit]
@@ -635,9 +649,9 @@ namespace Catel.Test.Runtime.Serialization
         {
             var serializers = new List<ISerializer>();
 
-            serializers.Add(SerializationFactory.GetXmlSerializer());
-            serializers.Add(SerializationFactory.GetBinarySerializer());
-            serializers.Add(new JsonSerializer(new SerializationManager(), TypeFactory.Default, new ObjectAdapter()));
+            serializers.Add(GetXmlSerializer());
+            serializers.Add(GetBinarySerializer());
+            serializers.Add(GetJsonSerializer());
 
             foreach (var serializer in serializers)
             {
@@ -653,6 +667,21 @@ namespace Catel.Test.Runtime.Serialization
 
                 action(serializer, typeName);
             }
+        }
+
+        private static IXmlSerializer GetXmlSerializer()
+        {
+            return SerializationFactory.GetXmlSerializer();
+        }
+
+        private static IBinarySerializer GetBinarySerializer()
+        {
+            return SerializationFactory.GetBinarySerializer();
+        }
+
+        private static IJsonSerializer GetJsonSerializer()
+        {
+            return new JsonSerializer(new SerializationManager(), TypeFactory.Default, new ObjectAdapter());
         }
     }
 }

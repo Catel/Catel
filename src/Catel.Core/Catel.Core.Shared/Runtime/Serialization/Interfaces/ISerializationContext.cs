@@ -7,6 +7,7 @@
 namespace Catel.Runtime.Serialization
 {
     using System;
+    using System.Collections.Generic;
 
     /// <summary>
     /// The mode in which a context is being used.
@@ -58,6 +59,11 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <value>The reference manager.</value>
         ReferenceManager ReferenceManager { get; }
+
+        /// <summary>
+        /// Gets the type stack inside the current scope.
+        /// </summary>
+        Stack<Type> TypeStack { get; }
     }
 
     /// <summary>
