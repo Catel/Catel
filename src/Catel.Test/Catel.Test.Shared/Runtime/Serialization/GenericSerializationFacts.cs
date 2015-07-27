@@ -555,29 +555,17 @@ namespace Catel.Test.Runtime.Serialization
                 dictionary.Add("skip", 1);
                 dictionary.Add("take", 2);
 
-                var serializer = GetJsonSerializer();
+                TestSerializationOnAllSerializers((serializer, description) =>
+                {
+                    var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(dictionary, serializer);
 
-                var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(dictionary, serializer);
+                    Assert.AreEqual(dictionary.Count, deserializedObject.Count, description);
 
-                Assert.AreEqual(dictionary.Count, deserializedObject.Count, "test");
-
-                Assert.IsTrue(deserializedObject.ContainsKey("skip"));
-                Assert.AreEqual(1, deserializedObject["skip"]);
-                Assert.IsTrue(deserializedObject.ContainsKey("take"));
-                Assert.AreEqual(2, deserializedObject["take"]);
-
-                // TODO: enable on all serializers again
-                //TestSerializationOnAllSerializers((serializer, description) =>
-                //{
-                //    var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(dictionary, serializer);
-
-                //    Assert.AreEqual(dictionary.Count, deserializedObject.Count, description);
-
-                //    Assert.IsTrue(deserializedObject.ContainsKey("skip"));
-                //    Assert.AreEqual(1, deserializedObject["skip"]);
-                //    Assert.IsTrue(deserializedObject.ContainsKey("take"));
-                //    Assert.AreEqual(2, deserializedObject["take"]);
-                //});
+                    Assert.IsTrue(deserializedObject.ContainsKey("skip"));
+                    Assert.AreEqual(1, deserializedObject["skip"]);
+                    Assert.IsTrue(deserializedObject.ContainsKey("take"));
+                    Assert.AreEqual(2, deserializedObject["take"]);
+                });
             }
         }
 

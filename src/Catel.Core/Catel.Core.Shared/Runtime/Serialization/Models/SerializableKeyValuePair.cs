@@ -12,6 +12,7 @@ namespace Catel.Runtime.Serialization
     /// <summary>
     /// Serializable key value pair.
     /// </summary>
+    [Serializable]
     public class SerializableKeyValuePair
     {
         /// <summary>

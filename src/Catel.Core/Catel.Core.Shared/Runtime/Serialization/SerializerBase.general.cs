@@ -604,7 +604,7 @@ namespace Catel.Runtime.Serialization
             // NOTE: This method must be deleted in the future
 
             // CTL-688: only support json for now. In the future, these checks (depth AND type) should be removed
-            if (context.Depth == 0 || GetType().Name == "JsonSerializer")
+            if (context.Depth == 0 || GetType().Name != "XmlSerializer")
             {
                 return true;
             }

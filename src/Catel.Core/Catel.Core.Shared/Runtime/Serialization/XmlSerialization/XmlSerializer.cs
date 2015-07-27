@@ -250,7 +250,8 @@ namespace Catel.Runtime.Serialization.Xml
 
             try
             {
-                if (memberValue.MemberGroup == SerializationMemberGroup.Collection)
+                if (memberValue.MemberGroup == SerializationMemberGroup.Dictionary ||
+                    memberValue.MemberGroup == SerializationMemberGroup.Collection)
                 {
                     var value = GetObjectFromXmlElement(context, element, memberValue, modelType);
                     return SerializationObject.SucceededToDeserialize(modelType, memberValue.MemberGroup, memberValue.Name, value);

@@ -280,6 +280,13 @@ namespace Catel.Runtime.Serialization.Binary
         {
             // We need to add the serialized property values to the serialization info manually here
             var serializationContext = context.Context;
+
+            // Note: since this serialize adds the items *after* serializing, don't add if we already did add it to this context
+            if (serializationContext.PropertyValues.Count > 0)
+            {
+                return;
+            }
+
             var serializationInfo = serializationContext.SerializationInfo;
             var memberValues = serializationContext.MemberValues;
             var propertyValues = ConvertMemberValuesToPropertyValues(context, memberValues);

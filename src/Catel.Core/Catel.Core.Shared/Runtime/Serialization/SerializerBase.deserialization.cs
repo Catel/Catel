@@ -312,19 +312,31 @@ namespace Catel.Runtime.Serialization
                 var firstMember = deserializedMemberValues[0];
                 if (firstMember.MemberGroup == SerializationMemberGroup.Dictionary)
                 {
+                    var targetDictionary = context.Model as IDictionary;
+                    if (targetDictionary == null)
+                    {
+                        Log.ErrorAndThrowException<NotSupportedException>("'{0}' seems to be a dictionary, but target model cannot be updated because it does not implement IDictionary",
+                            context.ModelType.GetSafeFullName());
+                    }
+
                     var enumerable = firstMember.Value as List<SerializableKeyValuePair>;
                     if (enumerable != null)
                     {
-                        var targetDictionary = context.Model as IDictionary;
-                        if (targetDictionary == null)
-                        {
-                            Log.ErrorAndThrowException<NotSupportedException>("'{0}' seems to be a dictionary, but target model cannot be updated because it does not implement IDictionary",
-                                context.ModelType.GetSafeFullName());
-                        }
-
                         foreach (var item in enumerable)
                         {
                             targetDictionary.Add(item.Key, item.Value);
+                        }
+                    }
+                    else
+                    {
+                        // Backwards compatibility code
+                        var sourceDictionary = firstMember.Value as IDictionary;
+                        if (sourceDictionary != null)
+                        {
+                            foreach (var key in sourceDictionary.Keys)
+                            {
+                                targetDictionary.Add(key, sourceDictionary[key]);
+                            }
                         }
                     }
                 }
