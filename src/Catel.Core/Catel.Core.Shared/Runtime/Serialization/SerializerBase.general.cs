@@ -144,7 +144,7 @@ namespace Catel.Runtime.Serialization
 
             if (modelType == typeof(SerializableKeyValuePair))
             {
-                var keyValuePair = (SerializableKeyValuePair) model;
+                var keyValuePair = (SerializableKeyValuePair)model;
 
                 var keyType = typeof(object);
                 var valueType = typeof(object);
@@ -546,7 +546,12 @@ namespace Catel.Runtime.Serialization
         /// <returns>The dictionary.</returns>
         protected IDictionary ConvertCollectionToDictionary(MemberValue memberValue, List<SerializableKeyValuePair> collection)
         {
-            var dictionary = (IDictionary)TypeFactory.CreateInstance(memberValue.MemberType);
+            var dictionary = TypeFactory.CreateInstance(memberValue.MemberType) as IDictionary;
+            if (dictionary == null)
+            {
+                Log.Warning("Cannot instantiate '{0}' as IDictionary", memberValue.MemberType.GetSafeFullName());
+                return null;
+            }
 
             if (collection.Count != 0)
             {
@@ -599,7 +604,12 @@ namespace Catel.Runtime.Serialization
             return false;
         }
 
-        private bool SupportsDictionarySerialization(ISerializationContext<TSerializationContext> context)
+        /// <summary>
+        /// Supportses the dictionary serialization.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        protected bool SupportsDictionarySerialization(ISerializationContext<TSerializationContext> context)
         {
             // NOTE: This method must be deleted in the future
 

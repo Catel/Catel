@@ -195,7 +195,7 @@ namespace Catel.Runtime.Serialization
         /// <returns>The deserialized <see cref="object"/>.</returns>
         public object Deserialize(Type modelType, ISerializationContextInfo serializationContext)
         {
-            return Deserialize(modelType, (TSerializationContext) serializationContext);
+            return Deserialize(modelType, (TSerializationContext)serializationContext);
         }
 
         /// <summary>
@@ -241,7 +241,7 @@ namespace Catel.Runtime.Serialization
         /// <returns>The deserialized list of member values.</returns>
         public List<MemberValue> DeserializeMembers(Type modelType, ISerializationContextInfo serializedContext)
         {
-            return DeserializeMembers(modelType, (TSerializationContext) serializedContext);
+            return DeserializeMembers(modelType, (TSerializationContext)serializedContext);
         }
 
         /// <summary>
@@ -289,7 +289,62 @@ namespace Catel.Runtime.Serialization
                 {
                     // Note that we need to sync the member values every time
                     var memberValue = new MemberValue(member.MemberGroup, member.ModelType, member.MemberType, member.Name, serializationObject.MemberValue);
-                    member.Value = memberValue.Value;
+
+                    if (memberValue.MemberGroup == SerializationMemberGroup.Dictionary)
+                    {
+                        var targetDictionary = TypeFactory.CreateInstance(member.MemberType) as IDictionary;
+                        if (targetDictionary == null)
+                        {
+                            Log.ErrorAndThrowException<NotSupportedException>("'{0}' seems to be a dictionary, but target model cannot be updated because it does not implement IDictionary",
+                                context.ModelType.GetSafeFullName());
+                        }
+
+                        var enumerable = memberValue.Value as List<SerializableKeyValuePair>;
+                        if (enumerable != null)
+                        {
+                            foreach (var item in enumerable)
+                            {
+                                targetDictionary.Add(item.Key, item.Value);
+                            }
+                        }
+                        else
+                        {
+                            var sourceDictionary = memberValue.Value as IDictionary;
+                            if (sourceDictionary != null)
+                            {
+                                foreach (var key in sourceDictionary.Keys)
+                                {
+                                    targetDictionary.Add(key, sourceDictionary[key]);
+                                }
+                            }
+                        }
+
+                        member.Value = targetDictionary;
+                    }
+                    else if (memberValue.MemberGroup == SerializationMemberGroup.Collection)
+                    {
+                        var targetCollection = TypeFactory.CreateInstance(member.MemberType) as IList;
+                        if (targetCollection == null)
+                        {
+                            Log.ErrorAndThrowException<NotSupportedException>("'{0}' seems to be a collection, but target model cannot be updated because it does not implement IList",
+                                context.ModelType.GetSafeFullName());
+                        }
+
+                        var sourceCollection = memberValue.Value as IEnumerable;
+                        if (sourceCollection != null)
+                        {
+                            foreach (var item in sourceCollection)
+                            {
+                                targetCollection.Add(item);
+                            }
+                        }
+
+                        member.Value = targetCollection;
+                    }
+                    else
+                    {
+                        member.Value = memberValue.Value;
+                    }
 
                     deserializedMemberValues.Add(memberValue);
 
@@ -319,40 +374,32 @@ namespace Catel.Runtime.Serialization
                             context.ModelType.GetSafeFullName());
                     }
 
-                    var enumerable = firstMember.Value as List<SerializableKeyValuePair>;
-                    if (enumerable != null)
+                    targetDictionary.Clear();
+
+                    var sourceDictionary = firstMember.Value as IDictionary;
+                    if (sourceDictionary != null)
                     {
-                        foreach (var item in enumerable)
+                        foreach (var key in sourceDictionary.Keys)
                         {
-                            targetDictionary.Add(item.Key, item.Value);
-                        }
-                    }
-                    else
-                    {
-                        // Backwards compatibility code
-                        var sourceDictionary = firstMember.Value as IDictionary;
-                        if (sourceDictionary != null)
-                        {
-                            foreach (var key in sourceDictionary.Keys)
-                            {
-                                targetDictionary.Add(key, sourceDictionary[key]);
-                            }
+                            targetDictionary.Add(key, sourceDictionary[key]);
                         }
                     }
                 }
                 else if (firstMember.MemberGroup == SerializationMemberGroup.Collection)
                 {
-                    var enumerable = firstMember.Value as IEnumerable;
-                    if (enumerable != null)
+                    var targetCollection = context.Model as IList;
+                    if (targetCollection == null)
                     {
-                        var targetCollection = context.Model as IList;
-                        if (targetCollection == null)
-                        {
-                            Log.ErrorAndThrowException<NotSupportedException>("'{0}' seems to be a collection, but target model cannot be updated because it does not implement IList",
-                                context.ModelType.GetSafeFullName());
-                        }
+                        Log.ErrorAndThrowException<NotSupportedException>("'{0}' seems to be a collection, but target model cannot be updated because it does not implement IList",
+                            context.ModelType.GetSafeFullName());
+                    }
 
-                        foreach (var item in enumerable)
+                    targetCollection.Clear();
+
+                    var sourceCollection = firstMember.Value as IEnumerable;
+                    if (sourceCollection != null)
+                    {
+                        foreach (var item in sourceCollection)
                         {
                             targetCollection.Add(item);
                         }

@@ -84,7 +84,7 @@ namespace Catel.Runtime.Serialization
 
             var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
             using (ScopeManager<ISerializer>.GetScopeManager(scopeName, () => this))
-            { 
+            {
                 using (var finalContext = GetContext(model, context, SerializationContextMode.Serialization))
                 {
                     Serialize(model, finalContext);
@@ -243,18 +243,7 @@ namespace Catel.Runtime.Serialization
                         serializerModifier.SerializeMember(context, member);
                     }
 
-                    if (ShouldSerializeAsDictionary(member) && SupportsDictionarySerialization(context))
-                    {
-                        var collection = ConvertDictionaryToCollection(member.Value);
-                        if (collection != null)
-                        {
-                            Serialize(collection, context.Context);
-                        }
-                    }
-                    else
-                    {
-                        SerializeMember(context, member);
-                    }
+                    SerializeMember(context, member);
 
                     AfterSerializeMember(context, member);
 

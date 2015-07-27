@@ -272,6 +272,36 @@ namespace Catel.Runtime.Serialization.Json
             {
                 jsonSerializer.Serialize(jsonWriter, memberValue.Value);
             }
+            else if (ShouldSerializeAsDictionary(memberValue))
+            {
+                // Serialize as an object with properties
+                var sourceDictionary = memberValue.Value as IDictionary;
+                if (sourceDictionary != null)
+                {
+                    jsonWriter.WriteStartObject();
+
+                    foreach (var key in sourceDictionary.Keys)
+                    {
+                        jsonWriter.WritePropertyName(ObjectToStringHelper.ToString(key));
+
+                        var item = sourceDictionary[key];
+                        if (item != null)
+                        {
+                            var itemType = item.GetType();
+                            if (ShouldExternalSerializerHandleMember(itemType, null))
+                            {
+                                jsonSerializer.Serialize(jsonWriter, item);
+                            }
+                            else
+                            {
+                                Serialize(item, jsonWriter);
+                            }
+                        }
+                    }
+
+                    jsonWriter.WriteEndObject();
+                }
+            }
             else if (ShouldSerializeAsCollection(memberValue))
             {
                 jsonWriter.WriteStartArray();
@@ -308,7 +338,15 @@ namespace Catel.Runtime.Serialization.Json
         protected override void BeforeDeserialization(ISerializationContext<JsonSerializationContextInfo> context)
         {
             var serializationContext = context.Context;
-            if (ShouldSerializeAsCollection(context.ModelType, context.Model))
+            if (ShouldSerializeAsDictionary(context.ModelType, context.Model))
+            {
+                if (serializationContext.JsonProperties == null)
+                {
+                    var jsonObject = JObject.Load(context.Context.JsonReader);
+                    serializationContext.JsonProperties = jsonObject.Properties().ToDictionary(x => x.Name, x => x);
+                }
+            }
+            else if (ShouldSerializeAsCollection(context.ModelType, context.Model))
             {
                 if (serializationContext.JsonArray == null)
                 {
@@ -382,6 +420,52 @@ namespace Catel.Runtime.Serialization.Json
                     }
                 }
 
+                if (memberValue.MemberGroup == SerializationMemberGroup.Dictionary)
+                {
+                    var dictionary = TypeFactory.CreateInstance(memberValue.MemberType) as IDictionary;
+
+                    var keyType = typeof(object);
+                    var valueType = typeof(object);
+
+                    if (memberValue.MemberType.IsGenericTypeEx())
+                    {
+                        var genericArguments = memberValue.MemberType.GetGenericArgumentsEx();
+                        if (genericArguments.Length == 2)
+                        {
+                            keyType = genericArguments[0];
+                            valueType = genericArguments[1];
+                        }
+                    }
+
+                    var shouldValueTypeBeHandledByExternalSerializer = ShouldExternalSerializerHandleMember(valueType, null);
+
+                    foreach (var jsonPropertyKeyValuePair in jsonProperties)
+                    {
+                        var jsonProperty = jsonPropertyKeyValuePair.Value;
+
+                        object deserializedItem = null;
+
+                        object key = jsonProperty.Name;
+                        if (keyType != typeof (object))
+                        {
+                            key = StringToObjectHelper.ToRightType(keyType, jsonProperty.Name);
+                        }
+
+                        if (shouldValueTypeBeHandledByExternalSerializer)
+                        {
+                            deserializedItem = jsonProperty.Value.ToObject(valueType, serializationContext.JsonSerializer);
+                        }
+                        else
+                        {
+                            deserializedItem = Deserialize(valueType, jsonProperty.Value.CreateReader());
+                        }
+
+                        dictionary[key] = deserializedItem;
+                    }
+
+                    return SerializationObject.SucceededToDeserialize(context.ModelType, memberValue.MemberGroup, memberValue.Name, dictionary);
+                }
+
                 if (jsonProperties.ContainsKey(memberValue.Name))
                 {
                     var jsonProperty = jsonProperties[memberValue.Name];
@@ -443,17 +527,20 @@ namespace Catel.Runtime.Serialization.Json
                 }
             }
 
-            var shouldSerializeAsDictionary = ShouldSerializeAsDictionary(memberValue);
             var shouldSerializeAsCollection = ShouldSerializeAsCollection(memberValue);
-
-            if (shouldSerializeAsDictionary || shouldSerializeAsCollection)
+            if (shouldSerializeAsCollection)
             {
-                var collection = shouldSerializeAsDictionary ? new List<SerializableKeyValuePair>() : (IList) Activator.CreateInstance(memberValue.MemberType);
+                var collection = new List<object>();
 
                 var jArray = context.Context.JsonArray;
                 if (jArray != null)
                 {
-                    var collectionItemType = shouldSerializeAsDictionary ? typeof(SerializableKeyValuePair) : memberValue.MemberType.GetGenericArgumentsEx()[0];
+                    var collectionItemType = typeof (object);
+                    if (memberValue.MemberType.IsGenericTypeEx())
+                    {
+                        collectionItemType = memberValue.MemberType.GetGenericArgumentsEx()[0];
+                    }
+
                     var shouldBeHandledByExternalSerializer = ShouldExternalSerializerHandleMember(collectionItemType, null);
 
                     foreach (var item in jArray.Children())
@@ -471,8 +558,6 @@ namespace Catel.Runtime.Serialization.Json
 
                         collection.Add(deserializedItem);
                     }
-
-                    memberValue.Value = collection;
                 }
 
                 return SerializationObject.SucceededToDeserialize(context.ModelType, memberValue.MemberGroup, memberValue.Name, collection);

@@ -213,6 +213,20 @@ namespace Catel.Runtime.Serialization.Xml
             var modelType = context.ModelType;
             var element = context.Context.Element;
 
+            if (ShouldSerializeAsDictionary(memberValue))
+            {
+                // TODO: For now only support top-level dictionaries
+                if (context.Depth == 0)
+                {
+                    var collection = ConvertDictionaryToCollection(memberValue.Value);
+                    if (collection != null)
+                    {
+                        Serialize(collection, context.Context);
+                    }
+                    return;
+                }
+            }
+
             var propertyDataManager = PropertyDataManager.Default;
             if (propertyDataManager.IsPropertyNameMappedToXmlAttribute(modelType, memberValue.Name))
             {
@@ -250,8 +264,13 @@ namespace Catel.Runtime.Serialization.Xml
 
             try
             {
-                if (memberValue.MemberGroup == SerializationMemberGroup.Dictionary ||
-                    memberValue.MemberGroup == SerializationMemberGroup.Collection)
+                if (memberValue.MemberGroup == SerializationMemberGroup.Dictionary)
+                {
+                    var value = GetObjectFromXmlElement(context, element, memberValue, modelType);
+                    return SerializationObject.SucceededToDeserialize(modelType, memberValue.MemberGroup, memberValue.Name, value);
+                }
+
+                if (memberValue.MemberGroup == SerializationMemberGroup.Collection)
                 {
                     var value = GetObjectFromXmlElement(context, element, memberValue, modelType);
                     return SerializationObject.SucceededToDeserialize(modelType, memberValue.MemberGroup, memberValue.Name, value);

@@ -137,6 +137,11 @@ namespace Catel.Runtime.Serialization.Binary
             var serializationContext = context.Context;
             var memberValues = serializationContext.MemberValues;
 
+            if (memberValue.MemberGroup == SerializationMemberGroup.Dictionary)
+            {
+                memberValue.Value = ConvertDictionaryToCollection(memberValue.Value);
+            }
+
             memberValues.Add(memberValue);
         }
 
