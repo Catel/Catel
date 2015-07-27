@@ -243,7 +243,7 @@ namespace Catel.Runtime.Serialization
                         serializerModifier.SerializeMember(context, member);
                     }
 
-                    if (ShouldSerializeAsDictionary(member))
+                    if (ShouldSerializeAsDictionary(member) && SupportsDictionarySerialization(context))
                     {
                         var collection = ConvertDictionaryToCollection(member.Value);
                         if (collection != null)

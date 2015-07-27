@@ -272,14 +272,6 @@ namespace Catel.Runtime.Serialization.Json
             {
                 jsonSerializer.Serialize(jsonWriter, memberValue.Value);
             }
-            //else if (ShouldSerializeAsDictionary(memberValue))
-            //{
-            //    var collection = ConvertDictionaryToCollection(memberValue.Value);
-            //    if (collection != null)
-            //    {
-            //        Serialize(collection, jsonWriter);
-            //    }
-            //}
             else if (ShouldSerializeAsCollection(memberValue))
             {
                 jsonWriter.WriteStartArray();
