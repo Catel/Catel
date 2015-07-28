@@ -589,6 +589,16 @@ namespace Catel.Runtime.Serialization
                 return true;
             }
 
+            if (memberType == typeof (Guid))
+            {
+                return true;
+            }
+
+            if (memberType == typeof(Uri))
+            {
+                return true;
+            }
+
             if (memberType == typeof(byte[]))
             {
                 return true;

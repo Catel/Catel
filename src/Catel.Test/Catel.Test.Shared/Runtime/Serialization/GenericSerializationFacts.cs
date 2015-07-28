@@ -581,6 +581,7 @@ namespace Catel.Test.Runtime.Serialization
                 var dictionary = new Dictionary<string, int>();
                 dictionary.Add("skip", 1);
                 dictionary.Add("take", 2);
+                dictionary.Add("some other string", 3);
 
                 TestSerializationOnAllSerializers((serializer, description) =>
                 {
@@ -592,6 +593,8 @@ namespace Catel.Test.Runtime.Serialization
                     Assert.AreEqual(1, deserializedObject["skip"]);
                     Assert.IsTrue(deserializedObject.ContainsKey("take"));
                     Assert.AreEqual(2, deserializedObject["take"]);
+                    Assert.IsTrue(deserializedObject.ContainsKey("some other string"));
+                    Assert.AreEqual(3, deserializedObject["some other string"]);
                 });
             }
 

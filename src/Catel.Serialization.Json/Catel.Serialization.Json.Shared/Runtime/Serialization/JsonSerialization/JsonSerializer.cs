@@ -11,6 +11,7 @@ namespace Catel.Runtime.Serialization.Json
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Text;
     using Data;
     using IoC;
     using JsonSerialization;
@@ -282,7 +283,13 @@ namespace Catel.Runtime.Serialization.Json
 
                     foreach (var key in sourceDictionary.Keys)
                     {
-                        jsonWriter.WritePropertyName(ObjectToStringHelper.ToString(key));
+                        var stringKey = key as string;
+                        if (stringKey == null)
+                        {
+                            stringKey = ObjectToStringHelper.ToString(key);
+                        }
+
+                        jsonWriter.WritePropertyName(stringKey);
 
                         var item = sourceDictionary[key];
                         if (item != null)
@@ -437,8 +444,6 @@ namespace Catel.Runtime.Serialization.Json
                         }
                     }
 
-                    var shouldValueTypeBeHandledByExternalSerializer = ShouldExternalSerializerHandleMember(valueType, null);
-
                     foreach (var jsonPropertyKeyValuePair in jsonProperties)
                     {
                         var jsonProperty = jsonPropertyKeyValuePair.Value;
@@ -451,6 +456,49 @@ namespace Catel.Runtime.Serialization.Json
                             key = StringToObjectHelper.ToRightType(keyType, jsonProperty.Name);
                         }
 
+                        var typeToDeserialize = valueType;
+                        if (jsonProperty.Value != null)
+                        {
+                            if (jsonProperty.Value.Type != JTokenType.Object)
+                            {
+                                switch (jsonProperty.Value.Type)
+                                {
+                                    case JTokenType.Integer:
+                                        typeToDeserialize = typeof (int);
+                                        break;
+
+                                    case JTokenType.Float:
+                                        typeToDeserialize = typeof(float);
+                                        break;
+
+                                    case JTokenType.String:
+                                        typeToDeserialize = typeof(string);
+                                        break;
+
+                                    case JTokenType.Boolean:
+                                        typeToDeserialize = typeof(bool);
+                                        break;
+
+                                    case JTokenType.Date:
+                                        typeToDeserialize = typeof(DateTime);
+                                        break;
+
+                                    case JTokenType.Guid:
+                                        typeToDeserialize = typeof(Guid);
+                                        break;
+
+                                    case JTokenType.Uri:
+                                        typeToDeserialize = typeof(Uri);
+                                        break;
+
+                                    case JTokenType.TimeSpan:
+                                        typeToDeserialize = typeof(TimeSpan);
+                                        break;
+                                }
+                            }
+                        }
+
+                        var shouldValueTypeBeHandledByExternalSerializer = ShouldExternalSerializerHandleMember(typeToDeserialize, null);
                         if (shouldValueTypeBeHandledByExternalSerializer)
                         {
                             deserializedItem = jsonProperty.Value.ToObject(valueType, serializationContext.JsonSerializer);
@@ -585,11 +633,11 @@ namespace Catel.Runtime.Serialization.Json
             switch (contextMode)
             {
                 case SerializationContextMode.Serialization:
-                    jsonWriter = new JsonTextWriter(new StreamWriter(stream));
+                    jsonWriter = new JsonTextWriter(new StreamWriter(stream, Encoding.UTF8));
                     break;
 
                 case SerializationContextMode.Deserialization:
-                    jsonReader = new JsonTextReader(new StreamReader(stream));
+                    jsonReader = new JsonTextReader(new StreamReader(stream, Encoding.UTF8));
                     break;
 
                 default:
