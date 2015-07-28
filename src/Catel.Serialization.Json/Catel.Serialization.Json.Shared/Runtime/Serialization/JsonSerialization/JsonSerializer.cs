@@ -235,8 +235,8 @@ namespace Catel.Runtime.Serialization.Json
             var jsonWriter = serializationContext.JsonWriter;
 
             // Only write property names when this is not the root and not a collection
-            var isRootDictionary = (context.Depth == 0 && ShouldSerializeAsDictionary(memberValue));
-            var isRootCollection = (context.Depth == 0 && ShouldSerializeAsCollection(memberValue));
+            var isRootDictionary = IsRootDictionary(context, memberValue);
+            var isRootCollection = IsRootCollection(context, memberValue);
 
             if (!isRootDictionary && !isRootCollection)
             {

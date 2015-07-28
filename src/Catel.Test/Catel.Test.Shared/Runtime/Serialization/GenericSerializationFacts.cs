@@ -86,7 +86,7 @@ namespace Catel.Test.Runtime.Serialization
                     var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
 
                     Assert.AreEqual(originalObject, clonedObject, description);
-                });
+                }, false);
             }
 
             [TestCase]
@@ -256,7 +256,7 @@ namespace Catel.Test.Runtime.Serialization
                     var clonedGraph = SerializationTestHelper.SerializeAndDeserialize(collection, serializer);
 
                     Assert.AreEqual(collection, clonedGraph, description);
-                });
+                }, false);
             }
 
             [TestCase]
@@ -287,7 +287,7 @@ namespace Catel.Test.Runtime.Serialization
 
                     Assert.IsNotNull(clonedGraph, description);
                     Assert.IsTrue(ReferenceEquals(clonedGraph, clonedGraph.CircularModel.CircularModel), description);
-                });
+                }, false);
             }
 
             [TestCase] // CTL-550
@@ -306,7 +306,7 @@ namespace Catel.Test.Runtime.Serialization
                     Assert.AreEqual(5, clonedGraph.Collection2.Count, description);
 
                     Assert.IsTrue(ReferenceEquals(clonedGraph.Collection1, clonedGraph.Collection2), description);
-                });
+                }, false);
             }
         }
 
@@ -691,13 +691,21 @@ namespace Catel.Test.Runtime.Serialization
             }
         }
 
-        private static void TestSerializationOnAllSerializers(Action<ISerializer, string> action)
+        private static void TestSerializationOnAllSerializers(Action<ISerializer, string> action, bool testWithoutGraphIdsAsWell = true)
         {
             var serializers = new List<ISerializer>();
 
             serializers.Add(GetXmlSerializer());
             serializers.Add(GetBinarySerializer());
             serializers.Add(GetJsonSerializer());
+
+            if (testWithoutGraphIdsAsWell)
+            {
+                var basicJsonSerializer = GetJsonSerializer();
+                basicJsonSerializer.PreserveReferences = false;
+                basicJsonSerializer.WriteTypeInfo = false;
+                serializers.Add(basicJsonSerializer);
+            }
 
             foreach (var serializer in serializers)
             {

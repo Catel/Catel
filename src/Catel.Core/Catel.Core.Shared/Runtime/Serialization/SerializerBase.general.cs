@@ -643,11 +643,60 @@ namespace Catel.Runtime.Serialization
         }
 
         /// <summary>
+        /// Determines whether the specified member value is a root dictionary.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="memberValue">The member value.</param>
+        /// <returns><c>true</c> if the specified member value is a root dictionary; otherwise, <c>false</c>.</returns>
+        protected virtual bool IsRootDictionary(ISerializationContext<TSerializationContext> context, MemberValue memberValue)
+        {
+            return IsRootObject(context, memberValue, x => ShouldSerializeAsDictionary(x));
+        }
+
+        /// <summary>
+        /// Determines whether the specified member value is a root collection.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="memberValue">The member value.</param>
+        /// <returns><c>true</c> if the specified member value is a root collection; otherwise, <c>false</c>.</returns>
+        protected virtual bool IsRootCollection(ISerializationContext<TSerializationContext> context, MemberValue memberValue)
+        {
+            return IsRootObject(context, memberValue, x => ShouldSerializeAsCollection(x));
+        }
+
+        /// <summary>
+        /// Determines whether the specified member value is a root object.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="memberValue">The member value.</param>
+        /// <param name="predicate">The predicate.</param>
+        /// <returns><c>true</c> if the specified member value is a root object; otherwise, <c>false</c>.</returns>
+        protected virtual bool IsRootObject(ISerializationContext<TSerializationContext> context, MemberValue memberValue, Func<MemberValue, bool> predicate)
+        {
+            if (context.Depth > 0)
+            {
+                return false;
+            }
+
+            if (!ReferenceEquals(context.Model, memberValue.Value))
+            {
+                return false;
+            }
+
+            if (!predicate(memberValue))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Supportses the dictionary serialization.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        protected bool SupportsDictionarySerialization(ISerializationContext<TSerializationContext> context)
+        protected virtual bool SupportsDictionarySerialization(ISerializationContext<TSerializationContext> context)
         {
             // NOTE: This method must be deleted in the future
 
