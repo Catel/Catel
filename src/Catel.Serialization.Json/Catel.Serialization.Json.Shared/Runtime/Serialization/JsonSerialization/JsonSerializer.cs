@@ -148,7 +148,7 @@ namespace Catel.Runtime.Serialization.Json
                 }
             }
 
-            var model = TypeFactory.CreateInstance(modelType);
+            var model = CreateModelInstance(modelType);
 
             using (var context = GetContext(model, jsonReader, null, SerializationContextMode.Deserialization, jsonProperties, jsonArray))
             {
@@ -422,7 +422,7 @@ namespace Catel.Runtime.Serialization.Json
 
                 if (memberValue.MemberGroup == SerializationMemberGroup.Dictionary)
                 {
-                    var dictionary = TypeFactory.CreateInstance(memberValue.MemberType) as IDictionary;
+                    var dictionary = CreateModelInstance(memberValue.MemberType) as IDictionary;
 
                     var keyType = typeof(object);
                     var valueType = typeof(object);
@@ -496,8 +496,11 @@ namespace Catel.Runtime.Serialization.Json
                                 }
                                 else
                                 {
-                                    // Serialize ourselves
-                                    finalMemberValue = Deserialize(valueType, jsonValue.CreateReader());
+                                    if (jsonValue.HasValues)
+                                    {
+                                        // Serialize ourselves
+                                        finalMemberValue = Deserialize(valueType, jsonValue.CreateReader());
+                                    }
                                 }
                             }
                             catch (Exception)

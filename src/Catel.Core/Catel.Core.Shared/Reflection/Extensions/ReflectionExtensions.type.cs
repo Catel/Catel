@@ -395,6 +395,22 @@ namespace Catel.Reflection
         }
 
         /// <summary>
+        /// Determines whether the specified type is an array.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns><c>true</c> if the specified type is an array; otherwise, <c>false</c>.</returns>
+        public static bool IsArrayEx(this Type type)
+        {
+            Argument.IsNotNull("type", type);
+
+#if NETFX_CORE || PCL
+            return type.GetTypeInfo().IsArray;
+#else
+            return type.IsArray;
+#endif
+        }
+
+        /// <summary>
         /// Determines whether the specified type is a class.
         /// </summary>
         /// <param name="type">The type.</param>
@@ -564,8 +580,6 @@ namespace Catel.Reflection
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns>Type[][].</returns>
-        /// <exception cref="System.NotSupportedException"></exception>
-        /// <exception cref="NotSupportedException"></exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         public static Type[] GetGenericArgumentsEx(this Type type)
         {
@@ -575,6 +589,23 @@ namespace Catel.Reflection
             return type.GetTypeInfo().GenericTypeArguments;
 #else
             return type.GetGenericArguments();
+#endif
+        }
+
+        /// <summary>
+        /// Gets the element type of the specified type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>Type.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        public static Type GetElementTypeEx(this Type type)
+        {
+            Argument.IsNotNull("type", type);
+
+#if NETFX_CORE || PCL
+            return type.GetTypeInfo().ElementType;
+#else
+            return type.GetElementType();
 #endif
         }
 

@@ -323,6 +323,8 @@ namespace Catel.Runtime.Serialization
                     }
                     else if (memberValue.MemberGroup == SerializationMemberGroup.Collection)
                     {
+                        // TODO: support arrays
+
                         var targetCollection = TypeFactory.CreateInstance(member.MemberType) as IList;
                         if (targetCollection == null)
                         {

@@ -294,10 +294,10 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="context" /> is <c>null</c>.</exception>
         protected ISerializationContext<TSerializationContext> GetContext(Type modelType, TSerializationContext context, SerializationContextMode contextMode)
         {
-            Argument.IsNotNull("modelType", modelType);
+            Argument.IsNotNull("type", modelType);
             Argument.IsNotNull("context", context);
 
-            var model = TypeFactory.CreateInstance(modelType);
+            var model = CreateModelInstance(modelType);
             return GetContext(model, context, contextMode);
         }
 
@@ -314,10 +314,10 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="stream" /> is <c>null</c>.</exception>
         protected ISerializationContext<TSerializationContext> GetContext(Type modelType, Stream stream, SerializationContextMode contextMode)
         {
-            Argument.IsNotNull("modelType", modelType);
+            Argument.IsNotNull("type", modelType);
             Argument.IsNotNull("stream", stream);
 
-            var model = TypeFactory.CreateInstance(modelType);
+            var model = CreateModelInstance(modelType);
             return GetContext(model, stream, contextMode);
         }
 
@@ -471,6 +471,20 @@ namespace Catel.Runtime.Serialization
                 return true;
             }
 
+            if (memberType == typeof (IEnumerable))
+            {
+                return true;
+            }
+
+            if (memberType.IsGenericTypeEx())
+            {
+                var genericDefinition = memberType.GetGenericTypeDefinitionEx();
+                if (genericDefinition == typeof (IEnumerable<>) || typeof (IEnumerable<>).IsAssignableFromEx(genericDefinition))
+                {
+                    return true;
+                }
+            }
+
             return false;
         }
 
@@ -539,32 +553,6 @@ namespace Catel.Runtime.Serialization
         }
 
         /// <summary>
-        /// Converts a serializable collection into a dictionary.
-        /// </summary>
-        /// <param name="memberValue">The member value.</param>
-        /// <param name="collection">The list of serializable key value pairs.</param>
-        /// <returns>The dictionary.</returns>
-        protected IDictionary ConvertCollectionToDictionary(MemberValue memberValue, List<SerializableKeyValuePair> collection)
-        {
-            var dictionary = TypeFactory.CreateInstance(memberValue.MemberType) as IDictionary;
-            if (dictionary == null)
-            {
-                Log.Warning("Cannot instantiate '{0}' as IDictionary", memberValue.MemberType.GetSafeFullName());
-                return null;
-            }
-
-            if (collection.Count != 0)
-            {
-                foreach (var keyValuePair in collection)
-                {
-                    dictionary.Add(keyValuePair.Key, keyValuePair.Value);
-                }
-            }
-
-            return dictionary;
-        }
-
-        /// <summary>
         /// Returns whether json.net should handle the member.
         /// <para />
         /// By default it only handles non-class types.
@@ -591,6 +579,11 @@ namespace Catel.Runtime.Serialization
         /// <returns><c>true</c> if json.net should handle the type, <c>false</c> otherwise.</returns>
         protected virtual bool ShouldExternalSerializerHandleMember(Type memberType, object memberValue)
         {
+            if (memberType == typeof (IEnumerable))
+            {
+                return false;
+            }
+
             if (!memberType.IsClassType())
             {
                 return true;
@@ -602,6 +595,41 @@ namespace Catel.Runtime.Serialization
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Creates the model instance. When a type is an array or IEnumerable, this will use a collection as model instance.
+        /// </summary>
+        /// <param name="type">Type of the model.</param>
+        /// <returns>The instantiated type.</returns>
+        protected virtual object CreateModelInstance(Type type)
+        {
+            Type elementType = null;
+
+            if (type == typeof (IEnumerable))
+            {
+                elementType = typeof (object);
+            }
+
+            if (type.IsArrayEx())
+            {
+                elementType = type.GetElementTypeEx();
+            }
+
+            if (type.IsGenericTypeEx() && typeof(IEnumerable<>) == type.GetGenericTypeDefinitionEx())
+            {
+                elementType = type.GetGenericArgumentsEx()[0];
+            }
+
+            if (elementType != null)
+            {
+                var collectionType = typeof(List<>);
+                var genericCollectionType = collectionType.MakeGenericType(elementType);
+
+                type = genericCollectionType;
+            }
+
+            return TypeFactory.CreateInstance(type);
         }
 
         /// <summary>

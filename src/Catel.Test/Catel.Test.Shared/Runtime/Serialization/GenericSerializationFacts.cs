@@ -8,6 +8,7 @@
 namespace Catel.Test.Runtime.Serialization
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
@@ -524,6 +525,32 @@ namespace Catel.Test.Runtime.Serialization
                 }
             }
 
+            [DataContract]
+            [KnownType("GetKnownTypes")]
+            public class DataSourceResult
+            {
+                #region Public Properties
+                [DataMember]
+                public object Aggregates { get; set; }
+
+                [DataMember]
+                public IEnumerable Data { get; set; }
+
+                [DataMember]
+                public int Total { get; set; }
+                #endregion
+
+                #region Public Methods and Operators
+                public static Type[] GetKnownTypes()
+                {
+                    var assembly = AppDomain.CurrentDomain.GetLoadedAssemblies(false).FirstOrDefault(a => a.FullName.StartsWith("DynamicClasses", StringComparison.Ordinal));
+                    var types = new List<Type>(assembly == null ? new Type[0] : assembly.GetTypes() .Where(t => t.Name.StartsWith("DynamicClass", StringComparison.Ordinal)) .ToArray());
+
+                    return types.ToArray();
+                }
+                #endregion
+            }
+
             [TestCase]
             public void CanSerializeCollection()
             {
@@ -565,6 +592,34 @@ namespace Catel.Test.Runtime.Serialization
                     Assert.AreEqual(1, deserializedObject["skip"]);
                     Assert.IsTrue(deserializedObject.ContainsKey("take"));
                     Assert.AreEqual(2, deserializedObject["take"]);
+                });
+            }
+
+            [TestCase]
+            public void CanSerializeCustomDataObject()
+            {
+                var countrylist = new List<Country>();
+                countrylist.Add(new Country { IsoCode = "AF", Description = "Afghanistan" });
+                countrylist.Add(new Country { IsoCode = "AG", Description = "Agypt" });
+
+                var dataSourceResult = new DataSourceResult();
+                dataSourceResult.Total = 243;
+                dataSourceResult.Data = countrylist;
+
+                TestSerializationOnAllSerializers((serializer, description) =>
+                {
+                    var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(dataSourceResult, serializer);
+
+                    Assert.AreEqual(243, deserializedObject.Total, description);
+
+                    int counter = 0;
+                    foreach (var country in dataSourceResult.Data)
+                    {
+                        var existingCountry = countrylist[counter++];
+
+                        Assert.AreEqual(existingCountry.IsoCode, ((Country)country).IsoCode, description);
+                        Assert.AreEqual(existingCountry.Description, ((Country)country).Description, description);
+                    }
                 });
             }
         }

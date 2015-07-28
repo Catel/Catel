@@ -77,7 +77,7 @@ namespace Catel.Runtime.Serialization.Binary
 
             // Note: although this looks like an unnecessary overload, it's required to prevent duplicate scopes
 
-            var model = TypeFactory.CreateInstance(modelType);
+            var model = CreateModelInstance(modelType);
 
             Deserialize(model, stream);
 
