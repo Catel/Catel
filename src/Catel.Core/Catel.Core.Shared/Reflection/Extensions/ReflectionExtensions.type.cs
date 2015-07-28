@@ -603,7 +603,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("type", type);
 
 #if NETFX_CORE || PCL
-            return type.GetTypeInfo().ElementType;
+            return type.GetTypeInfo().GetElementType();
 #else
             return type.GetElementType();
 #endif
