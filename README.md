@@ -34,3 +34,4 @@ Documentation can be found at http://www.catelproject.com
 ## Issue tracking
 
 The issue tracker including a roadmap can be found at http://www.catelproject.com
+ 
