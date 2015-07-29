@@ -92,14 +92,14 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="stream">The stream.</param>
-        public virtual void Deserialize(object model, Stream stream)
+        public virtual object Deserialize(object model, Stream stream)
         {
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("stream", stream);
 
-            using (var context = GetContext(model, stream, SerializationContextMode.Deserialization))
+            using (var context = GetContext(model, model.GetType(), stream, SerializationContextMode.Deserialization))
             {
-                Deserialize(model, context);
+                return Deserialize(model, context);
             }
         }
 
@@ -108,9 +108,9 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="serializationContext">The serialization context.</param>
-        public void Deserialize(object model, ISerializationContextInfo serializationContext)
+        public object Deserialize(object model, ISerializationContextInfo serializationContext)
         {
-            Deserialize(model, (TSerializationContext)serializationContext);
+            return Deserialize(model, (TSerializationContext)serializationContext);
         }
 
         /// <summary>
@@ -118,14 +118,14 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="serializationContext">The serialization context.</param>
-        public virtual void Deserialize(object model, TSerializationContext serializationContext)
+        public virtual object Deserialize(object model, TSerializationContext serializationContext)
         {
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("context", serializationContext);
 
-            using (var finalContext = GetContext(model, serializationContext, SerializationContextMode.Deserialization))
+            using (var finalContext = GetContext(model, model.GetType(), serializationContext, SerializationContextMode.Deserialization))
             {
-                Deserialize(model, finalContext);
+                return Deserialize(model, finalContext);
             }
         }
 
@@ -134,7 +134,7 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="context">The serialization context.</param>
-        protected virtual void Deserialize(object model, ISerializationContext<TSerializationContext> context)
+        protected virtual object Deserialize(object model, ISerializationContext<TSerializationContext> context)
         {
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("context", context);
@@ -156,6 +156,9 @@ namespace Catel.Runtime.Serialization
 
             DeserializeMembers(context);
 
+            // Always use the deserialized model (might be a value type)
+            model = context.Model;
+
             AfterDeserialization(context);
 
             foreach (var serializerModifier in serializerModifiers)
@@ -164,6 +167,8 @@ namespace Catel.Runtime.Serialization
             }
 
             Deserialized.SafeInvoke(this, serializingEventArgs);
+
+            return model;
         }
 
         /// <summary>
@@ -179,11 +184,7 @@ namespace Catel.Runtime.Serialization
 
             using (var context = GetContext(modelType, stream, SerializationContextMode.Deserialization))
             {
-                var model = context.Model;
-
-                Deserialize(model, context.Context);
-
-                return model;
+                return Deserialize(context.Model, context.Context);
             }
         }
 
@@ -288,7 +289,8 @@ namespace Catel.Runtime.Serialization
                 if (serializationObject.IsSuccessful)
                 {
                     // Note that we need to sync the member values every time
-                    var memberValue = new MemberValue(member.MemberGroup, member.ModelType, member.MemberType, member.Name, serializationObject.MemberValue);
+                    var memberValue = new MemberValue(member.MemberGroup, member.ModelType, member.MemberType, member.Name, 
+                        member.NameForSerialization, serializationObject.MemberValue);
 
                     if (memberValue.MemberGroup == SerializationMemberGroup.Dictionary)
                     {
@@ -367,7 +369,12 @@ namespace Catel.Runtime.Serialization
             if (deserializedMemberValues.Count > 0)
             {
                 var firstMember = deserializedMemberValues[0];
-                if (firstMember.MemberGroup == SerializationMemberGroup.Dictionary)
+                if (firstMember.MemberGroup == SerializationMemberGroup.SimpleRootObject)
+                {
+                    // Completely replace root object (this is a basic (non-reference) type)
+                    context.Model = firstMember.Value;
+                }
+                else if (firstMember.MemberGroup == SerializationMemberGroup.Dictionary)
                 {
                     var targetDictionary = context.Model as IDictionary;
                     if (targetDictionary == null)

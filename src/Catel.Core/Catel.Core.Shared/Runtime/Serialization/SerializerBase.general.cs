@@ -11,8 +11,6 @@ namespace Catel.Runtime.Serialization
     using System.Collections;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
-    using System.Reflection;
     using Catel.ApiCop;
     using Catel.ApiCop.Rules;
     using Catel.Caching;
@@ -20,7 +18,6 @@ namespace Catel.Runtime.Serialization
     using Catel.IoC;
     using Catel.Logging;
     using Catel.Reflection;
-    using Catel.Threading;
 
     /// <summary>
     /// Base class for serializers that can serialize any object.
@@ -39,6 +36,11 @@ namespace Catel.Runtime.Serialization
         /// The API cop.
         /// </summary>
         private static readonly IApiCop ApiCop = ApiCopManager.GetCurrentClassApiCop();
+
+        /// <summary>
+        /// The root object name.
+        /// </summary>
+        protected const string RootObjectName = "Value";
 
         /// <summary>
         /// The collection name.
@@ -120,25 +122,30 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("model", model);
 
             var listToSerialize = new List<MemberValue>();
-            var checkedMemberNames = new HashSet<string>();
             var membersToIgnoreHashSet = new HashSet<string>(membersToIgnore);
 
             var modelType = model.GetType();
 
-            // CTL-688 Support collections and dictionaries
+            // If a basic type, we need to directly deserialize as member and replace the context model
+            if (ShouldExternalSerializerHandleMember(context.ModelType, context.Model))
+            {
+                listToSerialize.Add(new MemberValue(SerializationMemberGroup.SimpleRootObject, modelType, modelType, RootObjectName, RootObjectName, model));
+                return listToSerialize;
+            }
+
             if (ShouldSerializeAsDictionary(modelType, model))
             {
                 // CTL-688: only support json for now. In the future, these checks (depth AND type) should be removed
                 if (SupportsDictionarySerialization(context))
                 {
-                    listToSerialize.Add(new MemberValue(SerializationMemberGroup.Dictionary, modelType, modelType, CollectionName, model));
+                    listToSerialize.Add(new MemberValue(SerializationMemberGroup.Dictionary, modelType, modelType, CollectionName, CollectionName, model));
                     return listToSerialize;
                 }
             }
 
             if (ShouldSerializeAsCollection(modelType, model))
             {
-                listToSerialize.Add(new MemberValue(SerializationMemberGroup.Collection, modelType, modelType, CollectionName, model));
+                listToSerialize.Add(new MemberValue(SerializationMemberGroup.Collection, modelType, modelType, CollectionName, CollectionName, model));
                 return listToSerialize;
             }
 
@@ -159,62 +166,40 @@ namespace Catel.Runtime.Serialization
                     valueType = genericTypeDefinition[1];
                 }
 
-                listToSerialize.Add(new MemberValue(SerializationMemberGroup.RegularProperty, modelType, keyType, "Key", keyValuePair.Key));
-                listToSerialize.Add(new MemberValue(SerializationMemberGroup.RegularProperty, modelType, valueType, "Value", keyValuePair.Value));
+                listToSerialize.Add(new MemberValue(SerializationMemberGroup.RegularProperty, modelType, keyType, "Key", "Key", keyValuePair.Key));
+                listToSerialize.Add(new MemberValue(SerializationMemberGroup.RegularProperty, modelType, valueType, "Value", "Value", keyValuePair.Value));
 
                 return listToSerialize;
             }
 
             var modelInfo = _serializationModelCache.GetFromCacheOrFetch(modelType, () =>
             {
-                var catelPropertyNames = SerializationManager.GetCatelPropertyNames(modelType);
-                var fieldsToSerialize = SerializationManager.GetFieldsToSerialize(modelType);
-                var propertiesToSerialize = SerializationManager.GetPropertiesToSerialize(modelType);
+                var catelProperties = SerializationManager.GetCatelPropertiesToSerialize(modelType);
+                var fields = SerializationManager.GetFieldsToSerialize(modelType);
+                var properties = SerializationManager.GetRegularPropertiesToSerialize(modelType);
 
-                return new SerializationModelInfo(modelType, catelPropertyNames, fieldsToSerialize, propertiesToSerialize);
+                return new SerializationModelInfo(modelType, catelProperties, fields, properties);
             });
 
-            foreach (var propertyName in modelInfo.PropertiesByName.Keys)
+            var members = new List<MemberMetadata>();
+            members.AddRange(modelInfo.CatelPropertiesByName.Values);
+            members.AddRange(modelInfo.PropertiesByName.Values);
+            members.AddRange(modelInfo.FieldsByName.Values);
+
+            foreach (var memberMetadata in members)
             {
-                if (checkedMemberNames.Contains(propertyName))
+                var memberName = memberMetadata.MemberName;
+                if (membersToIgnoreHashSet.Contains(memberName) || ShouldIgnoreMember(model, memberName))
                 {
+                    Log.Debug("Member '{0}' is being ignored for serialization", memberName);
                     continue;
                 }
 
-                checkedMemberNames.Add(propertyName);
-
-                if (membersToIgnoreHashSet.Contains(propertyName) || ShouldIgnoreMember(model, propertyName))
+                // TODO: why get value but not store it?
+                var memberValue = ObjectAdapter.GetMemberValue(model, memberName, modelInfo);
+                if (memberValue != null)
                 {
-                    Log.Debug("Property '{0}' is being ignored for serialization", propertyName);
-                    continue;
-                }
-
-                var propertyValue = ObjectAdapter.GetMemberValue(model, propertyName, modelInfo);
-                if (propertyValue != null)
-                {
-                    listToSerialize.Add(propertyValue);
-                }
-            }
-
-            foreach (var field in modelInfo.Fields)
-            {
-                if (checkedMemberNames.Contains(field.Name))
-                {
-                    continue;
-                }
-
-                checkedMemberNames.Add(field.Name);
-
-                if (membersToIgnoreHashSet.Contains(field.Name) || ShouldIgnoreMember(model, field.Name))
-                {
-                    Log.Debug("Field '{0}' is being ignored for serialization", field.Name);
-                    continue;
-                }
-
-                var fieldValue = ObjectAdapter.GetMemberValue(model, field.Name, modelInfo);
-                if (fieldValue != null)
-                {
-                    listToSerialize.Add(fieldValue);
+                    listToSerialize.Add(memberValue);
                 }
             }
 
@@ -298,7 +283,7 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("context", context);
 
             var model = CreateModelInstance(modelType);
-            return GetContext(model, context, contextMode);
+            return GetContext(model, modelType, context, contextMode);
         }
 
         /// <summary>
@@ -318,36 +303,38 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("stream", stream);
 
             var model = CreateModelInstance(modelType);
-            return GetContext(model, stream, contextMode);
+            return GetContext(model, modelType, stream, contextMode);
         }
 
         /// <summary>
         /// Gets the context for the specified model instance.
         /// </summary>
-        /// <param name="model">The model.</param>
+        /// <param name="model">The model, can be <c>null</c> for value types.</param>
+        /// <param name="modelType">Type of the model.</param>
         /// <param name="context">The context.</param>
         /// <param name="contextMode">The context mode.</param>
         /// <returns>The serialization context.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="context" /> is <c>null</c>.</exception>
-        protected virtual ISerializationContext<TSerializationContext> GetContext(object model, TSerializationContext context, SerializationContextMode contextMode)
+        protected virtual ISerializationContext<TSerializationContext> GetContext(object model, Type modelType, TSerializationContext context, SerializationContextMode contextMode)
         {
-            Argument.IsNotNull("model", model);
+            Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("context", context);
 
-            return new SerializationContext<TSerializationContext>(model, context, contextMode);
+            return new SerializationContext<TSerializationContext>(model, modelType, context, contextMode);
         }
 
         /// <summary>
         /// Gets the context.
         /// </summary>
-        /// <param name="model">The model.</param>
+        /// <param name="model">The model, can be <c>null</c> for value types.</param>
+        /// <param name="modelType">Type of the model.</param>
         /// <param name="stream">The stream.</param>
         /// <param name="contextMode">The context mode.</param>
         /// <returns>The serialization context.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="stream" /> is <c>null</c>.</exception>
-        protected abstract ISerializationContext<TSerializationContext> GetContext(object model, Stream stream, SerializationContextMode contextMode);
+        protected abstract ISerializationContext<TSerializationContext> GetContext(object model, Type modelType, Stream stream, SerializationContextMode contextMode);
 
         /// <summary>
         /// Appends the serialization context to the specified stream. This way each serializer can handle the serialization
@@ -373,11 +360,11 @@ namespace Catel.Runtime.Serialization
 
             var modelInfo = _serializationModelCache.GetFromCacheOrFetch(modelType, () =>
             {
-                var catelPropertyNames = SerializationManager.GetCatelPropertyNames(modelType);
-                var fieldsToSerialize = SerializationManager.GetFieldsToSerialize(modelType);
-                var propertiesToSerialize = SerializationManager.GetPropertiesToSerialize(modelType);
+                var catelProperties = SerializationManager.GetCatelProperties(modelType);
+                var fields = SerializationManager.GetFields(modelType);
+                var regularProperties = SerializationManager.GetRegularProperties(modelType);
 
-                return new SerializationModelInfo(modelType, catelPropertyNames, fieldsToSerialize, propertiesToSerialize);
+                return new SerializationModelInfo(modelType, catelProperties, fields, regularProperties);
             });
 
             foreach (var member in members)
@@ -471,7 +458,7 @@ namespace Catel.Runtime.Serialization
                 return true;
             }
 
-            if (memberType == typeof (IEnumerable))
+            if (memberType == typeof(IEnumerable))
             {
                 return true;
             }
@@ -479,7 +466,7 @@ namespace Catel.Runtime.Serialization
             if (memberType.IsGenericTypeEx())
             {
                 var genericDefinition = memberType.GetGenericTypeDefinitionEx();
-                if (genericDefinition == typeof (IEnumerable<>) || typeof (IEnumerable<>).IsAssignableFromEx(genericDefinition))
+                if (genericDefinition == typeof(IEnumerable<>) || typeof(IEnumerable<>).IsAssignableFromEx(genericDefinition))
                 {
                     return true;
                 }
@@ -579,7 +566,7 @@ namespace Catel.Runtime.Serialization
         /// <returns><c>true</c> if json.net should handle the type, <c>false</c> otherwise.</returns>
         protected virtual bool ShouldExternalSerializerHandleMember(Type memberType, object memberValue)
         {
-            if (memberType == typeof (IEnumerable))
+            if (memberType == typeof(IEnumerable))
             {
                 return false;
             }
@@ -589,7 +576,12 @@ namespace Catel.Runtime.Serialization
                 return true;
             }
 
-            if (memberType == typeof (Guid))
+            if (memberType == typeof(string))
+            {
+                return true;
+            }
+
+            if (memberType == typeof(Guid))
             {
                 return true;
             }
@@ -616,9 +608,19 @@ namespace Catel.Runtime.Serialization
         {
             Type elementType = null;
 
-            if (type == typeof (IEnumerable))
+            if (type == typeof(string))
             {
-                elementType = typeof (object);
+                return string.Empty;
+            }
+
+            if (type.IsBasicType())
+            {
+                return Activator.CreateInstance(type);
+            }
+
+            if (type == typeof(IEnumerable))
+            {
+                elementType = typeof(object);
             }
 
             if (type.IsArrayEx())

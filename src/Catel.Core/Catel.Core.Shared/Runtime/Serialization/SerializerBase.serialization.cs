@@ -12,7 +12,6 @@ namespace Catel.Runtime.Serialization
     using System.Collections.Generic;
     using System.IO;
     using Catel.ApiCop.Rules;
-    using Catel.Data;
     using Catel.Logging;
     using Catel.Reflection;
 
@@ -54,7 +53,7 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("stream", stream);
 
-            using (var context = GetContext(model, stream, SerializationContextMode.Serialization))
+            using (var context = GetContext(model, model.GetType(), stream, SerializationContextMode.Serialization))
             {
                 Serialize(model, context);
 
@@ -85,7 +84,7 @@ namespace Catel.Runtime.Serialization
             var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
             using (ScopeManager<ISerializer>.GetScopeManager(scopeName, () => this))
             {
-                using (var finalContext = GetContext(model, context, SerializationContextMode.Serialization))
+                using (var finalContext = GetContext(model, model.GetType(), context, SerializationContextMode.Serialization))
                 {
                     Serialize(model, finalContext);
                 }
@@ -142,7 +141,7 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("stream", stream);
 
-            using (var context = GetContext(model, stream, SerializationContextMode.Serialization))
+            using (var context = GetContext(model, model.GetType(), stream, SerializationContextMode.Serialization))
             {
                 var members = GetSerializableMembers(context, model, membersToIgnore);
                 if (members.Count == 0)

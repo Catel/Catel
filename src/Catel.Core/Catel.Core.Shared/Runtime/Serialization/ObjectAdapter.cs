@@ -8,6 +8,7 @@
 namespace Catel.Runtime.Serialization
 {
     using System;
+    using System.Reflection;
     using Data;
     using Logging;
     using Reflection;
@@ -35,16 +36,17 @@ namespace Catel.Runtime.Serialization
                 var modelEditor = model as IModelEditor;
                 if (modelEditor != null && modelInfo.CatelPropertyNames.Contains(memberName))
                 {
-                    var propertyData = modelInfo.CatelPropertiesByName[memberName];
+                    var memberMetadata = modelInfo.CatelPropertiesByName[memberName];
                     var actualPropertyValue = modelEditor.GetValueFastButUnsecure(memberName);
 
-                    var propertyValue = new MemberValue(SerializationMemberGroup.CatelProperty, modelType, propertyData.Type, propertyData.Name, actualPropertyValue);
+                    var propertyValue = new MemberValue(SerializationMemberGroup.CatelProperty, modelType, memberMetadata.MemberType, 
+                        memberMetadata.MemberName, memberMetadata.MemberNameForSerialization, actualPropertyValue);
                     return propertyValue;
                 }
 
                 if (modelInfo.PropertiesByName.ContainsKey(memberName))
                 {
-                    var propertyInfo = modelInfo.PropertiesByName[memberName];
+                    var memberMetadata = modelInfo.PropertiesByName[memberName];
 
                     object value = null;
                     var get = false;
@@ -57,16 +59,17 @@ namespace Catel.Runtime.Serialization
 
                     if (!get)
                     {
-                        value = propertyInfo.GetValue(model, null);
+                        value = ((PropertyInfo)memberMetadata.Tag).GetValue(model, null);
                     }
 
-                    var propertyValue = new MemberValue(SerializationMemberGroup.RegularProperty, modelType, propertyInfo.PropertyType, memberName, value);
+                    var propertyValue = new MemberValue(SerializationMemberGroup.RegularProperty, modelType, memberMetadata.MemberType, 
+                        memberMetadata.MemberName, memberMetadata.MemberNameForSerialization, value);
                     return propertyValue;
                 }
 
                 if (modelInfo.FieldsByName.ContainsKey(memberName))
                 {
-                    var fieldInfo = modelInfo.FieldsByName[memberName];
+                    var memberMetadata = modelInfo.FieldsByName[memberName];
 
                     object value = null;
                     var get = false;
@@ -79,10 +82,11 @@ namespace Catel.Runtime.Serialization
 
                     if (!get)
                     {
-                        value = fieldInfo.GetValue(model);
+                        value = ((FieldInfo)memberMetadata.Tag).GetValue(model);
                     }
 
-                    var fieldValue = new MemberValue(SerializationMemberGroup.Field, modelType, fieldInfo.FieldType, fieldInfo.Name, value);
+                    var fieldValue = new MemberValue(SerializationMemberGroup.Field, modelType, memberMetadata.MemberType, 
+                        memberMetadata.MemberName, memberMetadata.MemberNameForSerialization, value);
                     return fieldValue;
                 }
             }
@@ -123,10 +127,10 @@ namespace Catel.Runtime.Serialization
 
                     if (!set)
                     {
-                        var propertyInfo = modelInfo.PropertiesByName[member.Name];
-                        if (propertyInfo != null)
+                        var memberMetadata = modelInfo.PropertiesByName[member.Name];
+                        if (memberMetadata != null)
                         {
-                            propertyInfo.SetValue(model, member.Value, null);
+                            ((PropertyInfo)memberMetadata.Tag).SetValue(model, member.Value, null);
                             set = true;
                         }
                     }
@@ -148,10 +152,10 @@ namespace Catel.Runtime.Serialization
 
                     if (!set)
                     {
-                        var fieldInfo = modelInfo.FieldsByName[member.Name];
-                        if (fieldInfo != null)
+                        var memberMetadata = modelInfo.FieldsByName[member.Name];
+                        if (memberMetadata != null)
                         {
-                            fieldInfo.SetValue(model, member.Value);
+                            ((FieldInfo)memberMetadata.Tag).SetValue(model, member.Value);
                             set = true;
                         }
                     }

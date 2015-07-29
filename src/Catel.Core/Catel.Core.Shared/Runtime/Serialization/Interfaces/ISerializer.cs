@@ -102,18 +102,20 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="stream">The stream.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="stream"/> is <c>null</c>.</exception>
-        void Deserialize(object model, Stream stream);
+        /// <returns>The deserialized model.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="stream" /> is <c>null</c>.</exception>
+        object Deserialize(object model, Stream stream);
 
         /// <summary>
         /// Deserializes the specified model. The deserialized values will be set in the specified model.
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="serializationContext">The context.</param>
+        /// <returns>The deserialized model.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationContext"/> is <c>null</c>.</exception>
-        void Deserialize(object model, ISerializationContextInfo serializationContext);
+        object Deserialize(object model, ISerializationContextInfo serializationContext);
 
         /// <summary>
         /// Deserializes the specified model type.

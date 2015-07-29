@@ -143,9 +143,11 @@ namespace Catel.Runtime.Serialization.Xml
             {
                 var members = new List<MemberInfo>();
                 members.AddRange(from field in serializationManager.GetFieldsToSerialize(type)
-                                 select type.GetFieldEx(field));
-                members.AddRange(from property in serializationManager.GetPropertiesToSerialize(type)
-                                 select type.GetPropertyEx(property));
+                                 select (FieldInfo)field.Value.Tag);
+                members.AddRange(from property in serializationManager.GetCatelPropertiesToSerialize(type)
+                                 select (PropertyInfo)property.Value.Tag);
+                members.AddRange(from property in serializationManager.GetRegularPropertiesToSerialize(type)
+                                 select (PropertyInfo)property.Value.Tag);
 
                 foreach (var member in members)
                 {

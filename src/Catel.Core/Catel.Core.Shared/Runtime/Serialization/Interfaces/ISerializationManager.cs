@@ -40,31 +40,41 @@ namespace Catel.Runtime.Serialization
         /// <param name="type">The type.</param>
         /// <returns>The list of fields to serialize.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        HashSet<string> GetFieldsToSerialize(Type type);
+        Dictionary<string, MemberMetadata> GetFieldsToSerialize(Type type);
 
         /// <summary>
-        /// Gets the properties to serialize for the specified object.
+        /// Gets the Catel properties to serialize for the specified object.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>The list of properties to serialize.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        Dictionary<string, MemberMetadata> GetCatelPropertiesToSerialize(Type type);
+
+        /// <summary>
+        /// Gets the regular properties to serialize for the specified object.
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns>The list of properties to serialize.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        HashSet<string> GetPropertiesToSerialize(Type type);
+        Dictionary<string, MemberMetadata> GetRegularPropertiesToSerialize(Type type);
 
         /// <summary>
         /// Gets the catel property names.
         /// </summary>
         /// <param name="type">Type of the model.</param>
+        /// <param name="includeModelBaseProperties">if set to <c>true</c>, also include model base properties.</param>
         /// <returns>A hash set containing the Catel property names.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        HashSet<string> GetCatelPropertyNames(Type type);
+        HashSet<string> GetCatelPropertyNames(Type type, bool includeModelBaseProperties = false);
 
         /// <summary>
         /// Gets the catel properties.
         /// </summary>
         /// <param name="type">Type of the model.</param>
+        /// <param name="includeModelBaseProperties">if set to <c>true</c>, also include model base properties.</param>
         /// <returns>A hash set containing the Catel properties.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        Dictionary<string, MemberMetadata> GetCatelProperties(Type type);
+        /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        Dictionary<string, MemberMetadata> GetCatelProperties(Type type, bool includeModelBaseProperties = false);
 
         /// <summary>
         /// Gets the regular property names.

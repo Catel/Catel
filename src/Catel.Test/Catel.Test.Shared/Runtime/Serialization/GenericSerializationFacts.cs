@@ -15,8 +15,10 @@ namespace Catel.Test.Runtime.Serialization
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Diagnostics.Contracts;
+    using System.IO;
     using System.Linq;
     using System.Runtime.Serialization;
+    using System.Text;
     using System.Windows.Media;
     using Catel.Data;
     using Catel.IoC;
@@ -27,8 +29,10 @@ namespace Catel.Test.Runtime.Serialization
     using Catel.Runtime.Serialization.Json;
     using Catel.Runtime.Serialization.Xml;
     using Data;
+    using Newtonsoft.Json;
     using NUnit.Framework;
     using TestModels;
+    using JsonSerializer = Catel.Runtime.Serialization.Json.JsonSerializer;
 
     public class GenericSerializationFacts
     {
@@ -551,6 +555,20 @@ namespace Catel.Test.Runtime.Serialization
                 #endregion
             }
 
+            [DataContract(Name = "sort")]
+            public class SortDescriptor
+            {
+                #region Public Properties
+
+                [DataMember(Name = "dir")]
+                public string Direction { get; set; }
+
+                [DataMember(Name = "field")]
+                public string Field { get; set; }
+
+                #endregion
+            }
+
             [TestCase]
             public void CanSerializeCollection()
             {
@@ -598,6 +616,20 @@ namespace Catel.Test.Runtime.Serialization
                 });
             }
 
+            [TestCase(42)]
+            [TestCase(42d)]
+            [TestCase("some string")]
+            [TestCase(true)]
+            public void CanSerializeBasicTypes<T>(T value)
+            {
+                TestSerializationOnAllSerializers((serializer, description) =>
+                {
+                    var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(value, serializer);
+
+                    Assert.AreEqual(value, deserializedObject);
+                });
+            }
+
             [TestCase]
             public void CanSerializeCustomDataObject()
             {
@@ -625,6 +657,69 @@ namespace Catel.Test.Runtime.Serialization
                     }
                 });
             }
+
+            [TestCase]
+            public void CustomizedJsonParsing()
+            {
+                // it is not json dictionary standard (sort), so manual json parsing below is needed
+                var value = "{\"take\":10,\"skip\":0,\"page\":1,\"pageSize\":10,\"sort\":[{\"field\":\"IsoCode\",\"dir\":\"asc\"}]}";
+
+                var parameters = new object[] { 0, 10, null, null };
+                var parameterTypes = new[] { typeof(int), typeof(int), typeof(IEnumerable<SortDescriptor>) };
+                var parameterNames = new Dictionary<string, int> { { "skip", 0 }, { "take", 1 }, { "sort", 2 } };
+
+                var serializer = GetJsonSerializer();
+                serializer.PreserveReferences = false;
+                serializer.WriteTypeInfo = false;
+
+                using (var memoryStream = new MemoryStream())
+                {
+                    var writer = new StreamWriter(memoryStream);
+                    writer.Write(value);
+                    writer.Flush();
+
+                    memoryStream.Position = 0L;
+
+                    var reader = new StreamReader(memoryStream);
+                    using (var jsonReader = new JsonTextReader(reader))
+                    {
+                        jsonReader.Read();
+
+                        if (jsonReader.TokenType != JsonToken.StartObject)
+                        {
+                            throw new InvalidOperationException("Input needs to be wrapped in an object");
+                        }
+
+                        jsonReader.Read();
+
+                        while (jsonReader.TokenType == JsonToken.PropertyName)
+                        {
+                            var parameterName = jsonReader.Value as string;
+
+                            jsonReader.Read();
+                            int parameterIndex;
+
+                            if ((parameterName != null) && parameterNames.TryGetValue(parameterName, out parameterIndex))
+                            {
+                                parameters[parameterIndex] = serializer.Deserialize(parameterTypes[parameterIndex], jsonReader);
+                            }
+                            else
+                            {
+                                jsonReader.Skip();
+                            }
+
+                            jsonReader.Read();
+                        }
+                    }
+                }
+
+                Assert.AreEqual(0, parameters[0]);
+                Assert.AreEqual(10, parameters[1]);
+                var sort = ((List<SortDescriptor>)parameters[2])[0];
+                Assert.IsNotNull(sort);
+                Assert.AreEqual("IsoCode", sort.Field);
+                Assert.AreEqual("asc", sort.Direction);
+            }
         }
 
         [TestFixture, Explicit]
@@ -633,7 +728,7 @@ namespace Catel.Test.Runtime.Serialization
             [TestCase]
             public void WarmsUpSpecificTypes()
             {
-                var typesToWarmup = new Type[] { typeof(CircularTestModel), typeof(TestModel) };
+                var typesToWarmup = new [] { typeof(CircularTestModel), typeof(TestModel) };
 
                 TestSerializationOnAllSerializers((serializer, description) =>
                 {

@@ -31,6 +31,11 @@ namespace Catel.Runtime.Serialization
         Field,
 
         /// <summary>
+        /// The member is a simple root object, must be handled by external serializer immediately.
+        /// </summary>
+        SimpleRootObject,
+
+        /// <summary>
         /// The member is a collection.
         /// </summary>
         Collection,
@@ -56,13 +61,15 @@ namespace Catel.Runtime.Serialization
         /// <param name="modelType">Type of the model.</param>
         /// <param name="memberType">Type of the member.</param>
         /// <param name="name">The name.</param>
+        /// <param name="nameForSerialization">The name for serialization.</param>
         /// <param name="value">The value.</param>
-        public MemberValue(SerializationMemberGroup memberGroup, Type modelType, Type memberType, string name, object value)
+        public MemberValue(SerializationMemberGroup memberGroup, Type modelType, Type memberType, string name, string nameForSerialization, object value)
         {
             MemberGroup = memberGroup;
             ModelType = modelType;
             MemberType = memberType;
             Name = name;
+            NameForSerialization = nameForSerialization;
             Value = value;
         }
 
@@ -99,6 +106,13 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <value>The name.</value>
         public string Name { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the name for serialization. This is a name mapped based on attributes
+        /// like DataMember("something"), etc.
+        /// </summary>
+        /// <value>The name for serialization.</value>
+        public string NameForSerialization { get; private set; }
 
         /// <summary>
         /// Gets or sets the value.

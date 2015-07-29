@@ -22,51 +22,66 @@ namespace Catel.Runtime.Serialization
         /// Initializes a new instance of the <see cref="SerializationModelInfo"/> class.
         /// </summary>
         /// <param name="modelType">Type of the model.</param>
-        /// <param name="catelPropertyNames">The catel property names.</param>
-        /// <param name="fieldNames">The fields.</param>
-        /// <param name="propertyNames">The properties.</param>
-        public SerializationModelInfo(Type modelType, HashSet<string> catelPropertyNames, HashSet<string> fieldNames, HashSet<string> propertyNames)
+        /// <param name="catelProperties">The catel properties.</param>
+        /// <param name="fields">The fields.</param>
+        /// <param name="regularProperties">The properties.</param>
+        public SerializationModelInfo(Type modelType, Dictionary<string, MemberMetadata> catelProperties, Dictionary<string, MemberMetadata> fields,
+            Dictionary<string, MemberMetadata> regularProperties)
         {
             Argument.IsNotNull("modelType", modelType);
-            Argument.IsNotNull("catelPropertyNames", catelPropertyNames);
-            Argument.IsNotNull("fields", fieldNames);
-            Argument.IsNotNull("properties", propertyNames);
+            Argument.IsNotNull("catelProperties", catelProperties);
+            Argument.IsNotNull("fields", fields);
+            Argument.IsNotNull("properties", regularProperties);
 
             ModelType = modelType;
 
-            var catelTypeInfo = PropertyDataManager.Default.GetCatelTypeInfo(modelType);
+            CatelTypeInfo catelTypeInfo = null;
 
-            CatelPropertyNames = catelPropertyNames;
+            CatelPropertyNames = new HashSet<string>(catelProperties.Keys);
             CatelProperties = new List<PropertyData>();
-            CatelPropertiesByName = new Dictionary<string, PropertyData>();
-            foreach (var catelPropertyName in catelPropertyNames)
+            CatelPropertiesByName = catelProperties;
+            foreach (var catelProperty in catelProperties)
             {
-                var propertyData = catelTypeInfo.GetPropertyData(catelPropertyName);
+                var propertyData = catelProperty.Value.Tag as PropertyData;
+                if (propertyData == null)
+                {
+                    if (catelTypeInfo == null)
+                    {
+                        catelTypeInfo = PropertyDataManager.Default.GetCatelTypeInfo(modelType);
+                    }
+
+                    propertyData = catelTypeInfo.GetPropertyData(catelProperty.Key);
+                }
 
                 CatelProperties.Add(propertyData);
-                CatelPropertiesByName[propertyData.Name] = propertyData;
             }
 
-            FieldNames = fieldNames;
+            FieldNames = new HashSet<string>(fields.Keys);
             Fields = new List<FieldInfo>();
-            FieldsByName = new Dictionary<string, FieldInfo>();
-            foreach (var fieldName in fieldNames)
+            FieldsByName = fields;
+            foreach (var field in fields)
             {
-                var fieldInfo = modelType.GetFieldEx(fieldName);
+                var fieldInfo = field.Value.Tag as FieldInfo;
+                if (fieldInfo == null)
+                {
+                    fieldInfo = modelType.GetFieldEx(field.Key);
+                }
 
                 Fields.Add(fieldInfo);
-                FieldsByName[fieldName] = fieldInfo;
             }
 
-            PropertyNames = propertyNames;
+            PropertyNames = new HashSet<string>(regularProperties.Keys);
             Properties = new List<PropertyInfo>();
-            PropertiesByName = new Dictionary<string, PropertyInfo>();
-            foreach (var propertyName in propertyNames)
+            PropertiesByName = regularProperties;
+            foreach (var regularProperty in regularProperties)
             {
-                var propertyInfo = modelType.GetPropertyEx(propertyName);
+                var propertyInfo = regularProperty.Value.Tag as PropertyInfo;
+                if (propertyInfo == null)
+                {
+                    propertyInfo = modelType.GetPropertyEx(regularProperty.Key);
+                }
 
                 Properties.Add(propertyInfo);
-                PropertiesByName[propertyName] = propertyInfo;
             }
         }
 
@@ -80,7 +95,7 @@ namespace Catel.Runtime.Serialization
         /// Gets the catel property names.
         /// </summary>
         /// <value>The catel property names.</value>
-        public HashSet<string> CatelPropertyNames { get; private set; } 
+        public HashSet<string> CatelPropertyNames { get; private set; }
 
         /// <summary>
         /// Gets the catel properties.
@@ -92,7 +107,7 @@ namespace Catel.Runtime.Serialization
         /// Gets the Catel properties by name.
         /// </summary>
         /// <value>The Catel properties by name.</value>
-        public Dictionary<string, PropertyData> CatelPropertiesByName { get; private set; } 
+        public Dictionary<string, MemberMetadata> CatelPropertiesByName { get; private set; } 
 
         /// <summary>
         /// Gets the field names.
@@ -110,7 +125,7 @@ namespace Catel.Runtime.Serialization
         /// Gets the fields by name.
         /// </summary>
         /// <value>The fields by name.</value>
-        public Dictionary<string, FieldInfo> FieldsByName { get; private set; } 
+        public Dictionary<string, MemberMetadata> FieldsByName { get; private set; } 
 
         /// <summary>
         /// Gets the property names.
@@ -128,6 +143,6 @@ namespace Catel.Runtime.Serialization
         /// Gets the properties by name.
         /// </summary>
         /// <value>The properties by name.</value>
-        public Dictionary<string, PropertyInfo> PropertiesByName { get; private set; } 
+        public Dictionary<string, MemberMetadata> PropertiesByName { get; private set; } 
     }
 }

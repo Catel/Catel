@@ -26,13 +26,11 @@ namespace Catel.Runtime.Serialization.Xml
         /// Initializes a new instance of the <see cref="XmlSerializationContextInfo" /> class.
         /// </summary>
         /// <param name="element">The element.</param>
-        /// <param name="model">The model.</param>
+        /// <param name="model">The model, is allowed to be null for value types.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="element" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
         public XmlSerializationContextInfo(XElement element, object model)
         {
             Argument.IsNotNull("element", element);
-            Argument.IsNotNull("model", model);
 
             Initialize(element, model);
         }

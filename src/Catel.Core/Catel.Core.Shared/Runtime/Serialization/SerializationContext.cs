@@ -27,18 +27,19 @@ namespace Catel.Runtime.Serialization
         /// <summary>
         /// Initializes a new instance of the <see cref="SerializationContext{TContext}" /> class.
         /// </summary>
-        /// <param name="model">The model.</param>
+        /// <param name="model">The model, can be <c>null</c> for value types.</param>
+        /// <param name="modelType">Type of the model.</param>
         /// <param name="context">The context.</param>
         /// <param name="contextMode">The context mode.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="context" /> is <c>null</c>.</exception>
-        public SerializationContext(object model, TContext context, SerializationContextMode contextMode)
+        public SerializationContext(object model, Type modelType, TContext context, SerializationContextMode contextMode)
         {
-            Argument.IsNotNull("model", model);
+            Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("context", context);
 
             Model = model;
-            ModelType = model.GetType();
+            ModelType = modelType;
             Context = context;
             ContextMode = contextMode;
             TypeStack = new Stack<Type>();
@@ -55,10 +56,13 @@ namespace Catel.Runtime.Serialization
         }
 
         /// <summary>
-        /// Gets the model that needs serialization or deserialization.
+        /// Gets or sets the model that needs serialization or deserialization.
         /// </summary>
         /// <value>The model.</value>
-        public object Model { get; private set; }
+        /// <remarks>
+        /// Only set the model if you know what you are doing. In most (99.9%), you want to serializer to take care of this.
+        /// </remarks>
+        public object Model { get; set; }
 
         /// <summary>
         /// Gets the type of the model.

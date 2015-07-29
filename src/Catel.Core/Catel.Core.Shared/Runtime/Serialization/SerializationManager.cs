@@ -10,6 +10,8 @@ namespace Catel.Runtime.Serialization
     using System;
     using System.Linq;
     using System.Collections.Generic;
+    using System.Reflection;
+    using System.Runtime.Serialization;
     using Catel.Caching;
     using Catel.Data;
     using Catel.IoC;
@@ -30,11 +32,12 @@ namespace Catel.Runtime.Serialization
 
         private readonly object _lock = new object();
 
-        private readonly ICacheStorage<Type, HashSet<string>> _fieldsToSerializeCache = new CacheStorage<Type, HashSet<string>>();
-        private readonly ICacheStorage<Type, HashSet<string>> _propertiesToSerializeCache = new CacheStorage<Type, HashSet<string>>();
+        private readonly ICacheStorage<Type, Dictionary<string, MemberMetadata>> _fieldsToSerializeCache = new CacheStorage<Type, Dictionary<string, MemberMetadata>>();
+        private readonly ICacheStorage<Type, Dictionary<string, MemberMetadata>> _catelPropertiesToSerializeCache = new CacheStorage<Type, Dictionary<string, MemberMetadata>>();
+        private readonly ICacheStorage<Type, Dictionary<string, MemberMetadata>> _regularPropertiesToSerializeCache = new CacheStorage<Type, Dictionary<string, MemberMetadata>>();
 
-        private readonly ICacheStorage<Type, HashSet<string>> _catelPropertyNamesCache = new CacheStorage<Type, HashSet<string>>();
-        private readonly ICacheStorage<Type, Dictionary<string, MemberMetadata>> _catelPropertiesCache = new CacheStorage<Type, Dictionary<string, MemberMetadata>>();
+        private readonly ICacheStorage<string, HashSet<string>> _catelPropertyNamesCache = new CacheStorage<string, HashSet<string>>();
+        private readonly ICacheStorage<string, Dictionary<string, MemberMetadata>> _catelPropertiesCache = new CacheStorage<string, Dictionary<string, MemberMetadata>>();
 
         private readonly ICacheStorage<Type, HashSet<string>> _regularPropertyNamesCache = new CacheStorage<Type, HashSet<string>>();
         private readonly ICacheStorage<Type, Dictionary<string, MemberMetadata>> _regularPropertiesCache = new CacheStorage<Type, Dictionary<string, MemberMetadata>>();
@@ -62,7 +65,8 @@ namespace Catel.Runtime.Serialization
             lock (_lock)
             {
                 GetFieldsToSerialize(type);
-                GetPropertiesToSerialize(type);
+                GetCatelPropertiesToSerialize(type);
+                GetRegularPropertiesToSerialize(type);
 
                 GetCatelPropertyNames(type);
                 GetCatelProperties(type);
@@ -89,10 +93,16 @@ namespace Catel.Runtime.Serialization
             lock (_lock)
             {
                 _fieldsToSerializeCache.Remove(type);
-                _propertiesToSerializeCache.Remove(type);
+                _catelPropertiesToSerializeCache.Remove(type);
+                _regularPropertiesToSerializeCache.Remove(type);
 
-                _catelPropertyNamesCache.Remove(type);
-                _catelPropertiesCache.Remove(type);
+                var key1 = GetCacheKey(type, true);
+                var key2 = GetCacheKey(type, false);
+
+                _catelPropertyNamesCache.Remove(key1);
+                _catelPropertyNamesCache.Remove(key2);
+                _catelPropertiesCache.Remove(key1);
+                _catelPropertiesCache.Remove(key2);
 
                 _regularPropertyNamesCache.Remove(type);
                 _regularPropertiesCache.Remove(type);
@@ -113,65 +123,64 @@ namespace Catel.Runtime.Serialization
         /// <param name="type">The type.</param>
         /// <returns>The list of fields to serialize.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        public virtual HashSet<string> GetFieldsToSerialize(Type type)
+        public virtual Dictionary<string, MemberMetadata> GetFieldsToSerialize(Type type)
         {
             Argument.IsNotNull("type", type);
 
             return _fieldsToSerializeCache.GetFromCacheOrFetch(type, () =>
             {
-                var fields = new HashSet<string>();
+                var serializableMembers = new Dictionary<string, MemberMetadata>();
 
-                var typeFields = type.GetFieldsEx();
-                foreach (var typeField in typeFields)
+                var fields = GetFields(type);
+                foreach (var typeField in fields)
                 {
+                    var memberMetadata = typeField.Value;
+                    var fieldInfo = (FieldInfo)memberMetadata.Tag;
+
                     // Exclude fields by default
                     var include = false;
 
-                    if (AttributeHelper.IsDecoratedWithAttribute<IncludeInSerializationAttribute>(typeField))
+                    if (AttributeHelper.IsDecoratedWithAttribute<IncludeInSerializationAttribute>(fieldInfo))
                     {
                         include = true;
                     }
 
-                    if (AttributeHelper.IsDecoratedWithAttribute<ExcludeFromSerializationAttribute>(typeField))
+                    if (AttributeHelper.IsDecoratedWithAttribute<ExcludeFromSerializationAttribute>(fieldInfo))
                     {
                         include = false;
                     }
 
                     if (include)
                     {
-                        fields.Add(typeField.Name);
+                        serializableMembers.Add(typeField.Key, memberMetadata);
                     }
                 }
 
-                return fields;
+                return serializableMembers;
             });
         }
 
         /// <summary>
-        /// Gets the properties to serialize for the specified object.
+        /// Gets the catel properties to serialize.
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns>The list of properties to serialize.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        public virtual HashSet<string> GetPropertiesToSerialize(Type type)
+        public virtual Dictionary<string, MemberMetadata> GetCatelPropertiesToSerialize(Type type)
         {
             Argument.IsNotNull("type", type);
 
-            return _propertiesToSerializeCache.GetFromCacheOrFetch(type, () =>
+            return _catelPropertiesToSerializeCache.GetFromCacheOrFetch(type, () =>
             {
-                var properties = new HashSet<string>();
+                var serializableMembers = new Dictionary<string, MemberMetadata>();
 
-                var isModelBase = typeof(ModelBase).IsAssignableFromEx(type);
-
-                var propertyDataManager = PropertyDataManager.Default;
-                var catelTypeInfo = propertyDataManager.GetCatelTypeInfo(type);
-                var catelProperties = catelTypeInfo.GetCatelProperties();
-                var catelPropertyNames = new HashSet<string>(catelProperties.Keys);
-                foreach (var modelProperty in catelProperties)
+                var properties = GetCatelProperties(type);
+                foreach (var modelProperty in properties)
                 {
-                    var propertyData = modelProperty.Value;
+                    var memberMetadata = modelProperty.Value;
+                    var propertyData = (PropertyData)memberMetadata.Tag;
 
-                    bool isSerializable = typeof(ModelBase).IsAssignableFromEx(propertyData.Type) || propertyData.IsSerializable;
+                    bool isSerializable = propertyData.IsSerializable || typeof(ModelBase).IsAssignableFromEx(propertyData.Type);
                     if (!isSerializable)
                     {
                         // CTL-550
@@ -199,42 +208,71 @@ namespace Catel.Runtime.Serialization
                     {
                         if (!AttributeHelper.IsDecoratedWithAttribute<ExcludeFromSerializationAttribute>(propertyInfo.PropertyInfo))
                         {
-                            properties.Add(modelProperty.Key);
+                            serializableMembers.Add(modelProperty.Key, memberMetadata);
                         }
                     }
                     else
                     {
                         // Dynamic property, always include
-                        properties.Add(modelProperty.Key);
+                        serializableMembers.Add(modelProperty.Key, memberMetadata);
                     }
                 }
 
-                var typeProperties = type.GetPropertiesEx();
-                foreach (var typeProperty in typeProperties)
+                return serializableMembers;
+            });
+        }
+
+        /// <summary>
+        /// Gets the properties to serialize for the specified object.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>The list of properties to serialize.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
+        public virtual Dictionary<string, MemberMetadata> GetRegularPropertiesToSerialize(Type type)
+        {
+            Argument.IsNotNull("type", type);
+
+            return _regularPropertiesToSerializeCache.GetFromCacheOrFetch(type, () =>
+            {
+                var serializableMembers = new Dictionary<string, MemberMetadata>();
+
+                var catelPropertyNames = new HashSet<string>();
+
+                var isModelBase = typeof(ModelBase).IsAssignableFromEx(type);
+                if (isModelBase)
                 {
-                    if (!catelPropertyNames.Contains(typeProperty.Name))
+                    catelPropertyNames = GetCatelPropertyNames(type, true);
+                }
+
+                var regularProperties = GetRegularProperties(type);
+                foreach (var typeProperty in regularProperties)
+                {
+                    var memberMetadata = typeProperty.Value;
+                    var propertyInfo = (PropertyInfo)memberMetadata.Tag;
+
+                    if (!catelPropertyNames.Contains(memberMetadata.MemberName))
                     {
                         // If not a ModelBase, include by default
                         var include = !isModelBase;
 
-                        if (AttributeHelper.IsDecoratedWithAttribute<IncludeInSerializationAttribute>(typeProperty))
+                        if (AttributeHelper.IsDecoratedWithAttribute<IncludeInSerializationAttribute>(propertyInfo))
                         {
                             include = true;
                         }
 
-                        if (AttributeHelper.IsDecoratedWithAttribute<ExcludeFromSerializationAttribute>(typeProperty))
+                        if (AttributeHelper.IsDecoratedWithAttribute<ExcludeFromSerializationAttribute>(propertyInfo))
                         {
                             include = false;
                         }
 
                         if (include)
                         {
-                            properties.Add(typeProperty.Name);
+                            serializableMembers.Add(typeProperty.Key, memberMetadata);
                         }
                     }
                 }
 
-                return properties;
+                return serializableMembers;
             });
         }
 
@@ -242,21 +280,26 @@ namespace Catel.Runtime.Serialization
         /// Gets the catel property names.
         /// </summary>
         /// <param name="type">Type of the model.</param>
+        /// <param name="includeModelBaseProperties">if set to <c>true</c>, also include model base properties.</param>
         /// <returns>A hash set containing the Catel property names.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        public HashSet<string> GetCatelPropertyNames(Type type)
+        /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        public HashSet<string> GetCatelPropertyNames(Type type, bool includeModelBaseProperties = false)
         {
             Argument.IsNotNull("type", type);
 
-            return _catelPropertyNamesCache.GetFromCacheOrFetch(type, () =>
-            {
-                var propertyDataManager = PropertyDataManager.Default;
-                var catelTypeInfo = propertyDataManager.GetCatelTypeInfo(type);
-                var properties = (from property in catelTypeInfo.GetCatelProperties()
-                                  where !property.Value.IsModelBaseProperty
-                                  select property.Key);
+            var key = GetCacheKey(type, includeModelBaseProperties);
 
-                return new HashSet<string>(properties);
+            return _catelPropertyNamesCache.GetFromCacheOrFetch(key, () =>
+            {
+                var catelProperties = GetCatelProperties(type, includeModelBaseProperties);
+
+                var finalProperties = new HashSet<string>();
+                foreach (var property in catelProperties)
+                {
+                    finalProperties.Add(property.Key);
+                }
+
+                return finalProperties;
             });
         }
 
@@ -264,25 +307,47 @@ namespace Catel.Runtime.Serialization
         /// Gets the catel properties.
         /// </summary>
         /// <param name="type">Type of the model.</param>
+        /// <param name="includeModelBaseProperties">if set to <c>true</c>, also include model base properties.</param>
         /// <returns>A hash set containing the Catel properties.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        public Dictionary<string, MemberMetadata> GetCatelProperties(Type type)
+        /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        public Dictionary<string, MemberMetadata> GetCatelProperties(Type type, bool includeModelBaseProperties = false)
         {
             Argument.IsNotNull("type", type);
 
-            return _catelPropertiesCache.GetFromCacheOrFetch(type, () =>
+            var key = GetCacheKey(type, includeModelBaseProperties);
+
+            return _catelPropertiesCache.GetFromCacheOrFetch(key, () =>
             {
                 var dictionary = new Dictionary<string, MemberMetadata>();
 
                 var propertyDataManager = PropertyDataManager.Default;
                 var catelTypeInfo = propertyDataManager.GetCatelTypeInfo(type);
                 var properties = (from property in catelTypeInfo.GetCatelProperties()
-                                  where !property.Value.IsModelBaseProperty
-                                  select property.Value).ToList();
+                                  select property.Value);
+
+                if (!includeModelBaseProperties)
+                {
+                    properties = properties.Where(x => !x.IsModelBaseProperty);
+                }
 
                 foreach (var property in properties)
                 {
-                    dictionary[property.Name] = new MemberMetadata(type, property.Type, SerializationMemberGroup.CatelProperty, property.Name);
+                    var memberMetadata = new MemberMetadata(type, property.Type, SerializationMemberGroup.CatelProperty, property.Name)
+                    {
+                        Tag = property
+                    };
+
+                    var propertyInfo = property.GetPropertyInfo(type);
+                    if (propertyInfo != null && propertyInfo.PropertyInfo != null)
+                    {
+                        var nameOverride = GetNameOverrideForSerialization(propertyInfo.PropertyInfo);
+                        if (!string.IsNullOrWhiteSpace(nameOverride))
+                        {
+                            memberMetadata.MemberNameForSerialization = nameOverride;
+                        }
+                    }
+
+                    dictionary[property.Name] = memberMetadata;
                 }
 
                 return dictionary;
@@ -301,16 +366,12 @@ namespace Catel.Runtime.Serialization
 
             return _regularPropertyNamesCache.GetFromCacheOrFetch(type, () =>
             {
-                var catelPropertyNames = GetCatelPropertyNames(type);
-                var propertyNames = GetPropertiesToSerialize(type);
+                var regularPropertyNames = GetRegularProperties(type);
 
                 var finalProperties = new HashSet<string>();
-                foreach (var propertyName in propertyNames)
+                foreach (var propertyName in regularPropertyNames)
                 {
-                    if (!catelPropertyNames.Contains(propertyName))
-                    {
-                        finalProperties.Add(propertyName);
-                    }
+                    finalProperties.Add(propertyName.Key);
                 }
 
                 return finalProperties;
@@ -331,14 +392,29 @@ namespace Catel.Runtime.Serialization
             {
                 var dictionary = new Dictionary<string, MemberMetadata>();
 
-                var regularPropertyNames = GetRegularPropertyNames(type);
-                foreach (var property in regularPropertyNames)
+                var catelPropertyNames = GetCatelPropertyNames(type, true);
+
+                var regularProperties = type.GetPropertiesEx();
+                foreach (var propertyInfo in regularProperties)
                 {
-                    var propertyInfo = type.GetPropertyEx(property);
-                    if (propertyInfo != null)
+                    if (catelPropertyNames.Contains(propertyInfo.Name) ||
+                        propertyInfo.DeclaringType == typeof(ModelBase))
                     {
-                        dictionary[property] = new MemberMetadata(type, propertyInfo.PropertyType, SerializationMemberGroup.RegularProperty, property);
+                        continue;
                     }
+
+                    var memberMetadata = new MemberMetadata(type, propertyInfo.PropertyType, SerializationMemberGroup.RegularProperty, propertyInfo.Name)
+                    {
+                        Tag = propertyInfo
+                    };
+
+                    var nameOverride = GetNameOverrideForSerialization(propertyInfo);
+                    if (!string.IsNullOrWhiteSpace(nameOverride))
+                    {
+                        memberMetadata.MemberNameForSerialization = nameOverride;
+                    }
+
+                    dictionary[propertyInfo.Name] = memberMetadata;
                 }
 
                 return dictionary;
@@ -357,12 +433,12 @@ namespace Catel.Runtime.Serialization
 
             return _fieldNamesCache.GetFromCacheOrFetch(type, () =>
             {
-                var fieldNames = GetFieldsToSerialize(type);
+                var fieldNames = GetFields(type);
 
                 var finalFields = new HashSet<string>();
                 foreach (var fieldName in fieldNames)
                 {
-                    finalFields.Add(fieldName);
+                    finalFields.Add(fieldName.Key);
                 }
 
                 return finalFields;
@@ -383,14 +459,27 @@ namespace Catel.Runtime.Serialization
             {
                 var dictionary = new Dictionary<string, MemberMetadata>();
 
-                var fieldNames = GetFieldNames(type);
-                foreach (var field in fieldNames)
+                var fields = type.GetFieldsEx();
+                foreach (var fieldInfo in fields)
                 {
-                    var fieldInfo = type.GetFieldEx(field);
-                    if (fieldInfo != null)
+                    if (fieldInfo.Name.Contains("__BackingField") ||
+                        fieldInfo.DeclaringType == typeof (ModelBase))
                     {
-                        dictionary[field] = new MemberMetadata(type, fieldInfo.FieldType, SerializationMemberGroup.Field, field);
+                        continue;
                     }
+
+                    var memberMetadata = new MemberMetadata(type, fieldInfo.FieldType, SerializationMemberGroup.Field, fieldInfo.Name)
+                    {
+                        Tag = fieldInfo
+                    };
+
+                    var nameOverride = GetNameOverrideForSerialization(fieldInfo);
+                    if (!string.IsNullOrWhiteSpace(nameOverride))
+                    {
+                        memberMetadata.MemberNameForSerialization = nameOverride;
+                    }
+
+                    dictionary[fieldInfo.Name] = memberMetadata;
                 }
 
                 return dictionary;
@@ -446,6 +535,37 @@ namespace Catel.Runtime.Serialization
             modifiers.Reverse();
 
             return modifiers;
+        }
+
+        private string GetNameOverrideForSerialization(MemberInfo memberInfo)
+        {
+            var name = string.Empty;
+
+            DataMemberAttribute dataMemberAttribute = null;
+            if (AttributeHelper.TryGetAttribute(memberInfo, out dataMemberAttribute))
+            {
+                if (!string.IsNullOrWhiteSpace(dataMemberAttribute.Name))
+                {
+                    name = dataMemberAttribute.Name;
+                }
+            }
+
+            IncludeInSerializationAttribute includeInSerializationAttribute = null;
+            if (AttributeHelper.TryGetAttribute(memberInfo, out includeInSerializationAttribute))
+            {
+                if (!string.IsNullOrWhiteSpace(includeInSerializationAttribute.Name))
+                {
+                    name = includeInSerializationAttribute.Name;
+                }
+            }
+
+            return name;
+        }
+
+        private string GetCacheKey(Type type, bool additionalValue)
+        {
+            var key = string.Format("{0}_{1}", type.AssemblyQualifiedName, additionalValue);
+            return key;
         }
     }
 }

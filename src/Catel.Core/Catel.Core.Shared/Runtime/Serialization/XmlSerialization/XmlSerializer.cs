@@ -7,7 +7,6 @@
 namespace Catel.Runtime.Serialization.Xml
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -103,13 +102,19 @@ namespace Catel.Runtime.Serialization.Xml
             var fieldsToSerialize = SerializationManager.GetFieldsToSerialize(type);
             foreach (var fieldToSerialize in fieldsToSerialize)
             {
-                WarmupMember(type, fieldToSerialize, MemberType.Field);
+                WarmupMember(type, fieldToSerialize.Key, MemberType.Field);
             }
 
-            var propertiesToSerialize = SerializationManager.GetPropertiesToSerialize(type);
-            foreach (var propertyToSerialize in propertiesToSerialize)
+            var catelPropertiesToSerialize = SerializationManager.GetCatelPropertiesToSerialize(type);
+            foreach (var propertyToSerialize in catelPropertiesToSerialize)
             {
-                WarmupMember(type, propertyToSerialize, MemberType.Property);
+                WarmupMember(type, propertyToSerialize.Key, MemberType.Property);
+            }
+
+            var regularPropertiesToSerialize = SerializationManager.GetRegularPropertiesToSerialize(type);
+            foreach (var propertyToSerialize in regularPropertiesToSerialize)
+            {
+                WarmupMember(type, propertyToSerialize.Key, MemberType.Property);
             }
         }
 
@@ -213,6 +218,12 @@ namespace Catel.Runtime.Serialization.Xml
             var modelType = context.ModelType;
             var element = context.Context.Element;
 
+            if (memberValue.MemberGroup == SerializationMemberGroup.SimpleRootObject)
+            {
+                WriteXmlElement(context, element, memberValue.Name, memberValue, memberValue.MemberType);
+                return;
+            }
+
             if (ShouldSerializeAsDictionary(memberValue))
             {
                 // TODO: For now only support top-level dictionaries
@@ -264,6 +275,12 @@ namespace Catel.Runtime.Serialization.Xml
 
             try
             {
+                if (memberValue.MemberGroup == SerializationMemberGroup.SimpleRootObject)
+                {
+                    var value = GetObjectFromXmlElement(context, element.Element(RootObjectName), memberValue, modelType);
+                    return SerializationObject.SucceededToDeserialize(modelType, memberValue.MemberGroup, memberValue.Name, value);
+                }
+
                 if (memberValue.MemberGroup == SerializationMemberGroup.Dictionary)
                 {
                     var value = GetObjectFromXmlElement(context, element, memberValue, modelType);
@@ -406,10 +423,11 @@ namespace Catel.Runtime.Serialization.Xml
         /// Gets the context.
         /// </summary>
         /// <param name="model">The model.</param>
+        /// <param name="modelType">Type of the model.</param>
         /// <param name="stream">The stream.</param>
         /// <param name="contextMode">The context mode.</param>
         /// <returns>The serialization context.</returns>
-        protected override ISerializationContext<XmlSerializationContextInfo> GetContext(object model, Stream stream, SerializationContextMode contextMode)
+        protected override ISerializationContext<XmlSerializationContextInfo> GetContext(object model, Type modelType, Stream stream, SerializationContextMode contextMode)
         {
             XDocument document = null;
 
@@ -431,7 +449,6 @@ namespace Catel.Runtime.Serialization.Xml
                 var rootName = "root";
                 if (model != null)
                 {
-                    var modelType = model.GetType();
                     rootName = _rootNameCache.GetFromCacheOrFetch(modelType, () =>
                     {
                         if (ShouldSerializeAsCollection(modelType, model))
@@ -453,7 +470,7 @@ namespace Catel.Runtime.Serialization.Xml
             }
 
             var contextInfo = new XmlSerializationContextInfo(document.Root, model);
-            var context = new SerializationContext<XmlSerializationContextInfo>(model, contextInfo, contextMode);
+            var context = new SerializationContext<XmlSerializationContextInfo>(model, modelType, contextInfo, contextMode);
 
             if (isNewDocument)
             {

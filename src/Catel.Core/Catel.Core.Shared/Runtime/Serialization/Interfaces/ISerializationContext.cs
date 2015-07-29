@@ -34,7 +34,7 @@ namespace Catel.Runtime.Serialization
         /// Gets the model that needs serialization or deserialization.
         /// </summary>
         /// <value>The model.</value>
-        object Model { get; }
+        object Model { get; set; }
 
         /// <summary>
         /// Gets the type of the model.
