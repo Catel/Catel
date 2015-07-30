@@ -30,7 +30,7 @@ namespace Catel.MVVM.Views
         /// </summary>
         private readonly Dictionary<IView, int?> _registeredViews = new Dictionary<IView, int?>();
 
-        protected readonly object _syncObj = new object();
+        private readonly object _syncObj = new object();
         #endregion
 
         #region IViewManager Members
