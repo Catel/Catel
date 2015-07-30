@@ -118,6 +118,11 @@ namespace Catel.Runtime.Serialization.Json
             }
             else
             {
+                if (jsonReader.TokenType == JsonToken.Null)
+                {
+                    return null;
+                }
+
                 var jsonObject = JObject.Load(jsonReader);
                 jsonProperties = jsonObject.Properties().ToDictionary(x => x.Name, x => x);
 

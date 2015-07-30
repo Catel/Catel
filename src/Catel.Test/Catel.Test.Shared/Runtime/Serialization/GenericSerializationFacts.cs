@@ -569,6 +569,25 @@ namespace Catel.Test.Runtime.Serialization
                 #endregion
             }
 
+            [DataContract(Name = "filter")]
+            public class FilterDescriptor
+            {
+                [DataMember(Name = "field")]
+                public string Field { get; set; }
+
+                [DataMember(Name = "filters")]
+                public IEnumerable<FilterDescriptor> Filters { get; set; }
+
+                [DataMember(Name = "logic")]
+                public string LogicalOperator { get; set; }
+
+                [DataMember(Name = "operator")]
+                public string Operator { get; set; }
+
+                [DataMember(Name = "value")]
+                public object Value { get; set; }
+            }
+
             [TestCase]
             public void CanSerializeCollection()
             {
@@ -661,13 +680,14 @@ namespace Catel.Test.Runtime.Serialization
             [TestCase]
             public void CustomizedJsonParsingWithNullValue()
             {
-                var json = "{ \"skip\":0,\"take\":10,\"filter\":null}";
+                var json = "{ \"skip\":0,\"take\":10,\"filter\":null,\"includeDeleted\":false}";
 
                 CustomizedJsonParsing(json, parameters =>
                 {
                     Assert.AreEqual(0, parameters[0]);
                     Assert.AreEqual(10, parameters[1]);
-                    Assert.IsNull(parameters[2]);
+                    Assert.AreEqual(false, parameters[2]);
+                    Assert.IsNull(parameters[3]);
                 });
             }
 
@@ -678,13 +698,16 @@ namespace Catel.Test.Runtime.Serialization
 
                 CustomizedJsonParsing(json, parameters =>
                 {
+                    Assert.AreEqual(typeof(int), parameters[0].GetType());
                     Assert.AreEqual(0, parameters[0]);
+
+                    Assert.AreEqual(typeof(int), parameters[1].GetType());
                     Assert.AreEqual(10, parameters[1]);
 
-                    Assert.AreEqual(typeof(int), parameters[0].GetType());
-                    Assert.AreEqual(typeof(int), parameters[1].GetType());
+                    Assert.AreEqual(typeof(bool), parameters[2].GetType());
+                    Assert.AreEqual(false, parameters[2]);
 
-                    var sort = ((List<SortDescriptor>)parameters[2])[0];
+                    var sort = ((List<SortDescriptor>)parameters[3])[0];
                     Assert.IsNotNull(sort);
                     Assert.AreEqual("IsoCode", sort.Field);
                     Assert.AreEqual("asc", sort.Direction);
@@ -693,9 +716,9 @@ namespace Catel.Test.Runtime.Serialization
 
             private void CustomizedJsonParsing(string json, Action<object[]> assertAction)
             {
-                var parameters = new object[] { 0, 10, null, null };
-                var parameterTypes = new[] { typeof(int), typeof(int), typeof(IEnumerable<SortDescriptor>) };
-                var parameterNames = new Dictionary<string, int> { { "skip", 0 }, { "take", 1 }, { "sort", 2 } };
+                var parameters = new object[] { 0, 10, false, null, null };
+                var parameterTypes = new[] { typeof(int), typeof(int), typeof(bool), typeof(IEnumerable<SortDescriptor>), typeof(FilterDescriptor) };
+                var parameterNames = new Dictionary<string, int> { { "skip", 0 }, { "take", 1 }, { "includeDeleted", 2 }, { "sort", 3 }, { "filter", 4 } };
 
                 var serializer = GetJsonSerializer();
                 serializer.PreserveReferences = false;
