@@ -113,7 +113,7 @@ namespace Catel.Runtime.Serialization.Json
             }
             else if (ShouldExternalSerializerHandleMember(modelType, null))
             {
-                return jsonReader.Value;
+                return Convert.ChangeType(jsonReader.Value, modelType);
             }
             else
             {

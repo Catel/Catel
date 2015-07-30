@@ -715,6 +715,10 @@ namespace Catel.Test.Runtime.Serialization
 
                 Assert.AreEqual(0, parameters[0]);
                 Assert.AreEqual(10, parameters[1]);
+
+                Assert.AreEqual(typeof(int), parameters[0].GetType());
+                Assert.AreEqual(typeof(int), parameters[1].GetType());
+
                 var sort = ((List<SortDescriptor>)parameters[2])[0];
                 Assert.IsNotNull(sort);
                 Assert.AreEqual("IsoCode", sort.Field);
