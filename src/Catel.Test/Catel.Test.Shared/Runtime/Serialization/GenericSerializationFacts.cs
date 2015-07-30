@@ -548,7 +548,7 @@ namespace Catel.Test.Runtime.Serialization
                 public static Type[] GetKnownTypes()
                 {
                     var assembly = AppDomain.CurrentDomain.GetLoadedAssemblies(false).FirstOrDefault(a => a.FullName.StartsWith("DynamicClasses", StringComparison.Ordinal));
-                    var types = new List<Type>(assembly == null ? new Type[0] : assembly.GetTypes() .Where(t => t.Name.StartsWith("DynamicClass", StringComparison.Ordinal)) .ToArray());
+                    var types = new List<Type>(assembly == null ? new Type[0] : assembly.GetTypes().Where(t => t.Name.StartsWith("DynamicClass", StringComparison.Ordinal)).ToArray());
 
                     return types.ToArray();
                 }
@@ -659,11 +659,40 @@ namespace Catel.Test.Runtime.Serialization
             }
 
             [TestCase]
+            public void CustomizedJsonParsingWithNullValue()
+            {
+                var json = "{ \"skip\":0,\"take\":10,\"filter\":null}";
+
+                CustomizedJsonParsing(json, parameters =>
+                {
+                    Assert.AreEqual(0, parameters[0]);
+                    Assert.AreEqual(10, parameters[1]);
+                    Assert.IsNull(parameters[2]);
+                });
+            }
+
+            [TestCase]
             public void CustomizedJsonParsing()
             {
-                // it is not json dictionary standard (sort), so manual json parsing below is needed
-                var value = "{\"take\":10,\"skip\":0,\"page\":1,\"pageSize\":10,\"sort\":[{\"field\":\"IsoCode\",\"dir\":\"asc\"}]}";
+                var json = "{\"take\":10,\"skip\":0,\"page\":1,\"pageSize\":10,\"sort\":[{\"field\":\"IsoCode\",\"dir\":\"asc\"}]}";
 
+                CustomizedJsonParsing(json, parameters =>
+                {
+                    Assert.AreEqual(0, parameters[0]);
+                    Assert.AreEqual(10, parameters[1]);
+
+                    Assert.AreEqual(typeof(int), parameters[0].GetType());
+                    Assert.AreEqual(typeof(int), parameters[1].GetType());
+
+                    var sort = ((List<SortDescriptor>)parameters[2])[0];
+                    Assert.IsNotNull(sort);
+                    Assert.AreEqual("IsoCode", sort.Field);
+                    Assert.AreEqual("asc", sort.Direction);
+                });
+            }
+
+            private void CustomizedJsonParsing(string json, Action<object[]> assertAction)
+            {
                 var parameters = new object[] { 0, 10, null, null };
                 var parameterTypes = new[] { typeof(int), typeof(int), typeof(IEnumerable<SortDescriptor>) };
                 var parameterNames = new Dictionary<string, int> { { "skip", 0 }, { "take", 1 }, { "sort", 2 } };
@@ -675,7 +704,7 @@ namespace Catel.Test.Runtime.Serialization
                 using (var memoryStream = new MemoryStream())
                 {
                     var writer = new StreamWriter(memoryStream);
-                    writer.Write(value);
+                    writer.Write(json);
                     writer.Flush();
 
                     memoryStream.Position = 0L;
@@ -713,16 +742,7 @@ namespace Catel.Test.Runtime.Serialization
                     }
                 }
 
-                Assert.AreEqual(0, parameters[0]);
-                Assert.AreEqual(10, parameters[1]);
-
-                Assert.AreEqual(typeof(int), parameters[0].GetType());
-                Assert.AreEqual(typeof(int), parameters[1].GetType());
-
-                var sort = ((List<SortDescriptor>)parameters[2])[0];
-                Assert.IsNotNull(sort);
-                Assert.AreEqual("IsoCode", sort.Field);
-                Assert.AreEqual("asc", sort.Direction);
+                assertAction(parameters);
             }
         }
 
@@ -732,7 +752,7 @@ namespace Catel.Test.Runtime.Serialization
             [TestCase]
             public void WarmsUpSpecificTypes()
             {
-                var typesToWarmup = new [] { typeof(CircularTestModel), typeof(TestModel) };
+                var typesToWarmup = new[] { typeof(CircularTestModel), typeof(TestModel) };
 
                 TestSerializationOnAllSerializers((serializer, description) =>
                 {
