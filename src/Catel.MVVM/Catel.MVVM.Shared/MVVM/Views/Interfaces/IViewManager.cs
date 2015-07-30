@@ -48,14 +48,6 @@ namespace Catel.MVVM.Views
         /// <summary>
         /// Gets the first or default instance of the specified view type.
         /// </summary>
-        /// <typeparam name="TView">The type of the view.</typeparam>
-        /// <returns>The view or <c>null</c> if the view is not registered.</returns>
-        TView GetFirstOrDefaultInstance<TView>() 
-            where TView : IView;
-
-        /// <summary>
-        /// Gets the first or default instance of the specified view type.
-        /// </summary>
         /// <param name="viewType">Type of the view.</param>
         /// <returns>The <see cref="IViewModel"/> or <c>null</c> if the view model is not registered.</returns>
         /// <exception cref="System.ArgumentException">The <paramref name="viewType"/> is not of type <see cref="IView"/>.</exception>
