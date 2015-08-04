@@ -413,10 +413,22 @@ namespace Catel.MVVM
         private bool SupportIEditableObject { get; set; }
 
         /// <summary>
+        /// Gets a value indicating whether this instance is currently canceling.
+        /// </summary>
+        [ExcludeFromValidation]
+        protected bool IsCanceling { get; private set; }
+
+        /// <summary>
         /// Gets a value indicating whether this instance is currently saving.
         /// </summary>
         [ExcludeFromValidation]
         protected bool IsSaving { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is closing.
+        /// </summary>
+        /// <value><c>true</c> if this instance is closing; otherwise, <c>false</c>.</value>
+        protected bool IsClosing { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is closed. If a view model is closed, calling
@@ -889,7 +901,7 @@ namespace Catel.MVVM
         /// <param name="e">The <see cref="AdvancedPropertyChangedEventArgs"/> instance containing the event data.</param>
         protected override void OnPropertyChanged(AdvancedPropertyChangedEventArgs e)
         {
-            if (IsClosed)
+            if (IsSaving || IsCanceling || IsClosing || IsClosed)
             {
                 return;
             }
@@ -1511,12 +1523,15 @@ namespace Catel.MVVM
                 return false;
             }
 
+            IsCanceling = true;
+
             var eventArgs = new CancelingEventArgs();
             Canceling.SafeInvoke(this, eventArgs);
 
             if (eventArgs.Cancel)
             {
                 Log.Info("Canceling of view model '{0}' is canceled via the Canceling event", GetType());
+                IsCanceling = false;
                 return false;
             }
 
@@ -1525,6 +1540,7 @@ namespace Catel.MVVM
             Log.Info(cancel ? "Canceled view model '{0}'" : "Failed to cancel view model '{0}'", GetType());
             if (!cancel)
             {
+                IsCanceling = false;
                 return false;
             }
 
@@ -1539,6 +1555,8 @@ namespace Catel.MVVM
             Log.Info("Canceled view model '{0}'", GetType());
 
             Canceled.SafeInvoke(this);
+
+            IsCanceling = false;
 
             return true;
         }
@@ -1645,6 +1663,8 @@ namespace Catel.MVVM
 
             UninitializeThrottling();
 
+            IsClosing = true;
+
             OnClosing();
 
             ViewModelManager.UnregisterAllModels(this);
@@ -1653,9 +1673,10 @@ namespace Catel.MVVM
 
             SuspendValidation = true;
 
-            IsClosed = true;
-
             OnClosed(result);
+
+            IsClosing = false;
+            IsClosed = true;
 
             Log.Info("Closed view model '{0}'", GetType());
 
