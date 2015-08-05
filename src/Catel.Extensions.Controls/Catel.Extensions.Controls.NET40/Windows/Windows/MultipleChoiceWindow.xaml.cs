@@ -13,6 +13,7 @@ namespace Catel.Windows
     /// <summary>
     /// Interaction logic for MultipleChoiceWindow.xaml
     /// </summary>
+    [ObsoleteEx(Message = "Will be removed, copy to your own solution if you use it", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
     public partial class MultipleChoiceWindow : DataWindow
     {
         #region Fields
@@ -159,7 +160,7 @@ namespace Catel.Windows
 
             if (AllowSpecify)
             {
-                Choice specifyChoice = new Choice(ChoiceSpecify, string.Empty, true);
+                var specifyChoice = new Choice(ChoiceSpecify, string.Empty, true);
                 ChoiceCollection.Add(specifyChoice);
 
                 if (SelectedChoice == null)
