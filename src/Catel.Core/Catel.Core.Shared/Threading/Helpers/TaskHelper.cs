@@ -18,6 +18,11 @@ namespace Catel.Threading
     public static class TaskHelper
     {
         /// <summary>
+        /// The default configure await value.
+        /// </summary>
+        public const bool DefaultConfigureAwaitValue = false;
+
+        /// <summary>
         /// Runs the specified action using Task.Run if available. If <c>Task.Run</c> is not available on the target platform,
         /// it will use the right <c>Task.Factory.StartNew</c> usage.
         /// </summary>
@@ -37,11 +42,26 @@ namespace Catel.Threading
         /// <returns>Task.</returns>
         public static Task Run(Action action, CancellationToken cancellationToken)
         {
+            return Run(action, cancellationToken, DefaultConfigureAwaitValue);
+        }
+
+        /// <summary>
+        /// Runs the specified action using Task.Run if available. If <c>Task.Run</c> is not available on the target platform,
+        /// it will use the right <c>Task.Factory.StartNew</c> usage.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <param name="configureAwait">The value to be passed into ConfigureAwait.</param>
+        /// <returns>Task.</returns>
+        public static async Task Run(Action action, CancellationToken cancellationToken, bool configureAwait)
+        {
 #if NET40 || SL5
-            return Task.Factory.StartNew(action, cancellationToken, TaskCreationOptions.None, TaskScheduler.Default);
+            var task = return Task.Factory.StartNew(action, cancellationToken, TaskCreationOptions.None, TaskScheduler.Default);
 #else
-            return Task.Run(action, cancellationToken);
+            var task = Task.Run(action, cancellationToken);
 #endif
+
+            await task.ConfigureAwait(configureAwait);
         }
 
         /// <summary>
@@ -66,11 +86,27 @@ namespace Catel.Threading
         /// <returns>Task&lt;T&gt;.</returns>
         public static Task<TResult> Run<TResult>(Func<TResult> func, CancellationToken cancellationToken)
         {
+            return Run(func, cancellationToken, DefaultConfigureAwaitValue);
+        }
+
+        /// <summary>
+        /// Runs the specified function using Task.Run if available. If <c>Task.Run</c> is not available on the target platform,
+        /// it will use the right <c>Task.Factory.StartNew</c> usage.
+        /// </summary>
+        /// <typeparam name="TResult">Type of the result.</typeparam>
+        /// <param name="func">The function.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <param name="configureAwait">The value to be passed into ConfigureAwait.</param>
+        /// <returns>Task&lt;T&gt;.</returns>
+        public static async Task<TResult> Run<TResult>(Func<TResult> func, CancellationToken cancellationToken, bool configureAwait)
+        {
 #if NET40 || SL5
-            return Task.Factory.StartNew(func, cancellationToken, TaskCreationOptions.None, TaskScheduler.Default);
+            var task = Task.Factory.StartNew(func, cancellationToken, TaskCreationOptions.None, TaskScheduler.Default);
 #else
-            return Task.Run(func, cancellationToken);
+            var task = Task.Run(func, cancellationToken);
 #endif
+
+            return await task.ConfigureAwait(configureAwait);
         }
 
         /// <summary>
