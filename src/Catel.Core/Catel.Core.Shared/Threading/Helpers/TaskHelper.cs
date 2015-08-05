@@ -15,8 +15,85 @@ namespace Catel.Threading
     /// <summary>
     /// Helper class for tasks.
     /// </summary>
+    /// <typeparam name="T">The type of the tasks.</typeparam>
+    public static class TaskHelper<T>
+    {
+        private static readonly Dictionary<T, Task<T>> _fromResultCache = new Dictionary<T, Task<T>>();
+
+        private static readonly Task<T> _defaultValue = TaskShim.FromResult(default(T));
+
+        private static readonly Task<T> _canceled = CreateCanceledTask();
+
+        private static Task<T> CreateCanceledTask()
+        {
+            var tcs = new TaskCompletionSource<T>();
+            tcs.SetCanceled();
+            return tcs.Task;
+        }
+
+        /// <summary>
+        /// A <see cref="Task"/> return the default value of <typeparamref name="T"/>.
+        /// </summary>
+        public static Task<T> DefaultValue
+        {
+            get { return _defaultValue; }
+        }
+
+        /// <summary>
+        /// A <see cref="Task"/> representing a canceled task.
+        /// </summary>
+        public static Task<T> Canceled
+        {
+            get { return _canceled; }
+        }
+
+        /// <summary>
+        /// Creates a <see cref="Task"/> using the <c>Task.FromResult</c> method, but caches the result for the next call.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>Task&lt;T&gt;.</returns>
+        public static Task<T> FromResult(T value)
+        {
+            Task<T> task;
+
+            if (!_fromResultCache.ContainsKey(value))
+            {
+                task = TaskShim.FromResult(value);
+                _fromResultCache[value] = task;
+            }
+            else
+            {
+                task = _fromResultCache[value];
+            }
+
+            return task;
+        }
+    }
+
+    /// <summary>
+    /// Helper class for tasks.
+    /// </summary>
     public static class TaskHelper
     {
+        private static readonly Task _completed = TaskHelper<bool>.FromResult(true);
+        private static readonly Task _canceled = TaskHelper<bool>.Canceled;
+
+        /// <summary>
+        /// A <see cref="Task"/> that has been completed.
+        /// </summary>
+        public static Task Completed
+        {
+            get { return _completed; }
+        }
+
+        /// <summary>
+        /// A <see cref="Task"/> that has been canceled.
+        /// </summary>
+        public static Task Canceled
+        {
+            get { return _canceled; }
+        }
+
         /// <summary>
         /// The default configure await value.
         /// </summary>
@@ -55,11 +132,7 @@ namespace Catel.Threading
         /// <returns>Task.</returns>
         public static async Task Run(Action action, CancellationToken cancellationToken, bool configureAwait)
         {
-#if NET40 || SL5
-            var task = return Task.Factory.StartNew(action, cancellationToken, TaskCreationOptions.None, TaskScheduler.Default);
-#else
-            var task = Task.Run(action, cancellationToken);
-#endif
+            var task = TaskShim.Run(action, cancellationToken);
 
             await task.ConfigureAwait(configureAwait);
         }
@@ -100,11 +173,7 @@ namespace Catel.Threading
         /// <returns>Task&lt;T&gt;.</returns>
         public static async Task<TResult> Run<TResult>(Func<TResult> func, CancellationToken cancellationToken, bool configureAwait)
         {
-#if NET40 || SL5
-            var task = Task.Factory.StartNew(func, cancellationToken, TaskCreationOptions.None, TaskScheduler.Default);
-#else
-            var task = Task.Run(func, cancellationToken);
-#endif
+            var task = TaskShim.Run(func, cancellationToken);
 
             return await task.ConfigureAwait(configureAwait);
         }
@@ -118,11 +187,10 @@ namespace Catel.Threading
         {
             Argument.IsNotNull("actions", actions);
 
-            var list = actions.ToList();
-
 #if !SILVERLIGHT && !PCL
             Parallel.Invoke(actions);
 #elif PCL
+            var list = actions.ToList();
             var tasks = new List<Task>();
             for (int i = 0; i < list.Count; i++)
             {
@@ -133,6 +201,7 @@ namespace Catel.Threading
 
             Task.WaitAll(tasks.ToArray());
 #else
+            var list = actions.ToList();
             var handles = new ManualResetEvent[list.Count];
             for (var i = 0; i < list.Count; i++)
             {
@@ -169,7 +238,7 @@ namespace Catel.Threading
         /// <exception cref="ArgumentNullException">The <paramref name="actions"/> is <c>null</c>.</exception>
         public static Task RunAndWaitAsync(params Action[] actions)
         {
-            return TaskHelper.Run(() => TaskHelper.RunAndWait(actions));
+            return Run(() => RunAndWait(actions));
         }
 
         /// <summary>

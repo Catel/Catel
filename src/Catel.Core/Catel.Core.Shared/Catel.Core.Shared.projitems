@@ -376,6 +376,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Text\Extensions\StringBuilderExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Extensions\SynchronizationContextExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Helpers\TaskHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\Helpers\TaskShim.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Helpers\ThreadHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\ReaderWriterLockSlim.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\SynchronizationContext.cs" />
