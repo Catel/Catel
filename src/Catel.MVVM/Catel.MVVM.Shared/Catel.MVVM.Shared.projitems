@@ -304,7 +304,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\Test\AccelerometerService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Test\CameraService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Test\LocationService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\Test\MessageService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Test\NavigationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Test\OpenFileService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Test\PleaseWaitService.cs" />
