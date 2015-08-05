@@ -282,6 +282,7 @@ namespace Catel.Caching
         /// <returns>The instance initialized by the <paramref name="code" />.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
+        [ObsoleteEx(Message = "Member will be removed because it's not truly asynchronous", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         public Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<TValue> code, ExpirationPolicy expirationPolicy, bool @override = false)
         {
             return TaskHelper.Run(() => GetFromCacheOrFetch(key, code, expirationPolicy, @override));
@@ -299,6 +300,7 @@ namespace Catel.Caching
         /// <returns>The instance initialized by the <paramref name="code" />.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
+        [ObsoleteEx(Message = "Member will be removed because it's not truly asynchronous", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         public Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<TValue> code, bool @override = false, TimeSpan expiration = default(TimeSpan))
         {
             return TaskHelper.Run(() => GetFromCacheOrFetch(key, code, @override, expiration));
