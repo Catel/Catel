@@ -93,21 +93,6 @@ namespace Catel.MVVM
 
         #region Methods
         /// <summary>
-        /// Initializes the view model. Normally the initialization is done in the constructor, but sometimes this must be delayed
-        /// to a state where the associated UI element (user control, window, ...) is actually loaded.
-        /// <para />
-        /// This method is called as soon as the associated UI element is loaded.
-        /// </summary>
-        /// <remarks>
-        /// It's not recommended to implement the initialization of properties in this method. The initialization of properties
-        /// should be done in the constructor. This method should be used to start the retrieval of data from a web service or something
-        /// similar.
-        /// <para />
-        /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.
-        /// </remarks>
-        Task InitializeViewModel();
-
-        /// <summary>
         /// Validates the specified notify changed properties only.
         /// </summary>
         /// <param name="force">if set to <c>true</c>, a validation is forced (even if the object knows it is already validated).</param>
@@ -123,10 +108,48 @@ namespace Catel.MVVM
         bool ValidateViewModel(bool force = false, bool notifyChangedPropertiesOnly = true);
 
         /// <summary>
+        /// Initializes the view model. Normally the initialization is done in the constructor, but sometimes this must be delayed
+        /// to a state where the associated UI element (user control, window, ...) is actually loaded.
+        /// <para />
+        /// This method is called as soon as the associated UI element is loaded.
+        /// </summary>
+        /// <remarks>
+        /// It's not recommended to implement the initialization of properties in this method. The initialization of properties
+        /// should be done in the constructor. This method should be used to start the retrieval of data from a web service or something
+        /// similar.
+        /// <para />
+        /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.
+        /// </remarks>
+        [ObsoleteEx(ReplacementTypeOrMember = "Async overload", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
+        Task InitializeViewModel();
+
+        /// <summary>
+        /// Initializes the view model. Normally the initialization is done in the constructor, but sometimes this must be delayed
+        /// to a state where the associated UI element (user control, window, ...) is actually loaded.
+        /// <para />
+        /// This method is called as soon as the associated UI element is loaded.
+        /// </summary>
+        /// <remarks>
+        /// It's not recommended to implement the initialization of properties in this method. The initialization of properties
+        /// should be done in the constructor. This method should be used to start the retrieval of data from a web service or something
+        /// similar.
+        /// <para />
+        /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.
+        /// </remarks>
+        Task InitializeViewModelAsync();
+
+        /// <summary>
         /// Cancels the editing of the data.
         /// </summary>
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "Async overload", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         Task<bool> CancelViewModel();
+
+        /// <summary>
+        /// Cancels the editing of the data.
+        /// </summary>
+        /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
+        Task<bool> CancelViewModelAsync();
 
         /// <summary>
         /// Cancels the editing of the data, but also closes the view model in the same call.
@@ -134,6 +157,7 @@ namespace Catel.MVVM
         /// <returns>
         /// <c>true</c> if successful; otherwise <c>false</c>.
         /// </returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "Async extension method", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         Task<bool> CancelAndCloseViewModel();
 
         /// <summary>
@@ -142,7 +166,16 @@ namespace Catel.MVVM
         /// <returns>
         /// <c>true</c> if successful; otherwise <c>false</c>.
         /// </returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "Async overload", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         Task<bool> SaveViewModel();
+
+        /// <summary>
+        /// Saves the data.
+        /// </summary>
+        /// <returns>
+        /// <c>true</c> if successful; otherwise <c>false</c>.
+        /// </returns>
+        Task<bool> SaveViewModelAsync();
 
         /// <summary>
         /// Saves the data, but also closes the view model in the same call if the save succeeds.
@@ -150,13 +183,21 @@ namespace Catel.MVVM
         /// <returns>
         /// <c>true</c> if successful; otherwise <c>false</c>.
         /// </returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "Async extension method", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         Task<bool> SaveAndCloseViewModel();
 
         /// <summary>
         /// Closes this instance. Always called after the <see cref="CancelViewModel"/> of <see cref="SaveViewModel"/> method.
         /// </summary>
         /// <param name="result">The result to pass to the view. This will, for example, be used as <c>DialogResult</c>.</param>
+        [ObsoleteEx(ReplacementTypeOrMember = "Async overload", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         Task CloseViewModel(bool? result);
+
+        /// <summary>
+        /// Closes this instance. Always called after the <see cref="CancelViewModel"/> of <see cref="SaveViewModel"/> method.
+        /// </summary>
+        /// <param name="result">The result to pass to the view. This will, for example, be used as <c>DialogResult</c>.</param>
+        Task CloseViewModelAsync(bool? result);
         #endregion
     }
 }

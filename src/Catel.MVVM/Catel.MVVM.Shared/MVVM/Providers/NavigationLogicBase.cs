@@ -157,7 +157,7 @@ namespace Catel.MVVM.Providers
         {
             bool? result = true;
 
-            result = await SaveAndCloseViewModel();
+            result = await SaveAndCloseViewModelAsync();
 
             if (e.Uri != null && e.Uri.IsNavigationToExternal())
             {

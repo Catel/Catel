@@ -149,7 +149,8 @@ namespace Catel.ExceptionHandling
         /// <returns>
         /// The exception handler.
         /// </returns>
-        public IExceptionHandler GetHandler<TException>() where TException : Exception
+        public IExceptionHandler GetHandler<TException>() 
+            where TException : Exception
         {
             var exceptionType = typeof(TException);
 
@@ -422,6 +423,7 @@ namespace Catel.ExceptionHandling
             {
                 Exception lastError;
                 TimeSpan interval;
+
                 try
                 {
                     return await action().ConfigureAwait(false);
@@ -433,7 +435,6 @@ namespace Catel.ExceptionHandling
                         lastError = exception;
 
                         var exceptionHandler = ExceptionHandlers.FirstOrDefault(handler => handler.ExceptionType.IsAssignableFromEx(lastError.GetType()));
-
                         if (exceptionHandler != null && exceptionHandler.RetryPolicy != null)
                         {
                             var retryPolicy = exceptionHandler.RetryPolicy;
@@ -486,6 +487,7 @@ namespace Catel.ExceptionHandling
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        [ObsoleteEx(Message = "Member will be removed because it's not truly asynchronous", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         public Task ProcessAsync(Action action, CancellationToken cancellationToken = default(CancellationToken))
         {
             Argument.IsNotNull("action", action);
@@ -502,7 +504,7 @@ namespace Catel.ExceptionHandling
                 }
             }
 
-            return TaskHelper.Run(() => { }, cancellationToken);
+            return TaskHelper.Completed;
         }
 
         /// <summary>
@@ -575,7 +577,7 @@ namespace Catel.ExceptionHandling
                 }
             }
 
-            return TaskHelper.Run(() => default(TResult));
+            return TaskHelper<TResult>.DefaultValue;
         }
 
         /// <summary>

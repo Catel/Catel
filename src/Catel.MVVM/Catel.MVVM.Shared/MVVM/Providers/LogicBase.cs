@@ -17,6 +17,7 @@ namespace Catel.MVVM.Providers
     using MVVM;
     using Views;
     using Reflection;
+    using Threading;
 
     /// <summary>
     /// Available unload behaviors.
@@ -648,30 +649,32 @@ namespace Catel.MVVM.Providers
             TargetView.Dispatch(() =>
             {
 #pragma warning disable 4014
-                InitializeViewModel();
+                // No need to await
+                InitializeViewModelAsync();
 #pragma warning restore 4014
             });
 
             IsLoading = false;
         }
 
-        private async Task InitializeViewModel()
+        private async Task InitializeViewModelAsync()
         {
+            var viewModel = ViewModel;
             if (ViewModel != null)
             {
                 // Initialize the view model. The view model itself is responsible to prevent double initialization
-                await ViewModel.InitializeViewModel();
+                await viewModel.InitializeViewModel();
 
                 // Revalidate since the control already initialized the view model before the control
                 // was visible, therefore the WPF engine does not show warnings and errors
-                var viewModelAsViewModelBase = ViewModel as ViewModelBase;
+                var viewModelAsViewModelBase = viewModel as ViewModelBase;
                 if (viewModelAsViewModelBase != null)
                 {
                     viewModelAsViewModelBase.Validate(true, false);
                 }
                 else
                 {
-                    ViewModel.ValidateViewModel(true, false);
+                    viewModel.ValidateViewModel(true, false);
                 }
 
                 _isFirstValidationAfterLoaded = true;
@@ -782,7 +785,7 @@ namespace Catel.MVVM.Providers
                 return;
             }
 
-            if (ViewModel == dataContext)
+            if (ReferenceEquals(ViewModel, dataContext))
             {
                 return;
             }
@@ -865,7 +868,7 @@ namespace Catel.MVVM.Providers
                 return false;
             }
 
-            bool result = ViewModel.ValidateViewModel(_isFirstValidationAfterLoaded, false);
+            var result = ViewModel.ValidateViewModel(_isFirstValidationAfterLoaded, false);
 
             _isFirstValidationAfterLoaded = false;
 
@@ -876,72 +879,71 @@ namespace Catel.MVVM.Providers
         /// Cancels the view model.
         /// </summary>
         /// <returns><c>true</c> if the view model is successfully canceled; otherwise <c>false</c>.</returns>
-        public async virtual Task<bool> CancelViewModel()
+        public virtual Task<bool> CancelViewModelAsync()
         {
             if (ViewModel == null)
             {
-                return false;
+                return TaskHelper<bool>.FromResult(false);
             }
 
-            return await ViewModel.CancelViewModel();
+            return ViewModel.CancelViewModel();
         }
 
         /// <summary>
         /// Cancels and closes the view model.
         /// </summary>
         /// <returns><c>true</c> if the view model is successfully canceled; otherwise <c>false</c>.</returns>
-        public async Task<bool> CancelAndCloseViewModel()
+        public async Task<bool> CancelAndCloseViewModelAsync()
         {
-            var result = await CancelViewModel();
-            if (!result)
+            if (!await CancelViewModelAsync())
             {
-                return result;
+                return false;
             }
 
-            await CloseViewModel(result);
+            await CloseViewModelAsync(true);
 
-            return result;
+            return true;
         }
 
         /// <summary>
         /// Saves the view model.
         /// </summary>
         /// <returns><c>true</c> if the view model is successfully saved; otherwise <c>false</c>.</returns>
-        public async virtual Task<bool> SaveViewModel()
+        public virtual Task<bool> SaveViewModelAsync()
         {
             if (ViewModel == null)
             {
-                return false;
+                return TaskHelper<bool>.FromResult(false);
             }
 
-            return await ViewModel.SaveViewModel();
+            return ViewModel.SaveViewModel();
         }
 
         /// <summary>
         /// Saves and closes the view model. If the saving fails, the view model is not closed.
         /// </summary>
         /// <returns><c>true</c> if the view model is successfully saved; otherwise <c>false</c>.</returns>
-        public async Task<bool> SaveAndCloseViewModel()
+        public async Task<bool> SaveAndCloseViewModelAsync()
         {
-            var result = await SaveViewModel();
-            if (!result)
+            if (!await SaveViewModelAsync())
             {
-                return result;
+                return false;
             }
 
-            await CloseViewModel(result);
+            await CloseViewModelAsync(true);
 
-            return result;
+            return true;
         }
 
         /// <summary>
         /// Closes the view model.
         /// </summary>
-        public async virtual Task CloseViewModel(bool? result)
+        public async virtual Task CloseViewModelAsync(bool? result)
         {
-            if (ViewModel != null)
+            var vm = ViewModel;
+            if (vm != null)
             {
-                await ViewModel.CloseViewModel(result);
+                await vm.CloseViewModel(result);
                 ViewModel = null;
             }
         }

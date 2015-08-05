@@ -257,7 +257,23 @@ namespace Catel.MVVM.CSLA
         /// similar.
         /// <para />
         /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.</remarks>
-        async Task MVVM.IViewModel.InitializeViewModel()
+        Task MVVM.IViewModel.InitializeViewModel()
+        {
+            return ((MVVM.IViewModel) this).InitializeViewModelAsync();
+        }
+
+        /// <summary>
+        /// Initializes the view model. Normally the initialization is done in the constructor, but sometimes this must be delayed
+        /// to a state where the associated UI element (user control, window, ...) is actually loaded.
+        /// <para />
+        /// This method is called as soon as the associated UI element is loaded.
+        /// </summary>
+        /// <remarks>It's not recommended to implement the initialization of properties in this method. The initialization of properties
+        /// should be done in the constructor. This method should be used to start the retrieval of data from a web service or something
+        /// similar.
+        /// <para />
+        /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.</remarks>
+        async Task MVVM.IViewModel.InitializeViewModelAsync()
         {
             if (_isViewModelInitialized)
             {
@@ -297,7 +313,15 @@ namespace Catel.MVVM.CSLA
         /// <summary>
         /// Cancels the editing of the data.
         /// </summary>
-        async Task<bool> MVVM.IViewModel.CancelViewModel()
+        Task<bool> MVVM.IViewModel.CancelViewModel()
+        {
+            return ((MVVM.IViewModel)this).CancelViewModelAsync();
+        }
+
+        /// <summary>
+        /// Cancels the editing of the data.
+        /// </summary>
+        async Task<bool> MVVM.IViewModel.CancelViewModelAsync()
         {
             if (IsClosed)
             {
@@ -348,7 +372,18 @@ namespace Catel.MVVM.CSLA
         /// <returns>
         /// <c>true</c> if successful; otherwise <c>false</c>.
         /// </returns>
-        async Task<bool> MVVM.IViewModel.SaveViewModel()
+        Task<bool> MVVM.IViewModel.SaveViewModel()
+        {
+            return ((MVVM.IViewModel)this).SaveViewModelAsync();
+        }
+
+        /// <summary>
+        /// Saves the data.
+        /// </summary>
+        /// <returns>
+        /// <c>true</c> if successful; otherwise <c>false</c>.
+        /// </returns>
+        async Task<bool> MVVM.IViewModel.SaveViewModelAsync()
         {
             if (IsClosed)
             {
@@ -402,7 +437,16 @@ namespace Catel.MVVM.CSLA
         /// Closes this instance. Always called after the <see cref="M:Catel.MVVM.IViewModel.CancelViewModel"/> of <see cref="M:Catel.MVVM.IViewModel.SaveViewModel"/> method.
         /// </summary>
         /// <param name="result">The result to pass to the view. This will, for example, be used as <c>DialogResult</c>.</param>
-        async Task MVVM.IViewModel.CloseViewModel(bool? result)
+        Task MVVM.IViewModel.CloseViewModel(bool? result)
+        {
+            return ((MVVM.IViewModel)this).CloseViewModelAsync(result);
+        }
+
+        /// <summary>
+        /// Closes this instance. Always called after the <see cref="M:Catel.MVVM.IViewModel.CancelViewModel"/> of <see cref="M:Catel.MVVM.IViewModel.SaveViewModel"/> method.
+        /// </summary>
+        /// <param name="result">The result to pass to the view. This will, for example, be used as <c>DialogResult</c>.</param>
+        async Task MVVM.IViewModel.CloseViewModelAsync(bool? result)
         {
             if (IsClosed)
             {
@@ -430,7 +474,24 @@ namespace Catel.MVVM.CSLA
         /// similar.
         /// <para />
         /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.</remarks>
-        protected virtual async Task Initialize()
+        protected virtual Task Initialize()
+        {
+            return InitializeAsync();
+        }
+
+        /// <summary>
+        /// Initializes the view model. Normally the initialization is done in the constructor, but sometimes this must be delayed
+        /// to a state where the associated UI element (user control, window, ...) is actually loaded.
+        /// <para />
+        /// This method is called as soon as the associated UI element is loaded.
+        /// </summary>
+        /// <returns>Task.</returns>
+        /// <remarks>It's not recommended to implement the initialization of properties in this method. The initialization of properties
+        /// should be done in the constructor. This method should be used to start the retrieval of data from a web service or something
+        /// similar.
+        /// <para />
+        /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.</remarks>
+        protected virtual async Task InitializeAsync()
         {
         }
 

@@ -976,7 +976,7 @@ namespace Catel.Windows
         /// <returns>True if successful, otherwise false.</returns>
         protected async virtual Task<bool> ApplyChanges()
         {
-            return await _logic.SaveViewModel();
+            return await _logic.SaveViewModelAsync();
         }
 
         /// <summary>
@@ -984,7 +984,7 @@ namespace Catel.Windows
         /// </summary>
         protected async virtual Task<bool> DiscardChanges()
         {
-            return await _logic.CancelViewModel();
+            return await _logic.CancelViewModelAsync();
         }
 
         /// <summary>

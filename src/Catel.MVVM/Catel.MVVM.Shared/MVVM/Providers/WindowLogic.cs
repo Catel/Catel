@@ -223,7 +223,7 @@ namespace Catel.MVVM.Providers
                     Log.Warning("Failed to get the 'DialogResult' property of window type '{0}', using 'null' as dialog result", TargetWindow.GetType().Name);
                 }
 
-                await CloseViewModel(dialogResult);
+                await CloseViewModelAsync(dialogResult);
             }
 
             _dynamicEventListener.UnsubscribeFromEvent();

@@ -470,6 +470,7 @@ namespace Catel.Logging
         /// Flushes all listeners that implement the <see cref="IBatchLogListener" /> by calling <see cref="IBatchLogListener.Flush" />.
         /// </summary>
         /// <returns>Task so it can be awaited.</returns>
+        [ObsoleteEx(Message = "Member will be removed because it's not truly asynchronous", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         public static Task FlushAllAsync()
         {
             return TaskHelper.Run(() => FlushAll());

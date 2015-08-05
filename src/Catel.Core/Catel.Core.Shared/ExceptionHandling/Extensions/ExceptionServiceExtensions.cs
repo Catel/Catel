@@ -45,7 +45,11 @@ namespace Catel.ExceptionHandling
             Argument.IsNotNull("exceptionService", exceptionService);
             Argument.IsNotNull("action", action);
 
-            return exceptionService.ProcessWithRetryAsync(async () => { await action.ConfigureAwait(false); return default(object); });
+            return exceptionService.ProcessWithRetryAsync(async () => 
+            {
+                await action.ConfigureAwait(false);
+                return default(object);
+            });
         }
 
         /// <summary>
@@ -92,7 +96,11 @@ namespace Catel.ExceptionHandling
             Argument.IsNotNull("exceptionService", exceptionService);
             Argument.IsNotNull("action", action);
 
-            return exceptionService.ProcessWithRetryAsync(async () => { await action().ConfigureAwait(false); return default(object); });
+            return exceptionService.ProcessWithRetryAsync(async () =>
+            {
+                await action().ConfigureAwait(false);
+                return default(object);
+            });
         }
 
         /// <summary>
@@ -106,7 +114,11 @@ namespace Catel.ExceptionHandling
             Argument.IsNotNull("exceptionService", exceptionService);
             Argument.IsNotNull("action", action);
 
-            exceptionService.ProcessWithRetry(() => { action(); return default(object); });
+            exceptionService.ProcessWithRetry(() =>
+            {
+                action();
+                return default(object);
+            });
         }
     }
 }

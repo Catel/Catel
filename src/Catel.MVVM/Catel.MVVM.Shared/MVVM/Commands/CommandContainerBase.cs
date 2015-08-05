@@ -97,7 +97,7 @@ namespace Catel.MVVM
             _commandManager = commandManager;
 
             _compositeCommand = (ICompositeCommand) _commandManager.GetCommand(commandName);
-            _command = new TaskCommand<TExecuteParameter, TCanExecuteParameter, TPogress>(ExecuteAsyncInternal, CanExecute);
+            _command = new TaskCommand<TExecuteParameter, TCanExecuteParameter, TPogress>(ExecuteInternalAsync, CanExecute);
 
             _commandManager.RegisterCommand(commandName, _command);
         }
@@ -135,7 +135,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="parameter">The parameter.</param>
         /// <returns>Task.</returns>
-        private async Task ExecuteAsyncInternal(TExecuteParameter parameter)
+        private async Task ExecuteInternalAsync(TExecuteParameter parameter)
         {
             await ExecuteAsync(parameter);
 
