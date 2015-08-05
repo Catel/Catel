@@ -12,6 +12,7 @@ namespace Catel.Windows
     /// Window that contains a <see cref="Controls.MultiLineInput"/> control so the user is able
     /// to edit a multiline text value.
     /// </summary>
+    [ObsoleteEx(Message = "Will be removed, copy to your own solution if you use it", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
     public partial class MultiLineInputWindow : DataWindow
     {
         #region Fields
