@@ -480,7 +480,7 @@ namespace Catel.Windows
         /// </summary>
         protected async void OnOkExecute()
         {
-            if (!await ApplyChanges())
+            if (!await ApplyChangesAsync())
             {
                 return;
             }
@@ -514,7 +514,7 @@ namespace Catel.Windows
         /// </summary>
         protected async void OnCancelExecute()
         {
-            if (!await DiscardChanges())
+            if (!await DiscardChangesAsync())
             {
                 return;
             }
@@ -551,7 +551,7 @@ namespace Catel.Windows
         /// </summary>
         protected async void OnApplyExcute()
         {
-            await ApplyChanges();
+            await ApplyChangesAsync();
         }
 
         /// <summary>
@@ -949,7 +949,7 @@ namespace Catel.Windows
         {
             if (!ClosedByButton)
             {
-                await DiscardChanges();
+                await DiscardChangesAsync();
             }
         }
 
@@ -974,7 +974,17 @@ namespace Catel.Windows
         /// Applies all changes made by this window.
         /// </summary>
         /// <returns>True if successful, otherwise false.</returns>
-        protected async virtual Task<bool> ApplyChanges()
+        [ObsoleteEx(ReplacementTypeOrMember = "ApplyChangesAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
+        protected virtual Task<bool> ApplyChanges()
+        {
+            return ApplyChangesAsync();
+        }
+
+        /// <summary>
+        /// Applies all changes made by this window.
+        /// </summary>
+        /// <returns>True if successful, otherwise false.</returns>
+        protected async virtual Task<bool> ApplyChangesAsync()
         {
             return await _logic.SaveViewModelAsync();
         }
@@ -982,7 +992,16 @@ namespace Catel.Windows
         /// <summary>
         /// Discards all changes made by this window.
         /// </summary>
-        protected async virtual Task<bool> DiscardChanges()
+        [ObsoleteEx(ReplacementTypeOrMember = "DiscardChangesAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
+        protected virtual Task<bool> DiscardChanges()
+        {
+            return DiscardChangesAsync();
+        }
+
+        /// <summary>
+        /// Discards all changes made by this window.
+        /// </summary>
+        protected async virtual Task<bool> DiscardChangesAsync()
         {
             return await _logic.CancelViewModelAsync();
         }

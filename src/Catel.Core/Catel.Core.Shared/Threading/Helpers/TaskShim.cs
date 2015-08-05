@@ -28,6 +28,68 @@ namespace Catel.Threading
     internal static class TaskShim
     {
         /// <summary>
+        /// Creates a task that will complete after a time delay.
+        /// </summary>
+        /// <param name="millisecondsDelay">The number of milliseconds to wait before completing the returned task</param>
+        /// <returns>A task that represents the time delay</returns>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">The <paramref name="millisecondsDelay" /> is less than -1.</exception>
+        public static Task Delay(int millisecondsDelay)
+        {
+#if USE_TASKEX
+            return TaskEx.Delay(millisecondsDelay);
+#else
+            return Task.Delay(millisecondsDelay);
+#endif
+        }
+
+        /// <summary>
+        /// Creates a task that will complete after a time delay.
+        /// </summary>
+        /// <param name="millisecondsDelay">The number of milliseconds to wait before completing the returned task</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A task that represents the time delay</returns>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">The <paramref name="millisecondsDelay" /> is less than -1.</exception>
+        public static Task Delay(int millisecondsDelay, CancellationToken cancellationToken)
+        {
+#if USE_TASKEX
+            return TaskEx.Delay(millisecondsDelay, cancellationToken);
+#else
+            return Task.Delay(millisecondsDelay, cancellationToken);
+#endif
+        }
+
+        /// <summary>
+        /// Starts a Task that will complete after the specified due time.
+        /// </summary>
+        /// <param name="dueTime">The delay before the returned task completes.</param>
+        /// <returns>The timed Task.</returns>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">The <paramref name="dueTime" /> argument must be non-negative or -1 and less than or equal to Int32.MaxValue.</exception>
+        public static Task Delay(TimeSpan dueTime)
+        {
+#if USE_TASKEX
+            return TaskEx.Delay(dueTime);
+#else
+            return Task.Delay(dueTime);
+#endif
+        }
+
+        /// <summary>
+        /// Starts a Task that will complete after the specified due time.
+        /// </summary>
+        /// <param name="dueTime">The delay before the returned task completes.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The timed Task.</returns>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">The <paramref name="dueTime" /> argument must be non-negative or -1 and less than or equal to Int32.MaxValue.</exception>
+        public static Task Delay(TimeSpan dueTime, CancellationToken cancellationToken)
+        {
+#if USE_TASKEX
+            return TaskEx.Delay(dueTime, cancellationToken);
+#else
+            return Task.Delay(dueTime, cancellationToken);
+#endif
+        }
+
+        /// <summary>
         /// Queues the specified work to run on the ThreadPool and returns a task handle for that work.
         /// </summary>
         /// <param name="action">The work to execute asynchronously.</param>
@@ -246,21 +308,6 @@ namespace Catel.Threading
             return TaskEx.Yield();
 #else
             return Task.Yield();
-#endif
-        }
-
-        /// <summary>
-        /// Creates a task that will complete after a time delay.
-        /// </summary>
-        /// <param name="millisecondsDelay">The number of milliseconds to wait before completing the returned task</param>
-        /// <returns>A task that represents the time delay</returns>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">The <paramref name="millisecondsDelay" /> is less than -1.</exception>
-        public static Task Delay(int millisecondsDelay)
-        {
-#if USE_TASKEX
-            return TaskEx.Delay(millisecondsDelay);
-#else
-            return Task.Delay(millisecondsDelay);
 #endif
         }
 

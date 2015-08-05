@@ -8,6 +8,7 @@ namespace Catel.MVVM.Providers
 {
     using System;
     using System.ComponentModel;
+    using System.Threading.Tasks;
     using ApiCop;
     using ApiCop.Rules;
     using IoC;
@@ -349,7 +350,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        public override void OnTargetViewLoaded(object sender, EventArgs e)
+        public override async void OnTargetViewLoaded(object sender, EventArgs e)
         {
             // Do not call base because it will create a VM. We will create the VM ourselves
             //base.OnTargetControlLoaded(sender, e);
@@ -397,7 +398,7 @@ namespace Catel.MVVM.Providers
             if (ViewModel == null)
             {
                 // Try to create view model based on data context
-                UpdateDataContextToUseViewModel(TargetView.DataContext);
+                await UpdateDataContextToUseViewModelAsync(TargetView.DataContext);
             }
 
             if (DisableWhenNoViewModel)
@@ -411,7 +412,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        public override void OnTargetViewUnloaded(object sender, EventArgs e)
+        public override async void OnTargetViewUnloaded(object sender, EventArgs e)
         {
             base.OnTargetViewUnloaded(sender, e);
 
@@ -425,7 +426,7 @@ namespace Catel.MVVM.Providers
             if (CloseViewModelOnUnloaded)
             {
                 bool? result = GetViewModelResultValueFromUnloadBehavior();
-                CloseAndDisposeViewModel(result);
+                await CloseAndDisposeViewModelAsync(result);
             }
             else
             {
@@ -459,7 +460,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        public override void OnTargetViewDataContextChanged(object sender, Catel.MVVM.Views.DataContextChangedEventArgs e)
+        public override async void OnTargetViewDataContextChanged(object sender, Catel.MVVM.Views.DataContextChangedEventArgs e)
         {
             if (e.AreEqual)
             {
@@ -491,7 +492,7 @@ namespace Catel.MVVM.Providers
 
             if (!IsUnloading)
             {
-                UpdateDataContextToUseViewModel(dataContext);
+                await UpdateDataContextToUseViewModelAsync(dataContext);
             }
         }
 
@@ -647,7 +648,7 @@ namespace Catel.MVVM.Providers
         /// Updates the data context to use view model.
         /// </summary>
         /// <param name="newDataContext">The new data context.</param>
-        private void UpdateDataContextToUseViewModel(object newDataContext)
+        private async Task UpdateDataContextToUseViewModelAsync(object newDataContext)
         {
             SubscribeToParentViewModelContainer();
 
@@ -673,7 +674,7 @@ namespace Catel.MVVM.Providers
                     if (ViewModel != null)
                     {
                         bool? result = GetViewModelResultValueFromUnloadBehavior();
-                        CloseAndDisposeViewModel(result);
+                        await CloseAndDisposeViewModelAsync(result);
                     }
 
                     ViewModel = ConstructViewModelUsingArgumentOrDefaultConstructor(newDataContext);
@@ -684,7 +685,7 @@ namespace Catel.MVVM.Providers
                 if (ViewModel != null)
                 {
                     bool? result = GetViewModelResultValueFromUnloadBehavior();
-                    CloseAndDisposeViewModel(result);
+                    await CloseAndDisposeViewModelAsync(result);
                 }
 
                 // We closed our previous view-model, but it might be possible to construct a new view-model
@@ -695,7 +696,7 @@ namespace Catel.MVVM.Providers
 
         /// <summary>
         /// Gets the view model result value based on the <see cref="UnloadBehavior"/> property so it can be used for
-        /// the <see cref="CloseAndDisposeViewModel"/> method.
+        /// the <see cref="CloseAndDisposeViewModelAsync"/> method.
         /// </summary>
         /// <returns>The right value.</returns>
         private bool? GetViewModelResultValueFromUnloadBehavior()
@@ -724,23 +725,24 @@ namespace Catel.MVVM.Providers
         /// Closes and disposes the current view model.
         /// </summary>
         /// <param name="result"><c>true</c> if the view model should be saved; <c>false</c> if the view model should be canceled; <c>null</c> if it should only be closed.</param>
-        private void CloseAndDisposeViewModel(bool? result)
+        private async Task CloseAndDisposeViewModelAsync(bool? result)
         {
-            if (ViewModel != null)
+            var vm = ViewModel;
+            if (vm != null)
             {
                 if (result.HasValue)
                 {
                     if (result.Value)
                     {
-                        ViewModel.SaveViewModel();
+                        await vm.SaveViewModelAsync();
                     }
                     else
                     {
-                        ViewModel.CancelViewModel();
+                        await vm.CancelViewModelAsync();
                     }
                 }
 
-                ViewModel.CloseViewModel(result);
+                await vm.CloseViewModelAsync(result);
                 ViewModel = null;
             }
         }
@@ -819,7 +821,7 @@ namespace Catel.MVVM.Providers
 
                 if (!ViewModel.IsClosed)
                 {
-                    e.Cancel = !await ViewModel.CancelViewModel();
+                    e.Cancel = !await ViewModel.CancelViewModelAsync();
                 }
             }
         }
@@ -850,7 +852,7 @@ namespace Catel.MVVM.Providers
 
                 if (!ViewModel.IsClosed)
                 {
-                    e.Cancel = !await ViewModel.SaveViewModel();
+                    e.Cancel = !await ViewModel.SaveViewModelAsync();
                 }
             }
         }
@@ -860,7 +862,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private void OnParentViewModelClosing(object sender, EventArgs e)
+        private async void OnParentViewModelClosing(object sender, EventArgs e)
         {
             if (ViewModel != null)
             {
@@ -874,7 +876,7 @@ namespace Catel.MVVM.Providers
 
                 IgnoreNullDataContext = true;
 
-                CloseAndDisposeViewModel(null);
+                await CloseAndDisposeViewModelAsync(null);
             }
         }
 

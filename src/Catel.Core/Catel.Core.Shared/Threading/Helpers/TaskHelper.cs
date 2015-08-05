@@ -100,8 +100,7 @@ namespace Catel.Threading
         public const bool DefaultConfigureAwaitValue = false;
 
         /// <summary>
-        /// Runs the specified action using Task.Run if available. If <c>Task.Run</c> is not available on the target platform,
-        /// it will use the right <c>Task.Factory.StartNew</c> usage.
+        /// Runs the specified action using Task.Run if available.
         /// </summary>
         /// <param name="action">The action.</param>
         /// <returns>Task.</returns>
@@ -111,8 +110,7 @@ namespace Catel.Threading
         }
 
         /// <summary>
-        /// Runs the specified action using Task.Run if available. If <c>Task.Run</c> is not available on the target platform,
-        /// it will use the right <c>Task.Factory.StartNew</c> usage.
+        /// Runs the specified action using Task.Run if available.
         /// </summary>
         /// <param name="action">The action.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
@@ -123,8 +121,7 @@ namespace Catel.Threading
         }
 
         /// <summary>
-        /// Runs the specified action using Task.Run if available. If <c>Task.Run</c> is not available on the target platform,
-        /// it will use the right <c>Task.Factory.StartNew</c> usage.
+        /// Runs the specified action using Task.Run if available.
         /// </summary>
         /// <param name="action">The action.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
@@ -138,8 +135,7 @@ namespace Catel.Threading
         }
 
         /// <summary>
-        /// Runs the specified function using Task.Run if available. If <c>Task.Run</c> is not available on the target platform,
-        /// it will use the right <c>Task.Factory.StartNew</c> usage.
+        /// Runs the specified function using Task.Run if available.
         /// </summary>
         /// <typeparam name="TResult"></typeparam>
         /// <param name="func">The function.</param>
@@ -150,8 +146,7 @@ namespace Catel.Threading
         }
 
         /// <summary>
-        /// Runs the specified function using Task.Run if available. If <c>Task.Run</c> is not available on the target platform,
-        /// it will use the right <c>Task.Factory.StartNew</c> usage.
+        /// Runs the specified function using Task.Run if available.
         /// </summary>
         /// <typeparam name="TResult">Type of the result.</typeparam>
         /// <param name="func">The function.</param>
@@ -163,8 +158,7 @@ namespace Catel.Threading
         }
 
         /// <summary>
-        /// Runs the specified function using Task.Run if available. If <c>Task.Run</c> is not available on the target platform,
-        /// it will use the right <c>Task.Factory.StartNew</c> usage.
+        /// Runs the specified function using Task.Run if available.
         /// </summary>
         /// <typeparam name="TResult">Type of the result.</typeparam>
         /// <param name="func">The function.</param>

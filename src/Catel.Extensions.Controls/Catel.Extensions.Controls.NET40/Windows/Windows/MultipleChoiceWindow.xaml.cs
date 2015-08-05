@@ -191,7 +191,7 @@ namespace Catel.Windows
         /// </summary>
         /// <returns>True if successful, otherwise false.</returns>
 #pragma warning disable 1998
-        protected override async Task<bool> ApplyChanges()
+        protected override async Task<bool> ApplyChangesAsync()
 #pragma warning restore 1998
         {
             return true;
@@ -202,7 +202,7 @@ namespace Catel.Windows
         /// </summary>
         /// <returns>True if successful, otherwise false.</returns>
 #pragma warning disable 1998
-        protected override async Task<bool> DiscardChanges()
+        protected override async Task<bool> DiscardChangesAsync()
 #pragma warning restore 1998
         {
             Choice = string.Empty;

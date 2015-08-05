@@ -235,7 +235,7 @@
             viewModel.FirstName = "test1";
             Assert.AreEqual("test1", person.FirstName);
 
-            await viewModel.CloseViewModel(true);
+            await viewModel.CloseViewModelAsync(true);
             viewModel.FirstName = "test2";
 
             Assert.AreEqual("test1", person.FirstName);
@@ -442,7 +442,7 @@
 #endif
             Assert.IsTrue(validationTriggered, "Validating event is not triggered");
 
-            await childViewModel.CloseViewModel(null);
+            await childViewModel.CloseViewModelAsync(null);
 
             validationTriggered = false;
             validatedEvent.Reset();
@@ -556,7 +556,7 @@
 
             viewModel.FirstName = "new";
 
-            await viewModel.SaveAndCloseViewModel();
+            await viewModel.SaveAndCloseViewModelAsync();
 
             Assert.IsFalse(model.IsInEditSession);
             Assert.AreEqual("new", person.FirstName);
@@ -575,7 +575,7 @@
 
             viewModel.FirstName = "new first name";
 
-            await viewModel.CancelAndCloseViewModel();
+            await viewModel.CancelAndCloseViewModelAsync();
 
             Assert.IsFalse(model.IsInEditSession);
             Assert.AreEqual("first name", person.FirstName);
@@ -831,7 +831,7 @@
             Assert.AreEqual(false, auditor.OnViewModelCanceledCalled);
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
 
-            await vm.CancelAndCloseViewModel();
+            await vm.CancelAndCloseViewModelAsync();
 
             Assert.AreEqual(true, auditor.OnViewModelCanceledCalled);
             Assert.AreEqual(true, auditor.OnViewModelClosedCalled);
@@ -839,7 +839,7 @@
             auditor.OnViewModelCanceledCalled = false;
             auditor.OnViewModelClosedCalled = false;
 
-            await vm.CancelAndCloseViewModel();
+            await vm.CancelAndCloseViewModelAsync();
 
             Assert.AreEqual(false, auditor.OnViewModelCanceledCalled);
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
@@ -856,7 +856,7 @@
             Assert.AreEqual(false, auditor.OnViewModelSavedCalled);
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
 
-            await vm.SaveAndCloseViewModel();
+            await vm.SaveAndCloseViewModelAsync();
 
             Assert.AreEqual(true, auditor.OnViewModelSavedCalled);
             Assert.AreEqual(true, auditor.OnViewModelClosedCalled);
@@ -864,7 +864,7 @@
             auditor.OnViewModelSavedCalled = false;
             auditor.OnViewModelClosedCalled = false;
 
-            await vm.SaveAndCloseViewModel();
+            await vm.SaveAndCloseViewModelAsync();
 
             Assert.AreEqual(false, auditor.OnViewModelSavedCalled);
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
@@ -880,13 +880,13 @@
 
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
 
-            await vm.CloseViewModel(null);
+            await vm.CloseViewModelAsync(null);
 
             Assert.AreEqual(true, auditor.OnViewModelClosedCalled);
 
             auditor.OnViewModelClosedCalled = false;
 
-            await vm.CloseViewModel(null);
+            await vm.CloseViewModelAsync(null);
 
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
         }

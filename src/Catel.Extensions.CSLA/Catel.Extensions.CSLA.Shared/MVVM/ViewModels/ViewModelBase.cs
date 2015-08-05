@@ -280,7 +280,7 @@ namespace Catel.MVVM.CSLA
                 return;
             }
 
-            await Initialize();
+            await InitializeAsync();
 
             _isViewModelInitialized = true;
 
@@ -356,12 +356,12 @@ namespace Catel.MVVM.CSLA
                 return true;
             }
 
-            if (!await CatelViewModel.CancelViewModel())
+            if (!await CatelViewModel.CancelViewModelAsync())
             {
                 return false;
             }
 
-            await CatelViewModel.CloseViewModel(false);
+            await CatelViewModel.CloseViewModelAsync(false);
 
             return true;
         }
@@ -424,12 +424,12 @@ namespace Catel.MVVM.CSLA
                 return false;
             }
 
-            if (!await CatelViewModel.SaveViewModel())
+            if (!await CatelViewModel.SaveViewModelAsync())
             {
                 return false;
             }
 
-            await CatelViewModel.CloseViewModel(true);
+            await CatelViewModel.CloseViewModelAsync(true);
             return true;
         }
 

@@ -204,7 +204,7 @@ namespace Catel.Test.MVVM
 
                 Assert.IsFalse(vm.IsTestCommand1Executed);
 
-                await vm.CloseViewModel(false);
+                await vm.CloseViewModelAsync(false);
 
                 compositeCommand.Execute();
 

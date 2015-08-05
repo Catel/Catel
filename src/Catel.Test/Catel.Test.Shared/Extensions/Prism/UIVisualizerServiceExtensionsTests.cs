@@ -578,7 +578,7 @@ namespace Catel.Test.Extensions.Prism
             /// The is called is the method is close and remove method of the region is called.
             /// </summary>
             [TestCase, Explicit]
-            public void IsCalledIsTheMethodIsCloseAndRemoveMethodOfTheRegionIsCalled()
+            public async Task IsCalledIsTheMethodIsCloseAndRemoveMethodOfTheRegionIsCalled()
             {
                 SetupRegionManagerBehaviorRelatedWithMainRegion();
 
@@ -593,7 +593,7 @@ namespace Catel.Test.Extensions.Prism
                 var uiCompositionService = _serviceLocator.ResolveType<IUICompositionService>();
                 uiCompositionService.Activate(fooViewModel, MainRegionName);
 
-                fooViewModel.CloseViewModel(true);
+                await fooViewModel.CloseViewModelAsync(true);
 
                 _mainRegionMock.Verify(region => region.Remove(It.IsAny<FooViewModelView>()), Times.Once());
             }

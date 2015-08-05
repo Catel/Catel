@@ -50,9 +50,9 @@ namespace Catel.Test.MVVM
             {
                 var viewModel = new TestViewModel();
                 var viewModelCommandManager = ViewModelCommandManager.Create(viewModel);
-                await viewModel.InitializeViewModel();
+                await viewModel.InitializeViewModelAsync();
 
-                bool called = false;
+                var called = false;
 
                 viewModelCommandManager.AddHandler((vm, property, command, commandParameter) => called = true);
                 viewModel.GenerateData.Execute();

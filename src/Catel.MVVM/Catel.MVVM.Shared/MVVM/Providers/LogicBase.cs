@@ -276,7 +276,7 @@ namespace Catel.MVVM.Providers
 
                 if ((_viewModel != null) && IsTargetViewLoaded)
                 {
-                    _viewModel.InitializeViewModel();
+                    _viewModel.InitializeViewModelAsync();
                 }
             }
         }
@@ -663,7 +663,7 @@ namespace Catel.MVVM.Providers
             if (ViewModel != null)
             {
                 // Initialize the view model. The view model itself is responsible to prevent double initialization
-                await viewModel.InitializeViewModel();
+                await viewModel.InitializeViewModelAsync();
 
                 // Revalidate since the control already initialized the view model before the control
                 // was visible, therefore the WPF engine does not show warnings and errors
@@ -886,7 +886,7 @@ namespace Catel.MVVM.Providers
                 return TaskHelper<bool>.FromResult(false);
             }
 
-            return ViewModel.CancelViewModel();
+            return ViewModel.CancelViewModelAsync();
         }
 
         /// <summary>
@@ -916,7 +916,7 @@ namespace Catel.MVVM.Providers
                 return TaskHelper<bool>.FromResult(false);
             }
 
-            return ViewModel.SaveViewModel();
+            return ViewModel.SaveViewModelAsync();
         }
 
         /// <summary>
@@ -943,7 +943,7 @@ namespace Catel.MVVM.Providers
             var vm = ViewModel;
             if (vm != null)
             {
-                await vm.CloseViewModel(result);
+                await vm.CloseViewModelAsync(result);
                 ViewModel = null;
             }
         }

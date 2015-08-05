@@ -22,10 +22,10 @@ namespace Catel.MVVM
         {
             Argument.IsNotNull("viewModel", viewModel);
 
-            var result = await viewModel.SaveViewModel();
+            var result = await viewModel.SaveViewModelAsync();
             if (result)
             {
-                await viewModel.CloseViewModel(true);
+                await viewModel.CloseViewModelAsync(true);
             }
 
             return result;
@@ -39,10 +39,10 @@ namespace Catel.MVVM
         {
             Argument.IsNotNull("viewModel", viewModel);
 
-            var result = await viewModel.CancelViewModel();
+            var result = await viewModel.CancelViewModelAsync();
             if (result)
             {
-                await viewModel.CloseViewModel(false);
+                await viewModel.CloseViewModelAsync(false);
             }
 
             return result;
