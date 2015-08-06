@@ -8,6 +8,7 @@ namespace Catel.Services
 {
     using System;
     using System.Linq;
+    using System.Threading.Tasks;
     using System.Windows;
 
     using Catel.Caching;
@@ -17,6 +18,7 @@ namespace Catel.Services
     using Catel.Windows.Controls;
 
     using Microsoft.Practices.Prism.Regions;
+    using Threading;
 
     /// <summary>
     /// The user interface composition service.
@@ -225,7 +227,7 @@ namespace Catel.Services
                             if (!region.Views.Contains(view))
                             {
                                 region.Add(view);
-                                viewModel.Closed += ViewModelOnClosed;
+                                viewModel.ClosedAsync += ViewModelOnClosedAsync;
                             }
 
                             region.Activate(view);
@@ -250,11 +252,13 @@ namespace Catel.Services
         /// </summary>
         /// <param name="sender">The view model</param>
         /// <param name="e">The event args</param>
-        private void ViewModelOnClosed(object sender, ViewModelClosedEventArgs e)
+        private Task ViewModelOnClosedAsync(object sender, ViewModelClosedEventArgs e)
         {
             var viewModel = (IViewModel)sender;
-            viewModel.Closed -= this.ViewModelOnClosed;
+            viewModel.ClosedAsync -= ViewModelOnClosedAsync;
             Deactivate(viewModel);
+
+            return TaskHelper.Completed;
         }
 
         /// <summary>
@@ -302,10 +306,7 @@ namespace Catel.Services
             /// </summary>
             FrameworkElement IViewInfo.View
             {
-                get
-                {
-                    return Item1;
-                }
+                get { return Item1; }
             }
 
             /// <summary>
@@ -313,10 +314,7 @@ namespace Catel.Services
             /// </summary>
             IRegion IViewInfo.Region
             {
-                get
-                {
-                    return Item2;
-                }
+                get { return Item2; }
             }
             #endregion
         }

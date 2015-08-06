@@ -11,6 +11,7 @@ namespace Catel.Test.MVVM
     using ViewModels.TestClasses;
     using NUnit.Framework;
     using System.Threading.Tasks;
+    using System.Windows.Input;
 
     public class ViewModelCommandManagerFacts
     {
@@ -42,7 +43,7 @@ namespace Catel.Test.MVVM
                 var viewModel = new TestViewModel();
                 var viewModelCommandManager = ViewModelCommandManager.Create(viewModel);
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewModelCommandManager.AddHandler(null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewModelCommandManager.AddHandler((Func<IViewModel, string, ICommand, object, Task>)null));
             }            
 
             [TestCase]
@@ -54,7 +55,7 @@ namespace Catel.Test.MVVM
 
                 var called = false;
 
-                viewModelCommandManager.AddHandler((vm, property, command, commandParameter) => called = true);
+                viewModelCommandManager.AddHandler(async (vm, property, command, commandParameter) => called = true);
                 viewModel.GenerateData.Execute();
 
                 Assert.IsTrue(called);

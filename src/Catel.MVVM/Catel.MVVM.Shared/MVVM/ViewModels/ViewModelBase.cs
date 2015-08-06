@@ -288,8 +288,13 @@ namespace Catel.MVVM
 #endif
 
             ViewModelCommandManager = MVVM.ViewModelCommandManager.Create(this);
-            ViewModelCommandManager.AddHandler((viewModel, propertyName, command, commandParameter) =>
-                CommandExecuted.SafeInvoke(this, new CommandExecutedEventArgs((ICatelCommand)command, commandParameter, propertyName)));
+            ViewModelCommandManager.AddHandler(async (viewModel, propertyName, command, commandParameter) =>
+            {
+                var eventArgs = new CommandExecutedEventArgs((ICatelCommand) command, commandParameter, propertyName);
+
+                CommandExecuted.SafeInvoke(this, eventArgs);
+                await CommandExecutedAsync.SafeInvokeAsync(this, eventArgs);
+            });
 
             InvalidateCommandsOnPropertyChanged = true;
             SupportIEditableObject = supportIEditableObject;
@@ -324,42 +329,90 @@ namespace Catel.MVVM
         /// <summary>
         /// Occurs when the view model has been initialized.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "InitializedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         public event EventHandler<EventArgs> Initialized;
+
+        /// <summary>
+        /// Occurs when the view model has been initialized.
+        /// </summary>
+        public event AsyncEventHandler<EventArgs> InitializedAsync;
 
         /// <summary>
         /// Occurs when a command on the view model has been executed.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "CommandExecutedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         public event EventHandler<CommandExecutedEventArgs> CommandExecuted;
+
+        /// <summary>
+        /// Occurs when a command on the view model has been executed.
+        /// </summary>
+        public event AsyncEventHandler<CommandExecutedEventArgs> CommandExecutedAsync;
 
         /// <summary>
         /// Occurs when the view model is about to be saved.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "SavingAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         public event EventHandler<SavingEventArgs> Saving;
+
+        /// <summary>
+        /// Occurs when the view model is about to be saved.
+        /// </summary>
+        public event AsyncEventHandler<SavingEventArgs> SavingAsync;
 
         /// <summary>
         /// Occurs when the view model is saved successfully.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "SavedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         public event EventHandler<EventArgs> Saved;
+
+        /// <summary>
+        /// Occurs when the view model is saved successfully.
+        /// </summary>
+        public event AsyncEventHandler<EventArgs> SavedAsync;
 
         /// <summary>
         /// Occurs when the view model is about to be canceled.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "CancelingAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         public event EventHandler<CancelingEventArgs> Canceling;
+
+        /// <summary>
+        /// Occurs when the view model is about to be canceled.
+        /// </summary>
+        public event AsyncEventHandler<CancelingEventArgs> CancelingAsync;
 
         /// <summary>
         /// Occurrs when the view model is canceled.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "CanceledAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         public event EventHandler<EventArgs> Canceled;
+
+        /// <summary>
+        /// Occurrs when the view model is canceled.
+        /// </summary>
+        public event AsyncEventHandler<EventArgs> CanceledAsync;
 
         /// <summary>
         /// Occurs when the view model is being closed.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "ClosingAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         public event EventHandler<EventArgs> Closing;
+
+        /// <summary>
+        /// Occurs when the view model is being closed.
+        /// </summary>
+        public event AsyncEventHandler<EventArgs> ClosingAsync;
 
         /// <summary>
         /// Occurs when the view model has just been closed.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "ClosedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         public event EventHandler<ViewModelClosedEventArgs> Closed;
+
+        /// <summary>
+        /// Occurs when the view model has just been closed.
+        /// </summary>
+        public event AsyncEventHandler<ViewModelClosedEventArgs> ClosedAsync;
         #endregion
 
         #region Properties
@@ -1387,11 +1440,23 @@ namespace Catel.MVVM
         /// <summary>
         /// Called when the view model is about to be closed.
         /// <para />
-        /// This method also raises the <see cref="Closing"/> event.
+        /// This method also raises the <see cref="Closing" /> event.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "OnClosingAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         protected virtual void OnClosing()
         {
+            OnClosingAsync().Wait();
+        }
+
+        /// <summary>
+        /// Called when the view model is about to be closed.
+        /// <para />
+        /// This method also raises the <see cref="Closing"/> event.
+        /// </summary>
+        protected virtual Task OnClosingAsync()
+        {
             Closing.SafeInvoke(this);
+            return ClosingAsync.SafeInvokeAsync(this);
         }
 
         /// <summary>
@@ -1417,9 +1482,23 @@ namespace Catel.MVVM
         /// This method also raises the <see cref="Closed"/> event.
         /// </summary>
         /// <param name="result">The result to pass to the view. This will, for example, be used as <c>DialogResult</c>.</param>
+        [ObsoleteEx(ReplacementTypeOrMember = "OnClosedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         protected virtual void OnClosed(bool? result)
         {
-            Closed.SafeInvoke(this, new ViewModelClosedEventArgs(this, result));
+            OnClosedAsync(result).Wait();
+        }
+
+        /// <summary>
+        /// Called when the view model has just been closed.
+        /// <para />
+        /// This method also raises the <see cref="Closed"/> event.
+        /// </summary>
+        /// <param name="result">The result to pass to the view. This will, for example, be used as <c>DialogResult</c>.</param>
+        protected virtual Task OnClosedAsync(bool? result)
+        {
+            var eventArgs = new ViewModelClosedEventArgs(this, result);
+            Closed.SafeInvoke(this, eventArgs);
+            return ClosedAsync.SafeInvokeAsync(this, eventArgs);
         }
 
         /// <summary>
@@ -1492,6 +1571,7 @@ namespace Catel.MVVM
                 await InitializeAsync();
 
                 Initialized.SafeInvoke(this);
+                await InitializedAsync.SafeInvokeAsync(this);
             }
         }
 
@@ -1557,6 +1637,7 @@ namespace Catel.MVVM
 
             var eventArgs = new CancelingEventArgs();
             Canceling.SafeInvoke(this, eventArgs);
+            await CancelingAsync.SafeInvokeAsync(this, eventArgs);
 
             if (eventArgs.Cancel)
             {
@@ -1585,6 +1666,7 @@ namespace Catel.MVVM
             Log.Info("Canceled view model '{0}'", GetType());
 
             Canceled.SafeInvoke(this);
+            await CanceledAsync.SafeInvokeAsync(this);
 
             IsCanceling = false;
 
@@ -1639,6 +1721,7 @@ namespace Catel.MVVM
 
             var eventArgs = new SavingEventArgs();
             Saving.SafeInvoke(this, eventArgs);
+            await SavingAsync.SafeInvokeAsync(this, eventArgs);
 
             if (eventArgs.Cancel)
             {
@@ -1663,6 +1746,7 @@ namespace Catel.MVVM
                 }
 
                 Saved.SafeInvoke(this);
+                await SavedAsync.SafeInvokeAsync(this);
             }
 
             IsSaving = false;
@@ -1705,7 +1789,7 @@ namespace Catel.MVVM
 
             IsClosing = true;
 
-            OnClosing();
+            await OnClosingAsync();
 
             ViewModelManager.UnregisterAllModels(this);
 
@@ -1713,7 +1797,7 @@ namespace Catel.MVVM
 
             SuspendValidation = true;
 
-            OnClosed(result);
+            await OnClosedAsync(result);
 
             IsClosing = false;
             IsClosed = true;

@@ -10,8 +10,10 @@ namespace Catel.MVVM
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using Logging;
     using System.Windows.Input;
+    using Threading;
 
     /// <summary>
     /// Composite command which allows several commands inside a single command being exposed to a view.
@@ -377,7 +379,7 @@ namespace Catel.MVVM
 
                 if (viewModel != null)
                 {
-                    viewModel.Closed += OnViewModelClosed;
+                    viewModel.ClosedAsync += OnViewModelClosedAsync;
                 }
             }
             #endregion
@@ -387,14 +389,16 @@ namespace Catel.MVVM
             public IViewModel ViewModel { get; private set; }
             #endregion
 
-            private void OnViewModelClosed(object sender, ViewModelClosedEventArgs e)
+            private Task OnViewModelClosedAsync(object sender, ViewModelClosedEventArgs e)
             {
                 Log.Debug("ViewModel '{0}' is closed, automatically unregistering command from CompositeCommand", ViewModel);
 
                 _compositeCommand.UnregisterCommand(Command);
 
-                ViewModel.Closed -= OnViewModelClosed;
+                ViewModel.ClosedAsync -= OnViewModelClosedAsync;
                 ViewModel = null;
+
+                return TaskHelper.Completed;
             }
         }
         #endregion

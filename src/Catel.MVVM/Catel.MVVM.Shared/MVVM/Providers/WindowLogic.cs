@@ -9,6 +9,7 @@
 namespace Catel.MVVM.Providers
 {
     using System;
+    using System.Threading.Tasks;
     using System.Windows;
     using Views;
     using Logging;
@@ -135,7 +136,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="Catel.MVVM.ViewModelClosedEventArgs"/> instance containing the event data.</param>
-        public override void OnViewModelClosed(object sender, ViewModelClosedEventArgs e)
+        public override async Task OnViewModelClosedAsync(object sender, ViewModelClosedEventArgs e)
         {
             if (_closeInitiatedByViewModel == null)
             {
@@ -143,7 +144,7 @@ namespace Catel.MVVM.Providers
                 _closeInitiatedByViewModelResult = e.Result;
             }
 
-            base.OnViewModelClosed(sender, e);
+            await base.OnViewModelClosedAsync(sender, e);
 
 #if SILVERLIGHT
             if (TargetWindow is ChildWindow)

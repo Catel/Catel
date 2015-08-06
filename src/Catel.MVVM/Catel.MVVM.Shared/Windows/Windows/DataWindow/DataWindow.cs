@@ -25,6 +25,7 @@ namespace Catel.Windows
     using MVVM;
     using Exceptions = MVVM.Properties.Exceptions;
     using Catel.MVVM.Providers;
+    using Catel.Threading;
 
 #if SILVERLIGHT
     using System.Windows.Media;
@@ -154,7 +155,8 @@ namespace Catel.Windows
         /// This method is required for design time support.
         /// </remarks>
         public DataWindow()
-            : this(DataWindowMode.OkCancel) { }
+            : this(DataWindowMode.OkCancel)
+        { }
 
         /// <summary>
         /// Initializes a new instance of this class with custom commands.
@@ -164,10 +166,11 @@ namespace Catel.Windows
         /// <param name="defaultButton">The default button.</param>
         /// <param name="setOwnerAndFocus">if set to <c>true</c>, set the main window as owner window and focus the window.</param>
         /// <param name="infoBarMessageControlGenerationMode">The info bar message control generation mode.</param>
-        public DataWindow(DataWindowMode mode, IEnumerable<DataWindowButton> additionalButtons = null, 
+        public DataWindow(DataWindowMode mode, IEnumerable<DataWindowButton> additionalButtons = null,
             DataWindowDefaultButton defaultButton = DataWindowDefaultButton.OK, bool setOwnerAndFocus = true,
             InfoBarMessageControlGenerationMode infoBarMessageControlGenerationMode = InfoBarMessageControlGenerationMode.Inline)
-            : this(null, mode, additionalButtons, defaultButton, setOwnerAndFocus, infoBarMessageControlGenerationMode) { }
+            : this(null, mode, additionalButtons, defaultButton, setOwnerAndFocus, infoBarMessageControlGenerationMode)
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataWindow"/> class.
@@ -192,7 +195,7 @@ namespace Catel.Windows
         /// <param name="defaultButton">The default button.</param>
         /// <param name="setOwnerAndFocus">if set to <c>true</c>, set the main window as owner window and focus the window.</param>
         /// <param name="infoBarMessageControlGenerationMode">The info bar message control generation mode.</param>
-        public DataWindow(IViewModel viewModel, DataWindowMode mode, IEnumerable<DataWindowButton> additionalButtons = null, 
+        public DataWindow(IViewModel viewModel, DataWindowMode mode, IEnumerable<DataWindowButton> additionalButtons = null,
             DataWindowDefaultButton defaultButton = DataWindowDefaultButton.OK, bool setOwnerAndFocus = true,
             InfoBarMessageControlGenerationMode infoBarMessageControlGenerationMode = InfoBarMessageControlGenerationMode.Inline)
         {
@@ -251,6 +254,7 @@ namespace Catel.Windows
             };
 
             _logic.ViewModelClosed += OnViewModelClosed;
+            _logic.ViewModelClosedAsync += OnViewModelClosedAsync;
             _logic.ViewModelChanged += (sender, e) => RaiseViewModelChanged();
 
             _logic.ViewModelPropertyChanged += (sender, e) =>
@@ -425,7 +429,7 @@ namespace Catel.Windows
         /// Gets a value indicating whether this instance is close button available.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this instance is close button available; otherwise, <c>false</c>.
+        /// <c>true</c> if this instance is close button available; otherwise, <c>false</c>.
         /// </value>
         private bool IsCloseButtonAvailable
         {
@@ -492,12 +496,23 @@ namespace Catel.Windows
         /// <summary>
         /// Executes the Cancel command.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "OnApplyExcuteAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         protected void ExecuteCancel()
+        {
+            ExecuteCancelAsync();
+        }
+
+        /// <summary>
+        /// Executes the Cancel command.
+        /// </summary>
+        protected Task ExecuteCancelAsync()
         {
             if (OnCancelCanExecute())
             {
-                OnCancelExecute();
+                return OnCancelExecuteAsync();
             }
+
+            return TaskHelper.Completed;
         }
 
         /// <summary>
@@ -512,7 +527,16 @@ namespace Catel.Windows
         /// <summary>
         /// Handled when the user invokes the Cancel command.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "OnApplyExcuteAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         protected async void OnCancelExecute()
+        {
+            await OnCancelExecuteAsync();
+        }
+
+        /// <summary>
+        /// Handled when the user invokes the Cancel command.
+        /// </summary>
+        protected async Task OnCancelExecuteAsync()
         {
             if (!await DiscardChangesAsync())
             {
@@ -529,12 +553,23 @@ namespace Catel.Windows
         /// <summary>
         /// Executes the Apply command.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "ExecuteApplyAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         protected void ExecuteApply()
+        {
+            ExecuteApplyAsync();
+        }
+
+        /// <summary>
+        /// Executes the Apply command.
+        /// </summary>
+        protected Task ExecuteApplyAsync()
         {
             if (OnApplyCanExecute())
             {
-                OnApplyExcute();
+                return OnApplyExcuteAsync();
             }
+
+            return TaskHelper.Completed;
         }
 
         /// <summary>
@@ -549,7 +584,16 @@ namespace Catel.Windows
         /// <summary>
         /// Handled when the user invokes the Apply command.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "OnApplyExcuteAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         protected async void OnApplyExcute()
+        {
+            await OnApplyExcuteAsync();
+        }
+
+        /// <summary>
+        /// Handled when the user invokes the Apply command.
+        /// </summary>
+        protected async Task OnApplyExcuteAsync()
         {
             await ApplyChangesAsync();
         }
@@ -906,7 +950,7 @@ namespace Catel.Windows
 
             var contentGrid = WrapControlHelper.Wrap((FrameworkElement)newContent, wrapOptions, _buttons.ToArray(), this);
 
-            var internalGrid = contentGrid.FindVisualDescendant(obj => (obj is FrameworkElement) && string.Equals(((FrameworkElement)obj).Name,  WrapControlHelper.InternalGridName)) as Grid;
+            var internalGrid = contentGrid.FindVisualDescendant(obj => (obj is FrameworkElement) && string.Equals(((FrameworkElement)obj).Name, WrapControlHelper.InternalGridName)) as Grid;
             if (internalGrid != null)
             {
 #if SILVERLIGHT
@@ -1046,8 +1090,20 @@ namespace Catel.Windows
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        [ObsoleteEx(ReplacementTypeOrMember = "OnViewModelClosedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         protected virtual void OnViewModelClosed(object sender, ViewModelClosedEventArgs e)
         {
+        }
+
+        /// <summary>
+        /// Called when the <see cref="ViewModel"/> has been closed.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+
+        protected virtual Task OnViewModelClosedAsync(object sender, ViewModelClosedEventArgs e)
+        {
+            return TaskHelper.Completed;
         }
 
         /// <summary>

@@ -53,42 +53,90 @@ namespace Catel.MVVM
         /// <summary>
         /// Occurs when the view model has been initialized.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "InitializedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         event EventHandler<EventArgs> Initialized;
+
+        /// <summary>
+        /// Occurs when the view model has been initialized.
+        /// </summary>
+        event AsyncEventHandler<EventArgs> InitializedAsync;
 
         /// <summary>
         /// Occurs when a command on the view model has been executed.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "CommandExecutedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         event EventHandler<CommandExecutedEventArgs> CommandExecuted;
+
+        /// <summary>
+        /// Occurs when a command on the view model has been executed.
+        /// </summary>
+        event AsyncEventHandler<CommandExecutedEventArgs> CommandExecutedAsync;
 
         /// <summary>
         /// Occurs when the view model is about to be saved.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "SavingAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         event EventHandler<SavingEventArgs> Saving;
+
+        /// <summary>
+        /// Occurs when the view model is about to be saved.
+        /// </summary>
+        event AsyncEventHandler<SavingEventArgs> SavingAsync;
 
         /// <summary>
         /// Occurs when the view model is saved successfully.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "SavedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         event EventHandler<EventArgs> Saved;
+
+        /// <summary>
+        /// Occurs when the view model is saved successfully.
+        /// </summary>
+        event AsyncEventHandler<EventArgs> SavedAsync;
 
         /// <summary>
         /// Occurs when the view model is about to be canceled.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "CancelingAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         event EventHandler<CancelingEventArgs> Canceling;
+
+        /// <summary>
+        /// Occurs when the view model is about to be canceled.
+        /// </summary>
+        event AsyncEventHandler<CancelingEventArgs> CancelingAsync;
 
         /// <summary>
         /// Occurrs when the view model is canceled.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "CanceledAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         event EventHandler<EventArgs> Canceled;
+
+        /// <summary>
+        /// Occurrs when the view model is canceled.
+        /// </summary>
+        event AsyncEventHandler<EventArgs> CanceledAsync;
 
         /// <summary>
         /// Occurs when the view model is being closed.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "ClosingAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         event EventHandler<EventArgs> Closing;
+
+        /// <summary>
+        /// Occurs when the view model is being closed.
+        /// </summary>
+        event AsyncEventHandler<EventArgs> ClosingAsync;
 
         /// <summary>
         /// Occurs when the view model has been closed.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "ClosedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         event EventHandler<ViewModelClosedEventArgs> Closed;
+
+        /// <summary>
+        /// Occurs when the view model has been closed.
+        /// </summary>
+        event AsyncEventHandler<ViewModelClosedEventArgs> ClosedAsync;
         #endregion
 
         #region Methods

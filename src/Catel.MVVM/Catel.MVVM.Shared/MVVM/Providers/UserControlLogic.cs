@@ -425,7 +425,7 @@ namespace Catel.MVVM.Providers
 
             if (CloseViewModelOnUnloaded)
             {
-                bool? result = GetViewModelResultValueFromUnloadBehavior();
+                var result = GetViewModelResultValueFromUnloadBehavior();
                 await CloseAndDisposeViewModelAsync(result);
             }
             else
@@ -587,9 +587,9 @@ namespace Catel.MVVM.Providers
 
                 RegisterViewModelAsChild();
 
-                _parentViewModel.Saving += OnParentViewModelSaving;
-                _parentViewModel.Canceling += OnParentViewModelCanceling;
-                _parentViewModel.Closing += OnParentViewModelClosing;
+                _parentViewModel.SavingAsync += OnParentViewModelSavingAsync;
+                _parentViewModel.CancelingAsync += OnParentViewModelCancelingAsync;
+                _parentViewModel.ClosingAsync += OnParentViewModelClosingAsync;
 
                 Log.Debug("Subscribed to parent view model '{0}'", parentViewModel.GetType());
             }
@@ -604,9 +604,9 @@ namespace Catel.MVVM.Providers
             {
                 UnregisterViewModelAsChild();
 
-                _parentViewModel.Saving -= OnParentViewModelSaving;
-                _parentViewModel.Canceling -= OnParentViewModelCanceling;
-                _parentViewModel.Closing -= OnParentViewModelClosing;
+                _parentViewModel.SavingAsync -= OnParentViewModelSavingAsync;
+                _parentViewModel.CancelingAsync -= OnParentViewModelCancelingAsync;
+                _parentViewModel.ClosingAsync -= OnParentViewModelClosingAsync;
 
                 _parentViewModel = null;
 
@@ -800,7 +800,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="CancelingEventArgs"/> instance containing the event data.</param>
-        private async void OnParentViewModelCanceling(object sender, CancelingEventArgs e)
+        private async Task OnParentViewModelCancelingAsync(object sender, CancelingEventArgs e)
         {
             // The parent view model is canceled, cancel our view model as well
             if (ViewModel != null)
@@ -831,7 +831,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="SavingEventArgs"/> instance containing the event data.</param>
-        private async void OnParentViewModelSaving(object sender, SavingEventArgs e)
+        private async Task OnParentViewModelSavingAsync(object sender, SavingEventArgs e)
         {
             // The parent view model is saved, save our view model as well
             if (ViewModel != null)
@@ -862,7 +862,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private async void OnParentViewModelClosing(object sender, EventArgs e)
+        private async Task OnParentViewModelClosingAsync(object sender, EventArgs e)
         {
             if (ViewModel != null)
             {

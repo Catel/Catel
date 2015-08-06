@@ -10,7 +10,9 @@ namespace Catel.MVVM
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
+    using System.Threading.Tasks;
     using Logging;
+    using Threading;
 
     /// <summary>
     /// Represents a managed view model. A managed view model is watched for property changes. As soon as a change occurs in one of the
@@ -125,14 +127,14 @@ namespace Catel.MVVM
                     var viewModelBase = viewModel as ViewModelBase;
                     if (viewModelBase != null)
                     {
-                        viewModelBase.CommandExecuted += OnViewModelCommandExecuted;
+                        viewModelBase.CommandExecutedAsync += OnViewModelCommandExecutedAsync;
                     }
 
-                    viewModel.Saving += OnViewModelSaving;
-                    viewModel.Saved += OnViewModelSaved;
-                    viewModel.Canceling += OnViewModelCanceling;
-                    viewModel.Canceled += OnViewModelCanceled;
-                    viewModel.Closed += OnViewModelClosed;
+                    viewModel.SavingAsync += OnViewModelSavingAsync;
+                    viewModel.SavedAsync += OnViewModelSavedAsync;
+                    viewModel.CancelingAsync += OnViewModelCancelingAsync;
+                    viewModel.CanceledAsync += OnViewModelCanceledAsync;
+                    viewModel.ClosedAsync += OnViewModelClosedAsync;
 
                     Log.Debug("Added view model instance, currently containing '{0}' instances of type '{1}'", _viewModelInstances.Count, ViewModelType);
                 }
@@ -155,14 +157,14 @@ namespace Catel.MVVM
                 var viewModelBase = viewModel as ViewModelBase;
                 if (viewModelBase != null)
                 {
-                    viewModelBase.CommandExecuted -= OnViewModelCommandExecuted;
+                    viewModelBase.CommandExecutedAsync -= OnViewModelCommandExecutedAsync;
                 }
 
-                viewModel.Saving -= OnViewModelSaving;
-                viewModel.Saved -= OnViewModelSaved;
-                viewModel.Canceling -= OnViewModelCanceling;
-                viewModel.Canceled -= OnViewModelCanceled;
-                viewModel.Closed -= OnViewModelClosed;
+                viewModel.SavingAsync -= OnViewModelSavingAsync;
+                viewModel.SavedAsync -= OnViewModelSavedAsync;
+                viewModel.CancelingAsync -= OnViewModelCancelingAsync;
+                viewModel.CanceledAsync -= OnViewModelCanceledAsync;
+                viewModel.ClosedAsync -= OnViewModelClosedAsync;
 
                 var vmId = viewModel.UniqueIdentifier;
                 if (_viewModelInstances.ContainsKey(vmId))
@@ -188,7 +190,7 @@ namespace Catel.MVVM
                 var vmId = viewModel.UniqueIdentifier;
                 _interestedViewModels.Add(vmId, viewModel);
 
-                viewModel.Closed += OnInterestedViewModelClosed;
+                viewModel.ClosedAsync += OnInterestedViewModelClosedAsync;
 
                 Log.Debug("Added interested view model of type '{0}' for type '{1}', currently containing {2} interested view model(s)",
                     viewModel.GetType(), ViewModelType, _interestedViewModels.Count);
@@ -206,7 +208,7 @@ namespace Catel.MVVM
 
             lock (_lock)
             {
-                viewModel.Closed -= OnInterestedViewModelClosed;
+                viewModel.ClosedAsync -= OnInterestedViewModelClosedAsync;
 
                 var vmId = viewModel.UniqueIdentifier;
                 if (_interestedViewModels.ContainsKey(vmId))
@@ -254,7 +256,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="Catel.MVVM.CommandExecutedEventArgs"/> instance containing the event data.</param>
-        private void OnViewModelCommandExecuted(object sender, CommandExecutedEventArgs e)
+        private Task OnViewModelCommandExecutedAsync(object sender, CommandExecutedEventArgs e)
         {
             lock (_lock)
             {
@@ -277,6 +279,8 @@ namespace Catel.MVVM
                     }
                 }
             }
+
+            return TaskHelper.Completed;
         }
 
         /// <summary>
@@ -284,9 +288,11 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnViewModelSaving(object sender, EventArgs e)
+        private Task OnViewModelSavingAsync(object sender, EventArgs e)
         {
             NotifyViewModelsOfEvent((IViewModel)sender, ViewModelEvent.Saving, e);
+
+            return TaskHelper.Completed;
         }
 
         /// <summary>
@@ -294,9 +300,11 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnViewModelSaved(object sender, EventArgs e)
+        private Task OnViewModelSavedAsync(object sender, EventArgs e)
         {
             NotifyViewModelsOfEvent((IViewModel)sender, ViewModelEvent.Saved, e);
+
+            return TaskHelper.Completed;
         }
 
         /// <summary>
@@ -304,9 +312,11 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnViewModelCanceling(object sender, EventArgs e)
+        private Task OnViewModelCancelingAsync(object sender, EventArgs e)
         {
             NotifyViewModelsOfEvent((IViewModel)sender, ViewModelEvent.Canceling, e);
+
+            return TaskHelper.Completed;
         }
 
         /// <summary>
@@ -314,9 +324,11 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnViewModelCanceled(object sender, EventArgs e)
+        private Task OnViewModelCanceledAsync(object sender, EventArgs e)
         {
             NotifyViewModelsOfEvent((IViewModel)sender, ViewModelEvent.Canceled, e);
+
+            return TaskHelper.Completed;
         }
 
         /// <summary>
@@ -324,9 +336,11 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnViewModelClosed(object sender, EventArgs e)
+        private Task OnViewModelClosedAsync(object sender, EventArgs e)
         {
             NotifyViewModelsOfEvent((IViewModel)sender, ViewModelEvent.Closed, e);
+
+            return TaskHelper.Completed;
         }
 
         /// <summary>
@@ -334,9 +348,11 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnInterestedViewModelClosed(object sender, EventArgs e)
+        private Task OnInterestedViewModelClosedAsync(object sender, EventArgs e)
         {
             RemoveInterestedViewModel((IViewModel)sender);
+
+            return TaskHelper.Completed;
         }
 
         /// <summary>

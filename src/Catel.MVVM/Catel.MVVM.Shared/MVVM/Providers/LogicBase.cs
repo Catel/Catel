@@ -243,9 +243,9 @@ namespace Catel.MVVM.Providers
                 if (_viewModel != null)
                 {
                     _viewModel.PropertyChanged -= OnViewModelPropertyChanged;
-                    _viewModel.Canceled -= OnViewModelCanceled;
-                    _viewModel.Saved -= OnViewModelSaved;
-                    _viewModel.Closed -= OnViewModelClosed;
+                    _viewModel.CanceledAsync -= OnViewModelCanceledAsync;
+                    _viewModel.SavedAsync -= OnViewModelSavedAsync;
+                    _viewModel.ClosedAsync -= OnViewModelClosedAsync;
                 }
 
                 _viewModel = value;
@@ -253,9 +253,9 @@ namespace Catel.MVVM.Providers
                 if (_viewModel != null)
                 {
                     _viewModel.PropertyChanged += OnViewModelPropertyChanged;
-                    _viewModel.Canceled += OnViewModelCanceled;
-                    _viewModel.Saved += OnViewModelSaved;
-                    _viewModel.Closed += OnViewModelClosed;
+                    _viewModel.CanceledAsync += OnViewModelCanceledAsync;
+                    _viewModel.SavedAsync += OnViewModelSavedAsync;
+                    _viewModel.ClosedAsync += OnViewModelClosedAsync;
 
                     // Must be in a try/catch because Silverlight sometimes throws out of range exceptions for bindings
                     try
@@ -439,17 +439,35 @@ namespace Catel.MVVM.Providers
         /// <summary>
         /// Occurs when the <see cref="ViewModel"/> has been canceled.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelCanceledAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         public event EventHandler<EventArgs> ViewModelCanceled;
+
+        /// <summary>
+        /// Occurs when the <see cref="ViewModel"/> has been canceled.
+        /// </summary>
+        public event AsyncEventHandler<EventArgs> ViewModelCanceledAsync;
 
         /// <summary>
         /// Occurs when the <see cref="ViewModel"/> has been saved.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelSavedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         public event EventHandler<EventArgs> ViewModelSaved;
+
+        /// <summary>
+        /// Occurs when the <see cref="ViewModel"/> has been saved.
+        /// </summary>
+        public event AsyncEventHandler<EventArgs> ViewModelSavedAsync;
 
         /// <summary>
         /// Occurs when the <see cref="ViewModel"/> has been closed.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelClosedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         public event EventHandler<ViewModelClosedEventArgs> ViewModelClosed;
+
+        /// <summary>
+        /// Occurs when the <see cref="ViewModel"/> has been closed.
+        /// </summary>
+        public event AsyncEventHandler<ViewModelClosedEventArgs> ViewModelClosedAsync;
 
         /// <summary>
         /// Occurs when a property on the <see cref="TargetView"/> has changed.
@@ -619,7 +637,7 @@ namespace Catel.MVVM.Providers
         /// This method will call the <see cref="OnTargetViewLoaded"/> which can be overriden for custom 
         /// behavior. This method is required to protect from duplicate loaded events.
         /// </remarks>
-        private async void OnTargetViewLoadedInternal(object sender, EventArgs e)
+        private void OnTargetViewLoadedInternal(object sender, EventArgs e)
         {
             if (!CanLoad)
             {
@@ -832,9 +850,10 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        public virtual void OnViewModelCanceled(object sender, EventArgs e)
+        public virtual Task OnViewModelCanceledAsync(object sender, EventArgs e)
         {
             ViewModelCanceled.SafeInvoke(this, e);
+            return ViewModelCanceledAsync.SafeInvokeAsync(this, e);
         }
 
         /// <summary>
@@ -842,9 +861,10 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        public virtual void OnViewModelSaved(object sender, EventArgs e)
+        public virtual Task OnViewModelSavedAsync(object sender, EventArgs e)
         {
             ViewModelSaved.SafeInvoke(this, e);
+            return ViewModelSavedAsync.SafeInvokeAsync(this, e);
         }
 
         /// <summary>
@@ -852,9 +872,10 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="Catel.MVVM.ViewModelClosedEventArgs"/> instance containing the event data.</param>
-        public virtual void OnViewModelClosed(object sender, ViewModelClosedEventArgs e)
+        public virtual Task OnViewModelClosedAsync(object sender, ViewModelClosedEventArgs e)
         {
             ViewModelClosed.SafeInvoke(this, e);
+            return ViewModelClosedAsync.SafeInvokeAsync(this, e);
         }
 
         /// <summary>

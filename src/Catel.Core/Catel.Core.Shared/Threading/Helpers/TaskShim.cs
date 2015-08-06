@@ -25,7 +25,7 @@ namespace Catel.Threading
     /// Task wrapper so it works on all platforms.
     /// </summary>
     /// <remarks>This code originally comes from https://github.com/StephenCleary/AsyncEx/blob/77b9711c2c5fd4ca28b220ce4c93d209eeca2b4a/Source/Unit%20Tests/Tests%20(NET40)/Internal/TaskShim.cs.</remarks>
-    internal static class TaskShim
+    public static class TaskShim
     {
         /// <summary>
         /// Creates a task that will complete after a time delay.

@@ -39,6 +39,15 @@ namespace Catel.MVVM.CSLA
         private EventHandler<SavingEventArgs> _catelSaving;
         private EventHandler<EventArgs> _catelClosing;
         private EventHandler<ViewModelClosedEventArgs> _catelClosed;
+
+        private AsyncEventHandler<EventArgs> _catelInitializedAsync;
+        private AsyncEventHandler<CommandExecutedEventArgs> _catelCommandExecutedAsync;
+        private AsyncEventHandler<EventArgs> _catelCanceledAsync;
+        private AsyncEventHandler<CancelingEventArgs> _catelCancelingAsync;
+        private AsyncEventHandler<EventArgs> _catelSavedAsync;
+        private AsyncEventHandler<SavingEventArgs> _catelSavingAsync;
+        private AsyncEventHandler<EventArgs> _catelClosingAsync;
+        private AsyncEventHandler<ViewModelClosedEventArgs> _catelClosedAsync;
         #endregion
 
         #region Constructors
@@ -58,8 +67,10 @@ namespace Catel.MVVM.CSLA
             AuditingHelper.RegisterViewModel(this);
 
             _viewModelCommandManager = ViewModelCommandManager.Create(this);
-            _viewModelCommandManager.AddHandler((viewModel, propertyName, command, commandParameter) =>
-                _catelCommandExecuted.SafeInvoke(this, new CommandExecutedEventArgs((ICatelCommand)command, commandParameter, propertyName)));
+            _viewModelCommandManager.AddHandler(async (viewModel, propertyName, command, commandParameter) =>
+            {
+                _catelCommandExecuted.SafeInvoke(this, new CommandExecutedEventArgs((ICatelCommand) command, commandParameter, propertyName));
+            });
 
             ViewModelManager.RegisterViewModelInstance(this);
         }
@@ -153,10 +164,28 @@ namespace Catel.MVVM.CSLA
         /// <summary>
         /// Occurs when a command on the view model has been executed.
         /// </summary>
+        event AsyncEventHandler<EventArgs> MVVM.IViewModel.InitializedAsync
+        {
+            add { _catelInitializedAsync += value; }
+            remove { _catelInitializedAsync -= value; }
+        }
+
+        /// <summary>
+        /// Occurs when a command on the view model has been executed.
+        /// </summary>
         event EventHandler<CommandExecutedEventArgs> MVVM.IViewModel.CommandExecuted
         {
             add { _catelCommandExecuted += value; }
             remove { _catelCommandExecuted -= value; }
+        }
+
+        /// <summary>
+        /// Occurs when a command on the view model has been executed.
+        /// </summary>
+        event AsyncEventHandler<CommandExecutedEventArgs> MVVM.IViewModel.CommandExecutedAsync
+        {
+            add { _catelCommandExecutedAsync += value; }
+            remove { _catelCommandExecutedAsync -= value; }
         }
 
         /// <summary>
@@ -169,12 +198,30 @@ namespace Catel.MVVM.CSLA
         }
 
         /// <summary>
+        /// Occurs when the view model is about to be saved.
+        /// </summary>
+        event AsyncEventHandler<SavingEventArgs> MVVM.IViewModel.SavingAsync
+        {
+            add { _catelSavingAsync += value; }
+            remove { _catelSavingAsync -= value; }
+        }
+
+        /// <summary>
         /// Occurs when the view model is saved successfully.
         /// </summary>
         event EventHandler<EventArgs> MVVM.IViewModel.Saved
         {
             add { _catelSaved += value; }
             remove { _catelSaved -= value; }
+        }
+
+        /// <summary>
+        /// Occurs when the view model is saved successfully.
+        /// </summary>
+        event AsyncEventHandler<EventArgs> MVVM.IViewModel.SavedAsync
+        {
+            add { _catelSavedAsync += value; }
+            remove { _catelSavedAsync -= value; }
         }
 
         /// <summary>
@@ -187,12 +234,30 @@ namespace Catel.MVVM.CSLA
         }
 
         /// <summary>
+        /// Occurs when the view model is about to be canceled.
+        /// </summary>
+        event AsyncEventHandler<CancelingEventArgs> MVVM.IViewModel.CancelingAsync
+        {
+            add { _catelCancelingAsync += value; }
+            remove { _catelCancelingAsync -= value; }
+        }
+
+        /// <summary>
         /// Occurrs when the view model is canceled.
         /// </summary>
         event EventHandler<EventArgs> MVVM.IViewModel.Canceled
         {
             add { _catelCanceled += value; }
             remove { _catelCanceled -= value; }
+        }
+
+        /// <summary>
+        /// Occurrs when the view model is canceled.
+        /// </summary>
+        event AsyncEventHandler<EventArgs> MVVM.IViewModel.CanceledAsync
+        {
+            add { _catelCanceledAsync += value; }
+            remove { _catelCanceledAsync -= value; }
         }
 
         /// <summary>
@@ -207,10 +272,28 @@ namespace Catel.MVVM.CSLA
         /// <summary>
         /// Occurs when the view model is being closed.
         /// </summary>
+        event AsyncEventHandler<EventArgs> MVVM.IViewModel.ClosingAsync
+        {
+            add { _catelClosingAsync += value; }
+            remove { _catelClosingAsync -= value; }
+        }
+
+        /// <summary>
+        /// Occurs when the view model is being closed.
+        /// </summary>
         event EventHandler<ViewModelClosedEventArgs> MVVM.IViewModel.Closed
         {
             add { _catelClosed += value; }
             remove { _catelClosed -= value; }
+        }
+
+        /// <summary>
+        /// Occurs when the view model is being closed.
+        /// </summary>
+        event AsyncEventHandler<ViewModelClosedEventArgs> MVVM.IViewModel.ClosedAsync
+        {
+            add { _catelClosedAsync += value; }
+            remove { _catelClosedAsync -= value; }
         }
         #endregion
 
