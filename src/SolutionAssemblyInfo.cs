@@ -100,10 +100,10 @@ using System.Runtime.CompilerServices;
 
 #endif
 
-// CLS compliant
-#if !NETFX_CORE && !XAMARIN && !TEST
-[assembly: CLSCompliant(true)]
-#endif
+//// CLS compliant
+//#if !NETFX_CORE && !XAMARIN && !TEST
+//[assembly: CLSCompliant(true)]
+//#endif
 
 #if STRONGNAME_ASSEMBLIES
 

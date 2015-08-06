@@ -106,7 +106,6 @@ namespace Catel.Services
         /// method first.</exception>
         /// <remarks>If the <see cref="IViewManager.GetViewsOfViewModel" /> method returns no active views for the <paramref name="viewModel" /> in the expected <paramref name="timeOutInMilliseconds" /> time
         /// then this method will assume that the view is actually opened and invokes <paramref name="openedProc" /> anyway.</remarks>
-        [CLSCompliant(false)]
         public static bool? Show(this IUIVisualizerService @this, IViewModel viewModel, Action openedProc = null, EventHandler<UICompletedEventArgs> completedProc = null, uint timeOutInMilliseconds = 10000)
         {
             Argument.IsNotNull("@this", @this);
@@ -147,7 +146,6 @@ namespace Catel.Services
         /// method first.</exception>
         /// <remarks>If the <see cref="IViewManager.GetViewsOfViewModel" /> method returns no active views for the <paramref name="viewModel" /> in the expected <paramref name="timeOutInMilliseconds" /> time
         /// then this method will assume that the view is actually opened and invokes <paramref name="openedProc" /> anyway.</remarks>
-        [CLSCompliant(false)]
         public static Task<bool?> ShowAsync(this IUIVisualizerService @this, IViewModel viewModel, Action openedProc = null, EventHandler<UICompletedEventArgs> completedProc = null, uint timeOutInMilliseconds = 10000)
         {
             Argument.IsNotNull("@this", @this);

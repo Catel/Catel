@@ -890,7 +890,6 @@ namespace Catel.Reflection
         /// <param name="pcTInfo">
         /// Points to a location that receives the number of type information interfaces provided by the object.
         /// </param>
-        [CLSCompliant(false)]
         public void GetTypeInfoCount(out uint pcTInfo)
         {
             ((_Type) _type).GetTypeInfoCount(out pcTInfo);
@@ -908,7 +907,6 @@ namespace Catel.Reflection
         /// <param name="ppTInfo">
         /// Receives a pointer to the requested type information object.
         /// </param>
-        [CLSCompliant(false)]
         public void GetTypeInfo(uint iTInfo, uint lcid, IntPtr ppTInfo)
         {
             ((_Type) _type).GetTypeInfo(iTInfo, lcid, ppTInfo);
@@ -932,7 +930,6 @@ namespace Catel.Reflection
         /// <param name="rgDispId">
         /// Caller-allocated array that receives the IDs corresponding to the names.
         /// </param>
-        [CLSCompliant(false)]
         public void GetIDsOfNames(ref Guid riid, IntPtr rgszNames, uint cNames, uint lcid, IntPtr rgDispId)
         {
             ((_Type) _type).GetIDsOfNames(ref riid, rgszNames, cNames, lcid, rgDispId);
@@ -965,7 +962,6 @@ namespace Catel.Reflection
         /// <param name="puArgErr">
         /// The index of the first argument that has an error.
         /// </param>
-        [CLSCompliant(false)]
         public void Invoke(uint dispIdMember, ref Guid riid, uint lcid, short wFlags, IntPtr pDispParams, IntPtr pVarResult, IntPtr pExcepInfo, IntPtr puArgErr)
         {
             ((_Type) _type).Invoke(dispIdMember, ref riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr);

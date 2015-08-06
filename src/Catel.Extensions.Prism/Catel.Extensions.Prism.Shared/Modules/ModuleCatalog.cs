@@ -59,7 +59,6 @@ namespace Catel.Modules
         /// <summary>
         /// The synchronization context.
         /// </summary>
-        [CLSCompliant(false)]
         protected readonly SynchronizationContext _synchronizationContext = new SynchronizationContext();
 
         /// <summary>
