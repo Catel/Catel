@@ -246,15 +246,15 @@ namespace Catel.Threading
         {
             Argument.IsNotNull("actions", actions);
 
-            var finalActions = new List<Action>();
-
-            foreach (var action in actions)
+            if (actions.Length == 0)
             {
-                var innerAction = action;
-                finalActions.Add(() => innerAction().Wait());
+                return TaskHelper.Completed;
             }
 
-            return RunAndWaitAsync(finalActions.ToArray());
+            var tasks = (from action in actions
+                         select action()).ToArray();
+
+            return TaskShim.WhenAll(tasks);
         }
     }
 }
