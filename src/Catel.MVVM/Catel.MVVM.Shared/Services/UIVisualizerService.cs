@@ -541,7 +541,7 @@ namespace Catel.Services
                 return tcs.Task;
             }
 
-            return TaskHelper.Run(() => ShowWindow(window, showModal));
+            return TaskHelper.Run(() => ShowWindow(window, showModal), true);
         }
         #endregion
     }

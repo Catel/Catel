@@ -34,7 +34,7 @@ namespace Catel.Services
                 var result = MessageBox.Show(message, caption, messageBoxButton);
 
                 return TranslateMessageBoxResult(result);
-            });
+            }, true);
         }
     }
 }
