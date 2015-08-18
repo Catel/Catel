@@ -158,6 +158,7 @@ namespace Catel.Data
             PropertyDataManager = PropertyDataManager.Default;
 
             DefaultValidateUsingDataAnnotationsValue = true;
+            DefaultDisableEventSubscriptionsOfChildValuesValue = false;
             DefaultSerializer = IoCConfiguration.DefaultDependencyResolver.Resolve<ISerializer>();
         }
 
@@ -306,6 +307,11 @@ namespace Catel.Data
         protected bool DisableEventSubscriptionsOfChildValues { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether event subscriptions of child values should be disabled.
+        /// </summary>
+        public static bool DefaultDisableEventSubscriptionsOfChildValuesValue { get; set; }
+
+        /// <summary>
         /// Gets the property data manager that manages the properties of this object.
         /// </summary>
         /// <value>The property data manager.</value>
@@ -314,15 +320,6 @@ namespace Catel.Data
 #endif
         [XmlIgnore]
         internal static PropertyDataManager PropertyDataManager { get; private set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this object is subscribed to all childs.
-        /// </summary>
-#if NET || SILVERLIGHT
-        [Browsable(false)]
-#endif
-        [XmlIgnore]
-        private bool SubscribedToEvents { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this object is currently initializing.
@@ -528,6 +525,7 @@ namespace Catel.Data
             Serializer = DefaultSerializer;
             SuspendValidation = DefaultSuspendValidationValue;
             ValidateUsingDataAnnotations = DefaultValidateUsingDataAnnotationsValue;
+            DisableEventSubscriptionsOfChildValues = DefaultDisableEventSubscriptionsOfChildValuesValue;
             DeserializationSucceeded = false;
             HandlePropertyAndCollectionChanges = true;
             AlwaysInvokeNotifyChanged = false;
