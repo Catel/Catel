@@ -8,11 +8,27 @@ namespace Catel.Services
 {
     using System;
 
+#if !XAMARIN
+#if NETFX_CORE
+    using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
+#else
+    using System.Windows.Threading;
+#endif
+#endif
+
     /// <summary>
     /// Service that allows the retrieval of the UI dispatcher.
     /// </summary>
     public interface IDispatcherService
     {
+#if !XAMARIN
+        /// <summary>
+        /// Gets the dispatcher that the dispatcher service uses.
+        /// </summary>
+        /// <value>The dispatcher.</value>
+        Dispatcher CurrentDispatcher { get; }
+#endif
+
         /// <summary>
         /// Executes the specified action with the specified arguments synchronously on the thread the Dispatcher is associated with.
         /// </summary>

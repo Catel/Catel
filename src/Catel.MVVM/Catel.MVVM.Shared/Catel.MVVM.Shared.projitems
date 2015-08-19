@@ -409,6 +409,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\PopupBehavior\Popup.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\PopupBehavior\PopupOrientation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\PopupBehavior\PopupOrientationCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Threading\DispatcherOperation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Threading\Extensions\DispatcherExtensions.tasks.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Threading\Extensions\DispatcherExtensions.begininvoke.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Threading\Extensions\DispatcherExtensions.invoke.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Threading\Extensions\DispatcherExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Threading\Helpers\Dispatcherhelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Windows\DataWindow\DataWindow.cs" />

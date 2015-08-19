@@ -56,7 +56,7 @@ namespace Catel.Services
         /// <para />
         /// Internally, this property uses the <see cref="DispatcherHelper"/>, but can be overriden if required.
         /// </summary>
-        protected virtual Dispatcher CurrentDispatcher
+        public virtual Dispatcher CurrentDispatcher
         {
             get { return DispatcherHelper.CurrentDispatcher; }
         }
