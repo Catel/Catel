@@ -9,7 +9,10 @@ namespace Catel.Services
 {
     using System;
     using System.Threading.Tasks;
+
+#if NET
     using Catel.Windows.Threading;
+#endif
 
     /// <summary>
     /// Extension methods for the <see cref="IDispatcherService"/>.
