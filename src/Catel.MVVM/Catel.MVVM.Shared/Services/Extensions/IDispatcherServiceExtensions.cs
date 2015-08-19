@@ -116,7 +116,7 @@ namespace Catel.Services
             dispatcherService.BeginInvoke(() => method.DynamicInvoke(args), true);
         }
 
-#if !NETFX_CORE && !SILVERLIGHT
+#if NET
         /// <summary>
         /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
         /// </summary>
