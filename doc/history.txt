@@ -115,6 +115,7 @@ Added/fixed:
 (x) CTL-663 ViewModelManager sometimes throws KeyNotFoundException in multithreaded scenarios
 (x) CTL-664 EventToCommand doesn't initially call CanExecute on a command to determine the initial state
 (x) CTL-673 Fixed the naming registration convention which does not pick up some types
+(x) CTL-703 TypeCache.GetTypesImplementingInterface is broken
 
 Roadmap:
 ========

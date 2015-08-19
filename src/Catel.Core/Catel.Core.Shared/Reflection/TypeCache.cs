@@ -448,7 +448,15 @@ namespace Catel.Reflection
             {
                 if (!_typesByInterface.ContainsKey(interfaceType))
                 {
-                    _typesByInterface[interfaceType] = new HashSet<Type>(GetTypes(interfaceType.ImplementsInterfaceEx));
+                    _typesByInterface[interfaceType] = new HashSet<Type>(GetTypes(x =>
+                    {
+                        if (x == interfaceType)
+                        {
+                            return false;
+                        }
+
+                        return x.ImplementsInterfaceEx(interfaceType);
+                    }));
                 }
 
                 return _typesByInterface[interfaceType].ToArray();
