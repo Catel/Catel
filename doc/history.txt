@@ -98,6 +98,7 @@ Added/fixed:
 (*) CTL-679 Don't throw exceptions when converting a value in a ValueConverterBase fails
 (*) CTL-691 UnitOfWork should use DbContext instead of ObjectContext to save changes
 (*) CTL-692 Don't invoke command CanExecute when view model is canceling, saving or closing
+(*) CTL-705 Pass DeferValidationUntilFirstSaveCall through nested view model tree automatically
 (x) CTL-555 Non Catel models with GraphId are not correctly deserialized using XmlSerializer and JsonSerializer
 (x) CTL-621 ManagedViewModel might throw exception when enumerating interested view models
 (x) CTL-625 LogListeners are created twice when defined in config when using vshost

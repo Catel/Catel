@@ -201,6 +201,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\TestClasses\SpecialValidationModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\TestClasses\TestViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\TestClasses\ViewModelWithInvalidMappings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelBaseFacts.relations.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelBaseTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelFactoryFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelManagerTest.cs" />

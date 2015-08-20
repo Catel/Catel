@@ -778,9 +778,15 @@ namespace Catel.MVVM
         /// <param name="parentViewModel">The parent view model.</param>
         void IRelationalViewModel.SetParentViewModel(IViewModel parentViewModel)
         {
-            if (ParentViewModel != parentViewModel)
+            if (!ObjectHelper.AreEqualReferences(ParentViewModel, parentViewModel))
             {
                 ParentViewModel = parentViewModel;
+
+                var parentVm = parentViewModel as ViewModelBase;
+                if (parentVm != null)
+                {
+                    DeferValidationUntilFirstSaveCall = parentVm.DeferValidationUntilFirstSaveCall;
+                }
 
                 RaisePropertyChanged("ParentViewModel");
             }
@@ -803,9 +809,10 @@ namespace Catel.MVVM
                     return;
                 }
 
-                if (!ChildViewModels.Contains(childViewModel))
+                var childViewModels = ChildViewModels;
+                if (!childViewModels.Contains(childViewModel))
                 {
-                    ChildViewModels.Add(childViewModel);
+                    childViewModels.Add(childViewModel);
 
                     childViewModel.PropertyChanged += OnChildViewModelPropertyChanged;
                     childViewModel.Closed += OnChildViewModelClosed;
