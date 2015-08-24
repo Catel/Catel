@@ -216,6 +216,26 @@ namespace Catel.Threading
         }
 
         /// <summary>
+        /// Runs the specified function using Task.Run if available.
+        /// </summary>
+        /// <typeparam name="TResult">Type of the result.</typeparam>
+        /// <param name="func">The function.</param>
+        /// <param name="configureAwait">The value to be passed into ConfigureAwait.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>Task&lt;T&gt;.</returns>
+        public static async Task<TResult> Run<TResult>(Func<Task<TResult>> func, bool configureAwait = DefaultConfigureAwaitValue, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var task = TaskShim.Run(func, cancellationToken);
+
+            if (!configureAwait)
+            {
+                return await task.ConfigureAwait(false);
+            }
+
+            return await task;
+        }
+
+        /// <summary>
         /// Runs all the specified actions in separate threads and waits for the to complete.
         /// </summary>
         /// <param name="actions">The actions to spawn in separate threads.</param>
