@@ -11,6 +11,7 @@ namespace Catel.Windows.Threading
     using System;
     using System.Threading.Tasks;
     using System.Windows.Threading;
+    using Logging;
 
 #if NETFX_CORE
     using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
@@ -21,6 +22,8 @@ namespace Catel.Windows.Threading
     /// </summary>
     public static partial class DispatcherExtensions
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
 #if NET40
         /// <summary>
         /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
@@ -44,8 +47,30 @@ namespace Catel.Windows.Threading
                 }
             }), null);
 
-            dispatcherOperation.Completed += (sender, e) => tcs.SetResult(true);
-            dispatcherOperation.Aborted += (sender, e) => tcs.SetCanceled();
+            dispatcherOperation.Completed += (sender, e) =>
+            {
+                if (tcs.Task.IsCanceled)
+                {
+                    return;
+                }
+
+                if (!tcs.TrySetResult(true))
+                {
+                    Log.Warning("Failed to set the task result to true, task was already completed. Current status is '{0}'", tcs.Task.Status);
+                }
+            };
+            dispatcherOperation.Aborted += (sender, e) =>
+            {
+                if (tcs.Task.IsCanceled)
+                {
+                    return;
+                }
+
+                if (!tcs.TrySetCanceled())
+                {
+                    Log.Warning("Failed to set the task as canceled, task was already completed or canceled before");
+                }
+            };
 
             return tcs.Task;
         }
