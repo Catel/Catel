@@ -159,6 +159,7 @@ namespace Catel.Test.Runtime.Serialization
             }
 
             [TestCase(XmlSerializerOptimalizationMode.PrettyXml)]
+            //[TestCase(XmlSerializerOptimalizationMode.PrettyXmlAgressive)]
             [TestCase(XmlSerializerOptimalizationMode.Performance)]
             public void RespectsTheXmlAttributeAttributeOnRootElements(XmlSerializerOptimalizationMode mode)
             {
@@ -174,7 +175,7 @@ namespace Catel.Test.Runtime.Serialization
                 var newFamily = SerializationTestHelper.SerializeAndDeserialize(family, SerializationTestHelper.GetXmlSerializer(mode));
 
                 Assert.AreEqual(family.LastName, newFamily.LastName);
-                Assert.AreEqual(1, family.Persons.Count);
+                Assert.AreEqual(1, newFamily.Persons.Count);
 
                 var newPerson = newFamily.Persons.First();
 
