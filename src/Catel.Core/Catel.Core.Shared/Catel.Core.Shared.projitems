@@ -374,10 +374,17 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\ObjectConverterService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Test\ExceptionTester.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Text\Extensions\StringBuilderExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\AsyncLock.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\AwaitableDisposable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\DefaultAsyncWaitQueue.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\Extensions\AsyncWaitQueueExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Extensions\SynchronizationContextExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\Extensions\TaskExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Helpers\TaskHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Helpers\TaskShim.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Helpers\ThreadHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\Interfaces\IAsyncWaitQueue.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\Internal\Deque.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\ReaderWriterLockSlim.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\SynchronizationContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Timer.cs" />

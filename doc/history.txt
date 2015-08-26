@@ -72,6 +72,7 @@ Added/fixed:
 (+) CTL-681 Added support of Android's ISharedPreferences in ConfigurationService
 (+) CTL-688 Support collections and dictionary as top level elements in serialization
 (+) CTL-704 Add Async methods for dispatcher and IDispatcherService
+(+) CTL-709 Add AsyncLock from AsyncEx library
 (*) CTL-550 Non Serializable properties tagged with [IncludeInSerialization] should attempt to serialize and 
     complain if they are not serialized
 (*) CTL-617 Marked TraceOutputControl as obsolete, will be removed in 5.0. Use LogViewerControl from the 
