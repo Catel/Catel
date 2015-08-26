@@ -10,6 +10,7 @@ namespace Catel.Test.Data
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Runtime.Serialization;
+    using System.Xml.Serialization;
     using Catel.Data;
 
     public enum SortDirection

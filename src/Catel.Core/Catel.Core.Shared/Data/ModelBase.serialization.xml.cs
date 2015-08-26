@@ -62,6 +62,25 @@ namespace Catel.Data
             // http://stackoverflow.com/questions/3793/best-way-to-get-innerxml-of-an-xelement, this method is the fastest:
             var reader = element.CreateReader();
             reader.MoveToContent();
+
+            // CTL-710: fix attributes on top level elements
+            if (reader.HasAttributes)
+            {
+                for (int i = 0; i < reader.AttributeCount; i++)
+                {
+                    reader.MoveToAttribute(i);
+
+                    var attributePrefix = reader.Prefix;
+                    var attributeLocalName = reader.LocalName;
+                    var attributeNs = reader.NamespaceURI;
+                    var attributeValue = reader.Value;
+
+                    writer.WriteAttributeString(attributePrefix, attributeLocalName, attributeNs, attributeValue);
+                }
+
+                reader.MoveToElement();
+            }
+
             var elementContent = reader.ReadInnerXml();
 
             writer.WriteRaw(elementContent);

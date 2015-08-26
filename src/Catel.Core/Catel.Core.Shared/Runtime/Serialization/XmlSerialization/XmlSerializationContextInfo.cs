@@ -47,6 +47,26 @@ namespace Catel.Runtime.Serialization.Xml
             Argument.IsNotNull("xmlReader", xmlReader);
             Argument.IsNotNull("model", model);
 
+            var modelType = model.GetType();
+            var elementStart = string.Format("<{0}", modelType.Name);
+
+            if (xmlReader.HasAttributes)
+            {
+                for (int i = 0; i < xmlReader.AttributeCount; i++)
+                {
+                    xmlReader.MoveToAttribute(i);
+
+                    var attributeName = xmlReader.LocalName;
+                    var attributeValue = xmlReader.Value;
+
+                    elementStart += string.Format(" {0}=\"{1}\"", attributeName, attributeValue);
+                }
+
+                xmlReader.MoveToElement();
+            }
+
+            elementStart += ">";
+
             xmlReader.MoveToContent();
 
             var xmlContent = xmlReader.ReadInnerXml();
@@ -59,8 +79,6 @@ namespace Catel.Runtime.Serialization.Xml
 #endif
             }
 
-            var modelType = model.GetType();
-            var elementStart = string.Format("<{0}>", modelType.Name);
             var elementEnd = string.Format("</{0}>", modelType.Name);
 
             var finalXmlContent = string.Format("{0}{1}{2}", elementStart, xmlContent, elementEnd);

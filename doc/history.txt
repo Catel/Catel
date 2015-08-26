@@ -119,6 +119,7 @@ Added/fixed:
 (x) CTL-664 EventToCommand doesn't initially call CanExecute on a command to determine the initial state
 (x) CTL-673 Fixed the naming registration convention which does not pick up some types
 (x) CTL-703 TypeCache.GetTypesImplementingInterface is broken
+(x) CTL-710 XmlAttribute on root elements inside collections is not being respected by the XmlSerializer
 
 Roadmap:
 ========

@@ -7,8 +7,12 @@
 
 namespace Catel.Test.Runtime.Serialization
 {
+    using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Linq;
     using System.Xml.Serialization;
+    using Catel.Data;
     using Catel.Logging;
     using Catel.Runtime.Serialization;
     using Data;
@@ -16,6 +20,69 @@ namespace Catel.Test.Runtime.Serialization
 
     public class XmlSerializerFacts
     {
+
+#if NET
+        [Serializable]
+#endif
+        public class XmlFamily : ModelBase
+        {
+            public XmlFamily()
+            {
+                Persons = new ObservableCollection<XmlPerson>();
+            }
+
+            public string LastName
+            {
+                get { return GetValue<string>(LastNameProperty); }
+                set { SetValue(LastNameProperty, value); }
+            }
+
+            public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof(string), null);
+
+            
+            public ObservableCollection<XmlPerson> Persons
+            {
+                get { return GetValue<ObservableCollection<XmlPerson>>(PersonsProperty); }
+                private set { SetValue(PersonsProperty, value); }
+            }
+
+            public static readonly PropertyData PersonsProperty = RegisterProperty("Persons", typeof(ObservableCollection<XmlPerson>), null);
+        }
+
+#if NET
+        [Serializable]
+#endif
+        public class XmlPerson : ModelBase
+        {
+            public Gender Gender
+            {
+                get { return GetValue<Gender>(GenderProperty); }
+                set { SetValue(GenderProperty, value); }
+            }
+
+            public static readonly PropertyData GenderProperty = RegisterProperty("Gender", typeof(Gender), Data.Gender.Female);
+
+
+            [XmlAttribute]
+            public string FirstName
+            {
+                get { return GetValue<string>(FirstNameProperty); }
+                set { SetValue(FirstNameProperty, value); }
+            }
+
+            public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), null);
+
+
+            [XmlAttribute]
+            public string LastName
+            {
+                get { return GetValue<string>(LastNameProperty); }
+                set { SetValue(LastNameProperty, value); }
+            }
+
+            public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof(string), null);
+        }
+
         [TestFixture]
         public class BasicSerializationFacts
         {
@@ -88,6 +155,30 @@ namespace Catel.Test.Runtime.Serialization
 
                 var deserializedPerson = ModelBaseFacts.Person.Load(xmlDocument);
                 Assert.AreEqual(42, deserializedPerson.Age);
+            }
+
+            [TestCase]
+            public void RespectsTheXmlAttributeAttributeOnRootElements()
+            {
+                var family = new XmlFamily();
+                family.LastName = "van Horrik";
+                family.Persons.Add(new XmlPerson
+                {
+                    FirstName = "Geert",
+                    LastName = family.LastName,
+                    Gender = Gender.Male 
+                });
+
+                var newFamily = SerializationTestHelper.SerializeAndDeserialize(family, SerializationFactory.GetXmlSerializer());
+
+                Assert.AreEqual(family.LastName, newFamily.LastName);
+                Assert.AreEqual(1, family.Persons.Count);
+
+                var newPerson = newFamily.Persons.First();
+
+                Assert.AreEqual(family.Persons[0].FirstName, newPerson.FirstName);
+                Assert.AreEqual(family.Persons[0].LastName, newPerson.LastName);
+                Assert.AreEqual(family.Persons[0].Gender, newPerson.Gender);
             }
 
             [TestCase]
