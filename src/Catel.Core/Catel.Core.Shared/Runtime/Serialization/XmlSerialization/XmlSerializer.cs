@@ -404,18 +404,46 @@ namespace Catel.Runtime.Serialization.Xml
                 return;
             }
 
-            var rootNamespaces = (from attribute in document.Root.Attributes()
-                                  where attribute.IsNamespaceDeclaration
-                                  select attribute.Value).ToList();
+            OptimizeXElement(document.Root);
+        }
 
-            var obsoleteNamespaceMarkers = (from descendant in document.Root.Descendants()
-                                            from attribute in descendant.Attributes()
-                                            where attribute.IsNamespaceDeclaration && rootNamespaces.Contains(attribute.Value)
-                                            select attribute).ToList();
-
-            foreach (var obsoleteNamespaceMarker in obsoleteNamespaceMarkers)
+        /// <summary>
+        /// Optimizes the xml element.
+        /// </summary>
+        /// <param name="element">The element.</param>
+        protected virtual void OptimizeXElement(XElement element)
+        {
+            if (OptimalizationMode == XmlSerializerOptimalizationMode.Performance)
             {
-                obsoleteNamespaceMarker.Remove();
+                return;
+            }
+
+            var agressive = (OptimalizationMode == XmlSerializerOptimalizationMode.PrettyXmlAgressive);
+            if (agressive)
+            {
+                // Important: children first
+                foreach (var child in element.Elements())
+                {
+                    OptimizeXElement(child);
+                }
+            }
+
+            var rootNamespaceAttributes = (from attribute in element.Attributes()
+                                           where attribute.IsNamespaceDeclaration
+                                           select attribute).ToList();
+
+            foreach (var rootNamespaceAttribute in rootNamespaceAttributes)
+            {
+                rootNamespaceAttribute.Remove();
+            }
+
+            if (agressive)
+            {
+                // Clear xmlns namespaces
+                if (!string.IsNullOrEmpty(element.Name.NamespaceName))
+                {
+                    element.Name = element.Name.LocalName;
+                }
             }
         }
 

@@ -15,6 +15,7 @@ namespace Catel.Test.Runtime.Serialization
     using Catel.Data;
     using Catel.Logging;
     using Catel.Runtime.Serialization;
+    using Catel.Runtime.Serialization.Xml;
     using Data;
     using NUnit.Framework;
 
@@ -157,8 +158,9 @@ namespace Catel.Test.Runtime.Serialization
                 Assert.AreEqual(42, deserializedPerson.Age);
             }
 
-            [TestCase]
-            public void RespectsTheXmlAttributeAttributeOnRootElements()
+            [TestCase(XmlSerializerOptimalizationMode.PrettyXml)]
+            [TestCase(XmlSerializerOptimalizationMode.Performance)]
+            public void RespectsTheXmlAttributeAttributeOnRootElements(XmlSerializerOptimalizationMode mode)
             {
                 var family = new XmlFamily();
                 family.LastName = "van Horrik";
@@ -169,7 +171,7 @@ namespace Catel.Test.Runtime.Serialization
                     Gender = Gender.Male 
                 });
 
-                var newFamily = SerializationTestHelper.SerializeAndDeserialize(family, SerializationFactory.GetXmlSerializer());
+                var newFamily = SerializationTestHelper.SerializeAndDeserialize(family, SerializationTestHelper.GetXmlSerializer(mode));
 
                 Assert.AreEqual(family.LastName, newFamily.LastName);
                 Assert.AreEqual(1, family.Persons.Count);

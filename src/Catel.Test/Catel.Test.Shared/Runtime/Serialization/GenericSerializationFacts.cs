@@ -720,7 +720,7 @@ namespace Catel.Test.Runtime.Serialization
                 var parameterTypes = new[] { typeof(int), typeof(int), typeof(bool), typeof(IEnumerable<SortDescriptor>), typeof(FilterDescriptor) };
                 var parameterNames = new Dictionary<string, int> { { "skip", 0 }, { "take", 1 }, { "includeDeleted", 2 }, { "sort", 3 }, { "filter", 4 } };
 
-                var serializer = GetJsonSerializer();
+                var serializer = SerializationTestHelper.GetJsonSerializer();
                 serializer.PreserveReferences = false;
                 serializer.WriteTypeInfo = false;
 
@@ -837,13 +837,14 @@ namespace Catel.Test.Runtime.Serialization
         {
             var serializers = new List<ISerializer>();
 
-            serializers.Add(GetXmlSerializer());
-            serializers.Add(GetBinarySerializer());
-            serializers.Add(GetJsonSerializer());
+            serializers.Add(SerializationTestHelper.GetXmlSerializer(XmlSerializerOptimalizationMode.Performance));
+            serializers.Add(SerializationTestHelper.GetXmlSerializer(XmlSerializerOptimalizationMode.PrettyXml));
+            serializers.Add(SerializationTestHelper.GetBinarySerializer());
+            serializers.Add(SerializationTestHelper.GetJsonSerializer());
 
             if (testWithoutGraphIdsAsWell)
             {
-                var basicJsonSerializer = GetJsonSerializer();
+                var basicJsonSerializer = SerializationTestHelper.GetJsonSerializer();
                 basicJsonSerializer.PreserveReferences = false;
                 basicJsonSerializer.WriteTypeInfo = false;
                 serializers.Add(basicJsonSerializer);
@@ -863,21 +864,6 @@ namespace Catel.Test.Runtime.Serialization
 
                 action(serializer, typeName);
             }
-        }
-
-        private static IXmlSerializer GetXmlSerializer()
-        {
-            return SerializationFactory.GetXmlSerializer();
-        }
-
-        private static IBinarySerializer GetBinarySerializer()
-        {
-            return SerializationFactory.GetBinarySerializer();
-        }
-
-        private static IJsonSerializer GetJsonSerializer()
-        {
-            return new JsonSerializer(new SerializationManager(), TypeFactory.Default, new ObjectAdapter());
         }
     }
 }
