@@ -47,30 +47,8 @@ namespace Catel.Windows.Threading
                 }
             }), null);
 
-            dispatcherOperation.Completed += (sender, e) =>
-            {
-                if (tcs.Task.IsCanceled)
-                {
-                    return;
-                }
-
-                if (!tcs.TrySetResult(true))
-                {
-                    Log.Warning("Failed to set the task result to true, task was already completed. Current status is '{0}'", tcs.Task.Status);
-                }
-            };
-            dispatcherOperation.Aborted += (sender, e) =>
-            {
-                if (tcs.Task.IsCanceled)
-                {
-                    return;
-                }
-
-                if (!tcs.TrySetCanceled())
-                {
-                    Log.Warning("Failed to set the task as canceled, task was already completed or canceled before");
-                }
-            };
+            dispatcherOperation.Completed += (sender, e) => SetResult(tcs, true);
+            dispatcherOperation.Aborted += (sender, e) => SetCanceled(tcs);
 
             return tcs.Task;
         }
@@ -100,8 +78,8 @@ namespace Catel.Windows.Threading
                 }
             }), null);
 
-            dispatcherOperation.Completed += (sender, e) => tcs.SetResult(true);
-            dispatcherOperation.Aborted += (sender, e) => tcs.SetCanceled();
+            dispatcherOperation.Completed += (sender, e) => SetResult(tcs, true);
+            dispatcherOperation.Aborted += (sender, e) => SetCanceled(tcs);
 
             return tcs.Task;
         }
@@ -130,10 +108,42 @@ namespace Catel.Windows.Threading
                 }
             }), null);
 
-            dispatcherOperation.Completed += (sender, e) => tcs.SetResult(result);
-            dispatcherOperation.Aborted += (sender, e) => tcs.SetCanceled();
+            dispatcherOperation.Completed += (sender, e) => SetResult(tcs, result);
+            dispatcherOperation.Aborted += (sender, e) => SetCanceled(tcs);
 
             return tcs.Task;
+        }
+
+        private static bool SetResult<T>(TaskCompletionSource<T> tcs, T result)
+        {
+            if (tcs.Task.IsCanceled)
+            {
+                return false;
+            }
+
+            if (!tcs.TrySetResult(result))
+            {
+                Log.Warning("Failed to set the task result to '{0}', task was already completed. Current status is '{1}'", result, tcs.Task.Status);
+                return false;
+            }
+
+            return true;
+        }
+
+        private static bool SetCanceled<T>(TaskCompletionSource<T> tcs)
+        {
+            if (tcs.Task.IsCanceled)
+            {
+                return true;
+            }
+
+            if (!tcs.TrySetCanceled())
+            {
+                Log.Warning("Failed to set the task as canceled, task was already completed or canceled before");
+                return false;
+            }
+
+            return true;
         }
 #endif
     }
