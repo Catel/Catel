@@ -16,6 +16,49 @@ License:         http://www.catelproject.com/about/license
 **********************************************************
 
 ==================
+Version 4.3.0
+==================
+
+For an update guide, visit https://catelproject.atlassian.net/wiki/display/CTL/Update+guides
+
+Release date:
+=============
+2015/xx/xx
+
+Added/fixed (BREAKING CHANGES):
+===============================
+No breaking changes, but made a lot of preparations for the "async big bang" that will happen in Catel 5.0. We are
+currently trying to index all members that might need async members in the future. Most of these members are now
+marked as obsolete and have an async handler which must be used in the future.
+
+Platform support changes:
+=========================
+xxx
+
+Classes marked as obsolete:
+===========================
+Our mission is to make Catel easier to maintain in the future. One way to achieve this is to remove unused
+features and components. We are actively removing features by marking them obsolete. If nobody complains,
+we will remove the features in the next major release.
+
+(*) CTL-671 Marked Catel.Extensions.CSLA as obsolete
+(*) CTL-672 Marked Catel.Extensions.Wcf.Server as obsolete
+
+Added/fixed:
+============
+xxx
+
+Roadmap:
+========
+See http://www.catelproject.com/support/issue-tracker
+
+Known issues:
+=============
+See http://www.catelproject.com/support/issue-tracker
+
+**********************************************************
+
+==================
 Version 4.2.0
 ==================
 
