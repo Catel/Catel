@@ -37,5 +37,28 @@ namespace Catel.Services
                     }
                 });
         }
+
+        /// <summary>
+        /// Calls <see cref="IPleaseWaitService.Push"/> and returns a disposable token. As soon as the token is disposed, it will
+        /// call <see cref="IPleaseWaitService.Pop"/>.
+        /// <para />
+        /// This is a great way to safely show a busy indicator and ensure that the indicator hides, even when an exception occurs.
+        /// </summary>
+        /// <param name="pleaseWaitService">The please wait service.</param>
+        /// <returns>IDisposable.</returns>
+        /// <example>
+        /// <![CDATA[
+        /// using (pleaseWaitService.PushInScope())
+        /// {
+        ///     // some code that might throw exceptions
+        /// }
+        /// ]]>
+        /// </example>
+        public static IDisposable PushInScope(this IPleaseWaitService pleaseWaitService)
+        {
+            Argument.IsNotNull(() => pleaseWaitService);
+
+            return new DisposableToken<IPleaseWaitService>(pleaseWaitService, token => token.Instance.Push(), token => token.Instance.Pop());
+        }
     }
 }

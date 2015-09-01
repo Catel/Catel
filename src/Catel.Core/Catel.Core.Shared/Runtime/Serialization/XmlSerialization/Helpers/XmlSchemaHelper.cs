@@ -9,7 +9,6 @@
 namespace Catel.Runtime.Serialization.Xml
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
@@ -18,8 +17,8 @@ namespace Catel.Runtime.Serialization.Xml
     using System.Xml.Linq;
     using System.Xml.Schema;
     using System.Xml.Serialization;
-    using Catel.IoC;
     using Data;
+    using IoC;
     using Logging;
     using Reflection;
 
@@ -141,29 +140,20 @@ namespace Catel.Runtime.Serialization.Xml
 
             if (typeof(ModelBase).IsAssignableFromEx(type))
             {
-                var members = new List<MemberInfo>();
+                var members = new List<MemberMetadata>();
                 members.AddRange(from field in serializationManager.GetFieldsToSerialize(type)
-                                 select type.GetFieldEx(field));
-                members.AddRange(from property in serializationManager.GetPropertiesToSerialize(type)
-                                 select type.GetPropertyEx(property));
+                                 select field.Value);
+                members.AddRange(from property in serializationManager.GetCatelPropertiesToSerialize(type)
+                                 select property.Value);
+                members.AddRange(from property in serializationManager.GetRegularPropertiesToSerialize(type)
+                                 select property.Value);
 
                 foreach (var member in members)
                 {
                     var propertySchemaElement = new XmlSchemaElement();
-                    propertySchemaElement.Name = member.Name;
+                    propertySchemaElement.Name = member.MemberName;
 
-                    var memberType = typeof(object);
-                    var fieldInfo = member as FieldInfo;
-                    if (fieldInfo != null)
-                    {
-                        memberType = fieldInfo.FieldType;
-                    }
-
-                    var propertyInfo = member as PropertyInfo;
-                    if (propertyInfo != null)
-                    {
-                        memberType = propertyInfo.PropertyType;
-                    }
+                    var memberType = member.MemberType;
 
                     propertySchemaElement.IsNillable = memberType.IsNullableType();
                     propertySchemaElement.MinOccurs = 0;

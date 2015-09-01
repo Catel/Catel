@@ -21,14 +21,14 @@ namespace Catel.Runtime.Serialization
         /// <param name="model">The model.</param>
         /// <param name="memberValue">The member value.</param>
         /// <returns><c>true</c> if the property should be ignored, <c>false</c> otherwise.</returns>
-        bool ShouldIgnoreMember(ISerializationContext context, IModel model, MemberValue memberValue);
+        bool ShouldIgnoreMember(ISerializationContext context, object model, MemberValue memberValue);
 
         /// <summary>
         /// Called when the object is about to be serialized.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="model">The model.</param>
-        void OnSerializing(ISerializationContext context, IModel model);
+        void OnSerializing(ISerializationContext context, object model);
 
         /// <summary>
         /// Allows the customization of the provided <see cref="MemberValue"/>.
@@ -42,14 +42,14 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="model">The model.</param>
-        void OnSerialized(ISerializationContext context, IModel model);
+        void OnSerialized(ISerializationContext context, object model);
 
         /// <summary>
         /// Called when the object is about to be deserialized.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="model">The model.</param>
-        void OnDeserializing(ISerializationContext context, IModel model);
+        void OnDeserializing(ISerializationContext context, object model);
 
         /// <summary>
         /// Allows the customization of the provided <see cref="MemberValue"/>.
@@ -63,6 +63,6 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="model">The model.</param>
-        void OnDeserialized(ISerializationContext context, IModel model);
+        void OnDeserialized(ISerializationContext context, object model);
     }
 }

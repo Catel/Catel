@@ -6,6 +6,7 @@
 
 namespace Catel.Data
 {
+    using Runtime.Serialization;
     using System;
     using System.Collections;
     using System.Collections.Generic;

@@ -8,7 +8,7 @@ namespace Catel.MVVM
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
-
+    using System.Linq;
     using Catel.Data;
     using Catel.Reflection;
 
@@ -63,6 +63,16 @@ namespace Catel.MVVM
             set
             {
                 HideValidationResults = value;
+
+                foreach (var childViewModel in ChildViewModels.ToList())
+                {
+                    var childVm = childViewModel as ViewModelBase;
+                    if (childVm != null)
+                    {
+                        childVm.DeferValidationUntilFirstSaveCall = DeferValidationUntilFirstSaveCall;
+                    }
+                }
+
                 RaisePropertyChanged(string.Empty);
             }
         }

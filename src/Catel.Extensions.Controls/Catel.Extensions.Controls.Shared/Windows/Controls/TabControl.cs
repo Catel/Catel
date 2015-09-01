@@ -47,25 +47,25 @@ namespace Catel.Windows.Controls
         /// <summary>
         /// Obsolete, use <see cref="LazyLoading"/> instead.
         /// </summary>
-        [ObsoleteEx(Replacement = "LazyLoading", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "LazyLoading", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
         Single = LazyLoading,
 
         /// <summary>
         /// Obsolete, use <see cref="LazyLoadingUnloadOthers"/> instead.
         /// </summary>
-        [ObsoleteEx(Replacement = "LazyLoadingUnloadOthers", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "LazyLoadingUnloadOthers", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
         SingleUnloadOthers = LazyLoadingUnloadOthers,
 
         /// <summary>
         /// Obsolete, use <see cref="EagerLoading"/> instead.
         /// </summary>
-        [ObsoleteEx(Replacement = "EagerLoading", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "EagerLoading", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
         AllOnStartUp = EagerLoading,
 
         /// <summary>
         /// Obsolete, use <see cref="EagerLoadingOnFirstUse"/> instead.
         /// </summary>
-        [ObsoleteEx(Replacement = "EagerLoadingOnFirstUse", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "EagerLoadingOnFirstUse", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
         AllOnFirstUse = EagerLoadingOnFirstUse
     }
 
@@ -266,6 +266,7 @@ namespace Catel.Windows.Controls
 
                 case NotifyCollectionChangedAction.Add:
                 case NotifyCollectionChangedAction.Remove:
+                case NotifyCollectionChangedAction.Replace:
                     if (e.OldItems != null)
                     {
                         foreach (var item in e.OldItems)
@@ -281,9 +282,6 @@ namespace Catel.Windows.Controls
                     // don't do anything with new items because we don't want to
                     // create visuals that aren't being shown
                     break;
-
-                case NotifyCollectionChangedAction.Replace:
-                    throw new NotImplementedException("Replace not implemented yet");
             }
 
             InitializeItems();

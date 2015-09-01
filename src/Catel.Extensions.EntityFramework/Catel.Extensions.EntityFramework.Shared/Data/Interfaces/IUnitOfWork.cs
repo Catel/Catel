@@ -7,15 +7,22 @@
 namespace Catel.Data
 {
     using System;
+    using System.Collections;
     using System.Data;
     using System.Data.Entity;
     using IoC;
     using Repositories;
 
+#if EF_ASYNC
+    using System.Threading.Tasks;
+#endif
+
 #if EF5
     using SaveOptions = System.Data.Objects.SaveOptions;
+    using System.Data.Objects;
 #else
     using SaveOptions = System.Data.Entity.Core.Objects.SaveOptions;
+    using System.Data.Entity.Core.Objects;
 #endif
 
     /// <summary>
@@ -57,10 +64,68 @@ namespace Catel.Data
             where TEntityRepository : IEntityRepository;
 
         /// <summary>
+        /// Refreshes the collection inside the unit of work.
+        /// </summary>
+        /// <param name="refreshMode">The refresh mode.</param>
+        /// <param name="collection">The collection.</param>
+        void Refresh(RefreshMode refreshMode, IEnumerable collection);
+
+#if EF_ASYNC
+        /// <summary>
+        /// Refreshes the collection inside the unit of work.
+        /// </summary>
+        /// <param name="refreshMode">The refresh mode.</param>
+        /// <param name="collection">The collection.</param>
+        Task RefreshAsync(RefreshMode refreshMode, IEnumerable collection);
+#endif
+
+        /// <summary>
+        /// Refreshes the entity inside the unit of work.
+        /// </summary>
+        /// <param name="refreshMode">The refresh mode.</param>
+        /// <param name="entity">The entity.</param>
+        void Refresh(RefreshMode refreshMode, object entity);
+
+#if EF_ASYNC
+        /// <summary>
+        /// Refreshes the entity inside the unit of work.
+        /// </summary>
+        /// <param name="refreshMode">The refresh mode.</param>
+        /// <param name="entity">The entity.</param>
+        Task RefreshAsync(RefreshMode refreshMode, object entity);
+#endif
+
+        /// <summary>
         /// Saves the changes inside the unit of work.
         /// </summary>
         /// <param name="saveOptions">The save options.</param>
-        void SaveChanges(SaveOptions saveOptions = SaveOptions.DetectChangesBeforeSave | SaveOptions.AcceptAllChangesAfterSave);
+        /// <exception cref="InvalidOperationException">A transaction is running. Call CommitTransaction instead.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "SaveChangesAsync()", Message = "EF no longer exposes methods with SaveOptions, so this will be removed",
+            TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
+        void SaveChanges(SaveOptions saveOptions);
+
+        /// <summary>
+        /// Saves the changes inside the unit of work.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">A transaction is running. Call CommitTransaction instead.</exception>
+        void SaveChanges();
+
+#if EF_ASYNC
+        /// <summary>
+        /// Saves the changes inside the unit of work.
+        /// </summary>
+        /// <param name="saveOptions">The save options.</param>
+        /// <exception cref="InvalidOperationException">A transaction is running. Call CommitTransaction instead.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "SaveChangesAsync()", Message = "EF no longer exposes methods with SaveOptions, so this will be removed",
+            TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
+        Task SaveChangesAsync(SaveOptions saveOptions);
+
+        /// <summary>
+        /// Saves the changes inside the unit of work.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">A transaction is running. Call CommitTransaction instead.</exception>
+        Task SaveChangesAsync();
+#endif
 
         /// <summary>
         /// Begins a new transaction on the unit of work.
@@ -77,6 +142,13 @@ namespace Catel.Data
         /// Commits all the changes inside a transaction.
         /// </summary>
         void CommitTransaction();
+
+#if EF_ASYNC
+        /// <summary>
+        /// Commits all the changes inside a transaction.
+        /// </summary>
+        Task CommitTransactionAsync();
+#endif
         #endregion
     }
 }

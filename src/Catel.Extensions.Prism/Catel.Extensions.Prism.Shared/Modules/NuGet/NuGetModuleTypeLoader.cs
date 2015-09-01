@@ -3,7 +3,6 @@
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-
 #if NET
 
 namespace Catel.Modules
@@ -12,9 +11,10 @@ namespace Catel.Modules
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Globalization;
+    using System.IO;
     using System.Linq;
+    using System.Reflection;
     using System.Threading;
-    using System.Windows.Threading;
 
     using Catel.Logging;
     using Catel.Windows.Threading;
@@ -27,7 +27,7 @@ namespace Catel.Modules
     public sealed class NuGetModuleTypeLoader : IModuleTypeLoader
     {
         #region Constants
-       
+
         /// <summary>
         /// The log.
         /// </summary>
@@ -35,11 +35,53 @@ namespace Catel.Modules
         #endregion
 
         #region Fields
-       
+
+        /// <summary>
+        /// The module catalog
+        /// </summary>
+        private IModuleCatalog _moduleCatalog;
+
+        /// <summary>
+        /// The sync obj.
+        /// </summary>
+        private readonly object _syncObj = new object();
+
+        #endregion
+
+        #region Properties
         /// <summary>
         /// The module catalogs.
         /// </summary>
-        private readonly ReadOnlyCollection<INuGetBasedModuleCatalog> _moduleCatalogs;
+        private ReadOnlyCollection<INuGetBasedModuleCatalog> NuGetBasedModuleCatalogs
+        {
+            get
+            {
+                lock (_syncObj)
+                {
+                    ReadOnlyCollection<INuGetBasedModuleCatalog> moduleCatalogs = null;
+
+                    if (_moduleCatalog is INuGetBasedModuleCatalog)
+                    {
+                        moduleCatalogs = new List<INuGetBasedModuleCatalog> { _moduleCatalog as INuGetBasedModuleCatalog }.AsReadOnly();
+                    }
+
+                    if (_moduleCatalog is CompositeModuleCatalog)
+                    {
+                        var compositeModuleCatalog = _moduleCatalog as CompositeModuleCatalog;
+
+                        moduleCatalogs = compositeModuleCatalog.LeafCatalogs.OfType<INuGetBasedModuleCatalog>().ToList().AsReadOnly();
+                    }
+
+                    if (moduleCatalogs == null || moduleCatalogs.Count == 0)
+                    {
+                        Log.Warning("There are no NuGet based module catalogs available");
+                    }
+
+                    return moduleCatalogs;
+                }
+            }
+        }
+
         #endregion
 
         #region Constructors
@@ -54,24 +96,9 @@ namespace Catel.Modules
         {
             Argument.IsNotNull(() => moduleCatalog);
 
-            if (moduleCatalog is INuGetBasedModuleCatalog)
-            {
-                _moduleCatalogs = new List<INuGetBasedModuleCatalog> { moduleCatalog as INuGetBasedModuleCatalog }.AsReadOnly();
-            }
+            _moduleCatalog = moduleCatalog;
 
-            if (moduleCatalog is CompositeModuleCatalog)
-            {
-                var compositeModuleCatalog = moduleCatalog as CompositeModuleCatalog;
-                
-                _moduleCatalogs = compositeModuleCatalog.LeafCatalogs.OfType<INuGetBasedModuleCatalog>().ToList().AsReadOnly();
-            }
-
-            if (_moduleCatalogs == null || _moduleCatalogs.Count == 0)
-            {
-                const string error = "There are no NuGet based module catalogs available";
-                Log.Error(error);
-                throw new InvalidOperationException(error);
-            }
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomainOnAssemblyResolve;
         }
         #endregion
 
@@ -135,59 +162,126 @@ namespace Catel.Modules
             // ReSharper disable once ImplicitlyCapturedClosure
             Argument.IsNotNull(() => moduleInfo);
 
-            Dispatcher currentDispatcher = DispatcherHelper.CurrentDispatcher;
+            var currentDispatcher = DispatcherHelper.CurrentDispatcher;
 
             Log.Debug("Loading module type '{0}' from package '{1}'", moduleInfo.ModuleType, moduleInfo.Ref);
 
-            new Thread(() =>
+            var thread = new Thread(() =>
+            {
+                InstallPackageRequest installPackageRequest;
+                var packageName = moduleInfo.GetPackageName();
+                if (packageName != null && TryCreateInstallPackageRequest(moduleInfo, out installPackageRequest))
                 {
-                    InstallPackageRequest installPackageRequest;
-                    var packageName = moduleInfo.GetPackageName();
-                    if (packageName != null && this.TryCreateInstallPackageRequest(moduleInfo, out installPackageRequest))
-                    {
-                        currentDispatcher.BeginInvoke(() => OnModuleDownloadProgressChanged(new ModuleDownloadProgressChangedEventArgs(moduleInfo, 0, 1)));
+                    currentDispatcher.BeginInvoke(() => OnModuleDownloadProgressChanged(new ModuleDownloadProgressChangedEventArgs(moduleInfo, 0, 1)));
 
-                        bool installed = false;
+                    var installed = false;
+
+                    try
+                    {
+                        installPackageRequest.Execute();
+                        installed = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        currentDispatcher.BeginInvoke(() => OnLoadModuleCompleted(new LoadModuleCompletedEventArgs(moduleInfo, ex)));
+                    }
+
+                    if (installed)
+                    {
+                        var fileModuleTypeLoader = new FileModuleTypeLoader();
+                        var fileModuleInfo = new ModuleInfo(moduleInfo.ModuleName, moduleInfo.ModuleType)
+                        {
+                            Ref = installPackageRequest.ModuleAssemblyRef.Ref,
+                            InitializationMode = moduleInfo.InitializationMode,
+                            DependsOn = moduleInfo.DependsOn
+                        };
+
+                        fileModuleTypeLoader.ModuleDownloadProgressChanged += (sender, args) =>
+                        {
+                            moduleInfo.State = args.ModuleInfo.State;
+                            currentDispatcher.BeginInvoke(() => OnModuleDownloadProgressChanged(new ModuleDownloadProgressChangedEventArgs(moduleInfo, args.BytesReceived, args.TotalBytesToReceive)));
+                        };
+
+                        fileModuleTypeLoader.LoadModuleCompleted += (sender, args) =>
+                        {
+                            moduleInfo.State = args.ModuleInfo.State;
+                            currentDispatcher.BeginInvoke(() => OnLoadModuleCompleted(new LoadModuleCompletedEventArgs(moduleInfo, args.Error)));
+                        };
+
+                        fileModuleTypeLoader.LoadModuleType(fileModuleInfo);
+
+                        Log.Info("Module '{0}' is installed and loaded", moduleInfo.ModuleName);
+                    }
+                }
+                else
+                {
+                    currentDispatcher.BeginInvoke(() => OnLoadModuleCompleted(new LoadModuleCompletedEventArgs(moduleInfo, new ModuleNotFoundException(moduleInfo.ModuleName, string.Format(CultureInfo.InvariantCulture, "The package '{0}' for module '{1}' was not found", moduleInfo.Ref, moduleInfo.ModuleName)))));
+                }
+            });
+
+            thread.Start();
+        }
+
+        /// <summary>
+        /// Raised when the resolution of an assembly fails.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        private Assembly CurrentDomainOnAssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            var requestingAssembly = args.RequestingAssembly;
+
+            var moduleCatalogs = NuGetBasedModuleCatalogs;
+
+            if (!_moduleCatalog.Modules.Any(info => !string.IsNullOrWhiteSpace(info.Ref) && info.Ref.StartsWith(args.Name)) && (requestingAssembly == null && moduleCatalogs.Count > 0))
+            {
+                Log.Debug("Trying to resolve '{0}'", args.Name);
+
+                var frameworkIdentifierPath = string.Format("\\{0}\\", Platforms.CurrentPlatform).ToLower();
+
+                var assemblyName = args.Name.Split(',')[0].Trim();
+
+                var outputDirectoryFullPaths = moduleCatalogs.Select(catalog => catalog.OutputDirectoryFullPath).Distinct(StringComparer.InvariantCultureIgnoreCase).ToArray();
+
+                int i = 0;
+                while (requestingAssembly == null && i < outputDirectoryFullPaths.Length)
+                {
+                    var outputDirectoryFullPath = outputDirectoryFullPaths[i++];
+                    if (Directory.Exists(outputDirectoryFullPath))
+                    {
+                        var assemblyFilePath = string.Empty;
                         try
                         {
-                            installPackageRequest.Execute();
-                            installed = true;
+                            var expectedAssemblyFileName = string.Format("{0}.dll", assemblyName);
+
+                            // Search with framework identifiers first
+                            assemblyFilePath = Directory.EnumerateFiles(outputDirectoryFullPath, expectedAssemblyFileName, SearchOption.AllDirectories).FirstOrDefault(path => path.ToLower().Contains(frameworkIdentifierPath));
+                            if (string.IsNullOrWhiteSpace(assemblyFilePath))
+                            {
+                                assemblyFilePath = Directory.EnumerateFiles(outputDirectoryFullPath, expectedAssemblyFileName, SearchOption.AllDirectories).FirstOrDefault();
+                            }
                         }
-                        catch (Exception e)
+                        catch (Exception ex)
                         {
-                            currentDispatcher.BeginInvoke(() => OnLoadModuleCompleted(new LoadModuleCompletedEventArgs(moduleInfo, e)));
+                            Log.Error(ex, "Failed to search for assembly '{0}'", assemblyName);
                         }
 
-                        if (installed)
+                        if (!string.IsNullOrWhiteSpace(assemblyFilePath))
                         {
-                            var fileModuleTypeLoader = new FileModuleTypeLoader();
-                            var fileModuleInfo = new ModuleInfo(moduleInfo.ModuleName, moduleInfo.ModuleType)
-                            {
-                                Ref = installPackageRequest.AssemblyFileRef,
-                                InitializationMode = moduleInfo.InitializationMode,
-                                DependsOn = moduleInfo.DependsOn
-                            };
+                            Log.Warning("Resolved '{0}' at '{1}'", args.Name, assemblyFilePath);
 
-                            fileModuleTypeLoader.ModuleDownloadProgressChanged += (sender, args) =>
-                            {
-                                moduleInfo.State = args.ModuleInfo.State;
-                                currentDispatcher.BeginInvoke(() => OnModuleDownloadProgressChanged(new ModuleDownloadProgressChangedEventArgs(moduleInfo, args.BytesReceived, args.TotalBytesToReceive)));
-                            };
-
-                            fileModuleTypeLoader.LoadModuleCompleted += (sender, args) =>
-                            {
-                                moduleInfo.State = args.ModuleInfo.State;
-                                currentDispatcher.BeginInvoke(() => OnLoadModuleCompleted(new LoadModuleCompletedEventArgs(moduleInfo, args.Error)));
-                            };
-
-                            fileModuleTypeLoader.LoadModuleType(fileModuleInfo);
+                            requestingAssembly = Assembly.LoadFile(assemblyFilePath);
+                        }
+                        else
+                        {
+                            Log.Warning("Could not resolve '{0}'", args.Name);
                         }
                     }
-                    else
-                    {
-                        currentDispatcher.BeginInvoke(() => OnLoadModuleCompleted(new LoadModuleCompletedEventArgs(moduleInfo, new ModuleNotFoundException(moduleInfo.ModuleName, string.Format(CultureInfo.InvariantCulture, "The package '{0}' for module '{1}' was not found", moduleInfo.Ref, moduleInfo.ModuleName)))));
-                    }
-                }).Start();
+                }
+            }
+
+            return requestingAssembly;
         }
 
         /// <summary>
@@ -195,12 +289,13 @@ namespace Catel.Modules
         /// </summary>
         /// <param name="moduleInfo">The module info</param>
         /// <param name="installPackageRequest">The install package request</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
         private bool TryCreateInstallPackageRequest(ModuleInfo moduleInfo, out InstallPackageRequest installPackageRequest)
         {
-            int i = 0;
+            var i = 0;
             installPackageRequest = null;
-            while (i < _moduleCatalogs.Count && !_moduleCatalogs[i].TryCreateInstallPackageRequest(moduleInfo, out installPackageRequest))
+            var moduleCatalogs = NuGetBasedModuleCatalogs;
+            while (i < moduleCatalogs.Count && !moduleCatalogs[i].TryCreateInstallPackageRequest(moduleInfo, out installPackageRequest))
             {
                 i++;
             }

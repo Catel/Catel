@@ -13,6 +13,7 @@ namespace Catel.Windows.Interactivity
     using Reflection;
     using global::Windows.UI.Xaml;
     using IXamlBehavior = Microsoft.Xaml.Interactivity.IBehavior;
+    
 
     /// <summary>
     /// Base class for the behavior because the SDK in WIN81 only ships with interfaces.

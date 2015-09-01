@@ -12,6 +12,7 @@ namespace Catel.Windows.Controls
     /// <summary>
     /// Interaction logic for MultiLineInput.xaml
     /// </summary>
+    [ObsoleteEx(Message = "Will be removed, copy to your own solution if you use it", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
     public partial class MultiLineInput : System.Windows.Controls.UserControl
     {
         #region Fields

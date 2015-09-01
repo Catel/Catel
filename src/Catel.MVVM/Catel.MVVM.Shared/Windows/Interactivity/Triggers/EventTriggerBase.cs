@@ -31,7 +31,7 @@ namespace Catel.Windows.Interactivity
 #else
     public abstract class EventTriggerBase<T> : System.Windows.Interactivity.EventTriggerBase<T>, ITrigger
 #endif
- where T : FrameworkElement
+        where T : FrameworkElement
     {
         #region Fields
         private bool _isClean = true;
@@ -42,7 +42,7 @@ namespace Catel.Windows.Interactivity
         /// Gets a value indicating whether the <c>AssociatedObject</c> is loaded.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if the <c>AssociatedObject</c> is loaded; otherwise, <c>false</c>.
+        /// <c>true</c> if the <c>AssociatedObject</c> is loaded; otherwise, <c>false</c>.
         /// </value>
         public bool IsAssociatedObjectLoaded { get; private set; }
 
@@ -60,6 +60,22 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <value>The associated object.</value>
         protected new T AssociatedObject { get { return (T)base.AssociatedObject; } }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this trigger is enabled.
+        /// </summary>
+        /// <value><c>true</c> if this trigger is enabled; otherwise, <c>false</c>.</value>
+        public bool IsEnabled
+        {
+            get { return (bool)GetValue(IsEnabledProperty); }
+            set { SetValue(IsEnabledProperty, value); }
+        }
+
+        /// <summary>
+        /// The IsEnabled property registration.
+        /// </summary>
+        public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.Register("IsEnabled", typeof(bool),
+            typeof(EventTriggerBase<T>), new PropertyMetadata(true, (sender, e) => ((EventTriggerBase<T>)sender).OnIsEnabledChanged()));
         #endregion
 
         #region Methods
@@ -69,6 +85,13 @@ namespace Catel.Windows.Interactivity
         protected override string GetEventName()
         {
             throw new InvalidOperationException("This method MUST be overriden and the base cannot be called");
+        }
+
+        /// <summary>
+        /// Called when the <see cref="IsEnabled" /> property has changed.
+        /// </summary>
+        protected virtual void OnIsEnabledChanged()
+        {
         }
 
         /// <summary>

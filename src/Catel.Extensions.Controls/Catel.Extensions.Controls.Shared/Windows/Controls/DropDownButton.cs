@@ -19,6 +19,7 @@ namespace Catel.Windows.Controls
     /// <remarks>
     /// The code for this control is based on the code found at http://andyonwpf.blogspot.com/2006/10/dropdownbuttons-in-wpf.html.
     /// </remarks>
+    [ObsoleteEx(ReplacementTypeOrMember = "Orc.Controls, see https://github.com/wildgums/orc.controls", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
     public class DropDownButton : ToggleButton
     {
         #region Fields

@@ -14,6 +14,7 @@ namespace Catel.ExceptionHandling
     using Logging;
     using Reflection;
     using System.Threading;
+    using Threading;
 
     /// <summary>
     /// The exception service allows the usage of the Try/Catch mechanics. This means that this service provides possibilities
@@ -148,7 +149,8 @@ namespace Catel.ExceptionHandling
         /// <returns>
         /// The exception handler.
         /// </returns>
-        public IExceptionHandler GetHandler<TException>() where TException : Exception
+        public IExceptionHandler GetHandler<TException>() 
+            where TException : Exception
         {
             var exceptionType = typeof(TException);
 
@@ -421,6 +423,7 @@ namespace Catel.ExceptionHandling
             {
                 Exception lastError;
                 TimeSpan interval;
+
                 try
                 {
                     return await action().ConfigureAwait(false);
@@ -432,7 +435,6 @@ namespace Catel.ExceptionHandling
                         lastError = exception;
 
                         var exceptionHandler = ExceptionHandlers.FirstOrDefault(handler => handler.ExceptionType.IsAssignableFromEx(lastError.GetType()));
-
                         if (exceptionHandler != null && exceptionHandler.RetryPolicy != null)
                         {
                             var retryPolicy = exceptionHandler.RetryPolicy;
@@ -485,17 +487,14 @@ namespace Catel.ExceptionHandling
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public async Task ProcessAsync(Action action, CancellationToken cancellationToken = default(CancellationToken))
+        [ObsoleteEx(Message = "Member will be removed because it's not truly asynchronous", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
+        public Task ProcessAsync(Action action, CancellationToken cancellationToken = default(CancellationToken))
         {
             Argument.IsNotNull("action", action);
 
             try
             {
-#if NET40 || SL5 || PCL
-                await Task.Factory.StartNew(action, cancellationToken).ConfigureAwait(false);
-#else
-                await Task.Run(action, cancellationToken).ConfigureAwait(false);
-#endif
+                return TaskHelper.Run(action, cancellationToken);
             }
             catch (Exception exception)
             {
@@ -504,8 +503,9 @@ namespace Catel.ExceptionHandling
                     throw;
                 }
             }
-        }
 
+            return TaskHelper.Completed;
+        }
 
         /// <summary>
         /// Processes the specified action.
@@ -561,17 +561,13 @@ namespace Catel.ExceptionHandling
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public async Task<TResult> ProcessAsync<TResult>(Func<TResult> action, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<TResult> ProcessAsync<TResult>(Func<TResult> action, CancellationToken cancellationToken = default(CancellationToken))
         {
             Argument.IsNotNull("action", action);
 
             try
             {
-#if NET40 || SL5 || PCL
-                return await Task.Factory.StartNew(action, cancellationToken).ConfigureAwait(false);
-#else
-                return await Task.Run(action, cancellationToken).ConfigureAwait(false);
-#endif
+                return TaskHelper.Run(action, cancellationToken);
             }
             catch (Exception exception)
             {
@@ -581,7 +577,7 @@ namespace Catel.ExceptionHandling
                 }
             }
 
-            return default(TResult);
+            return TaskHelper<TResult>.DefaultValue;
         }
 
         /// <summary>

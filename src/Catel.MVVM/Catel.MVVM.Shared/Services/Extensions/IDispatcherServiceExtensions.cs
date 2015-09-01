@@ -8,6 +8,11 @@
 namespace Catel.Services
 {
     using System;
+    using System.Threading.Tasks;
+
+#if NET
+    using Catel.Windows.Threading;
+#endif
 
     /// <summary>
     /// Extension methods for the <see cref="IDispatcherService"/>.
@@ -26,6 +31,35 @@ namespace Catel.Services
             Argument.IsNotNull("method", method);
 
             dispatcherService.Invoke(() => method.DynamicInvoke(args));
+        }
+
+        /// <summary>
+        /// Executes the specified action asynchronously with the specified arguments on the thread that the Dispatcher was created on if required.
+        /// <para />
+        /// To check whether this is necessary, it will check whether the current thread has access to the dispatcher.
+        /// </summary>
+        /// <param name="dispatcherService">The dispatcher service.</param>
+        /// <param name="action">The action.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="action" /> is <c>null</c>.</exception>
+        public static void InvokeIfRequired(this IDispatcherService dispatcherService, Action action)
+        {
+            dispatcherService.Invoke(action, true);
+        }
+
+        /// <summary>
+        /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on if required.
+        /// <para />
+        /// To check whether this is necessary, it will check whether the current thread has access to the dispatcher.
+        /// </summary>
+        /// <param name="dispatcherService">The dispatcher service.</param>
+        /// <param name="method">A delegate to a method that takes parameters specified in args, which is pushed onto the Dispatcher event queue.</param>
+        /// <param name="args">An array of objects to pass as arguments to the given method. Can be <c>null</c>.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="method" /> is <c>null</c>.</exception>
+        public static void InvokeIfRequired(this IDispatcherService dispatcherService, Delegate method, params object[] args)
+        {
+            Argument.IsNotNull("method", method);
+
+            dispatcherService.Invoke(() => method.DynamicInvoke(args), true);
         }
 
         /// <summary>
@@ -81,5 +115,52 @@ namespace Catel.Services
 
             dispatcherService.BeginInvoke(() => method.DynamicInvoke(args), true);
         }
-    }
+
+#if NET
+        /// <summary>
+        /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
+        /// </summary>
+        /// <param name="dispatcherService">The dispatcher service.</param>
+        /// <param name="action">The action.</param>
+        /// <returns>The task representing the action.</returns>
+        public static async Task InvokeAsync(this IDispatcherService dispatcherService, Action action)
+        {
+            var dispatcher = dispatcherService.CurrentDispatcher;
+
+#if NET40
+            await DispatcherExtensions.InvokeAsync(dispatcher, action);
+#else
+            await dispatcher.InvokeAsync(action);
+#endif
+        }
+
+        /// <summary>
+        /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
+        /// </summary>
+        /// <param name="dispatcherService">The dispatcher service.</param>
+        /// <param name="method">The method.</param>
+        /// <param name="args">The arguments to pass into the method.</param>
+        /// <returns>The task representing the action.</returns>
+        public static Task InvokeAsync(this IDispatcherService dispatcherService, Delegate method, params object[] args)
+        {
+            var dispatcher = dispatcherService.CurrentDispatcher;
+
+            return DispatcherExtensions.InvokeAsync(dispatcher, method, args);
+        }
+
+        /// <summary>
+        /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
+        /// </summary>
+        /// <typeparam name="T">The type of the result.</typeparam>
+        /// <param name="dispatcherService">The dispatcher service.</param>
+        /// <param name="func">The function.</param>
+        /// <returns>The task representing the action.</returns>
+        public static Task<T> InvokeAsync<T>(this IDispatcherService dispatcherService, Func<T> func)
+        {
+            var dispatcher = dispatcherService.CurrentDispatcher;
+
+            return DispatcherExtensions.InvokeAsync(dispatcher, func);
+        }
+#endif
+        }
 }

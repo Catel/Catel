@@ -54,7 +54,8 @@ namespace Catel.Services
         /// Indicates whether the view model will be shown. If the view model is <c>null</c> then this argument will be ignored. 
         /// </param>
         /// <exception cref="InvalidOperationException">If the batch is already committed and the execution is in progress or committing via async way.</exception>
-        void CommitAsync<TViewModel>(Action completedCallback = null, TViewModel viewModel = default(TViewModel), bool show = true) where TViewModel : IProgressNotifyableViewModel;
+        void CommitAsync<TViewModel>(Action completedCallback = null, TViewModel viewModel = default(TViewModel), bool show = true) 
+            where TViewModel : IProgressNotifyableViewModel;
 
         /// <summary>
         /// Execute in batch mode the enqueued tasks.
@@ -72,6 +73,7 @@ namespace Catel.Services
         /// Indicates whether the view model will be shown. If the view model is <c>null</c> then this argument will be ignored. 
         /// </param>
         /// <exception cref="InvalidOperationException">If the batch is already committed and the execution is in progress or committing via async way.</exception>
-        void Commit<TViewModel>(TViewModel viewModel = default(TViewModel), bool show = true) where TViewModel : IProgressNotifyableViewModel;
+        void Commit<TViewModel>(TViewModel viewModel = default(TViewModel), bool show = true) 
+            where TViewModel : IProgressNotifyableViewModel;
     }
 }

@@ -52,7 +52,7 @@ namespace Catel.Test.MVVM.Auditing
             TestCommand = new Command<string>(OnTestCommandExecute);
             TestCommand.AutomaticallyDispatchEvents = false;
 
-            InitializeViewModel();
+            InitializeViewModelAsync();
         }
         #endregion
 

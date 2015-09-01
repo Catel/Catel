@@ -28,7 +28,7 @@ namespace Catel.Test.MVVM.Commands
         [TestCase]
         public void TestCommandCancellation()
         {
-            var taskCommand = new TaskCommand(TestExecute);
+            var taskCommand = new TaskCommand(TestExecuteAsync);
 
             Assert.IsFalse(taskCommand.IsExecuting);
             Assert.IsFalse(taskCommand.IsCancellationRequested);
@@ -47,15 +47,11 @@ namespace Catel.Test.MVVM.Commands
             Assert.IsFalse(taskCommand.IsCancellationRequested);
         }
 
-        private static async Task TestExecute(CancellationToken cancellationToken)
+        private static async Task TestExecuteAsync(CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-#if NET40
-            await TaskEx.Delay(TaskDelay, cancellationToken);
-#else
-            await Task.Delay(TaskDelay, cancellationToken);
-#endif
+            await TaskShim.Delay(TaskDelay, cancellationToken);
 
             cancellationToken.ThrowIfCancellationRequested();
         }

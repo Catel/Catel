@@ -15,7 +15,8 @@ Final release steps:
 4)   Create release page under "Download" section on catelproject.com
 5)   Release via Codeplex => just a forwarding release
 6)   Release version in jira
-7)   Update docs on confluence (create copy of LATEST space)
+6.1) Ensure that the update guides are written at https://catelproject.atlassian.net/wiki/display/CTL/Update+guides
+7)   [Deprecated, use Copy Space plugin]  Update docs on confluence (create copy of LATEST space)
      See https://confluence.atlassian.com/display/CONFKB/Copy+or+Rename+a+Space+in+Confluence
 	 
 	 Search & replace the following items:

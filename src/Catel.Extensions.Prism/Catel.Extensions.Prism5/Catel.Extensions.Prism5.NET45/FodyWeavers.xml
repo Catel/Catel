@@ -7,5 +7,5 @@
       NuGet.Core
     </IncludeAssemblies>
   </Costura>
-  <Catel/>
+  <Catel WeaveProperties="false" />
 </Weavers>

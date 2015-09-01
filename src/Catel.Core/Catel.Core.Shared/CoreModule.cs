@@ -43,17 +43,20 @@ namespace Catel
 
 #if NET
             serviceLocator.RegisterType<IBinarySerializer, BinarySerializer>();
+            serviceLocator.RegisterTypeWithTag<ISerializationContextInfoFactory, BinarySerializationContextInfoFactory>(typeof(BinarySerializer));
 #endif
             serviceLocator.RegisterType<IDataContractSerializerFactory, DataContractSerializerFactory>();
             serviceLocator.RegisterType<IXmlSerializer, XmlSerializer>();
             serviceLocator.RegisterType<IXmlNamespaceManager, XmlNamespaceManager>();
             serviceLocator.RegisterType<ISerializationManager, SerializationManager>();
+            serviceLocator.RegisterType<IObjectAdapter, ObjectAdapter>();
+
+            serviceLocator.RegisterType<ISerializer, XmlSerializer>();
+            serviceLocator.RegisterTypeWithTag<ISerializationContextInfoFactory, XmlSerializationContextInfoFactory>(typeof(XmlSerializer));
 
             serviceLocator.RegisterType<IModelEqualityComparer, ModelEqualityComparer>();
             serviceLocator.RegisterType<IConfigurationService, ConfigurationService>();
-
             serviceLocator.RegisterType<IObjectConverterService, ObjectConverterService>();
-
             serviceLocator.RegisterType<IRollingInMemoryLogService, RollingInMemoryLogService>();
         }
     }

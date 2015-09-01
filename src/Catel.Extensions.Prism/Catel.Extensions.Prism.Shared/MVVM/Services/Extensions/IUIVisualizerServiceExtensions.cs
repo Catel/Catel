@@ -40,7 +40,7 @@ namespace Catel.Services
         /// <exception cref="NotSupportedException">If the implementation of IRegionManager is not registered in the IoC container</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="viewModel" /> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="viewModel" /> is <c>null</c>.</exception>
-        [ObsoleteEx(RemoveInVersion = "5.0", TreatAsErrorFromVersion = "4.2", Replacement = "IUICompositionService.Activate(viewModel, regionName)")]
+        [ObsoleteEx(RemoveInVersion = "5.0", TreatAsErrorFromVersion = "4.2", ReplacementTypeOrMember = "IUICompositionService.Activate(viewModel, regionName)")]
         public static void Activate(this IUIVisualizerService @this, IViewModel viewModel, string regionName = null)
         {
             Argument.IsNotNull("@this", @this);
@@ -65,7 +65,7 @@ namespace Catel.Services
         /// <exception cref="System.ArgumentNullException">The <paramref name="viewModel" /> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentException">The <paramref name="regionName" /> is <c>null</c> or whitespace.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="viewModel" /> is <c>null</c>.</exception>
-        [ObsoleteEx(RemoveInVersion = "5.0", TreatAsErrorFromVersion = "4.2", Replacement = "IUICompositionService.Activate(viewModel, parentViewModel, regionName)")]
+        [ObsoleteEx(RemoveInVersion = "5.0", TreatAsErrorFromVersion = "4.2", ReplacementTypeOrMember = "IUICompositionService.Activate(viewModel, parentViewModel, regionName)")]
         public static void Activate(this IUIVisualizerService @this, IViewModel viewModel, IViewModel parentViewModel, string regionName)
         {
             Argument.IsNotNull("@this", @this);
@@ -81,7 +81,7 @@ namespace Catel.Services
         /// <param name="viewModel">The view model.</param>
         /// <exception cref="ArgumentException">If <paramref name="viewModel" /> is <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">If the <paramref name="viewModel" /> was no show at least one time in a <see cref="IRegion" />.</exception>
-        [ObsoleteEx(RemoveInVersion = "5.0", TreatAsErrorFromVersion = "4.2", Replacement = "IUICompositionService.Activate(viewModel, parentViewModel, regionName)")]
+        [ObsoleteEx(RemoveInVersion = "5.0", TreatAsErrorFromVersion = "4.2", ReplacementTypeOrMember = "IUICompositionService.Activate(viewModel, parentViewModel, regionName)")]
         public static void Deactivate(this IUIVisualizerService @this, IViewModel viewModel)
         {
             Argument.IsNotNull("@this", @this);
@@ -106,7 +106,6 @@ namespace Catel.Services
         /// method first.</exception>
         /// <remarks>If the <see cref="IViewManager.GetViewsOfViewModel" /> method returns no active views for the <paramref name="viewModel" /> in the expected <paramref name="timeOutInMilliseconds" /> time
         /// then this method will assume that the view is actually opened and invokes <paramref name="openedProc" /> anyway.</remarks>
-        [CLSCompliant(false)]
         public static bool? Show(this IUIVisualizerService @this, IViewModel viewModel, Action openedProc = null, EventHandler<UICompletedEventArgs> completedProc = null, uint timeOutInMilliseconds = 10000)
         {
             Argument.IsNotNull("@this", @this);
@@ -124,7 +123,7 @@ namespace Catel.Services
                     }
 
                     var dispatcherService = ResolveTypeFromContainer<IDispatcherService>();
-                    dispatcherService.Invoke(openedProc);
+                    dispatcherService.Invoke(openedProc, true);
                 });
             }
 
@@ -147,7 +146,6 @@ namespace Catel.Services
         /// method first.</exception>
         /// <remarks>If the <see cref="IViewManager.GetViewsOfViewModel" /> method returns no active views for the <paramref name="viewModel" /> in the expected <paramref name="timeOutInMilliseconds" /> time
         /// then this method will assume that the view is actually opened and invokes <paramref name="openedProc" /> anyway.</remarks>
-        [CLSCompliant(false)]
         public static Task<bool?> ShowAsync(this IUIVisualizerService @this, IViewModel viewModel, Action openedProc = null, EventHandler<UICompletedEventArgs> completedProc = null, uint timeOutInMilliseconds = 10000)
         {
             Argument.IsNotNull("@this", @this);
@@ -169,7 +167,7 @@ namespace Catel.Services
                             }
 
                             var dispatcherService = ResolveTypeFromContainer<IDispatcherService>();
-                            dispatcherService.Invoke(openedProc);
+                            dispatcherService.Invoke(openedProc, true);
                         });
                     }
 

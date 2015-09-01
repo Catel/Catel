@@ -15,6 +15,24 @@ namespace Catel.IO
     using Reflection;
 #endif
 
+#if NET
+    /// <summary>
+    /// Gets the application data target.
+    /// </summary>
+    public enum ApplicationDataTarget
+    {
+        /// <summary>
+        /// The user.
+        /// </summary>
+        User,
+
+        /// <summary>
+        /// The machine.
+        /// </summary>
+        Machine
+    }
+#endif
+
     /// <summary>
     /// Static class that implements some path methods
     /// </summary>
@@ -22,52 +40,148 @@ namespace Catel.IO
     {
 #if NET
         /// <summary>
-		/// Gets the application data directory for the company and product as defined the the assembly information of the entry assembly. 
-		/// If the entry assembly is <c>null</c>, this method will fall back to the calling assembly to retrieve the information.
-		/// If the folder does not exist, the folder is automatically created by this method. 
+        /// Gets the application data directory for the company and product as defined the the assembly information of the entry assembly. 
+        /// If the entry assembly is <c>null</c>, this method will fall back to the calling assembly to retrieve the information.
+        /// If the folder does not exist, the folder is automatically created by this method. 
         /// <para />
-		/// This method returns a value like [application data]\[company]\[product name].
-		/// </summary>
-		/// <returns>Directory for the application data.</returns>
-		public static string GetApplicationDataDirectory()
-		{
-			var assembly = AssemblyHelper.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
+        /// This method returns a value like [application data]\[company]\[product name].
+        /// </summary>
+        /// <returns>Directory for the application data.</returns>
+        public static string GetApplicationDataDirectory()
+        {
+            return GetApplicationDataDirectory(ApplicationDataTarget.User);
+        }
 
-			return GetApplicationDataDirectory(assembly.Company(), assembly.Product());
-		}
-
-		/// <summary>
-		/// Gets the application data directory for a specific product. If the folder does not exist, the folder is automatically created by this method.
+        /// <summary>
+        /// Gets the application data directory for a specific product. If the folder does not exist, the folder is automatically created by this method.
         /// <para />
-		/// This method returns a value like [application data]\[product name].
-		/// </summary>
-		/// <param name="productName">Name of the product.</param>
-		/// <returns>Directory for the application data.</returns>
-		public static string GetApplicationDataDirectory(string productName)
-		{
-			return GetApplicationDataDirectory(string.Empty, productName);
-		}
+        /// This method returns a value like [application data]\[product name].
+        /// </summary>
+        /// <param name="productName">Name of the product.</param>
+        /// <returns>Directory for the application data.</returns>
+        public static string GetApplicationDataDirectory(string productName)
+        {
+            return GetApplicationDataDirectory(ApplicationDataTarget.User, productName);
+        }
 
-		/// <summary>
-		/// Gets the application data directory for a specific product of a specific company. If the folder does not exist, the
-		/// folder is automatically created by this method.
+        /// <summary>
+        /// Gets the application data directory for a specific product of a specific company. If the folder does not exist, the
+        /// folder is automatically created by this method.
         /// <para />
-		/// This method returns a value like [application data]\[company]\[product name].
-		/// </summary>
-		/// <param name="companyName">Name of the company.</param>
-		/// <param name="productName">Name of the product.</param>
-		/// <returns>Directory for the application data.</returns>
-		public static string GetApplicationDataDirectory(string companyName, string productName)
-		{
-            string path = Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), companyName, productName);
+        /// This method returns a value like [application data]\[company]\[product name].
+        /// </summary>
+        /// <param name="companyName">Name of the company.</param>
+        /// <param name="productName">Name of the product.</param>
+        /// <returns>Directory for the application data.</returns>
+        public static string GetApplicationDataDirectory(string companyName, string productName)
+        {
+            return GetApplicationDataDirectory(ApplicationDataTarget.User, companyName, productName);
+        }
 
-			if (!Directory.Exists(path))
-			{
-			    Directory.CreateDirectory(path);
-			}
+        /// <summary>
+        /// Gets the application data directory for the company and product as defined the the assembly information of the entry assembly. 
+        /// If the entry assembly is <c>null</c>, this method will fall back to the calling assembly to retrieve the information.
+        /// If the folder does not exist, the folder is automatically created by this method. 
+        /// <para />
+        /// This method returns a value like [application data]\[company]\[product name].
+        /// </summary>
+        /// <returns>Directory for the application data.</returns>
+        public static string GetApplicationDataDirectoryForAllUsers()
+        {
+            return GetApplicationDataDirectory(ApplicationDataTarget.Machine);
+        }
 
-			return path;
-		}
+        /// <summary>
+        /// Gets the application data directory for a specific product. If the folder does not exist, the folder is automatically created by this method.
+        /// <para />
+        /// This method returns a value like [application data]\[product name].
+        /// </summary>
+        /// <param name="productName">Name of the product.</param>
+        /// <returns>Directory for the application data.</returns>
+        public static string GetApplicationDataDirectoryForAllUsers(string productName)
+        {
+            return GetApplicationDataDirectory(ApplicationDataTarget.Machine, productName);
+        }
+
+        /// <summary>
+        /// Gets the application data directory for a specific product of a specific company. If the folder does not exist, the
+        /// folder is automatically created by this method.
+        /// <para />
+        /// This method returns a value like [application data]\[company]\[product name].
+        /// </summary>
+        /// <param name="companyName">Name of the company.</param>
+        /// <param name="productName">Name of the product.</param>
+        /// <returns>Directory for the application data.</returns>
+        public static string GetApplicationDataDirectoryForAllUsers(string companyName, string productName)
+        {
+            return GetApplicationDataDirectory(ApplicationDataTarget.Machine, companyName, productName);
+        }
+
+        /// <summary>
+        /// Gets the application data directory for the company and product as defined the the assembly information of the entry assembly. 
+        /// If the entry assembly is <c>null</c>, this method will fall back to the calling assembly to retrieve the information.
+        /// If the folder does not exist, the folder is automatically created by this method. 
+        /// <para />
+        /// This method returns a value like [application data]\[company]\[product name].
+        /// </summary>
+        /// <returns>Directory for the application data.</returns>
+        public static string GetApplicationDataDirectory(ApplicationDataTarget applicationDataTarget)
+        {
+            var assembly = AssemblyHelper.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
+
+            return GetApplicationDataDirectory(applicationDataTarget, assembly.Company(), assembly.Product());
+        }
+
+        /// <summary>
+        /// Gets the application data directory for a specific product. If the folder does not exist, the folder is automatically created by this method.
+        /// <para />
+        /// This method returns a value like [application data]\[product name].
+        /// </summary>
+        /// <param name="applicationDataTarget">The application data target.</param>
+        /// <param name="productName">Name of the product.</param>
+        /// <returns>Directory for the application data.</returns>
+        public static string GetApplicationDataDirectory(ApplicationDataTarget applicationDataTarget, string productName)
+        {
+            return GetApplicationDataDirectory(applicationDataTarget, string.Empty, productName);
+        }
+
+        /// <summary>
+        /// Gets the application data directory for a specific product of a specific company. If the folder does not exist, the
+        /// folder is automatically created by this method.
+        /// <para />
+        /// This method returns a value like [application data]\[company]\[product name].
+        /// </summary>
+        /// <param name="applicationDataTarget">The application data target.</param>
+        /// <param name="companyName">Name of the company.</param>
+        /// <param name="productName">Name of the product.</param>
+        /// <returns>Directory for the application data.</returns>
+        public static string GetApplicationDataDirectory(ApplicationDataTarget applicationDataTarget, string companyName, string productName)
+        {
+            var rootDirectory = string.Empty;
+
+            switch (applicationDataTarget)
+            {
+                case ApplicationDataTarget.User:
+                    rootDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                    break;
+
+                case ApplicationDataTarget.Machine:
+                    rootDirectory = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException("applicationDataTarget");
+            }
+
+            string path = Combine(rootDirectory, companyName, productName);
+
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            return path;
+        }
 #endif
 
         /// <summary>
@@ -226,16 +340,16 @@ namespace Catel.IO
 
             string path = System.IO.Path.Combine(basePath, relativePath);
 
-			if (string.IsNullOrEmpty(path))
-			{
-				return string.Empty;
-			}
+            if (string.IsNullOrEmpty(path))
+            {
+                return string.Empty;
+            }
 
             // Get the path info (it may contain any relative path items such as ..\, but
             // now it is safe to call GetFullPath))
-        	path = System.IO.Path.GetFullPath(path);
+            path = System.IO.Path.GetFullPath(path);
 
-        	return path;
+            return path;
         }
 #endif
 

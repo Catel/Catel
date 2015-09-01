@@ -59,7 +59,6 @@ namespace Catel.Modules
         /// <summary>
         /// The synchronization context.
         /// </summary>
-        [CLSCompliant(false)]
         protected readonly SynchronizationContext _synchronizationContext = new SynchronizationContext();
 
         /// <summary>
@@ -90,6 +89,7 @@ namespace Catel.Modules
             : this()
         {
             Argument.IsNotNull("modules", modules);
+
             foreach (var moduleInfo in modules)
             {
                 AddModule(moduleInfo);

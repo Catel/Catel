@@ -87,7 +87,7 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
             NotRegisteredCommand = new Command<object>(OnUnregisteredCommandExecute, null, "unregistered");
             NotRegisteredCommand.AutomaticallyDispatchEvents = false;
 
-            InitializeViewModel();
+            InitializeViewModelAsync();
         }
         #endregion
 

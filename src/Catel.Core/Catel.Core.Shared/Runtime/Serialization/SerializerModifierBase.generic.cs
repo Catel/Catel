@@ -14,7 +14,6 @@ namespace Catel.Runtime.Serialization
     /// </summary>
     /// <typeparam name="TModel">The type of the model.</typeparam>
     public abstract class SerializerModifierBase<TModel> : SerializerModifierBase
-        where TModel : IModel
     {
         /// <summary>
         /// Called when the object is about to be serialized.

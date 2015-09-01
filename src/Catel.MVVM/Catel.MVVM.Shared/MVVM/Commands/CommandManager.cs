@@ -41,9 +41,12 @@ namespace Catel.MVVM
 
 #if NET
         private bool _subscribedToApplicationActivedEvent;
-        private readonly ConditionalWeakTable<Window, object> _subscribedWindows = new ConditionalWeakTable<Window, object>(); 
-#else
+#elif SL5
         private bool _subscribedToKeyboardEvent;
+#endif
+
+#if NET || SL5
+        private readonly ConditionalWeakTable<FrameworkElement, CommandManagerWrapper> _subscribedViews = new ConditionalWeakTable<FrameworkElement, CommandManagerWrapper>();
 #endif
 
         private readonly Dictionary<string, InputGesture> _originalCommandGestures = new Dictionary<string, InputGesture>();
@@ -91,7 +94,7 @@ namespace Catel.MVVM
 
                 if (_commands.ContainsKey(commandName))
                 {
-                    string error = string.Format("Command '{0}' is already created using the CreateCommand method", commandName);
+                    var error = string.Format("Command '{0}' is already created using the CreateCommand method", commandName);
                     Log.Error(error);
 
                     if (throwExceptionWhenCommandIsAlreadyCreated)
@@ -137,7 +140,7 @@ namespace Catel.MVVM
 
                 if (_commands.ContainsKey(commandName))
                 {
-                    string error = string.Format("Command '{0}' is already created using the CreateCommand method", commandName);
+                    var error = string.Format("Command '{0}' is already created using the CreateCommand method", commandName);
                     Log.Error(error);
 
                     if (throwExceptionWhenCommandIsAlreadyCreated)
@@ -245,7 +248,7 @@ namespace Catel.MVVM
 
                 if (!_commands.ContainsKey(commandName))
                 {
-                    string error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    var error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
                     Log.Error(error);
                     throw new InvalidOperationException(error);
                 }
@@ -279,7 +282,7 @@ namespace Catel.MVVM
 
                 if (!_commands.ContainsKey(commandName))
                 {
-                    string error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    var error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
                     Log.Error(error);
                     throw new InvalidOperationException(error);
                 }
@@ -314,7 +317,7 @@ namespace Catel.MVVM
 
                 if (!_commands.ContainsKey(commandName))
                 {
-                    string error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    var error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
                     Log.Error(error);
                     throw new InvalidOperationException(error);
                 }
@@ -349,7 +352,7 @@ namespace Catel.MVVM
 
                 if (!_commands.ContainsKey(commandName))
                 {
-                    string error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    var error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
                     Log.Error(error);
                     throw new InvalidOperationException(error);
                 }
@@ -384,7 +387,7 @@ namespace Catel.MVVM
 
                 if (!_commands.ContainsKey(commandName))
                 {
-                    string error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    var error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
                     Log.Error(error);
                     throw new InvalidOperationException(error);
                 }
@@ -419,7 +422,7 @@ namespace Catel.MVVM
 
                 if (!_commands.ContainsKey(commandName))
                 {
-                    string error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    var error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
                     Log.Error(error);
                     throw new InvalidOperationException(error);
                 }
@@ -454,7 +457,7 @@ namespace Catel.MVVM
 
                 if (!_commands.ContainsKey(commandName))
                 {
-                    string error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    var error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
                     Log.Error(error);
                     throw new InvalidOperationException(error);
                 }
@@ -480,7 +483,7 @@ namespace Catel.MVVM
             {
                 if (!_commands.ContainsKey(commandName))
                 {
-                    string error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    var error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
                     Log.Error(error);
                     throw new InvalidOperationException(error);
                 }
@@ -503,7 +506,7 @@ namespace Catel.MVVM
             {
                 if (!_commands.ContainsKey(commandName))
                 {
-                    string error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    var error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
                     Log.Error(error);
                     throw new InvalidOperationException(error);
                 }
@@ -529,7 +532,7 @@ namespace Catel.MVVM
 
                 if (!_commands.ContainsKey(commandName))
                 {
-                    string error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
+                    var error = string.Format("Command '{0}' is not yet created using the CreateCommand method", commandName);
                     Log.Error(error);
                     throw new InvalidOperationException(error);
                 }
@@ -561,7 +564,7 @@ namespace Catel.MVVM
         /// </summary>
         public void SubscribeToKeyboardEvents()
         {
-#if !NET
+#if SL5
             if (_subscribedToKeyboardEvent)
             {
                 return;
@@ -578,71 +581,38 @@ namespace Catel.MVVM
 #endif
 
 #if NET
-            var mainWindow = application.MainWindow;
-            if (mainWindow == null)
+            FrameworkElement mainView = application.MainWindow;
+            if (mainView == null)
             {
                 if (!_subscribedToApplicationActivedEvent)
                 {
-                    application.Activated += OnApplicationActivated;
+                    application.Activated += (sender, e) => SubscribeToKeyboardEvents();
                     _subscribedToApplicationActivedEvent = true;
                     Log.Info("Application.MainWindow is null, cannot subscribe to keyboard events, subscribed to Application.Activated event");
                 }
 
                 return;
             }
-
-            object obj = null;
-            if (!_subscribedWindows.TryGetValue(mainWindow, out obj))
-            {
-                mainWindow.KeyDown += OnKeyDown;
-                _subscribedWindows.Add(mainWindow, new object());
-            }
 #elif SILVERLIGHT
-            var rootVisual = application.RootVisual;
-            if (rootVisual == null)
+            var mainView = application.RootVisual as FrameworkElement;
+            if (mainView == null)
             {
                 Log.Warning("Application.RootVisual is null, cannot subscribe to keyboard events");
                 return;
             }
 
-            rootVisual.KeyDown += OnKeyDown;
             _subscribedToKeyboardEvent = true;
 #elif NETFX_CORE
-    // TODO: Grab events
-#endif
-        }
-
-#if NET
-        private void OnApplicationActivated(object sender, EventArgs e)
-        {
-            SubscribeToKeyboardEvents();
-        }
+            // TODO: Grab events
 #endif
 
-        private void OnKeyDown(object sender, KeyEventArgs e)
-        {
-            lock (_lockObject)
+#if NET || SL5
+            CommandManagerWrapper commandManagerWrapper = null;
+            if (!_subscribedViews.TryGetValue(mainView, out commandManagerWrapper))
             {
-                bool keyHandled = false;
-
-                foreach (var commandGesture in _commandGestures)
-                {
-                    var keyGesture = commandGesture.Value;
-                    if (keyGesture != null)
-                    {
-                        if (keyGesture.Matches(e))
-                        {
-                            ExecuteCommand(commandGesture.Key);
-                            keyHandled = true;
-                        }
-                    }
-                }
-
-                if (keyHandled)
-                {
-                    e.Handled = true;
-                }
+                _subscribedViews.Add(mainView, new CommandManagerWrapper(mainView, this));
             }
+#endif
         }
 #endif
     }

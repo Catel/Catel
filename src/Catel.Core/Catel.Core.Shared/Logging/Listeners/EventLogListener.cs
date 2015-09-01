@@ -71,9 +71,10 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="logEvent">The log event.</param>
         /// <param name="extraData">The extra data.</param>
+        /// <param name="logData">The log data.</param>
         /// <param name="time">The time.</param>
         /// <returns>The formatted log event.</returns>
-        protected override string FormatLogEvent(ILog log, string message, LogEvent logEvent, object extraData, DateTime time)
+        protected override string FormatLogEvent(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
         {
             var logMessage = string.Format("[{0}] {1}", log.TargetType.FullName, message);
             return logMessage;
@@ -87,18 +88,14 @@ namespace Catel.Logging
         /// <exception cref="ArgumentNullException">The <paramref name="batchEntries"/> is <c>null</c>.</exception>
         protected override async Task WriteBatch(List<LogBatchEntry> batchEntries)
         {
-            Argument.IsNotNull("batchEntries", batchEntries);
-
             try
             {
                 foreach (var batchEntry in batchEntries)
                 {
                     var type = ChooseEventLogEntryType(batchEntry.LogEvent);
-
                     var message = FormatLogEvent(batchEntry.Log, batchEntry.Message, batchEntry.LogEvent, batchEntry.ExtraData, batchEntry.Time);
 
-                    var entry = batchEntry;
-                    await Task.Factory.StartNew(() => EventLog.WriteEntry(Source, message, type, (int) entry.LogEvent));
+                    EventLog.WriteEntry(Source, message, type, (int) batchEntry.LogEvent);
                 }
             }
             catch (Exception)

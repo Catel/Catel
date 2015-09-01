@@ -17,22 +17,23 @@ namespace Catel.Modules
         /// <summary>
         /// Initializes a new instance of the <see cref="InstallPackageRequest" /> class.
         /// </summary>
-        /// <param name="assemblyFileRef">The assembly file reference.</param>
-        /// <exception cref="System.ArgumentException">The <paramref name="assemblyFileRef" /> is <c>null</c> or whitespace.</exception>
-        public InstallPackageRequest(string assemblyFileRef)
+        /// <param name="moduleAssemblyRef">The assembly file reference.</param>
+        /// <exception cref="System.ArgumentException">The <paramref name="moduleAssemblyRef" /> is <c>null</c> or whitespace.</exception>
+        public InstallPackageRequest(ModuleAssemblyRef moduleAssemblyRef)
         {
-            Argument.IsNotNullOrWhitespace(() => assemblyFileRef);
+            Argument.IsNotNull(() => moduleAssemblyRef);
 
-            AssemblyFileRef = assemblyFileRef;
+            this.ModuleAssemblyRef = moduleAssemblyRef;
         }
         #endregion
 
         #region Properties
         /// <summary>
-        /// Tge assembly file reference.
+        /// Gets the module assembly reference.
         /// </summary>
         /// <value>The assembly file reference.</value>
-        public string AssemblyFileRef { get; private set; }
+        public ModuleAssemblyRef ModuleAssemblyRef { get; private set; }
+
         #endregion
 
         /// <summary>

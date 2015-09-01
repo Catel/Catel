@@ -28,6 +28,7 @@ namespace Catel.Runtime.Serialization
             MemberType = memberType;
             MemberGroup = memberGroup;
             MemberName = memberName;
+            MemberNameForSerialization = memberName;
         }
         #endregion
 
@@ -54,5 +55,18 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <value>The name of the member.</value>
         public string MemberName { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the member name for serialization. This is a name mapped based on attributes
+        /// like DataMember("something"), etc.
+        /// </summary>
+        /// <value>The member name for serialization.</value>
+        public string MemberNameForSerialization { get; set; }
+
+        /// <summary>
+        /// Gets or sets the tag.
+        /// </summary>
+        /// <value>The tag.</value>
+        public object Tag { get; set; }
     }
 }

@@ -10,8 +10,10 @@ namespace Catel.MVVM
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using Logging;
     using System.Windows.Input;
+    using Threading;
 
     /// <summary>
     /// Composite command which allows several commands inside a single command being exposed to a view.
@@ -187,6 +189,45 @@ namespace Catel.MVVM
         }
 
         /// <summary>
+        /// Gets the commands currently registered to this composite command.
+        /// </summary>
+        /// <returns>IEnumerable.</returns>
+        public IEnumerable<ICommand> GetCommands()
+        {
+            lock (_lock)
+            {
+                return (from command in _commandInfo
+                        select command.Command).ToList();
+            }
+        }
+
+        /// <summary>
+        /// Gets the actions currently registered to this composite command.
+        /// </summary>
+        /// <returns>IEnumerable.</returns>
+        public IEnumerable<Action> GetActions()
+        {
+            lock (_lock)
+            {
+                return (from action in _actions
+                        select action).ToList();
+            }
+        }
+
+        /// <summary>
+        /// Gets the actions with parameters currently registered to this composite command.
+        /// </summary>
+        /// <returns>IEnumerable.</returns>
+        public IEnumerable<Action<object>> GetActionsWithParameter()
+        {
+            lock (_lock)
+            {
+                return (from action in _actionsWithParameter
+                        select action).ToList();
+            }
+        }
+
+        /// <summary>
         /// Registers the specified command.
         /// </summary>
         /// <param name="command">The command.</param>
@@ -255,7 +296,7 @@ namespace Catel.MVVM
 
             lock (_lock)
             {
-                for (int i = _commandInfo.Count - 1; i >= 0; i--)
+                for (var i = _commandInfo.Count - 1; i >= 0; i--)
                 {
                     var commandInfo = _commandInfo[i];
 
@@ -281,9 +322,10 @@ namespace Catel.MVVM
 
             lock (_lock)
             {
-                for (int i = _actions.Count - 1; i >= 0; i--)
+                for (var i = _actions.Count - 1; i >= 0; i--)
                 {
-                    if (ReferenceEquals(_actions[i], action))
+                    // Check for both ReferenceEquals (original implementation) and == (to fix CTL-654)
+                    if (ReferenceEquals(_actions[i], action) || _actions[i] == action)
                     {
                         _actions.RemoveAt(i);
 
@@ -304,7 +346,7 @@ namespace Catel.MVVM
 
             lock (_lock)
             {
-                for (int i = _actionsWithParameter.Count - 1; i >= 0; i--)
+                for (var i = _actionsWithParameter.Count - 1; i >= 0; i--)
                 {
                     if (ReferenceEquals(_actionsWithParameter[i], action))
                     {
@@ -337,7 +379,7 @@ namespace Catel.MVVM
 
                 if (viewModel != null)
                 {
-                    viewModel.Closed += OnViewModelClosed;
+                    viewModel.ClosedAsync += OnViewModelClosedAsync;
                 }
             }
             #endregion
@@ -347,14 +389,16 @@ namespace Catel.MVVM
             public IViewModel ViewModel { get; private set; }
             #endregion
 
-            private void OnViewModelClosed(object sender, ViewModelClosedEventArgs e)
+            private Task OnViewModelClosedAsync(object sender, ViewModelClosedEventArgs e)
             {
                 Log.Debug("ViewModel '{0}' is closed, automatically unregistering command from CompositeCommand", ViewModel);
 
                 _compositeCommand.UnregisterCommand(Command);
 
-                ViewModel.Closed -= OnViewModelClosed;
+                ViewModel.ClosedAsync -= OnViewModelClosedAsync;
                 ViewModel = null;
+
+                return TaskHelper.Completed;
             }
         }
         #endregion

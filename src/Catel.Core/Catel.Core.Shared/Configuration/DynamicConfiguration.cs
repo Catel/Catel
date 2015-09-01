@@ -40,7 +40,7 @@ namespace Catel.Configuration
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns><c>true</c> if the specified configuration key is available; otherwise, <c>false</c>.</returns>
-        [ObsoleteEx(Replacement = "IsConfigurationValueSet", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "IsConfigurationValueSet", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         public bool IsConfigurationKeyAvailable(string name)
         {
             return IsPropertyRegistered(GetType(), name);

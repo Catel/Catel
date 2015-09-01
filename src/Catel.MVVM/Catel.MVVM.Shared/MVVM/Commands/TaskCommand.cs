@@ -236,6 +236,7 @@ namespace Catel.MVVM
             try
             {
                 Log.Info("Executing task command...");
+
                 await executionTask.ConfigureAwait(false);
             }
             catch (OperationCanceledException)
@@ -260,6 +261,7 @@ namespace Catel.MVVM
             {
                 RaiseExecuted(parameter);
             }
+
             RaiseCanExecuteChanged();
         }
 

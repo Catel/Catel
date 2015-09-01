@@ -35,18 +35,18 @@ namespace Catel.Services
         {
             get
             {
-        	    if (_arguments == null)
-        	    {
-        	        var commandLine = System.Environment.GetCommandLineArgs();
+                if (_arguments == null)
+                {
+                    var commandLine = System.Environment.GetCommandLineArgs();
 
                     _arguments = new string[commandLine.Length - 1];
 
                     if (_arguments.Length > 0)
-        	        {
+                    {
                         System.Array.Copy(commandLine, 1, _arguments, 0, _arguments.Length);
-        	        }
-        	    }
-        	
+                    }
+                }
+
                 return _arguments;
             }
         }

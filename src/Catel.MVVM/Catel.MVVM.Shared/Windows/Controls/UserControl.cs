@@ -10,7 +10,9 @@ namespace Catel.Windows.Controls
 {
     using System;
     using System.ComponentModel;
+    using System.Threading.Tasks;
     using System.Windows;
+    using Catel.Threading;
     using MVVM.Providers;
     using MVVM.Views;
     using MVVM;
@@ -97,6 +99,7 @@ namespace Catel.Windows.Controls
             };
 
             _logic.ViewModelClosed += OnViewModelClosed;
+            _logic.ViewModelClosedAsync += OnViewModelClosedAsync;
             _logic.ViewModelChanged += (sender, e) => RaiseViewModelChanged();
 
             _logic.ViewModelPropertyChanged += (sender, e) =>
@@ -417,8 +420,20 @@ namespace Catel.Windows.Controls
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        [ObsoleteEx(ReplacementTypeOrMember = "OnViewModelClosedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         protected virtual void OnViewModelClosed(object sender, ViewModelClosedEventArgs e)
         {
+        }
+
+        /// <summary>
+        /// Called when the <see cref="ViewModel"/> has been closed.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        
+        protected virtual Task OnViewModelClosedAsync(object sender, ViewModelClosedEventArgs e)
+        {
+            return TaskHelper.Completed;
         }
 
         /// <summary>

@@ -14,11 +14,18 @@ namespace Catel.Data
     using IoC;
     using Logging;
     using Repositories;
+    using System.Collections;
+
+#if EF_ASYNC
+    using System.Threading.Tasks;
+#endif
 
 #if EF5
     using SaveOptions = System.Data.Objects.SaveOptions;
+    using System.Data.Objects;
 #else
     using SaveOptions = System.Data.Entity.Core.Objects.SaveOptions;
+    using System.Data.Entity.Core.Objects;
 #endif
 
     /// <summary>
@@ -155,8 +162,7 @@ namespace Catel.Data
 
             try
             {
-                var objectContext = DbContext.GetObjectContext();
-                objectContext.SaveChanges();
+                DbContext.SaveChanges();
 
                 Transaction.Commit();
 
@@ -172,6 +178,43 @@ namespace Catel.Data
                 throw;
             }
         }
+
+#if EF_ASYNC
+        /// <summary>
+        /// Commits all the changes inside a transaction.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">No transaction is currently running.</exception>
+        public virtual async Task CommitTransactionAsync()
+        {
+            Log.Debug("Committing transaction async | {0}", Tag);
+
+            if (Transaction == null)
+            {
+                const string error = "Cannot commit a transaction when there is no transaction running.";
+
+                Log.Error(error);
+                throw new InvalidOperationException(error);
+            }
+
+            try
+            {
+                await DbContext.SaveChangesAsync();
+
+                Transaction.Commit();
+
+                ReleaseTransaction();
+
+                Log.Debug("Committed transaction async | {0}", Tag);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "An exception occurred while committing the transaction, automatically rolling back | {0}", Tag);
+
+                RollBackTransaction();
+                throw;
+            }
+        }
+#endif
 
         /// <summary>
         /// Gets the repository that is created specificially for this unit of work.
@@ -200,7 +243,7 @@ namespace Catel.Data
             var registrationInfo = _serviceLocator.GetRegistrationInfo(typeof(TEntityRepository));
             if (registrationInfo == null)
             {
-                string error = string.Format("The specified repository type '{0}' cannot be found. Make sure it is registered in the ServiceLocator.", typeof(TEntityRepository).FullName);
+                var error = string.Format("The specified repository type '{0}' cannot be found. Make sure it is registered in the ServiceLocator.", typeof(TEntityRepository).FullName);
                 Log.Error(error);
                 throw new NotSupportedException(error);
             }
@@ -210,11 +253,86 @@ namespace Catel.Data
         }
 
         /// <summary>
+        /// Refreshes the collection inside the unit of work.
+        /// </summary>
+        /// <param name="refreshMode">The refresh mode.</param>
+        /// <param name="collection">The collection.</param>
+        public virtual void Refresh(RefreshMode refreshMode, IEnumerable collection)
+        {
+            Log.Debug("Refreshing collection | {0}", Tag);
+
+            var objectContext = DbContext.GetObjectContext();
+            objectContext.Refresh(refreshMode, collection);
+
+            Log.Debug("Refreshed collection | {0}", Tag);
+        }
+
+#if EF_ASYNC
+        /// <summary>
+        /// Refreshes the collection inside the unit of work.
+        /// </summary>
+        /// <param name="refreshMode">The refresh mode.</param>
+        /// <param name="collection">The collection.</param>
+        public virtual async Task RefreshAsync(RefreshMode refreshMode, IEnumerable collection)
+        {
+            Log.Debug("Refreshing collection async | {0}", Tag);
+
+            var objectContext = DbContext.GetObjectContext();
+            await objectContext.RefreshAsync(refreshMode, collection);
+
+            Log.Debug("Refreshed collection async | {0}", Tag);
+        }
+#endif
+
+        /// <summary>
+        /// Refreshes the entity inside the unit of work.
+        /// </summary>
+        /// <param name="refreshMode">The refresh mode.</param>
+        /// <param name="entity">The entity.</param>
+        public virtual void Refresh(RefreshMode refreshMode, object entity)
+        {
+            Log.Debug("Refreshing entity | {0}", Tag);
+
+            var objectContext = DbContext.GetObjectContext();
+            objectContext.Refresh(refreshMode, entity);
+
+            Log.Debug("Refreshed entity | {0}", Tag);
+        }
+
+#if EF_ASYNC
+        /// <summary>
+        /// Refreshes the entity inside the unit of work.
+        /// </summary>
+        /// <param name="refreshMode">The refresh mode.</param>
+        /// <param name="entity">The entity.</param>
+        public virtual async Task RefreshAsync(RefreshMode refreshMode, object entity)
+        {
+            Log.Debug("Refreshing entity async | {0}", Tag);
+
+            var objectContext = DbContext.GetObjectContext();
+            await objectContext.RefreshAsync(refreshMode, entity);
+
+            Log.Debug("Refreshed entity async | {0}", Tag);
+        }
+#endif
+
+        /// <summary>
         /// Saves the changes inside the unit of work.
         /// </summary>
         /// <param name="saveOptions">The save options.</param>
         /// <exception cref="InvalidOperationException">A transaction is running. Call CommitTransaction instead.</exception>
-        public virtual void SaveChanges(SaveOptions saveOptions = SaveOptions.DetectChangesBeforeSave | SaveOptions.AcceptAllChangesAfterSave)
+        [ObsoleteEx(ReplacementTypeOrMember = "SaveChanges()", Message = "EF no longer exposes methods with SaveOptions, so this will be removed",
+            TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
+        public virtual void SaveChanges(SaveOptions saveOptions)
+        {
+            SaveChanges();
+        }
+
+        /// <summary>
+        /// Saves the changes inside the unit of work.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">A transaction is running. Call CommitTransaction instead.</exception>
+        public virtual void SaveChanges()
         {
             Log.Debug("Saving changes | {0}", Tag);
 
@@ -226,11 +344,45 @@ namespace Catel.Data
                 throw new InvalidOperationException(error);
             }
 
-            var objectContext = DbContext.GetObjectContext();
-            objectContext.SaveChanges(saveOptions);
+            DbContext.SaveChanges();
 
             Log.Debug("Saved changes | {0}", Tag);
         }
+
+#if EF_ASYNC
+        /// <summary>
+        /// Saves the changes inside the unit of work.
+        /// </summary>
+        /// <param name="saveOptions">The save options.</param>
+        /// <exception cref="InvalidOperationException">A transaction is running. Call CommitTransaction instead.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "SaveChangesAsync()", Message = "EF no longer exposes methods with SaveOptions, so this will be removed",
+            TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
+        public virtual async Task SaveChangesAsync(SaveOptions saveOptions)
+        {
+            await SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Saves the changes inside the unit of work.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">A transaction is running. Call CommitTransaction instead.</exception>
+        public virtual async Task SaveChangesAsync()
+        {
+            Log.Debug("Saving changes async | {0}", Tag);
+
+            if (IsInTransaction)
+            {
+                const string error = "A transaction is running. Call CommitTransaction instead.";
+
+                Log.Error(error);
+                throw new InvalidOperationException(error);
+            }
+
+            await DbContext.SaveChangesAsync();
+
+            Log.Debug("Saved changes async | {0}", Tag);
+        }
+#endif
         #endregion
 
         #region Implementation of IDisposable
@@ -302,6 +454,24 @@ namespace Catel.Data
                 Log.Debug("Opened connection | {0}", Tag);
             }
         }
+
+#if EF_ASYNC
+        /// <summary>
+        /// Opens the connection to the database.
+        /// </summary>
+        protected virtual async Task OpenConnectionAsync()
+        {
+            var objectContext = DbContext.GetObjectContext();
+            if (objectContext.Connection.State != ConnectionState.Open)
+            {
+                Log.Debug("Opening connection async | {0}", Tag);
+
+                await objectContext.Connection.OpenAsync();
+
+                Log.Debug("Opened connection async | {0}", Tag);
+            }
+        }
+#endif
 
         /// <summary>
         /// Releases the transaction.

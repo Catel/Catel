@@ -12,12 +12,14 @@ namespace Catel.MVVM.CSLA
     using Auditing;
     using Csla.Xaml;
     using IoC;
+    using Threading;
 
     /// <summary>
     /// View model base for CSLA view models with support for Catel.
     /// </summary>
     /// <typeparam name="TModel">The type of the T model.</typeparam>
-    [CLSCompliant(false)]
+    [ObsoleteEx(Message = "We are considering to remove CSLA support. See https://catelproject.atlassian.net/browse/CTL-671",
+        TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
     public abstract class ViewModelBase<TModel> : ViewModel<TModel>, IViewModel, IUniqueIdentifyable
     {
         #region Fields
@@ -36,6 +38,15 @@ namespace Catel.MVVM.CSLA
         private EventHandler<SavingEventArgs> _catelSaving;
         private EventHandler<EventArgs> _catelClosing;
         private EventHandler<ViewModelClosedEventArgs> _catelClosed;
+
+        private AsyncEventHandler<EventArgs> _catelInitializedAsync;
+        private AsyncEventHandler<CommandExecutedEventArgs> _catelCommandExecutedAsync;
+        private AsyncEventHandler<EventArgs> _catelCanceledAsync;
+        private AsyncEventHandler<CancelingEventArgs> _catelCancelingAsync;
+        private AsyncEventHandler<EventArgs> _catelSavedAsync;
+        private AsyncEventHandler<SavingEventArgs> _catelSavingAsync;
+        private AsyncEventHandler<EventArgs> _catelClosingAsync;
+        private AsyncEventHandler<ViewModelClosedEventArgs> _catelClosedAsync;
         #endregion
 
         #region Constructors
@@ -55,8 +66,10 @@ namespace Catel.MVVM.CSLA
             AuditingHelper.RegisterViewModel(this);
 
             _viewModelCommandManager = ViewModelCommandManager.Create(this);
-            _viewModelCommandManager.AddHandler((viewModel, propertyName, command, commandParameter) =>
-                _catelCommandExecuted.SafeInvoke(this, new CommandExecutedEventArgs((ICatelCommand)command, commandParameter, propertyName)));
+            _viewModelCommandManager.AddHandler(async (viewModel, propertyName, command, commandParameter) =>
+            {
+                _catelCommandExecuted.SafeInvoke(this, new CommandExecutedEventArgs((ICatelCommand) command, commandParameter, propertyName));
+            });
 
             ViewModelManager.RegisterViewModelInstance(this);
         }
@@ -150,10 +163,28 @@ namespace Catel.MVVM.CSLA
         /// <summary>
         /// Occurs when a command on the view model has been executed.
         /// </summary>
+        event AsyncEventHandler<EventArgs> MVVM.IViewModel.InitializedAsync
+        {
+            add { _catelInitializedAsync += value; }
+            remove { _catelInitializedAsync -= value; }
+        }
+
+        /// <summary>
+        /// Occurs when a command on the view model has been executed.
+        /// </summary>
         event EventHandler<CommandExecutedEventArgs> MVVM.IViewModel.CommandExecuted
         {
             add { _catelCommandExecuted += value; }
             remove { _catelCommandExecuted -= value; }
+        }
+
+        /// <summary>
+        /// Occurs when a command on the view model has been executed.
+        /// </summary>
+        event AsyncEventHandler<CommandExecutedEventArgs> MVVM.IViewModel.CommandExecutedAsync
+        {
+            add { _catelCommandExecutedAsync += value; }
+            remove { _catelCommandExecutedAsync -= value; }
         }
 
         /// <summary>
@@ -166,12 +197,30 @@ namespace Catel.MVVM.CSLA
         }
 
         /// <summary>
+        /// Occurs when the view model is about to be saved.
+        /// </summary>
+        event AsyncEventHandler<SavingEventArgs> MVVM.IViewModel.SavingAsync
+        {
+            add { _catelSavingAsync += value; }
+            remove { _catelSavingAsync -= value; }
+        }
+
+        /// <summary>
         /// Occurs when the view model is saved successfully.
         /// </summary>
         event EventHandler<EventArgs> MVVM.IViewModel.Saved
         {
             add { _catelSaved += value; }
             remove { _catelSaved -= value; }
+        }
+
+        /// <summary>
+        /// Occurs when the view model is saved successfully.
+        /// </summary>
+        event AsyncEventHandler<EventArgs> MVVM.IViewModel.SavedAsync
+        {
+            add { _catelSavedAsync += value; }
+            remove { _catelSavedAsync -= value; }
         }
 
         /// <summary>
@@ -184,12 +233,30 @@ namespace Catel.MVVM.CSLA
         }
 
         /// <summary>
+        /// Occurs when the view model is about to be canceled.
+        /// </summary>
+        event AsyncEventHandler<CancelingEventArgs> MVVM.IViewModel.CancelingAsync
+        {
+            add { _catelCancelingAsync += value; }
+            remove { _catelCancelingAsync -= value; }
+        }
+
+        /// <summary>
         /// Occurrs when the view model is canceled.
         /// </summary>
         event EventHandler<EventArgs> MVVM.IViewModel.Canceled
         {
             add { _catelCanceled += value; }
             remove { _catelCanceled -= value; }
+        }
+
+        /// <summary>
+        /// Occurrs when the view model is canceled.
+        /// </summary>
+        event AsyncEventHandler<EventArgs> MVVM.IViewModel.CanceledAsync
+        {
+            add { _catelCanceledAsync += value; }
+            remove { _catelCanceledAsync -= value; }
         }
 
         /// <summary>
@@ -204,10 +271,28 @@ namespace Catel.MVVM.CSLA
         /// <summary>
         /// Occurs when the view model is being closed.
         /// </summary>
+        event AsyncEventHandler<EventArgs> MVVM.IViewModel.ClosingAsync
+        {
+            add { _catelClosingAsync += value; }
+            remove { _catelClosingAsync -= value; }
+        }
+
+        /// <summary>
+        /// Occurs when the view model is being closed.
+        /// </summary>
         event EventHandler<ViewModelClosedEventArgs> MVVM.IViewModel.Closed
         {
             add { _catelClosed += value; }
             remove { _catelClosed -= value; }
+        }
+
+        /// <summary>
+        /// Occurs when the view model is being closed.
+        /// </summary>
+        event AsyncEventHandler<ViewModelClosedEventArgs> MVVM.IViewModel.ClosedAsync
+        {
+            add { _catelClosedAsync += value; }
+            remove { _catelClosedAsync -= value; }
         }
         #endregion
 
@@ -237,7 +322,8 @@ namespace Catel.MVVM.CSLA
 
             var dependencyResolver = this.GetDependencyResolver();
             var messageService = dependencyResolver.Resolve<Catel.Services.IMessageService>();
-            messageService.ShowError(message.ToString());
+            var task = messageService.ShowErrorAsync(message.ToString());
+            task.Wait();
 
             base.OnError(error);
         }
@@ -253,14 +339,30 @@ namespace Catel.MVVM.CSLA
         /// similar.
         /// <para />
         /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.</remarks>
-        async Task MVVM.IViewModel.InitializeViewModel()
+        Task MVVM.IViewModel.InitializeViewModel()
+        {
+            return ((MVVM.IViewModel) this).InitializeViewModelAsync();
+        }
+
+        /// <summary>
+        /// Initializes the view model. Normally the initialization is done in the constructor, but sometimes this must be delayed
+        /// to a state where the associated UI element (user control, window, ...) is actually loaded.
+        /// <para />
+        /// This method is called as soon as the associated UI element is loaded.
+        /// </summary>
+        /// <remarks>It's not recommended to implement the initialization of properties in this method. The initialization of properties
+        /// should be done in the constructor. This method should be used to start the retrieval of data from a web service or something
+        /// similar.
+        /// <para />
+        /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.</remarks>
+        async Task MVVM.IViewModel.InitializeViewModelAsync()
         {
             if (_isViewModelInitialized)
             {
                 return;
             }
 
-            await Initialize();
+            await InitializeAsync();
 
             _isViewModelInitialized = true;
 
@@ -293,32 +395,37 @@ namespace Catel.MVVM.CSLA
         /// <summary>
         /// Cancels the editing of the data.
         /// </summary>
-        async Task<bool> MVVM.IViewModel.CancelViewModel()
+        Task<bool> MVVM.IViewModel.CancelViewModel()
         {
-            return await Task.Factory.StartNew(() =>
+            return ((MVVM.IViewModel)this).CancelViewModelAsync();
+        }
+
+        /// <summary>
+        /// Cancels the editing of the data.
+        /// </summary>
+        async Task<bool> MVVM.IViewModel.CancelViewModelAsync()
+        {
+            if (IsClosed)
             {
-                if (IsClosed)
-                {
-                    return false;
-                }
+                return false;
+            }
 
-                var cancelingEventArgs = new CancelingEventArgs();
-                _catelCanceling.SafeInvoke(this, cancelingEventArgs);
+            var cancelingEventArgs = new CancelingEventArgs();
+            _catelCanceling.SafeInvoke(this, cancelingEventArgs);
 
-                if (cancelingEventArgs.Cancel)
-                {
-                    return false;
-                }
+            if (cancelingEventArgs.Cancel)
+            {
+                return false;
+            }
 
-                if (base.CanCancel)
-                {
-                    base.DoCancel();
-                }
+            if (base.CanCancel)
+            {
+                base.DoCancel();
+            }
 
-                _catelCanceled.SafeInvoke(this);
+            _catelCanceled.SafeInvoke(this);
 
-                return true;
-            });
+            return true;
         }
 
         /// <summary>
@@ -331,12 +438,12 @@ namespace Catel.MVVM.CSLA
                 return true;
             }
 
-            if (!await CatelViewModel.CancelViewModel())
+            if (!await CatelViewModel.CancelViewModelAsync())
             {
                 return false;
             }
 
-            await CatelViewModel.CloseViewModel(false);
+            await CatelViewModel.CloseViewModelAsync(false);
 
             return true;
         }
@@ -347,35 +454,43 @@ namespace Catel.MVVM.CSLA
         /// <returns>
         /// <c>true</c> if successful; otherwise <c>false</c>.
         /// </returns>
-        async Task<bool> MVVM.IViewModel.SaveViewModel()
+        Task<bool> MVVM.IViewModel.SaveViewModel()
         {
-            return await Task.Factory.StartNew(() =>
+            return ((MVVM.IViewModel)this).SaveViewModelAsync();
+        }
+
+        /// <summary>
+        /// Saves the data.
+        /// </summary>
+        /// <returns>
+        /// <c>true</c> if successful; otherwise <c>false</c>.
+        /// </returns>
+        async Task<bool> MVVM.IViewModel.SaveViewModelAsync()
+        {
+            if (IsClosed)
             {
-                if (IsClosed)
-                {
-                    return false;
-                }
+                return false;
+            }
 
-                if (!base.CanSave)
-                {
-                    return false;
-                }
+            if (!base.CanSave)
+            {
+                return false;
+            }
 
-                var e = new SavingEventArgs();
-                _catelSaving.SafeInvoke(this, e);
-                if (e.Cancel)
-                {
-                    return false;
-                }
+            var e = new SavingEventArgs();
+            _catelSaving.SafeInvoke(this, e);
+            if (e.Cancel)
+            {
+                return false;
+            }
 
-                base.Save(this, new ExecuteEventArgs());
+            base.Save(this, new ExecuteEventArgs());
 
-                _catelSaved.SafeInvoke(this);
+            _catelSaved.SafeInvoke(this);
 
-                // Was original call, but not supported in SL
-                //base.DoSave();
-                return true;
-            });
+            // Was original call, but not supported in SL
+            //base.DoSave();
+            return true;
         }
 
         /// <summary>
@@ -391,12 +506,12 @@ namespace Catel.MVVM.CSLA
                 return false;
             }
 
-            if (!await CatelViewModel.SaveViewModel())
+            if (!await CatelViewModel.SaveViewModelAsync())
             {
                 return false;
             }
 
-            await CatelViewModel.CloseViewModel(true);
+            await CatelViewModel.CloseViewModelAsync(true);
             return true;
         }
 
@@ -404,23 +519,29 @@ namespace Catel.MVVM.CSLA
         /// Closes this instance. Always called after the <see cref="M:Catel.MVVM.IViewModel.CancelViewModel"/> of <see cref="M:Catel.MVVM.IViewModel.SaveViewModel"/> method.
         /// </summary>
         /// <param name="result">The result to pass to the view. This will, for example, be used as <c>DialogResult</c>.</param>
-        async Task MVVM.IViewModel.CloseViewModel(bool? result)
+        Task MVVM.IViewModel.CloseViewModel(bool? result)
         {
-            await Task.Factory.StartNew(() =>
+            return ((MVVM.IViewModel)this).CloseViewModelAsync(result);
+        }
+
+        /// <summary>
+        /// Closes this instance. Always called after the <see cref="M:Catel.MVVM.IViewModel.CancelViewModel"/> of <see cref="M:Catel.MVVM.IViewModel.SaveViewModel"/> method.
+        /// </summary>
+        /// <param name="result">The result to pass to the view. This will, for example, be used as <c>DialogResult</c>.</param>
+        async Task MVVM.IViewModel.CloseViewModelAsync(bool? result)
+        {
+            if (IsClosed)
             {
-                if (IsClosed)
-                {
-                    return;
-                }
+                return;
+            }
 
-                _catelClosing.SafeInvoke(this);
+            _catelClosing.SafeInvoke(this);
 
-                IsClosed = true;
+            IsClosed = true;
 
-                ViewModelManager.UnregisterViewModelInstance(this);
+            ViewModelManager.UnregisterViewModelInstance(this);
 
-                _catelClosed.SafeInvoke(this, new ViewModelClosedEventArgs(this, result));
-            });
+            _catelClosed.SafeInvoke(this, new ViewModelClosedEventArgs(this, result));
         }
 
         /// <summary>
@@ -435,7 +556,24 @@ namespace Catel.MVVM.CSLA
         /// similar.
         /// <para />
         /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.</remarks>
-        protected virtual async Task Initialize()
+        protected virtual Task Initialize()
+        {
+            return InitializeAsync();
+        }
+
+        /// <summary>
+        /// Initializes the view model. Normally the initialization is done in the constructor, but sometimes this must be delayed
+        /// to a state where the associated UI element (user control, window, ...) is actually loaded.
+        /// <para />
+        /// This method is called as soon as the associated UI element is loaded.
+        /// </summary>
+        /// <returns>Task.</returns>
+        /// <remarks>It's not recommended to implement the initialization of properties in this method. The initialization of properties
+        /// should be done in the constructor. This method should be used to start the retrieval of data from a web service or something
+        /// similar.
+        /// <para />
+        /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.</remarks>
+        protected virtual async Task InitializeAsync()
         {
         }
 

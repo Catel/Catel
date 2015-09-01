@@ -57,7 +57,7 @@ namespace Catel.Services.Models
         public string GetSource()
         {
 #if NETFX_CORE
-            return string.Format("{0}/{1}", AssemblyName, ResourceFileName);
+            return string.Format("{0}|{1}", AssemblyName, ResourceFileName);
 #else
             return string.Format("{0}.{1}, {2}", NamespaceName, ResourceFileName, AssemblyName);
 #endif

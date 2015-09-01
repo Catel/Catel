@@ -8,8 +8,11 @@
 
 namespace Catel.Modules
 {
+    using System.Collections.Generic;
+    using NuGet;
+
     /// <summary>
-    /// 
+    /// The NuGetBased Module Catalog Parent Child Behavior
     /// </summary>
     public class NuGetBasedModuleCatalogParentChildBehavior
     {
@@ -49,12 +52,13 @@ namespace Catel.Modules
         public NuGetBasedModuleCatalogParentChildBehavior(INuGetBasedModuleCatalog moduleCatalog)
         {
             Argument.IsNotNull(() => moduleCatalog);
+
             _moduleCatalog = moduleCatalog;
-            
+
             OutputDirectory = "packages";
             PackagedModuleIdFilterExpression = string.Empty;
             AllowPrereleaseVersions = false;
-            IgnoreDependencies = true;
+            IgnoreDependencies = false;
         }
         #endregion
 

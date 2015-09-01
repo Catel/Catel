@@ -105,7 +105,7 @@ namespace Catel.Logging
                 var fileInfo = new FileInfo(filePath);
                 if (fileInfo.Exists && (fileInfo.Length / 1024 >= MaxSizeInKiloBytes))
                 {
-                    await CreateCopyOfCurrentLogFile(FilePath);
+                    CreateCopyOfCurrentLogFile(FilePath);
                 }
 
                 using (var fileStream = new FileStream(filePath, FileMode.Append, FileAccess.Write, FileShare.Read))
@@ -116,10 +116,10 @@ namespace Catel.Logging
                         {
                             var message = FormatLogEvent(batchEntry.Log, batchEntry.Message, batchEntry.LogEvent, batchEntry.ExtraData, batchEntry.Time);
 
-                            await writer.WriteLineAsync(message);
+                            writer.WriteLine(message);
                         }
 
-                        await writer.FlushAsync();
+                        writer.Flush();
                     }
                 }
             }
@@ -129,19 +129,16 @@ namespace Catel.Logging
             }
         }
 
-        private async Task CreateCopyOfCurrentLogFile(string filePath)
+        private void CreateCopyOfCurrentLogFile(string filePath)
         {
-            await Task.Factory.StartNew(() =>
+            for (int i = 1; i < 999; i++)
             {
-                for (int i = 1; i < 999; i++)
+                var possibleFilePath = string.Format("{0}.{1:000}", filePath, i);
+                if (!File.Exists(possibleFilePath))
                 {
-                    var possibleFilePath = string.Format("{0}.{1:000}", filePath, i);
-                    if (!File.Exists(possibleFilePath))
-                    {
-                        File.Move(filePath, possibleFilePath);
-                    }
+                    File.Move(filePath, possibleFilePath);
                 }
-            });
+            }
         }
 
         private string DetermineFilePath(string filePath)

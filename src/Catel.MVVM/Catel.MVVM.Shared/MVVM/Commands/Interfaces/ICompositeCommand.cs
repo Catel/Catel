@@ -8,6 +8,7 @@
 namespace Catel.MVVM
 {
     using System;
+    using System.Collections.Generic;
     using System.Windows.Input;
 
     /// <summary>
@@ -22,7 +23,7 @@ namespace Catel.MVVM
         /// there is a requirement to allow partial invocation, set this property to false.
         /// </summary>
         /// <value>The check can execute of all commands to determine can execute for composite command.</value>
-        [ObsoleteEx(Replacement = "AllowPartialExecution (inverted!)", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "AllowPartialExecution (inverted!)", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
         bool CheckCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand { get; set; }
 
         /// <summary>
@@ -42,6 +43,24 @@ namespace Catel.MVVM
         /// </summary>
         /// <value><c>true</c> if at least one command must be executed; otherwise, <c>false</c>.</value>
         bool AtLeastOneMustBeExecutable { get; set; }
+
+        /// <summary>
+        /// Gets the commands currently registered to this composite command.
+        /// </summary>
+        /// <returns>IEnumerable.</returns>
+        IEnumerable<ICommand> GetCommands();
+
+        /// <summary>
+        /// Gets the actions currently registered to this composite command.
+        /// </summary>
+        /// <returns>IEnumerable.</returns>
+        IEnumerable<Action> GetActions();
+
+        /// <summary>
+        /// Gets the actions with parameters currently registered to this composite command.
+        /// </summary>
+        /// <returns>IEnumerable.</returns>
+        IEnumerable<Action<object>> GetActionsWithParameter();
 
         /// <summary>
         /// Registers the specified command.

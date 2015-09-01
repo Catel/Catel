@@ -53,7 +53,7 @@ namespace Catel.IoC
             {
                 if (type.IsInterfaceEx() && type.Name.StartsWith("I"))
                 {
-                    var implementationType = typesToHandle.FirstOrDefault(row => TagHelper.AreTagsEqual(row.Name, type.Name.Replace("I", string.Empty).Trim()) && row.IsClassEx() && type.IsAssignableFromEx(row));
+                    var implementationType = typesToHandle.FirstOrDefault(row => TagHelper.AreTagsEqual(row.Name, type.Name.Substring(1).Trim()) && row.IsClassEx() && type.IsAssignableFromEx(row));
 
                     if (implementationType != null)
                     {

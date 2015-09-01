@@ -11,7 +11,7 @@ namespace Catel.Reflection
     using System;
     using System.Reflection;
 
-#if NETFX_CORE || WP80 || NET45 || PCL
+#if NETFX_CORE || WP80 || (NET && !NET40) || PCL
     using System.Linq;
 #endif
 

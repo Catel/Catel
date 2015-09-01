@@ -8,12 +8,14 @@ namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Reflection;
+    using System.Threading.Tasks;
     using System.Windows.Input;
     using Logging;
     using Reflection;
+    using Threading;
     using CommandHandler = System.Action<IViewModel, string, System.Windows.Input.ICommand, object>;
+    using AsyncCommandHandler = System.Func<IViewModel, string, System.Windows.Input.ICommand, object, System.Threading.Tasks.Task>;
 
     /// <summary>
     /// Command manager that manages the execution state of all commands of a view model.
@@ -42,6 +44,11 @@ namespace Catel.MVVM
         /// A list of registered command handlers.
         /// </summary>
         private readonly List<CommandHandler> _commandHandlers = new List<CommandHandler>();
+
+        /// <summary>
+        /// A list of registered command handlers.
+        /// </summary>
+        private readonly List<AsyncCommandHandler> _asyncCommandHandlers = new List<AsyncCommandHandler>();
 
         /// <summary>
         /// A list of commands that implement the <see cref="ICatelCommand"/> interface.
@@ -82,8 +89,8 @@ namespace Catel.MVVM
 
             _viewModel = viewModel;
             _viewModelType = viewModel.GetType();
-            _viewModel.Initialized += OnViewModelInitialized;
-            _viewModel.Closed += OnViewModelClosed;
+            _viewModel.InitializedAsync += OnViewModelInitializedAsync;
+            _viewModel.ClosedAsync += OnViewModelClosedAsync;
 
             var properties = new List<PropertyInfo>();
             properties.AddRange(_viewModelType.GetPropertiesEx());
@@ -116,18 +123,23 @@ namespace Catel.MVVM
         {
             Argument.IsNotNull("viewModel", viewModel);
 
-            if (viewModel.IsClosed)
+            lock (_instances)
             {
-                Log.Warning("View model '{0}' with unique identifier '{1}' is already closed, cannot manage commands of a closed view model", viewModel.GetType().FullName, viewModel.UniqueIdentifier);
-                return null;
-            }
+                // Event the check for closed is done inside the lock. It might be that the lock has awaited the removal because the vm was being closed
+                // in the meantime
+                if (viewModel.IsClosed)
+                {
+                    Log.Warning("View model '{0}' with unique identifier '{1}' is already closed, cannot manage commands of a closed view model", viewModel.GetType().FullName, viewModel.UniqueIdentifier);
+                    return null;
+                }
 
-            if (!_instances.ContainsKey(viewModel.UniqueIdentifier))
-            {
-                _instances[viewModel.UniqueIdentifier] = new ViewModelCommandManager(viewModel);
-            }
+                if (!_instances.ContainsKey(viewModel.UniqueIdentifier))
+                {
+                    _instances[viewModel.UniqueIdentifier] = new ViewModelCommandManager(viewModel);
+                }
 
-            return _instances[viewModel.UniqueIdentifier];
+                return _instances[viewModel.UniqueIdentifier];
+            }
         }
 
         /// <summary>
@@ -178,7 +190,7 @@ namespace Catel.MVVM
                                 var commandAsICatelCommand = command as ICatelCommand;
                                 if (commandAsICatelCommand != null)
                                 {
-                                    commandAsICatelCommand.Executed += OnViewModelCommandExecuted;
+                                    commandAsICatelCommand.ExecutedAsync += OnViewModelCommandExecutedAsync;
                                 }
 
                                 _commands.Add(command, propertyInfo.Name);
@@ -200,6 +212,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="handler">The handler to execute when a command is executed.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "AddHandler with async func", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         public void AddHandler(CommandHandler handler)
         {
             Argument.IsNotNull("handler", handler);
@@ -207,6 +220,21 @@ namespace Catel.MVVM
             lock (_lock)
             {
                 _commandHandlers.Add(handler);
+            }
+        }
+
+        /// <summary>
+        /// Adds a new handler when a command is executed on the specified view model.
+        /// </summary>
+        /// <param name="handler">The handler to execute when a command is executed.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
+        public void AddHandler(AsyncCommandHandler handler)
+        {
+            Argument.IsNotNull("handler", handler);
+
+            lock (_lock)
+            {
+                _asyncCommandHandlers.Add(handler);
             }
         }
 
@@ -246,7 +274,7 @@ namespace Catel.MVVM
                     var commandAsICatelCommand = command as ICatelCommand;
                     if (commandAsICatelCommand != null)
                     {
-                        commandAsICatelCommand.Executed -= OnViewModelCommandExecuted;
+                        commandAsICatelCommand.ExecutedAsync -= OnViewModelCommandExecutedAsync;
                     }
                 }
 
@@ -256,45 +284,60 @@ namespace Catel.MVVM
             Log.Debug("Unregistered commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, _viewModel.UniqueIdentifier);
         }
 
-        private void OnViewModelCommandExecuted(object sender, CommandExecutedEventArgs e)
+        private async Task OnViewModelCommandExecutedAsync(object sender, CommandExecutedEventArgs e)
         {
+            CommandHandler[] syncHandlers;
+            AsyncCommandHandler[] asyncHandlers;
+
             lock (_lock)
             {
-                foreach (var handler in _commandHandlers)
+                syncHandlers = _commandHandlers.ToArray();
+                asyncHandlers = _asyncCommandHandlers.ToArray();
+            }
+
+            foreach (var handler in syncHandlers)
+            {
+                if (handler != null)
                 {
-                    if (handler != null)
-                    {
-                        handler(_viewModel, _commands[e.Command], e.Command, e.CommandParameter);
-                    }
+                    handler(_viewModel, _commands[e.Command], e.Command, e.CommandParameter);
+                }
+            }
+
+            foreach (var handler in asyncHandlers)
+            {
+                if (handler != null)
+                {
+                    await handler(_viewModel, _commands[e.Command], e.Command, e.CommandParameter);
                 }
             }
         }
 
-        private void OnViewModelInitialized(object sender, EventArgs e)
+        private Task OnViewModelInitializedAsync(object sender, EventArgs e)
         {
             InvalidateCommands(true);
+
+            return TaskHelper.Completed;
         }
 
-        private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            RegisterCommands(false);
-        }
-
-        private void OnViewModelClosed(object sender, EventArgs e)
+        private Task OnViewModelClosedAsync(object sender, EventArgs e)
         {
             lock (_lock)
             {
-                _instances.Remove(_viewModel.UniqueIdentifier);
+                lock (_instances)
+                {
+                    _instances.Remove(_viewModel.UniqueIdentifier);
+                }
 
                 _commandHandlers.Clear();
 
                 UnregisterCommands();
 
-                _viewModel.Initialized -= OnViewModelInitialized;
-                _viewModel.PropertyChanged -= OnViewModelPropertyChanged;
-                _viewModel.Closed -= OnViewModelClosed;
+                _viewModel.InitializedAsync -= OnViewModelInitializedAsync;
+                _viewModel.ClosedAsync -= OnViewModelClosedAsync;
                 _viewModel = null;
             }
+
+            return TaskHelper.Completed;
         }
         #endregion
     }

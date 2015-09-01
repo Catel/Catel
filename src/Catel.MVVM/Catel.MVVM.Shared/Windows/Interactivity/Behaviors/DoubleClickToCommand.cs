@@ -194,6 +194,11 @@ namespace Catel.Windows.Interactivity
         /// <param name="e">The event args instance containing the event data.</param>
         private void OnMouseButtonDown(object sender, MouseButtonEventArgs e)
         {
+            if (!IsEnabled)
+            {
+                return;
+            }
+
             if (!_timer.IsEnabled)
             {
                 _timer.Start();

@@ -146,7 +146,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
         /// <param name="ignoreCanExecuteCheck">if set to <c>true</c>, the check on <see cref="System.Windows.Input.ICommand.CanExecute"/> will be used before actually executing the action.</param>
-        protected override void Execute(TExecuteParameter parameter, bool ignoreCanExecuteCheck)
+        protected override async void Execute(TExecuteParameter parameter, bool ignoreCanExecuteCheck)
         {
             if (IsExecuting)
             {
@@ -175,7 +175,7 @@ namespace Catel.MVVM
 
             // Run the action on a new thread from the thread pool (this will therefore work in Silverlight and Windows Phone as well)
 #if NETFX_CORE
-            ThreadPool.RunAsync(state =>
+            await ThreadPool.RunAsync(state =>
 #else
             ThreadPool.QueueUserWorkItem(state =>
 #endif

@@ -26,6 +26,12 @@ namespace Catel
         object Target { get; }
 
         /// <summary>
+        /// Gets the target weak reference.
+        /// </summary>
+        /// <value>The target weak reference.</value>
+        WeakReference TargetWeakReference { get; }
+
+        /// <summary>
         /// Gets the type of the source.
         /// </summary>
         /// <value>The type of the source.</value>
@@ -38,6 +44,12 @@ namespace Catel
         object Source { get; }
 
         /// <summary>
+        /// Gets the source weak reference.
+        /// </summary>
+        /// <value>The source weak reference.</value>
+        WeakReference SourceWeakReference { get; }
+
+        /// <summary>
         /// Gets the type of the event args.
         /// </summary>
         /// <value>The type of the event args.</value>
@@ -47,7 +59,7 @@ namespace Catel
         /// Gets a value indicating whether the event source has not yet been garbage collected.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if the event source has not yet been garbage collected; otherwise, <c>false</c>.
+        /// <c>true</c> if the event source has not yet been garbage collected; otherwise, <c>false</c>.
         /// </value>
         /// <remarks>
         /// In case of static events, this property always returns <c>false</c>.
@@ -58,7 +70,7 @@ namespace Catel
         /// Gets a value indicating whether the event target has not yet been garbage collected.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if the event target has not yet been garbage collected; otherwise, <c>false</c>.
+        /// <c>true</c> if the event target has not yet been garbage collected; otherwise, <c>false</c>.
         /// </value>
         /// <remarks>
         /// In case of static event handlers, this property always returns <c>false</c>.
@@ -77,7 +89,7 @@ namespace Catel
         /// Gets a value indicating whether this instance represents a static event handler.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this instance represents a static event handler; otherwise, <c>false</c>.
+        /// <c>true</c> if this instance represents a static event handler; otherwise, <c>false</c>.
         /// </value>
         bool IsStaticEventHandler { get; }
 

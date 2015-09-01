@@ -137,6 +137,61 @@ namespace Catel.Test.MVVM
         }
 
         [TestFixture]
+        public class TheRegisterAndUnregisterActionFunctionality
+        {
+            [TestCase]
+            public void RegisteredActionsCanBeInvoked()
+            {
+                var invoked = false;
+                Action action = () => invoked = true;
+
+                var compositeCommand = new CompositeCommand();
+
+                compositeCommand.RegisterAction(action);
+
+                compositeCommand.Execute(null);
+
+                Assert.IsTrue(invoked);
+            }
+
+            [TestCase]
+            public void RegisteredActionsCanBeUnregistered_DefinedAction()
+            {
+                var invoked = false;
+                Action action = () => invoked = true;
+
+                var compositeCommand = new CompositeCommand();
+
+                compositeCommand.RegisterAction(action);
+                compositeCommand.UnregisterAction(action);
+
+                compositeCommand.Execute(null);
+
+                Assert.IsFalse(invoked);
+            }
+
+            [TestCase]
+            public void RegisteredActionsCanBeUnregistered_DynamicAction()
+            {
+                var compositeCommand = new CompositeCommand();
+
+                compositeCommand.RegisterAction(RegisteredActionsCanBeUnregistered_TestMethod);
+                compositeCommand.UnregisterAction(RegisteredActionsCanBeUnregistered_TestMethod);
+
+                compositeCommand.Execute(null);
+
+                Assert.IsFalse(_registeredActionsCanBeUnregistered_TestValue);
+            }
+
+            private bool _registeredActionsCanBeUnregistered_TestValue = false;
+
+            private void RegisteredActionsCanBeUnregistered_TestMethod()
+            {
+                _registeredActionsCanBeUnregistered_TestValue = true;
+            }
+        }
+
+        [TestFixture]
         public class TheAutoUnsubscribeFunctionality
         {
             [TestCase]
@@ -149,7 +204,7 @@ namespace Catel.Test.MVVM
 
                 Assert.IsFalse(vm.IsTestCommand1Executed);
 
-                await vm.CloseViewModel(false);
+                await vm.CloseViewModelAsync(false);
 
                 compositeCommand.Execute();
 

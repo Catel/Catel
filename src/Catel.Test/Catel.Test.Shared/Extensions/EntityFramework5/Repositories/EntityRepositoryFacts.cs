@@ -10,7 +10,7 @@ namespace Catel.Test.Extensions.EntityFramework5.Repositories
 {
     using System;
     using System.Linq;
-
+    using Catel.Data;
     using Catel.Test.EntityFramework5.DbContextTest;
     using Catel.Test.EntityFramework5.DbContextTest.Repositories;
 

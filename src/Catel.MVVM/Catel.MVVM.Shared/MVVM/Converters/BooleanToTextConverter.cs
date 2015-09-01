@@ -54,7 +54,7 @@ namespace Catel.MVVM.Converters
         {
             if ((value == null) || !(value is bool))
             {
-                return string.Empty;
+                return ConverterHelper.UnsetValue;
             }
 
             bool typedValue = (bool)value;

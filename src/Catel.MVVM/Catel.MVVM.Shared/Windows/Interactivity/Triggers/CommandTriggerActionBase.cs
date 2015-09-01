@@ -93,8 +93,9 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnCommandCanExecuteChangedInternal(object sender, EventArgs e)
+        private void OnCommandCanExecuteChangedInternal(object sender, System.EventArgs e)
         {
+            OnCommandCanExecuteChanged();
             OnCommandCanExecuteChanged(sender, e);
         }
 
@@ -103,7 +104,15 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected virtual void OnCommandCanExecuteChanged(object sender, EventArgs e)
+        [ObsoleteEx(ReplacementTypeOrMember = "OnCommandCanExecuteChanged", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        protected virtual void OnCommandCanExecuteChanged(object sender, System.EventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// Called when the <see cref="ICommand.CanExecute"/> state has changed.
+        /// </summary>
+        protected virtual void OnCommandCanExecuteChanged()
         {
         }
 
@@ -116,7 +125,7 @@ namespace Catel.Windows.Interactivity
         {
             base.OnAssociatedObjectLoaded(sender, e);
 
-            SubscribeToCommand();
+            UpdateCommandSubscriptions();
         }
 
         /// <summary>
@@ -177,13 +186,27 @@ namespace Catel.Windows.Interactivity
         /// <param name="newValue">The new value.</param>
         private void OnCommandChangedInternal(ICommand newValue)
         {
+            UpdateCommandSubscriptions();
+        }
+
+        private void UpdateCommandSubscriptions()
+        {
+            var oldCommand = _command;
+            var newCommand = Command;
+
+            if (ReferenceEquals(oldCommand, newCommand))
+            {
+                return;
+            }
+
             UnsubscribeFromCommand();
 
-            _command = newValue;
+            _command = newCommand;
 
             SubscribeToCommand();
 
             OnCommandChanged();
+            OnCommandCanExecuteChanged();
         }
 
         /// <summary>
@@ -236,12 +259,9 @@ namespace Catel.Windows.Interactivity
                 return false;
             }
 
-            if (Modifiers != ModifierKeys.None)
+            if (!IsEnabled)
             {
-                if (!KeyboardHelper.AreKeyboardModifiersPressed(Modifiers))
-                {
-                    return false;
-                }
+                return false;
             }
 
             return command.CanExecute(parameter);
@@ -263,6 +283,15 @@ namespace Catel.Windows.Interactivity
         /// <param name="parameter">The parameter that will override the <see cref="CommandParameter"/>.</param>
         protected virtual void ExecuteCommand(object parameter)
         {
+            // CTL-638
+            if (Modifiers != ModifierKeys.None)
+            {
+                if (!KeyboardHelper.AreKeyboardModifiersPressed(Modifiers))
+                {
+                    return;
+                }
+            }
+
             if (CanExecuteCommand(parameter))
             {
                 _command.Execute(parameter);

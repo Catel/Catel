@@ -156,7 +156,10 @@ namespace Catel.Data
         static ModelBase()
         {
             PropertyDataManager = PropertyDataManager.Default;
+
             DefaultValidateUsingDataAnnotationsValue = true;
+            DefaultDisableEventSubscriptionsOfChildValuesValue = false;
+            DefaultSerializer = IoCConfiguration.DefaultDependencyResolver.Resolve<ISerializer>();
         }
 
 #if !NET
@@ -304,6 +307,11 @@ namespace Catel.Data
         protected bool DisableEventSubscriptionsOfChildValues { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether event subscriptions of child values should be disabled.
+        /// </summary>
+        public static bool DefaultDisableEventSubscriptionsOfChildValuesValue { get; set; }
+
+        /// <summary>
         /// Gets the property data manager that manages the properties of this object.
         /// </summary>
         /// <value>The property data manager.</value>
@@ -312,15 +320,6 @@ namespace Catel.Data
 #endif
         [XmlIgnore]
         internal static PropertyDataManager PropertyDataManager { get; private set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this object is subscribed to all childs.
-        /// </summary>
-#if NET || SILVERLIGHT
-        [Browsable(false)]
-#endif
-        [XmlIgnore]
-        private bool SubscribedToEvents { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this object is currently initializing.
@@ -519,20 +518,14 @@ namespace Catel.Data
         }
 
         /// <summary>
-        /// Called when the object is deserialized.
-        /// </summary>
-        protected virtual void OnDeserialized()
-        {
-            _deserialized.SafeInvoke(this);
-        }
-
-        /// <summary>
         /// Initializes the object by setting default values.
         /// </summary>
         private void Initialize()
         {
+            Serializer = DefaultSerializer;
             SuspendValidation = DefaultSuspendValidationValue;
             ValidateUsingDataAnnotations = DefaultValidateUsingDataAnnotationsValue;
+            DisableEventSubscriptionsOfChildValues = DefaultDisableEventSubscriptionsOfChildValuesValue;
             DeserializationSucceeded = false;
             HandlePropertyAndCollectionChanges = true;
             AlwaysInvokeNotifyChanged = false;
@@ -568,23 +561,6 @@ namespace Catel.Data
             InitializeProperties();
 
             InitializeCustomProperties();
-        }
-
-        /// <summary>
-        /// Finishes the deserialization (both binary and xml)
-        /// </summary>
-        internal void FinishDeserialization()
-        {
-            Log.Debug("Finished deserialization of '{0}'", GetType().Name);
-
-            // Data is now considered deserialized
-            IsDeserialized = true;
-
-            FinishInitializationAfterConstructionOrDeserialization();
-
-            IsDirty = false;
-
-            OnDeserialized();
         }
 
         /// <summary>
@@ -964,11 +940,20 @@ namespace Catel.Data
         }
 
         /// <summary>
+        /// Determines whether a specific property change should update <c>IsDirty</c> to <c>true</c>.
+        /// </summary>
+        /// <returns><c>true</c> if <c>IsDirty</c> should be set to <c>true</c> when the specified property has changed, <c>false</c> otherwise.</returns>
+        protected virtual bool ShouldPropertyChangeUpdateIsDirty(string propertyName)
+        {
+            return true;
+        }
+
+        /// <summary>
         /// Sets the <see cref="IsDirty"/> property and automatically validate if required.
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="setDirtyAndAllowAutomaticValidation">If set to <c>true</c>, the <see cref="IsDirty"/> property is set and automatic validation is allowed.</param>
-        private void SetDirtyAndAutomaticallyValidate(string propertyName, bool setDirtyAndAllowAutomaticValidation)
+        protected virtual void SetDirtyAndAutomaticallyValidate(string propertyName, bool setDirtyAndAllowAutomaticValidation)
         {
             // Are we not validating or is this a warning or error message?
             if (setDirtyAndAllowAutomaticValidation && !IsValidating &&
@@ -977,7 +962,11 @@ namespace Catel.Data
                 (string.CompareOrdinal(propertyName, ErrorMessageProperty) != 0) &&
                 (string.CompareOrdinal(propertyName, HasErrorsMessageProperty) != 0))
             {
-                IsDirty = true;
+                if (ShouldPropertyChangeUpdateIsDirty(propertyName))
+                {
+                    IsDirty = true;
+                }
+
                 IsValidated = false;
             }
 

@@ -39,7 +39,7 @@ namespace Catel.Data
             {
                 Log.Debug("Disposing DbContextManager because this is a non-injected DbContext");
 
-                // We need to get the DbContextManager and dispose it twice (once for the call in the ctor, once for this retrieval call)
+                // Note: we need to get the DbContextManager and dispose it twice (once for the call in the ctor, once for this retrieval call)
                 var dbContextManager = DbContextManager<TDbContext>.GetManager();
                 dbContextManager.Dispose();
                 dbContextManager.Dispose();

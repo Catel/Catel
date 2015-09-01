@@ -142,10 +142,22 @@ namespace Catel
         public object Target { get { return (_weakTarget != null) ? _weakTarget.Target : null; } }
 
         /// <summary>
+        /// Gets the target weak reference.
+        /// </summary>
+        /// <value>The target weak reference.</value>
+        public WeakReference TargetWeakReference { get { return _weakTarget; } }
+
+        /// <summary>
         /// Gets the source or <c>null</c> if there is no source.
         /// </summary>
         /// <value>The target.</value>
         public object Source { get { return (_weakSource != null) ? _weakSource.Target : null; } }
+
+        /// <summary>
+        /// Gets the source weak reference.
+        /// </summary>
+        /// <value>The source weak reference.</value>
+        public WeakReference SourceWeakReference { get { return _weakSource; } }
 
         /// <summary>
         /// Gets the type of the target.

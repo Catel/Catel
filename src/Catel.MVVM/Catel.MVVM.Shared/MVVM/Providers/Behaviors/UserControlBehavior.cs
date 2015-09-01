@@ -17,6 +17,7 @@ namespace Catel.MVVM.Providers
 #if NETFX_CORE
     using global::Windows.UI.Xaml;
     using ControlType = global::Windows.UI.Xaml.Controls.UserControl;
+    using Catel.Windows.Interactivity;
 #elif NET
     using ControlType = System.Windows.Controls.ContentControl;
     using System.Windows;

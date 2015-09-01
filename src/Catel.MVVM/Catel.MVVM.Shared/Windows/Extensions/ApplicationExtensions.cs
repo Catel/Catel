@@ -38,10 +38,14 @@ namespace Catel.Windows
         {
             System.Windows.Window activeWindow = null;
 
+            // CTL-687: Only allow windows that have an actual size (been shown at least once)
+            Func<System.Windows.Window, bool> predicate = x => x.ActualWidth > 0d && x.ActualHeight > 0d;
+
             if (application != null && application.Windows.Count > 0)
             {
                 var windowList = new List<System.Windows.Window>(application.Windows.Cast<System.Windows.Window>());
-                activeWindow = windowList.FirstOrDefault(cur => cur.IsActive);
+
+                activeWindow = windowList.FirstOrDefault(x => x.IsActive && predicate(x));
                 if (activeWindow == null && windowList.Count == 1 && windowList[0].Topmost)
                 {
                     activeWindow = windowList[0];
@@ -49,7 +53,7 @@ namespace Catel.Windows
 
                 if (activeWindow == null)
                 {
-                    activeWindow = windowList[windowList.Count - 1];
+                    activeWindow = windowList.LastOrDefault(predicate);
                 }
             }
 

@@ -363,7 +363,7 @@ namespace Catel.MVVM.Providers
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private async void OnSaved(object sender, EventArgs e)
         {
-            await Logic.SaveViewModel();
+            await Logic.SaveViewModelAsync();
         }
 
         /// <summary>
@@ -373,7 +373,7 @@ namespace Catel.MVVM.Providers
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private async void OnSavedAndClosed(object sender, EventArgs e)
         {
-            await Logic.SaveAndCloseViewModel();
+            await Logic.SaveAndCloseViewModelAsync();
         }
 
         /// <summary>
@@ -383,7 +383,7 @@ namespace Catel.MVVM.Providers
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private async void OnCanceled(object sender, EventArgs e)
         {
-            await Logic.CancelViewModel();
+            await Logic.CancelViewModelAsync();
         }
 
         /// <summary>
@@ -393,7 +393,7 @@ namespace Catel.MVVM.Providers
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private async void OnCanceledAndClosed(object sender, EventArgs e)
         {
-            await Logic.CancelAndCloseViewModel();
+            await Logic.CancelAndCloseViewModelAsync();
         }
 
         /// <summary>
@@ -403,7 +403,7 @@ namespace Catel.MVVM.Providers
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private async void OnClosed(object sender, EventArgs e)
         {
-            await Logic.CloseViewModel(null);
+            await Logic.CloseViewModelAsync(null);
         }
         #endregion
     }

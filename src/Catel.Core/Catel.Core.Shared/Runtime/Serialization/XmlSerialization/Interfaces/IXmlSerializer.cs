@@ -17,6 +17,11 @@ namespace Catel.Runtime.Serialization.Xml
         PrettyXml,
 
         /// <summary>
+        /// If pretty xml is required (for display reasons), pick this one. This will remove all namespaces instead of only the root ones.
+        /// </summary>
+        PrettyXmlAgressive,
+
+        /// <summary>
         /// If duplicate namespaces are irrelevant, pick this for speed.
         /// </summary>
         Performance
@@ -25,7 +30,7 @@ namespace Catel.Runtime.Serialization.Xml
     /// <summary>
     /// Interface for the xml serializer.
     /// </summary>
-    public interface IXmlSerializer : IModelBaseSerializer<XmlSerializationContextInfo>
+    public interface IXmlSerializer : ISerializer
     {
         /// <summary>
         /// Gets or sets the optimalization mode.

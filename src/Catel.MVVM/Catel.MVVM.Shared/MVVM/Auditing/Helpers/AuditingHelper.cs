@@ -7,8 +7,11 @@
 namespace Catel.MVVM.Auditing
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Threading.Tasks;
     using Reflection;
+    using Threading;
 
     /// <summary>
     /// Helper for auditing which handles the complete subscription of an <see cref="IViewModel"/> instance
@@ -16,6 +19,19 @@ namespace Catel.MVVM.Auditing
     /// </summary>
     public static class AuditingHelper
     {
+        private static readonly HashSet<string> KnownIgnoredPropertyNames = new HashSet<string>();
+
+        /// <summary>
+        /// Initializes static members of the <see cref="AuditingHelper"/> class.
+        /// </summary>
+        static AuditingHelper()
+        {
+            KnownIgnoredPropertyNames.Add("IDataWarningInfo.Warning");
+            KnownIgnoredPropertyNames.Add("INotifyDataWarningInfo.HasWarnings");
+            KnownIgnoredPropertyNames.Add("IDataErrorInfo.Error");
+            KnownIgnoredPropertyNames.Add("INotifyDataErrorInfo.HasErrors");
+        }
+
         /// <summary>
         /// Registers the view model to the <see cref="AuditingManager"/>.
         /// <para />
@@ -31,11 +47,18 @@ namespace Catel.MVVM.Auditing
         {
             Argument.IsNotNull("viewModel", viewModel);
 
-            AuditingManager.OnViewModelCreating(viewModel.GetType());
+            var isAuditingEnabled = AuditingManager.IsAuditingEnabled;
+            if (isAuditingEnabled)
+            {
+                AuditingManager.OnViewModelCreating(viewModel.GetType());
+            }
 
             SubscribeEvents(viewModel);
 
-            AuditingManager.OnViewModelCreated(viewModel);
+            if (isAuditingEnabled)
+            {
+                AuditingManager.OnViewModelCreated(viewModel);
+            }
         }
 
         /// <summary>
@@ -54,13 +77,13 @@ namespace Catel.MVVM.Auditing
             }
 
             viewModel.PropertyChanged += OnViewModelPropertyChanged;
-            viewModel.CommandExecuted += OnViewModelCommandExecuted;
-            viewModel.Saving += OnViewModelSaving;
-            viewModel.Saved += OnViewModelSaved;
-            viewModel.Canceling += OnViewModelCanceling;
-            viewModel.Canceled += OnViewModelCanceled;
-            viewModel.Closing += OnViewModelClosing;
-            viewModel.Closed += OnViewModelClosed;
+            viewModel.CommandExecutedAsync += OnViewModelCommandExecutedAsync;
+            viewModel.SavingAsync += OnViewModelSavingAsync;
+            viewModel.SavedAsync += OnViewModelSavedAsync;
+            viewModel.CancelingAsync += OnViewModelCancelingAsync;
+            viewModel.CanceledAsync += OnViewModelCanceledAsync;
+            viewModel.ClosingAsync += OnViewModelClosingAsync;
+            viewModel.ClosedAsync += OnViewModelClosedAsync;
         }
 
         /// <summary>
@@ -79,17 +102,22 @@ namespace Catel.MVVM.Auditing
             }
 
             viewModel.PropertyChanged -= OnViewModelPropertyChanged;
-            viewModel.CommandExecuted -= OnViewModelCommandExecuted;
-            viewModel.Saving -= OnViewModelSaving;
-            viewModel.Saved -= OnViewModelSaved;
-            viewModel.Canceling -= OnViewModelCanceling;
-            viewModel.Canceled -= OnViewModelCanceled;
-            viewModel.Closing -= OnViewModelClosing;
-            viewModel.Closed -= OnViewModelClosed;
+            viewModel.CommandExecutedAsync -= OnViewModelCommandExecutedAsync;
+            viewModel.SavingAsync -= OnViewModelSavingAsync;
+            viewModel.SavedAsync -= OnViewModelSavedAsync;
+            viewModel.CancelingAsync -= OnViewModelCancelingAsync;
+            viewModel.CanceledAsync -= OnViewModelCanceledAsync;
+            viewModel.ClosingAsync -= OnViewModelClosingAsync;
+            viewModel.ClosedAsync -= OnViewModelClosedAsync;
         }
 
         private static void OnViewModelPropertyChanging(object sender, PropertyChangingEventArgs e)
         {
+            if (!AuditingManager.IsAuditingEnabled)
+            {
+                return;
+            }
+
             var viewModel = (IViewModel)sender;
 
             object propertyValue = null;
@@ -103,10 +131,15 @@ namespace Catel.MVVM.Auditing
 
         private static void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            if (!AuditingManager.IsAuditingEnabled)
+            {
+                return;
+            }
+
             var viewModel = (IViewModel)sender;
 
             object propertyValue = null;
-            if (!string.IsNullOrEmpty(e.PropertyName))
+            if (!string.IsNullOrEmpty(e.PropertyName) && !KnownIgnoredPropertyNames.Contains(e.PropertyName))
             {
                 PropertyHelper.TryGetPropertyValue(viewModel, e.PropertyName, out propertyValue);
             }
@@ -114,42 +147,91 @@ namespace Catel.MVVM.Auditing
             AuditingManager.OnPropertyChanged(viewModel, e.PropertyName, propertyValue);
         }
 
-        private static void OnViewModelCommandExecuted(object sender, CommandExecutedEventArgs e)
+        private static Task OnViewModelCommandExecutedAsync(object sender, CommandExecutedEventArgs e)
         {
+            if (!AuditingManager.IsAuditingEnabled)
+            {
+                return TaskHelper.Completed;
+            }
+
             AuditingManager.OnCommandExecuted((IViewModel)sender, e.CommandPropertyName, e.Command, e.CommandParameter);
+
+            return TaskHelper.Completed;
         }
 
-        private static void OnViewModelSaving(object sender, SavingEventArgs e)
+        private static Task OnViewModelSavingAsync(object sender, SavingEventArgs e)
         {
+            if (!AuditingManager.IsAuditingEnabled)
+            {
+                return TaskHelper.Completed;
+            }
+
             AuditingManager.OnViewModelSaving((IViewModel)sender);
+
+            return TaskHelper.Completed;
         }
 
-        private static void OnViewModelSaved(object sender, EventArgs e)
+        private static Task OnViewModelSavedAsync(object sender, EventArgs e)
         {
+            if (!AuditingManager.IsAuditingEnabled)
+            {
+                return TaskHelper.Completed;
+            }
+
             AuditingManager.OnViewModelSaved((IViewModel)sender);
+
+            return TaskHelper.Completed;
         }
 
-        private static void OnViewModelCanceling(object sender, CancelingEventArgs e)
+        private static Task OnViewModelCancelingAsync(object sender, CancelingEventArgs e)
         {
+            if (!AuditingManager.IsAuditingEnabled)
+            {
+                return TaskHelper.Completed;
+            }
+
             AuditingManager.OnViewModelCanceling((IViewModel)sender);
+
+            return TaskHelper.Completed;
         }
 
-        private static void OnViewModelCanceled(object sender, EventArgs e)
+        private static Task OnViewModelCanceledAsync(object sender, EventArgs e)
         {
+            if (!AuditingManager.IsAuditingEnabled)
+            {
+                return TaskHelper.Completed;
+            }
+
             AuditingManager.OnViewModelCanceled((IViewModel)sender);
+
+            return TaskHelper.Completed;
         }
 
-        private static void OnViewModelClosing(object sender, EventArgs e)
+        private static Task OnViewModelClosingAsync(object sender, EventArgs e)
         {
+            if (!AuditingManager.IsAuditingEnabled)
+            {
+                return TaskHelper.Completed;
+            }
+
             AuditingManager.OnViewModelClosing((IViewModel)sender);
+
+            return TaskHelper.Completed;
         }
 
-        private static void OnViewModelClosed(object sender, EventArgs e)
+        private static Task OnViewModelClosedAsync(object sender, EventArgs e)
         {
+            if (!AuditingManager.IsAuditingEnabled)
+            {
+                return TaskHelper.Completed;
+            }
+
             var viewModel = (IViewModel) sender;
             AuditingManager.OnViewModelClosed(viewModel);
 
             UnsubscribeEvents(viewModel);
+
+            return TaskHelper.Completed;
         }
     }
 }

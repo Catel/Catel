@@ -6,7 +6,7 @@
     <SharedGUID>bb05f0ab-070d-4a45-b16e-0e43c5692357</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Catel.Extensions.Prism5.Shared</Import_RootNamespace>
+    <Import_RootNamespace>Catel</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ExtensionsPrismModule.cs" />

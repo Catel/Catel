@@ -17,6 +17,8 @@ namespace Catel.ServiceModel
     /// Decore your service contract with this attribute to use binary serialization mechanism on datacontracts serialization.
     /// </summary>
     [AttributeUsage(AttributeTargets.Interface)]
+    [ObsoleteEx(Message = "We are considering to remove Wcf.Server support. See https://catelproject.atlassian.net/browse/CTL-672",
+        TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
     public class ShouldUseBinarySerializationForDataContractsAttribute : Attribute, IContractBehavior
     {
         #region IContractBehavior Members

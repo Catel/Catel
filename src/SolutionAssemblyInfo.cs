@@ -20,7 +20,7 @@ using System.Runtime.CompilerServices;
 ////[assembly: AssemblyDescription("DEFINED IN ACTUAL ASSEMBLYINFO")]
 
 [assembly: AssemblyCompany("CatenaLogic")]
-[assembly: AssemblyCopyright("Copyright © CatenaLogic 2010 - 2014")]
+[assembly: AssemblyCopyright("Copyright © CatenaLogic 2010 - 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en-US")]
@@ -35,8 +35,8 @@ using System.Runtime.CompilerServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("4.1")]
-[assembly: AssemblyInformationalVersion("4.1, manually built in Visual Studio")]
+[assembly: AssemblyVersion("4.2")]
+[assembly: AssemblyInformationalVersion("4.2, manually built in Visual Studio")]
 
 #if DEBUG
 
@@ -100,10 +100,10 @@ using System.Runtime.CompilerServices;
 
 #endif
 
-// CLS compliant
-#if !NETFX_CORE && !XAMARIN && !TEST
-[assembly: CLSCompliant(true)]
-#endif
+//// CLS compliant
+//#if !NETFX_CORE && !XAMARIN && !TEST
+//[assembly: CLSCompliant(true)]
+//#endif
 
 #if STRONGNAME_ASSEMBLIES
 

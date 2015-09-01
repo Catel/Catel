@@ -21,7 +21,7 @@ namespace Catel.MVVM.Providers
 #endif
 
     /// <summary>
-    /// A <see cref="Behavior"/> base implementation that takes care of generic MVVM behavior logic.
+    /// A behavior base implementation that takes care of generic MVVM behavior logic.
     /// </summary>
     /// <typeparam name="TAttachedType">The type of the attached type.</typeparam>
     /// <typeparam name="TLogicType">The type of the logic type.</typeparam>
