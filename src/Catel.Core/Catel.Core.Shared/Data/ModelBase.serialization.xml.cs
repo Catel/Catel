@@ -35,7 +35,7 @@ namespace Catel.Data
         /// <param name="reader">The <see cref="T:System.Xml.XmlReader"/> stream from which the object is deserialized.</param>
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
-            if (reader.IsEmptyElement)
+            if (reader.IsEmptyElement && !reader.HasAttributes)
             {
                 return;
             }
