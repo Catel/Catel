@@ -50,13 +50,15 @@ namespace Catel.Memento
         {
             Argument.IsNotNull("propertyChanged", propertyChanged);
 
-            Log.Debug("Initializing ObjectObserver for type '{0}'", propertyChanged.GetType().Name);
+            var propertyChangedType = propertyChanged.GetType();
+
+            Log.Debug("Initializing ObjectObserver for type '{0}'", propertyChangedType.Name);
 
             _weakEventListener = this.SubscribeToWeakPropertyChangedEvent(propertyChanged, OnPropertyChanged);
 
             InitializeDefaultValues(propertyChanged);
 
-            Log.Debug("Initialized ObjectObserver for type '{0}'", propertyChanged.GetType().Name);
+            Log.Debug("Initialized ObjectObserver for type '{0}'", propertyChangedType.Name);
         }
         #endregion
 
@@ -87,9 +89,16 @@ namespace Catel.Memento
                 return;
             }
 
-            object oldValue = _previousPropertyValues[e.PropertyName];
-            _previousPropertyValues[e.PropertyName] = PropertyHelper.GetPropertyValue(sender, e.PropertyName);
-            object newValue = _previousPropertyValues[e.PropertyName];
+            var oldValue = _previousPropertyValues[e.PropertyName];
+            var newValue = PropertyHelper.GetPropertyValue(sender, e.PropertyName);
+
+            // CTL-719: ignore duplicate properties
+            if (ObjectHelper.AreEqual(oldValue, newValue))
+            {
+                return;
+            }
+
+            _previousPropertyValues[e.PropertyName] = newValue;
 
             MementoService.Add(new PropertyChangeUndo(sender, e.PropertyName, oldValue, newValue, Tag));
         }

@@ -50,6 +50,7 @@ Added/fixed:
 (*) CTL-713 Improved designer support by automatically initializing all classes that derive from DesignTimeInitializer. 
     This way it's possible to have customized registrations at design time (for example switching languages at design 
     time, even when the code is using the ILanguageService and custom resx files)
+(*) CTL-719 Don't store extra undo action for properties when validation errors are cleared in memento
 (x) CTL-714 Serialize Model with only one property as XML attribute does not work
 
 Roadmap:
