@@ -35,8 +35,8 @@ using System.Runtime.CompilerServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("4.2")]
-[assembly: AssemblyInformationalVersion("4.2, manually built in Visual Studio")]
+[assembly: AssemblyVersion("4.3")]
+[assembly: AssemblyInformationalVersion("4.3, manually built in Visual Studio")]
 
 #if DEBUG
 
@@ -44,6 +44,8 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("NET40, Debug")]
 #elif NET45
 [assembly: AssemblyConfiguration("NET45, Debug")]
+#elif NET46
+[assembly: AssemblyConfiguration("NET46, Debug")]
 #elif NET50
 [assembly: AssemblyConfiguration("NET50, Debug")]
 #elif SL5
@@ -74,6 +76,8 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("NET40, Release")]
 #elif NET45
 [assembly: AssemblyConfiguration("NET45, Release")]
+#elif NET46
+[assembly: AssemblyConfiguration("NET46, Release")]
 #elif NET50
 [assembly: AssemblyConfiguration("NET50, Release")]
 #elif SL5

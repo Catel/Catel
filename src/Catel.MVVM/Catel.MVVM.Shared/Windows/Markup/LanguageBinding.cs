@@ -55,6 +55,12 @@ namespace Catel.Windows.Markup
         [ConstructorArgument("resourceName")]
 #endif
         public string ResourceName { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to hide design time messages or not.
+        /// </summary>
+        /// <value><c>true</c> if design time messages should be hidden; otherwise, <c>false</c>.</value>
+        public bool HideDesignTimeMessages { get; set; }
         #endregion
 
         private void OnLanguageUpdated(object sender, EventArgs e)
@@ -70,15 +76,33 @@ namespace Catel.Windows.Markup
         {
             if (_languageService == null)
             {
+                if (ShowDesignTimeMessages())
+                {
+                    return "[Language service not available]";
+                }
+
                 return null;
             }
 
             if (string.IsNullOrWhiteSpace(ResourceName))
             {
+                if (ShowDesignTimeMessages())
+                {
+                    return "[ResourceName is null or white space]";
+                }
+
                 return null;
             }
 
             var resource = _languageService.GetString(ResourceName);
+            if (string.IsNullOrWhiteSpace(resource))
+            {
+                if (ShowDesignTimeMessages())
+                {
+                    return "[empty]";
+                }
+            }
+
             return resource;
         }
 
@@ -100,6 +124,11 @@ namespace Catel.Windows.Markup
         protected override void OnTargetObjectUnloaded()
         {
             _languageService.LanguageUpdated -= OnLanguageUpdated;
+        }
+
+        private bool ShowDesignTimeMessages()
+        {
+            return !HideDesignTimeMessages && CatelEnvironment.IsInDesignMode;
         }
     }
 }
