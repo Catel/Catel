@@ -7,6 +7,7 @@
 
 namespace Catel.Services
 {
+    using System;
     using System.Collections.Generic;
     using Logging;
 
@@ -23,6 +24,9 @@ namespace Catel.Services
         public RollingInMemoryLogService()
         {
             _rollingInMemoryLogListener = new RollingInMemoryLogListener();
+            _rollingInMemoryLogListener.LogMessage += OnLogListenerLogMessage;
+
+            LogManager.AddListener(_rollingInMemoryLogListener);
         }
 
         #region Properties
@@ -63,6 +67,13 @@ namespace Catel.Services
         }
         #endregion
 
+        #region Events
+        /// <summary>
+        /// Occurs when a log message is written.
+        /// </summary>
+        public event EventHandler<LogMessageEventArgs> LogMessage;
+        #endregion
+
         #region Methods
         /// <summary>
         /// Gets the log entries.
@@ -89,6 +100,11 @@ namespace Catel.Services
         public IEnumerable<LogEntry> GetErrorLogEntries()
         {
             return _rollingInMemoryLogListener.GetErrorLogEntries();
+        }
+
+        private void OnLogListenerLogMessage(object sender, LogMessageEventArgs e)
+        {
+            LogMessage.SafeInvoke(this, e);
         }
         #endregion
     }
