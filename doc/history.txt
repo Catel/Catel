@@ -46,7 +46,9 @@ we will remove the features in the next major release.
 
 Added/fixed:
 ============
-xxx
+(*) CTL-713 Improved designer support by automatically initializing all classes that derive from DesignTimeInitializer. 
+    This way it's possible to have customized registrations at design time (for example switching languages at design 
+    time, even when the code is using the ILanguageService and custom resx files)
 
 Roadmap:
 ========

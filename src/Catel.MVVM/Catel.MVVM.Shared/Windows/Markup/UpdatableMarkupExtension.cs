@@ -115,7 +115,8 @@ namespace Catel.Windows.Markup
             }
 #endif
 
-            return ProvideDynamicValue();
+            var dynamicValue = ProvideDynamicValue();
+            return dynamicValue;
         }
 
         private void OnTargetObjectLoadedInternal(object sender, RoutedEventArgs e)
