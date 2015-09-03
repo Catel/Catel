@@ -498,7 +498,7 @@ namespace Catel.Data
                 }
 
                 IWeakEventListener oldSubscription;
-                if (eventsTable.TryGetValue(value, out oldSubscription))
+                if (eventsTable != null && eventsTable.TryGetValue(value, out oldSubscription))
                 {
                     oldSubscription.Detach();
 
