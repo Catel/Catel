@@ -414,7 +414,7 @@ namespace Catel.Data
                 }
 
                 IWeakEventListener oldSubscription;
-                if (eventsTable.TryGetValue(value, out oldSubscription))
+                if (eventsTable != null && eventsTable.TryGetValue(value, out oldSubscription))
                 {
                     oldSubscription.Detach();
 
@@ -447,8 +447,15 @@ namespace Catel.Data
                         throw new ArgumentOutOfRangeException("eventChangeType");
                 }
 
-                eventsTable.Add(value, weakListener);
-                eventsList.Add(weakListener);
+                if (eventsTable != null)
+                {
+                    eventsTable.Add(value, weakListener);
+                }
+
+                if (eventsList != null)
+                {
+                    eventsList.Add(weakListener);
+                }
             }
         }
 
@@ -498,7 +505,7 @@ namespace Catel.Data
                 }
 
                 IWeakEventListener oldSubscription;
-                if (eventsTable.TryGetValue(value, out oldSubscription))
+                if (eventsTable != null && eventsTable.TryGetValue(value, out oldSubscription))
                 {
                     oldSubscription.Detach();
 
