@@ -40,6 +40,12 @@ namespace Catel.Services
         /// </summary>
         /// <value>The maximum number of log entries.</value>
         int MaximumNumberOfErrorLogEntries { get; set; }
+
+        /// <summary>
+        /// Gets the log listener.
+        /// </summary>
+        /// <value>The log listener.</value>
+        RollingInMemoryLogListener LogListener { get; }
         #endregion
 
         #region Events

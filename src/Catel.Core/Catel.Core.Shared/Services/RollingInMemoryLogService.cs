@@ -22,14 +22,33 @@ namespace Catel.Services
         /// Initializes a new instance of the <see cref="RollingInMemoryLogService" /> class.
         /// </summary>
         public RollingInMemoryLogService()
+            : this(null)
         {
-            _rollingInMemoryLogListener = new RollingInMemoryLogListener();
-            _rollingInMemoryLogListener.LogMessage += OnLogListenerLogMessage;
+        }
 
-            LogManager.AddListener(_rollingInMemoryLogListener);
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RollingInMemoryLogService"/> class.
+        /// </summary>
+        /// <param name="logListener">The log listener. If <c>null</c>, this service will create its own log listener.</param>
+        public RollingInMemoryLogService(RollingInMemoryLogListener logListener)
+        {
+            if (logListener == null)
+            {
+                logListener = new RollingInMemoryLogListener();
+                LogManager.AddListener(logListener);
+            }
+
+            _rollingInMemoryLogListener = logListener;
+            _rollingInMemoryLogListener.LogMessage += OnLogListenerLogMessage;
         }
 
         #region Properties
+        /// <summary>
+        /// Gets the log listener.
+        /// </summary>
+        /// <value>The log listener.</value>
+        public RollingInMemoryLogListener LogListener { get { return _rollingInMemoryLogListener; } }
+
         /// <summary>
         /// Gets or sets the maximum number of log entries to keep.
         /// <para />
