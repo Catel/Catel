@@ -1011,7 +1011,8 @@ namespace Catel.Windows
         /// <returns>True if successful, otherwise false.</returns>
         protected virtual bool ValidateData()
         {
-            return _logic.ValidateViewModel();
+            var result = _logic.ValidateViewModel();
+            return result;
         }
 
         /// <summary>
@@ -1019,9 +1020,10 @@ namespace Catel.Windows
         /// </summary>
         /// <returns>True if successful, otherwise false.</returns>
         [ObsoleteEx(ReplacementTypeOrMember = "ApplyChangesAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected virtual Task<bool> ApplyChanges()
+        protected virtual async Task<bool> ApplyChanges()
         {
-            return ApplyChangesAsync();
+            var result = await ApplyChangesAsync();
+            return result;
         }
 
         /// <summary>
@@ -1030,16 +1032,18 @@ namespace Catel.Windows
         /// <returns>True if successful, otherwise false.</returns>
         protected async virtual Task<bool> ApplyChangesAsync()
         {
-            return await _logic.SaveViewModelAsync();
+            var result = await _logic.SaveViewModelAsync();
+            return result;
         }
 
         /// <summary>
         /// Discards all changes made by this window.
         /// </summary>
         [ObsoleteEx(ReplacementTypeOrMember = "DiscardChangesAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected virtual Task<bool> DiscardChanges()
+        protected virtual async Task<bool> DiscardChanges()
         {
-            return DiscardChangesAsync();
+            var result = await DiscardChangesAsync();
+            return result;
         }
 
         /// <summary>
@@ -1047,7 +1051,8 @@ namespace Catel.Windows
         /// </summary>
         protected async virtual Task<bool> DiscardChangesAsync()
         {
-            return await _logic.CancelViewModelAsync();
+            var result = await _logic.CancelViewModelAsync();
+            return result;
         }
 
         /// <summary>

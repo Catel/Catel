@@ -932,12 +932,13 @@ namespace Catel.MVVM.Providers
         /// <returns><c>true</c> if the view model is successfully saved; otherwise <c>false</c>.</returns>
         public virtual Task<bool> SaveViewModelAsync()
         {
-            if (ViewModel == null)
+            var vm = ViewModel;
+            if (vm == null)
             {
                 return TaskHelper<bool>.FromResult(false);
             }
 
-            return ViewModel.SaveViewModelAsync();
+            return vm.SaveViewModelAsync();
         }
 
         /// <summary>
