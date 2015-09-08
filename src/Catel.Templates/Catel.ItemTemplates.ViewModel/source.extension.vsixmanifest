@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="Catel.ItemTemplates.ViewModel..a1b09889-e514-4fcf-b5ee-e2c39ec96513" Version="1.3" Language="en-US" Publisher="Geert van Horrik" />
+    <Identity Id="Catel.ItemTemplates.ViewModel..a1b09889-e514-4fcf-b5ee-e2c39ec96513" Version="4.2" Language="en-US" Publisher="Geert van Horrik" />
     <DisplayName>ViewModel using Catel</DisplayName>
     <Description xml:space="preserve">Item template to create a view model using Catel.</Description>
     <MoreInfo>http://www.catelproject.com</MoreInfo>
