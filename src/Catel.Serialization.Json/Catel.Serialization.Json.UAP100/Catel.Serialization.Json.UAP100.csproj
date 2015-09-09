@@ -119,7 +119,7 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FodyWeavers.xml" />
+    <None Include="FodyWeavers.xml" />
     <Content Include="Properties\Catel.Serialization.Json.UAP100.rd.xml" />
   </ItemGroup>
   <ItemGroup>
