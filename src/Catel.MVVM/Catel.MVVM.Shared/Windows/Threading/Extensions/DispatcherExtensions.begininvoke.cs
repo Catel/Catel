@@ -10,6 +10,8 @@ namespace Catel.Windows.Threading
 {
     using System;
     using System.Threading.Tasks;
+
+    // Required for DispatcherOperation on all platforms
     using System.Windows.Threading;
 
 #if NETFX_CORE

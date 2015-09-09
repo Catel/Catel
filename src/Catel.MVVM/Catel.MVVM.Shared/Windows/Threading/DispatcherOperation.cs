@@ -13,11 +13,17 @@ namespace System.Windows.Threading
     /// </summary>
     public class DispatcherOperation
     {
+        /// <summary>
+        /// Static constructor.
+        /// </summary>
         static DispatcherOperation()
         {
             Default = new DispatcherOperation();
         }
 
+        /// <summary>
+        /// Gets the default dispatcher operation.
+        /// </summary>
         public static DispatcherOperation Default { get; private set; }
     }
 }

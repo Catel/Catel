@@ -37,8 +37,8 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <paramref name="inputGesture"/> is <c>null</c>.</exception>
         public static Dictionary<string, ICommand> FindCommandsByGesture(this ICommandManager commandManager, InputGesture inputGesture)
         {
-            Argument.IsNotNull(() => commandManager);
-            Argument.IsNotNull(() => inputGesture);
+            Argument.IsNotNull("commandManager", commandManager);
+            Argument.IsNotNull("inputGesture", inputGesture);
 
             var commands = new Dictionary<string, ICommand>();
 
@@ -65,9 +65,9 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <paramref name="commandNameFieldName"/> is <c>null</c>.</exception>
         public static void CreateCommandWithGesture(this ICommandManager commandManager, Type containerType, string commandNameFieldName)
         {
-            Argument.IsNotNull(() => commandManager);
-            Argument.IsNotNull(() => containerType);
-            Argument.IsNotNullOrWhitespace(() => commandNameFieldName);
+            Argument.IsNotNull("commandManager", commandManager);
+            Argument.IsNotNull("containerType", containerType);
+            Argument.IsNotNullOrWhitespace("commandNameFieldName", commandNameFieldName);
 
             Log.Debug("Creating command '{0}'", commandNameFieldName);
 
