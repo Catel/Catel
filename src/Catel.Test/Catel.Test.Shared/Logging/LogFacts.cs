@@ -31,7 +31,7 @@ namespace Catel.Test.Logging
             [TestCase]
             public void LoggingPerformance()
             {
-                var log = new Log(typeof (ThePerformance));
+                var log = new Log(typeof(ThePerformance));
 
                 var averageDuration = TimeMeasureHelper.MeasureAction(5000, "Log.Write", () => log.WriteWithData("this is a test", null, LogEvent.Error));
 
@@ -866,33 +866,33 @@ namespace Catel.Test.Logging
             }
 
             [TestCase]
-            public void ErrorAndThrowException_NullInput()
+            public void ErrorAndCreateException_NullInput()
             {
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => log.ErrorAndThrowException<InvalidOperationException>(null));
+                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => { throw log.ErrorAndCreateException<InvalidOperationException>(null); });
             }
 
             [TestCase]
-            public void ErrorAndThrowException_ExceptionWithoutMessageConstructor()
+            public void ErrorAndCreateException_ExceptionWithoutMessageConstructor()
             {
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => log.ErrorAndThrowException<ExceptionWithoutStringConstructor>("exception test"));
+                ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => { throw log.ErrorAndCreateException<ExceptionWithoutStringConstructor>("exception test"); });
             }
 
             [TestCase]
-            public void ErrorAndThrowException_ExceptionWithMessageConstructor()
+            public void ErrorAndCreateException_ExceptionWithMessageConstructor()
             {
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
                 // Several tests to make sure we are not testing the NotSupportedException of the class itself
-                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => log.ErrorAndThrowException<InvalidOperationException>("exception test"));
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.ErrorAndThrowException<ArgumentNullException>("exception test"));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => log.ErrorAndThrowException<ArgumentException>("exception test"));
+                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => { throw log.ErrorAndCreateException<InvalidOperationException>("exception test"); });
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => { throw log.ErrorAndCreateException<ArgumentNullException>("exception test"); });
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => { throw log.ErrorAndCreateException<ArgumentException>("exception test"); });
             }
         }
 

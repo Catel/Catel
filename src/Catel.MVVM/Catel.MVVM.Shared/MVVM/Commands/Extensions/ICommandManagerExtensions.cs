@@ -74,7 +74,7 @@ namespace Catel
             var commandNameField = containerType.GetFieldEx(commandNameFieldName, BindingFlags.Public | BindingFlags.Static);
             if (commandNameField == null)
             {
-                Log.ErrorAndThrowException<InvalidOperationException>("Command '{0}' is not available on container type '{1}'",
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Command '{0}' is not available on container type '{1}'",
                     commandNameFieldName, containerType.GetSafeFullName());
             }
 

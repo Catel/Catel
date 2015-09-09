@@ -54,7 +54,7 @@ namespace Catel.MVVM
             _eventInfo = elementType.GetEventEx(eventName);
             if (_eventInfo == null)
             {
-                Log.ErrorAndThrowException<InvalidOperationException>("Event '{0}.{1}' not found, cannot create command binding", elementType.Name, eventName);
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Event '{0}.{1}' not found, cannot create command binding", elementType.Name, eventName);
             }
 
             _enabledPropertyInfo = elementType.GetPropertyEx("Enabled");
