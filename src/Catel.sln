@@ -405,6 +405,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Serialization.Json.NE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.DynamicObjects.PCL", "Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.PCL\Catel.Extensions.DynamicObjects.PCL.csproj", "{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Serialization.Json.UAP100", "Catel.Serialization.Json\Catel.Serialization.Json.UAP100\Catel.Serialization.Json.UAP100.csproj", "{917AF08F-4BD5-468A-BDB0-4C0ECDAD71EC}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Catel.Extensions.Wcf.Server\Catel.Extensions.Wcf.Server.Shared\Catel.Extensions.Wcf.Server.Shared.projitems*{bd187286-74f3-4c79-9f4c-4b0102947ea8}*SharedItemsImports = 4
@@ -418,6 +420,7 @@ Global
 		Catel.Extensions.Memento\Catel.Extensions.Memento.Shared\Catel.Extensions.Memento.Shared.projitems*{78940ad6-6cbe-4a64-b36e-8595633034fa}*SharedItemsImports = 4
 		Catel.Core\Catel.Core.Shared\Catel.Core.Shared.projitems*{3743a304-3ee5-4909-bfec-988d59d1b33a}*SharedItemsImports = 13
 		Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.Shared\Catel.Extensions.DynamicObjects.Shared.projitems*{a1b5d494-32d5-4dce-8dc1-00cecc821f58}*SharedItemsImports = 4
+		Catel.Serialization.Json\Catel.Serialization.Json.Shared\Catel.Serialization.Json.Shared.projitems*{917af08f-4bd5-468a-bdb0-4c0ecdad71ec}*SharedItemsImports = 4
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{786d0298-2117-4b96-838d-c0e9458d06c2}*SharedItemsImports = 4
 		Catel.Extensions.Data\Catel.Extensions.Data.Shared\Catel.Extensions.Data.Shared.projitems*{3658ef5e-766f-4d36-b0fc-dfadae6547dd}*SharedItemsImports = 4
 		Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework5\Catel.Extensions.EntityFramework5.Shared\Catel.Extensions.EntityFramework5.Shared.projitems*{2156065f-74f7-420c-a7c9-f40b4751e36a}*SharedItemsImports = 4
@@ -1636,6 +1639,22 @@ Global
 		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Release|x64.Build.0 = Release|Any CPU
 		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Release|x86.ActiveCfg = Release|Any CPU
 		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Release|x86.Build.0 = Release|Any CPU
+		{917AF08F-4BD5-468A-BDB0-4C0ECDAD71EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{917AF08F-4BD5-468A-BDB0-4C0ECDAD71EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{917AF08F-4BD5-468A-BDB0-4C0ECDAD71EC}.Debug|ARM.ActiveCfg = Debug|ARM
+		{917AF08F-4BD5-468A-BDB0-4C0ECDAD71EC}.Debug|ARM.Build.0 = Debug|ARM
+		{917AF08F-4BD5-468A-BDB0-4C0ECDAD71EC}.Debug|x64.ActiveCfg = Debug|x64
+		{917AF08F-4BD5-468A-BDB0-4C0ECDAD71EC}.Debug|x64.Build.0 = Debug|x64
+		{917AF08F-4BD5-468A-BDB0-4C0ECDAD71EC}.Debug|x86.ActiveCfg = Debug|x86
+		{917AF08F-4BD5-468A-BDB0-4C0ECDAD71EC}.Debug|x86.Build.0 = Debug|x86
+		{917AF08F-4BD5-468A-BDB0-4C0ECDAD71EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{917AF08F-4BD5-468A-BDB0-4C0ECDAD71EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{917AF08F-4BD5-468A-BDB0-4C0ECDAD71EC}.Release|ARM.ActiveCfg = Release|ARM
+		{917AF08F-4BD5-468A-BDB0-4C0ECDAD71EC}.Release|ARM.Build.0 = Release|ARM
+		{917AF08F-4BD5-468A-BDB0-4C0ECDAD71EC}.Release|x64.ActiveCfg = Release|x64
+		{917AF08F-4BD5-468A-BDB0-4C0ECDAD71EC}.Release|x64.Build.0 = Release|x64
+		{917AF08F-4BD5-468A-BDB0-4C0ECDAD71EC}.Release|x86.ActiveCfg = Release|x86
+		{917AF08F-4BD5-468A-BDB0-4C0ECDAD71EC}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1789,6 +1808,7 @@ Global
 		{43D4D0A2-3227-4973-BA7F-97ECCB1B13E2} = {BD2D9D3A-6266-4D0B-B2B4-DD5726861E36}
 		{97E093E6-1CF9-4CFF-9201-540A7681BC12} = {85BEBC4F-4020-4045-945B-B8F6F732FC6E}
 		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33} = {B5ED1A50-E238-4C92-996A-08ED76033DF3}
+		{917AF08F-4BD5-468A-BDB0-4C0ECDAD71EC} = {85BEBC4F-4020-4045-945B-B8F6F732FC6E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.2\lib\NET35
