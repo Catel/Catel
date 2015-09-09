@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(NuGetPackageRoot)' == ''">
+    <NuGetPackageRoot>..\..\..\lib\</NuGetPackageRoot>
+  </PropertyGroup>
+  <ImportGroup>
+    <Import Project="$(NuGetPackageRoot)\Fody\1.29.3\build\dotnet\Fody.targets" Condition="Exists('$(NuGetPackageRoot)\Fody\1.29.3\build\dotnet\Fody.targets')" />
+    <Import Project="$(NuGetPackageRoot)\Obsolete.Fody\4.0.3\build\dotnet\Obsolete.Fody.targets" Condition="Exists('$(NuGetPackageRoot)\Obsolete.Fody\4.0.3\build\dotnet\Obsolete.Fody.targets')" />
+  </ImportGroup>
+</Project>
