@@ -3,6 +3,18 @@
   "version": 1,
   "targets": {
     "UAP,Version=v10.0": {
+      "Catel.Fody/2.8.0": {
+        "dependencies": {
+          "Fody": "(, )"
+        },
+        "compile": {
+          "lib/portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40/Catel.Fody.Attributes.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40/Catel.Fody.Attributes.dll": {}
+        }
+      },
+      "Fody/1.29.3": {},
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
           "System.Runtime": "[4.0.20, )",
@@ -199,6 +211,17 @@
         },
         "runtime": {
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "Obsolete.Fody/4.0.3": {
+        "dependencies": {
+          "Fody": "[1.29.2, )"
+        },
+        "compile": {
+          "Lib/dotnet/Obsolete.dll": {}
+        },
+        "runtime": {
+          "Lib/dotnet/Obsolete.dll": {}
         }
       },
       "System.AppContext/4.0.0": {
@@ -1538,6 +1561,18 @@
       }
     },
     "UAP,Version=v10.0/win10-arm": {
+      "Catel.Fody/2.8.0": {
+        "dependencies": {
+          "Fody": "(, )"
+        },
+        "compile": {
+          "lib/portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40/Catel.Fody.Attributes.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40/Catel.Fody.Attributes.dll": {}
+        }
+      },
+      "Fody/1.29.3": {},
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
           "System.Runtime": "[4.0.20, )",
@@ -1777,6 +1812,17 @@
         },
         "runtime": {
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "Obsolete.Fody/4.0.3": {
+        "dependencies": {
+          "Fody": "[1.29.2, )"
+        },
+        "compile": {
+          "Lib/dotnet/Obsolete.dll": {}
+        },
+        "runtime": {
+          "Lib/dotnet/Obsolete.dll": {}
         }
       },
       "System.AppContext/4.0.0": {
@@ -3163,6 +3209,18 @@
       }
     },
     "UAP,Version=v10.0/win10-arm-aot": {
+      "Catel.Fody/2.8.0": {
+        "dependencies": {
+          "Fody": "(, )"
+        },
+        "compile": {
+          "lib/portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40/Catel.Fody.Attributes.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40/Catel.Fody.Attributes.dll": {}
+        }
+      },
+      "Fody/1.29.3": {},
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
           "System.Runtime": "[4.0.20, )",
@@ -3388,6 +3446,17 @@
         },
         "runtime": {
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "Obsolete.Fody/4.0.3": {
+        "dependencies": {
+          "Fody": "[1.29.2, )"
+        },
+        "compile": {
+          "Lib/dotnet/Obsolete.dll": {}
+        },
+        "runtime": {
+          "Lib/dotnet/Obsolete.dll": {}
         }
       },
       "System.AppContext/4.0.0": {
@@ -4760,6 +4829,18 @@
       }
     },
     "UAP,Version=v10.0/win10-x86": {
+      "Catel.Fody/2.8.0": {
+        "dependencies": {
+          "Fody": "(, )"
+        },
+        "compile": {
+          "lib/portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40/Catel.Fody.Attributes.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40/Catel.Fody.Attributes.dll": {}
+        }
+      },
+      "Fody/1.29.3": {},
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
           "System.Runtime": "[4.0.20, )",
@@ -5004,6 +5085,17 @@
         },
         "runtime": {
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "Obsolete.Fody/4.0.3": {
+        "dependencies": {
+          "Fody": "[1.29.2, )"
+        },
+        "compile": {
+          "Lib/dotnet/Obsolete.dll": {}
+        },
+        "runtime": {
+          "Lib/dotnet/Obsolete.dll": {}
         }
       },
       "System.AppContext/4.0.0": {
@@ -6390,6 +6482,18 @@
       }
     },
     "UAP,Version=v10.0/win10-x86-aot": {
+      "Catel.Fody/2.8.0": {
+        "dependencies": {
+          "Fody": "(, )"
+        },
+        "compile": {
+          "lib/portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40/Catel.Fody.Attributes.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40/Catel.Fody.Attributes.dll": {}
+        }
+      },
+      "Fody/1.29.3": {},
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
           "System.Runtime": "[4.0.20, )",
@@ -6615,6 +6719,17 @@
         },
         "runtime": {
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "Obsolete.Fody/4.0.3": {
+        "dependencies": {
+          "Fody": "[1.29.2, )"
+        },
+        "compile": {
+          "Lib/dotnet/Obsolete.dll": {}
+        },
+        "runtime": {
+          "Lib/dotnet/Obsolete.dll": {}
         }
       },
       "System.AppContext/4.0.0": {
@@ -7987,6 +8102,18 @@
       }
     },
     "UAP,Version=v10.0/win10-x64": {
+      "Catel.Fody/2.8.0": {
+        "dependencies": {
+          "Fody": "(, )"
+        },
+        "compile": {
+          "lib/portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40/Catel.Fody.Attributes.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40/Catel.Fody.Attributes.dll": {}
+        }
+      },
+      "Fody/1.29.3": {},
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
           "System.Runtime": "[4.0.20, )",
@@ -8231,6 +8358,17 @@
         },
         "runtime": {
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "Obsolete.Fody/4.0.3": {
+        "dependencies": {
+          "Fody": "[1.29.2, )"
+        },
+        "compile": {
+          "Lib/dotnet/Obsolete.dll": {}
+        },
+        "runtime": {
+          "Lib/dotnet/Obsolete.dll": {}
         }
       },
       "System.AppContext/4.0.0": {
@@ -9617,6 +9755,18 @@
       }
     },
     "UAP,Version=v10.0/win10-x64-aot": {
+      "Catel.Fody/2.8.0": {
+        "dependencies": {
+          "Fody": "(, )"
+        },
+        "compile": {
+          "lib/portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40/Catel.Fody.Attributes.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40/Catel.Fody.Attributes.dll": {}
+        }
+      },
+      "Fody/1.29.3": {},
       "Microsoft.CSharp/4.0.0": {
         "dependencies": {
           "System.Runtime": "[4.0.20, )",
@@ -9842,6 +9992,17 @@
         },
         "runtime": {
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
+        }
+      },
+      "Obsolete.Fody/4.0.3": {
+        "dependencies": {
+          "Fody": "[1.29.2, )"
+        },
+        "compile": {
+          "Lib/dotnet/Obsolete.dll": {}
+        },
+        "runtime": {
+          "Lib/dotnet/Obsolete.dll": {}
         }
       },
       "System.AppContext/4.0.0": {
@@ -11215,6 +11376,46 @@
     }
   },
   "libraries": {
+    "Catel.Fody/2.8.0": {
+      "sha512": "d//ve6Tre7Liqj/ICNBe1tcwhkqDJqlw3KHTp+dRitN4KqUdVLC/6veWofRDMIR8Cw2btOzHgf+MXpEdgEZXyg==",
+      "type": "Package",
+      "files": [
+        "_rels/.rels",
+        "Catel.Fody.nuspec",
+        "Catel.Fody.dll",
+        "content/FodyWeavers.xml.install.xdt",
+        "content/FodyWeavers.xml.uninstall.xdt",
+        "lib/portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40/Catel.Fody.Attributes.dll",
+        "lib/portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40/Catel.Fody.Attributes.pdb",
+        "lib/portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40/Catel.Fody.Attributes.pdb.srcsrv",
+        "lib/portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40/Catel.Fody.Attributes.XML",
+        "package/services/metadata/core-properties/6e37f3383ae043eaa45975ed0904be99.psmdcp",
+        "[Content_Types].xml"
+      ]
+    },
+    "Fody/1.29.3": {
+      "sha512": "I+dC/ez9Tl2QH+YuUhZBoqsMJKk3JzNszHpYSEFHzNBES1C5KcNJJPtc0gRUrQBpCz5x9oxPBfMZaI0UXFg9rw==",
+      "type": "Package",
+      "files": [
+        "_rels/.rels",
+        "Fody.nuspec",
+        "build/dotnet/Fody.targets",
+        "build/portable-net+sl+win+wpa+wp/Fody.targets",
+        "Content/FodyWeavers.xml",
+        "Fody.dll",
+        "Fody.pdb",
+        "FodyCommon.dll",
+        "FodyCommon.pdb",
+        "FodyIsolated.dll",
+        "FodyIsolated.pdb",
+        "Mono.Cecil.dll",
+        "Mono.Cecil.Mdb.dll",
+        "Mono.Cecil.Pdb.dll",
+        "Mono.Cecil.Rocks.dll",
+        "package/services/metadata/core-properties/bc30331ed57a4163a77c063160c6131b.psmdcp",
+        "[Content_Types].xml"
+      ]
+    },
     "Microsoft.CSharp/4.0.0": {
       "sha512": "oWqeKUxHXdK6dL2CFjgMcaBISbkk+AqEg+yvJHE4DElNzS4QaTsCflgkkqZwVlWby1Dg9zo9n+iCAMFefFdJ/A==",
       "type": "Package",
@@ -11865,6 +12066,25 @@
         "ref/xamarinios10/_._",
         "ref/xamarinmac20/_._",
         "package/services/metadata/core-properties/1d4eb9d0228b48b88d2df3822fba2d86.psmdcp",
+        "[Content_Types].xml"
+      ]
+    },
+    "Obsolete.Fody/4.0.3": {
+      "sha512": "Pq4mmY1YxctV7MYWDervXC1ganfxmMrjcQG6L1ygxLDlfMzsSfMJZupFk2ExKtJY88KOOnfW7rXReXEYjkU8XA==",
+      "type": "Package",
+      "files": [
+        "_rels/.rels",
+        "Obsolete.Fody.nuspec",
+        "build/dotnet/Obsolete.Fody.targets",
+        "Lib/dotnet/Obsolete.dll",
+        "Lib/dotnet/Obsolete.xml",
+        "Lib/portable-net4+sl5+wp8+win8+wpa81+MonoAndroid16+MonoTouch40/Obsolete.dll",
+        "Lib/portable-net4+sl5+wp8+win8+wpa81+MonoAndroid16+MonoTouch40/Obsolete.xml",
+        "Tools/install.ps1",
+        "Tools/uninstall.ps1",
+        "Obsolete.Fody.dll",
+        "Obsolete.Fody.pdb",
+        "package/services/metadata/core-properties/fe526b12dcad4337a98835ca473d4f7a.psmdcp",
         "[Content_Types].xml"
       ]
     },
@@ -14566,7 +14786,10 @@
   },
   "projectFileDependencyGroups": {
     "": [
-      "Microsoft.NETCore.UniversalWindowsPlatform >= 5.0.0"
+      "Catel.Fody >= 2.8.0",
+      "Fody >= 1.29.3",
+      "Microsoft.NETCore.UniversalWindowsPlatform >= 5.0.0",
+      "Obsolete.Fody >= 4.0.3"
     ],
     "UAP,Version=v10.0": []
   }
