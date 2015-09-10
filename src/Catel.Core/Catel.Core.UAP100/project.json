@@ -1,6 +1,6 @@
 ﻿{
   "dependencies": {
-    "Catel.Fody": "2.8.0",
+    "Catel.Fody": "2.9.0-unstable0002",
     "Fody": "1.29.3",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0",
     "Obsolete.Fody": "4.0.3"

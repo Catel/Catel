@@ -54,9 +54,9 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Catel.Fody.Attributes, Version=2.8.0.0, Culture=neutral, PublicKeyToken=1c8163524cbe02e6, processorArchitecture=MSIL">
+    <Reference Include="Catel.Fody.Attributes, Version=2.9.0.0, Culture=neutral, PublicKeyToken=1c8163524cbe02e6, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Catel.Fody.2.8.0\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
+      <HintPath>..\..\..\lib\Catel.Fody.2.9.0-unstable0002\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FluentValidation, Version=5.6.2.0, Culture=neutral, processorArchitecture=MSIL">

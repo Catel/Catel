@@ -120,9 +120,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Catel.Fody.Attributes, Version=2.8.0.0, Culture=neutral, PublicKeyToken=1c8163524cbe02e6, processorArchitecture=MSIL">
+    <Reference Include="Catel.Fody.Attributes, Version=2.9.0.0, Culture=neutral, PublicKeyToken=1c8163524cbe02e6, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Catel.Fody.2.8.0\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
+      <HintPath>..\..\..\lib\Catel.Fody.2.9.0-unstable0002\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Obsolete, Version=4.0.3.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
@@ -146,8 +146,10 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\..\..\lib\Fody.1.29.3\build\dotnet\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.1.29.3\build\dotnet\Fody.targets'))" />
     <Error Condition="!Exists('..\..\..\lib\Obsolete.Fody.4.0.3\build\dotnet\Obsolete.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Obsolete.Fody.4.0.3\build\dotnet\Obsolete.Fody.targets'))" />
+    <Error Condition="!Exists('..\..\..\lib\Catel.Fody.2.9.0-unstable0002\build\dotnet\Catel.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Catel.Fody.2.9.0-unstable0002\build\dotnet\Catel.Fody.targets'))" />
   </Target>
   <Import Project="..\..\..\lib\Obsolete.Fody.4.0.3\build\dotnet\Obsolete.Fody.targets" Condition="Exists('..\..\..\lib\Obsolete.Fody.4.0.3\build\dotnet\Obsolete.Fody.targets')" />
+  <Import Project="..\..\..\lib\Catel.Fody.2.9.0-unstable0002\build\dotnet\Catel.Fody.targets" Condition="Exists('..\..\..\lib\Catel.Fody.2.9.0-unstable0002\build\dotnet\Catel.Fody.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
