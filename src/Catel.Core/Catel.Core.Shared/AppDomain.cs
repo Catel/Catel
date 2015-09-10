@@ -28,6 +28,11 @@ namespace System
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
+        /// The known assemblies to ignore.
+        /// </summary>
+        private static readonly HashSet<string> KnownAssembliesToIgnore = new HashSet<string>(); 
+
+        /// <summary>
         /// List of loaded assemblies.
         /// </summary>
         private List<Assembly> _loadedAssemblies;
@@ -39,6 +44,8 @@ namespace System
         static AppDomain()
         {
             CurrentDomain = new AppDomain();
+
+            KnownAssembliesToIgnore.Add("ClrCompression.dll");
         }
         #endregion
 
@@ -74,6 +81,11 @@ namespace System
                     {
                         try
                         {
+                            if (KnownAssembliesToIgnore.Contains(file.Name))
+                            {
+                                continue;
+                            }
+
                             var filename = file.Name.Substring(0, file.Name.Length - file.FileType.Length);
                             var name = new AssemblyName { Name = filename };
                             var asm = Assembly.Load(name);

@@ -122,7 +122,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="FodyWeavers.xml" />
-    <Content Include="Properties\Catel.Serialization.Json.UAP100.rd.xml" />
+    <EmbeddedResource Include="Properties\Catel.Serialization.Json.rd.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Catel.Core\Catel.Core.UAP100\Catel.Core.UAP100.csproj">

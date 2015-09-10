@@ -25,9 +25,10 @@
     http://go.microsoft.com/fwlink/?LinkId=613100
 -->
 <Directives xmlns="http://schemas.microsoft.com/netfx/2013/01/metadata">
-  <Library Name="Catel.Serialization.Json.UAP100">
+  <Library Name="Catel.Extensions.Controls">
 
-  	<!-- add directives for your library here -->
+    <!-- add directives for your library here -->
+    <Assembly Name="Catel.Extensions.Controls" Dynamic="Required All" />
 
   </Library>
 </Directives>
