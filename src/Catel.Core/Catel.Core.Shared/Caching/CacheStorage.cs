@@ -270,7 +270,6 @@ namespace Catel.Caching
             return GetFromCacheOrFetch(key, code, ExpirationPolicy.Duration(expiration), @override);
         }
 
-
         /// <summary>
         /// Adds a value to the cache associated with to a key asynchronously.
         /// <para />
