@@ -38,7 +38,8 @@ namespace Catel.MVVM.Converters
                 return value;
             }
 
-            var methodInfo = value.GetType().GetMethodEx(methodName, new Type[0], BindingFlagsHelper.GetFinalBindingFlags(true, true));
+            var bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(true, true);
+            var methodInfo = value.GetType().GetMethodEx(methodName, new Type[0], bindingFlags);
             if (methodInfo == null)
             {
                 return value;

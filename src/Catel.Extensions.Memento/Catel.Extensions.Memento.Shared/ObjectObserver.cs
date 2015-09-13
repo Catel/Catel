@@ -112,7 +112,8 @@ namespace Catel.Memento
         {
             Argument.IsNotNull("obj", obj);
 
-            var properties = obj.GetType().GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(true, false));
+            var bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(true, false);
+            var properties = obj.GetType().GetPropertiesEx(bindingFlags);
             foreach (var property in properties)
             {
                 if (!ShouldPropertyBeIgnored(obj, property.Name))

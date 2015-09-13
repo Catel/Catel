@@ -548,7 +548,7 @@ namespace Catel
             Argument.IsNotNullOrWhitespace("eventName", eventName);
 
             var expectedMethodName = string.Format(".remove_{0}", eventName);
-            var methods = (from method in _typeForEventSubscriptions.GetMethodsEx(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+            var methods = (from method in _typeForEventSubscriptions.GetMethodsEx(BindingFlags.NonPublic | BindingFlags.Instance)
                            where method.Name.Contains(expectedMethodName)
                            select method);
 

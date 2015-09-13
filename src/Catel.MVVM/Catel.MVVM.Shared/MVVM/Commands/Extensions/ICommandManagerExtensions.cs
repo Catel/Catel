@@ -71,7 +71,9 @@ namespace Catel
 
             Log.Debug("Creating command '{0}'", commandNameFieldName);
 
-            var commandNameField = containerType.GetFieldEx(commandNameFieldName, BindingFlags.Public | BindingFlags.Static);
+            // Note: we must store bindingflags inside variable otherwise invalid IL will be generated
+            var bindingFlags = BindingFlags.Public | BindingFlags.Static;
+            var commandNameField = containerType.GetFieldEx(commandNameFieldName, bindingFlags);
             if (commandNameField == null)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Command '{0}' is not available on container type '{1}'",
@@ -86,8 +88,7 @@ namespace Catel
             }
 
             InputGesture commandInputGesture = null;
-            var inputGestureField = containerType.GetFieldEx(string.Format("{0}InputGesture", commandNameFieldName),
-                BindingFlags.Public | BindingFlags.Static);
+            var inputGestureField = containerType.GetFieldEx(string.Format("{0}InputGesture", commandNameFieldName), bindingFlags);
             if (inputGestureField != null)
             {
                 commandInputGesture = inputGestureField.GetValue(null) as InputGesture;

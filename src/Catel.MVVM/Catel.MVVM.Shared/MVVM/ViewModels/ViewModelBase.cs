@@ -603,7 +603,8 @@ namespace Catel.MVVM
             }
 
             var properties = new List<PropertyInfo>();
-            properties.AddRange(viewModelType.GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(true, false, true)));
+            var bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(true, false, true);
+            properties.AddRange(viewModelType.GetPropertiesEx(bindingFlags));
 
             var modelObjectsInfo = new Dictionary<string, ModelInfo>();
             var viewModelToModelMap = new Dictionary<string, ViewModelToModelMapping>();
