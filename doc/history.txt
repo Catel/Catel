@@ -53,6 +53,7 @@ Added/fixed:
 (*) CTL-719 Don't store extra undo action for properties when validation errors are cleared in memento
 (*) CTL-723 Add LogExtensions.ErrorAndCreateException to replace ErrorAndThrowException which returns an exception. The
     code must be changed to 'throw Log.ErrorAndCreateException<MyException>("my message");'
+(*) CTL-725 Update NuGet reference to 2.8.6
 (*) CTL-724 Created separate projects for Universal App Platform projects (UAP 10.0)	
 (x) CTL-714 Serialize Model with only one property as XML attribute does not work
 (x) CTL-720 NullReferenceException in ChangeNotificationWrapper
