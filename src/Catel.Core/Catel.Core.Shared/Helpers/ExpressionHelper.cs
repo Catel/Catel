@@ -91,7 +91,7 @@ namespace Catel
                 var ownerConstantExpression = memberExpression.Expression as ConstantExpression;
                 if (ownerConstantExpression != null)
                 {
-                    return propertyInfo.GetValue(ownerConstantExpression.Value);
+                    return propertyInfo.GetValue(ownerConstantExpression.Value, null);
                 }
 
                 // Note: this is support for .NET native
@@ -99,7 +99,7 @@ namespace Catel
                 if (subMemberExpression != null)
                 {
                     var resolvedMemberExpression = ResolveMemberExpression(subMemberExpression);
-                    return propertyInfo.GetValue(resolvedMemberExpression);
+                    return propertyInfo.GetValue(resolvedMemberExpression, null);
                 }
             }
 
