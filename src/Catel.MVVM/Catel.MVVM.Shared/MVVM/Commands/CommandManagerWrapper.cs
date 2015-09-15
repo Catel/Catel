@@ -9,7 +9,7 @@
 namespace Catel.MVVM
 {
     using Catel.IoC;
-
+    using Logging;
 #if !WINDOWS_PHONE && !XAMARIN
     using InputGesture = Catel.Windows.Input.InputGesture;
 
@@ -29,6 +29,8 @@ namespace Catel.MVVM
     /// </summary>
     public class CommandManagerWrapper
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         private readonly ICommandManager _commandManager;
 
         private bool _subscribed;
@@ -46,8 +48,19 @@ namespace Catel.MVVM
 
             View = view;
 
-            WeakEventListener.SubscribeToWeakGenericEvent<RoutedEventArgs>(this, view, "Loaded", OnViewLoaded);
-            WeakEventListener.SubscribeToWeakGenericEvent<RoutedEventArgs>(this, view, "Unloaded", OnViewUnloaded);
+            if (this.SubscribeToWeakGenericEvent<RoutedEventArgs>(view, "Loaded", OnViewLoaded, false) == null)
+            {
+                Log.Debug("Failed to use weak events to subscribe to 'view.Loaded', going to subscribe without weak events");
+
+                view.Loaded += OnViewLoaded;
+            }
+
+            if (this.SubscribeToWeakGenericEvent<RoutedEventArgs>(view, "Unloaded", OnViewUnloaded, false) == null)
+            {
+                Log.Debug("Failed to use weak events to subscribe to 'view.Unloaded', going to subscribe without weak events");
+
+                view.Unloaded += OnViewUnloaded;
+            }
 
             Subscribe();
         }

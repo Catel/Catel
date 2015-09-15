@@ -26,9 +26,9 @@ namespace Catel.Memento
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
-        /// Subscription to the weak event listener.
+        /// The collection.
         /// </summary>
-        private IWeakEventListener _weakEventListener;
+        private INotifyCollectionChanged _collection;
         #endregion
 
         #region Constructors
@@ -44,7 +44,8 @@ namespace Catel.Memento
         {
             Argument.IsNotNull("collection", collection);
 
-            _weakEventListener = this.SubscribeToWeakCollectionChangedEvent(collection, OnCollectionChanged);
+            _collection = collection;
+            _collection.CollectionChanged += OnCollectionChanged;
         }
         #endregion
 
@@ -100,10 +101,10 @@ namespace Catel.Memento
         {
             Log.Debug("Canceling collection change subscription");
 
-            if (_weakEventListener != null)
+            if (_collection != null)
             {
-                _weakEventListener.Detach();
-                _weakEventListener = null;
+                _collection.CollectionChanged -= OnCollectionChanged;
+                _collection = null;
             }
 
             Log.Debug("Canceled collection change subscription");

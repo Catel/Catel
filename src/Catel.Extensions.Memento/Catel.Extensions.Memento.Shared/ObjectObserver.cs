@@ -31,10 +31,7 @@ namespace Catel.Memento
         /// </summary>
         private readonly Dictionary<string, object> _previousPropertyValues = new Dictionary<string, object>();
 
-        /// <summary>
-        /// Subscription to the weak event listener.
-        /// </summary>
-        private IWeakEventListener _weakEventListener;
+        private INotifyPropertyChanged _object;
         #endregion
 
         #region Constructors
@@ -54,7 +51,8 @@ namespace Catel.Memento
 
             Log.Debug("Initializing ObjectObserver for type '{0}'", propertyChangedType.Name);
 
-            _weakEventListener = this.SubscribeToWeakPropertyChangedEvent(propertyChanged, OnPropertyChanged);
+            _object = propertyChanged;
+            _object.PropertyChanged += OnPropertyChanged;
 
             InitializeDefaultValues(propertyChanged);
 
@@ -149,10 +147,10 @@ namespace Catel.Memento
         {
             Log.Debug("Canceling property change subscription");
 
-            if (_weakEventListener != null)
+            if (_object != null)
             {
-                _weakEventListener.Detach();
-                _weakEventListener = null;
+                _object.PropertyChanged -= OnPropertyChanged;
+                _object = null;
             }
 
             _previousPropertyValues.Clear();

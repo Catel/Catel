@@ -7,7 +7,7 @@
 namespace Catel.MVVM.Views
 {
     using System;
-
+    using Logging;
 #if NETFX_CORE && WIN80
     using LoadedEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
     using LayoutUpdatedEventArgs = System.Object;
@@ -26,6 +26,8 @@ namespace Catel.MVVM.Views
     public class WeakViewInfo
     {
         #region Fields
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         private WeakReference _view;
 
         private bool _isViewLoadState;
@@ -128,8 +130,19 @@ namespace Catel.MVVM.Views
             IsLoaded = isViewLoaded;
             _isViewLoadState = viewObject is IViewLoadState;
 
-            this.SubscribeToWeakGenericEvent<LoadedEventArgs>(viewObject, "Loaded", OnViewLoadStateLoaded);
-            this.SubscribeToWeakGenericEvent<LoadedEventArgs>(viewObject, "Unloaded", OnViewLoadStateUnloaded);
+            if (this.SubscribeToWeakGenericEvent<LoadedEventArgs>(viewObject, "Loaded", OnViewLoadStateLoaded, false) == null)
+            {
+                Log.Debug("Failed to use weak events to subscribe to 'view.Loaded', going to subscribe without weak events");
+
+                ((IView) viewObject).Loaded += OnViewLoadStateLoaded;
+            }
+
+            if (this.SubscribeToWeakGenericEvent<LoadedEventArgs>(viewObject, "Unloaded", OnViewLoadStateUnloaded, false) == null)
+            {
+                Log.Debug("Failed to use weak events to subscribe to 'view.Unloaded', going to subscribe without weak events");
+
+                ((IView)viewObject).Unloaded += OnViewLoadStateUnloaded;
+            }
 
 #if SILVERLIGHT
             var view = View;
