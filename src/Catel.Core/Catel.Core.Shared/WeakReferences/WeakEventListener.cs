@@ -7,6 +7,7 @@
 namespace Catel
 {
     using System;
+    using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.ComponentModel;
     using System.Linq;
@@ -534,7 +535,16 @@ namespace Catel
             var eventInfo = _typeForEventSubscriptions.GetEventEx(eventName, true, true);
             if (eventInfo == null)
             {
-                return false;
+                if (source != null)
+                {
+                    var sourceObjectType = source.GetType();
+                    eventInfo = sourceObjectType.GetEventEx(eventName, true, true);
+                }
+
+                if (eventInfo == null)
+                {
+                    return false;
+                }
             }
 
 #if NETFX_CORE || PCL
@@ -636,7 +646,16 @@ namespace Catel
             var eventInfo = _typeForEventSubscriptions.GetEventEx(eventName, true, true);
             if (eventInfo == null)
             {
-                return false;
+                if (source != null)
+                {
+                    var sourceObjectType = source.GetType();
+                    eventInfo = sourceObjectType.GetEventEx(eventName, true, true);
+                }
+
+                if (eventInfo == null)
+                {
+                    return false;
+                }
             }
 
 #if NETFX_CORE || PCL
@@ -767,7 +786,9 @@ namespace Catel
         /// <summary>
         /// The event handler event arguments cache.
         /// </summary>
-        private static readonly ICacheStorage<Type, Type> _eventHandlerEventArgsCache = new CacheStorage<Type, Type>();
+        private static readonly ICacheStorage<Type, Type> EventHandlerEventArgsCache = new CacheStorage<Type, Type>();
+
+        private static readonly Dictionary<string, MethodInfo> ListenerTypeCache = new Dictionary<string, MethodInfo>();
 
         /// <summary>
         /// Subscribes to a weak event by using one single method. This method also takes care of automatic
@@ -814,7 +835,31 @@ namespace Catel
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
         public static IWeakEventListener SubscribeToWeakPropertyChangedEvent(TTarget target, TSource source, PropertyChangedEventHandler handler, string eventName = "PropertyChanged")
         {
-            return SubscribeToWeakEventWithExplicitSourceType<INotifyPropertyChanged>(target, source, eventName, handler);
+            return SubscribeToWeakPropertyChangedEvent(target, source, handler, true, eventName);
+        }
+
+        /// <summary>
+        /// Subscribes to a weak event by using one single method. This method also takes care of automatic
+        /// unsubscription of the event.
+        /// <para />
+        /// This method subscribes to the <see cref="PropertyChangedEventHandler"/> which does not follow the <c>EventHandler{TEventArgs}</c> convention.
+        /// </summary>
+        /// <param name="target">Instance subscribing to the event, should be <c>null</c> for static event handlers.</param>
+        /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
+        /// <param name="handler">The handler to execute when the event occurs.</param>
+        /// <param name="throwWhenSubscriptionFails">if set to <c>true</c>, throw an exception when subscription fails (does not apply to argument checks).</param>
+        /// <param name="eventName">Name of the event.</param>
+        /// <returns>
+        /// The created event listener.
+        /// </returns>
+        /// <exception cref="ArgumentException">The <paramref name="eventName"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
+        /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
+        public static IWeakEventListener SubscribeToWeakPropertyChangedEvent(TTarget target, TSource source, PropertyChangedEventHandler handler, bool throwWhenSubscriptionFails, string eventName = "PropertyChanged")
+        {
+            return SubscribeToWeakEventWithExplicitSourceType<INotifyPropertyChanged>(target, source, eventName, handler, throwWhenSubscriptionFails);
         }
 
         /// <summary>
@@ -826,7 +871,7 @@ namespace Catel
         /// <param name="target">Instance subscribing to the event, should be <c>null</c> for static event handlers.</param>
         /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
         /// <param name="handler">The handler to execute when the event occurs.</param>
-        /// /// <param name="eventName">Name of the event.</param>
+        /// <param name="eventName">Name of the event.</param>
         /// <returns>
         /// The created event listener.
         /// </returns>
@@ -837,7 +882,31 @@ namespace Catel
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
         public static IWeakEventListener SubscribeToWeakCollectionChangedEvent(TTarget target, TSource source, NotifyCollectionChangedEventHandler handler, string eventName = "CollectionChanged")
         {
-            return SubscribeToWeakEventWithExplicitSourceType<INotifyCollectionChanged>(target, source, eventName, handler);
+            return SubscribeToWeakCollectionChangedEvent(target, source, handler, true, eventName);
+        }
+
+        /// <summary>
+        /// Subscribes to a weak event by using one single method. This method also takes care of automatic
+        /// unsubscription of the event.
+        /// <para />
+        /// This method subscribes to the <see cref="NotifyCollectionChangedEventHandler"/> which does not follow the <c>EventHandler{TEventArgs}</c> convention.
+        /// </summary>
+        /// <param name="target">Instance subscribing to the event, should be <c>null</c> for static event handlers.</param>
+        /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
+        /// <param name="handler">The handler to execute when the event occurs.</param>
+        /// <param name="throwWhenSubscriptionFails">if set to <c>true</c>, throw an exception when subscription fails (does not apply to argument checks).</param>
+        /// <param name="eventName">Name of the event.</param>
+        /// <returns>
+        /// The created event listener.
+        /// </returns>
+        /// <exception cref="ArgumentException">The <paramref name="eventName"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
+        /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
+        public static IWeakEventListener SubscribeToWeakCollectionChangedEvent(TTarget target, TSource source, NotifyCollectionChangedEventHandler handler, bool throwWhenSubscriptionFails, string eventName = "CollectionChanged")
+        {
+            return SubscribeToWeakEventWithExplicitSourceType<INotifyCollectionChanged>(target, source, eventName, handler, throwWhenSubscriptionFails);
         }
 
         /// <summary>
@@ -860,7 +929,31 @@ namespace Catel
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
         public static IWeakEventListener SubscribeToWeakEvent(TTarget target, TSource source, string eventName, Delegate handler)
         {
-            return SubscribeToWeakEventWithExplicitSourceType<TSource>(target, source, eventName, handler);
+            return SubscribeToWeakEvent(target, source, eventName, handler, true);
+        }
+
+        /// <summary>
+        /// Subscribes to a weak event by using one single method. This method also takes care of automatic
+        /// unsubscription of the event.
+        /// </summary>
+        /// <param name="target">Instance subscribing to the event, should be <c>null</c> for static event handlers.</param>
+        /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
+        /// <param name="eventName">Name of the event.</param>
+        /// <param name="handler">The handler to execute when the event occurs.</param>
+        /// <param name="throwWhenSubscriptionFails">if set to <c>true</c>, throw an exception when subscription fails (does not apply to argument checks).</param>
+        /// <returns>
+        /// The created event listener.
+        /// </returns>
+        /// <exception cref="ArgumentException">The <paramref name="eventName"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
+        /// <exception cref="NotSupportedException">The <paramref name="handler"/> is not of type <see cref="PropertyChangedEventHandler"/>, 
+        /// <see cref="NotifyCollectionChangedEventHandler"/> or <see cref="EventHandler{TEventArgs}"/>.</exception>
+        /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
+        public static IWeakEventListener SubscribeToWeakEvent(TTarget target, TSource source, string eventName, Delegate handler, bool throwWhenSubscriptionFails)
+        {
+            return SubscribeToWeakEventWithExplicitSourceType<TSource>(target, source, eventName, handler, throwWhenSubscriptionFails);
         }
 
         /// <summary>
@@ -889,11 +982,41 @@ namespace Catel
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
         public static IWeakEventListener SubscribeToWeakEventWithExplicitSourceType<TExplicitSourceType>(TTarget target, TSource source, string eventName, Delegate handler)
         {
+            return SubscribeToWeakEventWithExplicitSourceType<TExplicitSourceType>(target, source, eventName, handler, true);
+        }
+
+        /// <summary>
+        /// Subscribes to a weak event by using one single method. This method also takes care of automatic
+        /// unsubscription of the event.
+        /// </summary>
+        /// <typeparam name="TExplicitSourceType">The final source type, which must be specified for explicitly implemented events.</typeparam>
+        /// <param name="target">Instance subscribing to the event, should be <c>null</c> for static event handlers.</param>
+        /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
+        /// <param name="eventName">Name of the event.</param>
+        /// <param name="handler">The handler to execute when the event occurs.</param>
+        /// <param name="throwWhenSubscriptionFails">if set to <c>true</c>, throw an exception when subscription fails (does not apply to argument checks).</param>
+        /// <returns>
+        /// The created event listener.
+        /// </returns>
+        /// <remarks>
+        /// This method can only be used for non-static event sources and targets. If static events or listeners are required, use
+        /// the <see cref="WeakEventListener{TTarget,TSource,TEventArgs}"/> class.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">The <paramref name="target"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="source"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="eventName"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
+        /// <exception cref="NotSupportedException">The <paramref name="handler"/> is not of type <see cref="PropertyChangedEventHandler"/>, <see cref="NotifyCollectionChangedEventHandler"/> or <see cref="EventHandler{TEventArgs}"/>.</exception>
+        /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
+        public static IWeakEventListener SubscribeToWeakEventWithExplicitSourceType<TExplicitSourceType>(TTarget target, TSource source, string eventName, Delegate handler, bool throwWhenSubscriptionFails)
+        {
             Argument.IsNotNullOrWhitespace("eventName", eventName);
             Argument.IsNotNull("handler", handler);
 
             var handlerType = handler.GetType();
-            var eventArgsType = _eventHandlerEventArgsCache.GetFromCacheOrFetch(handlerType, () =>
+            var eventArgsType = EventHandlerEventArgsCache.GetFromCacheOrFetch(handlerType, () =>
             {
                 Type type = null;
 
@@ -922,17 +1045,33 @@ namespace Catel
                 throw Log.ErrorAndCreateException<NotSupportedException>("Only handlers of type 'PropertyChangedEventHandler', 'NotifyCollectionChangedEventHandler' or 'EventHandler<TEventArgs' are supported. '{0}' does not belong to these supported types", handler.GetType().Name);
             }
 
-            var listenerType = typeof(WeakEventListener<TTarget, TSource, EventArgsBase>).GetGenericTypeDefinition().MakeGenericType(new[] { typeof(TTarget), typeof(TSource), eventArgsType });
+            var targetType = typeof (TTarget);
+            var sourceType = typeof(TSource);
 
-            var methodInfo = listenerType.GetMethodEx("SubscribeToWeakEventWithExplicitSourceType", new[] { typeof(TTarget), typeof(TSource), typeof(string), typeof(Delegate) }, BindingFlagsHelper.GetFinalBindingFlags(true, true));
-            //var methodInfo = listenerType.GetMethodEx("SubscribeToWeakEvent", new[] { typeof(TTarget), typeof(TSource), typeof(string), handlerType }, BindingFlagsHelper.GetFinalBindingFlags(true, true));
+            MethodInfo methodInfo = null;
+
+            var cacheKey = string.Format("{0}_{1}_{2}", targetType.FullName, sourceType.FullName, eventArgsType.FullName);
+
+            lock (ListenerTypeCache)
+            {
+                if (!ListenerTypeCache.ContainsKey(cacheKey))
+                {
+                    var listenerType = typeof(WeakEventListener<TTarget, TSource, EventArgsBase>).GetGenericTypeDefinition().MakeGenericType(new[] { targetType, sourceType, eventArgsType });
+                    var bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(true, true);
+
+                    ListenerTypeCache[cacheKey] = listenerType.GetMethodEx("SubscribeToWeakEventWithExplicitSourceType", new[] { targetType, sourceType, typeof(string), typeof(Delegate), typeof(bool) }, bindingFlags);
+                }
+
+                methodInfo = ListenerTypeCache[cacheKey];
+            }
+
             if (methodInfo == null)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Expected to find the SubscribeToWeakEventWithExplicitSourceType on WeakEventListener<TTarget, TSource, TEventArgs>, but did not find it");
             }
 
             var genericMethodInfo = methodInfo.MakeGenericMethod(typeof(TExplicitSourceType));
-            return (IWeakEventListener)genericMethodInfo.Invoke(null, new object[] { target, source, eventName, handler });
+            return (IWeakEventListener)genericMethodInfo.Invoke(null, new object[] { target, source, eventName, handler, throwWhenSubscriptionFails });
         }
     }
 
@@ -950,6 +1089,8 @@ namespace Catel
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        private static readonly Dictionary<string, MethodInfo> ListenerTypeCache = new Dictionary<string, MethodInfo>();
 
         /// <summary>
         /// Subscribes to a weak event by using one single method. This method also takes care of automatic
@@ -1214,10 +1355,23 @@ namespace Catel
             var targetType = target.GetType();
             var sourceType = source.GetType();
 
-            // TODO: worth caching?
-            var listenerType = typeof(WeakEventListener<object, object>).GetGenericTypeDefinition().MakeGenericType(new[] { targetType, sourceType });
+            MethodInfo methodInfo = null;
 
-            var methodInfo = listenerType.GetMethodEx("SubscribeToWeakEventWithExplicitSourceType", new[] { targetType, sourceType, typeof(string), typeof(Delegate), typeof(bool) }, BindingFlagsHelper.GetFinalBindingFlags(true, true));
+            var cacheKey = string.Format("{0}_{1}", targetType.FullName, sourceType.FullName);
+
+            lock (ListenerTypeCache)
+            {
+                if (!ListenerTypeCache.ContainsKey(cacheKey))
+                {
+                    var listenerType = typeof(WeakEventListener<object, object>).GetGenericTypeDefinition().MakeGenericType(new[] { targetType, sourceType });
+                    var bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(true, true);
+
+                    ListenerTypeCache[cacheKey] = listenerType.GetMethodEx("SubscribeToWeakEventWithExplicitSourceType", new[] { targetType, sourceType, typeof(string), typeof(Delegate), typeof(bool) }, bindingFlags);
+                }
+
+                methodInfo = ListenerTypeCache[cacheKey];
+            }
+
             if (methodInfo == null)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Expected to find the SubscribeToWeakEventWithExplicitSourceType on WeakEventListener<TTarget, TSource>, but did not find it");

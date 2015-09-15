@@ -57,6 +57,7 @@ Added/fixed:
 (*) CTL-724 Created separate projects for Universal App Platform projects (UAP 10.0)
 (*) CTL-725 Update NuGet reference to 2.8.6
 (*) CTL-726 Fallback to non-weak events when weak event subscription fails (required for UAP)
+(*) CTL-729 Support .NET native in the WeakEventListener
 (x) CTL-714 Serialize Model with only one property as XML attribute does not work
 (x) CTL-720 NullReferenceException in ChangeNotificationWrapper
 (x) CTL-721 AppDomainExtensions.PreloadAssemblies() throws exception on loading native dll

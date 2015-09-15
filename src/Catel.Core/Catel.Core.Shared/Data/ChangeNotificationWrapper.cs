@@ -428,19 +428,37 @@ namespace Catel.Data
                     case EventChangeType.Property:
                         if (parentCollection != null)
                         {
-                            weakListener = this.SubscribeToWeakPropertyChangedEvent(value, OnObjectCollectionItemPropertyChanged);
+                            weakListener = this.SubscribeToWeakPropertyChangedEvent(value, OnObjectCollectionItemPropertyChanged, false);
+                            if (weakListener == null)
+                            {
+                                Log.Debug("Failed to use weak events to subscribe to 'value.PropertyChanged', going to subscribe without weak events");
+
+                                ((INotifyPropertyChanged) value).PropertyChanged += OnObjectCollectionItemPropertyChanged;
+                            }
 
                             var collectionItems = _collectionItems.GetOrCreateValue(parentCollection);
-                            collectionItems.Add(weakListener.SourceWeakReference);
+                            collectionItems.Add(weakListener != null ? weakListener.SourceWeakReference : new WeakReference(value));
                         }
                         else
                         {
-                            weakListener = this.SubscribeToWeakPropertyChangedEvent(value, OnObjectPropertyChanged);
+                            weakListener = this.SubscribeToWeakPropertyChangedEvent(value, OnObjectPropertyChanged, false);
+                            if (weakListener == null)
+                            {
+                                Log.Debug("Failed to use weak events to subscribe to 'value.PropertyChanged', going to subscribe without weak events");
+
+                                ((INotifyPropertyChanged)value).PropertyChanged += OnObjectPropertyChanged;
+                            }
                         }
                         break;
 
                     case EventChangeType.Collection:
-                        weakListener = this.SubscribeToWeakCollectionChangedEvent(value, OnObjectCollectionChanged);
+                        weakListener = this.SubscribeToWeakCollectionChangedEvent(value, OnObjectCollectionChanged, false);
+                        if (weakListener == null)
+                        {
+                            Log.Debug("Failed to use weak events to subscribe to 'value.CollectionChanged', going to subscribe without weak events");
+
+                            ((INotifyCollectionChanged)value).CollectionChanged += OnObjectCollectionChanged;
+                        }
                         break;
 
                     default:
@@ -507,9 +525,13 @@ namespace Catel.Data
                 IWeakEventListener oldSubscription;
                 if (eventsTable != null && eventsTable.TryGetValue(value, out oldSubscription))
                 {
-                    oldSubscription.Detach();
+                    if (oldSubscription != null)
+                    {
+                        oldSubscription.Detach();
 
-                    eventsList.Remove(oldSubscription);
+                        eventsList.Remove(oldSubscription);
+                    }
+
                     eventsTable.Remove(value);
                 }
 
