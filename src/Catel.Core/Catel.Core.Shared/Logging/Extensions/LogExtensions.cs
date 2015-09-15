@@ -197,6 +197,32 @@ namespace Catel.Logging
         public static Exception ErrorAndCreateException<TException>(this ILog log, string messageFormat, params object[] args)
             where TException : Exception
         {
+            return ErrorAndCreateException<TException>(log, messageFormat, args);
+        }
+
+        /// <summary>
+        /// Writes the specified message as error message and then throws the specified exception.
+        /// <para />
+        /// The specified exception must have a constructor that accepts a single string as message.
+        /// </summary>
+        /// <typeparam name="TException">The type of the exception.</typeparam>
+        /// <param name="log">The log.</param>
+        /// <param name="innerException">The inner exception.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="args">The args.</param>
+        /// <returns>Exception.</returns>
+        /// <exception cref="System.NotSupportedException"></exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="log" /> is <c>null</c>.</exception>
+        /// <exception cref="NotSupportedException">The <typeparamref name="TException" /> does not have a constructor accepting a string.</exception>
+        /// <example>
+        ///   <code>
+        /// This example logs an error and immediately throws the exception:<para /><![CDATA[
+        /// throw Log.ErrorAndCreateException<NotSupportedException>("This action is not supported");
+        /// ]]></code>
+        /// </example>
+        public static Exception ErrorAndCreateException<TException>(this ILog log, Exception innerException, string messageFormat, params object[] args)
+            where TException : Exception
+        {
             var message = messageFormat ?? string.Empty;
             if (args != null && args.Length > 0)
             {
@@ -205,20 +231,18 @@ namespace Catel.Logging
 
             if (log != null)
             {
-                log.ErrorWithData(message);
+                if (innerException != null)
+                {
+                    log.ErrorWithData(innerException, message);
+                }
+                else
+                {
+                    log.ErrorWithData(message);
+                }
             }
 
-            Exception exception;
-
-            try
-            {
-                exception = (Exception)Activator.CreateInstance(typeof(TException), message);
-            }
-#if !NETFX_CORE && !PCL
-            catch (MissingMethodException)
-#else
-            catch (Exception)
-#endif
+            var exception = ExceptionFactory.CreateException<TException>(message, innerException);
+            if (exception == null)
             {
                 var error = string.Format("Exception type '{0}' does not have a constructor accepting a string", typeof(TException).Name);
 
