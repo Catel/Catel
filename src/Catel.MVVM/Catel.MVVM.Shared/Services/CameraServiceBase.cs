@@ -8,6 +8,7 @@ namespace Catel.Services
 {
     using System;
     using System.Collections.Generic;
+    using Logging;
 
     /// <summary>
     /// Base implementation of the <see cref="ICameraService"/>. This implementation takes care of some
@@ -20,6 +21,8 @@ namespace Catel.Services
     public abstract class CameraServiceBase : ViewModelServiceBase, ICameraService
     {
         #region Fields
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         private bool _isRunning;
         #endregion
 
@@ -258,7 +261,7 @@ namespace Catel.Services
         {
             if (!_isRunning)
             {
-                throw new NotSupportedException("The service must be started before this functionality can be used");
+                throw Log.ErrorAndCreateException<NotSupportedException>("The service must be started before this functionality can be used");
             }
         }
 
@@ -283,7 +286,7 @@ namespace Catel.Services
 
             if (!IsCameraTypeSupported(cameraType))
             {
-                throw new NotSupportedException(string.Format("Camera type '{0}' is not supported by this camera", cameraType));
+                throw Log.ErrorAndCreateException<NotSupportedException>("Camera type '{0}' is not supported by this camera", cameraType);
             }
 
             StartService(cameraType);

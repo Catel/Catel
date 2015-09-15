@@ -91,9 +91,7 @@ namespace Catel.Logging
             var type = TypeCache.GetType(Type);
             if (type == null)
             {
-                string error = string.Format("Failed to retrieve type '{0}'", typeAsString);
-                Log.Error(error);
-                throw new InvalidOperationException(error);
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Failed to retrieve type '{0}'", typeAsString);
             }
 
             var typeFactory = IoCConfiguration.DefaultTypeFactory;
@@ -105,9 +103,7 @@ namespace Catel.Logging
 
             if (logListener == null)
             {
-                string error = string.Format("Failed to instantiate type '{0}' or it does not implement ILogListener and thus cannot be used as such", typeAsString);
-                Log.Error(error);
-                throw new InvalidOperationException(error);
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Failed to instantiate type '{0}' or it does not implement ILogListener and thus cannot be used as such", typeAsString);
             }
 
             foreach (var dynamicProperty in _dynamicProperties)

@@ -9,12 +9,15 @@ namespace Catel
     using System;
     using System.Globalization;
     using System.Text;
+    using Logging;
 
     /// <summary>
     /// String to object helper class that converts a string to the right object if possible.
     /// </summary>
     public static class StringToObjectHelper
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Initializes static members of the <see cref="StringToObjectHelper"/> class.
         /// </summary>
@@ -420,7 +423,7 @@ namespace Catel
                 return ToType(value);
             }
 
-            throw new NotSupportedException(string.Format("Type '{0}' is not yet supported", targetType.FullName));
+            throw Log.ErrorAndCreateException<NotSupportedException>("Type '{0}' is not yet supported", targetType.FullName);
         }
 
         /// <summary>

@@ -206,9 +206,7 @@ namespace Catel.IoC
         {
             if (_typePath.Count <= 1)
             {
-                string error = string.Format("This call to Pop() would result in an empty TypeRequestPath which is not allowed");
-                Log.Error(error);
-                throw new InvalidOperationException(error);
+                throw Log.ErrorAndCreateException<InvalidOperationException>("This call to Pop() would result in an empty TypeRequestPath which is not allowed");
             }
 
             _typePath.RemoveAt(_typePath.Count - 1);
@@ -233,9 +231,8 @@ namespace Catel.IoC
         {
             if (!IsValid)
             {
-                string error = string.Format("Found a circular dependency while resolving '{0}', it is used by '{1}'", FirstType, _typePath[_typePath.Count - 2]);
-                Log.Error(error);
-                throw new CircularDependencyException(this, string.Format("{0}. For more information, view the enclosed TypeRequestPath", error));
+                throw Log.ErrorAndCreateException(msg => new CircularDependencyException(this, string.Format("{0}. For more information, view the enclosed TypeRequestPath", msg)),
+                    "Found a circular dependency while resolving '{0}', it is used by '{1}'", FirstType, _typePath[_typePath.Count - 2]);
             }
         }
 

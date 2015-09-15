@@ -673,9 +673,7 @@ namespace Catel.IoC
 
             if (serviceImplementationType.IsInterfaceEx())
             {
-                string error = string.Format("Cannot register interface type '{0}' as implementation, make sure to specify an actual class", serviceImplementationType.GetSafeFullName());
-                Log.Error(error);
-                throw new InvalidOperationException(error);
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot register interface type '{0}' as implementation, make sure to specify an actual class", serviceImplementationType.GetSafeFullName());
             }
 
             /* TODO: This code have to be here to ensure the right usage of non-generic overloads of register methods.
@@ -828,8 +826,8 @@ namespace Catel.IoC
             _currentTypeRequestPath = null;
             // or _currentTypeRequestPath.PopType();
 
-            Log.Error("The type '{0}' is not registered", type.GetSafeFullName());
-            throw new TypeNotRegisteredException(type, message);
+            throw Log.ErrorAndCreateException(msg => new TypeNotRegisteredException(type, msg),
+                "The type '{0}' is not registered", type.GetSafeFullName());
         }
         #endregion
 

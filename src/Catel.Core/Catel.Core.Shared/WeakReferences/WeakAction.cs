@@ -109,9 +109,7 @@ namespace Catel
 
             if (MethodName.Contains("_AnonymousDelegate>"))
             {
-                const string error = "Anonymous delegates are not supported because they are located in a private class";
-                Log.Error(error);
-                throw new NotSupportedException(error);
+                throw Log.ErrorAndCreateException<NotSupportedException>("Anonymous delegates are not supported because they are located in a private class");
             }
 
             var targetType = (target != null) ? target.GetType() : typeof(object);
@@ -204,9 +202,7 @@ namespace Catel
 
             if (MethodName.Contains("_AnonymousDelegate>"))
             {
-                const string error = "Anonymous delegates are not supported because they are located in a private class";
-                Log.Error(error);
-                throw new NotSupportedException(error);
+                throw Log.ErrorAndCreateException<NotSupportedException>("Anonymous delegates are not supported because they are located in a private class");
             }
 
             var targetType = (target != null) ? target.GetType() : typeof(object);

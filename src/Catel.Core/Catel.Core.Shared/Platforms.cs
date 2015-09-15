@@ -54,6 +54,7 @@ namespace Catel
                 case KnownPlatforms.NET:
                     return currentPlatform == SupportedPlatforms.NET40 ||
                            currentPlatform == SupportedPlatforms.NET45 ||
+                           currentPlatform == SupportedPlatforms.NET46 ||
                            currentPlatform == SupportedPlatforms.NET50;
 
                 case KnownPlatforms.NET40:
@@ -61,6 +62,9 @@ namespace Catel
 
                 case KnownPlatforms.NET45:
                     return currentPlatform == SupportedPlatforms.NET45;
+
+                case KnownPlatforms.NET46:
+                    return currentPlatform == SupportedPlatforms.NET46;
 
                 case KnownPlatforms.NET50:
                     return currentPlatform == SupportedPlatforms.NET50;
@@ -102,6 +106,12 @@ namespace Catel
                 case KnownPlatforms.WindowsRuntime81:
                     return currentPlatform == SupportedPlatforms.WindowsRuntime81;
 
+                case KnownPlatforms.WindowsUniversal:
+                    return currentPlatform == SupportedPlatforms.WindowsUniversal100;
+
+                case KnownPlatforms.WindowsUniversal100:
+                    return currentPlatform == SupportedPlatforms.WindowsUniversal100;
+
                 case KnownPlatforms.Xamarin:
                     return currentPlatform == SupportedPlatforms.Android ||
                            currentPlatform == SupportedPlatforms.iOS;
@@ -130,6 +140,8 @@ namespace Catel
             return SupportedPlatforms.NET40;
 #elif NET45
             return SupportedPlatforms.NET45;
+#elif NET46
+            return SupportedPlatforms.NET46;
 #elif NET50
             return SupportedPlatforms.NET50;
 #elif SL5
@@ -144,6 +156,8 @@ namespace Catel
             return SupportedPlatforms.WindowsRuntime80;
 #elif WIN81
             return SupportedPlatforms.WindowsRuntime81;
+#elif UAP100
+            return SupportedPlatforms.WindowsUniversal100;
 #elif ANDROID
             return SupportedPlatforms.Android;
 #elif IOS
@@ -168,6 +182,11 @@ namespace Catel
         /// .NET framework 4.5.
         /// </summary>
         NET45,
+
+        /// <summary>
+        /// .NET framework 4.6.
+        /// </summary>
+        NET46,
 
         /// <summary>
         /// .NET framework 5.0.
@@ -203,6 +222,11 @@ namespace Catel
         /// Windows Runtime 8.1.
         /// </summary>
         WindowsRuntime81,
+
+        /// <summary>
+        /// Windows Universal 10.0.
+        /// </summary>
+        WindowsUniversal100,
 
         /// <summary>
         /// The Android platform.
@@ -244,6 +268,11 @@ namespace Catel
         /// .NET framework 4.5.
         /// </summary>
         NET45,
+
+        /// <summary>
+        /// .NET framework 4.6.
+        /// </summary>
+        NET46,
 
         /// <summary>
         /// .NET framework 5.0.
@@ -304,6 +333,16 @@ namespace Catel
         /// Windows Runtime 8.1.
         /// </summary>
         WindowsRuntime81,
+
+        /// <summary>
+        /// Any Windows Universal platform.
+        /// </summary>
+        WindowsUniversal,
+
+        /// <summary>
+        /// Windows Universal 10.0.
+        /// </summary>
+        WindowsUniversal100,
 
         /// <summary>
         /// Any Xamarin platform.

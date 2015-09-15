@@ -238,10 +238,7 @@ namespace Catel.MVVM.Providers
             var closeMethod = TargetWindow.GetType().GetMethodEx("Close");
             if (closeMethod == null)
             {
-                string error = string.Format("Cannot close any window without a public 'Close()' method, implement the 'Close()' method on '{0}'", TargetWindow.GetType().Name);
-                Log.Error(error);
-
-                throw new NotSupportedException(error);
+                throw Log.ErrorAndCreateException<NotSupportedException>("Cannot close any window without a public 'Close()' method, implement the 'Close()' method on '{0}'", TargetWindow.GetType().Name);
             }
 
             closeMethod.Invoke(TargetWindow, null);

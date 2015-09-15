@@ -60,8 +60,8 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("Windows 8.0, Debug")]
 #elif WIN81
 [assembly: AssemblyConfiguration("Windows 8.1, Debug")]
-#elif UAP
-[assembly: AssemblyConfiguration("UAP, Debug")]
+#elif UAP100
+[assembly: AssemblyConfiguration("Universal Windows 10.0, Debug")]
 #elif PCL
 [assembly: AssemblyConfiguration("PCL, Debug")]
 #elif XAMARIN && ANDROID
@@ -94,8 +94,8 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("Windows 8.0, Release")]
 #elif WIN81
 [assembly: AssemblyConfiguration("Windows 8.1, Release")]
-#elif UAP
-[assembly: AssemblyConfiguration("UAP, Release")]
+#elif UAP100
+[assembly: AssemblyConfiguration("Universal Windows 10.0, Release")]
 #elif PCL
 [assembly: AssemblyConfiguration("PCL, Release")]
 #elif XAMARIN && ANDROID

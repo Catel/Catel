@@ -44,8 +44,9 @@ namespace Catel
         {
             if (paramValue == null)
             {
-                Log.Error("Argument '{0}' cannot be null", ObjectToStringHelper.ToString(paramName));
-                throw new ArgumentNullException(paramName);
+                var error = string.Format("Argument '{0}' cannot be null", ObjectToStringHelper.ToString(paramName));
+                Log.Error(error);
+                throw new ArgumentNullException(paramName, error);
             }
         }
 
@@ -62,9 +63,7 @@ namespace Catel
             if (string.IsNullOrEmpty(paramValue))
             {
                 var error = string.Format("Argument '{0}' cannot be null or empty", ObjectToStringHelper.ToString(paramName));
-
                 Log.Error(error);
-
                 throw new ArgumentException(error, paramName);
             }
         }
@@ -94,9 +93,7 @@ namespace Catel
             if (paramValue == Guid.Empty)
             {
                 var error = string.Format("Argument '{0}' cannot be Guid.Empty", ObjectToStringHelper.ToString(paramName));
-
                 Log.Error(error);
-
                 throw new ArgumentException(error, paramName);
             }
         }
@@ -114,9 +111,7 @@ namespace Catel
             if (!paramValue.HasValue || paramValue.Value == Guid.Empty)
             {
                 var error = string.Format("Argument '{0}' cannot be null or Guid.Empty", ObjectToStringHelper.ToString(paramName));
-
                 Log.Error(error);
-
                 throw new ArgumentException(error, paramName);
             }
         }
@@ -134,9 +129,7 @@ namespace Catel
             if (string.IsNullOrEmpty(paramValue) || (string.CompareOrdinal(paramValue.Trim(), string.Empty) == 0))
             {
                 var error = string.Format("Argument '{0}' cannot be null or whitespace", ObjectToStringHelper.ToString(paramName));
-
                 Log.Error(error);
-
                 throw new ArgumentException(error, paramName);
             }
         }
@@ -154,9 +147,7 @@ namespace Catel
             if ((paramValue == null) || (paramValue.Length == 0))
             {
                 var error = string.Format("Argument '{0}' cannot be null or an empty array", ObjectToStringHelper.ToString(paramName));
-
                 Log.Error(error);
-
                 throw new ArgumentException(error, paramName);
             }
         }
@@ -181,7 +172,6 @@ namespace Catel
             if (!validation(paramValue, minimumValue, maximumValue))
             {
                 var error = string.Format("Argument '{0}' should be between {1} and {2}", ObjectToStringHelper.ToString(paramName), minimumValue, maximumValue);
-
                 Log.Error(error);
                 throw new ArgumentOutOfRangeException(paramName, error);
             }
@@ -223,9 +213,8 @@ namespace Catel
             if (!validation(paramValue, minimumValue))
             {
                 var error = string.Format("Argument '{0}' should be minimal {1}", ObjectToStringHelper.ToString(paramName), minimumValue);
-
                 Log.Error(error);
-                throw new ArgumentOutOfRangeException(paramName);
+                throw new ArgumentOutOfRangeException(paramName, error);
             }
         }
 
@@ -262,7 +251,6 @@ namespace Catel
             if (!validation(paramValue, maximumValue))
             {
                 var error = string.Format("Argument '{0}' should be at maximum {1}", ObjectToStringHelper.ToString(paramName), maximumValue);
-
                 Log.Error(error);
                 throw new ArgumentOutOfRangeException(paramName, error);
             }
@@ -320,9 +308,7 @@ namespace Catel
             } while (runtimeBaseType != null);
 
             var error = string.Format("Type '{0}' should have type '{1}' as base class, but does not", type.Name, baseType.Name);
-
             Log.Error(error);
-
             throw new ArgumentException(error, paramName);
         }
 
@@ -414,10 +400,8 @@ namespace Catel
             }
 
             var error = string.Format("Type '{0}' should implement interface '{1}', but does not", type.Name, interfaceType.Name);
-
             Log.Error(error);
-
-            throw new ArgumentException(error, "type");
+            throw new ArgumentException(error, paramName);
         }
 
         /// <summary>
@@ -469,10 +453,8 @@ namespace Catel
             }
 
             var error = errorBuilder.ToString();
-
             Log.Error(error);
-
-            throw new ArgumentException(error, "type");
+            throw new ArgumentException(error, paramName);
         }
 
         /// <summary>
@@ -519,10 +501,8 @@ namespace Catel
             }
 
             var error = string.Format("Type '{0}' should be of type '{1}', but is not", type.Name, requiredType.Name);
-
             Log.Error(error);
-
-            throw new ArgumentException(error, "type");
+            throw new ArgumentException(error, paramName);
         }
 
         /// <summary>
@@ -579,10 +559,8 @@ namespace Catel
             }
 
             var error = errorBuilder.ToString();
-
             Log.Error(error);
-
-            throw new ArgumentException(error, "type");
+            throw new ArgumentException(error, paramName);
         }
 
         /// <summary>
@@ -629,10 +607,8 @@ namespace Catel
             }
 
             var error = string.Format("Type '{0}' should not be of type '{1}', but is", type.Name, notRequiredType.Name);
-
             Log.Error(error);
-
-            throw new ArgumentException(error, "type");
+            throw new ArgumentException(error, paramName);
         }
 
         /// <summary>
@@ -678,10 +654,8 @@ namespace Catel
                 if (notRequiredType.IsAssignableFromEx(type))
                 {
                     var error = string.Format("Type '{0}' should not be of type '{1}', but is", type.Name, notRequiredType.Name);
-
                     Log.Error(error);
-
-                    throw new ArgumentException(error, "type");
+                    throw new ArgumentException(error, paramName);
                 }
             }
         }
@@ -705,10 +679,8 @@ namespace Catel
             if (Regex.IsMatch(paramValue, pattern, regexOptions))
             {
                 var error = string.Format("Argument '{0}' matches with pattern '{1}'", paramName, pattern);
-
                 Log.Error(error);
-
-                throw new ArgumentException(error);
+                throw new ArgumentException(error, paramName);
             }
         }
 
@@ -731,10 +703,8 @@ namespace Catel
             if (!Regex.IsMatch(paramValue, pattern, regexOptions))
             {
                 var error = string.Format("Argument '{0}' doesn't match with pattern '{1}'", paramName, pattern);
-
                 Log.Error(error);
-
-                throw new ArgumentException(error);
+                throw new ArgumentException(error, paramName);
             }
         }
 
@@ -812,10 +782,8 @@ namespace Catel
             if (!validation)
             {
                 var error = string.Format("Argument '{0}' is not valid", ObjectToStringHelper.ToString(paramName));
-
                 Log.Error(error);
-
-                throw new ArgumentException(error);
+                throw new ArgumentException(error, paramName);
             }
         }
 
@@ -834,12 +802,10 @@ namespace Catel
             if (!isSupported)
             {
                 var error = string.Format(errorFormat, args);
-
                 Log.Error(error);
-
                 throw new NotSupportedException(error);
             }
         }
-        #endregion
+#endregion
     }
 }

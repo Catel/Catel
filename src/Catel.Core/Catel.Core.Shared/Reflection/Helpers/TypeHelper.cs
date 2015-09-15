@@ -66,10 +66,7 @@ namespace Catel.Reflection
             var typedInstance = instance as TTargetType;
             if ((typedInstance == null) && (instance != null))
             {
-                string error = string.Format("Expected an instance of '{0}', but retrieved an instance of '{1}', cannot return the typed instance", typeof(TTargetType).Name, instance.GetType().Name);
-
-                Log.Error(error);
-                throw new NotSupportedException(error);
+                throw Log.ErrorAndCreateException<NotSupportedException>("Expected an instance of '{0}', but retrieved an instance of '{1}', cannot return the typed instance", typeof (TTargetType).Name, instance.GetType().Name);
             }
 
             return typedInstance;
@@ -167,7 +164,7 @@ namespace Catel.Reflection
 
             var assemblyNameWithoutOverhead = GetAssemblyName(fullTypeName);
             var assemblyName = GetAssemblyNameWithoutOverhead(assemblyNameWithoutOverhead);
-            string typeName = GetTypeName(fullTypeName);
+            var typeName = GetTypeName(fullTypeName);
 
             return FormatType(assemblyName, typeName);
         }
@@ -215,7 +212,7 @@ namespace Catel.Reflection
 
             fullTypeName = GetTypeName(fullTypeName);
 
-            int splitterPos = fullTypeName.LastIndexOf(".", StringComparison.Ordinal);
+            var splitterPos = fullTypeName.LastIndexOf(".", StringComparison.Ordinal);
 
             var typeName = (splitterPos != -1) ? fullTypeName.Substring(0, splitterPos).Trim() : fullTypeName;
             return typeName;
@@ -511,8 +508,7 @@ namespace Catel.Reflection
                     msg = string.Concat(msg, " for value '{2}'");
                 }
 
-                msg = string.Format(msg, tI, tO, vl);
-                throw new InvalidCastException(msg);
+                throw Log.ErrorAndCreateException<InvalidCastException>(msg, tI, tO, vl);
             }
 
             return output;

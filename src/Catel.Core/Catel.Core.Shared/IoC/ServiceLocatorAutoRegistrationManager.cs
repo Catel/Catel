@@ -163,8 +163,7 @@ namespace Catel.IoC
 
                                 if (!IgnoreRuntimeIncorrectUsageOfRegisterAttribute)
                                 {
-                                    Log.Error(message);
-                                    throw new InvalidOperationException(message);
+                                    throw Log.ErrorAndCreateException<InvalidOperationException>(message);
                                 }
 
                                 Log.Warning(message);
@@ -202,11 +201,9 @@ namespace Catel.IoC
                 }
                 catch (InvalidOperationException ex)
                 {
-                    Log.Error(ex, "Failed to inspect the pending types");
-
                     AutoRegisterTypesViaAttributes = false;
 
-                    throw;
+                    throw Log.ErrorAndCreateException<Exception>(ex, "Failed to inspect the pending types");
                 }
                 finally
                 {

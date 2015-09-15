@@ -56,7 +56,7 @@ namespace Catel.MVVM.Providers
 #if NET
                 if (!associatedObject.IsLoaded)
                 {
-                    throw new InvalidOperationException("The associated object is not yet loaded, which is required");
+                    throw Log.ErrorAndCreateException<InvalidOperationException>("The associated object is not yet loaded, which is required");
                 }
 #endif
 
@@ -79,15 +79,15 @@ namespace Catel.MVVM.Providers
                 _target = _associatedObject.FindName(ControlName);
                 if (_target == null)
                 {
-                    throw new InvalidOperationException(string.Format("'{0}' resulted in control name '{1}', which cannot be found on the associated object",
-                        eventTarget, ControlName));
+                    throw Log.ErrorAndCreateException<InvalidOperationException>("'{0}' resulted in control name '{1}', which cannot be found on the associated object",
+                        eventTarget, ControlName);
                 }
 
                 _eventInfo = _target.GetType().GetEventEx(EventName);
                 if (_eventInfo == null)
                 {
-                    throw new InvalidOperationException(string.Format("'{0}' resulted in event name '{1}', which cannot be found on target '{2}'",
-                        eventTarget, EventName, ControlName));
+                    throw Log.ErrorAndCreateException<InvalidOperationException>("'{0}' resulted in event name '{1}', which cannot be found on target '{2}'",
+                        eventTarget, EventName, ControlName);
                 }
 
                 var methodInfo = GetType().GetMethodEx("OnEvent", BindingFlagsHelper.GetFinalBindingFlags(true, false));
@@ -265,9 +265,7 @@ namespace Catel.MVVM.Providers
             var associatedObjectType = AssociatedObject.GetType();
             if (!associatedObjectType.ImplementsInterfaceEx<IView>())
             {
-                string error = string.Format("Type '{0}' does not implement IView, make sure to implement the interface correctly", associatedObjectType);
-                Log.Error(error);
-                throw new InvalidOperationException(error);
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Type '{0}' does not implement IView, make sure to implement the interface correctly", associatedObjectType);
             }
 
             return new WindowLogic((IView)AssociatedObject, ViewModelType, InjectedViewModel);

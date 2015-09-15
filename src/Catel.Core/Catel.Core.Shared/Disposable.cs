@@ -58,7 +58,8 @@ namespace Catel
             {
                 if (IsDisposed)
                 {
-                    throw new ObjectDisposedException(GetType().GetSafeFullName());
+                    throw Log.ErrorAndCreateException(msg => new ObjectDisposedException(GetType().GetSafeFullName()),
+                        "Object '{0}' is already disposed", GetType().GetSafeFullName());
                 }
             }
         }

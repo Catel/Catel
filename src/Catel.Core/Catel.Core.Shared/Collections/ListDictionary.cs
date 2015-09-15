@@ -70,6 +70,7 @@ namespace Catel.Collections
                 {
                     throw new KeyNotFoundException();
                 }
+
                 return keyValuePair.Value;
             }
             set

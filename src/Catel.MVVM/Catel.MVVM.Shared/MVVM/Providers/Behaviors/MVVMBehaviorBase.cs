@@ -11,6 +11,7 @@ namespace Catel.MVVM.Providers
     using System;
     using System.ComponentModel;
     using Catel.Windows.Interactivity;
+    using Logging;
     using MVVM;
 
 #if NETFX_CORE
@@ -30,6 +31,8 @@ namespace Catel.MVVM.Providers
         where TLogicType : LogicBase
     {
         #region Fields
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// The injected view model.
         /// </summary>
@@ -196,7 +199,7 @@ namespace Catel.MVVM.Providers
         {
             if (ViewModelType == null)
             {
-                throw new InvalidOperationException("The 'ViewModelType' must be set when using this behavior");
+                throw Log.ErrorAndCreateException<InvalidOperationException>("The 'ViewModelType' must be set when using this behavior");
             }
         }
 

@@ -201,7 +201,8 @@ namespace Catel.Data
 
             if (!IsPropertyRegistered(type, name))
             {
-                throw new PropertyNotRegisteredException(name, type);
+                throw Log.ErrorAndCreateException(msg => new PropertyNotRegisteredException(name, type),
+                    "Property '{0}' on type '{1}' is not registered", name, type.FullName);
             }
 
             lock (_propertyDataLock)

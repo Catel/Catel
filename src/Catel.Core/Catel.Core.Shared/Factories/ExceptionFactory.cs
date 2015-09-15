@@ -25,7 +25,7 @@ namespace Catel
         public static TException CreateException<TException>(string message, Exception innerException = null)
             where TException : Exception
         {
-            return (TException)CreateException(typeof (TException), message, innerException);
+            return (TException)CreateException(typeof(TException), message, innerException);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace Catel
             }
 
             // try 3: without anything
-            exception = CreateException(exceptionType, new object[] {});
+            exception = CreateException(exceptionType, new object[] { });
             if (exception != null)
             {
                 return exception;
@@ -76,7 +76,7 @@ namespace Catel
         public static TException CreateException<TException>(object[] args)
             where TException : Exception
         {
-            return (TException)CreateException(typeof (TException), args);
+            return (TException)CreateException(typeof(TException), args);
         }
 
         /// <summary>

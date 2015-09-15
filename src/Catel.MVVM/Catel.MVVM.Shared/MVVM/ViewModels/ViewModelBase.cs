@@ -643,9 +643,7 @@ namespace Catel.MVVM
                 {
                     if (propertyInfo.PropertyType != typeof(IValidationSummary))
                     {
-                        string error = string.Format("A property decorated with the ValidationToViewModel attribute must be of type IValidationSummary, but '{0}' is not", propertyInfo.Name);
-                        Log.Error(error);
-                        throw new InvalidOperationException(error);
+                        throw Log.ErrorAndCreateException<InvalidOperationException>("A property decorated with the ValidationToViewModel attribute must be of type IValidationSummary, but '{0}' is not", propertyInfo.Name);
                     }
 
                     validationSummaries.Add(propertyInfo.Name, validationToViewModelAttribute);
@@ -671,10 +669,9 @@ namespace Catel.MVVM
                 var mapping = viewModelToModelMapping.Value;
                 if (!IsModelRegistered(mapping.ModelProperty))
                 {
-                    Log.Error("There is no model '{0}' registered with the model attribute, so the ViewModelToModel attribute on property '{1}' is invalid",
+                    throw Log.ErrorAndCreateException(msg => new ModelNotRegisteredException(mapping.ModelProperty, mapping.ViewModelProperty),
+                        "There is no model '{0}' registered with the model attribute, so the ViewModelToModel attribute on property '{1}' is invalid",
                         mapping.ModelProperty, mapping.ViewModelProperty);
-
-                    throw new ModelNotRegisteredException(mapping.ModelProperty, mapping.ViewModelProperty);
                 }
 
                 var viewModelPropertyType = GetPropertyData(mapping.ViewModelProperty).Type;
@@ -689,8 +686,6 @@ namespace Catel.MVVM
                         Log.Warning("Mapped viewmodel property '{0}' to model property '{1}' is invalid because property '{1}' is not found on the model '{2}'.\n\n" +
                                 "If the property is defined in a sub-interface, reflection does not return it as a valid property. If this is the case, you can safely ignore this warning",
                             mapping.ViewModelProperty, valueProperty, mapping.ModelProperty);
-                        //throw new PropertyNotFoundInModelException(mapping.ViewModelProperty, mapping.ModelProperty, mapping.ValueProperty);
-                        // Disabled because a property defined in an interface is not detected by FlattenHierarchy
                     }
                     else
                     {
