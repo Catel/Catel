@@ -86,8 +86,6 @@ namespace Catel
 
         private static ParameterExpression GetParameterExpression(Expression expression)
         {
-
-
             if (expression.NodeType == ExpressionType.Parameter)
             {
                 return (ParameterExpression)expression;
