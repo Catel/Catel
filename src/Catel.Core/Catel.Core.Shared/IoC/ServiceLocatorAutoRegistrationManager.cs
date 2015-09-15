@@ -203,7 +203,7 @@ namespace Catel.IoC
                 {
                     AutoRegisterTypesViaAttributes = false;
 
-                    throw Log.ErrorAndCreateException<Exception>(ex, "Failed to inspect the pending types");
+                    throw Log.ErrorAndCreateException<InvalidOperationException>(ex, "Failed to inspect the pending types");
                 }
                 finally
                 {
