@@ -880,7 +880,7 @@ namespace Catel.Test.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => { throw log.ErrorAndCreateException<ExceptionWithoutStringConstructor>("exception test"); });
+                ExceptionTester.CallMethodAndExpectException<ExceptionWithoutStringConstructor>(() => { throw log.ErrorAndCreateException<ExceptionWithoutStringConstructor>("exception test"); });
             }
 
             [TestCase]
