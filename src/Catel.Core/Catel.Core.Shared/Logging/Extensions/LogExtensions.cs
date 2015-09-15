@@ -197,7 +197,7 @@ namespace Catel.Logging
         public static Exception ErrorAndCreateException<TException>(this ILog log, string messageFormat, params object[] args)
             where TException : Exception
         {
-            return ErrorAndCreateException<TException>(log, messageFormat, args);
+            return ErrorAndCreateException<TException>(log, null, messageFormat, args);
         }
 
         /// <summary>
