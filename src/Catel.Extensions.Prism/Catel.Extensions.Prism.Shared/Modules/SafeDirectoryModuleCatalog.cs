@@ -43,9 +43,7 @@ namespace Catel.Modules
 
             if (!Directory.Exists(ModulePath))
             {
-                var error = string.Format("Directory '{0}' not found", ModulePath);
-                Log.Error(error);
-                throw new InvalidOperationException(error);
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Directory '{0}' not found", ModulePath);
             }
 
             var childDomain = BuildChildDomain(AppDomain.CurrentDomain);

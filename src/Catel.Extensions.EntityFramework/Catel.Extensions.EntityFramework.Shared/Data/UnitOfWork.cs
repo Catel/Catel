@@ -107,11 +107,8 @@ namespace Catel.Data
 
             if (Transaction != null)
             {
-                const string error = "Cannot begin a new transaction while an existing transaction is still running. " +
-                               "Please commit or rollback the existing transaction before starting a new one.";
-
-                Log.Error(error);
-                throw new InvalidOperationException(error);
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot begin a new transaction while an existing transaction is still running. " +
+                    "Please commit or rollback the existing transaction before starting a new one.");
             }
 
             OpenConnection();
@@ -132,10 +129,7 @@ namespace Catel.Data
 
             if (Transaction == null)
             {
-                const string error = "Cannot roll back a transaction when there is no transaction running.";
-
-                Log.Error(error);
-                throw new InvalidOperationException(error);
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot roll back a transaction when there is no transaction running.");
             }
 
             Transaction.Rollback();
@@ -154,10 +148,7 @@ namespace Catel.Data
 
             if (Transaction == null)
             {
-                const string error = "Cannot commit a transaction when there is no transaction running.";
-
-                Log.Error(error);
-                throw new InvalidOperationException(error);
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot commit a transaction when there is no transaction running.");
             }
 
             try
@@ -190,10 +181,7 @@ namespace Catel.Data
 
             if (Transaction == null)
             {
-                const string error = "Cannot commit a transaction when there is no transaction running.";
-
-                Log.Error(error);
-                throw new InvalidOperationException(error);
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot commit a transaction when there is no transaction running.");
             }
 
             try
@@ -243,9 +231,7 @@ namespace Catel.Data
             var registrationInfo = _serviceLocator.GetRegistrationInfo(typeof(TEntityRepository));
             if (registrationInfo == null)
             {
-                var error = string.Format("The specified repository type '{0}' cannot be found. Make sure it is registered in the ServiceLocator.", typeof(TEntityRepository).FullName);
-                Log.Error(error);
-                throw new NotSupportedException(error);
+                throw Log.ErrorAndCreateException<NotSupportedException>("The specified repository type '{0}' cannot be found. Make sure it is registered in the ServiceLocator.", typeof(TEntityRepository).FullName);
             }
 
             var repository = _typeFactory.CreateInstanceWithParameters(registrationInfo.ImplementingType, DbContext);
@@ -338,10 +324,7 @@ namespace Catel.Data
 
             if (IsInTransaction)
             {
-                const string error = "A transaction is running. Call CommitTransaction instead.";
-
-                Log.Error(error);
-                throw new InvalidOperationException(error);
+                throw Log.ErrorAndCreateException<InvalidOperationException>("A transaction is running. Call CommitTransaction instead.");
             }
 
             DbContext.SaveChanges();
@@ -372,10 +355,7 @@ namespace Catel.Data
 
             if (IsInTransaction)
             {
-                const string error = "A transaction is running. Call CommitTransaction instead.";
-
-                Log.Error(error);
-                throw new InvalidOperationException(error);
+                throw Log.ErrorAndCreateException < InvalidOperationException >("A transaction is running. Call CommitTransaction instead");
             }
 
             await DbContext.SaveChangesAsync();
