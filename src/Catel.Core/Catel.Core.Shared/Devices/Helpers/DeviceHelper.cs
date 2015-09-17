@@ -95,10 +95,14 @@ namespace Catel
                 // TODO: add more support like xbox and IoT, but need devices for this
                 _deviceType = DeviceType.Unknown;
             }
-
+#elif NETFX_CORE
+            // Assume tablet for WinRT
+            _deviceType = DeviceType.Tablet;
 #elif IOS
             _deviceType = DeviceType.Unknown;
 #elif ANDROID
+            _deviceType = DeviceType.Unknown;
+#else
             _deviceType = DeviceType.Unknown;
 #endif
 
