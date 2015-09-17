@@ -127,6 +127,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\ValidationSummary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ValidatorBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ValidatorProviderBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Devices\DeviceType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Devices\Helpers\DeviceHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Disposable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DisposableToken.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DynamicEventListener.cs" />

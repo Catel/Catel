@@ -48,6 +48,7 @@ Added/fixed:
 ============
 (+) CTL-718 Add LogMessage event to RollingInMemoryService
 (+) CTL-727 Created ExceptionFactory and convert all throw new exception calls
+(+) CTL-732 Add DeviceHelper so it's easy to determine on what kind of device the code is being executed
 (*) CTL-713 Improved designer support by automatically initializing all classes that derive from DesignTimeInitializer. 
     This way it's possible to have customized registrations at design time (for example switching languages at design 
     time, even when the code is using the ILanguageService and custom resx files)
