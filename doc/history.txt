@@ -61,6 +61,7 @@ Added/fixed:
 (x) CTL-714 Serialize Model with only one property as XML attribute does not work
 (x) CTL-720 NullReferenceException in ChangeNotificationWrapper
 (x) CTL-721 AppDomainExtensions.PreloadAssemblies() throws exception on loading native dll
+(x) CTL-731 ViewModelBase.CancelingAsync gets called twice on IViewModelExtensions.CancelAndCloseViewModelAsync
 
 Roadmap:
 ========

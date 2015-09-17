@@ -1631,7 +1631,7 @@ namespace Catel.MVVM
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
         public async Task<bool> CancelViewModelAsync()
         {
-            if (IsClosed)
+            if (IsClosing || IsClosed)
             {
                 return false;
             }
@@ -1702,7 +1702,7 @@ namespace Catel.MVVM
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
         public async Task<bool> SaveViewModelAsync()
         {
-            if (IsClosed)
+            if (IsClosing || IsClosed)
             {
                 return false;
             }
