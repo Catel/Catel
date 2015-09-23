@@ -98,6 +98,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Extensions\ObjectExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Helpers\ViewHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Helpers\ViewModelServiceHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\Extensions\IViewModelLocatorExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\Interfaces\ILocator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\Interfaces\IUrlLocator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\Interfaces\IViewLocator.cs" />
