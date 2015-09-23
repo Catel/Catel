@@ -7,6 +7,7 @@
 namespace Catel.Data
 {
     using System;
+    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     using System.Linq;
@@ -35,6 +36,7 @@ namespace Catel.Data
     /// </summary>
     public static partial class DbContextExtensions
     {
+        private static readonly ICacheStorage<Tuple<Type, Type>, List<string>> _entityKeyCache = new CacheStorage<Tuple<Type, Type>, List<string>>();
         private static readonly ICacheStorage<Tuple<Type, Type>, string> _entityKeyPropertyNameCache = new CacheStorage<Tuple<Type, Type>, string>();
         private static readonly ICacheStorage<Tuple<Type, Type>, string> _entitySetNameCache = new CacheStorage<Tuple<Type, Type>, string>();
         private static readonly ICacheStorage<Type, string> _tableNameCache = new CacheStorage<Type, string>();
@@ -50,6 +52,54 @@ namespace Catel.Data
             Argument.IsNotNull("dbContext", dbContext);
 
             return ((IObjectContextAdapter)dbContext).ObjectContext;
+        }
+
+        /// <summary>
+        /// Gets the entity key of the specified entity type in the <see cref="DbContext"/>.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the T entity.</typeparam>
+        /// <param name="dbContext">The db context.</param>
+        /// <returns>The entity key.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="dbContext"/> is <c>null</c>.</exception>
+        public static EntityKey GetEntityKey<TEntity>(this DbContext dbContext)
+        {
+            return GetEntityKey(dbContext, typeof(TEntity));
+        }
+
+        /// <summary>
+        /// Gets the entity key of the specified entity type in the <see cref="DbContext" />.
+        /// </summary>
+        /// <param name="dbContext">The db context.</param>
+        /// <param name="entityType">Type of the entity.</param>
+        /// <returns>The entity key.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="dbContext"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="entityType"/> is <c>null</c>.</exception>
+        public static EntityKey GetEntityKey(this DbContext dbContext, Type entityType)
+        {
+            Argument.IsNotNull("dbContext", dbContext);
+            Argument.IsNotNull("entityType", entityType);
+
+            var keySet = _entityKeyCache.GetFromCacheOrFetch(new Tuple<Type, Type>(dbContext.GetType(), entityType), () =>
+            {
+                var entitySet = GetEntitySet(dbContext, entityType);
+
+                return (from keyMember in entitySet.ElementType.KeyMembers
+                        select keyMember.Name).ToList();
+            });
+
+            var entitySetName = GetFullEntitySetName(dbContext, entityType);
+
+            var keys = new List<EntityKeyMember>();
+            foreach (var keySetItem in keySet)
+            {
+                keys.Add(new EntityKeyMember
+                {
+                    Key = keySetItem
+                });
+            }
+
+            var entityKey = new EntityKey(entitySetName, keys.ToArray());
+            return entityKey;
         }
 
         /// <summary>
