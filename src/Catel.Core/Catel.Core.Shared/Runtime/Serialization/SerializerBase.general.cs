@@ -626,6 +626,7 @@ namespace Catel.Runtime.Serialization
             if (type.IsArrayEx())
             {
                 elementType = type.GetElementTypeEx();
+                return Array.CreateInstance(elementType, 0);
             }
 
             if (type.IsGenericTypeEx() && typeof(IEnumerable<>) == type.GetGenericTypeDefinitionEx())

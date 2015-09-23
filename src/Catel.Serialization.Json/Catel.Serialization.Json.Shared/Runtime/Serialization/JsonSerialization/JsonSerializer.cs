@@ -598,10 +598,15 @@ namespace Catel.Runtime.Serialization.Json
                 var jArray = context.Context.JsonArray;
                 if (jArray != null)
                 {
+                    var memberType = memberValue.MemberType;
                     var collectionItemType = typeof(object);
-                    if (memberValue.MemberType.IsGenericTypeEx())
+                    if (memberType.IsGenericTypeEx())
                     {
-                        collectionItemType = memberValue.MemberType.GetGenericArgumentsEx()[0];
+                        collectionItemType = memberType.GetGenericArgumentsEx()[0];
+                    }
+                    else if (memberType.IsArrayEx())
+                    {
+                        collectionItemType = memberType.GetElementTypeEx();
                     }
 
                     var shouldBeHandledByExternalSerializer = ShouldExternalSerializerHandleMember(collectionItemType, null);
