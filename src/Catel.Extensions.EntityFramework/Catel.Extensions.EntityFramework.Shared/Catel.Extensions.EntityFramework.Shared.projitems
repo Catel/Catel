@@ -28,6 +28,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\DbContextExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\DbContextExtensions.generic.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\DbContextExtensions.transactions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\DbEntityEntryExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\QueryableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\IsolationHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
