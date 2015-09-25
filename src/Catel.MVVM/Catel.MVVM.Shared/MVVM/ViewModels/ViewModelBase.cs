@@ -1800,10 +1800,12 @@ namespace Catel.MVVM
 
             SuspendValidation = true;
 
-            await OnClosedAsync(result);
-
+            // Note: important to set *before* calling the event (the handler might need to check
+            // if the vm is closed)
             IsClosing = false;
             IsClosed = true;
+
+            await OnClosedAsync(result);
 
             Log.Info("Closed view model '{0}'", GetType());
 

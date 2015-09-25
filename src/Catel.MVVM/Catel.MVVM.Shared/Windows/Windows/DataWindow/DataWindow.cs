@@ -4,6 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Catel.Windows.Threading;
+
 #if NET || SL5
 
 namespace Catel.Windows
@@ -125,12 +127,10 @@ namespace Catel.Windows
         #endregion
 
         #region Fields
-        /// <summary>
-        /// The log.
-        /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private bool _isWrapped;
+        private bool _forceClose;
 
         private ICommand _defaultOkCommand;
         private ButtonBase _defaultOkElement;
@@ -991,9 +991,19 @@ namespace Catel.Windows
         /// <param name="args">The <see cref="System.ComponentModel.CancelEventArgs"/> instance containing the event data.</param>
         private async void OnDataWindowClosing(object sender, CancelEventArgs args)
         {
-            if (!ClosedByButton)
+            if (!_forceClose && !ClosedByButton)
             {
-                await DiscardChangesAsync();
+                // CTL-735 always cancel, we will close later once we handled our async result
+                args.Cancel = true;
+
+                if (await DiscardChangesAsync())
+                {
+                    // Now we can close for sure
+                    _forceClose = true;
+
+                    // Dispatcher to make sure we are not inside the same loop
+                    Dispatcher.BeginInvoke(() => SetDialogResultAndMakeSureWindowGetsClosed(false));
+                }
             }
         }
 
@@ -1051,6 +1061,16 @@ namespace Catel.Windows
         /// </summary>
         protected async virtual Task<bool> DiscardChangesAsync()
         {
+            // CTL-735 We might be handling the ViewModel.Closed event
+            var vm = _logic.ViewModel;
+            if (vm != null)
+            {
+                if (vm.IsClosed)
+                {
+                    return true;
+                }
+            }
+
             var result = await _logic.CancelViewModelAsync();
             return result;
         }
