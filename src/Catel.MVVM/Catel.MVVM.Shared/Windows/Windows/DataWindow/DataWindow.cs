@@ -4,8 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Catel.Windows.Threading;
-
 #if NET || SL5
 
 namespace Catel.Windows
@@ -28,6 +26,7 @@ namespace Catel.Windows
     using Exceptions = MVVM.Properties.Exceptions;
     using Catel.MVVM.Providers;
     using Catel.Threading;
+    using Catel.Windows.Threading;
 
 #if SILVERLIGHT
     using System.Windows.Media;
