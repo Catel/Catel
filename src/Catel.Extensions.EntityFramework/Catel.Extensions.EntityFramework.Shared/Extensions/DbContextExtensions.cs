@@ -185,7 +185,7 @@ namespace Catel.Data
             Argument.IsNotNull("dbContext", dbContext);
             Argument.IsNotNull("dbEntityEntry", dbEntityEntry);
 
-            var entityType = dbEntityEntry.Entity.GetType();
+            var entityType = dbEntityEntry.GetEntityType();
 
             var keySet = _entityKeyCache.GetFromCacheOrFetch(new Tuple<Type, Type>(dbContext.GetType(), entityType), () =>
             {

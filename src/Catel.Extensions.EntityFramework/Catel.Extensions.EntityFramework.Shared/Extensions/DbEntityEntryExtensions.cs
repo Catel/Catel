@@ -41,6 +41,55 @@ namespace Catel
     public static class DbEntityEntryExtensions
     {
         /// <summary>
+        /// Gets the type of the entity. Even when proxies are enabled, this will return the 
+        /// actual entity type.
+        /// </summary>
+        /// <param name="dbEntityEntry">The database entity entry.</param>
+        /// <returns>The type or <c>null</c> if the type could not be determined.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="dbEntityEntry"/> is <c>null</c>.</exception>
+        public static Type GetEntityType(this DbEntityEntry dbEntityEntry)
+        {
+            Argument.IsNotNull("dbEntityEntry", dbEntityEntry);
+
+            var entity = dbEntityEntry.Entity;
+            return entity.GetEntityType();
+        }
+
+        /// <summary>
+        /// Gets the type of the entity. Even when proxies are enabled, this will return the 
+        /// actual entity type.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns>The type or <c>null</c> if the type could not be determined.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="entity"/> is <c>null</c>.</exception>
+        public static Type GetEntityType(this object entity)
+        {
+            Argument.IsNotNull("entity", entity);
+
+            var entityType = entity.GetType();
+            return entityType.GetEntityType();
+        }
+
+        /// <summary>
+        /// Gets the type of the entity. Even when proxies are enabled, this will return the 
+        /// actual entity type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>The type or <c>null</c> if the type could not be determined.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
+        public static Type GetEntityType(this Type type)
+        {
+            Argument.IsNotNull("type", type);
+
+            while (type != null && type.FullName.Contains(".DynamicProxies."))
+            {
+                type = type.BaseType;
+            }
+
+            return type;
+        }
+
+        /// <summary>
         /// Gets the current database value. If a value is <c>null</c>, it will be returned as <c>DBNull.Value</c>.
         /// </summary>
         /// <param name="dbEntityEntry">The database entity entry.</param>
