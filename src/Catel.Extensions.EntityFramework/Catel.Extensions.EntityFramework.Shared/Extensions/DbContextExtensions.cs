@@ -173,46 +173,38 @@ namespace Catel.Data
         }
 
         /// <summary>
-        /// Gets the entity key of the specified entity type in the <see cref="DbContext"/>.
-        /// </summary>
-        /// <typeparam name="TEntity">The type of the T entity.</typeparam>
-        /// <param name="dbContext">The db context.</param>
-        /// <returns>The entity key.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="dbContext"/> is <c>null</c>.</exception>
-        public static EntityKey GetEntityKey<TEntity>(this DbContext dbContext)
-        {
-            return GetEntityKey(dbContext, typeof(TEntity));
-        }
-
-        /// <summary>
         /// Gets the entity key of the specified entity type in the <see cref="DbContext" />.
         /// </summary>
         /// <param name="dbContext">The db context.</param>
-        /// <param name="entityType">Type of the entity.</param>
+        /// <param name="dbEntityEntry">Type of the entity.</param>
         /// <returns>The entity key.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="dbContext"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="entityType"/> is <c>null</c>.</exception>
-        public static EntityKey GetEntityKey(this DbContext dbContext, Type entityType)
+        /// <exception cref="ArgumentNullException">The <paramref name="dbEntityEntry"/> is <c>null</c>.</exception>
+        public static EntityKey GetEntityKey(this DbContext dbContext, DbEntityEntry dbEntityEntry)
         {
             Argument.IsNotNull("dbContext", dbContext);
-            Argument.IsNotNull("entityType", entityType);
+            Argument.IsNotNull("dbEntityEntry", dbEntityEntry);
+
+            var entityType = dbEntityEntry.Entity.GetType();
 
             var keySet = _entityKeyCache.GetFromCacheOrFetch(new Tuple<Type, Type>(dbContext.GetType(), entityType), () =>
             {
-                var entitySet = GetEntitySet(dbContext, entityType);
+                var entitySet = dbContext.GetEntitySet(entityType);
 
                 return (from keyMember in entitySet.ElementType.KeyMembers
                         select keyMember.Name).ToList();
             });
 
-            var entitySetName = GetFullEntitySetName(dbContext, entityType);
+            var entitySetName = dbContext.GetFullEntitySetName(entityType);
+            var currentValues = dbEntityEntry.CurrentValues;
 
             var keys = new List<EntityKeyMember>();
             foreach (var keySetItem in keySet)
             {
                 keys.Add(new EntityKeyMember
                 {
-                    Key = keySetItem
+                    Key = keySetItem,
+                    Value = currentValues[keySetItem]
                 });
             }
 
