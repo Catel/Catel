@@ -1002,7 +1002,9 @@ namespace Catel.Windows
                     _forceClose = true;
 
                     // Dispatcher to make sure we are not inside the same loop
+#pragma warning disable 4014
                     Dispatcher.BeginInvoke(() => SetDialogResultAndMakeSureWindowGetsClosed(false));
+#pragma warning restore 4014
                 }
             }
         }
