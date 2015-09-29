@@ -9,6 +9,7 @@ namespace Catel
 {
     using System;
     using System.Windows;
+    using System.Windows.Controls;
     using Logging;
 
     /// <summary>
@@ -24,7 +25,7 @@ namespace Catel
         /// <returns>DependencyObject.</returns>
         protected override DependencyObject CreateShell()
         {
-            return new DependencyObject();
+            return new UserControl();
         }
     }
 }
