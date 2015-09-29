@@ -34,6 +34,7 @@ marked as obsolete and have an async handler which must be used in the future.
 Platform support changes:
 =========================
 (*) CTL-724 Created separate projects for Universal App Platform projects (UAP 10.0)
+(*) CTL-741 Support .NET 4.6 for Prism 5
 
 Classes marked as obsolete:
 ===========================
@@ -61,6 +62,7 @@ Added/fixed:
 (*) CTL-726 Fallback to non-weak events when weak event subscription fails (required for UAP)
 (*) CTL-729 Support .NET native in the WeakEventListener
 (*) CTL-735 Support async canceling on closing event of DataWindow
+(*) CTL-741 Support .NET 4.6 for Prism 5
 (x) CTL-714 Serialize Model with only one property as XML attribute does not work
 (x) CTL-720 NullReferenceException in ChangeNotificationWrapper
 (x) CTL-721 AppDomainExtensions.PreloadAssemblies() throws exception on loading native dll

@@ -42,6 +42,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Modules\NuGet\RemoteInstallPackageRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\SafeDirectoryModuleCatalog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Services\Extensions\ISplashScreenServiceExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Services\Extensions\IUICompositionServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Services\Extensions\IUIVisualizerServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Services\Interfaces\IUICompositionService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Services\UICompositionService.cs" />
