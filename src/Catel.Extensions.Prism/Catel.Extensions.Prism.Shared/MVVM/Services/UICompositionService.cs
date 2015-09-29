@@ -47,28 +47,11 @@ namespace Catel.Services
         #endregion
 
         #region Fields
-        /// <summary>
-        /// The region manager.
-        /// </summary>
         private readonly IRegionManager _regionManager;
-
-        /// <summary>
-        /// The view manager.
-        /// </summary>
         private readonly IViewManager _viewManager;
-
-        /// <summary>
-        /// The view locator.
-        /// </summary>
         private readonly IViewLocator _viewLocator;
-
-        /// <summary>
-        /// The dispatcher service.
-        /// </summary>
         private readonly IDispatcherService _dispatcherService;
-
         private readonly IViewModelManager _viewModelManager;
-
         private readonly IViewModelFactory _viewModelFactory;
         #endregion
 

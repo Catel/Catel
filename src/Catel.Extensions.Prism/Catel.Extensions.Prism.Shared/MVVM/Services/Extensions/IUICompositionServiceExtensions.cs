@@ -27,7 +27,7 @@ namespace Catel.Services
         public static void Activate<TViewModel>(this IUICompositionService uiCompositionService, string regionName)
             where TViewModel : IViewModel
         {
-            uiCompositionService.Activate((IViewModel) typeof(TViewModel), regionName);
+            uiCompositionService.Activate(typeof(TViewModel), regionName);
         }
     }
 }

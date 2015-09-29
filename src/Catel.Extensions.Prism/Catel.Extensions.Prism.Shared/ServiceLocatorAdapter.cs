@@ -29,6 +29,14 @@ namespace Catel
         #endregion
 
         #region Constructors
+        /// <summary>
+        /// Initializes static members of the <see cref="ServiceLocatorAdapter"/> class.
+        /// </summary>
+        static ServiceLocatorAdapter()
+        {
+            Default = new ServiceLocatorAdapter(IoC.ServiceLocator.Default);
+        }
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceLocatorAdapter"/> class.
@@ -51,6 +59,14 @@ namespace Catel
         {
             _serviceLocator = serviceLocator ?? IoC.ServiceLocator.Default;
         }
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets the default service locator adapter.
+        /// </summary>
+        /// <value>The default.</value>
+        public static ServiceLocatorAdapter Default { get; private set; }
         #endregion
 
         #region Methods
