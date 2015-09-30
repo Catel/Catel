@@ -7,10 +7,12 @@
 
 namespace Catel.Services
 {
+    using System;
+
     /// <summary>
     /// Object containing size information.
     /// </summary>
-    public struct Size
+    public struct Size : IEquatable<Size>
     {
         private double _width;
         private double _height;
@@ -44,6 +46,88 @@ namespace Catel.Services
         {
             get { return _height; }
             set { _height = value; }
+        }
+
+        /// <summary>
+        /// Determines whether the specified <see cref="System.Object" /> is equal to this instance.
+        /// </summary>
+        /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
+        /// <returns><c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(obj, null))
+            {
+                return false;
+            }
+
+            var isSize = obj is Size;
+            if (!isSize)
+            {
+                return false;
+            }
+
+            var size = (Size) obj;
+            return size == this;
+        }
+
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
+        /// <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.</returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        /// <summary>
+        /// Determines whether the specified size equals this instance.
+        /// </summary>
+        /// <param name="size">The size to compare this instance to.</param>
+        /// <returns><c>true</c> if equal, <c>false</c> otherwise.</returns>
+        public bool Equals(Size size)
+        {
+            return this == size;
+        }
+
+        /// <summary>
+        /// Implements the ==.
+        /// </summary>
+        /// <param name="a">a.</param>
+        /// <param name="b">The b.</param>
+        /// <returns>The result of the operator.</returns>
+        public static bool operator ==(Size a, Size b)
+        {
+            if (a.Width != b.Width)
+            {
+                return false;
+            }
+
+            if (a.Height != b.Height)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Implements the !=.
+        /// </summary>
+        /// <param name="a">a.</param>
+        /// <param name="b">The b.</param>
+        /// <returns>The result of the operator.</returns>
+        public static bool operator !=(Size a, Size b)
+        {
+            return !(a == b);
+        }
+
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
+        public override string ToString()
+        {
+            return string.Format("{0}x{1}", Width, Height);
         }
     }
 }
