@@ -992,6 +992,13 @@ namespace Catel.Windows
         {
             if (!_forceClose && !ClosedByButton)
             {
+                var vm = ViewModel;
+                if (vm != null && vm.IsClosed)
+                {
+                    // Being closed from the vm
+                    return;
+                }
+
                 // CTL-735 always cancel, we will close later once we handled our async result
                 args.Cancel = true;
 
