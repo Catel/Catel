@@ -212,7 +212,7 @@ namespace Catel.Configuration
         protected virtual bool ValueExists(string key)
         {
 #if PCL || (XAMARIN && !ANDROID)
-            throw new NotSupportedInPlatformException();
+            throw Log.ErrorAndCreateException<NotSupportedInPlatformException>("No configuration objects available");
 #elif ANDROID
             return _preferences.Contains(key);
 #elif NETFX_CORE
@@ -234,7 +234,7 @@ namespace Catel.Configuration
         protected virtual string GetValueFromStore(string key)
         {
 #if PCL || (XAMARIN && !ANDROID)
-            throw new NotSupportedInPlatformException();
+            throw Log.ErrorAndCreateException<NotSupportedInPlatformException>("No configuration objects available");
 #elif ANDROID
             return _preferences.GetString(key, null);
 #elif NETFX_CORE
@@ -256,7 +256,7 @@ namespace Catel.Configuration
         protected virtual void SetValueToStore(string key, string value)
         {
 #if PCL || (XAMARIN && !ANDROID)
-            throw new NotSupportedInPlatformException();
+            throw Log.ErrorAndCreateException<NotSupportedInPlatformException>("No configuration objects available");
 #elif ANDROID
             _preferences.Edit()
                         .PutString(key, value)

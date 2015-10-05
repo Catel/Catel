@@ -160,9 +160,11 @@ namespace Catel.Windows.Data
 
             var properties = new List<DependencyPropertyInfo>();
 
+            var bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(true, true);
+
             var typeMembers = new List<MemberInfo>();
-            typeMembers.AddRange(viewType.GetFieldsEx(BindingFlagsHelper.GetFinalBindingFlags(true, true)));
-            typeMembers.AddRange(viewType.GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(true, true)));
+            typeMembers.AddRange(viewType.GetFieldsEx(bindingFlags));
+            typeMembers.AddRange(viewType.GetPropertiesEx(bindingFlags));
 
             foreach (var member in typeMembers)
             {

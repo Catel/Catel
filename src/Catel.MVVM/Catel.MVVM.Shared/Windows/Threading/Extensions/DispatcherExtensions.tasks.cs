@@ -10,11 +10,12 @@ namespace Catel.Windows.Threading
 {
     using System;
     using System.Threading.Tasks;
-    using System.Windows.Threading;
     using Logging;
 
 #if NETFX_CORE
     using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
+#else
+    using System.Windows.Threading;
 #endif
 
     /// <summary>

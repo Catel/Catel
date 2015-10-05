@@ -25,11 +25,27 @@ namespace Catel.Test.Runtime.Serialization
 #if NET
         [Serializable]
 #endif
+        public class XmlModelWithAttributesOnly : ModelBase
+        {
+            [XmlAttribute]
+            public string FirstName
+            {
+                get { return GetValue<string>(FirstNameProperty); }
+                set { SetValue(FirstNameProperty, value); }
+            }
+
+            public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), null);
+        }
+
+#if NET
+        [Serializable]
+#endif
         public class XmlFamily : ModelBase
         {
             public XmlFamily()
             {
                 Persons = new ObservableCollection<XmlPerson>();
+                ModelsWithAttributesOnly = new ObservableCollection<XmlModelWithAttributesOnly>();
             }
 
             public string LastName
@@ -48,6 +64,15 @@ namespace Catel.Test.Runtime.Serialization
             }
 
             public static readonly PropertyData PersonsProperty = RegisterProperty("Persons", typeof(ObservableCollection<XmlPerson>), null);
+
+
+            public ObservableCollection<XmlModelWithAttributesOnly> ModelsWithAttributesOnly
+            {
+                get { return GetValue<ObservableCollection<XmlModelWithAttributesOnly>>(ModelsWithAttributesOnlyProperty); }
+                set { SetValue(ModelsWithAttributesOnlyProperty, value); }
+            }
+
+            public static readonly PropertyData ModelsWithAttributesOnlyProperty = RegisterProperty("ModelsWithAttributesOnly", typeof(ObservableCollection<XmlModelWithAttributesOnly>), null);
         }
 
 #if NET
@@ -182,6 +207,28 @@ namespace Catel.Test.Runtime.Serialization
                 Assert.AreEqual(family.Persons[0].FirstName, newPerson.FirstName);
                 Assert.AreEqual(family.Persons[0].LastName, newPerson.LastName);
                 Assert.AreEqual(family.Persons[0].Gender, newPerson.Gender);
+            }
+
+            [TestCase(XmlSerializerOptimalizationMode.PrettyXml)]
+            //[TestCase(XmlSerializerOptimalizationMode.PrettyXmlAgressive)]
+            [TestCase(XmlSerializerOptimalizationMode.Performance)]
+            public void SerializesModelsWithOnlyAttributes(XmlSerializerOptimalizationMode mode)
+            {
+                var family = new XmlFamily();
+                family.LastName = "van Horrik";
+                family.ModelsWithAttributesOnly.Add(new XmlModelWithAttributesOnly
+                {
+                    FirstName = "Geert",
+                });
+
+                var newFamily = SerializationTestHelper.SerializeAndDeserialize(family, SerializationTestHelper.GetXmlSerializer(mode));
+
+                Assert.AreEqual(family.LastName, newFamily.LastName);
+                Assert.AreEqual(1, newFamily.ModelsWithAttributesOnly.Count);
+
+                var newModelWithAttributesOnly = newFamily.ModelsWithAttributesOnly.First();
+
+                Assert.AreEqual(family.ModelsWithAttributesOnly[0].FirstName, newModelWithAttributesOnly.FirstName);
             }
 
             [TestCase]

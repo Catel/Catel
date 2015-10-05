@@ -142,9 +142,7 @@ namespace Catel.Modules
             Match typeNameMatch = TypeNameRegex.Match(moduleInfo.ModuleType);
             if (!typeNameMatch.Success)
             {
-                Log.Error(ModuleTypeMustBeSpecifiedUsingQualifiedNamePatternErrorMessage);
-
-                throw new InvalidOperationException(ModuleTypeMustBeSpecifiedUsingQualifiedNamePatternErrorMessage);
+                throw Log.ErrorAndCreateException<InvalidOperationException>(ModuleTypeMustBeSpecifiedUsingQualifiedNamePatternErrorMessage);
             }
 
             var assemblyName = typeNameMatch.Groups[1].Value.Trim();

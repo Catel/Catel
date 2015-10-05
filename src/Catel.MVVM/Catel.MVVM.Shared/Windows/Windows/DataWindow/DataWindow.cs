@@ -26,6 +26,7 @@ namespace Catel.Windows
     using Exceptions = MVVM.Properties.Exceptions;
     using Catel.MVVM.Providers;
     using Catel.Threading;
+    using Catel.Windows.Threading;
 
 #if SILVERLIGHT
     using System.Windows.Media;
@@ -125,12 +126,10 @@ namespace Catel.Windows
         #endregion
 
         #region Fields
-        /// <summary>
-        /// The log.
-        /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private bool _isWrapped;
+        private bool _forceClose;
 
         private ICommand _defaultOkCommand;
         private ButtonBase _defaultOkElement;
@@ -991,9 +990,28 @@ namespace Catel.Windows
         /// <param name="args">The <see cref="System.ComponentModel.CancelEventArgs"/> instance containing the event data.</param>
         private async void OnDataWindowClosing(object sender, CancelEventArgs args)
         {
-            if (!ClosedByButton)
+            if (!_forceClose && !ClosedByButton)
             {
-                await DiscardChangesAsync();
+                var vm = ViewModel;
+                if (vm != null && vm.IsClosed)
+                {
+                    // Being closed from the vm
+                    return;
+                }
+
+                // CTL-735 always cancel, we will close later once we handled our async result
+                args.Cancel = true;
+
+                if (await DiscardChangesAsync())
+                {
+                    // Now we can close for sure
+                    _forceClose = true;
+
+                    // Dispatcher to make sure we are not inside the same loop
+#pragma warning disable 4014
+                    Dispatcher.BeginInvoke(() => SetDialogResultAndMakeSureWindowGetsClosed(false));
+#pragma warning restore 4014
+                }
             }
         }
 
@@ -1011,7 +1029,8 @@ namespace Catel.Windows
         /// <returns>True if successful, otherwise false.</returns>
         protected virtual bool ValidateData()
         {
-            return _logic.ValidateViewModel();
+            var result = _logic.ValidateViewModel();
+            return result;
         }
 
         /// <summary>
@@ -1019,9 +1038,10 @@ namespace Catel.Windows
         /// </summary>
         /// <returns>True if successful, otherwise false.</returns>
         [ObsoleteEx(ReplacementTypeOrMember = "ApplyChangesAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected virtual Task<bool> ApplyChanges()
+        protected virtual async Task<bool> ApplyChanges()
         {
-            return ApplyChangesAsync();
+            var result = await ApplyChangesAsync();
+            return result;
         }
 
         /// <summary>
@@ -1030,16 +1050,18 @@ namespace Catel.Windows
         /// <returns>True if successful, otherwise false.</returns>
         protected async virtual Task<bool> ApplyChangesAsync()
         {
-            return await _logic.SaveViewModelAsync();
+            var result = await _logic.SaveViewModelAsync();
+            return result;
         }
 
         /// <summary>
         /// Discards all changes made by this window.
         /// </summary>
         [ObsoleteEx(ReplacementTypeOrMember = "DiscardChangesAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected virtual Task<bool> DiscardChanges()
+        protected virtual async Task<bool> DiscardChanges()
         {
-            return DiscardChangesAsync();
+            var result = await DiscardChangesAsync();
+            return result;
         }
 
         /// <summary>
@@ -1047,7 +1069,18 @@ namespace Catel.Windows
         /// </summary>
         protected async virtual Task<bool> DiscardChangesAsync()
         {
-            return await _logic.CancelViewModelAsync();
+            // CTL-735 We might be handling the ViewModel.Closed event
+            var vm = _logic.ViewModel;
+            if (vm != null)
+            {
+                if (vm.IsClosed)
+                {
+                    return true;
+                }
+            }
+
+            var result = await _logic.CancelViewModelAsync();
+            return result;
         }
 
         /// <summary>

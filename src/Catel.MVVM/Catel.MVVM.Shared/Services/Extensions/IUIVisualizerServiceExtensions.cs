@@ -134,14 +134,14 @@ namespace Catel.Services
         /// <param name="completedProc">The completed proc.</param>
         /// <returns><c>true</c> if shown successfully, <c>false</c> otherwise.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="uiVisualizerService" /> is <c>null</c>.</exception>
-        public static async Task<bool?> ShowAsync<TViewModel>(this IUIVisualizerService uiVisualizerService, object model = null, EventHandler<UICompletedEventArgs> completedProc = null)
+        public static Task<bool?> ShowAsync<TViewModel>(this IUIVisualizerService uiVisualizerService, object model = null, EventHandler<UICompletedEventArgs> completedProc = null)
             where TViewModel : IViewModel
         {
             Argument.IsNotNull("uiVisualizerService", uiVisualizerService);
 
             var viewModelFactory = GetViewModelFactory(uiVisualizerService);
             var vm = viewModelFactory.CreateViewModel(typeof(TViewModel), model);
-            return await uiVisualizerService.ShowAsync(vm, completedProc);
+            return uiVisualizerService.ShowAsync(vm, completedProc);
         }
 
         /// <summary>
@@ -172,14 +172,14 @@ namespace Catel.Services
         /// <param name="completedProc">The completed proc.</param>
         /// <returns>The dialog result.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="uiVisualizerService" /> is <c>null</c>.</exception>
-        public static async Task<bool?> ShowDialogAsync<TViewModel>(this IUIVisualizerService uiVisualizerService, object model = null, EventHandler<UICompletedEventArgs> completedProc = null)
+        public static Task<bool?> ShowDialogAsync<TViewModel>(this IUIVisualizerService uiVisualizerService, object model = null, EventHandler<UICompletedEventArgs> completedProc = null)
             where TViewModel : IViewModel
         {
             Argument.IsNotNull("uiVisualizerService", uiVisualizerService);
 
             var viewModelFactory = GetViewModelFactory(uiVisualizerService);
             var vm = viewModelFactory.CreateViewModel(typeof(TViewModel), model);
-            return await uiVisualizerService.ShowDialogAsync(vm, completedProc);
+            return uiVisualizerService.ShowDialogAsync(vm, completedProc);
         }
 
         private static IViewModelFactory GetViewModelFactory(IUIVisualizerService uiVisualizerService)

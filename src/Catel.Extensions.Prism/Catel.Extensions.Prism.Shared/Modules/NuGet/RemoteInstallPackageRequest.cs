@@ -166,8 +166,7 @@ namespace Catel.Modules
 
             if (packageToInstall == null)
             {
-                Log.ErrorAndThrowException<NotSupportedException>("Package '{0}' is not found in any of the sources, cannot install package", packageId);
-                return packagesToRetrieve;
+                throw Log.ErrorAndCreateException<NotSupportedException>("Package '{0}' is not found in any of the sources, cannot install package", packageId);
             }
 
             if (IgnoreDependencies)

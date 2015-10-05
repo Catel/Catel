@@ -10,6 +10,7 @@ namespace Catel.Collections
     using System.Collections;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Linq;
     using Logging;
 
     /// <summary>
@@ -306,6 +307,29 @@ namespace Catel.Collections
             return new ReadOnlyCollection<T>(collection);
         }
 #endif
+
+        /// <summary>
+        /// Converts the collection to an array.
+        /// </summary>
+        /// <param name="collection">The collection.</param>
+        /// <param name="elementType">Type of the element.</param>
+        /// <returns>Array.</returns>
+        public static Array ToArray(this IEnumerable collection, Type elementType)
+        {
+            Argument.IsNotNull("elementType", elementType);
+
+            var internalList = new List<object>(collection != null ? collection.Cast<object>() : new object[] { });
+            var array = Array.CreateInstance(elementType, internalList.Count);
+
+            var index = 0;
+
+            foreach (var item in internalList)
+            {
+                array.SetValue(item, index++);
+            }
+
+            return array;
+        }
 
         /// <summary>
         /// Synchronizes the collection by adding / removing items that are in the new set.

@@ -16,6 +16,69 @@ License:         http://www.catelproject.com/about/license
 **********************************************************
 
 ==================
+Version 4.3.0
+==================
+
+For an update guide, visit https://catelproject.atlassian.net/wiki/display/CTL/Update+guides
+
+Release date:
+=============
+2015/10/05
+
+Added/fixed (BREAKING CHANGES):
+===============================
+No breaking changes, but made a lot of preparations for the "async big bang" that will happen in Catel 5.0. We are
+currently trying to index all members that might need async members in the future. Most of these members are now
+marked as obsolete and have an async handler which must be used in the future.
+
+Platform support changes:
+=========================
+(*) CTL-724 Created separate projects for Universal App Platform projects (UAP 10.0)
+(*) CTL-741 Support .NET 4.6 for Prism 5
+
+Classes marked as obsolete:
+===========================
+Our mission is to make Catel easier to maintain in the future. One way to achieve this is to remove unused
+features and components. We are actively removing features by marking them obsolete. If nobody complains,
+we will remove the features in the next major release.
+
+(*) CTL-671 Marked Catel.Extensions.CSLA as obsolete
+(*) CTL-672 Marked Catel.Extensions.Wcf.Server as obsolete
+
+Added/fixed:
+============
+(+) CTL-718 Add LogMessage event to RollingInMemoryService
+(+) CTL-727 Created ExceptionFactory and convert all throw new exception calls
+(+) CTL-732 Add DeviceHelper so it's easy to determine on what kind of device the code is being executed
+(+) CTL-730 Support array deserialization in all serializers (Xml, Binary, Json)
+(*) CTL-713 Improved designer support by automatically initializing all classes that derive from DesignTimeInitializer. 
+    This way it's possible to have customized registrations at design time (for example switching languages at design 
+    time, even when the code is using the ILanguageService and custom resx files)
+(*) CTL-719 Don't store extra undo action for properties when validation errors are cleared in memento
+(*) CTL-723 Add LogExtensions.ErrorAndCreateException to replace ErrorAndThrowException which returns an exception. The
+    code must be changed to 'throw Log.ErrorAndCreateException<MyException>("my message");'
+(*) CTL-724 Created separate projects for Universal App Platform projects (UAP 10.0)
+(*) CTL-725 Update NuGet reference to 2.8.6
+(*) CTL-726 Fallback to non-weak events when weak event subscription fails (required for UAP)
+(*) CTL-729 Support .NET native in the WeakEventListener
+(*) CTL-735 Support async canceling on closing event of DataWindow
+(*) CTL-741 Support .NET 4.6 for Prism 5
+(x) CTL-714 Serialize Model with only one property as XML attribute does not work
+(x) CTL-720 NullReferenceException in ChangeNotificationWrapper
+(x) CTL-721 AppDomainExtensions.PreloadAssemblies() throws exception on loading native dll
+(x) CTL-731 ViewModelBase.CancelingAsync gets called twice on IViewModelExtensions.CancelAndCloseViewModelAsync
+
+Roadmap:
+========
+See http://www.catelproject.com/support/issue-tracker
+
+Known issues:
+=============
+See http://www.catelproject.com/support/issue-tracker
+
+**********************************************************
+
+==================
 Version 4.2.0
 ==================
 

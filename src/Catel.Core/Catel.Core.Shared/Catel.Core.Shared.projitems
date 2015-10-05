@@ -127,6 +127,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\ValidationSummary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ValidatorBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ValidatorProviderBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Devices\DeviceType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Devices\Helpers\DeviceHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Disposable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DisposableToken.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DynamicEventListener.cs" />
@@ -155,6 +157,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ProcessExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.slug.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Factories\ExceptionFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Filtering\CompositeFilter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Filtering\CompositePredicate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Filtering\Interfaces\ICompositeFilter.cs" />
@@ -313,6 +316,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\EventArgs\MemberSerializationEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\EventArgs\SerializationEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Extensions\ISerializationContextExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Extensions\ISerializerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Helpers\SerializationContextHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\IObjectAdapter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\IPropertySerializable.cs" />

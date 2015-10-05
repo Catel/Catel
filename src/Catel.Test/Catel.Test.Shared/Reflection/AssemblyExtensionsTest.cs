@@ -33,7 +33,7 @@ namespace Catel.Test.Reflection
         [TestCase]
         public void VersionAutomatic()
         {
-            string expected = "4.2.0.0";
+            string expected = "4.3.0.0";
 
             var result = Assembly.Version();
 
@@ -43,7 +43,7 @@ namespace Catel.Test.Reflection
         [TestCase]
         public void VersionWithSeparatorAutomatic()
         {
-            string expected = "4.2";
+            string expected = "4.3";
 
             var result = Assembly.Version(1);
 
@@ -53,7 +53,7 @@ namespace Catel.Test.Reflection
         [TestCase]
         public void VersionWithSeparatorAutomaticWhereSeparatorCountIsTooHigh()
         {
-            string expected = "4.2.0.0";
+            string expected = "4.3.0.0";
 
             var result = Assembly.Version(8);
 
@@ -63,7 +63,7 @@ namespace Catel.Test.Reflection
         //[TestCase]
         //public void InformationalVersionAutomatic()
         //{
-        //    var expected = "4.2, manually built in Visual Studio";
+        //    var expected = "4.3, manually built in Visual Studio";
 
         //    var result = Assembly.InformationalVersion();
 

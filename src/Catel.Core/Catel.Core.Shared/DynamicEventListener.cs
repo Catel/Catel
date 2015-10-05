@@ -156,10 +156,7 @@ namespace Catel
             _eventInfo = _eventInstanceType.GetEventEx(EventName, BindingFlagsHelper.GetFinalBindingFlags(true, false));
             if (_eventInfo == null)
             {
-                string error = string.Format("Cannot find the '{0}' event, implement the '{0}' event on '{1}'", EventName, _eventInstanceType.Name);
-                Log.Error(error);
-
-                throw new NotSupportedException(error);
+                throw Log.ErrorAndCreateException<NotSupportedException>("Cannot find the '{0}' event, implement the '{0}' event on '{1}'", EventName, _eventInstanceType.Name);
             }
 
             _handler = CreateDynamicHandlerDelegate(_eventInfo.EventHandlerType);
@@ -219,13 +216,13 @@ namespace Catel
         {
             if (!delegateType.HasBaseTypeEx(typeof(MulticastDelegate)))
             {
-                throw new InvalidOperationException("Not a delegate");
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Not a delegate");
             }
 
             var invoke = delegateType.GetMethodEx("Invoke");
             if (invoke == null)
             {
-                throw new InvalidOperationException("Not a delegate");
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Not a delegate");
             }
 
             var parameters = invoke.GetParameters();
@@ -252,10 +249,7 @@ namespace Catel
                 var handlerMethodInfo = _handlerInstance.GetType().GetMethodEx(HandlerName, BindingFlagsHelper.GetFinalBindingFlags(true, false));
                 if (handlerMethodInfo == null)
                 {
-                    string error = string.Format("Cannot find the '{0}' method, implement the '{0}' method on '{1}'", EventName, _handlerInstance.GetType().Name);
-                    Log.Error(error);
-
-                    throw new NotSupportedException(error);
+                    throw Log.ErrorAndCreateException<NotSupportedException>("Cannot find the '{0}' method, implement the '{0}' method on '{1}'", EventName, _handlerInstance.GetType().Name);
                 }
 
                 handlerMethodInfo.Invoke(_handlerInstance, null);

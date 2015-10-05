@@ -133,9 +133,7 @@ namespace Catel.MVVM.Providers
             var associatedObjectType = AssociatedObject.GetType();
             if (!associatedObjectType.ImplementsInterfaceEx<IView>())
             {
-                string error = string.Format("Type '{0}' does not implement IView, make sure to implement the interface correctly", associatedObjectType);
-                Log.Error(error);
-                throw new InvalidOperationException(error);
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Type '{0}' does not implement IView, make sure to implement the interface correctly", associatedObjectType);
             }
 
             return new UserControlLogic((IView)AssociatedObject, ViewModelType);

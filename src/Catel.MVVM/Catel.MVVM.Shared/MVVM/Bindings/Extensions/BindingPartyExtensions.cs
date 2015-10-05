@@ -27,7 +27,7 @@ namespace Catel.MVVM
             AddEventMethodInfo = typeof(BindingParty).GetMethodEx("AddEvent");
             if (AddEventMethodInfo == null)
             {
-                Log.ErrorAndThrowException<NotSupportedException>("Cannot find BindingParty.AddEvent method, BindingPartyExtensions will not be supported");
+                throw Log.ErrorAndCreateException<NotSupportedException>("Cannot find BindingParty.AddEvent method, BindingPartyExtensions will not be supported");
             }
         }
 
@@ -46,14 +46,14 @@ namespace Catel.MVVM
             var instance = bindingParty.Instance;
             if (instance == null)
             {
-                Log.ErrorAndThrowException<InvalidOperationException>("The BindingParty '{0}' is no longer alive, cannot add event '{1}'", bindingParty, eventName);
+                throw Log.ErrorAndCreateException<InvalidOperationException>("The BindingParty '{0}' is no longer alive, cannot add event '{1}'", bindingParty, eventName);
             }
 
             var instanceType = instance.GetType();
             var eventInfo = instanceType.GetEventEx(eventName);
             if (eventInfo == null)
             {
-                Log.ErrorAndThrowException<InvalidOperationException>("Event '{0}.{1}' does not exist", instanceType.Name, eventName);
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Event '{0}.{1}' does not exist", instanceType.Name, eventName);
             }
 
             var eventHandlerType = eventInfo.EventHandlerType;

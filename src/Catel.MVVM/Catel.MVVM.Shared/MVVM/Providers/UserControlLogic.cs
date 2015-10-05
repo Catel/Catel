@@ -115,8 +115,19 @@ namespace Catel.MVVM.Providers
             targetView.SubscribeToPropertyChanged("Content", OnTargetControlContentChanged);
 #endif
 
-            this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewLoading", OnViewLoadedManagerLoadingForParentView);
-            this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewUnloading", OnViewLoadedManagerUnloadingForParentView);
+            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewLoading", OnViewLoadedManagerLoadingForParentView, false) == null)
+            {
+                Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewLoading', going to subscribe without weak events");
+
+                ViewLoadManager.ViewLoading += OnViewLoadedManagerLoadingForParentView;
+            }
+
+            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewUnloading", OnViewLoadedManagerUnloadingForParentView, false) == null)
+            {
+                Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewUnloading', going to subscribe without weak events");
+
+                ViewLoadManager.ViewUnloading += OnViewLoadedManagerUnloadingForParentView;
+            }
         }
         #endregion
 

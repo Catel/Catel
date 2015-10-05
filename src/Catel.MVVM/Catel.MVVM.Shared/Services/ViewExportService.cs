@@ -80,11 +80,7 @@ namespace Catel.Services
             var view = _viewManager.GetViewsOfViewModel(viewModel).OfType<UIElement>().FirstOrDefault();
             if (view == null)
             {
-                string message = string.Format(CultureInfo.InvariantCulture, "There no an active view for this view model of type '{0}'", viewModel.GetType().FullName);
-
-                Log.Error(message);
-
-                throw new InvalidOperationException(message);
+                throw Log.ErrorAndCreateException < InvalidOperationException >("There no an active view for this view model of type '{0}'", viewModel.GetType().FullName);
             }
 
             var bitmap = CreateImageFromUIElement(view, dpiX, dpiY);

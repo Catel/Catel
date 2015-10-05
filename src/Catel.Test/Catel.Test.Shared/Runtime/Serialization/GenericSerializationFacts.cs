@@ -613,6 +613,33 @@ namespace Catel.Test.Runtime.Serialization
             }
 
             [TestCase]
+            public void CanSerializeArray()
+            {
+                var countrylist = new[]
+                {
+                    new Country {IsoCode = "AF", Description = "Afghanistan"},
+                    new Country {IsoCode = "AG", Description = "Agypt"},
+                };
+
+                TestSerializationOnAllSerializers((serializer, description) =>
+                {
+                    var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(countrylist, serializer);
+
+                    Assert.AreEqual(countrylist.GetType(), deserializedObject.GetType(), description);
+                    Assert.AreEqual(countrylist.Length, deserializedObject.Length, description);
+
+                    for (var i = 0; i < deserializedObject.Length; i++)
+                    {
+                        var expectedItem = countrylist[i];
+                        var actualItem = deserializedObject[i];
+
+                        Assert.AreEqual(expectedItem.IsoCode, actualItem.IsoCode, description);
+                        Assert.AreEqual(expectedItem.Description, actualItem.Description, description);
+                    }
+                });
+            }
+
+            [TestCase]
             public void CanSerializeDictionary()
             {
                 var dictionary = new Dictionary<string, int>();

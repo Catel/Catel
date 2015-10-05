@@ -39,7 +39,8 @@ namespace Catel.Data
             var property = GetPropertyData(name);
             if ((value == null) && !property.Type.IsNullableType())
             {
-                throw new PropertyNotNullableException(name, GetType());
+                throw Log.ErrorAndCreateException(msg => new PropertyNotNullableException(name, GetType()),
+                    "Property '{0}' on type '{1}' is not nullable, cannot set value to null", name, GetType().FullName);
             }
 
             SetValue(property, value, notifyOnChange, validateAttributes);
@@ -94,7 +95,8 @@ namespace Catel.Data
                 {
                     if (!value.GetType().IsCOMObjectEx())
                     {
-                        throw new InvalidPropertyValueException(property.Name, property.Type, value.GetType());
+                        throw Log.ErrorAndCreateException(msg => new InvalidPropertyValueException(property.Name, property.Type, value.GetType()), 
+                            "Cannot set value '{0}' to property '{1}' of type '{2}', the value is invalid", value, property.Name, GetType().FullName);
                     }
                 }
             }

@@ -513,10 +513,7 @@ namespace Catel.Services
             var showMethodInfo = window.GetType().GetMethodEx("Show");
             if (showMethodInfo == null)
             {
-                var error = string.Format("Method 'Show' not found on '{0}', cannot show the window", window.GetType().Name);
-                Log.Error(error);
-
-                throw new NotSupportedException(error);
+                throw Log.ErrorAndCreateException<NotSupportedException>("Method 'Show' not found on '{0}', cannot show the window", window.GetType().Name);
             }
 
             window.Dispatcher.InvokeIfRequired(() => showMethodInfo.Invoke(window, null));

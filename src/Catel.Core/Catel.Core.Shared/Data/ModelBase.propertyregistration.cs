@@ -41,7 +41,7 @@ namespace Catel.Data
 #if !PCL && !NETFX_CORE
             if (memberExpression.Member.MemberType != MemberTypes.Property)
             {
-                throw new ArgumentException("The member type of the body of the property expression should be a property");
+                throw Log.ErrorAndCreateException<ArgumentException>("The member type of the body of the property expression should be a property");
             }
 #endif
 
@@ -82,7 +82,7 @@ namespace Catel.Data
 #if !PCL && !NETFX_CORE
             if (memberExpression.Member.MemberType != MemberTypes.Property)
             {
-                throw new ArgumentException("The member type of the body of the property expression should be a property");
+                throw Log.ErrorAndCreateException<ArgumentException>("The member type of the body of the property expression should be a property");
             }
 #endif
 
@@ -335,7 +335,8 @@ namespace Catel.Data
             var objectType = GetType();
             if ((defaultValue == null) && !type.IsNullableType())
             {
-                throw new PropertyNotNullableException(name, objectType);
+                throw Log.ErrorAndCreateException(msg => new PropertyNotNullableException(name, objectType),
+                    "Property '{0}' is not nullable, please provide a valid (not null) default value", name);
             }
 
             lock (_initializedTypesLock)

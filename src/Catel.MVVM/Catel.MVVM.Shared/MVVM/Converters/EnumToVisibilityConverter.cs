@@ -82,7 +82,8 @@ namespace Catel.MVVM.Converters
             }
 
             var genericEnumType = typeof(Enum<>).MakeGenericType(enumType);
-            var parseMethod = genericEnumType.GetMethodEx("Parse", new[] { typeof(string), typeof(bool) }, BindingFlags.Public | BindingFlags.Static);
+            var bindingFlags = BindingFlags.Public | BindingFlags.Static;
+            var parseMethod = genericEnumType.GetMethodEx("Parse", new[] { typeof(string), typeof(bool) }, bindingFlags);
 
             var allowedEnumValues = stringParameter.Split(SplitChars, StringSplitOptions.RemoveEmptyEntries);
             foreach (var allowedEnumValueAsString in allowedEnumValues)

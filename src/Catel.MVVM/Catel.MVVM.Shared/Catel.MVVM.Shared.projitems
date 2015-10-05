@@ -9,11 +9,12 @@
     <Import_RootNamespace>Catel</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Attributes\DesignTimeCodeAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CatelEnvironment.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\FastObservableCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\DispatcherObservableObject.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DesignTimeInitializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Designer\Attributes\DesignTimeCodeAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Designer\DesignTimeInitializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Designer\Helpers\DesignTimeHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\INotifyPropertyChangedExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ThemeHelper.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Extensions\ObjectExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Helpers\ViewHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Helpers\ViewModelServiceHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\Extensions\IViewModelLocatorExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\Interfaces\ILocator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\Interfaces\IUrlLocator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\Interfaces\IViewLocator.cs" />

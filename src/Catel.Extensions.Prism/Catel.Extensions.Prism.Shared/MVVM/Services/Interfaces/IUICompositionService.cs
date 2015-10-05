@@ -49,5 +49,14 @@ namespace Catel.Services
         /// </summary>
         /// <param name="viewModel"></param>
         void Deactivate(IViewModel viewModel);
+
+        /// <summary>
+        /// Tries to activate an existing view model in the specified region name. If there is no view model alive, it will create one
+        /// and navigate to that view model.
+        /// </summary>
+        /// <param name="viewModelType">The view model type.</param>
+        /// <param name="regionName">Name of the region.</param>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="viewModelType" /> is <c>null</c>.</exception>
+        void Activate(Type viewModelType, string regionName);
     }
 }

@@ -304,7 +304,8 @@ namespace Catel.Windows.Interactivity
         {
             DependencyProperty property = null;
 
-            var fieldInfo = AssociatedObject.GetType().GetFieldEx(dependencyPropertyName, BindingFlagsHelper.GetFinalBindingFlags(true, true));
+            var bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(true, true);
+            var fieldInfo = AssociatedObject.GetType().GetFieldEx(dependencyPropertyName, bindingFlags);
             if (fieldInfo != null)
             {
                 property = fieldInfo.GetValue(null) as DependencyProperty;

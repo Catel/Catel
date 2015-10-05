@@ -17,6 +17,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ILogExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\IRegionManagerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\HostHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\PrismHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IModuleTracker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRegionInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IViewInfo.cs" />
@@ -42,10 +43,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Modules\NuGet\RemoteInstallPackageRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\SafeDirectoryModuleCatalog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Services\Extensions\ISplashScreenServiceExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Services\Extensions\IUICompositionServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Services\Extensions\IUIVisualizerServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Services\Interfaces\IUICompositionService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Services\UICompositionService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ServiceLocatorAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StandaloneBootstrapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Tasks\BootstrapperTaskFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Tasks\Interfaces\IBootstrapperTaskFactory.cs" />
   </ItemGroup>

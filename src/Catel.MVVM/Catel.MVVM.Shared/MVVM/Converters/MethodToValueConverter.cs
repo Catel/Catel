@@ -7,6 +7,7 @@
 namespace Catel.MVVM.Converters
 {
     using System;
+    using Logging;
     using Reflection;
 
     /// <summary>
@@ -23,6 +24,8 @@ namespace Catel.MVVM.Converters
 #endif
     public class MethodToValueConverter : ValueConverterBase
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Modifies the source data before passing it to the target for display in the UI.
         /// </summary>
@@ -38,7 +41,8 @@ namespace Catel.MVVM.Converters
                 return value;
             }
 
-            var methodInfo = value.GetType().GetMethodEx(methodName, new Type[0], BindingFlagsHelper.GetFinalBindingFlags(true, true));
+            var bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(true, true);
+            var methodInfo = value.GetType().GetMethodEx(methodName, new Type[0], bindingFlags);
             if (methodInfo == null)
             {
                 return value;
@@ -60,7 +64,7 @@ namespace Catel.MVVM.Converters
         /// </remarks>
         protected override object ConvertBack(object value, Type targetType, object parameter)
         {
-            throw new NotSupportedException("MethodToValueConverter can only be used for one way conversion");
+            throw Log.ErrorAndCreateException<NotSupportedException>("MethodToValueConverter can only be used for one way conversion");
         }
     }
 }

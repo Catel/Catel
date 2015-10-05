@@ -12,6 +12,7 @@ namespace Catel.MVVM
     using System.Linq;
     using System.Threading.Tasks;
     using Logging;
+    using Reflection;
     using Threading;
 
     /// <summary>
@@ -113,7 +114,8 @@ namespace Catel.MVVM
 
             if (viewModel.GetType() != ViewModelType)
             {
-                throw new WrongViewModelTypeException(viewModel.GetType(), ViewModelType);
+                throw Log.ErrorAndCreateException(msg => new WrongViewModelTypeException(viewModel.GetType(), ViewModelType),
+                    "Cannot use view model type '{0}', expected type '{1}'", viewModel.GetType().GetSafeFullName(), ViewModelType.GetSafeFullName());
             }
 
             lock (_lock)

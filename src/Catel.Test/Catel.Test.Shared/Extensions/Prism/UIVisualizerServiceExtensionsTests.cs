@@ -435,7 +435,7 @@ namespace Catel.Test.Extensions.Prism
             public void ThrowsArgumentNullExceptionIfViewModelIsNull()
             {
                 var uiCompositionService = _serviceLocator.ResolveType<IUICompositionService>();
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => uiCompositionService.Activate(null, MainRegionName));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => uiCompositionService.Activate((IViewModel) null, MainRegionName));
             }
 
             /// <summary>

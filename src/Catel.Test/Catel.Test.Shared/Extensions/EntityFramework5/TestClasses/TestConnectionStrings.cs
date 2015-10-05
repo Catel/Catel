@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
+#if NET && !SKIP_EF
 
 namespace Catel.Test.Extensions.EntityFramework5
 {

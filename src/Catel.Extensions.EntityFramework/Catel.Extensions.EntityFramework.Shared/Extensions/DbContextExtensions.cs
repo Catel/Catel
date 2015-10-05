@@ -7,6 +7,7 @@
 namespace Catel.Data
 {
     using System;
+    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     using System.Linq;
@@ -22,12 +23,14 @@ namespace Catel.Data
     using EntityKey = System.Data.EntityKey;
     using EntityKeyMember = System.Data.EntityKeyMember;
     using EntitySet = System.Data.Metadata.Edm.EntitySet;
+    using EntityState = System.Data.EntityState;
 #else
     using ObjectContext = System.Data.Entity.Core.Objects.ObjectContext;
     using DataSpace = System.Data.Entity.Core.Metadata.Edm.DataSpace;
     using EntityKey = System.Data.Entity.Core.EntityKey;
     using EntityKeyMember = System.Data.Entity.Core.EntityKeyMember;
     using EntitySet = System.Data.Entity.Core.Metadata.Edm.EntitySet;
+    using EntityState = System.Data.Entity.EntityState;
 #endif
 
     /// <summary>
@@ -35,9 +38,126 @@ namespace Catel.Data
     /// </summary>
     public static partial class DbContextExtensions
     {
+        private static readonly ICacheStorage<Tuple<Type, Type>, List<string>> _entityKeyCache = new CacheStorage<Tuple<Type, Type>, List<string>>();
         private static readonly ICacheStorage<Tuple<Type, Type>, string> _entityKeyPropertyNameCache = new CacheStorage<Tuple<Type, Type>, string>();
         private static readonly ICacheStorage<Tuple<Type, Type>, string> _entitySetNameCache = new CacheStorage<Tuple<Type, Type>, string>();
         private static readonly ICacheStorage<Type, string> _tableNameCache = new CacheStorage<Type, string>();
+
+        /// <summary>
+        /// Determines whether the specified database context contains the specified entity. It does this by checking all
+        /// the entries inside the change tracker of the database context.
+        /// </summary>
+        /// <param name="dbContext">The database context.</param>
+        /// <param name="entity">The entity.</param>
+        /// <returns><c>true</c> if the specified database context contains entity; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="dbContext" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="entity" /> is <c>null</c>.</exception>
+        public static DbEntityEntry GetEntityEntry(this DbContext dbContext, object entity)
+        {
+            Argument.IsNotNull("dbContext", dbContext);
+            Argument.IsNotNull("entity", entity);
+
+            var entries = dbContext.GetChangeTrackerEntries();
+
+            var entityEntry = entries.FirstOrDefault(x => ReferenceEquals(x, entity));
+            return entityEntry;
+        }
+
+        /// <summary>
+        /// Determines whether the specified database context contains the specified entity. It does this by checking all
+        /// the entries inside the change tracker of the database context.
+        /// </summary>
+        /// <param name="dbContext">The database context.</param>
+        /// <param name="entity">The entity.</param>
+        /// <param name="entityStates">The entity states.</param>
+        /// <returns><c>true</c> if the specified database context contains entity; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="dbContext" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="entity" /> is <c>null</c>.</exception>
+        public static DbEntityEntry GetEntityEntry(this DbContext dbContext, object entity, EntityState entityStates)
+        {
+            Argument.IsNotNull("dbContext", dbContext);
+            Argument.IsNotNull("entity", entity);
+
+            var entries = dbContext.GetChangeTrackerEntries(entityStates);
+
+            var entityEntry = entries.FirstOrDefault(x => ReferenceEquals(x, entity));
+            return entityEntry;
+        }
+
+        /// <summary>
+        /// Determines whether the specified database context contains the specified entity. It does this by checking all
+        /// the entries inside the change tracker of the database context.
+        /// </summary>
+        /// <param name="dbContext">The database context.</param>
+        /// <param name="entity">The entity.</param>
+        /// <returns><c>true</c> if the specified database context contains entity; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="dbContext" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="entity" /> is <c>null</c>.</exception>
+        public static bool ContainsEntityEntry(this DbContext dbContext, object entity)
+        {
+            Argument.IsNotNull("dbContext", dbContext);
+            Argument.IsNotNull("entity", entity);
+
+            return GetEntityEntry(dbContext, entity) != null;
+        }
+
+        /// <summary>
+        /// Determines whether the specified database context contains the specified entity. It does this by checking all
+        /// the entries inside the change tracker of the database context.
+        /// </summary>
+        /// <param name="dbContext">The database context.</param>
+        /// <param name="entity">The entity.</param>
+        /// <param name="entityStates">The entity states.</param>
+        /// <returns><c>true</c> if the specified database context contains entity; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="dbContext" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="entity" /> is <c>null</c>.</exception>
+        public static bool ContainsEntityEntry(this DbContext dbContext, object entity, EntityState entityStates)
+        {
+            Argument.IsNotNull("dbContext", dbContext);
+            Argument.IsNotNull("entity", entity);
+
+            return GetEntityEntry(dbContext, entity, entityStates) != null;
+        }
+
+        /// <summary>
+        /// Gets the change tracker entries of the database context.
+        /// </summary>
+        /// <param name="dbContext">The database context.</param>
+        /// <returns>List&lt;DbEntityEntry&gt;.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="dbContext" /> is <c>null</c>.</exception>
+        public static List<DbEntityEntry> GetChangeTrackerEntries(this DbContext dbContext)
+        {
+            var entries = (from entry in dbContext.ChangeTracker.Entries()
+                           select entry).ToList();
+
+            return entries;
+        }
+
+        /// <summary>
+        /// Gets the change tracker entries of the database context.
+        /// </summary>
+        /// <param name="dbContext">The database context.</param>
+        /// <param name="entityStates">The entity states.</param>
+        /// <returns>List&lt;DbEntityEntry&gt;.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="dbContext" /> is <c>null</c>.</exception>
+        public static List<DbEntityEntry> GetChangeTrackerEntries(this DbContext dbContext, EntityState entityStates)
+        {
+            var states = new List<EntityState>();
+
+            foreach (var value in Enum<EntityState>.GetValues())
+            {
+                if (Enum<EntityState>.Flags.IsFlagSet(entityStates, value))
+                {
+                    states.Add(value);
+                }
+            }
+
+            var entries = (from entry in dbContext.ChangeTracker.Entries()
+                           where states.Contains(entry.State)
+                           select entry).ToList();
+
+            return entries;
+        }
 
         /// <summary>
         /// Gets the object context from the specified <see cref="DbContext"/>.
@@ -50,6 +170,46 @@ namespace Catel.Data
             Argument.IsNotNull("dbContext", dbContext);
 
             return ((IObjectContextAdapter)dbContext).ObjectContext;
+        }
+
+        /// <summary>
+        /// Gets the entity key of the specified entity type in the <see cref="DbContext" />.
+        /// </summary>
+        /// <param name="dbContext">The db context.</param>
+        /// <param name="dbEntityEntry">Type of the entity.</param>
+        /// <returns>The entity key.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="dbContext"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="dbEntityEntry"/> is <c>null</c>.</exception>
+        public static EntityKey GetEntityKey(this DbContext dbContext, DbEntityEntry dbEntityEntry)
+        {
+            Argument.IsNotNull("dbContext", dbContext);
+            Argument.IsNotNull("dbEntityEntry", dbEntityEntry);
+
+            var entityType = dbEntityEntry.GetEntityType();
+
+            var keySet = _entityKeyCache.GetFromCacheOrFetch(new Tuple<Type, Type>(dbContext.GetType(), entityType), () =>
+            {
+                var entitySet = dbContext.GetEntitySet(entityType);
+
+                return (from keyMember in entitySet.ElementType.KeyMembers
+                        select keyMember.Name).ToList();
+            });
+
+            var entitySetName = dbContext.GetFullEntitySetName(entityType);
+            var currentValues = dbEntityEntry.CurrentValues;
+
+            var keys = new List<EntityKeyMember>();
+            foreach (var keySetItem in keySet)
+            {
+                keys.Add(new EntityKeyMember
+                {
+                    Key = keySetItem,
+                    Value = currentValues[keySetItem]
+                });
+            }
+
+            var entityKey = new EntityKey(entitySetName, keys.ToArray());
+            return entityKey;
         }
 
         /// <summary>

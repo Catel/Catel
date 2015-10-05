@@ -7,6 +7,7 @@
 
 namespace Catel.Services
 {
+    using System;
     using System.Collections.Generic;
     using Logging;
 
@@ -21,11 +22,33 @@ namespace Catel.Services
         /// Initializes a new instance of the <see cref="RollingInMemoryLogService" /> class.
         /// </summary>
         public RollingInMemoryLogService()
+            : this(null)
         {
-            _rollingInMemoryLogListener = new RollingInMemoryLogListener();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RollingInMemoryLogService"/> class.
+        /// </summary>
+        /// <param name="logListener">The log listener. If <c>null</c>, this service will create its own log listener.</param>
+        public RollingInMemoryLogService(RollingInMemoryLogListener logListener)
+        {
+            if (logListener == null)
+            {
+                logListener = new RollingInMemoryLogListener();
+                LogManager.AddListener(logListener);
+            }
+
+            _rollingInMemoryLogListener = logListener;
+            _rollingInMemoryLogListener.LogMessage += OnLogListenerLogMessage;
         }
 
         #region Properties
+        /// <summary>
+        /// Gets the log listener.
+        /// </summary>
+        /// <value>The log listener.</value>
+        public RollingInMemoryLogListener LogListener { get { return _rollingInMemoryLogListener; } }
+
         /// <summary>
         /// Gets or sets the maximum number of log entries to keep.
         /// <para />
@@ -63,6 +86,13 @@ namespace Catel.Services
         }
         #endregion
 
+        #region Events
+        /// <summary>
+        /// Occurs when a log message is written.
+        /// </summary>
+        public event EventHandler<LogMessageEventArgs> LogMessage;
+        #endregion
+
         #region Methods
         /// <summary>
         /// Gets the log entries.
@@ -89,6 +119,11 @@ namespace Catel.Services
         public IEnumerable<LogEntry> GetErrorLogEntries()
         {
             return _rollingInMemoryLogListener.GetErrorLogEntries();
+        }
+
+        private void OnLogListenerLogMessage(object sender, LogMessageEventArgs e)
+        {
+            LogMessage.SafeInvoke(this, e);
         }
         #endregion
     }

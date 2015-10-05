@@ -7,6 +7,7 @@
 
 namespace Catel.Services
 {
+    using System;
     using System.Collections.Generic;
     using Logging;
 
@@ -39,6 +40,19 @@ namespace Catel.Services
         /// </summary>
         /// <value>The maximum number of log entries.</value>
         int MaximumNumberOfErrorLogEntries { get; set; }
+
+        /// <summary>
+        /// Gets the log listener.
+        /// </summary>
+        /// <value>The log listener.</value>
+        RollingInMemoryLogListener LogListener { get; }
+        #endregion
+
+        #region Events
+        /// <summary>
+        /// Occurs when a log message is written.
+        /// </summary>
+        event EventHandler<LogMessageEventArgs> LogMessage;
         #endregion
 
         #region Methods

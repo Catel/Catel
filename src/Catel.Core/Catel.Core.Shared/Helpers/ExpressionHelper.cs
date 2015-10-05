@@ -66,28 +66,50 @@ namespace Catel
             var memberExpression = body.Expression as MemberExpression;
             if (memberExpression != null)
             {
-                var fieldInfo = memberExpression.Member as FieldInfo;
-                if (fieldInfo != null)
-                {
-                    var ownerConstantExpression = memberExpression.Expression as ConstantExpression;
-                    if (ownerConstantExpression != null)
-                    {
-                        return fieldInfo.GetValue(ownerConstantExpression.Value);
-                    }
-                }
-
-                // Fallback but is a bit slower
-                var lamdaExpression = Expression.Lambda(memberExpression);
-                return lamdaExpression.Compile().DynamicInvoke();
+                var resolvedMemberExpression = ResolveMemberExpression(memberExpression);
+                return resolvedMemberExpression;
             }
 
             return null;
         }
 
+        private static object ResolveMemberExpression(MemberExpression memberExpression)
+        {
+            var fieldInfo = memberExpression.Member as FieldInfo;
+            if (fieldInfo != null)
+            {
+                var ownerConstantExpression = memberExpression.Expression as ConstantExpression;
+                if (ownerConstantExpression != null)
+                {
+                    return fieldInfo.GetValue(ownerConstantExpression.Value);
+                }
+            }
+
+            var propertyInfo = memberExpression.Member as PropertyInfo;
+            if (propertyInfo != null)
+            {
+                var ownerConstantExpression = memberExpression.Expression as ConstantExpression;
+                if (ownerConstantExpression != null)
+                {
+                    return propertyInfo.GetValue(ownerConstantExpression.Value, null);
+                }
+
+                // Note: this is support for .NET native
+                var subMemberExpression = memberExpression.Expression as MemberExpression;
+                if (subMemberExpression != null)
+                {
+                    var resolvedMemberExpression = ResolveMemberExpression(subMemberExpression);
+                    return propertyInfo.GetValue(resolvedMemberExpression, null);
+                }
+            }
+
+            // Fallback but is a bit slower
+            var lamdaExpression = Expression.Lambda(memberExpression);
+            return lamdaExpression.Compile().DynamicInvoke();
+        }
+
         private static ParameterExpression GetParameterExpression(Expression expression)
         {
-
-
             if (expression.NodeType == ExpressionType.Parameter)
             {
                 return (ParameterExpression)expression;
