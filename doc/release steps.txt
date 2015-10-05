@@ -30,7 +30,6 @@ Final release steps:
 
 8)   Share via Twitter
 9)   Share via LinkedIn
-10)  Send newsletter
 
 Post release steps:
 ===================
@@ -38,4 +37,3 @@ Post release steps:
 1)  Update the following version numbers:
      * History.txt
      * SolutionAssemblyInfo.cs
-2)  Update version numbers in the Catel project in Continua CI
