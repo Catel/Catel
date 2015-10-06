@@ -90,7 +90,7 @@ namespace Catel.Services
             DispatchQueue.MainQueue.DispatchSync(() => action());
 #else
             var dispatcher = CurrentDispatcher;
-            DispatcherExtensions.Invoke(dispatcher, action, true);
+            DispatcherExtensions.Invoke(dispatcher, action, onlyInvokeWhenNoAccess);
 #endif
         }
 
