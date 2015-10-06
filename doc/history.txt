@@ -46,7 +46,8 @@ we will remove the features in the next major release.
 
 Added/fixed:
 ============
-xxx
+(x) CTL-744 Fixed missing DataWindowStyle when only referencing Catel.Extensions.Controls theme (it was no longer
+    including the Catel.MVVM theme)
 
 Roadmap:
 ========
