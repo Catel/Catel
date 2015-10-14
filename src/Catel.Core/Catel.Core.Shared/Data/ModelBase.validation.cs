@@ -1243,9 +1243,11 @@ namespace Catel.Data
         /// </returns>
         IEnumerable INotifyDataErrorInfo.GetErrors(string propertyName)
         {
+            var elements = new List<string>();
+
             if (HideValidationResults)
             {
-                yield return null;
+                return elements;
             }
 
             if (string.IsNullOrEmpty(propertyName))
@@ -1254,7 +1256,7 @@ namespace Catel.Data
                 {
                     foreach (var error in _validationContext.GetBusinessRuleErrors())
                     {
-                        yield return error.Message;
+                        elements.Add(error.Message);
                     }
 
                 }
@@ -1265,10 +1267,12 @@ namespace Catel.Data
                 {
                     foreach (var error in _validationContext.GetFieldErrors(propertyName))
                     {
-                        yield return error.Message;
+                        elements.Add(error.Message);
                     }
                 }
             }
+
+            return elements;
         }
         #endregion
 
@@ -1314,9 +1318,11 @@ namespace Catel.Data
         /// <returns><see cref="IEnumerable"/> of warnings.</returns>
         IEnumerable INotifyDataWarningInfo.GetWarnings(string propertyName)
         {
+            var elements = new List<string>();
+
             if (HideValidationResults)
             {
-                yield return null;
+                return elements;
             }
 
             if (string.IsNullOrEmpty(propertyName))
@@ -1325,7 +1331,7 @@ namespace Catel.Data
                 {
                     foreach (var warning in _validationContext.GetBusinessRuleWarnings())
                     {
-                        yield return warning.Message;
+                        elements.Add(warning.Message);
                     }
 
                 }
@@ -1336,10 +1342,12 @@ namespace Catel.Data
                 {
                     foreach (var warning in _validationContext.GetFieldWarnings(propertyName))
                     {
-                        yield return warning.Message;
+                        elements.Add(warning.Message);
                     }
                 }
             }
+
+            return elements;
         }
         #endregion
 
