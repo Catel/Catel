@@ -23,6 +23,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Collections\CollectionExtensionsFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\CollectionHelperFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\FastObservableCollectionFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\DisplayNameAttributeFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\PropertyChangedEventArgsExtensionsFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\ConfigurationServiceFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\DynamicConfigurationFacts.cs" />
@@ -247,6 +248,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\EventArgs\UICompletedEventArgsTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Exceptions\WindowNotRegisteredExceptionTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IStartupInfoProviderExtensionsFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Fixtures\LanguageServiceFixture.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Fixtures\StartupInfoProviderFixture.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\LanguageServiceFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\NamingConventionTest.cs" />

@@ -43,6 +43,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Helpers\CollectionHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\ListDictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\BackgroundWorker.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\DisplayNameAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\EventArgs\BeginEditEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\EventArgs\CancelEditCompletedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\EventArgs\CancelEditEventArgs.cs" />
@@ -399,5 +400,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)WeakReferences\Interfaces\IWeakReference.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WeakReferences\WeakAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WeakReferences\WeakEventListener.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)ComponentModel\DataAnnotations\" />
   </ItemGroup>
 </Project>
