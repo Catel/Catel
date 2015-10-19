@@ -79,7 +79,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityFramework5\Helpers\IsolationHelperFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityFramework5\Repositories\EntityRepositoryFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityFramework5\TestClasses\TestConnectionStrings.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\FluentValidation\Attributes\DisplayNameAttributeFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\FluentValidation\FluentValidatorProviderFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\FluentValidation\FluentValidatorToCatelValidatorAdapterFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\FluentValidation\Models\Person.cs" />

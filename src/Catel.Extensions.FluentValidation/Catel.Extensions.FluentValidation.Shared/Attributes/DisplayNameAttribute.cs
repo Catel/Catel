@@ -26,6 +26,7 @@ namespace Catel
     ///  </code>
     /// </example>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    [ObsoleteEx(ReplacementTypeOrMember = "Catel.ComponentModel.DisplayNameAttribute", TreatAsErrorFromVersion = "4.4", RemoveInVersion = "5.0")]
     public class DisplayNameAttribute : Attribute
     {
         #region Constructors and Destructors

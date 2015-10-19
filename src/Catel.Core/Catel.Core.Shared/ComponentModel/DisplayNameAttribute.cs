@@ -4,8 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
-
 namespace Catel.ComponentModel
 {
     using System;
@@ -16,7 +14,12 @@ namespace Catel.ComponentModel
     /// A custom implementation of the display name attribute that uses the <see cref="ILanguageService"/>.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Event)]
-    public class DisplayNameAttribute : System.ComponentModel.DisplayNameAttribute
+    public class DisplayNameAttribute :
+#if NET
+        System.ComponentModel.DisplayNameAttribute
+#else
+        System.Attribute
+#endif
     {
         private static readonly Lazy<ILanguageService> DefaultLanguageService = new Lazy<ILanguageService>(() => IoCConfiguration.DefaultDependencyResolver.Resolve<ILanguageService>());
 
@@ -27,7 +30,9 @@ namespace Catel.ComponentModel
         /// Initializes a new instance of the <see cref="DisplayNameAttribute"/> class.
         /// </summary>
         public DisplayNameAttribute(string resourceName)
+#if NET
             : base(string.Empty)
+#endif
         {
             Argument.IsNotNullOrWhitespace("resourceName", resourceName);
 
@@ -50,22 +55,34 @@ namespace Catel.ComponentModel
 
                 return DefaultLanguageService.Value;
             }
-            set { _languageService = value; }
+            set
+            {
+                _languageService = value;
+            }
         }
 
         /// <summary>
         /// Gets the display name.
         /// </summary>
         /// <value>The display name.</value>
+#if NET
         public override string DisplayName
+#else
+        public string DisplayName
+#endif
         {
             get
             {
                 var languageService = LanguageService;
-                return languageService.GetString(_resourceName);
+
+                var displayName = languageService.GetString(_resourceName);
+                if (string.IsNullOrWhiteSpace(displayName))
+                {
+                    displayName = _resourceName;
+                }
+
+                return displayName;
             }
         }
     }
 }
-
-#endif

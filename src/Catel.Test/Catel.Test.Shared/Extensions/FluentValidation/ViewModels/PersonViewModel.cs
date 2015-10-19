@@ -35,35 +35,21 @@ namespace Catel.Test.Extensions.FluentValidation.ViewModels
         /// <summary>
         /// Gets or sets PersonFirstName.
         /// </summary>
-        [DisplayName("First name")]
+        [Catel.ComponentModel.DisplayName("First name")]
         public string PersonFirstName
         {
-            get
-            {
-                return this.GetValue<string>(FirstNameProperty);
-            }
-
-            set
-            {
-                this.SetValue(FirstNameProperty, value);
-            }
+            get { return GetValue<string>(FirstNameProperty); }
+            set { SetValue(FirstNameProperty, value); }
         }
 
         /// <summary>
         /// Gets or sets PersonLastName.
         /// </summary>
-        [DisplayName("Last name")]
+        [Catel.ComponentModel.DisplayName("Last name")]
         public string PersonLastName
         {
-            get
-            {
-                return this.GetValue<string>(LastNameProperty);
-            }
-
-            set
-            {
-                this.SetValue(LastNameProperty, value);
-            }
+            get { return GetValue<string>(LastNameProperty); }
+            set { SetValue(LastNameProperty, value); }
         }
 
         #endregion

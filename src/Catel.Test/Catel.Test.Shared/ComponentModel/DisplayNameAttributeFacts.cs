@@ -21,9 +21,22 @@ namespace Catel.Test.ComponentModel
                 var languageService = new LanguageServiceFixture();
                 languageService.RegisterValue("MyDisplayName", "It works");
 
-                var displayAttribute = new DisplayNameAttribute("MyDisplayName");
+                var displayAttribute = new Catel.ComponentModel.DisplayNameAttribute("MyDisplayName");
+                displayAttribute.LanguageService = languageService;
 
                 Assert.AreEqual("It works", displayAttribute.DisplayName);
+            }
+
+            [TestCase]
+            public void ReturnsResourceNameIfTranslationCannotBeFound()
+            {
+                var languageService = new LanguageServiceFixture();
+                languageService.RegisterValue("MyDisplayName", "It works");
+
+                var displayAttribute = new Catel.ComponentModel.DisplayNameAttribute("MyNonExistingDisplayName");
+                displayAttribute.LanguageService = languageService;
+
+                Assert.AreEqual("MyNonExistingDisplayName", displayAttribute.DisplayName);
             }
         }
     }
