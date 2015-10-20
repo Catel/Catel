@@ -81,8 +81,10 @@ namespace Catel.Reflection
         ///   <c>true</c> if the subclass is of a raw generic type; otherwise, <c>false</c>.
         /// </returns>
         /// <remarks>
-        ///   This implementation is based on this forum thread:
-        ///   http://stackoverflow.com/questions/457676/c-reflection-check-if-a-class-is-derived-from-a-generic-class
+        /// This implementation is based on this forum thread:
+        /// http://stackoverflow.com/questions/457676/c-reflection-check-if-a-class-is-derived-from-a-generic-class
+        /// <para />
+        /// Original license: CC BY-SA 2.5, compatible with the MIT license.
         /// </remarks>
         /// <exception cref = "ArgumentNullException">The <paramref name = "generic" /> is <c>null</c>.</exception>
         /// <exception cref = "ArgumentNullException">The <paramref name = "toCheck" /> is <c>null</c>.</exception>

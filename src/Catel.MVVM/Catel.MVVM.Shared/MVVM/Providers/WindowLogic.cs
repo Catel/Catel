@@ -23,13 +23,6 @@ namespace Catel.MVVM.Providers
     /// <summary>
     /// MVVM Provider behavior implementation for a window.
     /// </summary>
-    /// <remarks>
-    /// Some parts in this class (with the instances and increments), but this is required to dynamically subscribe to
-    /// an even that we do not know the handler of on forehand. Normally, you would do this via an anynomous delegate, 
-    /// but that doesn't work so the event delegate is created via ILGenerator at runtime.
-    /// <para />
-    /// http://stackoverflow.com/questions/8122085/calling-an-instance-method-when-event-occurs/8122242#8122242.
-    /// </remarks>
     public class WindowLogic : LogicBase
     {
         #region Fields

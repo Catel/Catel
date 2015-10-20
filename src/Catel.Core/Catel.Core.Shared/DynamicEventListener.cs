@@ -25,6 +25,8 @@ namespace Catel
     /// but that doesn't work so the event delegate is created via ILGenerator at runtime.
     /// <para />
     /// http://stackoverflow.com/questions/8122085/calling-an-instance-method-when-event-occurs/8122242#8122242.
+    /// <para />
+    /// Original license: CC BY-SA 2.5, compatible with the MIT license.
     /// </remarks>
     public class DynamicEventListener : IUniqueIdentifyable
     {
