@@ -20,6 +20,7 @@ namespace Catel.Windows.Controls
     /// <remarks>
     /// Source : http://serialseb.blogspot.com/2007/09/wpf-tips-6-preventing-scrollviewer-from.html
     /// </remarks>
+    [ObsoleteEx(Message = "Removed because no longer being used", TreatAsErrorFromVersion = "4.4", RemoveInVersion = "5.0")]
     public static class ScrollViewerProperties
     {
         #region Mousewheel fix

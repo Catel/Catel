@@ -44,6 +44,8 @@ we will remove the features in the next major release.
 * CTL-671 Marked Catel.Extensions.CSLA as obsolete to minimize maintenance costs of Catel
 * CTL-672 Marked Catel.Extensions.Wcf.Server as obsolete to minimize maintenance costs of Catel
 * CTL-740 Marked IMessageMediator.SendMessageAsync as obsolete because it's not truly async
+* CTL-755 Marked Catel.Windows.Controls.ScrollViewerProperties as obsolete to minimize maintenance costs of Catel
+* CTL-756 Marked Catel.Windows.Controls.RichToolTip as obsolete to minimize maintenance costs of Catel
 
 Added/fixed:
 ============
@@ -51,6 +53,8 @@ Added/fixed:
 (x) CTL-740 TargetParameterCountException while sending message on RT projects (RT projects now support weak actions)
 (x) CTL-744 Fixed missing DataWindowStyle when only referencing Catel.Extensions.Controls theme (it was no longer
     including the Catel.MVVM theme)
+(*) CTL-755 Marked Catel.Windows.Controls.ScrollViewerProperties as obsolete to minimize maintenance costs of Catel
+(*) CTL-756 Marked Catel.Windows.Controls.RichToolTip as obsolete to minimize maintenance costs of Catel
 
 Roadmap:
 ========
